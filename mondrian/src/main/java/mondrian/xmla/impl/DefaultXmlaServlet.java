@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2001-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara and others
+// Copyright (C) 2019 Topsoft
 // All Rights Reserved.
 */
 package mondrian.xmla.impl;
@@ -291,17 +292,6 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                     continue;
                 }
 
-                // Make sure Element has mustUnderstand=1 attribute.
-                Attr attr = e.getAttributeNode(SOAP_MUST_UNDERSTAND_ATTR);
-                boolean mustUnderstandValue =
-                    attr != null
-                    && attr.getValue() != null
-                    && attr.getValue().equals("1");
-
-                if (!mustUnderstandValue) {
-                    continue;
-                }
-
                 // Is it an XMLA element
                 if (!NS_XMLA.equals(e.getNamespaceURI())) {
                     continue;
@@ -313,7 +303,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                 //    Session
                 //    EndSession
 
-                String sessionIdStr;
+                String sessionIdStr = null;
                 if (localName.equals(XMLA_BEGIN_SESSION)) {
                     sessionIdStr = generateSessionId(context);
 
@@ -345,30 +335,20 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                         CONTEXT_XMLA_SESSION_STATE,
                         CONTEXT_XMLA_SESSION_STATE_END);
 
-                } else {
-                    // error
-                    String msg =
-                        "Invalid XML/A message: Unknown "
-                        + "\"mustUnderstand\" XMLA Header element \""
-                        + localName
-                        + "\"";
-                    throw new XmlaException(
-                        MUST_UNDERSTAND_FAULT_FC,
-                        HSH_MUST_UNDERSTAND_CODE,
-                        HSH_MUST_UNDERSTAND_FAULT_FS,
-                        new RuntimeException(msg));
                 }
 
-                StringBuilder buf = new StringBuilder(100);
-                buf.append("<Session ");
-                buf.append(XMLA_SESSION_ID);
-                buf.append("=\"");
-                buf.append(sessionIdStr);
-                buf.append("\" ");
-                buf.append("xmlns=\"");
-                buf.append(NS_XMLA);
-                buf.append("\" />");
-                bytes = buf.toString().getBytes(encoding);
+                if(sessionIdStr!=null) {
+                    StringBuilder buf = new StringBuilder(100);
+                    buf.append("<Session ");
+                    buf.append(XMLA_SESSION_ID);
+                    buf.append("=\"");
+                    buf.append(sessionIdStr);
+                    buf.append("\" ");
+                    buf.append("xmlns=\"");
+                    buf.append(NS_XMLA);
+                    buf.append("\" />");
+                    bytes = buf.toString().getBytes(encoding);
+                }
 
                 if (authenticatedSession) {
                     String username =

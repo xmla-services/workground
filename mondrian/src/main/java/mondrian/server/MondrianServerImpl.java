@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2006-2017 Hitachi Vantara
 // All Rights Reserved.
+// Copyright (C) 2019 Topsoft. All rights reserved.
 */
 package mondrian.server;
 
@@ -140,7 +141,7 @@ class MondrianServerImpl
             "Model", "Model_Existence_Only", "Models", "Move", "MTD", "Name",
             "Nest", "NextMember", "Non", "Normal", "Not", "Ntext", "Nvarchar",
             "OLAP", "On", "OpeningPeriod", "OpenQuery", "Or", "Ordered",
-            "Ordinal", "Pages", "Pages", "ParallelPeriod", "Parent",
+            "Ordinal", "Pages", "ParallelPeriod", "Parent",
             "Parent_Level", "Parent_Unique_Name", "PeriodsToDate", "PMML",
             "Predict", "Predict_Only", "PredictAdjustedProbability",
             "PredictHistogram", "Prediction", "PredictionScore",
@@ -156,7 +157,7 @@ class MondrianServerImpl
             "StdDev", "Stdev", "StripCalculatedMembers", "StrToSet",
             "StrToTuple", "SubSet", "Support", "Tail", "Text", "Thresholds",
             "ToggleDrillState", "TopCount", "TopPercent", "TopSum",
-            "TupleToStr", "Under", "Uniform", "UniqueName", "Use", "Value",
+            "TupleToStr", "Under", "Uniform", "UniqueName", "Use",
             "Value", "Var", "Variance", "VarP", "VarianceP", "VisualTotals",
             "When", "Where", "With", "WTD", "Xor"));
 

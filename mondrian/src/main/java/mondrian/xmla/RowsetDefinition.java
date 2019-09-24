@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2003-2005 Julian Hyde
 // Copyright (C) 2005-2018 Hitachi Vantara
+// Copyright (C) 2019 Topsoft
 // All Rights Reserved.
 */
 
@@ -68,6 +69,7 @@ public enum RowsetDefinition {
      */
     DISCOVER_DATASOURCES(
         0,
+        "06C03D41-F66D-49F3-B1B8-987F7AF4CF18",
         "Returns a list of XML for Analysis data sources available on the "
         + "server or Web Service.",
         new Column[] {
@@ -99,6 +101,7 @@ public enum RowsetDefinition {
      */
     DISCOVER_SCHEMA_ROWSETS(
         2,
+        "EEA0302B-7922-4992-8991-0E605D0E5593",
         "Returns the names, values, and other information of all supported "
         + "RequestType enumeration values.",
         new Column[] {
@@ -106,6 +109,7 @@ public enum RowsetDefinition {
             DiscoverSchemaRowsetsRowset.SchemaGuid,
             DiscoverSchemaRowsetsRowset.Restrictions,
             DiscoverSchemaRowsetsRowset.Description,
+            DiscoverSchemaRowsetsRowset.RestrictionsMask,
         },
         null /* not sorted */)
     {
@@ -200,6 +204,7 @@ public enum RowsetDefinition {
      */
     DISCOVER_ENUMERATORS(
         3,
+        "55A9E78B-ACCB-45B4-95A6-94C5065617A7",
         "Returns a list of names, data types, and enumeration values for "
         + "enumerators supported by the provider of a specific data source.",
         new Column[] {
@@ -227,6 +232,7 @@ public enum RowsetDefinition {
      */
     DISCOVER_PROPERTIES(
         1,
+        "4B40ADFB-8B09-4758-97BB-636E8AE97BCF",
         "Returns a list of information and values about the requested "
         + "properties that are supported by the specified data source "
         + "provider.",
@@ -255,6 +261,7 @@ public enum RowsetDefinition {
      */
     DISCOVER_KEYWORDS(
         4,
+        "1426C443-4CDD-4A40-8F45-572FAB9BBAA1",
         "Returns an XML list of keywords reserved by the provider.",
         new Column[] {
             DiscoverKeywordsRowset.Keyword,
@@ -276,6 +283,7 @@ public enum RowsetDefinition {
      */
     DISCOVER_LITERALS(
         5,
+        "C3EF5ECB-0A07-4665-A140-B075722DBDC2",
         "Returns information about literals supported by the provider.",
         new Column[] {
             DiscoverLiteralsRowset.LiteralName,
@@ -283,6 +291,7 @@ public enum RowsetDefinition {
             DiscoverLiteralsRowset.LiteralInvalidChars,
             DiscoverLiteralsRowset.LiteralInvalidStartingChars,
             DiscoverLiteralsRowset.LiteralMaxLength,
+            DiscoverLiteralsRowset.LiteralNameEnumValue,
         },
         null /* not sorted */)
     {
@@ -301,6 +310,7 @@ public enum RowsetDefinition {
      */
     DBSCHEMA_CATALOGS(
         6,
+        "C8B52211-5CF3-11CE-ADE5-00AA0044773D",
         "Identifies the physical attributes associated with catalogs "
         + "accessible from the provider.",
         new Column[] {
@@ -328,7 +338,8 @@ public enum RowsetDefinition {
      *    COLUMN_OLAP_TYPE
      */
     DBSCHEMA_COLUMNS(
-        7, null,
+        7,
+            "C8B52214-5CF3-11CE-ADE5-00AA0044773D", null,
         new Column[] {
             DbschemaColumnsRowset.TableCatalog,
             DbschemaColumnsRowset.TableSchema,
@@ -364,7 +375,7 @@ public enum RowsetDefinition {
      * Not supported
      */
     DBSCHEMA_PROVIDER_TYPES(
-        8, null,
+        8, "C8B5222C-5CF3-11CE-ADE5-00AA0044773D", null,
         new Column[] {
             DbschemaProviderTypesRowset.TypeName,
             DbschemaProviderTypesRowset.DataType,
@@ -390,7 +401,7 @@ public enum RowsetDefinition {
     },
 
     DBSCHEMA_SCHEMATA(
-        8, null,
+        8, "c8b52225-5cf3-11ce-ade5-00aa0044773d", null,
         new Column[] {
             DbschemaSchemataRowset.CatalogName,
             DbschemaSchemataRowset.SchemaName,
@@ -420,7 +431,7 @@ public enum RowsetDefinition {
      * Not supported
      */
     DBSCHEMA_TABLES(
-        9, null,
+        9, "C8B52229-5CF3-11CE-ADE5-00AA0044773D", null,
         new Column[] {
             DbschemaTablesRowset.TableCatalog,
             DbschemaTablesRowset.TableSchema,
@@ -455,7 +466,7 @@ public enum RowsetDefinition {
      * Not supported
      */
     DBSCHEMA_TABLES_INFO(
-        10, null,
+        10, "c8b522e0-5cf3-11ce-ade5-00aa0044773d", null,
         new Column[] {
             DbschemaTablesInfoRowset.TableCatalog,
             DbschemaTablesInfoRowset.TableSchema,
@@ -506,7 +517,7 @@ public enum RowsetDefinition {
      * Not supported
      */
     MDSCHEMA_ACTIONS(
-        11, null, new Column[] {
+        11, "A07CCD08-8148-11D0-87BB-00C04FC33942", null, new Column[] {
             MdschemaActionsRowset.CatalogName,
             MdschemaActionsRowset.SchemaName,
             MdschemaActionsRowset.CubeName,
@@ -550,12 +561,13 @@ public enum RowsetDefinition {
      *   ANNOTATIONS
      */
     MDSCHEMA_CUBES(
-        12, null,
+        12, "C8B522D8-5CF3-11CE-ADE5-00AA0044773D", null,
         new Column[] {
             MdschemaCubesRowset.CatalogName,
             MdschemaCubesRowset.SchemaName,
             MdschemaCubesRowset.CubeName,
             MdschemaCubesRowset.CubeType,
+            MdschemaCubesRowset.BaseCubeName,
             MdschemaCubesRowset.CubeGuid,
             MdschemaCubesRowset.CreatedOn,
             MdschemaCubesRowset.LastSchemaUpdate,
@@ -576,6 +588,8 @@ public enum RowsetDefinition {
             MdschemaCubesRowset.CatalogName,
             MdschemaCubesRowset.SchemaName,
             MdschemaCubesRowset.CubeName,
+            MdschemaCubesRowset.CubeType,
+            MdschemaCubesRowset.BaseCubeName,
         })
     {
         public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
@@ -606,7 +620,7 @@ public enum RowsetDefinition {
      *    Default restriction is a value of 1.
      */
     MDSCHEMA_DIMENSIONS(
-        13, null,
+        13, "C8B522D9-5CF3-11CE-ADE5-00AA0044773D", null,
         new Column[] {
             MdschemaDimensionsRowset.CatalogName,
             MdschemaDimensionsRowset.SchemaName,
@@ -661,7 +675,7 @@ public enum RowsetDefinition {
      *  CAPTION The display caption for the function.
      */
     MDSCHEMA_FUNCTIONS(
-        14, null,
+        14, "A07CCD07-8148-11D0-87BB-00C04FC33942", null,
         new Column[] {
             MdschemaFunctionsRowset.FunctionName,
             MdschemaFunctionsRowset.Description,
@@ -714,7 +728,7 @@ public enum RowsetDefinition {
      *  INSTANCE_SELECTION
      */
     MDSCHEMA_HIERARCHIES(
-        15, null,
+        15, "C8B522DA-5CF3-11CE-ADE5-00AA0044773D", null,
         new Column[] {
             MdschemaHierarchiesRowset.CatalogName,
             MdschemaHierarchiesRowset.SchemaName,
@@ -793,7 +807,7 @@ public enum RowsetDefinition {
      *
      */
     MDSCHEMA_LEVELS(
-        16, null,
+        16, "C8B522DB-5CF3-11CE-ADE5-00AA0044773D", null,
         new Column[] {
             MdschemaLevelsRowset.CatalogName,
             MdschemaLevelsRowset.SchemaName,
@@ -859,7 +873,7 @@ public enum RowsetDefinition {
      *  DEFAULT_FORMAT_STRING
      */
     MDSCHEMA_MEASURES(
-        17, null,
+        17, "C8B522DC-5CF3-11CE-ADE5-00AA0044773D", null,
         new Column[] {
             MdschemaMeasuresRowset.CatalogName,
             MdschemaMeasuresRowset.SchemaName,
@@ -921,7 +935,7 @@ public enum RowsetDefinition {
      * Not supported
      */
     MDSCHEMA_MEMBERS(
-        18, null,
+        18, "C8B522DE-5CF3-11CE-ADE5-00AA0044773D", null,
         new Column[] {
             MdschemaMembersRowset.CatalogName,
             MdschemaMembersRowset.SchemaName,
@@ -1007,7 +1021,7 @@ public enum RowsetDefinition {
      *    PROPERTY_IS_VISIBLE
      */
     MDSCHEMA_PROPERTIES(
-        19, null,
+        19, "C8B522DD-5CF3-11CE-ADE5-00AA0044773D", null,
         new Column[] {
             MdschemaPropertiesRowset.CatalogName,
             MdschemaPropertiesRowset.SchemaName,
@@ -1016,14 +1030,14 @@ public enum RowsetDefinition {
             MdschemaPropertiesRowset.HierarchyUniqueName,
             MdschemaPropertiesRowset.LevelUniqueName,
             MdschemaPropertiesRowset.MemberUniqueName,
+            MdschemaPropertiesRowset.PropertyType,
             MdschemaPropertiesRowset.PropertyName,
             MdschemaPropertiesRowset.PropertyCaption,
-            MdschemaPropertiesRowset.PropertyType,
             MdschemaPropertiesRowset.DataType,
             MdschemaPropertiesRowset.PropertyContentType,
-            MdschemaPropertiesRowset.Description
+            MdschemaPropertiesRowset.Description,
         },
-        null /* not sorted */)
+            null /* not sorted */)
     {
         public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
             return new MdschemaPropertiesRowset(request, handler);
@@ -1051,7 +1065,7 @@ public enum RowsetDefinition {
      *    SET_DISPLAY_FOLDER
      */
     MDSCHEMA_SETS(
-        20, null,
+        20, "A07CCD0B-8148-11D0-87BB-00C04FC33942", null,
         new Column[] {
             MdschemaSetsRowset.CatalogName,
             MdschemaSetsRowset.SchemaName,
@@ -1081,6 +1095,7 @@ public enum RowsetDefinition {
      */
     private static final String dateModified = "2005-01-25T17:35:32";
     private final String description;
+    private final String schemaGuid;
 
     static final String UUID_PATTERN =
         "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-"
@@ -1096,11 +1111,13 @@ public enum RowsetDefinition {
      */
     RowsetDefinition(
         int ordinal,
+        String schemaGuid,
         String description,
         Column[] columnDefinitions,
         Column[] sortColumnDefinitions)
     {
         Util.discard(ordinal);
+        this.schemaGuid = schemaGuid;
         this.description = description;
         this.columnDefinitions = columnDefinitions;
         this.sortColumnDefinitions = sortColumnDefinitions;
@@ -1361,6 +1378,7 @@ public enum RowsetDefinition {
         final boolean restriction;
         final boolean nullable;
         final boolean unbounded;
+        final int restrictionOrder;
 
         /**
          * Creates a column.
@@ -1390,7 +1408,21 @@ public enum RowsetDefinition {
         {
             this(
                 name, type, enumeratedType,
-                restriction, nullable, ONE_MAX, description);
+                restriction, 0, nullable, ONE_MAX, description);
+        }
+
+        Column(
+                String name,
+                Type type,
+                Enumeration enumeratedType,
+                boolean restriction,
+                int restrictionOrder,
+                boolean nullable,
+                String description)
+        {
+            this(
+                    name, type, enumeratedType,
+                    restriction, restrictionOrder, nullable, ONE_MAX, description);
         }
 
         Column(
@@ -1402,11 +1434,26 @@ public enum RowsetDefinition {
             boolean unbounded,
             String description)
         {
+            this(
+                    name, type, enumeratedType,
+                    restriction, 0, nullable, ONE_MAX, description);
+        }
+
+        Column(
+                String name,
+                Type type,
+                Enumeration enumeratedType,
+                boolean restriction,
+                int restrictionOrder,
+                boolean nullable,
+                boolean unbounded,
+                String description)
+        {
             assert type != null;
             assert (type == Type.Enumeration
                     || type == Type.EnumerationArray
                     || type == Type.EnumString)
-                   == (enumeratedType != null);
+                    == (enumeratedType != null);
             // Line endings must be UNIX style (LF) not Windows style (LF+CR).
             // Thus the client will receive the same XML, regardless
             // of the server O/S.
@@ -1418,6 +1465,7 @@ public enum RowsetDefinition {
             this.restriction = restriction;
             this.nullable = nullable;
             this.unbounded = unbounded;
+            this.restrictionOrder = restrictionOrder;
         }
 
         /**
@@ -1657,6 +1705,14 @@ public enum RowsetDefinition {
                 Column.NOT_RESTRICTION,
                 Column.OPTIONAL,
                 "The GUID of the schema.");
+        private static final Column RestrictionsMask =
+            new Column(
+                "RestrictionsMask",
+                Type.UnsignedLong,
+                null,
+                Column.NOT_RESTRICTION,
+                Column.OPTIONAL,
+                "");
         private static final Column Restrictions =
             new Column(
                 "Restrictions",
@@ -1701,8 +1757,7 @@ public enum RowsetDefinition {
                 Row row = new Row();
                 row.set(SchemaName.name, rowsetDefinition.name());
 
-                // TODO: If we have a SchemaGuid output here
-                //row.set(SchemaGuid.name, "");
+                row.set(SchemaGuid.name, rowsetDefinition.schemaGuid);
 
                 row.set(Restrictions.name, getRestrictions(rowsetDefinition));
 
@@ -1716,7 +1771,17 @@ public enum RowsetDefinition {
             RowsetDefinition rowsetDefinition)
         {
             List<XmlElement> restrictionList = new ArrayList<XmlElement>();
-            final Column[] columns = rowsetDefinition.columnDefinitions;
+            final Column[] columns = rowsetDefinition.columnDefinitions.clone();
+            Arrays.sort(
+                    columns,
+                    new Comparator<Column>() {
+                        public int compare(
+                                Column c1,
+                                Column c2)
+                        {
+                            return Integer.compare(c1.restrictionOrder, c2.restrictionOrder);
+                        }
+                    });
             for (Column column : columns) {
                 if (column.restriction) {
                     restrictionList.add(
@@ -1808,13 +1873,9 @@ public enum RowsetDefinition {
                 Column.REQUIRED,
                 "The current value of the property.");
 
-        protected boolean needConnection() {
-            return false;
-        }
-
         public void populateImpl(
             XmlaResponse response, OlapConnection connection, List<Row> rows)
-            throws XmlaException
+            throws XmlaException, OlapException
         {
             for (PropertyDefinition propertyDefinition
                 : PropertyDefinition.class.getEnumConstants())
@@ -1829,7 +1890,17 @@ public enum RowsetDefinition {
                 row.set(PropertyType.name, propertyDefinition.type.getName());
                 row.set(PropertyAccessType.name, propertyDefinition.access);
                 row.set(IsRequired.name, false);
-                row.set(Value.name, propertyDefinition.value);
+
+                String propertyValue = "";
+                switch(propertyDefinition.name()) {
+                    case "Catalog":
+                        propertyValue = connection.getCatalog();
+                        break;
+                    default:
+                        propertyValue = propertyDefinition.value;
+                }
+                row.set(Value.name, propertyValue);
+
                 addRow(row, rows);
             }
         }
@@ -2082,17 +2153,24 @@ public enum RowsetDefinition {
             "The maximum number of characters in the literal. If there is no "
             + "maximum or the maximum is unknown, the value is ?1.");
 
+        private static final Column LiteralNameEnumValue = new Column(
+                "LiteralNameEnumValue",
+                Type.Integer,
+                null,
+                Column.NOT_RESTRICTION,
+                Column.OPTIONAL,
+                "");
         public void populateImpl(
             XmlaResponse response, OlapConnection connection, List<Row> rows)
             throws XmlaException
         {
             populate(
-                XmlaConstants.Literal.class,
+                mondrian.xmla.XmlaConstants.Literal.class,
                 rows,
-                new Comparator<XmlaConstants.Literal>() {
+                new Comparator<mondrian.xmla.XmlaConstants.Literal>() {
                 public int compare(
-                    XmlaConstants.Literal o1,
-                    XmlaConstants.Literal o2)
+                    mondrian.xmla.XmlaConstants.Literal o1,
+                    mondrian.xmla.XmlaConstants.Literal o2)
                 {
                     return o1.name().compareTo(o2.name());
                 }
@@ -3466,6 +3544,14 @@ TODO: see above
                 Column.RESTRICTION,
                 Column.REQUIRED,
                 "Cube type.");
+        private static final Column BaseCubeName =
+            new Column(
+                "BASE_CUBE_NAME",
+                Type.String,
+                null,
+                Column.RESTRICTION,
+                Column.OPTIONAL,
+                "The name of the source cube if this cube is a perspective cube.");
         private static final Column CubeGuid =
             new Column(
                 "CUBE_GUID",
@@ -5954,6 +6040,7 @@ TODO: see above
                 Type.String,
                 null,
                 Column.RESTRICTION,
+                0,
                 Column.OPTIONAL,
                 "The name of the database.");
         private static final Column SchemaName =
@@ -5962,6 +6049,7 @@ TODO: see above
                 Type.String,
                 null,
                 Column.RESTRICTION,
+                1,
                 Column.OPTIONAL,
                 "The name of the schema to which this property belongs.");
         private static final Column CubeName =
@@ -5970,6 +6058,7 @@ TODO: see above
                 Type.String,
                 null,
                 Column.RESTRICTION,
+                2,
                 Column.OPTIONAL,
                 "The name of the cube.");
         private static final Column DimensionUniqueName =
@@ -5978,6 +6067,7 @@ TODO: see above
                 Type.String,
                 null,
                 Column.RESTRICTION,
+                3,
                 Column.OPTIONAL,
                 "The unique name of the dimension.");
         private static final Column HierarchyUniqueName =
@@ -5986,6 +6076,7 @@ TODO: see above
                 Type.String,
                 null,
                 Column.RESTRICTION,
+                4,
                 Column.OPTIONAL,
                 "The unique name of the hierarchy.");
         private static final Column LevelUniqueName =
@@ -5994,6 +6085,7 @@ TODO: see above
                 Type.String,
                 null,
                 Column.RESTRICTION,
+                5,
                 Column.OPTIONAL,
                 "The unique name of the level to which this property belongs.");
         // According to MS this should not be nullable
@@ -6003,39 +6095,44 @@ TODO: see above
                 Type.String,
                 null,
                 Column.RESTRICTION,
+                6,
                 Column.OPTIONAL,
                 "The unique name of the member to which the property belongs.");
-        private static final Column PropertyName =
-            new Column(
-                "PROPERTY_NAME",
-                Type.String,
-                null,
-                Column.RESTRICTION,
-                Column.REQUIRED,
-                "Name of the property.");
         private static final Column PropertyType =
             new Column(
                 "PROPERTY_TYPE",
                 Type.Short,
                 null,
                 Column.RESTRICTION,
+                8,
                 Column.REQUIRED,
                 "A bitmap that specifies the type of the property");
+        private static final Column PropertyName =
+            new Column(
+                "PROPERTY_NAME",
+                Type.String,
+                null,
+                Column.RESTRICTION,
+                7,
+                Column.REQUIRED,
+                "Name of the property.");
         private static final Column PropertyCaption =
             new Column(
                 "PROPERTY_CAPTION",
                 Type.String,
                 null,
                 Column.NOT_RESTRICTION,
+                10,
                 Column.REQUIRED,
                 "A label or caption associated with the property, used "
-                + "primarily for display purposes.");
+                        + "primarily for display purposes.");
         private static final Column DataType =
             new Column(
                 "DATA_TYPE",
                 Type.UnsignedShort,
                 null,
                 Column.NOT_RESTRICTION,
+                11,
                 Column.REQUIRED,
                 "Data type of the property.");
         private static final Column PropertyContentType =
@@ -6044,6 +6141,7 @@ TODO: see above
                 Type.Short,
                 null,
                 Column.RESTRICTION,
+                9,
                 Column.OPTIONAL,
                 "The type of the property.");
         private static final Column Description =
@@ -6052,6 +6150,7 @@ TODO: see above
                 Type.String,
                 null,
                 Column.NOT_RESTRICTION,
+                12,
                 Column.OPTIONAL,
                 "A human-readable description of the measure.");
 

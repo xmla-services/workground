@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2003-2005 Julian Hyde
 // Copyright (C) 2005-2018 Hitachi Vantara
+// Copyright (C) 2019 Topsoft
 // All Rights Reserved.
 */
 package mondrian.xmla;
@@ -38,6 +39,7 @@ import java.util.Date;
 
 import static mondrian.xmla.XmlaConstants.*;
 import static org.olap4j.metadata.XmlaConstants.*;
+
 
 /**
  * An <code>XmlaHandler</code> responds to XML for Analysis (XML/A) requests.
@@ -713,10 +715,12 @@ public class XmlaHandler {
             if (formatName != null) {
                 Format format = getFormat(request, null);
                 if (format != Format.Multidimensional
-                    && format != Format.Tabular)
+                    && format != Format.Tabular
+                    && format != Format.Native)
                 {
+                    //Galaktika: Support for Native format
                     throw new UnsupportedOperationException(
-                        "<Format>: only 'Multidimensional', 'Tabular' "
+                        "<Format>: only 'Multidimensional', 'Tabular' and 'Native' "
                         + "currently supported");
                 }
             }
@@ -768,9 +772,9 @@ public class XmlaHandler {
             writer.startDocument();
 
             writer.startElement(
-                prefix + ":ExecuteResponse",
-                "xmlns:" + prefix, NS_XMLA);
-            writer.startElement(prefix + ":return");
+                    "ExecuteResponse",
+                    "xmlns", NS_XMLA);
+            writer.startElement("return");
             boolean rowset =
                 request.isDrillThrough()
                 || Format.Tabular.name().equals(
@@ -793,13 +797,17 @@ public class XmlaHandler {
             case SchemaData:
                 if (result != null) {
                     result.metadata(writer);
-                } else {
+                }
+                /*
+                //Galaktika: Do not write schema for NS_XMLA_EMPTY
+                else {
                     if (rowset) {
                         writer.verbatim(EMPTY_ROW_SET_XML_SCHEMA);
                     } else {
                         writer.verbatim(EMPTY_MD_DATA_SET_XML_SCHEMA);
                     }
                 }
+                */
                 break;
             }
 
@@ -1551,23 +1559,25 @@ public class XmlaHandler {
             for (Object[] row : rows) {
                 writer.startElement("row");
                 for (int i = 0; i < row.length; i++) {
-                    writer.startElement(
-                        columns.get(i).encodedName,
-                        new Object[] {
-                            "xsi:type",
-                            columns.get(i).xsdType});
                     Object value = row[i];
-                    if (value == null) {
-                        writer.characters("null");
-                    } else {
-                        String valueString = value.toString();
-                        if (value instanceof Number) {
-                            valueString =
-                                XmlaUtil.normalizeNumericString(valueString);
+                    if(value != null) {
+                        writer.startElement(
+                                columns.get(i).encodedName,
+                                new Object[]{
+                                        "xsi:type",
+                                        columns.get(i).xsdType});
+                        if (value == null) {
+                            writer.characters("null");
+                        } else {
+                            String valueString = value.toString();
+                            if (value instanceof Number) {
+                                valueString =
+                                        XmlaUtil.normalizeNumericString(valueString);
+                            }
+                            writer.characters(valueString);
                         }
-                        writer.characters(valueString);
+                        writer.endElement();
                     }
-                    writer.endElement();
                 }
                 writer.endElement(); // row
             }
@@ -1720,7 +1730,7 @@ public class XmlaHandler {
                 final Enumeration.ResponseMimeType responseMimeType =
                     getResponseMimeType(request);
                 final MDDataSet dataSet;
-                if (format == Format.Multidimensional) {
+                if (format == Format.Multidimensional || format == Format.Native) {
                     dataSet =
                         new MDDataSet_Multidimensional(
                             cellSet,
@@ -2066,7 +2076,7 @@ public class XmlaHandler {
             writer.startSequence(null, "HierarchyInfo");
             for (Hierarchy hierarchy : hierarchies) {
                 writer.startElement(
-                    "HierarchyInfo", "name", hierarchy.getName());
+                    "HierarchyInfo", "name", hierarchy.getUniqueName());
                 for (final Property prop : props) {
                     if (prop instanceof IMondrianOlap4jProperty) {
                         writeProperty(writer, hierarchy, prop);
@@ -2141,6 +2151,32 @@ public class XmlaHandler {
             }
         }
 
+        private static boolean DEFAULT_BOOLEAN;
+        private static byte DEFAULT_BYTE;
+        private static short DEFAULT_SHORT;
+        private static int DEFAULT_INT;
+        private static long DEFAULT_LONG;
+        private static float DEFAULT_FLOAT;
+        private static double DEFAULT_DOUBLE;
+
+        private Object getDefaultValue(Property property) {
+            Datatype datatype = property.getDatatype();
+            switch (datatype) {
+                case UNSIGNED_INTEGER:
+                    return DEFAULT_INT;
+                case DOUBLE:
+                    return DEFAULT_DOUBLE;
+                case LARGE_INTEGER:
+                    return DEFAULT_LONG;
+                case INTEGER:
+                    return DEFAULT_INT;
+                case BOOLEAN:
+                    return DEFAULT_BOOLEAN;
+                default:
+                    return null;
+            }
+        }
+
         private void axes(SaxWriter writer) throws OlapException {
             writer.startSequence("Axes", "Axis");
             //axis(writer, result.getSlicerAxis(), "SlicerAxis");
@@ -2154,18 +2190,22 @@ public class XmlaHandler {
             ////////////////////////////////////////////
             // now generate SlicerAxis information
             //
+
+            CellSetAxis slicerAxis = cellSet.getFilterAxis();
             if (omitDefaultSlicerInfo) {
-                CellSetAxis slicerAxis = cellSet.getFilterAxis();
                 // We always write a slicer axis. There are two 'empty' cases:
                 // zero positions (which happens when the WHERE clause evalutes
                 // to an empty set) or one position containing a tuple of zero
                 // members (which happens when there is no WHERE clause) and we
                 // need to be able to distinguish between the two.
-                axis(
-                    writer,
-                    slicerAxis,
-                    getProps(slicerAxis.getAxisMetaData()),
-                    "SlicerAxis");
+
+                if(slicerAxisHierarchies.size() > 0) {
+                    axis(
+                            writer,
+                            slicerAxis,
+                            getProps(slicerAxis.getAxisMetaData()),
+                            "SlicerAxis");
+                }
             } else {
                 List<Hierarchy> hierarchies = slicerAxisHierarchies;
                 writer.startElement(
@@ -2176,7 +2216,6 @@ public class XmlaHandler {
 
                 Map<String, Integer> memberMap = new HashMap<String, Integer>();
                 Member positionMember;
-                CellSetAxis slicerAxis = cellSet.getFilterAxis();
                 final List<Position> slicerPositions =
                     slicerAxis.getPositions();
                 if (slicerPositions != null
@@ -2287,7 +2326,7 @@ public class XmlaHandler {
             throws OlapException
         {
             writer.startElement(
-                "Member", "Hierarchy", member.getHierarchy().getName());
+                "Member", "Hierarchy", member.getHierarchy().getUniqueName());
             for (final Property prop : props) {
                 Object value = null;
                 Property longProp = (longProps.get(prop.getName()) != null)
@@ -2304,6 +2343,9 @@ public class XmlaHandler {
                     value = (longProp instanceof IMondrianOlap4jProperty)
                         ? getHierarchyProperty(member, longProp)
                         : member.getPropertyValue(longProp);
+                }
+                if(value == null) {
+                    value = getDefaultValue(prop);
                 }
                 if (value != null) {
                     writer.textElement(encoder.encode(prop.getName()), value);
@@ -2341,7 +2383,7 @@ public class XmlaHandler {
         {
             writer.startElement(
                 "Member",
-                "Hierarchy", member.getHierarchy().getName());
+                "Hierarchy", member.getHierarchy().getUniqueName());
             for (Property prop : props) {
                 Object value;
                 Property longProp = longProps.get(prop.getName());
@@ -2367,6 +2409,9 @@ public class XmlaHandler {
                 } else {
                     value = member.getPropertyValue(longProp);
                 }
+                if(value == null) {
+                    value = getDefaultValue(prop);
+                }
                 if (value != null) {
                     writer.textElement(
                         encoder.encode(prop.getName()), value);
@@ -2385,11 +2430,10 @@ public class XmlaHandler {
             int displayInfo = 0xffff & childrenCount;
 
             if (nextPosition != null) {
-                String currentUName = currentMember.getUniqueName();
                 Member nextMember =
                     nextPosition.getMembers().get(memberOrdinal);
                 String nextParentUName = parentUniqueName(nextMember);
-                if (currentUName.equals(nextParentUName)) {
+                if (currentMember.equals(nextMember.getParentMember())) {
                     displayInfo |= 0x10000;
                 }
             }
@@ -2485,7 +2529,9 @@ public class XmlaHandler {
                     final ValueInfo vi = new ValueInfo(dataType, value);
                     final String valueType = vi.valueType;
                     final String valueString;
-                    if (vi.isDecimal) {
+                    if (vi.value instanceof Double && (Double)vi.value == Double.POSITIVE_INFINITY){
+                        valueString = "INF";
+                    } else if (vi.isDecimal) {
                         valueString =
                             XmlaUtil.normalizeNumericString(
                                 vi.value.toString());
@@ -2911,9 +2957,9 @@ public class XmlaHandler {
         writer.startDocument();
 
         writer.startElement(
-            prefix + ":DiscoverResponse",
-            "xmlns:" + prefix, NS_XMLA);
-        writer.startElement(prefix + ":return");
+                "DiscoverResponse",
+                "xmlns", NS_XMLA);
+        writer.startElement("return");
         writer.startElement(
             "root",
             "xmlns", NS_XMLA_ROWSET,

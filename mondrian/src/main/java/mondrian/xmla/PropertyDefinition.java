@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2003-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara
+// Copyright (C) 2019 Topsoft
 // All Rights Reserved.
 */
 
@@ -232,7 +233,34 @@ public enum PropertyDefinition {
         XmlaConstants.Access.Read,
         "false",
         XmlaConstants.Method.DISCOVER_AND_EXECUTE,
-        "");
+        ""),
+
+    // Microsoft-specific XMLA definition.
+    SafetyOptions(
+        RowsetDefinition.Type.Integer,
+        null,
+        XmlaConstants.Access.ReadWrite,
+        "0",
+        XmlaConstants.Method.DISCOVER_AND_EXECUTE,
+        "Determines whether unsafe libraries can be registered and loaded by client applications."),
+
+    // Microsoft-specific XMLA definition.
+    MdxMissingMemberMode(
+        RowsetDefinition.Type.String,
+        null,
+        XmlaConstants.Access.Write,
+        "",
+        XmlaConstants.Method.DISCOVER_AND_EXECUTE,
+        "Indicates whether missing members are ignored in MDX statements."),
+
+    // Microsoft-specific XMLA definition.
+    DbpropMsmdMDXCompatibility(
+            RowsetDefinition.Type.Integer,
+            null,
+            XmlaConstants.Access.ReadWrite,
+            "1",
+            XmlaConstants.Method.DISCOVER_AND_EXECUTE,
+            "");
 
     final RowsetDefinition.Type type;
     final Set<? extends Enum> enumSet;

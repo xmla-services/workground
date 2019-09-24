@@ -4,7 +4,9 @@
 * http://www.eclipse.org/legal/epl-v10.html.
 * You must accept the terms of that agreement to use this software.
 *
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+* Copyright (c) 2002-2017 Hitachi Vantara.
+* Copyright (C) 2019 Topsoft  
+* All rights reserved.
 */
 
 package mondrian.xmla.impl;
@@ -275,7 +277,6 @@ public class DefaultXmlaRequest
                     Element e = (Element) n;
                     if (NS_XMLA.equals(e.getNamespaceURI())) {
                         String key = e.getLocalName();
-                        String value = XmlaUtil.textInElement(e);
 
                         List<String> values;
                         if (restrictions.containsKey(key)) {
@@ -285,17 +286,28 @@ public class DefaultXmlaRequest
                             restrictions.put(key, values);
                         }
 
-                        if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug(
-                                "DefaultXmlaRequest.initRestrictions: "
-                                + " key=\""
-                                + key
-                                + "\", value=\""
-                                + value
-                                + "\"");
-                        }
+                        NodeList propertyValues = e.getChildNodes();
+                        for (int j = 0, pvlen = propertyValues.getLength(); j < pvlen; j++) {
+                            String value = "";
+                            Node vn = propertyValues.item(j);
+                            if (vn instanceof Element) {
+                                Element ve = (Element) vn;
+                                value = XmlaUtil.textInElement(ve);
+                            } else {
+                                value = XmlaUtil.textInElement(e);
+                            }
+                            if (LOGGER.isDebugEnabled()) {
+                                LOGGER.debug(
+                                        "DefaultXmlaRequest.initRestrictions: "
+                                                + " key=\""
+                                                + key
+                                                + "\", value=\""
+                                                + value
+                                                + "\"");
+                            }
 
-                        values.add(value);
+                            values.add(value);
+                        }
                     }
                 }
             }
