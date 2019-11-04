@@ -109,14 +109,12 @@ public class VisualTotalsFunDef extends FunDefBase {
             final List<Member> list,
             Evaluator evaluator)
         {
-            final String name;
+            final String name = member.getName();;
             final String caption;
             if (stringCalc != null) {
                 final String namePattern = stringCalc.evaluateString(evaluator);
-                name = substitute(namePattern, member.getName());
-                caption = name;
+                caption = substitute(namePattern, member.getName());
             } else {
-                name = member.getName();
                 caption = member.getCaption();
             }
             final List<Member> childMemberList =
@@ -214,7 +212,7 @@ public class VisualTotalsFunDef extends FunDefBase {
             super(
                 (RolapMember) member.getParentMember(),
                 (RolapLevel) member.getLevel(),
-                RolapUtil.sqlNullValue, name, MemberType.FORMULA);
+                RolapUtil.sqlNullValue, name, MemberType.ALL);
             this.member = member;
             this.caption = caption;
             this.exp = exp;
