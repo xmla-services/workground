@@ -212,7 +212,7 @@ public class VisualTotalsFunDef extends FunDefBase {
             super(
                 (RolapMember) member.getParentMember(),
                 (RolapLevel) member.getLevel(),
-                RolapUtil.sqlNullValue, name, MemberType.ALL);
+                RolapUtil.sqlNullValue, name, member.getMemberType() ==  MemberType.ALL ? MemberType.ALL : MemberType.FORMULA);
             this.member = member;
             this.caption = caption;
             this.exp = exp;
