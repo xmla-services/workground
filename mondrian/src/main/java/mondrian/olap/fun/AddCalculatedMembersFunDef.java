@@ -16,6 +16,8 @@ import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.*;
 import mondrian.olap.type.*;
 
+import org.apache.log4j.Logger;
+
 import java.util.*;
 
 /**
@@ -32,6 +34,9 @@ import java.util.*;
  * @since Mar 23, 2006
  */
 class AddCalculatedMembersFunDef extends FunDefBase {
+    private static final Logger LOGGER =
+            Logger.getLogger(AddCalculatedMembersFunDef.class);
+
     private static final AddCalculatedMembersFunDef instance =
         new AddCalculatedMembersFunDef();
 
@@ -65,6 +70,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
         final Set<Level> levels = new LinkedHashSet<Level>();
         Hierarchy hierarchy = null;
 
+
         for (Member member : memberList) {
             if (hierarchy == null) {
                 hierarchy = member.getHierarchy();
@@ -86,7 +92,12 @@ class AddCalculatedMembersFunDef extends FunDefBase {
         for (Level level : levels) {
             List<Member> calcMemberList =
                 schemaReader.getCalculatedMembers(level);
-            workingList.addAll(calcMemberList);
+            for (Member calcMember : calcMemberList) {
+                Member parentMember = calcMember.getParentMember();
+                if (parentMember == null || memberList.stream().filter(m -> m.getParentMember() != null && m.getParentMember().getUniqueName().equals(parentMember.getUniqueName())).findFirst().isPresent()) {
+                    workingList.add(calcMember);
+                }
+            }
         }
         return workingList;
     }
