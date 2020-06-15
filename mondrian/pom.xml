@@ -5,10 +5,10 @@
   <parent>
     <groupId>pentaho</groupId>
     <artifactId>pentaho-mondrian-parent-pom</artifactId>
-    <version>9.0.0.0-SNAPSHOT</version>
+    <version>9.1.0.0-SNAPSHOT</version>
   </parent>
   <artifactId>mondrian</artifactId>
-  <version>9.0.0.0-SNAPSHOT</version>
+  <version>9.1.0.0-SNAPSHOT</version>
   <name>Pentaho Community Edition Project: ${project.artifactId}</name>
   <description>Mondrian OLAP Engine</description>
   <url>http://mondrian.pentaho.com</url>
@@ -20,7 +20,9 @@
     <driver.name>Mondrian olap4j driver</driver.name>
     <driver.version.minor>${project.version.minor}</driver.version.minor>
     <vendor>Pentaho</vendor>
+    <guava.version>17.0</guava.version>
     <driver.version.major>${project.version.major}</driver.version.major>
+    <maven-failsafe-plugin.argLine>-Duser.language=en -Duser.country=US</maven-failsafe-plugin.argLine>
   </properties>
   <dependencies>
     <dependency>
@@ -52,6 +54,11 @@
       <artifactId>commons-logging</artifactId>
     </dependency>
     <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>${guava.version}</version>
+    </dependency>
+    <dependency>
       <groupId>log4j</groupId>
       <artifactId>log4j</artifactId>
       <scope>compile</scope>
@@ -69,7 +76,6 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-vfs2</artifactId>
-      <version>${commons-vfs2.version}</version>
     </dependency>
     <dependency>
       <groupId>org.dom4j</groupId>
@@ -298,6 +304,7 @@
             </goals>
           </execution>
         </executions>
+
         <configuration>
           <includes>
             <include>Main.java</include>
@@ -396,6 +403,24 @@
               </execution>
             </executions>
           </plugin>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.7</version>
+            <executions>
+              <execution>
+                <id>copy-mysql-cnf</id>
+                <phase>pre-integration-test</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <tasks>
+                    <copy file="${project.build.directory}/mysql-dist/my-default.ini" tofile="${project.build.directory}/mysql-dist/support-files/my-default.cnf" failonerror="false" />
+                  </tasks>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>          
           <plugin>
             <groupId>com.jcabi</groupId>
             <artifactId>jcabi-mysql-maven-plugin</artifactId>
