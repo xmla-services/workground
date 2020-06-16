@@ -6006,7 +6006,7 @@ TODO: see above
                 row.set(CatalogName.name, catalog.getName());
                 row.set(SchemaName.name, cube.getSchema().getName());
                 row.set(CubeName.name, cube.getName());
-                row.set(SetName.name, namedSet.getUniqueName());
+                row.set(SetName.name, namedSet.getName());
                 row.set(Scope.name, GLOBAL_SCOPE);
                 row.set(Description.name, namedSet.getDescription());
                 addRow(row, rows);
