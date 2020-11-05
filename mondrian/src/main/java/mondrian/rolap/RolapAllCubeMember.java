@@ -12,6 +12,7 @@
 package mondrian.rolap;
 
 import mondrian.olap.Util;
+import mondrian.olap.*;
 
 /**
  * The 'All' member of a {@link mondrian.rolap.RolapCubeHierarchy}.
@@ -57,10 +58,15 @@ class RolapAllCubeMember
         // called [Measures].[Foo] not [Measures].[Measures].[Foo]. We can
         // remove this code when we revisit the scheme to generate member unique
         // names.
-        if (getHierarchy().getName().equals(getDimension().getName())) {
-            this.uniqueName = Util.makeFqName(getDimension(), name);
-        } else {
+        if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
             this.uniqueName = Util.makeFqName(getHierarchy(), name);
+        }
+        else {
+            if (getHierarchy().getName().equals(getDimension().getName())) {
+                this.uniqueName = Util.makeFqName(getDimension(), name);
+            } else {
+                this.uniqueName = Util.makeFqName(getHierarchy(), name);
+            }
         }
     }
 

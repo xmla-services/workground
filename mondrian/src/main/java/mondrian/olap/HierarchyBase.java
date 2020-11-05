@@ -75,12 +75,8 @@ public abstract class HierarchyBase
             }
             this.subName = subName;
             this.name = subName;
-            // e.g. "[Time].[Weekly]" for dimension "Time", hierarchy "Weekly";
-            // "[Time]" for dimension "Time", hierarchy "Time".
-            this.uniqueName =
-                subName.equals(name)
-                    ? dimension.getUniqueName()
-                    : Util.makeFqName(dimension, this.name);
+            // always "[Time].[Weekly]" for dimension "Time", hierarchy "Weekly";
+            this.uniqueName = Util.makeFqName(dimension, this.name);
         } else {
             this.subName = subName;
             if (this.subName != null) {

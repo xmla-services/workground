@@ -160,7 +160,8 @@ public enum PropertyDefinition {
         RowsetDefinition.Type.String,
         null,
         XmlaConstants.Access.Read,
-        MondrianServer.forId(null).getVersion().getVersionString(),
+	"10.50.1600.1",
+        //MondrianServer.forId(null).getVersion().getVersionString(),
         XmlaConstants.Method.DISCOVER,
         "The version of the Mondrian XMLA Provider"),
 
@@ -259,6 +260,15 @@ public enum PropertyDefinition {
             null,
             XmlaConstants.Access.ReadWrite,
             "1",
+            XmlaConstants.Method.DISCOVER_AND_EXECUTE,
+            ""),
+
+    // Microsoft-specific XMLA definition.
+    DbpropMsmdSubqueries(
+            RowsetDefinition.Type.Integer,
+            null,
+            XmlaConstants.Access.ReadWrite,
+            "0",
             XmlaConstants.Method.DISCOVER_AND_EXECUTE,
             "");
 
