@@ -111,7 +111,9 @@ public enum RowsetDefinition {
             DiscoverSchemaRowsetsRowset.Description,
             DiscoverSchemaRowsetsRowset.RestrictionsMask,
         },
-        null /* not sorted */)
+        new Column[] {
+            DiscoverSchemaRowsetsRowset.SchemaName,
+        })
     {
         public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
             return new DiscoverSchemaRowsetsRowset(request, handler);
@@ -748,9 +750,12 @@ public enum RowsetDefinition {
             MdschemaHierarchiesRowset.IsReadWrite,
             MdschemaHierarchiesRowset.DimensionUniqueSettings,
             MdschemaHierarchiesRowset.DimensionIsVisible,
-            MdschemaHierarchiesRowset.HierarchyIsVisible,
             MdschemaHierarchiesRowset.HierarchyOrdinal,
             MdschemaHierarchiesRowset.DimensionIsShared,
+            MdschemaHierarchiesRowset.HierarchyIsVisible,
+            MdschemaHierarchiesRowset.HierarchyOrigin,
+            MdschemaHierarchiesRowset.CubeSource,
+            MdschemaHierarchiesRowset.HierarchyVisiblity,
             MdschemaHierarchiesRowset.ParentChild,
             MdschemaHierarchiesRowset.Levels,
         },
@@ -760,6 +765,10 @@ public enum RowsetDefinition {
             MdschemaHierarchiesRowset.CubeName,
             MdschemaHierarchiesRowset.DimensionUniqueName,
             MdschemaHierarchiesRowset.HierarchyName,
+            MdschemaHierarchiesRowset.HierarchyUniqueName,
+            MdschemaHierarchiesRowset.HierarchyOrigin,
+            MdschemaHierarchiesRowset.CubeSource,
+            MdschemaHierarchiesRowset.HierarchyVisiblity,
         })
     {
         public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
@@ -887,13 +896,21 @@ public enum RowsetDefinition {
             MdschemaMeasuresRowset.MeasureIsVisible,
             MdschemaMeasuresRowset.LevelsList,
             MdschemaMeasuresRowset.Description,
+            MdschemaMeasuresRowset.MeasuregroupName,
+            MdschemaMeasuresRowset.DisplayFolder,
             MdschemaMeasuresRowset.FormatString,
+            MdschemaMeasuresRowset.CubeSource,
+            MdschemaMeasuresRowset.MeasureVisiblity,
         },
         new Column[] {
             MdschemaMeasuresRowset.CatalogName,
             MdschemaMeasuresRowset.SchemaName,
             MdschemaMeasuresRowset.CubeName,
             MdschemaMeasuresRowset.MeasureName,
+            MdschemaMeasuresRowset.MeasureUniqueName,
+            MdschemaMeasuresRowset.MeasuregroupName,
+            MdschemaMeasuresRowset.CubeSource,
+            MdschemaMeasuresRowset.MeasureVisiblity,
         })
     {
         public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
@@ -1753,17 +1770,25 @@ public enum RowsetDefinition {
                         return o1.name().compareTo(o2.name());
                     }
                 });
+
+            List<String> restrictionSchemaNames = null;
+            if(restrictions.containsKey(SchemaName.name)) {
+                restrictionSchemaNames = (List<String>)restrictions.get(SchemaName.name);
+            }
+
             for (RowsetDefinition rowsetDefinition : rowsetDefinitions) {
-                Row row = new Row();
-                row.set(SchemaName.name, rowsetDefinition.name());
+                if(restrictionSchemaNames == null || restrictionSchemaNames.contains(rowsetDefinition.name())) {
+                    Row row = new Row();
+                    row.set(SchemaName.name, rowsetDefinition.name());
 
-                row.set(SchemaGuid.name, rowsetDefinition.schemaGuid);
+                    row.set(SchemaGuid.name, rowsetDefinition.schemaGuid);
 
-                row.set(Restrictions.name, getRestrictions(rowsetDefinition));
+                    row.set(Restrictions.name, getRestrictions(rowsetDefinition));
 
-                String desc = rowsetDefinition.getDescription();
-                row.set(Description.name, (desc == null) ? "" : desc);
-                addRow(row, rows);
+                    String desc = rowsetDefinition.getDescription();
+                    row.set(Description.name, (desc == null) ? "" : desc);
+                    addRow(row, rows);
+                }
             }
         }
 
@@ -3704,7 +3729,6 @@ TODO: see above
                         row.set(CubeType.name, extra.getCubeType(cube));
                         //row.set(CubeGuid.name, "");
                         //row.set(CreatedOn.name, "");
-                        //row.set(LastSchemaUpdate.name, "");
                         //row.set(SchemaUpdatedBy.name, "");
                         //row.set(LastDataUpdate.name, "");
                         //row.set(DataUpdatedBy.name, "");
@@ -4477,6 +4501,37 @@ TODO: see above
                 Column.NOT_RESTRICTION,
                 Column.REQUIRED,
                 "A Boolean that indicates whether the hieararchy is visible.");
+        private static final Column HierarchyOrigin =
+            new Column(
+                "HIERARCHY_ORIGIN",
+                Type.UnsignedShort,
+                null,
+                Column.RESTRICTION,
+                Column.OPTIONAL,
+                "A bit mask that determines the source of the hierarchy:\n" +
+                        "1 MD_ORIGIN_USER_DEFINED identifies levels in a user defined hierarchy.\n" +
+                        "2 MD_ORIGIN_ATTRIBUTE identifies levels in an attribute hierarchy.\n" +
+                        "4 MD_ORIGIN_INTERNAL identifies levels in attribute hierarchies that are not enabled.\n" +
+                        "8 MD_ORIGIN_KEY_ATTRIBUTE identifies levels in a key attribute hierarchy.");
+        private static final Column CubeSource =
+            new Column(
+                "CUBE_SOURCE",
+                Type.UnsignedShort,
+                null,
+                Column.RESTRICTION,
+                Column.OPTIONAL,
+                "A bitmap with one of the following valid values:\n" +
+                        "1 CUBE\n" +
+                        "2 DIMENSION\n" +
+                        "Default restriction is a value of 1.");
+        private static final Column HierarchyVisiblity =
+            new Column(
+                "HIERARCHY_VISIBILITY",
+                Type.UnsignedShort,
+                null,
+                Column.RESTRICTION,
+                Column.OPTIONAL,
+                "A bitmap with one of the following valid values: 1 Visible, 2 Not visible.");
         private static final Column HierarchyOrdinal =
             new Column(
                 "HIERARCHY_ORDINAL",
@@ -4646,7 +4701,11 @@ TODO: see above
             row.set(DimensionUniqueSettings.name, 0);
 
             row.set(DimensionIsVisible.name, dimension.isVisible());
+
             row.set(HierarchyIsVisible.name, hierarchy.isVisible());
+            row.set(HierarchyVisiblity.name, hierarchy.isVisible()?1:2);
+
+            row.set(HierarchyOrigin.name, 0);
 
             row.set(HierarchyOrdinal.name, ordinal);
 
@@ -5190,6 +5249,22 @@ TODO: see above
                 Column.NOT_RESTRICTION,
                 Column.OPTIONAL,
                 "A human-readable description of the measure.");
+        private static final Column MeasuregroupName =
+            new Column(
+                "MEASUREGROUP_NAME",
+                Type.String,
+                null,
+                Column.RESTRICTION,
+                Column.OPTIONAL,
+                "The name of the measure group to which the measure belongs.");
+        private static final Column DisplayFolder =
+            new Column(
+                "MEASURE_DISPLAY_FOLDER",
+                Type.String,
+                null,
+                Column.NOT_RESTRICTION,
+                Column.OPTIONAL,
+                "The path to be used when displaying the measure in the user interface. Folder names will be separated by a semicolon. Nested folders are indicated by a backslash (\\).");
         private static final Column FormatString =
             new Column(
                 "DEFAULT_FORMAT_STRING",
@@ -5198,6 +5273,25 @@ TODO: see above
                 Column.NOT_RESTRICTION,
                 Column.OPTIONAL,
                 "The default format string for the measure.");
+        private static final Column MeasureVisiblity =
+            new Column(
+                "MEASURE_VISIBILITY",
+                Type.UnsignedShort,
+                null,
+                Column.RESTRICTION,
+                Column.OPTIONAL,
+                "A bitmap with one of the following valid values: 1 Visible, 2 Not visible.");
+        private static final Column CubeSource =
+            new Column(
+                "CUBE_SOURCE",
+                Type.UnsignedShort,
+                null,
+                Column.RESTRICTION,
+                Column.OPTIONAL,
+                "A bitmap with one of the following valid values:\n" +
+                        "1 CUBE\n" +
+                        "2 DIMENSION\n" +
+                        "Default restriction is a value of 1.");
 
         public void populateImpl(
             XmlaResponse response,
@@ -5326,6 +5420,12 @@ TODO: see above
             }
             row.set(DataType.name, dbType.xmlaOrdinal());
             row.set(MeasureIsVisible.name, visible);
+
+            row.set(MeasuregroupName.name, "");
+
+            row.set(DisplayFolder.name, extra.getMeasureDisplayFolder(member));
+
+            row.set(MeasureVisiblity.name, visible?1:2);
 
             if (levelListStr != null) {
                 row.set(LevelsList.name, levelListStr);

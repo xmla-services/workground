@@ -765,7 +765,13 @@ public class XmlaHandler {
             if (request.isDrillThrough()) {
                 result = executeDrillThroughQuery(request);
             } else {
-                result = executeQuery(request);
+                String[] tokens = request.getStatement().split(" ");
+                if(tokens.length > 2 && tokens[0].toUpperCase().equals("REFRESH") && tokens[1].toUpperCase().equals("CUBE")) {
+                    //empty result
+                    ;
+                } else {
+                    result = executeQuery(request);
+                }
             }
 
             SaxWriter writer = response.getWriter();
@@ -1903,6 +1909,7 @@ public class XmlaHandler {
         private XmlaUtil.ElementNameEncoder encoder =
             XmlaUtil.ElementNameEncoder.INSTANCE;
         private XmlaExtra extra;
+        private mondrian.olap4j.MondrianOlap4jConnection mondrianOlap4jConnection;
 
         protected MDDataSet_Multidimensional(
             CellSet cellSet,
@@ -1913,6 +1920,8 @@ public class XmlaHandler {
             super(cellSet);
             this.omitDefaultSlicerInfo = omitDefaultSlicerInfo;
             this.json = json;
+            this.mondrianOlap4jConnection =
+                    (mondrian.olap4j.MondrianOlap4jConnection)cellSet.getStatement().getConnection();
             this.extra = getExtra(cellSet.getStatement().getConnection());
         }
 
@@ -1936,6 +1945,16 @@ public class XmlaHandler {
             writer.startElement("CubeInfo");
             writer.startElement("Cube");
             writer.textElement("CubeName", cube.getName());
+            java.text.Format formatter =
+                    new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            String formattedDate =
+                    formatter.format(this.extra.getSchemaLoadDate(this.mondrianOlap4jConnection.getMondrianOlap4jSchema()));
+            writer.startElement("LastDataUpdate", "xmlns", NS_AS_ENGINE);
+            writer.characters(formattedDate);
+            writer.endElement();
+            writer.startElement("LastSchemaUpdate", "xmlns", NS_AS_ENGINE);
+            writer.characters(formattedDate);
+            writer.endElement();
             writer.endElement();
             writer.endElement(); // CubeInfo
 
@@ -3126,6 +3145,8 @@ public class XmlaHandler {
 
         int getMeasureAggregator(Member member);
 
+        String getMeasureDisplayFolder(Member member);
+
         void checkMemberOrdinal(Member member) throws OlapException;
 
         /**
@@ -3314,6 +3335,10 @@ public class XmlaHandler {
         public int getMeasureAggregator(Member member) {
             return RowsetDefinition.MdschemaMeasuresRowset
                 .MDMEASURE_AGGR_UNKNOWN;
+        }
+
+        public String getMeasureDisplayFolder(Member member) {
+            return "";
         }
 
         public void checkMemberOrdinal(Member member) {

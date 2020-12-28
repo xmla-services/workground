@@ -403,6 +403,8 @@ public class RolapCube extends CubeBase {
         }
         measure.setProperty(Property.VISIBLE.name, visible);
 
+        measure.setProperty(Property.DISPLAY_FOLDER.name, xmlMeasure.displayFolder);
+
         List<String> propNames = new ArrayList<String>();
         List<String> propExprs = new ArrayList<String>();
         validateMemberProps(

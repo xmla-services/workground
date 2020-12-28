@@ -53,6 +53,9 @@ public interface XmlaConstants {
 
     public static final String SOAP_PREFIX = "SOAP-ENV";
 
+    public static final String NS_AS_ENGINE =
+        "http://schemas.microsoft.com/analysisservices/2003/engine";
+
     /**
      * Soap Header mustUnderstand attribute name.
      */

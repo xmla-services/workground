@@ -1021,6 +1021,12 @@ Revision is $Id$
                 Default true.
             </Doc>
         </Attribute>
+        <Attribute name="displayFolder" required="false">
+            <Doc>
+                The path to be used when displaying the measure in the user interface.
+                Folder names will be separated by a semicolon. Nested folders are indicated by a backslash (\).
+            </Doc>
+        </Attribute>
         <Object name="annotations" type="Annotations" required="false">
             <Doc>Contains values of user-defined properties.</Doc>
         </Object>

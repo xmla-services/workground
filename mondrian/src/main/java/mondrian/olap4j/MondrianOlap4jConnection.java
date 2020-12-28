@@ -117,6 +117,10 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
     private final MondrianOlap4jSchema olap4jSchema;
     private final NamedList<MondrianOlap4jDatabase> olap4jDatabases;
 
+    public MondrianOlap4jSchema getMondrianOlap4jSchema(){
+        return this.olap4jSchema;
+    }
+
     /**
      * Creates an Olap4j connection to Mondrian.
      *

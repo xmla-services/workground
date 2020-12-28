@@ -194,6 +194,14 @@
                                             </xsd:documentation>
                                         </xsd:annotation>
                                     </xsd:attribute>
+                                    <xsd:attribute name="displayFolder" type="xsd:string" use="optional">
+                                        <xsd:annotation>
+                                            <xsd:documentation>
+                                                The path to be used when displaying the measure in the user interface.
+                                                Folder names will be separated by a semicolon. Nested folders are indicated by a backslash (\).
+                                            </xsd:documentation>
+                                        </xsd:annotation>
+                                    </xsd:attribute>
                                 </xsd:complexType>
                             </xsd:element>
                             <xsd:element name="CalculatedMember" type="CalculatedMember" minOccurs="0" maxOccurs="unbounded">

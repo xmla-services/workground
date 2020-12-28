@@ -189,6 +189,12 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         return ((RolapLevel) olap4jLevel.level).isParentChild();
     }
 
+    public String getMeasureDisplayFolder(Member member) {
+        MondrianOlap4jMeasure olap4jMeasure =
+                (MondrianOlap4jMeasure) member;
+        return olap4jMeasure.getDisplayFolder();
+    }
+
     public int getMeasureAggregator(Member member) {
         MondrianOlap4jMeasure olap4jMeasure =
             (MondrianOlap4jMeasure) member;
