@@ -698,7 +698,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         if (t instanceof XmlaException) {
             XmlaException xex = (XmlaException) t;
             code = xex.getCode();
-            faultString = xex.getFaultString();
+            faultString = xex.getFaultString() + " " + xex.getDetail();
             faultCode = XmlaException.formatFaultCode(xex);
             detail = XmlaException.formatDetail(xex.getDetail());
 
@@ -706,7 +706,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
             // some unexpected Throwable
             t = XmlaException.getRootCause(t);
             code = UNKNOWN_ERROR_CODE;
-            faultString = UNKNOWN_ERROR_FAULT_FS;
+            faultString = UNKNOWN_ERROR_FAULT_FS + " " + t.getMessage();
             faultCode = XmlaException.formatFaultCode(
                 SERVER_FAULT_FC, code);
             detail = XmlaException.formatDetail(t.getMessage());
