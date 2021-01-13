@@ -1056,6 +1056,8 @@ public class RolapCube extends CubeBase {
         }
         member.setProperty(Property.VISIBLE.name, visible);
 
+        member.setProperty(Property.DISPLAY_FOLDER.name, xmlCalcMember.displayFolder);
+
         if (xmlCalcMember.caption != null
             && xmlCalcMember.caption.length() > 0)
         {
