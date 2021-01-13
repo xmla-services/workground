@@ -78,6 +78,7 @@ public abstract class XmlaServlet
     }
 
     public XmlaServlet() {
+        LOGGER.info("Application working directory: \"" + new java.io.File(".").getAbsolutePath() + "\"");
     }
 
 
