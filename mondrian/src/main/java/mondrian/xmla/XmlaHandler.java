@@ -40,6 +40,7 @@ import java.util.Date;
 import static mondrian.xmla.XmlaConstants.*;
 import static org.olap4j.metadata.XmlaConstants.*;
 
+import mondrian.server.Locus;
 
 /**
  * An <code>XmlaHandler</code> responds to XML for Analysis (XML/A) requests.
@@ -1740,6 +1741,7 @@ public class XmlaHandler {
                     dataSet =
                         new MDDataSet_Multidimensional(
                             cellSet,
+                            connection,
                             content != Content.DataIncludeDefaultSlicer,
                             responseMimeType
                             == Enumeration.ResponseMimeType.JSON);
@@ -1909,10 +1911,12 @@ public class XmlaHandler {
         private XmlaUtil.ElementNameEncoder encoder =
             XmlaUtil.ElementNameEncoder.INSTANCE;
         private XmlaExtra extra;
+        private OlapConnection connection;
         private mondrian.olap4j.MondrianOlap4jConnection mondrianOlap4jConnection;
 
         protected MDDataSet_Multidimensional(
             CellSet cellSet,
+            OlapConnection connection,
             boolean omitDefaultSlicerInfo,
             boolean json)
             throws SQLException
@@ -1922,6 +1926,7 @@ public class XmlaHandler {
             this.json = json;
             this.mondrianOlap4jConnection =
                     (mondrian.olap4j.MondrianOlap4jConnection)cellSet.getStatement().getConnection();
+            this.connection = connection;
             this.extra = getExtra(cellSet.getStatement().getConnection());
         }
 
@@ -2317,6 +2322,41 @@ public class XmlaHandler {
                 "Axis",
                 "name", axisName);
             writer.startSequence("Tuples", "Tuple");
+
+            HashMap<Level, ArrayList<mondrian.olap.Member>> levelMembers = new HashMap<>();
+
+            for (Position p : axis.getPositions()) {
+                for (Member member : p.getMembers()) {
+                    Level level = member.getLevel();
+                    if(!levelMembers.containsKey(level)){
+                        levelMembers.put(level, new ArrayList<mondrian.olap.Member>());
+                    }
+                    levelMembers.get(level)
+                            .add(((mondrian.olap4j.MondrianOlap4jMember)member).getOlapMember());
+                }
+            }
+
+            mondrian.rolap.RolapConnection rolapConnection =
+                    ((mondrian.olap4j.MondrianOlap4jConnection)this.connection).getMondrianConnection();
+
+
+            for(Map.Entry<Level, ArrayList<mondrian.olap.Member>> entry : levelMembers.entrySet()) {
+                Level level = entry.getKey();
+                ArrayList<mondrian.olap.Member> members = entry.getValue();
+
+                if (members.size() > 0 && members.get(0).getLevel().getChildLevel() != null) {
+                    Locus.execute(
+                            rolapConnection,
+                            "MondrianOlap4jMember.getChildMembers",
+                            new Locus.Action<List<mondrian.olap.Member>>() {
+                                public List<mondrian.olap.Member> execute() {
+                                    return
+                                            rolapConnection.getSchemaReader()
+                                                    .getMemberChildren(members);
+                                }
+                            });
+                }
+            }
 
             List<Position> positions = axis.getPositions();
             Iterator<Position> pit = positions.iterator();

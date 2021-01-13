@@ -124,6 +124,8 @@ class DrilldownLevelFunDef extends FunDefBase {
 
         List<Member> drilledSet = new ArrayList<Member>();
 
+        List<Member> parentMembers = new ArrayList<Member>();
+
         for (int i = 0, m = list.size(); i < m; i++) {
             Member member = list.get(i);
             drilledSet.add(member);
@@ -142,12 +144,13 @@ class DrilldownLevelFunDef extends FunDefBase {
             if (member.getLevel().getDepth() == searchDepth
                 && !FunUtil.isAncestorOf(member, nextMember, true))
             {
-                final List<Member> childMembers =
-                    evaluator.getSchemaReader().getMemberChildren(member);
-                for (Member childMember : childMembers) {
-                    drilledSet.add(childMember);
-                }
+                parentMembers.add(member);
             }
+        }
+        final List<Member> childMembers =
+                evaluator.getSchemaReader().getMemberChildren(parentMembers);
+        for (Member childMember : childMembers) {
+            drilledSet.add(childMember);
         }
         return drilledSet;
     }

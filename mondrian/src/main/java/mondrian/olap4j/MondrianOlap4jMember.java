@@ -32,7 +32,7 @@ import java.util.List;
  * @author jhyde
  * @since May 25, 2007
  */
-class MondrianOlap4jMember
+public class MondrianOlap4jMember
     extends MondrianOlap4jMetadataElement
     implements Member, Named
 {
@@ -257,6 +257,10 @@ class MondrianOlap4jMember
     protected OlapElement getOlapElement() {
         return member;
     }
+
+    public mondrian.olap.Member getOlapMember() { return member; }
+
+
 }
 
 // End MondrianOlap4jMember.java
