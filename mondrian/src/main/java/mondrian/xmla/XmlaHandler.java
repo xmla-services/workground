@@ -2399,9 +2399,23 @@ public class XmlaHandler {
                 } else if (longProp == StandardMemberProperty.DEPTH) {
                     value = member.getDepth();
                 } else {
-                    value = (longProp instanceof IMondrianOlap4jProperty)
-                        ? getHierarchyProperty(member, longProp)
-                        : member.getPropertyValue(longProp);
+                    if(longProp instanceof IMondrianOlap4jProperty) {
+                        IMondrianOlap4jProperty currentProperty =
+                                (IMondrianOlap4jProperty) longProp;
+                        String thisHierarchyName = member.getHierarchy().getName();
+                        String thatHierarchyName = currentProperty.getLevel()
+                                .getHierarchy().getName();
+                        if (thisHierarchyName.equals(thatHierarchyName)) {
+                            value = getHierarchyProperty(member, longProp);
+                        }
+                        else {
+                            // Property belongs to other hierarchy
+                            continue;
+                        }
+                    }
+                    else {
+                        value = member.getPropertyValue(longProp);
+                    }
                 }
                 if(value == null) {
                     value = getDefaultValue(prop);
