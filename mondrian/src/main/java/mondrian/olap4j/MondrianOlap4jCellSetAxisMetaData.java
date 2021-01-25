@@ -57,6 +57,10 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
             final String[] names = id.toStringArray();
             Property olap4jProperty = null;
             if (names.length == 1) {
+                if(names[0].equals("MEMBER_VALUE")) {
+                    //TODO:
+                    continue;
+                }
                 olap4jProperty =
                     Util.lookup(
                         Property.StandardMemberProperty.class, names[0]);

@@ -37,8 +37,9 @@ class DrilldownLevelFunDef extends FunDefBase {
             "DrilldownLevel",
             "DrilldownLevel(<Set>[, <Level>]) or DrilldownLevel(<Set>, , <Index>)",
             "Drills down the members of a set, at a specified level, to one level below. Alternatively, drills down on a specified dimension in the set.",
-            new String[]{"fxx", "fxxl", "fxxen"},
-            DrilldownLevelFunDef.class);
+            new String[]{"fxx", "fxxl", "fxxen", "fxxeey"},
+            DrilldownLevelFunDef.class,
+            new String[]{"INCLUDE_CALC_MEMBERS"});
 
     public DrilldownLevelFunDef(FunDef dummyFunDef) {
         super(dummyFunDef);
@@ -54,7 +55,7 @@ class DrilldownLevelFunDef extends FunDefBase {
                 ? compiler.compileLevel(call.getArg(1))
                 : null;
         final IntegerCalc indexCalc =
-            call.getArgCount() > 2
+            call.getArgCount() == 3
                 ? compiler.compileInteger(call.getArg(2))
                 : null;
         final int arity = listCalc.getType().getArity();

@@ -129,20 +129,32 @@ public class TupleFunDef extends FunDefBase {
                 return new ParenthesesFunDef(args[0].getCategory());
             } else {
                 final int[] argTypes = new int[args.length];
+                boolean hasSet = false;
                 for (int i = 0; i < args.length; i++) {
                     // Arg must be a member:
                     //  OK: ([Gender].[S], [Time].[1997])   (member, member)
                     //  OK: ([Gender], [Time])           (dimension, dimension)
                     // Not OK:
                     //  ([Gender].[S], [Store].[Store City]) (member, level)
-                    if (!validator.canConvert(
-                            i, args[i], Category.Member, conversions))
-                    {
+                    if (validator.canConvert(
+                            i, args[i], Category.Member, conversions)) {
+                        argTypes[i] = Category.Member;
+                    } else if(validator.canConvert(
+                            i, args[i], Category.Set, conversions)){
+                        hasSet = true;
+                        argTypes[i] = Category.Set;
+                    }
+                    else {
                         return null;
                     }
-                    argTypes[i] = Category.Member;
                 }
-                return new TupleFunDef(argTypes);
+                if(hasSet){
+                    FunDef dummy = createDummyFunDef(this, Category.Set, args);
+                    return new CrossJoinFunDef(dummy);
+                }
+                else {
+                    return new TupleFunDef(argTypes);
+                }
             }
         }
     }

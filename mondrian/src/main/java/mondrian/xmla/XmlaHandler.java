@@ -1732,7 +1732,7 @@ public class XmlaHandler {
             try {
                 cellSet = statement.executeQuery();
 
-                final Format format = getFormat(request, null);
+                final Format format = getFormat(request, Format.Native);
                 final Content content = getContent(request);
                 final Enumeration.ResponseMimeType responseMimeType =
                     getResponseMimeType(request);

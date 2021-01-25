@@ -886,6 +886,8 @@ public class BuiltinFunTable extends FunTableImpl {
             }
         });
 
+        builder.define(NonEmptyFunDef.Resolver);
+
         builder.define(CrossJoinFunDef.Resolver);
         builder.define(NonEmptyCrossJoinFunDef.Resolver);
         builder.define(CrossJoinFunDef.StarResolver);
@@ -1391,6 +1393,27 @@ public class BuiltinFunTable extends FunTableImpl {
                 };
             }
         });
+
+        // <Member>.Unique_Name
+        builder.define(
+                new FunDefBase(
+                        "Unique_Name",
+                        "Returns the unique name of a member.",
+                        "pSm")
+                {
+                    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+                    {
+                        final MemberCalc memberCalc =
+                                compiler.compileMember(call.getArg(0));
+                        return new AbstractStringCalc(call, new Calc[] {memberCalc}) {
+                            public String evaluateString(Evaluator evaluator) {
+                                final Member member =
+                                        memberCalc.evaluateMember(evaluator);
+                                return member.getUniqueName();
+                            }
+                        };
+                    }
+                });
 
         //
         // TUPLE FUNCTIONS

@@ -139,7 +139,7 @@ class MondrianServerImpl
             "Member_Type", "Member_Unique_Name", "Members",
             "Microsoft_Clustering", "Microsoft_Decision_Trees", "Mining",
             "Model", "Model_Existence_Only", "Models", "Move", "MTD", "Name",
-            "Nest", "NextMember", "Non", "Normal", "Not", "Ntext", "Nvarchar",
+            "Nest", "NextMember", "Non", "NonEmpty", "Normal", "Not", "Ntext", "Nvarchar",
             "OLAP", "On", "OpeningPeriod", "OpenQuery", "Or", "Ordered",
             "Ordinal", "Pages", "ParallelPeriod", "Parent",
             "Parent_Level", "Parent_Unique_Name", "PeriodsToDate", "PMML",
