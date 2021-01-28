@@ -259,18 +259,47 @@ public enum PropertyDefinition {
             RowsetDefinition.Type.Integer,
             null,
             XmlaConstants.Access.ReadWrite,
-            "1",
+            "0",
             XmlaConstants.Method.DISCOVER_AND_EXECUTE,
-            ""),
+            "An enumeration value that determines how placeholder members in a ragged or\n" +
+                    "unbalanced hierarchy are treated."),
+
+    // Microsoft-specific XMLA definition.
+    MdpropMdxSubqueries(
+            RowsetDefinition.Type.Integer,
+            null,
+            XmlaConstants.Access.Read,
+            "",
+            XmlaConstants.Method.DISCOVER,
+            "A bitmask that indicates the level of support for subqueries in MDX."),
+
+    // Microsoft-specific XMLA definition.
+    ClientProcessID(
+            RowsetDefinition.Type.Integer,
+            null,
+            XmlaConstants.Access.ReadWrite,
+            "0",
+            XmlaConstants.Method.DISCOVER_AND_EXECUTE,
+            "The ID of the client process."),
+
+//    // Microsoft-specific XMLA definition.
+//    MdpropMdxFormulas(
+//            RowsetDefinition.Type.Integer,
+//            null,
+//            XmlaConstants.Access.ReadWrite,
+//            "63",
+//            XmlaConstants.Method.DISCOVER_AND_EXECUTE,
+//            ""),
 
     // Microsoft-specific XMLA definition.
     DbpropMsmdSubqueries(
             RowsetDefinition.Type.Integer,
             null,
             XmlaConstants.Access.ReadWrite,
-            "0",
+            "1",
             XmlaConstants.Method.DISCOVER_AND_EXECUTE,
-            "");
+            "An enumeration value that determines the behavior of subqueries.")
+            ;
 
     final RowsetDefinition.Type type;
     final Set<? extends Enum> enumSet;

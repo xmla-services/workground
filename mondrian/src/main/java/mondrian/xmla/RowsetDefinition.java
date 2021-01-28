@@ -752,10 +752,10 @@ public enum RowsetDefinition {
             MdschemaHierarchiesRowset.DimensionIsVisible,
             MdschemaHierarchiesRowset.HierarchyOrdinal,
             MdschemaHierarchiesRowset.DimensionIsShared,
-            MdschemaHierarchiesRowset.HierarchyIsVisible,
+            MdschemaHierarchiesRowset.HierarchyIsVisibile,
             MdschemaHierarchiesRowset.HierarchyOrigin,
             MdschemaHierarchiesRowset.CubeSource,
-            MdschemaHierarchiesRowset.HierarchyVisiblity,
+            MdschemaHierarchiesRowset.HierarchyVisibility,
             MdschemaHierarchiesRowset.ParentChild,
             MdschemaHierarchiesRowset.Levels,
         },
@@ -768,7 +768,7 @@ public enum RowsetDefinition {
             MdschemaHierarchiesRowset.HierarchyUniqueName,
             MdschemaHierarchiesRowset.HierarchyOrigin,
             MdschemaHierarchiesRowset.CubeSource,
-            MdschemaHierarchiesRowset.HierarchyVisiblity,
+            MdschemaHierarchiesRowset.HierarchyVisibility,
         })
     {
         public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
@@ -834,6 +834,9 @@ public enum RowsetDefinition {
             MdschemaLevelsRowset.LevelUniqueSettings,
             MdschemaLevelsRowset.LevelIsVisible,
             MdschemaLevelsRowset.Description,
+            MdschemaLevelsRowset.LevelOrigin,
+            MdschemaLevelsRowset.CubeSource,
+            MdschemaLevelsRowset.LevelVisibility,
         },
         new Column[] {
             MdschemaLevelsRowset.CatalogName,
@@ -841,7 +844,11 @@ public enum RowsetDefinition {
             MdschemaLevelsRowset.CubeName,
             MdschemaLevelsRowset.DimensionUniqueName,
             MdschemaLevelsRowset.HierarchyUniqueName,
-            MdschemaLevelsRowset.LevelNumber,
+            MdschemaLevelsRowset.LevelName,
+            MdschemaLevelsRowset.LevelUniqueName,
+            MdschemaLevelsRowset.LevelOrigin,
+            MdschemaLevelsRowset.CubeSource,
+            MdschemaLevelsRowset.LevelVisibility,
         })
     {
         public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
@@ -4493,7 +4500,7 @@ TODO: see above
                 Column.NOT_RESTRICTION,
                 Column.REQUIRED,
                 "A Boolean that indicates whether the parent dimension is visible.");
-        private static final Column HierarchyIsVisible =
+        private static final Column HierarchyIsVisibile =
             new Column(
                 "HIERARCHY_IS_VISIBLE",
                 Type.Boolean,
@@ -4509,10 +4516,10 @@ TODO: see above
                 Column.RESTRICTION,
                 Column.OPTIONAL,
                 "A bit mask that determines the source of the hierarchy:\n" +
-                        "1 MD_ORIGIN_USER_DEFINED identifies levels in a user defined hierarchy.\n" +
-                        "2 MD_ORIGIN_ATTRIBUTE identifies levels in an attribute hierarchy.\n" +
-                        "4 MD_ORIGIN_INTERNAL identifies levels in attribute hierarchies that are not enabled.\n" +
-                        "8 MD_ORIGIN_KEY_ATTRIBUTE identifies levels in a key attribute hierarchy.");
+                        "MD_USER_DEFINED identifies user defined hierarchies, and has a value of 0x0000001.\n" +
+                        "MD_SYSTEM_ENABLED identifies attribute hierarchies, and has a value of 0x0000002.\n" +
+                        "MD_SYSTEM_INTERNAL identifies attributes with no attribute hierarchies, and has a value of 0x0000004." +
+                        "A parent/child attribute hierarchy is both MD_USER_DEFINED and MD_SYSTEM_ENABLED.");
         private static final Column CubeSource =
             new Column(
                 "CUBE_SOURCE",
@@ -4524,7 +4531,7 @@ TODO: see above
                         "1 CUBE\n" +
                         "2 DIMENSION\n" +
                         "Default restriction is a value of 1.");
-        private static final Column HierarchyVisiblity =
+        private static final Column HierarchyVisibility =
             new Column(
                 "HIERARCHY_VISIBILITY",
                 Type.UnsignedShort,
@@ -4702,8 +4709,8 @@ TODO: see above
 
             row.set(DimensionIsVisible.name, dimension.isVisible());
 
-            row.set(HierarchyIsVisible.name, hierarchy.isVisible());
-            row.set(HierarchyVisiblity.name, hierarchy.isVisible()?1:2);
+            row.set(HierarchyIsVisibile.name, hierarchy.isVisible());
+            row.set(HierarchyVisibility.name, hierarchy.isVisible()?1:2);
 
             row.set(HierarchyOrigin.name, 0);
 
@@ -4921,6 +4928,40 @@ TODO: see above
                 Column.OPTIONAL,
                 "A human-readable description of the level. NULL if no "
                 + "description exists.");
+        private static final Column LevelOrigin =
+            new Column(
+                "LEVEL_ORIGIN",
+                Type.UnsignedShort,
+                null,
+                Column.RESTRICTION,
+                Column.OPTIONAL,
+                "A bit map that defines how the level was sourced:\n" +
+                        "MD_ORIGIN_USER_DEFINED identifies levels in a user defined hierarchy.\n" +
+                        "MD_ORIGIN_ATTRIBUTE identifies levels in an attribute hierarchy.\n" +
+                        "MD_ORIGIN_KEY_ATTRIBUTE identifies levels in a key attribute hierarchy.\n" +
+                        "MD_ORIGIN_INTERNAL identifies levels in attribute hierarchies that are not enabled.\n");
+        private static final Column CubeSource =
+            new Column(
+                "CUBE_SOURCE",
+                Type.UnsignedShort,
+                null,
+                Column.RESTRICTION,
+                Column.OPTIONAL,
+                "A bitmap with one of the following valid values:\n" +
+                        "1 CUBE\n" +
+                        "2 DIMENSION\n" +
+                        "Default restriction is a value of 1.");
+        private static final Column LevelVisibility =
+            new Column(
+                "LEVEL_VISIBILITY",
+                Type.UnsignedShort,
+                null,
+                Column.RESTRICTION,
+                Column.OPTIONAL,
+                "A bitmap with one of the following values:\n" +
+                        "1 Visible\n" +
+                        "2 Not visible\n" +
+                        "Default restriction is a value of 1.");
 
         public void populateImpl(
             XmlaResponse response,
@@ -5060,6 +5101,7 @@ TODO: see above
             row.set(LevelUniqueSettings.name, uniqueSettings);
             row.set(LevelIsVisible.name, level.isVisible());
             row.set(Description.name, desc);
+            row.set(LevelOrigin.name, 0);
             addRow(row, rows);
             return true;
         }
