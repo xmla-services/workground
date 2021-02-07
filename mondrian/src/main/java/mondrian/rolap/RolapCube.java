@@ -2776,6 +2776,43 @@ public class RolapCube extends CubeBase {
         return measuresHierarchy.getMemberReader().getMembers();
     }
 
+    public Formula createNamedSet(String xml) {
+        //MondrianDef.CalculatedMember xmlCalcMember;
+        MondrianDef.NamedSet xmlNamedSet;
+        try {
+            final Parser xmlParser = XOMUtil.createDefaultParser();
+            final DOMWrapper def = xmlParser.parse(xml);
+            final String tagName = def.getTagName();
+            if (tagName.equals("NamedSet")) {
+                xmlNamedSet = new MondrianDef.NamedSet(def);
+            } else {
+                throw new XOMException(
+                    "Got <" + tagName + "> when expecting <NamedSet>");
+            }
+        } catch (XOMException e) {
+            throw Util.newError(
+                e,
+                "Error while creating named set from XML ["
+                + xml + "]");
+        }
+
+        try {
+            loadInProgress = true;
+            final List<Formula> setList = new ArrayList<Formula>();
+            createCalcMembersAndNamedSets(
+                Collections.<MondrianDef.CalculatedMember>emptyList(),
+                Collections.singletonList(xmlNamedSet),
+                new ArrayList<RolapMember>(),
+                setList,
+                this,
+                true);
+            assert setList.size() == 1;
+            return setList.get(0);
+        } finally {
+            loadInProgress = false;
+        }
+    }
+
     public Member createCalculatedMember(String xml) {
         MondrianDef.CalculatedMember xmlCalcMember;
         try {
@@ -3220,6 +3257,15 @@ public class RolapCube extends CubeBase {
       }
       cubesList.addAll(cubes);
       return cubesList;
+    }
+
+    public void addCalculatedMeasure(Member member){
+        List<Member> measureList = new ArrayList<Member>(getMeasures());
+        measureList.add(member);
+        setMeasuresHierarchyMemberReader(
+                new CacheMemberReader(
+                        new MeasureMemberSource(this.measuresHierarchy,
+                                Util.<RolapMember>cast(measureList))));
     }
 }
 

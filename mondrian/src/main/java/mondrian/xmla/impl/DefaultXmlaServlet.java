@@ -13,6 +13,7 @@ package mondrian.xmla.impl;
 
 import mondrian.util.XmlParserFactoryProducer;
 import mondrian.xmla.*;
+import mondrian.server.Session;
 
 import org.olap4j.impl.Olap4jUtil;
 
@@ -312,8 +313,13 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                         CONTEXT_XMLA_SESSION_STATE,
                         CONTEXT_XMLA_SESSION_STATE_BEGIN);
 
+                    Session.create(sessionIdStr);
+
                 } else if (localName.equals(XMLA_SESSION)) {
                     sessionIdStr = getSessionIdFromRequest(e, context);
+
+                    Session.get(sessionIdStr);
+                    Session.checkIn(sessionIdStr);
 
                     SessionInfo sessionInfo = getSessionInfo(sessionIdStr);
 
@@ -329,12 +335,23 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                         CONTEXT_XMLA_SESSION_STATE,
                         CONTEXT_XMLA_SESSION_STATE_WITHIN);
 
+
                 } else if (localName.equals(XMLA_END_SESSION)) {
                     sessionIdStr = getSessionIdFromRequest(e, context);
+                    context.put(CONTEXT_XMLA_SESSION_ID, sessionIdStr);
                     context.put(
                         CONTEXT_XMLA_SESSION_STATE,
                         CONTEXT_XMLA_SESSION_STATE_END);
-
+                    // Session is closed in XmlaServlet doPost
+                } else {
+                    // Request lifetime session
+                    // Session is closed in XmlaServlet doPost
+                    String requestSessionId = generateSessionId(context);
+                    context.put(CONTEXT_XMLA_SESSION_ID, sessionIdStr);
+                    Session.create(requestSessionId);
+                    context.put(
+                            CONTEXT_XMLA_SESSION_STATE,
+                            CONTEXT_XMLA_SESSION_STATE_END);
                 }
 
                 if(sessionIdStr!=null) {
@@ -748,20 +765,61 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
             // information belonging to header entries. Detailed error
             // information belonging to header entries MUST be carried within
             // header entries.
-            if (phase != Phase.PROCESS_HEADER) {
-                writer.startElement("detail");
-                writer.startElement(
-                    FAULT_NS_PREFIX + ":error",
-                    "xmlns:" + FAULT_NS_PREFIX, MONDRIAN_NAMESPACE);
-                writer.startElement("code");
-                writer.characters(code);
-                writer.endElement(); // code
-                writer.startElement("desc");
-                writer.characters(detail);
-                writer.endElement(); // desc
-                writer.endElement(); // error
-                writer.endElement(); // detail
+
+            //code must be unsigned type
+            //HSH_UNKNOWN_CODE
+            switch (code) {
+                case  ("00HSBE02"):
+                    code = "3238789130"; // The connection either timed out or was lost.
+                    break;
+                case ("00HSHU01"):
+                    code = "3238789130"; // The connection either timed out or was lost.
+                    break;
+                default:
+                    code = "3238658121";
+                    break;
             }
+            writer.startElement("detail");
+            writer.startElement("Error",
+                    "ErrorCode", code,
+                    "Description", detail);
+            writer.endElement(); // error
+            writer.endElement(); // detail
+
+//            if (phase != Phase.PROCESS_HEADER) {
+//                boolean  canConvertUnsignedInt;
+//                try {
+//                    Integer.parseUnsignedInt(code);
+//                    canConvertUnsignedInt = true;
+//                }
+//                catch(Exception ex) {
+//                    canConvertUnsignedInt = false;
+//                }
+//                if(canConvertUnsignedInt) {
+//                    //code must be unsigned type
+//                    //code = "3238658121";
+//                    writer.startElement("detail");
+//                    writer.startElement("Error",
+//                            "ErrorCode", code,
+//                            "Description", detail);
+//                    writer.endElement(); // error
+//                    writer.endElement(); // detail
+//                }
+//                else {
+//                    writer.startElement("detail");
+//                    writer.startElement(
+//                            FAULT_NS_PREFIX + ":error",
+//                            "xmlns:" + FAULT_NS_PREFIX, MONDRIAN_NAMESPACE);
+//                    writer.startElement("code");
+//                    writer.characters(code);
+//                    writer.endElement(); // code
+//                    writer.startElement("desc");
+//                    writer.characters(detail);
+//                    writer.endElement(); // desc
+//                    writer.endElement(); // error
+//                    writer.endElement(); // detail
+//                }
+//            }
 
             writer.endElement();   // </Fault>
             writer.endDocument();

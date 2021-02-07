@@ -1529,4 +1529,16 @@ log4j.configuration=file:log4j.properties</code></blockquote>
         <Core>false</Core>
         <Type>String</Type>
     </PropertyDefinition>
+    <PropertyDefinition>
+        <Name>IdleOrphanSessionTimeout</Name>
+        <Path>mondrian.server.IdleOrphanSessionTimeout</Path>
+        <Description>
+            <p>
+                The server will close a session if it is not in use for the specified timeout.
+                Default value is 3600 seconds.
+            </p>
+        </Description>
+        <Type>int</Type>
+        <Default>3600</Default>
+    </PropertyDefinition>
 </PropertyDefinitions>

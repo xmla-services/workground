@@ -377,6 +377,16 @@ public abstract class XmlaServlet
                 phase = Phase.SEND_ERROR;
                 marshallSoapMessage(response, responseSoapParts, mimeType);
             }
+
+            String sessionId = (String)context.get(CONTEXT_XMLA_SESSION_ID);
+            if(sessionId != null) {
+                if(((String)context.get(CONTEXT_XMLA_SESSION_STATE)).equals(CONTEXT_XMLA_SESSION_STATE_END)) {
+                    mondrian.server.Session.close(sessionId);
+                }
+                else {
+                    mondrian.server.Session.checkIn(sessionId);
+                }
+            }
         } catch (Throwable t) {
             LOGGER.error("Unknown Error when handling XML/A message", t);
             handleFault(response, responseSoapParts, phase, t);

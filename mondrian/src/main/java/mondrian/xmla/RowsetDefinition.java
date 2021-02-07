@@ -1096,6 +1096,10 @@ public enum RowsetDefinition {
             MdschemaSetsRowset.CubeName,
             MdschemaSetsRowset.SetName,
             MdschemaSetsRowset.Scope,
+            MdschemaSetsRowset.Description,
+            MdschemaSetsRowset.Expression,
+            MdschemaSetsRowset.Dimensions,
+            MdschemaSetsRowset.SetCaption,
         },
         new Column[] {
             MdschemaSetsRowset.CatalogName,
@@ -6044,7 +6048,7 @@ TODO: see above
         private final Util.Functor1<Boolean, Catalog> catalogCond;
         private final Util.Functor1<Boolean, Schema> schemaNameCond;
         private final Util.Functor1<Boolean, Cube> cubeNameCond;
-        private final Util.Functor1<Boolean, NamedSet> setUnameCond;
+        private final Util.Functor1<Boolean, NamedSet> setNameCond;
         private static final String GLOBAL_SCOPE = "1";
 
         MdschemaSetsRowset(XmlaRequest request, XmlaHandler handler) {
@@ -6052,7 +6056,7 @@ TODO: see above
             catalogCond = makeCondition(CATALOG_NAME_GETTER, CatalogName);
             schemaNameCond = makeCondition(SCHEMA_NAME_GETTER, SchemaName);
             cubeNameCond = makeCondition(ELEMENT_NAME_GETTER, CubeName);
-            setUnameCond = makeCondition(ELEMENT_UNAME_GETTER, SetName);
+            setNameCond = makeCondition(ELEMENT_NAME_GETTER, SetName);
         }
 
         private static final Column CatalogName =
@@ -6108,9 +6112,25 @@ TODO: see above
                 "DESCRIPTION",
                 Type.String,
                 null,
-                false,
-                true,
+                Column.NOT_RESTRICTION,
+                Column.OPTIONAL,
                 "A human-readable description of the measure.");
+        private static final Column Expression =
+            new Column(
+                "EXPRESSION",
+                Type.String,
+                null,
+                Column.NOT_RESTRICTION,
+                Column.OPTIONAL,
+                "The expression for the set.");
+        private static final Column Dimensions =
+            new Column(
+                "DIMENSIONS",
+                Type.String,
+                null,
+                Column.NOT_RESTRICTION,
+                Column.OPTIONAL,
+                "A comma delimited list of hierarchies included in the set.");
 
         public void populateImpl(
             XmlaResponse response,
@@ -6143,14 +6163,26 @@ TODO: see above
             Catalog catalog,
             List<Row> rows)
         {
-            for (NamedSet namedSet : filter(cube.getSets(), setUnameCond)) {
+            for (NamedSet namedSet : filter(cube.getSets(), setNameCond)) {
                 Row row = new Row();
                 row.set(CatalogName.name, catalog.getName());
                 row.set(SchemaName.name, cube.getSchema().getName());
                 row.set(CubeName.name, cube.getName());
                 row.set(SetName.name, namedSet.getName());
+                //TODO: 2 (SESSION_SCOPE) for session sets
                 row.set(Scope.name, GLOBAL_SCOPE);
                 row.set(Description.name, namedSet.getDescription());
+                row.set(Dimensions.name, "");
+
+                java.io.StringWriter sw = new java.io.StringWriter();
+                java.io.PrintWriter pw = new java.io.PrintWriter(sw);
+                org.olap4j.mdx.ParseTreeWriter parseTreeWriter = new org.olap4j.mdx.ParseTreeWriter(pw);
+                namedSet.getExpression().unparse(parseTreeWriter);
+                pw.flush();
+                sw.toString();
+                row.set(Expression.name, sw.toString());
+
+                row.set(SetCaption.name, namedSet.getCaption());
                 addRow(row, rows);
             }
         }

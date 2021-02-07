@@ -18,6 +18,7 @@ import mondrian.util.CompositeList;
 import mondrian.xmla.impl.DefaultSaxWriter;
 
 import org.apache.log4j.Logger;
+import org.apache.commons.lang.StringEscapeUtils;
 
 import org.olap4j.*;
 import org.olap4j.impl.Olap4jUtil;
@@ -136,6 +137,7 @@ public class XmlaHandler {
             + "] and session [" + sessionId + "]");
 
         Properties props = new Properties();
+        props.put("sessionId", sessionId);
         for (Map.Entry<String, String> entry : propMap.entrySet()) {
             props.put(entry.getKey(), entry.getValue());
         }
@@ -767,10 +769,108 @@ public class XmlaHandler {
                 result = executeDrillThroughQuery(request);
             } else {
                 String[] tokens = request.getStatement().split(" ");
-                if(tokens.length > 2 && tokens[0].toUpperCase().equals("REFRESH") && tokens[1].toUpperCase().equals("CUBE")) {
+
+                java.util.regex.Pattern createMemberPattern =
+                        java.util.regex.Pattern.compile(
+                                "(?i)\\s*CREATE\\s+SESSION\\s+MEMBER\\s+\\[([^\\]]*)\\]\\." +
+                                        "(\\[.*\\])\\.\\[([^\\]]*)\\]\\s*AS\\s+([\\s\\S]*)");
+                java.util.regex.Matcher createMemberMatcher = createMemberPattern.matcher(request.getStatement());
+                java.util.regex.Pattern createSetPattern =
+                        java.util.regex.Pattern.compile(
+                                "(?i)\\s*CREATE\\s+SESSION\\s+SET\\s+\\[([^\\]]*)\\]\\.\\[([^\\]]*)\\]\\s*AS\\s+([\\s\\S]*)");
+                java.util.regex.Matcher createSetMatcher = createSetPattern.matcher(request.getStatement());
+
+                if(createMemberMatcher.find()) {
+                    final String cubeName = createMemberMatcher.group(1);
+                    final String parentName = createMemberMatcher.group(2);
+                    final String memberName = createMemberMatcher.group(3);
+                    final String memberBody = createMemberMatcher.group(4);
+                    final String escapedMemberBody =
+                            StringEscapeUtils.escapeXml(memberBody);
+
+                    OlapConnection connection =
+                            getConnection(request, Collections.<String, String>emptyMap());
+                    try {
+                        final mondrian.rolap.RolapConnection rolapConnection =
+                                ((mondrian.olap4j.MondrianOlap4jConnection) connection).getMondrianConnection();
+
+                        final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
+                        final mondrian.rolap.RolapCube cube = (mondrian.rolap.RolapCube)
+                                schema.lookupCube(cubeName, true);
+
+                        mondrian.olap.Member newMember = null;
+                        if(parentName.equals("[Measures]")) {
+                            newMember = cube.createCalculatedMember(
+                                    "<CalculatedMember name='" + StringEscapeUtils.escapeXml(memberName) + "'"
+                                            + "  dimension='Measures'"
+                                            + "  formula='" + StringEscapeUtils.escapeXml(memberBody) + "'/>");
+
+                            cube.addCalculatedMeasure(newMember);
+                        }
+                        else {
+                            final mondrian.olap.SchemaReader schemaReader = rolapConnection.getSchemaReader();
+                            List<mondrian.olap.Id.Segment> parentNameSegments = Util.parseIdentifier(parentName);
+//                            mondrian.olap.Member parentMember =
+//                                schemaReader.getMemberByUniqueName(parentNameSerments,true);
+                            mondrian.olap.Member parentMember =
+                                    cube.getSchemaReader().getMemberByUniqueName(
+                                            parentNameSegments,
+                                            true,
+                                            mondrian.olap.MatchType.EXACT);
+                            if(parentMember != null) {
+                                newMember = cube.createCalculatedMember(
+                                        "<CalculatedMember name='" + memberName + "'"
+                                                + "  hierarchy='" + StringEscapeUtils.escapeXml(parentMember.getHierarchy().getUniqueName()) + "'"
+                                                + "  parent='" + StringEscapeUtils.escapeXml(parentName) + "'"
+                                                + "  formula='" + StringEscapeUtils.escapeXml(memberBody) + "'/>");
+                            }
+                            else {
+                                //Parent member ... does not exists.
+                            }
+                        }
+
+                    }
+                    catch (Exception ex) {
+                        throw new XmlaException(
+                                CLIENT_FAULT_FC,
+                                "3238658121",
+                                USM_DOM_PARSE_FAULT_FS,
+                                ex);
+                    }
+                }
+                else if(createSetMatcher.find()) {
+                    final String cubeName = createSetMatcher.group(1);
+                    final String setName = createSetMatcher.group(2);
+                    final String setBody = createSetMatcher.group(3);
+
+                    OlapConnection connection =
+                            getConnection(request, Collections.<String, String>emptyMap());
+                    try {
+                        final mondrian.rolap.RolapConnection rolapConnection =
+                                ((mondrian.olap4j.MondrianOlap4jConnection) connection).getMondrianConnection();
+
+                        final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
+                        final mondrian.rolap.RolapCube cube = (mondrian.rolap.RolapCube)
+                                schema.lookupCube(cubeName, true);
+
+                        mondrian.olap.Formula newSet = cube.createNamedSet(
+                                "<NamedSet name=\"" + StringEscapeUtils.escapeXml(setName) + "\">\n" +
+                                        "<Formula>" + StringEscapeUtils.escapeXml(setBody) + "</Formula>\n" +
+                                        "</NamedSet>");
+                    }
+                    catch (Exception ex) {
+                        throw new XmlaException(
+                                CLIENT_FAULT_FC,
+                                "3238658121",
+                                USM_DOM_PARSE_FAULT_FS,
+                                ex);
+                    }
+                }
+                else if(tokens.length > 2 && tokens[0].toUpperCase().equals("REFRESH") && tokens[1].toUpperCase().equals("CUBE")) {
                     //empty result
                     ;
-                } else {
+                }
+                else {
                     result = executeQuery(request);
                 }
             }
