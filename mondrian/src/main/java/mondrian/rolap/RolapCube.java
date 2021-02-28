@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2001-2005 Julian Hyde
 // Copyright (C) 2005-2018 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.rolap;
@@ -2518,7 +2519,7 @@ public class RolapCube extends CubeBase {
         return nonJoiningDimensions;
     }
 
-    List<Member> getMeasures() {
+    public List<Member> getMeasures() {
         Level measuresLevel = dimensions[0].getHierarchies()[0].getLevels()[0];
         return getSchemaReader().getLevelMembers(measuresLevel, true);
     }
@@ -2976,19 +2977,31 @@ public class RolapCube extends CubeBase {
         }
 
         public List<Member> getCalculatedMembers() {
-            List<Member> list =
-                roleToAccessibleCalculatedMembers.get(getRole());
-            if (list == null) {
-                list = new ArrayList<Member>();
-                for (Formula formula : calculatedMemberList) {
-                    Member member = formula.getMdxMember();
-                    if (getRole().canAccess(member)) {
-                        list.add(member);
-                    }
-                }
-                //  calculatedMembers array may not have been initialized
-                if (list.size() > 0) {
-                    roleToAccessibleCalculatedMembers.put(getRole(), list);
+//            List<Member> list =
+//                roleToAccessibleCalculatedMembers.get(getRole());
+//            if (list == null) {
+//                list = new ArrayList<Member>();
+//
+//                for (Formula formula : calculatedMemberList) {
+//                    Member member = formula.getMdxMember();
+//                    if (getRole().canAccess(member)) {
+//                        list.add(member);
+//                    }
+//                }
+//                //  calculatedMembers array may not have been initialized
+//                if (list.size() > 0) {
+//                    roleToAccessibleCalculatedMembers.put(getRole(), list);
+//                }
+//            }
+
+            //Without roleToAccessibleCalculatedMembers
+            //Issues with session objects
+            List<Member> list = new ArrayList<Member>();
+
+            for (Formula formula : calculatedMemberList) {
+                Member member = formula.getMdxMember();
+                if (getRole().canAccess(member)) {
+                    list.add(member);
                 }
             }
             return list;
@@ -3257,15 +3270,6 @@ public class RolapCube extends CubeBase {
       }
       cubesList.addAll(cubes);
       return cubesList;
-    }
-
-    public void addCalculatedMeasure(Member member){
-        List<Member> measureList = new ArrayList<Member>(getMeasures());
-        measureList.add(member);
-        setMeasuresHierarchyMemberReader(
-                new CacheMemberReader(
-                        new MeasureMemberSource(this.measuresHierarchy,
-                                Util.<RolapMember>cast(measureList))));
     }
 }
 

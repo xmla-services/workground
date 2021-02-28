@@ -7,6 +7,7 @@
 // Copyright (C) 2003-2005 Julian Hyde
 // Copyright (C) 2005-2018 Hitachi Vantara
 // Copyright (C) 2019 Topsoft
+// Copyright (C) 2020-2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.xmla;
@@ -780,6 +781,11 @@ public class XmlaHandler {
                                 "(?i)\\s*CREATE\\s+SESSION\\s+SET\\s+\\[([^\\]]*)\\]\\.\\[([^\\]]*)\\]\\s*AS\\s+([\\s\\S]*)");
                 java.util.regex.Matcher createSetMatcher = createSetPattern.matcher(request.getStatement());
 
+                java.util.regex.Pattern refreshCubePattern =
+                        java.util.regex.Pattern.compile(
+                                "(?i)\\s*REFRESH\\s+CUBE\\s+\\[([^\\]]*)\\]\\s*");
+                java.util.regex.Matcher refreshCubeMatcher = refreshCubePattern.matcher(request.getStatement());
+
                 if(createMemberMatcher.find()) {
                     final String cubeName = createMemberMatcher.group(1);
                     final String parentName = createMemberMatcher.group(2);
@@ -799,13 +805,11 @@ public class XmlaHandler {
                                 schema.lookupCube(cubeName, true);
 
                         mondrian.olap.Member newMember = null;
-                        if(parentName.equals("[Measures]")) {
+                        if(parentName.equals(cube.getMeasuresHierarchy().getUniqueName())) {
                             newMember = cube.createCalculatedMember(
                                     "<CalculatedMember name='" + StringEscapeUtils.escapeXml(memberName) + "'"
                                             + "  dimension='Measures'"
                                             + "  formula='" + StringEscapeUtils.escapeXml(memberBody) + "'/>");
-
-                            cube.addCalculatedMeasure(newMember);
                         }
                         else {
                             final mondrian.olap.SchemaReader schemaReader = rolapConnection.getSchemaReader();
@@ -866,9 +870,28 @@ public class XmlaHandler {
                                 ex);
                     }
                 }
-                else if(tokens.length > 2 && tokens[0].toUpperCase().equals("REFRESH") && tokens[1].toUpperCase().equals("CUBE")) {
-                    //empty result
-                    ;
+                else if(refreshCubeMatcher.find()) {
+                    final String cubeName = refreshCubeMatcher.group(1);
+
+                    OlapConnection connection =
+                            getConnection(request, Collections.<String, String>emptyMap());
+                    try {
+                        final mondrian.rolap.RolapConnection rolapConnection =
+                                ((mondrian.olap4j.MondrianOlap4jConnection) connection).getMondrianConnection();
+
+                        final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
+                        final mondrian.rolap.RolapCube cube = (mondrian.rolap.RolapCube)
+                                schema.lookupCube(cubeName, true);
+
+                        //cube.invalidateSchemaReader();
+                    }
+                    catch (Exception ex) {
+                        throw new XmlaException(
+                                CLIENT_FAULT_FC,
+                                "3238658121",
+                                USM_DOM_PARSE_FAULT_FS,
+                                ex);
+                    }
                 }
                 else {
                     result = executeQuery(request);
@@ -2249,8 +2272,7 @@ public class XmlaHandler {
                 hierarchy.getUniqueName()
                 + "."
                 + Util.quoteMdxIdentifier(longProp.getName()));
-            if (longProp == prop) {
-                // Adding type attribute to the optional properties
+            if (!(longProp instanceof IMondrianOlap4jProperty)) {
                 values.add("type");
                 values.add(getXsdType(longProp));
             }
@@ -2517,11 +2539,20 @@ public class XmlaHandler {
                         value = member.getPropertyValue(longProp);
                     }
                 }
-                if(value == null) {
+                if(longProp != prop && value == null) {
                     value = getDefaultValue(prop);
                 }
                 if (value != null) {
-                    writer.textElement(encoder.encode(prop.getName()), value);
+                    if(longProp instanceof IMondrianOlap4jProperty) {
+                        writer.startElement(
+                                encoder.encode(prop.getName()),
+                                "xsi:type", getXsdType(prop));
+                        writer.characters(value);
+                        writer.endElement();
+                    }
+                    else {
+                        writer.textElement(encoder.encode(prop.getName()), value);
+                    }
                 }
             }
             writer.endElement(); // Member

@@ -6,6 +6,7 @@
 //
 // Copyright (C) 1999-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 
@@ -34,6 +35,8 @@ public interface Cube extends OlapElement, Annotated {
      * Returns the named sets of this cube.
      */
     NamedSet[] getNamedSets();
+
+    List<Member> getMeasures();
 
     /**
      * Finds a hierarchy whose name (or unique name, if <code>unique</code> is

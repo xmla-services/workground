@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2001-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 
@@ -69,14 +70,21 @@ public abstract class HierarchyBase
 
         String name = dimension.getName();
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
-            if (subName == null) {
-                // e.g. "Time"
-                subName = name;
+            if(dimension.getDimensionType() == DimensionType.MeasuresDimension) {
+                this.subName = subName;
+                this.name = name;
+                this.uniqueName = Dimension.MEASURES_UNIQUE_NAME;
             }
-            this.subName = subName;
-            this.name = subName;
-            // always "[Time].[Weekly]" for dimension "Time", hierarchy "Weekly";
-            this.uniqueName = Util.makeFqName(dimension, this.name);
+            else {
+                if (subName == null) {
+                    // e.g. "Time"
+                    subName = name;
+                }
+                this.subName = subName;
+                this.name = subName;
+                // always "[Time].[Weekly]" for dimension "Time", hierarchy "Weekly";
+                this.uniqueName = Util.makeFqName(dimension, this.name);
+            }
         } else {
             this.subName = subName;
             if (this.subName != null) {

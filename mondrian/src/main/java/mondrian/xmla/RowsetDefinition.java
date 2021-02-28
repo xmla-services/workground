@@ -7,6 +7,7 @@
 // Copyright (C) 2003-2005 Julian Hyde
 // Copyright (C) 2005-2018 Hitachi Vantara
 // Copyright (C) 2019 Topsoft
+// Copyright (C) 2020 - 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 
@@ -844,15 +845,39 @@ public enum RowsetDefinition {
             MdschemaLevelsRowset.CubeName,
             MdschemaLevelsRowset.DimensionUniqueName,
             MdschemaLevelsRowset.HierarchyUniqueName,
-            MdschemaLevelsRowset.LevelName,
-            MdschemaLevelsRowset.LevelUniqueName,
-            MdschemaLevelsRowset.LevelOrigin,
-            MdschemaLevelsRowset.CubeSource,
-            MdschemaLevelsRowset.LevelVisibility,
+            MdschemaLevelsRowset.LevelNumber,
         })
     {
         public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
             return new MdschemaLevelsRowset(request, handler);
+        }
+    },
+
+    MDSCHEMA_MEASUREGROUP_DIMENSIONS(
+        13, "a07ccd33-8148-11d0-87bb-00c04fc33942", null,
+        new Column[] {
+                MdschemaMeasuregroupDimensionsRowset.CatalogName,
+                MdschemaMeasuregroupDimensionsRowset.SchemaName,
+                MdschemaMeasuregroupDimensionsRowset.CubeName,
+                MdschemaMeasuregroupDimensionsRowset.MeasuregroupName,
+                MdschemaMeasuregroupDimensionsRowset.MeasuregroupCardinality,
+                MdschemaMeasuregroupDimensionsRowset.DimensionUniqueName,
+                MdschemaMeasuregroupDimensionsRowset.DimensionCardinality,
+                MdschemaMeasuregroupDimensionsRowset.DimensionIsVisible,
+                MdschemaMeasuregroupDimensionsRowset.DimensionIsFactDimension,
+                MdschemaMeasuregroupDimensionsRowset.DimensionPath,
+                MdschemaMeasuregroupDimensionsRowset.DimensionGranularity,
+        },
+        new Column[] {
+                MdschemaMeasuregroupDimensionsRowset.CatalogName,
+                MdschemaMeasuregroupDimensionsRowset.SchemaName,
+                MdschemaMeasuregroupDimensionsRowset.CubeName,
+                MdschemaMeasuregroupDimensionsRowset.MeasuregroupName,
+                MdschemaMeasuregroupDimensionsRowset.DimensionUniqueName,
+        })
+    {
+        public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
+            return new MdschemaMeasuregroupDimensionsRowset(request, handler);
         }
     },
 
@@ -1100,6 +1125,8 @@ public enum RowsetDefinition {
             MdschemaSetsRowset.Expression,
             MdschemaSetsRowset.Dimensions,
             MdschemaSetsRowset.SetCaption,
+//            MdschemaSetsRowset.DisplayFolder,
+//            MdschemaSetsRowset.EvaluationContext,
         },
         new Column[] {
             MdschemaSetsRowset.CatalogName,
@@ -4147,6 +4174,203 @@ TODO: see above
         }
     }
 
+    static class MdschemaMeasuregroupDimensionsRowset extends Rowset {
+        private final Util.Functor1<Boolean, Catalog> catalogNameCond;
+        private final Util.Functor1<Boolean, Schema> schemaNameCond;
+        private final Util.Functor1<Boolean, Cube> cubeNameCond;
+        private final Util.Functor1<Boolean, Dimension> dimensionUnameCond;
+
+        MdschemaMeasuregroupDimensionsRowset(XmlaRequest request, XmlaHandler handler) {
+            super(MDSCHEMA_MEASUREGROUP_DIMENSIONS, request, handler);
+            catalogNameCond = makeCondition(CATALOG_NAME_GETTER, CatalogName);
+            schemaNameCond = makeCondition(SCHEMA_NAME_GETTER, SchemaName);
+            cubeNameCond = makeCondition(ELEMENT_NAME_GETTER, CubeName);
+            dimensionUnameCond =
+                    makeCondition(ELEMENT_UNAME_GETTER, DimensionUniqueName);
+        }
+
+        private static final Column CatalogName =
+                new Column(
+                        "CATALOG_NAME",
+                        Type.String,
+                        null,
+                        Column.RESTRICTION,
+                        Column.OPTIONAL,
+                        "The name of the database.");
+        private static final Column SchemaName =
+                new Column(
+                        "SCHEMA_NAME",
+                        Type.String,
+                        null,
+                        Column.RESTRICTION,
+                        Column.OPTIONAL,
+                        "Not supported.");
+        private static final Column CubeName =
+                new Column(
+                        "CUBE_NAME",
+                        Type.String,
+                        null,
+                        Column.RESTRICTION,
+                        Column.REQUIRED,
+                        "The name of the cube.");
+        private static final Column MeasuregroupName =
+                new Column(
+                        "MEASUREGROUP_NAME",
+                        Type.String,
+                        null,
+                        Column.RESTRICTION,
+                        Column.OPTIONAL,
+                        "The name of the measure group.");
+        private static final Column MeasuregroupCardinality =
+                new Column(
+                        "MEASUREGROUP_CARDINALITY",
+                        Type.String,
+                        null,
+                        Column.NOT_RESTRICTION,
+                        Column.OPTIONAL,
+                        "The number of instances a measure in the measure group can have for a single dimension member." +
+                                " Possible values include:\n" +
+                                "ONE\n" +
+                                "MANY");
+        private static final Column DimensionUniqueName =
+                new Column(
+                        "DIMENSION_UNIQUE_NAME",
+                        Type.String,
+                        null,
+                        Column.RESTRICTION,
+                        Column.OPTIONAL,
+                        "The unique name of the dimension.");
+        private static final Column DimensionCardinality =
+                new Column(
+                        "DIMENSION_CARDINALITY",
+                        Type.String,
+                        null,
+                        Column.NOT_RESTRICTION,
+                        Column.OPTIONAL,
+                        "The number of instances a dimension member can have for a single instance of a measure group measure.\n" +
+                                "Possible values include:\n" +
+                                "ONE\n" +
+                                "MANY");
+        private static final Column DimensionIsVisible =
+                new Column(
+                        "DIMENSION_IS_VISIBLE",
+                        Type.Boolean,
+                        null,
+                        Column.NOT_RESTRICTION,
+                        Column.OPTIONAL,
+                        "A Boolean that indicates whether hieararchies in the dimension are visible.\n" +
+                        "Returns TRUE if one or more hierarchies in the dimension is visible; otherwise, FALSE.");
+        private static final Column DimensionIsFactDimension =
+                new Column(
+                        "DIMENSION_IS_FACT_DIMENSION",
+                        Type.Boolean,
+                        null,
+                        Column.NOT_RESTRICTION,
+                        Column.OPTIONAL,
+                        "");
+        private static final Column DimensionPath =
+                new Column(
+                        "DIMENSION_PATH",
+                        Type.String,
+                        null,
+                        Column.NOT_RESTRICTION,
+                        Column.OPTIONAL,
+                        "A list of dimensions for the reference dimension.");
+        private static final Column DimensionGranularity =
+                new Column(
+                        "DIMENSION_GRANULARITY",
+                        Type.String,
+                        null,
+                        Column.NOT_RESTRICTION,
+                        Column.OPTIONAL,
+                        "The unique name of the granularity hierarchy.");
+
+        public void populateImpl(
+                XmlaResponse response,
+                OlapConnection connection,
+                List<Row> rows)
+                throws XmlaException, SQLException
+        {
+            for (Catalog catalog
+                    : catIter(connection, catNameCond(), catalogNameCond))
+            {
+                populateCatalog(connection, catalog, rows);
+            }
+        }
+
+        protected void populateCatalog(
+                OlapConnection connection,
+                Catalog catalog,
+                List<Row> rows)
+                throws XmlaException, SQLException
+        {
+            for (Schema schema : filter(catalog.getSchemas(), schemaNameCond)) {
+                for (Cube cube : filteredCubes(schema, cubeNameCond)) {
+                    populateCube(connection, catalog, cube, rows);
+                }
+            }
+        }
+
+        protected void populateCube(
+                OlapConnection connection,
+                Catalog catalog,
+                Cube cube,
+                List<Row> rows)
+                throws XmlaException, SQLException
+        {
+            for (Dimension dimension
+                    : filter(
+                    cube.getDimensions(),
+                    dimensionUnameCond))
+            {
+                populateMeasuregroupDimension(
+                        connection, catalog, cube, dimension, rows);
+            }
+        }
+
+        protected void populateMeasuregroupDimension(
+                OlapConnection connection,
+                Catalog catalog,
+                Cube cube,
+                Dimension dimension,
+                List<Row> rows)
+                throws XmlaException, SQLException
+        {
+            String desc = dimension.getDescription();
+            if (desc == null) {
+                desc =
+                        cube.getName() + " Cube - "
+                                + dimension.getName() + " Dimension";
+            }
+
+            Row row = new Row();
+            row.set(CatalogName.name, catalog.getName());
+            row.set(SchemaName.name, cube.getSchema().getName());
+            row.set(CubeName.name, cube.getName());
+            row.set(MeasuregroupName.name, "");
+            row.set(MeasuregroupCardinality.name, "ONE");
+            row.set(DimensionUniqueName.name, dimension.getUniqueName());
+            row.set(DimensionCardinality.name, "MANY");
+            row.set(DimensionIsVisible.name, dimension.isVisible());
+            row.set(DimensionIsFactDimension.name, "0");
+            row.set(DimensionPath.name, "");
+            row.set(DimensionGranularity.name, "");
+
+            addRow(row, rows);
+        }
+
+        protected void setProperty(
+                PropertyDefinition propertyDef, String value)
+        {
+            switch (propertyDef) {
+                case Content:
+                    break;
+                default:
+                    super.setProperty(propertyDef, value);
+            }
+        }
+    }
+
     public static class MdschemaFunctionsRowset extends Rowset {
         /**
          * http://www.csidata.com/custserv/onlinehelp/VBSdocs/vbs57.htm
@@ -6131,6 +6355,28 @@ TODO: see above
                 Column.NOT_RESTRICTION,
                 Column.OPTIONAL,
                 "A comma delimited list of hierarchies included in the set.");
+        private static final Column DisplayFolder =
+            new Column(
+                "SET_DISPLAY_FOLDER",
+                Type.String,
+                null,
+                Column.NOT_RESTRICTION,
+                Column.OPTIONAL,
+                "A string that identifies the path of the display folder that the client application " +
+                "uses to show the set. The folder level separator is defined by the client application. " +
+                "For the tools and clients supplied by Analysis Services, the backslash (\\) is the level separator. " +
+                "To provide multiple display folders, use a semicolon (;) to separate the folders.");
+        private static final Column EvaluationContext =
+            new Column(
+                "SET_EVALUATION_CONTEXT",
+                Type.Integer,
+                null,
+                Column.NOT_RESTRICTION,
+                Column.OPTIONAL,
+                "The context for the set. The set can be static or dynamic.\n" +
+                "This column can have one of the following values:\n" +
+                "MDSET_RESOLUTION_STATIC=1\n" +
+                "MDSET_RESOLUTION_DYNAMIC=2");
 
         public void populateImpl(
             XmlaResponse response,
@@ -6183,6 +6429,9 @@ TODO: see above
                 row.set(Expression.name, sw.toString());
 
                 row.set(SetCaption.name, namedSet.getCaption());
+
+                row.set(DisplayFolder.name, "");
+                row.set(EvaluationContext.name, "1");
                 addRow(row, rows);
             }
         }

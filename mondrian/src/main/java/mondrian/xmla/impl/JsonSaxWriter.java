@@ -5,6 +5,7 @@
 * You must accept the terms of that agreement to use this software.
 *
 * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+* Copyright (c) 2021 Sergei Semenkov
 */
 
 package mondrian.xmla.impl;
@@ -144,6 +145,10 @@ class JsonSaxWriter implements SaxWriter {
     }
 
     public void characters(String data) {
+        throw new UnsupportedOperationException();
+    }
+
+    public void characters(Object data) {
         throw new UnsupportedOperationException();
     }
 

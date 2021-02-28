@@ -32,8 +32,7 @@ public class Session
                         session.checkInTime,
                         java.time.LocalDateTime.now());
                 if(duration.getSeconds() >
-                        60*60) {
-//                        mondrian.olap.MondrianProperties.instance().IdleOrphanSessionTimeout.get()) {
+                        mondrian.olap.MondrianProperties.instance().IdleOrphanSessionTimeout.get()) {
                     toRemove.add(entry.getKey());
                 }
             }

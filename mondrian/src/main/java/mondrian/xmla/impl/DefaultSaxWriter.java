@@ -5,6 +5,8 @@
 * You must accept the terms of that agreement to use this software.
 *
 * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+* Copyright (c) 2021 Sergei Semenkov
+* All rights reserved.
 */
 
 package mondrian.xmla.impl;
@@ -163,6 +165,12 @@ public class DefaultSaxWriter implements SaxWriter {
         if (s != null && s.length() > 0) {
             _characters(s.toCharArray(), 0, s.length());
         }
+    }
+
+    public void characters(Object data) {
+        characters(
+                nlPattern.matcher(data.toString())
+                        .replaceAll(" "));
     }
 
     public void startSequence(String name, String subName) {
