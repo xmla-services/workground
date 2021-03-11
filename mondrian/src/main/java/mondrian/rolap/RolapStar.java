@@ -167,20 +167,20 @@ public class RolapStar {
         return null;
     }
 
-    public Object getCellFromAllCaches(final CellRequest request) {
+    public Object getCellFromAllCaches(final CellRequest request, RolapConnection rolapConnection) {
         // First, try the local/thread cache.
         Object result = getCellFromCache(request, null);
         if (result != null) {
             return result;
         }
         // Now ask the segment cache manager.
-        return getCellFromExternalCache(request);
+        return getCellFromExternalCache(request, rolapConnection);
     }
 
-    private Object getCellFromExternalCache(CellRequest request) {
+    private Object getCellFromExternalCache(CellRequest request, RolapConnection rolapConnection) {
         final SegmentWithData segment =
             Locus.peek().getServer().getAggregationManager()
-                .cacheMgr.peek(request);
+                .getCacheMgr(rolapConnection).peek(request);
         if (segment == null) {
             return null;
         }

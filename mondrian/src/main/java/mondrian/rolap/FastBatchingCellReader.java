@@ -101,7 +101,7 @@ public class FastBatchingCellReader implements CellReader {
         assert execution != null;
         this.cube = cube;
         this.aggMgr = aggMgr;
-        cacheMgr = aggMgr.cacheMgr;
+        cacheMgr = aggMgr.getCacheMgr(execution.getMondrianStatement().getMondrianConnection());
         pinnedSegments = this.aggMgr.createPinSet();
         cacheEnabled = !MondrianProperties.instance().DisableCaching.get();
 

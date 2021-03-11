@@ -1541,4 +1541,15 @@ log4j.configuration=file:log4j.properties</code></blockquote>
         <Type>int</Type>
         <Default>3600</Default>
     </PropertyDefinition>
+    <PropertyDefinition>
+        <Name>EnableSessionCaching</Name>
+        <Path>mondrian.server.EnableSessionCaching</Path>
+        <Description>
+            <p>
+                If enable, then data cache will be created for every session.
+            </p>
+        </Description>
+        <Type>boolean</Type>
+        <Default>false</Default>
+    </PropertyDefinition>
 </PropertyDefinitions>

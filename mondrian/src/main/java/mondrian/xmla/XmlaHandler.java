@@ -883,7 +883,7 @@ public class XmlaHandler {
                         final mondrian.rolap.RolapCube cube = (mondrian.rolap.RolapCube)
                                 schema.lookupCube(cubeName, true);
 
-                        //cube.invalidateSchemaReader();
+                        cube.flushCache(rolapConnection);
                     }
                     catch (Exception ex) {
                         throw new XmlaException(

@@ -16,6 +16,9 @@ import org.apache.log4j.Logger;
 import org.olap4j.OlapException;
 
 import mondrian.rolap.*;
+import mondrian.rolap.agg.SegmentCacheManager;
+import mondrian.rolap.agg.SegmentCacheWorker;
+import mondrian.olap.MondrianServer;
 
 public class Session
 {
@@ -46,8 +49,10 @@ public class Session
         timer.scheduleAtFixedRate(timerTask, 0, 60*1000);
     }
 
+    String sessionId;
     Session(String sessionId)
     {
+        this.sessionId = sessionId;
     }
     public static Session create(String sessionId) throws OlapException
     {
@@ -61,6 +66,11 @@ public class Session
         session.checkInTime = java.time.LocalDateTime.now();
 
         return session;
+    }
+
+    public static Session getWithoutCheck(String sessionId)
+    {
+        return sessions.get(sessionId);
     }
 
     public static Session get(String sessionId) throws OlapException
@@ -89,7 +99,28 @@ public class Session
             }
         }
 
+        Session session = sessions.get(sessionId);
+        shutdownCacheManager(session);
+
         sessions.remove(sessionId);
+    }
+
+    static void shutdownCacheManager(Session session) {
+        if(session.segmentCacheManager == null) {
+            // Send a shutdown command and wait for it to return.
+            session.segmentCacheManager.shutdown();
+            // Now we can cleanup.
+            for (SegmentCacheWorker worker : session.segmentCacheManager.segmentCacheWorkers) {
+                worker.shutdown();
+            }
+        }
+    }
+
+    public static void shutdown()
+    {
+        for(Map.Entry<String, Session> entry : sessions.entrySet()) {
+            shutdownCacheManager(entry.getValue());
+        }
     }
 
     public static void close(String sessionId) throws OlapException
@@ -99,4 +130,12 @@ public class Session
         closeInternal(sessionId);
     }
 
+    private SegmentCacheManager segmentCacheManager = null;
+
+    public SegmentCacheManager getOrCreateSegmentCacheManager(MondrianServer server){
+        if(this.segmentCacheManager == null) {
+            this.segmentCacheManager = new SegmentCacheManager(server);
+        }
+        return this.segmentCacheManager;
+    }
 }

@@ -3271,6 +3271,35 @@ public class RolapCube extends CubeBase {
       cubesList.addAll(cubes);
       return cubesList;
     }
+
+    public void flushCache(RolapConnection rolapConnection) {
+        //Data cache exists in connection context
+        final CacheControl cacheControl = rolapConnection.getCacheControl(null);
+        cacheControl.flush(cacheControl.createMeasuresRegion(this));
+
+
+        for(RolapHierarchy rolapHierarchy: this.hierarchyList){
+            if (rolapHierarchy instanceof RolapCubeHierarchy) {
+                RolapCubeHierarchy rolapCubeHierarchy = (RolapCubeHierarchy) rolapHierarchy;
+
+                MemberReader memberReader = rolapCubeHierarchy.getMemberReader();
+                if(memberReader instanceof RolapCubeHierarchy.CacheRolapCubeHierarchyMemberReader) {
+                    RolapCubeHierarchy.CacheRolapCubeHierarchyMemberReader crhmr =
+                            (RolapCubeHierarchy.CacheRolapCubeHierarchyMemberReader)memberReader;
+                    ((MemberCacheHelper)crhmr.getMemberCache()).flushCache();
+                    crhmr.getRolapCubeMemberCacheHelper().flushCache();
+                }
+
+                RolapHierarchy sharedRolapHierarchy = rolapCubeHierarchy.getRolapHierarchy();
+                memberReader = sharedRolapHierarchy.getMemberReader();
+                if (memberReader instanceof SmartMemberReader) {
+                    final SmartMemberReader smartMemberReader = (SmartMemberReader) memberReader;
+                    final MemberCacheHelper memberCacheHelper = (MemberCacheHelper) smartMemberReader.getMemberCache();
+                    memberCacheHelper.flushCache();
+                }
+            }
+        }
+    }
 }
 
 // End RolapCube.java

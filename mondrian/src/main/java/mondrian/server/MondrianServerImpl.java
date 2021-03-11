@@ -313,6 +313,7 @@ class MondrianServerImpl
         }
         this.shutdown  = true;
         aggMgr.shutdown();
+        Session.shutdown();
         monitor.shutdown();
         repository.shutdown();
         shepherd.shutdown();
