@@ -106,7 +106,7 @@ public class Session
     }
 
     static void shutdownCacheManager(Session session) {
-        if(session.segmentCacheManager == null) {
+        if(session.segmentCacheManager != null) {
             // Send a shutdown command and wait for it to return.
             session.segmentCacheManager.shutdown();
             // Now we can cleanup.
