@@ -5,6 +5,7 @@
 // You must accept the terms of that agreement to use this software.
 //
 // Copyright (c) 2002-2020 Hitachi Vantara..  All rights reserved.
+// Copyright (c) 2021 Sergei Semenkov.  All rights reserved.
 */
 package mondrian.rolap;
 
@@ -506,7 +507,7 @@ public class SqlStatement {
    */
   public ResultSet getWrappedResultSet() {
     return (ResultSet) Proxy.newProxyInstance(
-      null,
+      this.getClass().getClassLoader(),
       new Class<?>[] { ResultSet.class },
       new MyDelegatingInvocationHandler( this ) );
   }
