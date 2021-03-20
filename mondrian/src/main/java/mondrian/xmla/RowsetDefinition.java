@@ -6226,7 +6226,7 @@ TODO: see above
             row.set(HierarchyUniqueName.name, hierarchy.getUniqueName());
             row.set(LevelUniqueName.name, level.getUniqueName());
             row.set(LevelNumber.name, adjustedLevelDepth);
-            row.set(MemberOrdinal.name, member.getOrdinal());
+            row.set(MemberOrdinal.name, 0);
             row.set(MemberName.name, member.getName());
             row.set(MemberUniqueName.name, member.getUniqueName());
             row.set(MemberType.name, member.getMemberType().ordinal());
@@ -6420,13 +6420,13 @@ TODO: see above
                 row.set(Description.name, namedSet.getDescription());
                 row.set(Dimensions.name, "");
 
-                java.io.StringWriter sw = new java.io.StringWriter();
-                java.io.PrintWriter pw = new java.io.PrintWriter(sw);
-                org.olap4j.mdx.ParseTreeWriter parseTreeWriter = new org.olap4j.mdx.ParseTreeWriter(pw);
-                namedSet.getExpression().unparse(parseTreeWriter);
-                pw.flush();
-                sw.toString();
-                row.set(Expression.name, sw.toString());
+//                java.io.StringWriter sw = new java.io.StringWriter();
+//                java.io.PrintWriter pw = new java.io.PrintWriter(sw);
+//                org.olap4j.mdx.ParseTreeWriter parseTreeWriter = new org.olap4j.mdx.ParseTreeWriter(pw);
+//                namedSet.getExpression().unparse(parseTreeWriter);
+//                pw.flush();
+//                sw.toString();
+//                row.set(Expression.name, sw.toString());
 
                 row.set(SetCaption.name, namedSet.getCaption());
 

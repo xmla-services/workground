@@ -2895,6 +2895,53 @@ public class RolapCube extends CubeBase {
         }
     }
 
+    public void createNamedSet(
+            Formula formula)
+    {
+        final Statement statement =
+                schema.getInternalConnection().getInternalStatement();
+        try {
+            final Query query =
+                    new Query(
+                            statement,
+                            this,
+                            new Formula[] {formula},
+                            new QueryAxis[0],
+                            null,
+                            new QueryPart[0],
+                            new Parameter[0],
+                            false);
+            query.createValidator().validate(formula);
+            namedSetList.add(formula);
+        } finally {
+            statement.close();
+        }
+    }
+
+    public RolapMember createCalculatedMember(
+            Formula formula)
+    {
+        final Statement statement =
+                schema.getInternalConnection().getInternalStatement();
+        try {
+            final Query query =
+                    new Query(
+                            statement,
+                            this,
+                            new Formula[] {formula},
+                            new QueryAxis[0],
+                            null,
+                            new QueryPart[0],
+                            new Parameter[0],
+                            false);
+            query.createValidator().validate(formula);
+            calculatedMemberList.add(formula);
+            return (RolapMember) formula.getMdxMember();
+        } finally {
+            statement.close();
+        }
+    }
+
     /**
      * Schema reader which works from the perspective of a particular cube
      * (and hence includes calculated members defined in that cube) and also

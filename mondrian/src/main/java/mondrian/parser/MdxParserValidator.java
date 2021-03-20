@@ -4,7 +4,9 @@
 * http://www.eclipse.org/legal/epl-v10.html.
 * You must accept the terms of that agreement to use this software.
 *
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+* Copyright (c) 2002-2017 Hitachi Vantara.
+* Copyright (c) 2021 Sergei Semenkov
+* All rights reserved.
 */
 
 package mondrian.parser;
@@ -65,11 +67,18 @@ public interface MdxParserValidator {
             int firstRowOrdinal,
             List<Exp> returnList);
 
+        CalculatedFormula makeCalculatedFormula(
+                String cubeName,
+                Formula e);
+
         /**
          * Creates an {@link mondrian.olap.Explain} object.
          */
         Explain makeExplain(
             QueryPart query);
+
+        Refresh makeRefresh(
+                String cubeName);
     }
 }
 

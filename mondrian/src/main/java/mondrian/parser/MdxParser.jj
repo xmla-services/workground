@@ -5,6 +5,7 @@
 // You must accept the terms of that agreement to use this software.
 //
 // Copyright (C) 2010-2011 Pentaho
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 options {
@@ -213,7 +214,9 @@ TOKEN :
     | <CAST: "CAST">
     | <CELL: "CELL">
     | <CHAPTERS: "CHAPTERS">
+    | <CREATE: "CREATE">
     | <COLUMNS: "COLUMNS">
+    | <CUBE: "CUBE">
     | <DIMENSION: "DIMENSION">
     | <DRILLTHROUGH: "DRILLTHROUGH">
     | <ELSE: "ELSE">
@@ -236,10 +239,12 @@ TOKEN :
     | <PAGES: "PAGES">
     | <PLAN: "PLAN">
     | <PROPERTIES: "PROPERTIES">
+    | <REFRESH: "REFRESH">
     | <RETURN: "RETURN">
     | <ROWS: "ROWS">
     | <SECTIONS: "SECTIONS">
     | <SELECT: "SELECT">
+    | <SESSION: "SESSION">
     | <SET: "SET">
     | <THEN: "THEN">
     | <WHEN: "WHEN">
@@ -993,9 +998,13 @@ QueryPart statement() :
     (
         qp = selectStatement()
     |
+        qp = createFormula()
+    |
         qp = drillthroughStatement()
     |
         qp = explainStatement()
+    |
+        qp = refreshStatement()
     )
     {
         return qp;
@@ -1079,6 +1088,55 @@ Query selectStatement() :
             w,
             toQueryPartArray(cellPropList),
             strictValidation);
+    }
+}
+
+QueryPart createFormula() :
+{
+    boolean isMember = true;
+    Id.NameSegment cubeId;
+    Id m;
+    Exp e;
+    List<MemberProperty> l = new ArrayList<MemberProperty>();
+    MemberProperty mp;
+}
+{
+    <CREATE> <SESSION>
+    (
+        <MEMBER>
+        |
+        <SET> { isMember = false; }
+    )
+    cubeId = nameSegment()<DOT>
+    m = compoundId() <AS> e = formulaExpression()
+    (
+        <COMMA>
+        mp = memberPropertyDefinition() {
+            l.add(mp);
+        }
+    )*
+    {
+        String cubeName = cubeId.name;
+        Formula formula;
+        if(isMember) {
+            formula = new Formula(m, e, toMemberPropertyArray(l));
+        }
+        else {
+            formula = new Formula(m, e);
+        }
+        return factory.makeCalculatedFormula(cubeName, formula);
+    }
+}
+
+QueryPart refreshStatement() :
+{
+     Id c;
+}
+{
+    <REFRESH> <CUBE>  c = compoundId()
+    {
+        String cubeName = ((Id.NameSegment) c.getElement(0)).name;
+        return factory.makeRefresh(cubeName);
     }
 }
 
