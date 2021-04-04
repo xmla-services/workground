@@ -8,6 +8,7 @@
 // Copyright (C) 2005-2018 Hitachi Vantara
 // Copyright (C) 2019 Topsoft
 // Copyright (C) 2020-2021 Sergei Semenkov
+
 // All Rights Reserved.
 */
 package mondrian.xmla;
