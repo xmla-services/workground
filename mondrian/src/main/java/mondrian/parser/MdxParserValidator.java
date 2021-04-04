@@ -53,7 +53,7 @@ public interface MdxParserValidator {
             Statement statement,
             Formula[] formulae,
             QueryAxis[] axes,
-            String cube,
+            Subcube subcube,
             Exp slicer,
             QueryPart[] cellProps,
             boolean strictValidation);

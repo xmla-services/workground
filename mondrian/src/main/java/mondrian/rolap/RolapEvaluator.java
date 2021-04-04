@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2001-2005 Julian Hyde
 // Copyright (C) 2005-2020 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 //
 // jhyde, 10 August, 2001
@@ -1404,6 +1405,25 @@ public class RolapEvaluator implements Evaluator {
 
     abstract void execute( RolapEvaluator evaluator );
   }
+
+  public final Object getBackColor() {
+    final String s = (String)getProperty( Property.BACK_COLOR.name, null );
+    if ( s == null ) {
+      return null;
+    }
+    final Exp backColorExp = Literal.createString(s);
+//            (Exp) getProperty( Property.BACK_COLOR.name, null );
+    if ( backColorExp == null ) {
+      return null;
+    }
+    final Calc backColorCalc = root.getCompiled( backColorExp, true, null );
+    final Object o = backColorCalc.evaluate( this );
+    if ( o == null ) {
+      return null;
+    }
+    return o;
+  }
+
 }
 
 // End RolapEvaluator.java

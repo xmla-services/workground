@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2005-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.rolap;
@@ -554,6 +555,17 @@ public class RolapCell implements Cell {
                 return canDrillThrough() ? MDACTION_TYPE_DRILLTHROUGH : 0;
             case Property.DRILLTHROUGH_COUNT_ORDINAL:
                 return canDrillThrough() ? getDrillThroughCount() : -1;
+            case Property.BACK_COLOR_ORDINAL:
+                Object backColor = null;
+                final RolapEvaluator rolapEvaluator = (RolapEvaluator)result.getRootEvaluator();
+                final int savepoint = rolapEvaluator.savepoint();
+                try {
+                    result.populateEvaluator(rolapEvaluator, pos);
+                    backColor = rolapEvaluator.getBackColor();
+                } finally {
+                    rolapEvaluator.restore(savepoint);
+                }
+                return backColor;
             default:
                 // fall through
             }

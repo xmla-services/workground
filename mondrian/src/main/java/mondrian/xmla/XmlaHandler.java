@@ -1862,17 +1862,27 @@ public class XmlaHandler {
     static abstract class MDDataSet implements QueryResult {
         protected final CellSet cellSet;
 
+        protected static Map<String, String> cellPropertyAliases =new HashMap<String, String>() {{
+            put("VALUE", "Value");
+            put("FORMATTED_VALUE", "FmtValue");
+            put("FORMAT_STRING", "FormatString");
+            put("LANGUAGE", "Language");
+            put("BACK_COLOR", "BackColor");
+            put("FORE_COLOR", "ForeColor");
+            put("FONT_FLAGS", "FontFlags");
+        }};
+
         protected static final List<Property> cellProps =
             Arrays.asList(
                 rename(StandardCellProperty.VALUE, "Value"),
-                rename(StandardCellProperty.FORMATTED_VALUE, "FmtValue"),
-                rename(StandardCellProperty.FORMAT_STRING, "FormatString"));
+                rename(StandardCellProperty.FORMATTED_VALUE, "FmtValue")
+            );
 
         protected static final List<StandardCellProperty> cellPropLongs =
             Arrays.asList(
                 StandardCellProperty.VALUE,
-                StandardCellProperty.FORMATTED_VALUE,
-                StandardCellProperty.FORMAT_STRING);
+                StandardCellProperty.FORMATTED_VALUE
+            );
 
         protected static final List<Property> defaultProps =
             Arrays.asList(
@@ -1950,6 +1960,7 @@ public class XmlaHandler {
         private XmlaExtra extra;
         private OlapConnection connection;
         private mondrian.olap4j.MondrianOlap4jConnection mondrianOlap4jConnection;
+        private List<String> queryCellPropertyNames = new ArrayList<String> ();
 
         protected MDDataSet_Multidimensional(
             CellSet cellSet,
@@ -1965,6 +1976,22 @@ public class XmlaHandler {
                     (mondrian.olap4j.MondrianOlap4jConnection)cellSet.getStatement().getConnection();
             this.connection = connection;
             this.extra = getExtra(cellSet.getStatement().getConnection());
+
+            final boolean matchCase =
+                    MondrianProperties.instance().CaseSensitive.get();
+            final mondrian.server.Statement statement =
+                    (mondrian.server.Statement) cellSet.getStatement();
+            for(QueryPart queryPart: statement.getQuery().getCellProperties()){
+                mondrian.olap.CellProperty cellProperty = (mondrian.olap.CellProperty)queryPart;
+                mondrian.olap.Property property = mondrian.olap.Property.lookup(cellProperty.toString(), matchCase);
+                String propertyName = ((mondrian.olap.Id.NameSegment)
+                        mondrian.olap.Util.parseIdentifier(cellProperty.toString()).get(0)).name;
+                queryCellPropertyNames.add(propertyName);
+            }
+            if(queryCellPropertyNames.size() == 0) {
+                queryCellPropertyNames.add("VALUE");
+                queryCellPropertyNames.add("FORMATTED_VALUE");
+            }
         }
 
         public void unparse(SaxWriter writer)
@@ -2049,38 +2076,14 @@ public class XmlaHandler {
 
             // -----------
             writer.startElement("CellInfo");
-            cellProperty(writer, StandardCellProperty.VALUE, true, "Value");
-            cellProperty(
-                writer, StandardCellProperty.FORMATTED_VALUE, true, "FmtValue");
-            cellProperty(
-                writer, StandardCellProperty.FORMAT_STRING, true,
-                "FormatString");
-            cellProperty(
-                writer, StandardCellProperty.LANGUAGE, false, "Language");
-            cellProperty(
-                writer, StandardCellProperty.BACK_COLOR, false, "BackColor");
-            cellProperty(
-                writer, StandardCellProperty.FORE_COLOR, false, "ForeColor");
-            cellProperty(
-                writer, StandardCellProperty.FONT_FLAGS, false, "FontFlags");
+
+            for(String cellPropertyName: queryCellPropertyNames){
+                writer.element(cellPropertyAliases.get(cellPropertyName), "name", cellPropertyName);
+            }
+
             writer.endElement(); // CellInfo
             // -----------
             writer.endElement(); // OlapInfo
-        }
-
-        private void cellProperty(
-            SaxWriter writer,
-            StandardCellProperty cellProperty,
-            boolean evenEmpty,
-            String elementName)
-        {
-            if (extra.shouldReturnCellProperty(
-                    cellSet, cellProperty, evenEmpty))
-            {
-                writer.element(
-                    elementName,
-                    "name", cellProperty.getName());
-            }
         }
 
         private List<Hierarchy> axisInfo(
@@ -2624,19 +2627,14 @@ public class XmlaHandler {
             writer.startElement(
                 "Cell",
                 "CellOrdinal", ordinal);
-            for (int i = 0; i < cellProps.size(); i++) {
-                Property cellPropLong = cellPropLongs.get(i);
-                Object value = cell.getPropertyValue(cellPropLong);
+            for(String propertyName: this.queryCellPropertyNames){
+                mondrian.olap4j.MondrianOlap4jCell mondrianOlap4jCell = (mondrian.olap4j.MondrianOlap4jCell)cell;
+                Object value = mondrianOlap4jCell.getRolapCell().getPropertyValue(propertyName);
                 if (value == null) {
                     continue;
                 }
-                if (!extra.shouldReturnCellProperty(
-                        cellSet, cellPropLong, true))
-                {
-                    continue;
-                }
 
-                if (!json && cellPropLong == StandardCellProperty.VALUE) {
+                if (!json && propertyName == StandardCellProperty.VALUE.getName()) {
                     if (cell.isNull()) {
                         // Return cell without value as in case of AS2005
                         continue;
@@ -2658,12 +2656,12 @@ public class XmlaHandler {
                     }
 
                     writer.startElement(
-                        cellProps.get(i).getName(),
-                        "xsi:type", valueType);
+                            this.cellPropertyAliases.get(propertyName),
+                            "xsi:type", valueType);
                     writer.characters(valueString);
                     writer.endElement();
                 } else {
-                    writer.textElement(cellProps.get(i).getName(), value);
+                    writer.textElement(this.cellPropertyAliases.get(propertyName), value);
                 }
             }
             writer.endElement(); // Cell

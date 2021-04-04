@@ -1031,6 +1031,7 @@ Query selectStatement() :
      Exp w = null;
      QueryAxis i;
      List<QueryAxis> a = new ArrayList<QueryAxis>();
+     Subcube subcube;
      Id c, p;
      List<QueryPart> cellPropList = new ArrayList<QueryPart>();
 }
@@ -1059,7 +1060,7 @@ Query selectStatement() :
             }
         )*
     )?
-    <FROM> c = compoundId()
+    <FROM> subcube = selectSubcubeClause()
     (
         <WHERE> w = expression()
     )?
@@ -1079,15 +1080,60 @@ Query selectStatement() :
     {
         // We want 'Sales', not '[Sales]', and can't handle 'Schema.Sales'
         // yet.
-        String cubeName = ((Id.NameSegment) c.getElement(0)).name;
+        String cubeName = subcube.getCubeName();
         return factory.makeQuery(
             statement,
             toFormulaArray(f),
             toQueryAxisArray(a),
-            cubeName,
+            subcube,
             w,
             toQueryPartArray(cellPropList),
             strictValidation);
+    }
+}
+
+Subcube selectSubcubeClause() :
+{
+     Id c = null;
+     QueryAxis i;
+     List<QueryAxis> a = new ArrayList<QueryAxis>();
+     Subcube subcube = null;
+     Exp w = null;
+}
+{
+    (
+        c = compoundId()
+        |
+        <LPAREN> <SELECT>
+        (
+            (
+                i = axisSpecification() {
+                    a.add(i);
+                }
+                (
+                    <COMMA>
+                    i = axisSpecification() {
+                        a.add(i);
+                    }
+                )*
+            )
+            |
+            (
+                <ASTERISK>
+            )?
+        )
+        <FROM> subcube = selectSubcubeClause()
+        (
+            <WHERE> w = expression()
+        )?
+        <RPAREN>
+    )
+    {
+        String cubeName = null;
+        if(c != null) {
+            cubeName = ((Id.NameSegment) c.getElement(0)).name;
+        }
+        return new Subcube(cubeName, subcube);
     }
 }
 

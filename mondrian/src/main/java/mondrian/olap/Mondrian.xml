@@ -8,6 +8,7 @@
   ==
   == Copyright (C) 2001-2005 Julian Hyde
   == Copyright (C) 2005-2019 Hitachi Vantara and others
+  == Copyright (C) 2021 Sergei Semenkov
   == All Rights Reserved.
   ==
   == This file defines an MMM schema for an Olap schema.
@@ -981,6 +982,11 @@ Revision is $Id$
             <Doc>
                 Format string with which to format cells of this measure. For
                 more details, see the <a href="api/mondrian/util/Format.html">mondrian.util.Format</a> class.
+            </Doc>
+        </Attribute>
+        <Attribute name="backColor">
+            <Doc>
+                The background color for displaying the value or formatted value.
             </Doc>
         </Attribute>
         <Attribute name="aggregator" required="true">

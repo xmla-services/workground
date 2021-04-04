@@ -6,6 +6,7 @@
 //
 // Copyright (C) 1998-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.olap;
@@ -153,14 +154,14 @@ public class Query extends QueryPart {
         Statement statement,
         Formula[] formulas,
         QueryAxis[] axes,
-        String cube,
+        Subcube subcube,
         QueryAxis slicerAxis,
         QueryPart[] cellProps,
         boolean strictValidation)
     {
         this(
             statement,
-            Util.lookupCube(statement.getSchemaReader(), cube, true),
+            Util.lookupCube(statement.getSchemaReader(), subcube.getCubeName(), true),
             formulas,
             axes,
             slicerAxis,
@@ -226,6 +227,10 @@ public class Query extends QueryPart {
      */
     public void setQueryTimeoutMillis(long queryTimeoutMillis) {
         statement.setQueryTimeoutMillis(queryTimeoutMillis);
+    }
+
+    public QueryPart[] getCellProperties() {
+        return this.cellProps;
     }
 
     /**
