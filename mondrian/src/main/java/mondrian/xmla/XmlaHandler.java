@@ -1863,27 +1863,31 @@ public class XmlaHandler {
     static abstract class MDDataSet implements QueryResult {
         protected final CellSet cellSet;
 
-        protected static Map<String, String> cellPropertyAliases =new HashMap<String, String>() {{
-            put("VALUE", "Value");
-            put("FORMATTED_VALUE", "FmtValue");
-            put("FORMAT_STRING", "FormatString");
-            put("LANGUAGE", "Language");
-            put("BACK_COLOR", "BackColor");
-            put("FORE_COLOR", "ForeColor");
-            put("FONT_FLAGS", "FontFlags");
+        static class CellProperty {
+            String name;
+            String alias;
+            String xsdType;
+
+            public CellProperty(String name, String alias, String xsdType) {
+                this.name = name;
+                this.alias = alias;
+                this.xsdType = xsdType;
+            }
+
+            public String getName() {return this.name; }
+            public String getAlias() {return this.alias; }
+            public String getXsdType() {return this.xsdType; }
+        }
+
+        protected static Map<String, CellProperty> cellPropertyMap =new HashMap<String, CellProperty>() {{
+            put("VALUE", new CellProperty("VALUE", "Value", null));
+            put("FORMATTED_VALUE", new CellProperty("FORMATTED_VALUE", "FmtValue", "xsd:string"));
+            put("FORMAT_STRING", new CellProperty("FORMAT_STRING", "FormatString", "xsd:string"));
+            put("LANGUAGE", new CellProperty("LANGUAGE", "Language", "xsd:unsignedInt"));
+            put("BACK_COLOR", new CellProperty("BACK_COLOR", "BackColor", "xsd:unsignedInt"));
+            put("FORE_COLOR", new CellProperty("FORE_COLOR", "ForeColor", "xsd:unsignedInt"));
+            put("FONT_FLAGS", new CellProperty("FONT_FLAGS", "FontFlags", "xsd:int"));
         }};
-
-        protected static final List<Property> cellProps =
-            Arrays.asList(
-                rename(StandardCellProperty.VALUE, "Value"),
-                rename(StandardCellProperty.FORMATTED_VALUE, "FmtValue")
-            );
-
-        protected static final List<StandardCellProperty> cellPropLongs =
-            Arrays.asList(
-                StandardCellProperty.VALUE,
-                StandardCellProperty.FORMATTED_VALUE
-            );
 
         protected static final List<Property> defaultProps =
             Arrays.asList(
@@ -2079,7 +2083,16 @@ public class XmlaHandler {
             writer.startElement("CellInfo");
 
             for(String cellPropertyName: queryCellPropertyNames){
-                writer.element(cellPropertyAliases.get(cellPropertyName), "name", cellPropertyName);
+                CellProperty cellProperty = cellPropertyMap.get(cellPropertyName);
+                List<Object> values = new ArrayList<Object>();
+                values.add("name");
+                values.add(cellPropertyName);
+                if(cellProperty != null && cellProperty.getXsdType() != null) {
+                    values.add("type");
+                    values.add(cellProperty.getXsdType());
+                }
+
+                writer.element(cellProperty.getAlias(), values.toArray());
             }
 
             writer.endElement(); // CellInfo
@@ -2635,7 +2648,7 @@ public class XmlaHandler {
                     continue;
                 }
 
-                if (!json && propertyName == StandardCellProperty.VALUE.getName()) {
+                if (!json && StandardCellProperty.VALUE.getName().equals(propertyName)) {
                     if (cell.isNull()) {
                         // Return cell without value as in case of AS2005
                         continue;
@@ -2657,12 +2670,12 @@ public class XmlaHandler {
                     }
 
                     writer.startElement(
-                            this.cellPropertyAliases.get(propertyName),
+                            this.cellPropertyMap.get(propertyName).getAlias(),
                             "xsi:type", valueType);
                     writer.characters(valueString);
                     writer.endElement();
                 } else {
-                    writer.textElement(this.cellPropertyAliases.get(propertyName), value);
+                    writer.textElement(this.cellPropertyMap.get(propertyName).getAlias(), value);
                 }
             }
             writer.endElement(); // Cell
