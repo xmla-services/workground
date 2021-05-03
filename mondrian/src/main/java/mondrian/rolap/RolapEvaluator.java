@@ -1407,12 +1407,35 @@ public class RolapEvaluator implements Evaluator {
   }
 
   public final Object getBackColor() {
+// To option when backColor belongs to real measure
+
+//    final String s = (String)getProperty( Property.BACK_COLOR.name, null );
+//    if ( s == null ) {
+//      return null;
+//    }
+//
+//    String queryString = "WITH Member [Measures].[m1] as " + s + "SELECT FROM " + getCube().getUniqueName();
+//    final Query queryExp = root.connection.parseQuery(queryString);
+//    final Formula formula = queryExp.getFormulas()[0];
+//
+////    final Exp backColorExp = Literal.createString(s);
+//    final Exp backColorExp = formula.getExpression();
+//
+//
+//    if ( backColorExp == null ) {
+//      return null;
+//    }
+//
+//    final Calc backColorCalc = root.getCompiled( backColorExp, true, null );
+//    final Object o = backColorCalc.evaluate( this );
+//    return o;
+
+
     final String s = (String)getProperty( Property.BACK_COLOR.name, null );
     if ( s == null ) {
       return null;
     }
     final Exp backColorExp = Literal.createString(s);
-//            (Exp) getProperty( Property.BACK_COLOR.name, null );
     if ( backColorExp == null ) {
       return null;
     }

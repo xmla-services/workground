@@ -525,6 +525,7 @@ public class RolapCell implements Cell {
             MondrianProperties.instance().CaseSensitive.get();
         Property property = Property.lookup(propertyName, matchCase);
         Object defaultValue = null;
+        String formatString = null;
         if (property != null) {
             switch (property.ordinal) {
             case Property.CELL_ORDINAL_ORDINAL:
@@ -556,16 +557,46 @@ public class RolapCell implements Cell {
             case Property.DRILLTHROUGH_COUNT_ORDINAL:
                 return canDrillThrough() ? getDrillThroughCount() : -1;
             case Property.BACK_COLOR_ORDINAL:
-                Object backColor = null;
-                final RolapEvaluator rolapEvaluator = (RolapEvaluator)result.getRootEvaluator();
-                final int savepoint = rolapEvaluator.savepoint();
-                try {
-                    result.populateEvaluator(rolapEvaluator, pos);
-                    backColor = rolapEvaluator.getBackColor();
-                } finally {
-                    rolapEvaluator.restore(savepoint);
+                formatString = (String)getPropertyValue(Property.FORMAT_STRING.getName());
+                if(formatString == null) {
+                    return null;
                 }
-                return backColor;
+                for(String part: formatString.split(";")) {
+                    String[] pair = part.split("=");
+                    if(pair.length == 2
+                            && pair[0] != null
+                            && pair[0].toUpperCase().equals(Property.BACK_COLOR.getName())) {
+                        return pair[1];
+                    }
+                }
+                return null;
+// To option when backColor belongs to real measure
+//                Object backColor = null;
+//                //final RolapEvaluator rolapEvaluator = (RolapEvaluator)result.getEvaluator(pos);
+//                final RolapEvaluator rolapEvaluator = (RolapEvaluator)result.getRootEvaluator();
+//                final int savepoint = rolapEvaluator.savepoint();
+//                try {
+//                    result.populateEvaluator(rolapEvaluator, pos);
+//                    org.apache.log4j.Logger LOGGER = org.apache.log4j.Logger.getLogger( RolapCell.class );
+//                    backColor = rolapEvaluator.getBackColor();
+//                } finally {
+//                    rolapEvaluator.restore(savepoint);
+//                }
+//                return backColor;
+            case Property.FORE_COLOR_ORDINAL:
+                formatString = (String)getPropertyValue(Property.FORMAT_STRING.getName());
+                if(formatString == null) {
+                    return null;
+                }
+                for(String part: formatString.split(";")) {
+                    String[] pair = part.split("=");
+                    if(pair.length == 2
+                            && pair[0] != null
+                            && pair[0].toUpperCase().equals(Property.FORE_COLOR.getName())) {
+                        return pair[1];
+                    }
+                }
+                return null;
             default:
                 // fall through
             }
