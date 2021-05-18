@@ -588,6 +588,12 @@ Revision is $Id$
                 Can be localized from Properties file using #{propertyname}.
             </Doc>
         </Attribute>
+        <Attribute name="displayFolder" required="false">
+            <Doc>
+                The path to be used when displaying the hierarchy in the user interface.
+                Folder names will be separated by a semicolon (;). Nested folders are indicated by a backslash (\).
+            </Doc>
+        </Attribute>
         <Attribute name="uniqueKeyLevelName" required="false">
             <Doc>
 		        Should be set to the level (if such a level exists) at which depth it is known

@@ -755,6 +755,7 @@ public enum RowsetDefinition {
             MdschemaHierarchiesRowset.DimensionIsShared,
             MdschemaHierarchiesRowset.HierarchyIsVisibile,
             MdschemaHierarchiesRowset.HierarchyOrigin,
+            MdschemaHierarchiesRowset.DisplayFolder,
             MdschemaHierarchiesRowset.CubeSource,
             MdschemaHierarchiesRowset.HierarchyVisibility,
             MdschemaHierarchiesRowset.ParentChild,
@@ -4748,6 +4749,14 @@ TODO: see above
                         "MD_SYSTEM_ENABLED identifies attribute hierarchies, and has a value of 0x0000002.\n" +
                         "MD_SYSTEM_INTERNAL identifies attributes with no attribute hierarchies, and has a value of 0x0000004." +
                         "A parent/child attribute hierarchy is both MD_USER_DEFINED and MD_SYSTEM_ENABLED.");
+        private static final Column DisplayFolder =
+            new Column(
+                "HIERARCHY_DISPLAY_FOLDER",
+                Type.String,
+                null,
+                Column.NOT_RESTRICTION,
+                Column.OPTIONAL,
+                "The path to be used when displaying the hierarchy in the user interface. Folder names will be separated by a semicolon (;). Nested folders are indicated by a backslash (\\).");
         private static final Column CubeSource =
             new Column(
                 "CUBE_SOURCE",
@@ -4943,6 +4952,11 @@ TODO: see above
             row.set(HierarchyOrigin.name, 0);
 
             row.set(HierarchyOrdinal.name, ordinal);
+
+
+            mondrian.olap4j.MondrianOlap4jHierarchy mondrianOlap4jHierarchy =
+                    (mondrian.olap4j.MondrianOlap4jHierarchy)hierarchy;
+            row.set(DisplayFolder.name, mondrianOlap4jHierarchy.getDisplayFolder());
 
             // always true
             row.set(DimensionIsShared.name, true);

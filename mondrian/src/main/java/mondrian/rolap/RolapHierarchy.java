@@ -83,6 +83,8 @@ public class RolapHierarchy extends HierarchyBase {
     private final Map<String, Annotation> annotationMap;
     final RolapHierarchy closureFor;
 
+    protected String displayFolder = null;
+
     /**
      * Creates a hierarchy.
      *
@@ -98,11 +100,13 @@ public class RolapHierarchy extends HierarchyBase {
         String caption,
         boolean visible,
         String description,
+        String displayFolder,
         boolean hasAll,
         RolapHierarchy closureFor,
         Map<String, Annotation> annotationMap)
     {
         super(dimension, subName, caption, visible, description, hasAll);
+        this.displayFolder = displayFolder;
         this.annotationMap = annotationMap;
         this.allLevelName = "(All)";
         this.allMemberName =
@@ -188,6 +192,7 @@ public class RolapHierarchy extends HierarchyBase {
             xmlHierarchy.caption,
             xmlHierarchy.visible,
             xmlHierarchy.description,
+            xmlHierarchy.displayFolder,
             xmlHierarchy.hasAll,
             null,
             createAnnotationMap(xmlHierarchy.annotations));
@@ -355,6 +360,10 @@ public class RolapHierarchy extends HierarchyBase {
 
     protected Logger getLogger() {
         return LOGGER;
+    }
+
+    public String getDisplayFolder() {
+        return this.displayFolder;
     }
 
     public boolean equals(Object o) {

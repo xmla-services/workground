@@ -24,7 +24,7 @@ import java.util.List;
  * @author jhyde
  * @since May 25, 2007
  */
-class MondrianOlap4jHierarchy
+public class MondrianOlap4jHierarchy
     extends MondrianOlap4jMetadataElement
     implements Hierarchy, Named
 {
@@ -126,6 +126,10 @@ class MondrianOlap4jHierarchy
         return hierarchy.getLocalized(
             OlapElement.LocalizedProperty.DESCRIPTION,
             olap4jSchema.getLocale());
+    }
+
+    public String getDisplayFolder() {
+        return hierarchy.getDisplayFolder();
     }
 
     public boolean isVisible() {
