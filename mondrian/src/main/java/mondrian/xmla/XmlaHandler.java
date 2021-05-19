@@ -1880,6 +1880,7 @@ public class XmlaHandler {
         }
 
         protected static Map<String, CellProperty> cellPropertyMap =new HashMap<String, CellProperty>() {{
+            put("CELL_ORDINAL", new CellProperty("CELL_ORDINAL", "CellOrdinal", "xsd:unsignedInt"));
             put("VALUE", new CellProperty("VALUE", "Value", null));
             put("FORMATTED_VALUE", new CellProperty("FORMATTED_VALUE", "FmtValue", "xsd:string"));
             put("FORMAT_STRING", new CellProperty("FORMAT_STRING", "FormatString", "xsd:string"));
@@ -1996,6 +1997,7 @@ public class XmlaHandler {
             if(queryCellPropertyNames.size() == 0) {
                 queryCellPropertyNames.add("VALUE");
                 queryCellPropertyNames.add("FORMATTED_VALUE");
+                queryCellPropertyNames.add("CELL_ORDINAL");
             }
         }
 
@@ -2642,6 +2644,9 @@ public class XmlaHandler {
                 "Cell",
                 "CellOrdinal", ordinal);
             for(String propertyName: this.queryCellPropertyNames){
+                if(propertyName.equals("CELL_ORDINAL")) {
+                    continue;
+                }
                 mondrian.olap4j.MondrianOlap4jCell mondrianOlap4jCell = (mondrian.olap4j.MondrianOlap4jCell)cell;
                 Object value = mondrianOlap4jCell.getRolapCell().getPropertyValue(propertyName);
                 if (value == null) {
