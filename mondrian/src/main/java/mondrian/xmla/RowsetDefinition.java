@@ -570,19 +570,19 @@ public enum RowsetDefinition {
             MdschemaCubesRowset.SchemaName,
             MdschemaCubesRowset.CubeName,
             MdschemaCubesRowset.CubeType,
-            MdschemaCubesRowset.BaseCubeName,
             MdschemaCubesRowset.CubeGuid,
             MdschemaCubesRowset.CreatedOn,
             MdschemaCubesRowset.LastSchemaUpdate,
             MdschemaCubesRowset.SchemaUpdatedBy,
             MdschemaCubesRowset.LastDataUpdate,
             MdschemaCubesRowset.DataUpdatedBy,
+            MdschemaCubesRowset.Description,
             MdschemaCubesRowset.IsDrillthroughEnabled,
-            MdschemaCubesRowset.IsWriteEnabled,
             MdschemaCubesRowset.IsLinkable,
+            MdschemaCubesRowset.IsWriteEnabled,
             MdschemaCubesRowset.IsSqlEnabled,
             MdschemaCubesRowset.CubeCaption,
-            MdschemaCubesRowset.Description,
+            MdschemaCubesRowset.BaseCubeName,
             MdschemaCubesRowset.Dimensions,
             MdschemaCubesRowset.Sets,
             MdschemaCubesRowset.Measures
@@ -3769,7 +3769,6 @@ TODO: see above
                         //row.set(CubeGuid.name, "");
                         //row.set(CreatedOn.name, "");
                         //row.set(SchemaUpdatedBy.name, "");
-                        //row.set(LastDataUpdate.name, "");
                         //row.set(DataUpdatedBy.name, "");
                         row.set(IsDrillthroughEnabled.name, true);
                         row.set(IsWriteEnabled.name, false);
@@ -3783,6 +3782,7 @@ TODO: see above
                             formatter.format(
                                 extra.getSchemaLoadDate(schema));
                         row.set(LastSchemaUpdate.name, formattedDate);
+                        row.set(LastDataUpdate.name, formattedDate);
                         if (deep) {
                             row.set(
                                 Dimensions.name,
