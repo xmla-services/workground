@@ -132,7 +132,7 @@ class MondrianServerImpl
             "Hierarchy", "Hierary_Unique_name", "IIF", "IsEmpty",
             "Include_Null", "Include_Statistics", "Inclusive", "Input_Only",
             "IsDescendant", "Item", "Lag", "LastChild", "LastPeriods",
-            "LastSibling", "Lead", "Level", "Level_Unique_Name", "Levels",
+            "LastSibling", "Lead", "Level", "Level_Number", "Level_Unique_Name", "Levels",
             "LinRegIntercept", "LinRegR2", "LinRegPoint", "LinRegSlope",
             "LinRegVariance", "Long", "MaxRows", "Median", "Member",
             "Member_Caption", "Member_Guid", "Member_Name", "Member_Ordinal",

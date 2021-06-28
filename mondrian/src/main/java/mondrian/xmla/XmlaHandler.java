@@ -2085,6 +2085,9 @@ public class XmlaHandler {
             writer.startElement("CellInfo");
 
             for(String cellPropertyName: queryCellPropertyNames){
+                if(cellPropertyName != null) {
+                    cellPropertyName = cellPropertyName.toUpperCase();
+                }
                 CellProperty cellProperty = cellPropertyMap.get(cellPropertyName);
                 List<Object> values = new ArrayList<Object>();
                 values.add("name");
@@ -2644,6 +2647,9 @@ public class XmlaHandler {
                 "Cell",
                 "CellOrdinal", ordinal);
             for(String propertyName: this.queryCellPropertyNames){
+                if(propertyName != null) {
+                    propertyName = propertyName.toUpperCase();
+                }
                 if(propertyName.equals("CELL_ORDINAL")) {
                     continue;
                 }

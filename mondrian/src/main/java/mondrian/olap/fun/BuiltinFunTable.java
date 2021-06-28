@@ -1373,6 +1373,27 @@ public class BuiltinFunTable extends FunTableImpl {
             }
         });
 
+        // <Member>.Level_Number
+        builder.define(
+                new FunDefBase(
+                        "Level_Number",
+                        "Returns the level number of a member.",
+                        "pim")
+                {
+                    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+                    {
+                        final MemberCalc memberCalc =
+                                compiler.compileMember(call.getArg(0));
+                        return new AbstractIntegerCalc(call, new Calc[] {memberCalc}) {
+                            public int evaluateInteger(Evaluator evaluator) {
+                                final Member member =
+                                        memberCalc.evaluateMember(evaluator);
+                                return member.getLevel().getDepth();
+                            }
+                        };
+                    }
+                });
+
         // <Member>.UniqueName
         builder.define(
             new FunDefBase(
