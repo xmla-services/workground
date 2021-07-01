@@ -239,10 +239,12 @@ public class MemberCacheHelper implements MemberCache {
         mapKeyToMember.clear();
         mapLevelToMembers.clear();
         mapParentToNamedChildren.clear();
-        // We also need to clear the approxRowCount of each level.
-        for (Level level : rolapHierarchy.getLevels()) {
-            ((RolapLevel)level).setApproxRowCount(Integer.MIN_VALUE);
-        }
+
+        // We also need (why?) to clear the approxRowCount of each level.
+        // But it leads to losing of approxRowCount value from schema
+//        for (Level level : rolapHierarchy.getLevels()) {
+//            ((RolapLevel)level).setApproxRowCount(Integer.MIN_VALUE);
+//        }
     }
 
     public DataSourceChangeListener getChangeListener() {
