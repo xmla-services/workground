@@ -100,7 +100,12 @@ abstract class MondrianOlap4jStatement
             if(fields.size() == 0) {
                 MondrianOlap4jCube mondrianOlap4jCube = (MondrianOlap4jCube)cellSet.getMetaData().getCube();
                 mondrian.rolap.RolapCube rolapCube = (mondrian.rolap.RolapCube)mondrianOlap4jCube.getOlapElement();
-                fields = rolapCube.getDefaultDrillThroughAction().getOlapElements();
+
+                mondrian.rolap.RolapDrillThroughAction rolapDrillThroughAction =
+                        rolapCube.getDefaultDrillThroughAction();
+                if(rolapDrillThroughAction != null) {
+                    fields = rolapDrillThroughAction.getOlapElements();
+                }
             }
 
             ResultSet resultSet =
