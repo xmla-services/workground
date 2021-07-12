@@ -62,23 +62,8 @@ public class RolapCalculatedMember extends RolapMemberBase {
         if (Util.equal(propertyName, Property.FORMULA.name, matchCase)) {
             return formula;
         } else if (Util.equal(propertyName, Property.DATATYPE.name, matchCase)) {
-            if(this.formula.getExpression()  instanceof   mondrian.mdx.ResolvedFunCall) {
-                final mondrian.mdx.ResolvedFunCall resolvedFunCall =
-                        (mondrian.mdx.ResolvedFunCall)this.formula.getExpression();
-                resolvedFunCall.getType().toString();
-                //one of mondrian.olap.type
-                switch (resolvedFunCall.getType().toString()) {
-                    case "BOOLEAN":
-                        return "Boolean";
-                    case "NUMERIC":
-                        return "Numeric";
-                    case "STRING":
-                        return "String";
-                    default:
-                        return resolvedFunCall.getType().toString();
-                }
-            }
-            return "String";
+            //will be processed in CellSet
+            return null;
         } else if (Util.equal(
                 propertyName, Property.CHILDREN_CARDINALITY.name, matchCase))
         {
