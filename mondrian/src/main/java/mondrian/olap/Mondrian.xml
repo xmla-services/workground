@@ -242,6 +242,7 @@ Revision is $Id$
                 Named sets in this cube.
             </Doc>
         </Array>
+        <Array name="actions" type="Action"><Doc></Doc></Array>
         <Code><![CDATA[
             public boolean isEnabled() {
                 return enabled.booleanValue();
@@ -2438,6 +2439,70 @@ Revision is $Id$
             <a href="api/mondrian/spi/PropertyFormatter.html">mondrian.spi.PropertyFormatter</a>,
             or by a script.
         </Doc>
+    </Element>
+
+    <!-- Action ============================================== -->
+    <Element type="DrillThroughColumn" abstract="true">
+        <Doc>
+            Base class for drillthrough columns.
+        </Doc>
+    </Element>
+
+    <Element type="DrillThroughAttribute" class="DrillThroughColumn">
+        <Doc>
+        </Doc>
+        <Attribute name="dimension" required="true">
+            <Doc></Doc>
+        </Attribute>
+        <Attribute name="hierarchy" required="false">
+            <Doc></Doc>
+        </Attribute>
+        <Attribute name="level" required="false">
+            <Doc></Doc>
+        </Attribute>
+    </Element>
+
+    <Element type="DrillThroughMeasure" class="DrillThroughColumn">
+        <Doc>
+        </Doc>
+        <Attribute name="name" required="true">
+            <Doc></Doc>
+        </Attribute>
+    </Element>
+
+    <Element type="Action">
+        <Doc>
+            Definition of a cube action.
+        </Doc>
+        <Attribute name="name" required="true">
+            <Doc>
+                Name of this cube action.
+            </Doc>
+        </Attribute>
+        <Attribute name="caption" required="false">
+            <Doc>
+                Caption of this action.
+            </Doc>
+        </Attribute>
+        <Attribute name="description" required="false">
+            <Doc>
+                Description of this action.
+            </Doc>
+        </Attribute>
+        <Object name="annotations" type="Annotations" required="false">
+            <Doc>Contains values of user-defined properties.</Doc>
+        </Object>
+    </Element>
+
+    <Element type="DrillThroughAction" class="Action">
+        <Doc>
+        </Doc>
+        <Attribute name="default" required="false">
+            <Doc>
+                Is this action default DrillThrough action.
+            </Doc>
+        </Attribute>
+        <Array name="columns" type="DrillThroughColumn"><Doc></Doc></Array>
     </Element>
 </Model>
 

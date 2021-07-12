@@ -5,6 +5,7 @@
 * You must accept the terms of that agreement to use this software.
 *
 * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+* Copyright (c) 2021 Sergei Semenkov
 */
 
 package mondrian.olap4j;
@@ -95,11 +96,18 @@ abstract class MondrianOlap4jStatement
             final MondrianOlap4jCell cell =
                 (MondrianOlap4jCell) cellSet.getCell(coords);
 
+            List<OlapElement> fields = drillThrough.getReturnList();
+            if(fields.size() == 0) {
+                MondrianOlap4jCube mondrianOlap4jCube = (MondrianOlap4jCube)cellSet.getMetaData().getCube();
+                mondrian.rolap.RolapCube rolapCube = (mondrian.rolap.RolapCube)mondrianOlap4jCube.getOlapElement();
+                fields = rolapCube.getDefaultDrillThroughAction().getOlapElements();
+            }
+
             ResultSet resultSet =
                 cell.drillThroughInternal(
                     drillThrough.getMaxRowCount(),
                     drillThrough.getFirstRowOrdinal(),
-                    drillThrough.getReturnList(),
+                    fields,
                     true,
                     null,
                     rowCountSlot);

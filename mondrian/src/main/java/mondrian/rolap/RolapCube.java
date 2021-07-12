@@ -103,6 +103,9 @@ public class RolapCube extends CubeBase {
 
     final BitKey closureColumnBitKey;
 
+    final List<RolapAction> actionList =
+            new ArrayList<RolapAction>();
+
     /**
      * Used for virtual cubes.
      * Contains a list of all base cubes related to a virtual cube
@@ -328,6 +331,105 @@ public class RolapCube extends CubeBase {
 
         checkOrdinals(xmlCube.name, measureList);
         loadAggGroup(xmlCube);
+
+        for(MondrianDef.Action action: xmlCube.actions) {
+            if(action instanceof MondrianDef.DrillThroughAction) {
+                MondrianDef.DrillThroughAction drillThroughAction = (MondrianDef.DrillThroughAction)action;
+
+                List<RolapDrillThroughColumn> columns = new ArrayList<RolapDrillThroughColumn>();
+
+                for(MondrianDef.DrillThroughColumn drillThroughColumn: drillThroughAction.columns) {
+                    if(drillThroughColumn instanceof MondrianDef.DrillThroughAttribute) {
+                        MondrianDef.DrillThroughAttribute drillThroughAttribute =
+                                (MondrianDef.DrillThroughAttribute)drillThroughColumn;
+
+                        Dimension dimension = null;
+                        Hierarchy hierarchy = null;
+                        Level level = null;
+                        for(Dimension currntDimension: this.getDimensions()) {
+                            if(currntDimension.getName().equals(drillThroughAttribute.dimension)) {
+                                dimension = currntDimension;
+                                break;
+                            }
+                        }
+                        if(dimension == null) {
+                            throw Util.newError(
+                                    "Error while creating DrillThrough  action. Dimension '"
+                                            + drillThroughAttribute.dimension + "' not found");
+                        }
+                        else {
+                            if(drillThroughAttribute.hierarchy != null && !drillThroughAttribute.hierarchy.equals("")) {
+                                for(Hierarchy currentHierarchy: dimension.getHierarchies()) {
+                                    if(currentHierarchy.getName().equals(drillThroughAttribute.hierarchy)) {
+                                        hierarchy = currentHierarchy;
+                                        break;
+                                    }
+                                }
+                                if(hierarchy == null) {
+                                    throw Util.newError(
+                                            "Error while creating DrillThrough  action. Hierarchy '"
+                                                    + drillThroughAttribute.hierarchy + "' not found");
+                                }
+                                else {
+                                    if(drillThroughAttribute.level != null && !drillThroughAttribute.level.equals("")) {
+                                        for(Level currentLevel: hierarchy.getLevels()) {
+                                            if(currentLevel.getName().equals(drillThroughAttribute.level)) {
+                                                level = currentLevel;
+                                                break;
+                                            }
+                                        }
+                                        if(level == null) {
+                                            throw Util.newError(
+                                                    "Error while creating DrillThrough  action. Level '"
+                                                            + drillThroughAttribute.level + "' not found");
+                                        }
+                                    }
+
+                                }
+                            }
+                        }
+
+                        columns.add(
+                                new RolapDrillThroughAttribute(
+                                        dimension,
+                                        hierarchy,
+                                        level
+                                )
+                        );
+
+                    }
+                    else if(drillThroughColumn instanceof MondrianDef.DrillThroughMeasure) {
+                        MondrianDef.DrillThroughMeasure drillThroughMeasure =
+                                (MondrianDef.DrillThroughMeasure)drillThroughColumn;
+
+                        Member measure = null;
+                        for(Member currntMeasure: this.getMeasures()) {
+                            if(currntMeasure.getName().equals(drillThroughMeasure.name)) {
+                                measure = currntMeasure;
+                                break;
+                            }
+                        }
+                        if(measure == null) {
+                            throw Util.newError(
+                                    "Error while creating DrillThrough  action. Measure '"
+                                            + drillThroughMeasure.name + "' not found");
+                        }
+                        columns.add(
+                                new RolapDrillThroughMeasure(measure)
+                        );
+                    }
+                }
+
+                RolapDrillThroughAction rolapDrillThroughAction = new RolapDrillThroughAction(
+                        drillThroughAction.name,
+                        drillThroughAction.caption,
+                        drillThroughAction.description,
+                        drillThroughAction._default != null && drillThroughAction._default.equals("true"),
+                        columns
+                );
+                this.actionList.add(rolapDrillThroughAction);
+            }
+        }
     }
 
     /**
@@ -3348,6 +3450,18 @@ public class RolapCube extends CubeBase {
                 }
             }
         }
+    }
+
+    public RolapDrillThroughAction getDefaultDrillThroughAction() {
+        for(RolapAction action: this.actionList) {
+            if(action instanceof RolapDrillThroughAction) {
+                RolapDrillThroughAction rolapDrillThroughAction = (RolapDrillThroughAction)action;
+                if(rolapDrillThroughAction.getIsDefault()) {
+                    return rolapDrillThroughAction;
+                }
+            }
+        }
+        return null;
     }
 }
 

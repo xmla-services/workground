@@ -317,7 +317,7 @@ class MondrianOlap4jCube
         return true;
     }
 
-    protected OlapElement getOlapElement() {
+    public OlapElement getOlapElement() {
         return cube;
     }
 }
