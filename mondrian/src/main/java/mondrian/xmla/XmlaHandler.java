@@ -2667,7 +2667,11 @@ public class XmlaHandler {
                     final String dataType =
                         (String) cell.getPropertyValue(
                             StandardCellProperty.DATATYPE);
-                    final ValueInfo vi = new ValueInfo(dataType, value);
+
+                    //final ValueInfo vi = new ValueInfo(dataType, value);
+                    //will always get real datatype (see ValueInfo logic)
+                    final ValueInfo vi = new ValueInfo(null, value);
+
                     final String valueType = vi.valueType;
                     final String valueString;
                     if (vi.value instanceof Double && (Double)vi.value == Double.POSITIVE_INFINITY){

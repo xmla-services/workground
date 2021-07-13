@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2001-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.rolap;
@@ -61,9 +62,6 @@ public class RolapCalculatedMember extends RolapMemberBase {
     public Object getPropertyValue(String propertyName, boolean matchCase) {
         if (Util.equal(propertyName, Property.FORMULA.name, matchCase)) {
             return formula;
-        } else if (Util.equal(propertyName, Property.DATATYPE.name, matchCase)) {
-            //will be processed in CellSet
-            return null;
         } else if (Util.equal(
                 propertyName, Property.CHILDREN_CARDINALITY.name, matchCase))
         {
