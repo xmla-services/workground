@@ -585,7 +585,8 @@ public enum RowsetDefinition {
             MdschemaCubesRowset.BaseCubeName,
             MdschemaCubesRowset.Dimensions,
             MdschemaCubesRowset.Sets,
-            MdschemaCubesRowset.Measures
+            MdschemaCubesRowset.Measures,
+            MdschemaCubesRowset.CubeSource
         },
         new Column[] {
             MdschemaCubesRowset.CatalogName,
@@ -1137,6 +1138,68 @@ public enum RowsetDefinition {
     {
         public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
             return new MdschemaSetsRowset(request, handler);
+        }
+    },
+
+    /**
+     */
+    MDSCHEMA_KPIS(
+        21, "2AE44109-ED3D-4842-B16F-B694D1CB0E3F", null,
+        new Column[] {
+            MdschemaKpisRowset.CatalogName,
+            MdschemaKpisRowset.SchemaName,
+            MdschemaKpisRowset.CubeName,
+            MdschemaKpisRowset.MeasuregroupName,
+            MdschemaKpisRowset.KpiName,
+            MdschemaKpisRowset.KpiCaption,
+            MdschemaKpisRowset.KpiDescription,
+            MdschemaKpisRowset.KpiDisplayFolder,
+            MdschemaKpisRowset.KpiValue,
+            MdschemaKpisRowset.KpiGoal,
+            MdschemaKpisRowset.KpiStatus,
+            MdschemaKpisRowset.KpiTrend,
+            MdschemaKpisRowset.KpiStatusGraphic,
+            MdschemaKpisRowset.KpiTrendGraphic,
+            MdschemaKpisRowset.KpiWeight,
+            MdschemaKpisRowset.KpiCurrentTimeMember,
+            MdschemaKpisRowset.KpiParentKpiName,
+            MdschemaKpisRowset.Scope,
+    },
+        new Column[] {
+            MdschemaKpisRowset.CatalogName,
+            MdschemaKpisRowset.SchemaName,
+            MdschemaKpisRowset.CubeName,
+            MdschemaKpisRowset.MeasuregroupName,
+            MdschemaKpisRowset.KpiName,
+        })
+    {
+        public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
+          return new MdschemaKpisRowset(request, handler);
+        }
+    },
+
+    /**
+     */
+    MDSCHEMA_MEASUREGROUPS(
+        22, "E1625EBF-FA96-42FD-BEA6-DB90ADAFD96B", null,
+        new Column[] {
+                MdschemaMeasuregroupsRowset.CatalogName,
+                MdschemaMeasuregroupsRowset.SchemaName,
+                MdschemaMeasuregroupsRowset.CubeName,
+                MdschemaMeasuregroupsRowset.MeasuregroupName,
+                MdschemaMeasuregroupsRowset.Description,
+                MdschemaMeasuregroupsRowset.IsWriteEnabled,
+                MdschemaMeasuregroupsRowset.MeasuregroupCaption,
+    },
+        new Column[] {
+                MdschemaKpisRowset.CatalogName,
+                MdschemaKpisRowset.SchemaName,
+                MdschemaKpisRowset.CubeName,
+                MdschemaKpisRowset.MeasuregroupName,
+    })
+    {
+        public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
+            return new MdschemaMeasuregroupsRowset(request, handler);
         }
     };
 
@@ -3737,6 +3800,18 @@ TODO: see above
                 Column.NOT_RESTRICTION,
                 Column.OPTIONAL,
                 "Measures in this cube.");
+        private static final Column CubeSource =
+            new Column(
+                "CUBE_SOURCE",
+                Type.Integer,
+                null,
+                Column.RESTRICTION,
+                Column.OPTIONAL,
+                "A bitmap with one of these valid values:\n" +
+                        "\n" +
+                        "1 CUBE\n" +
+                        "\n" +
+                        "2 DIMENSION");
 
         public void populateImpl(
             XmlaResponse response,
@@ -3776,6 +3851,7 @@ TODO: see above
                         row.set(IsSqlEnabled.name, false);
                         row.set(CubeCaption.name, cube.getCaption());
                         row.set(Description.name, desc);
+                        row.set(CubeSource.name, 1);
                         Format formatter =
                             new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
                         String formattedDate =
@@ -4348,7 +4424,7 @@ TODO: see above
             row.set(CatalogName.name, catalog.getName());
             row.set(SchemaName.name, cube.getSchema().getName());
             row.set(CubeName.name, cube.getName());
-            row.set(MeasuregroupName.name, "");
+            row.set(MeasuregroupName.name, cube.getName());
             row.set(MeasuregroupCardinality.name, "ONE");
             row.set(DimensionUniqueName.name, dimension.getUniqueName());
             row.set(DimensionCardinality.name, "MANY");
@@ -4949,14 +5025,28 @@ TODO: see above
             row.set(HierarchyIsVisibile.name, hierarchy.isVisible());
             row.set(HierarchyVisibility.name, hierarchy.isVisible()?1:2);
 
-            row.set(HierarchyOrigin.name, 0);
+            // Bitmask
+            // MD_ORIGIN_USER_DEFINED 0x00000001
+            // MD_ORIGIN_ATTRIBUTE 0x00000002
+            // MD_ORIGIN_KEY_ATTRIBUTE 0x00000004
+            // MD_ORIGIN_INTERNAL 0x00000008
+            int hierarchyOrigin;
+            if(dimension.getUniqueName().equals(mondrian.olap.Dimension.MEASURES_UNIQUE_NAME)){
+                hierarchyOrigin = 6;
+            }
+            else {
+                hierarchyOrigin = 1;
+            }
+            row.set(HierarchyOrigin.name, hierarchyOrigin);
 
             row.set(HierarchyOrdinal.name, ordinal);
 
 
             mondrian.olap4j.MondrianOlap4jHierarchy mondrianOlap4jHierarchy =
                     (mondrian.olap4j.MondrianOlap4jHierarchy)hierarchy;
-            row.set(DisplayFolder.name, mondrianOlap4jHierarchy.getDisplayFolder());
+            String displayFolder = mondrianOlap4jHierarchy.getDisplayFolder();
+            if(displayFolder == null) { displayFolder = ""; }
+            row.set(DisplayFolder.name, displayFolder);
 
             // always true
             row.set(DimensionIsShared.name, true);
@@ -5705,9 +5795,13 @@ TODO: see above
             row.set(DataType.name, dbType.xmlaOrdinal());
             row.set(MeasureIsVisible.name, visible);
 
-            row.set(MeasuregroupName.name, "");
+            row.set(MeasuregroupName.name, cube.getName());
 
-            row.set(DisplayFolder.name, extra.getMeasureDisplayFolder(member));
+            String displayFolder = extra.getMeasureDisplayFolder(member);
+            if(displayFolder == null) {
+                displayFolder = "";
+            }
+            row.set(DisplayFolder.name, displayFolder);
 
             row.set(MeasureVisiblity.name, visible?1:2);
 
@@ -6448,6 +6542,341 @@ TODO: see above
                 row.set(EvaluationContext.name, "1");
                 addRow(row, rows);
             }
+        }
+    }
+
+    static class MdschemaKpisRowset extends Rowset {
+        private final Util.Functor1<Boolean, Catalog> catalogCond;
+        private final Util.Functor1<Boolean, Schema> schemaNameCond;
+        private final Util.Functor1<Boolean, Cube> cubeNameCond;
+        private final Util.Functor1<Boolean, NamedSet> kpiNameCond;
+
+        MdschemaKpisRowset(XmlaRequest request, XmlaHandler handler) {
+            super(MDSCHEMA_KPIS, request, handler);
+            catalogCond = makeCondition(CATALOG_NAME_GETTER, CatalogName);
+            schemaNameCond = makeCondition(SCHEMA_NAME_GETTER, SchemaName);
+            cubeNameCond = makeCondition(ELEMENT_NAME_GETTER, CubeName);
+            kpiNameCond = makeCondition(ELEMENT_NAME_GETTER, KpiName);
+        }
+
+        private static final Column CatalogName =
+                new Column(
+                        "CATALOG_NAME",
+                        Type.String,
+                        null,
+                        true,
+                        true,
+                        null);
+        private static final Column SchemaName =
+                new Column(
+                        "SCHEMA_NAME",
+                        Type.String,
+                        null,
+                        true,
+                        true,
+                        null);
+        private static final Column CubeName =
+                new Column(
+                        "CUBE_NAME",
+                        Type.String,
+                        null,
+                        true,
+                        true,
+                        null);
+        private static final Column MeasuregroupName =
+                new Column(
+                        "MEASUREGROUP_NAME",
+                        Type.String,
+                        null,
+                        false,
+                        false,
+                        null);
+        private static final Column KpiName =
+                new Column(
+                        "KPI_NAME",
+                        Type.String,
+                        null,
+                        true,
+                        true,
+                        null);
+        private static final Column KpiCaption =
+                new Column(
+                        "KPI_CAPTION",
+                        Type.String,
+                        null,
+                        false,
+                        false,
+                        null);
+        private static final Column KpiDescription =
+                new Column(
+                        "KPI_DESCRIPTION",
+                        Type.String,
+                        null,
+                        false,
+                        false,
+                        null);
+        private static final Column KpiDisplayFolder =
+                new Column(
+                        "KPI_DISPLAY_FOLDER",
+                        Type.String,
+                        null,
+                        false,
+                        false,
+                        null);
+        private static final Column KpiValue =
+                new Column(
+                        "KPI_VALUE",
+                        Type.String,
+                        null,
+                        false,
+                        false,
+                        null);
+        private static final Column KpiGoal =
+                new Column(
+                        "KPI_GOAL",
+                        Type.String,
+                        null,
+                        false,
+                        false,
+                        null);
+        private static final Column KpiStatus =
+                new Column(
+                        "KPI_STATUS",
+                        Type.String,
+                        null,
+                        false,
+                        false,
+                        null);
+        private static final Column KpiTrend =
+                new Column(
+                        "KPI_TREND",
+                        Type.String,
+                        null,
+                        false,
+                        false,
+                        null);
+        private static final Column KpiStatusGraphic =
+                new Column(
+                        "KPI_STATUS_GRAPHIC",
+                        Type.String,
+                        null,
+                        false,
+                        false,
+                        null);
+        private static final Column KpiTrendGraphic =
+                new Column(
+                        "KPI_TREND_GRAPHIC",
+                        Type.String,
+                        null,
+                        false,
+                        false,
+                        null);
+        private static final Column KpiWeight =
+                new Column(
+                        "KPI_WEIGHT",
+                        Type.String,
+                        null,
+                        false,
+                        false,
+                        null);
+        private static final Column KpiCurrentTimeMember =
+                new Column(
+                        "KPI_CURRENT_TIME_MEMBER",
+                        Type.String,
+                        null,
+                        false,
+                        false,
+                        null);
+        private static final Column KpiParentKpiName =
+                new Column(
+                        "KPI_PARENT_KPI_NAME",
+                        Type.String,
+                        null,
+                        false,
+                        false,
+                        null);
+        private static final Column Scope =
+                new Column(
+                        "SCOPE",
+                        Type.Integer,
+                        null,
+                        false,
+                        false,
+                        null);
+
+        public void populateImpl(
+                XmlaResponse response,
+                OlapConnection connection,
+                List<Row> rows)
+                throws XmlaException, OlapException
+        {
+            for (Catalog catalog
+                    : catIter(connection, catNameCond(), catalogCond))
+            {
+                processCatalog(connection, catalog, rows);
+            }
+        }
+
+        private void processCatalog(
+                OlapConnection connection,
+                Catalog catalog,
+                List<Row> rows)
+                throws OlapException
+        {
+            for (Schema schema : filter(catalog.getSchemas(), schemaNameCond)) {
+                for (Cube cube : filter(sortedCubes(schema), cubeNameCond)) {
+                    populateKpis(cube, catalog, rows);
+                }
+            }
+        }
+
+        private void populateKpis(
+                Cube cube,
+                Catalog catalog,
+                List<Row> rows)
+        {
+//            for (Kpi kpi : filter(cube.getKpis(), kpiNameCond)) {
+//                Row row = new Row();
+//                row.set(CatalogName.name, catalog.getName());
+//                addRow(row, rows);
+//            }
+        }
+    }
+
+    static class MdschemaMeasuregroupsRowset extends Rowset {
+        private final Util.Functor1<Boolean, Catalog> catalogNameCond;
+        private final Util.Functor1<Boolean, Schema> schemaNameCond;
+        private final Util.Functor1<Boolean, Cube> cubeNameCond;
+
+        MdschemaMeasuregroupsRowset(XmlaRequest request, XmlaHandler handler) {
+            super(MDSCHEMA_MEASUREGROUPS, request, handler);
+            catalogNameCond = makeCondition(CATALOG_NAME_GETTER, CatalogName);
+            schemaNameCond = makeCondition(SCHEMA_NAME_GETTER, SchemaName);
+            cubeNameCond = makeCondition(ELEMENT_NAME_GETTER, CubeName);
+        }
+
+        private static final Column CatalogName =
+                new Column(
+                        "CATALOG_NAME",
+                        Type.String,
+                        null,
+                        Column.RESTRICTION,
+                        Column.OPTIONAL,
+                        "The name of the catalog to which this measure group belongs. " +
+                                "NULL if the provider does not support catalogs.");
+        private static final Column SchemaName =
+                new Column(
+                        "SCHEMA_NAME",
+                        Type.String,
+                        null,
+                        Column.RESTRICTION,
+                        Column.OPTIONAL,
+                        "Not supported.");
+        private static final Column CubeName =
+                new Column(
+                        "CUBE_NAME",
+                        Type.String,
+                        null,
+                        Column.RESTRICTION,
+                        Column.OPTIONAL,
+                        "The name of the cube to which this measure group belongs.");
+        private static final Column MeasuregroupName =
+                new Column(
+                        "MEASUREGROUP_NAME",
+                        Type.String,
+                        null,
+                        Column.RESTRICTION,
+                        Column.OPTIONAL,
+                        "The name of the measure group.");
+        private static final Column Description =
+                new Column(
+                        "DESCRIPTION",
+                        Type.String,
+                        null,
+                        Column.NOT_RESTRICTION,
+                        Column.OPTIONAL,
+                        "A human-readable description of the measure group.");
+        private static final Column IsWriteEnabled =
+                new Column(
+                        "IS_WRITE_ENABLED",
+                        Type.Boolean,
+                        null,
+                        Column.NOT_RESTRICTION,
+                        Column.OPTIONAL,
+                        "A Boolean that indicates whether the measure group is write-enabled.");
+        private static final Column MeasuregroupCaption =
+                new Column(
+                        "MEASUREGROUP_CAPTION",
+                        Type.String,
+                        null,
+                        Column.NOT_RESTRICTION,
+                        Column.OPTIONAL,
+                        "The display caption for the measure group.");
+
+        public void populateImpl(
+                XmlaResponse response,
+                OlapConnection connection,
+                List<Row> rows)
+                throws XmlaException, SQLException
+        {
+            for (Catalog catalog
+                    : catIter(connection, catNameCond(), catalogNameCond))
+            {
+                populateCatalog(connection, catalog, rows);
+            }
+        }
+
+        protected void populateCatalog(
+                OlapConnection connection,
+                Catalog catalog,
+                List<Row> rows)
+                throws XmlaException, SQLException
+        {
+            for (Schema schema : filter(catalog.getSchemas(), schemaNameCond)) {
+                for (Cube cube : filteredCubes(schema, cubeNameCond)) {
+                    if (!(cube instanceof SharedDimensionHolderCube)) {
+                        populateCube(connection, catalog, cube, rows);
+                    }
+                }
+            }
+        }
+
+        protected void populateCube(
+                OlapConnection connection,
+                Catalog catalog,
+                Cube cube,
+                List<Row> rows)
+                throws XmlaException, SQLException
+        {
+//            for (Measuregroup measuregroup
+//                    : filter(
+//                    cube.getMeasuregroups(),
+//                    measuregroupCond))
+//            {
+//                populateMeasuregroup(
+//                        connection, catalog, cube, measuregroup, rows);
+//            }
+            populateMeasuregroup(
+                    connection, catalog, cube, rows);
+        }
+
+        protected void populateMeasuregroup(
+                OlapConnection connection,
+                Catalog catalog,
+                Cube cube,
+                List<Row> rows)
+                throws XmlaException, SQLException
+        {
+            Row row = new Row();
+            row.set(CatalogName.name, catalog.getName());
+            row.set(SchemaName.name, cube.getSchema().getName());
+            row.set(CubeName.name, cube.getName());
+            row.set(MeasuregroupName.name, cube.getName());
+            row.set(Description.name, "");
+            row.set(IsWriteEnabled.name, false);
+            row.set(MeasuregroupCaption.name, cube.getName());
+
+            addRow(row, rows);
         }
     }
 

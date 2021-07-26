@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2001-2005 Julian Hyde
 // Copyright (C) 2005-2018 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.rolap;
@@ -938,6 +939,9 @@ RME is this right
         List<RolapMember> children,
         MemberChildrenConstraint constraint)
     {
+        Execution execution = Locus.peek().execution;
+        execution.checkCancelOrTimeout();
+
         Pair<String, List<SqlStatement.Type>> pair;
         boolean parentChild;
         final RolapLevel parentLevel = parentMember.getLevel();
@@ -982,7 +986,6 @@ RME is this right
             final List<SqlStatement.Accessor> accessors = stmt.getAccessors();
             ResultSet resultSet = stmt.getResultSet();
             RolapMember parentMember2 = RolapUtil.strip(parentMember);
-            Execution execution = Locus.peek().execution;
             while (resultSet.next()) {
                 // Check if the MDX query was canceled.
                 CancellationChecker.checkCancelOrTimeout(

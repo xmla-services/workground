@@ -252,6 +252,7 @@ TOKEN :
     | <XOR: "XOR">
     | <WITH: "WITH">
     | <EXISTING: "EXISTING">
+    | <$SYSTEM: "$SYSTEM">
 }
 
 // White space
@@ -327,6 +328,7 @@ TOKEN :
     | < RBRACE : "}" >
     | < RPAREN : ")" >
     | < SOLIDUS : "/" >
+    | < ATSIGN : "@" >
 }
 
 // Literals
@@ -466,6 +468,9 @@ Id.NameSegment nameSegment() :
     }
 |   <ID> {
         return new Id.NameSegment(token.image, Id.Quoting.UNQUOTED);
+    }
+|   <ATSIGN><ID> {
+        return new Id.NameSegment("@" + token.image, Id.Quoting.UNQUOTED);
     }
 |   <QUOTED_ID> {
         return new Id.NameSegment(
@@ -996,6 +1001,10 @@ QueryPart statement() :
 }
 {
     (
+        LOOKAHEAD(3)
+        //look ahead for <$SYSTEM>
+        qp = dmvSelectStatement()
+    |
         qp = selectStatement()
     |
         qp = createFormula()
@@ -1021,6 +1030,37 @@ QueryPart selectOrDrillthroughStatement() :
     }
 |   qp = drillthroughStatement() {
         return qp;
+    }
+}
+
+QueryPart dmvSelectStatement() :
+{
+    Id.NameSegment tableId;
+    Id c;
+    List<Id> columns = new ArrayList<Id>();
+    Exp w = null;
+}
+{
+    <SELECT>
+    (
+        c = compoundId() { columns.add(c); }
+        (
+            <COMMA>
+            c = compoundId() { columns.add(c); }
+        )*
+
+    )?
+    <FROM> <$SYSTEM><DOT>tableId = nameSegment()
+    (
+        <WHERE> w = expression()
+    )?
+    {
+        String tableName = tableId.name;
+        List<String> returnList = new ArrayList<String>();
+        for(Id id: columns) {
+            returnList.add(((Id.NameSegment) id.getElement(0)).name);
+        }
+        return factory.makeDmvQuery(tableName, returnList, w);
     }
 }
 

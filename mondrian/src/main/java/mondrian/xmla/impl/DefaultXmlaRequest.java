@@ -5,7 +5,8 @@
 * You must accept the terms of that agreement to use this software.
 *
 * Copyright (c) 2002-2017 Hitachi Vantara.
-* Copyright (C) 2019 Topsoft  
+* Copyright (C) 2019 Topsoft
+* Copyright (C) 2021 Sergei Semenkov
 * All rights reserved.
 */
 
@@ -43,6 +44,8 @@ public class DefaultXmlaRequest
     /* EXECUTE content */
     private String statement;
     private boolean drillthrough;
+    private String command;
+    private Map<String, String> parameters = Collections.unmodifiableMap(new HashMap<String, String>());
 
     /* DISCOVER contnet */
     private String requestType;
@@ -87,6 +90,10 @@ public class DefaultXmlaRequest
         return properties;
     }
 
+    public Map<String, String> getParameters() {
+        return parameters;
+    }
+
     public Map<String, Object> getRestrictions() {
         if (method != Method.DISCOVER) {
             throw new IllegalStateException(
@@ -105,6 +112,10 @@ public class DefaultXmlaRequest
 
     public String getRoleName() {
         return roleName;
+    }
+
+    public String getCommand() {
+        return this.command;
     }
 
     public String getRequestType() {
@@ -257,6 +268,15 @@ public class DefaultXmlaRequest
                 Util.newError(buf.toString()));
         }
         initProperties(childElems[0]); // <Properties><PropertyList>
+
+        childElems =
+                XmlaUtil.filterChildElements(
+                        executeRoot,
+                        NS_XMLA,
+                        "Parameters");
+        if(childElems.length > 0) {
+            initParameters(childElems[0]); // <Parameters>
+        }
     }
 
     private void initRestrictions(Element restrictionsRoot)
@@ -396,26 +416,85 @@ public class DefaultXmlaRequest
         this.properties = Collections.unmodifiableMap(properties);
     }
 
+    private void initParameters(Element parameterElement) throws XmlaException {
+        Map<String, String> parameters = new HashMap<String, String>();
+
+        NodeList nlst = parameterElement.getChildNodes();
+        for (int i = 0, nlen = nlst.getLength(); i < nlen; i++) {
+            Node n = nlst.item(i);
+            if (n instanceof Element) {
+                String name = null;
+                Element[] nameElems =
+                        XmlaUtil.filterChildElements(
+                                (Element)n,
+                                NS_XMLA,
+                                "Name");
+                if(nameElems.length > 0) {
+                    name = XmlaUtil.textInElement(nameElems[0]);
+
+                    String value = null;
+                    //TODO: Implement xsi:type
+                    Element[] valueElems =
+                            XmlaUtil.filterChildElements(
+                                    (Element)n,
+                                    NS_XMLA,
+                                    "Value");
+                    if(nameElems.length > 0) {
+                        value = XmlaUtil.textInElement(valueElems[0]);
+                    }
+
+                    parameters.put(name, value);
+                }
+            }
+        }
+        this.parameters = Collections.unmodifiableMap(parameters);
+    }
+
 
     private void initCommand(Element commandRoot) throws XmlaException {
-        Element[] childElems =
-            XmlaUtil.filterChildElements(
-                commandRoot,
-                NS_XMLA,
-                "Statement");
-        if (childElems.length != 1) {
+        Element[] commandElements =
+                XmlaUtil.filterChildElements(
+                        commandRoot,
+                        null,
+                        null);
+        if (commandElements.length != 1) {
             StringBuilder buf = new StringBuilder(100);
             buf.append(MSG_INVALID_XMLA);
-            buf.append(": Wrong number of Statement elements: ");
-            buf.append(childElems.length);
+            buf.append(": Wrong number of Command children elements: ");
+            buf.append(commandElements.length);
             throw new XmlaException(
-                CLIENT_FAULT_FC,
-                HSB_BAD_STATEMENT_CODE,
-                HSB_BAD_STATEMENT_FAULT_FS,
-                Util.newError(buf.toString()));
+                    CLIENT_FAULT_FC,
+                    HSB_BAD_COMMAND_CODE,
+                    HSB_BAD_COMMAND_FAULT_FS,
+                    Util.newError(buf.toString()));
         }
-        statement = XmlaUtil.textInElement(childElems[0]).replaceAll("\\r", "");
-        drillthrough = statement.toUpperCase().indexOf("DRILLTHROUGH") != -1;
+        else {
+            command = commandElements[0].getNodeName();
+            if(command != null && command.toUpperCase().equals("STATEMENT")) {
+                statement = XmlaUtil.textInElement(commandElements[0]).replaceAll("\\r", "");
+                drillthrough = statement.toUpperCase().indexOf("DRILLTHROUGH") != -1;
+            }
+            else if(command != null && command.toUpperCase().equals("CANCEL")) {
+                ;
+            }
+            else {
+                StringBuilder buf = new StringBuilder(100);
+                buf.append(MSG_INVALID_XMLA);
+                buf.append(": Wrong child of Command elements: ");
+                buf.append(command);
+                throw new XmlaException(
+                        CLIENT_FAULT_FC,
+                        HSB_BAD_COMMAND_CODE,
+                        HSB_BAD_COMMAND_FAULT_FS,
+                        Util.newError(buf.toString()));
+            }
+        }
+    }
+
+    public void setProperty(String key, String value) {
+        HashMap<String, String> newProperties = new HashMap<String, String>(this.properties);
+        newProperties.put(key, value);
+        this.properties = Collections.unmodifiableMap(newProperties);
     }
 }
 

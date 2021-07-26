@@ -5,8 +5,9 @@
 // You must accept the terms of that agreement to use this software.
 //
 // Copyright (C) 2006-2017 Hitachi Vantara
-// All Rights Reserved.
 // Copyright (C) 2019 Topsoft. All rights reserved.
+// Copyright (C) 2021 Sergei Semenkov
+// All Rights Reserved.
 */
 package mondrian.server;
 
@@ -466,6 +467,16 @@ class MondrianServerImpl
         } catch (MBeanRegistrationException e) {
             LOGGER.warn("Failed to register JMX MBean", e);
         }
+    }
+
+    public List<Statement> getStatements(RolapConnection rolapConnection){
+        List<Statement> result = new ArrayList<Statement>();
+        for(Statement statement: statementMap.values()) {
+            if(rolapConnection == null || statement.getMondrianConnection() == rolapConnection) {
+                result.add(statement);
+            }
+        }
+        return result;
     }
 }
 

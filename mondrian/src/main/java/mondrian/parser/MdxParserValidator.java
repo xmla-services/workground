@@ -79,6 +79,11 @@ public interface MdxParserValidator {
 
         Refresh makeRefresh(
                 String cubeName);
+
+        DmvQuery makeDmvQuery(
+                String tableName,
+                List<String> columns,
+                Exp whereExpression);
     }
 }
 

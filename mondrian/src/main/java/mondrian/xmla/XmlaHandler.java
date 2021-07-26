@@ -27,6 +27,7 @@ import mondrian.olap.QueryPart;
 import mondrian.olap.DrillThrough;
 import mondrian.olap.CalculatedFormula;
 import mondrian.olap.Refresh;
+import mondrian.olap.DmvQuery;
 
 import org.olap4j.*;
 import org.olap4j.impl.Olap4jUtil;
@@ -749,11 +750,56 @@ public class XmlaHandler {
         }
     }
 
+    private ArrayList<XmlaRequest> currentRequests = new ArrayList<XmlaRequest>();
+
     private void execute(
         XmlaRequest request,
         XmlaResponse response)
         throws XmlaException
     {
+        mondrian.xmla.impl.DefaultXmlaRequest defaultXmlaRequest = (mondrian.xmla.impl.DefaultXmlaRequest)request;
+
+        currentRequests.add(request);
+
+        if(defaultXmlaRequest.getCommand().toUpperCase().equals("CANCEL")){
+            try {
+                final OlapConnection connection1 = getConnection(request, Collections.<String, String>emptyMap());
+                final mondrian.rolap.RolapConnection rolapConnection1 =
+                        ((mondrian.olap4j.MondrianOlap4jConnection) connection1).getMondrianConnection();
+
+                for(XmlaRequest xmlaRequest: currentRequests){
+                    if(xmlaRequest.getSessionId().equals(rolapConnection1.getConnectInfo().get("sessionId"))){
+                        ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty("CANCELED", "true");
+                    }
+                }
+
+                mondrian.olap.MondrianServer mondrianServer =
+                        mondrian.olap.MondrianServer.forConnection(rolapConnection1);
+                for(mondrian.server.Statement statement: mondrianServer.getStatements(rolapConnection1)) {
+                    if(statement.getMondrianConnection().getConnectInfo().get("sessionId").equals(rolapConnection1.getConnectInfo().get("sessionId"))){
+                        statement.cancel();
+                    }
+                }
+                for(XmlaRequest xmlaRequest: currentRequests){
+                    if(xmlaRequest.getSessionId().equals(rolapConnection1.getConnectInfo().get("sessionId"))){
+                        ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty("CANCELED", "true");
+                    }
+                }
+            } catch (org.olap4j.OlapException oe) {
+            throw new XmlaException(
+                    CLIENT_FAULT_FC,
+                    "3238658121",
+                    USM_DOM_PARSE_FAULT_FS,
+                    oe);
+            } catch (java.sql.SQLException oe) {
+                throw new XmlaException(
+                        CLIENT_FAULT_FC,
+                        "3238658121",
+                        USM_DOM_PARSE_FAULT_FS,
+                        oe);
+            }
+        }
+
         final Map<String, String> properties = request.getProperties();
 
         // Default responseMimeType is SOAP.
@@ -797,6 +843,27 @@ public class XmlaHandler {
                 else {
                     cube.createNamedSet(formula);
                 }
+            } else if (queryPart instanceof DmvQuery) {
+                DmvQuery dmvQuery = (DmvQuery)queryPart;
+
+                mondrian.xmla.impl.DmvXmlaRequest dmvXmlaRequest = new mondrian.xmla.impl.DmvXmlaRequest(
+                        new HashMap<String, Object>(),
+                        request.getRoleName(),
+                        dmvQuery.getTableName().toUpperCase(),
+                        request.getUsername(),
+                        request.getPassword(),
+                        request.getSessionId()
+                );
+
+                executeDmvQuery(
+                        dmvXmlaRequest,
+                        response,
+                        dmvQuery.getTableName().toUpperCase(),
+                        dmvQuery.getWhereExpression(),
+                        defaultXmlaRequest.getParameters()
+                );
+
+                return;
             } else if (queryPart instanceof Refresh) {
                 Refresh refresh = (Refresh)queryPart;
                 final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
@@ -804,7 +871,14 @@ public class XmlaHandler {
                         schema.lookupCube(refresh.getCubeName(), true);
                 cube.flushCache(rolapConnection);
             } else {
-                result = executeQuery(request);
+                String canceled = request.getProperties().get("CANCELED");
+                if(canceled != null && canceled.equals("true")) {
+                    //Exception
+                    ;
+                }
+                else {
+                    result = executeQuery(request);
+                }
             }
 
             SaxWriter writer = response.getWriter();
@@ -882,6 +956,7 @@ public class XmlaHandler {
                     USM_DOM_PARSE_FAULT_FS,
                     oe);
         } finally {
+            currentRequests.remove(request);
             if (result != null) {
                 try {
                     result.close();
@@ -3077,6 +3152,146 @@ public class XmlaHandler {
             }
             writer.endElement();
         }
+    }
+
+    private void executeDmvQuery(
+            mondrian.xmla.impl.DmvXmlaRequest dmvXmlaRequest,
+            XmlaResponse response,
+            String rowsetName,
+            mondrian.olap.Exp whereExpression,
+            Map<String, String> parameters)
+            throws XmlaException
+    {
+        final RowsetDefinition rowsetDefinition =
+                RowsetDefinition.valueOf(rowsetName);
+
+        Rowset rowset = rowsetDefinition.getRowset(dmvXmlaRequest, this);
+
+        SaxWriter writer = response.getWriter();
+        writer.startDocument();
+
+        writer.startElement(
+                "DiscoverResponse",
+                "xmlns", NS_XMLA);
+        writer.startElement("return");
+        writer.startElement(
+                "root",
+                "xmlns", NS_XMLA_ROWSET,
+                "xmlns:xsi", NS_XSI,
+                "xmlns:xsd", NS_XSD,
+                "xmlns:EX", NS_XMLA_EX);
+
+        rowset.rowsetDefinition.writeRowsetXmlSchema(writer);
+
+        try {
+            //copied from rowset.unparse(response);
+
+            final List<Rowset.Row> rows = new ArrayList<Rowset.Row>();
+            rowset.populate(response, null, rows);
+            final Comparator<Rowset.Row> comparator = rowsetDefinition.getComparator();
+            if (comparator != null) {
+                Collections.sort(rows, comparator);
+            }
+            writer.startSequence(null, "row");
+            for (Rowset.Row row : rows) {
+                if(isCompatable(row, whereExpression, parameters)) {
+                    rowset.emit(row, response);
+                }
+            }
+            writer.endSequence();
+
+        } catch (XmlaException xex) {
+            throw xex;
+        } catch (Throwable t) {
+            throw new XmlaException(
+                    SERVER_FAULT_FC,
+                    HSB_DISCOVER_UNPARSE_CODE,
+                    HSB_DISCOVER_UNPARSE_FAULT_FS,
+                    t);
+        } finally {
+            // keep the tags balanced, even if there's an error
+            try {
+                writer.endElement();
+                writer.endElement();
+                writer.endElement();
+            } catch (Throwable e) {
+                // Ignore any errors balancing the tags. The original exception
+                // is more important.
+            }
+        }
+
+        writer.endDocument();
+    }
+
+    private boolean isCompatable(Rowset.Row row, mondrian.olap.Exp exp, Map<String, String> parameters) {
+        if(exp == null) {
+            return true;
+        }
+
+        if(exp instanceof mondrian.mdx.UnresolvedFunCall) {
+            mondrian.mdx.UnresolvedFunCall unresolvedFunCall = (mondrian.mdx.UnresolvedFunCall) exp;
+            final String functionName = unresolvedFunCall.getFunName();
+
+            Object o1, o2;
+            boolean result;
+
+            switch (functionName) {
+                case "AND":
+                    return isCompatable(row, unresolvedFunCall.getArgs()[0], parameters)
+                            && isCompatable(row, unresolvedFunCall.getArgs()[1], parameters);
+                case "OR":
+                    return isCompatable(row, unresolvedFunCall.getArgs()[0], parameters)
+                            || isCompatable(row, unresolvedFunCall.getArgs()[1], parameters);
+                case "=":
+                    o1 = getValue(row, unresolvedFunCall.getArgs()[0], parameters);
+                    o2 = getValue(row, unresolvedFunCall.getArgs()[1], parameters);
+                    result = (o1 == null && o2 == null)
+                            ||
+                            (o1 != null && o2 != null && o1.equals(o2));
+                    return result;
+                case "<>":
+                    o1 = getValue(row, unresolvedFunCall.getArgs()[0], parameters);
+                    o2 = getValue(row, unresolvedFunCall.getArgs()[1], parameters);
+                    result = !((o1 == null && o2 == null)
+                            ||
+                            (o1 != null && o2 != null && o1.equals(o2)));
+                    return result;
+                default:
+                    return true;
+            }
+        }
+        else if (exp instanceof  mondrian.olap.Id) {
+            Object value = getValue(row, exp, parameters);
+            return value != null && value.equals("true");
+        }
+
+        return true;
+    }
+
+    private Object getValue(Rowset.Row row, mondrian.olap.Exp exp, Map<String, String> parameters) {
+        if(exp instanceof  mondrian.olap.Id) {
+            String columnName = ((mondrian.olap.Id.NameSegment)((mondrian.olap.Id)exp).getElement(0)).getName();
+
+            if(columnName.startsWith("@")) {
+                columnName = columnName.substring(1);
+                Object value = null;
+                if(parameters.containsKey(columnName)) {
+                    value = parameters.get(columnName);
+                }
+                return value;
+            }
+            else {
+                Object value = row.get(columnName);
+                if(value != null) { value = value.toString(); }
+                return value;
+            }
+        }
+        else if(exp instanceof  mondrian.olap.Literal) {
+            Object value = ((mondrian.olap.Literal)exp).getValue();
+            if(value != null) { value = value.toString(); }
+            return value;
+        }
+        return null;
     }
 
     private void discover(XmlaRequest request, XmlaResponse response)

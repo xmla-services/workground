@@ -206,6 +206,14 @@ parser code {:
         {
             return new Refresh(cubeName);
         }
+
+        public DmvQuery makeDmvQuery(
+                String tableName,
+                List<String> columns,
+                Exp whereExpression)
+        {
+            return new DmvQuery(tableName, columns, whereExpression);
+        }
     }
 
     // Override lr_parser methods for NLS.  With this error handling scheme,
