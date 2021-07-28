@@ -19,7 +19,8 @@ import mondrian.xmla.XmlaRequest;
 public class DmvXmlaRequest
         implements XmlaRequest
 {
-    private Map<String, Object> restrictions;
+    private HashMap<String, Object> restrictions;
+    private HashMap<String, String> properties;
     private String roleName;
     private String requestType;
     private String username;
@@ -28,6 +29,7 @@ public class DmvXmlaRequest
 
     public DmvXmlaRequest(
             Map<String, Object> restrictions,
+            Map<String, String> properties,
             String roleName,
             String requestType,
             String username,
@@ -35,7 +37,8 @@ public class DmvXmlaRequest
             String sessionId
     )
     {
-        this.restrictions = restrictions;
+        this.restrictions = new HashMap<String, Object>(restrictions);
+        this.properties = new HashMap<String, String>(properties);
         this.roleName = roleName;
         this.requestType = requestType;
         this.username = username;

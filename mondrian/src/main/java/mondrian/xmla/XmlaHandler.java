@@ -846,8 +846,26 @@ public class XmlaHandler {
             } else if (queryPart instanceof DmvQuery) {
                 DmvQuery dmvQuery = (DmvQuery)queryPart;
 
+                HashMap<String, String> upperCaseProperties = new HashMap<String, String>();
+                for (String key : request.getProperties().keySet()) {
+                    String newKey = null;
+                    if(key != null) {
+                        newKey = key.toUpperCase();
+                    }
+                    upperCaseProperties.put(newKey, request.getProperties().get(key));
+                }
+
+                HashMap<String, Object> restrictions = new HashMap<String, Object>();
+                if(upperCaseProperties.containsKey("CATALOG")) {
+                    List<String> restriction = new ArrayList<String>();
+                    restriction.add(request.getProperties().get("Catalog"));
+                    restrictions.put(
+                            Property.StandardMemberProperty.CATALOG_NAME.name(),
+                            restriction);
+                }
                 mondrian.xmla.impl.DmvXmlaRequest dmvXmlaRequest = new mondrian.xmla.impl.DmvXmlaRequest(
-                        new HashMap<String, Object>(),
+                        restrictions,
+                        request.getProperties(),
                         request.getRoleName(),
                         dmvQuery.getTableName().toUpperCase(),
                         request.getUsername(),

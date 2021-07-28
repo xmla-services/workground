@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2001-2005 Julian Hyde
 // Copyright (C) 2005-2020 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.rolap;
@@ -474,12 +475,19 @@ public class RolapResult extends ResultBase {
       evaluator.restore( savepoint );
 
       // Get value for each Cell
-      final Locus locus = new Locus( execution, null, "Loading cells" );
-      Locus.push( locus );
-      try {
-        executeBody( internalSlicerEvaluator, query, new int[axes.length] );
-      } finally {
-        Locus.pop( locus );
+      // Cells will not be calculated if only CELL_ORDINAL requested.
+      mondrian.olap.QueryPart[] cellProperties = query.getCellProperties();
+      if(!(cellProperties.length == 1
+              && ((mondrian.olap.Id.NameSegment)
+              mondrian.olap.Util.parseIdentifier(cellProperties[0].toString()).get(0)).name.equalsIgnoreCase(
+              mondrian.olap.Property.CELL_ORDINAL.getName()    ))) {
+        final Locus locus = new Locus( execution, null, "Loading cells" );
+        Locus.push( locus );
+        try {
+          executeBody( internalSlicerEvaluator, query, new int[axes.length] );
+        } finally {
+          Locus.pop( locus );
+        }
       }
 
       // If you are very close to running out of memory due to
@@ -850,7 +858,7 @@ public class RolapResult extends ResultBase {
     }
 
     for ( int i = 0; i < pos.length; i++ ) {
-      if ( positionsHighCardinality.get( i ) ) {
+      if ( positionsHighCardinality.containsKey(i) && positionsHighCardinality.get( i ) ) {
         final Locus locus = new Locus( execution, null, "Loading cells" );
         Locus.push( locus );
         try {
