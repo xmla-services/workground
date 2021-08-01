@@ -469,10 +469,10 @@ class MondrianServerImpl
         }
     }
 
-    public List<Statement> getStatements(RolapConnection rolapConnection){
+    public List<Statement> getStatements(String sessionId) {
         List<Statement> result = new ArrayList<Statement>();
         for(Statement statement: statementMap.values()) {
-            if(rolapConnection == null || statement.getMondrianConnection() == rolapConnection) {
+            if(statement.getMondrianConnection().getConnectInfo().get("sessionId").equals(sessionId)) {
                 result.add(statement);
             }
         }

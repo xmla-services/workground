@@ -592,6 +592,12 @@ RME is this right
 
         RolapLevel level = (RolapLevel) member.getLevel().getChildLevel();
 
+        RolapLevel[] levels = (RolapLevel[]) hierarchy.getLevels();
+        int levelDepth = level.getDepth();
+
+        boolean needsGroupBy =
+                RolapUtil.isGroupByNeeded( hierarchy, levels, levelDepth );
+
         boolean levelCollapsed =
             (aggStar != null)
             && isLevelCollapsed(aggStar, (RolapCubeLevel)level);
@@ -607,8 +613,10 @@ RME is this right
             int bitPos = starColumn.getBitPosition();
             AggStar.Table.Column aggColumn = aggStar.lookupColumn(bitPos);
             String q = aggColumn.generateExprString(sqlQuery);
-            final String qAlias =
-                sqlQuery.addSelectGroupBy(q, starColumn.getInternalType());
+            String qAlias = sqlQuery.addSelect(q, starColumn.getInternalType());
+            if(needsGroupBy) {
+                sqlQuery.addGroupBy(q, qAlias);
+            }
             sqlQuery.addOrderBy(
                 q, qAlias, true, false, true, true);
             aggColumn.getTable().addToFrom(sqlQuery, false, true);
@@ -617,8 +625,10 @@ RME is this right
 
         hierarchy.addToFrom(sqlQuery, level.getKeyExp());
         String q = level.getKeyExp().getExpression(sqlQuery);
-        String idAlias =
-            sqlQuery.addSelectGroupBy(q, level.getInternalType());
+        String idAlias = sqlQuery.addSelect(q, level.getInternalType());
+        if(needsGroupBy) {
+            sqlQuery.addGroupBy(q, idAlias);
+        }
 
         // in non empty mode the level table must be joined to the fact
         // table
@@ -660,7 +670,10 @@ RME is this right
                 hierarchy.addToFrom(sqlQuery, captionExp);
             }
             String captionSql = captionExp.getExpression(sqlQuery);
-            sqlQuery.addSelectGroupBy(captionSql, null);
+            String gbAlias = sqlQuery.addSelect(captionSql, null);
+            if(needsGroupBy) {
+                sqlQuery.addGroupBy(captionSql, gbAlias);
+            }
         }
         if (!levelCollapsed) {
             hierarchy.addToFrom(sqlQuery, level.getOrdinalExp());
@@ -668,7 +681,10 @@ RME is this right
 
         final String orderBy = level.getOrdinalExp().getExpression(sqlQuery);
         if (!orderBy.equals(q)) {
-            String orderAlias = sqlQuery.addSelectGroupBy(orderBy, null);
+            String orderAlias = sqlQuery.addSelect(orderBy, null);
+            if(needsGroupBy) {
+                sqlQuery.addGroupBy(orderBy, orderAlias);
+            }
             sqlQuery.addOrderBy(
                 orderBy, orderAlias, true, false, true, true);
         } else {
@@ -684,12 +700,13 @@ RME is this right
             }
             final String s = exp.getExpression(sqlQuery);
             String alias = sqlQuery.addSelect(s, property.getType().getInternalType());
-            // Some dialects allow us to eliminate properties from the
-            // group by that are functionally dependent on the level value
-            if (!sqlQuery.getDialect().allowsSelectNotInGroupBy()
-                || !property.dependsOnLevelValue())
-            {
-                sqlQuery.addGroupBy(s, alias);
+            if(needsGroupBy) {
+                // Some dialects allow us to eliminate properties from the
+                // group by that are functionally dependent on the level value
+                if (!sqlQuery.getDialect().allowsSelectNotInGroupBy()
+                        || !property.dependsOnLevelValue()) {
+                    sqlQuery.addGroupBy(s, alias);
+                }
             }
         }
         return sqlQuery.toSqlAndTypes();

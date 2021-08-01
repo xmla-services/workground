@@ -248,7 +248,7 @@ public abstract class MondrianServer {
 
     public abstract AggregationManager getAggregationManager();
 
-    public abstract List<Statement> getStatements(RolapConnection rolapConnection);
+    public abstract List<Statement> getStatements(String sessionId);
 
     /**
      * Description of the version of the server.

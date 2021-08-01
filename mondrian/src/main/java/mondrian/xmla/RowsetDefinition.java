@@ -1944,10 +1944,15 @@ public enum RowsetDefinition {
 
     static class DiscoverPropertiesRowset extends Rowset {
         private final Util.Functor1<Boolean, PropertyDefinition> propNameCond;
+        private String properetyCatalog = null;
 
         DiscoverPropertiesRowset(XmlaRequest request, XmlaHandler handler) {
             super(DISCOVER_PROPERTIES, request, handler);
             propNameCond = makeCondition(PROPDEF_NAME_GETTER, PropertyName);
+
+            if(request.getProperties().containsKey(PropertyDefinition.Catalog.name())) {
+                properetyCatalog = request.getProperties().get(PropertyDefinition.Catalog.name());
+            }
         }
 
         private static final Column PropertyName =
@@ -2019,12 +2024,22 @@ public enum RowsetDefinition {
                 row.set(IsRequired.name, false);
 
                 String propertyValue = "";
-                switch(propertyDefinition.name()) {
-                    case "Catalog":
-                        propertyValue = connection.getCatalog();
-                        break;
-                    default:
-                        propertyValue = propertyDefinition.value;
+                if(propertyDefinition.name().equals(PropertyDefinition.Catalog.name())) {
+                    List<Catalog> catalogs = connection.getOlapCatalogs();
+                    if(this.properetyCatalog != null) {
+                        for(Catalog currentCatalog: catalogs) {
+                            if(currentCatalog.getName().equals(this.properetyCatalog)) {
+                                propertyValue = currentCatalog.getName();
+                                break;
+                            }
+                        }
+                    }
+                    else if(catalogs.size() > 0){
+                        propertyValue = catalogs.get(0).getName();
+                    }
+                }
+                else {
+                    propertyValue = propertyDefinition.value;
                 }
                 row.set(Value.name, propertyValue);
 
@@ -2366,8 +2381,9 @@ public enum RowsetDefinition {
             XmlaResponse response, OlapConnection connection, List<Row> rows)
             throws XmlaException, SQLException
         {
+            //Don't need catNameCond() condition. Have to return all catalogs.
             for (Catalog catalog
-                : catIter(connection, catNameCond(), catalogNameCond))
+                : catIter(connection, catalogNameCond))
             {
                 for (Schema schema : catalog.getSchemas()) {
                     Row row = new Row();

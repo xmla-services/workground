@@ -775,13 +775,14 @@ public class XmlaHandler {
 
                 mondrian.olap.MondrianServer mondrianServer =
                         mondrian.olap.MondrianServer.forConnection(rolapConnection1);
-                for(mondrian.server.Statement statement: mondrianServer.getStatements(rolapConnection1)) {
+                String sessionId = rolapConnection1.getConnectInfo().get("sessionId");
+                for(mondrian.server.Statement statement: mondrianServer.getStatements(sessionId)) {
                     if(statement.getMondrianConnection().getConnectInfo().get("sessionId").equals(rolapConnection1.getConnectInfo().get("sessionId"))){
                         statement.cancel();
                     }
                 }
                 for(XmlaRequest xmlaRequest: currentRequests){
-                    if(xmlaRequest.getSessionId().equals(rolapConnection1.getConnectInfo().get("sessionId"))){
+                    if(xmlaRequest.getSessionId().equals(sessionId)){
                         ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty("CANCELED", "true");
                     }
                 }
@@ -856,7 +857,7 @@ public class XmlaHandler {
                 }
 
                 HashMap<String, Object> restrictions = new HashMap<String, Object>();
-                if(upperCaseProperties.containsKey("CATALOG")) {
+                if(upperCaseProperties.containsKey(PropertyDefinition.Catalog.name().toUpperCase())) {
                     List<String> restriction = new ArrayList<String>();
                     restriction.add(request.getProperties().get("Catalog"));
                     restrictions.put(

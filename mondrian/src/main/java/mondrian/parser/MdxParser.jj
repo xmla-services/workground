@@ -1001,8 +1001,8 @@ QueryPart statement() :
 }
 {
     (
-        LOOKAHEAD(3)
-        //look ahead for <$SYSTEM>
+        LOOKAHEAD(dmvSelectStatement())
+        //TODO: look ahead for <$SYSTEM>
         qp = dmvSelectStatement()
     |
         qp = selectStatement()
