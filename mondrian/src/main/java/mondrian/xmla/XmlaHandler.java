@@ -752,6 +752,18 @@ public class XmlaHandler {
 
     private ArrayList<XmlaRequest> currentRequests = new ArrayList<XmlaRequest>();
 
+    private void checkedCanceled(XmlaRequest request) {
+        String canceled = request.getProperties().get("CANCELED");
+        if(canceled != null && canceled.equals("true")) {
+            throw new XmlaException(
+                    CLIENT_FAULT_FC,
+                    "3238658121",
+                    "",
+                    new Exception("The query was canceled by user.")
+            );
+        }
+    }
+
     private void execute(
         XmlaRequest request,
         XmlaResponse response)
@@ -890,15 +902,11 @@ public class XmlaHandler {
                         schema.lookupCube(refresh.getCubeName(), true);
                 cube.flushCache(rolapConnection);
             } else {
-                String canceled = request.getProperties().get("CANCELED");
-                if(canceled != null && canceled.equals("true")) {
-                    //Exception
-                    ;
-                }
-                else {
-                    result = executeQuery(request);
-                }
+                checkedCanceled(request);
+                result = executeQuery(request);
             }
+
+            checkedCanceled(request);
 
             SaxWriter writer = response.getWriter();
             writer.startDocument();
@@ -967,6 +975,7 @@ public class XmlaHandler {
                 writer.endElement(); // return
                 writer.endElement(); // ExecuteResponse
             }
+            checkedCanceled(request);
             writer.endDocument();
         } catch (org.olap4j.OlapException oe) {
             throw new XmlaException(
