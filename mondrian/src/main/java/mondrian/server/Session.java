@@ -57,7 +57,12 @@ public class Session
     public static Session create(String sessionId) throws OlapException
     {
         if(sessions.containsKey(sessionId)) {
-            throw new OlapException("Session with id \"" + sessionId + "\" already exists.");
+            throw new mondrian.xmla.XmlaException(
+                    "XMLAnalysisError",
+                    "0xc10c000a",
+                    "Session with id \"" + sessionId + "\" already exists.",
+                    new OlapException("Session with id \"" + sessionId + "\" already exists.")
+            );
         }
 
         Session session = new Session(sessionId);
@@ -76,7 +81,12 @@ public class Session
     public static Session get(String sessionId) throws OlapException
     {
         if(!sessions.containsKey(sessionId)) {
-            throw new OlapException("Session with id \"" + sessionId + "\" does not exist");
+            throw new mondrian.xmla.XmlaException(
+                    "XMLAnalysisError",
+                    "0xc10c000a",
+                    "Session with id \"" + sessionId + "\" already exists.",
+                    new OlapException("Session with id \"" + sessionId + "\" does not exist")
+            );
         }
         return sessions.get(sessionId);
     }
