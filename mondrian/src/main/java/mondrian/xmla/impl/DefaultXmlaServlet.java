@@ -321,7 +321,10 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                     Session.get(sessionIdStr);
                     Session.checkIn(sessionIdStr);
 
-                    SessionInfo sessionInfo = getSessionInfo(sessionIdStr);
+                    SessionInfo sessionInfo = null;
+                    if(authenticatedSession) {
+                        sessionInfo = getSessionInfo(sessionIdStr);
+                    }
 
                     if (sessionInfo != null) {
                         context.put(CONTEXT_XMLA_USERNAME, sessionInfo.user);
