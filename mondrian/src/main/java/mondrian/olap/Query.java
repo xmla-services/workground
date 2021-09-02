@@ -5,7 +5,7 @@
 // You must accept the terms of that agreement to use this software.
 //
 // Copyright (C) 1998-2005 Julian Hyde
-// Copyright (C) 2005-2017 Hitachi Vantara and others
+// Copyright (C) 2005-2021 Hitachi Vantara and others
 // Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
@@ -147,28 +147,14 @@ public class Query extends QueryPart {
         new ArrayList<ScopedNamedSet>();
     private boolean ownStatement;
 
-    /**
-     * Creates a Query.
-     */
-    public Query(
-        Statement statement,
-        Formula[] formulas,
-        QueryAxis[] axes,
-        Subcube subcube,
-        QueryAxis slicerAxis,
-        QueryPart[] cellProps,
-        boolean strictValidation)
-    {
-        this(
-            statement,
-            Util.lookupCube(statement.getSchemaReader(), subcube.getCubeName(), true),
-            formulas,
-            axes,
-            slicerAxis,
-            cellProps,
-            new Parameter[0],
-            strictValidation);
-    }
+  /**
+   * Creates a Query.
+   */
+  public Query( Statement statement, Formula[] formulas, QueryAxis[] axes, Subcube subcube, QueryAxis slicerAxis,
+      QueryPart[] cellProps, boolean strictValidation ) {
+    this( statement, Util.lookupCube( statement.getSchemaReader(), subcube.getCubeName(), true ), formulas, axes, slicerAxis, cellProps,
+        new Parameter[0], strictValidation );
+  }
 
     /**
      * Creates a Query.
@@ -229,7 +215,7 @@ public class Query extends QueryPart {
         statement.setQueryTimeoutMillis(queryTimeoutMillis);
     }
 
-    public QueryPart[] getCellProperties() {
+  public QueryPart[] getCellProperties() {
         return this.cellProps;
     }
 
@@ -1533,6 +1519,7 @@ public class Query extends QueryPart {
             }
         }
 
+        @Override
         public List<Member> getLevelMembers(
                 Level level,
                 boolean includeCalculated)

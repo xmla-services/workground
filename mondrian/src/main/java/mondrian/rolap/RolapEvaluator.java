@@ -5,7 +5,7 @@
 // You must accept the terms of that agreement to use this software.
 //
 // Copyright (C) 2001-2005 Julian Hyde
-// Copyright (C) 2005-2020 Hitachi Vantara and others
+// Copyright (C) 2005-2021 Hitachi Vantara and others
 // Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 //
@@ -1024,12 +1024,20 @@ public class RolapEvaluator implements Evaluator {
    * which the expression is dependent upon.
    */
   private Object getExpResultCacheKey( ExpCacheDescriptor descriptor ) {
+    boolean includeAggregationList = false;
+    if ( aggregationLists != null && !aggregationLists.isEmpty() ) {
+      // Don't include empty aggregation lists in the cache key or we'll get
+      // a ton of cache misses due to empty collections with different hash codes
+      // across different RolapEvaluators
+      includeAggregationList = true;
+    }
+
     // in NON EMPTY mode the result depends on everything, e.g.
     // "NON EMPTY [Customer].[Name].members" may return different results
     // for 1997-01 and 1997-02
     final List<Object> key;
     if ( nonEmpty ) {
-      key = new ArrayList<Object>( currentMembers.length + 1 );
+      key = new ArrayList<>( currentMembers.length + ( includeAggregationList ? 2 : 1 ) );
       key.add( descriptor.getExp() );
       // noinspection ManualArrayToCollectionCopy
       for ( RolapMember currentMember : currentMembers ) {
@@ -1037,13 +1045,17 @@ public class RolapEvaluator implements Evaluator {
       }
     } else {
       final int[] hierarchyOrdinals = descriptor.getDependentHierarchyOrdinals();
-      key = new ArrayList<Object>( hierarchyOrdinals.length + 1 );
+      key = new ArrayList<>( hierarchyOrdinals.length + ( includeAggregationList ? 2 : 1 ) );
       key.add( descriptor.getExp() );
       for ( final int hierarchyOrdinal : hierarchyOrdinals ) {
         final Member member = currentMembers[hierarchyOrdinal];
         assert member != null;
         key.add( member );
       }
+    }
+    // See MONDRIAN-2713
+    if ( includeAggregationList ) {
+      key.add( aggregationLists );
     }
     return key;
   }
@@ -1405,48 +1417,6 @@ public class RolapEvaluator implements Evaluator {
 
     abstract void execute( RolapEvaluator evaluator );
   }
-
-  public final Object getBackColor() {
-// To option when backColor belongs to real measure
-
-//    final String s = (String)getProperty( Property.BACK_COLOR.name, null );
-//    if ( s == null ) {
-//      return null;
-//    }
-//
-//    String queryString = "WITH Member [Measures].[m1] as " + s + "SELECT FROM " + getCube().getUniqueName();
-//    final Query queryExp = root.connection.parseQuery(queryString);
-//    final Formula formula = queryExp.getFormulas()[0];
-//
-////    final Exp backColorExp = Literal.createString(s);
-//    final Exp backColorExp = formula.getExpression();
-//
-//
-//    if ( backColorExp == null ) {
-//      return null;
-//    }
-//
-//    final Calc backColorCalc = root.getCompiled( backColorExp, true, null );
-//    final Object o = backColorCalc.evaluate( this );
-//    return o;
-
-
-    final String s = (String)getProperty( Property.BACK_COLOR.name, null );
-    if ( s == null ) {
-      return null;
-    }
-    final Exp backColorExp = Literal.createString(s);
-    if ( backColorExp == null ) {
-      return null;
-    }
-    final Calc backColorCalc = root.getCompiled( backColorExp, true, null );
-    final Object o = backColorCalc.evaluate( this );
-    if ( o == null ) {
-      return null;
-    }
-    return o;
-  }
-
 }
 
 // End RolapEvaluator.java

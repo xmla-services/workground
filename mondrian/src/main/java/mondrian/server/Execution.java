@@ -5,7 +5,7 @@
 // You must accept the terms of that agreement to use this software.
 //
 // Copyright (C) 2002-2005 Julian Hyde
-// Copyright (C) 2005-2020 Hitachi Vantara and others
+// Copyright (C) 2005-2021 Hitachi Vantara and others
 // All Rights Reserved.
 */
 package mondrian.server;
@@ -71,6 +71,8 @@ public class Execution {
   private int cellCacheHitCount;
   private int cellCacheMissCount;
   private int cellCachePendingCount;
+  private int expCacheHitCount;
+  private int expCacheMissCount;
 
   /**
    * Execution id, global within this JVM instance.
@@ -111,7 +113,7 @@ public class Execution {
     this.startTimeMillis = System.currentTimeMillis();
     this.timeoutTimeMillis = timeoutIntervalMillis > 0 ? this.startTimeMillis + timeoutIntervalMillis : 0L;
     this.state = State.RUNNING;
-    this.queryTiming.init( true );
+    this.queryTiming.init( this.statement.getProfileHandler() != null );
     fireExecutionStartEvent();
   }
 
@@ -386,7 +388,7 @@ public class Execution {
     final MondrianServer server = connection.getServer();
     server.getMonitor().sendEvent( new ExecutionEndEvent( this.startTimeMillis, server.getId(), connection.getId(),
         this.statement.getId(), this.id, this.phase, this.state, this.cellCacheHitCount, this.cellCacheMissCount,
-        this.cellCachePendingCount ) );
+        this.cellCachePendingCount, expCacheHitCount, expCacheMissCount ) );
   }
 
   private void fireExecutionStartEvent() {
@@ -408,6 +410,11 @@ public class Execution {
     this.cellCachePendingCount = cellCachePendingCount;
   }
 
+  public void setExpCacheCounts( int hitCount, int missCount ) {
+    this.expCacheHitCount = hitCount;
+    this.expCacheMissCount = missCount;
+  }
+
   /**
    * Enumeration of the states of an Execution instance.
    */
@@ -417,6 +424,14 @@ public class Execution {
      * there are no current SQL statements already beeing executed.
      */
     FRESH, RUNNING, ERROR, CANCELED, TIMEOUT, DONE,
+  }
+
+  public int getExpCacheHitCount() {
+    return expCacheHitCount;
+  }
+
+  public int getExpCacheMissCount() {
+    return expCacheMissCount;
   }
 }
 
