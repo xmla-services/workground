@@ -3061,10 +3061,18 @@ public class RolapCube extends CubeBase {
         }
 
         public List<Member> getLevelMembers(
-            Level level,
-            boolean includeCalculated)
+                Level level,
+                boolean includeCalculated)
         {
-            List<Member> members = super.getLevelMembers(level, false);
+            return getLevelMembers(level, includeCalculated, null);
+        }
+
+        public List<Member> getLevelMembers(
+            Level level,
+            boolean includeCalculated,
+            Evaluator context)
+        {
+            List<Member> members = super.getLevelMembers(level, false, context);
             if (includeCalculated) {
                 members = Util.addLevelCalculatedMembers(this, level, members);
             }

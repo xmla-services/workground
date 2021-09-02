@@ -7,6 +7,7 @@
 // Copyright (C) 2004-2005 TONBELLER AG
 // Copyright (C) 2005-2005 Julian Hyde
 // Copyright (C) 2005-2020 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.rolap;
@@ -110,7 +111,18 @@ public class SqlConstraintUtils {
     TupleConstraintStruct expandedSet =
         makeContextConstraintSet( rEvaluator, restrictMemberTypes, disjointSlicerTuples );
 
-    final CellRequest request = RolapAggregationManager.makeRequest( expandedSet.getMembersArray() );
+    //This part is needed in case when constrain contains a calculated measure.
+    Member[] members = expandedSet.getMembersArray();
+    if (members.length > 0
+            && !(members[0] instanceof RolapStoredMeasure))
+    {
+      RolapStoredMeasure measure = (RolapStoredMeasure) baseCube.getMeasures().get(0);
+      ArrayList<Member> memberList = new ArrayList<Member>(Arrays.asList(members));
+      memberList.add(0, measure);
+      members = memberList.toArray(new Member[0]);
+    }
+
+    final CellRequest request = RolapAggregationManager.makeRequest( members );
 
     if ( request == null ) {
       if ( restrictMemberTypes ) {

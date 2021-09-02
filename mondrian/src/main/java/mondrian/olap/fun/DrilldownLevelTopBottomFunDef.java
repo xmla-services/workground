@@ -4,7 +4,10 @@
  * http://www.eclipse.org/legal/epl-v10.html.
  * You must accept the terms of that agreement to use this software.
  *
- * Copyright (c) 2002-2020 Hitachi Vantara..  All rights reserved.
+ * Copyright (c) 2002-2020 Hitachi Vantara.
+ * Copyright (C) 2021 Sergei Semenkov
+ *
+ * All rights reserved.
  */
 
 package mondrian.olap.fun;
@@ -143,7 +146,7 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
             continue;
           }
           List<Member> children =
-            schemaReader.getMemberChildren( member );
+            schemaReader.getMemberChildren( member, evaluator );
           final int savepoint = evaluator.savepoint();
           List<Member> sortedChildren;
           try {

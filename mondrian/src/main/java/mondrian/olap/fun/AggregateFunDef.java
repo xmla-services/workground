@@ -4,7 +4,9 @@
 // http://www.eclipse.org/legal/epl-v10.html.
 // You must accept the terms of that agreement to use this software.
 //
-// Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+// Copyright (c) 2002-2017 Hitachi Vantara..
+// Copyright (C) 2021 Sergei Semenkov
+// All rights reserved.
 */
 package mondrian.olap.fun;
 
@@ -252,7 +254,8 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                 optimizeChildren(
                     tupleList,
                     evaluator.getSchemaReader(),
-                    evaluator.getMeasureCube());
+                    evaluator.getMeasureCube(),
+                    evaluator);
             if (checkSize) {
                 checkIfAggregationSizeIsTooLarge(tupleList);
             }
@@ -381,7 +384,8 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         public static TupleList optimizeChildren(
             TupleList tuples,
             SchemaReader reader,
-            Cube baseCubeForMeasure)
+            Cube baseCubeForMeasure,
+            Evaluator evaluator)
         {
             Map<Member, Integer>[] membersOccurencesInTuple =
                 membersVersusOccurencesInTuple(tuples);
@@ -398,7 +402,8 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                         optimizeMemberSet(
                             new LinkedHashSet<Member>(members),
                             reader,
-                            baseCubeForMeasure);
+                            baseCubeForMeasure,
+                            evaluator);
                     if (sets[i].size() != originalSize) {
                         optimized = true;
                     }
@@ -448,7 +453,8 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         private static Set<Member> optimizeMemberSet(
             Set<Member> members,
             SchemaReader reader,
-            Cube baseCubeForMeasure)
+            Cube baseCubeForMeasure,
+            Evaluator evaluator)
         {
             boolean didOptimize;
             Set<Member> membersToBeOptimized = new LinkedHashSet<Member>();
@@ -487,7 +493,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                 int childCountOfParent = -1;
                 if (firstParentMember != null) {
                     childCountOfParent =
-                        getChildCount(firstParentMember, reader);
+                        getChildCount(firstParentMember, reader, evaluator);
                 }
                 if (childCountOfParent != -1
                     && membersToBeOptimized.size() == childCountOfParent
@@ -561,7 +567,8 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
 
         private static int getChildCount(
             Member parentMember,
-            SchemaReader reader)
+            SchemaReader reader,
+            Evaluator evaluator)
         {
             int childrenCountFromCache =
                 reader.getChildrenCountFromCache(parentMember);

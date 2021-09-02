@@ -2505,7 +2505,9 @@ public class XmlaHandler {
                 Level level = entry.getKey();
                 ArrayList<mondrian.olap.Member> members = entry.getValue();
 
-                if (members.size() > 0 && members.get(0).getLevel().getChildLevel() != null) {
+                if (members.size() > 0
+                        && members.get(0).getLevel().getChildLevel() != null
+                        && !members.get(0).getLevel().isAll()) {
                     Locus.execute(
                             rolapConnection,
                             "MondrianOlap4jMember.getChildMembers",

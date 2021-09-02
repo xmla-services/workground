@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2002-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.olap.fun;
@@ -317,10 +318,11 @@ public class FunUtil extends Util {
   static List<Member> addMembers(
     final SchemaReader schemaReader,
     final List<Member> members,
-    final Hierarchy hierarchy ) {
+    final Hierarchy hierarchy,
+    final Evaluator evaluator ) {
     // only add accessible levels
     for ( Level level : schemaReader.getHierarchyLevels( hierarchy ) ) {
-      addMembers( schemaReader, members, level );
+      addMembers( schemaReader, members, level, evaluator );
     }
     return members;
   }
@@ -328,8 +330,9 @@ public class FunUtil extends Util {
   static List<Member> addMembers(
     SchemaReader schemaReader,
     List<Member> members,
-    Level level ) {
-    List<Member> levelMembers = schemaReader.getLevelMembers( level, true );
+    Level level,
+    Evaluator evaluator) {
+    List<Member> levelMembers = schemaReader.getLevelMembers( level, true,  evaluator);
     members.addAll( levelMembers );
     return members;
   }
@@ -1649,7 +1652,7 @@ public class FunUtil extends Util {
       }
       return members;
     }
-    return sr.getLevelMembers( level, includeCalcMembers );
+    return sr.getLevelMembers( level, includeCalcMembers, evaluator );
   }
 
   static TupleList levelMembers(
@@ -1686,7 +1689,8 @@ public class FunUtil extends Util {
       final List<Member> memberList1 = addMembers(
         evaluator.getSchemaReader(),
         new ConcatenableList<>(),
-        hierarchy );
+        hierarchy,
+        evaluator );
       if ( includeCalcMembers ) {
         memberList.addAll( memberList1 );
       } else {

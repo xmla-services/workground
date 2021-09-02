@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2002-2005 Julian Hyde
 // Copyright (C) 2005-2019 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.olap.fun;
@@ -397,7 +398,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
             Member firstChild(Evaluator evaluator, Member member) {
                 List<Member> children = evaluator.getSchemaReader()
-                        .getMemberChildren(member);
+                        .getMemberChildren(member, evaluator);
                 return (children.size() == 0)
                         ? member.getHierarchy().getNullMember()
                         : children.get(0);
@@ -434,7 +435,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     children = schemaReader.getHierarchyRootMembers(
                         member.getHierarchy());
                 } else {
-                    children = schemaReader.getMemberChildren(parent);
+                    children = schemaReader.getMemberChildren(parent, evaluator);
                 }
                 return children.get(0);
             }
@@ -463,7 +464,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
             Member lastChild(Evaluator evaluator, Member member) {
                 List<Member> children =
-                        evaluator.getSchemaReader().getMemberChildren(member);
+                        evaluator.getSchemaReader().getMemberChildren(member, evaluator);
                 return (children.size() == 0)
                         ? member.getHierarchy().getNullMember()
                         : children.get(children.size() - 1);
@@ -500,7 +501,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     children = schemaReader.getHierarchyRootMembers(
                         member.getHierarchy());
                 } else {
-                    children = schemaReader.getMemberChildren(parent);
+                    children = schemaReader.getMemberChildren(parent, evaluator);
                 }
                 return children.get(children.size() - 1);
             }
@@ -1112,7 +1113,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     return schemaReader.getHierarchyRootMembers(
                         member.getHierarchy());
                 } else {
-                    return schemaReader.getMemberChildren(parent);
+                    return schemaReader.getMemberChildren(parent, evaluator);
                 }
             }
         });

@@ -6,6 +6,8 @@
 //
 // Copyright (C) 2002-2005 Julian Hyde
 // Copyright (C) 2005-2020 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
+//
 // All Rights Reserved.
 */
 
@@ -158,7 +160,7 @@ class DescendantsFunDef extends FunDefBase {
           final SchemaReader schemaReader =
             evaluator.getSchemaReader();
           descendantsLeavesByDepth(
-            member, result, schemaReader, depth );
+            member, result, schemaReader, depth , evaluator);
           hierarchizeMemberList( result, false );
           return new UnaryTupleList( result );
         }
@@ -244,11 +246,7 @@ class DescendantsFunDef extends FunDefBase {
         }
       }
 
-      if ( context.isNonEmpty() ) {
-        children = schemaReader.getMemberChildren( children, context );
-      } else {
-        children = schemaReader.getMemberChildren( children );
-      }
+      children = schemaReader.getMemberChildren( children, context );
       if ( children.size() == 0 ) {
         break;
       }
@@ -263,7 +261,8 @@ class DescendantsFunDef extends FunDefBase {
     final Member member,
     final List<Member> result,
     final SchemaReader schemaReader,
-    final int depthLimit ) {
+    final int depthLimit,
+    final Evaluator evaluator) {
     if ( !schemaReader.isDrillable( member ) ) {
       if ( depthLimit >= 0 ) {
         result.add( member );
@@ -273,7 +272,7 @@ class DescendantsFunDef extends FunDefBase {
     List<Member> children = new ArrayList<Member>();
     children.add( member );
     for ( int depth = 0; depthLimit == -1 || depth <= depthLimit; ++depth ) {
-      children = schemaReader.getMemberChildren( children );
+      children = schemaReader.getMemberChildren( children, evaluator );
       if ( children.size() == 0 ) {
         throw Util.newInternal( "drillable member must have children" );
       }
