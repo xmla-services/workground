@@ -97,12 +97,13 @@ public class RolapCell implements Cell {
         boolean extendedContext)
     {
         return getDrillThroughSQL(
-            new ArrayList<OlapElement>(), extendedContext);
+            new ArrayList<OlapElement>(), extendedContext, 0);
     }
 
     public String getDrillThroughSQL(
         List<OlapElement> fields,
-        boolean extendedContext)
+        boolean extendedContext,
+        int maxRowCount)
     {
         if (!MondrianProperties.instance()
             .EnableDrillThrough.get())
@@ -126,6 +127,7 @@ public class RolapCell implements Cell {
             RolapAggregationManager.makeDrillThroughRequest(
                 currentMembers, extendedContext, result.getCube(),
                 fields);
+        cellRequest.setMaxRowCount(maxRowCount);
         if (cellRequest == null) {
             return null;
         }
@@ -479,7 +481,7 @@ public class RolapCell implements Cell {
         }
 
         // Generate SQL.
-        String sql = getDrillThroughSQL(fields, extendedContext);
+        String sql = getDrillThroughSQL(fields, extendedContext,  maxRowCount);
         if (logger != null && logger.isDebugEnabled()) {
             logger.debug("drill through sql: " + sql);
         }

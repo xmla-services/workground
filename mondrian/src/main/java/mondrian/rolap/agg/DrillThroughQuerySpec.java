@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2005-2005 Julian Hyde
 // Copyright (C) 2005-2018 Hitachi Vantara
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.rolap.agg;
@@ -189,6 +190,9 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
         SqlQuery sqlQuery = newSqlQuery();
         nonDistinctGenerateSql(sqlQuery);
         appendInapplicableFields(sqlQuery);
+        if(this.request.getMaxRowCount() > 0) {
+            sqlQuery.addRowLimit(this.request.getMaxRowCount());
+        }
         return sqlQuery.toSqlAndTypes();
     }
 
