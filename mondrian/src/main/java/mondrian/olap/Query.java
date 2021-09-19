@@ -92,6 +92,8 @@ public class Query extends QueryPart {
      */
     private final Cube cube;
 
+    private Subcube subcube;
+
     private final Statement statement;
     public Calc[] axisCalcs;
     public Calc slicerCalc;
