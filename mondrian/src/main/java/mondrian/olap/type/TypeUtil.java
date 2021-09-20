@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2005-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.olap.type;
@@ -352,10 +353,15 @@ public class TypeUtil {
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
                 return true;
             case Category.Numeric:
-                // It is more expensive to convert from Member->Scalar (cost=3)
-                // than Member->Set (cost=2). In particular, we want 'member *
-                // set' to resolve to the crossjoin operator, '{m} * set'.
-                conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
+                if(((MemberType)fromType).getDimension().isMeasures()) {
+                    conversions.add(new ConversionImpl(from, to, ordinal, 0, null));
+                }
+                else {
+                    // It is more expensive to convert from Member->Scalar (cost=3)
+                    // than Member->Set (cost=2). In particular, we want 'member *
+                    // set' to resolve to the crossjoin operator, '{m} * set'.
+                    conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
+                }
                 return true;
             case Category.Value:
             case Category.String:

@@ -1655,6 +1655,27 @@ public class BuiltinFunTable extends FunTableImpl {
             }
         });
 
+        // <Set> - <Set>
+        builder.define(
+                new FunDefBase(
+                        "-",
+                        "Finds the difference between two sets.",
+                        "ixxx")
+        {
+            public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+            {
+                mondrian.mdx.UnresolvedFunCall unresolvedFunCall = new mondrian.mdx.UnresolvedFunCall(
+                        "Except",
+                        mondrian.olap.Syntax.Function,
+                        call.getArgs());
+
+                // ResolvedFunCall
+                Exp exp = unresolvedFunCall.accept(compiler.getValidator());
+
+                return compiler.compile(exp);
+            }
+        });
+
         // <String Expression> || <String Expression>
         builder.define(
             new FunDefBase(
