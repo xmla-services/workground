@@ -156,6 +156,7 @@ public class Query extends QueryPart {
       QueryPart[] cellProps, boolean strictValidation ) {
     this( statement, Util.lookupCube( statement.getSchemaReader(), subcube.getCubeName(), true ), formulas, axes, slicerAxis, cellProps,
         new Parameter[0], strictValidation );
+    this.subcube = subcube;
   }
 
     /**
@@ -1267,6 +1268,13 @@ public class Query extends QueryPart {
             ? slicerAxis
             : axes[axis.logicalOrdinal()];
         return collectHierarchies(queryAxis.getSet());
+    }
+
+    public Hierarchy[] getMdxHierarchiesOnAxis(QueryAxis axis) {
+        if(axis == null) {
+            return new Hierarchy[0];
+        }
+        return collectHierarchies(axis.getSet());
     }
 
     /**

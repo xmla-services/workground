@@ -9,11 +9,19 @@ import java.util.*;
 public class Subcube extends QueryPart {
     private final String cubeName;
     private final Subcube subcube;
+    private final QueryAxis[] axes;
+    private final QueryAxis slicerAxis;
 
-    public Subcube(String cubeName, Subcube subcube)
+    public Subcube(
+            String cubeName,
+            Subcube subcube,
+            QueryAxis[] axes,
+            QueryAxis slicerAxis)
     {
         this.cubeName = cubeName;
         this.subcube = subcube;
+        this.axes = axes;
+        this.slicerAxis = slicerAxis;
     }
 
     @Override

@@ -133,6 +133,16 @@ public class RolapResult extends ResultBase {
       }
     }
     RolapCube cube = (RolapCube) query.getCube();
+
+    ArrayList<Hierarchy> hierarchies = new ArrayList<Hierarchy>();
+    for ( int i = 0; i < axes.length; i++ ) {
+      QueryAxis axis = query.axes[i];
+      hierarchies.addAll(java.util.Arrays.asList(
+              query.getMdxHierarchiesOnAxis(axis)));
+    }
+    hierarchies.addAll(java.util.Arrays.asList(
+            query.getMdxHierarchiesOnAxis(query.getSlicerAxis())));
+
     this.batchingReader = new FastBatchingCellReader( execution, cube, aggMgr );
 
     this.cellInfos = ( query.axes.length > 4 ) ? new CellInfoMap( point ) : new CellInfoPool( query.axes.length );
