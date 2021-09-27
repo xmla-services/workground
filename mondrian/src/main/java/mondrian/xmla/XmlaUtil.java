@@ -533,6 +533,8 @@ way too noisy
                 } catch (RuntimeException re) {
                     // probably a bad locale string; fall through
                 }
+            } catch (RuntimeException re) {
+                // probably a bad locale string; fall through
             }
         }
         return null;
