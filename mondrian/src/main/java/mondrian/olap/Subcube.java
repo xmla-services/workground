@@ -9,11 +9,19 @@ import java.util.*;
 public class Subcube extends QueryPart {
     private final String cubeName;
     private final Subcube subcube;
+    private final QueryAxis[] axes;
+    private final QueryAxis slicerAxis;
 
-    public Subcube(String cubeName, Subcube subcube)
+    public Subcube(
+            String cubeName,
+            Subcube subcube,
+            QueryAxis[] axes,
+            QueryAxis slicerAxis)
     {
         this.cubeName = cubeName;
         this.subcube = subcube;
+        this.axes = axes;
+        this.slicerAxis = slicerAxis;
     }
 
     @Override
@@ -43,5 +51,18 @@ public class Subcube extends QueryPart {
         }
     }
 
+    public List<Exp> getAxisExps() {
+        ArrayList<Exp> exps = new ArrayList<Exp>();
+        if(this.subcube != null) {
+            exps.addAll(this.subcube.getAxisExps());
+        }
+        for(int i =0; i < this.axes.length; i++) {
+            exps.add(this.axes[i].getSet());
+        }
+        if(this.slicerAxis != null) {
+            exps.add(this.slicerAxis.getSet());
+        }
+        return exps;
+    }
 }
 

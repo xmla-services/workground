@@ -1420,7 +1420,7 @@ select_statement ::=
                 parser.statement,
                 Parser.toFormulaArray(f),
                 Parser.toQueryAxisArray(a),
-                new Subcube(cubeName, null),
+                new Subcube(cubeName, null, null, null),
                 w,
                 Parser.toQueryPartArray(cp),
                 parser.strictValidation);

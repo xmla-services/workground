@@ -92,6 +92,8 @@ public class Query extends QueryPart {
      */
     private final Cube cube;
 
+    private Subcube subcube;
+
     private final Statement statement;
     public Calc[] axisCalcs;
     public Calc slicerCalc;
@@ -152,7 +154,7 @@ public class Query extends QueryPart {
    */
   public Query( Statement statement, Formula[] formulas, QueryAxis[] axes, Subcube subcube, QueryAxis slicerAxis,
       QueryPart[] cellProps, boolean strictValidation ) {
-    this( statement, Util.lookupCube( statement.getSchemaReader(), subcube.getCubeName(), true ), formulas, axes, slicerAxis, cellProps,
+    this( statement, Util.lookupCube( statement.getSchemaReader(), subcube.getCubeName(), true ), formulas, subcube, axes, slicerAxis, cellProps,
         new Parameter[0], strictValidation );
   }
 
@@ -160,9 +162,33 @@ public class Query extends QueryPart {
      * Creates a Query.
      */
     public Query(
+            Statement statement,
+            Cube mdxCube,
+            Formula[] formulas,
+            QueryAxis[] axes,
+            QueryAxis slicerAxis,
+            QueryPart[] cellProps,
+            Parameter[] parameters,
+            boolean strictValidation)
+    {
+        this(
+            statement,
+            mdxCube,
+            formulas,
+            null,
+            axes,
+            slicerAxis,
+            cellProps,
+            parameters,
+            strictValidation);
+
+    }
+
+    public Query(
         Statement statement,
         Cube mdxCube,
         Formula[] formulas,
+        Subcube subcube,
         QueryAxis[] axes,
         QueryAxis slicerAxis,
         QueryPart[] cellProps,
@@ -172,6 +198,7 @@ public class Query extends QueryPart {
         this.statement = statement;
         this.cube = mdxCube;
         this.formulas = formulas;
+        this.subcube = subcube;
         this.axes = axes;
         normalizeAxes();
         this.slicerAxis = slicerAxis;
@@ -529,12 +556,80 @@ public class Query extends QueryPart {
         return resultStyle;
     }
 
+    public HashMap<Hierarchy, Calc> subcubeHierarchyCalcs = new HashMap<Hierarchy, Calc>();
+    public HashMap<Hierarchy, HashMap<Member, Member>> subcubeHierarchies = new HashMap<Hierarchy, HashMap<Member, Member>>();
+
     /**
      * Generates compiled forms of all expressions.
      *
      * @param compiler Compiler
      */
     private void compile(ExpCompiler compiler) {
+
+        if(this.subcube != null) {
+
+            for(Hierarchy hierarchy : ((RolapCube) getCube()).getHierarchies()) {
+
+                mondrian.olap.Level[] levels = hierarchy.getLevels();
+                mondrian.olap.Level lastLevel = levels[levels.length - 1];
+                mondrian.mdx.LevelExpr levelExpr = new mondrian.mdx.LevelExpr(lastLevel);
+                Exp levelMembers = new UnresolvedFunCall(
+                  "AllMembers",
+                  Syntax.Property,
+                  new Exp[] {levelExpr}
+                );
+
+                Exp resultExp = null;
+
+                List<Exp> subcubeAxisExps = this.subcube.getAxisExps();
+                for(int j = 0; j < subcubeAxisExps.size(); j++) {
+                    Exp subcubeAxisExp = subcubeAxisExps.get(j);
+                    subcubeAxisExp = subcubeAxisExp.accept(compiler.getValidator());
+                    Hierarchy[] subcubeAxisHierarchies = collectHierarchies(subcubeAxisExp);
+                    if(Arrays.asList(subcubeAxisHierarchies).contains(hierarchy)) {
+                        Exp prevExp;
+                        if(resultExp == null) {
+                            prevExp = levelMembers;
+                        }
+                        else {
+                            prevExp = resultExp;
+                        }
+                        Exp axisInBracesExp =
+                                new UnresolvedFunCall(
+                                        "{}", Syntax.Braces, new Exp[] {subcubeAxisExp});
+                        resultExp = new UnresolvedFunCall(
+                                "Exists",
+                                Syntax.Function,
+                                new Exp[] {prevExp, axisInBracesExp}
+                        );
+                    }
+                }
+
+                if(resultExp != null) {
+                    mondrian.mdx.HierarchyExpr hierarchyExpr = new mondrian.mdx.HierarchyExpr(hierarchy);
+                    Exp hierarchyAllMembersExp = new UnresolvedFunCall(
+                            "AllMembers",
+                            Syntax.Property,
+                            new Exp[] {hierarchyExpr}
+                    );
+
+                    resultExp = new UnresolvedFunCall(
+                            "Exists",
+                            Syntax.Function,
+                            new Exp[] {hierarchyAllMembersExp, resultExp}
+                    );
+
+                    resultExp = resultExp.accept(compiler.getValidator());
+
+                    Calc calc = compiler.compileList(resultExp);
+                    subcubeHierarchyCalcs.put(hierarchy, calc);
+
+                }
+            }
+
+            HashMap<Hierarchy, HashMap<Member, Member>> newSubcubeHierarchies = new HashMap<Hierarchy, HashMap<Member, Member>>();
+        }
+
         if (formulas != null) {
             for (Formula formula : formulas) {
                 formula.compile();
@@ -1267,6 +1362,13 @@ public class Query extends QueryPart {
         return collectHierarchies(queryAxis.getSet());
     }
 
+    public Hierarchy[] getMdxHierarchiesOnAxis(QueryAxis axis) {
+        if(axis == null) {
+            return new Hierarchy[0];
+        }
+        return collectHierarchies(axis.getSet());
+    }
+
     /**
      * Compiles an expression, using a cached compiled expression if available.
      *
@@ -1536,6 +1638,20 @@ public class Query extends QueryPart {
             if (includeCalculated) {
                 members = Util.addLevelCalculatedMembers(this, level, members);
             }
+
+            Hierarchy hierarchy = level.getHierarchy();
+            if(query.subcubeHierarchies.containsKey(hierarchy)) {
+                ArrayList<Member> newMembers = new ArrayList<Member>();
+                HashMap<Member, Member> subcubeMembers = query.subcubeHierarchies.get(hierarchy);
+                for (int i = 0; i < members.size(); i++) {
+                    Member sourceMember = members.get(i);
+                    if(subcubeMembers.containsKey(sourceMember)) {
+                        newMembers.add(subcubeMembers.get(sourceMember));
+                    }
+                }
+                members = newMembers;
+            }
+
             return members;
         }
 
@@ -1729,6 +1845,20 @@ public class Query extends QueryPart {
             OlapElement parent,
             IdentifierSegment segment)
         {
+            OlapElement child = null;
+            for (NameResolver.Namespace namespace : this.getNamespaces()) {
+                if(namespace != this) {
+                    child = namespace.lookupChild(parent, segment);
+                    if (child != null) {
+                        break;
+                    }
+                }
+            }
+
+            if(child != null && child instanceof RolapMember) {
+                return query.getSubcubeMember((RolapMember)child);
+            }
+
             // Only look for calculated members and named sets defined in the
             // query.
             for (Formula formula : query.getFormulas()) {
@@ -1737,6 +1867,11 @@ public class Query extends QueryPart {
                 }
             }
             return null;
+        }
+
+        public Member getHierarchyDefaultMember(Hierarchy hierarchy) {
+            Member member = super.getHierarchyDefaultMember(hierarchy);
+            return query.getSubcubeMember(member);
         }
 
         public List<NameResolver.Namespace> getNamespaces() {
@@ -2118,6 +2253,56 @@ public class Query extends QueryPart {
                 }
             }
         }
+    }
+
+    public void replaceSubcubeMembers() {
+        for(QueryAxis queryAxis: this.axes) {
+            Exp exp = queryAxis.getSet();
+            queryAxis.setSet(replaceSubcubeMember(exp));
+        }
+        if(this.slicerAxis != null) {
+            Exp exp = this.slicerAxis.getSet();
+            this.slicerAxis.setSet(replaceSubcubeMember(exp));
+        }
+        for(Formula formula: this.formulas) {
+            Exp exp = formula.getExpression();
+            if(exp != null){
+                formula.setExpression(replaceSubcubeMember(exp));
+            }
+            exp = formula.getExpression();
+            if(exp != null){
+                formula.setExpression(replaceSubcubeMember(exp));
+            }
+        }
+    }
+
+    private Member getSubcubeMember(Member member) {
+        Hierarchy hierarchy = ((RolapMember)member).getHierarchy();
+        if(this.subcubeHierarchies.containsKey(hierarchy)) {
+            HashMap<Member, Member> subcubeMembers = this.subcubeHierarchies.get(hierarchy);
+            if(subcubeMembers.containsKey(member)) {
+                return subcubeMembers.get(member);
+            }
+            else {
+                return hierarchy.getNullMember();
+            }
+        }
+        return member;
+    }
+
+    private Exp replaceSubcubeMember(Exp exp) {
+        if(exp instanceof MemberExpr) {
+            MemberExpr memberExpr = (MemberExpr)exp;
+            Member subcubeMember = this.getSubcubeMember(memberExpr.getMember());
+            return new MemberExpr(subcubeMember);
+        }
+        if(exp instanceof ResolvedFunCall) {
+            ResolvedFunCall resolvedFunCall = (ResolvedFunCall) exp;
+            for (int i = 0; i < resolvedFunCall.getArgs().length; i++) {
+                resolvedFunCall.getArgs()[i] = replaceSubcubeMember(resolvedFunCall.getArgs()[i]);
+            }
+        }
+        return exp;
     }
 }
 

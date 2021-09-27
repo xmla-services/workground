@@ -1173,7 +1173,17 @@ Subcube selectSubcubeClause() :
         if(c != null) {
             cubeName = ((Id.NameSegment) c.getElement(0)).name;
         }
-        return new Subcube(cubeName, subcube);
+        final QueryAxis slicerAxis =
+            w == null
+                ? null
+                : new QueryAxis(
+                    false, w, AxisOrdinal.StandardAxisOrdinal.SLICER,
+                    QueryAxis.SubtotalVisibility.Undefined, new Id[0]);
+        return new Subcube(
+            cubeName,
+            subcube,
+            toQueryAxisArray(a),
+            slicerAxis);
     }
 }
 

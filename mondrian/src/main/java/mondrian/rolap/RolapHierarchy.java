@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2001-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.rolap;
@@ -1503,7 +1504,7 @@ public class RolapHierarchy extends HierarchyBase {
      * Compiled expression that computes rollup over a set of visible children.
      * The {@code listCalc} expression determines that list of children.
      */
-    private static class LimitedRollupAggregateCalc
+    public static class LimitedRollupAggregateCalc
         extends AggregateFunDef.AggregateCalc
     {
         public LimitedRollupAggregateCalc(
