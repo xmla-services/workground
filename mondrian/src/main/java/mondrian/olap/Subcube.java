@@ -51,5 +51,18 @@ public class Subcube extends QueryPart {
         }
     }
 
+    public List<Exp> getAxisExps() {
+        ArrayList<Exp> exps = new ArrayList<Exp>();
+        if(this.subcube != null) {
+            exps.addAll(this.subcube.getAxisExps());
+        }
+        for(int i =0; i < this.axes.length; i++) {
+            exps.add(this.axes[i].getSet());
+        }
+        if(this.slicerAxis != null) {
+            exps.add(this.slicerAxis.getSet());
+        }
+        return exps;
+    }
 }
 

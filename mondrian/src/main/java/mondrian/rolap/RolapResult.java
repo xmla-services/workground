@@ -134,15 +134,6 @@ public class RolapResult extends ResultBase {
     }
     RolapCube cube = (RolapCube) query.getCube();
 
-    ArrayList<Hierarchy> hierarchies = new ArrayList<Hierarchy>();
-    for ( int i = 0; i < axes.length; i++ ) {
-      QueryAxis axis = query.axes[i];
-      hierarchies.addAll(java.util.Arrays.asList(
-              query.getMdxHierarchiesOnAxis(axis)));
-    }
-    hierarchies.addAll(java.util.Arrays.asList(
-            query.getMdxHierarchiesOnAxis(query.getSlicerAxis())));
-
     this.batchingReader = new FastBatchingCellReader( execution, cube, aggMgr );
 
     this.cellInfos = ( query.axes.length > 4 ) ? new CellInfoMap( point ) : new CellInfoPool( query.axes.length );
@@ -262,6 +253,118 @@ public class RolapResult extends ResultBase {
 
       // List of Measures
       final List<Member> measureMembers = new ArrayList<Member>();
+
+      /////////////////////////////////////////////////////////////////
+      // Determine Subcube
+      //
+      HashMap<Hierarchy, HashMap<Member, Member>> subcubeHierarchies = new HashMap<Hierarchy, HashMap<Member, Member>>();
+
+      for(Map.Entry<Hierarchy, Calc> entry : query.subcubeHierarchyCalcs.entrySet()) {
+        Hierarchy hierarchy = entry.getKey();
+        mondrian.olap.Level[] levels = hierarchy.getLevels();
+        mondrian.olap.Level lastLevel = levels[levels.length - 1];
+
+        Calc calc = entry.getValue();
+
+        HashMap<Member, Member> subcubeHierarchyMembers = new HashMap<Member, Member>();
+
+        mondrian.olap.type.Type memberType1 =
+                new mondrian.olap.type.MemberType(
+                        hierarchy.getDimension(),
+                        hierarchy,
+                        null,
+                        null);
+        SetType setType = new SetType(memberType1);
+        mondrian.calc.ListCalc listCalc =
+                new mondrian.calc.impl.AbstractListCalc(
+                        new DummyExp(setType), new Calc[0])
+                {
+                  public TupleList evaluateList(
+                          Evaluator evaluator)
+                  {
+                    ArrayList<Member> children = new ArrayList<Member>();
+                    Member expandingMember = ((RolapEvaluator) evaluator).getExpanding();
+
+                    if(subcubeHierarchyMembers.containsKey(expandingMember)) {
+                      for(Map.Entry<Member, Member> memberEntry : subcubeHierarchyMembers.entrySet()) {
+                        Member childMember = memberEntry.getValue();
+                        if(childMember.getParentUniqueName() != null &&
+                                childMember.getParentUniqueName().equals(expandingMember.getUniqueName())) {
+                          children.add(childMember);
+                        }
+                      }
+                    }
+
+                    return new mondrian.calc.impl.UnaryTupleList(children);
+                  }
+
+                  public boolean dependsOn(Hierarchy hierarchy) {
+                    return true;
+                  }
+                };
+        final mondrian.olap.type.NumericType returnType = new mondrian.olap.type.NumericType();
+        final Calc partialCalc =
+                new RolapHierarchy.LimitedRollupAggregateCalc(returnType, listCalc);
+        Exp partialExp =
+                new ResolvedFunCall(
+                        new mondrian.olap.fun.FunDefBase("$x", "x", "In") {
+                          public Calc compileCall(
+                                  ResolvedFunCall call, mondrian.calc.ExpCompiler compiler)
+                          {
+                            //for debug
+                            //return new mondrian.calc.impl.ConstantCalc(returnType, null);
+                            return partialCalc;
+                          }
+
+                          public void unparse(Exp[] args, PrintWriter pw) {
+                            pw.print("$RollupAccessibleChildren()");
+                          }
+                        },
+                        new Exp[0],
+                        returnType);
+
+        final TupleIterable iterable = ( (IterCalc) calc ).evaluateIterable( evaluator );
+        TupleCursor cursor;
+        if ( iterable instanceof TupleList ) {
+          TupleList list = (TupleList) iterable;
+          cursor = list.tupleCursor();
+        } else {
+          // Iterable
+          cursor = iterable.tupleCursor();
+        }
+        int currentIteration = 0;
+        while ( cursor.forward() ) {
+          CancellationChecker.checkCancelOrTimeout( currentIteration++, execution );
+          Member member = cursor.member(0);
+          //must be not isLeaf()
+          if(member.getLevel().getDepth() < lastLevel.getDepth()) {
+            member = new mondrian.rolap.RolapHierarchy.LimitedRollupMember(
+                    (RolapCubeMember)member,
+                    partialExp,
+                    null
+            );
+          }
+          subcubeHierarchyMembers.put(member, member);
+        }
+        subcubeHierarchies.put(hierarchy, subcubeHierarchyMembers);
+
+      }
+      query.subcubeHierarchies = subcubeHierarchies;
+
+      query.replaceSubcubeMembers();
+      query.resolve();
+
+      //Create evaluator once more. It collected default members before subcube calculation.
+      if ( expDeps > 0 ) {
+        this.evaluator = new RolapDependencyTestingEvaluator( this, expDeps );
+      } else {
+        final RolapEvaluatorRoot root = new RolapResultEvaluatorRoot( this );
+        if ( statement.getProfileHandler() != null ) {
+          this.evaluator = new RolapProfilingEvaluator( root );
+        } else {
+          this.evaluator = new RolapEvaluator( root );
+        }
+      }
 
       // load all root Members for Hierarchies that have no ALL
       // Member and load ALL Members that are not the default Member.
