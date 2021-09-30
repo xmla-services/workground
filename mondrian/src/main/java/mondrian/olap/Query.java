@@ -1629,6 +1629,14 @@ public class Query extends QueryPart {
             return getLevelMembers(level, includeCalculated, null);
         }
 
+        @Override
+        public List<Member> getLevelMembers(
+                Level level,
+                Evaluator context)
+        {
+            return getLevelMembers(level, false, context);
+        }
+
         public List<Member> getLevelMembers(
             Level level,
             boolean includeCalculated,
@@ -1653,6 +1661,40 @@ public class Query extends QueryPart {
             }
 
             return members;
+        }
+
+        public List<Member> getMemberChildren(Member member) {
+            return query.getSubcubeMembers(super.getMemberChildren(member), false);
+        }
+
+        public List<Member> getMemberChildren(List<Member> members) {
+            return query.getSubcubeMembers(super.getMemberChildren(members), false);
+        }
+
+        public List<Member> getMemberChildren(Member member, Evaluator context) {
+            return query.getSubcubeMembers(super.getMemberChildren(member, context), false);
+        }
+
+        public List<Member> getMemberChildren(
+                List<Member> members, Evaluator context)
+        {
+            return query.getSubcubeMembers(super.getMemberChildren(members, context), false);
+        }
+
+        public Map<? extends Member, Access> getMemberChildrenWithDetails(
+                Member member,
+                Evaluator evaluator)
+        {
+            Map<Member, Access> sourceMembers = (Map<Member, Access>)super.getMemberChildrenWithDetails(member, evaluator);
+            HashMap<Member, Access> newMembers = new HashMap<Member, Access>();
+            for(Map.Entry<Member, Access> entry : sourceMembers.entrySet()) {
+                Member subcubeMember = query.getSubcubeMember(entry.getKey(), false);
+                if(subcubeMember != null) {
+                    newMembers.put(subcubeMember, entry.getValue());
+                }
+            }
+
+            return newMembers;
         }
 
         public Member getCalculatedMember(List<Id.Segment> nameParts) {
@@ -1856,7 +1898,7 @@ public class Query extends QueryPart {
             }
 
             if(child != null && child instanceof RolapMember) {
-                return query.getSubcubeMember((RolapMember)child);
+                return query.getSubcubeMember((RolapMember)child, true);
             }
 
             // Only look for calculated members and named sets defined in the
@@ -1871,7 +1913,7 @@ public class Query extends QueryPart {
 
         public Member getHierarchyDefaultMember(Hierarchy hierarchy) {
             Member member = super.getHierarchyDefaultMember(hierarchy);
-            return query.getSubcubeMember(member);
+            return query.getSubcubeMember(member, true);
         }
 
         public List<NameResolver.Namespace> getNamespaces() {
@@ -2276,16 +2318,28 @@ public class Query extends QueryPart {
         }
     }
 
-    private Member getSubcubeMember(Member member) {
+    private List<Member> getSubcubeMembers(List<Member> members, boolean addNullMember) {
+        ArrayList<Member> newMembers = new ArrayList<Member>();
+        for(Member sourceMember: members) {
+            Member subcubeMember = this.getSubcubeMember(sourceMember, addNullMember);
+            if(subcubeMember != null) {
+                newMembers.add(subcubeMember);
+            }
+        }
+        return newMembers;
+    }
+
+    private Member getSubcubeMember(Member member, boolean addNullMember) {
         Hierarchy hierarchy = ((RolapMember)member).getHierarchy();
         if(this.subcubeHierarchies.containsKey(hierarchy)) {
             HashMap<Member, Member> subcubeMembers = this.subcubeHierarchies.get(hierarchy);
             if(subcubeMembers.containsKey(member)) {
                 return subcubeMembers.get(member);
             }
-            else {
+            else if(addNullMember) {
                 return hierarchy.getNullMember();
             }
+            return null;
         }
         return member;
     }
@@ -2293,7 +2347,7 @@ public class Query extends QueryPart {
     private Exp replaceSubcubeMember(Exp exp) {
         if(exp instanceof MemberExpr) {
             MemberExpr memberExpr = (MemberExpr)exp;
-            Member subcubeMember = this.getSubcubeMember(memberExpr.getMember());
+            Member subcubeMember = this.getSubcubeMember(memberExpr.getMember(), true);
             return new MemberExpr(subcubeMember);
         }
         if(exp instanceof ResolvedFunCall) {

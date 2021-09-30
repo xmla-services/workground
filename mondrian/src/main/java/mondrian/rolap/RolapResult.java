@@ -334,6 +334,7 @@ public class RolapResult extends ResultBase {
           // Iterable
           cursor = iterable.tupleCursor();
         }
+        mondrian.olap.Role.HierarchyAccess hierarchyAccess = mondrian.olap.RoleImpl.createAllAccess(hierarchy);
         int currentIteration = 0;
         while ( cursor.forward() ) {
           CancellationChecker.checkCancelOrTimeout( currentIteration++, execution );
@@ -343,7 +344,7 @@ public class RolapResult extends ResultBase {
             member = new mondrian.rolap.RolapHierarchy.LimitedRollupMember(
                     (RolapCubeMember)member,
                     partialExp,
-                    null
+                    hierarchyAccess
             );
           }
           subcubeHierarchyMembers.put(member, member);

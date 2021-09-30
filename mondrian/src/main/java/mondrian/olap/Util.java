@@ -4482,14 +4482,14 @@ public class Util extends XOMUtil {
                     iterator()
                 {
                     return new Iterator<Entry<K, V>>() {
-                        private int pt = -1;
+                        private int pt = 0;
                         public void remove() {
                             throw new UnsupportedOperationException();
                         }
                         @SuppressWarnings("unchecked")
                         public Entry<K, V> next() {
                             return new AbstractMapEntry(
-                                list.get(++pt), null) {};
+                                list.get(pt++), null) {};
                         }
                         public boolean hasNext() {
                             return pt < list.size();
