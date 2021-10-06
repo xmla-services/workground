@@ -1127,7 +1127,7 @@ public enum RowsetDefinition {
             MdschemaSetsRowset.Expression,
             MdschemaSetsRowset.Dimensions,
             MdschemaSetsRowset.SetCaption,
-//            MdschemaSetsRowset.DisplayFolder,
+            MdschemaSetsRowset.DisplayFolder,
 //            MdschemaSetsRowset.EvaluationContext,
         },
         new Column[] {
@@ -4212,8 +4212,7 @@ TODO: see above
             int n = getExtra(connection).getLevelCardinality(lastLevel);
             row.set(DimensionCardinality.name, n + 1);
 
-            // TODO: I think that this is just the dimension name
-            row.set(DefaultHierarchy.name, dimension.getUniqueName());
+            row.set(DefaultHierarchy.name, firstHierarchy.getUniqueName());
             row.set(Description.name, desc);
             row.set(IsVirtual.name, false);
             // SQL Server always returns false
@@ -6544,6 +6543,7 @@ TODO: see above
                 row.set(Description.name, namedSet.getDescription());
                 row.set(Dimensions.name, "");
 
+                //TODO:
 //                java.io.StringWriter sw = new java.io.StringWriter();
 //                java.io.PrintWriter pw = new java.io.PrintWriter(sw);
 //                org.olap4j.mdx.ParseTreeWriter parseTreeWriter = new org.olap4j.mdx.ParseTreeWriter(pw);
@@ -6551,6 +6551,7 @@ TODO: see above
 //                pw.flush();
 //                sw.toString();
 //                row.set(Expression.name, sw.toString());
+                row.set(Expression.name, "");
 
                 row.set(SetCaption.name, namedSet.getCaption());
 
