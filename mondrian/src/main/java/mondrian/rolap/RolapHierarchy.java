@@ -1395,6 +1395,8 @@ public class RolapHierarchy extends HierarchyBase {
         public boolean isEvaluated() {
             return true;
         }
+
+        public RolapMember getSourceMember() { return this.member; }
     }
 
     /**

@@ -650,7 +650,7 @@ public class XmlaHandler {
     }
 
     private static interface QueryResult {
-        void unparse(SaxWriter res) throws SAXException, OlapException;
+        void unparse(SaxWriter res) throws SAXException, OlapException, SQLException;
         void close() throws SQLException;
         void metadata(SaxWriter writer);
     }
@@ -2105,7 +2105,7 @@ public class XmlaHandler {
         }
 
         public void unparse(SaxWriter writer)
-            throws SAXException, OlapException
+            throws SAXException, OlapException, SQLException
         {
             olapInfo(writer);
             axes(writer);
@@ -2362,7 +2362,7 @@ public class XmlaHandler {
             }
         }
 
-        private void axes(SaxWriter writer) throws OlapException {
+        private void axes(SaxWriter writer) throws OlapException, SQLException {
             writer.startSequence("Axes", "Axis");
             //axis(writer, result.getSlicerAxis(), "SlicerAxis");
             final List<CellSetAxis> axes = cellSet.getAxes();
@@ -2477,7 +2477,7 @@ public class XmlaHandler {
             SaxWriter writer,
             CellSetAxis axis,
             List<Property> props,
-            String axisName) throws OlapException
+            String axisName) throws OlapException, SQLException
         {
             writer.startElement(
                 "Axis",
@@ -2499,7 +2499,8 @@ public class XmlaHandler {
 
             mondrian.rolap.RolapConnection rolapConnection =
                     ((mondrian.olap4j.MondrianOlap4jConnection)this.connection).getMondrianConnection();
-
+            final mondrian.server.Statement statement =
+                    (mondrian.server.Statement) cellSet.getStatement();
 
             for(Map.Entry<Level, ArrayList<mondrian.olap.Member>> entry : levelMembers.entrySet()) {
                 Level level = entry.getKey();
@@ -2514,8 +2515,7 @@ public class XmlaHandler {
                             new Locus.Action<List<mondrian.olap.Member>>() {
                                 public List<mondrian.olap.Member> execute() {
                                     return
-                                            rolapConnection.getSchemaReader()
-                                                    .getMemberChildren(members);
+                                            statement.getQuery().getSchemaReader(true).getMemberChildren(members);
                                 }
                             });
                 }

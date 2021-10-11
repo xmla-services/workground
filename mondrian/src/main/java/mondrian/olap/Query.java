@@ -1664,28 +1664,38 @@ public class Query extends QueryPart {
         }
 
         public List<Member> getMemberChildren(Member member) {
-            return query.getSubcubeMembers(super.getMemberChildren(member), false);
+            //Must be RolapMember, not LimitedRollupMember
+            Member rolapMember = query.getRolapMember(member);
+            return query.getSubcubeMembers(super.getMemberChildren(rolapMember), false);
         }
 
         public List<Member> getMemberChildren(List<Member> members) {
-            return query.getSubcubeMembers(super.getMemberChildren(members), false);
+            //Must be RolapMember, not LimitedRollupMember
+            List<Member> rolapMembers = query.getRolapMembers(members);
+            return query.getSubcubeMembers(super.getMemberChildren(rolapMembers), false);
         }
 
         public List<Member> getMemberChildren(Member member, Evaluator context) {
-            return query.getSubcubeMembers(super.getMemberChildren(member, context), false);
+            //Must be RolapMember, not LimitedRollupMember
+            Member rolapMember = query.getRolapMember(member);
+            return query.getSubcubeMembers(super.getMemberChildren(rolapMember, context), false);
         }
 
         public List<Member> getMemberChildren(
                 List<Member> members, Evaluator context)
         {
-            return query.getSubcubeMembers(super.getMemberChildren(members, context), false);
+            //Must be RolapMember, not LimitedRollupMember
+            List<Member> rolapMembers = query.getRolapMembers(members);
+            return query.getSubcubeMembers(super.getMemberChildren(rolapMembers, context), false);
         }
 
         public Map<? extends Member, Access> getMemberChildrenWithDetails(
                 Member member,
                 Evaluator evaluator)
         {
-            Map<Member, Access> sourceMembers = (Map<Member, Access>)super.getMemberChildrenWithDetails(member, evaluator);
+            //Must be RolapMember, not LimitedRollupMember
+            Member rolapMember = query.getRolapMember(member);
+            Map<Member, Access> sourceMembers = (Map<Member, Access>)super.getMemberChildrenWithDetails(rolapMember, evaluator);
             HashMap<Member, Access> newMembers = new HashMap<Member, Access>();
             for(Map.Entry<Member, Access> entry : sourceMembers.entrySet()) {
                 Member subcubeMember = query.getSubcubeMember(entry.getKey(), false);
@@ -1887,10 +1897,15 @@ public class Query extends QueryPart {
             OlapElement parent,
             IdentifierSegment segment)
         {
+            //Must be RolapMember, not LimitedRollupMember
+            OlapElement parentOlapElement = parent;
+            if(parent != null && parent instanceof RolapMember) {
+                parentOlapElement = query.getRolapMember((RolapMember)parent);
+            }
             OlapElement child = null;
             for (NameResolver.Namespace namespace : this.getNamespaces()) {
                 if(namespace != this) {
-                    child = namespace.lookupChild(parent, segment);
+                    child = namespace.lookupChild(parentOlapElement, segment);
                     if (child != null) {
                         break;
                     }
@@ -2327,6 +2342,23 @@ public class Query extends QueryPart {
             }
         }
         return newMembers;
+    }
+
+    private List<Member> getRolapMembers(List<Member> members) {
+        ArrayList<Member> newMembers = new ArrayList<Member>();
+        for(Member sourceMember: members) {
+            newMembers.add(this.getRolapMember(sourceMember));
+        }
+        return newMembers;
+    }
+
+    private Member getRolapMember(Member member) {
+        if(member == null || !(member instanceof mondrian.rolap.RolapHierarchy.LimitedRollupMember)) {
+            return member;
+        }
+        else {
+            return ((RolapHierarchy.LimitedRollupMember)member).getSourceMember();
+        }
     }
 
     private Member getSubcubeMember(Member member, boolean addNullMember) {
