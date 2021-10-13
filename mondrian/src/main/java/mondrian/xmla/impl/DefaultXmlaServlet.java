@@ -692,7 +692,11 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
     {
         // Regardless of whats been put into the response so far, clear
         // it out.
-        response.reset();
+        // If we just reset we will lose headers
+        // For example these
+        // Access-Control-Allow-Origin
+        // Access-Control-Allow-Credentials
+        //response.reset();
 
         // NOTE: if you can think of better/other status codes to use
         // for the various phases, please make changes.
