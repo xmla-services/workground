@@ -1897,6 +1897,14 @@ public class Query extends QueryPart {
             OlapElement parent,
             IdentifierSegment segment)
         {
+            // Only look for calculated members and named sets defined in the
+            // query.
+            for (Formula formula : query.getFormulas()) {
+                if (NameResolver.matches(formula, parent, segment)) {
+                    return formula.getElement();
+                }
+            }
+
             //Must be RolapMember, not LimitedRollupMember
             OlapElement parentOlapElement = parent;
             if(parent != null && parent instanceof RolapMember) {
@@ -1916,13 +1924,6 @@ public class Query extends QueryPart {
                 return query.getSubcubeMember((RolapMember)child, true);
             }
 
-            // Only look for calculated members and named sets defined in the
-            // query.
-            for (Formula formula : query.getFormulas()) {
-                if (NameResolver.matches(formula, parent, segment)) {
-                    return formula.getElement();
-                }
-            }
             return null;
         }
 
