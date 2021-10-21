@@ -1221,6 +1221,27 @@ public class BuiltinFunTable extends FunTableImpl {
             }
         });
 
+        // <Member>.Member_Caption
+        builder.define(
+            new FunDefBase(
+                    "Member_Caption",
+                    "Returns the caption of a member.",
+                    "pSm")
+        {
+            public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+            {
+                final MemberCalc memberCalc =
+                        compiler.compileMember(call.getArg(0));
+                return new AbstractStringCalc(call, new Calc[] {memberCalc}) {
+                    public String evaluateString(Evaluator evaluator) {
+                        final Member member =
+                                memberCalc.evaluateMember(evaluator);
+                        return member.getCaption();
+                    }
+                };
+            }
+        });
+
         // <Dimension>.Name
         builder.define(
             new FunDefBase(
