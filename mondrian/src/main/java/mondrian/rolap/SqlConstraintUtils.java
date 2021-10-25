@@ -151,6 +151,11 @@ public class SqlConstraintUtils {
     RolapStar.Column[] columns = request.getConstrainedColumns();
     Object[] values = request.getSingleValues();
 
+    if(columns.length > 0) {
+      //First add fact table to From.
+      baseCube.getStar().getFactTable().addToFrom(sqlQuery, false, false);
+    }
+
     Map<MondrianDef.Expression, Set<RolapMember>> mapOfSlicerMembers = null;
     HashMap<MondrianDef.Expression, Boolean> done = new HashMap<MondrianDef.Expression, Boolean>();
 

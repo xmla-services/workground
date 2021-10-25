@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2005-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.rolap.agg;
@@ -84,6 +85,8 @@ public abstract class AbstractQuerySpec implements QuerySpec {
 
     protected Map<String, String> nonDistinctGenerateSql(SqlQuery sqlQuery)
     {
+        //First add fact table to From.
+        getStar().getFactTable().addToFrom(sqlQuery, false, false);
         // add constraining dimensions
         RolapStar.Column[] columns = getColumns();
         int arity = columns.length;
