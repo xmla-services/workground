@@ -341,6 +341,10 @@ public class RolapResult extends ResultBase {
           Member member = cursor.member(0);
           //must be not isLeaf()
           if(member.getLevel().getDepth() < lastLevel.getDepth()) {
+            if(member instanceof mondrian.rolap.RolapHierarchy.LimitedRollupMember){
+              //it could happen if there is Roles
+              member = ((mondrian.rolap.RolapHierarchy.LimitedRollupMember)member).getSourceMember();
+            }
             member = new mondrian.rolap.RolapHierarchy.LimitedRollupMember(
                     (RolapCubeMember)member,
                     partialExp,
