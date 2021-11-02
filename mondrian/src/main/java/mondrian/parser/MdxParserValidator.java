@@ -80,10 +80,16 @@ public interface MdxParserValidator {
         Refresh makeRefresh(
                 String cubeName);
 
+        Update makeUpdate(
+                String cubeName);
+
         DmvQuery makeDmvQuery(
                 String tableName,
                 List<String> columns,
                 Exp whereExpression);
+
+        TransactionCommand makeTransactionCommand(
+                TransactionCommand.Command c);
     }
 }
 

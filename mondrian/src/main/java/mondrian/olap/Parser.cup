@@ -207,12 +207,24 @@ parser code {:
             return new Refresh(cubeName);
         }
 
+        public Update makeUpdate(
+                String cubeName)
+        {
+            return new Update(cubeName);
+        }
+
         public DmvQuery makeDmvQuery(
                 String tableName,
                 List<String> columns,
                 Exp whereExpression)
         {
             return new DmvQuery(tableName, columns, whereExpression);
+        }
+
+        public TransactionCommand makeTransactionCommand(
+                TransactionCommand.Command c)
+        {
+            return new TransactionCommand(c);
         }
     }
 

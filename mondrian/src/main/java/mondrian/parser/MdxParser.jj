@@ -210,12 +210,15 @@ TOKEN :
     <AND: "AND">
     | <AS: "AS">
     | <AXIS: "AXIS">
+    | <BEGIN: "BEGIN">
+    | <BY: "BY">
     | <CASE: "CASE">
     | <CAST: "CAST">
     | <CELL: "CELL">
     | <CHAPTERS: "CHAPTERS">
     | <CREATE: "CREATE">
     | <COLUMNS: "COLUMNS">
+    | <COMMIT: "COMMIT">
     | <CUBE: "CUBE">
     | <DIMENSION: "DIMENSION">
     | <DRILLTHROUGH: "DRILLTHROUGH">
@@ -241,12 +244,20 @@ TOKEN :
     | <PROPERTIES: "PROPERTIES">
     | <REFRESH: "REFRESH">
     | <RETURN: "RETURN">
+    | <ROLLBACK: "ROLLBACK">
     | <ROWS: "ROWS">
     | <SECTIONS: "SECTIONS">
     | <SELECT: "SELECT">
     | <SESSION: "SESSION">
     | <SET: "SET">
     | <THEN: "THEN">
+    | <TRAN: "TRAN">
+    | <TRANSACTION: "TRANSACTION">
+    | <UPDATE: "UPDATE">
+    | <USE_EQUAL_ALLOCATION: "USE_EQUAL_ALLOCATION">
+    | <USE_EQUAL_INCREMENT: "USE_EQUAL_INCREMENT">
+    | <USE_WEIGHTED_ALLOCATION: "USE_WEIGHTED_ALLOCATION">
+    | <USE_WEIGHTED_INCREMENT: "USE_WEIGHTED_INCREMENT">
     | <WHEN: "WHEN">
     | <WHERE: "WHERE">
     | <XOR: "XOR">
@@ -1014,6 +1025,10 @@ QueryPart statement() :
         qp = explainStatement()
     |
         qp = refreshStatement()
+    |
+        qp = updateStatement()
+    |
+        qp = transactionCommandStatement()
     )
     {
         return qp;
@@ -1233,6 +1248,70 @@ QueryPart refreshStatement() :
     {
         String cubeName = ((Id.NameSegment) c.getElement(0)).name;
         return factory.makeRefresh(cubeName);
+    }
+}
+
+QueryPart updateStatement() :
+{
+    Id c;
+    Exp uc;
+    List<Exp> list = new ArrayList<Exp>();
+}
+{
+    <UPDATE> (<CUBE>)?  c = compoundId()
+    <SET>
+    uc = updateClause() {
+        list.add(uc);
+    }
+    (
+        <COMMA>
+        uc = updateClause() {
+            list.add(uc);
+        }
+    )*
+    {
+        String cubeName = ((Id.NameSegment) c.getElement(0)).name;
+        return factory.makeUpdate(cubeName);
+    }
+}
+
+Exp updateClause() :
+{
+    Exp t, v, w;
+}
+{
+    t = primary()
+    <EQ>
+    v = unaliasedExpression()
+    (
+        <USE_EQUAL_ALLOCATION>
+        |
+        <USE_EQUAL_INCREMENT>
+        |
+        <USE_WEIGHTED_ALLOCATION> (<BY> w = unaliasedExpression())?
+        |
+        <USE_WEIGHTED_INCREMENT> (<BY> w = unaliasedExpression())?
+    )?
+    {
+        return t;
+    }
+}
+
+QueryPart transactionCommandStatement() :
+{
+     TransactionCommand.Command c;
+}
+{
+    (
+        <BEGIN>  { c = TransactionCommand.Command.BEGIN; }
+        |
+        <COMMIT>  { c = TransactionCommand.Command.COMMIT; }
+        |
+        <ROLLBACK>  { c = TransactionCommand.Command.ROLLBACK; }
+    )
+    (<TRANSACTION> | <TRAN>)
+    {
+        return factory.makeTransactionCommand(c);
     }
 }
 

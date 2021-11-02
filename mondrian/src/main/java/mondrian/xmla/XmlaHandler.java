@@ -27,6 +27,8 @@ import mondrian.olap.QueryPart;
 import mondrian.olap.DrillThrough;
 import mondrian.olap.CalculatedFormula;
 import mondrian.olap.Refresh;
+import mondrian.olap.Update;
+import mondrian.olap.TransactionCommand;
 import mondrian.olap.DmvQuery;
 
 import org.olap4j.*;
@@ -901,6 +903,8 @@ public class XmlaHandler {
                 final mondrian.rolap.RolapCube cube = (mondrian.rolap.RolapCube)
                         schema.lookupCube(refresh.getCubeName(), true);
                 cube.flushCache(rolapConnection);
+            } else if (queryPart instanceof Update) {
+            } else if (queryPart instanceof TransactionCommand) {
             } else {
                 checkedCanceled(request);
                 result = executeQuery(request);
