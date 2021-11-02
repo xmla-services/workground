@@ -9,6 +9,8 @@
 
 package mondrian.spi.impl;
 
+import mondrian.olap.Util;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -33,6 +35,19 @@ public class ClickHouseDialect extends JdbcDialectImpl {
 
     public boolean requiresDrillthroughMaxRowsInLimit() {
         return true;
+    }
+
+    public void quoteStringLiteral(
+            StringBuilder buf,
+            String s)
+    {
+        buf.append('\'');
+
+        String s0 = Util.replace(s, "\\", "\\\\");
+        s0 = Util.replace(s0, "'", "\\'");
+        buf.append(s0);
+
+        buf.append('\'');
     }
 }
 
