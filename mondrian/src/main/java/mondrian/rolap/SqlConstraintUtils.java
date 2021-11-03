@@ -153,7 +153,12 @@ public class SqlConstraintUtils {
 
     if(columns.length > 0) {
       //First add fact table to From.
-      baseCube.getStar().getFactTable().addToFrom(sqlQuery, false, false);
+      if(aggStar != null) {
+        aggStar.getFactTable().addToFrom(sqlQuery, false, false);
+      }
+      else {
+        baseCube.getStar().getFactTable().addToFrom(sqlQuery, false, false);
+      }
     }
 
     Map<MondrianDef.Expression, Set<RolapMember>> mapOfSlicerMembers = null;
