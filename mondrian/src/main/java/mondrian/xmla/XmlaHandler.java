@@ -904,6 +904,10 @@ public class XmlaHandler {
                         schema.lookupCube(refresh.getCubeName(), true);
                 cube.flushCache(rolapConnection);
             } else if (queryPart instanceof Update) {
+                Update update = (Update)queryPart;
+                final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
+                final mondrian.rolap.RolapCube cube = (mondrian.rolap.RolapCube)
+                        schema.lookupCube(update.getCubeName(), true);
             } else if (queryPart instanceof TransactionCommand) {
             } else {
                 checkedCanceled(request);

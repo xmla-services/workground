@@ -3,14 +3,16 @@
 package mondrian.olap;
 
 import java.io.PrintWriter;
+import java.util.List;
 
 public class Update extends QueryPart {
     private final String cubeName;
+    private List<UpdateClause> updateClauses;
 
-    Update(
-            String cubeName)
+    Update(String cubeName, List<UpdateClause> updateClauses)
     {
         this.cubeName = cubeName;
+        this.updateClauses = updateClauses;
     }
 
     @Override
@@ -26,4 +28,27 @@ public class Update extends QueryPart {
     public String getCubeName() {
         return cubeName;
     }
+
+    public enum Allocation {
+        NO_ALLOCATION,
+        USE_EQUAL_ALLOCATION,
+        USE_EQUAL_INCREMENT,
+        USE_WEIGHTED_ALLOCATION,
+        USE_WEIGHTED_INCREMENT
+    }
+
+    public static class UpdateClause extends QueryPart {
+        private final Exp tuple;
+        private Exp value;
+        private Allocation allocation;
+        private Exp weight;
+
+        public UpdateClause(Exp tuple, Exp value, Allocation allocation, Exp weight) {
+            this.tuple = tuple;
+            this.value = value;
+            this.allocation = allocation;
+            this.weight = weight;
+        }
+    }
 }
+

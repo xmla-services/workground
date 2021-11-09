@@ -1254,8 +1254,8 @@ QueryPart refreshStatement() :
 QueryPart updateStatement() :
 {
     Id c;
-    Exp uc;
-    List<Exp> list = new ArrayList<Exp>();
+    Update.UpdateClause uc;
+    List<Update.UpdateClause> list = new ArrayList<Update.UpdateClause>();
 }
 {
     <UPDATE> (<CUBE>)?  c = compoundId()
@@ -1271,29 +1271,37 @@ QueryPart updateStatement() :
     )*
     {
         String cubeName = ((Id.NameSegment) c.getElement(0)).name;
-        return factory.makeUpdate(cubeName);
+        return factory.makeUpdate(cubeName, list);
     }
 }
 
-Exp updateClause() :
+Update.UpdateClause updateClause() :
 {
-    Exp t, v, w;
+    Exp t, v, w = null;
+    Update.Allocation a = Update.Allocation.NO_ALLOCATION;
 }
 {
+
     t = primary()
     <EQ>
     v = unaliasedExpression()
     (
         <USE_EQUAL_ALLOCATION>
+        { a = Update.Allocation.USE_EQUAL_ALLOCATION; }
         |
         <USE_EQUAL_INCREMENT>
+        { a = Update.Allocation.USE_EQUAL_INCREMENT; }
         |
-        <USE_WEIGHTED_ALLOCATION> (<BY> w = unaliasedExpression())?
+        <USE_WEIGHTED_ALLOCATION>
+        { a = Update.Allocation.USE_WEIGHTED_ALLOCATION; }
+        (<BY> w = unaliasedExpression())?
         |
-        <USE_WEIGHTED_INCREMENT> (<BY> w = unaliasedExpression())?
+        <USE_WEIGHTED_INCREMENT>
+        { a = Update.Allocation.USE_WEIGHTED_INCREMENT; }
+        (<BY> w = unaliasedExpression())?
     )?
     {
-        return t;
+        return new Update.UpdateClause(t, v, a, w);
     }
 }
 

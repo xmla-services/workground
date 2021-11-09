@@ -81,7 +81,8 @@ public interface MdxParserValidator {
                 String cubeName);
 
         Update makeUpdate(
-                String cubeName);
+                String cubeName,
+                List<Update.UpdateClause> list);
 
         DmvQuery makeDmvQuery(
                 String tableName,

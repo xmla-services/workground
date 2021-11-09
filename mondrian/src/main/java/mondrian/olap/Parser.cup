@@ -208,9 +208,10 @@ parser code {:
         }
 
         public Update makeUpdate(
-                String cubeName)
+                String cubeName,
+                List<Update.UpdateClause> list)
         {
-            return new Update(cubeName);
+            return new Update(cubeName, list);
         }
 
         public DmvQuery makeDmvQuery(
