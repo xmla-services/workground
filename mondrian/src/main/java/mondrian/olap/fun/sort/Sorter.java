@@ -743,13 +743,16 @@ public class Sorter {
     if ( ( k1 != null ) && ( k2 != null ) ) {
       return k1.compareTo( k2 );
     } else {
-      final int ordinal1 = m1.getOrdinal();
-      final int ordinal2 = m2.getOrdinal();
-      return ( ordinal1 == ordinal2 )
-        ? m1.compareTo( m2 )
-        : ( ordinal1 < ordinal2 )
-        ? -1
-        : 1;
+      final String caption1 = m1.getCaption();
+      final String caption2 = m2.getCaption();
+      return caption1.compareTo( caption2 );
+//      final int ordinal1 = m1.getOrdinal();
+//      final int ordinal2 = m2.getOrdinal();
+//      return ( ordinal1 == ordinal2 )
+//        ? m1.compareTo( m2 )
+//        : ( ordinal1 < ordinal2 )
+//        ? -1
+//        : 1;
     }
   }
 
