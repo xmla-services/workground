@@ -1113,6 +1113,9 @@ RME is this right
             }
             ++columnOffset;
         }
+        else {
+            setOrderKey(member, value);
+        }
         for (int j = 0; j < properties.length; j++) {
             Property property = properties[j];
             member.setProperty(
