@@ -31,6 +31,8 @@ import mondrian.olap.Update;
 import mondrian.olap.TransactionCommand;
 import mondrian.olap.DmvQuery;
 
+import mondrian.server.Session;
+
 import org.olap4j.*;
 import org.olap4j.impl.Olap4jUtil;
 import org.olap4j.metadata.*;
@@ -131,7 +133,7 @@ public class XmlaHandler {
      */
     public OlapConnection getConnection(
         XmlaRequest request,
-        Map<String, String> propMap)
+        Map<String, String> propMap) throws OlapException
     {
         String sessionId = request.getSessionId();
         if (sessionId == null) {
@@ -200,6 +202,12 @@ public class XmlaHandler {
         if (locale != null) {
             connection.setLocale(locale);
         }
+
+        Session session = Session.getWithoutCheck(sessionId);
+        if (session != null) {
+            connection.setScenario(session.getScenario());
+        }
+
         return connection;
     }
 
@@ -906,9 +914,63 @@ public class XmlaHandler {
             } else if (queryPart instanceof Update) {
                 Update update = (Update)queryPart;
                 final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
-                final mondrian.rolap.RolapCube cube = (mondrian.rolap.RolapCube)
-                        schema.lookupCube(update.getCubeName(), true);
+                for(Update.UpdateClause updateClause: update.getUpdateClauses()) {
+                    StringWriter sw = new StringWriter();
+                    PrintWriter pw = new mondrian.mdx.QueryPrintWriter(sw);
+                    updateClause.getTupleExp().unparse(pw);
+                    String tupleString = sw.toString();
+
+                    PreparedOlapStatement pstmt = connection.prepareOlapStatement(
+                            "SELECT "
+                            + tupleString
+                            + " ON 0 FROM "
+                            + update.getCubeName()
+                            + " CELL PROPERTIES CELL_ORDINAL"
+                    );
+                    CellSet cellSet = pstmt.executeQuery();
+                    CellSetAxis axis = cellSet.getAxes().get(0);
+                    if(axis.getPositionCount() == 0) {
+                        //Empty tuple exception
+                    }
+                    if (axis.getPositionCount() == 1) {
+                        //More than one tuple exception
+                    }
+                    Cell writeBackCell = cellSet.getCell(Arrays.asList(0));
+
+                    sw = new StringWriter();
+                    pw = new mondrian.mdx.QueryPrintWriter(sw);
+                    updateClause.getValueExp().unparse(pw);
+                    String valueString = sw.toString();
+
+                    pstmt = connection.prepareOlapStatement(
+                            "WITH MEMBER [Measures].[m1] AS "
+                            + valueString
+                            + " SELECT [Measures].[m1] ON 0 FROM "
+                            + update.getCubeName()
+                            + " CELL PROPERTIES VALUE"
+                    );
+                    cellSet = pstmt.executeQuery();
+                    Cell cell = cellSet.getCell(Arrays.asList(0));
+                    Double doubleValue = cell.getDoubleValue();
+
+                    writeBackCell.setValue(doubleValue, AllocationPolicy.EQUAL_ALLOCATION);
+                }
             } else if (queryPart instanceof TransactionCommand) {
+                TransactionCommand transactionCommand = (TransactionCommand)queryPart;
+
+                String sessionId = request.getSessionId();
+                Session session = Session.get(sessionId);
+                if(transactionCommand.getCommand() == TransactionCommand.Command.BEGIN) {
+                    Scenario scenario = connection.createScenario();
+                    session.setScenario(scenario);
+                }
+                else if(transactionCommand.getCommand() == TransactionCommand.Command.ROLLBACK) {
+                    session.setScenario(null);
+                }
+                else if(transactionCommand.getCommand() == TransactionCommand.Command.COMMIT) {
+                    session.setScenario(null);
+                }
+
             } else {
                 checkedCanceled(request);
                 result = executeQuery(request);
@@ -1846,7 +1908,7 @@ public class XmlaHandler {
     }
 
     private QueryResult executeQuery(XmlaRequest request)
-        throws XmlaException
+        throws XmlaException, OlapException
     {
         final String mdx = request.getStatement();
 

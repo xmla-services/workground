@@ -29,6 +29,10 @@ public class Update extends QueryPart {
         return cubeName;
     }
 
+    public List<UpdateClause> getUpdateClauses() {
+        return this.updateClauses;
+    }
+
     public enum Allocation {
         NO_ALLOCATION,
         USE_EQUAL_ALLOCATION,
@@ -48,6 +52,14 @@ public class Update extends QueryPart {
             this.value = value;
             this.allocation = allocation;
             this.weight = weight;
+        }
+
+        public Exp getTupleExp() {
+            return this.tuple;
+        }
+
+        public Exp getValueExp() {
+            return this.value;
         }
     }
 }

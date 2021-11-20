@@ -19,6 +19,7 @@ import mondrian.rolap.*;
 import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.rolap.agg.SegmentCacheWorker;
 import mondrian.olap.MondrianServer;
+import org.olap4j.Scenario;
 
 public class Session
 {
@@ -147,5 +148,15 @@ public class Session
             this.segmentCacheManager = new SegmentCacheManager(server);
         }
         return this.segmentCacheManager;
+    }
+
+    private Scenario scenario = null;
+
+    public void setScenario(Scenario scenario) {
+        this.scenario = scenario;
+    }
+
+    public Scenario getScenario() {
+        return this.scenario;
     }
 }
