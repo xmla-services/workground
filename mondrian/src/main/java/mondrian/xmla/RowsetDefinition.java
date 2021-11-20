@@ -3874,6 +3874,9 @@ TODO: see above
                             formatter.format(
                                 extra.getSchemaLoadDate(schema));
                         row.set(LastSchemaUpdate.name, formattedDate);
+                        //It could be a last source update. Now it's just current time.
+                        formattedDate =
+                                formatter.format(new Date());
                         row.set(LastDataUpdate.name, formattedDate);
                         if (deep) {
                             row.set(
