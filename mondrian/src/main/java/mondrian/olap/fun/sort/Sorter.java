@@ -740,7 +740,7 @@ public class Sorter {
     }
     final Comparable k1 = m1.getOrderKey();
     final Comparable k2 = m2.getOrderKey();
-    if ( ( k1 != null ) && ( k2 != null ) ) {
+    if ( ( k1 != null ) && ( k2 != null ) && ( k1.getClass() == k2.getClass() ) ) {
       return k1.compareTo( k2 );
     } else {
       final String caption1 = m1.getCaption();
