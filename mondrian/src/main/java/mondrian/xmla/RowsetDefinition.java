@@ -2400,11 +2400,13 @@ public enum RowsetDefinition {
                     serialize(buf, roleNames);
                     row.set(Roles.name, buf.toString());
 
-                    // TODO: currently schema grammar does not support modify
-                    // date so we return just some date for now.
-                    if (false) {
-                        row.set(DateModified.name, dateModified);
-                    }
+                    //If it is ROLAP - return when data was last changed or just current date time.
+                    //It could be Session start date
+                    Format formatter =
+                            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                    String formattedDate = formatter.format(new Date());
+                    row.set(DateModified.name, formattedDate);
+
                     addRow(row, rows);
                 }
             }
