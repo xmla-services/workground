@@ -778,8 +778,9 @@ public class Query extends QueryPart {
                 }
             }
         }
-        if (cube != null) {
-            pw.println("from [" + cube.getName() + "]");
+        if (subcube != null) {
+            pw.println("from ");
+            subcube.unparse(pw);
         }
         if (slicerAxis != null) {
             pw.print("where ");

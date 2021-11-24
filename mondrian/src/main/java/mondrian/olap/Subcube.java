@@ -26,6 +26,14 @@ public class Subcube extends QueryPart {
 
     @Override
     public void unparse(PrintWriter pw) {
+        if(this.subcube != null) {
+            pw.println("(");
+            pw.println("Subcube");
+            pw.println(")");
+        }
+        else {
+            pw.println("from [" + this.cubeName + "]");
+        }
 //        pw.print("CREATE SESSION MEMBER ");
 //        pw.print("[" + cubeName + "]");
 //        pw.print(".");
