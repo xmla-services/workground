@@ -230,6 +230,9 @@ Revision is $Id$
                 present, table name is left unqualified.
             </Doc>
         </Object>
+        <Array name="writebacks" type="WritebackTable" required="false">
+            <Doc>Contains definition of writeback tables.</Doc>
+        </Array>
         <Array name="dimensions" type="CubeDimension"><Doc></Doc></Array>
         <Array name="measures" type="Measure"><Doc></Doc></Array>
         <Array name="calculatedMembers" type="CalculatedMember">
@@ -2504,6 +2507,52 @@ Revision is $Id$
         </Attribute>
         <Array name="columns" type="DrillThroughColumn"><Doc></Doc></Array>
     </Element>
+
+    <!-- `Writeback` ============================================== -->
+    <Element type="WritebackColumn" abstract="true">
+        <Doc>
+            Base class for Writeback columns.
+        </Doc>
+    </Element>
+
+    <Element type="WritebackAttribute" class="WritebackColumn">
+        <Doc>
+        </Doc>
+        <Attribute name="dimension" required="true">
+            <Doc></Doc>
+        </Attribute>
+        <Attribute name="column" required="true">
+            <Doc></Doc>
+        </Attribute>
+    </Element>
+
+    <Element type="WritebackMeasure" class="WritebackColumn">
+        <Doc>
+        </Doc>
+        <Attribute name="name" required="true">
+            <Doc></Doc>
+        </Attribute>
+        <Attribute name="column" required="true">
+            <Doc></Doc>
+        </Attribute>
+    </Element>
+
+    <Element type="WritebackTable">
+        <Doc>
+            Definition of a cube writeback.
+        </Doc>
+        <Attribute name="name" required="true"/>
+        <Attribute name="schema">
+            <Doc>
+                Optional qualifier for <code>table</code>.
+            </Doc>
+        </Attribute>
+        <Array name="columns" type="WritebackColumn"><Doc></Doc></Array>
+        <Object name="annotations" type="Annotations" required="false">
+            <Doc>Contains values of user-defined properties.</Doc>
+        </Object>
+    </Element>
+
 </Model>
 
 <!-- End Mondrian.xml -->

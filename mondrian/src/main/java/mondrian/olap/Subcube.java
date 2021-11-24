@@ -28,11 +28,30 @@ public class Subcube extends QueryPart {
     public void unparse(PrintWriter pw) {
         if(this.subcube != null) {
             pw.println("(");
-            pw.println("Subcube");
+            pw.println("select ");
+            for (int i = 0; i < axes.length; i++) {
+                pw.print("  ");
+                axes[i].unparse(pw);
+                if (i < axes.length - 1) {
+                    pw.println(",");
+                    pw.print("  ");
+                } else {
+                    pw.println();
+                }
+            }
+            pw.println("from ");
+            if (subcube != null) {
+                subcube.unparse(pw);
+            }
+            if (slicerAxis != null) {
+                pw.print("where ");
+                slicerAxis.unparse(pw);
+                pw.println();
+            }
             pw.println(")");
         }
         else {
-            pw.println("from [" + this.cubeName + "]");
+            pw.println("[" + this.cubeName + "]");
         }
 //        pw.print("CREATE SESSION MEMBER ");
 //        pw.print("[" + cubeName + "]");

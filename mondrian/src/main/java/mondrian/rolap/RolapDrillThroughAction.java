@@ -32,7 +32,7 @@ public class RolapDrillThroughAction extends RolapAction {
         this.isDefault = isDefault;
         this.columnList = columnList;
         if(this.columnList == null) {
-            columnList = new ArrayList<RolapDrillThroughColumn>();
+            this.columnList = new ArrayList<RolapDrillThroughColumn>();
         }
     }
 

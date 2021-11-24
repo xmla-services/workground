@@ -106,6 +106,8 @@ public class RolapCube extends CubeBase {
     final List<RolapAction> actionList =
             new ArrayList<RolapAction>();
 
+    final List<RolapWritebackTable> writebackTableList =
+            new ArrayList<RolapWritebackTable>();
     /**
      * Used for virtual cubes.
      * Contains a list of all base cubes related to a virtual cube
@@ -429,6 +431,67 @@ public class RolapCube extends CubeBase {
                 );
                 this.actionList.add(rolapDrillThroughAction);
             }
+        }
+
+        for(MondrianDef.WritebackTable writebackTable: xmlCube.writebacks) {
+            List<RolapWritebackColumn> columns = new ArrayList<RolapWritebackColumn>();
+
+            for(MondrianDef.WritebackColumn writebackColumn: writebackTable.columns) {
+                if(writebackColumn instanceof MondrianDef.WritebackAttribute) {
+                    MondrianDef.WritebackAttribute writebackAttribute =
+                            (MondrianDef.WritebackAttribute)writebackColumn;
+
+                    Dimension dimension = null;
+                    for(Dimension currentDimension: this.getDimensions()) {
+                        if(currentDimension.getName().equals(writebackAttribute.dimension)) {
+                            dimension = currentDimension;
+                            break;
+                        }
+                    }
+                    if(dimension == null) {
+                        throw Util.newError(
+                                "Error while creating `WritebackTable`. Dimension '"
+                                        + writebackAttribute.dimension + "' not found");
+                    }
+
+                    columns.add(
+                            new RolapWritebackAttribute(
+                                    dimension,
+                                    writebackAttribute.column
+                            )
+                    );
+
+                }
+                else if(writebackColumn instanceof MondrianDef.WritebackMeasure) {
+                    MondrianDef.WritebackMeasure writebackMeasure =
+                            (MondrianDef.WritebackMeasure)writebackColumn;
+
+                    Member measure = null;
+                    for(Member currentMeasure: this.getMeasures()) {
+                        if(currentMeasure.getName().equals(writebackMeasure.name)) {
+                            measure = currentMeasure;
+                            break;
+                        }
+                    }
+                    if(measure == null) {
+                        throw Util.newError(
+                                "Error while creating DrillThrough  action. Measure '"
+                                        + writebackMeasure.name + "' not found");
+                    }
+                    columns.add(
+                            new RolapWritebackMeasure(
+                                    measure,
+                                    writebackMeasure.column)
+                    );
+                }
+            }
+
+            RolapWritebackTable rolapWritebackTable = new RolapWritebackTable(
+                    writebackTable.name,
+                    writebackTable.schema,
+                    columns
+            );
+            this.writebackTableList.add(rolapWritebackTable);
         }
     }
 
