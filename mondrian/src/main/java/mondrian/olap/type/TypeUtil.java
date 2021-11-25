@@ -354,7 +354,10 @@ public class TypeUtil {
                 return true;
             case Category.Numeric:
                 if(((MemberType)fromType).getDimension().isMeasures()) {
-                    conversions.add(new ConversionImpl(from, to, ordinal, 0, null));
+                    //Must work both cases
+                    //<Set> - <Set>
+                    //IIF(<BOOLEAN>, <Member>, <Member>) if 0 then is the same as IIF(<BOOLEAN>, <Numeric>, <Numeric>)
+                    conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
                 }
                 else {
                     // It is more expensive to convert from Member->Scalar (cost=3)
