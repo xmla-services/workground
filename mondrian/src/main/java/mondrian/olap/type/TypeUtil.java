@@ -346,6 +346,9 @@ public class TypeUtil {
             case Category.Numeric:
                 conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
                 return true;
+            case Category.Set:
+                    conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
+                    return true;
             case Category.Value:
             case Category.String:
                 // We assume that measures are numeric, so a cast to a string or
