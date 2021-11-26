@@ -62,7 +62,7 @@ public class TupleFunDef extends FunDefBase {
         //
         // If there is only one member, it merely represents a parenthesized
         // expression, whose Hierarchy is that of the member.
-        if (args.length == 1  && args[0].getType() instanceof NumericType) {
+        if (args.length == 1  && !(args[0].getType() instanceof MemberType)) {
             return args[0].getType();
         } else {
             MemberType[] types = new MemberType[args.length];
@@ -126,7 +126,7 @@ public class TupleFunDef extends FunDefBase {
             //   (1 + 2) is a numeric,
             // but
             //   ([Gender].[M], [Marital Status].[S]) is a tuple.
-            if (args.length == 1 && args[0].getType() instanceof NumericType) {
+            if (args.length == 1 && !(args[0].getType() instanceof MemberType)) {
                 return new ParenthesesFunDef(args[0].getCategory());
             } else {
                 final int[] argTypes = new int[args.length];
