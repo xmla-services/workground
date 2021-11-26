@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2002-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara and others
+// Copyright (C) 2021 Sergei Semenkov
 // All Rights Reserved.
 */
 
@@ -157,7 +158,7 @@ public class SetFunDef extends FunDefBase {
                         return "Sublist";
                     }
                 };
-            } else if (type.getArity() == 1) {
+            } else if (type.getArity() == 1 && arg instanceof MemberType) {
                 final MemberCalc memberCalc = compiler.compileMember(arg);
                 return new AbstractVoidCalc(arg, new Calc[]{memberCalc}) {
                     final Member[] members = {null};

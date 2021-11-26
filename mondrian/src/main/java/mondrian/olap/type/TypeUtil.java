@@ -343,28 +343,8 @@ public class TypeUtil {
             case Category.Hierarchy:
             case Category.Level:
             case Category.Tuple:
-                conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
-                return true;
-            case Category.Set:
-                // It is more expensive to convert from Member->Set (cost=2)
-                // than Member->Tuple (cost=1). In particular, m.Tuple(n) should
-                // resolve to <Tuple>.Item(<Numeric>) rather than
-                // <Set>.Item(<Numeric>).
-                conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
-                return true;
             case Category.Numeric:
-                if(((MemberType)fromType).getDimension().isMeasures()) {
-                    //Must work both cases
-                    //<Set> - <Set>
-                    //IIF(<BOOLEAN>, <Member>, <Member>) if 0 then is the same as IIF(<BOOLEAN>, <Numeric>, <Numeric>)
-                    conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
-                }
-                else {
-                    // It is more expensive to convert from Member->Scalar (cost=3)
-                    // than Member->Set (cost=2). In particular, we want 'member *
-                    // set' to resolve to the crossjoin operator, '{m} * set'.
-                    conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
-                }
+                conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
                 return true;
             case Category.Value:
             case Category.String:
@@ -443,14 +423,10 @@ public class TypeUtil {
             }
         case Category.Tuple:
             switch (to) {
-            case Category.Set:
-                conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
-                return true;
             case Category.Numeric:
-                // It is more expensive to convert from Tuple->Scalar (cost=4)
-                // than Tuple->Set (cost=3). In particular, we want 'tuple *
-                // set' to resolve to the crossjoin operator, '{tuple} * set'.
-                // This is analogous to Member->Numeric conversion.
+                conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
+                return true;
+            case Category.Set:
                 conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
                 return true;
             case Category.String:
