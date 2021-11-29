@@ -332,7 +332,7 @@ public class FunUtil extends Util {
     List<Member> members,
     Level level,
     Evaluator evaluator) {
-    List<Member> levelMembers = schemaReader.getLevelMembers( level, true,  evaluator);
+    List<Member> levelMembers = schemaReader.getLevelMembers( level, true );
     members.addAll( levelMembers );
     return members;
   }
@@ -1652,7 +1652,7 @@ public class FunUtil extends Util {
       }
       return members;
     }
-    return sr.getLevelMembers( level, includeCalcMembers, evaluator );
+    return sr.getLevelMembers( level, includeCalcMembers );
   }
 
   static TupleList levelMembers(

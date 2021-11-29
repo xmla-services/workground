@@ -111,7 +111,7 @@ class ToggleDrillStateFunDef extends FunDefBase {
                 } while (i < n);
             } else {
                 List<Member> children =
-                    evaluator.getSchemaReader().getMemberChildren(m, evaluator);
+                    evaluator.getSchemaReader().getMemberChildren(m);
                 for (Member child : children) {
                     o.toArray(members);
                     members[k] = child;

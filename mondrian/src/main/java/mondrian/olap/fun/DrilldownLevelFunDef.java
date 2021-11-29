@@ -98,7 +98,7 @@ class DrilldownLevelFunDef extends FunDefBase {
                     for (List<Member> tuple : list) {
                         result.add(tuple);
                         final List<Member> children =
-                            schemaReader.getMemberChildren(tuple.get(index), evaluator);
+                            schemaReader.getMemberChildren(tuple.get(index));
                         for (Member child : children) {
                             tuple.toArray(tupleClone);
                             tupleClone[index] = child;
@@ -152,7 +152,7 @@ class DrilldownLevelFunDef extends FunDefBase {
             }
         }
         final List<Member> childMembers =
-                evaluator.getSchemaReader().getMemberChildren(parentMembers, evaluator);
+                evaluator.getSchemaReader().getMemberChildren(parentMembers);
         for (Member childMember : childMembers) {
             drilledSet.add(childMember);
         }

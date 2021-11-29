@@ -78,9 +78,7 @@ class DrilldownMemberFunDef extends FunDefBase {
                     Member member = tuple[k];
                     if (memberSet.contains(member)) {
                         List<Member> children =
-                            evaluator.getSchemaReader().getMemberChildren(
-                                member
-                                , evaluator);
+                            evaluator.getSchemaReader().getMemberChildren( member );
                         final Member[] tuple2 = tuple.clone();
                         for (Member childMember : children) {
                             tuple2[k] = childMember;

@@ -191,7 +191,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
                 "member.getLevel().getDepth() < targetLevel.getDepth()");
 
         for (;;) {
-            children = schemaReader.getMemberChildren(member, evaluator);
+            children = schemaReader.getMemberChildren(member);
 
             if (children.size() == 0) {
                 return targetLevel.getHierarchy().getNullMember();

@@ -246,7 +246,7 @@ class DescendantsFunDef extends FunDefBase {
         }
       }
 
-      children = schemaReader.getMemberChildren( children, context );
+      children = schemaReader.getMemberChildren( children );
       if ( children.size() == 0 ) {
         break;
       }
@@ -272,7 +272,7 @@ class DescendantsFunDef extends FunDefBase {
     List<Member> children = new ArrayList<Member>();
     children.add( member );
     for ( int depth = 0; depthLimit == -1 || depth <= depthLimit; ++depth ) {
-      children = schemaReader.getMemberChildren( children, evaluator );
+      children = schemaReader.getMemberChildren( children );
       if ( children.size() == 0 ) {
         throw Util.newInternal( "drillable member must have children" );
       }

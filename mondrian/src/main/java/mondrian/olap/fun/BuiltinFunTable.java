@@ -398,7 +398,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
             Member firstChild(Evaluator evaluator, Member member) {
                 List<Member> children = evaluator.getSchemaReader()
-                        .getMemberChildren(member, evaluator);
+                        .getMemberChildren(member);
                 return (children.size() == 0)
                         ? member.getHierarchy().getNullMember()
                         : children.get(0);
@@ -435,7 +435,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     children = schemaReader.getHierarchyRootMembers(
                         member.getHierarchy());
                 } else {
-                    children = schemaReader.getMemberChildren(parent, evaluator);
+                    children = schemaReader.getMemberChildren(parent);
                 }
                 return children.get(0);
             }
@@ -464,7 +464,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
             Member lastChild(Evaluator evaluator, Member member) {
                 List<Member> children =
-                        evaluator.getSchemaReader().getMemberChildren(member, evaluator);
+                        evaluator.getSchemaReader().getMemberChildren(member);
                 return (children.size() == 0)
                         ? member.getHierarchy().getNullMember()
                         : children.get(children.size() - 1);
@@ -501,7 +501,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     children = schemaReader.getHierarchyRootMembers(
                         member.getHierarchy());
                 } else {
-                    children = schemaReader.getMemberChildren(parent, evaluator);
+                    children = schemaReader.getMemberChildren(parent);
                 }
                 return children.get(children.size() - 1);
             }
@@ -1113,7 +1113,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     return schemaReader.getHierarchyRootMembers(
                         member.getHierarchy());
                 } else {
-                    return schemaReader.getMemberChildren(parent, evaluator);
+                    return schemaReader.getMemberChildren(parent);
                 }
             }
         });
