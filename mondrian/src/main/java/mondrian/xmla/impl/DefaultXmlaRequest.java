@@ -469,7 +469,7 @@ public class DefaultXmlaRequest
                     Util.newError(buf.toString()));
         }
         else {
-            command = commandElements[0].getNodeName();
+            command = commandElements[0].getLocalName();
             if(command != null && command.toUpperCase().equals("STATEMENT")) {
                 statement = XmlaUtil.textInElement(commandElements[0]).replaceAll("\\r", "");
                 drillthrough = statement.toUpperCase().indexOf("DRILLTHROUGH") != -1;
