@@ -40,7 +40,7 @@ public class AggregationManager extends RolapAggregationManager {
     private static final Logger LOGGER =
         Logger.getLogger(AggregationManager.class);
 
-    private final SegmentCacheManager cacheMgr;
+    public final SegmentCacheManager cacheMgr;
 
     private MondrianServer server;
 

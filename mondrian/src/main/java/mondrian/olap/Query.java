@@ -152,6 +152,20 @@ public class Query extends QueryPart {
   /**
    * Creates a Query.
    */
+  public Query( Statement statement, Formula[] formulas, QueryAxis[] axes, String cubeName, QueryAxis slicerAxis,
+                QueryPart[] cellProps, boolean strictValidation ) {
+      this(
+              statement,
+              Util.lookupCube( statement.getSchemaReader(), cubeName, true ),
+              formulas,
+              new Subcube(cubeName, null, new QueryAxis[] {}, null),
+              axes,
+              slicerAxis,
+              cellProps,
+              new Parameter[0],
+              strictValidation );
+  }
+
   public Query( Statement statement, Formula[] formulas, QueryAxis[] axes, Subcube subcube, QueryAxis slicerAxis,
       QueryPart[] cellProps, boolean strictValidation ) {
     this( statement, Util.lookupCube( statement.getSchemaReader(), subcube.getCubeName(), true ), formulas, subcube, axes, slicerAxis, cellProps,

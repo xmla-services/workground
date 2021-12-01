@@ -101,6 +101,13 @@ public class RolapCell implements Cell {
     }
 
     public String getDrillThroughSQL(
+            List<OlapElement> fields,
+            boolean extendedContext)
+    {
+        return getDrillThroughSQL(fields, extendedContext, 0);
+    }
+
+    public String getDrillThroughSQL(
         List<OlapElement> fields,
         boolean extendedContext,
         int maxRowCount)
