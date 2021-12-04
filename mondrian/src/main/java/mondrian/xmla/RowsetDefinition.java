@@ -3845,84 +3845,87 @@ TODO: see above
                 {
                     for (Cube cube : filter(sortedCubes(schema), cubeNameCond))
                     {
-                        String desc = cube.getDescription();
-                        if (desc == null) {
-                            desc =
-                                catalog.getName() + " Schema - "
-                                + cube.getName() + " Cube";
-                        }
+                        //Could also process  "Show Hidden Cubes" connection string setting
+                        if(cube.isVisible()) {
+                            String desc = cube.getDescription();
+                            if (desc == null) {
+                                desc =
+                                        catalog.getName() + " Schema - "
+                                                + cube.getName() + " Cube";
+                            }
 
-                        Row row = new Row();
-                        row.set(CatalogName.name, catalog.getName());
-                        row.set(SchemaName.name, schema.getName());
-                        row.set(CubeName.name, cube.getName());
-                        final XmlaHandler.XmlaExtra extra =
-                            getExtra(connection);
-                        row.set(CubeType.name, extra.getCubeType(cube));
-                        //row.set(CubeGuid.name, "");
-                        //row.set(CreatedOn.name, "");
-                        //row.set(SchemaUpdatedBy.name, "");
-                        //row.set(DataUpdatedBy.name, "");
-                        row.set(IsDrillthroughEnabled.name, true);
-                        row.set(IsWriteEnabled.name, false);
-                        row.set(IsLinkable.name, false);
-                        row.set(IsSqlEnabled.name, false);
-                        row.set(CubeCaption.name, cube.getCaption());
-                        row.set(Description.name, desc);
-                        row.set(CubeSource.name, 1);
-                        Format formatter =
-                            new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-                        String formattedDate =
-                            formatter.format(
-                                extra.getSchemaLoadDate(schema));
-                        row.set(LastSchemaUpdate.name, formattedDate);
-                        //It could be a last source update. Now it's just current time.
-                        formattedDate =
-                                formatter.format(new Date());
-                        row.set(LastDataUpdate.name, formattedDate);
-                        if (deep) {
-                            row.set(
-                                Dimensions.name,
-                                new MdschemaDimensionsRowset(
-                                    wrapRequest(
-                                        request,
-                                        Olap4jUtil.mapOf(
-                                            MdschemaDimensionsRowset
-                                                .CatalogName,
-                                            catalog.getName(),
-                                            MdschemaDimensionsRowset.SchemaName,
-                                            schema.getName(),
-                                            MdschemaDimensionsRowset.CubeName,
-                                            cube.getName())),
-                                    handler));
-                            row.set(
-                                Sets.name,
-                                new MdschemaSetsRowset(
-                                    wrapRequest(
-                                        request,
-                                        Olap4jUtil.mapOf(
-                                            MdschemaSetsRowset.CatalogName,
-                                            catalog.getName(),
-                                            MdschemaSetsRowset.SchemaName,
-                                            schema.getName(),
-                                            MdschemaSetsRowset.CubeName,
-                                            cube.getName())),
-                                    handler));
-                            row.set(
-                                Measures.name,
-                                new MdschemaMeasuresRowset(
-                                    wrapRequest(
-                                        request,
-                                        Olap4jUtil.mapOf(
-                                            MdschemaMeasuresRowset.CatalogName,
-                                            catalog.getName(),
-                                            MdschemaMeasuresRowset.SchemaName,
-                                            schema.getName(),
-                                            MdschemaMeasuresRowset.CubeName,
-                                            cube.getName())),
-                                    handler));
+                            Row row = new Row();
+                            row.set(CatalogName.name, catalog.getName());
+                            row.set(SchemaName.name, schema.getName());
+                            row.set(CubeName.name, cube.getName());
+                            final XmlaHandler.XmlaExtra extra =
+                                    getExtra(connection);
+                            row.set(CubeType.name, extra.getCubeType(cube));
+                            //row.set(CubeGuid.name, "");
+                            //row.set(CreatedOn.name, "");
+                            //row.set(SchemaUpdatedBy.name, "");
+                            //row.set(DataUpdatedBy.name, "");
+                            row.set(IsDrillthroughEnabled.name, true);
+                            row.set(IsWriteEnabled.name, false);
+                            row.set(IsLinkable.name, false);
+                            row.set(IsSqlEnabled.name, false);
+                            row.set(CubeCaption.name, cube.getCaption());
+                            row.set(Description.name, desc);
+                            row.set(CubeSource.name, 1);
+                            Format formatter =
+                                    new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+                            String formattedDate =
+                                    formatter.format(
+                                            extra.getSchemaLoadDate(schema));
+                            row.set(LastSchemaUpdate.name, formattedDate);
+                            //It could be a last source update. Now it's just current time.
+                            formattedDate =
+                                    formatter.format(new Date());
+                            row.set(LastDataUpdate.name, formattedDate);
+                            if (deep) {
+                                row.set(
+                                        Dimensions.name,
+                                        new MdschemaDimensionsRowset(
+                                                wrapRequest(
+                                                        request,
+                                                        Olap4jUtil.mapOf(
+                                                                MdschemaDimensionsRowset
+                                                                        .CatalogName,
+                                                                catalog.getName(),
+                                                                MdschemaDimensionsRowset.SchemaName,
+                                                                schema.getName(),
+                                                                MdschemaDimensionsRowset.CubeName,
+                                                                cube.getName())),
+                                                handler));
+                                row.set(
+                                        Sets.name,
+                                        new MdschemaSetsRowset(
+                                                wrapRequest(
+                                                        request,
+                                                        Olap4jUtil.mapOf(
+                                                                MdschemaSetsRowset.CatalogName,
+                                                                catalog.getName(),
+                                                                MdschemaSetsRowset.SchemaName,
+                                                                schema.getName(),
+                                                                MdschemaSetsRowset.CubeName,
+                                                                cube.getName())),
+                                                handler));
+                                row.set(
+                                        Measures.name,
+                                        new MdschemaMeasuresRowset(
+                                                wrapRequest(
+                                                        request,
+                                                        Olap4jUtil.mapOf(
+                                                                MdschemaMeasuresRowset.CatalogName,
+                                                                catalog.getName(),
+                                                                MdschemaMeasuresRowset.SchemaName,
+                                                                schema.getName(),
+                                                                MdschemaMeasuresRowset.CubeName,
+                                                                cube.getName())),
+                                                handler));
+                            }
+                            addRow(row, rows);
                         }
-                        addRow(row, rows);
                     }
                 }
             }
