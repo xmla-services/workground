@@ -793,7 +793,7 @@ public class Query extends QueryPart {
             }
         }
         if (subcube != null) {
-            pw.println("from ");
+            pw.print("from ");
             subcube.unparse(pw);
         }
         if (slicerAxis != null) {

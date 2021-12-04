@@ -74,7 +74,10 @@ public class TypeUtil {
             || type instanceof LevelType)
         {
             return MemberType.forType(type);
-        } else {
+        } else if(type instanceof TupleType && ((TupleType)type).getArity() == 1) {
+            return MemberType.forHierarchy(((TupleType)type).getHierarchies().get(0));
+        }
+        else {
             return null;
         }
     }
@@ -343,12 +346,14 @@ public class TypeUtil {
             case Category.Hierarchy:
             case Category.Level:
             case Category.Tuple:
-            case Category.Numeric:
                 conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
                 return true;
             case Category.Set:
-                    conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
-                    return true;
+                conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
+                return true;
+            case Category.Numeric:
+                conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
+                return true;
             case Category.Value:
             case Category.String:
                 // We assume that measures are numeric, so a cast to a string or
