@@ -389,11 +389,16 @@ RME is this right
 
                     // REVIEW jvs 20-Feb-2007:  What about caption?
 
-                    if (!level.getOrdinalExp().equals(level.getKeyExp())) {
-                        if (assignOrderKeys) {
+                    if(assignOrderKeys && level.getOrdinalExp() != null) {
+                        if (!level.getOrdinalExp().equals(level.getKeyExp())) {
                             Object orderKey = accessors.get(column).get();
                             setOrderKey((RolapMemberBase) member, orderKey);
                         }
+                        else {
+                            setOrderKey((RolapMemberBase) member, value);
+                        }
+                    }
+                    if (!level.getOrdinalExp().equals(level.getKeyExp())) {
                         column++;
                     }
 
@@ -1106,15 +1111,17 @@ RME is this right
         }
         Property[] properties = childLevel.getProperties();
         final List<SqlStatement.Accessor> accessors = stmt.getAccessors();
-        if (!childLevel.getOrdinalExp().equals(childLevel.getKeyExp())) {
-            if (assignOrderKeys) {
+        if(assignOrderKeys && childLevel.getOrdinalExp() != null) {
+            if (!childLevel.getOrdinalExp().equals(childLevel.getKeyExp())) {
                 Object orderKey = accessors.get(columnOffset).get();
                 setOrderKey(member, orderKey);
             }
-            ++columnOffset;
+            else {
+                setOrderKey(member, value);
+            }
         }
-        else {
-            setOrderKey(member, value);
+        if (!childLevel.getOrdinalExp().equals(childLevel.getKeyExp())) {
+            ++columnOffset;
         }
         for (int j = 0; j < properties.length; j++) {
             Property property = properties[j];
