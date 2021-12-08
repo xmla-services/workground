@@ -2170,7 +2170,6 @@ public class XmlaHandler {
             if(queryCellPropertyNames.size() == 0) {
                 queryCellPropertyNames.add("VALUE");
                 queryCellPropertyNames.add("FORMATTED_VALUE");
-                queryCellPropertyNames.add("CELL_ORDINAL");
             }
         }
 
@@ -2813,7 +2812,17 @@ public class XmlaHandler {
             int ordinal)
         {
             Cell cell = cellSet.getCell(pos);
-            if (MondrianProperties.instance().IgnoreEmptyCells.get() && ordinal != 0 && cell.isNull()) {
+
+            Boolean allPropertyIsEmpty = true;
+            for(String propertyName: this.queryCellPropertyNames) {
+                if(((mondrian.olap4j.MondrianOlap4jCell)cell).getRolapCell().getPropertyValue(propertyName) != null) {
+                    allPropertyIsEmpty = false;
+                    break;
+                }
+            }
+
+            if (cell.isNull() && allPropertyIsEmpty && ordinal != 0)
+            {
                 // Ignore null cell like MS AS, except for Oth ordinal
                 return;
             }

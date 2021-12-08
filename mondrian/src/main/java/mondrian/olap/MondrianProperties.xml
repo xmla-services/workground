@@ -868,16 +868,6 @@ limit on the number of rows returned by XML/A drill through request.
         <Default>1000</Default>
     </PropertyDefinition>
     <PropertyDefinition>
-        <Name>IgnoreEmptyCells</Name>
-        <Path>mondrian.xmla.ignoreEmptyCells</Path>
-        <Category>XML/A</Category>
-        <Description>
-            If true - empty cells will not be inserted in a XMLA CellSet.
-        </Description>
-        <Type>boolean</Type>
-        <Default>true</Default>
-    </PropertyDefinition>
-    <PropertyDefinition>
         <Name>MaxConstraints</Name>
         <Path>mondrian.rolap.maxConstraints</Path>
         <Category>SQL generation</Category>
