@@ -2813,7 +2813,7 @@ public class XmlaHandler {
             int ordinal)
         {
             Cell cell = cellSet.getCell(pos);
-            if (cell.isNull() && ordinal != 0) {
+            if (MondrianProperties.instance().IgnoreEmptyCells.get() && ordinal != 0 && cell.isNull()) {
                 // Ignore null cell like MS AS, except for Oth ordinal
                 return;
             }
