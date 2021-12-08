@@ -92,12 +92,19 @@ public class TypeUtil {
      * @return whether types are union-compatible
      */
     public static boolean isUnionCompatible(Type type1, Type type2) {
+        final MemberType memberType1 = toMemberType(type1);
+        final MemberType memberType2 = toMemberType(type2);
+        if(memberType1 != null && memberType2 != null ) {
+            final Hierarchy hierarchy1 = memberType1.getHierarchy();
+            final Hierarchy hierarchy2 = memberType2.getHierarchy();
+            return equal(hierarchy1, hierarchy2);
+        }
         if (type1 instanceof TupleType) {
             TupleType tupleType1 = (TupleType) type1;
             if (type2 instanceof TupleType) {
                 TupleType tupleType2 = (TupleType) type2;
                 if (tupleType1.elementTypes.length
-                    == tupleType2.elementTypes.length)
+                        == tupleType2.elementTypes.length)
                 {
                     for (int i = 0; i < tupleType1.elementTypes.length; i++) {
                         if (!isUnionCompatible(
@@ -111,19 +118,8 @@ public class TypeUtil {
                 }
             }
             return false;
-        } else {
-            final MemberType memberType1 = toMemberType(type1);
-            if (memberType1 == null) {
-                return false;
-            }
-            final MemberType memberType2 = toMemberType(type2);
-            if (memberType2 == null) {
-                return false;
-            }
-            final Hierarchy hierarchy1 = memberType1.getHierarchy();
-            final Hierarchy hierarchy2 = memberType2.getHierarchy();
-            return equal(hierarchy1, hierarchy2);
         }
+        return false;
     }
 
     /**
@@ -432,10 +428,10 @@ public class TypeUtil {
         case Category.Tuple:
             switch (to) {
             case Category.Numeric:
-                conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
+                conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
                 return true;
             case Category.Set:
-                conversions.add(new ConversionImpl(from, to, ordinal, 3, null));
+                conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
                 return true;
             case Category.String:
             case Category.Value:

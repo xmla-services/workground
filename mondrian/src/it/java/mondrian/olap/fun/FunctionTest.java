@@ -51,7 +51,7 @@ import java.util.concurrent.CancellationException;
 public class FunctionTest extends FoodMartTestCase {
 
   private static final Logger LOGGER = Logger.getLogger( FunctionTest.class );
-  private static final int NUM_EXPECTED_FUNCTIONS = 325;
+  private static final int NUM_EXPECTED_FUNCTIONS = 329;
 
   private static final String months =
     "[Time].[1997].[Q1].[1]\n"
@@ -10572,12 +10572,13 @@ Intel platforms):
         + "from [Sales]",
 
       // note that Subtotal - Bread only includes 2 displayed children
+      // in member with visual totals name is the same but caption is changed
       "Axis #0:\n"
         + "{}\n"
         + "Axis #1:\n"
         + "{[Measures].[Unit Sales]}\n"
         + "Axis #2:\n"
-        + "{[Product].[Food].[Baked Goods].[*Subtotal - Bread]}\n"
+        + "{[Product].[Food].[Baked Goods].[Bread]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Bagels]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Muffins]}\n"
         + "Row #0: 4,312\n"
@@ -10601,14 +10602,15 @@ Intel platforms):
       // Note that [Bagels] occurs 3 times, but only once does it
       // become a subtotal. Note that the subtotal does not include
       // the following [Bagels] member.
+      // in member with visual totals name is the same but caption is changed
       "Axis #0:\n"
         + "{}\n"
         + "Axis #1:\n"
         + "{[Measures].[Unit Sales]}\n"
         + "Axis #2:\n"
-        + "{[Product].[Food].[Baked Goods].[*Subtotal - Bread]}\n"
+        + "{[Product].[Food].[Baked Goods].[Bread]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Bagels]}\n"
-        + "{[Product].[Food].[Baked Goods].[Bread].[*Subtotal - Bagels]}\n"
+        + "{[Product].[Food].[Baked Goods].[Bread].[Bagels]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Bagels].[Colony]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Bagels]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Muffins]}\n"
@@ -10647,12 +10649,13 @@ Intel platforms):
 
       // Note that [*Subtotal - Bread] still contains the
       // contribution of [Bagels] 815, which was filtered out.
+      // in member with visual totals name is the same but caption is changed
       "Axis #0:\n"
         + "{}\n"
         + "Axis #1:\n"
         + "{[Measures].[Unit Sales]}\n"
         + "Axis #2:\n"
-        + "{[Product].[Food].[Baked Goods].[*Subtotal - Bread]}\n"
+        + "{[Product].[Food].[Baked Goods].[Bread]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Muffins]}\n"
         + "Row #0: 4,312\n"
         + "Row #1: 3,497\n" );
@@ -10673,12 +10676,13 @@ Intel platforms):
         + "from [Sales]",
 
       // Yields the same -- no extra total.
+      // in member with visual totals name is the same but caption is changed
       "Axis #0:\n"
         + "{}\n"
         + "Axis #1:\n"
         + "{[Measures].[Unit Sales]}\n"
         + "Axis #2:\n"
-        + "{[Product].[Food].[Baked Goods].[*Subtotal - Bread]}\n"
+        + "{[Product].[Food].[Baked Goods].[Bread]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Muffins]}\n"
         + "Row #0: 4,312\n"
         + "Row #1: 3,497\n" );
@@ -10701,7 +10705,7 @@ Intel platforms):
         + "Axis #1:\n"
         + "{[Measures].[Unit Sales]}\n"
         + "Axis #2:\n"
-        + "{[Product].[Food].[Baked Goods].[*Subtotal - Bread]}\n"
+        + "{[Product].[Food].[Baked Goods].[Bread]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Muffins]}\n"
         + "Row #0: 3,497\n"
         + "Row #1: 3,497\n" );
@@ -10725,7 +10729,7 @@ Intel platforms):
         + "{[Measures].[Unit Sales]}\n"
         + "Axis #2:\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Bagels]}\n"
-        + "{[Product].[Food].[Baked Goods].[*Subtotal - Bread]}\n"
+        + "{[Product].[Food].[Baked Goods].[Bread]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Muffins]}\n"
         + "Row #0: 815\n"
         + "Row #1: 3,497\n"
@@ -10756,10 +10760,10 @@ Intel platforms):
         + "Axis #1:\n"
         + "{[Measures].[Unit Sales]}\n"
         + "Axis #2:\n"
-        + "{[Product].[*Subtotal - Food]}\n"
-        + "{[Product].[Food].[Baked Goods].[*Subtotal - Bread]}\n"
+        + "{[Product].[Food]}\n"
+        + "{[Product].[Food].[Baked Goods].[Bread]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Bagels]}\n"
-        + "{[Product].[Food].[Frozen Foods].[*Subtotal - Breakfast Foods]}\n"
+        + "{[Product].[Food].[Frozen Foods].[Breakfast Foods]}\n"
         + "{[Product].[Food].[Frozen Foods].[Breakfast Foods].[Pancake Mix].[Golden]}\n"
         + "{[Product].[Food].[Frozen Foods].[Breakfast Foods].[Pancake Mix].[Big Time]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Muffins]}\n"
@@ -11249,7 +11253,8 @@ Intel platforms):
     assertEquals( "Bread", member1.getName() );
     assertEquals( "Product Category", member1.getLevel().getName() );
     final Member member2 = rowPos.get( 2 ).get( 0 );
-    assertEquals( "*Subtotal - Bread", member2.getName() );
+    assertEquals( "Bread", member2.getName() );
+    assertEquals( "*Subtotal - Bread", member2.getCaption() );
     assertEquals( "Product Category", member2.getLevel().getName() );
     final Member member3 = rowPos.get( 3 ).get( 0 );
     assertEquals( "Bagels", member3.getName() );
@@ -11287,7 +11292,7 @@ Intel platforms):
         + "Axis #2:\n"
         + "{[Product].[All Products]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread]}\n"
-        + "{[Product].[Food].[Baked Goods].[*Subtotal - Bread]}\n"
+        + "{[Product].[Food].[Baked Goods].[Bread]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Bagels]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Muffins]}\n"
         + "Row #0: 266,773\n"

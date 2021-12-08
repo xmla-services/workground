@@ -59,7 +59,14 @@ public class BetterExpCompiler extends AbstractExpCompiler {
             final MemberCalc memberCalc = (MemberCalc) calc;
             return new AbstractTupleCalc(exp, new Calc[] {memberCalc}) {
                 public Member[] evaluateTuple(Evaluator evaluator) {
-                    return new Member[] {memberCalc.evaluateMember(evaluator)};
+                    Member member = memberCalc.evaluateMember(evaluator);
+                    if(member == null) {
+                        //<Tuple>.Item(-1)
+                        return null;
+                    }
+                    else {
+                        return new Member[]{memberCalc.evaluateMember(evaluator)};
+                    }
                 }
             };
         } else {
