@@ -246,7 +246,11 @@ class DescendantsFunDef extends FunDefBase {
         }
       }
 
-      children = schemaReader.getMemberChildren( children );
+      if ( context.isNonEmpty() ) {
+        children = schemaReader.getMemberChildren( children, context );
+      } else {
+        children = schemaReader.getMemberChildren( children );
+      }
       if ( children.size() == 0 ) {
         break;
       }
