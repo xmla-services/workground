@@ -358,7 +358,7 @@ class DescendantsFunDef extends FunDefBase {
                     schemaReader.getMemberChildren( member, context );
             if ( childMembers.size() == 0 ) {
               // this member is a leaf -- add it
-              if ( currentDepth == levelDepth ) {
+              if ( currentDepth <= levelDepth ) {
                 result.add( member );
               }
             } else {

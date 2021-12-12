@@ -4636,10 +4636,10 @@ public class FunctionTest extends FoodMartTestCase {
   public void testDescendantsMLLeaves() {
     assertAxisReturns(
       "Descendants([Time].[1997], [Time].[Year], LEAVES)",
-      "" );
+      "[Time].[1997]" );
     assertAxisReturns(
       "Descendants([Time].[1997], [Time].[Quarter], LEAVES)",
-      "" );
+      "[Time].[1997].[Q1]\n" + "[Time].[1997].[Q2]\n" + "[Time].[1997].[Q3]\n" + "[Time].[1997].[Q4]" );
     assertAxisReturns(
       "Descendants([Time].[1997], [Time].[Month], LEAVES)",
       months );
@@ -4655,7 +4655,7 @@ public class FunctionTest extends FoodMartTestCase {
       getTestContext().withCube( "[Sales Ragged]" );
     raggedContext.assertAxisReturns(
       "Descendants([Store].[Israel], [Store].[Store City], leaves)",
-      "" );
+      "[Store].[Israel].[Israel].[Haifa]\n" + "[Store].[Israel].[Israel].[Tel Aviv]" );
 
     // all cities are leaves
     raggedContext.assertAxisReturns(
@@ -4667,13 +4667,19 @@ public class FunctionTest extends FoodMartTestCase {
     // a state, or Vatican, with is a country/state/city)
     raggedContext.assertAxisReturns(
       "Descendants([Geography], [Geography].[State], leaves)",
-      "" );
+      "[Geography].[Canada].[BC]\n" +
+              "[Geography].[Mexico].[DF]\n" +
+              "[Geography].[Mexico].[Guerrero]\n" +
+              "[Geography].[Mexico].[Jalisco]\n" +
+              "[Geography].[Mexico].[Veracruz]\n" +
+              "[Geography].[Mexico].[Yucatan]\n" +
+              "[Geography].[Mexico].[Zacatecas]\n" +
+              "[Geography].[USA].[CA]\n" +
+              "[Geography].[USA].[OR]\n" +
+              "[Geography].[USA].[WA]\n" +
+              "[Geography].[Vatican]"
+    );
 
-    // The Vatican is a nation with no children (they're all celibate,
-    // you know).
-    raggedContext.assertAxisReturns(
-      "Descendants([Geography], [Geography].[Country], leaves)",
-      "[Geography].[Vatican]" );
   }
 
   public void testDescendantsMNLeaves() {
