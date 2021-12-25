@@ -2382,6 +2382,7 @@ public enum RowsetDefinition {
             throws XmlaException, SQLException
         {
             //Don't need catNameCond() condition. Have to return all catalogs.
+            //Catalog in the properties has not filter DBSCHEMA_CATALOGS. Only if is set in restrictions.
             for (Catalog catalog
                 : catIter(connection, catalogNameCond))
             {
