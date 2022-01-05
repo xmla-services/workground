@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2003-2005 Julian Hyde
 // Copyright (C) 2005-2020 Hitachi Vantara and others
+// Copyright (C) 2022 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.olap.fun;
@@ -5238,12 +5239,6 @@ public class FunctionTest extends FoodMartTestCase {
       "" );
   }
 
-  public void testSetContainingLevelFails() {
-    assertAxisThrows(
-      "[Store].[Store City]",
-      "No function matches signature '{<Level>}'" );
-  }
-
   public void testBug715177() {
     assertQueryReturns(
       "WITH MEMBER [Product].[Non-Consumable].[Other] AS\n"
@@ -5694,11 +5689,6 @@ public class FunctionTest extends FoodMartTestCase {
     // can coerce hierarchy to member
     assertExprReturns(
       "([Gender].[M], " + TimeWeekly + ")", "135,215" );
-
-    // cannot coerce level to member
-    assertAxisThrows(
-      "{([Gender].[M], [Store].[Store City])}",
-      "No function matches signature '(<Member>, <Level>)'" );
 
     // coerce args (hierarchy, member, member, dimension)
     assertAxisReturns(

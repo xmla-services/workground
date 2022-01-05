@@ -6,7 +6,7 @@
 //
 // Copyright (C) 2005-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara
-// Copyright (C) 2021 Sergei Semenkov
+// Copyright (C) 2021-2022 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.olap.type;
@@ -324,6 +324,7 @@ public class TypeUtil {
                 conversions.add(new ConversionImpl(from, to, ordinal, 2, null));
                 return true;
             case Category.Hierarchy:
+            case Category.Set:
                 conversions.add(new ConversionImpl(from, to, ordinal, 1, null));
                 return true;
             default:

@@ -6,7 +6,7 @@
 //
 // Copyright (C) 2002-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara and others
-// Copyright (C) 2021 Sergei Semenkov
+// Copyright (C) 2021-2022 Sergei Semenkov
 // All Rights Reserved.
 */
 
@@ -156,6 +156,19 @@ public class SetFunDef extends FunDefBase {
 
                     protected String getName() {
                         return "Sublist";
+                    }
+                };
+            } else if (type instanceof mondrian.olap.type.LevelType) {
+                mondrian.mdx.UnresolvedFunCall unresolvedFunCall = new mondrian.mdx.UnresolvedFunCall(
+                        "Members",
+                        mondrian.olap.Syntax.Property,
+                        new Exp[] {arg});
+                final ListCalc listCalc = compiler.compileList(unresolvedFunCall.accept(compiler.getValidator()));
+                return new AbstractVoidCalc(arg, new Calc[] {listCalc}) {
+                    public void evaluateVoid(Evaluator evaluator) {
+                        TupleList list =
+                                listCalc.evaluateList(evaluator);
+                        result = list;
                     }
                 };
             } else if (type.getArity() == 1 && arg instanceof MemberType) {
