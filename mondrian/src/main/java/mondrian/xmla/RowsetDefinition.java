@@ -2386,7 +2386,6 @@ public enum RowsetDefinition {
                 XmlaResponse response, OlapConnection connection, List<Row> rows)
                 throws XmlaException
         {
-            //MondrianServer mondrianServer = MondrianServer.forId(null);
             for (Catalog catalog
                     : catIter(connection, catalogNameCond)) {
                 String catalogStr;

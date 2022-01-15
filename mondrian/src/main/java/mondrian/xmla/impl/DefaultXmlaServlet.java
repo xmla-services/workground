@@ -776,11 +776,10 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
             //code must be unsigned type
             //HSH_UNKNOWN_CODE
             switch (code) {
-                case  ("00HSBE02"):
-                    code = "3238789130"; // The connection either timed out or was lost.
-                    break;
-                case ("00HSHU01"):
-                    code = "3238789130"; // The connection either timed out or was lost.
+                case  ("00HSBE02"): // The connection either timed out or was lost.
+                case ("00HSHU01"): // The connection either timed out or was lost.
+                case ("0xc10c000a"): // Session with id  does not exist
+                    code = "3238789130";
                     break;
                 default:
                     code = "3238658121";
