@@ -34,6 +34,7 @@ import org.olap4j.metadata.Property;
 import org.olap4j.metadata.Schema;
 import org.olap4j.metadata.XmlaConstants;
 
+import java.io.IOException;
 import java.lang.reflect.*;
 import java.sql.SQLException;
 import java.text.Format;
@@ -302,6 +303,31 @@ public enum RowsetDefinition {
             return new DiscoverLiteralsRowset(request, handler);
         }
     },
+
+    /**
+     *
+     *
+     *
+     * restrictions
+     *
+     * Not supported
+     */
+    DISCOVER_XML_METADATA(
+        23,
+        "3444B255-171E-4CB9-AD98-19E57888A75F",
+        "Returns an XML document describing a requested object. " +
+                "The rowset that is returned always consists of one row and one column.",
+        new Column[] {
+                DiscoverXmlMetadataRowset.METADATA,
+                // Restrictions
+                DiscoverXmlMetadataRowset.DatabaseID,
+        },
+        null /* not sorted */)
+        {
+            public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
+                return new DiscoverXmlMetadataRowset(request, handler);
+            }
+        },
 
     /**
      *
@@ -2328,6 +2354,68 @@ public enum RowsetDefinition {
                 break;
             default:
                 super.setProperty(propertyDef, value);
+            }
+        }
+    }
+
+    static class DiscoverXmlMetadataRowset extends Rowset {
+        private final Util.Functor1<Boolean, Catalog> catalogNameCond;
+
+        DiscoverXmlMetadataRowset(XmlaRequest request, XmlaHandler handler) {
+            super(DISCOVER_XML_METADATA, request, handler);
+            catalogNameCond = makeCondition(CATALOG_NAME_GETTER, DatabaseID);
+        }
+
+        private static final Column METADATA = new Column(
+                "METADATA",
+                Type.String,
+                null,
+                Column.NOT_RESTRICTION,
+                Column.REQUIRED,
+                "An XML document that describes the object requested by the restriction.");
+
+        private static final Column DatabaseID = new Column(
+                "DatabaseID",
+                Type.String,
+                null,
+                Column.RESTRICTION,
+                Column.OPTIONAL,
+                null);
+
+        public void populateImpl(
+                XmlaResponse response, OlapConnection connection, List<Row> rows)
+                throws XmlaException
+        {
+            //MondrianServer mondrianServer = MondrianServer.forId(null);
+            for (Catalog catalog
+                    : catIter(connection, catalogNameCond)) {
+                String catalogStr;
+                try {
+                    final String catalogUrl = ((mondrian.olap4j.MondrianOlap4jConnection)connection)
+                            .getMondrianConnection().getCatalogName();
+                    catalogStr = Util.readVirtualFileAsString(catalogUrl);
+                } catch (OlapException e) {
+                    throw new RuntimeException(e);
+                }
+                catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                Row row = new Row();
+                row.set(METADATA.name, catalogStr);
+                addRow(row, rows);
+                break;
+            }
+        }
+
+        protected void setProperty(
+                PropertyDefinition propertyDef,
+                String value)
+        {
+            switch (propertyDef) {
+                case Content:
+                    break;
+                default:
+                    super.setProperty(propertyDef, value);
             }
         }
     }
