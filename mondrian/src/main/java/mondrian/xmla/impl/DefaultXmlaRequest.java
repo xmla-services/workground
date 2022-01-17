@@ -6,7 +6,7 @@
 *
 * Copyright (c) 2002-2017 Hitachi Vantara.
 * Copyright (C) 2019 Topsoft
-* Copyright (C) 2021 Sergei Semenkov
+* Copyright (C) 2021-2022 Sergei Semenkov
 * All rights reserved.
 */
 
@@ -46,6 +46,10 @@ public class DefaultXmlaRequest
     private boolean drillthrough;
     private String command;
     private Map<String, String> parameters = Collections.unmodifiableMap(new HashMap<String, String>());
+
+    /* EXECUTE ALTER content */
+    private ServerObject serverObject;
+    private String objectDefinition;
 
     /* DISCOVER contnet */
     private String requestType;
@@ -133,6 +137,15 @@ public class DefaultXmlaRequest
         }
         return drillthrough;
     }
+
+    public ServerObject getServerObject() {
+        return this.serverObject;
+    }
+
+    public String getObjectDefinition() {
+        return this.objectDefinition;
+    }
+
 
 
     protected final void init(Element xmlaRoot) throws XmlaException {
@@ -473,6 +486,69 @@ public class DefaultXmlaRequest
             if(command != null && command.toUpperCase().equals("STATEMENT")) {
                 statement = XmlaUtil.textInElement(commandElements[0]).replaceAll("\\r", "");
                 drillthrough = statement.toUpperCase().indexOf("DRILLTHROUGH") != -1;
+            }
+            else if(command != null && command.toUpperCase().equals("ALTER")) {
+                Element[] objectElements =
+                        XmlaUtil.filterChildElements(
+                                commandElements[0],
+                                null,
+                                "Object");
+                if(objectElements.length > 1 ) {
+                    StringBuilder buf = new StringBuilder(100);
+                    buf.append(MSG_INVALID_XMLA);
+                    buf.append(": Wrong number of Objects elements: ");
+                    buf.append(objectElements.length);
+                    throw new XmlaException(
+                            CLIENT_FAULT_FC,
+                            HSB_BAD_PROPERTIES_LIST_CODE,
+                            HSB_BAD_PROPERTIES_LIST_FAULT_FS,
+                            Util.newError(buf.toString()));
+                }
+                if(objectElements.length > 0) {
+                    String databaseId = null;
+
+                    Element[] databaseIdElements =
+                            XmlaUtil.filterChildElements(
+                                    objectElements[0],
+                                    null,
+                                    "DatabaseID");
+
+                    if(databaseIdElements.length > 1 ) {
+                        StringBuilder buf = new StringBuilder(100);
+                        buf.append(MSG_INVALID_XMLA);
+                        buf.append(": Wrong number of DatabaseID elements: ");
+                        buf.append(databaseIdElements.length);
+                        throw new XmlaException(
+                                CLIENT_FAULT_FC,
+                                HSB_BAD_PROPERTIES_LIST_CODE,
+                                HSB_BAD_PROPERTIES_LIST_FAULT_FS,
+                                Util.newError(buf.toString()));
+                    }
+                    if(databaseIdElements.length > 0 ) {
+                        databaseId = XmlaUtil.textInElement(databaseIdElements[0]).replaceAll("\\r", "");
+                    }
+
+                    this.serverObject = new ServerObject(databaseId);
+                }
+                Element[] objectDefinitionElements =
+                        XmlaUtil.filterChildElements(
+                                commandElements[0],
+                                null,
+                                "ObjectDefinition");
+                if(objectDefinitionElements.length > 1 ) {
+                    StringBuilder buf = new StringBuilder(100);
+                    buf.append(MSG_INVALID_XMLA);
+                    buf.append(": Wrong number of ObjectDefinition elements: ");
+                    buf.append(objectDefinitionElements.length);
+                    throw new XmlaException(
+                            CLIENT_FAULT_FC,
+                            HSB_BAD_PROPERTIES_LIST_CODE,
+                            HSB_BAD_PROPERTIES_LIST_FAULT_FS,
+                            Util.newError(buf.toString()));
+                }
+                if(objectDefinitionElements.length > 0 ) {
+                    this.objectDefinition = XmlaUtil.textInElement(objectDefinitionElements[0]);
+                }
             }
             else if(command != null && command.toUpperCase().equals("CANCEL")) {
                 ;

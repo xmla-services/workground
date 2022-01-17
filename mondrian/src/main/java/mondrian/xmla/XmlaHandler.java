@@ -7,7 +7,7 @@
 // Copyright (C) 2003-2005 Julian Hyde
 // Copyright (C) 2005-2018 Hitachi Vantara
 // Copyright (C) 2019 Topsoft
-// Copyright (C) 2020-2021 Sergei Semenkov
+// Copyright (C) 2020-2022 Sergei Semenkov
 
 // All Rights Reserved.
 */
@@ -820,6 +820,41 @@ public class XmlaHandler {
                         "3238658121",
                         USM_DOM_PARSE_FAULT_FS,
                         oe);
+            }
+        }
+        else if(defaultXmlaRequest.getCommand().toUpperCase().equals("ALTER")) {
+            final ServerObject serverObject = ((mondrian.xmla.impl.DefaultXmlaRequest)request).getServerObject();
+            if(serverObject != null) {
+                final OlapConnection connection1 = getConnection(null, serverObject.getDatabaseID(), null);
+                try {
+                    final mondrian.rolap.RolapConnection rolapConnection1 =
+                            ((mondrian.olap4j.MondrianOlap4jConnection) connection1).getMondrianConnection();
+                    final String catalogUrl = rolapConnection1.getCatalogName();
+                    String filePath = java.net.URI.create(catalogUrl).getPath();
+                    java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(filePath));
+                    final String objectDefinition = ((mondrian.xmla.impl.DefaultXmlaRequest) request).getObjectDefinition();
+                    try {
+                        out.write(objectDefinition);
+                    }
+                    finally
+                    {
+                        out.close();
+                    }
+                } catch (org.olap4j.OlapException oe) {
+                    throw new XmlaException(
+                            CLIENT_FAULT_FC,
+                            "3238658121",
+                            USM_DOM_PARSE_FAULT_FS,
+                            oe);
+                }
+                catch (java.io.IOException e)
+                {
+                    throw new XmlaException(
+                            CLIENT_FAULT_FC,
+                            "3238658121",
+                            USM_DOM_PARSE_FAULT_FS,
+                            e);
+                }
             }
         }
 
