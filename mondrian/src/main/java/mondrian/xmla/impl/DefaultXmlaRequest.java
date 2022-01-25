@@ -15,7 +15,8 @@ package mondrian.xmla.impl;
 import mondrian.olap.Util;
 import mondrian.xmla.*;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import org.w3c.dom.*;
 
@@ -32,7 +33,7 @@ public class DefaultXmlaRequest
     implements XmlaRequest, XmlaConstants
 {
     private static final Logger LOGGER =
-        Logger.getLogger(DefaultXmlaRequest.class);
+        LogManager.getLogger(DefaultXmlaRequest.class);
 
     private static final String MSG_INVALID_XMLA = "Invalid XML/A message";
 

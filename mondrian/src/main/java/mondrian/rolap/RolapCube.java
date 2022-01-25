@@ -25,7 +25,8 @@ import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.spi.CellFormatter;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import org.eigenbase.xom.*;
 import org.eigenbase.xom.Parser;
@@ -43,7 +44,7 @@ import java.util.*;
  */
 public class RolapCube extends CubeBase {
 
-    private static final Logger LOGGER = Logger.getLogger(RolapCube.class);
+    private static final Logger LOGGER = LogManager.getLogger(RolapCube.class);
 
     private final RolapSchema schema;
     private final Map<String, Annotation> annotationMap;
