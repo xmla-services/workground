@@ -1581,7 +1581,7 @@ public enum RowsetDefinition {
         {
             this(
                     name, type, enumeratedType,
-                    restriction, 0, nullable, ONE_MAX, description);
+                    restriction, 0, nullable, unbounded, description);
         }
 
         Column(
