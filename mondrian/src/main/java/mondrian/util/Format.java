@@ -308,7 +308,7 @@ public class Format {
         }
 
         void formatNull(StringBuilder buf) {
-            if (formats.length >= 4) {
+            if (formats.length >= 4 && formats[3] != null) {
                 formats[3].format(0, buf);
             } else {
                 super.formatNull(buf);
