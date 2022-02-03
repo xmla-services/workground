@@ -20,6 +20,7 @@ import mondrian.olap.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 
 /**
  * Definition of the <code>DrilldownLevel</code> MDX function.
@@ -42,7 +43,7 @@ class DrilldownLevelFunDef extends FunDefBase {
                     "DrilldownLevel",
                     "DrilldownLevel(<Set>[, <Level>]) or DrilldownLevel(<Set>, , <Index>)",
                     "Drills down the members of a set, at a specified level, to one level below. Alternatively, drills down on a specified dimension in the set.",
-                    new String[]{"fxx", "fxxl", "fxxen", "fxxeey"},
+                    new String[]{"fxx", "fxxl", "fxxen", "fxxeny", "fxxeey"},
                     DrilldownLevelFunDef.class,
                     new String[]{INCLUDE_CALC_MEMBERS});
 
@@ -100,6 +101,10 @@ class DrilldownLevelFunDef extends FunDefBase {
                     if (index < 0 || index >= arity) {
                         return list;
                     }
+                    HashMap<Member,List<Member>> calcMembersByParent = getCalcMembersByParent(
+                            list.get(0).get(index).getHierarchy(),
+                            evaluator,
+                            includeCalcMembers);
                     TupleList result = TupleCollections.createList(arity);
                     final SchemaReader schemaReader =
                             evaluator.getSchemaReader();
@@ -113,6 +118,14 @@ class DrilldownLevelFunDef extends FunDefBase {
                             tupleClone[index] = child;
                             result.addTuple(tupleClone);
                         }
+                        List<Member> childrenCalcMembers = calcMembersByParent.get(tuple.get(index));
+                        if(childrenCalcMembers != null) {
+                            for (Member childMember : childrenCalcMembers) {
+                                tuple.toArray(tupleClone);
+                                tupleClone[index] = childMember;
+                                result.addTuple(tupleClone);
+                            }
+                        }
                     }
                     return result;
                 }
@@ -120,18 +133,17 @@ class DrilldownLevelFunDef extends FunDefBase {
         }
     }
 
-    List<Member> drill(int searchDepth, List<Member> list, Evaluator evaluator, boolean includeCalcMembers)
-    {
+    HashMap<Member,List<Member>> getCalcMembersByParent(Hierarchy hierarchy, Evaluator evaluator, boolean includeCalcMembers) {
         List<Member> calculatedMembers;
         if(includeCalcMembers) {
             final SchemaReader schemaReader =
                     evaluator.getSchemaReader();
-            calculatedMembers = schemaReader.getCalculatedMembers(list.get(0).getHierarchy());
+            calculatedMembers = schemaReader.getCalculatedMembers(hierarchy);
         }
         else {
             calculatedMembers = new ArrayList<Member>();
         }
-        java.util.HashMap<Member,List<Member>> calcMembersByParent = new java.util.HashMap<Member,List<Member>>();
+        HashMap<Member,List<Member>> calcMembersByParent = new HashMap<Member,List<Member>>();
         for(Member member: calculatedMembers) {
             if(member.getParentMember() != null) {
                 List<Member> children = calcMembersByParent.get(member.getParentMember());
@@ -142,6 +154,15 @@ class DrilldownLevelFunDef extends FunDefBase {
                 children.add(member);
             }
         }
+        return calcMembersByParent;
+    }
+
+    List<Member> drill(int searchDepth, List<Member> list, Evaluator evaluator, boolean includeCalcMembers)
+    {
+        HashMap<Member,List<Member>> calcMembersByParent = getCalcMembersByParent(
+                list.get(0).getHierarchy(),
+                evaluator,
+                includeCalcMembers);
 
         if (searchDepth == -1) {
             searchDepth = list.get(0).getLevel().getDepth();
