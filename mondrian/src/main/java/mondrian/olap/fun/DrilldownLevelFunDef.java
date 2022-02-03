@@ -1,14 +1,14 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..
-* Copyright (C) 2021 Sergei Semenkov
-*
-* All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..
+ * Copyright (C) 2021 Sergei Semenkov
+ *
+ * All rights reserved.
+ */
 
 package mondrian.olap.fun;
 
@@ -35,14 +35,16 @@ import java.util.List;
  * @since Mar 23, 2006
  */
 class DrilldownLevelFunDef extends FunDefBase {
+    public static String INCLUDE_CALC_MEMBERS = "INCLUDE_CALC_MEMBERS";
+
     static final ReflectiveMultiResolver Resolver =
-        new ReflectiveMultiResolver(
-            "DrilldownLevel",
-            "DrilldownLevel(<Set>[, <Level>]) or DrilldownLevel(<Set>, , <Index>)",
-            "Drills down the members of a set, at a specified level, to one level below. Alternatively, drills down on a specified dimension in the set.",
-            new String[]{"fxx", "fxxl", "fxxen", "fxxeey"},
-            DrilldownLevelFunDef.class,
-            new String[]{"INCLUDE_CALC_MEMBERS"});
+            new ReflectiveMultiResolver(
+                    "DrilldownLevel",
+                    "DrilldownLevel(<Set>[, <Level>]) or DrilldownLevel(<Set>, , <Index>)",
+                    "Drills down the members of a set, at a specified level, to one level below. Alternatively, drills down on a specified dimension in the set.",
+                    new String[]{"fxx", "fxxl", "fxxen", "fxxeey"},
+                    DrilldownLevelFunDef.class,
+                    new String[]{INCLUDE_CALC_MEMBERS});
 
     public DrilldownLevelFunDef(FunDef dummyFunDef) {
         super(dummyFunDef);
@@ -58,10 +60,17 @@ class DrilldownLevelFunDef extends FunDefBase {
                 ? compiler.compileLevel(call.getArg(1))
                 : null;
         final IntegerCalc indexCalc =
-            call.getArgCount() == 3
+            call.getArgCount() > 2
+                && call.getArg(2) != null
+                && !(call.getArg(2).getType() instanceof mondrian.olap.type.EmptyType)
                 ? compiler.compileInteger(call.getArg(2))
                 : null;
         final int arity = listCalc.getType().getArity();
+        final boolean includeCalcMembers =
+            call.getArgCount() == 4
+                && call.getArg(3) != null
+                && call.getArg(3) instanceof Literal
+                && INCLUDE_CALC_MEMBERS.equals(((Literal)call.getArg(3)).getValue());
         if (indexCalc == null) {
             return new AbstractListCalc(call, new Calc[] {listCalc, levelCalc})
             {
@@ -76,7 +85,7 @@ class DrilldownLevelFunDef extends FunDefBase {
                         searchDepth = level.getDepth();
                     }
                     return new UnaryTupleList(
-                        drill(searchDepth, list.slice(0), evaluator));
+                        drill(searchDepth, list.slice(0), evaluator, includeCalcMembers));
                 }
             };
         } else {
@@ -93,12 +102,12 @@ class DrilldownLevelFunDef extends FunDefBase {
                     }
                     TupleList result = TupleCollections.createList(arity);
                     final SchemaReader schemaReader =
-                        evaluator.getSchemaReader();
+                            evaluator.getSchemaReader();
                     final Member[] tupleClone = new Member[arity];
                     for (List<Member> tuple : list) {
                         result.add(tuple);
                         final List<Member> children =
-                            schemaReader.getMemberChildren(tuple.get(index));
+                                schemaReader.getMemberChildren(tuple.get(index));
                         for (Member child : children) {
                             tuple.toArray(tupleClone);
                             tupleClone[index] = child;
@@ -111,8 +120,29 @@ class DrilldownLevelFunDef extends FunDefBase {
         }
     }
 
-    List<Member> drill(int searchDepth, List<Member> list, Evaluator evaluator)
+    List<Member> drill(int searchDepth, List<Member> list, Evaluator evaluator, boolean includeCalcMembers)
     {
+        List<Member> calculatedMembers;
+        if(includeCalcMembers) {
+            final SchemaReader schemaReader =
+                    evaluator.getSchemaReader();
+            calculatedMembers = schemaReader.getCalculatedMembers(list.get(0).getHierarchy());
+        }
+        else {
+            calculatedMembers = new ArrayList<Member>();
+        }
+        java.util.HashMap<Member,List<Member>> calcMembersByParent = new java.util.HashMap<Member,List<Member>>();
+        for(Member member: calculatedMembers) {
+            if(member.getParentMember() != null) {
+                List<Member> children = calcMembersByParent.get(member.getParentMember());
+                if(children == null) {
+                    children = new ArrayList<Member>();
+                    calcMembersByParent.put(member.getParentMember(), children);
+                }
+                children.add(member);
+            }
+        }
+
         if (searchDepth == -1) {
             searchDepth = list.get(0).getLevel().getDepth();
 
@@ -151,11 +181,21 @@ class DrilldownLevelFunDef extends FunDefBase {
                 parentMembers.add(member);
             }
         }
-        final List<Member> childMembers =
-                evaluator.getSchemaReader().getMemberChildren(parentMembers);
-        for (Member childMember : childMembers) {
-            drilledSet.add(childMember);
+
+        for(Member parentMember: parentMembers) {
+            List<Member> childMembers =
+                    evaluator.getSchemaReader().getMemberChildren(parentMember);
+            for (Member childMember : childMembers) {
+                drilledSet.add(childMember);
+            }
+            List<Member> childrenCalcMembers = calcMembersByParent.get(parentMember);
+            if(childrenCalcMembers != null) {
+                for (Member childMember : childrenCalcMembers) {
+                    drilledSet.add(childMember);
+                }
+            }
         }
+
         return drilledSet;
     }
 }
