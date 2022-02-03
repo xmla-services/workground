@@ -205,7 +205,7 @@ public class RolapSchema implements Schema {
      * @param catalogStr may be null
      * @param connectInfo Connection properties
      */
-    RolapSchema(
+    public RolapSchema(
         SchemaKey key,
         ByteString md5Bytes,
         String catalogUrl,

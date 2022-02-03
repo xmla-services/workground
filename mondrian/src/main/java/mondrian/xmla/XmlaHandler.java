@@ -33,6 +33,8 @@ import mondrian.olap.DmvQuery;
 
 import mondrian.server.Session;
 
+import org.eigenbase.xom.Parser;
+import org.eigenbase.xom.XOMUtil;
 import org.olap4j.*;
 import org.olap4j.impl.Olap4jUtil;
 import org.olap4j.metadata.*;
@@ -830,9 +832,21 @@ public class XmlaHandler {
                     final mondrian.rolap.RolapConnection rolapConnection1 =
                             ((mondrian.olap4j.MondrianOlap4jConnection) connection1).getMondrianConnection();
                     final String catalogUrl = rolapConnection1.getCatalogName();
+                    final String objectDefinition = ((mondrian.xmla.impl.DefaultXmlaRequest) request).getObjectDefinition();
+
+                    //Try to create a schema to check xml.
+                    mondrian.rolap.RolapSchema prevSchema = rolapConnection1.getSchema();
+                    mondrian.rolap.RolapSchema rolapSchema = new mondrian.rolap.RolapSchema(
+                            prevSchema.getKey(),
+                            null,
+                            catalogUrl,
+                            objectDefinition,
+                            rolapConnection1.getConnectInfo(),
+                            null
+                    );
+
                     String filePath = java.net.URI.create(catalogUrl).getPath();
                     java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(filePath));
-                    final String objectDefinition = ((mondrian.xmla.impl.DefaultXmlaRequest) request).getObjectDefinition();
                     try {
                         out.write(objectDefinition);
                     }
