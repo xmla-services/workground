@@ -292,6 +292,15 @@ public enum PropertyDefinition {
 //            ""),
 
     // Microsoft-specific XMLA definition.
+    SspropInitAppName(
+            RowsetDefinition.Type.String,
+            null,
+            XmlaConstants.Access.ReadWrite,
+            "",
+            XmlaConstants.Method.DISCOVER_AND_EXECUTE,
+            "The name of the client application."),
+
+    // Microsoft-specific XMLA definition.
     DbpropMsmdSubqueries(
             RowsetDefinition.Type.Integer,
             null,
