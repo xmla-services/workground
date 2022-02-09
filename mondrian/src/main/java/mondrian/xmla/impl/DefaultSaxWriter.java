@@ -5,7 +5,7 @@
 * You must accept the terms of that agreement to use this software.
 *
 * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-* Copyright (c) 2021 Sergei Semenkov
+* Copyright (c) 2021-2022 Sergei Semenkov
 * All rights reserved.
 */
 
@@ -192,15 +192,10 @@ public class DefaultSaxWriter implements SaxWriter {
     public final void textElement(String name, Object data) {
         startElement(name);
 
-        // Replace line endings with spaces. IBM's DOM implementation keeps
-        // line endings, whereas Sun's does not. For consistency, always strip
-        // them.
-        //
-        // REVIEW: It would be better to enclose in CDATA, but some clients
-        // might not be expecting this.
         characters(
-            nlPattern.matcher(data.toString())
-                .replaceAll(" "));
+            //nlPattern.matcher(data.toString()).replaceAll(" ")
+                data.toString()
+                );
         endElement();
     }
 
