@@ -7,7 +7,7 @@
 // Copyright (C) 2003-2005 Julian Hyde
 // Copyright (C) 2005-2018 Hitachi Vantara
 // Copyright (C) 2019 Topsoft
-// Copyright (C) 2020 - 2021 Sergei Semenkov
+// Copyright (C) 2020 - 2022 Sergei Semenkov
 // All Rights Reserved.
 */
 
@@ -485,6 +485,26 @@ public enum RowsetDefinition {
         }
     },
 
+//    DBSCHEMA_SOURCE_TABLES(
+//            9, "8c3f5858-2742-4976-9d65-eb4d493c693e", null,
+//            new Column[] {
+//                    DbschemaSourceTablesRowset.TableCatalog,
+//                    DbschemaSourceTablesRowset.TableSchema,
+//                    DbschemaSourceTablesRowset.TableName,
+//                    DbschemaSourceTablesRowset.TableType,
+//            },
+//            new Column[] {
+//                    DbschemaSourceTablesRowset.TableCatalog,
+//                    DbschemaSourceTablesRowset.TableSchema,
+//                    DbschemaSourceTablesRowset.TableName,
+//                    DbschemaSourceTablesRowset.TableType,
+//            })
+//            {
+//                public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
+//                    return new DbschemaSourceTablesRowset(request, handler);
+//                }
+//            },
+//
     /**
      * http://msdn.microsoft.com/library/en-us/oledb/htm/
      * oledbtables_info_rowset.asp
@@ -3482,6 +3502,90 @@ TODO: see above
         }
     }
 
+//    static class DbschemaSourceTablesRowset extends Rowset {
+//        DbschemaSourceTablesRowset(XmlaRequest request, XmlaHandler handler) {
+//            super(DBSCHEMA_SOURCE_TABLES, request, handler);
+//        }
+//
+//        private static final Column TableCatalog =
+//                new Column(
+//                        "TABLE_CATALOG",
+//                        Type.String,
+//                        null,
+//                        Column.RESTRICTION,
+//                        Column.OPTIONAL,
+//                        "Catalog name. NULL if the provider does not support "
+//                                + "catalogs.");
+//        private static final Column TableSchema =
+//                new Column(
+//                        "TABLE_SCHEMA",
+//                        Type.String,
+//                        null,
+//                        Column.RESTRICTION,
+//                        Column.OPTIONAL,
+//                        "Unqualified schema name. NULL if the provider does not "
+//                                + "support schemas.");
+//        private static final Column TableName =
+//                new Column(
+//                        "TABLE_NAME",
+//                        Type.String,
+//                        null,
+//                        Column.RESTRICTION,
+//                        Column.REQUIRED,
+//                        "Table name.");
+//        private static final Column TableType =
+//                new Column(
+//                        "TABLE_TYPE",
+//                        Type.String,
+//                        null,
+//                        Column.RESTRICTION,
+//                        Column.REQUIRED,
+//                        "Table type. One of the following or a provider-specific "
+//                                + "value: ALIAS, TABLE, SYNONYM, SYSTEM TABLE, VIEW, GLOBAL "
+//                                + "TEMPORARY, LOCAL TEMPORARY, EXTERNAL TABLE, SYSTEM VIEW");
+//
+//        public void populateImpl(
+//                XmlaResponse response,
+//                OlapConnection connection,
+//                List<Row> rows)
+//                throws XmlaException, OlapException, SQLException
+//        {
+//            mondrian.rolap.RolapConnection rolapConnection =
+//                    (mondrian.rolap.RolapConnection)
+//                            ((mondrian.olap4j.MondrianOlap4jConnection)connection).getMondrianConnection();
+//            java.sql.Connection sqlConnection = rolapConnection.getDataSource().getConnection();
+//            java.sql.DatabaseMetaData databaseMetaData = sqlConnection.getMetaData();
+//            java.sql.ResultSet resultSet = databaseMetaData.getTables(null, null, null, null);
+////            java.sql.ResultSet resultSet = databaseMetaData.getTables(null, null, null, new String[]{"TABLE"});
+//            while(resultSet.next()) {
+//                String tableName = resultSet.getString("TABLE_NAME");
+//                String remarks = resultSet.getString("REMARKS");
+//
+//                Row row = new Row();
+//                row.set(TableName.name, tableName);
+//                row.set(TableType.name, "TABLE");
+//                row.set(Bookmarks.name, false);
+//                row.set(TableVersion.name, "");
+//                row.set(Cardinality.name, "");
+//                row.set(Description.name, "");
+//                addRow(row, rows);
+//            }
+//        }
+//
+//        protected void setProperty(
+//                PropertyDefinition propertyDef,
+//                String value)
+//        {
+//            switch (propertyDef) {
+//                case Content:
+//                    break;
+//                default:
+//                    super.setProperty(propertyDef, value);
+//            }
+//        }
+//    }
+//
+//
     // TODO: Is this needed????
     static class DbschemaTablesInfoRowset extends Rowset {
         DbschemaTablesInfoRowset(XmlaRequest request, XmlaHandler handler) {
