@@ -485,26 +485,26 @@ public enum RowsetDefinition {
         }
     },
 
-//    DBSCHEMA_SOURCE_TABLES(
-//            9, "8c3f5858-2742-4976-9d65-eb4d493c693e", null,
-//            new Column[] {
-//                    DbschemaSourceTablesRowset.TableCatalog,
-//                    DbschemaSourceTablesRowset.TableSchema,
-//                    DbschemaSourceTablesRowset.TableName,
-//                    DbschemaSourceTablesRowset.TableType,
-//            },
-//            new Column[] {
-//                    DbschemaSourceTablesRowset.TableCatalog,
-//                    DbschemaSourceTablesRowset.TableSchema,
-//                    DbschemaSourceTablesRowset.TableName,
-//                    DbschemaSourceTablesRowset.TableType,
-//            })
-//            {
-//                public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
-//                    return new DbschemaSourceTablesRowset(request, handler);
-//                }
-//            },
-//
+    DBSCHEMA_SOURCE_TABLES(
+            23, "8c3f5858-2742-4976-9d65-eb4d493c693e", null,
+            new Column[] {
+                    DbschemaSourceTablesRowset.TableCatalog,
+                    DbschemaSourceTablesRowset.TableSchema,
+                    DbschemaSourceTablesRowset.TableName,
+                    DbschemaSourceTablesRowset.TableType,
+            },
+            new Column[] {
+                    DbschemaSourceTablesRowset.TableCatalog,
+                    DbschemaSourceTablesRowset.TableSchema,
+                    DbschemaSourceTablesRowset.TableName,
+                    DbschemaSourceTablesRowset.TableType,
+            })
+            {
+                public Rowset getRowset(XmlaRequest request, XmlaHandler handler) {
+                    return new DbschemaSourceTablesRowset(request, handler);
+                }
+            },
+
     /**
      * http://msdn.microsoft.com/library/en-us/oledb/htm/
      * oledbtables_info_rowset.asp
@@ -3502,90 +3502,96 @@ TODO: see above
         }
     }
 
-//    static class DbschemaSourceTablesRowset extends Rowset {
-//        DbschemaSourceTablesRowset(XmlaRequest request, XmlaHandler handler) {
-//            super(DBSCHEMA_SOURCE_TABLES, request, handler);
-//        }
-//
-//        private static final Column TableCatalog =
-//                new Column(
-//                        "TABLE_CATALOG",
-//                        Type.String,
-//                        null,
-//                        Column.RESTRICTION,
-//                        Column.OPTIONAL,
-//                        "Catalog name. NULL if the provider does not support "
-//                                + "catalogs.");
-//        private static final Column TableSchema =
-//                new Column(
-//                        "TABLE_SCHEMA",
-//                        Type.String,
-//                        null,
-//                        Column.RESTRICTION,
-//                        Column.OPTIONAL,
-//                        "Unqualified schema name. NULL if the provider does not "
-//                                + "support schemas.");
-//        private static final Column TableName =
-//                new Column(
-//                        "TABLE_NAME",
-//                        Type.String,
-//                        null,
-//                        Column.RESTRICTION,
-//                        Column.REQUIRED,
-//                        "Table name.");
-//        private static final Column TableType =
-//                new Column(
-//                        "TABLE_TYPE",
-//                        Type.String,
-//                        null,
-//                        Column.RESTRICTION,
-//                        Column.REQUIRED,
-//                        "Table type. One of the following or a provider-specific "
-//                                + "value: ALIAS, TABLE, SYNONYM, SYSTEM TABLE, VIEW, GLOBAL "
-//                                + "TEMPORARY, LOCAL TEMPORARY, EXTERNAL TABLE, SYSTEM VIEW");
-//
-//        public void populateImpl(
-//                XmlaResponse response,
-//                OlapConnection connection,
-//                List<Row> rows)
-//                throws XmlaException, OlapException, SQLException
-//        {
-//            mondrian.rolap.RolapConnection rolapConnection =
-//                    (mondrian.rolap.RolapConnection)
-//                            ((mondrian.olap4j.MondrianOlap4jConnection)connection).getMondrianConnection();
-//            java.sql.Connection sqlConnection = rolapConnection.getDataSource().getConnection();
-//            java.sql.DatabaseMetaData databaseMetaData = sqlConnection.getMetaData();
-//            java.sql.ResultSet resultSet = databaseMetaData.getTables(null, null, null, null);
-////            java.sql.ResultSet resultSet = databaseMetaData.getTables(null, null, null, new String[]{"TABLE"});
-//            while(resultSet.next()) {
-//                String tableName = resultSet.getString("TABLE_NAME");
-//                String remarks = resultSet.getString("REMARKS");
-//
-//                Row row = new Row();
-//                row.set(TableName.name, tableName);
-//                row.set(TableType.name, "TABLE");
-//                row.set(Bookmarks.name, false);
-//                row.set(TableVersion.name, "");
-//                row.set(Cardinality.name, "");
-//                row.set(Description.name, "");
-//                addRow(row, rows);
-//            }
-//        }
-//
-//        protected void setProperty(
-//                PropertyDefinition propertyDef,
-//                String value)
-//        {
-//            switch (propertyDef) {
-//                case Content:
-//                    break;
-//                default:
-//                    super.setProperty(propertyDef, value);
-//            }
-//        }
-//    }
-//
-//
+    static class DbschemaSourceTablesRowset extends Rowset {
+        DbschemaSourceTablesRowset(XmlaRequest request, XmlaHandler handler) {
+            super(DBSCHEMA_SOURCE_TABLES, request, handler);
+        }
+
+        private static final Column TableCatalog =
+                new Column(
+                        "TABLE_CATALOG",
+                        Type.String,
+                        null,
+                        Column.RESTRICTION,
+                        Column.OPTIONAL,
+                        "Catalog name. NULL if the provider does not support "
+                                + "catalogs.");
+        private static final Column TableSchema =
+                new Column(
+                        "TABLE_SCHEMA",
+                        Type.String,
+                        null,
+                        Column.RESTRICTION,
+                        Column.OPTIONAL,
+                        "Unqualified schema name. NULL if the provider does not "
+                                + "support schemas.");
+        private static final Column TableName =
+                new Column(
+                        "TABLE_NAME",
+                        Type.String,
+                        null,
+                        Column.RESTRICTION,
+                        Column.REQUIRED,
+                        "Table name.");
+        private static final Column TableType =
+                new Column(
+                        "TABLE_TYPE",
+                        Type.String,
+                        null,
+                        Column.RESTRICTION,
+                        Column.REQUIRED,
+                        "Table type. One of the following or a provider-specific "
+                                + "value: ALIAS, TABLE, SYNONYM, SYSTEM TABLE, VIEW, GLOBAL "
+                                + "TEMPORARY, LOCAL TEMPORARY, EXTERNAL TABLE, SYSTEM VIEW");
+
+        public void populateImpl(
+                XmlaResponse response,
+                OlapConnection connection,
+                List<Row> rows)
+                throws XmlaException, OlapException, SQLException
+        {
+            mondrian.rolap.RolapConnection rolapConnection =
+                    (mondrian.rolap.RolapConnection)
+                            ((mondrian.olap4j.MondrianOlap4jConnection)connection).getMondrianConnection();
+            java.sql.Connection sqlConnection = rolapConnection.getDataSource().getConnection();
+            java.sql.DatabaseMetaData databaseMetaData = sqlConnection.getMetaData();
+            String[] tableTypeRestriction = null;
+            List<String> tableTypeRestrictionList = getRestriction(TableType);
+            if(tableTypeRestrictionList != null) {
+                tableTypeRestriction = tableTypeRestrictionList.toArray(new String[0]);
+            }
+            java.sql.ResultSet resultSet = databaseMetaData.getTables(null, null, null, tableTypeRestriction);
+//            java.sql.ResultSet resultSet = databaseMetaData.getTables(null, null, null, new String[]{"TABLE"});
+            while(resultSet.next()) {
+
+                final String tableCatalog = resultSet.getString("TABLE_CAT");
+                final String tableSchema = resultSet.getString("TABLE_SCHEM");
+                final String tableName = resultSet.getString("TABLE_NAME");
+                final String tableType = resultSet.getString("TABLE_TYPE");
+
+                Row row = new Row();
+                row.set(TableCatalog.name, tableCatalog);
+                row.set(TableSchema.name, tableSchema);
+                row.set(TableName.name, tableName);
+                row.set(TableType.name, tableType);
+                addRow(row, rows);
+            }
+        }
+
+        protected void setProperty(
+                PropertyDefinition propertyDef,
+                String value)
+        {
+            switch (propertyDef) {
+                case Content:
+                    break;
+                default:
+                    super.setProperty(propertyDef, value);
+            }
+        }
+    }
+
+
     // TODO: Is this needed????
     static class DbschemaTablesInfoRowset extends Rowset {
         DbschemaTablesInfoRowset(XmlaRequest request, XmlaHandler handler) {
