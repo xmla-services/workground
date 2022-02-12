@@ -3536,7 +3536,7 @@ TODO: see above
         private static final Column TableType =
                 new Column(
                         "TABLE_TYPE",
-                        Type.String,
+                        Type.StringSometimesArray,
                         null,
                         Column.RESTRICTION,
                         Column.REQUIRED,
