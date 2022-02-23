@@ -34,6 +34,7 @@ import mondrian.olap.DmvQuery;
 import mondrian.server.Session;
 
 import org.eigenbase.xom.Parser;
+import org.eigenbase.xom.XOMException;
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.*;
 import org.olap4j.impl.Olap4jUtil;
@@ -785,74 +786,51 @@ public class XmlaHandler {
 
         currentRequests.add(request);
 
-        if(defaultXmlaRequest.getCommand().toUpperCase().equals("CANCEL")){
-            try {
-                final OlapConnection connection1 = getConnection(request, Collections.<String, String>emptyMap());
-                final mondrian.rolap.RolapConnection rolapConnection1 =
-                        ((mondrian.olap4j.MondrianOlap4jConnection) connection1).getMondrianConnection();
+        final Map<String, String> properties = request.getProperties();
 
-                for(XmlaRequest xmlaRequest: currentRequests){
-                    if(xmlaRequest.getSessionId().equals(rolapConnection1.getConnectInfo().get("sessionId"))){
-                        ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty("CANCELED", "true");
-                    }
-                }
+        // Default responseMimeType is SOAP.
+        Enumeration.ResponseMimeType responseMimeType =
+                getResponseMimeType(request);
 
-                mondrian.olap.MondrianServer mondrianServer =
-                        mondrian.olap.MondrianServer.forConnection(rolapConnection1);
-                String sessionId = rolapConnection1.getConnectInfo().get("sessionId");
-                for(mondrian.server.Statement statement: mondrianServer.getStatements(sessionId)) {
-                    if(statement.getMondrianConnection().getConnectInfo().get("sessionId").equals(rolapConnection1.getConnectInfo().get("sessionId"))){
-                        statement.cancel();
-                    }
-                }
-                for(XmlaRequest xmlaRequest: currentRequests){
-                    if(xmlaRequest.getSessionId().equals(sessionId)){
-                        ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty("CANCELED", "true");
-                    }
-                }
-            } catch (org.olap4j.OlapException oe) {
-            throw new XmlaException(
-                    CLIENT_FAULT_FC,
-                    "3238658121",
-                    USM_DOM_PARSE_FAULT_FS,
-                    oe);
-            } catch (java.sql.SQLException oe) {
-                throw new XmlaException(
-                        CLIENT_FAULT_FC,
-                        "3238658121",
-                        USM_DOM_PARSE_FAULT_FS,
-                        oe);
-            }
-        }
-        else if(defaultXmlaRequest.getCommand().toUpperCase().equals("ALTER")) {
-            final ServerObject serverObject = ((mondrian.xmla.impl.DefaultXmlaRequest)request).getServerObject();
-            if(serverObject != null) {
-                final OlapConnection connection1 = getConnection(null, serverObject.getDatabaseID(), null);
+        // Default value is SchemaData, or Data for JSON responses.
+        final String contentName =
+                properties.get(PropertyDefinition.Content.name());
+        Content content = Util.lookup(
+                Content.class,
+                contentName,
+                responseMimeType == Enumeration.ResponseMimeType.JSON
+                        ? Content.Data
+                        : Content.DEFAULT);
+
+        // Handle execute
+        QueryResult result = null;
+
+        try {
+
+            if(defaultXmlaRequest.getCommand().toUpperCase().equals("CANCEL")){
                 try {
+                    final OlapConnection connection1 = getConnection(request, Collections.<String, String>emptyMap());
                     final mondrian.rolap.RolapConnection rolapConnection1 =
                             ((mondrian.olap4j.MondrianOlap4jConnection) connection1).getMondrianConnection();
-                    final String catalogUrl = rolapConnection1.getCatalogName();
-                    final String objectDefinition = ((mondrian.xmla.impl.DefaultXmlaRequest) request).getObjectDefinition();
 
-                    //Try to create a schema to check xml.
-                    mondrian.rolap.RolapSchema prevSchema = rolapConnection1.getSchema();
-                    mondrian.rolap.RolapSchema rolapSchema = new mondrian.rolap.RolapSchema(
-                            prevSchema.getKey(),
-                            null,
-                            catalogUrl,
-                            objectDefinition,
-                            rolapConnection1.getConnectInfo(),
-                            null
-                    );
-
-                    String filePath = java.net.URI.create(catalogUrl).getPath();
-                    java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(filePath));
-                    try {
-                        out.write(objectDefinition);
+                    for(XmlaRequest xmlaRequest: currentRequests){
+                        if(xmlaRequest.getSessionId().equals(rolapConnection1.getConnectInfo().get("sessionId"))){
+                            ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty("CANCELED", "true");
+                        }
                     }
-                    finally
-                    {
-                        out.close();
+
+                    mondrian.olap.MondrianServer mondrianServer =
+                            mondrian.olap.MondrianServer.forConnection(rolapConnection1);
+                    String sessionId = rolapConnection1.getConnectInfo().get("sessionId");
+                    for(mondrian.server.Statement statement: mondrianServer.getStatements(sessionId)) {
+                        if(statement.getMondrianConnection().getConnectInfo().get("sessionId").equals(rolapConnection1.getConnectInfo().get("sessionId"))){
+                            statement.cancel();
+                        }
+                    }
+                    for(XmlaRequest xmlaRequest: currentRequests){
+                        if(xmlaRequest.getSessionId().equals(sessionId)){
+                            ((mondrian.xmla.impl.DefaultXmlaRequest)xmlaRequest).setProperty("CANCELED", "true");
+                        }
                     }
                 } catch (org.olap4j.OlapException oe) {
                     throw new XmlaException(
@@ -860,170 +838,221 @@ public class XmlaHandler {
                             "3238658121",
                             USM_DOM_PARSE_FAULT_FS,
                             oe);
-                }
-                catch (java.io.IOException e)
-                {
+                } catch (java.sql.SQLException oe) {
                     throw new XmlaException(
                             CLIENT_FAULT_FC,
                             "3238658121",
                             USM_DOM_PARSE_FAULT_FS,
-                            e);
+                            oe);
                 }
             }
-        }
+            else if(defaultXmlaRequest.getCommand().toUpperCase().equals("ALTER")) {
+                boolean validate =  "true".equals(defaultXmlaRequest.getProperties().get("Validate"));
+                final ServerObject serverObject = ((mondrian.xmla.impl.DefaultXmlaRequest)request).getServerObject();
+                if(serverObject != null) {
+                    final OlapConnection connection1 = getConnection(null, serverObject.getDatabaseID(), null);
 
-        final Map<String, String> properties = request.getProperties();
+                    try {
 
-        // Default responseMimeType is SOAP.
-        Enumeration.ResponseMimeType responseMimeType =
-            getResponseMimeType(request);
+                        final mondrian.rolap.RolapConnection rolapConnection1 =
+                                ((mondrian.olap4j.MondrianOlap4jConnection) connection1).getMondrianConnection();
+                        final String catalogUrl = rolapConnection1.getCatalogName();
+                        final String objectDefinition = ((mondrian.xmla.impl.DefaultXmlaRequest) request).getObjectDefinition();
 
-        // Default value is SchemaData, or Data for JSON responses.
-        final String contentName =
-            properties.get(PropertyDefinition.Content.name());
-        Content content = Util.lookup(
-            Content.class,
-            contentName,
-            responseMimeType == Enumeration.ResponseMimeType.JSON
-                ? Content.Data
-                : Content.DEFAULT);
+                        //Try to create a schema to check xml.
+                        mondrian.rolap.RolapSchema prevSchema = rolapConnection1.getSchema();
 
-        // Handle execute
-        QueryResult result = null;
-        try {
+                        if (validate) {
+//                        if (true) {
+                            List<Column> columns = new ArrayList<>();
+                            columns.add(
+                                    new Column("Text", Types.VARCHAR, 0)
+                            );
+                            List<Object[]> rows = new ArrayList<Object[]>();
 
-            final OlapConnection connection = getConnection(request, Collections.<String, String>emptyMap());
-            final mondrian.rolap.RolapConnection rolapConnection =
-                    ((mondrian.olap4j.MondrianOlap4jConnection) connection).getMondrianConnection();
-            final String mdx = request.getStatement();
-            QueryPart queryPart = null;
-            if(mdx != null && !mdx.isEmpty()) {
-                queryPart = rolapConnection.parseStatement(mdx);
-            }
+                            try {
+                                mondrian.rolap.RolapSchema rolapSchema = new mondrian.rolap.RolapSchema(
+                                        prevSchema.getKey(),
+                                        null,
+                                        catalogUrl,
+                                        objectDefinition,
+                                        rolapConnection1.getConnectInfo(),
+                                        null
+                                );
+                            } catch (RuntimeException e) {
+                                rows.add(new Object[]{e.getMessage()});
+                            }
 
-            if (queryPart instanceof DrillThrough) {
-                result = executeDrillThroughQuery(request);
-            } else if (queryPart instanceof CalculatedFormula) {
-                CalculatedFormula calculatedFormula = (CalculatedFormula)queryPart;
-                Formula formula = calculatedFormula.getFormula();
-                final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
-                final mondrian.rolap.RolapCube cube = (mondrian.rolap.RolapCube)
-                        schema.lookupCube(calculatedFormula.getCubeName(), true);
-                if(formula.isMember()){
-                    cube.createCalculatedMember(formula);
-                }
-                else {
-                    cube.createNamedSet(formula);
-                }
-            } else if (queryPart instanceof DmvQuery) {
-                DmvQuery dmvQuery = (DmvQuery)queryPart;
+                            result = new TabularRowSet(columns, rows);
+                        } else {
+                            mondrian.rolap.RolapSchema rolapSchema = new mondrian.rolap.RolapSchema(
+                                    prevSchema.getKey(),
+                                    null,
+                                    catalogUrl,
+                                    objectDefinition,
+                                    rolapConnection1.getConnectInfo(),
+                                    null
+                            );
 
-                HashMap<String, String> upperCaseProperties = new HashMap<String, String>();
-                for (String key : request.getProperties().keySet()) {
-                    String newKey = null;
-                    if(key != null) {
-                        newKey = key.toUpperCase();
+                            String filePath = java.net.URI.create(catalogUrl).getPath();
+                            java.io.BufferedWriter out = new java.io.BufferedWriter(new java.io.FileWriter(filePath));
+                            try {
+                                out.write(objectDefinition);
+                            } finally {
+                                out.close();
+                            }
+                        }
+                    } catch (org.olap4j.OlapException oe) {
+                        throw new XmlaException(
+                                CLIENT_FAULT_FC,
+                                "3238658121",
+                                USM_DOM_PARSE_FAULT_FS,
+                                oe);
+                    } catch (java.io.IOException e) {
+                        throw new XmlaException(
+                                CLIENT_FAULT_FC,
+                                "3238658121",
+                                USM_DOM_PARSE_FAULT_FS,
+                                e);
                     }
-                    upperCaseProperties.put(newKey, request.getProperties().get(key));
+
+                }
+            }
+            else if(defaultXmlaRequest.getCommand().toUpperCase().equals("STATEMENT")) {
+                final OlapConnection connection = getConnection(request, Collections.<String, String>emptyMap());
+                final mondrian.rolap.RolapConnection rolapConnection =
+                        ((mondrian.olap4j.MondrianOlap4jConnection) connection).getMondrianConnection();
+                final String mdx = request.getStatement();
+                QueryPart queryPart = null;
+                if(mdx != null && !mdx.isEmpty()) {
+                    queryPart = rolapConnection.parseStatement(mdx);
                 }
 
-                HashMap<String, Object> restrictions = new HashMap<String, Object>();
-                if(upperCaseProperties.containsKey(PropertyDefinition.Catalog.name().toUpperCase())) {
-                    List<String> restriction = new ArrayList<String>();
-                    restriction.add(request.getProperties().get("Catalog"));
-                    restrictions.put(
-                            Property.StandardMemberProperty.CATALOG_NAME.name(),
-                            restriction);
-                }
-                mondrian.xmla.impl.DmvXmlaRequest dmvXmlaRequest = new mondrian.xmla.impl.DmvXmlaRequest(
-                        restrictions,
-                        request.getProperties(),
-                        request.getRoleName(),
-                        dmvQuery.getTableName().toUpperCase(),
-                        request.getUsername(),
-                        request.getPassword(),
-                        request.getSessionId()
-                );
+                if (queryPart instanceof DrillThrough) {
+                    result = executeDrillThroughQuery(request);
+                } else if (queryPart instanceof CalculatedFormula) {
+                    CalculatedFormula calculatedFormula = (CalculatedFormula)queryPart;
+                    Formula formula = calculatedFormula.getFormula();
+                    final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
+                    final mondrian.rolap.RolapCube cube = (mondrian.rolap.RolapCube)
+                            schema.lookupCube(calculatedFormula.getCubeName(), true);
+                    if(formula.isMember()){
+                        cube.createCalculatedMember(formula);
+                    }
+                    else {
+                        cube.createNamedSet(formula);
+                    }
+                } else if (queryPart instanceof DmvQuery) {
+                    DmvQuery dmvQuery = (DmvQuery)queryPart;
 
-                executeDmvQuery(
-                        dmvXmlaRequest,
-                        response,
-                        dmvQuery.getTableName().toUpperCase(),
-                        dmvQuery.getWhereExpression(),
-                        defaultXmlaRequest.getParameters()
-                );
+                    HashMap<String, String> upperCaseProperties = new HashMap<String, String>();
+                    for (String key : request.getProperties().keySet()) {
+                        String newKey = null;
+                        if(key != null) {
+                            newKey = key.toUpperCase();
+                        }
+                        upperCaseProperties.put(newKey, request.getProperties().get(key));
+                    }
 
-                return;
-            } else if (queryPart instanceof Refresh) {
-                Refresh refresh = (Refresh)queryPart;
-                final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
-                final mondrian.rolap.RolapCube cube = (mondrian.rolap.RolapCube)
-                        schema.lookupCube(refresh.getCubeName(), true);
-                cube.flushCache(rolapConnection);
-            } else if (queryPart instanceof Update) {
-                Update update = (Update)queryPart;
-                final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
-                for(Update.UpdateClause updateClause: update.getUpdateClauses()) {
-                    StringWriter sw = new StringWriter();
-                    PrintWriter pw = new mondrian.mdx.QueryPrintWriter(sw);
-                    updateClause.getTupleExp().unparse(pw);
-                    String tupleString = sw.toString();
-
-                    PreparedOlapStatement pstmt = connection.prepareOlapStatement(
-                            "SELECT "
-                            + tupleString
-                            + " ON 0 FROM "
-                            + update.getCubeName()
-                            + " CELL PROPERTIES CELL_ORDINAL"
+                    HashMap<String, Object> restrictions = new HashMap<String, Object>();
+                    if(upperCaseProperties.containsKey(PropertyDefinition.Catalog.name().toUpperCase())) {
+                        List<String> restriction = new ArrayList<String>();
+                        restriction.add(request.getProperties().get("Catalog"));
+                        restrictions.put(
+                                Property.StandardMemberProperty.CATALOG_NAME.name(),
+                                restriction);
+                    }
+                    mondrian.xmla.impl.DmvXmlaRequest dmvXmlaRequest = new mondrian.xmla.impl.DmvXmlaRequest(
+                            restrictions,
+                            request.getProperties(),
+                            request.getRoleName(),
+                            dmvQuery.getTableName().toUpperCase(),
+                            request.getUsername(),
+                            request.getPassword(),
+                            request.getSessionId()
                     );
-                    CellSet cellSet = pstmt.executeQuery();
-                    CellSetAxis axis = cellSet.getAxes().get(0);
-                    if(axis.getPositionCount() == 0) {
-                        //Empty tuple exception
-                    }
-                    if (axis.getPositionCount() == 1) {
-                        //More than one tuple exception
-                    }
-                    Cell writeBackCell = cellSet.getCell(Arrays.asList(0));
 
-                    sw = new StringWriter();
-                    pw = new mondrian.mdx.QueryPrintWriter(sw);
-                    updateClause.getValueExp().unparse(pw);
-                    String valueString = sw.toString();
-
-                    pstmt = connection.prepareOlapStatement(
-                            "WITH MEMBER [Measures].[m1] AS "
-                            + valueString
-                            + " SELECT [Measures].[m1] ON 0 FROM "
-                            + update.getCubeName()
-                            + " CELL PROPERTIES VALUE"
+                    executeDmvQuery(
+                            dmvXmlaRequest,
+                            response,
+                            dmvQuery.getTableName().toUpperCase(),
+                            dmvQuery.getWhereExpression(),
+                            defaultXmlaRequest.getParameters()
                     );
-                    cellSet = pstmt.executeQuery();
-                    Cell cell = cellSet.getCell(Arrays.asList(0));
-                    Double doubleValue = cell.getDoubleValue();
 
-                    writeBackCell.setValue(doubleValue, AllocationPolicy.EQUAL_ALLOCATION);
-                }
-            } else if (queryPart instanceof TransactionCommand) {
-                TransactionCommand transactionCommand = (TransactionCommand)queryPart;
+                    return;
+                } else if (queryPart instanceof Refresh) {
+                    Refresh refresh = (Refresh)queryPart;
+                    final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
+                    final mondrian.rolap.RolapCube cube = (mondrian.rolap.RolapCube)
+                            schema.lookupCube(refresh.getCubeName(), true);
+                    cube.flushCache(rolapConnection);
+                } else if (queryPart instanceof Update) {
+                    Update update = (Update)queryPart;
+                    final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
+                    for(Update.UpdateClause updateClause: update.getUpdateClauses()) {
+                        StringWriter sw = new StringWriter();
+                        PrintWriter pw = new mondrian.mdx.QueryPrintWriter(sw);
+                        updateClause.getTupleExp().unparse(pw);
+                        String tupleString = sw.toString();
 
-                String sessionId = request.getSessionId();
-                Session session = Session.get(sessionId);
-                if(transactionCommand.getCommand() == TransactionCommand.Command.BEGIN) {
-                    Scenario scenario = connection.createScenario();
-                    session.setScenario(scenario);
-                }
-                else if(transactionCommand.getCommand() == TransactionCommand.Command.ROLLBACK) {
-                    session.setScenario(null);
-                }
-                else if(transactionCommand.getCommand() == TransactionCommand.Command.COMMIT) {
-                    session.setScenario(null);
-                }
+                        PreparedOlapStatement pstmt = connection.prepareOlapStatement(
+                                "SELECT "
+                                        + tupleString
+                                        + " ON 0 FROM "
+                                        + update.getCubeName()
+                                        + " CELL PROPERTIES CELL_ORDINAL"
+                        );
+                        CellSet cellSet = pstmt.executeQuery();
+                        CellSetAxis axis = cellSet.getAxes().get(0);
+                        if(axis.getPositionCount() == 0) {
+                            //Empty tuple exception
+                        }
+                        if (axis.getPositionCount() == 1) {
+                            //More than one tuple exception
+                        }
+                        Cell writeBackCell = cellSet.getCell(Arrays.asList(0));
 
-            } else {
-                checkedCanceled(request);
-                result = executeQuery(request);
+                        sw = new StringWriter();
+                        pw = new mondrian.mdx.QueryPrintWriter(sw);
+                        updateClause.getValueExp().unparse(pw);
+                        String valueString = sw.toString();
+
+                        pstmt = connection.prepareOlapStatement(
+                                "WITH MEMBER [Measures].[m1] AS "
+                                        + valueString
+                                        + " SELECT [Measures].[m1] ON 0 FROM "
+                                        + update.getCubeName()
+                                        + " CELL PROPERTIES VALUE"
+                        );
+                        cellSet = pstmt.executeQuery();
+                        Cell cell = cellSet.getCell(Arrays.asList(0));
+                        Double doubleValue = cell.getDoubleValue();
+
+                        writeBackCell.setValue(doubleValue, AllocationPolicy.EQUAL_ALLOCATION);
+                    }
+                } else if (queryPart instanceof TransactionCommand) {
+                    TransactionCommand transactionCommand = (TransactionCommand)queryPart;
+
+                    String sessionId = request.getSessionId();
+                    Session session = Session.get(sessionId);
+                    if(transactionCommand.getCommand() == TransactionCommand.Command.BEGIN) {
+                        Scenario scenario = connection.createScenario();
+                        session.setScenario(scenario);
+                    }
+                    else if(transactionCommand.getCommand() == TransactionCommand.Command.ROLLBACK) {
+                        session.setScenario(null);
+                    }
+                    else if(transactionCommand.getCommand() == TransactionCommand.Command.COMMIT) {
+                        session.setScenario(null);
+                    }
+
+                } else {
+                    checkedCanceled(request);
+                    result = executeQuery(request);
+                }
             }
+
 
             checkedCanceled(request);
 
@@ -1035,28 +1064,28 @@ public class XmlaHandler {
                     "xmlns", NS_XMLA);
             writer.startElement("return");
             boolean rowset =
-                request.isDrillThrough()
-                || Format.Tabular.name().equals(
-                    request.getProperties().get(
-                        PropertyDefinition.Format.name()));
+                    request.isDrillThrough()
+                            || Format.Tabular.name().equals(
+                            request.getProperties().get(
+                                    PropertyDefinition.Format.name()));
             writer.startElement(
-                "root",
-                "xmlns",
-                result == null
-                    ? NS_XMLA_EMPTY
-                    : rowset
-                        ? NS_XMLA_ROWSET
-                        : NS_XMLA_MDDATASET,
-                "xmlns:xsi", NS_XSI,
-                "xmlns:xsd", NS_XSD,
-                "xmlns:EX", NS_XMLA_EX);
+                    "root",
+                    "xmlns",
+                    result == null
+                            ? NS_XMLA_EMPTY
+                            : rowset
+                            ? NS_XMLA_ROWSET
+                            : NS_XMLA_MDDATASET,
+                    "xmlns:xsi", NS_XSI,
+                    "xmlns:xsd", NS_XSD,
+                    "xmlns:EX", NS_XMLA_EX);
 
             switch (content) {
-            case Schema:
-            case SchemaData:
-                if (result != null) {
-                    result.metadata(writer);
-                }
+                case Schema:
+                case SchemaData:
+                    if (result != null) {
+                        result.metadata(writer);
+                    }
                 /*
                 //Galaktika: Do not write schema for NS_XMLA_EMPTY
                 else {
@@ -1067,28 +1096,28 @@ public class XmlaHandler {
                     }
                 }
                 */
-                break;
+                    break;
             }
 
             try {
                 switch (content) {
-                case Data:
-                case SchemaData:
-                case DataOmitDefaultSlicer:
-                case DataIncludeDefaultSlicer:
-                    if (result != null) {
-                        result.unparse(writer);
-                    }
-                    break;
+                    case Data:
+                    case SchemaData:
+                    case DataOmitDefaultSlicer:
+                    case DataIncludeDefaultSlicer:
+                        if (result != null) {
+                            result.unparse(writer);
+                        }
+                        break;
                 }
             } catch (XmlaException xex) {
                 throw xex;
             } catch (Throwable t) {
                 throw new XmlaException(
-                    SERVER_FAULT_FC,
-                    HSB_EXECUTE_UNPARSE_CODE,
-                    HSB_EXECUTE_UNPARSE_FAULT_FS,
-                    t);
+                        SERVER_FAULT_FC,
+                        HSB_EXECUTE_UNPARSE_CODE,
+                        HSB_EXECUTE_UNPARSE_FAULT_FS,
+                        t);
             } finally {
                 writer.endElement(); // root
                 writer.endElement(); // return
@@ -1730,8 +1759,8 @@ public class XmlaHandler {
     }
 
     static class TabularRowSet implements QueryResult {
-        private final List<Column> columns = new ArrayList<Column>();
-        private final List<Object[]> rows;
+        private List<Column> columns = new ArrayList<Column>();
+        private List<Object[]> rows;
         private int totalCount;
 
         /**
@@ -1804,6 +1833,19 @@ public class XmlaHandler {
                 row[k] = k;
             }
             rows.add(row);
+        }
+
+        public TabularRowSet(
+                List<Column> columns,
+                List<Object[]> rows)
+        {
+            if(columns != null ){
+               this.columns = columns;
+            }
+            if(rows != null) {
+                this.rows = rows;
+                this.totalCount = this.rows.size();
+            }
         }
 
         public void close() {
