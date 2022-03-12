@@ -14,6 +14,7 @@
 package mondrian.xmla;
 
 import mondrian.olap.*;
+import mondrian.rolap.RolapHierarchy;
 import mondrian.util.Composite;
 
 import org.olap4j.OlapConnection;
@@ -5042,10 +5043,10 @@ TODO: see above
                 Column.RESTRICTION,
                 Column.OPTIONAL,
                 "A bit mask that determines the source of the hierarchy:\n" +
-                        "MD_USER_DEFINED identifies user defined hierarchies, and has a value of 0x0000001.\n" +
-                        "MD_SYSTEM_ENABLED identifies attribute hierarchies, and has a value of 0x0000002.\n" +
-                        "MD_SYSTEM_INTERNAL identifies attributes with no attribute hierarchies, and has a value of 0x0000004." +
-                        "A parent/child attribute hierarchy is both MD_USER_DEFINED and MD_SYSTEM_ENABLED.");
+                        "MD_ORIGIN_USER_DEFINED identifies levels in a user defined hierarchy (0x0000001).\n" +
+                        "MD_ORIGIN_ATTRIBUTE identifies levels in an attribute hierarchy (0x0000002).\n" +
+                        "MD_ORIGIN_INTERNAL identifies levels in attribute hierarchies that are not enabled (0x0000004).\n" +
+                        "MD_ORIGIN_KEY_ATTRIBUTE identifies levels in a key attribute hierarchy (0x0000008).\n");
         private static final Column DisplayFolder =
             new Column(
                 "HIERARCHY_DISPLAY_FOLDER",
@@ -5246,6 +5247,9 @@ TODO: see above
             row.set(HierarchyIsVisibile.name, hierarchy.isVisible());
             row.set(HierarchyVisibility.name, hierarchy.isVisible()?1:2);
 
+            mondrian.olap4j.MondrianOlap4jHierarchy mondrianOlap4jHierarchy =
+                    (mondrian.olap4j.MondrianOlap4jHierarchy)hierarchy;
+
             // Bitmask
             // MD_ORIGIN_USER_DEFINED 0x00000001
             // MD_ORIGIN_ATTRIBUTE 0x00000002
@@ -5256,15 +5260,20 @@ TODO: see above
                 hierarchyOrigin = 6;
             }
             else {
-                hierarchyOrigin = 1;
+                RolapHierarchy rolapHierarchy = (RolapHierarchy)mondrianOlap4jHierarchy.getHierarchy();
+                MondrianDef.Hierarchy xmlHierarchy = rolapHierarchy.getXmlHierarchy();
+                try {
+                    hierarchyOrigin = Integer.parseInt(xmlHierarchy.origin);
+                }
+                catch (NumberFormatException e) {
+                    hierarchyOrigin =  1;
+                }
             }
             row.set(HierarchyOrigin.name, hierarchyOrigin);
 
             row.set(HierarchyOrdinal.name, ordinal);
 
 
-            mondrian.olap4j.MondrianOlap4jHierarchy mondrianOlap4jHierarchy =
-                    (mondrian.olap4j.MondrianOlap4jHierarchy)hierarchy;
             String displayFolder = mondrianOlap4jHierarchy.getDisplayFolder();
             if(displayFolder == null) { displayFolder = ""; }
             row.set(DisplayFolder.name, displayFolder);

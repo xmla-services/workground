@@ -8,7 +8,7 @@
   ==
   == Copyright (C) 2001-2005 Julian Hyde
   == Copyright (C) 2005-2019 Hitachi Vantara and others
-  == Copyright (C) 2021 Sergei Semenkov
+  == Copyright (C) 2021-2022 Sergei Semenkov
   == All Rights Reserved.
   ==
   == This file defines an MMM schema for an Olap schema.
@@ -604,6 +604,17 @@ Revision is $Id$
 		        Should be set to the level (if such a level exists) at which depth it is known
 		        that all members have entirely unique rows, allowing SQL GROUP BY clauses to
                 be completely eliminated from the query.
+            </Doc>
+        </Attribute>
+        <Attribute name="origin" required="false">
+            <Doc>
+                A bit mask that determines the source of the hierarchy:
+                MD_ORIGIN_USER_DEFINED identifies levels in a user defined hierarchy (0x0000001).
+                MD_ORIGIN_ATTRIBUTE identifies levels in an attribute hierarchy (0x0000002).
+                MD_ORIGIN_INTERNAL identifies levels in attribute hierarchies that are not enabled (0x0000004).
+                MD_ORIGIN_KEY_ATTRIBUTE identifies levels in a key attribute hierarchy (0x0000008).
+
+                The default value is MD_ORIGIN_USER_DEFINED. For Measure it is MD_ORIGIN_ATTRIBUTE &amp; MD_ORIGIN_INTERNAL (0x0000006)
             </Doc>
         </Attribute>
 
