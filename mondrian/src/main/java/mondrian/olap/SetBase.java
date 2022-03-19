@@ -6,6 +6,7 @@
 //
 // Copyright (C) 2001-2005 Julian Hyde
 // Copyright (C) 2005-2017 Hitachi Vantara and others
+// Copyright (C) 2022 Sergei Semenkov
 // All Rights Reserved.
 */
 
@@ -16,6 +17,8 @@ import mondrian.olap.type.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -97,6 +100,10 @@ public class SetBase extends OlapElementBase implements NamedSet {
 
     public String getDescription() {
         return description;
+    }
+
+    public List<Hierarchy> getHierarchies() {
+        return ((SetType)exp.getType()).getHierarchies();
     }
 
     public Hierarchy getHierarchy() {

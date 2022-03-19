@@ -6748,6 +6748,18 @@ TODO: see above
             List<Row> rows)
         {
             for (NamedSet namedSet : filter(cube.getSets(), setNameCond)) {
+                mondrian.olap4j.MondrianOlap4jNamedSet mondrianOlap4jNamedSet =
+                        (mondrian.olap4j.MondrianOlap4jNamedSet)namedSet;
+
+                SetBase setBase = (SetBase)mondrianOlap4jNamedSet.getNamedSet();
+                String dimensions = "";
+                for(mondrian.olap.Hierarchy hierarchy: setBase.getHierarchies()) {
+                    if(!dimensions.equals("")) {
+                        dimensions = dimensions + ",";
+                    }
+                    dimensions = dimensions + hierarchy.getUniqueName();
+                }
+
                 Row row = new Row();
                 row.set(CatalogName.name, catalog.getName());
                 row.set(SchemaName.name, cube.getSchema().getName());
@@ -6756,17 +6768,9 @@ TODO: see above
                 //TODO: 2 (SESSION_SCOPE) for session sets
                 row.set(Scope.name, GLOBAL_SCOPE);
                 row.set(Description.name, namedSet.getDescription());
-                row.set(Dimensions.name, "");
+                row.set(Dimensions.name, dimensions);
 
-                //TODO:
-//                java.io.StringWriter sw = new java.io.StringWriter();
-//                java.io.PrintWriter pw = new java.io.PrintWriter(sw);
-//                org.olap4j.mdx.ParseTreeWriter parseTreeWriter = new org.olap4j.mdx.ParseTreeWriter(pw);
-//                namedSet.getExpression().unparse(parseTreeWriter);
-//                pw.flush();
-//                sw.toString();
-//                row.set(Expression.name, sw.toString());
-                row.set(Expression.name, "");
+                row.set(Expression.name, setBase.getExp().toString());
 
                 row.set(SetCaption.name, namedSet.getCaption());
 
