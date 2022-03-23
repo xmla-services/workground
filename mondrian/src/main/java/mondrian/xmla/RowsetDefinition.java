@@ -6774,7 +6774,7 @@ TODO: see above
 
                 row.set(SetCaption.name, namedSet.getCaption());
 
-                row.set(DisplayFolder.name, "");
+                row.set(DisplayFolder.name, setBase.getDisplayFolder());
                 row.set(EvaluationContext.name, "1");
                 addRow(row, rows);
             }

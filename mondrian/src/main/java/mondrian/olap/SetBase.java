@@ -37,6 +37,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
     private final String uniqueName;
     private Exp exp;
     private boolean validated;
+    private String displayFolder;
 
     /**
      * Creates a SetBase.
@@ -102,6 +103,10 @@ public class SetBase extends OlapElementBase implements NamedSet {
         return description;
     }
 
+    public String getDisplayFolder() {
+        return displayFolder;
+    }
+
     public List<Hierarchy> getHierarchies() {
         return ((SetType)exp.getType()).getHierarchies();
     }
@@ -126,6 +131,10 @@ public class SetBase extends OlapElementBase implements NamedSet {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void setDisplayFolder(String displayFolder) {
+        this.displayFolder = displayFolder;
     }
 
     public void setAnnotationMap(Map<String, Annotation> annotationMap) {

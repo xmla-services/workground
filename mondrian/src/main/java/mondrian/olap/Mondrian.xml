@@ -1252,6 +1252,14 @@ Revision is $Id$
                 Can be localized from Properties file using #{propertyname}.
             </Doc>
         </Attribute>
+        <Attribute name="displayFolder" required="false">
+            <Doc>
+                A string that identifies the path of the display folder that the client application uses to show the set.
+                The folder level separator is defined by the client application.
+                For the tools and clients supplied by Analysis Services, the backslash (\) is the level separator.
+                To provide multiple display folders, use a semicolon (;) to separate the folders.
+            </Doc>
+        </Attribute>
         <Attribute name="formula" required="false">
             <Doc>
                 MDX expression which gives the value of this set.

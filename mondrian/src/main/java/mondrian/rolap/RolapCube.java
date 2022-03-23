@@ -6,7 +6,7 @@
 //
 // Copyright (C) 2001-2005 Julian Hyde
 // Copyright (C) 2005-2021 Hitachi Vantara and others
-// Copyright (C) 2021 Sergei Semenkov
+// Copyright (C) 2021-2022 Sergei Semenkov
 // All Rights Reserved.
 */
 package mondrian.rolap;
@@ -1178,6 +1178,12 @@ public class RolapCube extends CubeBase {
             && xmlNamedSet.description.length() > 0)
         {
             namedSet.setDescription(xmlNamedSet.description);
+        }
+
+        if (xmlNamedSet.displayFolder != null
+                && xmlNamedSet.displayFolder.length() > 0)
+        {
+            namedSet.setDisplayFolder(xmlNamedSet.displayFolder);
         }
 
         namedSet.setAnnotationMap(
