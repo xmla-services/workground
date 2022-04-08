@@ -596,26 +596,35 @@ public class Query extends QueryPart {
                 Exp resultExp = null;
 
                 List<Exp> subcubeAxisExps = this.subcube.getAxisExps();
+                ArrayList<Exp> hierarchyExps = new ArrayList<Exp>();
                 for(int j = 0; j < subcubeAxisExps.size(); j++) {
                     Exp subcubeAxisExp = subcubeAxisExps.get(j);
                     subcubeAxisExp = subcubeAxisExp.accept(compiler.getValidator());
                     Hierarchy[] subcubeAxisHierarchies = collectHierarchies(subcubeAxisExp);
                     if(Arrays.asList(subcubeAxisHierarchies).contains(hierarchy)) {
-                        Exp prevExp;
-                        if(resultExp == null) {
-                            prevExp = levelMembers;
-                        }
-                        else {
-                            prevExp = resultExp;
-                        }
-                        Exp axisInBracesExp =
-                                new UnresolvedFunCall(
-                                        "{}", Syntax.Braces, new Exp[] {subcubeAxisExp});
+                        hierarchyExps.add(subcubeAxisExp);
+                    }
+                }
+                for(Exp hierarchyExp: hierarchyExps) {
+                    Exp prevExp;
+                    if(resultExp == null) {
+                        prevExp = levelMembers;
+                    }
+                    else {
+                        prevExp = resultExp;
+                    }
+                    Exp axisInBracesExp =
+                            new UnresolvedFunCall(
+                                    "{}", Syntax.Braces, new Exp[] {hierarchyExp});
+                    if(hierarchyExps.size() > 1) {
                         resultExp = new UnresolvedFunCall(
                                 "Exists",
                                 Syntax.Function,
                                 new Exp[] {prevExp, axisInBracesExp}
                         );
+                    }
+                    else {
+                        resultExp = axisInBracesExp;
                     }
                 }
 
