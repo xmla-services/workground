@@ -11,7 +11,7 @@ import org.sqlite.SQLiteDataSource;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 
-@ServiceProvider(value = DatabaseProvider.class)
+//@ServiceProvider(value = DatabaseProvider.class)
 public class SQLiteDatabaseProvider implements DatabaseProvider {
 
 	private static String getTempFile() {
