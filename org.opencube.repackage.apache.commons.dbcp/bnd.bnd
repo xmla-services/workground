@@ -1,0 +1,10 @@
+-includeresource: \
+	@commons-dbcp-1.2.1.jar
+	
+Export-Package: org.apache.commons.dbcp.*
+
+Import-Package: \
+	!javax.transaction,\
+	*
+	
+DynamicImport-Package: *

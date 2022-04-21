@@ -19,7 +19,9 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.rolap.SqlStatement;
+import mondrian.spi.Dialect;
 import mondrian.spi.DialectUtil;
 
 /**
@@ -28,6 +30,8 @@ import mondrian.spi.DialectUtil;
  * @author Pedro Alves
  * @since Sept 11, 2009
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='VERTICA'",
+		"database.product:String='VERTICA'" })
 public class VerticaDialect extends JdbcDialectImpl {
 
   public static final JdbcDialectFactory FACTORY =

@@ -10,6 +10,7 @@
 package mondrian.spi.impl;
 
 import mondrian.olap.Util;
+import mondrian.spi.Dialect;
 import mondrian.spi.DialectUtil;
 
 import java.sql.*;
@@ -17,12 +18,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.*;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the MySQL database.
  *
  * @author jhyde
  * @since Nov 23, 2008
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MYSQL'",
+		"database.product:String='MYSQL'" })
 public class MySqlDialect extends JdbcDialectImpl {
 
     private final String escapeRegexp = "(\\\\Q([^\\\\Q]+)\\\\E)";

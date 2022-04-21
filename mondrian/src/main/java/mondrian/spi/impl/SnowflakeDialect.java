@@ -17,10 +17,14 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Util;
 import mondrian.rolap.SqlStatement;
+import mondrian.spi.Dialect;
 import mondrian.spi.DialectUtil;
 
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='SNOWFLAKE'",
+		"database.product:String='SNOWFLAKE'" })
 public class SnowflakeDialect extends JdbcDialectImpl {
 
   public static final JdbcDialectFactory FACTORY =

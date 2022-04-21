@@ -1,0 +1,6 @@
+-includeresource: \
+	@olap4j-1.2.0.jar
+
+Export-Package: \
+	!org.olap4.xmla,\
+	org.olap4*

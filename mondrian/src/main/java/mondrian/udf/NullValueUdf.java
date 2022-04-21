@@ -9,6 +9,7 @@
 
 package mondrian.udf;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.*;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.Type;
@@ -20,6 +21,7 @@ import mondrian.spi.UserDefinedFunction;
  *
  * @author remberson,jhyde
  */
+@ServiceProvider(value = UserDefinedFunction.class)
 public class NullValueUdf implements UserDefinedFunction {
 
     public String getName() {

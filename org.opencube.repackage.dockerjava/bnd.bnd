@@ -1,0 +1,32 @@
+Export-Package: \
+	com.github.dockerjava.api*,\
+	com.github.dockerjava.core*,\
+	com.github.dockerjava.transport*,\
+	!com.github.dockerjava.zerodep.shaded*,\
+	com.github.dockerjava.zerodep*
+	
+
+-privatepackage: \
+	org.apache.*,\
+	*
+
+	
+Import-Package: \
+	com.sun*,\
+	javax.net*,\
+	org.testcontainers.*,\
+	com.github.dockerjava.api*,\
+	com.github.dockerjava.core*,\
+	com.github.dockerjava.transport*,\
+	com.github.dockerjava.zerodep
+
+
+
+#	!com.github.dockerjava.zerodep.shaded.org.apache.hc.core5.http2*,\
+#	!org.brotli.dec*,\
+#	!com.github.dockerjava.jaxrs*,\
+#	!com.github.luben.zstd*,\
+#	!com.google.appengine.api*,\
+#	!com.google.apphosting.api*,\
+#	!org.brotli.dec
+#	*

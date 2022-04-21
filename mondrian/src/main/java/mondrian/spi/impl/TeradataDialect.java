@@ -13,12 +13,17 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.spi.Dialect;
+
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the Teradata database.
  *
  * @author jhyde
  * @since Nov 23, 2008
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='TERADATA'",
+		"database.product:String='TERADATA'" })
 public class TeradataDialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =

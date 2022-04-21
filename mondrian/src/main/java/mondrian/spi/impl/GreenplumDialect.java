@@ -14,12 +14,17 @@ package mondrian.spi.impl;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.spi.Dialect;
+
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the GreenplumSQL database.
  *
  * @author Millersoft
  * @since Dec 23, 2009
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='POSTGRESQL'",
+		"database.product:String='GREENPLUM'" })
 public class GreenplumDialect extends PostgreSqlDialect {
 
     /**

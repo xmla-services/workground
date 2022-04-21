@@ -16,11 +16,14 @@ import mondrian.spi.UserDefinedFunction;
 
 import java.util.List;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+
 /**
  * Definition of the user-defined function "LastNonEmpty".
  *
  * @author jhyde
  */
+@ServiceProvider(value = UserDefinedFunction.class)
 public class LastNonEmptyUdf implements UserDefinedFunction {
 
     public String getName() {

@@ -9,12 +9,17 @@
 package mondrian.spi.impl;
 
 import mondrian.rolap.SqlStatement;
+import mondrian.spi.Dialect;
 
 import java.sql.Connection;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='PDI'",
+		"database.product:String='PDI'" })
 public class PdiDataServiceDialect extends JdbcDialectImpl {
 
   public static final JdbcDialectFactory FACTORY =

@@ -15,11 +15,14 @@ import mondrian.spi.UserDefinedFunction;
 
 import java.util.List;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+
 /**
  * User-defined function <code>IN</code>.
  *
  * @author schoi
  */
+@ServiceProvider(value = UserDefinedFunction.class)
 public class InUdf implements UserDefinedFunction {
 
     public Object execute(Evaluator evaluator, Argument[] arguments) {

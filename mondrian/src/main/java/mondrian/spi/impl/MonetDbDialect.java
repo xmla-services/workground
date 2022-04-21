@@ -11,11 +11,14 @@ package mondrian.spi.impl;
 
 import mondrian.olap.Util;
 import mondrian.rolap.SqlStatement;
+import mondrian.spi.Dialect;
 
 import java.sql.Connection;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the MonetDB database.
@@ -23,6 +26,8 @@ import java.sql.Types;
  * @author pstoellberger
  * @since Nov 10, 2012
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MONETDB'",
+		"database.product:String='MONETDB'" })
 public class MonetDbDialect extends JdbcDialectImpl {
   private static final String DOT = "\\.";
 

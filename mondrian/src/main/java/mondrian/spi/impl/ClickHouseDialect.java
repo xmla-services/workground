@@ -10,13 +10,18 @@
 package mondrian.spi.impl;
 
 import mondrian.olap.Util;
+import mondrian.spi.Dialect;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+
 /**
  * Implementation of {@link mondrian.spi.Dialect} for ClickHouse
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='CLICKHOUSE'",
+		"database.product:String='CLICKHOUSE'" })
 public class ClickHouseDialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =

@@ -12,6 +12,9 @@ import java.sql.*;
 import java.util.Calendar;
 import java.util.List;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.spi.Dialect;
+
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the Microsoft Access
  * database (also called the JET Engine).
@@ -19,6 +22,8 @@ import java.util.List;
  * @author jhyde
  * @since Nov 23, 2008
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='ACCESS'",
+		"database.product:String='ACCESS'" })
 public class AccessDialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =

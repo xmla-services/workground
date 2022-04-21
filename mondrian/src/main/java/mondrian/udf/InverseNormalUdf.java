@@ -16,11 +16,12 @@ import mondrian.olap.type.NumericType;
 import mondrian.olap.type.Type;
 import mondrian.spi.UserDefinedFunction;
 
-import org.apache.commons.math.MathException;
-import org.apache.commons.math.distribution.NormalDistribution;
-import org.apache.commons.math.distribution.NormalDistributionImpl;
 
 import org.apache.logging.log4j.Logger;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
+
+import org.apache.commons.math3.distribution.NormalDistribution;
 import org.apache.logging.log4j.LogManager;
 
 
@@ -43,6 +44,7 @@ import org.apache.logging.log4j.LogManager;
  *         FORMAT_STRING = "0.0000"
  * </pre></code></blockquote>
  */
+@ServiceProvider(value = UserDefinedFunction.class)
 public class InverseNormalUdf implements UserDefinedFunction {
     private static final Logger LOGGER =
         LogManager.getLogger(InverseNormalUdf.class);
@@ -50,7 +52,7 @@ public class InverseNormalUdf implements UserDefinedFunction {
 
     // the zero arg constructor sets the mean equal to zero and standard
     // deviation equal to one
-    private static final NormalDistribution nd = new NormalDistributionImpl();
+    private static final NormalDistribution nd = new NormalDistribution();
 
     public String getName() {
         return "InverseNormal";
@@ -104,7 +106,7 @@ public class InverseNormalUdf implements UserDefinedFunction {
             Double result = new Double(nd.inverseCumulativeProbability(dbl));
             LOGGER.debug("Inverse Normal result : " + result.doubleValue());
             return result;
-        } catch (MathException e) {
+        } catch (Exception e) {
             LOGGER.debug(
                 "Exception calculating inverse normal distribution: " + dbl, e);
             throw new MondrianEvaluationException(

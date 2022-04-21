@@ -83,13 +83,7 @@ import org.apache.commons.vfs2.VFS;
 import org.apache.commons.vfs2.provider.http.HttpFileObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.appender.WriterAppender;
-import org.apache.logging.log4j.core.config.Configuration;
-import org.apache.logging.log4j.core.config.Configurator;
-import org.apache.logging.log4j.core.config.LoggerConfig;
-import org.apache.logging.log4j.core.layout.PatternLayout;
+
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.Olap4jUtil;
 import org.olap4j.mdx.IdentifierNode;
@@ -4601,52 +4595,6 @@ public class Util extends XOMUtil {
     handler.explain( stringWriter.toString(), timing );
   }
 
-  public static void addAppender(Appender appender, Logger logger, org.apache.logging.log4j.Level level) {
-    LoggerContext ctx = (LoggerContext) LogManager.getContext( false );
-    Configuration config = ctx.getConfiguration();
-    appender.start();
-    config.addAppender( appender );
-
-    LoggerConfig loggerConfig = config.getLoggerConfig( logger.getName() );
-    LoggerConfig specificConfig = loggerConfig;
-
-    if ( !loggerConfig.getName().equals( logger.getName() ) ) {
-      specificConfig = new LoggerConfig( logger.getName(), null, true );
-      specificConfig.setParent( loggerConfig );
-      config.addLogger( logger.getName(), specificConfig );
-    }
-
-    specificConfig.addAppender( appender, level, null );
-    ctx.updateLoggers();
-  }
-
-  public static void removeAppender(Appender appender, Logger logger) {
-    appender.stop();
-    LoggerContext ctx = (LoggerContext) LogManager.getContext( false );
-    Configuration config = ctx.getConfiguration();
-    LoggerConfig loggerConfig = config.getLoggerConfig( logger.getName() );
-    loggerConfig.removeAppender( appender.getName() );
-    ctx.updateLoggers();
-  }
-
-  public static Appender makeAppender(
-      String name,
-      StringWriter sw,
-      String layout)
-  {
-    if (layout == null) {
-      layout = PatternLayout.createDefaultLayout().getConversionPattern();
-    }
-    return WriterAppender.newBuilder()
-        .setName(name)
-        .setLayout(PatternLayout.newBuilder().withPattern(layout).build())
-        .setTarget(sw)
-        .build();
-  }
-  
-  public static void setLevel( Logger logger, org.apache.logging.log4j.Level level ) {
-    Configurator.setLevel( logger.getName(), level );
-  }
 }
 
 // End Util.java

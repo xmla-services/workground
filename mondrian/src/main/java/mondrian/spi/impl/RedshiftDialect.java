@@ -15,12 +15,16 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Util;
+import mondrian.spi.Dialect;
 import mondrian.spi.DialectUtil;
 
 /**
  * User: cboyden Date: 2/8/13
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='POSTGRESQL'",
+		"database.product:String='REDSHIFT'" })
 public class RedshiftDialect extends PostgreSqlDialect {
   /**
    * Creates a RedshiftDialect.

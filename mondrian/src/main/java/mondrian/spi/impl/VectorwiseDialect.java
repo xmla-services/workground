@@ -11,12 +11,17 @@ package mondrian.spi.impl;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.spi.Dialect;
+
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the Vertica database.
  *
  * @author LBoudreau
  * @since Sept 11, 2009
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='VECTORWISE'",
+		"database.product:String='VECTORWISE'" })
 public class VectorwiseDialect extends IngresDialect {
 
     public static final JdbcDialectFactory FACTORY =

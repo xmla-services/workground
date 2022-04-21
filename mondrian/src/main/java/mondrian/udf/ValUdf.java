@@ -9,6 +9,7 @@
 
 package mondrian.udf;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Syntax;
 import mondrian.olap.type.NumericType;
@@ -20,6 +21,7 @@ import mondrian.spi.UserDefinedFunction;
  *
  * @author Gang Chen
  */
+@ServiceProvider(value = UserDefinedFunction.class)
 public class ValUdf implements UserDefinedFunction {
 
     public Object execute(Evaluator evaluator, Argument[] arguments) {

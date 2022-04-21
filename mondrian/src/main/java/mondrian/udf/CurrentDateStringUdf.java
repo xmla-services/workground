@@ -19,6 +19,8 @@ import mondrian.util.Format;
 import java.util.Date;
 import java.util.Locale;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+
 /**
  * User-defined function <code>CurrentDateString<code>, which returns the
  * current date value as a formatted string, based on a format string passed in
@@ -27,6 +29,7 @@ import java.util.Locale;
  *
  * @author Zelaine Fong
  */
+@ServiceProvider(value = UserDefinedFunction.class)
 public class CurrentDateStringUdf implements UserDefinedFunction {
 
     public Object execute(Evaluator evaluator, Argument[] arguments) {

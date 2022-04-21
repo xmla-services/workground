@@ -15,6 +15,8 @@ import java.sql.*;
 import java.util.*;
 import java.util.logging.Logger;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+
 /**
  * Olap4j driver for Mondrian.
  *
@@ -60,6 +62,7 @@ import java.util.logging.Logger;
  * @author jhyde
  * @since May 22, 2007
  */
+@ServiceProvider(value = Driver.class)
 public class MondrianOlap4jDriver implements Driver {
     protected final Factory factory;
 

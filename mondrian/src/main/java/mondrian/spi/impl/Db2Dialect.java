@@ -11,6 +11,9 @@ package mondrian.spi.impl;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.spi.Dialect;
+
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the IBM DB2 database.
  *
@@ -19,6 +22,8 @@ import java.sql.SQLException;
  * @author jhyde
  * @since Nov 23, 2008
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='DB2'",
+		"database.product:String='DB2'" })
 public class Db2Dialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =

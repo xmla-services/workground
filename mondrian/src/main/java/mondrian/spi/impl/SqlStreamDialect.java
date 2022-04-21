@@ -12,6 +12,9 @@ package mondrian.spi.impl;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.spi.Dialect;
+
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the SQLstream streaming
  * SQL system.
@@ -19,6 +22,8 @@ import java.sql.SQLException;
  * @author jhyde
  * @since Mar 23, 2009
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='SQLSTREAM'",
+		"database.product:String='SQLSTREAM'" })
 public class SqlStreamDialect extends LucidDbDialect {
 
     public static final JdbcDialectFactory FACTORY =

@@ -12,11 +12,14 @@
 package mondrian.spi.impl;
 
 import mondrian.rolap.SqlStatement;
+import mondrian.spi.Dialect;
 
 import java.sql.Connection;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the Netezza database.
@@ -24,6 +27,8 @@ import java.sql.Types;
  * @author swood
  * @since April 17, 2009
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='NETEZZA'",
+		"database.product:String='NETEZZA'" })
 public class NetezzaDialect extends PostgreSqlDialect {
 
     public static final JdbcDialectFactory FACTORY =

@@ -17,6 +17,8 @@ import mondrian.util.Format;
 
 import java.util.*;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+
 /**
  * User-defined function <code>CurrentDateMember</code>.  Arguments to the
  * function are as follows:
@@ -36,6 +38,7 @@ import java.util.*;
  *
  * @author Zelaine Fong
  */
+@ServiceProvider(value = UserDefinedFunction.class)
 public class CurrentDateMemberUdf implements UserDefinedFunction {
     private Object resultDateMember = null;
 

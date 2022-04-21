@@ -16,11 +16,14 @@ import mondrian.spi.UserDefinedFunction;
 
 import java.util.regex.Pattern;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+
 /**
  * User-defined function <code>MATCHES</code>.
  *
  * @author schoi
  */
+@ServiceProvider(value = UserDefinedFunction.class)
 public class MatchesUdf implements UserDefinedFunction {
 
     public Object execute(Evaluator evaluator, Argument[] arguments) {

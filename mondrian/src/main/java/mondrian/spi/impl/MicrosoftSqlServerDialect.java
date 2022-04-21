@@ -9,6 +9,7 @@
 package mondrian.spi.impl;
 
 import mondrian.olap.Util;
+import mondrian.spi.Dialect;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -18,6 +19,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the Microsoft SQL Server
  * database.
@@ -25,6 +28,8 @@ import java.util.List;
  * @author jhyde
  * @since Nov 23, 2008
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MSSQL'",
+		"database.product:String='MSSQL'" })
 public class MicrosoftSqlServerDialect extends JdbcDialectImpl {
 
     private final DateFormat df =

@@ -9,6 +9,8 @@
 
 package mondrian.udf;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.olap.MondrianDef.UserDefinedFunction;
 import mondrian.olap.type.*;
 import mondrian.util.Format;
 
@@ -31,6 +33,7 @@ import mondrian.util.Format;
  *
  * @author Zelaine Fong
  */
+@ServiceProvider(value = UserDefinedFunction.class)
 public class CurrentDateMemberExactUdf extends CurrentDateMemberUdf {
 
     public String getDescription() {

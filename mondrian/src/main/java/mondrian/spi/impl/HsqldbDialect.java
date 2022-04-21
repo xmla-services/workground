@@ -10,9 +10,12 @@
 package mondrian.spi.impl;
 
 import mondrian.olap.Util;
+import mondrian.spi.Dialect;
 
 import java.sql.*;
 import java.util.List;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the Hsqldb database.
@@ -20,6 +23,8 @@ import java.util.List;
  * @author wgorman
  * @since Aug 20, 2009
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='HSQLDB'",
+		"database.product:String='HSQLDB'" })
 public class HsqldbDialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =

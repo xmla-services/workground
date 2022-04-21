@@ -12,12 +12,17 @@ package mondrian.spi.impl;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.spi.Dialect;
+
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the Informix database.
  *
  * @author jhyde
  * @since Nov 23, 2008
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='INFORMIX'",
+		"database.product:String='INFORMIX'" })
 public class InformixDialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =

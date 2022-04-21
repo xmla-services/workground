@@ -13,12 +13,17 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.spi.Dialect;
+
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the Neoview database.
  *
  * @author jhyde
  * @since Dec 4, 2009
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='NEOVIEW'",
+		"database.product:String='NEOVIEW'" })
 public class NeoviewDialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =

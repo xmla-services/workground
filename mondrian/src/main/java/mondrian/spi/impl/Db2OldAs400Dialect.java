@@ -12,6 +12,9 @@ package mondrian.spi.impl;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.spi.Dialect;
+
 /**
  * Implementation of {@link mondrian.spi.Dialect} for old versions of the IBM
  * DB2/AS400 database. Modern versions of DB2/AS400 use
@@ -22,6 +25,8 @@ import java.sql.SQLException;
  * @author jhyde
  * @since Nov 23, 2008
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='DB2_OLD_AS400'",
+		"database.product:String='DB2_OLD_AS400'" })
 public class Db2OldAs400Dialect extends Db2Dialect {
 
     public static final JdbcDialectFactory FACTORY =

@@ -9,12 +9,15 @@
 package mondrian.spi.impl;
 
 import mondrian.olap.Util;
+import mondrian.spi.Dialect;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the NuoDB database.
@@ -24,6 +27,8 @@ import java.util.List;
  * @author rbuck
  * @since Mar 20, 2014
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='NUODB'",
+		"database.product:String='NUODB'" })
 public class NuoDbDialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =

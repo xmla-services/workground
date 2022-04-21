@@ -14,9 +14,13 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Util;
+import mondrian.spi.Dialect;
 import mondrian.spi.Dialect.DatabaseProduct;
 
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MARIADB'",
+		"database.product:String='MARIADB'" })
 public class MariaDBDialect extends MySqlDialect {
 
   public static final JdbcDialectFactory FACTORY =

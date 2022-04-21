@@ -10,11 +10,14 @@
 package mondrian.spi.impl;
 
 import mondrian.rolap.SqlStatement;
+import mondrian.spi.Dialect;
 import mondrian.spi.DialectUtil;
 
 import java.sql.*;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the PostgreSQL database.
@@ -22,6 +25,8 @@ import java.util.regex.PatternSyntaxException;
  * @author jhyde
  * @since Nov 23, 2008
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='POSTGRESQL'",
+		"database.product:String='POSTGRESQL'" })
 public class PostgreSqlDialect extends JdbcDialectImpl {
     public static final JdbcDialectFactory FACTORY =
         new JdbcDialectFactory(

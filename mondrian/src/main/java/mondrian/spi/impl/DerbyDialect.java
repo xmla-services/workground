@@ -10,9 +10,12 @@
 package mondrian.spi.impl;
 
 import mondrian.olap.Util;
+import mondrian.spi.Dialect;
 
 import java.sql.*;
 import java.util.List;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the Apache Derby database.
@@ -20,6 +23,8 @@ import java.util.List;
  * @author jhyde
  * @since Nov 23, 2008
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='DERBY'",
+		"database.product:String='DERBY'" })
 public class DerbyDialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =

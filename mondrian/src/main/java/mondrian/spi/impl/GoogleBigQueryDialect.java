@@ -9,6 +9,7 @@
 package mondrian.spi.impl;
 
 import mondrian.olap.Util;
+import mondrian.spi.Dialect;
 import mondrian.spi.DialectUtil;
 
 import java.sql.Connection;
@@ -17,11 +18,15 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+
 /**
  * This is the Mondrian dialect for Google BigQuery. It was tested against
  * google-api-services-bigquery-v2-rev355-1.22.0 in Q1 2018.
  * @author lucboudreau
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='GOOGLEBIGQUERY'",
+		"database.product:String='GOOGLEBIGQUERY'" })
 public class GoogleBigQueryDialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =

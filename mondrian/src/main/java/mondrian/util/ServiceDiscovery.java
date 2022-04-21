@@ -9,12 +9,12 @@
 
 package mondrian.util;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-
 import java.io.*;
 import java.net.URL;
 import java.util.*;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Utility functions to discover Java services.
@@ -30,7 +30,7 @@ import java.util.*;
  */
 public class ServiceDiscovery<T> {
 
-    private static final Log logger = LogFactory.getLog(ServiceDiscovery.class);
+    private static final Logger logger = LogManager.getLogger(ServiceDiscovery.class);
 
     private final Class<T> theInterface;
 

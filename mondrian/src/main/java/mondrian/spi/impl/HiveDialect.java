@@ -10,10 +10,13 @@
 package mondrian.spi.impl;
 
 import mondrian.olap.Util;
+import mondrian.spi.Dialect;
 
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link mondrian.spi.Dialect} for the Hive database.
@@ -21,6 +24,8 @@ import java.util.*;
  * @author Hongwei Fu
  * @since Jan 10, 2011
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='HIVE'",
+		"database.product:String='HIVE'" })
 public class HiveDialect extends JdbcDialectImpl {
     private static final int MAX_COLUMN_NAME_LENGTH = 128;
 

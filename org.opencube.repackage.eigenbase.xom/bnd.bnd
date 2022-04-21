@@ -1,0 +1,9 @@
+-includeresource: \
+	@eigenbase-xom-1.3.5.jar
+	
+Export-Package: org.eigenbase.resgen*
+Import-Package: \
+	org.apache.tools.ant;'resolution:'=optional,\
+	*
+	
+DynamicImport-Package: *

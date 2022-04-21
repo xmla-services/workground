@@ -15,6 +15,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.spi.Dialect;
 import mondrian.spi.DialectUtil;
 
 /**
@@ -23,6 +25,8 @@ import mondrian.spi.DialectUtil;
  * @author cboyden
  * @since 2/11/13
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='IMPALA'",
+		"database.product:String='IMPALA'" })
 public class ImpalaDialect extends HiveDialect {
     private final String escapeRegexp = "(\\\\Q([^\\\\Q]+)\\\\E)";
     private final Pattern escapePattern = Pattern.compile(escapeRegexp);

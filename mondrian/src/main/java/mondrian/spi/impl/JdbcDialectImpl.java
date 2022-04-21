@@ -31,8 +31,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
@@ -58,7 +58,7 @@ import mondrian.util.ClassResolver;
  * @since Oct 10, 2008
  */
 public class JdbcDialectImpl implements Dialect {
-    private static final Log LOGGER = LogFactory.getLog(JdbcDialectImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(JdbcDialectImpl.class);
 
     /**
      * String used to quote identifiers.
