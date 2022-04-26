@@ -1,6 +1,7 @@
 package org.opencube.junit5.dbprovider;
 
 import java.io.IOException;
+import java.util.Map.Entry;
 
 import javax.sql.DataSource;
 
@@ -17,7 +18,7 @@ public class EmptyDBProvider implements DatabaseProvider {
 	}
 
 	@Override
-	public DataSource activate()  {
+	public Entry<String, DataSource> activate() {
 		return null;
 	}
 

@@ -3,13 +3,13 @@ package org.opencube.junit5.dbprovider;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.AbstractMap;
+import java.util.Map.Entry;
 
 import javax.sql.DataSource;
 
 import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteDataSource;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
 
 //@ServiceProvider(value = DatabaseProvider.class)
 public class SQLiteDatabaseProvider implements DatabaseProvider {
@@ -33,13 +33,13 @@ public class SQLiteDatabaseProvider implements DatabaseProvider {
 	}
 
 	@Override
-	public DataSource activate() {
+	public Entry<String,DataSource> activate() {
 
 		SQLiteConfig cfg = new SQLiteConfig();
 		SQLiteDataSource ds = new SQLiteDataSource(cfg);
 		ds.setUrl(JDBC_SQLITE_MEMORY);
 
-		return ds;
+		return new AbstractMap.SimpleEntry<String,DataSource>(JDBC_SQLITE_MEMORY,ds);
 	}
 
 	@Override

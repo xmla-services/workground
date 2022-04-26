@@ -9,39 +9,47 @@
 */
 package mondrian.xmla.test;
 
-import mondrian.olap.*;
-import mondrian.olap.Util.PropertyList;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.server.StringRepositoryContentFinder;
-import mondrian.test.DiffRepository;
-import mondrian.test.TestContext;
-import mondrian.xmla.*;
-import mondrian.xmla.impl.DefaultXmlaRequest;
-import mondrian.xmla.impl.DefaultXmlaResponse;
-
-import org.junit.jupiter.api.*;
-import org.opentest4j.AssertionFailedError;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-
-import org.xmlunit.XMLAssert;
-import org.xmlunit.XMLUnit;
-import org.w3c.dom.*;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-import java.io.*;
-import java.util.Iterator;
-import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.StringWriter;
 import java.util.Properties;
-import java.util.regex.Pattern;
 
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.hamcrest.MatcherAssert;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.FoodMartContext;
+import org.opencube.junit5.xmltests.XmlResourceTestCase;
+import org.opentest4j.AssertionFailedError;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xmlunit.matchers.CompareMatcher;
+
+import mondrian.olap.MondrianServer;
+import mondrian.olap.Util;
+import mondrian.olap.Util.PropertyList;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.server.StringRepositoryContentFinder;
+import mondrian.xmla.Enumeration;
+import mondrian.xmla.XmlaHandler;
+import mondrian.xmla.XmlaRequest;
+import mondrian.xmla.XmlaResponse;
+import mondrian.xmla.XmlaUtil;
+import mondrian.xmla.impl.DefaultXmlaRequest;
+import mondrian.xmla.impl.DefaultXmlaResponse;
 
 /**
  * Unit test for refined Mondrian's XML for Analysis API (package
@@ -54,15 +62,6 @@ public class XmlaTest{
     private static final Logger LOGGER =
             LogManager.getLogger(XmlaTest.class);
 
-    static {
-        XMLUnit.setControlParser(
-            "org.apache.xerces.jaxp.DocumentBuilderFactoryImpl");
-        XMLUnit.setTestParser(
-            "org.apache.xerces.jaxp.DocumentBuilderFactoryImpl");
-        XMLUnit.setIgnoreWhitespace(true);
-    }
-
-    private static final XmlaTestContext context = new XmlaTestContext();
 
     private static final String DATA_SOURCE_INFO_RESPONSE_PROP =
         "data.source.info.response";
@@ -70,51 +69,61 @@ public class XmlaTest{
     private XmlaHandler handler;
     private MondrianServer server;
 
+
     // implement TestCase
-    protected void setUp() throws Exception {
-        super.setUp();
-        DiffRepository diffRepos = getDiffRepos();
-        diffRepos.setCurrentTestCaseName(getName());
+
+    protected void setUp(Context context) throws Exception {
+  
+//        DiffRepository diffRepos = getDiffRepos();
+   //     diffRepos.setCurrentTestCaseName(info.getDisplayName());
         server = MondrianServer.createWithRepository(
             new StringRepositoryContentFinder(
-                context.getDataSourcesString()),
+            		XmlaTestContext.getDataSourcesString(context)),
             XmlaTestContext.CATALOG_LOCATOR);
         handler = new XmlaHandler(
             (XmlaHandler.ConnectionFactory) server,
             "xmla");
-        XMLUnit.setIgnoreWhitespace(false);
+      
+       // XMLUnit.setIgnoreWhitespace(false);
     }
 
     // implement TestCase
+    
     protected void tearDown() throws Exception {
-        DiffRepository diffRepos = getDiffRepos();
-        diffRepos.setCurrentTestCaseName(null);
+//        DiffRepository diffRepos = getDiffRepos();
+//        diffRepos.setCurrentTestCaseName(null);
         server.shutdown();
         server = null;
         handler = null;
-        super.tearDown();
     }
 
-    private static DiffRepository getDiffRepos() {
-        return DiffRepository.lookup(XmlaTest.class);
-    }
+//    private static DiffRepository getDiffRepos() {
+//        return DiffRepository.lookup(XmlaTest.class);
+//    }
 
-    protected void runTest() throws Exception {
-        if (!MondrianProperties.instance().SsasCompatibleNaming.get()
-            && getName().equals("mdschemaLevelsCubeDimRestrictions"))
-        {
+    @ParameterizedTest
+    @ContextSource
+    protected void runTest(FoodMartContext context,XmlResourceTestCase testCase) throws Exception {
+    
+    	String request=testCase.getValue("request");
+    	String expectedResponse=testCase.getValue("response");
+    	
+    	setUp(context);
+    	//run all test
+//        if (!MondrianProperties.instance().SsasCompatibleNaming.get()
+//            && getName().equals("mdschemaLevelsCubeDimRestrictions"))
+//        {
             // Changes in unique names of hierarchies and levels mean that the
             // output is a different order in the old behavior, and cannot be
             // fixed by a few sed-like comparisons.
-            return;
-        }
-        DiffRepository diffRepos = getDiffRepos();
-        String request = diffRepos.expand(null, "${request}");
-        String expectedResponse = diffRepos.expand(null, "${response}");
+         //   return;
+//        }
+//        DiffRepository diffRepos = getDiffRepos();
+      //  String request = diffRepos.expand(null, "${request}");
+//        String expectedResponse = diffRepos.expand(null, "${response}");
 
         Properties props = new Properties();
-        XmlaTestContext s = new XmlaTestContext();
-        String con = s.getConnectString().replaceAll("&amp;","&");
+        String con = XmlaTestContext.getConnectString(context).replaceAll("&amp;","&");
         PropertyList pl = Util.parseConnectString(con);
         pl.remove(RolapConnectionProperties.Jdbc.name());
         pl.remove(RolapConnectionProperties.JdbcUser.name());
@@ -136,20 +145,26 @@ public class XmlaTest{
         transformer.transform(
             new DOMSource(responseElem), new StreamResult(bufWriter));
         bufWriter.write(Util.nl);
-        String actualResponse =
-            TestContext.instance().upgradeActual(
-                bufWriter.getBuffer().toString());
+        String actualResponse = bufWriter.getBuffer().toString();// removes upgrade
         try {
             // Start with a purely logical XML diff to avoid test noise
             // from non-determinism in XML generation.
-            XMLAssert.assertXMLEqual(expectedResponse, actualResponse);
+        	
+			MatcherAssert.assertThat(actualResponse, CompareMatcher.isIdenticalTo(expectedResponse)
+					.ignoreComments()
+					.ignoreWhitespace()
+					.ignoreElementContentWhitespace());
         } catch (AssertionFailedError e) {
             // In case of failure, re-diff using DiffRepository's comparison
             // method. It may have noise due to physical vs logical structure,
             // but it will maintain the expected/actual, and some IDEs can even
             // display visual diffs.
-            diffRepos.assertEquals("response", "${response}", actualResponse);
-        }
+        	
+        	Assertions.fail("what????");
+            //diffRepos.assertEquals("response", "${response}", actualResponse);
+        }finally {
+        	tearDown();
+		}
     }
 
     private Element ignoreLastUpdateDate(Element element) {
@@ -177,46 +192,11 @@ public class XmlaTest{
             new ByteArrayInputStream(resBuf.toByteArray()));
     }
 
-    public static TestSuite suite() {
-        TestSuite suite = new TestSuite();
-
-        DiffRepository diffRepos = getDiffRepos();
-
-        MondrianProperties properties = MondrianProperties.instance();
-        String filePattern = properties.QueryFilePattern.get();
-
-        final Pattern pattern =
-            filePattern == null
-            ? null
-            : Pattern.compile(filePattern);
-
-        List<String> testCaseNames = diffRepos.getTestCaseNames();
-
-        if (pattern != null) {
-            Iterator<String> iter = testCaseNames.iterator();
-            while (iter.hasNext()) {
-                String name = iter.next();
-                if (!pattern.matcher(name).matches()) {
-                    iter.remove();
-                }
-            }
-        }
-
-        LOGGER.debug("Found " + testCaseNames.size() + " XML/A test cases");
-
-        for (String name : testCaseNames) {
-            suite.addTest(new XmlaTest(name));
-        }
-
-        suite.addTestSuite(OtherTest.class);
-
-        return suite;
-    }
 
     /**
      * Non diff-based unit tests for XML/A support.
      */
-    public static class OtherTest extends TestCase {
+    public static class OtherTest {
         public void testEncodeElementName() {
             final XmlaUtil.ElementNameEncoder encoder =
                 XmlaUtil.ElementNameEncoder.INSTANCE;

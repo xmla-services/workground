@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
@@ -43,7 +44,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 	         return id;
 	    }
 
-	  public DataSource activate() {
+	  public Entry<String,DataSource> activate() {
 
 
 			DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
@@ -97,7 +98,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 		
 		}
 
-	protected abstract DataSource createConnection();
+	protected abstract Entry<String,DataSource> createConnection();
 
 	protected abstract List<String> env();
 

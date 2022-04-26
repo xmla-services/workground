@@ -2,8 +2,10 @@ package org.opencube.junit5.dbprovider;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import javax.sql.DataSource;
 
@@ -39,7 +41,7 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 	}
 
 	@Override
-	protected DataSource createConnection() {
+	protected Entry<String, DataSource> createConnection() {
 		MysqlDataSource dataSource = new MysqlDataSource();
 		dataSource.setServerName(serverName);
 		dataSource.setPort(PORT);
@@ -56,10 +58,14 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 
 			try {
 				Thread.sleep(100);
-		
+
 				Connection connection = dataSource.getConnection(MYSQL_USER, MYSQL_PASSWORD);
-				
-				return dataSource;
+				String connString = "jdbc:mysql://" + serverName + ":" + PORT + "/" + MYSQL_DATABASE + "?user="
+						+ MYSQL_USER + "&password=" + MYSQL_PASSWORD;
+
+				// jdbc:mysql://<hostname>:<port>/<dbname>?prop1;
+				return new AbstractMap.SimpleEntry<String, DataSource>(connString, dataSource);
+
 			} catch (Exception e) {
 //				e.printStackTrace();
 				System.out.println("nope");
@@ -70,14 +76,14 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 	}
 
 	@Override
-	protected String image()	 {
+	protected String image() {
 		return "mysql:latest";
 	}
 
 	@Override
 	public String getJdbcUrl() {
-		return "jdbc:mysql"+"//"+serverName+":"+PORT+"/"+MYSQL_DATABASE+"?user="+MYSQL_USER+"&password="+MYSQL_PASSWORD+"&rewriteBatchedStatements=true";
+		return "jdbc:mysql" + "//" + serverName + ":" + PORT + "/" + MYSQL_DATABASE + "?user=" + MYSQL_USER
+				+ "&password=" + MYSQL_PASSWORD + "&rewriteBatchedStatements=true";
 	}
-
 
 }

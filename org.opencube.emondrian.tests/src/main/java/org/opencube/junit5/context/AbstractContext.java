@@ -2,6 +2,7 @@ package org.opencube.junit5.context;
 
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Map.Entry;
 import java.util.Optional;
 
 import javax.sql.DataSource;
@@ -19,10 +20,18 @@ public abstract class AbstractContext implements Context {
 
 	private DataSource dataSource;
 	private Util.PropertyList connectProperties = new Util.PropertyList();
+	private String connectionString;
+	private String olapConnectString;
 
 	@Override
-	public void init(DataSource dataSource) {
+	public void init(Entry<String, DataSource> dataSource) {
+		this.dataSource = dataSource.getValue();
+		this.connectionString = dataSource.getKey();
+		init();
 
+	}
+
+	private void init() {
 		connectProperties = new Util.PropertyList();
 
 		connectProperties.put(RolapConnectionProperties.Provider.name(), provider());
@@ -31,18 +40,18 @@ public abstract class AbstractContext implements Context {
 		jdbcPassword().ifPresent(v -> connectProperties.put(RolapConnectionProperties.JdbcPassword.name(), v));
 		connectProperties.put(RolapConnectionProperties.Catalog.name(), catalog().toString());
 
-		if (dataSource == null) {
-			System.out.println(1);
+		olapConnectString = getJDBCConnectString();
+		if (olapConnectString.startsWith("Provider=mondrian; ")) {
+			olapConnectString = olapConnectString.substring("Provider=mondrian; ".length());
 		}
-		this.dataSource = dataSource;
-
+		olapConnectString = "jdbc:mondrian:" + olapConnectString;
 	}
 
 	@Override
 	public Connection createConnection() {
 
 		if (dataSource == null) {
-			System.out.println(1);
+			return DriverManager.getConnection(connectionString, null);
 		}
 		return DriverManager.getConnection(connectProperties, null, dataSource);
 
@@ -80,28 +89,37 @@ public abstract class AbstractContext implements Context {
 
 		MondrianOlap4jDriver d = new MondrianOlap4jDriver();
 
-		String connectString = getConnectString();
-		if (connectString.startsWith("Provider=mondrian; ")) {
-			connectString = connectString.substring("Provider=mondrian; ".length());
-		}
-		final java.sql.Connection connection = java.sql.DriverManager.getConnection("jdbc:mondrian:" + connectString);
+		final java.sql.Connection connection = java.sql.DriverManager.getConnection(getOlapConnectString());
 		return ((OlapWrapper) connection).unwrap(OlapConnection.class);
 	}
 
-	private String getConnectString() {
+	public String getJDBCConnectString() {
 
 		// may exist better ways
-		return createConnection().getConnectString();
+		return connectionString;
+	}
+
+	public String getOlapConnectString() {
+
+		return olapConnectString;
 	}
 
 	@Override
 	public String toString() {
 
-		Connection con = createConnection();
-		if (con == null||dataSource==null) {
-			return super.toString();
-		}
-		return dataSource.getClass()+ " - " + con.getConnectString();
+		return connectionString;
+
+//		
+//		Connection con = createConnection();
+//		if (con == null||dataSource==null) {
+//			return super.toString();
+//		}
+//		try {
+//			return jdbcURL().orElse(		dataSource.getConnection().getMetaData().getDriverName());
+//		} catch (SQLException e) {
+//		return	super.toString();
+//		}
+
 	}
 
 }

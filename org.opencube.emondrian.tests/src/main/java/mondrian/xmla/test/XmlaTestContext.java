@@ -9,26 +9,28 @@
 
 package mondrian.xmla.test;
 
+import java.io.StringReader;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.eigenbase.xom.DOMWrapper;
+import org.eigenbase.xom.Parser;
+import org.eigenbase.xom.XOMUtil;
+import org.olap4j.impl.Olap4jUtil;
+import org.opencube.junit5.context.Context;
+
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.spi.CatalogLocator;
 import mondrian.spi.impl.CatalogLocatorImpl;
 import mondrian.test.DiffRepository;
-import mondrian.test.TestContext;
 import mondrian.xmla.DataSourcesConfig;
-
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-
-import org.eigenbase.xom.*;
-
-import org.olap4j.impl.Olap4jUtil;
-
-import java.io.StringReader;
-import java.net.URL;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Common utilities for XML/A testing, used in test suite and
@@ -54,31 +56,25 @@ public class XmlaTestContext {
     private static DataSourcesConfig.DataSources DATASOURCES;
     public static final CatalogLocator CATALOG_LOCATOR =
         new CatalogLocatorImpl();
-    private String connectString;
 
-    public XmlaTestContext() {
-        super();
-    }
 
-    public String getConnectString() {
-        if (connectString != null) {
-            return connectString;
-        }
+    public static String getConnectString(Context context) {
 
-        connectString = TestContext.instance().getConnectString();
+
+		String connectString = context.getJDBCConnectString();
 
         // Deal with MySQL and other connect strings with & in them
         connectString = connectString.replaceAll("&", "&amp;");
         return connectString;
     }
 
-    public DataSourcesConfig.DataSources dataSources() {
+    public DataSourcesConfig.DataSources dataSources(Context context) {
         if (DATASOURCES != null) {
             return DATASOURCES;
         }
 
         StringReader dsConfigReader = new StringReader(
-            getDataSourcesString());
+            getDataSourcesString(context));
         try {
             final Parser xmlParser = XOMUtil.createDefaultParser();
             final DOMWrapper def = xmlParser.parse(dsConfigReader);
@@ -90,9 +86,10 @@ public class XmlaTestContext {
         return DATASOURCES;
     }
 
-    public String getDataSourcesString() {
+    public static String getDataSourcesString(Context context) {
+    	String connectString=getConnectString(context);
         Util.PropertyList connectProperties =
-            Util.parseConnectString(getConnectString());
+            Util.parseConnectString(connectString);
         String catalogUrl = connectProperties.get(
             RolapConnectionProperties.Catalog.name());
         return
@@ -107,7 +104,7 @@ public class XmlaTestContext {
             + "</DataSourceDescription>"
             + "       <URL>http://localhost:8080/mondrian/xmla</URL>"
             + "       <DataSourceInfo>"
-            + getConnectString()
+            + connectString
             + "</DataSourceInfo>"
             + "       <ProviderName>Mondrian</ProviderName>"
             + "       <ProviderType>MDP</ProviderType>"

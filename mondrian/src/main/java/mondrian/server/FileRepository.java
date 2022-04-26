@@ -231,13 +231,16 @@ public class FileRepository implements Repository {
       properties.putAll(props);
       // Make sure we load the Mondrian driver into
       // the ClassLoader.
-      try {
-        ClassResolver.INSTANCE.forName(
-            MondrianOlap4jDriver.class.getName(), true);
-      } catch (ClassNotFoundException e) {
-          throw new OlapException("Cannot find mondrian olap4j driver.");
-      }
-
+      
+      
+//maybe java 5
+//      try {
+//        ClassResolver.INSTANCE.forName(
+//            MondrianOlap4jDriver.class.getName(), true);
+//      } catch (ClassNotFoundException e) {
+//          throw new OlapException("Cannot find mondrian olap4j driver.");
+//      }
+    Class s=  MondrianOlap4jDriver.class;
       final java.sql.Connection connection =
           java.sql.DriverManager.getConnection(connectString, properties);
       return ((OlapWrapper) connection).unwrap(OlapConnection.class);
