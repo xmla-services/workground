@@ -3,9 +3,9 @@ package org.opencube.junit5.dbprovider;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import javax.sql.DataSource;
 
@@ -14,6 +14,8 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 import com.mysql.jdbc.Driver;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.olap.Util.PropertyList;
+import mondrian.rolap.RolapConnectionProperties;
 
 @ServiceProvider(value = DatabaseProvider.class)
 public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
@@ -42,7 +44,7 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 	}
 
 	@Override
-	protected Entry<String, DataSource> createConnection() {
+	protected SimpleEntry<PropertyList, DataSource> createConnection() {
 		MysqlDataSource dataSource = new MysqlDataSource();
 		dataSource.setServerName(serverName);
 		dataSource.setPort(PORT);
@@ -67,11 +69,15 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 				Thread.sleep(100);
 
 				Connection connection = dataSource.getConnection(MYSQL_USER, MYSQL_PASSWORD);
-				String connString = "jdbc:mysql://" + serverName + ":" + PORT + "/" + MYSQL_DATABASE + "?user="
-						+ MYSQL_USER + "&password=" + MYSQL_PASSWORD;
+
+				String jdbc = "jdbc:mysql://" + serverName + ":" + PORT + "/" + MYSQL_DATABASE;
+				PropertyList connectProperties = new PropertyList();
+				connectProperties.put(RolapConnectionProperties.Jdbc.name(), jdbc);
+				connectProperties.put(RolapConnectionProperties.JdbcUser.name(), MYSQL_USER);
+				connectProperties.put(RolapConnectionProperties.JdbcPassword.name(), MYSQL_PASSWORD);
 
 				// jdbc:mysql://<hostname>:<port>/<dbname>?prop1;
-				return new AbstractMap.SimpleEntry<String, DataSource>(connString, dataSource);
+				return new AbstractMap.SimpleEntry<PropertyList, DataSource>(connectProperties, dataSource);
 
 			} catch (Exception e) {
 //				e.printStackTrace();

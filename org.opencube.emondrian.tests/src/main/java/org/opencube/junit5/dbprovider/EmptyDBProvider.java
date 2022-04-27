@@ -5,6 +5,8 @@ import java.util.Map.Entry;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.Util.PropertyList;
+
 public class EmptyDBProvider implements DatabaseProvider {
 
 	@Override
@@ -18,7 +20,7 @@ public class EmptyDBProvider implements DatabaseProvider {
 	}
 
 	@Override
-	public Entry<String, DataSource> activate() {
+	public Entry<PropertyList, DataSource> activate() {
 		return null;
 	}
 

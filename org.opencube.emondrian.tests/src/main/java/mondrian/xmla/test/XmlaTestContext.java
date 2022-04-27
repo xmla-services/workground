@@ -61,7 +61,7 @@ public class XmlaTestContext {
     public static String getConnectString(Context context) {
 
 
-		String connectString = context.getJDBCConnectString();
+		String connectString = context.getOlapConnectString();
 
         // Deal with MySQL and other connect strings with & in them
         connectString = connectString.replaceAll("&", "&amp;");

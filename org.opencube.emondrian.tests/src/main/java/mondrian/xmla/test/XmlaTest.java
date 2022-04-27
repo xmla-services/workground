@@ -28,10 +28,11 @@ import org.apache.logging.log4j.Logger;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.Context;
 import org.opencube.junit5.context.FoodMartContext;
-import org.opencube.junit5.xmltests.XmlResourceTestCase;
+import org.opencube.junit5.xmltests.ResourceTestCase;
 import org.opentest4j.AssertionFailedError;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -41,6 +42,7 @@ import org.xmlunit.matchers.CompareMatcher;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
+import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.server.StringRepositoryContentFinder;
 import mondrian.xmla.Enumeration;
@@ -103,10 +105,15 @@ public class XmlaTest{
 
     @ParameterizedTest
     @ContextSource
-    protected void runTest(FoodMartContext context,XmlResourceTestCase testCase) throws Exception {
-    
-    	String request=testCase.getValue("request");
-    	String expectedResponse=testCase.getValue("response");
+    protected void runTest(FoodMartContext context,ResourceTestCase testCase) throws Exception {
+    	java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
+
+    	java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver());// finy out why this dies not happend automatically
+
+
+		String name = testCase.getName();
+		String request = testCase.getValue("request");
+		String expectedResponse = testCase.getValue("response");
     	
     	setUp(context);
     	//run all test
@@ -150,10 +157,20 @@ public class XmlaTest{
             // Start with a purely logical XML diff to avoid test noise
             // from non-determinism in XML generation.
         	
-			MatcherAssert.assertThat(actualResponse, CompareMatcher.isIdenticalTo(expectedResponse)
-					.ignoreComments()
-					.ignoreWhitespace()
-					.ignoreElementContentWhitespace());
+        	
+        	System.out.println("actualResponse");
+        	System.out.println(actualResponse);
+        	System.out.println("-------------------------------------------");
+        	System.out.println("-------------------------------------------");
+        	System.out.println("-------------------------------------------");
+        	System.out.println("-------------------------------------------");
+        	System.out.println("-------------------------------------------");
+        	System.out.println("-------------------------------------------");
+        	System.out.println("expectedResponse");
+        	
+        	System.out.println(expectedResponse);
+        	
+			MatcherAssert.assertThat(actualResponse.trim(), CompareMatcher.isIdenticalTo(expectedResponse.trim()));
         } catch (AssertionFailedError e) {
             // In case of failure, re-diff using DiffRepository's comparison
             // method. It may have noise due to physical vs logical structure,

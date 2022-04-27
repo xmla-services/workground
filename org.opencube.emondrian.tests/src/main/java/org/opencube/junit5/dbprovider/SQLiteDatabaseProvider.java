@@ -11,6 +11,9 @@ import javax.sql.DataSource;
 import org.sqlite.SQLiteConfig;
 import org.sqlite.SQLiteDataSource;
 
+import mondrian.olap.Util.PropertyList;
+import mondrian.rolap.RolapConnectionProperties;
+
 //@ServiceProvider(value = DatabaseProvider.class)
 public class SQLiteDatabaseProvider implements DatabaseProvider {
 
@@ -33,13 +36,17 @@ public class SQLiteDatabaseProvider implements DatabaseProvider {
 	}
 
 	@Override
-	public Entry<String,DataSource> activate() {
+	public Entry<PropertyList, DataSource> activate() {
 
 		SQLiteConfig cfg = new SQLiteConfig();
 		SQLiteDataSource ds = new SQLiteDataSource(cfg);
 		ds.setUrl(JDBC_SQLITE_MEMORY);
 
-		return new AbstractMap.SimpleEntry<String,DataSource>(JDBC_SQLITE_MEMORY,ds);
+		PropertyList connectProperties = new PropertyList();
+		connectProperties.put(RolapConnectionProperties.Jdbc.name(), JDBC_SQLITE_MEMORY);
+//		connectProperties.put(RolapConnectionProperties.JdbcUser.name(),MYSQL_USER);
+//		connectProperties.put(RolapConnectionProperties.JdbcPassword.name(), MYSQL_PASSWORD);
+		return new AbstractMap.SimpleEntry<PropertyList, DataSource>(connectProperties, ds);
 	}
 
 	@Override

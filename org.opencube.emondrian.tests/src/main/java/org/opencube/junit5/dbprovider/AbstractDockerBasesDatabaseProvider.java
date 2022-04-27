@@ -1,13 +1,14 @@
 package org.opencube.junit5.dbprovider;
 
 import java.io.IOException;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
@@ -22,6 +23,8 @@ import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
+
+import mondrian.olap.Util.PropertyList;
 
 public abstract class AbstractDockerBasesDatabaseProvider implements DatabaseProvider{
 
@@ -44,7 +47,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 	         return id;
 	    }
 
-	  public Entry<String,DataSource> activate() {
+	  public Entry<PropertyList, DataSource> activate() {
 
 
 			DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
@@ -98,7 +101,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 		
 		}
 
-	protected abstract Entry<String,DataSource> createConnection();
+	protected abstract SimpleEntry<PropertyList, DataSource> createConnection();
 
 	protected abstract List<String> env();
 

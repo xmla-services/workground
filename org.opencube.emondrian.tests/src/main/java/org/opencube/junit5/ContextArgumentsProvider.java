@@ -36,12 +36,13 @@ import aQute.bnd.annotation.spi.ServiceConsumer;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
+import mondrian.olap.Util.PropertyList;
 
 @ServiceConsumer(cardinality = Cardinality.MULTIPLE, value = DatabaseProvider.class)
 public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationConsumer<ContextSource> {
 	private ContextSource contextSource;
 
-	private static Map<Class<? extends DatabaseProvider>, Map<Class<? extends DataLoader>, Entry<String, DataSource>>> store = new HashMap<>();
+	private static Map<Class<? extends DatabaseProvider>, Map<Class<? extends DataLoader>, Entry<PropertyList, DataSource>>> store = new HashMap<>();
 
 	@Override
 	public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
@@ -137,7 +138,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 		}
 		List<Context> args = providers.parallel().map(dbp -> {
 
-			Entry<String, DataSource> dataSource = null;
+			Entry<PropertyList, DataSource> dataSource = null;
 			Class<? extends DatabaseProvider> clazzProvider = dbp.getClass();
 
 			if (!store.containsKey(clazzProvider)) {
@@ -163,7 +164,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 								Class<? extends DataLoader> dataLoaderClass = context.dataLoader();
 
-								Map<Class<? extends DataLoader>, Entry<String, DataSource>> storedLoaders = store
+								Map<Class<? extends DataLoader>, Entry<PropertyList, DataSource>> storedLoaders = store
 										.get(clazzProvider);
 								if (storedLoaders.containsKey(dataLoaderClass)) {
 									dataSource = storedLoaders.get(dataLoaderClass);

@@ -5,9 +5,11 @@ import java.util.Map.Entry;
 
 import javax.sql.DataSource;
 
+import mondrian.olap.Util.PropertyList;
+
 public interface DatabaseProvider extends Closeable {
 
-	public Entry<String, DataSource> activate();
+	public Entry<PropertyList, DataSource> activate();
 
 	public String getJdbcUrl();
 

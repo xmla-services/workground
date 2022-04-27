@@ -8,10 +8,11 @@ import javax.sql.DataSource;
 import org.olap4j.OlapConnection;
 
 import mondrian.olap.Connection;
+import mondrian.olap.Util.PropertyList;
 
 public interface Context {
 
-	public void init(Entry<String, DataSource> dataSource);
+	public void init(Entry<PropertyList, DataSource> dataSource);
 
 	/**
 	 * Returns the olap.Connection.
@@ -21,5 +22,7 @@ public interface Context {
 	OlapConnection createOlap4jConnection() throws SQLException;
 
 	public String getJDBCConnectString();
+
+	String getOlapConnectString();
 
 }
