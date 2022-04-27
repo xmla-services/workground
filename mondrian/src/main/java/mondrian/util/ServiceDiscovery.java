@@ -27,7 +27,9 @@ import org.apache.logging.log4j.Logger;
  * entries in a JAR file and discovers implementors of an interface.
  *
  * @author Marc Batchelor
+ * @deprecated use ServiceLoader
  */
+@Deprecated()
 public class ServiceDiscovery<T> {
 
     private static final Logger logger = LogManager.getLogger(ServiceDiscovery.class);
@@ -49,7 +51,9 @@ public class ServiceDiscovery<T> {
      * Creates a ServiceDiscovery.
      *
      * @param theInterface Interface for service
+     * @deprecated use ServiceLoader
      */
+    @Deprecated
     private ServiceDiscovery(Class<T> theInterface) {
         assert theInterface != null;
         this.theInterface = theInterface;
@@ -59,7 +63,9 @@ public class ServiceDiscovery<T> {
      * Returns a list of classes that implement the service.
      *
      * @return List of classes that implement the service
+     * @deprecated use ServiceLoader
      */
+    @Deprecated
     public List<Class<T>> getImplementor() {
         // Use linked hash set to eliminate duplicates but still return results
         // in the order they were added.
@@ -118,7 +124,9 @@ public class ServiceDiscovery<T> {
      * @param clazz Class name (or list of class names)
      * @param cLoader Class loader
      * @param uniqueClasses Set of classes (output)
+     * @deprecated use ServiceLoader
      */
+@Deprecated
     protected void parseImplementor(
         String clazz,
         ClassLoader cLoader,

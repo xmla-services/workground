@@ -8,10 +8,11 @@
 */
 package mondrian.olap.fun;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.FoodMartCachesExistsTestsAlternateSalesContext;
 import org.opencube.junit5.context.FoodMartContext;
 
 
@@ -300,7 +301,8 @@ public class CachedExistsTest{
   
 	@ParameterizedTest
 	@ContextSource
-    public void testMondrian2704(FoodMartCachesExistsTestsAlternateSalesContext context) {
+    public void testMondrian2704(FoodMartContext context) {
+		fail("TODO: mock contexts");
 //    TestContext testContext = FoodMartTestCase.getTestContext().create(
 //        null,
 //        "<Cube name=\"Alternate Sales\">\n"

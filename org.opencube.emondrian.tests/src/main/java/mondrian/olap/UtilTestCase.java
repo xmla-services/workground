@@ -36,6 +36,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.TimeUnit;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import mondrian.olap.Util.ByteMatcher;
@@ -659,6 +660,7 @@ public class UtilTestCase{
      * Tests {@link mondrian.util.ServiceDiscovery}.
      */
     @Test
+    @Disabled("Use Serviceloader directly - this is pre java 8 and non-osgi")
     public void testServiceDiscovery() {
         final ServiceDiscovery<Driver>
             serviceDiscovery = ServiceDiscovery.forClass(Driver.class);

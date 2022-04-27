@@ -215,7 +215,7 @@ public class TestUtil {
 		// TODO: switch so other than printwriter
 		result.print(pw);
 
-		assertThat(sw.getBuffer().toString()).isNotNull().isSameAs(expectedResult);
+		assertThat(sw.getBuffer().toString()).isNotNull().isEqualTo(expectedResult);
 
 	}
 	public static CellSet executeOlap4jQuery(OlapConnection olapConnection, String queryString ) throws SQLException {
