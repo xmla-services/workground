@@ -19,7 +19,7 @@
 	bnd.identity;id='org.glassfish.hk2.osgi-resource-locator',\
 	bnd.identity;id='com.sun.xml.bind.jaxb-impl'
 
--runee: JavaSE-11
+-runee: JavaSE-17
 
 -runstartlevel: \
     order=sortbynameversion,\

@@ -125,8 +125,7 @@ public class TestUtil {
 	      try {
 	        final String queryString =
 	          "select {" + expression + "} on columns from " + cubeName;
-	        Query query = connection.parseQuery( queryString );
-	        connection.execute( query );
+	        executeQuery(connection, queryString);
 	      } catch ( Throwable e ) {
 	        throwable = e;
 	      }

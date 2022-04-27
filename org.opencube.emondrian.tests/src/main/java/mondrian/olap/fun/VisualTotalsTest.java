@@ -93,9 +93,9 @@ public class VisualTotalsTest {
 	@ParameterizedTest
 	@ContextSource
     public void testDrillthroughVisualTotal(FoodMartContext foodMartContext) throws SQLException {
-        Connection conn = foodMartContext.createConnection();
+        OlapConnection conn = foodMartContext.createOlap4jConnection();
         CellSet cellSet =
-    		TestUtil.executeOlap4jQuery((OlapConnection)conn,
+    		TestUtil.executeOlap4jQuery(conn,
                 "select {[Measures].[Unit Sales]} on columns, "
                 + "{VisualTotals("
                 + "    {[Product].[Food].[Baked Goods].[Bread],"

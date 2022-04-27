@@ -35,6 +35,7 @@ import org.olap4j.mdx.IdentifierSegment;
 import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.sql.DriverManager;
 import java.util.*;
 
 import javax.sql.DataSource;
@@ -182,6 +183,7 @@ public class RolapSchema implements Schema {
             throw new AssertionError();
         }
 
+        DriverManager.drivers().forEach(System.out::println);
         // the order of the next two lines is important
         this.defaultRole = Util.createRootRole(this);
         final MondrianServer internalServer = MondrianServer.forId(null);
