@@ -436,7 +436,6 @@ public class DataLoaderUtil {
 					if (first) {
 						first = false;
 					} else {
-						ps.addBatch();
 						ps.clearParameters();
 					}
 
@@ -481,7 +480,9 @@ public class DataLoaderUtil {
 
 						i++;
 					}
+					ps.addBatch();
 				}
+
 				long start = System.currentTimeMillis();
 				System.out.println("---");
 				ps.executeBatch();

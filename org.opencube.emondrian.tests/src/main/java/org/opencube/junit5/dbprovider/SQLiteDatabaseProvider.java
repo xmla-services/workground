@@ -19,7 +19,10 @@ public class SQLiteDatabaseProvider implements DatabaseProvider {
 
 	private static String getTempFile() {
 		try {
-			Path temp = Files.createTempFile("database", ".sqlite.db");
+			Path temp = Path.of("foodsqlite.db");
+			if (Files.exists(temp)) {
+				Files.delete(temp);
+			}
 			return temp.toFile().getAbsolutePath().toString();
 		} catch (Exception e) {
 			e.printStackTrace();
