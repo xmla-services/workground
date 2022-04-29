@@ -388,11 +388,11 @@ public class DataLoaderUtil {
 
 				}
 				
-				if (table.tableName.startsWith("agg_")) {
-					//aggregation tables are calculated 
-					//TODO: also load them
-					return;
-				}
+//				if (table.tableName.startsWith("agg_")) {
+//					//aggregation tables are calculated 
+//					//TODO: also load them
+//					return;
+//				}
 				com.univocity.parsers.csv.CsvParser parser = new com.univocity.parsers.csv.CsvParser(settings);
 				parser.beginParsing(p.toFile(), StandardCharsets.UTF_8);
 				parser.parseNext();

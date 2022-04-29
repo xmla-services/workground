@@ -382,10 +382,10 @@ public class FastFoodmardDataLoader implements DataLoader {
 	    
 	    DataLoaderUtil.importCSV(dataSource, dialect,foodmardTables,dir);
 
-	    
-	    InputStream sqlFile= new FileInputStream(new File(Constants.TESTFILES_DIR+"loader/foodmart/insert.sql"));
-	    
-	   DataLoaderUtil.loadFromSqlInserts(connection, dialect,sqlFile);
+//	   imported by csv no agg using sql
+//	    InputStream sqlFile= new FileInputStream(new File(Constants.TESTFILES_DIR+"loader/foodmart/insert.sql"));
+//	    
+//	   DataLoaderUtil.loadFromSqlInserts(connection, dialect,sqlFile);
 
 	}
 	return true;

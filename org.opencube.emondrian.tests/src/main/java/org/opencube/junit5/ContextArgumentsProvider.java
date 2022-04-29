@@ -87,7 +87,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 			if (oElement.get() instanceof Method) {
 				Method method = (Method) oElement.get();
 				for (Parameter param : method.getParameters()) {
-					if (ResourceTestCase.class.isAssignableFrom(param.getType())) {
+					if (ResourceTestCase.class.equals(param.getType())) {
 						Optional<Class<?>> oTestclass = extensionContext.getTestClass();
 						if (oTestclass.isPresent()) {
 							Class<?> testclass = oTestclass.get();
@@ -103,6 +103,12 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 								Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 
+//								try {
+//									System.out.println(new String(is.readAllBytes()));
+//								} catch (IOException e) {
+//									// TODO Auto-generated catch block
+//									e.printStackTrace();
+//								}
 								XmlResourceRoot o = (XmlResourceRoot) jaxbUnmarshaller.unmarshal(is);
 
 								return o.testCase;
