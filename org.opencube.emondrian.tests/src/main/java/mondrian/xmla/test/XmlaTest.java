@@ -76,8 +76,6 @@ public class XmlaTest{
 
     protected void setUp(Context context) throws Exception {
   
-//        DiffRepository diffRepos = getDiffRepos();
-   //     diffRepos.setCurrentTestCaseName(info.getDisplayName());
         server = MondrianServer.createWithRepository(
             new StringRepositoryContentFinder(
             		XmlaTestContext.getDataSourcesString(context)),
@@ -86,22 +84,15 @@ public class XmlaTest{
             (XmlaHandler.ConnectionFactory) server,
             "xmla");
       
-       // XMLUnit.setIgnoreWhitespace(false);
     }
 
     // implement TestCase
     
     protected void tearDown() throws Exception {
-//        DiffRepository diffRepos = getDiffRepos();
-//        diffRepos.setCurrentTestCaseName(null);
         server.shutdown();
         server = null;
         handler = null;
     }
-
-//    private static DiffRepository getDiffRepos() {
-//        return DiffRepository.lookup(XmlaTest.class);
-//    }
 
     @ParameterizedTest
     @ContextSource
@@ -116,18 +107,6 @@ public class XmlaTest{
 		String expectedResponse = testCase.getValue("response");
     	
     	setUp(context);
-    	//run all test
-//        if (!MondrianProperties.instance().SsasCompatibleNaming.get()
-//            && getName().equals("mdschemaLevelsCubeDimRestrictions"))
-//        {
-            // Changes in unique names of hierarchies and levels mean that the
-            // output is a different order in the old behavior, and cannot be
-            // fixed by a few sed-like comparisons.
-         //   return;
-//        }
-//        DiffRepository diffRepos = getDiffRepos();
-      //  String request = diffRepos.expand(null, "${request}");
-//        String expectedResponse = diffRepos.expand(null, "${response}");
 
         Properties props = new Properties();
         String con = XmlaTestContext.getConnectString(context).replaceAll("&amp;","&");
@@ -154,23 +133,12 @@ public class XmlaTest{
         bufWriter.write(Util.nl);
         String actualResponse = bufWriter.getBuffer().toString();// removes upgrade
         try {
-            // Start with a purely logical XML diff to avoid test noise
-            // from non-determinism in XML generation.
+			actualResponse = actualResponse.trim();
+			expectedResponse = expectedResponse.trim();
+			
+			CompareMatcher compareMatcher = CompareMatcher.isIdenticalTo(expectedResponse);
         	
-        	
-        	System.out.println("actualResponse");
-        	System.out.println(actualResponse);
-        	System.out.println("-------------------------------------------");
-        	System.out.println("-------------------------------------------");
-        	System.out.println("-------------------------------------------");
-        	System.out.println("-------------------------------------------");
-        	System.out.println("-------------------------------------------");
-        	System.out.println("-------------------------------------------");
-        	System.out.println("expectedResponse");
-        	
-        	System.out.println(expectedResponse);
-        	
-			MatcherAssert.assertThat(actualResponse.trim(), CompareMatcher.isIdenticalTo(expectedResponse.trim()));
+			MatcherAssert.assertThat(actualResponse, compareMatcher);
         } catch (AssertionFailedError e) {
             // In case of failure, re-diff using DiffRepository's comparison
             // method. It may have noise due to physical vs logical structure,
