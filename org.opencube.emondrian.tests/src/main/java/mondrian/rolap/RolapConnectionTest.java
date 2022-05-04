@@ -10,20 +10,14 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.DriverManager;
-import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
-import mondrian.olap.Result;
-import mondrian.olap.Util;
-import mondrian.spi.Dialect;
-import mondrian.test.TestContext;
-import mondrian.util.Pair;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
-import org.apache.commons.lang.StringUtils;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -42,12 +36,21 @@ import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.NamingManager;
 import javax.sql.DataSource;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.*;
+import org.apache.commons.lang.StringUtils;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.FoodMartContext;
+
+import mondrian.olap.DriverManager;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Query;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.spi.Dialect;
+import mondrian.util.Pair;
 
 /**
  * Unit test for {@link RolapConnection}.
@@ -82,10 +85,10 @@ public class RolapConnectionTest {
         }
     }
 
-    @Test
-    public void testPooledConnectionWithProperties() throws SQLException {
-        Util.PropertyList properties =
-            TestContext.instance().getConnectionProperties().clone();
+	@ParameterizedTest
+	@ContextSource
+    public void testPooledConnectionWithProperties(FoodMartContext context) throws SQLException {
+        Util.PropertyList properties = baseProperties(context);
 
         // Only the JDBC-ODBC bridge gives the error necessary for this
         // test to succeed. So trivially succeed for all other JDBC
@@ -134,10 +137,15 @@ public class RolapConnectionTest {
         }
     }
 
-    @Test
-    public void testNonPooledConnectionWithProperties() {
-        Util.PropertyList properties =
-            TestContext.instance().getConnectionProperties().clone();
+	private Util.PropertyList baseProperties(FoodMartContext context) {
+		Util.PropertyList properties =Util.parseConnectString( context.getOlapConnectString());
+		return properties;
+	}
+
+	@ParameterizedTest
+	@ContextSource
+    public void testNonPooledConnectionWithProperties(FoodMartContext context) {
+        Util.PropertyList properties =baseProperties(context);
 
         // Only the JDBC-ODBC bridge gives the error necessary for this
         // test to succeed. So trivially succeed for all other JDBC
@@ -214,8 +222,9 @@ public class RolapConnectionTest {
     /**
      * Tests that the FORMAT function uses the connection's locale.
      */
-    @Test
-    public void testFormatLocale() {
+	@ParameterizedTest
+	@ContextSource
+    public void testFormatLocale(FoodMartContext context) {
         String expr = "FORMAT(1234.56, \"#,##.#\")";
         checkLocale("es_ES", expr, "1.234,6", false);
         checkLocale("es_MX", expr, "1,234.6", false);
@@ -225,8 +234,9 @@ public class RolapConnectionTest {
     /**
      * Tests that measures are formatted using the connection's locale.
      */
-    @Test
-    public void testFormatStringLocale() {
+	@ParameterizedTest
+	@ContextSource
+    public void testFormatStringLocale(FoodMartContext context) {
         checkLocale("es_ES", "1234.56", "1.234,6", true);
         checkLocale("es_MX", "1234.56", "1,234.6", true);
         checkLocale("en_US", "1234.56", "1,234.6", true);
@@ -235,42 +245,44 @@ public class RolapConnectionTest {
     private static void checkLocale(
         final String localeName, String expr, String expected, boolean isQuery)
     {
-        TestContext testContextSpain = new TestContext() {
-            public mondrian.olap.Connection getConnection() {
-                Util.PropertyList properties =
-                    Util.parseConnectString(getConnectString());
-                properties.put(
-                    RolapConnectionProperties.Locale.name(),
-                    localeName);
-                return DriverManager.getConnection(properties, null);
-            }
-        };
-        if (isQuery) {
-            String query = "WITH MEMBER [Measures].[Foo] AS '" + expr + "',\n"
-                + " FORMAT_STRING = '#,##.#' \n"
-                + "SELECT {[MEasures].[Foo]} ON COLUMNS FROM [Sales]";
-            String expected2 =
-                "Axis #0:\n"
-                + "{}\n"
-                + "Axis #1:\n"
-                + "{[Measures].[Foo]}\n"
-                + "Row #0: " + expected + "\n";
-            testContextSpain.assertQueryReturns(query, expected2);
-        } else {
-            testContextSpain.assertExprReturns(expr, expected);
-        }
+    	//TODO:
+    	fail("uncomment here");
+//        TestContext testContextSpain = new TestContext() {
+//            public mondrian.olap.Connection getConnection() {
+//                Util.PropertyList properties =
+//                    Util.parseConnectString(getConnectString());
+//                properties.put(
+//                    RolapConnectionProperties.Locale.name(),
+//                    localeName);
+//                return DriverManager.getConnection(properties, null);
+//            }
+//        };
+//        if (isQuery) {
+//            String query = "WITH MEMBER [Measures].[Foo] AS '" + expr + "',\n"
+//                + " FORMAT_STRING = '#,##.#' \n"
+//                + "SELECT {[MEasures].[Foo]} ON COLUMNS FROM [Sales]";
+//            String expected2 =
+//                "Axis #0:\n"
+//                + "{}\n"
+//                + "Axis #1:\n"
+//                + "{[Measures].[Foo]}\n"
+//                + "Row #0: " + expected + "\n";
+//            testContextSpain.assertQueryReturns(query, expected2);
+//        } else {
+//            testContextSpain.assertExprReturns(expr, expected);
+//        }
     }
 
-    @Test
-    public void testConnectSansCatalogFails() {
-        Util.PropertyList properties =
-            TestContext.instance().getConnectionProperties().clone();
+	@ParameterizedTest
+	@ContextSource
+    public void testConnectSansCatalogFails(FoodMartContext context) {
+        Util.PropertyList properties =baseProperties(context);
         properties.remove(RolapConnectionProperties.Catalog.name());
         properties.remove(RolapConnectionProperties.CatalogContent.name());
 
         if (RolapUtil.SQL_LOGGER.isDebugEnabled()) {
             RolapUtil.SQL_LOGGER.debug(
-                this.getName() + "\n  [Connection Properties | " + properties
+                 "\n  [Connection Properties | " + properties
                 + "]\n");
         } else {
             System.out.println(properties);
@@ -290,8 +302,9 @@ public class RolapConnectionTest {
         }
     }
 
-    @Test
-    public void testJndiConnection() throws NamingException {
+	@ParameterizedTest
+	@ContextSource
+    public void testJndiConnection(FoodMartContext context) throws NamingException {
         // Cannot guarantee that this test will work if they have chosen to
         // resolve data sources other than by JNDI.
         if (MondrianProperties.instance().DataSourceResolverClass.isSet()) {
@@ -299,7 +312,7 @@ public class RolapConnectionTest {
         }
         // get a regular connection
         Util.PropertyList properties =
-            TestContext.instance().getConnectionProperties().clone();
+           baseProperties(context);
         final StringBuilder buf = new StringBuilder();
         final DataSource dataSource =
             RolapConnection.createDataSource(null, properties, buf);
@@ -328,7 +341,7 @@ public class RolapConnectionTest {
         // Remove user and password, because some data sources (those using
         // pools) don't allow you to override user.
         Util.PropertyList properties2 =
-            TestContext.instance().getConnectionProperties().clone();
+           baseProperties(context);
         properties2.remove(RolapConnectionProperties.Jdbc.name());
         properties2.remove(RolapConnectionProperties.JdbcUser.name());
         properties2.remove(RolapConnectionProperties.JdbcPassword.name());
@@ -341,14 +354,15 @@ public class RolapConnectionTest {
         assertTrue(lookupCalls.size() > 0);
     }
 
-    @Test
-    public void testDataSourceOverrideUserPass()
+	@ParameterizedTest
+	@ContextSource
+    public void testDataSourceOverrideUserPass(FoodMartContext context)
         throws SQLException, NamingException
     {
         // use the datasource property to connect to the database
         Util.PropertyList properties =
-            spy(TestContext.instance().getConnectionProperties().clone());
-        final Dialect dialect = TestContext.instance().getDialect();
+            spy(baseProperties(context));
+        final Dialect dialect = TestUtil.getDialect(context.createConnection());
         if (dialect.getDatabaseProduct() == Dialect.DatabaseProduct.ACCESS) {
             // Access doesn't accept user/password, so this test is pointless.
             return;
@@ -443,7 +457,7 @@ public class RolapConnectionTest {
                 connection = DriverManager.getConnection(properties2, null);
                 fail("Expected exception");
             } catch (MondrianException e) {
-                final String s = TestContext.getStackTrace(e);
+                final String s = TestUtil.getStackTrace(e);
                 assertTrue(
                     s.indexOf(
                         "Error while creating SQL connection: "
@@ -490,11 +504,12 @@ public class RolapConnectionTest {
         }
     }
 
-    @Test
-    public void testGetJdbcConnectionWhenJdbcIsNull() {
+	@ParameterizedTest
+	@ContextSource
+    public void testGetJdbcConnectionWhenJdbcIsNull(FoodMartContext context) {
         final StringBuilder connectInfo = new StringBuilder();
         Util.PropertyList properties =
-            TestContext.instance().getConnectionProperties().clone();
+           baseProperties(context);
         properties.remove(RolapConnectionProperties.Jdbc.name());
         try {
             DataSource dataSource =
@@ -506,13 +521,14 @@ public class RolapConnectionTest {
         }
     }
 
-    @Test
-    public void testJdbcConnectionString() {
+	@ParameterizedTest
+	@ContextSource
+    public void testJdbcConnectionString(FoodMartContext context) {
         final StringBuilder connectInfo = new StringBuilder();
         Map<String, String> connectInfoMap = new HashMap<>();
 
         Util.PropertyList properties =
-            TestContext.instance().getConnectionProperties().clone();
+           baseProperties(context);
         properties.put(
             RolapConnectionProperties.JdbcUser.name(), "sqlserver://localhost");
         properties.put("databaseName", "databaseTest");
@@ -535,11 +551,12 @@ public class RolapConnectionTest {
         assertEquals(connectInfoMap.get("integratedSecurity"), "true");
     }
 
-    @Test
-    public void testJdbcConnectionStringWithoutDatabase() {
+	@ParameterizedTest
+	@ContextSource
+    public void testJdbcConnectionStringWithoutDatabase(FoodMartContext context) {
         final StringBuilder connectInfo = new StringBuilder();
         Util.PropertyList properties =
-            TestContext.instance().getConnectionProperties().clone();
+           baseProperties(context);
         properties.put(
             RolapConnectionProperties.JdbcUser.name(), "sqlserver://localhost");
 
@@ -550,11 +567,12 @@ public class RolapConnectionTest {
         assertFalse(connectInfo.toString().contains("databaseName"));
     }
 
-    @Test
-    public void testJdbcConnectionStringWithoutIntegratedSecurity() {
+	@ParameterizedTest
+	@ContextSource
+    public void testJdbcConnectionStringWithoutIntegratedSecurity(FoodMartContext context) {
         final StringBuilder connectInfo = new StringBuilder();
         Util.PropertyList properties =
-            TestContext.instance().getConnectionProperties().clone();
+           baseProperties(context);
         properties.put(
             RolapConnectionProperties.JdbcUser.name(), "sqlserver://localhost");
 

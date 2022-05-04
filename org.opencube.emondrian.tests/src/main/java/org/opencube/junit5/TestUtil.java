@@ -13,6 +13,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.sql.DataSource;
+
 import org.junit.jupiter.api.Assertions;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -35,6 +37,8 @@ import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
+import mondrian.spi.Dialect;
+import mondrian.spi.DialectManager;
 
 public class TestUtil {
 	
@@ -311,5 +315,11 @@ public class TestUtil {
 	          };
 	        }
 	      };
+	    }
+	    
+	static   public Dialect getDialect(Connection connection){
+	    	   DataSource dataSource =connection.getDataSource();
+	    	    return DialectManager.createDialect( dataSource, null );
+	    	
 	    }
 }
