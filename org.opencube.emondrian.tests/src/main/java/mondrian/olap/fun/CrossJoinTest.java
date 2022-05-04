@@ -360,6 +360,12 @@ private PropertySaver5 propSaver;
 
 	@ParameterizedTest
 	@ContextSource
+public void testResultLimitWithinCrossjoin_1(FoodMartContext foodMartContext) {
+	}
+
+  
+	@ParameterizedTest
+	@ContextSource
   public void testResultLimitWithinCrossjoin(FoodMartContext foodMartContext) {
     propSaver.set( MondrianProperties.instance().ResultLimit, 1000 );
    Connection connection= foodMartContext.createConnection();
