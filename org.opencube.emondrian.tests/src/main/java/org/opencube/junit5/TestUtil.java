@@ -322,4 +322,79 @@ public class TestUtil {
 	    	    return DialectManager.createDialect( dataSource, null );
 	    	
 	    }
+	
+	  /**
+	   * Returns a the XML of the current schema with added parameters and cube definitions.
+	   */
+	  public static String getSchema(
+		String baseSchema,
+	    String parameterDefs,
+	    String cubeDefs,
+	    String virtualCubeDefs,
+	    String namedSetDefs,
+	    String udfDefs,
+	    String roleDefs ) {
+	    // First, get the unadulterated schema.
+	    String s = baseSchema;
+
+	    // Add parameter definitions, if specified.
+	    if ( parameterDefs != null ) {
+	      int i = s.indexOf( "<Dimension name=\"Store\">" );
+	      s = s.substring( 0, i )
+	        + parameterDefs
+	        + s.substring( i );
+	    }
+
+	    // Add cube definitions, if specified.
+	    if ( cubeDefs != null ) {
+	      int i =
+	        s.indexOf(
+	          "<Cube name=\"Sales\" defaultMeasure=\"Unit Sales\">" );
+	      s = s.substring( 0, i )
+	        + cubeDefs
+	        + s.substring( i );
+	    }
+
+	    // Add virtual cube definitions, if specified.
+	    if ( virtualCubeDefs != null ) {
+	      int i = s.indexOf(
+	        "<VirtualCube name=\"Warehouse and Sales\" "
+	          + "defaultMeasure=\"Store Sales\">" );
+	      s = s.substring( 0, i )
+	        + virtualCubeDefs
+	        + s.substring( i );
+	    }
+
+	    // Add named set definitions, if specified. Schema-level named sets
+	    // occur after <Cube> and <VirtualCube> and before <Role> elements.
+	    if ( namedSetDefs != null ) {
+	      int i = s.indexOf( "<Role" );
+	      if ( i < 0 ) {
+	        i = s.indexOf( "</Schema>" );
+	      }
+	      s = s.substring( 0, i )
+	        + namedSetDefs
+	        + s.substring( i );
+	    }
+
+	    // Add definitions of roles, if specified.
+	    if ( roleDefs != null ) {
+	      int i = s.indexOf( "<UserDefinedFunction" );
+	      if ( i < 0 ) {
+	        i = s.indexOf( "</Schema>" );
+	      }
+	      s = s.substring( 0, i )
+	        + roleDefs
+	        + s.substring( i );
+	    }
+
+	    // Add definitions of user-defined functions, if specified.
+	    if ( udfDefs != null ) {
+	      int i = s.indexOf( "</Schema>" );
+	      s = s.substring( 0, i )
+	        + udfDefs
+	        + s.substring( i );
+	    }
+	    return s;
+	  }
 }

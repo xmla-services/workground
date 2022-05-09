@@ -187,7 +187,6 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 								throw new RuntimeException(e);
 							}
 
-//							context.init(dataSource);
 							context.init(dataSource);
 
 							aaa.add(context);

@@ -1,8 +1,7 @@
 package org.opencube.junit5.context;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.sql.SQLException;
+import java.util.AbstractMap;
 import java.util.Map.Entry;
 import java.util.Optional;
 
@@ -17,12 +16,29 @@ import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.rolap.RolapConnectionProperties;
+import mondrian.util.Pair;
 
-public abstract class AbstractContext implements Context {
+public class BaseTestContext implements Context {
 
 	private DataSource dataSource;
 	private Util.PropertyList connectProperties = new Util.PropertyList();
 	private String olapConnectString;
+
+	public BaseTestContext clone() {
+
+		BaseTestContext context = new BaseTestContext();
+
+		Util.PropertyList newConnectProperties = new Util.PropertyList();
+
+		for (Pair<String, String> pair : connectProperties) {
+			newConnectProperties.put(pair.left, pair.right);
+		}
+
+		context.init(new AbstractMap.SimpleEntry<Util.PropertyList, DataSource>(newConnectProperties, dataSource));
+
+		return context;
+
+	}
 
 	@Override
 	public void init(Entry<PropertyList, DataSource> dataSource) {
@@ -34,23 +50,25 @@ public abstract class AbstractContext implements Context {
 
 	private void init() {
 
+		connectProperties.remove(RolapConnectionProperties.Catalog.name());
+		//TODO maybe ead file to content before remove
+		
 		connectProperties.put(RolapConnectionProperties.Provider.name(), provider());
-		connectProperties.put(RolapConnectionProperties.Catalog.name(), catalog().toString());
 
 		// Find the catalog. Use the URL specified in the connect string, if
 		// it is specified and is valid. Otherwise, reference FoodMart.xml
 		// assuming we are at the root of the source tree.
-		URL catalogURL = null;
-		String catalog = connectProperties.get("catalog");
-		if (catalog != null) {
-			try {
-				catalogURL = new URL(catalog);
-			} catch (MalformedURLException e) {
-				// ignore
-			}
+		String catalogContent = null;
+		String catalog = connectProperties.get(RolapConnectionProperties.CatalogContent.name());
+		if (catalog == null || catalog.isEmpty()) {
+			catalogContent = getCatalogContent();
+		} else {
+			catalogContent = catalog;
 		}
 
-		connectProperties.put("catalog", catalogURL.toString());
+		connectProperties.put(RolapConnectionProperties.CatalogContent.name(), catalogContent);
+
+//		connectProperties.put(RolapConnectionProperties.Catalog.name(), catalogURL.toString());
 		olapConnectString = connectProperties.toString();
 		if (olapConnectString.startsWith("Provider=mondrian; ")) {
 			olapConnectString = olapConnectString.substring("Provider=mondrian; ".length());
@@ -68,7 +86,9 @@ public abstract class AbstractContext implements Context {
 
 	}
 
-	abstract URL catalog();
+	protected String getCatalogContent() {
+		return "";
+	}
 
 	protected String provider() {
 		return "mondrian";

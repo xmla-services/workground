@@ -1,8 +1,6 @@
 package org.opencube.junit5.context;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Optional;
 
 import org.opencube.junit5.Constants;
@@ -10,18 +8,18 @@ import org.opencube.junit5.dataloader.DataLoader;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.dbprovider.MySqlDatabaseProvider;
 
-public class FoodMartContext extends AbstractContext implements LoadableContext {
+public class FoodMartContext extends BaseTestContext implements LoadableContext {
 
 	@Override
-	URL catalog() {
+	protected
+	String getCatalogContent() {
 		try {
-			return new File(Constants.TESTFILES_DIR + "/catalogs/FoodMart.xml").toURI().toURL();
-		} catch (MalformedURLException e) {
+			return new String( new File(Constants.TESTFILES_DIR +"/catalogs/FoodMart.xml").toURI().toURL().openConnection().getInputStream().readAllBytes());
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
 	}
-
 	@Override
 	protected Optional<String> jdbcPassword() {
 		return Optional.of(MySqlDatabaseProvider.MYSQL_PASSWORD);

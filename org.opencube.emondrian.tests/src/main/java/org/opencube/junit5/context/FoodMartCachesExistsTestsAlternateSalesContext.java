@@ -1,21 +1,20 @@
 package org.opencube.junit5.context;
 
 import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Optional;
 
 import org.opencube.junit5.Constants;
 import org.opencube.junit5.dbprovider.MySqlDatabaseProvider;
 
-public class FoodMartCachesExistsTestsAlternateSalesContext extends AbstractContext {
+public class FoodMartCachesExistsTestsAlternateSalesContext extends BaseTestContext {
 
 
 	@Override
-	URL catalog() {
+	protected
+	String getCatalogContent() {
 		try {
-			return new File(Constants.TESTFILES_DIR +"/catalogs/FoodMart_CachedExistsTest_Alternate_Sales.xml").toURI().toURL();
-		} catch (MalformedURLException e) {
+			return new String( new File(Constants.TESTFILES_DIR +"/catalogs/FoodMart_CachedExistsTest_Alternate_Sales.xml").toURI().toURL().openConnection().getInputStream().readAllBytes());
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException(e);
 		}
