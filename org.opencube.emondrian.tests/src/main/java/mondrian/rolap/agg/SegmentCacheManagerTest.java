@@ -10,15 +10,6 @@
 
 package mondrian.rolap.agg;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianServer;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -30,6 +21,16 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianServer;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
 
 public class SegmentCacheManagerTest {
 

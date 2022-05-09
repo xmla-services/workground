@@ -31,7 +31,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.Context;
-import org.opencube.junit5.context.FoodMartContext;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.xmltests.ResourceTestCase;
 import org.opentest4j.AssertionFailedError;
 import org.w3c.dom.Element;
@@ -95,8 +96,8 @@ public class XmlaTest{
     }
 
     @ParameterizedTest
-    @ContextSource
-    protected void runTest(FoodMartContext context,ResourceTestCase testCase) throws Exception {
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    protected void runTest(Context context,ResourceTestCase testCase) throws Exception {
     	java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
 
     	java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver());// finy out why this dies not happend automatically

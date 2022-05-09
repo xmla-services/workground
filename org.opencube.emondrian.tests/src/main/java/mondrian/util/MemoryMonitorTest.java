@@ -20,7 +20,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.FoodMartContext;
+import org.opencube.junit5.context.Context;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.calc.ResultStyle;
 import mondrian.olap.Connection;
@@ -231,8 +233,8 @@ Does not work without the notify on add feature.
      * @throws Exception
      */
 	@ParameterizedTest
-	@ContextSource
-    public void _testQuery(FoodMartContext context) throws Exception {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void _testQuery(Context context) throws Exception {
         if (!enabled) {
             return;
         }

@@ -1,14 +1,13 @@
 package org.opencube.junit5.context;
 
 import java.sql.SQLException;
-import java.util.AbstractMap;
 import java.util.Map.Entry;
-import java.util.Optional;
 
 import javax.sql.DataSource;
 
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapWrapper;
+import org.opencube.junit5.propupdator.PropertyUpdater;
 
 import mondrian.olap.Connection;
 import mondrian.olap.DriverManager;
@@ -16,64 +15,29 @@ import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.rolap.RolapConnectionProperties;
-import mondrian.util.Pair;
 
 public class BaseTestContext implements Context {
 
 	private DataSource dataSource;
-	private Util.PropertyList connectProperties = new Util.PropertyList();
-	private String olapConnectString;
-
-	public BaseTestContext clone() {
-
-		BaseTestContext context = new BaseTestContext();
-
-		Util.PropertyList newConnectProperties = new Util.PropertyList();
-
-		for (Pair<String, String> pair : connectProperties) {
-			newConnectProperties.put(pair.left, pair.right);
-		}
-
-		context.init(new AbstractMap.SimpleEntry<Util.PropertyList, DataSource>(newConnectProperties, dataSource));
-
-		return context;
-
-	}
+	private Util.PropertyList properties = new Util.PropertyList();
 
 	@Override
 	public void init(Entry<PropertyList, DataSource> dataSource) {
 		this.dataSource = dataSource.getValue();
-		this.connectProperties = dataSource.getKey();
+		this.properties = dataSource.getKey();
 		init();
 
 	}
 
+	public void update(PropertyUpdater updater) {
+		properties = updater.update(properties);
+	}
+
 	private void init() {
 
-		connectProperties.remove(RolapConnectionProperties.Catalog.name());
-		//TODO maybe ead file to content before remove
-		
-		connectProperties.put(RolapConnectionProperties.Provider.name(), provider());
+		properties.put(RolapConnectionProperties.Provider.name(), provider());
 
-		// Find the catalog. Use the URL specified in the connect string, if
-		// it is specified and is valid. Otherwise, reference FoodMart.xml
-		// assuming we are at the root of the source tree.
-		String catalogContent = null;
-		String catalog = connectProperties.get(RolapConnectionProperties.CatalogContent.name());
-		if (catalog == null || catalog.isEmpty()) {
-			catalogContent = getCatalogContent();
-		} else {
-			catalogContent = catalog;
-		}
-
-		connectProperties.put(RolapConnectionProperties.CatalogContent.name(), catalogContent);
-
-//		connectProperties.put(RolapConnectionProperties.Catalog.name(), catalogURL.toString());
-		olapConnectString = connectProperties.toString();
-		if (olapConnectString.startsWith("Provider=mondrian; ")) {
-			olapConnectString = olapConnectString.substring("Provider=mondrian; ".length());
-		}
-		olapConnectString = "jdbc:mondrian:" + olapConnectString;
+//		olapConnectString = "jdbc:mondrian:" + olapConnectString;
 	}
 
 	@Override
@@ -82,7 +46,7 @@ public class BaseTestContext implements Context {
 		if (dataSource == null) {
 			return DriverManager.getConnection(getJDBCConnectString(), null);
 		}
-		return DriverManager.getConnection(connectProperties, null, dataSource);
+		return DriverManager.getConnection(properties, null, dataSource);
 
 	}
 
@@ -94,20 +58,12 @@ public class BaseTestContext implements Context {
 		return "mondrian";
 	}
 
-	protected Optional<String> jdbcPassword() {
-		return Optional.empty();
-	}
-
-	protected Optional<String> jdbcUser() {
-		return Optional.empty();
-	}
-
 	/*
 	 * must be done before getConection;
 	 */
 	public void setProperty(String key, boolean value) {
 
-		connectProperties.put(key, value ? "true" : "false");
+		properties.put(key, value ? "true" : "false");
 
 	}
 
@@ -123,14 +79,14 @@ public class BaseTestContext implements Context {
 	public String getJDBCConnectString() {
 
 		// may exist better ways
-		return connectProperties.get(RolapConnectionProperties.Jdbc.name());
+		return properties.get(RolapConnectionProperties.Jdbc.name());
 
 	}
 
 	@Override
 	public String getOlapConnectString() {
-
-		return connectProperties.toString();
+		 
+		return "jdbc:mondrian:" + properties.toString();
 	}
 
 	@Override

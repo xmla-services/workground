@@ -11,16 +11,16 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.Util;
-
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.BitSet;
 import java.util.Iterator;
+
+import org.junit.jupiter.api.Test;
+
+import mondrian.olap.Util;
 
 /**
  * Unit test for {@link BitKey}.

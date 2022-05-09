@@ -9,16 +9,18 @@
 
 package mondrian.olap4j;
 
-import mondrian.olap.Util;
-import mondrian.tui.XmlaSupport;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import org.apache.commons.collections.map.ReferenceMap;
-
 import org.olap4j.driver.xmla.XmlaOlap4jServerInfos;
 import org.olap4j.driver.xmla.proxy.XmlaOlap4jProxy;
 
-import java.util.*;
-import java.util.concurrent.*;
+import mondrian.olap.Util;
+import mondrian.tui.XmlaSupport;
 
 /**
  * Proxy which implements XMLA requests by talking to mondrian

@@ -25,7 +25,11 @@ import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.FoodMartContext;
+import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.Context;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.test.PropertySaver5;
 public class HierarchyBugTest {
@@ -54,8 +58,8 @@ public class HierarchyBugTest {
      * the parse ought to pick it up.
      **/
 	@ParameterizedTest
-	@ContextSource
-    public void testNoHierarchy(FoodMartContext foodMartContext) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testNoHierarchy(Context foodMartContext) {
         String queryString =
             "select NON EMPTY "
             + "Crossjoin(Hierarchize(Union({[Time].[Time].LastSibling}, "
@@ -99,8 +103,8 @@ public class HierarchyBugTest {
      * </a>
      */
 	@ParameterizedTest
-	@ContextSource
-	public void testNamesIdentitySsasCompatibleTimeHierarchy(FoodMartContext foodMartContext) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+	public void testNamesIdentitySsasCompatibleTimeHierarchy(Context foodMartContext) {
         propSaver.set(
             MondrianProperties.instance().SsasCompatibleNaming, true);
         String mdxTime = "SELECT\n"
@@ -119,8 +123,8 @@ public class HierarchyBugTest {
 TestUtil.flushSchemaCache(conn);
     }
 	@ParameterizedTest
-	@ContextSource
-    public void testNamesIdentitySsasCompatibleWeeklyHierarchy(FoodMartContext foodMartContext) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testNamesIdentitySsasCompatibleWeeklyHierarchy(Context foodMartContext) {
         propSaver.set(
             MondrianProperties.instance().SsasCompatibleNaming, true);
         String mdxWeekly = "SELECT\n"
@@ -139,8 +143,8 @@ TestUtil.flushSchemaCache(conn);
         TestUtil.flushSchemaCache(conn);
     }
 	@ParameterizedTest
-	@ContextSource
-    public void testNamesIdentitySsasInCompatibleTimeHierarchy(FoodMartContext foodMartContext) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testNamesIdentitySsasInCompatibleTimeHierarchy(Context foodMartContext) {
         // SsasCompatibleNaming defaults to false
         String mdxTime = "SELECT\n"
             + "   [Measures].[Unit Sales] ON COLUMNS,\n"
@@ -156,8 +160,8 @@ TestUtil.flushSchemaCache(conn);
         TestUtil.flushSchemaCache(conn);
     }
 	@ParameterizedTest
-	@ContextSource
-    public void testNamesIdentitySsasInCompatibleWeeklyHierarchy(FoodMartContext foodMartContext) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testNamesIdentitySsasInCompatibleWeeklyHierarchy(Context foodMartContext) {
         String mdxWeekly = "SELECT\n"
             + "   [Measures].[Unit Sales] ON COLUMNS,\n"
             + "   [Time.Weekly].[Year].Members ON ROWS\n"
@@ -195,20 +199,20 @@ TestUtil.flushSchemaCache(conn);
         assertEquals(year1997HierarchyName, yearHierarchyName);
     }
 	@ParameterizedTest
-	@ContextSource
-    public void testNamesIdentitySsasCompatibleOlap4j(FoodMartContext foodMartContext) throws SQLException {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testNamesIdentitySsasCompatibleOlap4j(Context foodMartContext) throws SQLException {
         propSaver.set(
             MondrianProperties.instance().SsasCompatibleNaming, true);
         verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(foodMartContext);
     }
 	@ParameterizedTest
-	@ContextSource
-    public void testNamesIdentitySsasInCompatibleOlap4j(FoodMartContext foodMartContext) throws SQLException {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testNamesIdentitySsasInCompatibleOlap4j(Context foodMartContext) throws SQLException {
         // SsasCompatibleNaming defaults to false
         verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(foodMartContext);
     }
 
-    private void verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(FoodMartContext foodMartContext)
+    private void verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(Context foodMartContext)
         throws SQLException
     {
         // essential here, in time hierarchy, is hasAll="false"
@@ -220,8 +224,8 @@ TestUtil.flushSchemaCache(conn);
         verifyLevelMemberNamesIdentityOlap4j(mdx, foodMartContext, "[Time]");
     }
 	@ParameterizedTest
-	@ContextSource
-    public void testNamesIdentitySsasCompatibleOlap4jWeekly(FoodMartContext foodMartContext)
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testNamesIdentitySsasCompatibleOlap4jWeekly(Context foodMartContext)
         throws SQLException
     {
         propSaver.set(
@@ -234,8 +238,8 @@ TestUtil.flushSchemaCache(conn);
             mdx, foodMartContext, "[Time].[Weekly]");
     }
 	@ParameterizedTest
-	@ContextSource
-    public void testNamesIdentitySsasInCompatibleOlap4jWeekly(FoodMartContext foodMartContext)
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testNamesIdentitySsasInCompatibleOlap4jWeekly(Context foodMartContext)
         throws SQLException
     {
         // SsasCompatibleNaming defaults to false
@@ -247,8 +251,8 @@ TestUtil.flushSchemaCache(conn);
             mdx, foodMartContext, "[Time.Weekly]");
     }
 	@ParameterizedTest
-	@ContextSource
-    public void testNamesIdentitySsasCompatibleOlap4jDateDim(FoodMartContext foodMartContext)
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testNamesIdentitySsasCompatibleOlap4jDateDim(Context foodMartContext)
         throws SQLException
     {
         propSaver.set(
@@ -256,15 +260,15 @@ TestUtil.flushSchemaCache(conn);
         verifyMemberLevelNamesIdentityOlap4jDateDim(foodMartContext);
     }
 	@ParameterizedTest
-	@ContextSource
-    public void testNamesSsasInCompatibleOlap4jDateDim(FoodMartContext foodMartContext)
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testNamesSsasInCompatibleOlap4jDateDim(Context foodMartContext)
         throws SQLException
     {
         // SsasCompatibleNaming defaults to false
         verifyMemberLevelNamesIdentityOlap4jDateDim(foodMartContext);
     }
 
-    private void verifyMemberLevelNamesIdentityOlap4jDateDim(FoodMartContext context)
+    private void verifyMemberLevelNamesIdentityOlap4jDateDim(Context context)
         throws SQLException
     {
         String mdx =
@@ -285,14 +289,15 @@ TestUtil.flushSchemaCache(conn);
             + "          levelType=\"TimeMonths\"/>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>";
-       //TODO: general context
-        fail("TODO: fix next line using an general(not only for test) context approach");
-        // context = context.createSubstitutingCube("Sales", dateDim);
+    
+
+       ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales", dateDim));
+        
         verifyLevelMemberNamesIdentityOlap4j(mdx, context, "[Date]");
     }
 	@ParameterizedTest
-	@ContextSource
-    public void testNamesIdentitySsasCompatibleOlap4jDateWeekly(FoodMartContext context)
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testNamesIdentitySsasCompatibleOlap4jDateWeekly(Context context)
         throws SQLException
     {
         propSaver.set(
@@ -304,8 +309,8 @@ TestUtil.flushSchemaCache(conn);
         verifyMemberLevelNamesIdentityOlap4jWeekly(context,mdx,"[Date].[Weekly]");
     }
 	@ParameterizedTest
-	@ContextSource
-    public void testNamesIdentitySsasInCompatibleOlap4jDateDim(FoodMartContext context)
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testNamesIdentitySsasInCompatibleOlap4jDateDim(Context context)
         throws SQLException
     {
         // SsasCompatibleNaming defaults to false
@@ -316,7 +321,7 @@ TestUtil.flushSchemaCache(conn);
         verifyMemberLevelNamesIdentityOlap4jWeekly(context,mdx, "[Date.Weekly]");
     }
 
-    private void verifyMemberLevelNamesIdentityOlap4jWeekly(FoodMartContext context,
+    private void verifyMemberLevelNamesIdentityOlap4jWeekly(Context context,
         String mdx, String expected) throws SQLException
     {
    
@@ -333,14 +338,14 @@ TestUtil.flushSchemaCache(conn);
             + "    </Hierarchy>\n"
             + "  </Dimension>";
         
-        //TODO: general context
-        fail("TODO: fix next line using an general(not only for test) context approach");
-//        context = context.createSubstitutingCube("Sales", dateDim);
+
+        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales", dateDim));
+        
         verifyLevelMemberNamesIdentityOlap4j(mdx, context, expected);
     }
 
     private void verifyLevelMemberNamesIdentityOlap4j(
-        String mdx, FoodMartContext context, String expected) throws SQLException
+        String mdx, Context context, String expected) throws SQLException
     {
     OlapConnection olapConnection=	context.createOlap4jConnection();
     

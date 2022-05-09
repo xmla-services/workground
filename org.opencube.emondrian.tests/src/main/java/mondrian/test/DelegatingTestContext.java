@@ -9,9 +9,9 @@
 
 package mondrian.test;
 
-import mondrian.olap.Util;
-
 import java.io.PrintWriter;
+
+import mondrian.olap.Util;
 
 /**
  * Extension of {@link FoodmartTestContextImpl} which delegates all behavior to

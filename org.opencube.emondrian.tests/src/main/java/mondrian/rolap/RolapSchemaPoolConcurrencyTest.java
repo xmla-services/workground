@@ -9,20 +9,6 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.Util;
-import mondrian.util.ByteString;
-
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
-import java.util.*;
-import java.util.concurrent.*;
-import javax.sql.DataSource;
-
 import static mondrian.rolap.RolapConnectionProperties.CatalogContent;
 import static mondrian.rolap.RolapConnectionProperties.UseContentChecksum;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -32,6 +18,34 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Queue;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+
+import javax.sql.DataSource;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import mondrian.olap.Util;
+import mondrian.util.ByteString;
 
 /**
  * @author Andrey Khayrutdinov

@@ -13,17 +13,19 @@
 
 package mondrian.test;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.rolap.RolapUtil;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
+import org.eigenbase.util.property.BooleanProperty;
+import org.eigenbase.util.property.DoubleProperty;
+import org.eigenbase.util.property.IntegerProperty;
+import org.eigenbase.util.property.Property;
+import org.eigenbase.util.property.StringProperty;
 
-import org.eigenbase.util.property.*;
-
-import java.util.HashMap;
-import java.util.Map;
+import mondrian.olap.MondrianProperties;
+import mondrian.rolap.RolapUtil;
 
 /**
  * Sets properties and logging levels, and remembers the original values so they

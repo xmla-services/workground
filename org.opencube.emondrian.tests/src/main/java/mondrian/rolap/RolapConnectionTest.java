@@ -28,7 +28,6 @@ import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
-import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.naming.spi.InitialContextFactory;
@@ -41,7 +40,9 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.FoodMartContext;
+import org.opencube.junit5.context.Context;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.DriverManager;
 import mondrian.olap.MondrianException;
@@ -72,7 +73,7 @@ public class RolapConnectionTest {
                         throws NamingException
                     {
                         return new InitialContextFactory() {
-                            public Context getInitialContext(
+                            public javax.naming.Context getInitialContext(
                                 Hashtable<?, ?> environment)
                                 throws NamingException
                             {
@@ -86,8 +87,8 @@ public class RolapConnectionTest {
     }
 
 	@ParameterizedTest
-	@ContextSource
-    public void testPooledConnectionWithProperties(FoodMartContext context) throws SQLException {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testPooledConnectionWithProperties(Context context) throws SQLException {
         Util.PropertyList properties = baseProperties(context);
 
         // Only the JDBC-ODBC bridge gives the error necessary for this
@@ -137,14 +138,14 @@ public class RolapConnectionTest {
         }
     }
 
-	private Util.PropertyList baseProperties(FoodMartContext context) {
+	private Util.PropertyList baseProperties(Context context) {
 		Util.PropertyList properties =Util.parseConnectString( context.getOlapConnectString());
 		return properties;
 	}
 
 	@ParameterizedTest
-	@ContextSource
-    public void testNonPooledConnectionWithProperties(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testNonPooledConnectionWithProperties(Context context) {
         Util.PropertyList properties =baseProperties(context);
 
         // Only the JDBC-ODBC bridge gives the error necessary for this
@@ -223,8 +224,8 @@ public class RolapConnectionTest {
      * Tests that the FORMAT function uses the connection's locale.
      */
 	@ParameterizedTest
-	@ContextSource
-    public void testFormatLocale(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testFormatLocale(Context context) {
         String expr = "FORMAT(1234.56, \"#,##.#\")";
         checkLocale("es_ES", expr, "1.234,6", false);
         checkLocale("es_MX", expr, "1,234.6", false);
@@ -235,8 +236,8 @@ public class RolapConnectionTest {
      * Tests that measures are formatted using the connection's locale.
      */
 	@ParameterizedTest
-	@ContextSource
-    public void testFormatStringLocale(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testFormatStringLocale(Context context) {
         checkLocale("es_ES", "1234.56", "1.234,6", true);
         checkLocale("es_MX", "1234.56", "1,234.6", true);
         checkLocale("en_US", "1234.56", "1,234.6", true);
@@ -274,8 +275,8 @@ public class RolapConnectionTest {
     }
 
 	@ParameterizedTest
-	@ContextSource
-    public void testConnectSansCatalogFails(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testConnectSansCatalogFails(Context context) {
         Util.PropertyList properties =baseProperties(context);
         properties.remove(RolapConnectionProperties.Catalog.name());
         properties.remove(RolapConnectionProperties.CatalogContent.name());
@@ -303,8 +304,8 @@ public class RolapConnectionTest {
     }
 
 	@ParameterizedTest
-	@ContextSource
-    public void testJndiConnection(FoodMartContext context) throws NamingException {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testJndiConnection(Context context) throws NamingException {
         // Cannot guarantee that this test will work if they have chosen to
         // resolve data sources other than by JNDI.
         if (MondrianProperties.instance().DataSourceResolverClass.isSet()) {
@@ -355,8 +356,8 @@ public class RolapConnectionTest {
     }
 
 	@ParameterizedTest
-	@ContextSource
-    public void testDataSourceOverrideUserPass(FoodMartContext context)
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testDataSourceOverrideUserPass(Context context)
         throws SQLException, NamingException
     {
         // use the datasource property to connect to the database
@@ -505,8 +506,8 @@ public class RolapConnectionTest {
     }
 
 	@ParameterizedTest
-	@ContextSource
-    public void testGetJdbcConnectionWhenJdbcIsNull(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testGetJdbcConnectionWhenJdbcIsNull(Context context) {
         final StringBuilder connectInfo = new StringBuilder();
         Util.PropertyList properties =
            baseProperties(context);
@@ -522,8 +523,8 @@ public class RolapConnectionTest {
     }
 
 	@ParameterizedTest
-	@ContextSource
-    public void testJdbcConnectionString(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testJdbcConnectionString(Context context) {
         final StringBuilder connectInfo = new StringBuilder();
         Map<String, String> connectInfoMap = new HashMap<>();
 
@@ -552,8 +553,8 @@ public class RolapConnectionTest {
     }
 
 	@ParameterizedTest
-	@ContextSource
-    public void testJdbcConnectionStringWithoutDatabase(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testJdbcConnectionStringWithoutDatabase(Context context) {
         final StringBuilder connectInfo = new StringBuilder();
         Util.PropertyList properties =
            baseProperties(context);
@@ -568,8 +569,8 @@ public class RolapConnectionTest {
     }
 
 	@ParameterizedTest
-	@ContextSource
-    public void testJdbcConnectionStringWithoutIntegratedSecurity(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testJdbcConnectionStringWithoutIntegratedSecurity(Context context) {
         final StringBuilder connectInfo = new StringBuilder();
         Util.PropertyList properties =
            baseProperties(context);

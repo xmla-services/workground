@@ -8,12 +8,17 @@
 */
 package mondrian.olap.fun;
 
-import static org.junit.jupiter.api.Assertions.fail;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.FoodMartContext;
+import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.Context;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsContent;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import mondrian.rolap.RolapConnectionProperties;
 
 
 /**
@@ -25,8 +30,8 @@ public class CachedExistsTest{
 
 
 	@ParameterizedTest
-	@ContextSource
-    public void testEducationLevelSubtotals(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testEducationLevelSubtotals(Context context) {
     String query =
         "WITH "
             + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],[*BASE_MEMBERS__Product_])' "
@@ -54,8 +59,8 @@ public class CachedExistsTest{
   }
 
 	@ParameterizedTest
-	@ContextSource
-    public void testProductFamilySubtotals(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testProductFamilySubtotals(Context context) {
     String query =
         "WITH\r\n"
             + "SET [*NATIVE_CJ_SET] AS 'FILTER(FILTER([Product].[Product Department].MEMBERS,ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]) IN {[Product].[All Products].[Drink],[Product].[All Products].[Non-Consumable]}), NOT ISEMPTY ([Measures].[Unit Sales]))'\r\n"
@@ -83,8 +88,8 @@ public class CachedExistsTest{
   }
 
 	@ParameterizedTest
-	@ContextSource
-    public void testProductFamilyProductDepartmentSubtotals(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testProductFamilyProductDepartmentSubtotals(Context context) {
     String query =
         "WITH\r\n"
             + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Gender_])'\r\n"
@@ -118,8 +123,8 @@ public class CachedExistsTest{
   }
 
 	@ParameterizedTest
-	@ContextSource
-    public void testRowColumSubtotals(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testRowColumSubtotals(Context context) {
     String query =
         "WITH\r\n"
             + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Gender_]))'\r\n"
@@ -156,8 +161,8 @@ public class CachedExistsTest{
   }
 
 	@ParameterizedTest
-	@ContextSource
-    public void testProductFamilyDisplayMember(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testProductFamilyDisplayMember(Context context) {
     String query =
         "WITH\r\n" + 
         "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Gender_])'\r\n" + 
@@ -198,8 +203,8 @@ public class CachedExistsTest{
   }
   
 	@ParameterizedTest
-	@ContextSource
-    public void testTop10Customers(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testTop10Customers(Context context) {
     String query =
         "WITH\r\n" + 
         "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Customers_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Store_]))'\r\n" + 
@@ -270,8 +275,8 @@ public class CachedExistsTest{
   }
   
 	@ParameterizedTest
-	@ContextSource
-    public void testTop1CustomersWithColumnLevel(FoodMartContext context) {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testTop1CustomersWithColumnLevel(Context context) {
     String query =
         "WITH\n"
             + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],[*BASE_MEMBERS__Customers_])))'\n"
@@ -300,36 +305,39 @@ public class CachedExistsTest{
   }
   
 	@ParameterizedTest
-	@ContextSource
-    public void testMondrian2704(FoodMartContext context) {
-		fail("TODO: mock contexts");
-//    TestContext testContext = FoodMartTestCase.getTestContext().create(
-//        null,
-//        "<Cube name=\"Alternate Sales\">\n"
-//            + "  <Table name=\"sales_fact_1997\"/>\n"
-//            + "<Dimension name=\"Time\" type=\"TimeDimension\" foreignKey=\"time_id\">\n" + 
-//            "    <Hierarchy name=\"Time\" hasAll=\"true\" primaryKey=\"time_id\">\n" + 
-//            "      <Table name=\"time_by_day\"/>\n" + 
-//            "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n" + 
-//            "          levelType=\"TimeYears\"/>\n" + 
-//            "    </Hierarchy>\n" + 
-//            "    <Hierarchy hasAll=\"true\" name=\"Weekly\" primaryKey=\"time_id\">\n" + 
-//            "      <Table name=\"time_by_day\"/>\n" + 
-//            "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n" + 
-//            "          levelType=\"TimeYears\"/>\n" + 
-//            "    </Hierarchy>\n" + 
-//            "    <Hierarchy hasAll=\"true\" name=\"Weekly2\" primaryKey=\"time_id\">\n" + 
-//            "      <Table name=\"time_by_day\"/>\n" + 
-//            "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n" + 
-//            "          levelType=\"TimeYears\"/>\n" + 
-//            "    </Hierarchy>\n" + 
-//            "  </Dimension>"
-//            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" formatString=\"Standard\"/>\n"
-//            + "</Cube>",
-//        null,
-//        null,
-//        null,
-//        null);
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsContent.class,dataloader = FastFoodmardDataLoader.class )
+    public void testMondrian2704(Context context) {
+    String cube=    "<Cube name=\"Alternate Sales\">\n"
+            + "  <Table name=\"sales_fact_1997\"/>\n"
+            + "<Dimension name=\"Time\" type=\"TimeDimension\" foreignKey=\"time_id\">\n" + 
+            "    <Hierarchy name=\"Time\" hasAll=\"true\" primaryKey=\"time_id\">\n" + 
+            "      <Table name=\"time_by_day\"/>\n" + 
+            "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n" + 
+            "          levelType=\"TimeYears\"/>\n" + 
+            "    </Hierarchy>\n" + 
+            "    <Hierarchy hasAll=\"true\" name=\"Weekly\" primaryKey=\"time_id\">\n" + 
+            "      <Table name=\"time_by_day\"/>\n" + 
+            "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n" + 
+            "          levelType=\"TimeYears\"/>\n" + 
+            "    </Hierarchy>\n" + 
+            "    <Hierarchy hasAll=\"true\" name=\"Weekly2\" primaryKey=\"time_id\">\n" + 
+            "      <Table name=\"time_by_day\"/>\n" + 
+            "      <Level name=\"Year\" column=\"the_year\" type=\"Numeric\" uniqueMembers=\"true\"\n" + 
+            "          levelType=\"TimeYears\"/>\n" + 
+            "    </Hierarchy>\n" + 
+            "  </Dimension>"
+            + "  <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" formatString=\"Standard\"/>\n"
+            + "</Cube>";
+    
+    
+		((BaseTestContext) context).update(p -> {
+			String schemaOld=p.get(RolapConnectionProperties.CatalogContent.name());
+			String schema= SchemaUtil.getSchema(schemaOld, null, cube, null, null, null, null);
+			p.put(RolapConnectionProperties.CatalogContent.name(), schema);
+			return p;
+		});
+
+
     
     
     // Verifies second arg of CachedExists uses a tuple type

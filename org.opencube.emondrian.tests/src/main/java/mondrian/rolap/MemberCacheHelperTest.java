@@ -9,25 +9,23 @@
  */
 package mondrian.rolap;
 
-import mondrian.rolap.sql.MemberChildrenConstraint;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
+
+import mondrian.rolap.sql.MemberChildrenConstraint;
 
 
 public class MemberCacheHelperTest {
@@ -36,10 +34,10 @@ public class MemberCacheHelperTest {
     private RolapMember parentMember;
 
     @Mock
-    private ChildByNameConstraint childByNameConstraint;
+    private TestPublicChildByNameConstraint childByNameConstraint;
 
     @Mock
-    private MemberKey memberKey;
+    private TestPublicMemberKey memberKey;
 
     private MemberChildrenConstraint defMemChildrenConstraint =
         DefaultMemberChildrenConstraint.instance();
@@ -172,7 +170,7 @@ public class MemberCacheHelperTest {
     }
 
     private MemberKey mockMemberKey() {
-        MemberKey mock = mock(MemberKey.class);
+        MemberKey mock = mock(TestPublicMemberKey.class);
         when(mock.getLevel()).thenReturn(mock(RolapLevel.class));
         return mock;
     }

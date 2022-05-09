@@ -9,24 +9,29 @@
 
 package mondrian.xmla.impl;
 
-import mondrian.olap.*;
-import mondrian.server.DynamicContentFinder;
-import mondrian.util.Pair;
-import mondrian.xmla.DataSourcesConfig;
-
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.eigenbase.xom.*;
-import org.eigenbase.xom.Parser;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import org.eigenbase.xom.DOMWrapper;
+import org.eigenbase.xom.Parser;
+import org.eigenbase.xom.XOMException;
+import org.eigenbase.xom.XOMUtil;
+import org.junit.jupiter.api.Test;
 import org.olap4j.impl.Olap4jUtil;
 
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.TimeUnit;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.server.DynamicContentFinder;
+import mondrian.util.Pair;
+import mondrian.xmla.DataSourcesConfig;
 
 /**
  * Unit test for DynamicDatasourceXmlaServlet

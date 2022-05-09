@@ -10,15 +10,6 @@
 */
 package mondrian.rolap.agg;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import mondrian.rolap.BitKey;
-import mondrian.rolap.RolapSchema;
-import mondrian.rolap.RolapStar;
-import mondrian.rolap.StarColumnPredicate;
-import mondrian.rolap.StarPredicate;
-import mondrian.util.ByteString;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -29,6 +20,16 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import mondrian.rolap.BitKey;
+import mondrian.rolap.RolapSchema;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.StarColumnPredicate;
+import mondrian.rolap.StarPredicate;
+import mondrian.util.ByteString;
 
 public class GroupingSetsListTest {
 

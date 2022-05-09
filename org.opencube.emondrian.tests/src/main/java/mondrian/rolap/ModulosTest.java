@@ -9,17 +9,17 @@
 
 package mondrian.rolap;
 
-import mondrian.calc.TupleList;
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Axis;
-import mondrian.olap.Member;
-
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.Collections;
+
+import org.junit.jupiter.api.Test;
+
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.olap.Axis;
+import mondrian.olap.Member;
 
 /**
  * Test that the implementations of the Modulos interface are correct.

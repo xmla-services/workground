@@ -14,21 +14,25 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.*;
-import org.olap4j.metadata.Member;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.FoodMartContext;
-import org.opencube.junit5.dbprovider.MySqlDatabaseProvider;
-
-import mondrian.olap.Connection;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.olap4j.Cell;
+import org.olap4j.CellSet;
+import org.olap4j.OlapConnection;
+import org.olap4j.Position;
+import org.olap4j.metadata.Member;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.Context;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import mondrian.olap.Connection;
 
 /**
  * <code>VisualTotalsTest</code> tests the internal functions defined in
@@ -91,8 +95,8 @@ public class VisualTotalsTest {
      * @throws java.sql.SQLException on error
      */
 	@ParameterizedTest
-	@ContextSource
-    public void testDrillthroughVisualTotal(FoodMartContext foodMartContext) throws SQLException {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testDrillthroughVisualTotal(Context foodMartContext) throws SQLException {
         OlapConnection conn = foodMartContext.createOlap4jConnection();
         CellSet cellSet =
     		TestUtil.executeOlap4jQuery(conn,
@@ -130,8 +134,8 @@ public class VisualTotalsTest {
      * @throws java.sql.SQLException on error
      */
 	@ParameterizedTest
-	@ContextSource
-    public void testVisualTotalCaptionBug(FoodMartContext foodMartContext) throws SQLException {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testVisualTotalCaptionBug(Context foodMartContext) throws SQLException {
         Connection conn = foodMartContext.createConnection();
         CellSet cellSet =
     		TestUtil.executeOlap4jQuery((OlapConnection)conn,
@@ -159,8 +163,8 @@ public class VisualTotalsTest {
      * @throws java.sql.SQLException on error
      */
 	@ParameterizedTest
-	@ContextSource
-    public void testVisualTotalsAggregatedMemberBug(FoodMartContext foodMartContext) throws SQLException {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testVisualTotalsAggregatedMemberBug(Context foodMartContext) throws SQLException {
         Connection conn = foodMartContext.createConnection();
         CellSet cellSet =
     		TestUtil.executeOlap4jQuery((OlapConnection)conn,

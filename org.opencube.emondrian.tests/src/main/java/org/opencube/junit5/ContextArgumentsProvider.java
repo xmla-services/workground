@@ -23,8 +23,8 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.support.AnnotationConsumer;
+import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.Context;
-import org.opencube.junit5.context.LoadableContext;
 import org.opencube.junit5.dataloader.DataLoader;
 import org.opencube.junit5.dbprovider.DatabaseProvider;
 import org.opencube.junit5.xmltests.ResourceTestCase;
@@ -160,15 +160,12 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 				if (oElement.get() instanceof Method) {
 					Method method = (Method) oElement.get();
 					for (Parameter param : method.getParameters()) {
-						if (LoadableContext.class.isAssignableFrom(param.getType())) {
-							Class<LoadableContext> loadableContextClass = (Class<LoadableContext>) param.getType();
-
-							LoadableContext context;
+						if (Context.class.isAssignableFrom(param.getType())) {
+							ContextSource contextSource=method.getAnnotation(ContextSource.class);
 
 							try {
-								context = (LoadableContext) loadableContextClass.getConstructor().newInstance();
 
-								Class<? extends DataLoader> dataLoaderClass = context.dataLoader();
+								Class<? extends DataLoader> dataLoaderClass = contextSource.dataloader();
 
 								Map<Class<? extends DataLoader>, Entry<PropertyList, DataSource>> storedLoaders = store
 										.get(clazzProvider);
@@ -187,7 +184,17 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 								throw new RuntimeException(e);
 							}
 
+							BaseTestContext context=new BaseTestContext();
 							context.init(dataSource);
+							
+							Stream.of(contextSource.propertyUpdater()).map(c -> {
+								try {
+									return c.getConstructor().newInstance();
+								} catch (Exception e) {
+									e.printStackTrace();
+									throw new RuntimeException(e);
+								}
+							}).forEachOrdered(u->context.update(u));
 
 							aaa.add(context);
 						}

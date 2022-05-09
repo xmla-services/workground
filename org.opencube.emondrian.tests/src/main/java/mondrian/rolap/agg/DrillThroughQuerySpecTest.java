@@ -10,19 +10,13 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.olap.OlapElement;
-import mondrian.rolap.*;
-import mondrian.rolap.sql.SqlQuery;
-import mondrian.spi.Dialect;
-
-import mondrian.test.TestContext;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.OlapConnection;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.FoodMartContext;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,8 +25,21 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.olap4j.OlapConnection;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.Context;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import mondrian.olap.OlapElement;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.SqlStatement;
+import mondrian.rolap.StarPredicate;
+import mondrian.rolap.sql.SqlQuery;
+import mondrian.spi.Dialect;
 
 public class DrillThroughQuerySpecTest {
 
@@ -123,8 +130,8 @@ public class DrillThroughQuerySpecTest {
 
   // test that returns correct number of columns
   @ParameterizedTest
-  @ContextSource
-  public void testMdxQuery(FoodMartContext foodMartContext) throws SQLException {
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  public void testMdxQuery(Context foodMartContext) throws SQLException {
     String drillThroughMdx = "DRILLTHROUGH WITH "
         + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Store Type_])' "
         + "SET [*NATIVE_CJ_SET] AS 'GENERATE([*NATIVE_CJ_SET_WITH_SLICER], {([Product].CURRENTMEMBER)})' "

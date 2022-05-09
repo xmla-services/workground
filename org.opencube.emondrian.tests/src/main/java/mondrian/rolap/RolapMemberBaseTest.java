@@ -9,21 +9,21 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.Member;
-
-import mondrian.olap.Property;
-import mondrian.spi.MemberFormatter;
-import mondrian.spi.PropertyFormatter;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
+import mondrian.olap.Member;
+import mondrian.olap.Property;
+import mondrian.spi.MemberFormatter;
+import mondrian.spi.PropertyFormatter;
 
 /**
  * Unit Test for {@link RolapMemberBase}.

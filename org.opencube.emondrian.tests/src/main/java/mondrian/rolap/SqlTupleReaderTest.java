@@ -11,27 +11,28 @@
 
 package mondrian.rolap;
 
-import org.junit.jupiter.api.Test;
-import mondrian.olap.MondrianDef;
-import mondrian.recorder.MessageRecorder;
-import mondrian.rolap.aggmatcher.AggStar;
-import mondrian.rolap.aggmatcher.JdbcSchema;
-import mondrian.rolap.sql.SqlQuery;
-import mondrian.rolap.sql.TupleConstraint;
-import org.mockito.Answers;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.eq;
+import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
+
+import mondrian.olap.MondrianDef;
+import mondrian.recorder.MessageRecorder;
+import mondrian.rolap.aggmatcher.AggStar;
+import mondrian.rolap.aggmatcher.JdbcSchema;
+import mondrian.rolap.sql.SqlQuery;
+import mondrian.rolap.sql.TupleConstraint;
 
 /**
  * Created by Dmitriy Stepanov on 20.01.18.

@@ -9,6 +9,21 @@
 */
 package mondrian.rolap;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
 import mondrian.olap.MondrianServer;
 import mondrian.olap.QueryCanceledException;
 import mondrian.resource.MondrianResource;
@@ -16,15 +31,7 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.StatementImpl;
 import mondrian.server.monitor.Monitor;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 import mondrian.spi.Dialect;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.*;
 
 /**
  * @author Andrey Khayrutdinov

@@ -72,8 +72,8 @@ public class XmlaHandlerTypeTest {
      * @throws SQLException
      */
 	@ParameterizedTest
-	@ContextSource
-    public void testDatatypeConsistency(FoodMartContext foodMartContext) throws SQLException {
+	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testDatatypeConsistency(Context foodMartContext) throws SQLException {
         TestContext context = getTestContext();
 
         // MDX cast expressions

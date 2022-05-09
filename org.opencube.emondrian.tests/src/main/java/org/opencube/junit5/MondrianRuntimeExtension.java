@@ -7,8 +7,6 @@ import org.junit.jupiter.api.extension.ConditionEvaluationResult;
 import org.junit.jupiter.api.extension.ExecutionCondition;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import mondrian.resource.MondrianResource;
-
 public class MondrianRuntimeExtension
 		implements ExecutionCondition, BeforeAllCallback, ExtensionContext.Store.CloseableResource {
 

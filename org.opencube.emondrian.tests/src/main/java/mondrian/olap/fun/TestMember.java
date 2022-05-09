@@ -8,6 +8,10 @@
 */
 package mondrian.olap.fun;
 
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import mondrian.olap.Annotation;
 import mondrian.olap.Dimension;
 import mondrian.olap.DimensionType;
@@ -21,10 +25,6 @@ import mondrian.olap.OlapElement;
 import mondrian.olap.Property;
 import mondrian.olap.Schema;
 import mondrian.olap.SchemaReader;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * Mock implementation of {@link Member} for testing.

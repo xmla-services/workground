@@ -9,7 +9,6 @@
 package mondrian.olap4j;
 
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 

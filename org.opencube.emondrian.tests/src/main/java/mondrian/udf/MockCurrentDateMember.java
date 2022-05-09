@@ -9,10 +9,10 @@
 
 package mondrian.udf;
 
-import mondrian.olap.Evaluator;
-
 import java.util.Calendar;
 import java.util.Date;
+
+import mondrian.olap.Evaluator;
 
 public class MockCurrentDateMember extends CurrentDateMemberExactUdf {
     public MockCurrentDateMember() {

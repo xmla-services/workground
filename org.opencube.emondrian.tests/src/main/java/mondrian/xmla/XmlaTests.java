@@ -9,16 +9,16 @@
 
 package mondrian.xmla;
 
-import mondrian.olap.Util;
-
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 // Only in Java5 and above
 //import java.math.MathContext;
+
+import org.junit.jupiter.api.Test;
+
+import mondrian.olap.Util;
 
 
 /**

@@ -23,8 +23,8 @@ import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;
 import org.eigenbase.xom.XOMUtil;
-
 import org.junit.jupiter.api.Test;
+
 import mondrian.olap.MondrianDef;
 
 public class RolapUtilTest {
