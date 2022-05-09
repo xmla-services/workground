@@ -51,7 +51,6 @@ import mondrian.util.ByteString;
  * @author Andrey Khayrutdinov
  */
 public class RolapSchemaPoolConcurrencyTest
-        implements Answer<RolapSchema>
 {
 
     private List<RolapSchema> addedSchemas;
@@ -62,7 +61,7 @@ public class RolapSchemaPoolConcurrencyTest
         addedSchemas = new ArrayList<RolapSchema>();
 
         poolSpy = spy(RolapSchemaPool.instance());
-        doAnswer(this).when(poolSpy)
+        doAnswer(new RolapAnswer()).when(poolSpy)
                 .createRolapSchema(
                     anyString(),
                     any(DataSource.class),
@@ -82,6 +81,7 @@ public class RolapSchemaPoolConcurrencyTest
     }
 
 
+    class RolapAnswer implements Answer<RolapSchema>{
     @Override
     public RolapSchema answer(InvocationOnMock invocation) throws Throwable {
         SchemaKey key = (SchemaKey) invocation.getArguments()[4];
@@ -91,7 +91,7 @@ public class RolapSchemaPoolConcurrencyTest
         return new RolapSchema(key, md5, connection);
     }
 
-
+    }
     @Test
     public void testTwentyAdders() throws Exception {
         final int cycles = 500;

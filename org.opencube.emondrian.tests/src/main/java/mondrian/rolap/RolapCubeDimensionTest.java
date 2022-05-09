@@ -32,7 +32,7 @@ public class RolapCubeDimensionTest {
     RolapCube cube = mock(RolapCube.class);
     doReturn(virtualCube).when(cube).isVirtual();
 
-    RolapDimension rolapDim = mock(RolapDimension.class);
+    RolapDimension rolapDim = mock(TestPublicRolapDimension.class);
     Hierarchy[] rolapDim_hierarchies = new Hierarchy[]{};
     doReturn(rolapDim_hierarchies).when(rolapDim).getHierarchies();
 

@@ -55,7 +55,7 @@ public class RolapMemberBaseTest {
         propertyFormatter = mock(PropertyFormatter.class);
         memberKey = Integer.MAX_VALUE;
         RolapHierarchy hierarchy = mock(RolapHierarchy.class);
-        RolapDimension dimension = mock(RolapDimension.class);
+        RolapDimension dimension = mock(TestPublicRolapDimension.class);
 
         when(level.getHierarchy()).thenReturn(hierarchy);
         when(hierarchy.getDimension()).thenReturn(dimension);

@@ -72,7 +72,7 @@ public class BaseTestContext implements Context {
 
 		MondrianOlap4jDriver d = new MondrianOlap4jDriver();
 
-		final java.sql.Connection connection = java.sql.DriverManager.getConnection(getOlapConnectString());
+		final java.sql.Connection connection = java.sql.DriverManager.getConnection("jdbc:mondrian:" + getOlapConnectString());
 		return ((OlapWrapper) connection).unwrap(OlapConnection.class);
 	}
 
@@ -86,7 +86,7 @@ public class BaseTestContext implements Context {
 	@Override
 	public String getOlapConnectString() {
 		 
-		return "jdbc:mondrian:" + properties.toString();
+		return properties.toString();
 	}
 
 	@Override

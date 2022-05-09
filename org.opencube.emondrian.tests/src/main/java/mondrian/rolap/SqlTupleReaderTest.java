@@ -47,7 +47,7 @@ public class SqlTupleReaderTest {
     RolapCube baseCube = mock( RolapCube.class );
     RolapLevel targetLevel = mock( RolapLevel.class );
     RolapCubeLevel levelIter = mock( RolapCubeLevel.class, Answers.RETURNS_MOCKS );
-    RolapProperty rolapProperty = mock( RolapProperty.class, Answers.RETURNS_MOCKS );
+    RolapProperty rolapProperty = mock( TestPublicRolapProperty.class, Answers.RETURNS_MOCKS );
     String propertyName = "property_1";
     when( rolapProperty.getName() ).thenReturn( propertyName );
     RolapProperty[] properties = { rolapProperty };

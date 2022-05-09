@@ -506,7 +506,7 @@ public class IdBatchResolverTest  {
             boolean accessControlled)
         {
             if (spyReader == null) {
-                spyReader = spy(super.getSchemaReader(accessControlled));
+            	spyReader=spy( new SpySchemaReader(super.getSchemaReader(accessControlled)));
             }
             return spyReader;
         }
