@@ -77,8 +77,8 @@ public class RolapMemberBaseTest {
      */
     @Test
     public void testShouldUsePropertyFormatterWhenPropertyValuesAreRequested() {
-        RolapProperty property1 = mock(RolapProperty.class);
-        RolapProperty property2 = mock(RolapProperty.class);
+        RolapProperty property1 = mock(TestPublicRolapProperty.class);
+        RolapProperty property2 = mock(TestPublicRolapProperty.class);
         when(property1.getName()).thenReturn(PROPERTY_NAME_1);
         when(property2.getName()).thenReturn(PROPERTY_NAME_2);
         when(property1.getFormatter()).thenReturn(propertyFormatter);
