@@ -1,10 +1,13 @@
 package org.opencube.junit5;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
@@ -19,26 +22,36 @@ import org.junit.jupiter.api.Assertions;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
 import org.olap4j.OlapConnection;
+import org.olap4j.OlapException;
 import org.olap4j.OlapStatement;
 import org.olap4j.impl.CoordinateIterator;
+import org.opencube.junit5.context.Context;
 
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
+import mondrian.olap.Axis;
 import mondrian.olap.Cell;
 import mondrian.olap.Connection;
 import mondrian.olap.Cube;
 import mondrian.olap.Id;
 import mondrian.olap.Member;
 import mondrian.olap.MondrianProperties;
+import mondrian.olap.Position;
 import mondrian.olap.Query;
 import mondrian.olap.Result;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
+import mondrian.olap4j.MondrianOlap4jConnection;
+import mondrian.rolap.RolapConnectionProperties;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
 import mondrian.spi.Dialect;
 import mondrian.spi.DialectManager;
+import mondrian.spi.impl.FilterDynamicSchemaProcessor;
+import mondrian.xmla.XmlaException;
+
+import java.util.regex.Pattern;
 
 public class TestUtil {
 	
@@ -135,6 +148,195 @@ public class TestUtil {
 	      }
 	      checkThrowable( throwable, pattern );
 	    }
+	    
+	    public static void assertAxisThrows(Connection connection,
+	  	      String expression,
+	  	      String pattern) {
+	    	assertAxisThrows(connection, expression, pattern, getDefaultCubeName());
+	    }
+	    
+		/**
+		 * Executes a query, and asserts that it throws an exception which contains the
+		 * given pattern.
+		 *
+		 * @param queryString Query string
+		 * @param pattern     Pattern which exception must match
+		 */
+		public static void assertQueryThrows(Connection connection, String queryString, String pattern) {
+			Throwable throwable;
+			try {
+				Result result = executeQuery(connection, queryString);
+				Util.discard(result);
+				throwable = null;
+			} catch (Throwable e) {
+				throwable = e;
+			}
+			checkThrowable(throwable, pattern);
+		}
+	    
+		/**
+		 * Executes an expression, and asserts that it gives an error which contains a
+		 * particular pattern. The error might occur during parsing, or might be
+		 * contained within the cell value.
+		 */
+		public static void assertExprThrows(Connection connection, String expression, String pattern) {
+			Throwable throwable = null;
+			try {
+				String cubeName = getDefaultCubeName();
+				if (cubeName.indexOf(' ') >= 0) {
+					cubeName = Util.quoteMdxIdentifier(cubeName);
+				}
+				expression = Util.replace(expression, "'", "''");
+				Result result = executeQuery(connection, "with member [Measures].[Foo] as '" + expression
+						+ "' select {[Measures].[Foo]} on columns from " + cubeName);
+				Cell cell = result.getCell(new int[] { 0 });
+				if (cell.isError()) {
+					throwable = (Throwable) cell.getValue();
+				}
+			} catch (Throwable e) {
+				throwable = e;
+			}
+			checkThrowable(throwable, pattern);
+		}	    
+
+		/**
+		 * Checks that an actual string matches an expected string.
+		 *
+		 * <p>
+		 * If they do not, throws a {@link junit.framework.ComparisonFailure} and prints
+		 * the difference, including the actual string as an easily pasted Java string
+		 * literal.
+		 */
+		public static void assertEqualsVerbose(String expected, String actual) {
+			assertEqualsVerbose(expected, actual, true, null);
+		}
+
+		/**
+		 * Checks that an actual string matches an expected string.
+		 *
+		 * <p>
+		 * If they do not, throws a {@link ComparisonFailure} and prints the difference,
+		 * including the actual string as an easily pasted Java string literal.
+		 *
+		 * @param expected Expected string
+		 * @param actual   Actual string
+		 * @param java     Whether to generate actual string as a Java string literal if
+		 *                 the values are not equal
+		 * @param message  Message to display, optional
+		 */
+		public static void assertEqualsVerbose(String expected, String actual, boolean java, String message) {
+			assertEqualsVerbose(fold(expected), actual, java, message);
+		}
+		
+		/**
+		 * Wrapper around a string that indicates that all line endings have been
+		 * converted to platform-specific line endings.
+		 *
+		 * @see TestContext#fold
+		 */
+		public static class SafeString {
+			public final String s;
+
+			private SafeString(String s) {
+				this.s = s;
+			}
+		}
+
+		/**
+		 * Replaces line-endings in a string with the platform-dependent equivalent. If
+		 * the input string already has platform-dependent line endings, no replacements
+		 * are made.
+		 *
+		 * @param string String whose line endings are to be made platform- dependent.
+		 *               Typically these are constant "expected value" string
+		 *               expressions where the linefeed is represented as linefeed "\n",
+		 *               but sometimes this method will receive strings created
+		 *               dynamically where the line endings are already appropriate for
+		 *               the platform.
+		 * @return String where all linefeeds have been converted to platform-specific
+		 *         (CR+LF on Windows, LF on Unix/Linux)
+		 */
+		public static SafeString fold(String string) {
+			if (string == null) {
+				return null;
+			}
+			if (nl.equals("\n") || string.indexOf(nl) != -1) {
+				return new SafeString(string);
+			}
+			return new SafeString(Util.replace(string, "\n", nl));
+		}
+		
+		protected static final String nl = Util.nl;
+		private static final String indent = "                ";
+		private static final Pattern LineBreakPattern = Pattern.compile("\r\n|\r|\n");
+		private static final Pattern TabPattern = Pattern.compile("\t");
+		private static final String lineBreak2 = "\\\\n\"" + nl + indent + "+ \"";
+
+		private static String toJavaString(String s) {
+			// Convert [string with "quotes" split
+			// across lines]
+			// into ["string with \"quotes\" split\n"
+			// + "across lines
+			//
+			s = Util.replace(s, "\"", "\\\"");
+			s = LineBreakPattern.matcher(s).replaceAll(lineBreak2);
+			s = TabPattern.matcher(s).replaceAll("\\\\t");
+			s = "\"" + s + "\"";
+			String spurious = nl + indent + "+ \"\"";
+			if (s.endsWith(spurious)) {
+				s = s.substring(0, s.length() - spurious.length());
+			}
+			return s;
+		}
+		
+		/**
+		 * Checks that an actual string matches an expected string.
+		 *
+		 * <p>
+		 * If they do not, throws a {@link ComparisonFailure} and prints the difference,
+		 * including the actual string as an easily pasted Java string literal.
+		 *
+		 * @param safeExpected Expected string, where all line endings have been
+		 *                     converted into platform-specific line endings
+		 * @param actual       Actual string
+		 * @param java         Whether to generate actual string as a Java string
+		 *                     literal if the values are not equal
+		 * @param message      Message to display, optional
+		 */
+		public static void assertEqualsVerbose(SafeString safeExpected, String actual, boolean java, String message) {
+			String expected = safeExpected == null ? null : safeExpected.s;
+			if ((expected == null) && (actual == null)) {
+				return;
+			}
+			if ((expected != null) && expected.equals(actual)) {
+				return;
+			}
+			if (message == null) {
+				message = "";
+			} else {
+				message += nl;
+			}
+			message += "Expected:" + nl + expected + nl + "Actual:" + nl + actual + nl;
+			if (java) {
+				message += "Actual java:" + nl + toJavaString(actual) + nl;
+			}
+			assertEquals(expected, actual, message);
+		}		
+		
+		/**
+		 * Executes an expression and asserts that it returns a given result.
+		 */
+		public static void assertExprReturns(Connection connection, String expression, String expected) {
+			final Cell cell = executeExprRaw(connection, getDefaultCubeName(), expression);
+			if (expected == null) {
+				expected = ""; // null values are formatted as empty string
+			}
+			assertEqualsVerbose(expected, cell.getFormattedValue());
+		}
+		
+		public static String getDefaultCubeName() {
+			return "Sales";
+		}
 
 	    public static void checkThrowable( Throwable throwable, String pattern ) {
 	      if ( throwable == null ) {
@@ -176,6 +378,7 @@ public class TestUtil {
         }
         return resultCube;
     }
+    
 
 	public static synchronized void flushSchemaCache(Connection connection) {
 		// it's pointless to flush the schema cache if we
@@ -210,6 +413,85 @@ public class TestUtil {
 		return query;
 	}
 
+	/**
+	 * Executes a query with a given expression on an axis, and returns the whole
+	 * axis.
+	 */
+	public static Axis executeAxis(Connection connection, String expression) {
+		Result result = executeQuery(connection, "select {" + expression + "} on columns from " + getDefaultCubeName());
+		return result.getAxes()[0];
+	}
+	
+	/**
+	 * Converts a set of positions into a string. Useful if you want to check that
+	 * an axis has the results you expected.
+	 */
+	public static String toString(List<Position> positions) {
+		StringBuilder buf = new StringBuilder();
+		int i = 0;
+		for (Position position : positions) {
+			if (i > 0) {
+				buf.append(nl);
+			}
+			if (position.size() != 1) {
+				buf.append("{");
+			}
+			for (int j = 0; j < position.size(); j++) {
+				Member member = position.get(j);
+				if (j > 0) {
+					buf.append(", ");
+				}
+				buf.append(member.getUniqueName());
+			}
+			if (position.size() != 1) {
+				buf.append("}");
+			}
+			i++;
+		}
+		return buf.toString();
+	}
+	  
+	/**
+	 * Executes a query with a given expression on an axis, and asserts that it
+	 * returns the expected string.
+	 */
+	public static void assertAxisReturns(Connection connection, String expression, String expected) {
+		Axis axis = executeAxis(connection, expression);
+		assertEqualsVerbose(expected, upgradeActual(toString(axis.getPositions())));
+	}
+	
+	/**
+	 * Massages the actual result of executing a query to handle differences in
+	 * unique names betweeen old and new behavior.
+	 *
+	 * <p>
+	 * Even though the new naming is not enabled by default, reference logs should
+	 * be in terms of the new naming.
+	 *
+	 * @param actual Actual result
+	 * @return Expected result massaged for backwards compatibility
+	 * @see mondrian.olap.MondrianProperties#SsasCompatibleNaming
+	 */
+	public static String upgradeActual(String actual) {
+		if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
+			actual = Util.replace(actual, "[Time.Weekly]", "[Time].[Weekly]");
+			actual = Util.replace(actual, "[All Time.Weeklys]", "[All Weeklys]");
+			actual = Util.replace(actual, "<HIERARCHY_NAME>Time.Weekly</HIERARCHY_NAME>",
+					"<HIERARCHY_NAME>Weekly</HIERARCHY_NAME>");
+
+			// for a few tests in SchemaTest
+			actual = Util.replace(actual, "[Store.MyHierarchy]", "[Store].[MyHierarchy]");
+			actual = Util.replace(actual, "[All Store.MyHierarchys]", "[All MyHierarchys]");
+			actual = Util.replace(actual, "[Store2].[All Store2s]", "[Store2].[Store].[All Stores]");
+			actual = Util.replace(actual, "[Store Type 2.Store Type 2].[All Store Type 2.Store Type 2s]",
+					"[Store Type 2].[All Store Type 2s]");
+			actual = Util.replace(actual, "[TIME.CALENDAR]", "[TIME].[CALENDAR]");
+			actual = Util.replace(actual, "<Store>true</Store>", "<Store>1</Store>");
+			actual = Util.replace(actual, "<Employees>80000.0000</Employees>", "<Employees>80000</Employees>");
+		}
+		return actual;
+	}
+	
 	public static void assertQueryReturns(Connection connection, String queryString, String expectedResult) {
 
 		Result result = executeQuery(connection, queryString);
@@ -327,5 +609,42 @@ public class TestUtil {
 	    	
 	    }
 	
+		public static Member executeSingletonAxis(Connection connection, String expression) {
+			final String cubeName = getDefaultCubeName();
+			Result result = executeQuery(connection, "select {" + expression + "} on columns from " + cubeName);
+			Axis axis = result.getAxes()[0];
+			switch (axis.getPositions().size()) {
+			case 0:
+				// The mdx "{...}" operator eliminates null members (that is,
+				// members for which member.isNull() is true). So if "expression"
+				// yielded just the null member, the array will be empty.
+				return null;
+			case 1:
+				// Java nulls should never happen during expression evaluation.
+				Position position = axis.getPositions().get(0);
+				Util.assertTrue(position.size() == 1);
+				Member member = position.get(0);
+				Util.assertTrue(member != null);
+				return member;
+			default:
+				throw Util.newInternal(
+						"expression " + expression + " yielded " + axis.getPositions().size() + " positions");
+			}
+		}
+
+		public static String getRawSchema(Context context) throws SQLException, OlapException, IOException {
+			OlapConnection connection = context.createOlap4jConnection();
+            final String catalogUrl = ((MondrianOlap4jConnection)connection).getMondrianConnection().getCatalogName();
+            String schema = Util.readVirtualFileAsString(catalogUrl);
+            return schema;
+		}
+		
+		public static void withSchema(Context context, String schema) {
+			context.setProperty(RolapConnectionProperties.CatalogContent.name(), schema);
+		}
+
+		public static void withRole(Context context, String roleName) {
+			context.setProperty(RolapConnectionProperties.Role.name(), roleName);
+		}
 
 }

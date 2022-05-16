@@ -68,6 +68,11 @@ public class BaseTestContext implements Context {
 	}
 
 	@Override
+	public void setProperty(String key, String value) {
+		properties.put(key, value);
+	}
+	
+	@Override
 	public OlapConnection createOlap4jConnection() throws SQLException {
 
 		MondrianOlap4jDriver d = new MondrianOlap4jDriver();

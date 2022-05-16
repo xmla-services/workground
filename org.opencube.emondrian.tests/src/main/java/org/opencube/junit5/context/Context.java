@@ -24,5 +24,7 @@ public interface Context {
 	public String getJDBCConnectString();
 
 	String getOlapConnectString();
+	
+	void setProperty(String key, String value);
 
 }
