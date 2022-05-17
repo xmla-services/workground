@@ -326,12 +326,19 @@ public class TestUtil {
 		/**
 		 * Executes an expression and asserts that it returns a given result.
 		 */
-		public static void assertExprReturns(Connection connection, String expression, String expected) {
-			final Cell cell = executeExprRaw(connection, getDefaultCubeName(), expression);
+		public static void assertExprReturns(Connection connection, String cubeName, String expression, String expected) {
+			final Cell cell = executeExprRaw(connection, cubeName, expression);
 			if (expected == null) {
 				expected = ""; // null values are formatted as empty string
 			}
 			assertEqualsVerbose(expected, cell.getFormattedValue());
+		}
+		
+		/**
+		 * Executes an expression and asserts that it returns a given result.
+		 */
+		public static void assertExprReturns(Connection connection, String expression, String expected) {
+			assertExprReturns(connection, getDefaultCubeName(), expression, expected);
 		}
 		
 		public static String getDefaultCubeName() {
@@ -417,11 +424,14 @@ public class TestUtil {
 	 * Executes a query with a given expression on an axis, and returns the whole
 	 * axis.
 	 */
-	public static Axis executeAxis(Connection connection, String expression) {
-		Result result = executeQuery(connection, "select {" + expression + "} on columns from " + getDefaultCubeName());
+	public static Axis executeAxis(Connection connection, String cubeName, String expression) {
+		Result result = executeQuery(connection, "select {" + expression + "} on columns from " + cubeName);
 		return result.getAxes()[0];
 	}
 	
+	public static Axis executeAxis(Connection connection, String expression) {
+		return executeAxis(connection, getDefaultCubeName(), expression);
+	}
 	/**
 	 * Converts a set of positions into a string. Useful if you want to check that
 	 * an axis has the results you expected.
@@ -450,14 +460,35 @@ public class TestUtil {
 		}
 		return buf.toString();
 	}
-	  
+
+	/**
+	 * Converts a {@link mondrian.olap.Result} to text in traditional format.
+	 *
+	 * <p>
+	 * For more exotic formats, see {@link org.olap4j.layout.CellSetFormatter}.
+	 *
+	 * @param result Query result
+	 * @return Result as text
+	 */
+	public static String toString(Result result) {
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		result.print(pw);
+		pw.flush();
+		return sw.toString();
+	}	
+	
 	/**
 	 * Executes a query with a given expression on an axis, and asserts that it
 	 * returns the expected string.
 	 */
-	public static void assertAxisReturns(Connection connection, String expression, String expected) {
-		Axis axis = executeAxis(connection, expression);
+	public static void assertAxisReturns(Connection connection, String cubeName, String expression, String expected) {
+		Axis axis = executeAxis(connection, cubeName, expression);
 		assertEqualsVerbose(expected, upgradeActual(toString(axis.getPositions())));
+	}
+	
+	public static void assertAxisReturns(Connection connection, String expression, String expected) {
+		assertAxisReturns(connection, getDefaultCubeName(), expression, expected);
 	}
 	
 	/**
@@ -507,6 +538,19 @@ public class TestUtil {
 		assertThat(sw.getBuffer().toString()).isNotNull().isEqualTo(expectedResult);
 
 	}
+
+	/**
+	 * Executes a query and checks that the result is a given string, displaying a
+	 * message if result does not match desiredResult.
+	 */
+	public static void assertQueryReturns(Connection connection, String message, String query, String desiredResult) {
+		Result result = executeQuery(connection, query);
+		String resultString = toString(result);
+		if (desiredResult != null) {
+			assertEqualsVerbose(desiredResult, upgradeActual(resultString), true, message);
+		}
+	}
+
 	public static CellSet executeOlap4jQuery(OlapConnection olapConnection, String queryString ) throws SQLException {
 	//TODO: may better fix querys then use upgradeQuery
 	  //  queryString = upgradeQuery( queryString );
@@ -632,11 +676,24 @@ public class TestUtil {
 			}
 		}
 
-		public static String getRawSchema(Context context) throws SQLException, OlapException, IOException {
-			OlapConnection connection = context.createOlap4jConnection();
-            final String catalogUrl = ((MondrianOlap4jConnection)connection).getMondrianConnection().getCatalogName();
-            String schema = Util.readVirtualFileAsString(catalogUrl);
-            return schema;
+		static String rawSchema = null;
+		
+		public static String getRawSchema(Context context) {
+			if(rawSchema == null) {
+				try {
+					OlapConnection connection = context.createOlap4jConnection();
+					final String catalogUrl = ((MondrianOlap4jConnection) connection).getMondrianConnection()
+							.getCatalogName();
+			    	String schema;
+				    synchronized ( TestUtil.class ) {
+				    	schema = Util.readVirtualFileAsString(catalogUrl);
+				    }
+					rawSchema = schema;
+				} catch (Exception e) {
+					throw new RuntimeException("getRawSchema exception", e);
+				}
+			}
+			return rawSchema;
 		}
 		
 		public static void withSchema(Context context, String schema) {
