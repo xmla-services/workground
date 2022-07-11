@@ -1,57 +1,48 @@
 package org.opencube.junit5;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import mondrian.calc.Calc;
+import mondrian.calc.CalcWriter;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.olap.Axis;
+import mondrian.olap.Cell;
+import mondrian.olap.Position;
+import mondrian.olap.*;
+import mondrian.olap.fun.FunUtil;
+import mondrian.olap4j.MondrianOlap4jConnection;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapHierarchy;
+import mondrian.server.Execution;
+import mondrian.server.Statement;
+import mondrian.spi.Dialect;
+import mondrian.spi.DialectManager;
+import mondrian.test.FoodmartTestContextImpl;
+import mondrian.test.TestContext;
+import org.junit.jupiter.api.Assertions;
+import org.olap4j.*;
+import org.olap4j.impl.CoordinateIterator;
+import org.opencube.junit5.context.Context;
 
-import java.io.IOException;
-import java.io.InputStream;
+import javax.sql.DataSource;
+import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.sql.DataSource;
-
-import org.junit.jupiter.api.Assertions;
-import org.olap4j.CellSet;
-import org.olap4j.CellSetAxis;
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapException;
-import org.olap4j.OlapStatement;
-import org.olap4j.impl.CoordinateIterator;
-import org.opencube.junit5.context.Context;
-
-import mondrian.calc.TupleList;
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Axis;
-import mondrian.olap.Cell;
-import mondrian.olap.Connection;
-import mondrian.olap.Cube;
-import mondrian.olap.Id;
-import mondrian.olap.Member;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Position;
-import mondrian.olap.Query;
-import mondrian.olap.Result;
-import mondrian.olap.SchemaReader;
-import mondrian.olap.Util;
-import mondrian.olap.fun.FunUtil;
-import mondrian.olap4j.MondrianOlap4jConnection;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.server.Execution;
-import mondrian.server.Statement;
-import mondrian.spi.Dialect;
-import mondrian.spi.DialectManager;
-import mondrian.spi.impl.FilterDynamicSchemaProcessor;
-import mondrian.xmla.XmlaException;
-
 import java.util.regex.Pattern;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class TestUtil {
 	
@@ -179,10 +170,9 @@ public class TestUtil {
 		 * particular pattern. The error might occur during parsing, or might be
 		 * contained within the cell value.
 		 */
-		public static void assertExprThrows(Connection connection, String expression, String pattern) {
+		public static void assertExprThrows(Connection connection, String cubeName, String expression, String pattern) {
 			Throwable throwable = null;
 			try {
-				String cubeName = getDefaultCubeName();
 				if (cubeName.indexOf(' ') >= 0) {
 					cubeName = Util.quoteMdxIdentifier(cubeName);
 				}
@@ -197,7 +187,17 @@ public class TestUtil {
 				throwable = e;
 			}
 			checkThrowable(throwable, pattern);
-		}	    
+		}
+
+	/**
+	 * Executes an expression, and asserts that it gives an error which contains a
+	 * particular pattern. The error might occur during parsing, or might be
+	 * contained within the cell value.
+	 */
+	public static void assertExprThrows(Connection connection, String expression, String pattern) {
+		String cubeName = getDefaultCubeName();
+		assertExprThrows(connection, cubeName, expression, pattern);
+	}
 
 		/**
 		 * Checks that an actual string matches an expected string.
@@ -395,7 +395,7 @@ public class TestUtil {
 			return;
 		}
 
-		mondrian.olap.CacheControl cc = connection.getCacheControl(null);
+		CacheControl cc = connection.getCacheControl(null);
 
 		if (cc == null) {
 			return;
@@ -462,7 +462,7 @@ public class TestUtil {
 	}
 
 	/**
-	 * Converts a {@link mondrian.olap.Result} to text in traditional format.
+	 * Converts a {@link Result} to text in traditional format.
 	 *
 	 * <p>
 	 * For more exotic formats, see {@link org.olap4j.layout.CellSetFormatter}.
@@ -529,8 +529,8 @@ public class TestUtil {
 
 		assertThat(result).isNotNull();
 
-		java.io.StringWriter sw = new java.io.StringWriter();
-		java.io.PrintWriter pw = new java.io.PrintWriter(sw);
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
 
 		// TODO: switch so other than printwriter
 		result.print(pw);
@@ -647,7 +647,7 @@ public class TestUtil {
 	      };
 	    }
 	    
-	static   public Dialect getDialect(Connection connection){
+	static public Dialect getDialect(Connection connection){
 	    	   DataSource dataSource =connection.getDataSource();
 	    	    return DialectManager.createDialect( dataSource, null );
 	    	
@@ -655,9 +655,13 @@ public class TestUtil {
 	
 		public static Member executeSingletonAxis(Connection connection, String expression) {
 			final String cubeName = getDefaultCubeName();
-			Result result = executeQuery(connection, "select {" + expression + "} on columns from " + cubeName);
-			Axis axis = result.getAxes()[0];
-			switch (axis.getPositions().size()) {
+			return executeSingletonAxis(connection, expression, cubeName);
+		}
+
+	public static Member executeSingletonAxis(Connection connection, String expression, String cubeName) {
+		Result result = executeQuery(connection, "select {" + expression + "} on columns from " + cubeName);
+		Axis axis = result.getAxes()[0];
+		switch (axis.getPositions().size()) {
 			case 0:
 				// The mdx "{...}" operator eliminates null members (that is,
 				// members for which member.isNull() is true). So if "expression"
@@ -673,8 +677,8 @@ public class TestUtil {
 			default:
 				throw Util.newInternal(
 						"expression " + expression + " yielded " + axis.getPositions().size() + " positions");
-			}
 		}
+	}
 
 		static String rawSchema = null;
 		
@@ -704,4 +708,348 @@ public class TestUtil {
 			context.setProperty(RolapConnectionProperties.Role.name(), roleName);
 		}
 
+	public static void assertExprDependsOn(Connection connection, String expr, String hierList ) {
+		// Construct a query, and mine it for a parsed expression.
+		// Use a fresh connection, because some tests define their own dims.
+		final String queryString =
+				"WITH MEMBER [Measures].[Foo] AS "
+						+ Util.singleQuoteString( expr )
+						+ " SELECT FROM [Sales]";
+		final Query query = connection.parseQuery( queryString );
+		query.resolve();
+		final Formula formula = query.getFormulas()[ 0 ];
+		final Exp expression = formula.getExpression();
+
+		// Build a list of the dimensions which the expression depends upon,
+		// and check that it is as expected.
+		checkDependsOn( query, expression, hierList, true );
+	}
+
+	public static void assertMemberExprDependsOn(Connection connection, String expr, String dimList ) {
+		assertSetExprDependsOn(connection, "{" + expr + "}", dimList );
+	}
+
+	public static void assertSetExprDependsOn(Connection connection, String expr, String dimList ) {
+		// Construct a query, and mine it for a parsed expression.
+		// Use a fresh connection, because some tests define their own dims.
+		final String queryString =
+				"SELECT {" + expr + "} ON COLUMNS FROM [Sales]";
+		final Query query = connection.parseQuery( queryString );
+		query.resolve();
+		final Exp expression = query.getAxes()[ 0 ].getSet();
+
+		// Build a list of the dimensions which the expression depends upon,
+		// and check that it is as expected.
+		checkDependsOn( query, expression, dimList, false );
+	}
+
+	/**
+	 * Executes an expression which yields a boolean result, and asserts that
+	 * the result is the expected one.
+	 */
+	public static void assertBooleanExprReturns(Connection connection, String expression, boolean expected) {
+		final String iifExpression =
+				"Iif (" + expression + ",\"true\",\"false\")";
+		final String actual = executeExpr(connection, iifExpression);
+		final String expectedString = expected ? "true" : "false";
+		assertEquals(expectedString, actual);
+	}
+
+	/**
+	 * Executes an expression against the Sales cube in the FoodMart database
+	 * to form a single cell result set, then returns that cell's formatted
+	 * value.
+	 */
+	public static String executeExpr(Connection connection, String expression) {
+		return executeExprRaw(connection, expression).getFormattedValue();
+	}
+
+	public static boolean isDefaultNullMemberRepresentation() {
+		return MondrianProperties.instance().NullMemberRepresentation.get()
+				.equals("#null");
+	}
+
+	public static String compileExpression(Connection connection, String expression, final boolean scalar ) {
+		String cubeName = getDefaultCubeName();
+		if ( cubeName.indexOf( ' ' ) >= 0 ) {
+			cubeName = Util.quoteMdxIdentifier( cubeName );
+		}
+		final String queryString;
+		if ( scalar ) {
+			queryString =
+					"with member [Measures].[Foo] as "
+							+ Util.singleQuoteString( expression )
+							+ " select {[Measures].[Foo]} on columns from " + cubeName;
+		} else {
+			queryString =
+					"SELECT {" + expression + "} ON COLUMNS FROM " + cubeName;
+		}
+		Query query = connection.parseQuery( queryString );
+		final Exp exp;
+		if ( scalar ) {
+			exp = query.getFormulas()[ 0 ].getExpression();
+		} else {
+			exp = query.getAxes()[ 0 ].getSet();
+		}
+		final Calc calc = query.compileExpression( exp, scalar, null );
+		final StringWriter sw = new StringWriter();
+		final PrintWriter pw = new PrintWriter( sw );
+		final CalcWriter calcWriter = new CalcWriter( pw, false );
+		calc.accept( calcWriter );
+		pw.flush();
+		return sw.toString();
+	}
+
+	/**
+	 * Executes the expression in the context of the cube indicated by
+	 * <code>cubeName</code>, and returns the result as a Cell.
+	 *
+	 * @param expression The expression to evaluate
+	 * @return Cell which is the result of the expression
+	 */
+	public static Cell executeExprRaw(Connection connection, String expression ) {
+		final String queryString = generateExpression( expression );
+		Result result = executeQuery(connection, queryString);
+		return result.getCell( new int[] { 0 } );
+	}
+
+	private static String generateExpression( String expression ) {
+		String cubeName = getDefaultCubeName();
+		if ( cubeName.indexOf( ' ' ) >= 0 ) {
+			cubeName = Util.quoteMdxIdentifier( cubeName );
+		}
+		return
+				"with member [Measures].[Foo] as "
+						+ Util.singleQuoteString( expression )
+						+ " select {[Measures].[Foo]} on columns from " + cubeName;
+	}
+
+	private static void checkDependsOn(
+			final Query query,
+			final Exp expression,
+			String expectedHierList,
+			final boolean scalar ) {
+		final Calc calc =
+				query.compileExpression(
+						expression,
+						scalar,
+						scalar ? null : ResultStyle.ITERABLE );
+		final List<RolapHierarchy> hierarchies =
+				( (RolapCube) query.getCube() ).getHierarchies();
+		StringBuilder buf = new StringBuilder( "{" );
+		int dependCount = 0;
+		for ( Hierarchy hierarchy : hierarchies ) {
+			if ( calc.dependsOn( hierarchy ) ) {
+				if ( dependCount++ > 0 ) {
+					buf.append( ", " );
+				}
+				buf.append( hierarchy.getUniqueName() );
+			}
+		}
+		buf.append( "}" );
+		String actualHierList = buf.toString();
+		assertEquals( expectedHierList, actualHierList );
+	}
+
+	/**
+	 * Checks that an actual string matches an expected string. Ignores the difference of anonymous class names in
+	 * "mondrian...." package.
+	 *
+	 * <p>If they do not, throws a {@link junit.framework.ComparisonFailure} and
+	 * prints the difference, including the actual string as an easily pasted Java string literal.
+	 */
+	public static void assertStubbedEqualsVerbose(
+			String expected,
+			String actual ) {
+		assertEqualsVerbose(
+				stubAnonymousClasses( expected ),
+				stubAnonymousClasses( actual ) );
+	}
+
+	/**
+	 * Replaces anonymous class names (/\$\d+/) with a stub "$-anonymous-class-" in constructions
+	 * "class&nbsp;mondrian.rest.package.name.ClassName$InnerClassNames". <br/> e.g. <br/>
+	 * <code>stubAnonymousClasses("class mondrian.fun.Fun$21$1")</code>
+	 * results
+	 * <code>
+	 * "class mondrian.fun.Fun$-anonymous-class-$-anonymous-class-"
+	 * </code>.
+	 * <br/> Within a Strings comparison <br/> applying this to both compared <code>String</code>s makes the comparison
+	 * independent on anonymous class names.
+	 * </br>
+	 */
+	public static String stubAnonymousClasses( String str ) {
+		if ( !str.contains( "$" ) ) {
+			return str;
+		}
+		final String regex =
+				"(class mondrian(?:\\.\\w+)*(?:\\$(?:\\w+|-anonymous-class-))*?)(?:\\$\\d+)\\b";
+		final String replacement = "$1\\$-anonymous-class-";
+		Pattern p = Pattern.compile( regex );
+		String str1 = p.matcher( str ).replaceAll( replacement );
+		while ( !str.equals( str1 ) ) {
+			str = str1;
+			str1 = p.matcher( str ).replaceAll( replacement );
+		}
+		return str1;
+	}
+
+	public static String hierarchyName( String dimension, String hierarchy ) {
+		return MondrianProperties.instance().SsasCompatibleNaming.get()
+				? "[" + dimension + "].[" + hierarchy + "]"
+				: ( hierarchy.equals( dimension )
+				? "[" + dimension + "]"
+				: "[" + dimension + "." + hierarchy + "]" );
+	}
+
+	/**
+	 * Runs a query, and asserts that the result has a given number of columns
+	 * and rows.
+	 */
+	public static void assertSize(
+			Connection connection,
+			String queryString,
+			int columnCount,
+			int rowCount)
+	{
+		Result result = executeQuery(connection, queryString);
+		Axis[] axes = result.getAxes();
+		assertTrue(axes.length == 2);
+		assertTrue(axes[0].getPositions().size() == columnCount);
+		assertTrue(axes[1].getPositions().size() == rowCount);
+	}
+
+	public static void assertSimpleQuery(Connection connection) {
+		assertQueryReturns(connection,
+				"select from [Sales]",
+				"Axis #0:\n"
+						+ "{}\n"
+						+ "266,773" );
+	}
+
+	/**
+	 * Executes query1 and query2 and Compares the obtained measure values.
+	 */
+	public static void assertQueriesReturnSimilarResults(Connection connection,
+			String query1,
+			String query2)
+	{
+		String resultString1 =
+				toString(executeQuery(connection, query1));
+		String resultString2 =
+				FoodmartTestContextImpl.toString(executeQuery(connection, query2));
+		assertEquals(
+				measureValues(resultString1),
+				measureValues(resultString2));
+	}
+
+	/**
+	 * Truncates the query result to return only measure values.
+	 */
+	private static String measureValues(String resultString) {
+		int index = resultString.indexOf("}");
+		return index != -1 ? resultString.substring(index) : resultString;
+	}
+
+	public static OlapConnection getOlap4jConnection() throws SQLException {
+		try {
+			Class.forName( "mondrian.olap4j.MondrianOlap4jDriver" );
+		} catch ( ClassNotFoundException e ) {
+			throw new RuntimeException( "Driver not found" );
+		}
+		String connectString = getConnectString();
+		if ( connectString.startsWith( "Provider=mondrian; " ) ) {
+			connectString =
+					connectString.substring( "Provider=mondrian; ".length() );
+		}
+		final java.sql.Connection connection =
+				java.sql.DriverManager.getConnection(
+						"jdbc:mondrian:" + connectString );
+		return ( (OlapWrapper) connection ).unwrap( OlapConnection.class );
+	}
+
+	private static final String getConnectString() {
+		return getConnectionProperties().toString();
+	}
+
+	private static Util.PropertyList getConnectionProperties() {
+		final Util.PropertyList propertyList =
+				Util.parseConnectString( getDefaultConnectString() );
+		if ( MondrianProperties.instance().TestHighCardinalityDimensionList
+				.get() != null
+				&& propertyList.get(
+				RolapConnectionProperties.DynamicSchemaProcessor.name() )
+				== null ) {
+			propertyList.put(
+					RolapConnectionProperties.DynamicSchemaProcessor.name(),
+					FoodmartTestContextImpl.HighCardDynamicSchemaProcessor.class.getName() );
+		}
+		return propertyList;
+	}
+
+	/**
+	 * Constructs a connect string by which the unit tests can talk to the FoodMart database.
+	 * <p>
+	 * The algorithm is as follows:<ul>
+	 * <li>Starts with {@link MondrianProperties#TestConnectString}, if it is
+	 * set.</li>
+	 * <li>If {@link MondrianProperties#FoodmartJdbcURL} is set, this
+	 * overrides the <code>Jdbc</code> property.</li>
+	 * <li>If the <code>catalog</code> URL is unset or invalid, it assumes that
+	 * we are at the root of the source tree, and references
+	 * <code>demo/FoodMart.xml</code></li>.
+	 * </ul>
+	 */
+	public static String getDefaultConnectString() {
+		String connectString =
+				MondrianProperties.instance().TestConnectString.get();
+		final Util.PropertyList connectProperties;
+		if ( connectString == null || connectString.equals( "" ) ) {
+			connectProperties = new Util.PropertyList();
+			connectProperties.put( "Provider", "mondrian" );
+		} else {
+			connectProperties = Util.parseConnectString( connectString );
+		}
+		String jdbcURL = MondrianProperties.instance().FoodmartJdbcURL.get();
+		if ( jdbcURL != null ) {
+			connectProperties.put( "Jdbc", jdbcURL );
+		}
+		String jdbcUser = MondrianProperties.instance().TestJdbcUser.get();
+		if ( jdbcUser != null ) {
+			connectProperties.put( "JdbcUser", jdbcUser );
+		}
+		String jdbcPassword =
+				MondrianProperties.instance().TestJdbcPassword.get();
+		if ( jdbcPassword != null ) {
+			connectProperties.put( "JdbcPassword", jdbcPassword );
+		}
+
+		// Find the catalog. Use the URL specified in the connect string, if
+		// it is specified and is valid. Otherwise, reference FoodMart.xml
+		// assuming we are at the root of the source tree.
+		URL catalogURL = null;
+		String catalog = connectProperties.get( "catalog" );
+		if ( catalog != null ) {
+			try {
+				catalogURL = new URL( catalog );
+			} catch ( MalformedURLException e ) {
+				// ignore
+			}
+		}
+		if ( catalogURL == null ) {
+			// Works if we are running in root directory of source tree
+			File file = new File( "demo/FoodMart.xml" );
+			if ( !file.exists() ) {
+				// Works if we are running in bin directory of runtime env
+				file = new File( "../demo/FoodMart.xml" );
+			}
+			try {
+				catalogURL = Util.toURL( file );
+			} catch ( MalformedURLException e ) {
+				throw new Error( e.getMessage() );
+			}
+		}
+		connectProperties.put( "catalog", catalogURL.toString() );
+		return connectProperties.toString();
+	}
 }
