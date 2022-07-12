@@ -1052,4 +1052,9 @@ public class TestUtil {
 		connectProperties.put( "catalog", catalogURL.toString() );
 		return connectProperties.toString();
 	}
+
+	public static int getRowCount(Result result) {
+		return result.getAxes()[result.getAxes().length - 1]
+				.getPositions().size();
+	}
 }
