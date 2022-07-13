@@ -424,11 +424,11 @@ public class RolapCubeHierarchy extends RolapHierarchy {
         return currentAllMember;
     }
 
-    void setMemberReader(MemberReader memberReader) {
+    public void setMemberReader(MemberReader memberReader) {
         rolapHierarchy.setMemberReader(memberReader);
     }
 
-    MemberReader getMemberReader() {
+    public MemberReader getMemberReader() {
         return reader;
     }
 

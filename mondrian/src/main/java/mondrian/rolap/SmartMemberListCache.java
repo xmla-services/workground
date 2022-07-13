@@ -49,7 +49,7 @@ import mondrian.util.Pair;
  * @since Nov 21, 2005
  */
 public class SmartMemberListCache <K, V> {
-    SmartCache<Pair<K, Object>, V> cache;
+    public SmartCache<Pair<K, Object>, V> cache;
 
     public SmartMemberListCache() {
         cache = new SoftSmartCache<Pair<K, Object>, V>();

@@ -11,14 +11,13 @@ import mondrian.olap.Position;
 import mondrian.olap.*;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap4j.MondrianOlap4jConnection;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.rolap.RolapCube;
-import mondrian.rolap.RolapHierarchy;
+import mondrian.rolap.*;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
 import mondrian.spi.Dialect;
 import mondrian.spi.DialectManager;
 import mondrian.test.FoodmartTestContextImpl;
+import mondrian.test.SqlPattern;
 import mondrian.test.TestContext;
 import org.junit.jupiter.api.Assertions;
 import org.olap4j.*;
@@ -32,17 +31,11 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.AbstractList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestUtil {
 	
@@ -227,8 +220,26 @@ public class TestUtil {
 		public static void assertEqualsVerbose(String expected, String actual, boolean java, String message) {
 			assertEqualsVerbose(fold(expected), actual, java, message);
 		}
-		
-		/**
+
+	/**
+	 * Returns count copies of a string. Format strings within string are substituted, per {@link
+	 * java.lang.String#format}.
+	 *
+	 * @param count  Number of copies
+	 * @param format String template
+	 * @return Multiple copies of a string
+	 */
+	public static String repeatString(
+			final int count,
+			String format ) {
+		final Formatter formatter = new Formatter();
+		for ( int i = 0; i < count; i++ ) {
+			formatter.format( format, i );
+		}
+		return formatter.toString();
+	}
+
+	/**
 		 * Wrapper around a string that indicates that all line endings have been
 		 * converted to platform-specific line endings.
 		 *
@@ -347,11 +358,11 @@ public class TestUtil {
 
 	    public static void checkThrowable( Throwable throwable, String pattern ) {
 	      if ( throwable == null ) {
-	        Assertions.fail( "query did not yield an exception" );
+	        fail( "query did not yield an exception" );
 	      }
 	      String stackTrace = getStackTrace( throwable );
 	      if ( stackTrace.indexOf( pattern ) < 0 ) {
-	    	  Assertions.fail(
+	    	  fail(
 	          "query's error does not match pattern '" + pattern
 	            + "'; error is [" + stackTrace + "]" );
 	      }
@@ -1057,4 +1068,329 @@ public class TestUtil {
 		return result.getAxes()[result.getAxes().length - 1]
 				.getPositions().size();
 	}
+
+	/**
+	 * Checks that a given MDX query results in a particular SQL statement
+	 * being generated.
+	 *
+	 * @param mdxQuery MDX query
+	 * @param patterns Set of patterns for expected SQL statements
+	 */
+	public static void assertQuerySql(
+			Connection connection,
+			String mdxQuery,
+			SqlPattern[] patterns)
+	{
+		assertQuerySqlOrNot(
+				connection, mdxQuery, patterns, false, false, true);
+	}
+
+	/**
+	 * During MDX query parse and execution, checks that the query results
+	 * (or does not result) in a particular SQL statement being generated.
+	 *
+	 * <p>Parses and executes the MDX query once for each SQL
+	 * pattern in the current dialect. If there are multiple patterns, runs the
+	 * MDX query multiple times, and expects to see each SQL statement appear.
+	 * If there are no patterns in this dialect, the test trivially succeeds.
+	 *
+	 * @param connection connection
+	 * @param mdxQuery MDX query
+	 * @param patterns Set of patterns
+	 * @param negative false to assert if SQL is generated;
+	 *                 true to assert if SQL is NOT generated
+	 * @param bypassSchemaCache whether to grab a new connection and bypass the
+	 *        schema cache before parsing the MDX query
+	 * @param clearCache whether to clear cache before executing the MDX query
+	 */
+	public static void assertQuerySqlOrNot(
+			Connection connection,
+			String mdxQuery,
+			SqlPattern[] patterns,
+			boolean negative,
+			boolean bypassSchemaCache,
+			boolean clearCache)
+	{
+		mdxQuery = upgradeQuery(mdxQuery);
+
+		// Run the test once for each pattern in this dialect.
+		// (We could optimize and run it once, collecting multiple queries, and
+		// comparing all queries at the end.)
+		Dialect dialect = getDialect(connection);
+		Dialect.DatabaseProduct d = dialect.getDatabaseProduct();
+		boolean patternFound = false;
+		for (SqlPattern sqlPattern : patterns) {
+			if (!sqlPattern.hasDatabaseProduct(d)) {
+				// If the dialect is not one in the pattern set, skip the
+				// test. If in the end no pattern is located, print a warning
+				// message if required.
+				continue;
+			}
+
+			patternFound = true;
+
+			String sql = sqlPattern.getSql();
+			String trigger = sqlPattern.getTriggerSql();
+
+			sql = dialectize(d, sql);
+			trigger = dialectize(d, trigger);
+
+			// Create a dummy DataSource which will throw a 'bomb' if it is
+			// asked to execute a particular SQL statement, but will otherwise
+			// behave exactly the same as the current DataSource.
+			final TriggerHook hook = new TriggerHook(trigger);
+			RolapUtil.setHook(hook);
+			Bomb bomb = null;
+			try {
+				//if (bypassSchemaCache) {
+				//	connection =
+				//			testContext.withSchemaPool(false).getConnection();
+				//}
+				final Query query = connection.parseQuery(mdxQuery);
+				if (clearCache) {
+					clearCache(connection, (RolapCube)query.getCube());
+				}
+				final Result result = connection.execute(query);
+				Util.discard(result);
+				bomb = null;
+			} catch (Bomb e) {
+				bomb = e;
+			} catch (RuntimeException e) {
+				// Walk up the exception tree and see if the root cause
+				// was a SQL bomb.
+				bomb = Util.getMatchingCause(e, Bomb.class);
+				if (bomb == null) {
+					throw e;
+				}
+			} finally {
+				RolapUtil.setHook(null);
+			}
+			if (negative) {
+				if (bomb != null || hook.foundMatch()) {
+					fail("forbidden query [" + sql + "] detected");
+				}
+			} else {
+				if (bomb == null && !hook.foundMatch()) {
+					fail("expected query [" + sql + "] did not occur");
+				}
+				if (bomb != null) {
+					assertEquals(
+							replaceQuotes(
+									sql.replaceAll("\r\n", "\n")),
+							replaceQuotes(
+									bomb.sql.replaceAll("\r\n", "\n")));
+				}
+			}
+		}
+
+		// Print warning message that no pattern was specified for the current
+		// dialect.
+		if (!patternFound) {
+			String warnDialect =
+					MondrianProperties.instance().WarnIfNoPatternForDialect.get();
+
+			if (warnDialect.equals(d.toString())) {
+				System.out.println(
+						"[No expected SQL statements found for dialect \""
+								+ dialect.toString()
+								+ "\" and test not run]");
+			}
+		}
+	}
+
+	private static String upgradeQuery( String queryString ) {
+		if ( MondrianProperties.instance().SsasCompatibleNaming.get() ) {
+			String[] names = {
+					"[Gender]",
+					"[Education Level]",
+					"[Marital Status]",
+					"[Store Type]",
+					"[Yearly Income]",
+			};
+			for ( String name : names ) {
+				queryString = Util.replace(
+						queryString,
+						name + "." + name,
+						name + "." + name + "." + name );
+			}
+			queryString = Util.replace(
+					queryString,
+					"[Time.Weekly].[All Time.Weeklys]",
+					"[Time].[Weekly].[All Weeklys]" );
+		}
+		return queryString;
+	}
+
+	private static String dialectize(Dialect.DatabaseProduct d, String sql) {
+		sql = sql.replaceAll("\r\n", "\n");
+		switch (d) {
+			case ORACLE:
+				return sql.replaceAll(" =as= ", " ");
+			case GREENPLUM:
+			case POSTGRESQL:
+			case TERADATA:
+				return sql.replaceAll(" =as= ", " as ");
+			case DERBY:
+				return sql.replaceAll("`", "\"");
+			case ACCESS:
+				return sql.replaceAll(
+						"ISNULL\\(([^)]*)\\)",
+						"Iif($1 IS NULL, 1, 0)");
+			default:
+				return sql;
+		}
+	}
+
+	private static String replaceQuotes(String s) {
+		s = s.replace('`', '\"');
+		s = s.replace('\'', '\"');
+		return s;
+	}
+
+	private static void clearCache(Connection connection, RolapCube cube) {
+		// Clear the cache for the Sales cube, so the query runs as if
+		// for the first time. (TODO: Cleaner way to do this.)
+		final Cube salesCube =
+				connection.getSchema().lookupCube("Sales", true);
+		RolapHierarchy hierarchy =
+				(RolapHierarchy) salesCube.lookupHierarchy(
+						new Id.NameSegment("Store", Id.Quoting.UNQUOTED),
+						false);
+		SmartMemberReader memberReader =
+				(SmartMemberReader) hierarchy.getMemberReader();
+		MemberCacheHelper cacheHelper = memberReader.cacheHelper;
+		cacheHelper.mapLevelToMembers.cache.clear();
+		cacheHelper.mapMemberToChildren.cache.clear();
+
+		// Flush the cache, to ensure that the query gets executed.
+		cube.clearCachedAggregations(true);
+
+		CacheControl cacheControl = connection.getCacheControl(null);
+		final CacheControl.CellRegion measuresRegion =
+				cacheControl.createMeasuresRegion(cube);
+		cacheControl.flush(measuresRegion);
+		waitForFlush(cacheControl, measuresRegion, cube.getName());
+	}
+
+	public static Member allMember(String dimensionName, Cube salesCube) {
+		Dimension genderDimension = getDimension(dimensionName, salesCube);
+		return genderDimension.getHierarchy().getAllMember();
+	}
+
+	private static Dimension getDimension(String dimensionName, Cube salesCube) {
+		return getDimensionWithName(dimensionName, salesCube.getDimensions());
+	}
+
+	private static Dimension getDimensionWithName(
+			String name,
+			Dimension[] dimensions)
+	{
+		Dimension resultDimension = null;
+		for (Dimension dimension : dimensions) {
+			if (dimension.getName().equals(name)) {
+				resultDimension = dimension;
+				break;
+			}
+		}
+		return resultDimension;
+	}
+
+	private static void waitForFlush(
+			final CacheControl cacheControl,
+			final CacheControl.CellRegion measuresRegion,
+			final String cubeName)
+	{
+		int i = 100;
+		while (true) {
+			try {
+				Thread.sleep(i);
+			} catch (InterruptedException e) {
+				fail(e.getMessage());
+			}
+			String cacheState = getCacheState(cacheControl, measuresRegion);
+			if (regionIsEmpty(cacheState, cubeName)) {
+				break;
+			}
+			i *= 2;
+			if (i > 6400) {
+				fail(
+						"Cache didn't flush in sufficient time\nCache Was: \n"
+								+ cacheState);
+				break;
+			}
+		}
+	}
+
+	private static String getCacheState(
+			final CacheControl cacheControl,
+			final CacheControl.CellRegion measuresRegion)
+	{
+		StringWriter out = new StringWriter();
+		cacheControl.printCacheState(new PrintWriter(out), measuresRegion);
+		return out.toString();
+	}
+
+	private static boolean regionIsEmpty(
+			final String cacheState, final String cubeName)
+	{
+		return !cacheState.contains("Cube:[" + cubeName + "]");
+	}
+
+	/**
+	 * Fake exception to interrupt the test when we see the desired query.
+	 * It is an {@link Error} because we need it to be unchecked
+	 * ({@link Exception} is checked), and we don't want handlers to handle
+	 * it.
+	 */
+	static class Bomb extends Error {
+		final String sql;
+
+		Bomb(final String sql) {
+			this.sql = sql;
+		}
+	}
+
+	private static class TriggerHook implements RolapUtil.ExecuteQueryHook {
+		private final String trigger;
+		private boolean foundMatch = false;
+
+		public TriggerHook(String trigger) {
+			this.trigger =
+					trigger
+							.replaceAll("\r\n", "")
+							.replaceAll("\r", "")
+							.replaceAll("\n", "");
+		}
+
+		private boolean matchTrigger(String sql) {
+			if (trigger == null) {
+				return true;
+			}
+			// Cleanup the endlines.
+			sql =
+					sql
+							.replaceAll("\r\n", "")
+							.replaceAll("\r", "")
+							.replaceAll("\n", "");
+			// different versions of mysql drivers use different quoting, so
+			// ignore quotes
+			String s = replaceQuotes(sql);
+			String t = replaceQuotes(trigger);
+			if (s.startsWith(t) && !foundMatch) {
+				foundMatch = true;
+			}
+			return s.startsWith(t);
+		}
+
+		public void onExecuteQuery(String sql) {
+			if (matchTrigger(sql)) {
+				throw new Bomb(sql);
+			}
+		}
+
+		public boolean foundMatch() {
+			return foundMatch;
+		}
+	}
+
 }

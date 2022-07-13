@@ -37,7 +37,7 @@ public class MemberCacheHelper implements MemberCache {
         SqlConstraintFactory.instance();
 
     /** maps a parent member and constraint to a list of its children */
-    final SmartMemberListCache<RolapMember, List<RolapMember>>
+    public final SmartMemberListCache<RolapMember, List<RolapMember>>
         mapMemberToChildren;
 
     /** maps a parent member to the collection of named children that have
@@ -53,7 +53,7 @@ public class MemberCacheHelper implements MemberCache {
     DataSourceChangeListener changeListener;
 
     /** maps a level to its members */
-    final SmartMemberListCache<RolapLevel, List<RolapMember>>
+    public final SmartMemberListCache<RolapLevel, List<RolapMember>>
         mapLevelToMembers;
 
     /**

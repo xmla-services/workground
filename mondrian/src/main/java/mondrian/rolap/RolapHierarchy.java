@@ -450,7 +450,7 @@ public class RolapHierarchy extends HierarchyBase {
         this.memberReader = memberReader;
     }
 
-    MemberReader getMemberReader() {
+    public MemberReader getMemberReader() {
         return memberReader;
     }
 
