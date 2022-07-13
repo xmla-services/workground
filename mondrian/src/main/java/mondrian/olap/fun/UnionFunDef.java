@@ -22,7 +22,7 @@ import java.util.*;
  * @author jhyde
  * @since Mar 23, 2006
  */
-class UnionFunDef extends FunDefBase {
+public class UnionFunDef extends FunDefBase {
     static final String[] ReservedWords = new String[] {"ALL", "DISTINCT"};
 
     static final ReflectiveMultiResolver Resolver =

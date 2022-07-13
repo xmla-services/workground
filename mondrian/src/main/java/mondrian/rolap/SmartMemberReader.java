@@ -50,7 +50,7 @@ public class SmartMemberReader implements MemberReader {
     /** access to <code>source</code> must be synchronized(this) */
     protected final MemberReader source;
 
-    protected final MemberCacheHelper cacheHelper;
+    public final MemberCacheHelper cacheHelper;
 
     protected List<RolapMember> rootMembers;
 
