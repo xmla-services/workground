@@ -1086,6 +1086,23 @@ public class TestUtil {
 	}
 
 	/**
+	 * Checks that a given MDX query does not result in a particular SQL
+	 * statement being generated.
+	 *
+	 * @param mdxQuery MDX query
+	 * @param patterns Set of patterns for expected SQL statements
+	 */
+	public static void assertNoQuerySql(
+			Connection connection,
+			String mdxQuery,
+			SqlPattern[] patterns)
+	{
+		assertQuerySqlOrNot(
+				connection, mdxQuery, patterns, true, false, true);
+	}
+
+
+	/**
 	 * During MDX query parse and execution, checks that the query results
 	 * (or does not result) in a particular SQL statement being generated.
 	 *
@@ -1221,7 +1238,7 @@ public class TestUtil {
 		return queryString;
 	}
 
-	private static String dialectize(Dialect.DatabaseProduct d, String sql) {
+	public static String dialectize(Dialect.DatabaseProduct d, String sql) {
 		sql = sql.replaceAll("\r\n", "\n");
 		switch (d) {
 			case ORACLE:
@@ -1334,6 +1351,14 @@ public class TestUtil {
 			final String cacheState, final String cubeName)
 	{
 		return !cacheState.contains("Cube:[" + cubeName + "]");
+	}
+
+	private static SqlPattern[] sqlPattern(Dialect.DatabaseProduct db, String sql) {
+		return new SqlPattern[]{new SqlPattern(db, sql, sql.length())};
+	}
+
+	public static SqlPattern[] mysqlPattern(String sql) {
+		return sqlPattern(Dialect.DatabaseProduct.MYSQL, sql);
 	}
 
 	/**
