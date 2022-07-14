@@ -1336,6 +1336,14 @@ public class TestUtil {
 		return !cacheState.contains("Cube:[" + cubeName + "]");
 	}
 
+	private static SqlPattern[] sqlPattern(Dialect.DatabaseProduct db, String sql) {
+		return new SqlPattern[]{new SqlPattern(db, sql, sql.length())};
+	}
+
+	public static SqlPattern[] mysqlPattern(String sql) {
+		return sqlPattern(Dialect.DatabaseProduct.MYSQL, sql);
+	}
+
 	/**
 	 * Fake exception to interrupt the test when we see the desired query.
 	 * It is an {@link Error} because we need it to be unchecked
