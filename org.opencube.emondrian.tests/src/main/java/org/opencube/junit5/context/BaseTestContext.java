@@ -24,7 +24,7 @@ public class BaseTestContext implements Context {
 	@Override
 	public void init(Entry<PropertyList, DataSource> dataSource) {
 		this.dataSource = dataSource.getValue();
-		this.properties = dataSource.getKey();
+		this.properties = dataSource.getKey().clone();
 		init();
 
 	}
