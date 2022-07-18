@@ -223,7 +223,7 @@ public class FastBatchingCellReader implements CellReader {
      *
      * @return Whether any aggregations were loaded.
      */
-    boolean loadAggregations() {
+    public boolean loadAggregations() {
         if (!isDirty()) {
             return false;
         }
