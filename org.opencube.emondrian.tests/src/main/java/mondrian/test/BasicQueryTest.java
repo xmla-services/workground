@@ -5746,10 +5746,10 @@ public class BasicQueryTest {
         "" + "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Sales]}\n" + "Axis #2:\n"
             + "{[Product - no Bug].[Drink]}\n" + "{[Product - no Bug].[Food]}\n"
             + "{[Product - no Bug].[Non-Consumable]}\n" + "Row #0: 48,836.21\n" + "Row #1: 409,035.59\n"
-            + "Row #2: 107,366.33\n";
-    Connection connection = context.createConnection();
+            + "Row #2: 107,366.33\n";    
     //TestContext testContext = TestContext.instance().withFreshConnection().withSchema( schema );
     withSchema(context, schema);
+    Connection connection = context.createConnection();
     assertQueryReturns(connection, mdxWithoutBug, expectedResultInNoBugCube );
     assertQueryReturns(connection, mdxWithBug, expectedResultInBugCube );
   }
