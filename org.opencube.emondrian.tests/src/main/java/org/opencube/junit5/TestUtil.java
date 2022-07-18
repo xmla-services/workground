@@ -12,6 +12,8 @@ import mondrian.olap.*;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap4j.MondrianOlap4jConnection;
 import mondrian.rolap.*;
+import mondrian.rolap.agg.CellRequest;
+import mondrian.rolap.agg.ValueColumnPredicate;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
 import mondrian.spi.Dialect;
@@ -19,7 +21,6 @@ import mondrian.spi.DialectManager;
 import mondrian.test.FoodmartTestContextImpl;
 import mondrian.test.SqlPattern;
 import mondrian.test.TestContext;
-import org.junit.jupiter.api.Assertions;
 import org.olap4j.*;
 import org.olap4j.impl.CoordinateIterator;
 import org.opencube.junit5.context.Context;
@@ -1215,7 +1216,7 @@ public class TestUtil {
 		}
 	}
 
-	private static String upgradeQuery( String queryString ) {
+	public static String upgradeQuery( String queryString ) {
 		if ( MondrianProperties.instance().SsasCompatibleNaming.get() ) {
 			String[] names = {
 					"[Gender]",
@@ -1258,13 +1259,40 @@ public class TestUtil {
 		}
 	}
 
+	/**
+	 * Flushes the entire contents of the cache. Utility method used to ensure
+	 * that cache control tests are starting with a blank page.
+	 *
+	 * @param connection Connection
+	 */
+	public static void flushCache(Connection connection) {
+		final CacheControl cacheControl = connection.getCacheControl(null);
+
+		// Flush the entire cache.
+		CacheControl.CellRegion measuresRegion = null;
+		for (Cube cube
+				: connection.getSchema().getCubes())
+		{
+			measuresRegion =
+					cacheControl.createMeasuresRegion(cube);
+			cacheControl.flush(measuresRegion);
+		}
+
+		// Check the cache is empty.
+		StringWriter sw = new StringWriter();
+		PrintWriter pw = new PrintWriter(sw);
+		cacheControl.printCacheState(pw, measuresRegion);
+		pw.flush();
+		assertEquals("", sw.toString());
+	}
+
 	private static String replaceQuotes(String s) {
 		s = s.replace('`', '\"');
 		s = s.replace('\'', '\"');
 		return s;
 	}
 
-	private static void clearCache(Connection connection, RolapCube cube) {
+	public static void clearCache(Connection connection, RolapCube cube) {
 		// Clear the cache for the Sales cube, so the query runs as if
 		// for the first time. (TODO: Cleaner way to do this.)
 		final Cube salesCube =
