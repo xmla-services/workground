@@ -972,7 +972,7 @@ public class BatchTestCase{
             .getPositions().size();
     }
 
-    protected Result executeQuery(String mdx, Connection connection) {
+    public Result executeQuery(String mdx, Connection connection) {
         Query query = connection.parseQuery(mdx);
         query.setResultStyle(ResultStyle.LIST);
         return connection.execute(query);
