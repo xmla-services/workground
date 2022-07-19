@@ -19,6 +19,7 @@ import mondrian.server.Statement;
 import mondrian.spi.Dialect;
 import mondrian.spi.DialectManager;
 import mondrian.test.FoodmartTestContextImpl;
+import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import mondrian.test.TestContext;
 import org.olap4j.*;
@@ -1326,7 +1327,7 @@ public class TestUtil {
 		return getDimensionWithName(dimensionName, salesCube.getDimensions());
 	}
 
-	private static Dimension getDimensionWithName(
+	public static Dimension getDimensionWithName(
 			String name,
 			Dimension[] dimensions)
 	{
@@ -1390,6 +1391,41 @@ public class TestUtil {
 	}
 
 	/**
+	 * Checks whether query produces the same results with the native.* props
+	 * enabled as it does with the props disabled
+	 * @param query query to run
+	 * @param message Message to output on test failure
+	 * @param connection Connection
+	 */
+	public static void verifySameNativeAndNot(Connection connection,
+			String query, String message)
+	{
+		PropertySaver5 propSaver=new PropertySaver5();
+
+		propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
+		propSaver.set(propSaver.properties.EnableNativeFilter, true);
+		propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
+		propSaver.set(propSaver.properties.EnableNativeTopCount, true);
+
+		Result resultNative = executeQuery(connection, query);
+
+		propSaver.set(propSaver.properties.EnableNativeCrossJoin, false);
+		propSaver.set(propSaver.properties.EnableNativeFilter, false);
+		propSaver.set(propSaver.properties.EnableNativeNonEmpty, false);
+		propSaver.set(propSaver.properties.EnableNativeTopCount, false);
+
+		Result resultNonNative = executeQuery(connection, query);
+
+		assertEquals(
+				FoodmartTestContextImpl.toString(resultNative),
+				FoodmartTestContextImpl.toString(resultNonNative),
+				message);
+
+		propSaver.reset();
+	}
+
+
+/**
 	 * Fake exception to interrupt the test when we see the desired query.
 	 * It is an {@link Error} because we need it to be unchecked
 	 * ({@link Exception} is checked), and we don't want handlers to handle
