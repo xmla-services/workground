@@ -24,7 +24,7 @@ import java.util.*;
  * @author jhyde
  * @since Feb 26, 2003
  */
-class RestrictedMemberReader extends DelegatingMemberReader {
+public class RestrictedMemberReader extends DelegatingMemberReader {
 
     private final Role.HierarchyAccess hierarchyAccess;
     private final boolean ragged;
@@ -45,7 +45,7 @@ class RestrictedMemberReader extends DelegatingMemberReader {
      * @pre role.getAccessDetails(memberReader.getHierarchy()) != null ||
      *   memberReader.getHierarchy().isRagged()
      */
-    RestrictedMemberReader(MemberReader memberReader, Role role) {
+    public RestrictedMemberReader(MemberReader memberReader, Role role) {
         super(memberReader);
         this.role = role;
         RolapHierarchy hierarchy = memberReader.getHierarchy();
