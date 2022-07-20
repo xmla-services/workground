@@ -38,6 +38,7 @@ import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.opencube.junit5.Constants.PROJECT_DIR;
 
 public class TestUtil {
 	
@@ -1051,10 +1052,10 @@ public class TestUtil {
 		}
 		if ( catalogURL == null ) {
 			// Works if we are running in root directory of source tree
-			File file = new File( "demo/FoodMart.xml" );
+			File file = new File(PROJECT_DIR +  "demo/FoodMart.xml" );
 			if ( !file.exists() ) {
 				// Works if we are running in bin directory of runtime env
-				file = new File( "../demo/FoodMart.xml" );
+				file = new File(PROJECT_DIR +  "../demo/FoodMart.xml" );
 			}
 			try {
 				catalogURL = Util.toURL( file );
