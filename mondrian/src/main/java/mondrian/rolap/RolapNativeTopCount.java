@@ -273,7 +273,7 @@ public class RolapNativeTopCount extends RolapNativeSet {
     }
 
     // package-local visibility for testing purposes
-    boolean isValidContext(RolapEvaluator evaluator) {
+    public boolean isValidContext(RolapEvaluator evaluator) {
         return TopCountConstraint.isValidContext(
             evaluator, restrictMemberTypes());
     }
