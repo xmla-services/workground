@@ -985,7 +985,7 @@ public class TestUtil {
 		return getConnectionProperties().toString();
 	}
 
-	private static Util.PropertyList getConnectionProperties() {
+	public static Util.PropertyList getConnectionProperties() {
 		final Util.PropertyList propertyList =
 				Util.parseConnectString( getDefaultConnectString() );
 		if ( MondrianProperties.instance().TestHighCardinalityDimensionList
