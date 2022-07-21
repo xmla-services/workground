@@ -160,7 +160,25 @@ public class TestUtil {
 			}
 			checkThrowable(throwable, pattern);
 		}
-	    
+
+	/**
+	 * Executes a query, and asserts that it throws an exception which contains the
+	 * given pattern.
+	 *
+	 * @param queryString Query string
+	 * @param pattern     Pattern which exception must match
+	 */
+	public static void assertQueryThrows(Context context, String queryString, String pattern) {
+		Throwable throwable;
+		try {
+			Result result = executeQuery(context.createConnection(), queryString);
+			Util.discard(result);
+			throwable = null;
+		} catch (Throwable e) {
+			throwable = e;
+		}
+		checkThrowable(throwable, pattern);
+	}
 		/**
 		 * Executes an expression, and asserts that it gives an error which contains a
 		 * particular pattern. The error might occur during parsing, or might be
