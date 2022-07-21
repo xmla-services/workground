@@ -24,7 +24,7 @@ import javax.sql.DataSource;
  *
  * @author jhyde
  */
-class ConnectionKey extends StringKey {
+public class ConnectionKey extends StringKey {
     private ConnectionKey(String s) {
         super(s);
     }

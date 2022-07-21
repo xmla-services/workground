@@ -24,7 +24,7 @@ import mondrian.util.*;
  *
  * @author jhyde
  */
-class SchemaContentKey extends StringKey {
+public class SchemaContentKey extends StringKey {
     private SchemaContentKey(String s) {
         super(s);
     }

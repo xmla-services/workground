@@ -491,7 +491,7 @@ public class RolapHierarchy extends HierarchyBase {
      * if this hierarchy has no table, return the cube's fact-table;
      * otherwise, returns null.
      */
-    MondrianDef.Relation getUniqueTable() {
+    public MondrianDef.Relation getUniqueTable() {
         if (relation instanceof MondrianDef.Relation) {
             return (MondrianDef.Relation) relation;
         } else if (relation instanceof MondrianDef.Join) {
@@ -502,7 +502,7 @@ public class RolapHierarchy extends HierarchyBase {
         }
     }
 
-    boolean tableExists(String tableName) {
+    public boolean tableExists(String tableName) {
         return (relation != null) && getTable(tableName, relation) != null;
     }
 

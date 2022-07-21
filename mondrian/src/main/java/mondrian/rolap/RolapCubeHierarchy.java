@@ -360,7 +360,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
     }
 
 
-    boolean tableExists(String tableName) {
+    public boolean tableExists(String tableName) {
         return rolapHierarchy.tableExists(tableName);
     }
 
