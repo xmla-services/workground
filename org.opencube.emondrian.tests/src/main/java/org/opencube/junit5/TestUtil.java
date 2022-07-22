@@ -10,6 +10,7 @@ import mondrian.olap.Cell;
 import mondrian.olap.Position;
 import mondrian.olap.*;
 import mondrian.olap.fun.FunUtil;
+import mondrian.olap4j.MondrianInprocProxy;
 import mondrian.olap4j.MondrianOlap4jConnection;
 import mondrian.rolap.*;
 import mondrian.rolap.agg.CellRequest;
@@ -23,6 +24,7 @@ import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import mondrian.test.TestContext;
 import org.olap4j.*;
+import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.impl.CoordinateIterator;
 import org.opencube.junit5.context.Context;
 
@@ -1341,6 +1343,49 @@ public class TestUtil {
 		Dimension genderDimension = getDimension(dimensionName, salesCube);
 		return genderDimension.getHierarchy().getAllMember();
 	}
+
+	public static CellSet executeOlap4jXmlaQuery(Context context, String queryString )
+			throws SQLException {
+		String schema = getConnectionProperties()
+				.get( RolapConnectionProperties.CatalogContent.name() );
+		if ( schema == null ) {
+			schema = getRawSchema(context);
+		}
+		// TODO:  Need to better handle semicolons in schema content.
+		// Util.parseValue does not appear to allow escaping them.
+		schema = schema.replace( "&quot;", "" ).replace( ";", "" );
+
+		String Jdbc = getConnectionProperties()
+				.get( RolapConnectionProperties.Jdbc.name() );
+
+		String cookie = XmlaOlap4jDriver.nextCookie();
+		Map<String, String> catalogs = new HashMap<String, String>();
+		catalogs.put( "FoodMart", "" );
+		XmlaOlap4jDriver.PROXY_MAP.put(
+				cookie, new MondrianInprocProxy(
+						catalogs,
+						"jdbc:mondrian:Server=http://whatever;"
+								+ "Jdbc=" + Jdbc + ";TestProxyCookie="
+								+ cookie
+								+ ";CatalogContent=" + schema ) );
+		try {
+			Class.forName( "org.olap4j.driver.xmla.XmlaOlap4jDriver" );
+		} catch ( ClassNotFoundException e ) {
+			throw new RuntimeException( "oops", e );
+		}
+		Properties info = new Properties();
+		info.setProperty(
+				XmlaOlap4jDriver.Property.CATALOG.name(), "FoodMart" );
+		java.sql.Connection connection = java.sql.DriverManager.getConnection(
+				"jdbc:xmla:Server=http://whatever;Catalog=FoodMart;TestProxyCookie="
+						+ cookie,
+				info );
+		OlapConnection olapConnection =
+				connection.unwrap( OlapConnection.class );
+		OlapStatement statement = olapConnection.createStatement();
+		return statement.executeOlapQuery( queryString );
+	}
+
 
 	private static Dimension getDimension(String dimensionName, Cube salesCube) {
 		return getDimensionWithName(dimensionName, salesCube.getDimensions());
