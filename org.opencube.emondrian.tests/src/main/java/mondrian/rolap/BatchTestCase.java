@@ -992,6 +992,16 @@ public class BatchTestCase{
                 mdx,
                 TestUtil.toString(expectedResult));
     }
+
+    public static void checkNative(Context context, String mdx, Result expectedResult) {
+        BatchTestCase test = new BatchTestCase();
+        test.checkNative(context,
+                0,
+                getRowCount(expectedResult),
+                mdx,
+                TestUtil.toString(expectedResult),
+                true);
+    }
     /**
      * Convenience method for debugging; please do not delete.
      */
