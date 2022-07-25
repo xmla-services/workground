@@ -155,7 +155,7 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 							</goals>
 							<configuration>
 								<bndruns>
-									<include>*.bndrun</include>
+									<include>test.bndrun</include>
 								</bndruns>
 								<failOnChanges>false</failOnChanges>
 								<includeDependencyManagement>true</includeDependencyManagement>
