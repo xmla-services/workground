@@ -63,7 +63,7 @@ public class SchemaUtil {
 	  /**
 	   * Overload that allows swapping the defaultMeasure.
 	   */
-	  public final String createSubstitutingCube(
+	  public final static String createSubstitutingCube(
 	    final String oldSchema,
 	    final String cubeName,
 	    final String dimensionDefs,
