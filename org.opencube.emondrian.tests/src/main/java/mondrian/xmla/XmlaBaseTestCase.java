@@ -14,6 +14,7 @@ import mondrian.olap.MondrianServer;
 import mondrian.olap.Role;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
+import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.test.DiffRepository;
 import mondrian.tui.MockHttpServletRequest;
@@ -541,7 +542,7 @@ System.out.println("Got CONTINUE");
         Role role)
         throws Exception
     {
-        String connectString = connection.getConnectString();
+        String connectString = ((RolapConnection)connection).getConnectInfo().toString();
         Map<String, String> catalogNameUrls = getCatalogNameUrls(connection);
 
         boolean xml = !requestText.contains("application/json");
