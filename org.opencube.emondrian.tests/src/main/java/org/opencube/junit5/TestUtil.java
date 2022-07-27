@@ -35,6 +35,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -263,6 +264,175 @@ public class TestUtil {
 		}
 		return formatter.toString();
 	}
+
+	public static void assertSqlEquals(Connection connection,
+			String expectedSql,
+			String actualSql,
+			int expectedRows ) {
+		// if the actual SQL isn't in the current dialect we have some
+		// problems... probably with the dialectize method
+		assertEqualsVerbose( actualSql, dialectize(connection, actualSql));
+
+		String transformedExpectedSql = removeQuotes( dialectize(connection, expectedSql))
+				.replaceAll( "\r\n", "\n" );
+		String transformedActualSql = removeQuotes( actualSql )
+				.replaceAll( "\r\n", "\n" );
+		assertEquals( transformedExpectedSql, transformedActualSql );
+
+		checkSqlAgainstDatasource(actualSql, expectedRows );
+	}
+
+
+	private static void checkSqlAgainstDatasource(
+			String actualSql,
+			int expectedRows ) {
+		Util.PropertyList connectProperties = getConnectionProperties();
+
+		java.sql.Connection jdbcConn = null;
+		java.sql.Statement stmt = null;
+		ResultSet rs = null;
+
+		try {
+			String jdbcDrivers =
+					connectProperties.get(
+							RolapConnectionProperties.JdbcDrivers.name() );
+			if ( jdbcDrivers != null ) {
+				RolapUtil.loadDrivers( jdbcDrivers );
+			}
+			final String jdbcDriversProp =
+					MondrianProperties.instance().JdbcDrivers.get();
+			RolapUtil.loadDrivers( jdbcDriversProp );
+
+			jdbcConn = java.sql.DriverManager.getConnection(
+					connectProperties.get( RolapConnectionProperties.Jdbc.name() ),
+					connectProperties.get(
+							RolapConnectionProperties.JdbcUser.name() ),
+					connectProperties.get(
+							RolapConnectionProperties.JdbcPassword.name() ) );
+			stmt = jdbcConn.createStatement();
+
+			if ( RolapUtil.SQL_LOGGER.isDebugEnabled() ) {
+				StringBuffer sqllog = new StringBuffer();
+				sqllog.append( "mondrian.test.TestContext: executing sql [" );
+				if ( actualSql.indexOf( '\n' ) >= 0 ) {
+					// SQL appears to be formatted as multiple lines. Make it
+					// start on its own line.
+					sqllog.append( "\n" );
+				}
+				sqllog.append( actualSql );
+				sqllog.append( ']' );
+				RolapUtil.SQL_LOGGER.debug( sqllog.toString() );
+			}
+
+			long startTime = System.currentTimeMillis();
+			rs = stmt.executeQuery( actualSql );
+			long time = System.currentTimeMillis();
+			final long execMs = time - startTime;
+			Util.addDatabaseTime( execMs );
+
+			RolapUtil.SQL_LOGGER.debug( ", exec " + execMs + " ms" );
+
+			int rows = 0;
+			while ( rs.next() ) {
+				rows++;
+			}
+
+			assertEquals(expectedRows, rows, "row count");
+		} catch ( SQLException e ) {
+			throw new RuntimeException(
+					"ERROR in SQL - invalid for database: "
+							+ connectProperties.get( RolapConnectionProperties.Jdbc.name() )
+							+ "\n" + actualSql,
+					e );
+		} finally {
+			try {
+				if ( rs != null ) {
+					rs.close();
+				}
+			} catch ( Exception e1 ) {
+				// ignore
+			}
+			try {
+				if ( stmt != null ) {
+					stmt.close();
+				}
+			} catch ( Exception e1 ) {
+				// ignore
+			}
+			try {
+				if ( jdbcConn != null ) {
+					jdbcConn.close();
+				}
+			} catch ( Exception e1 ) {
+				// ignore
+			}
+		}
+	}
+
+	private static String removeQuotes( String actualSql ) {
+		String transformedActualSql = actualSql.replaceAll( "`", "" );
+		transformedActualSql = transformedActualSql.replaceAll( "\"", "" );
+		return transformedActualSql;
+	}
+
+	/**
+	 * Converts a SQL string into the current dialect.
+	 *
+	 * <p>This is not intended to be a general purpose method: it looks for
+	 * specific patterns known to occur in tests, in particular "=as=" and "fname + ' ' + lname".
+	 *
+	 * @param sql SQL string in generic dialect
+	 * @return SQL string converted into current dialect
+	 */
+	private static String dialectize(Connection connection, String sql ) {
+		final String search = "fname \\+ ' ' \\+ lname";
+		final Dialect dialect = getDialect(connection);
+		final Dialect.DatabaseProduct databaseProduct =
+				dialect.getDatabaseProduct();
+		switch ( databaseProduct ) {
+			case MYSQL:
+			case MARIADB:
+				// Mysql would generate "CONCAT(...)"
+				sql = sql.replaceAll(
+						search,
+						"CONCAT(`customer`.`fname`, ' ', `customer`.`lname`)" );
+				break;
+			case POSTGRESQL:
+			case ORACLE:
+			case LUCIDDB:
+			case TERADATA:
+				sql = sql.replaceAll(
+						search,
+						"`fname` || ' ' || `lname`" );
+				break;
+			case DERBY:
+				sql = sql.replaceAll(
+						search,
+						"`customer`.`fullname`" );
+				break;
+			case INGRES:
+				sql = sql.replaceAll(
+						search,
+						"fullname" );
+				break;
+			case DB2:
+			case DB2_AS400:
+			case DB2_OLD_AS400:
+				sql = sql.replaceAll(
+						search,
+						"CONCAT(CONCAT(`customer`.`fname`, ' '), `customer`.`lname`)" );
+				break;
+		}
+
+		if ( dialect.getDatabaseProduct() == Dialect.DatabaseProduct.ORACLE ) {
+			// " + tableQualifier + "
+			sql = sql.replaceAll( " =as= ", " " );
+		} else {
+			sql = sql.replaceAll( " =as= ", " as " );
+		}
+		return sql;
+	}
+
 
 	/**
 		 * Wrapper around a string that indicates that all line endings have been
@@ -1324,6 +1494,7 @@ public class TestUtil {
 				return sql;
 		}
 	}
+
 
 	/**
 	 * Flushes the entire contents of the cache. Utility method used to ensure
