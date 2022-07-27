@@ -42,6 +42,18 @@ public class SchemaUpdater implements PropertyUpdater {
 
 	}
 
+	public static SchemaUpdater createSubstitutingCube(final String cubeName,
+													   final String dimensionDefs,
+													   final String measureDefs,
+													   final String memberDefs,
+													   final String namedSetDefs,
+													   final String defaultMeasure) {
+
+		return new SchemaUpdater((schema) -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs,
+				measureDefs, memberDefs, namedSetDefs, defaultMeasure));
+
+	}
+
 	@Override
 	public PropertyList update(PropertyList propertyList) {
 		String content = null;

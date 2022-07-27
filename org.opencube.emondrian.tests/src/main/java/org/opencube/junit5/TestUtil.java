@@ -26,6 +26,7 @@ import mondrian.test.TestContext;
 import org.olap4j.*;
 import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.impl.CoordinateIterator;
+import org.olap4j.layout.TraditionalCellSetFormatter;
 import org.opencube.junit5.context.Context;
 
 import javax.sql.DataSource;
@@ -43,8 +44,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.opencube.junit5.Constants.PROJECT_DIR;
 
 public class TestUtil {
-	
-	
+
+	protected static final String nl = Util.nl;
+	private static final String lineBreak = "\"," + nl + "\"";
 	  /**
 	   * Executes the expression in the context of the cube indicated by
 	   * <code>cubeName</code>, and returns the result as a Cell.
@@ -299,8 +301,7 @@ public class TestUtil {
 			}
 			return new SafeString(Util.replace(string, "\n", nl));
 		}
-		
-		protected static final String nl = Util.nl;
+
 		private static final String indent = "                ";
 		private static final Pattern LineBreakPattern = Pattern.compile("\r\n|\r|\n");
 		private static final Pattern TabPattern = Pattern.compile("\t");
@@ -495,6 +496,14 @@ public class TestUtil {
 		return buf.toString();
 	}
 
+	public static String toString( CellSet cellSet ) {
+		final StringWriter sw = new StringWriter();
+		new TraditionalCellSetFormatter().format(
+				cellSet,
+				new PrintWriter( sw ) );
+		return sw.toString();
+	}
+
 	/**
 	 * Converts a {@link Result} to text in traditional format.
 	 *
@@ -609,6 +618,41 @@ public class TestUtil {
 	    }
 	    return cellSet;
 	  }
+
+	/**
+	 * Checks that an actual string matches an expected pattern. If they do not, throws a {@link ComparisonFailure} and
+	 * prints the difference, including the actual string as an easily pasted Java string literal.
+	 */
+	public static void assertMatchesVerbose(
+			Pattern expected,
+			String actual ) {
+		Util.assertPrecondition( expected != null, "expected != null" );
+		if ( expected.matcher( actual ).matches() ) {
+			return;
+		}
+		String s = actual;
+
+		// Convert [string with "quotes" split
+		// across lines]
+		// into ["string with \"quotes\" split" + nl +
+		// "across lines
+		//
+		s = Util.replace( s, "\"", "\\\"" );
+		s = LineBreakPattern.matcher( s ).replaceAll( lineBreak );
+		s = TabPattern.matcher( s ).replaceAll( "\\\\t" );
+		s = "\"" + s + "\"";
+		final String spurious = " + " + nl + "\"\"";
+		if ( s.endsWith( spurious ) ) {
+			s = s.substring( 0, s.length() - spurious.length() );
+		}
+		String message =
+				"Expected pattern:" + nl + expected + nl
+						+ "Actual: " + nl + actual + nl
+						+ "Actual java: " + nl + s + nl;
+		//throw new ComparisonFailure( message, expected.pattern(), actual );
+		throw new RuntimeException(message);
+	}
+
 	
 	  /**
 	   * Checks that a {@link CellSet} is valid.
