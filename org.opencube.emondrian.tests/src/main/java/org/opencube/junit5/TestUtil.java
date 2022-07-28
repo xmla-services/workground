@@ -433,8 +433,14 @@ public class TestUtil {
 		return sql;
 	}
 
+	public static ResultSet executeStatement( String queryString ) throws SQLException {
+		OlapConnection connection = getOlap4jConnection();
+		queryString = upgradeQuery( queryString );
+		OlapStatement stmt = connection.createStatement();
+		return stmt.executeQuery( queryString );
+	}
 
-	/**
+    /**
 		 * Wrapper around a string that indicates that all line endings have been
 		 * converted to platform-specific line endings.
 		 *
