@@ -19,10 +19,8 @@ import mondrian.server.Execution;
 import mondrian.server.Statement;
 import mondrian.spi.Dialect;
 import mondrian.spi.DialectManager;
-import mondrian.test.FoodmartTestContextImpl;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
-import mondrian.test.TestContext;
+import mondrian.spi.DynamicSchemaProcessor;
+import mondrian.test.*;
 import org.olap4j.*;
 import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.impl.CoordinateIterator;
@@ -440,7 +438,42 @@ public class TestUtil {
 		return stmt.executeQuery( queryString );
 	}
 
-    /**
+	/**
+	 * Returns a connection to the FoodMart database with a dynamic schema processor and disables use of RolapSchema
+	 * Pool.
+	 */
+	public static void withSchemaProcessor(Context context,
+			Class<? extends DynamicSchemaProcessor> dynProcClass ) {
+		final Util.PropertyList properties = getConnectionProperties().clone();
+		context.setProperty(RolapConnectionProperties.DynamicSchemaProcessor.name(), dynProcClass.getName());
+		context.setProperty(RolapConnectionProperties.UseSchemaPool.name(), "false");
+	}
+
+
+
+	public static void assertParameterizedExprReturns(Connection connection,
+			String expr,
+			String expected,
+			Object... paramValues ) {
+		String queryString = generateExpression( expr );
+		Query query = connection.parseQuery( queryString );
+		assert paramValues.length % 2 == 0;
+		for ( int i = 0; i < paramValues.length; ) {
+			final String paramName = (String) paramValues[ i++ ];
+			final Object value = paramValues[ i++ ];
+			query.setParameter( paramName, value );
+		}
+		final Result result = connection.execute( query );
+		final Cell cell = result.getCell( new int[] { 0 } );
+
+		if ( expected == null ) {
+			expected = ""; // null values are formatted as empty string
+		}
+		assertEqualsVerbose( expected, cell.getFormattedValue() );
+	}
+
+
+	/**
 		 * Wrapper around a string that indicates that all line endings have been
 		 * converted to platform-specific line endings.
 		 *
