@@ -472,6 +472,23 @@ public class TestUtil {
 		assertEqualsVerbose( expected, cell.getFormattedValue() );
 	}
 
+	/**
+	 * Reverses the effect of {@link #fold}; converts platform-specific line endings in a string info linefeeds.
+	 *
+	 * @param string String where all linefeeds have been converted to platform-specific (CR+LF on Windows, LF on
+	 *               Unix/Linux)
+	 * @return String where line endings are represented as linefeed "\n"
+	 */
+	public static String unfold( String string ) {
+		if ( !nl.equals( "\n" ) ) {
+			string = Util.replace( string, nl, "\n" );
+		}
+		if ( string == null ) {
+			return null;
+		} else {
+			return string;
+		}
+	}
 
 	/**
 		 * Wrapper around a string that indicates that all line endings have been
