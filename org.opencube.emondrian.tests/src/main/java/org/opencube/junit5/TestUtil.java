@@ -491,6 +491,22 @@ public class TestUtil {
 	}
 
 	/**
+	 * Creates a FoodMart connection with "Ignore=true" and returns the list of warnings in the schema.
+	 *
+	 * @return Warnings encountered while loading schema
+	 */
+	public static List<Exception> getSchemaWarnings() {
+		final Util.PropertyList propertyList =
+				getConnectionProperties().clone();
+		propertyList.put(
+				RolapConnectionProperties.Ignore.name(),
+				"true" );
+		final Connection connection =
+				withProperties( propertyList ).getConnection();
+		return connection.getSchema().getWarnings();
+	}
+
+	/**
 		 * Wrapper around a string that indicates that all line endings have been
 		 * converted to platform-specific line endings.
 		 *
