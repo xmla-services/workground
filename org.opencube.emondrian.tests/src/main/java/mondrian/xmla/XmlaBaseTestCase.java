@@ -14,6 +14,7 @@ import mondrian.olap.MondrianServer;
 import mondrian.olap.Role;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
+import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.test.DiffRepository;
@@ -23,6 +24,7 @@ import mondrian.tui.XmlUtil;
 import mondrian.tui.XmlaSupport;
 import mondrian.util.LockBox;
 import mondrian.xmla.test.XmlaTestContext;
+import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.metadata.XmlaConstants;
 import org.opencube.junit5.context.Context;
 import org.opentest4j.AssertionFailedError;
@@ -40,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -263,6 +266,13 @@ System.out.println("Got CONTINUE");
 
     protected void helperTestExpect(Context context, boolean doSessionId)
     {
+        try {
+            java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
+            java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver());// finy out why this dies not happend automatically
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
         if (doSessionId) {
             Util.discard(getSessionId(Action.CREATE));
         }
@@ -284,6 +294,13 @@ System.out.println("Got CONTINUE");
 
     protected void helperTest(Context context, boolean doSessionId)
     {
+        try {
+            java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
+            java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver());// finy out why this dies not happend automatically
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
         if (doSessionId) {
             getSessionId(Action.CREATE);
         }
@@ -408,7 +425,7 @@ System.out.println("Got CONTINUE");
     protected Map<String, String> getCatalogNameUrls(Connection connection) {
         if (catalogNameUrls == null) {
             catalogNameUrls = new TreeMap<String, String>();
-            String connectString = connection.getConnectString();
+            String connectString = ((RolapConnection)connection).getConnectInfo().toString();
             PropertyList connectProperties =
                         Util.parseConnectString(connectString);
             String catalog = connectProperties.get(
@@ -423,7 +440,7 @@ System.out.println("Got CONTINUE");
     {
         getSessionId(Action.CLEAR);
 
-        String connectString = connection.getConnectString();
+        String connectString = ((RolapConnection)connection).getConnectInfo().toString();
         Map<String, String> catalogNameUrls =
             getCatalogNameUrls(connection);
         connectString = filterConnectString(connectString);

@@ -495,14 +495,16 @@ public class TestUtil {
 	 *
 	 * @return Warnings encountered while loading schema
 	 */
-	public static List<Exception> getSchemaWarnings() {
-		final Util.PropertyList propertyList =
-				getConnectionProperties().clone();
-		propertyList.put(
-				RolapConnectionProperties.Ignore.name(),
-				"true" );
-		final Connection connection =
-				withProperties( propertyList ).getConnection();
+	public static List<Exception> getSchemaWarnings(Context context) {
+		//final Util.PropertyList propertyList =
+		//		getConnectionProperties().clone();
+		//propertyList.put(
+		//		RolapConnectionProperties.Ignore.name(),
+		//		"true" );
+		context.setProperty(RolapConnectionProperties.Ignore.name(),
+				"true");
+		final Connection connection = context.createConnection();
+				//withProperties( propertyList ).getConnection();
 		return connection.getSchema().getWarnings();
 	}
 
