@@ -2777,7 +2777,7 @@ public class SchemaTest {
                 + "      <Level name=\"Store Sqft\" column=\"store_sqft\" type=\"Numeric\" uniqueMembers=\"true\"/>\n"
                 + "    </Hierarchy>\n"
                 + "  </Dimension>"));
-        final List<Exception> exceptionList = TestUtil.getSchemaWarnings();
+        final List<Exception> exceptionList = TestUtil.getSchemaWarnings(context);
         assertContains(exceptionList, "todo xxxxx");
     }
 
@@ -2791,7 +2791,7 @@ public class SchemaTest {
                 "<Schema name=\"FoodMart\"",
                 "<Schema name=\"FoodMart\" defaultRole=\"Unknown\"");
         withSchema(context, schema);
-        final List<Exception> exceptionList = TestUtil.getSchemaWarnings();
+        final List<Exception> exceptionList = TestUtil.getSchemaWarnings(context);
         assertContains(exceptionList, "Role 'Unknown' not found");
     }
 
