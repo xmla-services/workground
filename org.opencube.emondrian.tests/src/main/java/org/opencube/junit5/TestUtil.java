@@ -21,6 +21,7 @@ import mondrian.spi.Dialect;
 import mondrian.spi.DialectManager;
 import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.test.*;
+import mondrian.util.DelegatingInvocationHandler;
 import org.olap4j.*;
 import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.impl.CoordinateIterator;
@@ -31,8 +32,10 @@ import javax.sql.DataSource;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Proxy;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
@@ -506,6 +509,140 @@ public class TestUtil {
 		final Connection connection = context.createConnection();
 				//withProperties( propertyList ).getConnection();
 		return connection.getSchema().getWarnings();
+	}
+
+	/**
+	 * Creates a dialect without using a connection.
+	 *
+	 * @param product Database product
+	 * @return dialect of an required persuasion
+	 */
+	public static Dialect getFakeDialect( Dialect.DatabaseProduct product ) {
+		final DatabaseMetaData metaData =
+				(DatabaseMetaData) Proxy.newProxyInstance(
+						TestContext.class.getClassLoader(),
+						new Class<?>[] { DatabaseMetaData.class },
+						new DatabaseMetaDataInvocationHandler( product ) );
+		final java.sql.Connection connection =
+				(java.sql.Connection) Proxy.newProxyInstance(
+						TestContext.class.getClassLoader(),
+						new Class<?>[] { java.sql.Connection.class },
+						new ConnectionInvocationHandler( metaData ) );
+		final Dialect dialect = DialectManager.createDialect( null, connection );
+		assert dialect.getDatabaseProduct() == product;
+		return dialect;
+	}
+
+	public static boolean databaseIsValid(Connection connection) {
+		try {
+			String cubeName = getDefaultCubeName();
+			if ( cubeName.indexOf( ' ' ) >= 0 ) {
+				cubeName = Util.quoteMdxIdentifier( cubeName );
+			}
+			Query query = connection.parseQuery( "select from " + cubeName );
+			Result result = connection.execute( query );
+			Util.discard( result );
+			connection.close();
+			return true;
+		} catch ( RuntimeException e ) {
+			Util.discard( e );
+			return false;
+		}
+	}
+
+
+	public static class ConnectionInvocationHandler
+			extends DelegatingInvocationHandler {
+		private final DatabaseMetaData metaData;
+
+		ConnectionInvocationHandler( DatabaseMetaData metaData ) {
+			this.metaData = metaData;
+		}
+
+		/**
+		 * Proxy for {@link java.sql.Connection#getMetaData()}.
+		 */
+		public DatabaseMetaData getMetaData() {
+			return metaData;
+		}
+
+		/**
+		 * Proxy for {@link java.sql.Connection#createStatement()}
+		 */
+		public java.sql.Statement createStatement() throws SQLException {
+			throw new SQLException();
+		}
+	}
+
+	// Public only because required for reflection to work.
+	@SuppressWarnings( "UnusedDeclaration" )
+	public static class DatabaseMetaDataInvocationHandler
+			extends DelegatingInvocationHandler {
+		private final Dialect.DatabaseProduct product;
+
+		DatabaseMetaDataInvocationHandler(
+				Dialect.DatabaseProduct product ) {
+			this.product = product;
+		}
+
+		/**
+		 * Proxy for {@link DatabaseMetaData#supportsResultSetConcurrency(int, int)}.
+		 */
+		public boolean supportsResultSetConcurrency( int type, int concurrency ) {
+			return false;
+		}
+
+		/**
+		 * Proxy for {@link DatabaseMetaData#getDatabaseProductName()}.
+		 */
+		public String getDatabaseProductName() {
+			switch ( product ) {
+				case GREENPLUM:
+					return "postgres greenplum";
+				default:
+					return product.name();
+			}
+		}
+
+		/**
+		 * Proxy for {@link DatabaseMetaData#getIdentifierQuoteString()}.
+		 */
+		public String getIdentifierQuoteString() {
+			return "\"";
+		}
+
+		/**
+		 * Proxy for {@link DatabaseMetaData#getDatabaseProductVersion()}.
+		 */
+		public String getDatabaseProductVersion() {
+			return "1.0";
+		}
+
+		/**
+		 * Proxy for {@link DatabaseMetaData#isReadOnly()}.
+		 */
+		public boolean isReadOnly() {
+			return true;
+		}
+
+		/**
+		 * Proxy for {@link DatabaseMetaData#getMaxColumnNameLength()}.
+		 */
+		public int getMaxColumnNameLength() {
+			return 30;
+		}
+
+		/**
+		 * Proxy for {@link DatabaseMetaData#getDriverName()}.
+		 */
+		public String getDriverName() {
+			switch ( product ) {
+				case GREENPLUM:
+					return "Mondrian fake dialect for Greenplum";
+				default:
+					return "Mondrian fake dialect";
+			}
+		}
 	}
 
 	/**
