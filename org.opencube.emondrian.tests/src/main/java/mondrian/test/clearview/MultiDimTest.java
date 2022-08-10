@@ -39,7 +39,7 @@ public class MultiDimTest extends ClearViewBase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    protected void runTest(Context context) throws Exception {
+    protected void runTest(Context context) {
         DiffRepository diffRepos = getDiffRepos();
         for (String name : diffRepos.getTestCaseNames()) {
             setName(name);
