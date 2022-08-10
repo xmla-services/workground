@@ -28,6 +28,10 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  */
 public class CVBasicTest extends ClearViewBase {
 
+    public CVBasicTest(String name) {
+        super(name);
+    }
+
     public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }

@@ -30,6 +30,9 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  */
 public class MultiDimVCTest extends ClearViewBase {
 
+    public MultiDimVCTest(String name) {
+        super(name);
+    }
 
     public DiffRepository getDiffRepos() {
         return getDiffReposStatic();

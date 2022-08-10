@@ -44,9 +44,11 @@ import static org.opencube.junit5.TestUtil.getDialect;
  *
  * @since Jan 25, 2007
  */
-abstract class ClearViewBase extends BatchTestCase {
+ public abstract class ClearViewBase extends BatchTestCase {
 
-
+    public ClearViewBase(String name) {
+        this.name = name;
+    }
 
     public abstract DiffRepository getDiffRepos();
 

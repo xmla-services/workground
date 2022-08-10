@@ -28,6 +28,10 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  */
 public class MemHungryTest extends ClearViewBase {
 
+    public MemHungryTest(String name) {
+        super(name);
+    }
+
     public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }

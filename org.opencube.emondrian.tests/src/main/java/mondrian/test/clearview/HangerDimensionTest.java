@@ -31,6 +31,10 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  */
 public class HangerDimensionTest extends ClearViewBase {
 
+    public HangerDimensionTest(String name) {
+        super(name);
+    }
+
     public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }

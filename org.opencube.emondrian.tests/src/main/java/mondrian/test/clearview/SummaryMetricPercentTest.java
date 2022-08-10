@@ -30,6 +30,10 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  */
 public class SummaryMetricPercentTest extends ClearViewBase {
 
+    public SummaryMetricPercentTest(String name) {
+        super(name);
+    }
+
     public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }
