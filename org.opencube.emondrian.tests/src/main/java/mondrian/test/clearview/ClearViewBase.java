@@ -119,7 +119,6 @@ abstract class ClearViewBase extends BatchTestCase {
     }
 
     protected void assertQuerySql(Connection connection, boolean flushCache)
-        throws Exception
     {
         DiffRepository diffRepos = getDiffRepos();
 
