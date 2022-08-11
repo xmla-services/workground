@@ -30,6 +30,10 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  */
 public class PredicateFilterTest extends ClearViewBase {
 
+    public PredicateFilterTest(String name) {
+        super(name);
+    }
+
     public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }
@@ -40,7 +44,7 @@ public class PredicateFilterTest extends ClearViewBase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    protected void runTest(Context context) throws Exception {
+    protected void runTest(Context context) {
         DiffRepository diffRepos = getDiffRepos();
         for (String name : diffRepos.getTestCaseNames()) {
             setName(name);

@@ -28,6 +28,10 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  */
 public class PartialCacheTest extends ClearViewBase {
 
+    public PartialCacheTest(String name) {
+        super(name);
+    }
+
     public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }
@@ -38,7 +42,7 @@ public class PartialCacheTest extends ClearViewBase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    protected void runTest(Context context) throws Exception {
+    protected void runTest(Context context) {
         DiffRepository diffRepos = getDiffRepos();
         for (String name : diffRepos.getTestCaseNames()) {
             setName(name);
