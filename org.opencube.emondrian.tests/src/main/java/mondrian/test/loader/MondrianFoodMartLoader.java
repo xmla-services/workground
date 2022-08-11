@@ -18,11 +18,9 @@ import mondrian.spi.DialectManager;
 
 import org.apache.commons.lang.StringUtils;
 
-import org.apache.logging.log4j.core.Logger;
-import org.apache.logging.log4j.core.appender.ConsoleAppender;
-import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -232,13 +230,14 @@ public class MondrianFoodMartLoader {
             }
         }
 
+        //TODO need slf4j implementation
         // Add a console appender for error messages.
-        ConsoleAppender ca = ConsoleAppender.newBuilder()
-          .setName("mfml")
-          .setLayout(PatternLayout.newBuilder().withPattern("%m%n").build())
-          .build();
-        LOGGER.setLevel(verbose ? Level.DEBUG : Level.ERROR);
-        LOGGER.addAppender(ca);
+        //ConsoleAppender ca = ConsoleAppender.newBuilder()
+        //  .setName("mfml")
+        //  .setLayout(PatternLayout.newBuilder().withPattern("%m%n").build())
+        //  .build();
+        //LOGGER.setLevel(verbose ? Level.DEBUG : Level.ERROR);
+        //LOGGER.addAppender(ca);
         //Util.addAppender(ca, LOGGER, verbose ? Level.DEBUG : Level.ERROR);
 
         if (inputJdbcURL != null) {
