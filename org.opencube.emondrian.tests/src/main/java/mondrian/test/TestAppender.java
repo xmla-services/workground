@@ -10,27 +10,21 @@
 */
 package mondrian.test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
-import org.apache.logging.log4j.core.LogEvent;
-import org.apache.logging.log4j.core.appender.AbstractAppender;
-import org.apache.logging.log4j.core.config.Property;
-import org.apache.logging.log4j.core.layout.PatternLayout;
-
 /**
  * TestAppender captures log4j events for unit testing.
  * 
  * @author benny
  */
-public class TestAppender extends AbstractAppender {
-  private final List<LogEvent> logEvents = new ArrayList<>();
+//public class TestAppender extends AbstractAppender {
+public class TestAppender {
+  //private final List<LogEvent> logEvents = new ArrayList<>();
 
+  //TODO need slf4j implementation
   public TestAppender() {
-    super( "TestAppender", null, PatternLayout.createDefaultLayout(), true, Property.EMPTY_ARRAY );
+    //super( "TestAppender", null, PatternLayout.createDefaultLayout(), true, Property.EMPTY_ARRAY );
   }
 
+  /*
   @Override
   public void append( final LogEvent loggingEvent ) {
     logEvents.add( loggingEvent.toImmutable() );
@@ -43,6 +37,8 @@ public class TestAppender extends AbstractAppender {
   public void clear() {
     logEvents.clear();
   }
+
+   */
 }
 
 // End TestAppender.java

@@ -10,9 +10,6 @@
 */
 package mondrian.rolap;
 
-import mondrian.test.TestAppender;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,33 +18,33 @@ import org.opencube.junit5.context.Context;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.flushSchemaCache;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 class OrderKeyOneToOneCheckTest {
 
-  private TestAppender memberSourceAppender;
-  private TestAppender sqlReaderAppender;
+  //private TestAppender memberSourceAppender;
+  //private TestAppender sqlReaderAppender;
 
   @BeforeEach
   public void beforeEach() throws Exception {
-    Logger memberSourceLogger = (Logger) LogManager.getLogger(SqlMemberSource.class);
-    Logger sqlReaderLogger = (Logger) LogManager.getLogger(SqlTupleReader.class);
+    //Logger memberSourceLogger = (Logger) LogManager.getLogger(SqlMemberSource.class);
+    //Logger sqlReaderLogger = (Logger) LogManager.getLogger(SqlTupleReader.class);
 
-    memberSourceAppender = new TestAppender();
-    sqlReaderAppender = new TestAppender();
-    memberSourceLogger.addAppender(memberSourceAppender);
-    sqlReaderLogger.addAppender(sqlReaderAppender);
+    //memberSourceAppender = new TestAppender();
+    //sqlReaderAppender = new TestAppender();
+    //memberSourceLogger.addAppender(memberSourceAppender);
+    //sqlReaderLogger.addAppender(sqlReaderAppender);
   }
 
   @AfterEach
   protected void afterEach() throws Exception {
-    Logger memberSourceLogger = (Logger) LogManager.getLogger(SqlMemberSource.class);
-    Logger sqlReaderLogger = (Logger) LogManager.getLogger(SqlTupleReader.class);
-    memberSourceLogger.removeAppender(memberSourceAppender);
-    sqlReaderLogger.removeAppender(sqlReaderAppender);
+    //Logger memberSourceLogger = (Logger) LogManager.getLogger(SqlMemberSource.class);
+    //Logger sqlReaderLogger = (Logger) LogManager.getLogger(SqlTupleReader.class);
+    //memberSourceLogger.removeAppender(memberSourceAppender);
+    //sqlReaderLogger.removeAppender(sqlReaderAppender);
   }
 
   @ParameterizedTest
@@ -89,16 +86,16 @@ class OrderKeyOneToOneCheckTest {
                     + "from [Sales]";
     prepareContext(context);
     executeQuery(context.createConnection(), mdx);
-
+    fail("need slf4j implementation");
     //TODO need slf4j implementation
-    assertEquals(
-            8,
-            sqlReaderAppender.getLogEvents().size(),
-            "Running with modified schema should log 8 error");
-    assertEquals(
-            8,
-            memberSourceAppender.getLogEvents().size(),
-            "Running with modified schema should log 8 error");
+    //assertEquals(
+    //        8,
+    //        sqlReaderAppender.getLogEvents().size(),
+    //        "Running with modified schema should log 8 error");
+    //assertEquals(
+    //        8,
+    //        memberSourceAppender.getLogEvents().size(),
+    //        "Running with modified schema should log 8 error");
   }
 
   @ParameterizedTest
@@ -110,11 +107,12 @@ class OrderKeyOneToOneCheckTest {
 
     prepareContext(context);
     executeQuery(context.createConnection(), mdx);
+    fail("need slf4j implementation");
     //TODO need slf4j implementation
-    assertEquals(
-            16,
-            sqlReaderAppender.getLogEvents().size(),
-            "Running with modified schema should log 16 error");
+    //assertEquals(
+    //        16,
+    //        sqlReaderAppender.getLogEvents().size(),
+    //        "Running with modified schema should log 16 error");
   }
 }
 // End OrderKeyOneToOneCheckTest.java
