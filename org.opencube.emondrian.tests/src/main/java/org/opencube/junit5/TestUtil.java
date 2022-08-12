@@ -315,36 +315,20 @@ public class TestUtil {
 				.replaceAll( "\r\n", "\n" );
 		assertEquals( transformedExpectedSql, transformedActualSql );
 
-		checkSqlAgainstDatasource(actualSql, expectedRows );
+		checkSqlAgainstDatasource(connection, actualSql, expectedRows );
 	}
 
-
-	private static void checkSqlAgainstDatasource(
+	private static void checkSqlAgainstDatasource(Connection connection,
 			String actualSql,
 			int expectedRows ) {
-		Util.PropertyList connectProperties = getConnectionProperties();
 
 		java.sql.Connection jdbcConn = null;
 		java.sql.Statement stmt = null;
 		ResultSet rs = null;
 
 		try {
-			String jdbcDrivers =
-					connectProperties.get(
-							RolapConnectionProperties.JdbcDrivers.name() );
-			if ( jdbcDrivers != null ) {
-				RolapUtil.loadDrivers( jdbcDrivers );
-			}
-			final String jdbcDriversProp =
-					MondrianProperties.instance().JdbcDrivers.get();
-			RolapUtil.loadDrivers( jdbcDriversProp );
 
-			jdbcConn = java.sql.DriverManager.getConnection(
-					connectProperties.get( RolapConnectionProperties.Jdbc.name() ),
-					connectProperties.get(
-							RolapConnectionProperties.JdbcUser.name() ),
-					connectProperties.get(
-							RolapConnectionProperties.JdbcPassword.name() ) );
+			jdbcConn = connection.getDataSource().getConnection();
 			stmt = jdbcConn.createStatement();
 
 			if ( RolapUtil.SQL_LOGGER.isDebugEnabled() ) {
@@ -377,7 +361,7 @@ public class TestUtil {
 		} catch ( SQLException e ) {
 			throw new RuntimeException(
 					"ERROR in SQL - invalid for database: "
-							+ connectProperties.get( RolapConnectionProperties.Jdbc.name() )
+							+ ""
 							+ "\n" + actualSql,
 					e );
 		} finally {
