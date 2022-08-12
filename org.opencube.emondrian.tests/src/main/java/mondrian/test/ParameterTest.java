@@ -13,7 +13,6 @@ package mondrian.test;
 import mondrian.olap.*;
 import mondrian.rolap.RolapConnectionProperties;
 import org.eigenbase.util.property.Property;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.impl.Olap4jUtil;
 import org.opencube.junit5.ContextSource;
@@ -29,7 +28,6 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.*;
 
-import static mondrian.test.FoodMartTestCase.executeExpr;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.opencube.junit5.TestUtil.*;
 
@@ -137,7 +135,7 @@ public class ParameterTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testNumericParameter(Context context) {
         String s =
-            executeExpr("Parameter(\"N\",NUMERIC,2+3,\"A numeric parameter\")");
+            executeExpr(context.createConnection(),"Parameter(\"N\",NUMERIC,2+3,\"A numeric parameter\")");
         assertEquals("5", s);
     }
 
@@ -145,7 +143,7 @@ public class ParameterTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testStringParameter(Context context) {
         String s =
-            executeExpr(
+            executeExpr(context.createConnection(),
                 "Parameter(\"S\",STRING,\"x\" || \"y\","
                 + "\"A string parameter\")");
         assertEquals("xy", s);
@@ -574,8 +572,7 @@ public class ParameterTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void _testParameterDuplicateDimensionFails(Context context) {
-        Connection connection = context.createConnection();
-        assertQueryThrows(connection,
+        assertQueryThrows(context,
             "select {[Measures].[Unit Sales]} on rows,\n"
             + " {[Gender].[F]} on columns\n"
             + "from Sales where Parameter(\"GenderParam\",[Gender],[Gender].[M],\"Which gender?\")",
@@ -583,9 +580,10 @@ public class ParameterTest {
     }
 
     /** Mondrian can not handle forward references */
-    @Test
-    public void dontTestParamRef() {
-        String s = executeExpr(
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    public void dontTestParamRef(Context context) {
+        String s = executeExpr(context.createConnection(),
             "Parameter(\"X\",STRING,\"x\",\"A string\") || "
             + "ParamRef(\"Y\") || "
             + "\".\" ||"
@@ -1274,7 +1272,7 @@ public class ParameterTest {
             null,
             null);
         withSchema(context, schema);
-        assertExprThrows(context.createConnection(),
+        assertExprThrows(context,
             "ParamRef(\"foo\")",
             "Duplicate parameter 'foo' in schema");
     }
@@ -1291,7 +1289,7 @@ public class ParameterTest {
             null,
             null);
         withSchema(context, schema);
-        assertExprThrows(context.createConnection(),
+        assertExprThrows(context,
             "1",
             "In Schema: In Parameter: "
             + "Value 'Bad type' of attribute 'type' has illegal value 'Bad type'.  "

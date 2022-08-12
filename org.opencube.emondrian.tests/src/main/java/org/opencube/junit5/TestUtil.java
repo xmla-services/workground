@@ -13,14 +13,15 @@ import mondrian.olap.fun.FunUtil;
 import mondrian.olap4j.MondrianInprocProxy;
 import mondrian.olap4j.MondrianOlap4jConnection;
 import mondrian.rolap.*;
-import mondrian.rolap.agg.CellRequest;
-import mondrian.rolap.agg.ValueColumnPredicate;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
 import mondrian.spi.Dialect;
 import mondrian.spi.DialectManager;
 import mondrian.spi.DynamicSchemaProcessor;
-import mondrian.test.*;
+import mondrian.test.FoodmartTestContextImpl;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
+import mondrian.test.TestContext;
 import mondrian.util.DelegatingInvocationHandler;
 import org.olap4j.*;
 import org.olap4j.driver.xmla.XmlaOlap4jDriver;
@@ -214,12 +215,46 @@ public class TestUtil {
 	 * particular pattern. The error might occur during parsing, or might be
 	 * contained within the cell value.
 	 */
+	public static void assertExprThrows(Context context, String cubeName, String expression, String pattern) {
+		Throwable throwable = null;
+		try {
+			if (cubeName.indexOf(' ') >= 0) {
+				cubeName = Util.quoteMdxIdentifier(cubeName);
+			}
+			expression = Util.replace(expression, "'", "''");
+			Result result = executeQuery(context.createConnection(), "with member [Measures].[Foo] as '" + expression
+					+ "' select {[Measures].[Foo]} on columns from " + cubeName);
+			Cell cell = result.getCell(new int[] { 0 });
+			if (cell.isError()) {
+				throwable = (Throwable) cell.getValue();
+			}
+		} catch (Throwable e) {
+			throwable = e;
+		}
+		checkThrowable(throwable, pattern);
+	}
+
+	/**
+	 * Executes an expression, and asserts that it gives an error which contains a
+	 * particular pattern. The error might occur during parsing, or might be
+	 * contained within the cell value.
+	 */
 	public static void assertExprThrows(Connection connection, String expression, String pattern) {
 		String cubeName = getDefaultCubeName();
 		assertExprThrows(connection, cubeName, expression, pattern);
 	}
 
-		/**
+	/**
+	 * Executes an expression, and asserts that it gives an error which contains a
+	 * particular pattern. The error might occur during parsing, or might be
+	 * contained within the cell value.
+	 */
+	public static void assertExprThrows(Context context, String expression, String pattern) {
+		String cubeName = getDefaultCubeName();
+		assertExprThrows(context, cubeName, expression, pattern);
+	}
+
+	/**
 		 * Checks that an actual string matches an expected string.
 		 *
 		 * <p>
