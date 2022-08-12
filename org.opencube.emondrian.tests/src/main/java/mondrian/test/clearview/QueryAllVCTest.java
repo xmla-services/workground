@@ -29,10 +29,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  */
 public class QueryAllVCTest extends ClearViewBase {
 
-    public QueryAllVCTest(String name) {
-        super(name);
-    }
-
     public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }

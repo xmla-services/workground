@@ -28,10 +28,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  */
 public class SubTotalTest extends ClearViewBase {
 
-    public SubTotalTest(String name) {
-        super(name);
-    }
-
     public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }
