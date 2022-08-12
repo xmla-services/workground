@@ -30,10 +30,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  */
 public class SummaryTest extends ClearViewBase {
 
-    public SummaryTest(String name) {
-        super(name);
-    }
-
     public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }

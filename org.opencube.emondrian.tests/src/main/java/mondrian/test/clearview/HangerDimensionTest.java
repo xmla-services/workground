@@ -9,12 +9,16 @@
 
 package mondrian.test.clearview;
 
-import mondrian.test.DiffRepository;
+import static org.mockito.Mockito.withSettings;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.Context;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import mondrian.test.DiffRepository;
 
 /**
  * <code>HangerDimensionTest</code> tests the extended syntax of Order
@@ -31,10 +35,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  */
 public class HangerDimensionTest extends ClearViewBase {
 
-    public HangerDimensionTest(String name) {
-        super(name);
-    }
-
     public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }
@@ -49,7 +49,7 @@ public class HangerDimensionTest extends ClearViewBase {
         DiffRepository diffRepos = getDiffRepos();
         for (String name : diffRepos.getTestCaseNames()) {
             setName(name);
-            diffRepos.setCurrentTestCaseName(name);
+            diffRepos.setCurrentTestCaseName(name);            
             super.runTest(context);
         }
     }
