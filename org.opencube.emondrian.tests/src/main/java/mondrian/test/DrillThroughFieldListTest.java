@@ -11,10 +11,14 @@
 */
 package mondrian.test;
 
-import mondrian.olap.Connection;
-import mondrian.olap.OlapElement;
-import mondrian.olap.Result;
-import mondrian.rolap.RolapCell;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertSqlEquals;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.getDialect;
+
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -22,13 +26,10 @@ import org.opencube.junit5.context.Context;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.assertSqlEquals;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.getDialect;
+import mondrian.olap.Connection;
+import mondrian.olap.OlapElement;
+import mondrian.olap.Result;
+import mondrian.rolap.RolapCell;
 
 /**
  * Test drillthrought operation with specified field list.
@@ -79,8 +80,8 @@ public class DrillThroughFieldListTest {
             + "    time_by_day.quarter as Quarter,\n"
             + "    sales_fact_1997.unit_sales as Unit Sales\n"
             + "from\n"
-            + "    time_by_day as time_by_day,\n"
-            + "    sales_fact_1997 as sales_fact_1997\n"
+            + "    sales_fact_1997 as sales_fact_1997,\n"
+            + "    time_by_day as time_by_day\n"         
             + "where\n"
             + "    sales_fact_1997.time_id = time_by_day.time_id\n"
             + "and\n"
@@ -98,8 +99,8 @@ public class DrillThroughFieldListTest {
             + "    time_by_day.quarter as Quarter,\n"
             + "    sales_fact_1997.unit_sales as Unit Sales\n"
             + "from\n"
-            + "    time_by_day time_by_day,\n"
-            + "    sales_fact_1997 sales_fact_1997\n"
+            + "    sales_fact_1997 sales_fact_1997,\n"
+            + "    time_by_day time_by_day\n"
             + "where\n"
             + "    sales_fact_1997.time_id = time_by_day.time_id\n"
             + "and\n"
@@ -153,8 +154,8 @@ public class DrillThroughFieldListTest {
             + "    sales_fact_1997.unit_sales as Unit Sales,\n"
             + "    sales_fact_1997.store_cost as Store Cost\n"
             + "from\n"
-            + "    time_by_day as time_by_day,\n"
-            + "    sales_fact_1997 as sales_fact_1997\n"
+            + "    sales_fact_1997 as sales_fact_1997,\n"
+            + "    time_by_day as time_by_day\n"
             + "where\n"
             + "    sales_fact_1997.time_id = time_by_day.time_id\n"
             + "and\n"
@@ -173,8 +174,8 @@ public class DrillThroughFieldListTest {
             + "    sales_fact_1997.unit_sales as Unit Sales,\n"
             + "    sales_fact_1997.store_cost as Store Cost\n"
             + "from\n"
-            + "    time_by_day time_by_day,\n"
-            + "    sales_fact_1997 sales_fact_1997\n"
+            + "    sales_fact_1997 sales_fact_1997,\n"
+            + "    time_by_day time_by_day\n"
             + "where\n"
             + "    sales_fact_1997.time_id = time_by_day.time_id\n"
             + "and\n"
@@ -228,8 +229,8 @@ public class DrillThroughFieldListTest {
             + "    sales_fact_1997.unit_sales as Unit Sales,\n"
             + "    sales_fact_1997.store_cost as Store Cost\n"
             + "from\n"
-            + "    time_by_day as time_by_day,\n"
             + "    sales_fact_1997 as sales_fact_1997,\n"
+            + "    time_by_day as time_by_day,\n"
             + "    product as product\n"
             + "where\n"
             + "    sales_fact_1997.time_id = time_by_day.time_id\n"
@@ -252,8 +253,8 @@ public class DrillThroughFieldListTest {
             + "    sales_fact_1997.unit_sales as Unit Sales,\n"
             + "    sales_fact_1997.store_cost as Store Cost\n"
             + "from\n"
-            + "    time_by_day time_by_day,\n"
             + "    sales_fact_1997 sales_fact_1997,\n"
+            + "    time_by_day time_by_day,\n"
             + "    product product\n"
             + "where\n"
             + "    sales_fact_1997.time_id = time_by_day.time_id\n"
@@ -351,8 +352,8 @@ public class DrillThroughFieldListTest {
         expectedSql = "select\n"
             + "    sales_fact_1997.unit_sales as Unit Sales\n"
             + "from\n"
-            + "    time_by_day as time_by_day,\n"
             + "    sales_fact_1997 as sales_fact_1997,\n"
+            + "    time_by_day as time_by_day,\n"
             + "    customer as customer\n"
             + "where\n"
             + "    sales_fact_1997.time_id = time_by_day.time_id\n"
@@ -367,8 +368,8 @@ public class DrillThroughFieldListTest {
         expectedSql = "select\n"
              + "    sales_fact_1997.unit_sales as Unit Sales\n"
              + "from\n"
-             + "    time_by_day time_by_day,\n"
              + "    sales_fact_1997 sales_fact_1997,\n"
+             + "    time_by_day time_by_day,\n"
              + "    customer customer\n"
              + "where\n"
              + "    sales_fact_1997.time_id = time_by_day.time_id\n"
