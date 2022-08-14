@@ -267,6 +267,7 @@ public class NonCollapsedAggTest extends AggTableTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testSingleJoin(Context context) throws Exception {
+    	super.prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
         }

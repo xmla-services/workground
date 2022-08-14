@@ -11,12 +11,19 @@ import mondrian.rolap.RolapConnectionProperties;
 public class SchemaUpdater implements PropertyUpdater {
 
 	private Function<String, String> function;
+	private boolean removeCatalog = true;
 
 	private SchemaUpdater() {
 	}
 
 	public SchemaUpdater(Function<String, String> function) {
 		this();
+		this.function = function;
+	}
+
+	public SchemaUpdater(Function<String, String> function, boolean removeCatalog) {
+		this();
+		this.removeCatalog = removeCatalog;
 		this.function = function;
 	}
 
@@ -42,6 +49,15 @@ public class SchemaUpdater implements PropertyUpdater {
 
 	}
 
+	public static SchemaUpdater createSubstitutingCube(final String cubeName, final String dimensionDefs,
+													   final String measureDefs, final String memberDefs, final String namedSetDefs, boolean removeCatalog) {
+
+		return new SchemaUpdater((schema) -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs,
+				measureDefs, memberDefs, namedSetDefs), removeCatalog);
+
+	}
+
+
 	public static SchemaUpdater createSubstitutingCube(final String cubeName,
 													   final String dimensionDefs,
 													   final String measureDefs,
@@ -58,7 +74,9 @@ public class SchemaUpdater implements PropertyUpdater {
 	public PropertyList update(PropertyList propertyList) {
 		String content = null;
 		String catalog = propertyList.get(RolapConnectionProperties.Catalog.name());
-		propertyList.remove(RolapConnectionProperties.Catalog.name());
+		if (removeCatalog) {
+			propertyList.remove(RolapConnectionProperties.Catalog.name());
+		}
 		if (catalog != null && !catalog.isBlank()) {
 			try {
 				content = new String(

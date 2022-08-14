@@ -46,10 +46,6 @@ import static org.opencube.junit5.TestUtil.getDialect;
  */
  public abstract class ClearViewBase extends BatchTestCase {
 
-    public ClearViewBase(String name) {
-        this.name = name;
-    }
-
     public abstract DiffRepository getDiffRepos();
 
     private PropertySaver5 propSaver;
@@ -105,7 +101,8 @@ import static org.opencube.junit5.TestUtil.getDialect;
                                 ? namedSets : null;
                 ((BaseTestContext) context).update(SchemaUpdater.createSubstitutingCube(
                         cubeName, customDimensions, measures, calculatedMembers,
-                        namedSets));
+                        namedSets, false));
+
             }
 
             // Set some properties to match the way we configure them
