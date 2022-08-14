@@ -576,7 +576,7 @@ public class ParameterTest {
             "select {[Measures].[Unit Sales]} on rows,\n"
             + " {[Gender].[F]} on columns\n"
             + "from Sales where Parameter(\"GenderParam\",[Gender],[Gender].[M],\"Which gender?\")",
-            "Invalid hierarchy for parameter 'GenderParam'");
+            "Hierarchy '[Gender]' appears in more than one independent axis.");
     }
 
     /** Mondrian can not handle forward references */
