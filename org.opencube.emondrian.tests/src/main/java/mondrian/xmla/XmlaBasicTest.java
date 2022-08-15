@@ -12,6 +12,7 @@ package mondrian.xmla;
 
 import mondrian.olap.*;
 import mondrian.olap4j.MondrianOlap4jDriver;
+import mondrian.rolap.RolapConnection;
 import mondrian.spi.Dialect;
 import mondrian.test.DiffRepository;
 import mondrian.test.PropertySaver5;
@@ -1159,7 +1160,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
         requestText = upgradeQuery(requestText);
         Document responseDoc = fileToDocument("response", props);
 
-        String connectString = connection.getConnectString();
+        String connectString = ((RolapConnection)connection).getConnectInfo().toString();
         Map<String, String> catalogNameUrls = getCatalogNameUrls(connection);
 
         Document expectedDoc;

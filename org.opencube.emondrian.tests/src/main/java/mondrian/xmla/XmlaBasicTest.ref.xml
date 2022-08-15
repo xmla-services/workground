@@ -2298,10 +2298,9 @@
                         <CUBE_NAME>Warehouse</CUBE_NAME>
                         <SET_NAME>Top Sellers</SET_NAME>
                         <SCOPE>1</SCOPE>
-                        <EXPRESSION/>
-                        <DIMENSIONS/>
+                        <EXPRESSION>TopCount([Warehouse].[Warehouse Name].Members, 5, [Measures].[Warehouse Sales])</EXPRESSION>
+                        <DIMENSIONS>[Warehouse]</DIMENSIONS>
                         <SET_CAPTION>Top Sellers</SET_CAPTION>
-                        <SET_DISPLAY_FOLDER/>
                     </row>
                 </root>
             </return>
@@ -11875,7 +11874,7 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                                 <xsd:element minOccurs="0" name="URL" sql:field="URL" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="DataSourceInfo" sql:field="DataSourceInfo" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="ProviderName" sql:field="ProviderName" type="xsd:string"/>
-                                <xsd:element name="ProviderType" sql:field="ProviderType" type="xsd:string"/>
+                                <xsd:element maxOccurs="unbounded" name="ProviderType" sql:field="ProviderType" type="xsd:string"/>
                                 <xsd:element name="AuthenticationMode" sql:field="AuthenticationMode" type="xsd:string"/>
                             </xsd:sequence>
                         </xsd:complexType>
@@ -13151,7 +13150,9 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                     </row>
                     <row>
                         <PropertyName>BeginRange</PropertyName>
-                        <PropertyDescription>Contains a zero-based integer value corresponding to a CellOrdinal attribute value. (The CellOrdinal attribute is part of the Cell element in the CellData section of MDDataSet.) Used together with the EndRange property, the client application can use this property to restrict an OLAP dataset returned by a command to a specific range of cells. If -1 is specified, all cells up to the cell specified in the EndRange property are returned. The default value for this property is -1.</PropertyDescription>
+                        <PropertyDescription>Contains a zero-based integer value corresponding to a CellOrdinal attribute value. (The CellOrdinal attribute is part of the Cell element in the CellData section of MDDataSet.)
+Used together with the EndRange property, the client application can use this property to restrict an OLAP dataset returned by a command to a specific range of cells. If -1 is specified, all cells up to the cell specified in the EndRange property are returned.
+The default value for this property is -1.</PropertyDescription>
                         <PropertyType>Integer</PropertyType>
                         <PropertyAccessType>Write</PropertyAccessType>
                         <IsRequired>false</IsRequired>
@@ -13159,7 +13160,9 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                     </row>
                     <row>
                         <PropertyName>Catalog</PropertyName>
-                        <PropertyDescription>When establishing a session with an Analysis Services instance to send an XMLA command, this property is equivalent to the OLE DB property, DBPROP_INIT_CATALOG. When you set this property during a session to change the current database for the session, this property is equivalent to the OLE DB property, DBPROP_CURRENTCATALOG. The default value for this property is an empty string.</PropertyDescription>
+                        <PropertyDescription>When establishing a session with an Analysis Services instance to send an XMLA command, this property is equivalent to the OLE DB property, DBPROP_INIT_CATALOG.
+When you set this property during a session to change the current database for the session, this property is equivalent to the OLE DB property, DBPROP_CURRENTCATALOG.
+The default value for this property is an empty string.</PropertyDescription>
                         <PropertyType>string</PropertyType>
                         <PropertyAccessType>ReadWrite</PropertyAccessType>
                         <IsRequired>false</IsRequired>
@@ -13167,7 +13170,11 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                     </row>
                     <row>
                         <PropertyName>Content</PropertyName>
-                        <PropertyDescription>An enumerator that specifies what type of data is returned in the result set. None: Allows the structure of the command to be verified, but not executed. Analogous to using Prepare to check syntax, and so on. Schema: Contains the XML schema (which indicates column information, and so on) that relates to the requested query. Data: Contains only the data that was requested. SchemaData: Returns both the schema information as well as the data.</PropertyDescription>
+                        <PropertyDescription>An enumerator that specifies what type of data is returned in the result set.
+None: Allows the structure of the command to be verified, but not executed. Analogous to using Prepare to check syntax, and so on.
+Schema: Contains the XML schema (which indicates column information, and so on) that relates to the requested query.
+Data: Contains only the data that was requested.
+SchemaData: Returns both the schema information as well as the data.</PropertyDescription>
                         <PropertyType>EnumString</PropertyType>
                         <PropertyAccessType>Write</PropertyAccessType>
                         <IsRequired>false</IsRequired>
@@ -13215,7 +13222,10 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                     </row>
                     <row>
                         <PropertyName>Format</PropertyName>
-                        <PropertyDescription>Enumerator that determines the format of the returned result set. Values include: Tabular: a flat or hierarchical rowset. Similar to the XML RAW format in SQL. The Format property should be set to Tabular for OLE DB for Data Mining commands. Multidimensional: Indicates that the result set will use the MDDataSet format (Execute method only). Native: The client does not request a specific format, so the provider may return the format  appropriate to the query. (The actual result type is identified by namespace of the result.)</PropertyDescription>
+                        <PropertyDescription>Enumerator that determines the format of the returned result set. Values include:
+Tabular: a flat or hierarchical rowset. Similar to the XML RAW format in SQL. The Format property should be set to Tabular for OLE DB for Data Mining commands.
+Multidimensional: Indicates that the result set will use the MDDataSet format (Execute method only).
+Native: The client does not request a specific format, so the provider may return the format  appropriate to the query. (The actual result type is identified by namespace of the result.)</PropertyDescription>
                         <PropertyType>EnumString</PropertyType>
                         <PropertyAccessType>Write</PropertyAccessType>
                         <IsRequired>false</IsRequired>
@@ -13223,7 +13233,10 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                     </row>
                     <row>
                         <PropertyName>LocaleIdentifier</PropertyName>
-                        <PropertyDescription>Use this to read or set the numeric locale identifier for this request. The default is provider-specific. For the complete hexadecimal list of language identifiers, search on "Language Identifiers" in the MSDN Library at http://www.msdn.microsoft.com. As an extension to the XMLA standard, Mondrian also allows locale codes as specified by ISO-639 and ISO-3166 and as used by Java; for example 'en-US'. </PropertyDescription>
+                        <PropertyDescription>Use this to read or set the numeric locale identifier for this request. The default is provider-specific.
+For the complete hexadecimal list of language identifiers, search on "Language Identifiers" in the MSDN Library at http://www.msdn.microsoft.com.
+As an extension to the XMLA standard, Mondrian also allows locale codes as specified by ISO-639 and ISO-3166 and as used by Java; for example 'en-US'.
+</PropertyDescription>
                         <PropertyType>UnsignedInteger</PropertyType>
                         <PropertyAccessType>ReadWrite</PropertyAccessType>
                         <IsRequired>false</IsRequired>
@@ -13271,7 +13284,9 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                     </row>
                     <row>
                         <PropertyName>StateSupport</PropertyName>
-                        <PropertyDescription>Property that specifies the degree of support in the provider for state. For information about state in XML for Analysis, see "Support for Statefulness in XML for Analysis." Minimum enumeration values are as follows: None - No support for sessions or stateful operations. Sessions - Provider supports sessions.</PropertyDescription>
+                        <PropertyDescription>Property that specifies the degree of support in the provider for state. For information about state in XML for Analysis, see "Support for Statefulness in XML for Analysis." Minimum enumeration values are as follows:
+None - No support for sessions or stateful operations.
+Sessions - Provider supports sessions.</PropertyDescription>
                         <PropertyType>EnumString</PropertyType>
                         <PropertyAccessType>Read</PropertyAccessType>
                         <IsRequired>false</IsRequired>
@@ -13287,7 +13302,8 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                     </row>
                     <row>
                         <PropertyName>UserName</PropertyName>
-                        <PropertyDescription>Returns the UserName the server associates with the command. This property is deprecated as writeable in XMLA 1.1. To support legacy applications, servers accept but ignore the password setting when it is used with the Execute method.</PropertyDescription>
+                        <PropertyDescription>Returns the UserName the server associates with the command.
+This property is deprecated as writeable in XMLA 1.1. To support legacy applications, servers accept but ignore the password setting when it is used with the Execute method.</PropertyDescription>
                         <PropertyType>string</PropertyType>
                         <PropertyAccessType>Read</PropertyAccessType>
                         <IsRequired>false</IsRequired>
@@ -13295,7 +13311,8 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                     </row>
                     <row>
                         <PropertyName>VisualMode</PropertyName>
-                        <PropertyDescription>This property is equivalent to the OLE DB property, MDPROP_VISUALMODE. The default value for this property is zero (0), equivalent to DBPROPVAL_VISUAL_MODE_DEFAULT.</PropertyDescription>
+                        <PropertyDescription>This property is equivalent to the OLE DB property, MDPROP_VISUALMODE.
+The default value for this property is zero (0), equivalent to DBPROPVAL_VISUAL_MODE_DEFAULT.</PropertyDescription>
                         <PropertyType>Enumeration</PropertyType>
                         <PropertyAccessType>Write</PropertyAccessType>
                         <IsRequired>false</IsRequired>
@@ -13303,7 +13320,8 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                     </row>
                     <row>
                         <PropertyName>TableFields</PropertyName>
-                        <PropertyDescription>List of fields to return for drill-through. The default value of this property is the empty string,in which case, all fields are returned.</PropertyDescription>
+                        <PropertyDescription>List of fields to return for drill-through.
+The default value of this property is the empty string,in which case, all fields are returned.</PropertyDescription>
                         <PropertyType>string</PropertyType>
                         <PropertyAccessType>Read</PropertyAccessType>
                         <IsRequired>false</IsRequired>
@@ -13335,7 +13353,8 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                     </row>
                     <row>
                         <PropertyName>DbpropMsmdMDXCompatibility</PropertyName>
-                        <PropertyDescription>An enumeration value that determines how placeholder members in a ragged or unbalanced hierarchy are treated.</PropertyDescription>
+                        <PropertyDescription>An enumeration value that determines how placeholder members in a ragged or
+unbalanced hierarchy are treated.</PropertyDescription>
                         <PropertyType>Integer</PropertyType>
                         <PropertyAccessType>ReadWrite</PropertyAccessType>
                         <IsRequired>false</IsRequired>
@@ -13356,6 +13375,14 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                         <PropertyAccessType>ReadWrite</PropertyAccessType>
                         <IsRequired>false</IsRequired>
                         <Value>0</Value>
+                    </row>
+                    <row>
+                        <PropertyName>SspropInitAppName</PropertyName>
+                        <PropertyDescription>The name of the client application.</PropertyDescription>
+                        <PropertyType>string</PropertyType>
+                        <PropertyAccessType>ReadWrite</PropertyAccessType>
+                        <IsRequired>false</IsRequired>
+                        <Value/>
                     </row>
                     <row>
                         <PropertyName>DbpropMsmdSubqueries</PropertyName>
@@ -13497,6 +13524,27 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                         <Description/>
                     </row>
                     <row>
+                        <SchemaName>DBSCHEMA_SOURCE_TABLES</SchemaName>
+                        <SchemaGuid>8c3f5858-2742-4976-9d65-eb4d493c693e</SchemaGuid>
+                        <Restrictions>
+                            <Name>TABLE_CATALOG</Name>
+                            <Type>xsd:string</Type>
+                        </Restrictions>
+                        <Restrictions>
+                            <Name>TABLE_SCHEMA</Name>
+                            <Type>xsd:string</Type>
+                        </Restrictions>
+                        <Restrictions>
+                            <Name>TABLE_NAME</Name>
+                            <Type>xsd:string</Type>
+                        </Restrictions>
+                        <Restrictions>
+                            <Name>TABLE_TYPE</Name>
+                            <Type>xsd:string</Type>
+                        </Restrictions>
+                        <Description/>
+                    </row>
+                    <row>
                         <SchemaName>DBSCHEMA_TABLES</SchemaName>
                         <SchemaGuid>C8B52229-5CF3-11CE-ADE5-00AA0044773D</SchemaGuid>
                         <Restrictions>
@@ -13607,6 +13655,15 @@ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
                             <Type>xsd:string</Type>
                         </Restrictions>
                         <Description>Returns the names, values, and other information of all supported RequestType enumeration values.</Description>
+                    </row>
+                    <row>
+                        <SchemaName>DISCOVER_XML_METADATA</SchemaName>
+                        <SchemaGuid>3444B255-171E-4CB9-AD98-19E57888A75F</SchemaGuid>
+                        <Restrictions>
+                            <Name>DatabaseID</Name>
+                            <Type>xsd:string</Type>
+                        </Restrictions>
+                        <Description>Returns an XML document describing a requested object. The rowset that is returned always consists of one row and one column.</Description>
                     </row>
                     <row>
                         <SchemaName>MDSCHEMA_ACTIONS</SchemaName>
@@ -17741,8 +17798,8 @@ Cell Properties Format_String, Formatted_Value
                         <CubeInfo>
                             <Cube>
                                 <CubeName>Sales</CubeName>
-                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:46:25</LastDataUpdate>
-                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:46:25</LastSchemaUpdate>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
@@ -18182,8 +18239,8 @@ WHERE ([Time].[1997].[Q2], [Marital Status], [Measures].[Store Sales])
                         <CubeInfo>
                             <Cube>
                                 <CubeName>Sales</CubeName>
-                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:46:25</LastDataUpdate>
-                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:46:25</LastSchemaUpdate>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
@@ -18389,8 +18446,8 @@ WHERE ([Time].[1997].[Q2], [Marital Status], [Measures].[Store Sales])
                         <CubeInfo>
                             <Cube>
                                 <CubeName>Sales</CubeName>
-                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:37:44</LastDataUpdate>
-                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:37:44</LastSchemaUpdate>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
@@ -18722,8 +18779,8 @@ WHERE ([Time].[1997].[Q2], [Marital Status], [Measures].[Store Sales])
                         <CubeInfo>
                             <Cube>
                                 <CubeName>Sales</CubeName>
-                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:46:25</LastDataUpdate>
-                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:46:25</LastSchemaUpdate>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
@@ -19211,8 +19268,8 @@ FROM Sales
                         <CubeInfo>
                             <Cube>
                                 <CubeName>Sales</CubeName>
-                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:57:58</LastDataUpdate>
-                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:57:58</LastSchemaUpdate>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
@@ -19542,8 +19599,8 @@ WHERE [Marital Status].Parent * [Time].[1997].[Q1]
                         <CubeInfo>
                             <Cube>
                                 <CubeName>Sales</CubeName>
-                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:57:58</LastDataUpdate>
-                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:57:58</LastSchemaUpdate>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
@@ -19881,8 +19938,8 @@ WHERE [Marital Status].Parent * [Time].[1997].[Q1]
                         <CubeInfo>
                             <Cube>
                                 <CubeName>Sales</CubeName>
-                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:24:29</LastDataUpdate>
-                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:24:29</LastSchemaUpdate>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
@@ -24915,8 +24972,8 @@ where [Measures].[Count]
                         <CubeInfo>
                             <Cube>
                                 <CubeName>Sales</CubeName>
-                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:24:29</LastDataUpdate>
-                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:24:29</LastSchemaUpdate>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
@@ -25173,8 +25230,8 @@ select [Measures].[Unit Sales] on columns from [Sales]
                         <CubeInfo>
                             <Cube>
                                 <CubeName>Sales</CubeName>
-                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:24:29</LastDataUpdate>
-                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:24:29</LastSchemaUpdate>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
@@ -25409,8 +25466,8 @@ select [Measures].[Unit Sales] on columns from [Sales]
                         <CubeInfo>
                             <Cube>
                                 <CubeName>Sales</CubeName>
-                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:24:29</LastDataUpdate>
-                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">2021-12-13T23:24:29</LastSchemaUpdate>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
@@ -25448,7 +25505,7 @@ select [Measures].[Unit Sales] on columns from [Sales]
                     <CellData>
                         <Cell CellOrdinal="0">
                             <Value xsi:type="xsd:double">266773</Value>
-                            <FmtValue>266.773,00 €</FmtValue>
+                            <FmtValue>266.773,00 €</FmtValue>
                         </Cell>
                     </CellData>
                 </root>
