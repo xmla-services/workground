@@ -48,47 +48,48 @@ where [Measures].[Unit Sales]
 <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
     <SOAP-ENV:Header/>
     <SOAP-ENV:Body>
-        <cxmla:ExecuteResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <OlapInfo>
                         <CubeInfo>
                             <Cube>
                                 <CubeName>Sales</CubeName>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
                             <AxisInfo name="Axis0">
-                                <HierarchyInfo name="Customers">
-                                    <UName name="[Customers].[MEMBER_UNIQUE_NAME]"/>
-                                    <Caption name="[Customers].[MEMBER_CAPTION]"/>
-                                    <LName name="[Customers].[LEVEL_UNIQUE_NAME]"/>
-                                    <LNum name="[Customers].[LEVEL_NUMBER]"/>
-                                    <DisplayInfo name="[Customers].[DISPLAY_INFO]"/>
+                                <HierarchyInfo name="[Customers]">
+                                    <UName name="[Customers].[MEMBER_UNIQUE_NAME]" type="xsd:string"/>
+                                    <Caption name="[Customers].[MEMBER_CAPTION]" type="xsd:string"/>
+                                    <LName name="[Customers].[LEVEL_UNIQUE_NAME]" type="xsd:string"/>
+                                    <LNum name="[Customers].[LEVEL_NUMBER]" type="xsd:unsignedInt"/>
+                                    <DisplayInfo name="[Customers].[DISPLAY_INFO]" type="xsd:unsignedInt"/>
                                     <PARENT_UNIQUE_NAME name="[Customers].[PARENT_UNIQUE_NAME]" type="xsd:string"/>
                                 </HierarchyInfo>
                             </AxisInfo>
                             <AxisInfo name="SlicerAxis">
-                                <HierarchyInfo name="Measures">
-                                    <UName name="[Measures].[MEMBER_UNIQUE_NAME]"/>
-                                    <Caption name="[Measures].[MEMBER_CAPTION]"/>
-                                    <LName name="[Measures].[LEVEL_UNIQUE_NAME]"/>
-                                    <LNum name="[Measures].[LEVEL_NUMBER]"/>
-                                    <DisplayInfo name="[Measures].[DISPLAY_INFO]"/>
+                                <HierarchyInfo name="[Measures]">
+                                    <UName name="[Measures].[MEMBER_UNIQUE_NAME]" type="xsd:string"/>
+                                    <Caption name="[Measures].[MEMBER_CAPTION]" type="xsd:string"/>
+                                    <LName name="[Measures].[LEVEL_UNIQUE_NAME]" type="xsd:string"/>
+                                    <LNum name="[Measures].[LEVEL_NUMBER]" type="xsd:unsignedInt"/>
+                                    <DisplayInfo name="[Measures].[DISPLAY_INFO]" type="xsd:unsignedInt"/>
                                 </HierarchyInfo>
                             </AxisInfo>
                         </AxesInfo>
                         <CellInfo>
                             <Value name="VALUE"/>
-                            <FmtValue name="FORMATTED_VALUE"/>
-                            <FormatString name="FORMAT_STRING"/>
+                            <FmtValue name="FORMATTED_VALUE" type="xsd:string"/>
                         </CellInfo>
                     </OlapInfo>
                     <Axes>
                         <Axis name="Axis0">
                             <Tuples>
                                 <Tuple>
-                                    <Member Hierarchy="Customers">
+                                    <Member Hierarchy="[Customers]">
                                         <UName>[Customers].[All Customers]</UName>
                                         <Caption>All Customers</Caption>
                                         <LName>[Customers].[(All)]</LName>
@@ -97,7 +98,7 @@ where [Measures].[Unit Sales]
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Customers">
+                                    <Member Hierarchy="[Customers]">
                                         <UName>[Customers].[USA]</UName>
                                         <Caption>USA</Caption>
                                         <LName>[Customers].[Country]</LName>
@@ -107,7 +108,7 @@ where [Measures].[Unit Sales]
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Customers">
+                                    <Member Hierarchy="[Customers]">
                                         <UName>[Customers].[USA].[CA]</UName>
                                         <Caption>CA</Caption>
                                         <LName>[Customers].[State Province]</LName>
@@ -117,7 +118,7 @@ where [Measures].[Unit Sales]
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Customers">
+                                    <Member Hierarchy="[Customers]">
                                         <UName>[Customers].[USA].[CA].[Beverly Hills]</UName>
                                         <Caption>Beverly Hills</Caption>
                                         <LName>[Customers].[City]</LName>
@@ -131,7 +132,7 @@ where [Measures].[Unit Sales]
                         <Axis name="SlicerAxis">
                             <Tuples>
                                 <Tuple>
-                                    <Member Hierarchy="Measures">
+                                    <Member Hierarchy="[Measures]">
                                         <UName>[Measures].[Unit Sales]</UName>
                                         <Caption>Unit Sales</Caption>
                                         <LName>[Measures].[MeasuresLevel]</LName>
@@ -146,27 +147,23 @@ where [Measures].[Unit Sales]
                         <Cell CellOrdinal="0">
                             <Value xsi:type="xsd:double">12</Value>
                             <FmtValue>12</FmtValue>
-                            <FormatString>Standard</FormatString>
                         </Cell>
                         <Cell CellOrdinal="1">
                             <Value xsi:type="xsd:double">12</Value>
                             <FmtValue>12</FmtValue>
-                            <FormatString>Standard</FormatString>
                         </Cell>
                         <Cell CellOrdinal="2">
                             <Value xsi:type="xsd:double">12</Value>
                             <FmtValue>12</FmtValue>
-                            <FormatString>Standard</FormatString>
                         </Cell>
                         <Cell CellOrdinal="3">
                             <Value xsi:type="xsd:double">12</Value>
                             <FmtValue>12</FmtValue>
-                            <FormatString>Standard</FormatString>
                         </Cell>
                     </CellData>
                 </root>
-            </cxmla:return>
-        </cxmla:ExecuteResponse>
+            </return>
+        </ExecuteResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -2084,58 +2081,60 @@ WITH  SET [XL_Row_Dim_0] AS 'VisualTotals(Distinct(Hierarchize(
 <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
     <SOAP-ENV:Header/>
     <SOAP-ENV:Body>
-        <cxmla:ExecuteResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <OlapInfo>
                         <CubeInfo>
                             <Cube>
                                 <CubeName>HR</CubeName>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
                             <AxisInfo name="Axis0">
-                                <HierarchyInfo name="Store">
-                                    <UName name="[Store].[MEMBER_UNIQUE_NAME]"/>
-                                    <Caption name="[Store].[MEMBER_CAPTION]"/>
-                                    <LName name="[Store].[LEVEL_UNIQUE_NAME]"/>
-                                    <LNum name="[Store].[LEVEL_NUMBER]"/>
-                                    <DisplayInfo name="[Store].[DISPLAY_INFO]"/>
+                                <HierarchyInfo name="[Store]">
+                                    <UName name="[Store].[MEMBER_UNIQUE_NAME]" type="xsd:string"/>
+                                    <Caption name="[Store].[MEMBER_CAPTION]" type="xsd:string"/>
+                                    <LName name="[Store].[LEVEL_UNIQUE_NAME]" type="xsd:string"/>
+                                    <LNum name="[Store].[LEVEL_NUMBER]" type="xsd:unsignedInt"/>
+                                    <DisplayInfo name="[Store].[DISPLAY_INFO]" type="xsd:unsignedInt"/>
                                     <PARENT_UNIQUE_NAME name="[Store].[PARENT_UNIQUE_NAME]" type="xsd:string"/>
-                                    <Store_x0020_Type name="[Store].[Store Type]" type="xsd:string"/>
-                                    <Store_x0020_Manager name="[Store].[Store Manager]" type="xsd:string"/>
-                                    <Store_x0020_Sqft name="[Store].[Store Sqft]" type="xsd:double"/>
-                                    <Grocery_x0020_Sqft name="[Store].[Grocery Sqft]" type="xsd:double"/>
-                                    <Frozen_x0020_Sqft name="[Store].[Frozen Sqft]" type="xsd:double"/>
-                                    <Meat_x0020_Sqft name="[Store].[Meat Sqft]" type="xsd:double"/>
-                                    <Has_x0020_coffee_x0020_bar name="[Store].[Has coffee bar]" type="xsd:boolean"/>
-                                    <Street_x0020_address name="[Store].[Street address]" type="xsd:string"/>
+                                    <Store_x0020_Type name="[Store].[Store Type]"/>
+                                    <Store_x0020_Manager name="[Store].[Store Manager]"/>
+                                    <Store_x0020_Sqft name="[Store].[Store Sqft]"/>
+                                    <Grocery_x0020_Sqft name="[Store].[Grocery Sqft]"/>
+                                    <Frozen_x0020_Sqft name="[Store].[Frozen Sqft]"/>
+                                    <Meat_x0020_Sqft name="[Store].[Meat Sqft]"/>
+                                    <Has_x0020_coffee_x0020_bar name="[Store].[Has coffee bar]"/>
+                                    <Street_x0020_address name="[Store].[Street address]"/>
                                 </HierarchyInfo>
                             </AxisInfo>
                             <AxisInfo name="SlicerAxis">
-                                <HierarchyInfo name="Measures">
-                                    <UName name="[Measures].[MEMBER_UNIQUE_NAME]"/>
-                                    <Caption name="[Measures].[MEMBER_CAPTION]"/>
-                                    <LName name="[Measures].[LEVEL_UNIQUE_NAME]"/>
-                                    <LNum name="[Measures].[LEVEL_NUMBER]"/>
-                                    <DisplayInfo name="[Measures].[DISPLAY_INFO]"/>
+                                <HierarchyInfo name="[Measures]">
+                                    <UName name="[Measures].[MEMBER_UNIQUE_NAME]" type="xsd:string"/>
+                                    <Caption name="[Measures].[MEMBER_CAPTION]" type="xsd:string"/>
+                                    <LName name="[Measures].[LEVEL_UNIQUE_NAME]" type="xsd:string"/>
+                                    <LNum name="[Measures].[LEVEL_NUMBER]" type="xsd:unsignedInt"/>
+                                    <DisplayInfo name="[Measures].[DISPLAY_INFO]" type="xsd:unsignedInt"/>
                                 </HierarchyInfo>
                             </AxisInfo>
                         </AxesInfo>
                         <CellInfo>
                             <Value name="VALUE"/>
-                            <FormatString name="FORMAT_STRING"/>
-                            <Language name="LANGUAGE"/>
-                            <BackColor name="BACK_COLOR"/>
-                            <ForeColor name="FORE_COLOR"/>
-                            <FontFlags name="FONT_FLAGS"/>
+                            <FormatString name="FORMAT_STRING" type="xsd:string"/>
+                            <Language name="LANGUAGE" type="xsd:unsignedInt"/>
+                            <BackColor name="BACK_COLOR" type="xsd:unsignedInt"/>
+                            <ForeColor name="FORE_COLOR" type="xsd:unsignedInt"/>
+                            <FontFlags name="FONT_FLAGS" type="xsd:int"/>
                         </CellInfo>
                     </OlapInfo>
                     <Axes>
                         <Axis name="Axis0">
                             <Tuples>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[All Stores]</UName>
                                         <Caption>All Stores</Caption>
                                         <LName>[Store].[(All)]</LName>
@@ -2144,7 +2143,7 @@ WITH  SET [XL_Row_Dim_0] AS 'VisualTotals(Distinct(Hierarchize(
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA]</UName>
                                         <Caption>USA</Caption>
                                         <LName>[Store].[Store Country]</LName>
@@ -2154,7 +2153,7 @@ WITH  SET [XL_Row_Dim_0] AS 'VisualTotals(Distinct(Hierarchize(
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[OR]</UName>
                                         <Caption>OR</Caption>
                                         <LName>[Store].[Store State]</LName>
@@ -2164,7 +2163,7 @@ WITH  SET [XL_Row_Dim_0] AS 'VisualTotals(Distinct(Hierarchize(
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[WA]</UName>
                                         <Caption>WA</Caption>
                                         <LName>[Store].[Store State]</LName>
@@ -2174,7 +2173,7 @@ WITH  SET [XL_Row_Dim_0] AS 'VisualTotals(Distinct(Hierarchize(
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[WA].[Bremerton]</UName>
                                         <Caption>Bremerton</Caption>
                                         <LName>[Store].[Store City]</LName>
@@ -2184,25 +2183,25 @@ WITH  SET [XL_Row_Dim_0] AS 'VisualTotals(Distinct(Hierarchize(
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[WA].[Bremerton].[Store 3]</UName>
                                         <Caption>Store 3</Caption>
                                         <LName>[Store].[Store Name]</LName>
                                         <LNum>4</LNum>
                                         <DisplayInfo>0</DisplayInfo>
                                         <PARENT_UNIQUE_NAME>[Store].[USA].[WA].[Bremerton]</PARENT_UNIQUE_NAME>
-                                        <Store_x0020_Type>Supermarket</Store_x0020_Type>
-                                        <Store_x0020_Manager>Davis</Store_x0020_Manager>
-                                        <Store_x0020_Sqft>39696</Store_x0020_Sqft>
-                                        <Grocery_x0020_Sqft>24390</Grocery_x0020_Sqft>
-                                        <Frozen_x0020_Sqft>9184</Frozen_x0020_Sqft>
-                                        <Meat_x0020_Sqft>6122</Meat_x0020_Sqft>
-                                        <Has_x0020_coffee_x0020_bar>0</Has_x0020_coffee_x0020_bar>
-                                        <Street_x0020_address>1501 Ramsey Circle</Street_x0020_address>
+                                        <Store_x0020_Type xsi:type="xsd:string">Supermarket</Store_x0020_Type>
+                                        <Store_x0020_Manager xsi:type="xsd:string">Davis</Store_x0020_Manager>
+                                        <Store_x0020_Sqft xsi:type="xsd:double">39696</Store_x0020_Sqft>
+                                        <Grocery_x0020_Sqft xsi:type="xsd:double">24390</Grocery_x0020_Sqft>
+                                        <Frozen_x0020_Sqft xsi:type="xsd:double">9184</Frozen_x0020_Sqft>
+                                        <Meat_x0020_Sqft xsi:type="xsd:double">6122</Meat_x0020_Sqft>
+                                        <Has_x0020_coffee_x0020_bar xsi:type="xsd:boolean">false</Has_x0020_coffee_x0020_bar>
+                                        <Street_x0020_address xsi:type="xsd:string">1501 Ramsey Circle</Street_x0020_address>
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[WA].[Seattle]</UName>
                                         <Caption>Seattle</Caption>
                                         <LName>[Store].[Store City]</LName>
@@ -2212,7 +2211,7 @@ WITH  SET [XL_Row_Dim_0] AS 'VisualTotals(Distinct(Hierarchize(
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[WA].[Spokane]</UName>
                                         <Caption>Spokane</Caption>
                                         <LName>[Store].[Store City]</LName>
@@ -2222,7 +2221,7 @@ WITH  SET [XL_Row_Dim_0] AS 'VisualTotals(Distinct(Hierarchize(
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[WA].[Tacoma]</UName>
                                         <Caption>Tacoma</Caption>
                                         <LName>[Store].[Store City]</LName>
@@ -2232,7 +2231,7 @@ WITH  SET [XL_Row_Dim_0] AS 'VisualTotals(Distinct(Hierarchize(
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[WA].[Walla Walla]</UName>
                                         <Caption>Walla Walla</Caption>
                                         <LName>[Store].[Store City]</LName>
@@ -2242,7 +2241,7 @@ WITH  SET [XL_Row_Dim_0] AS 'VisualTotals(Distinct(Hierarchize(
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[WA].[Yakima]</UName>
                                         <Caption>Yakima</Caption>
                                         <LName>[Store].[Store City]</LName>
@@ -2256,7 +2255,7 @@ WITH  SET [XL_Row_Dim_0] AS 'VisualTotals(Distinct(Hierarchize(
                         <Axis name="SlicerAxis">
                             <Tuples>
                                 <Tuple>
-                                    <Member Hierarchy="Measures">
+                                    <Member Hierarchy="[Measures]">
                                         <UName>[Measures].[Number of Employees]</UName>
                                         <Caption>Number of Employees</Caption>
                                         <LName>[Measures].[MeasuresLevel]</LName>
@@ -2269,53 +2268,64 @@ WITH  SET [XL_Row_Dim_0] AS 'VisualTotals(Distinct(Hierarchize(
                     </Axes>
                     <CellData>
                         <Cell CellOrdinal="0">
-                            <Value xsi:type="xsd:int">419</Value>
+                            <Value xsi:type="xsd:double">419</Value>
                             <FormatString>#,#</FormatString>
+                            <FontFlags>0</FontFlags>
                         </Cell>
                         <Cell CellOrdinal="1">
-                            <Value xsi:type="xsd:int">419</Value>
+                            <Value xsi:type="xsd:double">419</Value>
                             <FormatString>#,#</FormatString>
+                            <FontFlags>0</FontFlags>
                         </Cell>
                         <Cell CellOrdinal="2">
-                            <Value xsi:type="xsd:int">136</Value>
+                            <Value xsi:type="xsd:double">136</Value>
                             <FormatString>#,#</FormatString>
+                            <FontFlags>0</FontFlags>
                         </Cell>
                         <Cell CellOrdinal="3">
-                            <Value xsi:type="xsd:int">283</Value>
+                            <Value xsi:type="xsd:double">283</Value>
                             <FormatString>#,#</FormatString>
+                            <FontFlags>0</FontFlags>
                         </Cell>
                         <Cell CellOrdinal="4">
-                            <Value xsi:type="xsd:int">62</Value>
+                            <Value xsi:type="xsd:double">62</Value>
                             <FormatString>#,#</FormatString>
+                            <FontFlags>0</FontFlags>
                         </Cell>
                         <Cell CellOrdinal="5">
-                            <Value xsi:type="xsd:int">62</Value>
+                            <Value xsi:type="xsd:double">62</Value>
                             <FormatString>#,#</FormatString>
+                            <FontFlags>0</FontFlags>
                         </Cell>
                         <Cell CellOrdinal="6">
-                            <Value xsi:type="xsd:int">62</Value>
+                            <Value xsi:type="xsd:double">62</Value>
                             <FormatString>#,#</FormatString>
+                            <FontFlags>0</FontFlags>
                         </Cell>
                         <Cell CellOrdinal="7">
-                            <Value xsi:type="xsd:int">62</Value>
+                            <Value xsi:type="xsd:double">62</Value>
                             <FormatString>#,#</FormatString>
+                            <FontFlags>0</FontFlags>
                         </Cell>
                         <Cell CellOrdinal="8">
-                            <Value xsi:type="xsd:int">74</Value>
+                            <Value xsi:type="xsd:double">74</Value>
                             <FormatString>#,#</FormatString>
+                            <FontFlags>0</FontFlags>
                         </Cell>
                         <Cell CellOrdinal="9">
-                            <Value xsi:type="xsd:int">4</Value>
+                            <Value xsi:type="xsd:double">4</Value>
                             <FormatString>#,#</FormatString>
+                            <FontFlags>0</FontFlags>
                         </Cell>
                         <Cell CellOrdinal="10">
-                            <Value xsi:type="xsd:int">19</Value>
+                            <Value xsi:type="xsd:double">19</Value>
                             <FormatString>#,#</FormatString>
+                            <FontFlags>0</FontFlags>
                         </Cell>
                     </CellData>
                 </root>
-            </cxmla:return>
-        </cxmla:ExecuteResponse>
+            </return>
+        </ExecuteResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
