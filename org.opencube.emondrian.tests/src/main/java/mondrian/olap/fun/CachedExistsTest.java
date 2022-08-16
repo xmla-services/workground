@@ -363,9 +363,9 @@ public class CachedExistsTest{
             + "Axis #1:\n"
             + "{[Measures].[*FORMATTED_MEASURE_0]}\n"
             + "Axis #2:\n"
-            + "{[Time].[*TOTAL_MEMBER_SEL~SUM], [Time].[Weekly].[*DEFAULT_MEMBER]}\n"
-            + "{[Time].[1997], [Time].[Weekly].[*TOTAL_MEMBER_SEL~SUM]}\n"
-            + "{[Time].[1997], [Time].[Weekly].[1997]}\n"
+            + "{[Time].[*TOTAL_MEMBER_SEL~SUM], [Time.Weekly].[*DEFAULT_MEMBER]}\n"
+            + "{[Time].[1997], [Time.Weekly].[*TOTAL_MEMBER_SEL~SUM]}\n"
+            + "{[Time].[1997], [Time.Weekly].[1997]}\n"
             + "Row #0: 266,773\n"
             + "Row #1: 266,773\n"
             + "Row #2: 266,773\n");
@@ -392,8 +392,8 @@ public class CachedExistsTest{
             + "Axis #1:\n"
             + "{[Measures].[*FORMATTED_MEASURE_0]}\n"
             + "Axis #2:\n"
-            + "{[Time].[Weekly].[1997], [Time].[1997], [Time.Weekly2].[*TOTAL_MEMBER_SEL~SUM]}\n"
-            + "{[Time].[Weekly].[1997], [Time].[1997], [Time.Weekly2].[1997]}\n"
+            + "{[Time.Weekly].[1997], [Time].[1997], [Time.Weekly2].[*TOTAL_MEMBER_SEL~SUM]}\n"
+            + "{[Time.Weekly].[1997], [Time].[1997], [Time.Weekly2].[1997]}\n"
             + "Row #0: 266,773\n"
             + "Row #1: 266,773\n");
   }

@@ -770,7 +770,7 @@ public class PerformanceTest {
         assertEquals(first, list.get( 0 ), "non-destructive");
         if ( limit == 10 && list.size() == 1000000 ) {
           assertEquals(
-            name(), "[0, 1, 1, 2, 3, 5, 5, 5, 6, 9]", x.toString() );
+            "[0, 1, 1, 2, 3, 5, 5, 5, 6, 9]", x.toString(), name());
         }
       }
 

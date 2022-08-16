@@ -30,7 +30,7 @@ import mondrian.olap.Util;
 public class FormatTest {
 
     public static final char Euro = '\u20AC';
-    public static final char Nbsp = '\u00A0';
+    public static final char Nbsp = ' ';
     public static final char EA = '\u00e9'; // e acute
     public static final char UC = '\u00FB'; // u circumflex
     
@@ -484,13 +484,13 @@ public class FormatTest {
 
     @Test
     public void testDates() {
-        checkDate("dd-mmm-yy",     "29-Apr-69",  "29-Avr-69",  "29-Apr-69");
+        checkDate("dd-mmm-yy",     "29-Apr-69",  "29-Avr-69",  "29-Apr.-69");
         checkDate("h:mm:ss AM/PM", "8:09:06 PM", "8#09#06 PM", "8:09:06 PM");
         checkDate("hh:mm",         "20:09",      "20#09",      "20:09");
         checkDate(
             "Long Date",     "Tuesday, April 29, 1969",
             "Mardi, Avril 29, 1969", "Dienstag, April 29, 1969");
-        checkDate("Medium Date",   "29-Apr-69",  "29-Avr-69",  "29-Apr-69");
+        checkDate("Medium Date",   "29-Apr-69",  "29-Avr-69",  "29-Apr.-69");
         checkDate("Short Date",    "4/29/69",    "4-29-69",    "4.29.69");
         checkDate("Long Time",     "8:09:06 PM", "8#09#06 PM", "8:09:06 PM");
         checkDate("Medium Time",   "8:09 PM",    "8#09 PM",    "8:09 PM");
@@ -500,7 +500,7 @@ public class FormatTest {
         checkDate("hh M HH:mm", "20 4 20:09", "20 4 20#09", "20 4 20:09");
         checkDate("MMMMM-dd", "April-29", "Avril-29", "April-29");
         checkDate("MM-dd", "04-29", "04-29", "04-29");
-        checkDate("MMM-dd", "Apr-29", "Avr-29", "Apr-29");
+        checkDate("MMM-dd", "Apr-29", "Avr-29", "Apr.-29");
         checkDate("MMMMM-dd-yyyy HH:mm AM/PM", "April-29-1969 20:09 PM", "Avril-29-1969 20#09 PM", "April-29-1969 20:09 PM");
     }
 
@@ -589,7 +589,7 @@ public class FormatTest {
     @Test
     public void testFrenchLocale() {
         Format.FormatLocale fr = Format.createLocale(Locale.FRANCE);
-        assertEquals("#,##0.00 " + Euro, fr.currencyFormat);
+        assertEquals("#,##0.00\\ \\" + Euro, fr.currencyFormat);
         assertEquals(Euro + "", fr.currencySymbol);
         assertEquals("/", fr.dateSeparator);
         assertEquals(
@@ -740,8 +740,8 @@ public class FormatTest {
         checkFormat(null, date2, "#;[#];NULL", "40428");
 
         // date value with string format gives long date string
-        checkFormat(null, date2, "<", "9/7/10 6:05:04 am");
-        checkFormat(null, date2, ">", "9/7/10 6:05:04 AM");
+        checkFormat(null, date2, "<", "9/7/10, 6:05:04 am");
+        checkFormat(null, date2, ">", "9/7/10, 6:05:04 AM");
 
         // numeric value and string format
         checkFormat(null, 123.45E6, "<", "123,450,000"); // Excel gives 12345600
@@ -863,7 +863,7 @@ public class FormatTest {
             localeDe,
             123456,
             "Currency",
-            "123.456,00 "+ Euro);
+            "123.456,00 "+ Euro);
         checkFormat(
             localeDe,
             123456,
@@ -886,7 +886,7 @@ public class FormatTest {
             Format.createLocale(Locale.JAPANESE),
             123456,
             "Currency",
-            "$ 123,456.00");
+            "¤123,456.00");
 
         // international currency symbol
         checkFormat(
