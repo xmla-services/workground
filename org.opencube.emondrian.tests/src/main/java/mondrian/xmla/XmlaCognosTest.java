@@ -13,6 +13,7 @@ import mondrian.olap.Util;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.spi.Dialect;
 import mondrian.test.DiffRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.opencube.junit5.ContextSource;
@@ -31,6 +32,11 @@ import static org.opencube.junit5.TestUtil.getDialect;
 
 public class XmlaCognosTest extends XmlaBaseTestCase {
 
+
+    @AfterEach
+    public void afterEach() {
+        tearDown();
+    }
 
     protected String filter(Connection connection,
         String testCaseName, String filename, String content)

@@ -12,6 +12,7 @@
 package mondrian.xmla;
 
 import mondrian.test.DiffRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.Context;
@@ -36,6 +37,11 @@ public class XmlaExcelXPTest extends XmlaBaseTestCase {
         Callback() {
             super("XmlaExcel2000Test");
         }
+    }
+
+    @AfterEach
+    public void afterEach() {
+        tearDown();
     }
 
     protected Class<? extends XmlaRequestCallback> getServletCallbackClass() {

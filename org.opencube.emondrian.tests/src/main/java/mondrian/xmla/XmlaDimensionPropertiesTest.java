@@ -13,6 +13,7 @@ import mondrian.olap.Connection;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.test.DiffRepository;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -34,6 +35,11 @@ public class XmlaDimensionPropertiesTest extends XmlaBaseTestCase {
 	@BeforeEach
     public void beforeEach() throws ClassNotFoundException {
         Class.forName(MondrianOlap4jDriver.class.getName());
+    }
+
+    @AfterEach
+    public void afterEach() {
+        tearDown();
     }
 	
     @ParameterizedTest

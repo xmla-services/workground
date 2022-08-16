@@ -134,10 +134,10 @@ public class RolapCell implements Cell {
             RolapAggregationManager.makeDrillThroughRequest(
                 currentMembers, extendedContext, result.getCube(),
                 fields);
-        cellRequest.setMaxRowCount(maxRowCount);
         if (cellRequest == null) {
             return null;
         }
+        cellRequest.setMaxRowCount(maxRowCount);
         final RolapConnection connection =
             result.getExecution().getMondrianStatement()
                 .getMondrianConnection();

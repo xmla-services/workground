@@ -372,6 +372,7 @@ System.out.println("password=" + password);
     @AfterEach
     public void afterEach() {
         System.setErr(systemErr);
+        tearDown();
     }
 
     protected DiffRepository getDiffRepos() {

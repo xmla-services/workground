@@ -12,6 +12,7 @@ import mondrian.olap.Connection;
 import mondrian.olap.Util;
 import mondrian.spi.Dialect;
 import mondrian.test.DiffRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.Context;
@@ -93,6 +94,12 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
         }
         return content;
     }
+
+    @AfterEach
+    public void afterEach() {
+        tearDown();
+    }
+
 
     private String foo(String content, String tag, String from, String to) {
         String start = "<" + tag + ">";

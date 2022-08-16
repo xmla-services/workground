@@ -15,6 +15,7 @@ package mondrian.xmla;
 
 import mondrian.test.DiffRepository;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.Context;
@@ -44,7 +45,12 @@ public class XmlaExcel2000Test extends XmlaBaseTestCase {
             super("XmlaExcel2000Test");
         }
     }
-    
+
+    @AfterEach
+    public void afterEach() {
+        tearDown();
+    }
+
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void test01(Context context) {

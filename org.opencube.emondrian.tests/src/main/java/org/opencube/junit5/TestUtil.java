@@ -453,8 +453,7 @@ public class TestUtil {
 		return sql;
 	}
 
-	public static ResultSet executeStatement( String queryString ) throws SQLException {
-		OlapConnection connection = getOlap4jConnection();
+	public static ResultSet executeStatement(OlapConnection connection, String queryString ) throws SQLException {
 		queryString = upgradeQuery( queryString );
 		OlapStatement stmt = connection.createStatement();
 		return stmt.executeQuery( queryString );

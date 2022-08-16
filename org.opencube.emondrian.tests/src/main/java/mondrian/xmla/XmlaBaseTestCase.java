@@ -110,7 +110,7 @@ public abstract class XmlaBaseTestCase {
     private final HashMap<List<String>, MondrianServer>
         SERVER_CACHE = new HashMap<List<String>, MondrianServer>();
 
-    protected void tearDown() throws Exception {
+    protected void tearDown() {
         for (MondrianServer server : SERVER_CACHE.values()) {
             server.shutdown();
         }
