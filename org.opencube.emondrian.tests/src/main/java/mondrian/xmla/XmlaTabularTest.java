@@ -12,6 +12,7 @@ package mondrian.xmla;
 import mondrian.olap.Connection;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.test.DiffRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -25,6 +26,11 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  * @author Julio Caub&iacute;n, jhyde
  */
 public class XmlaTabularTest extends XmlaBaseTestCase {
+
+    @AfterEach
+    public void afterEach() {
+        tearDown();
+    }
 
     @BeforeAll
     public static void beforeAll() throws ClassNotFoundException {

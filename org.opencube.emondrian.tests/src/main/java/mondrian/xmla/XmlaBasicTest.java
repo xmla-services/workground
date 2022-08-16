@@ -22,6 +22,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.metadata.XmlaConstants;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.Context;
@@ -29,6 +30,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.w3c.dom.Document;
 
+import java.sql.SQLException;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -67,6 +69,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
     @AfterEach
     public void afterEach() {
         propSaver.reset();
+        tearDown();
     }
 
 

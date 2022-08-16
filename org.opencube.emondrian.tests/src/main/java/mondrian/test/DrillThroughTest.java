@@ -19,7 +19,6 @@ import mondrian.rolap.RolapStar;
 import mondrian.spi.Dialect;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.OlapConnection;
 import org.opencube.junit5.ContextSource;
@@ -39,7 +38,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import static mondrian.test.FoodMartTestCase.getTestContext;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.opencube.junit5.TestUtil.*;
 
@@ -171,8 +169,8 @@ public class DrillThroughTest {
             "select `time_by_day`.`the_year` as `Year`,"
             + " `product_class`.`product_family` as `Product Family`,"
             + " `sales_fact_1997`.`unit_sales` as `Unit Sales` "
-            + "from `time_by_day` =as= `time_by_day`,"
-            + " `sales_fact_1997` =as= `sales_fact_1997`,"
+            + "from `sales_fact_1997` =as= `sales_fact_1997`,"
+            + " `time_by_day` =as= `time_by_day`,"
             + " `product_class` =as= `product_class`,"
             + " `product` =as= `product` "
             + "where `sales_fact_1997`.`time_id` = `time_by_day`.`time_id`"
@@ -197,9 +195,9 @@ public class DrillThroughTest {
         expectedSql =
             "select `time_by_day`.`the_year` as `Year`,"
             + " `product_class`.`product_family` as `Product Family`,"
-            + " `sales_fact_1997`.`unit_sales` as `Unit Sales` "
-            + "from `time_by_day` =as= `time_by_day`,"
-            + " `sales_fact_1997` =as= `sales_fact_1997`,"
+            + " `sales_fact_1997`.`unit_sales` as `Unit Sales` "            
+            + "from `sales_fact_1997` =as= `sales_fact_1997`,"
+            + " `time_by_day` =as= `time_by_day`,"
             + " `product_class` =as= `product_class`,"
             + " `product` =as= `product` "
             + "where `sales_fact_1997`.`time_id` = `time_by_day`.`time_id`"
@@ -305,8 +303,8 @@ public class DrillThroughTest {
             + "    promotion.media_type as Media Type,\n"
             + "    sales_fact_1997.unit_sales as Unit Sales\n"
             + "from\n"
-            + "    time_by_day =as= time_by_day,\n"
             + "    sales_fact_1997 =as= sales_fact_1997,\n"
+            + "    time_by_day =as= time_by_day,\n"
             + "    promotion =as= promotion\n"
             + "where\n"
             + "    sales_fact_1997.time_id = time_by_day.time_id\n"
@@ -340,8 +338,8 @@ public class DrillThroughTest {
             "select `time_by_day`.`the_year` as `Year`,"
             + " `product_class`.`product_family` as `Product Family`,"
             + " `sales_fact_1997`.`unit_sales` as `Unit Sales` "
-            + "from `time_by_day` =as= `time_by_day`,"
-            + " `sales_fact_1997` =as= `sales_fact_1997`,"
+            + "from `sales_fact_1997` =as= `sales_fact_1997`,"
+            + " `time_by_day` =as= `time_by_day`,"            
             + " `product_class` =as= `product_class`,"
             + " `product` =as= `product` "
             + "where `sales_fact_1997`.`time_id` = `time_by_day`.`time_id`"
@@ -432,8 +430,8 @@ public class DrillThroughTest {
             + " `customer`.`marital_status` as `Marital Status`,"
             + " `customer`.`yearly_income` as `Yearly Income`,"
             + " `sales_fact_1997`.`unit_sales` as `Unit Sales` "
-            + "from `store` =as= `store`,"
-            + " `sales_fact_1997` =as= `sales_fact_1997`,"
+            + "from `sales_fact_1997` =as= `sales_fact_1997`,"
+            + " `store` =as= `store`,"
             + " `time_by_day` =as= `time_by_day`,"
             + " `product_class` =as= `product_class`,"
             + " `product` =as= `product`,"
@@ -562,13 +560,13 @@ public class DrillThroughTest {
             + " `customer`.`marital_status` as `Marital Status`,"
             + " `customer`.`yearly_income` as `Yearly Income`,"
             + " `sales_fact_1997`.`unit_sales` as `Unit Sales` "
-            + "from `store =as= `store`, "
-            + "`sales_fact_1997` =as= `sales_fact_1997`, "
+            + "from `sales_fact_1997` =as= `sales_fact_1997`, "
+            + "`store =as= `store`, "
             + "`time_by_day` =as= `time_by_day`, "
             + "`product_class` =as= `product_class`, "
             + "`product` =as= `product`, "
             + "`promotion` =as= `promotion`, "
-            + "`customer` =as= `customer` "
+            + "`customer` =as= `customer` "            
             + "where `sales_fact_1997`.`store_id` = `store`.`store_id` and "
             + "`sales_fact_1997`.`time_id` = `time_by_day`.`time_id` and "
             + "`time_by_day`.`the_year` = 1997 and "
@@ -704,13 +702,13 @@ public class DrillThroughTest {
             + " `customer`.`marital_status` as `Marital Status`,"
             + " `customer`.`yearly_income` as `Yearly Income`,"
             + " `sales_fact_1997`.`unit_sales` as `Unit Sales` "
-            + "from `store` =as= `store`,"
-            + " `sales_fact_1997` =as= `sales_fact_1997`,"
+            + "from `sales_fact_1997` =as= `sales_fact_1997`,"
+            + " `store` =as= `store`,"
             + " `time_by_day` =as= `time_by_day`,"
             + " `product_class` =as= `product_class`,"
             + " `product` =as= `product`,"
             + " `promotion` =as= `promotion`,"
-            + " `customer` =as= `customer` "
+            + " `customer` =as= `customer` "            
             + "where `sales_fact_1997`.`store_id` = `store`.`store_id` and"
             + " `store`.`store_state` = 'CA' and"
             + " `store`.`store_city` = 'Beverly Hills' and"
@@ -799,9 +797,9 @@ public class DrillThroughTest {
             + " `product_class`.`product_family` as `Product Family`,"
             + " (case when `sales_fact_1997`.`promotion_id` = 0 then 0"
             + " else `sales_fact_1997`.`store_sales` end)"
-            + " as `Promotion Sales` "
-            + "from `time_by_day` =as= `time_by_day`,"
-            + " `sales_fact_1997` =as= `sales_fact_1997`,"
+            + " as `Promotion Sales` "         
+            + "from `sales_fact_1997` =as= `sales_fact_1997`,"
+            + " `time_by_day` =as= `time_by_day`,"
             + " `product_class` =as= `product_class`,"
             + " `product` =as= `product` "
             + "where `sales_fact_1997`.`time_id` = `time_by_day`.`time_id`"
@@ -881,8 +879,8 @@ public class DrillThroughTest {
             + " `store_ragged`.`store_id` as `Store Id`,"
             + " `store`.`store_id` as `Store Id_0`,"
             + " `sales_fact_1997`.`unit_sales` as `Unit Sales` "
-            + "from `time_by_day` =as= `time_by_day`,"
-            + " `sales_fact_1997` =as= `sales_fact_1997`,"
+            + "from `sales_fact_1997` =as= `sales_fact_1997`,"
+            + " `time_by_day` =as= `time_by_day`,"            
             + " `store_ragged` =as= `store_ragged`,"
             + " `store` =as= `store` "
             + "where `sales_fact_1997`.`time_id` = `time_by_day`.`time_id`"
@@ -902,7 +900,7 @@ public class DrillThroughTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void  testDrillThroughDupKeysAndMeasure(Context context) throws Exception {
-        if (!getTestContext().getDialect().getDatabaseProduct()
+        if (!getDialect(context.createConnection()).getDatabaseProduct()
             .equals(Dialect.DatabaseProduct.MYSQL))
         {
             // This test only works on MySQL because we
@@ -1069,8 +1067,8 @@ public class DrillThroughTest {
             + " `customer`.`city` as `City`,"
             + " `customer`.`gender` as `Gender`,"
             + " `sales_fact_1997`.`unit_sales` as `Unit Sales`"
-            + " from `time_by_day` =as= `time_by_day`,"
-            + " `sales_fact_1997` =as= `sales_fact_1997`,"
+            + " from `sales_fact_1997` =as= `sales_fact_1997`,"
+            + " `time_by_day` =as= `time_by_day`,"            
             + " `customer` =as= `customer`"
             + " where `sales_fact_1997`.`time_id` = `time_by_day`.`time_id` and"
             + " `time_by_day`.`the_year` = 1997 and"
@@ -1105,7 +1103,7 @@ public class DrillThroughTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void  testBug1438285(Context context) {
-        final Dialect dialect = getTestContext().getDialect();
+        final Dialect dialect = getDialect(context.createConnection());
         if (dialect.getDatabaseProduct() == Dialect.DatabaseProduct.TERADATA) {
             // On default Teradata express instance there isn't enough spool
             // space to run this query.
@@ -1164,8 +1162,8 @@ public class DrillThroughTest {
             + " `customer`.`marital_status` as `Marital Status`,"
             + " `customer`.`yearly_income` as `Yearly Income`,"
             + " `sales_fact_1997`.`unit_sales` as `Unit Sales`"
-            + " from `store` =as= `store`,"
-            + " `sales_fact_1997` =as= `sales_fact_1997`,"
+            + " from `sales_fact_1997` =as= `sales_fact_1997`,"
+            + " `store` =as= `store`,"
             + " `time_by_day` =as= `time_by_day`,"
             + " `product_class` =as= `product_class`,"
             + " `product` =as= `product`,"
@@ -1367,21 +1365,23 @@ public class DrillThroughTest {
             "([Time].[1997].[Q1], [Measures].[Unit Sales])");
     }
 
-    @Test
-    public void  testDrillthroughMaxRows() throws SQLException {
-        assertMaxRows("", 29);
-        assertMaxRows("maxrows 1000", 29);
-        assertMaxRows("maxrows 0", 29);
-        assertMaxRows("maxrows 3", 3);
-        assertMaxRows("maxrows 10 firstrowset 6", 4);
-        assertMaxRows("firstrowset 20", 9);
-        assertMaxRows("firstrowset 30", 0);
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void  testDrillthroughMaxRows(Context context) throws SQLException {
+        OlapConnection connection = context.createOlap4jConnection();
+        assertMaxRows(connection, "", 29);
+        assertMaxRows(connection, "maxrows 1000", 29);
+        assertMaxRows(connection, "maxrows 0", 29);
+        assertMaxRows(connection, "maxrows 3", 3);
+        assertMaxRows(connection, "maxrows 10 firstrowset 6", 4);
+        assertMaxRows(connection, "firstrowset 20", 9);
+        assertMaxRows(connection, "firstrowset 30", 0);
     }
 
-    private void assertMaxRows(String firstMaxRow, int expectedCount)
+    private void assertMaxRows(OlapConnection connection, String firstMaxRow, int expectedCount)
         throws SQLException
     {
-        final ResultSet resultSet = getTestContext().executeStatement(
+        final ResultSet resultSet = executeStatement(connection,
             "drillthrough\n"
             + firstMaxRow
             + " select\n"
@@ -1398,10 +1398,12 @@ public class DrillThroughTest {
         resultSet.close();
     }
 
-    @Test
-    public void  testDrillthroughNegativeMaxRowsFails() throws SQLException {
+
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void  testDrillthroughNegativeMaxRowsFails(Context context) throws SQLException {
         try {
-            final ResultSet resultSet = executeStatement(
+            final ResultSet resultSet = executeStatement(context.createOlap4jConnection(),
                 "DRILLTHROUGH MAXROWS -3\n"
                 + "SELECT {[Customers].[USA].[CA].[Berkeley]} ON 0,\n"
                 + "{[Time].[1997]} ON 1\n"
@@ -1413,10 +1415,11 @@ public class DrillThroughTest {
         }
     }
 
-    @Test
-    public void  testDrillThroughCalculatedMemberMeasure() {
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void  testDrillThroughCalculatedMemberMeasure(Context context) {
         try {
-            final ResultSet resultSet = getTestContext().executeStatement(
+            final ResultSet resultSet = executeStatement(context.createOlap4jConnection(),
                 "DRILLTHROUGH\n"
                 + "SELECT {[Customers].[USA].[CA].[Berkeley]} ON 0,\n"
                 + "{[Time].[1997]} ON 1\n"
@@ -1430,10 +1433,11 @@ public class DrillThroughTest {
         }
     }
 
-    @Test
-    public void  testDrillThroughNotDrillableFails() {
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void  testDrillThroughNotDrillableFails(Context context) {
         try {
-            final ResultSet resultSet = getTestContext().executeStatement(
+            final ResultSet resultSet = executeStatement(context.createOlap4jConnection(),
                 "DRILLTHROUGH\n"
                 + "WITH MEMBER [Measures].[Foo] "
                 + " AS [Measures].[Unit Sales]\n"
@@ -1532,7 +1536,7 @@ public class DrillThroughTest {
         assertTrue(cell.canDrillThrough());
         String sql = cell.getDrillThroughSQL(false);
         String expectedSql;
-        switch (getTestContext().getDialect().getDatabaseProduct()) {
+        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1541,8 +1545,8 @@ public class DrillThroughTest {
                 + "    time_by_day.quarter as Quarter,\n"
                 + "    sales_fact_1997.unit_sales as Unit Sales\n"
                 + "from\n"
-                + "    time_by_day as time_by_day,\n"
-                + "    sales_fact_1997 as sales_fact_1997\n"
+                + "    sales_fact_1997 as sales_fact_1997,\n"
+                + "    time_by_day as time_by_day\n"
                 + "where\n"
                 + "    sales_fact_1997.time_id = time_by_day.time_id\n"
                 + "and\n"
@@ -1555,8 +1559,8 @@ public class DrillThroughTest {
                 + "    time_by_day.quarter as Quarter,\n"
                 + "    sales_fact_1997.unit_sales as Unit Sales\n"
                 + "from\n"
-                + "    time_by_day time_by_day,\n"
-                + "    sales_fact_1997 sales_fact_1997\n"
+                + "    sales_fact_1997 sales_fact_1997,\n"
+                + "    time_by_day time_by_day\n"
                 + "where\n"
                 + "    sales_fact_1997.time_id = time_by_day.time_id\n"
                 + "and\n"
@@ -1581,7 +1585,7 @@ public class DrillThroughTest {
 
         // Note that gender and marital status get their own predicates,
         // independent of the time portion of the slicer
-        switch (getTestContext().getDialect().getDatabaseProduct()) {
+        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1592,8 +1596,8 @@ public class DrillThroughTest {
                 + "    time_by_day.quarter as Quarter,\n"
                 + "    sales_fact_1997.unit_sales as Unit Sales\n"
                 + "from\n"
-                + "    customer as customer,\n"
                 + "    sales_fact_1997 as sales_fact_1997,\n"
+                + "    customer as customer,\n"                
                 + "    time_by_day as time_by_day\n"
                 + "where\n"
                 + "    sales_fact_1997.customer_id = customer.customer_id\n"
@@ -1621,8 +1625,8 @@ public class DrillThroughTest {
                 + "    time_by_day.quarter as Quarter,\n"
                 + "    sales_fact_1997.unit_sales as Unit Sales\n"
                 + "from\n"
-                + "    customer customer,\n"
                 + "    sales_fact_1997 sales_fact_1997,\n"
+                + "    customer customer,\n"
                 + "    time_by_day time_by_day\n"
                 + "where\n"
                 + "    sales_fact_1997.customer_id = customer.customer_id\n"
@@ -1658,7 +1662,7 @@ public class DrillThroughTest {
 
         // Note that gender and marital status get their own predicates,
         // independent of the time portion of the slicer
-        switch (getTestContext().getDialect().getDatabaseProduct()) {
+        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1668,8 +1672,8 @@ public class DrillThroughTest {
                 + "    customer.gender as Gender,\n"
                 + "    sales_fact_1997.unit_sales as Unit Sales\n"
                 + "from\n"
-                + "    time_by_day as time_by_day,\n"
                 + "    sales_fact_1997 as sales_fact_1997,\n"
+                + "    time_by_day as time_by_day,\n"
                 + "    customer as customer\n"
                 + "where\n"
                 + "    sales_fact_1997.time_id = time_by_day.time_id\n"
@@ -1686,8 +1690,8 @@ public class DrillThroughTest {
                 + "    customer.gender as Gender,\n"
                 + "    sales_fact_1997.unit_sales as Unit Sales\n"
                 + "from\n"
-                + "    time_by_day time_by_day,\n"
                 + "    sales_fact_1997 sales_fact_1997,\n"
+                + "    time_by_day time_by_day,\n"
                 + "    customer customer\n"
                 + "where\n"
                 + "    sales_fact_1997.time_id = time_by_day.time_id\n"
@@ -1715,7 +1719,7 @@ public class DrillThroughTest {
 
         // With overlapping slicer members, the first slicer predicate is
         // redundant, but does not affect the query's results
-        switch (getTestContext().getDialect().getDatabaseProduct()) {
+        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1725,8 +1729,8 @@ public class DrillThroughTest {
                 + "    time_by_day.month_of_year as Month,\n"
                 + "    sales_fact_1997.unit_sales as Unit Sales\n"
                 + "from\n"
-                + "    time_by_day as time_by_day,\n"
-                + "    sales_fact_1997 as sales_fact_1997\n"
+                + "    sales_fact_1997 as sales_fact_1997,\n"
+                + "    time_by_day as time_by_day\n"
                 + "where\n"
                 + "    sales_fact_1997.time_id = time_by_day.time_id\n"
                 + "and\n"
@@ -1740,8 +1744,8 @@ public class DrillThroughTest {
                 + "    time_by_day.month_of_year as Month,\n"
                 + "    sales_fact_1997.unit_sales as Unit Sales\n"
                 + "from\n"
-                + "    time_by_day time_by_day,\n"
-                + "    sales_fact_1997 sales_fact_1997\n"
+                + "    sales_fact_1997 sales_fact_1997,\n"
+                + "    time_by_day time_by_day\n"
                 + "where\n"
                 + "    sales_fact_1997.time_id = time_by_day.time_id\n"
                 + "and\n"
@@ -1763,7 +1767,7 @@ public class DrillThroughTest {
         cell = result.getCell(new int[]{0, 0});
         assertTrue(cell.canDrillThrough());
         sql = cell.getDrillThroughSQL(false);
-        switch (getTestContext().getDialect().getDatabaseProduct()) {
+        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1773,8 +1777,8 @@ public class DrillThroughTest {
                 + "    time_by_day.month_of_year as Month,\n"
                 + "    sales_fact_1997.unit_sales as Unit Sales\n"
                 + "from\n"
-                + "    time_by_day as time_by_day,\n"
-                + "    sales_fact_1997 as sales_fact_1997\n"
+                + "    sales_fact_1997 as sales_fact_1997,\n"
+                + "    time_by_day as time_by_day\n"
                 + "where\n"
                 + "    sales_fact_1997.time_id = time_by_day.time_id\n"
                 + "and\n"
@@ -1788,8 +1792,8 @@ public class DrillThroughTest {
                 + "    time_by_day.month_of_year as Month,\n"
                 + "    sales_fact_1997.unit_sales as Unit Sales\n"
                 + "from\n"
-                + "    time_by_day time_by_day,\n"
-                + "    sales_fact_1997 sales_fact_1997\n"
+                + "    sales_fact_1997 sales_fact_1997,\n"
+                + "    time_by_day time_by_day\n"
                 + "where\n"
                 + "    sales_fact_1997.time_id = time_by_day.time_id\n"
                 + "and\n"
@@ -1862,7 +1866,7 @@ public class DrillThroughTest {
         Cell cell = result.getCell(new int[]{0, 0});
         String sql = cell.getDrillThroughSQL(true);
         String expectedSql;
-        switch (getTestContext().getDialect().getDatabaseProduct()) {
+        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
         case VECTORWISE:
             expectedSql =
                 "select \"store\".\"store_country\" as \"Store Country\","
@@ -1932,8 +1936,9 @@ public class DrillThroughTest {
         assertSqlEquals(context.createConnection(), expectedSql, sql, 11);
     }
 
-    @Test
-    public void  testDrillthroughVirtualCubeWithReturnClause()
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void  testDrillthroughVirtualCubeWithReturnClause(Context context)
         throws SQLException
     {
         // Validates that a RETURN clause including a mix of applicable
@@ -1942,7 +1947,7 @@ public class DrillThroughTest {
         // columns.
         ResultSet rs = null;
         try {
-            rs = getTestContext().executeStatement(
+            rs = executeStatement(context.createOlap4jConnection(),
                 "DRILLTHROUGH \n"
                 + "// Request ID: d73ea21c-2a29-11e5-ba1d-d4bed923da37 - RUN_REPORT\n"
                 + "WITH\n"
@@ -1958,7 +1963,7 @@ public class DrillThroughTest {
             assertEquals(
                 5, rs.getMetaData().getColumnCount());
             Object expectedYear;
-            switch (getTestContext().getDialect().getDatabaseProduct()) {
+            switch (getDialect(context.createConnection()).getDatabaseProduct()) {
             case MARIADB:
             case MYSQL:
                 expectedYear = new Integer(1997);
@@ -2002,7 +2007,7 @@ public class DrillThroughTest {
         withSchema(context, SALES_ONLY_WITH_NAME_COLUMN);
         int rowCount = 0;
         try {
-            rs = executeStatement(
+            rs = executeStatement(context.createOlap4jConnection(),
                 DRILLTHROUGH_QUERY_WITH_CUSTOMER_FULL_NAME);
             assertEquals(
                 5, rs.getMetaData().getColumnCount());
@@ -2057,7 +2062,7 @@ public class DrillThroughTest {
                     SALES_ONLY_WITHOUT_NAME_COLUMN);
         int rowCount = 0;
         try {
-            rs = executeStatement(
+            rs = executeStatement(context.createOlap4jConnection(),
                 DRILLTHROUGH_QUERY_WITH_CUSTOMER_ID);
             assertEquals(
                 3, rs.getMetaData().getColumnCount());
@@ -2088,8 +2093,9 @@ public class DrillThroughTest {
     * "Drill-through filtering not working properly
     * when level is used as filter"</a>.
     */
-    @Test
-    public void testMultipleFilterByLevel_NoDuplicatedColumnsInResult()
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testMultipleFilterByLevel_NoDuplicatedColumnsInResult(Context context)
         throws SQLException
     {
         String[] expectedColumnValues = {"Gourmet Supermarket",
@@ -2100,7 +2106,7 @@ public class DrillThroughTest {
         int rowCount = 0;
         ResultSet rs = null;
         try {
-            rs = getTestContext().executeStatement(
+            rs = executeStatement(context.createOlap4jConnection(),
                 "DRILLTHROUGH \n"
                 + "WITH\n"
                 + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'FILTER({[Store Type].[All Store Types].[Gourmet Supermarket],[Store Type].[All Store Types].[Small Grocery]}, NOT ISEMPTY ([Measures].[Store Sales]))'\n"
