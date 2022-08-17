@@ -12,6 +12,9 @@ import mondrian.olap.*;
 import mondrian.rolap.*;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 import mondrian.util.Bug;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
@@ -27,6 +30,19 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.opencube.junit5.TestUtil.*;
 
 public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
+	
+	private PropertySaver5 propSaver;
+
+    @BeforeEach
+    public void beforeEach() {
+        propSaver = new PropertySaver5();
+    }
+
+    @AfterEach
+    public void afterEach() {
+        propSaver.reset();
+    }
+    
     /**
      * Sanity check, that enumerates the Measures dimension.
      */
@@ -1590,8 +1606,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
-        }
-        final PropertySaver propSaver = new PropertySaver();
+        }        
         propSaver.set(MondrianProperties.instance().IgnoreInvalidMembers, true);
         propSaver.set(
             MondrianProperties.instance().IgnoreInvalidMembersDuringQuery,

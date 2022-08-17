@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 import javax.sql.DataSource;
 
+import mondrian.rolap.RolapConnectionProperties;
 import org.glassfish.jaxb.runtime.v2.JAXBContextFactory;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
@@ -171,6 +172,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 										.get(clazzProvider);
 								if (storedLoaders.containsKey(dataLoaderClass)) {
 									dataSource = storedLoaders.get(dataLoaderClass);
+									dataSource.getKey().put(RolapConnectionProperties.Jdbc.name(), dbp.getJdbcUrl());
 								} else {
 									dataSource = dbp.activate();
 									DataLoader dataLoader = dataLoaderClass.getConstructor().newInstance();

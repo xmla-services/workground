@@ -11,6 +11,7 @@ package mondrian.test;
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.BatchTestCase;
 import mondrian.spi.Dialect;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -43,7 +44,12 @@ public class OrderByAliasTest extends BatchTestCase {
     propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
   }
 
-     @ParameterizedTest
+  @AfterEach
+  public void afterEach() {
+    propSaver.reset();
+  }
+
+  @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testSqlInKeyExpression(Context context) {
     if (getDialect(context.createConnection()).getDatabaseProduct()

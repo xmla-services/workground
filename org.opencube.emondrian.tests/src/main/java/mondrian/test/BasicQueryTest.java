@@ -5146,7 +5146,7 @@ public class BasicQueryTest {
         + "{[Measures].[Units Shipped]}\n" + "Row #0: .0\n" );
   }
 
-    @ParameterizedTest
+  @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testDirectMemberReferenceOnDimensionWithCalculationsDefined(Context context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube( "Sales", null,
@@ -5160,10 +5160,10 @@ public class BasicQueryTest {
    * This is a test for MONDRIAN-1014. Executing a statement twice concurrently would fail because the statement wasn't
    * cleaning up properly its execution context.
    */
-    @ParameterizedTest
+  @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testConcurrentStatementRun() throws Exception {
-    final OlapConnection olapConnection = getOlap4jConnection();
+  public void testConcurrentStatementRun(Context context) throws Exception {
+    final OlapConnection olapConnection = context.createOlap4jConnection();
 
     final String mdxQuery =
         "select {TopCount([Customers].Members, 10, [Measures].[Unit Sales])} on columns from [Sales]";

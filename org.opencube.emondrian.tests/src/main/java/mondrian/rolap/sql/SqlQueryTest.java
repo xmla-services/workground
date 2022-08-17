@@ -47,7 +47,7 @@ import static org.opencube.junit5.TestUtil.*;
  * @since 06-Jun-2007
  */
 public class SqlQueryTest {
-    private String origWarnIfNoPatternForDialect;
+    //private String origWarnIfNoPatternForDialect;
 
     private MondrianProperties prop = MondrianProperties.instance();
 
@@ -56,7 +56,7 @@ public class SqlQueryTest {
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
-        origWarnIfNoPatternForDialect = prop.WarnIfNoPatternForDialect.get();
+        //origWarnIfNoPatternForDialect = prop.WarnIfNoPatternForDialect.get();
     }
 
     private void prepareContext(Connection connection) {
@@ -65,12 +65,12 @@ public class SqlQueryTest {
         if (prop.WarnIfNoPatternForDialect.get().equals("ANY")
                 || dialect.getDatabaseProduct() == MYSQL)
         {
-            prop.WarnIfNoPatternForDialect.set(
+        	propSaver.set(prop.WarnIfNoPatternForDialect,
                     dialect.getDatabaseProduct().toString());
         } else {
             // Do not warn unless the dialect is "MYSQL", or
             // if the test chooses to warn regardless of the dialect.
-            prop.WarnIfNoPatternForDialect.set("NONE");
+        	propSaver.set(prop.WarnIfNoPatternForDialect, "NONE");            
         }
 
     }
@@ -78,7 +78,7 @@ public class SqlQueryTest {
     @AfterEach
     public void afterEach() {
         propSaver.reset();
-        prop.WarnIfNoPatternForDialect.set(origWarnIfNoPatternForDialect);
+        //prop.WarnIfNoPatternForDialect.set(origWarnIfNoPatternForDialect);
     }
 
     @ParameterizedTest
@@ -467,10 +467,10 @@ public class SqlQueryTest {
             prop.OptimizePredicates.get();
 
         try {
-            prop.OptimizePredicates.set(optimizePredicatesValue);
+        	propSaver.set(prop.OptimizePredicates, optimizePredicatesValue);            
             assertQuerySql(context.createConnection(), inputMdx, sqlPatterns);
         } finally {
-            prop.OptimizePredicates.set(intialValueOptimize);
+        	propSaver.set(prop.OptimizePredicates, intialValueOptimize);            
         }
     }
 
