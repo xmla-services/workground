@@ -12,6 +12,7 @@ package mondrian.rolap.aggmatcher;
 import mondrian.olap.MondrianProperties;
 import mondrian.test.PropertySaver5;
 import mondrian.test.loader.CsvDBTestCase;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
 /**
@@ -50,6 +51,11 @@ public abstract class AggTableTestCase extends CsvDBTestCase {
         propSaver.set(
                 props.ReadAggregates,
                 true);
+    }
+
+    @AfterEach
+    public void afterEach() {
+        propSaver.reset();
     }
 }
 

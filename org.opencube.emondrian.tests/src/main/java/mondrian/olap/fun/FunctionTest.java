@@ -961,8 +961,7 @@ public class FunctionTest {//extends FoodMartTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testValidMeasureCalculatedMemberMeasure(Context context) {
     // Check for failure.
-    Connection connection = context.createConnection();
-     TestUtil.assertQueryThrows(connection,
+     TestUtil.assertQueryThrows(context,
       "with member measures.calc as 'measures.[Warehouse sales]' \n"
         + "member measures.vm as 'ValidMeasure(measures.calc)' \n"
         + "select from [warehouse and sales]\n"
@@ -970,7 +969,7 @@ public class FunctionTest {//extends FoodMartTestCase {
       "The function ValidMeasure cannot be used with the measure '[Measures].[calc]' because it is a calculated "
         + "member." );
     // Check the working version
-    TestUtil.assertQueryReturns(connection,
+    TestUtil.assertQueryReturns(context.createConnection(),
       "with \n"
         + "member measures.vm as 'ValidMeasure(measures.[warehouse sales])' \n"
         + "select from [warehouse and sales] where (measures.vm, gender.f) \n",
@@ -2604,7 +2603,7 @@ public class FunctionTest {//extends FoodMartTestCase {
   public void testNamedSetCurrentOrdinalWithNonNamedSetFails(Context context) {
     // a named set wrapped in {...} is not a named set, so CurrentOrdinal
     // fails
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "with set [Time Members] as [Time].Members\n"
         + "member [Measures].[Foo] as ' {[Time Members]}.CurrentOrdinal '\n"
         + "select {[Measures].[Unit Sales], [Measures].[Foo]} on 0,\n"
@@ -2613,7 +2612,7 @@ public class FunctionTest {//extends FoodMartTestCase {
       "Not a named set" );
 
     // as above for Current function
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "with set [Time Members] as [Time].Members\n"
         + "member [Measures].[Foo] as ' {[Time Members]}.Current.Name '\n"
         + "select {[Measures].[Unit Sales], [Measures].[Foo]} on 0,\n"
@@ -2622,7 +2621,7 @@ public class FunctionTest {//extends FoodMartTestCase {
       "Not a named set" );
 
     // a set expression is not a named set, so CurrentOrdinal fails
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "with member [Measures].[Foo] as\n"
         + " ' Head([Time].Members, 5).CurrentOrdinal '\n"
         + "select {[Measures].[Unit Sales], [Measures].[Foo]} on 0,\n"
@@ -2631,7 +2630,7 @@ public class FunctionTest {//extends FoodMartTestCase {
       "Not a named set" );
 
     // as above for Current function
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "with member [Measures].[Foo] as\n"
         + " ' Crossjoin([Time].Members, [Gender].Members).Current.Name '\n"
         + "select {[Measures].[Unit Sales], [Measures].[Foo]} on 0,\n"
@@ -3980,7 +3979,7 @@ public class FunctionTest {//extends FoodMartTestCase {
 
     // AS member fails on SSAS with "The CHILDREN function expects a member
     // expression for the 0 argument. A tuple set expression was used."
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "select\n"
         + " {([Time].[1997].[Q1] as t).Children, \n"
         + "  t.Parent } on 0 \n"
@@ -4072,7 +4071,7 @@ public class FunctionTest {//extends FoodMartTestCase {
     // Alias a tuple. Implicitly becomes set. The error confirms that the
     // named set's type is a set of tuples. SSAS gives error "Descendants
     // function expects a member or set ..."
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "select Measures.[Unit Sales] on 0,\n"
         + "  {([Time].[1997], [Customers].[USA].[CA]) as t,\n"
         + "   Descendants(t, [Time].[Month])} on 1\n"
@@ -4154,7 +4153,7 @@ public class FunctionTest {//extends FoodMartTestCase {
     // On SSAS 2005, finds t, and gives error,
     // "The Gender hierarchy already appears in the Axis0 axis."
     // On Mondrian, cannot find t. FIXME.
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "select\n"
         + "  Measures.[Unit Sales] * ([Gender].Members as t) on 0,\n"
         + "  {t} on 1\n"
@@ -4165,7 +4164,7 @@ public class FunctionTest {//extends FoodMartTestCase {
     // On SSAS 2005, finds t, and gives error,
     // "The Measures hierarchy already appears in the Axis0 axis."
     // On Mondrian, cannot find t. FIXME.
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "select\n"
         + "  (Measures.[Unit Sales] * [Gender].Members) as t on 0,\n"
         + "  {t} on 1\n"
@@ -4281,7 +4280,7 @@ public class FunctionTest {//extends FoodMartTestCase {
     // On SSAS 2005, gives error, "The CURRENT function cannot be called in
     // current context because the 'x' set is not in scope". SSAS 2005 gives
     // same error even if set does not exist.
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "with member Measures.Foo as 'x.Current.Name'\n"
         + "select\n"
         + "  {Measures.[Unit Sales], Measures.Foo} on 0,\n"
@@ -4297,7 +4296,7 @@ public class FunctionTest {//extends FoodMartTestCase {
 
     // As above, but set is not out of scope; it does not exist; but error
     // should be the same.
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "with member Measures.Foo as 'z.Current.Name'\n"
         + "select\n"
         + "  {Measures.[Unit Sales], Measures.Foo} on 0,\n"
@@ -6990,7 +6989,7 @@ public class FunctionTest {//extends FoodMartTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void _testParallelPeriodThrowsException(Context context) {
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "select {parallelperiod([Time].[Year], 1)} on columns "
         + "from [Sales] where ([Time].[1998].[Q1].[2])",
       "This should say something about Time appearing on two different axes (slicer an columns)" );
@@ -9817,7 +9816,7 @@ public class FunctionTest {//extends FoodMartTestCase {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testToggleDrillStateRecursive(Context context) {
     // We expect this to fail.
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "Select \n"
         + "    ToggleDrillState(\n"
         + "        {[Store].[USA]}, \n"
@@ -10224,14 +10223,14 @@ public class FunctionTest {//extends FoodMartTestCase {
       "MDX object '' not found in cube 'Sales'" );
 
     propSaver.set( properties.IgnoreInvalidMembersDuringQuery, false );
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "select \n"
         + "  {[Product].[Food],\n"
         + "    StrToMember(\"[Product].[Drugs]\")} on columns,\n"
         + "  {[Measures].[Unit Sales]} on rows\n"
         + "from [Sales]",
       "Member '[Product].[Drugs]' not found" );
-    assertExprThrows(context.createConnection(),
+    assertExprThrows(context,
       "StrToMember(\"[Marital Status].[Separated]\").Hierarchy.Name",
       "Member '[Marital Status].[Separated]' not found" );
   }
@@ -12744,7 +12743,7 @@ Intel platforms):
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testLeftFunctionWithNegativeLength(Context context) {
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "select filter([Store].MEMBERS,"
         + "Left([Store].CURRENTMEMBER.Name, -20)=\"Bellingham\") "
         + "on 0 from sales",
@@ -12831,7 +12830,7 @@ Intel platforms):
           + "{[Store].[USA].[WA].[Bellingham]}\n"
           + "Row #0: 2,237\n" );
     } else {
-      assertQueryThrows(context.createConnection(),
+      assertQueryThrows(context,
         "select filter([Store].MEMBERS,"
           + "[Store].CURRENTMEMBER.Name = \"Bellingham\""
           + "And Mid(\"Bellingham\", 0, 2) = \"Be\")"
@@ -12859,7 +12858,7 @@ Intel platforms):
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testMidFunctionWithNegativeStartIndex(Context context) {
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "select filter([Store].MEMBERS,"
         + "[Store].CURRENTMEMBER.Name = \"Bellingham\""
         + "And Mid(\"Bellingham\", -20, 2) = \"\")"
@@ -12871,7 +12870,7 @@ Intel platforms):
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testMidFunctionWithNegativeLength(Context context) {
-    assertQueryThrows(context.createConnection(),
+    assertQueryThrows(context,
       "select filter([Store].MEMBERS,"
         + "[Store].CURRENTMEMBER.Name = \"Bellingham\""
         + "And Mid(\"Bellingham\", 2, -2) = \"\")"
@@ -14468,7 +14467,7 @@ Intel platforms):
         + "WHERE {[Time].[H1 1997],[Time].[1998].[Q1]}";
     final String errorMessagePattern =
       "Calculated member 'H1 1997' is not supported within a compound predicate";
-    assertQueryThrows(context.createConnection(), query, errorMessagePattern );
+    assertQueryThrows(context, query, errorMessagePattern );
   }
 
   @ParameterizedTest

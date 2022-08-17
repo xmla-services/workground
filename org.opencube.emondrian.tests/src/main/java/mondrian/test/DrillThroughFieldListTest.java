@@ -19,6 +19,7 @@ import static org.opencube.junit5.TestUtil.getDialect;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -47,6 +48,11 @@ public class DrillThroughFieldListTest {
   public void beforeEach() {
     propSaver = new PropertySaver5();
     propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+  }
+
+  @AfterEach
+  public void afterEach() {
+    propSaver.reset();
   }
 
   @ParameterizedTest

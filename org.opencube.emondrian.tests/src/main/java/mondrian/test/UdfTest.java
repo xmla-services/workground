@@ -170,7 +170,7 @@ public class UdfTest {
         OlapStatement statement = null;
         CellSet x = null;
         try {
-            connection = getOlap4jConnection();
+            connection = context.createOlap4jConnection();
             statement = connection.createStatement();
             x = statement.executeOlapQuery(
                 "SELECT { CurrentDateMember([Time].[Time], "

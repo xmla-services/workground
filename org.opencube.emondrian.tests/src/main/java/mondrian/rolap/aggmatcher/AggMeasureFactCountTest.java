@@ -209,7 +209,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
             assertTrue
                     (e.getMessage().startsWith
                             ("Mondrian Error:Internal"
-                                    + " error: while parsing catalog file"));
+                                    + " error: while parsing catalog"));
         }
     }
 
@@ -488,10 +488,10 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
 
         String resultStr = TestUtil.toString(result);
         String resultWithAggStr = TestUtil.toString(resultWithAgg);
-        assertEquals
-                ("Results with and without agg table should be equal",
-                        resultStr,
-                        resultWithAggStr);
+        assertEquals(
+        		resultStr,
+        		resultWithAggStr, 
+        		"Results with and without agg table should be equal");
     }
 
     private void verifySameAggAndNot
