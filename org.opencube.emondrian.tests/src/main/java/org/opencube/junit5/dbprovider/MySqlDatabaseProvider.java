@@ -95,7 +95,7 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 
 	@Override
 	public String getJdbcUrl() {
-		return "jdbc:mysql" + "//" + serverName + ":" + PORT + "/" + MYSQL_DATABASE;
+		return "jdbc:mysql:" + "//" + serverName + ":" + PORT + "/" + MYSQL_DATABASE;
 				//+ "?user=" + MYSQL_USER
 				//+ "&password=" + MYSQL_PASSWORD; // + "&rewriteBatchedStatements=true";
 	}
