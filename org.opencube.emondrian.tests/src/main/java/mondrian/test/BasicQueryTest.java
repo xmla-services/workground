@@ -231,6 +231,8 @@ public class BasicQueryTest {
   @BeforeEach
   public void beforeEach() {
     propSaver = new PropertySaver5();
+    propSaver.set(
+            MondrianProperties.instance().SsasCompatibleNaming, false);
   }
 
   @AfterEach
@@ -595,7 +597,7 @@ public class BasicQueryTest {
     // filter
     assertQueryReturns(connection, "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n" + " {[Time].[1997].Children} ON ROWS\n"
         + "FROM [Sales]" + "WHERE ([Marital Status].[S], " + timeWeekly + ".[1997].[20])", "Axis #0:\n"
-            + "{[Marital Status].[S], [Time].[Weekly].[1997].[20]}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n"
+            + "{[Marital Status].[S], [Time.Weekly].[1997].[20]}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n"
             + "Axis #2:\n" + "{[Time].[1997].[Q1]}\n" + "{[Time].[1997].[Q2]}\n" + "{[Time].[1997].[Q3]}\n"
             + "{[Time].[1997].[Q4]}\n" + "Row #0: \n" + "Row #1: 3,523\n" + "Row #2: \n" + "Row #3: \n" );
 
@@ -608,7 +610,7 @@ public class BasicQueryTest {
     // slicer tuple
     assertQueryReturns(connection, "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n" + " {[Gender].MEMBERS} ON ROWS\n"
         + "FROM [Sales]" + "WHERE ([Time].[1997].[Q1], " + timeWeekly + ".[1997].[4])", "Axis #0:\n"
-            + "{[Time].[1997].[Q1], [Time].[Weekly].[1997].[4]}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n"
+            + "{[Time].[1997].[Q1], [Time.Weekly].[1997].[4]}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n"
             + "Axis #2:\n" + "{[Gender].[All Gender]}\n" + "{[Gender].[F]}\n" + "{[Gender].[M]}\n" + "Row #0: 4,908\n"
             + "Row #1: 2,354\n" + "Row #2: 2,554\n" );
 
@@ -622,7 +624,7 @@ public class BasicQueryTest {
     assertQueryReturns(connection, "select\n" + "{[Measures].[Unit Sales]} on columns,\n" + "{([Product].[All Products], "
         + timeWeekly + ".[1997])} ON rows\n" + "from Sales\n" + "where ([Time].[1997])", "Axis #0:\n"
             + "{[Time].[1997]}\n" + "Axis #1:\n" + "{[Measures].[Unit Sales]}\n" + "Axis #2:\n"
-            + "{[Product].[All Products], [Time].[Weekly].[1997]}\n" + "Row #0: 266,773\n" );
+            + "{[Product].[All Products], [Time.Weekly].[1997]}\n" + "Row #0: 266,773\n" );
   }
 
   /**
@@ -5142,7 +5144,7 @@ public class BasicQueryTest {
     assertQueryReturns( context.createConnection(),mdx, "Axis #0:\n" + "{}\n" + "Axis #1:\n"
         + "{[Product].[Food].[Produce].[Vegetables].[Fresh Vegetables]" + ".[Tell Tale].[Tell Tale Tomatos], "
         + "[Warehouse].[USA].[WA].[Seattle].[Quality Warehousing and " + "Trucking], "
-        + "[Store].[USA].[WA].[Seattle].[Store 15], " + "[Time].[Weekly].[1997].[24].[3]}\n" + "Axis #2:\n"
+        + "[Store].[USA].[WA].[Seattle].[Store 15], " + "[Time.Weekly].[1997].[24].[3]}\n" + "Axis #2:\n"
         + "{[Measures].[Units Shipped]}\n" + "Row #0: .0\n" );
   }
 
