@@ -12,6 +12,7 @@ package mondrian.rolap.sql;
 
 import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
+import mondrian.rolap.BatchTestCase;
 import mondrian.spi.Dialect;
 import mondrian.spi.impl.JdbcDialectImpl;
 import mondrian.test.PropertySaver5;
@@ -46,7 +47,7 @@ import static org.opencube.junit5.TestUtil.*;
  * @author Thiyagu
  * @since 06-Jun-2007
  */
-public class SqlQueryTest {
+public class SqlQueryTest  extends BatchTestCase {
     //private String origWarnIfNoPatternForDialect;
 
     private MondrianProperties prop = MondrianProperties.instance();
@@ -298,8 +299,8 @@ public class SqlQueryTest {
             "select `time_by_day`.`the_year` as `c0`, "
             + "`time_by_day`.`quarter` as `c1`, "
             + "sum(`sales_fact_1997`.`unit_sales`) as `m0` "
-            + "from `time_by_day` as `time_by_day`, "
-            + "`sales_fact_1997` as `sales_fact_1997` "
+            + "from `sales_fact_1997` as `sales_fact_1997`, "
+            + "`time_by_day` as `time_by_day` "
             + "where `sales_fact_1997`.`time_id` = "
             + "`time_by_day`.`time_id` and "
             + "`time_by_day`.`the_year` = 1997 group by "
@@ -310,7 +311,7 @@ public class SqlQueryTest {
             + "`time_by_day`.`the_year` as `c0`, `time_by_day`.`quarter` as `c1`, "
             + "sum(`sales_fact_1997`.`unit_sales`) as `m0` "
             + "from "
-            + "`time_by_day` as `time_by_day`, `sales_fact_1997` as `sales_fact_1997` "
+            + "`sales_fact_1997` as `sales_fact_1997`, `time_by_day` as `time_by_day` "
             + "where "
             + "`sales_fact_1997`.`time_id` = `time_by_day`.`time_id` and "
             + "`time_by_day`.`the_year` = 1997 "
@@ -383,9 +384,9 @@ public class SqlQueryTest {
         String accessSql =
             "select `time_by_day`.`the_year` as `c0`, "
             + "`time_by_day`.`quarter` as `c1`, "
-            + "sum(`sales_fact_1997`.`unit_sales`) as `m0` "
-            + "from `time_by_day` as `time_by_day`, "
-            + "`sales_fact_1997` as `sales_fact_1997` "
+            + "sum(`sales_fact_1997`.`unit_sales`) as `m0` "          
+            + "from `sales_fact_1997` as `sales_fact_1997`, "
+            + "`time_by_day` as `time_by_day` "
             + "where `sales_fact_1997`.`time_id` = "
             + "`time_by_day`.`time_id` and `time_by_day`.`the_year` "
             + "= 1997 and `time_by_day`.`quarter` in "
@@ -397,7 +398,7 @@ public class SqlQueryTest {
             + "`time_by_day`.`the_year` as `c0`, `time_by_day`.`quarter` as `c1`, "
             + "sum(`sales_fact_1997`.`unit_sales`) as `m0` "
             + "from "
-            + "`time_by_day` as `time_by_day`, `sales_fact_1997` as `sales_fact_1997` "
+            + "`sales_fact_1997` as `sales_fact_1997`, `time_by_day` as `time_by_day` "
             + "where "
             + "`sales_fact_1997`.`time_id` = `time_by_day`.`time_id` and "
             + "`time_by_day`.`the_year` = 1997 and "
@@ -432,8 +433,8 @@ public class SqlQueryTest {
             "select `time_by_day`.`the_year` as `c0`, "
             + "`time_by_day`.`quarter` as `c1`, "
             + "sum(`sales_fact_1997`.`unit_sales`) as `m0` from "
-            + "`time_by_day` as `time_by_day`, `sales_fact_1997` as"
-            + " `sales_fact_1997` where `sales_fact_1997`.`time_id`"
+            + "`sales_fact_1997` as `sales_fact_1997,` `time_by_day` as `time_by_day`"
+            + " where `sales_fact_1997`.`time_id`"
             + " = `time_by_day`.`time_id` and `time_by_day`."
             + "`the_year` = 1997 group by `time_by_day`.`the_year`,"
             + " `time_by_day`.`quarter`";
@@ -443,7 +444,7 @@ public class SqlQueryTest {
             + "`time_by_day`.`the_year` as `c0`, `time_by_day`.`quarter` as `c1`, "
             + "sum(`sales_fact_1997`.`unit_sales`) as `m0` "
             + "from "
-            + "`time_by_day` as `time_by_day`, `sales_fact_1997` as `sales_fact_1997` "
+            + "`sales_fact_1997` as `sales_fact_1997`, `time_by_day` as `time_by_day` "
             + "where "
             + "`sales_fact_1997`.`time_id` = `time_by_day`.`time_id` and "
             + "`time_by_day`.`the_year` = 1997 "
@@ -833,7 +834,7 @@ public class SqlQueryTest {
         SqlPattern myPattern = new SqlPattern(MYSQL, mySql, mySql.length());
         SqlPattern[] patterns = {pgPattern, myPattern};
         connection = context.createConnection();
-        executeQuery(connection, mdx);
+        executeQuery(mdx, connection);
         assertQuerySqlOrNot(connection, mdx, patterns, true, false, false);
     }
 
@@ -870,8 +871,8 @@ public class SqlQueryTest {
             "select\n"
             + "    avg(`sales_fact_1997`.`unit_sales`) as `m0`\n"
             + "from\n"
-            + "    `time_by_day` as `time_by_day`,\n"
-            + "    `sales_fact_1997` as `sales_fact_1997`\n"
+            + "    `sales_fact_1997` as `sales_fact_1997`,\n"
+            + "    `time_by_day` as `time_by_day`\n"
             + "where\n"
             + "    `sales_fact_1997`.`time_id` = `time_by_day`.`time_id`\n"
             + "and\n"
