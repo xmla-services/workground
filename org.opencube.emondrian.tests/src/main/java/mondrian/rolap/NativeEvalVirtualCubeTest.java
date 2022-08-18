@@ -9,6 +9,7 @@
 */
 package mondrian.rolap;
 
+import mondrian.olap.Connection;
 import mondrian.spi.Dialect;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
@@ -411,6 +412,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
       + "order by\n"
       + "    ISNULL(`c0`) ASC, `c0` ASC";
     //TestContext tc = getTestContext().withFreshConnection();
+    context.setProperty(RolapConnectionProperties.UseSchemaPool.name(), Boolean.toString(false));
     SqlPattern mysqlPattern =
       new SqlPattern(
           Dialect.DatabaseProduct.MYSQL,
@@ -422,12 +424,13 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "crossjoin(gender.gender.members, warehouse.[USA].[CA]) on 0, "
         + "measures.vm on 1 from [warehouse and sales]";
     // first MDX with a fresh query should result in gender query.
-    assertQuerySqlOrNot(context.createConnection(),
+    Connection connection = context.createConnection();
+    assertQuerySqlOrNot(connection,
         mdx, new SqlPattern[]{ mysqlPattern }, false, false, false);
     // rerun the MDX, since the previous assert aborts when it hits the SQL.
-    executeQuery(mdx, context.createConnection());
+    executeQuery(mdx, connection);
     // Subsequent query should pull from cache, not rerun gender query.
-    assertQuerySqlOrNot(context.createConnection(),
+    assertQuerySqlOrNot(connection,
         mdx, new SqlPattern[]{ mysqlPattern }, true, false, false);
   }
 
