@@ -12,7 +12,6 @@
 package mondrian.rolap;
 
 import mondrian.olap.*;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
@@ -107,18 +106,21 @@ public class RolapSchemaReaderTest {
         }
     }
 
-    @Test
-    public void testConnectUseContentChecksum() {
-        Util.PropertyList properties =
-                TestUtil.getConnectionProperties().clone();
-        properties.put(
-            RolapConnectionProperties.UseContentChecksum.name(),
-            "true");
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    public void testConnectUseContentChecksum(Context context) {
+    	context.setProperty(RolapConnectionProperties.UseContentChecksum.name(), "true");
+        //Util.PropertyList properties =
+        //       TestUtil.getConnectionProperties().clone();
+        // properties.put(
+        //    RolapConnectionProperties.UseContentChecksum.name(),
+        //    "true");
 
         try {
-            DriverManager.getConnection(
-                properties,
-                null);
+        	context.createConnection();
+            //DriverManager.getConnection(
+            //    properties,
+            //    null);
         } catch (MondrianException e) {
             e.printStackTrace();
             fail("unexpected exception for UseContentChecksum");

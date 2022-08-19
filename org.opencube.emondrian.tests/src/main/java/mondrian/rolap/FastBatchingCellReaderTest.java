@@ -1354,21 +1354,21 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
 
     String mysqlSql =
         "select " + "`time_by_day`.`the_year` as `c0`, " + "count(distinct `sales_fact_1997`.`customer_id`) as `m0` "
-            + "from " + "`time_by_day` as `time_by_day`, " + "`sales_fact_1997` as `sales_fact_1997` "
+            + "from " + "`sales_fact_1997` as `sales_fact_1997`, " + "`time_by_day` as `time_by_day`, "
             + "where `sales_fact_1997`.`time_id` = `time_by_day`.`time_id` " + "and `time_by_day`.`the_year` = 1997 "
             + "group by `time_by_day`.`the_year`";
 
     String accessSql =
         "select `d0` as `c0`," + " count(`m0`) as `c1` " + "from (select distinct `time_by_day`.`the_year` as `d0`,"
-            + " `sales_fact_1997`.`customer_id` as `m0` " + "from `time_by_day` as `time_by_day`, "
-            + "`sales_fact_1997` as `sales_fact_1997` "
+            + " `sales_fact_1997`.`customer_id` as `m0` " + "from `sales_fact_1997` as `sales_fact_1997`, "
+            + "`time_by_day` as `time_by_day` "
             + "where `sales_fact_1997`.`time_id` = `time_by_day`.`time_id` "
             + "and `time_by_day`.`the_year` = 1997) as `dummyname` group by `d0`";
 
     String derbySql =
         "select " + "\"time_by_day\".\"the_year\" as \"c0\", "
             + "count(distinct \"sales_fact_1997\".\"customer_id\") as \"m0\" " + "from "
-            + "\"time_by_day\" as \"time_by_day\", " + "\"sales_fact_1997\" as \"sales_fact_1997\" " + "where "
+            + "\"sales_fact_1997\" as \"sales_fact_1997\", " + "\"time_by_day\" as \"time_by_day\" " + "where "
             + "\"sales_fact_1997\".\"time_id\" = \"time_by_day\".\"time_id\" "
             + "and \"time_by_day\".\"the_year\" = 1997 " + "group by \"time_by_day\".\"the_year\"";
 

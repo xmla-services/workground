@@ -13,9 +13,13 @@
 package mondrian.test;
 
 import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
 import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
@@ -36,6 +40,20 @@ import static org.opencube.junit5.TestUtil.*;
  * @since April 30, 2005
  */
 public class NamedSetTest {
+	
+	private PropertySaver5 propSaver;
+
+    @BeforeEach
+    public void beforeEach() {
+        propSaver = new PropertySaver5();
+        propSaver.set(
+                MondrianProperties.instance().SsasCompatibleNaming, false);
+    }
+
+    @AfterEach
+    public void afterEach() {
+        propSaver.reset();
+    }
 
     /**
      * Set defined in query according measures, hence context-dependent.

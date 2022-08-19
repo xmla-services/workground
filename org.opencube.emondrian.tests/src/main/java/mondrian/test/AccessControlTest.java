@@ -381,7 +381,7 @@ public class AccessControlTest {
             + "   <SchemaGrant access=\"none\">\n"
             + "   </SchemaGrant>\n"
             + "</Role>");
-        
+        TestUtil.withSchema(foodMartContext, schema);
         TestUtil.withRole(foodMartContext, "MR,DBPentUsers"); 
         Connection connection = foodMartContext.createConnection();
 
@@ -408,10 +408,9 @@ public class AccessControlTest {
             + "  </SchemaGrant>\n"
             + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1"); 
-    	Connection connection = foodMartContext.createConnection();
+    	TestUtil.withRole(foodMartContext, "Role1");    	
         TestUtil.assertQueryThrows(
-    		connection,
+        	foodMartContext,
             "select {[Store].Children} on 0 from [Sales]",
             "Member '[Store].[USA].[Non Existent]' not found");
     }
@@ -984,7 +983,7 @@ public class AccessControlTest {
             + "Row #1: 187\n");
 
         TestUtil.assertQueryReturns(
-    		connection,
+        	foodMartContext.createConnection(),
             "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, \n"
             + "  NON EMPTY TopCount([Store].[USA].[CA].Children, 10, "
             + "           [Measures].[Unit Sales]) ON ROWS \n"
@@ -1029,7 +1028,7 @@ public class AccessControlTest {
             + "Row #1: 337\n");
 
         TestUtil.assertQueryReturns(
-    		connection,
+        	foodMartContext.createConnection(),
             "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, \n"
             + "  NON EMPTY TopCount([Store].[USA].[CA].Children, 10, "
             + "           [Measures].[Unit Sales]) ON ROWS \n"
@@ -1068,7 +1067,8 @@ public class AccessControlTest {
         //    {[Gender].children} on rows
         //   from Sales
         //   where ([Marital Status].[S], [Store].[SF LA])
-    	Connection connection = foodMartContext.createConnection();
+    	final Connection connection = getRestrictedConnection(foodMartContext);
+    	//Connection connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
 			connection,
             "with member [Measures].[California Unit Sales] as "
@@ -1091,7 +1091,7 @@ public class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testGrantHierarchyA(Context foodMartContext) {
-    	Connection connection = foodMartContext.createConnection();
+    	final Connection connection = getRestrictedConnection(foodMartContext);    	
         // assert: totals for USA include missing cells
     	TestUtil.assertQueryReturns(
 			connection,
@@ -1715,6 +1715,8 @@ public class AccessControlTest {
             + "{[Customers].[USA].Children,\n"
             + " [Customers].[USA].[OR].Children}) on 0\n"
             + "from [Sales]";
+        TestUtil.withRole(foodMartContext, null);
+        connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
             mdx,
@@ -1767,7 +1769,7 @@ public class AccessControlTest {
         // Compared to above:
         // a. cities in Oregon are missing besides Portland
         // b. total for Oregon = total for Portland
-    	TestUtil.withRole(foodMartContext, "Role1,Role2"); 
+    	TestUtil.withRole(foodMartContext, "Role1,Role2");    	
     	connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
 			connection,
@@ -1813,6 +1815,7 @@ public class AccessControlTest {
 
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
         String schema = SchemaUtil.getSchema(baseSchema, null, null, null, null, null, roleDefs);
+        TestUtil.withSchema(foodMartContext, schema);
         TestUtil.withRole(foodMartContext, "grandparent of USA manager"); 
         Connection connection = foodMartContext.createConnection();
 
