@@ -61,6 +61,8 @@ public class SchemaTest {
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
+        propSaver.set(
+                MondrianProperties.instance().SsasCompatibleNaming, false);        
     }
 
     @AfterEach
@@ -244,7 +246,7 @@ public class SchemaTest {
             + "      <Table name='customer'/>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select {[Gender no levels]} on columns from [Sales]",
             "Hierarchy '[Gender no levels]' must have at least one level.");
     }
@@ -261,7 +263,7 @@ public class SchemaTest {
             + "      <Level name='Gender' column='gender' uniqueMembers='true' />\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select {[Gender dup levels]} on columns from [Sales]",
             "Level names within hierarchy '[Gender dup levels]' are not unique; there is more than one level with name 'Gender'.");
     }
@@ -315,7 +317,7 @@ public class SchemaTest {
         // FIXME: This should validate the schema, and fail.
         assertSimpleQuery(context.createConnection());
         // FIXME: Should give better error.
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select [Yearly Income3].Children on 0 from [Sales]",
             "Internal error: while building member cache");
     }
@@ -331,7 +333,7 @@ public class SchemaTest {
             + "    <Level name=\"Yearly Income\" column=\"yearly_income\" uniqueMembers=\"true\"/>\n"
             + "  </Hierarchy>\n"
             + "</Dimension>"));
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select from [Sales]",
             "no table 'customer_not_found' found in hierarchy [Yearly Income4]");
     }
@@ -347,7 +349,7 @@ public class SchemaTest {
             + "    <Level name=\"Yearly Income\" table=\"customer_not_found\" column=\"yearly_income\" uniqueMembers=\"true\"/>\n"
             + "  </Hierarchy>\n"
             + "</Dimension>"));
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select from [Sales]",
             "Table 'customer_not_found' not found");
     }
@@ -366,7 +368,7 @@ public class SchemaTest {
             + "      <Level name=\"Gender\" column=\"gender\" uniqueMembers=\"true\" />\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select {[Gender with default]} on columns from [Sales]",
             "Can not find Default Member with name \"[Gender with default].[Non].[Existent]\" in Hierarchy \"Gender with default\"");
     }
@@ -1330,6 +1332,8 @@ public class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testAllMemberMultipleDimensionUsages(Context context) {
+        propSaver.set(
+                MondrianProperties.instance().SsasCompatibleNaming, true);        
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1407,7 +1411,7 @@ public class SchemaTest {
                              + " {[Time].[1997]} on columns \n"
                              + "From [Sales Two Dimensions]";
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
-            assertQueryThrows(context.createConnection(),
+            assertQueryThrows(context,
                 query,
                 "In cube \"Sales Two Dimensions\" use of unaliased Dimension name \"[Time]\" rather than the alias name \"Time2\"");
         } else {
@@ -1689,7 +1693,7 @@ public class SchemaTest {
             + "      visible=\"false\"\n"
             + "      formula=\"[Measures].[Customer Count2] / 2\">\n"
             + "  </CalculatedMember>"));
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select from [Sales]",
             "Unknown aggregator 'invalidAggregator'; valid aggregators are: 'sum', 'count', 'min', 'max', 'avg', 'distinct-count'");
     }
@@ -2564,7 +2568,7 @@ public class SchemaTest {
             + "</Role>");
         withSchema(context, schema);
         withRole(context, "Role1");
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select from [Sales]",
             "In Schema: In Role: In SchemaGrant: "
             + "Value 'invalid' of attribute 'access' has illegal value 'invalid'.  "
@@ -2604,7 +2608,7 @@ public class SchemaTest {
             "Axis #0:\n"
             + "{}\n"
             + "Axis #1:\n"
-            + "{[TIME].[CALENDAR].[All TIME(CALENDAR)]}\n"
+            + "{[TIME.CALENDAR].[All TIME(CALENDAR)]}\n"
             + "Row #0: 266,773\n");
     }
 
@@ -2659,7 +2663,7 @@ public class SchemaTest {
             + "</Role>\n");
         withSchema(context, schema);
         withRole(context, "Role1Plus2");
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select from [Sales]", "Union role must not contain grants");
     }
 
@@ -2683,7 +2687,7 @@ public class SchemaTest {
             + "</Role>");
         withSchema(context, schema);
         withRole(context, "Role1Plus2");
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select from [Sales]", "Unknown role 'Role2'");
     }
 
@@ -2959,7 +2963,7 @@ public class SchemaTest {
             + "      <Level name=\"Level2\" column=\"id\"/>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>\n"));
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select {[Big numbers].members} on 0 from [Sales]",
             "In Schema: In Cube: In Dimension: In Hierarchy: In Level: Value 'char' of attribute 'internalType' has illegal value 'char'.  Legal values: {int, long, Object, String}");
     }
@@ -4468,7 +4472,7 @@ public class SchemaTest {
         String schema = SchemaUtil.getSchema(baseSchema,
                 null, cube, null, null, null, null);
         withSchema(context, schema);
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select {[Product].[Product Family].Members} on rows, {[Measures].[Unit Sales]} on columns from [Foo]",
             "mondrian.olap.MondrianException: Mondrian Error:Too many errors, '1', while loading/reloading aggregates.");
     }
@@ -4754,7 +4758,7 @@ public class SchemaTest {
         String schema = SchemaUtil.getSchema(baseSchema,
                 null, cube, null, null, null, null);
         withSchema(context, schema);
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select {[Product].[Product Family].Members} on rows, {[Measures].[Unit Sales]} on columns from [Foo]",
             "Too many errors, '1', while loading/reloading aggregates.");
     }
@@ -4785,8 +4789,6 @@ public class SchemaTest {
     }
 
 
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void checkBugMondrian1047(Context context, int n) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "HR",

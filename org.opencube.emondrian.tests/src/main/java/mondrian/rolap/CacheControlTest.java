@@ -46,6 +46,8 @@ public class CacheControlTest {
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
+        propSaver.set(
+                MondrianProperties.instance().SsasCompatibleNaming, false);
     }
 
     @AfterEach
