@@ -808,7 +808,7 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
             <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">

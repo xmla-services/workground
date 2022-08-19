@@ -253,7 +253,7 @@ public class FileRepository implements Repository {
         }
     }
 
-    ServerInfo getServerInfo() {
+    public ServerInfo getServerInfo() {
         synchronized (SERVER_INFO_LOCK) {
             if (this.serverInfo != null) {
                 return this.serverInfo;
@@ -433,7 +433,7 @@ public class FileRepository implements Repository {
 
     // Method is defined as package-protected in order to be accessible by unit
     // tests
-    RepositoryContentFinder getRepositoryContentFinder() {
+    public RepositoryContentFinder getRepositoryContentFinder() {
         return repositoryContentFinder;
     }
 }

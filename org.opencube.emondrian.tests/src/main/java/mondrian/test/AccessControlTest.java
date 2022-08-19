@@ -1479,12 +1479,10 @@ public class AccessControlTest {
                 + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
     	TestUtil.withRole(foodMartContext, "Role1"); 
-    	Connection connection = foodMartContext.createConnection();
-
     	TestUtil.assertQueryThrows(
-			connection,
-            "select from [Sales]",
-            "Illegal rollupPolicy value 'bad'");
+    			foodMartContext,
+    			"select from [Sales]",
+    			"Illegal rollupPolicy value 'bad'");
     }
 
     /**

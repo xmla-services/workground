@@ -10,8 +10,12 @@
 package mondrian.rolap.sql;
 
 import mondrian.olap.Connection;
+import mondrian.rolap.BatchTestCase;
 import mondrian.spi.Dialect;
+import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
@@ -20,7 +24,6 @@ import org.opencube.junit5.context.Context;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.opencube.junit5.TestUtil.assertQuerySqlOrNot;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.withSchema;
 
@@ -30,7 +33,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
  *
  * @author Eric McDermid
  */
-public class SelectNotInGroupByTest {
+public class SelectNotInGroupByTest extends BatchTestCase {
 
     public static final String storeDimensionLevelIndependent =
         "<Dimension name=\"CustomStore\">\n"
@@ -94,53 +97,66 @@ public class SelectNotInGroupByTest {
         "select {[Measures].[Custom Store Sales],[Measures].[Custom Store Cost]} on columns, {[CustomStore].[Store Name].Members} on rows from CustomSales";
 
     public static final String sqlWithAllGroupBy =
-        "select \n"
-        + "    `store`.`store_country` as `c0`, \n"
-        + "    `store`.`store_city` as `c1`, \n"
-        + "    `store`.`store_state` as `c2`, \n"
+        "select\n"
+        + "    `store`.`store_country` as `c0`,\n"
+        + "    `store`.`store_city` as `c1`,\n"
+        + "    `store`.`store_state` as `c2`,\n"
         + "    `store`.`store_name` as `c3`\n"
-        + "from \n"
+        + "from\n"
         + "    `store` as `store`\n"
-        + "group by \n"
-        + "    `store`.`store_country`, \n"
-        + "    `store`.`store_city`, \n"
-        + "    `store`.`store_state`, \n"
+        + "group by\n"
+        + "    `store`.`store_country`,\n"
+        + "    `store`.`store_city`,\n"
+        + "    `store`.`store_state`,\n"
         + "    `store`.`store_name`\n"
-        + "order by \n"
-        + "    ISNULL(`store`.`store_country`), `store`.`store_country` ASC, \n"
-        + "    ISNULL(`store`.`store_city`), `store`.`store_city` ASC, \n"
-        + "    ISNULL(`store`.`store_name`), `store`.`store_name` ASC\n";
+        + "order by\n"
+        + "    ISNULL(`c0`) ASC, `c0` ASC,\n"
+        + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
+        + "    ISNULL(`c3`) ASC, `c3` ASC";
 
     public static final String sqlWithNoGroupBy =
-        "select \n"
-        + "    `store`.`store_country` as `c0`, \n"
-        + "    `store`.`store_city` as `c1`, \n"
-        + "    `store`.`store_state` as `c2`, \n"
+        "select\n"
+        + "    `store`.`store_country` as `c0`,\n"
+        + "    `store`.`store_city` as `c1`,\n"
+        + "    `store`.`store_state` as `c2`,\n"
         + "    `store`.`store_name` as `c3`\n"
-        + "from \n"
+        + "from\n"
         + "    `store` as `store`\n"
-        + "order by \n"
-        + "    ISNULL(`store`.`store_country`), `store`.`store_country` ASC, \n"
-        + "    ISNULL(`store`.`store_city`), `store`.`store_city` ASC, \n"
-        + "    ISNULL(`store`.`store_name`), `store`.`store_name` ASC\n";
+        + "order by\n"
+        + "    ISNULL(`c0`) ASC, `c0` ASC,\n"
+        + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
+        + "    ISNULL(`c3`) ASC, `c3` ASC";
 
     public static final String sqlWithLevelGroupBy =
-        "select \n"
-        + "    `store`.`store_country` as `c0`, \n"
-        + "    `store`.`store_city` as `c1`, \n"
-        + "    `store`.`store_state` as `c2`, \n"
+        "select\n"
+        + "    `store`.`store_country` as `c0`,\n"
+        + "    `store`.`store_city` as `c1`,\n"
+        + "    `store`.`store_state` as `c2`,\n"
         + "    `store`.`store_name` as `c3`\n"
-        + "from \n"
+        + "from\n"
         + "    `store` as `store`\n"
         + "group by \n"
-        + "    `store`.`store_country`, \n"
-        + "    `store`.`store_city`, \n"
+        + "    `store`.`store_country`,\n"
+        + "    `store`.`store_city`,\n"
         + "    `store`.`store_name`\n"
-        + "order by \n"
-        + "    ISNULL(`store`.`store_country`), `store`.`store_country` ASC, \n"
-        + "    ISNULL(`store`.`store_city`), `store`.`store_city` ASC, \n"
-        + "    ISNULL(`store`.`store_name`), `store`.`store_name` ASC\n";
+        + "order by\n"
+        + "    ISNULL(`c0`) ASC, `c0` ASC,\n"
+        + "    ISNULL(`c1`) ASC, `c1` ASC,\n"
+        + "    ISNULL(`c3`) ASC, `c3` ASC";
 
+    private PropertySaver5 propSaver;
+
+    @BeforeEach
+    public void beforeEach() {
+        propSaver = new PropertySaver5();
+        propSaver.set(propSaver.properties.GenerateFormattedSql, true);
+        propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
+    }
+
+    @AfterEach
+    public void afterEach() {
+        propSaver.reset();
+    }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
