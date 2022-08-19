@@ -381,7 +381,7 @@ public class AccessControlTest {
             + "   <SchemaGrant access=\"none\">\n"
             + "   </SchemaGrant>\n"
             + "</Role>");
-        
+        TestUtil.withSchema(foodMartContext, schema);
         TestUtil.withRole(foodMartContext, "MR,DBPentUsers"); 
         Connection connection = foodMartContext.createConnection();
 
@@ -408,10 +408,9 @@ public class AccessControlTest {
             + "  </SchemaGrant>\n"
             + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1"); 
-    	Connection connection = foodMartContext.createConnection();
+    	TestUtil.withRole(foodMartContext, "Role1");    	
         TestUtil.assertQueryThrows(
-    		connection,
+        	foodMartContext,
             "select {[Store].Children} on 0 from [Sales]",
             "Member '[Store].[USA].[Non Existent]' not found");
     }
@@ -1813,6 +1812,7 @@ public class AccessControlTest {
 
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
         String schema = SchemaUtil.getSchema(baseSchema, null, null, null, null, null, roleDefs);
+        TestUtil.withSchema(foodMartContext, schema);
         TestUtil.withRole(foodMartContext, "grandparent of USA manager"); 
         Connection connection = foodMartContext.createConnection();
 
