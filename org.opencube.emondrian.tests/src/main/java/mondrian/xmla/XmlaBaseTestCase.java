@@ -11,6 +11,7 @@ package mondrian.xmla;
 
 import mondrian.olap.Connection;
 import mondrian.olap.MondrianServer;
+import mondrian.server.Session;
 import mondrian.olap.Role;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
@@ -274,7 +275,16 @@ System.out.println("Got CONTINUE");
         }
 
         if (doSessionId) {
-            Util.discard(getSessionId(Action.CREATE));
+        	String sessionId = getSessionId(Action.CREATE); 
+            Util.discard(sessionId);
+            try {
+            	Session session = Session.getWithoutCheck(sessionId);
+            	if(session == null) {
+            		Session.create(sessionId);
+            	}
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         MockHttpServletRequest req = new MockHttpServletRequest();
         req.setMethod("POST");
@@ -302,7 +312,15 @@ System.out.println("Got CONTINUE");
         }
 
         if (doSessionId) {
-            getSessionId(Action.CREATE);
+            String sessionId = getSessionId(Action.CREATE);
+            try {
+            	Session session = Session.getWithoutCheck(sessionId);
+            	if(session == null) {
+            		Session.create(sessionId);
+            	}
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
         Properties props = new Properties();
         addDatasourceInfoResponseKey(context, props);
@@ -902,6 +920,7 @@ System.out.println("Got CONTINUE");
         // regex characters that wouldn't be expected before or after the
         // version string.  This avoids a false match when the version
         // string digits appear in other contexts (e.g. $3.56)
+        versionString = "10.50.1600.1";
         String charsOutOfContext = "([^,\\$\\d])";
         String matchString = charsOutOfContext + Pattern.quote(versionString)
             + charsOutOfContext;

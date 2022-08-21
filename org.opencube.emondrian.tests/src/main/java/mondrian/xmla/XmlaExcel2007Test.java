@@ -128,7 +128,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testMemberPropertiesAndSlicer(Context context) {
-        helperTestExpect(context, false);
+        helperTestExpect(context, true);
     }
 
     /**
@@ -138,7 +138,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testMdschemaPropertiesMember(Context context) {
-        helperTest(context, false);
+        helperTest(context, true);
     }
 
     /**
@@ -150,7 +150,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testMdschemaPropertiesCell(Context context) {
-        helperTest(context, false);
+        helperTest(context, true);
     }
 
     /**
@@ -195,7 +195,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testCellInfo(Context context) {
-        helperTest(context, false);
+        helperTest(context, true);
     }
 
     /**

@@ -86,7 +86,7 @@ public class Session
             throw new mondrian.xmla.XmlaException(
                     "XMLAnalysisError",
                     "0xc10c000a",
-                    "Session with id \"" + sessionId + "\" already exists.",
+                    "Session with id \"" + sessionId + "\" does not exists.",
                     new OlapException("Session with id \"" + sessionId + "\" does not exist")
             );
         }
