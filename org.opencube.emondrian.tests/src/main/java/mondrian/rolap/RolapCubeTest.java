@@ -13,6 +13,9 @@ package mondrian.rolap;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.*;
+import mondrian.test.PropertySaver5;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.BaseTestContext;
@@ -39,6 +42,20 @@ import static org.opencube.junit5.TestUtil.withSchema;
  * @since 25 January, 2007
  */
 public class RolapCubeTest {
+
+    private PropertySaver5 propSaver;
+
+    @BeforeEach
+    public void beforeEach() {
+        propSaver = new PropertySaver5();
+        propSaver.set(
+                MondrianProperties.instance().SsasCompatibleNaming, false);
+    }
+
+    @AfterEach
+    public void afterEach() {
+        propSaver.reset();
+    }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)

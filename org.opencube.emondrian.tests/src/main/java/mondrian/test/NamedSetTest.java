@@ -828,9 +828,9 @@ public class NamedSetTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testNamedSetAgainstSchema(Context context) {
-
+    	Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
         withSchemaProcessor(context,
-                NamedSetsInCubeAndSchemaProcessor.class);
+        		NamedSetTest.NamedSetsInCubeAndSchemaProcessor.class);
         Connection connection = context.createConnection();
         assertQueryReturns(connection,
             "SELECT {[Measures].[Store Sales]} on columns,\n"
@@ -863,7 +863,7 @@ public class NamedSetTest {
             null,
             null);
         withSchema(context, schema);
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "SELECT {[Measures].[Store Sales]} on columns,\n"
             + " {[Bad]} on rows\n"
             + "FROM [Sales]", "Named set 'Bad' has bad formula");
@@ -1251,6 +1251,8 @@ public class NamedSetTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testMondrian2424(Context context) {
+        propSaver.set(
+                MondrianProperties.instance().SsasCompatibleNaming, false);    	
         assertQueryReturns(context.createConnection(),
                 "WITH SET Gender as '[Gender].[Gender].members' \n" +
                         "select {Gender} ON 0 from [Sales]",
