@@ -17,7 +17,8 @@ import mondrian.spi.Dialect;
 import mondrian.spi.DialectManager;
 import mondrian.spi.impl.*;
 import mondrian.util.DelegatingInvocationHandler;
-import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.Context;
@@ -68,8 +69,8 @@ public class DialectTest {
     return context.createConnection().getDataSource();
   }
 
-  @AfterAll
-  public void beforeAll() {
+  @AfterEach
+  public void afterEach() {
     if ( connection != null ) {
       try {
         connection.close();
@@ -1002,8 +1003,8 @@ public class DialectTest {
     resultSet.close();
     String actualFirst = values.get( 0 );
     String actualLast = values.get( values.size() - 1 );
-    assertEquals( query, expectedFirst, actualFirst );
-    assertEquals( query, expectedLast, actualLast );
+    assertEquals(expectedFirst, actualFirst, query);
+    assertEquals(expectedLast, actualLast,  query);
   }
 
   private void assertInline(Context context,
@@ -1516,8 +1517,7 @@ public class DialectTest {
     }
   }
 
-  @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @Test
   public void testOracleTypeMapQuirks() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect oracleDialect = new OracleDialect();
@@ -1594,8 +1594,7 @@ public class DialectTest {
                     + " should map to OBJECT if measure name starts with 'm'");
   }
 
-  @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @Test
   public void testPostgresGreenplumTypeMapQuirks() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect greenplumDialect =
@@ -1611,8 +1610,7 @@ public class DialectTest {
                     + ", measure name starts with 'm' maps to OBJECT");
   }
 
-  @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @Test
   public void testSnowflakeTypeMapQuirks() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect greenplumDialect =
@@ -1628,8 +1626,7 @@ public class DialectTest {
                     + ", maps to DECIMAL");
   }
 
-  @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @Test
   public void testNetezzaTypeMapQuirks() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect netezzaDialect =
@@ -1654,8 +1651,7 @@ public class DialectTest {
                     + " means long.  Should be mapped to DOUBLE");
   }
 
-  @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @Test
   public void testMonetDBTypeMapQuirks() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect monetDbDialect =
@@ -1671,6 +1667,7 @@ public class DialectTest {
                     + " may be an aggregated decimal, should assume DOUBLE");
   }
 
+  @Test
   public void testJdbcDialectTypeMap() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect postgresDialect = new JdbcDialectImpl();
@@ -1694,8 +1691,7 @@ public class DialectTest {
                     + " and scale=0 should return INT");
   }
 
-  @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @Test
   public void testMonetBooleanColumn() throws SQLException {
     ResultSetMetaData resultSet = new MockResultSetMetadata()
             .withColumnType( Types.BOOLEAN ).build();
@@ -1704,8 +1700,7 @@ public class DialectTest {
     assertEquals( SqlStatement.Type.OBJECT, type );
   }
 
-  @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @Test
   public void testHiveTimestampQuoteLiteral() throws SQLException {
     /*MONDRIAN-2208*/
     Dialect hiveDbDialect =
@@ -1713,8 +1708,9 @@ public class DialectTest {
     StringBuilder buf = new StringBuilder();
     hiveDbDialect.quoteTimestampLiteral( buf, "2014-10-29 10:27:55.12" );
     assertEquals(
-            "TIMESTAMP literal for Hive requires special syntax (cast)",
-            "cast( '2014-10-29 10:27:55.12' as timestamp )", buf.toString() );
+    		"cast( '2014-10-29 10:27:55.12' as timestamp )", 
+    		buf.toString(),
+    		"TIMESTAMP literal for Hive requires special syntax (cast)");
   }
 
   @ParameterizedTest
