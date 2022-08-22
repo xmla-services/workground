@@ -26,8 +26,8 @@
 <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
     <SOAP-ENV:Header/>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -64,8 +64,8 @@
                         <AuthenticationMode>Unauthenticated</AuthenticationMode>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -886,8 +886,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -922,8 +922,8 @@
                         <Value>${mondrianVersion}</Value>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -968,8 +968,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -997,15 +997,17 @@
                     </xsd:schema>
                     <row>
                         <PropertyName>Catalog</PropertyName>
-                        <PropertyDescription>When establishing a session with an Analysis Services instance to send an XMLA command, this property is equivalent to the OLE DB property, DBPROP_INIT_CATALOG. When you set this property during a session to change the current database for the session, this property is equivalent to the OLE DB property, DBPROP_CURRENTCATALOG. The default value for this property is an empty string.</PropertyDescription>
+                        <PropertyDescription>When establishing a session with an Analysis Services instance to send an XMLA command, this property is equivalent to the OLE DB property, DBPROP_INIT_CATALOG.
+When you set this property during a session to change the current database for the session, this property is equivalent to the OLE DB property, DBPROP_CURRENTCATALOG.
+The default value for this property is an empty string.</PropertyDescription>
                         <PropertyType>string</PropertyType>
                         <PropertyAccessType>ReadWrite</PropertyAccessType>
                         <IsRequired>false</IsRequired>
-                        <Value/>
+                        <Value>FoodMart</Value>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -1045,15 +1047,11 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:ExecuteResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
-                <root xmlns="urn:schemas-microsoft-com:xml-analysis:empty" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                    <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                        <xsd:element name="root"/>
-                    </xsd:schema>
-                </root>
-            </cxmla:return>
-        </cxmla:ExecuteResponse>
+        <ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
+                <root xmlns="urn:schemas-microsoft-com:xml-analysis:empty" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+            </return>
+        </ExecuteResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -1233,8 +1231,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -1261,15 +1259,17 @@
                                 <xsd:element minOccurs="0" name="SCHEMA_UPDATED_BY" sql:field="SCHEMA_UPDATED_BY" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="LAST_DATA_UPDATE" sql:field="LAST_DATA_UPDATE" type="xsd:dateTime"/>
                                 <xsd:element minOccurs="0" name="DATA_UPDATED_BY" sql:field="DATA_UPDATED_BY" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="DESCRIPTION" sql:field="DESCRIPTION" type="xsd:string"/>
                                 <xsd:element name="IS_DRILLTHROUGH_ENABLED" sql:field="IS_DRILLTHROUGH_ENABLED" type="xsd:boolean"/>
-                                <xsd:element name="IS_WRITE_ENABLED" sql:field="IS_WRITE_ENABLED" type="xsd:boolean"/>
                                 <xsd:element name="IS_LINKABLE" sql:field="IS_LINKABLE" type="xsd:boolean"/>
+                                <xsd:element name="IS_WRITE_ENABLED" sql:field="IS_WRITE_ENABLED" type="xsd:boolean"/>
                                 <xsd:element name="IS_SQL_ENABLED" sql:field="IS_SQL_ENABLED" type="xsd:boolean"/>
                                 <xsd:element minOccurs="0" name="CUBE_CAPTION" sql:field="CUBE_CAPTION" type="xsd:string"/>
-                                <xsd:element minOccurs="0" name="DESCRIPTION" sql:field="DESCRIPTION" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="BASE_CUBE_NAME" sql:field="BASE_CUBE_NAME" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="DIMENSIONS" sql:field="DIMENSIONS"/>
                                 <xsd:element minOccurs="0" name="SETS" sql:field="SETS"/>
                                 <xsd:element minOccurs="0" name="MEASURES" sql:field="MEASURES"/>
+                                <xsd:element minOccurs="0" name="CUBE_SOURCE" sql:field="CUBE_SOURCE" type="xsd:int"/>
                             </xsd:sequence>
                         </xsd:complexType>
                     </xsd:schema>
@@ -1279,16 +1279,18 @@
                         <CUBE_NAME>Sales</CUBE_NAME>
                         <CUBE_TYPE>CUBE</CUBE_TYPE>
                         <LAST_SCHEMA_UPDATE>xxxx-xx-xxTxx:xx:xx</LAST_SCHEMA_UPDATE>
+                        <LAST_DATA_UPDATE>xxxx-xx-xxTxx:xx:xx</LAST_DATA_UPDATE>
+                        <DESCRIPTION>FoodMart Schema - Sales Cube</DESCRIPTION>
                         <IS_DRILLTHROUGH_ENABLED>true</IS_DRILLTHROUGH_ENABLED>
-                        <IS_WRITE_ENABLED>false</IS_WRITE_ENABLED>
                         <IS_LINKABLE>false</IS_LINKABLE>
+                        <IS_WRITE_ENABLED>false</IS_WRITE_ENABLED>
                         <IS_SQL_ENABLED>false</IS_SQL_ENABLED>
                         <CUBE_CAPTION>Sales</CUBE_CAPTION>
-                        <DESCRIPTION>FoodMart Schema - Sales Cube</DESCRIPTION>
+                        <CUBE_SOURCE>1</CUBE_SOURCE>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -1333,8 +1335,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -1369,17 +1371,21 @@
                                 <xsd:element name="IS_READWRITE" sql:field="IS_READWRITE" type="xsd:boolean"/>
                                 <xsd:element name="DIMENSION_UNIQUE_SETTINGS" sql:field="DIMENSION_UNIQUE_SETTINGS" type="xsd:int"/>
                                 <xsd:element name="DIMENSION_IS_VISIBLE" sql:field="DIMENSION_IS_VISIBLE" type="xsd:boolean"/>
-                                <xsd:element name="HIERARCHY_IS_VISIBLE" sql:field="HIERARCHY_IS_VISIBLE" type="xsd:boolean"/>
                                 <xsd:element name="HIERARCHY_ORDINAL" sql:field="HIERARCHY_ORDINAL" type="xsd:unsignedInt"/>
                                 <xsd:element name="DIMENSION_IS_SHARED" sql:field="DIMENSION_IS_SHARED" type="xsd:boolean"/>
+                                <xsd:element name="HIERARCHY_IS_VISIBLE" sql:field="HIERARCHY_IS_VISIBLE" type="xsd:boolean"/>
+                                <xsd:element minOccurs="0" name="HIERARCHY_ORIGIN" sql:field="HIERARCHY_ORIGIN" type="xsd:unsignedShort"/>
+                                <xsd:element minOccurs="0" name="HIERARCHY_DISPLAY_FOLDER" sql:field="HIERARCHY_DISPLAY_FOLDER" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="CUBE_SOURCE" sql:field="CUBE_SOURCE" type="xsd:unsignedShort"/>
+                                <xsd:element minOccurs="0" name="HIERARCHY_VISIBILITY" sql:field="HIERARCHY_VISIBILITY" type="xsd:unsignedShort"/>
                                 <xsd:element minOccurs="0" name="PARENT_CHILD" sql:field="PARENT_CHILD" type="xsd:boolean"/>
                                 <xsd:element minOccurs="0" name="LEVELS" sql:field="LEVELS"/>
                             </xsd:sequence>
                         </xsd:complexType>
                     </xsd:schema>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -1425,8 +1431,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -1461,9 +1467,13 @@
                                 <xsd:element name="IS_READWRITE" sql:field="IS_READWRITE" type="xsd:boolean"/>
                                 <xsd:element name="DIMENSION_UNIQUE_SETTINGS" sql:field="DIMENSION_UNIQUE_SETTINGS" type="xsd:int"/>
                                 <xsd:element name="DIMENSION_IS_VISIBLE" sql:field="DIMENSION_IS_VISIBLE" type="xsd:boolean"/>
-                                <xsd:element name="HIERARCHY_IS_VISIBLE" sql:field="HIERARCHY_IS_VISIBLE" type="xsd:boolean"/>
                                 <xsd:element name="HIERARCHY_ORDINAL" sql:field="HIERARCHY_ORDINAL" type="xsd:unsignedInt"/>
                                 <xsd:element name="DIMENSION_IS_SHARED" sql:field="DIMENSION_IS_SHARED" type="xsd:boolean"/>
+                                <xsd:element name="HIERARCHY_IS_VISIBLE" sql:field="HIERARCHY_IS_VISIBLE" type="xsd:boolean"/>
+                                <xsd:element minOccurs="0" name="HIERARCHY_ORIGIN" sql:field="HIERARCHY_ORIGIN" type="xsd:unsignedShort"/>
+                                <xsd:element minOccurs="0" name="HIERARCHY_DISPLAY_FOLDER" sql:field="HIERARCHY_DISPLAY_FOLDER" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="CUBE_SOURCE" sql:field="CUBE_SOURCE" type="xsd:unsignedShort"/>
+                                <xsd:element minOccurs="0" name="HIERARCHY_VISIBILITY" sql:field="HIERARCHY_VISIBILITY" type="xsd:unsignedShort"/>
                                 <xsd:element minOccurs="0" name="PARENT_CHILD" sql:field="PARENT_CHILD" type="xsd:boolean"/>
                                 <xsd:element minOccurs="0" name="LEVELS" sql:field="LEVELS"/>
                             </xsd:sequence>
@@ -1487,9 +1497,12 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>9</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>1</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                     <row>
@@ -1510,9 +1523,12 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>10</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>1</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                     <row>
@@ -1533,9 +1549,12 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>11</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>1</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                     <row>
@@ -1556,9 +1575,12 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>12</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>1</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                     <row>
@@ -1578,9 +1600,12 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>0</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>6</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                     <row>
@@ -1601,9 +1626,12 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>6</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>1</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                     <row>
@@ -1624,9 +1652,12 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>7</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>1</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                     <row>
@@ -1647,9 +1678,12 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>8</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>1</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                     <row>
@@ -1670,9 +1704,12 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>2</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>1</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                     <row>
@@ -1693,9 +1730,12 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>3</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>1</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                     <row>
@@ -1716,9 +1756,12 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>1</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>1</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                     <row>
@@ -1738,9 +1781,12 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>4</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>1</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                     <row>
@@ -1761,9 +1807,12 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>5</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>1</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                     <row>
@@ -1784,14 +1833,17 @@
                         <IS_READWRITE>false</IS_READWRITE>
                         <DIMENSION_UNIQUE_SETTINGS>0</DIMENSION_UNIQUE_SETTINGS>
                         <DIMENSION_IS_VISIBLE>true</DIMENSION_IS_VISIBLE>
-                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
                         <HIERARCHY_ORDINAL>13</HIERARCHY_ORDINAL>
                         <DIMENSION_IS_SHARED>true</DIMENSION_IS_SHARED>
+                        <HIERARCHY_IS_VISIBLE>true</HIERARCHY_IS_VISIBLE>
+                        <HIERARCHY_ORIGIN>1</HIERARCHY_ORIGIN>
+                        <HIERARCHY_DISPLAY_FOLDER/>
+                        <HIERARCHY_VISIBILITY>1</HIERARCHY_VISIBILITY>
                         <PARENT_CHILD>false</PARENT_CHILD>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -1837,8 +1889,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -1867,13 +1919,17 @@
                                 <xsd:element name="MEASURE_IS_VISIBLE" sql:field="MEASURE_IS_VISIBLE" type="xsd:boolean"/>
                                 <xsd:element minOccurs="0" name="LEVELS_LIST" sql:field="LEVELS_LIST" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="DESCRIPTION" sql:field="DESCRIPTION" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="MEASUREGROUP_NAME" sql:field="MEASUREGROUP_NAME" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="MEASURE_DISPLAY_FOLDER" sql:field="MEASURE_DISPLAY_FOLDER" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="DEFAULT_FORMAT_STRING" sql:field="DEFAULT_FORMAT_STRING" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="CUBE_SOURCE" sql:field="CUBE_SOURCE" type="xsd:unsignedShort"/>
+                                <xsd:element minOccurs="0" name="MEASURE_VISIBILITY" sql:field="MEASURE_VISIBILITY" type="xsd:unsignedShort"/>
                             </xsd:sequence>
                         </xsd:complexType>
                     </xsd:schema>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -1920,8 +1976,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -1950,7 +2006,11 @@
                                 <xsd:element name="MEASURE_IS_VISIBLE" sql:field="MEASURE_IS_VISIBLE" type="xsd:boolean"/>
                                 <xsd:element minOccurs="0" name="LEVELS_LIST" sql:field="LEVELS_LIST" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="DESCRIPTION" sql:field="DESCRIPTION" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="MEASUREGROUP_NAME" sql:field="MEASUREGROUP_NAME" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="MEASURE_DISPLAY_FOLDER" sql:field="MEASURE_DISPLAY_FOLDER" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="DEFAULT_FORMAT_STRING" sql:field="DEFAULT_FORMAT_STRING" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="CUBE_SOURCE" sql:field="CUBE_SOURCE" type="xsd:unsignedShort"/>
+                                <xsd:element minOccurs="0" name="MEASURE_VISIBILITY" sql:field="MEASURE_VISIBILITY" type="xsd:unsignedShort"/>
                             </xsd:sequence>
                         </xsd:complexType>
                     </xsd:schema>
@@ -1966,7 +2026,10 @@
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <LEVELS_LIST>[Store].[Store Name],[Store Size in SQFT].[Store Sqft],[Store Type].[Store Type],[Time].[Month],[Time].[Weekly].[Day],[Product].[Product Name],[Promotion Media].[Media Type],[Promotions].[Promotion Name],[Customers].[Name],[Education Level].[Education Level],[Gender].[Gender],[Marital Status].[Marital Status],[Yearly Income].[Yearly Income]</LEVELS_LIST>
                         <DESCRIPTION>Sales Cube - Customer Count Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>#,###</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -1979,7 +2042,10 @@
                         <DATA_TYPE>130</DATA_TYPE>
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <DESCRIPTION>Sales Cube - Profit Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>$#,##0.00</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -1992,7 +2058,10 @@
                         <DATA_TYPE>130</DATA_TYPE>
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <DESCRIPTION>Sales Cube - Profit Growth Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>0.0%</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2005,7 +2074,10 @@
                         <DATA_TYPE>130</DATA_TYPE>
                         <MEASURE_IS_VISIBLE>false</MEASURE_IS_VISIBLE>
                         <DESCRIPTION>Sales Cube - Profit last Period Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>$#,##0.00</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>2</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2019,7 +2091,10 @@
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <LEVELS_LIST>[Store].[Store Name],[Store Size in SQFT].[Store Sqft],[Store Type].[Store Type],[Time].[Month],[Time].[Weekly].[Day],[Product].[Product Name],[Promotion Media].[Media Type],[Promotions].[Promotion Name],[Customers].[Name],[Education Level].[Education Level],[Gender].[Gender],[Marital Status].[Marital Status],[Yearly Income].[Yearly Income]</LEVELS_LIST>
                         <DESCRIPTION>Sales Cube - Promotion Sales Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>#,###.00</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2033,7 +2108,10 @@
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <LEVELS_LIST>[Store].[Store Name],[Store Size in SQFT].[Store Sqft],[Store Type].[Store Type],[Time].[Month],[Time].[Weekly].[Day],[Product].[Product Name],[Promotion Media].[Media Type],[Promotions].[Promotion Name],[Customers].[Name],[Education Level].[Education Level],[Gender].[Gender],[Marital Status].[Marital Status],[Yearly Income].[Yearly Income]</LEVELS_LIST>
                         <DESCRIPTION>Sales Cube - Sales Count Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>#,###</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2047,7 +2125,10 @@
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <LEVELS_LIST>[Store].[Store Name],[Store Size in SQFT].[Store Sqft],[Store Type].[Store Type],[Time].[Month],[Time].[Weekly].[Day],[Product].[Product Name],[Promotion Media].[Media Type],[Promotions].[Promotion Name],[Customers].[Name],[Education Level].[Education Level],[Gender].[Gender],[Marital Status].[Marital Status],[Yearly Income].[Yearly Income]</LEVELS_LIST>
                         <DESCRIPTION>Sales Cube - Store Cost Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>#,###.00</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2061,7 +2142,10 @@
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <LEVELS_LIST>[Store].[Store Name],[Store Size in SQFT].[Store Sqft],[Store Type].[Store Type],[Time].[Month],[Time].[Weekly].[Day],[Product].[Product Name],[Promotion Media].[Media Type],[Promotions].[Promotion Name],[Customers].[Name],[Education Level].[Education Level],[Gender].[Gender],[Marital Status].[Marital Status],[Yearly Income].[Yearly Income]</LEVELS_LIST>
                         <DESCRIPTION>Sales Cube - Store Sales Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>#,###.00</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2075,11 +2159,14 @@
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <LEVELS_LIST>[Store].[Store Name],[Store Size in SQFT].[Store Sqft],[Store Type].[Store Type],[Time].[Month],[Time].[Weekly].[Day],[Product].[Product Name],[Promotion Media].[Media Type],[Promotions].[Promotion Name],[Customers].[Name],[Education Level].[Education Level],[Gender].[Gender],[Marital Status].[Marital Status],[Yearly Income].[Yearly Income]</LEVELS_LIST>
                         <DESCRIPTION>Sales Cube - Unit Sales Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>Standard</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -2125,8 +2212,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -2155,7 +2242,11 @@
                                 <xsd:element name="MEASURE_IS_VISIBLE" sql:field="MEASURE_IS_VISIBLE" type="xsd:boolean"/>
                                 <xsd:element minOccurs="0" name="LEVELS_LIST" sql:field="LEVELS_LIST" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="DESCRIPTION" sql:field="DESCRIPTION" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="MEASUREGROUP_NAME" sql:field="MEASUREGROUP_NAME" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="MEASURE_DISPLAY_FOLDER" sql:field="MEASURE_DISPLAY_FOLDER" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="DEFAULT_FORMAT_STRING" sql:field="DEFAULT_FORMAT_STRING" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="CUBE_SOURCE" sql:field="CUBE_SOURCE" type="xsd:unsignedShort"/>
+                                <xsd:element minOccurs="0" name="MEASURE_VISIBILITY" sql:field="MEASURE_VISIBILITY" type="xsd:unsignedShort"/>
                             </xsd:sequence>
                         </xsd:complexType>
                     </xsd:schema>
@@ -2171,7 +2262,10 @@
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <LEVELS_LIST>[Store].[Store Name],[Store Size in SQFT].[Store Sqft],[Store Type].[Store Type],[Time].[Month],[Time].[Weekly].[Day],[Product].[Product Name],[Promotion Media].[Media Type],[Promotions].[Promotion Name],[Customers].[Name],[Education Level].[Education Level],[Gender].[Gender],[Marital Status].[Marital Status],[Yearly Income].[Yearly Income]</LEVELS_LIST>
                         <DESCRIPTION>Sales Cube - Customer Count Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>#,###</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2184,7 +2278,10 @@
                         <DATA_TYPE>130</DATA_TYPE>
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <DESCRIPTION>Sales Cube - Profit Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>$#,##0.00</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2197,7 +2294,10 @@
                         <DATA_TYPE>130</DATA_TYPE>
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <DESCRIPTION>Sales Cube - Profit Growth Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>0.0%</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2211,7 +2311,10 @@
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <LEVELS_LIST>[Store].[Store Name],[Store Size in SQFT].[Store Sqft],[Store Type].[Store Type],[Time].[Month],[Time].[Weekly].[Day],[Product].[Product Name],[Promotion Media].[Media Type],[Promotions].[Promotion Name],[Customers].[Name],[Education Level].[Education Level],[Gender].[Gender],[Marital Status].[Marital Status],[Yearly Income].[Yearly Income]</LEVELS_LIST>
                         <DESCRIPTION>Sales Cube - Promotion Sales Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>#,###.00</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2225,7 +2328,10 @@
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <LEVELS_LIST>[Store].[Store Name],[Store Size in SQFT].[Store Sqft],[Store Type].[Store Type],[Time].[Month],[Time].[Weekly].[Day],[Product].[Product Name],[Promotion Media].[Media Type],[Promotions].[Promotion Name],[Customers].[Name],[Education Level].[Education Level],[Gender].[Gender],[Marital Status].[Marital Status],[Yearly Income].[Yearly Income]</LEVELS_LIST>
                         <DESCRIPTION>Sales Cube - Sales Count Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>#,###</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2239,7 +2345,10 @@
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <LEVELS_LIST>[Store].[Store Name],[Store Size in SQFT].[Store Sqft],[Store Type].[Store Type],[Time].[Month],[Time].[Weekly].[Day],[Product].[Product Name],[Promotion Media].[Media Type],[Promotions].[Promotion Name],[Customers].[Name],[Education Level].[Education Level],[Gender].[Gender],[Marital Status].[Marital Status],[Yearly Income].[Yearly Income]</LEVELS_LIST>
                         <DESCRIPTION>Sales Cube - Store Cost Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>#,###.00</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2253,7 +2362,10 @@
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <LEVELS_LIST>[Store].[Store Name],[Store Size in SQFT].[Store Sqft],[Store Type].[Store Type],[Time].[Month],[Time].[Weekly].[Day],[Product].[Product Name],[Promotion Media].[Media Type],[Promotions].[Promotion Name],[Customers].[Name],[Education Level].[Education Level],[Gender].[Gender],[Marital Status].[Marital Status],[Yearly Income].[Yearly Income]</LEVELS_LIST>
                         <DESCRIPTION>Sales Cube - Store Sales Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>#,###.00</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2267,11 +2379,14 @@
                         <MEASURE_IS_VISIBLE>true</MEASURE_IS_VISIBLE>
                         <LEVELS_LIST>[Store].[Store Name],[Store Size in SQFT].[Store Sqft],[Store Type].[Store Type],[Time].[Month],[Time].[Weekly].[Day],[Product].[Product Name],[Promotion Media].[Media Type],[Promotions].[Promotion Name],[Customers].[Name],[Education Level].[Education Level],[Gender].[Gender],[Marital Status].[Marital Status],[Yearly Income].[Yearly Income]</LEVELS_LIST>
                         <DESCRIPTION>Sales Cube - Unit Sales Member</DESCRIPTION>
+                        <MEASUREGROUP_NAME>Sales</MEASUREGROUP_NAME>
+                        <MEASURE_DISPLAY_FOLDER/>
                         <DEFAULT_FORMAT_STRING>Standard</DEFAULT_FORMAT_STRING>
+                        <MEASURE_VISIBILITY>1</MEASURE_VISIBILITY>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -2317,8 +2432,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -2351,12 +2466,15 @@
                                 <xsd:element name="LEVEL_UNIQUE_SETTINGS" sql:field="LEVEL_UNIQUE_SETTINGS" type="xsd:int"/>
                                 <xsd:element name="LEVEL_IS_VISIBLE" sql:field="LEVEL_IS_VISIBLE" type="xsd:boolean"/>
                                 <xsd:element minOccurs="0" name="DESCRIPTION" sql:field="DESCRIPTION" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="LEVEL_ORIGIN" sql:field="LEVEL_ORIGIN" type="xsd:unsignedShort"/>
+                                <xsd:element minOccurs="0" name="CUBE_SOURCE" sql:field="CUBE_SOURCE" type="xsd:unsignedShort"/>
+                                <xsd:element minOccurs="0" name="LEVEL_VISIBILITY" sql:field="LEVEL_VISIBILITY" type="xsd:unsignedShort"/>
                             </xsd:sequence>
                         </xsd:complexType>
                     </xsd:schema>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -2403,8 +2521,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -2437,6 +2555,9 @@
                                 <xsd:element name="LEVEL_UNIQUE_SETTINGS" sql:field="LEVEL_UNIQUE_SETTINGS" type="xsd:int"/>
                                 <xsd:element name="LEVEL_IS_VISIBLE" sql:field="LEVEL_IS_VISIBLE" type="xsd:boolean"/>
                                 <xsd:element minOccurs="0" name="DESCRIPTION" sql:field="DESCRIPTION" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="LEVEL_ORIGIN" sql:field="LEVEL_ORIGIN" type="xsd:unsignedShort"/>
+                                <xsd:element minOccurs="0" name="CUBE_SOURCE" sql:field="CUBE_SOURCE" type="xsd:unsignedShort"/>
+                                <xsd:element minOccurs="0" name="LEVEL_VISIBILITY" sql:field="LEVEL_VISIBILITY" type="xsd:unsignedShort"/>
                             </xsd:sequence>
                         </xsd:complexType>
                     </xsd:schema>
@@ -2456,6 +2577,7 @@
                         <LEVEL_UNIQUE_SETTINGS>1</LEVEL_UNIQUE_SETTINGS>
                         <LEVEL_IS_VISIBLE>true</LEVEL_IS_VISIBLE>
                         <DESCRIPTION>Sales Cube - Time Hierarchy - Year Level</DESCRIPTION>
+                        <LEVEL_ORIGIN>0</LEVEL_ORIGIN>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2473,6 +2595,7 @@
                         <LEVEL_UNIQUE_SETTINGS>0</LEVEL_UNIQUE_SETTINGS>
                         <LEVEL_IS_VISIBLE>true</LEVEL_IS_VISIBLE>
                         <DESCRIPTION>Sales Cube - Time Hierarchy - Quarter Level</DESCRIPTION>
+                        <LEVEL_ORIGIN>0</LEVEL_ORIGIN>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2490,10 +2613,11 @@
                         <LEVEL_UNIQUE_SETTINGS>0</LEVEL_UNIQUE_SETTINGS>
                         <LEVEL_IS_VISIBLE>true</LEVEL_IS_VISIBLE>
                         <DESCRIPTION>Sales Cube - Time Hierarchy - Month Level</DESCRIPTION>
+                        <LEVEL_ORIGIN>0</LEVEL_ORIGIN>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -2540,8 +2664,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -2574,6 +2698,9 @@
                                 <xsd:element name="LEVEL_UNIQUE_SETTINGS" sql:field="LEVEL_UNIQUE_SETTINGS" type="xsd:int"/>
                                 <xsd:element name="LEVEL_IS_VISIBLE" sql:field="LEVEL_IS_VISIBLE" type="xsd:boolean"/>
                                 <xsd:element minOccurs="0" name="DESCRIPTION" sql:field="DESCRIPTION" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="LEVEL_ORIGIN" sql:field="LEVEL_ORIGIN" type="xsd:unsignedShort"/>
+                                <xsd:element minOccurs="0" name="CUBE_SOURCE" sql:field="CUBE_SOURCE" type="xsd:unsignedShort"/>
+                                <xsd:element minOccurs="0" name="LEVEL_VISIBILITY" sql:field="LEVEL_VISIBILITY" type="xsd:unsignedShort"/>
                             </xsd:sequence>
                         </xsd:complexType>
                     </xsd:schema>
@@ -2593,6 +2720,7 @@
                         <LEVEL_UNIQUE_SETTINGS>3</LEVEL_UNIQUE_SETTINGS>
                         <LEVEL_IS_VISIBLE>true</LEVEL_IS_VISIBLE>
                         <DESCRIPTION>Sales Cube - Customers Hierarchy - (All) Level</DESCRIPTION>
+                        <LEVEL_ORIGIN>0</LEVEL_ORIGIN>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2610,6 +2738,7 @@
                         <LEVEL_UNIQUE_SETTINGS>1</LEVEL_UNIQUE_SETTINGS>
                         <LEVEL_IS_VISIBLE>true</LEVEL_IS_VISIBLE>
                         <DESCRIPTION>Sales Cube - Customers Hierarchy - Country Level</DESCRIPTION>
+                        <LEVEL_ORIGIN>0</LEVEL_ORIGIN>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2627,6 +2756,7 @@
                         <LEVEL_UNIQUE_SETTINGS>1</LEVEL_UNIQUE_SETTINGS>
                         <LEVEL_IS_VISIBLE>true</LEVEL_IS_VISIBLE>
                         <DESCRIPTION>Sales Cube - Customers Hierarchy - State Province Level</DESCRIPTION>
+                        <LEVEL_ORIGIN>0</LEVEL_ORIGIN>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2644,6 +2774,7 @@
                         <LEVEL_UNIQUE_SETTINGS>0</LEVEL_UNIQUE_SETTINGS>
                         <LEVEL_IS_VISIBLE>true</LEVEL_IS_VISIBLE>
                         <DESCRIPTION>Sales Cube - Customers Hierarchy - City Level</DESCRIPTION>
+                        <LEVEL_ORIGIN>0</LEVEL_ORIGIN>
                     </row>
                     <row>
                         <CATALOG_NAME>FoodMart</CATALOG_NAME>
@@ -2661,10 +2792,11 @@
                         <LEVEL_UNIQUE_SETTINGS>1</LEVEL_UNIQUE_SETTINGS>
                         <LEVEL_IS_VISIBLE>true</LEVEL_IS_VISIBLE>
                         <DESCRIPTION>Sales Cube - Customers Hierarchy - Name Level</DESCRIPTION>
+                        <LEVEL_ORIGIN>0</LEVEL_ORIGIN>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -2707,8 +2839,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:ExecuteResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -2725,65 +2857,65 @@
                         </xsd:simpleType>
                         <xsd:complexType name="row">
                             <xsd:sequence>
-                                <xsd:element minOccurs="0" name="_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_CAPTION_x005d_" sql:field="[Customers].[Country].[MEMBER_CAPTION]" type="xsd:string"/>
-                                <xsd:element minOccurs="0" name="_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_" sql:field="[Customers].[Country].[MEMBER_UNIQUE_NAME]" type="xsd:string"/>
-                                <xsd:element minOccurs="0" name="_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_" sql:field="[Time].[Year].[MEMBER_CAPTION]" type="xsd:string"/>
-                                <xsd:element minOccurs="0" name="_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_" sql:field="[Time].[Year].[MEMBER_UNIQUE_NAME]" type="xsd:string"/>
-                                <xsd:element minOccurs="0" name="_x005b_Measures_x005d_._x005b_Unit_x0020_Sales_x005d_" sql:field="[Measures].[Unit Sales]"/>
+                                <xsd:element minOccurs="0" name="_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_CAPTION_x005d_" sql:field="[Customers].[Country].[MEMBER_CAPTION]" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_" sql:field="[Customers].[Country].[MEMBER_UNIQUE_NAME]" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_" sql:field="[Time].[Year].[MEMBER_CAPTION]" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_" sql:field="[Time].[Year].[MEMBER_UNIQUE_NAME]" type="xsd:string"/>
+                                <xsd:element minOccurs="0" name="_x005b_Measures_x005d__x002e__x005b_Unit_x0020_Sales_x005d_" sql:field="[Measures].[Unit Sales]"/>
                             </xsd:sequence>
                         </xsd:complexType>
                     </xsd:schema>
                     <row>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>1997</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1997]</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
-                        <_x005b_Measures_x005d_._x005b_Unit_x0020_Sales_x005d_ xsi:type="xsd:double">266773</_x005b_Measures_x005d_._x005b_Unit_x0020_Sales_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>1997</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1997]</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Measures_x005d__x002e__x005b_Unit_x0020_Sales_x005d_ xsi:type="xsd:double">266773</_x005b_Measures_x005d__x002e__x005b_Unit_x0020_Sales_x005d_>
                     </row>
                     <row>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>1998</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1998]</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>1998</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1998]</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
                     </row>
                     <row>
-                        <_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_CAPTION_x005d_>Canada</_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Customers].[Canada]</_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>1997</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1997]</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
-                        <_x005b_Measures_x005d_._x005b_Unit_x0020_Sales_x005d_ xsi:type="xsd:double">266773</_x005b_Measures_x005d_._x005b_Unit_x0020_Sales_x005d_>
+                        <_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>Canada</_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Customers].[Canada]</_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>1997</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1997]</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Measures_x005d__x002e__x005b_Unit_x0020_Sales_x005d_ xsi:type="xsd:double">266773</_x005b_Measures_x005d__x002e__x005b_Unit_x0020_Sales_x005d_>
                     </row>
                     <row>
-                        <_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_CAPTION_x005d_>Canada</_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Customers].[Canada]</_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>1998</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1998]</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>Canada</_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Customers].[Canada]</_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>1998</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1998]</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
                     </row>
                     <row>
-                        <_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_CAPTION_x005d_>Mexico</_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Customers].[Mexico]</_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>1997</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1997]</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
-                        <_x005b_Measures_x005d_._x005b_Unit_x0020_Sales_x005d_ xsi:type="xsd:double">266773</_x005b_Measures_x005d_._x005b_Unit_x0020_Sales_x005d_>
+                        <_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>Mexico</_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Customers].[Mexico]</_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>1997</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1997]</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Measures_x005d__x002e__x005b_Unit_x0020_Sales_x005d_ xsi:type="xsd:double">266773</_x005b_Measures_x005d__x002e__x005b_Unit_x0020_Sales_x005d_>
                     </row>
                     <row>
-                        <_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_CAPTION_x005d_>Mexico</_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Customers].[Mexico]</_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>1998</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1998]</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>Mexico</_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Customers].[Mexico]</_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>1998</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1998]</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
                     </row>
                     <row>
-                        <_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_CAPTION_x005d_>USA</_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Customers].[USA]</_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>1997</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1997]</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
-                        <_x005b_Measures_x005d_._x005b_Unit_x0020_Sales_x005d_ xsi:type="xsd:double">266773</_x005b_Measures_x005d_._x005b_Unit_x0020_Sales_x005d_>
+                        <_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>USA</_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Customers].[USA]</_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>1997</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1997]</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Measures_x005d__x002e__x005b_Unit_x0020_Sales_x005d_ xsi:type="xsd:double">266773</_x005b_Measures_x005d__x002e__x005b_Unit_x0020_Sales_x005d_>
                     </row>
                     <row>
-                        <_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_CAPTION_x005d_>USA</_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Customers].[USA]</_x005b_Customers_x005d_._x005b_Country_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>1998</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_CAPTION_x005d_>
-                        <_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1998]</_x005b_Time_x005d_._x005b_Year_x005d_._x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>USA</_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Customers].[USA]</_x005b_Customers_x005d__x002e__x005b_Country_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>1998</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_CAPTION_x005d_>
+                        <_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>[Time].[1998]</_x005b_Time_x005d__x002e__x005b_Year_x005d__x002e__x005b_MEMBER_UNIQUE_NAME_x005d_>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:ExecuteResponse>
+            </return>
+        </ExecuteResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -2824,15 +2956,11 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:ExecuteResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
-                <root xmlns="urn:schemas-microsoft-com:xml-analysis:empty" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                    <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                        <xsd:element name="root"/>
-                    </xsd:schema>
-                </root>
-            </cxmla:return>
-        </cxmla:ExecuteResponse>
+        <ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
+                <root xmlns="urn:schemas-microsoft-com:xml-analysis:empty" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+            </return>
+        </ExecuteResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -2864,8 +2992,8 @@
 <SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
     <SOAP-ENV:Header/>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -2902,8 +3030,8 @@
                         <AuthenticationMode>Unauthenticated</AuthenticationMode>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -3724,8 +3852,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -3760,8 +3888,8 @@
                         <Value>${mondrianVersion}</Value>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -3806,8 +3934,8 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -3835,15 +3963,17 @@
                     </xsd:schema>
                     <row>
                         <PropertyName>Catalog</PropertyName>
-                        <PropertyDescription>When establishing a session with an Analysis Services instance to send an XMLA command, this property is equivalent to the OLE DB property, DBPROP_INIT_CATALOG. When you set this property during a session to change the current database for the session, this property is equivalent to the OLE DB property, DBPROP_CURRENTCATALOG. The default value for this property is an empty string.</PropertyDescription>
+                        <PropertyDescription>When establishing a session with an Analysis Services instance to send an XMLA command, this property is equivalent to the OLE DB property, DBPROP_INIT_CATALOG.
+When you set this property during a session to change the current database for the session, this property is equivalent to the OLE DB property, DBPROP_CURRENTCATALOG.
+The default value for this property is an empty string.</PropertyDescription>
                         <PropertyType>string</PropertyType>
                         <PropertyAccessType>ReadWrite</PropertyAccessType>
                         <IsRequired>false</IsRequired>
-                        <Value/>
+                        <Value>FoodMart</Value>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -3883,15 +4013,11 @@
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:ExecuteResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
-                <root xmlns="urn:schemas-microsoft-com:xml-analysis:empty" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                    <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-                        <xsd:element name="root"/>
-                    </xsd:schema>
-                </root>
-            </cxmla:return>
-        </cxmla:ExecuteResponse>
+        <ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
+                <root xmlns="urn:schemas-microsoft-com:xml-analysis:empty" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
+            </return>
+        </ExecuteResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>

@@ -206,8 +206,8 @@ where [Measures].[Unit Sales]
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:ExecuteResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:complexType name="MemberType">
@@ -378,41 +378,43 @@ where [Measures].[Unit Sales]
                         <CubeInfo>
                             <Cube>
                                 <CubeName>Sales</CubeName>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
                             <AxisInfo name="Axis0">
-                                <HierarchyInfo name="Store">
-                                    <UName name="[Store].[MEMBER_UNIQUE_NAME]"/>
-                                    <Caption name="[Store].[MEMBER_CAPTION]"/>
-                                    <LName name="[Store].[LEVEL_UNIQUE_NAME]"/>
-                                    <LNum name="[Store].[LEVEL_NUMBER]"/>
-                                    <DisplayInfo name="[Store].[DISPLAY_INFO]"/>
+                                <HierarchyInfo name="[Store]">
+                                    <UName name="[Store].[MEMBER_UNIQUE_NAME]" type="xsd:string"/>
+                                    <Caption name="[Store].[MEMBER_CAPTION]" type="xsd:string"/>
+                                    <LName name="[Store].[LEVEL_UNIQUE_NAME]" type="xsd:string"/>
+                                    <LNum name="[Store].[LEVEL_NUMBER]" type="xsd:unsignedInt"/>
+                                    <DisplayInfo name="[Store].[DISPLAY_INFO]" type="xsd:unsignedInt"/>
                                     <PARENT_UNIQUE_NAME name="[Store].[PARENT_UNIQUE_NAME]" type="xsd:string"/>
-                                    <Store_x0020_Type name="[Store].[Store Type]" type="xsd:string"/>
-                                    <Store_x0020_Manager name="[Store].[Store Manager]" type="xsd:string"/>
-                                    <Store_x0020_Sqft name="[Store].[Store Sqft]" type="xsd:double"/>
-                                    <Grocery_x0020_Sqft name="[Store].[Grocery Sqft]" type="xsd:double"/>
-                                    <Frozen_x0020_Sqft name="[Store].[Frozen Sqft]" type="xsd:double"/>
-                                    <Meat_x0020_Sqft name="[Store].[Meat Sqft]" type="xsd:double"/>
-                                    <Has_x0020_coffee_x0020_bar name="[Store].[Has coffee bar]" type="xsd:boolean"/>
-                                    <Street_x0020_address name="[Store].[Street address]" type="xsd:string"/>
+                                    <Store_x0020_Type name="[Store].[Store Type]"/>
+                                    <Store_x0020_Manager name="[Store].[Store Manager]"/>
+                                    <Store_x0020_Sqft name="[Store].[Store Sqft]"/>
+                                    <Grocery_x0020_Sqft name="[Store].[Grocery Sqft]"/>
+                                    <Frozen_x0020_Sqft name="[Store].[Frozen Sqft]"/>
+                                    <Meat_x0020_Sqft name="[Store].[Meat Sqft]"/>
+                                    <Has_x0020_coffee_x0020_bar name="[Store].[Has coffee bar]"/>
+                                    <Street_x0020_address name="[Store].[Street address]"/>
                                 </HierarchyInfo>
                             </AxisInfo>
                             <AxisInfo name="SlicerAxis">
-                                <HierarchyInfo name="Measures">
-                                    <UName name="[Measures].[MEMBER_UNIQUE_NAME]"/>
-                                    <Caption name="[Measures].[MEMBER_CAPTION]"/>
-                                    <LName name="[Measures].[LEVEL_UNIQUE_NAME]"/>
-                                    <LNum name="[Measures].[LEVEL_NUMBER]"/>
-                                    <DisplayInfo name="[Measures].[DISPLAY_INFO]"/>
+                                <HierarchyInfo name="[Measures]">
+                                    <UName name="[Measures].[MEMBER_UNIQUE_NAME]" type="xsd:string"/>
+                                    <Caption name="[Measures].[MEMBER_CAPTION]" type="xsd:string"/>
+                                    <LName name="[Measures].[LEVEL_UNIQUE_NAME]" type="xsd:string"/>
+                                    <LNum name="[Measures].[LEVEL_NUMBER]" type="xsd:unsignedInt"/>
+                                    <DisplayInfo name="[Measures].[DISPLAY_INFO]" type="xsd:unsignedInt"/>
                                 </HierarchyInfo>
-                                <HierarchyInfo name="Gender">
-                                    <UName name="[Gender].[MEMBER_UNIQUE_NAME]"/>
-                                    <Caption name="[Gender].[MEMBER_CAPTION]"/>
-                                    <LName name="[Gender].[LEVEL_UNIQUE_NAME]"/>
-                                    <LNum name="[Gender].[LEVEL_NUMBER]"/>
-                                    <DisplayInfo name="[Gender].[DISPLAY_INFO]"/>
+                                <HierarchyInfo name="[Gender]">
+                                    <UName name="[Gender].[MEMBER_UNIQUE_NAME]" type="xsd:string"/>
+                                    <Caption name="[Gender].[MEMBER_CAPTION]" type="xsd:string"/>
+                                    <LName name="[Gender].[LEVEL_UNIQUE_NAME]" type="xsd:string"/>
+                                    <LNum name="[Gender].[LEVEL_NUMBER]" type="xsd:unsignedInt"/>
+                                    <DisplayInfo name="[Gender].[DISPLAY_INFO]" type="xsd:unsignedInt"/>
                                 </HierarchyInfo>
                             </AxisInfo>
                         </AxesInfo>
@@ -424,7 +426,7 @@ where [Measures].[Unit Sales]
                         <Axis name="Axis0">
                             <Tuples>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[All Stores]</UName>
                                         <Caption>All Stores</Caption>
                                         <LName>[Store].[(All)]</LName>
@@ -433,7 +435,7 @@ where [Measures].[Unit Sales]
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA]</UName>
                                         <Caption>USA</Caption>
                                         <LName>[Store].[Store Country]</LName>
@@ -443,7 +445,7 @@ where [Measures].[Unit Sales]
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[CA]</UName>
                                         <Caption>CA</Caption>
                                         <LName>[Store].[Store State]</LName>
@@ -453,7 +455,7 @@ where [Measures].[Unit Sales]
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[CA].[Beverly Hills]</UName>
                                         <Caption>Beverly Hills</Caption>
                                         <LName>[Store].[Store City]</LName>
@@ -463,25 +465,25 @@ where [Measures].[Unit Sales]
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[CA].[Beverly Hills].[Store 6]</UName>
                                         <Caption>Store 6</Caption>
                                         <LName>[Store].[Store Name]</LName>
                                         <LNum>4</LNum>
                                         <DisplayInfo>0</DisplayInfo>
                                         <PARENT_UNIQUE_NAME>[Store].[USA].[CA].[Beverly Hills]</PARENT_UNIQUE_NAME>
-                                        <Store_x0020_Type>Gourmet Supermarket</Store_x0020_Type>
-                                        <Store_x0020_Manager>Maris</Store_x0020_Manager>
-                                        <Store_x0020_Sqft>23688</Store_x0020_Sqft>
-                                        <Grocery_x0020_Sqft>15337</Grocery_x0020_Sqft>
-                                        <Frozen_x0020_Sqft>5011</Frozen_x0020_Sqft>
-                                        <Meat_x0020_Sqft>3340</Meat_x0020_Sqft>
-                                        <Has_x0020_coffee_x0020_bar>1</Has_x0020_coffee_x0020_bar>
-                                        <Street_x0020_address>5495 Mitchell Canyon Road</Street_x0020_address>
+                                        <Store_x0020_Type xsi:type="xsd:string">Gourmet Supermarket</Store_x0020_Type>
+                                        <Store_x0020_Manager xsi:type="xsd:string">Maris</Store_x0020_Manager>
+                                        <Store_x0020_Sqft xsi:type="xsd:double">23688</Store_x0020_Sqft>
+                                        <Grocery_x0020_Sqft xsi:type="xsd:double">15337</Grocery_x0020_Sqft>
+                                        <Frozen_x0020_Sqft xsi:type="xsd:double">5011</Frozen_x0020_Sqft>
+                                        <Meat_x0020_Sqft xsi:type="xsd:double">3340</Meat_x0020_Sqft>
+                                        <Has_x0020_coffee_x0020_bar xsi:type="xsd:boolean">true</Has_x0020_coffee_x0020_bar>
+                                        <Street_x0020_address xsi:type="xsd:string">5495 Mitchell Canyon Road</Street_x0020_address>
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[CA].[Los Angeles]</UName>
                                         <Caption>Los Angeles</Caption>
                                         <LName>[Store].[Store City]</LName>
@@ -491,25 +493,25 @@ where [Measures].[Unit Sales]
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[CA].[Los Angeles].[Store 7]</UName>
                                         <Caption>Store 7</Caption>
                                         <LName>[Store].[Store Name]</LName>
                                         <LNum>4</LNum>
                                         <DisplayInfo>0</DisplayInfo>
                                         <PARENT_UNIQUE_NAME>[Store].[USA].[CA].[Los Angeles]</PARENT_UNIQUE_NAME>
-                                        <Store_x0020_Type>Supermarket</Store_x0020_Type>
-                                        <Store_x0020_Manager>White</Store_x0020_Manager>
-                                        <Store_x0020_Sqft>23598</Store_x0020_Sqft>
-                                        <Grocery_x0020_Sqft>14210</Grocery_x0020_Sqft>
-                                        <Frozen_x0020_Sqft>5633</Frozen_x0020_Sqft>
-                                        <Meat_x0020_Sqft>3755</Meat_x0020_Sqft>
-                                        <Has_x0020_coffee_x0020_bar>0</Has_x0020_coffee_x0020_bar>
-                                        <Street_x0020_address>1077 Wharf Drive</Street_x0020_address>
+                                        <Store_x0020_Type xsi:type="xsd:string">Supermarket</Store_x0020_Type>
+                                        <Store_x0020_Manager xsi:type="xsd:string">White</Store_x0020_Manager>
+                                        <Store_x0020_Sqft xsi:type="xsd:double">23598</Store_x0020_Sqft>
+                                        <Grocery_x0020_Sqft xsi:type="xsd:double">14210</Grocery_x0020_Sqft>
+                                        <Frozen_x0020_Sqft xsi:type="xsd:double">5633</Frozen_x0020_Sqft>
+                                        <Meat_x0020_Sqft xsi:type="xsd:double">3755</Meat_x0020_Sqft>
+                                        <Has_x0020_coffee_x0020_bar xsi:type="xsd:boolean">false</Has_x0020_coffee_x0020_bar>
+                                        <Street_x0020_address xsi:type="xsd:string">1077 Wharf Drive</Street_x0020_address>
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[CA].[San Diego]</UName>
                                         <Caption>San Diego</Caption>
                                         <LName>[Store].[Store City]</LName>
@@ -519,7 +521,7 @@ where [Measures].[Unit Sales]
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[CA].[San Francisco]</UName>
                                         <Caption>San Francisco</Caption>
                                         <LName>[Store].[Store City]</LName>
@@ -529,7 +531,7 @@ where [Measures].[Unit Sales]
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[OR]</UName>
                                         <Caption>OR</Caption>
                                         <LName>[Store].[Store State]</LName>
@@ -539,7 +541,7 @@ where [Measures].[Unit Sales]
                                     </Member>
                                 </Tuple>
                                 <Tuple>
-                                    <Member Hierarchy="Store">
+                                    <Member Hierarchy="[Store]">
                                         <UName>[Store].[USA].[WA]</UName>
                                         <Caption>WA</Caption>
                                         <LName>[Store].[Store State]</LName>
@@ -553,14 +555,14 @@ where [Measures].[Unit Sales]
                         <Axis name="SlicerAxis">
                             <Tuples>
                                 <Tuple>
-                                    <Member Hierarchy="Measures">
+                                    <Member Hierarchy="[Measures]">
                                         <UName>[Measures].[Customer Count]</UName>
                                         <Caption>Customer Count</Caption>
                                         <LName>[Measures].[MeasuresLevel]</LName>
                                         <LNum>0</LNum>
                                         <DisplayInfo>0</DisplayInfo>
                                     </Member>
-                                    <Member Hierarchy="Gender">
+                                    <Member Hierarchy="[Gender]">
                                         <UName>[Gender].[M]</UName>
                                         <Caption>M</Caption>
                                         <LName>[Gender].[Gender]</LName>
@@ -573,42 +575,42 @@ where [Measures].[Unit Sales]
                     </Axes>
                     <CellData>
                         <Cell CellOrdinal="0">
-                            <Value xsi:type="xsd:int">2826</Value>
+                            <Value xsi:type="xsd:double">2826</Value>
                         </Cell>
                         <Cell CellOrdinal="1">
-                            <Value xsi:type="xsd:int">2826</Value>
+                            <Value xsi:type="xsd:double">2826</Value>
                         </Cell>
                         <Cell CellOrdinal="2">
-                            <Value xsi:type="xsd:int">1389</Value>
+                            <Value xsi:type="xsd:double">1389</Value>
                         </Cell>
                         <Cell CellOrdinal="3">
-                            <Value xsi:type="xsd:int">540</Value>
+                            <Value xsi:type="xsd:double">540</Value>
                         </Cell>
                         <Cell CellOrdinal="4">
-                            <Value xsi:type="xsd:int">540</Value>
+                            <Value xsi:type="xsd:double">540</Value>
                         </Cell>
                         <Cell CellOrdinal="5">
-                            <Value xsi:type="xsd:int">596</Value>
+                            <Value xsi:type="xsd:double">596</Value>
                         </Cell>
                         <Cell CellOrdinal="6">
-                            <Value xsi:type="xsd:int">596</Value>
+                            <Value xsi:type="xsd:double">596</Value>
                         </Cell>
                         <Cell CellOrdinal="7">
-                            <Value xsi:type="xsd:int">488</Value>
+                            <Value xsi:type="xsd:double">488</Value>
                         </Cell>
                         <Cell CellOrdinal="8">
-                            <Value xsi:type="xsd:int">150</Value>
+                            <Value xsi:type="xsd:double">150</Value>
                         </Cell>
                         <Cell CellOrdinal="9">
-                            <Value xsi:type="xsd:int">536</Value>
+                            <Value xsi:type="xsd:double">536</Value>
                         </Cell>
                         <Cell CellOrdinal="10">
-                            <Value xsi:type="xsd:int">901</Value>
+                            <Value xsi:type="xsd:double">901</Value>
                         </Cell>
                     </CellData>
                 </root>
-            </cxmla:return>
-        </cxmla:ExecuteResponse>
+            </return>
+        </ExecuteResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -652,8 +654,8 @@ where [Measures].[Unit Sales]
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -677,9 +679,9 @@ where [Measures].[Unit Sales]
                                 <xsd:element minOccurs="0" name="HIERARCHY_UNIQUE_NAME" sql:field="HIERARCHY_UNIQUE_NAME" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="LEVEL_UNIQUE_NAME" sql:field="LEVEL_UNIQUE_NAME" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="MEMBER_UNIQUE_NAME" sql:field="MEMBER_UNIQUE_NAME" type="xsd:string"/>
+                                <xsd:element name="PROPERTY_TYPE" sql:field="PROPERTY_TYPE" type="xsd:short"/>
                                 <xsd:element name="PROPERTY_NAME" sql:field="PROPERTY_NAME" type="xsd:string"/>
                                 <xsd:element name="PROPERTY_CAPTION" sql:field="PROPERTY_CAPTION" type="xsd:string"/>
-                                <xsd:element name="PROPERTY_TYPE" sql:field="PROPERTY_TYPE" type="xsd:short"/>
                                 <xsd:element name="DATA_TYPE" sql:field="DATA_TYPE" type="xsd:unsignedShort"/>
                                 <xsd:element minOccurs="0" name="PROPERTY_CONTENT_TYPE" sql:field="PROPERTY_CONTENT_TYPE" type="xsd:short"/>
                                 <xsd:element minOccurs="0" name="DESCRIPTION" sql:field="DESCRIPTION" type="xsd:string"/>
@@ -693,9 +695,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Type</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Type</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Store Hierarchy - Store Name Level - Store Type Property</DESCRIPTION>
@@ -707,9 +709,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Manager</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Manager</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Store Hierarchy - Store Name Level - Store Manager Property</DESCRIPTION>
@@ -721,9 +723,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Store Hierarchy - Store Name Level - Store Sqft Property</DESCRIPTION>
@@ -735,9 +737,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Grocery Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Grocery Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Store Hierarchy - Store Name Level - Grocery Sqft Property</DESCRIPTION>
@@ -749,9 +751,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Frozen Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Frozen Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Store Hierarchy - Store Name Level - Frozen Sqft Property</DESCRIPTION>
@@ -763,9 +765,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Meat Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Meat Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Store Hierarchy - Store Name Level - Meat Sqft Property</DESCRIPTION>
@@ -777,9 +779,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Has coffee bar</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Has coffee bar</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>11</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Store Hierarchy - Store Name Level - Has coffee bar Property</DESCRIPTION>
@@ -791,9 +793,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Street address</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Street address</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Store Hierarchy - Store Name Level - Street address Property</DESCRIPTION>
@@ -805,9 +807,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Employees]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Employees]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Employees].[Employee Id]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Marital Status</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Marital Status</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Employees Hierarchy - Employee Id Level - Marital Status Property</DESCRIPTION>
@@ -819,9 +821,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Employees]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Employees]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Employees].[Employee Id]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Position Title</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Position Title</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Employees Hierarchy - Employee Id Level - Position Title Property</DESCRIPTION>
@@ -833,9 +835,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Employees]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Employees]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Employees].[Employee Id]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Gender</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Gender</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Employees Hierarchy - Employee Id Level - Gender Property</DESCRIPTION>
@@ -847,9 +849,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Employees]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Employees]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Employees].[Employee Id]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Salary</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Salary</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Employees Hierarchy - Employee Id Level - Salary Property</DESCRIPTION>
@@ -861,9 +863,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Employees]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Employees]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Employees].[Employee Id]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Education Level</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Education Level</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Employees Hierarchy - Employee Id Level - Education Level Property</DESCRIPTION>
@@ -875,9 +877,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Employees]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Employees]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Employees].[Employee Id]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Management Role</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Management Role</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>HR Cube - Employees Hierarchy - Employee Id Level - Management Role Property</DESCRIPTION>
@@ -889,9 +891,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Type</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Type</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Cube - Store Hierarchy - Store Name Level - Store Type Property</DESCRIPTION>
@@ -903,9 +905,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Manager</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Manager</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Cube - Store Hierarchy - Store Name Level - Store Manager Property</DESCRIPTION>
@@ -917,9 +919,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Cube - Store Hierarchy - Store Name Level - Store Sqft Property</DESCRIPTION>
@@ -931,9 +933,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Grocery Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Grocery Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Cube - Store Hierarchy - Store Name Level - Grocery Sqft Property</DESCRIPTION>
@@ -945,9 +947,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Frozen Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Frozen Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Cube - Store Hierarchy - Store Name Level - Frozen Sqft Property</DESCRIPTION>
@@ -959,9 +961,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Meat Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Meat Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Cube - Store Hierarchy - Store Name Level - Meat Sqft Property</DESCRIPTION>
@@ -973,9 +975,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Has coffee bar</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Has coffee bar</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>11</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Cube - Store Hierarchy - Store Name Level - Has coffee bar Property</DESCRIPTION>
@@ -987,9 +989,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Street address</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Street address</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Cube - Store Hierarchy - Store Name Level - Street address Property</DESCRIPTION>
@@ -1001,9 +1003,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Customers]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Customers]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Customers].[Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Gender</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Gender</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Cube - Customers Hierarchy - Name Level - Gender Property</DESCRIPTION>
@@ -1015,9 +1017,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Customers]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Customers]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Customers].[Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Marital Status</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Marital Status</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Cube - Customers Hierarchy - Name Level - Marital Status Property</DESCRIPTION>
@@ -1029,9 +1031,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Customers]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Customers]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Customers].[Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Education</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Education</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Cube - Customers Hierarchy - Name Level - Education Property</DESCRIPTION>
@@ -1043,9 +1045,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Customers]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Customers]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Customers].[Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Yearly Income</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Yearly Income</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Cube - Customers Hierarchy - Name Level - Yearly Income Property</DESCRIPTION>
@@ -1057,9 +1059,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Type</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Type</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Ragged Cube - Store Hierarchy - Store Name Level - Store Type Property</DESCRIPTION>
@@ -1071,9 +1073,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Manager</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Manager</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Ragged Cube - Store Hierarchy - Store Name Level - Store Manager Property</DESCRIPTION>
@@ -1085,9 +1087,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Ragged Cube - Store Hierarchy - Store Name Level - Store Sqft Property</DESCRIPTION>
@@ -1099,9 +1101,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Grocery Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Grocery Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Ragged Cube - Store Hierarchy - Store Name Level - Grocery Sqft Property</DESCRIPTION>
@@ -1113,9 +1115,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Frozen Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Frozen Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Ragged Cube - Store Hierarchy - Store Name Level - Frozen Sqft Property</DESCRIPTION>
@@ -1127,9 +1129,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Meat Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Meat Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Ragged Cube - Store Hierarchy - Store Name Level - Meat Sqft Property</DESCRIPTION>
@@ -1141,9 +1143,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Has coffee bar</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Has coffee bar</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>11</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Ragged Cube - Store Hierarchy - Store Name Level - Has coffee bar Property</DESCRIPTION>
@@ -1155,9 +1157,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Street address</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Street address</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Ragged Cube - Store Hierarchy - Store Name Level - Street address Property</DESCRIPTION>
@@ -1169,9 +1171,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Customers]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Customers]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Customers].[Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Gender</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Gender</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Ragged Cube - Customers Hierarchy - Name Level - Gender Property</DESCRIPTION>
@@ -1183,9 +1185,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Customers]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Customers]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Customers].[Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Marital Status</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Marital Status</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Ragged Cube - Customers Hierarchy - Name Level - Marital Status Property</DESCRIPTION>
@@ -1197,9 +1199,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Customers]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Customers]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Customers].[Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Education</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Education</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Ragged Cube - Customers Hierarchy - Name Level - Education Property</DESCRIPTION>
@@ -1211,9 +1213,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Customers]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Customers]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Customers].[Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Yearly Income</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Yearly Income</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Sales Ragged Cube - Customers Hierarchy - Name Level - Yearly Income Property</DESCRIPTION>
@@ -1225,9 +1227,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Type</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Type</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Store Cube - Store Hierarchy - Store Name Level - Store Type Property</DESCRIPTION>
@@ -1239,9 +1241,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Manager</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Manager</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Store Cube - Store Hierarchy - Store Name Level - Store Manager Property</DESCRIPTION>
@@ -1253,9 +1255,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Store Cube - Store Hierarchy - Store Name Level - Store Sqft Property</DESCRIPTION>
@@ -1267,9 +1269,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Grocery Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Grocery Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Store Cube - Store Hierarchy - Store Name Level - Grocery Sqft Property</DESCRIPTION>
@@ -1281,9 +1283,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Frozen Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Frozen Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Store Cube - Store Hierarchy - Store Name Level - Frozen Sqft Property</DESCRIPTION>
@@ -1295,9 +1297,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Meat Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Meat Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Store Cube - Store Hierarchy - Store Name Level - Meat Sqft Property</DESCRIPTION>
@@ -1309,9 +1311,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Has coffee bar</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Has coffee bar</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>11</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Store Cube - Store Hierarchy - Store Name Level - Has coffee bar Property</DESCRIPTION>
@@ -1323,9 +1325,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Street address</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Street address</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Store Cube - Store Hierarchy - Store Name Level - Street address Property</DESCRIPTION>
@@ -1337,9 +1339,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Type</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Type</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse Cube - Store Hierarchy - Store Name Level - Store Type Property</DESCRIPTION>
@@ -1351,9 +1353,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Manager</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Manager</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse Cube - Store Hierarchy - Store Name Level - Store Manager Property</DESCRIPTION>
@@ -1365,9 +1367,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse Cube - Store Hierarchy - Store Name Level - Store Sqft Property</DESCRIPTION>
@@ -1379,9 +1381,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Grocery Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Grocery Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse Cube - Store Hierarchy - Store Name Level - Grocery Sqft Property</DESCRIPTION>
@@ -1393,9 +1395,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Frozen Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Frozen Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse Cube - Store Hierarchy - Store Name Level - Frozen Sqft Property</DESCRIPTION>
@@ -1407,9 +1409,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Meat Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Meat Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse Cube - Store Hierarchy - Store Name Level - Meat Sqft Property</DESCRIPTION>
@@ -1421,9 +1423,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Has coffee bar</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Has coffee bar</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>11</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse Cube - Store Hierarchy - Store Name Level - Has coffee bar Property</DESCRIPTION>
@@ -1435,9 +1437,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Street address</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Street address</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse Cube - Store Hierarchy - Store Name Level - Street address Property</DESCRIPTION>
@@ -1449,9 +1451,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Customers]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Customers]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Customers].[Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Gender</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Gender</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse and Sales Cube - Customers Hierarchy - Name Level - Gender Property</DESCRIPTION>
@@ -1463,9 +1465,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Customers]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Customers]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Customers].[Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Marital Status</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Marital Status</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse and Sales Cube - Customers Hierarchy - Name Level - Marital Status Property</DESCRIPTION>
@@ -1477,9 +1479,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Customers]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Customers]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Customers].[Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Education</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Education</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse and Sales Cube - Customers Hierarchy - Name Level - Education Property</DESCRIPTION>
@@ -1491,9 +1493,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Customers]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Customers]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Customers].[Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Yearly Income</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Yearly Income</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse and Sales Cube - Customers Hierarchy - Name Level - Yearly Income Property</DESCRIPTION>
@@ -1505,9 +1507,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Type</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Type</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse and Sales Cube - Store Hierarchy - Store Name Level - Store Type Property</DESCRIPTION>
@@ -1519,9 +1521,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Manager</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Manager</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse and Sales Cube - Store Hierarchy - Store Name Level - Store Manager Property</DESCRIPTION>
@@ -1533,9 +1535,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Store Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Store Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse and Sales Cube - Store Hierarchy - Store Name Level - Store Sqft Property</DESCRIPTION>
@@ -1547,9 +1549,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Grocery Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Grocery Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse and Sales Cube - Store Hierarchy - Store Name Level - Grocery Sqft Property</DESCRIPTION>
@@ -1561,9 +1563,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Frozen Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Frozen Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse and Sales Cube - Store Hierarchy - Store Name Level - Frozen Sqft Property</DESCRIPTION>
@@ -1575,9 +1577,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Meat Sqft</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Meat Sqft</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>5</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse and Sales Cube - Store Hierarchy - Store Name Level - Meat Sqft Property</DESCRIPTION>
@@ -1589,9 +1591,9 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Has coffee bar</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Has coffee bar</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>11</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse and Sales Cube - Store Hierarchy - Store Name Level - Has coffee bar Property</DESCRIPTION>
@@ -1603,16 +1605,16 @@ where [Measures].[Unit Sales]
                         <DIMENSION_UNIQUE_NAME>[Store]</DIMENSION_UNIQUE_NAME>
                         <HIERARCHY_UNIQUE_NAME>[Store]</HIERARCHY_UNIQUE_NAME>
                         <LEVEL_UNIQUE_NAME>[Store].[Store Name]</LEVEL_UNIQUE_NAME>
+                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <PROPERTY_NAME>Street address</PROPERTY_NAME>
                         <PROPERTY_CAPTION>Street address</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>1</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                         <PROPERTY_CONTENT_TYPE>0</PROPERTY_CONTENT_TYPE>
                         <DESCRIPTION>Warehouse and Sales Cube - Store Hierarchy - Store Name Level - Street address Property</DESCRIPTION>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -1650,8 +1652,8 @@ where [Measures].[Unit Sales]
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:DiscoverResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <DiscoverResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:element name="root">
@@ -1675,9 +1677,9 @@ where [Measures].[Unit Sales]
                                 <xsd:element minOccurs="0" name="HIERARCHY_UNIQUE_NAME" sql:field="HIERARCHY_UNIQUE_NAME" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="LEVEL_UNIQUE_NAME" sql:field="LEVEL_UNIQUE_NAME" type="xsd:string"/>
                                 <xsd:element minOccurs="0" name="MEMBER_UNIQUE_NAME" sql:field="MEMBER_UNIQUE_NAME" type="xsd:string"/>
+                                <xsd:element name="PROPERTY_TYPE" sql:field="PROPERTY_TYPE" type="xsd:short"/>
                                 <xsd:element name="PROPERTY_NAME" sql:field="PROPERTY_NAME" type="xsd:string"/>
                                 <xsd:element name="PROPERTY_CAPTION" sql:field="PROPERTY_CAPTION" type="xsd:string"/>
-                                <xsd:element name="PROPERTY_TYPE" sql:field="PROPERTY_TYPE" type="xsd:short"/>
                                 <xsd:element name="DATA_TYPE" sql:field="DATA_TYPE" type="xsd:unsignedShort"/>
                                 <xsd:element minOccurs="0" name="PROPERTY_CONTENT_TYPE" sql:field="PROPERTY_CONTENT_TYPE" type="xsd:short"/>
                                 <xsd:element minOccurs="0" name="DESCRIPTION" sql:field="DESCRIPTION" type="xsd:string"/>
@@ -1685,104 +1687,104 @@ where [Measures].[Unit Sales]
                         </xsd:complexType>
                     </xsd:schema>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>BACK_COLOR</PROPERTY_NAME>
                         <PROPERTY_CAPTION>BACK_COLOR</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>CELL_EVALUATION_LIST</PROPERTY_NAME>
                         <PROPERTY_CAPTION>CELL_EVALUATION_LIST</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>CELL_ORDINAL</PROPERTY_NAME>
                         <PROPERTY_CAPTION>CELL_ORDINAL</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>19</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>FORE_COLOR</PROPERTY_NAME>
                         <PROPERTY_CAPTION>FORE_COLOR</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>FONT_NAME</PROPERTY_NAME>
                         <PROPERTY_CAPTION>FONT_NAME</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>FONT_SIZE</PROPERTY_NAME>
                         <PROPERTY_CAPTION>FONT_SIZE</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>FONT_FLAGS</PROPERTY_NAME>
                         <PROPERTY_CAPTION>FONT_FLAGS</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>19</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>FORMATTED_VALUE</PROPERTY_NAME>
                         <PROPERTY_CAPTION>FORMATTED_VALUE</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>FORMAT_STRING</PROPERTY_NAME>
                         <PROPERTY_CAPTION>FORMAT_STRING</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>NON_EMPTY_BEHAVIOR</PROPERTY_NAME>
                         <PROPERTY_CAPTION>NON_EMPTY_BEHAVIOR</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>SOLVE_ORDER</PROPERTY_NAME>
                         <PROPERTY_CAPTION>SOLVE_ORDER</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>3</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>VALUE</PROPERTY_NAME>
                         <PROPERTY_CAPTION>VALUE</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>12</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>DATATYPE</PROPERTY_NAME>
                         <PROPERTY_CAPTION>DATATYPE</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>130</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>LANGUAGE</PROPERTY_NAME>
                         <PROPERTY_CAPTION>LANGUAGE</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>19</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>ACTION_TYPE</PROPERTY_NAME>
                         <PROPERTY_CAPTION>ACTION_TYPE</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>1009</DATA_TYPE>
                     </row>
                     <row>
+                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <PROPERTY_NAME>UPDATEABLE</PROPERTY_NAME>
                         <PROPERTY_CAPTION>UPDATEABLE</PROPERTY_CAPTION>
-                        <PROPERTY_TYPE>2</PROPERTY_TYPE>
                         <DATA_TYPE>19</DATA_TYPE>
                     </row>
                 </root>
-            </cxmla:return>
-        </cxmla:DiscoverResponse>
+            </return>
+        </DiscoverResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
@@ -1825,8 +1827,8 @@ where [Measures].[Unit Sales]
         <Session SessionId="${session.id}" xmlns="urn:schemas-microsoft-com:xml-analysis"/>
     </SOAP-ENV:Header>
     <SOAP-ENV:Body>
-        <cxmla:ExecuteResponse xmlns:cxmla="urn:schemas-microsoft-com:xml-analysis">
-            <cxmla:return>
+        <ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis">
+            <return>
                 <root xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:EX="urn:schemas-microsoft-com:xml-analysis:exception" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                     <xsd:schema elementFormDefault="qualified" targetNamespace="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:sql="urn:schemas-microsoft-com:xml-sql" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <xsd:complexType name="MemberType">
@@ -1997,33 +1999,35 @@ where [Measures].[Unit Sales]
                         <CubeInfo>
                             <Cube>
                                 <CubeName>Sales</CubeName>
+                                <LastDataUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastDataUpdate>
+                                <LastSchemaUpdate xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">xxxx-xx-xxTxx:xx:xx</LastSchemaUpdate>
                             </Cube>
                         </CubeInfo>
                         <AxesInfo>
                             <AxisInfo name="SlicerAxis">
-                                <HierarchyInfo name="Measures">
-                                    <UName name="[Measures].[MEMBER_UNIQUE_NAME]"/>
-                                    <Caption name="[Measures].[MEMBER_CAPTION]"/>
-                                    <LName name="[Measures].[LEVEL_UNIQUE_NAME]"/>
-                                    <LNum name="[Measures].[LEVEL_NUMBER]"/>
-                                    <DisplayInfo name="[Measures].[DISPLAY_INFO]"/>
+                                <HierarchyInfo name="[Measures]">
+                                    <UName name="[Measures].[MEMBER_UNIQUE_NAME]" type="xsd:string"/>
+                                    <Caption name="[Measures].[MEMBER_CAPTION]" type="xsd:string"/>
+                                    <LName name="[Measures].[LEVEL_UNIQUE_NAME]" type="xsd:string"/>
+                                    <LNum name="[Measures].[LEVEL_NUMBER]" type="xsd:unsignedInt"/>
+                                    <DisplayInfo name="[Measures].[DISPLAY_INFO]" type="xsd:unsignedInt"/>
                                 </HierarchyInfo>
                             </AxisInfo>
                         </AxesInfo>
                         <CellInfo>
                             <Value name="VALUE"/>
-                            <FormatString name="FORMAT_STRING"/>
-                            <Language name="LANGUAGE"/>
-                            <BackColor name="BACK_COLOR"/>
-                            <ForeColor name="FORE_COLOR"/>
-                            <FontFlags name="FONT_FLAGS"/>
+                            <FormatString name="FORMAT_STRING" type="xsd:string"/>
+                            <Language name="LANGUAGE" type="xsd:unsignedInt"/>
+                            <BackColor name="BACK_COLOR" type="xsd:unsignedInt"/>
+                            <ForeColor name="FORE_COLOR" type="xsd:unsignedInt"/>
+                            <FontFlags name="FONT_FLAGS" type="xsd:int"/>
                         </CellInfo>
                     </OlapInfo>
                     <Axes>
                         <Axis name="SlicerAxis">
                             <Tuples>
                                 <Tuple>
-                                    <Member Hierarchy="Measures">
+                                    <Member Hierarchy="[Measures]">
                                         <UName>[Measures].[Unit Sales]</UName>
                                         <Caption>Unit Sales</Caption>
                                         <LName>[Measures].[MeasuresLevel]</LName>
@@ -2038,11 +2042,12 @@ where [Measures].[Unit Sales]
                         <Cell CellOrdinal="0">
                             <Value xsi:type="xsd:double">266773</Value>
                             <FormatString>Standard</FormatString>
+                            <FontFlags>0</FontFlags>
                         </Cell>
                     </CellData>
                 </root>
-            </cxmla:return>
-        </cxmla:ExecuteResponse>
+            </return>
+        </ExecuteResponse>
     </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 ]]>
