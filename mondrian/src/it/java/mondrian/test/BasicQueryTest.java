@@ -1636,7 +1636,7 @@ public class BasicQueryTest extends FoodMartTestCase {
     if ( !testContext.getDialect().allowsFromQuery() ) {
       return;
     }
-    testContext.assertAxisReturns( "[Gender2].members", "[Gender2].[All Gender]\n" + "[Gender2].[F]\n"
+    testContext.assertAxisReturns( "[Gender2],, "[Gender2].[All Gender]\n" + "[Gender2].[F]\n"
         + "[Gender2].[M]" );
   }
 

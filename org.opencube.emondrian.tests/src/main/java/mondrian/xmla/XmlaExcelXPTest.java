@@ -156,15 +156,6 @@ public class XmlaExcelXPTest extends XmlaBaseTestCase {
         helperTest(context,true);
     }
 
-    // The slicerAxis is empty in Mondrian by not empty in SQLServer.
-    // The xml schema returned by SQL Server is not the version 1.0
-    // schema returned by Mondrian.
-    // Values are correct.
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void _test18(Context context) {
-        helperTest(context,true);
-    }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
@@ -175,20 +166,6 @@ public class XmlaExcelXPTest extends XmlaBaseTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void test20(Context context) {
-        helperTest(context,true);
-    }
-
-    // Same issue as test18: slicerAxis
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void _test21(Context context) {
-        helperTest(context,true);
-    }
-
-    // Same issue as test18: slicerAxis
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void _test22(Context context) {
         helperTest(context,true);
     }
 
