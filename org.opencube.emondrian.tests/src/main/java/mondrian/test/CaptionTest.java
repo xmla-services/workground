@@ -36,7 +36,6 @@ public class CaptionTest{
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testMeasureCaption(Context context) {
-    	Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
         withSchemaProcessor(context, MyFoodmart.class);
         final Connection monConnection =
                 context.createConnection();
@@ -58,7 +57,6 @@ public class CaptionTest{
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testDimCaption(Context context) {
-    	Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
         withSchemaProcessor(context, MyFoodmart.class);
         final Connection monConnection =
                 context.createConnection();
@@ -81,7 +79,6 @@ public class CaptionTest{
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testDimCaptionShared(Context context) {
-    	Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
         String mdxQuery =
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
                         + "{[Store Size in SQFT].[All Store Size in SQFTs]} ON ROWS "
@@ -123,7 +120,6 @@ public class CaptionTest{
                 // Oracle and MySQL are supported in this test.
                 return;
         }
-        Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
         withSchemaProcessor(context, MyFoodmart.class);
         final Connection monConnection =
                 context.createConnection();
