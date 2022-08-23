@@ -233,7 +233,7 @@ System.out.println("password=" + password);
             String errorDesc)
         {
             this.faultCode = faultCode;
-            this.faultString = faultString;
+            this.faultString = faultString + " " + errorDesc;
             this.faultActor = faultActor;
             this.errorNS = errorNS;
             this.errorCode = errorCode;
@@ -271,19 +271,17 @@ System.out.println("password=" + password);
                 node = faultNodes[0];
                 errorNS = node.getNamespaceURI();
                 faultNodes = getChildElements(node);
-                if (faultNodes.length != 2) {
-                    throw new Exception(
-                        "SOAP Fault detail error node has "
-                        + faultNodes.length
-                        + " children");
-                }
+//                if (faultNodes.length != 2) {
+//                    throw new Exception(
+//                        "SOAP Fault detail error node has "
+//                        + faultNodes.length
+//                        + " children");
+//                }
                 // error code element
-                node = faultNodes[0];
-                errorCode = getNodeContent(node);
+                errorCode = node.getAttributes().getNamedItem("ErrorCode").getNodeValue();
 
                 // error desc element
-                node = faultNodes[1];
-                errorDesc = getNodeContent(node);
+                errorDesc = node.getAttributes().getNamedItem("Description").getNodeValue();
             } else {
                 errorNS = errorCode = errorDesc = null;
             }
@@ -415,8 +413,9 @@ System.out.println("password=" + password);
                     USM_DOM_PARSE_CODE),
                     USM_DOM_PARSE_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    USM_DOM_PARSE_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Premature end of file.");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -432,8 +431,9 @@ System.out.println("password=" + password);
                     USM_DOM_PARSE_CODE),
                     USM_DOM_PARSE_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    USM_DOM_PARSE_CODE, null);
+                    null,
+                    "3238658121", 
+                    "The element type \"soapenv:FOOEnvelope\" must be terminated by the matching end-tag \"</soapenv:FOOEnvelope>\".");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -449,8 +449,9 @@ System.out.println("password=" + password);
                     USM_DOM_PARSE_CODE),
                     USM_DOM_PARSE_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    USM_DOM_PARSE_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Invalid SOAP message: Envelope element not in SOAP namespace");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -468,8 +469,9 @@ System.out.println("password=" + password);
                     HSB_BAD_SOAP_BODY_CODE),
                     HSB_BAD_SOAP_BODY_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_SOAP_BODY_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Invalid XML/A message: Body has 0 Discover Requests and 0 Execute Requests");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -484,8 +486,9 @@ System.out.println("password=" + password);
                     HSB_BAD_SOAP_BODY_CODE),
                     HSB_BAD_SOAP_BODY_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_SOAP_BODY_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Invalid XML/A message: Body has 2 Discover Requests and 0 Execute Requests");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -500,8 +503,9 @@ System.out.println("password=" + password);
                     HSB_BAD_SOAP_BODY_CODE),
                     HSB_BAD_SOAP_BODY_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_SOAP_BODY_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Invalid XML/A message: Body has 1 Discover Requests and 1 Execute Requests");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -519,8 +523,9 @@ System.out.println("password=" + password);
                     USM_DOM_PARSE_CODE),
                     USM_DOM_PARSE_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    USM_DOM_PARSE_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Invalid SOAP message: More than one Header elements"); 
 
         doTest(expectedFault, context.createConnection());
     }
@@ -533,7 +538,7 @@ System.out.println("password=" + password);
                     USM_DOM_PARSE_CODE),
                     USM_DOM_PARSE_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
+                    null,
                     USM_DOM_PARSE_CODE, null);
 
         doTest(expectedFault, context.createConnection());
@@ -554,8 +559,9 @@ System.out.println("password=" + password);
                     CHH_AUTHORIZATION_CODE),
                     CHH_AUTHORIZATION_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    CHH_AUTHORIZATION_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Authorization: no header value");
         doAuthorization = true;
         try {
             doTest(expectedFault, context.createConnection());
@@ -575,8 +581,9 @@ System.out.println("password=" + password);
                     CHH_AUTHORIZATION_CODE),
                     CHH_AUTHORIZATION_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    CHH_AUTHORIZATION_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Authorization: badly formed userPass in encoding: FOOBAR");
 
         doAuthorization = true;
 
@@ -654,8 +661,9 @@ System.out.println("DO IT AGAIN");
                     CHH_AUTHORIZATION_CODE),
                     CHH_AUTHORIZATION_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    CHH_AUTHORIZATION_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Authorization: bad userid: MY_USER should be: MY_USERFOO");
 
         doAuthorization = true;
 
@@ -699,8 +707,9 @@ System.out.println("DO IT AGAIN");
                     CHH_AUTHORIZATION_CODE),
                     CHH_AUTHORIZATION_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    CHH_AUTHORIZATION_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Authorization: bad password: MY_PASSWORD should be: MY_PASSWORDFOO");
 
         doAuthorization = true;
 
@@ -742,7 +751,7 @@ System.out.println("DO IT AGAIN");
             new Fault(
                 XmlaException.formatFaultCode(
                     MUST_UNDERSTAND_FAULT_FC,
-                    HSH_MUST_UNDERSTAND_CODE),
+                    HSB_PROCESS_CODE),
                     HSH_MUST_UNDERSTAND_FAULT_FS,
                     FAULT_ACTOR,
                     null, null, null);
@@ -761,8 +770,9 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_SOAP_BODY_CODE),
                     HSB_BAD_SOAP_BODY_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_SOAP_BODY_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Invalid XML/A message: Body has 1 Discover Requests and 1 Execute Requests");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -777,8 +787,9 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_SOAP_BODY_CODE),
                     HSB_BAD_SOAP_BODY_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_SOAP_BODY_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Invalid XML/A message: Body has 0 Discover Requests and 0 Execute Requests");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -793,8 +804,9 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_SOAP_BODY_CODE),
                     HSB_BAD_SOAP_BODY_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_SOAP_BODY_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Invalid XML/A message: Body has 0 Discover Requests and 0 Execute Requests");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -809,8 +821,9 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_REQUEST_TYPE_CODE),
                     HSB_BAD_REQUEST_TYPE_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_REQUEST_TYPE_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of RequestType elements: 0");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -825,8 +838,9 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_RESTRICTIONS_CODE),
                     HSB_BAD_RESTRICTIONS_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_RESTRICTIONS_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of Restrictions elements: 0");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -841,8 +855,9 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_PROPERTIES_CODE),
                     HSB_BAD_PROPERTIES_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_PROPERTIES_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of Properties elements: 0");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -857,8 +872,9 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_COMMAND_CODE),
                     HSB_BAD_COMMAND_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_COMMAND_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of Command elements: 0");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -873,8 +889,9 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_PROPERTIES_CODE),
                     HSB_BAD_PROPERTIES_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_PROPERTIES_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of Properties elements: 0");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -889,8 +906,9 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_RESTRICTION_LIST_CODE),
                     HSB_BAD_RESTRICTION_LIST_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_RESTRICTION_LIST_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of RestrictionList elements: 2");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -905,8 +923,9 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_PROPERTIES_LIST_CODE),
                     HSB_BAD_PROPERTIES_LIST_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_PROPERTIES_LIST_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of PropertyList elements: 2");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -921,8 +940,9 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_PROPERTIES_LIST_CODE),
                     HSB_BAD_PROPERTIES_LIST_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
-                    HSB_BAD_PROPERTIES_LIST_CODE, null);
+                    null,
+                    "3238658121", 
+                    "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of PropertyList elements: 2");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -937,7 +957,7 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_STATEMENT_CODE),
                     HSB_BAD_STATEMENT_FAULT_FS,
                     FAULT_ACTOR,
-                    MONDRIAN_NAMESPACE,
+                    null,
                     HSB_BAD_STATEMENT_CODE, null);
 
         doTest(expectedFault, context.createConnection());
@@ -953,7 +973,7 @@ System.out.println("DO IT AGAIN");
                     HSB_DRILL_THROUGH_FORMAT_CODE),
                 HSB_DRILL_THROUGH_FORMAT_FAULT_FS,
                 FAULT_ACTOR,
-                MONDRIAN_NAMESPACE,
+                null,
                 HSB_DRILL_THROUGH_FORMAT_CODE,
                 null);
 
@@ -970,7 +990,7 @@ System.out.println("DO IT AGAIN");
                     HSB_DRILL_THROUGH_FORMAT_CODE),
                 HSB_DRILL_THROUGH_FORMAT_FAULT_FS,
                 FAULT_ACTOR,
-                MONDRIAN_NAMESPACE,
+                null,
                 HSB_DRILL_THROUGH_FORMAT_CODE,
                 null);
 
@@ -987,7 +1007,7 @@ System.out.println("DO IT AGAIN");
                     HSB_DRILL_THROUGH_FORMAT_CODE),
                 HSB_DRILL_THROUGH_FORMAT_FAULT_FS,
                 FAULT_ACTOR,
-                MONDRIAN_NAMESPACE,
+                null,
                 HSB_DRILL_THROUGH_FORMAT_CODE,
                 null);
 
