@@ -128,7 +128,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 	private List<Context> prepareContexts(ExtensionContext extensionContext) {
 		Stream<DatabaseProvider> providers;
-
+		Thread.currentThread().setContextClassLoader(getClass().getClassLoader()); //for withSchemaProcessor(context, MyFoodmart.class);
 		Class<? extends DatabaseProvider>[] dbHandlerClasses = contextSource.database();
 		if (dbHandlerClasses == null || dbHandlerClasses.length == 0) {
 			providers = ServiceLoader.load(DatabaseProvider.class, this.getClass().getClassLoader()).stream()

@@ -994,7 +994,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             + "(select \"warehouse_class\".\"warehouse_class_id\" AS \"warehouse_class_id\" "
             + "from \"warehouse_class\" AS \"warehouse_class\" "
             + "where \"warehouse_class\".\"warehouse_class_id\" = \"warehouse\".\"warehouse_class_id\" and \"warehouse_class\".\"description\" = 'Large Owned')) as \"m0\" "
-            + "from \"store\" as \"store\", \"warehouse\" as \"warehouse\" "
+            + "from \"warehouse\" as \"warehouse\", \"store\" as \"store\" "
             + "where \"warehouse\".\"stores_id\" = \"store\".\"store_id\" " + "group by \"store\".\"store_type\"";
 
     String loadCountDistinct_luciddb2 =
@@ -1002,7 +1002,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             + "(select \"warehouse_class\".\"warehouse_class_id\" AS \"warehouse_class_id\" "
             + "from \"warehouse_class\" AS \"warehouse_class\" "
             + "where \"warehouse_class\".\"warehouse_class_id\" = \"warehouse\".\"warehouse_class_id\" and \"warehouse_class\".\"description\" = 'Large Independent')) as \"m0\" "
-            + "from \"store\" as \"store\", \"warehouse\" as \"warehouse\" "
+            + "from \"warehouse\" as \"warehouse\", \"store\" as \"store\" "
             + "where \"warehouse\".\"stores_id\" = \"store\".\"store_id\" " + "group by \"store\".\"store_type\"";
 
     String loadOtherAggs_luciddb =
@@ -1012,7 +1012,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             + "where \"warehouse_class\".\"warehouse_class_id\" = \"warehouse\".\"warehouse_class_id\" and \"warehouse_class\".\"description\" = 'Large Independent')) as \"m0\", "
             + "count(distinct \"store_id\"+\"warehouse_id\") as \"m1\", "
             + "count(\"store_id\"+\"warehouse_id\") as \"m2\", " + "count(\"warehouse\".\"stores_id\") as \"m3\" "
-            + "from \"store\" as \"store\", \"warehouse\" as \"warehouse\" "
+            + "from \"warehouse\" as \"warehouse\", \"store\" as \"store\" "
             + "where \"warehouse\".\"stores_id\" = \"store\".\"store_id\" " + "group by \"store\".\"store_type\"";
 
     // Derby splits into multiple statements.
@@ -1032,7 +1032,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             + " count(distinct (select `warehouse_class`.`warehouse_class_id` AS `warehouse_class_id` from `warehouse_class` AS `warehouse_class` where `warehouse_class`.`warehouse_class_id` = `warehouse`.`warehouse_class_id` and `warehouse_class`.`description` = 'Large Independent')) as `m1`,"
             + " count((select `warehouse_class`.`warehouse_class_id` AS `warehouse_class_id` from `warehouse_class` AS `warehouse_class` where `warehouse_class`.`warehouse_class_id` = `warehouse`.`warehouse_class_id` and `warehouse_class`.`description` = 'Large Independent')) as `m2`,"
             + " count(distinct `store_id`+`warehouse_id`) as `m3`," + " count(`store_id`+`warehouse_id`) as `m4`,"
-            + " count(`warehouse`.`stores_id`) as `m5` " + "from `store` as `store`," + " `warehouse` as `warehouse` "
+            + " count(`warehouse`.`stores_id`) as `m5` " + "from `warehouse` as `warehouse`," + " `store` as `store` "
             + "where `warehouse`.`stores_id` = `store`.`store_id` " + "group by `store`.`store_type`";
 
     SqlPattern[] patterns =
@@ -1128,7 +1128,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
         "select " + "\"time_by_day\".\"the_year\" as \"c0\", \"time_by_day\".\"quarter\" as \"c1\", "
             + "\"promotion\".\"media_type\" as \"c2\", "
             + "count(distinct \"sales_fact_1997\".\"customer_id\") as \"m0\" " + "from "
-            + "\"time_by_day\" \"time_by_day\", \"sales_fact_1997\" \"sales_fact_1997\", "
+            + "\"sales_fact_1997\" \"sales_fact_1997\",  \"time_by_day\" \"time_by_day\", "
             + "\"promotion\" \"promotion\" " + "where "
             + "\"sales_fact_1997\".\"time_id\" = \"time_by_day\".\"time_id\" and "
             + "\"time_by_day\".\"the_year\" = 1997 and " + "\"time_by_day\".\"quarter\" = 'Q1' and "
@@ -1139,7 +1139,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     final String mysqlSql =
         "select " + "`time_by_day`.`the_year` as `c0`, `time_by_day`.`quarter` as `c1`, "
             + "`promotion`.`media_type` as `c2`, count(distinct `sales_fact_1997`.`customer_id`) as `m0` " + "from "
-            + "`time_by_day` as `time_by_day`, `sales_fact_1997` as `sales_fact_1997`, "
+            + "`sales_fact_1997` as `sales_fact_1997`, `time_by_day` as `time_by_day`, "
             + "`promotion` as `promotion` " + "where " + "`sales_fact_1997`.`time_id` = `time_by_day`.`time_id` and "
             + "`time_by_day`.`the_year` = 1997 and `time_by_day`.`quarter` = 'Q1' and `"
             + "sales_fact_1997`.`promotion_id` = `promotion`.`promotion_id` and "
@@ -1150,7 +1150,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
         "select " + "\"time_by_day\".\"the_year\" as \"c0\", \"time_by_day\".\"quarter\" as \"c1\", "
             + "\"promotion\".\"media_type\" as \"c2\", "
             + "count(distinct \"sales_fact_1997\".\"customer_id\") as \"m0\" " + "from "
-            + "\"time_by_day\" as \"time_by_day\", \"sales_fact_1997\" as \"sales_fact_1997\", "
+            + "\"sales_fact_1997\" as \"sales_fact_1997\", \"time_by_day\" as \"time_by_day\", "
             + "\"promotion\" as \"promotion\" " + "where "
             + "\"sales_fact_1997\".\"time_id\" = \"time_by_day\".\"time_id\" and "
             + "\"time_by_day\".\"the_year\" = 1997 and \"time_by_day\".\"quarter\" = 'Q1' and "
@@ -1220,7 +1220,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     String derbySql =
         "select \"store\".\"store_state\" as \"c0\", " + "\"time_by_day\".\"the_year\" as \"c1\", "
             + "count(distinct \"sales_fact_1997\".\"customer_id\") as \"m0\" "
-            + "from \"store\" as \"store\", \"sales_fact_1997\" as \"sales_fact_1997\", "
+            + "from \"sales_fact_1997\" as \"sales_fact_1997\", \"store\" as \"store\", "
             + "\"time_by_day\" as \"time_by_day\" "
             + "where \"sales_fact_1997\".\"store_id\" = \"store\".\"store_id\" "
             + "and \"sales_fact_1997\".\"time_id\" = \"time_by_day\".\"time_id\" "
@@ -1230,7 +1230,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     String mysqlSql =
         "select `store`.`store_state` as `c0`, `time_by_day`.`the_year` as `c1`, "
             + "count(distinct `sales_fact_1997`.`customer_id`) as `m0` "
-            + "from `store` as `store`, `sales_fact_1997` as `sales_fact_1997`, " + "`time_by_day` as `time_by_day` "
+            + "from `sales_fact_1997` as `sales_fact_1997`, `store` as `store`, " + "`time_by_day` as `time_by_day` "
             + "where `sales_fact_1997`.`store_id` = `store`.`store_id` "
             + "and `sales_fact_1997`.`time_id` = `time_by_day`.`time_id` " + "and `time_by_day`.`the_year` = 1997 "
             + "group by `store`.`store_state`, `time_by_day`.`the_year`";
@@ -1239,7 +1239,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
         { new SqlPattern( Dialect.DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern(
             Dialect.DatabaseProduct.MYSQL, mysqlSql, mysqlSql ) };
 
-    assertQuerySql(context.createConnection(), query, patterns );
+     assertQuerySql(context.createConnection(), query, patterns );
   }
 
   // Test for multiple members on different levels within the same hierarchy.
@@ -1296,7 +1296,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     String mysqlSql =
         "select " + "`store`.`store_state` as `c0`, `time_by_day`.`the_year` as `c1`, "
             + "count(distinct `sales_fact_1997`.`customer_id`) as `m0` " + "from "
-            + "`store` as `store`, `sales_fact_1997` as `sales_fact_1997`, "
+            + "`sales_fact_1997` as `sales_fact_1997`, `store` as `store`, "
             + "`time_by_day` as `time_by_day`, `product_class` as `product_class`, " + "`product` as `product` "
             + "where " + "`sales_fact_1997`.`store_id` = `store`.`store_id` " + "and `store`.`store_state` = 'WA' "
             + "and `sales_fact_1997`.`time_id` = `time_by_day`.`time_id` " + "and `time_by_day`.`the_year` = 1997 "
@@ -1308,8 +1308,8 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     String accessSql =
         "select `d0` as `c0`," + " `d1` as `c1`," + " count(`m0`) as `c2` "
             + "from (select distinct `store`.`store_state` as `d0`," + " `time_by_day`.`the_year` as `d1`,"
-            + " `sales_fact_1997`.`customer_id` as `m0` " + "from `store` as `store`,"
-            + " `sales_fact_1997` as `sales_fact_1997`," + " `time_by_day` as `time_by_day`,"
+            + " `sales_fact_1997`.`customer_id` as `m0` " + "from `sales_fact_1997` as `sales_fact_1997`,"
+            + " `store` as `store`," + " `time_by_day` as `time_by_day`,"
             + " `product_class` as `product_class`," + " `product` as `product` "
             + "where `sales_fact_1997`.`store_id` = `store`.`store_id` " + "and `store`.`store_state` = 'WA' "
             + "and `sales_fact_1997`.`time_id` = `time_by_day`.`time_id` " + "and `time_by_day`.`the_year` = 1997 "
@@ -1320,8 +1320,8 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
 
     String derbySql =
         "select " + "\"store\".\"store_state\" as \"c0\", " + "\"time_by_day\".\"the_year\" as \"c1\", "
-            + "count(distinct \"sales_fact_1997\".\"customer_id\") as \"m0\" " + "from " + "\"store\" as \"store\", "
-            + "\"sales_fact_1997\" as \"sales_fact_1997\", " + "\"time_by_day\" as \"time_by_day\", "
+            + "count(distinct \"sales_fact_1997\".\"customer_id\") as \"m0\" " + "from " + "\"sales_fact_1997\" as \"sales_fact_1997\", "
+            + "\"store\" as \"store\", " + "\"time_by_day\" as \"time_by_day\", "
             + "\"product_class\" as \"product_class\", " + "\"product\" as \"product\" " + "where "
             + "\"sales_fact_1997\".\"store_id\" = \"store\".\"store_id\" " + "and \"store\".\"store_state\" = 'WA' "
             + "and \"sales_fact_1997\".\"time_id\" = \"time_by_day\".\"time_id\" "
@@ -1337,7 +1337,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             Dialect.DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern( Dialect.DatabaseProduct.MYSQL,
                 mysqlSql, mysqlSql ) };
 
-    assertQuerySql(context.createConnection(), query, patterns );
+     assertQuerySql(context.createConnection(), query, patterns );
   }
 
   @ParameterizedTest
@@ -1354,7 +1354,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
 
     String mysqlSql =
         "select " + "`time_by_day`.`the_year` as `c0`, " + "count(distinct `sales_fact_1997`.`customer_id`) as `m0` "
-            + "from " + "`sales_fact_1997` as `sales_fact_1997`, " + "`time_by_day` as `time_by_day`, "
+            + "from " + "`sales_fact_1997` as `sales_fact_1997`, " + "`time_by_day` as `time_by_day` "
             + "where `sales_fact_1997`.`time_id` = `time_by_day`.`time_id` " + "and `time_by_day`.`the_year` = 1997 "
             + "group by `time_by_day`.`the_year`";
 
@@ -1490,7 +1490,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     String mysqlSql =
         "select " + "`store`.`store_state` as `c0`, `time_by_day`.`the_year` as `c1`, "
             + "count(distinct `sales_fact_1997`.`customer_id`) as `m0` " + "from "
-            + "`store` as `store`, `sales_fact_1997` as `sales_fact_1997`, "
+            + "`sales_fact_1997` as `sales_fact_1997`, `store` as `store`, "
             + "`time_by_day` as `time_by_day`, `product_class` as `product_class`, " + "`product` as `product` "
             + "where " + "`sales_fact_1997`.`store_id` = `store`.`store_id` and "
             + "`store`.`store_state` in ('CA', 'OR') and "
@@ -1503,7 +1503,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     String derbySql =
         "select " + "\"store\".\"store_state\" as \"c0\", \"time_by_day\".\"the_year\" as \"c1\", "
             + "count(distinct \"sales_fact_1997\".\"customer_id\") as \"m0\" " + "from "
-            + "\"store\" as \"store\", \"sales_fact_1997\" as \"sales_fact_1997\", "
+            + "\"sales_fact_1997\" as \"sales_fact_1997\", \"store\" as \"store\", "
             + "\"time_by_day\" as \"time_by_day\", \"product_class\" as \"product_class\", "
             + "\"product\" as \"product\" " + "where "
             + "\"sales_fact_1997\".\"store_id\" = \"store\".\"store_id\" and "
@@ -1519,7 +1519,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
         { new SqlPattern( Dialect.DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern(
             Dialect.DatabaseProduct.MYSQL, mysqlSql, mysqlSql ) };
 
-    assertQuerySql(context.createConnection(), query, patterns );
+     assertQuerySql(context.createConnection(), query, patterns );
   }
 
   public static class MyDelegatingInvocationHandler extends DelegatingInvocationHandler {
