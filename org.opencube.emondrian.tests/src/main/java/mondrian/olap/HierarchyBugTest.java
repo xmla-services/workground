@@ -118,7 +118,7 @@ public class HierarchyBugTest {
         verifyMemberLevelNamesIdentityMeasureAxis(
             resultTime.getAxes()[0], "[Measures]");
         verifyMemberLevelNamesIdentityDimAxis(
-            resultTime.getAxes()[1], "[Time]");
+            resultTime.getAxes()[1], "[Time].[Time]");
         
 TestUtil.flushSchemaCache(conn);
     }
@@ -257,7 +257,7 @@ TestUtil.flushSchemaCache(conn);
     {
         propSaver.set(
             MondrianProperties.instance().SsasCompatibleNaming, true);
-        verifyMemberLevelNamesIdentityOlap4jDateDim(foodMartContext);
+        verifyMemberLevelNamesIdentityOlap4jDateDim(foodMartContext, "[Date].[Date]");
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
@@ -265,10 +265,10 @@ TestUtil.flushSchemaCache(conn);
         throws SQLException
     {
         // SsasCompatibleNaming defaults to false
-        verifyMemberLevelNamesIdentityOlap4jDateDim(foodMartContext);
+        verifyMemberLevelNamesIdentityOlap4jDateDim(foodMartContext, "[Date]");
     }
 
-    private void verifyMemberLevelNamesIdentityOlap4jDateDim(Context context)
+    private void verifyMemberLevelNamesIdentityOlap4jDateDim(Context context, String expected)
         throws SQLException
     {
         String mdx =
@@ -293,7 +293,7 @@ TestUtil.flushSchemaCache(conn);
 
        ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube("Sales", dateDim));
         
-        verifyLevelMemberNamesIdentityOlap4j(mdx, context, "[Date]");
+        verifyLevelMemberNamesIdentityOlap4j(mdx, context, expected);
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )

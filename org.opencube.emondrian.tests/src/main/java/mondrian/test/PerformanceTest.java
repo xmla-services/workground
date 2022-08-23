@@ -18,6 +18,8 @@ import mondrian.util.Bug;
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -48,6 +50,17 @@ public class PerformanceTest {
   public static final Logger LOGGER =
     LogManager.getLogger( PerformanceTest.class );
 
+  private PropertySaver5 propSaver;
+
+  @BeforeEach
+  public void beforeEach() {
+      propSaver = new PropertySaver5();
+  }
+
+  @AfterEach
+  public void afterEach() {
+      propSaver.reset();
+  }  
   /**
    * Test case for
    * <a href="http://jira.pentaho.com/browse/MONDRIAN-550">
@@ -604,6 +617,7 @@ public class PerformanceTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testBugMondrian1242(Context context) {
+    propSaver.set(MondrianProperties.instance().SsasCompatibleNaming, false);
     String baseSchema = TestUtil.getRawSchema(context);
     String schema = SchemaUtil.getSchema(baseSchema,
       null, null, null, null,
