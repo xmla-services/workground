@@ -82,7 +82,7 @@ class RolapConnectionPool {
     /**
      * Clears the connection pool for testing purposes
      */
-    void clearPool() {
+    public void clearPool() {
         mapConnectKeyToPool.clear();
     }
 
