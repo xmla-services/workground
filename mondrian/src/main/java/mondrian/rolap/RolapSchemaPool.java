@@ -498,7 +498,7 @@ public class RolapSchemaPool {
         }
     }
 
-    void clear() {
+    public void clear() {
         lock.writeLock().lock();
         List<RolapSchema> schemas = new ArrayList<RolapSchema>();
         try {

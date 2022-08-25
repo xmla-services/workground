@@ -50,9 +50,6 @@ public class GroupingSetQueryTest extends BatchTestCase{
     private static final String measureCustomerCount =
         "[Measures].[Customer Count]";
 
-    private boolean useGroupingSets;
-    private boolean formattedSql;
-    private String origWarnIfNoPatternForDialect;
     private static final Set<Dialect.DatabaseProduct> ORACLE_TERADATA =
         Olap4jUtil.enumSetOf(
             Dialect.DatabaseProduct.ORACLE,
@@ -62,21 +59,12 @@ public class GroupingSetQueryTest extends BatchTestCase{
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
-        useGroupingSets = prop.EnableGroupingSets.get();
-        formattedSql = prop.GenerateFormattedSql.get();
-        origWarnIfNoPatternForDialect = prop.WarnIfNoPatternForDialect.get();
-
-        prop.GenerateFormattedSql.set(false);
-
-
+        propSaver.set(prop.GenerateFormattedSql, false);
     }
 
     @AfterEach
     public void afterEach() {
         propSaver.reset();
-        prop.EnableGroupingSets.set(useGroupingSets);
-        prop.GenerateFormattedSql.set(formattedSql);
-        prop.WarnIfNoPatternForDialect.set(origWarnIfNoPatternForDialect);
     }
 
     private void pripareContext(Context context) {
@@ -89,12 +77,11 @@ public class GroupingSetQueryTest extends BatchTestCase{
                 || dialect.getDatabaseProduct() == Dialect.DatabaseProduct.ACCESS
                 || dialect.getDatabaseProduct() == Dialect.DatabaseProduct.ORACLE)
         {
-            prop.WarnIfNoPatternForDialect.set(
-                    dialect.getDatabaseProduct().toString());
+            propSaver.set(prop.WarnIfNoPatternForDialect, dialect.getDatabaseProduct().toString());
         } else {
             // Do not warn unless the dialect is "ACCESS" or "ORACLE", or
             // if the test chooses to warn regardless of the dialect.
-            prop.WarnIfNoPatternForDialect.set("NONE");
+            propSaver.set(prop.WarnIfNoPatternForDialect, "NONE");
         }
 
     }
