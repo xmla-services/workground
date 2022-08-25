@@ -89,18 +89,18 @@ public class Olap4jTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testSameMemberByVariousMeans(Context context) throws SQLException {
         Random random = new Random();
+        final OlapConnection connection =
+                context.createOlap4jConnection();
         for (int i = 0; i < 20; i++) {
             int n = random.nextInt(7);
-            Member member = foo(context, n);
+            Member member = foo(connection, n);
             String s = "source #" + n;
-            assertEquals(s, "Unit Sales", member.getName());
+            assertEquals("Unit Sales", member.getName(), s);
             assertEquals(Member.Type.MEASURE, member.getMemberType(), s);
         }
     }
 
-    private Member foo(Context context, int i) throws SQLException {
-        final OlapConnection connection =
-            context.createOlap4jConnection();
+    private Member foo(OlapConnection connection, int i) throws SQLException {
         final Cube cube;
         final Hierarchy measuresHierarchy;
         final CellSet cellSet;
