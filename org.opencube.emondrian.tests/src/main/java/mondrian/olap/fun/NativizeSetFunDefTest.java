@@ -1203,7 +1203,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
             "select "
             + "NativizeSet({[Gender].[M], [Gender].[F]}) "
             + "ON COLUMNS\n"
-            + "from [Sales]\n");
+            + "from [sales]\n");
     }
 
     @ParameterizedTest
@@ -1217,7 +1217,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
             + "on 0 from sales",
             "select NativizeSet({[Marital Status].[Marital Status].Members}) "
             + "ON COLUMNS\n"
-            + "from [Sales]\n");
+            + "from [sales]\n");
     }
 
     @ParameterizedTest
@@ -1236,7 +1236,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
             + "  member [Marital Status].[_Nativized_Sentinel_Marital Status_(All)_] as '101010'\n"
             + "select NativizeSet(Crossjoin({[Gender].[M], [Gender].[F]}, "
             + "{[_Nativized_Set_Marital Status_Marital Status_]})) ON COLUMNS\n"
-            + "from [Sales]\n");
+            + "from [sales]\n");
     }
 
     @ParameterizedTest
@@ -1258,10 +1258,10 @@ public class NativizeSetFunDefTest extends BatchTestCase {
             + "  set [COG_OQP_INT_s3] as 'Crossjoin({[Marital Status].[S]}, [COG_OQP_INT_s2])'\n"
             + "  set [COG_OQP_INT_s2] as 'Crossjoin({[Gender].[F]}, [COG_OQP_INT_s1])'\n"
             + "  set [COG_OQP_INT_s1] as 'Crossjoin({[_Nativized_Set_Product_Product Name_]}, {[_Nativized_Set_Customers_Name_]})'\n"
-            + "  member [Customers].[_Nativized_Member_Customers_Name_] as '[Customers].DefaultMember'\n"
-            + "  set [_Nativized_Set_Customers_Name_] as '{[Customers].[_Nativized_Member_Customers_Name_]}'\n"
             + "  member [Product].[_Nativized_Member_Product_Product Name_] as '[Product].DefaultMember'\n"
-            + "  set [_Nativized_Set_Product_Product Name_] as '{[Product].[_Nativized_Member_Product_Product Name_]}'\n"
+            + "  set [_Nativized_Set_Product_Product Name_] as '{[Product].[_Nativized_Member_Product_Product Name_]}'\n"                        
+            + "  member [Customers].[_Nativized_Member_Customers_Name_] as '[Customers].DefaultMember'\n"            
+            + "  set [_Nativized_Set_Customers_Name_] as '{[Customers].[_Nativized_Member_Customers_Name_]}'\n"
             + "  member [Education Level].[_Nativized_Sentinel_Education Level_(All)_] as '101010'\n"
             + "  member [Marital Status].[_Nativized_Sentinel_Marital Status_(All)_] as '101010'\n"
             + "  member [Gender].[_Nativized_Sentinel_Gender_(All)_] as '101010'\n"
@@ -1373,7 +1373,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
             + "  member [Time].[_Nativized_Sentinel_Time_Year_] as '101010'\n"
             + "  member [Gender].[_Nativized_Sentinel_Gender_(All)_] as '101010'\n"
             + "select NativizeSet(Crossjoin([_Nativized_Set_Time_Weekly_Week_], {[Gender].[M]})) ON COLUMNS\n"
-            + "from [Sales]\n");
+            + "from [sales]\n");
     }
 
     @ParameterizedTest
