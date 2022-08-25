@@ -183,7 +183,8 @@ public class RolapCubeTest {
         };
         //TestContext testContext =
         //    createTestContextWithAdditionalMembersAndARole();
-        Connection connection = context.createConnection();
+        createTestContextWithAdditionalMembersAndARole(context);
+        Connection connection = context.createConnection();        
 
         try {
             Cube salesCube = cubeByName(connection, "Sales");

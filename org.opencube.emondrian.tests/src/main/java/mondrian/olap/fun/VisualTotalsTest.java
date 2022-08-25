@@ -12,7 +12,6 @@ package mondrian.olap.fun;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,8 +30,6 @@ import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.Context;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
-import mondrian.olap.Connection;
 
 /**
  * <code>VisualTotalsTest</code> tests the internal functions defined in
@@ -114,7 +111,7 @@ public class VisualTotalsTest {
 
         cell = cellSet.getCell(Arrays.asList(0, 0));
         member = positions.get(0).getMembers().get(0);
-        assertEquals("*Subtotal - Bread", member.getName());
+        assertEquals("*Subtotal - Bread", member.getCaption());
         resultSet = cell.drillThrough();
         assertNull(resultSet);
 
@@ -135,10 +132,9 @@ public class VisualTotalsTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testVisualTotalCaptionBug(Context foodMartContext) throws SQLException {
-        Connection conn = foodMartContext.createConnection();
+    public void testVisualTotalCaptionBug(Context foodMartContext) throws SQLException {        
         CellSet cellSet =
-    		TestUtil.executeOlap4jQuery((OlapConnection)conn,
+    		TestUtil.executeOlap4jQuery(foodMartContext.createOlap4jConnection(),
                 "select {[Measures].[Unit Sales]} on columns, "
                 + "VisualTotals("
                 + "    {[Product].[Food].[Baked Goods].[Bread],"
@@ -152,7 +148,7 @@ public class VisualTotalsTest {
 
         cell = cellSet.getCell(Arrays.asList(0, 0));
         member = positions.get(0).getMembers().get(0);
-        assertEquals("*Subtotal - Bread", member.getName());
+        assertEquals("Bread", member.getName());
         assertEquals("*Subtotal - Bread", member.getCaption());
     }
 
@@ -164,41 +160,40 @@ public class VisualTotalsTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testVisualTotalsAggregatedMemberBug(Context foodMartContext) throws SQLException {
-        Connection conn = foodMartContext.createConnection();
+    public void testVisualTotalsAggregatedMemberBug(Context foodMartContext) throws SQLException {        
         CellSet cellSet =
-    		TestUtil.executeOlap4jQuery((OlapConnection)conn,
+    		TestUtil.executeOlap4jQuery(foodMartContext.createOlap4jConnection(),
                 " with  member [Gender].[YTD] as 'AGGREGATE(YTD(),[Gender].[M])'" 
             	+ "  select " 
             	+ " {[Time].[1997]," 
             	+ " [Time].[1997].[Q1],[Time].[1997].[Q2],[Time].[1997].[Q3],[Time].[1997].[Q4]} ON COLUMNS, " 
             	+ " {[Gender].[M],[Gender].[YTD]} ON ROWS" 
             	+ " FROM [Sales]");
-        fail("Not yet implemented");
-//        String s = TestContext.toString(cellSet);
-//        TestContext.assertEqualsVerbose( 
-//        	     "Axis #0:\n"
-//        	     + "{}\n"
-//        	     + "Axis #1:\n"
-//        	     + "{[Time].[1997]}\n"
-//        	     + "{[Time].[1997].[Q1]}\n"
-//        	     + "{[Time].[1997].[Q2]}\n"
-//        	     + "{[Time].[1997].[Q3]}\n"
-//        	     + "{[Time].[1997].[Q4]}\n"
-//        	     + "Axis #2:\n"
-//        	     + "{[Gender].[M]}\n"
-//        	     + "{[Gender].[YTD]}\n"
-//        	     + "Row #0: 135,215\n"
-//        	     + "Row #0: 33,381\n"
-//        	     + "Row #0: 31,618\n"
-//        	     + "Row #0: 33,249\n"
-//        	     + "Row #0: 36,967\n"
-//        	     + "Row #1: 135,215\n"
-//        	     + "Row #1: 33,381\n"
-//        	     + "Row #1: 64,999\n"
-//        	     + "Row #1: 98,248\n"
-//        	     + "Row #1: 135,215\n"
-//        		,s); 
+        //fail("Not yet implemented");
+        String s = TestUtil.toString(cellSet);
+        TestUtil.assertEqualsVerbose( 
+        	     "Axis #0:\n"
+        	     + "{}\n"
+        	     + "Axis #1:\n"
+        	     + "{[Time].[1997]}\n"
+        	     + "{[Time].[1997].[Q1]}\n"
+        	     + "{[Time].[1997].[Q2]}\n"
+        	     + "{[Time].[1997].[Q3]}\n"
+        	     + "{[Time].[1997].[Q4]}\n"
+        	     + "Axis #2:\n"
+        	     + "{[Gender].[M]}\n"
+        	     + "{[Gender].[YTD]}\n"
+        	     + "Row #0: 135,215\n"
+        	     + "Row #0: 33,381\n"
+        	     + "Row #0: 31,618\n"
+        	     + "Row #0: 33,249\n"
+        	     + "Row #0: 36,967\n"
+        	     + "Row #1: 135,215\n"
+        	     + "Row #1: 33,381\n"
+        	     + "Row #1: 64,999\n"
+        	     + "Row #1: 98,248\n"
+        	     + "Row #1: 135,215\n"
+        		,s); 
     }
     
 }

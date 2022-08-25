@@ -203,16 +203,16 @@ TestUtil.flushSchemaCache(conn);
     public void testNamesIdentitySsasCompatibleOlap4j(Context foodMartContext) throws SQLException {
         propSaver.set(
             MondrianProperties.instance().SsasCompatibleNaming, true);
-        verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(foodMartContext);
+        verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(foodMartContext, "[Time].[Time]");
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testNamesIdentitySsasInCompatibleOlap4j(Context foodMartContext) throws SQLException {
         // SsasCompatibleNaming defaults to false
-        verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(foodMartContext);
+        verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(foodMartContext, "[Time]");
     }
 
-    private void verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(Context foodMartContext)
+    private void verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(Context foodMartContext, String expected)
         throws SQLException
     {
         // essential here, in time hierarchy, is hasAll="false"
@@ -221,7 +221,7 @@ TestUtil.flushSchemaCache(conn);
             + "   [Measures].[Unit Sales] ON COLUMNS,\n"
             + "   [Time].[Time].[Year].Members ON ROWS\n"
             + "FROM [Sales]";
-        verifyLevelMemberNamesIdentityOlap4j(mdx, foodMartContext, "[Time]");
+        verifyLevelMemberNamesIdentityOlap4j(mdx, foodMartContext, expected);
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
