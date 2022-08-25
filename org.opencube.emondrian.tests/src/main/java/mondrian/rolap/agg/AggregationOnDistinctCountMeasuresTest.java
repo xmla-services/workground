@@ -163,7 +163,7 @@ public class AggregationOnDistinctCountMeasuresTest {
         String mysqlSql =
             "select `time_by_day`.`the_year` as `c0`, "
             + "count(distinct `sales_fact_1997`.`customer_id`) as `m0` "
-            + "from `time_by_day` as `time_by_day`, `sales_fact_1997` as `sales_fact_1997`, `store` as `store` "
+            + "from `sales_fact_1997` as `sales_fact_1997`, `time_by_day` as `time_by_day`, `store` as `store` "
             + "where `sales_fact_1997`.`time_id` = `time_by_day`.`time_id` "
             + "and `time_by_day`.`the_year` = 1997 "
             + "and `sales_fact_1997`.`store_id` = `store`.`store_id` and `store`.`store_state` = 'CA' "
@@ -172,7 +172,7 @@ public class AggregationOnDistinctCountMeasuresTest {
         String oraTeraSql =
             "select \"time_by_day\".\"the_year\" as \"c0\", "
             + "count(distinct \"sales_fact_1997\".\"customer_id\") as \"m0\" "
-            + "from \"time_by_day\" =as= \"time_by_day\", \"sales_fact_1997\" =as= \"sales_fact_1997\", \"store\" =as= \"store\" "
+            + "from \"sales_fact_1997\" =as= \"sales_fact_1997\", \"time_by_day\" =as= \"time_by_day\", \"store\" =as= \"store\" "
             + "where \"sales_fact_1997\".\"time_id\" = \"time_by_day\".\"time_id\" and \"time_by_day\".\"the_year\" = 1997 "
             + "and \"sales_fact_1997\".\"store_id\" = \"store\".\"store_id\" and \"store\".\"store_state\" = 'CA' "
             + "group by \"time_by_day\".\"the_year\"";
@@ -226,7 +226,7 @@ public class AggregationOnDistinctCountMeasuresTest {
         String mysqlSql =
             "select `time_by_day`.`the_year` as `c0`, "
             + "count(distinct `sales_fact_1997`.`customer_id`) as `m0` "
-            + "from `time_by_day` as `time_by_day`, `sales_fact_1997` as `sales_fact_1997`, `store` as `store` "
+            + "from `sales_fact_1997` as `sales_fact_1997`, `time_by_day` as `time_by_day`, `store` as `store` "
             + "where `sales_fact_1997`.`time_id` = `time_by_day`.`time_id` and `time_by_day`.`the_year` = 1997 "
             + "and `sales_fact_1997`.`store_id` = `store`.`store_id` "
             + "and (`store`.`store_state` = 'CA' or `store`.`store_country` = 'Canada') "
@@ -235,7 +235,7 @@ public class AggregationOnDistinctCountMeasuresTest {
         String oraTeraSql =
             "select \"time_by_day\".\"the_year\" as \"c0\", "
             + "count(distinct \"sales_fact_1997\".\"customer_id\") as \"m0\" "
-            + "from \"time_by_day\" =as= \"time_by_day\", \"sales_fact_1997\" =as= \"sales_fact_1997\", \"store\" =as= \"store\" "
+            + "from \"sales_fact_1997\" =as= \"sales_fact_1997\", \"time_by_day\" =as= \"time_by_day\", \"store\" =as= \"store\" "
             + "where \"sales_fact_1997\".\"time_id\" = \"time_by_day\".\"time_id\" and \"time_by_day\".\"the_year\" = 1997 "
             + "and \"sales_fact_1997\".\"store_id\" = \"store\".\"store_id\" "
             + "and (\"store\".\"store_state\" = 'CA' or \"store\".\"store_country\" = 'Canada') "
@@ -636,8 +636,8 @@ public class AggregationOnDistinctCountMeasuresTest {
 
         String necjSqlDerby =
             "select count(distinct \"inventory_fact_1997\".\"warehouse_cost\") as \"m0\" "
-            + "from \"warehouse\" as \"warehouse\", "
-            + "\"inventory_fact_1997\" as \"inventory_fact_1997\" "
+            + "from \"inventory_fact_1997\" as \"inventory_fact_1997\", "
+            + "\"warehouse\" as \"warehouse\" "
             + "where \"inventory_fact_1997\".\"warehouse_id\" = \"warehouse\".\"warehouse_id\" "
             + "and ((\"warehouse\".\"warehouse_name\" = 'Arnold and Sons' "
             + "and \"warehouse\".\"wa_address1\" = '5617 Saclan Terrace' "
@@ -648,7 +648,7 @@ public class AggregationOnDistinctCountMeasuresTest {
 
         String necjSqlMySql =
             "select count(distinct `inventory_fact_1997`.`warehouse_cost`) as `m0` "
-            + "from `warehouse` as `warehouse`, `inventory_fact_1997` as `inventory_fact_1997` "
+            + "from `inventory_fact_1997` as `inventory_fact_1997`, `warehouse` as `warehouse` "
             + "where `inventory_fact_1997`.`warehouse_id` = `warehouse`.`warehouse_id` "
             + "and ((`warehouse`.`wa_address2` is null "
             + "and (`warehouse`.`wa_address1`, `warehouse`.`warehouse_name`) "
