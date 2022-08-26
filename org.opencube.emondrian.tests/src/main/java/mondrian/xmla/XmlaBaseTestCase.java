@@ -185,6 +185,7 @@ System.out.println("requestText=" + requestText);
         }
         expectedDoc = replaceSchemaDates(expectedDoc);
         String expectedStr = XmlUtil.toString(expectedDoc, true);
+        expectedStr = maskVersion(expectedStr);
         try {
             XmlAssert.assertThat(expectedStr).and(gotStr).areSimilar();
         } catch (AssertionFailedError e) {
