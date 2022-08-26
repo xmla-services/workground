@@ -985,7 +985,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     assertQueryReturns(context.createConnection(),
       mdx,
       "Axis #0:\n"
-        + "{[Time].[Weekly].[x]}\n"
+        + "{[Time.Weekly].[x]}\n"
         + "Axis #1:\n"
         + "{[Measures].[Store Sales]}\n"
         + "Axis #2:\n"
@@ -1936,7 +1936,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     propSaver.set( MondrianProperties.instance().ResultLimit, 400 );
     assertAxisThrows(context.createConnection(), "NonEmptyCrossjoin({[Product].[All Products].Children}, "
         + "{ [Customers].[Name].members})",
-      "read exceeded limit (400)" );
+      "exceeded limit (400)" );
   }
 }
 
