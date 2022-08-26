@@ -144,7 +144,7 @@ public class Execution {
       this.state = State.CANCELED;
       this.cancelSqlStatements();
       if ( parent != null ) {
-        parent.cancel();
+        //parent.cancel();
       }
       fireExecutionEndEvent();
     }

@@ -19,7 +19,6 @@ import java.util.stream.Stream;
 import javax.sql.DataSource;
 
 import mondrian.rolap.RolapConnectionProperties;
-import mondrian.rolap.RolapSchemaPool;
 import org.glassfish.jaxb.runtime.v2.JAXBContextFactory;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
@@ -130,7 +129,6 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 	private List<Context> prepareContexts(ExtensionContext extensionContext) {
 		Stream<DatabaseProvider> providers;
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader()); //for withSchemaProcessor(context, MyFoodmart.class);
-		RolapSchemaPool.instance().clear();
 		Class<? extends DatabaseProvider>[] dbHandlerClasses = contextSource.database();
 		if (dbHandlerClasses == null || dbHandlerClasses.length == 0) {
 			providers = ServiceLoader.load(DatabaseProvider.class, this.getClass().getClassLoader()).stream()
