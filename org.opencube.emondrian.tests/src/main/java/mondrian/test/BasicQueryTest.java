@@ -31,7 +31,6 @@ import org.apache.logging.log4j.Logger;
 import org.eigenbase.util.property.StringProperty;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
@@ -4169,7 +4168,6 @@ public class BasicQueryTest {
             + "Row #3: 0\n" + "Row #4: 0\n" );
   }
 
-  @Disabled
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testCancel(Context context) {
