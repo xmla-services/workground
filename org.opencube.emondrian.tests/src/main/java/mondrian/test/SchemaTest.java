@@ -2228,7 +2228,7 @@ public class SchemaTest {
                 + "    + [Store].[USA].[CA].[Los Angeles]\n"
                 + "  </Formula>\n"
                 + "</CalculatedMember>",
-                null));
+                null, false));
 
         // Because there are no explicit stored measures, the default measure is
         // the implicit stored measure, [Fact Count]. Stored measures, even
@@ -2269,7 +2269,7 @@ public class SchemaTest {
                     + "    + [Store].[USA].[CA].[Los Angeles]\n"
                     + "  </Formula>\n"
                     + "</CalculatedMember>",
-                    null));
+                    null, false));
             assertQueryReturns(context.createConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -2300,7 +2300,7 @@ public class SchemaTest {
                     + "    + [Store].[USA].[CA].[Los Angeles]\n"
                     + "  </Formula>\n"
                     + "</CalculatedMember>",
-                    null));
+                    null, false));
             assertQueryReturns(context.createConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -2330,7 +2330,7 @@ public class SchemaTest {
                     + "    Baconating!\n"
                     + "  </Formula>\n"
                     + "</CalculatedMember>",
-                    null));
+                    null, false));
             assertQueryReturns(context.createConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -2360,7 +2360,7 @@ public class SchemaTest {
                     + "    + [Store].[USA].[CA].[Los Angeles]\n"
                     + "  </Formula>\n"
                     + "</CalculatedMember>",
-                    null));
+                    null, false));
             assertQueryReturns(context.createConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -2392,7 +2392,7 @@ public class SchemaTest {
                     + "    + [Store].[USA].[CA].[Los Angeles]\n"
                     + "  </Formula>\n"
                     + "</CalculatedMember>",
-                    null));
+                    null, false));
             assertQueryReturns(context.createConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -2423,7 +2423,7 @@ public class SchemaTest {
                     + "  <Formula>\n"
                     + "  </Formula>\n"
                     + "</CalculatedMember>",
-                    null));
+                    null, false));
             assertQueryReturns(context.createConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -3001,7 +3001,7 @@ public class SchemaTest {
             + "       )\n"
             + "    )\n"
             + "   '\n"
-            + "SELECT [Measures].[SalesPerWorkingDay]  ON 0\n"
+            + "SELECT [Measures].[SalesPerWorkingDay] ON 0\n"
             + ", [Date].[Calendar].[Month].MEMBERS ON 1\n"
             + "FROM [Adventure Works]",
             "x");
@@ -4802,7 +4802,7 @@ public class SchemaTest {
                     + "    </Level>\n"
                     + "  </Hierarchy>\n"
                     + "</Dimension>"),
-                null));
+                null, false));
         assertQueryReturns(context.createConnection(),
             "select from [HR]",
             "Axis #0:\n"

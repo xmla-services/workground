@@ -1722,7 +1722,7 @@ public class TestAggregationManager extends BatchTestCase {
             + colName + ")</SQL></KeyExpression>\n"
             + "    </Level>\n"
             + "  </Hierarchy>\n"
-            + "</Dimension>"));
+            + "</Dimension>", false));
         assertQueryThrows(context.createConnection(),
             mdxQuery,
             "ERROR_TEST_FUNCTION_NAME");
@@ -1737,7 +1737,7 @@ public class TestAggregationManager extends BatchTestCase {
             + colName + ")</SQL></KeyExpression>\n"
             + "    </Level>\n"
             + "  </Hierarchy>\n"
-            + "</Dimension>"));
+            + "</Dimension>", false));
         assertQueryReturns(context.createConnection(),
             "select non empty{[Promotions].[All Promotions].Children} ON rows, "
             + "non empty {[Store].[All Stores]} ON columns "
