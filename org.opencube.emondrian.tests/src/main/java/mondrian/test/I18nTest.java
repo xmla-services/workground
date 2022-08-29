@@ -12,6 +12,7 @@ package mondrian.test;
 import mondrian.olap.*;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.util.Format;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
@@ -35,13 +36,12 @@ import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
  */
 public class I18nTest {
     public static final char Euro = '\u20AC';
-    public static final char Nbsp = '\u00A0';
+    public static final char Nbsp = ' ';
     public static final char EA = '\u00e9'; // e acute
     public static final char UC = '\u00FB'; // u circumflex
 
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testFormat(Context context) {
+    @Test
+    public void testFormat() {
         // Make sure Util is loaded, so that the LocaleFormatFactory gets
         // registered.
         Util.discard(Util.nl);
@@ -56,7 +56,7 @@ public class I18nTest {
         // Currency too
         Format currencyFormat = new Format("Currency", spanish);
         assertEquals(
-            "1.234.567,79 " + Euro,
+            "1.234.567,79 €",
             currencyFormat.format(new Double(1234567.789)));
 
         // Dates
@@ -79,29 +79,30 @@ public class I18nTest {
         // Create a connection in French.
         String localeName = "fr_FR";
         String resultString = "12" + Nbsp + "345,67";
-        assertFormatNumber(localeName, resultString);
+        assertFormatNumber(context, localeName, resultString);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testAutoSpanish(Context context) {
         // Format a number in (Peninsular) spanish.
-        assertFormatNumber("es", "12.345,67");
+        assertFormatNumber(context, "es", "12.345,67");
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testAutoMexican() {
+    public void testAutoMexican(Context context) {
         // Format a number in Mexican spanish.
-        assertFormatNumber("es_MX", "12,345.67");
+        assertFormatNumber(context, "es_MX", "12,345.67");
     }
 
-    private void assertFormatNumber(String localeName, String resultString) {
-        final Util.PropertyList properties =
-            TestUtil.getConnectionProperties().clone();
-        properties.put(RolapConnectionProperties.Locale.name(), localeName);
-        Connection connection =
-            DriverManager.getConnection(properties, null);
+    private void assertFormatNumber(Context context, String localeName, String resultString) {
+        //final Util.PropertyList properties =
+        //    TestUtil.getConnectionProperties().clone();
+        //properties.put(RolapConnectionProperties.Locale.name(), localeName);
+        context.setProperty(RolapConnectionProperties.Locale.name(), localeName);
+        Connection connection = context.createConnection();
+
         Query query = connection.parseQuery(
             "WITH MEMBER [Measures].[Foo] AS ' 12345.67 ',\n"
             + " FORMAT_STRING='#,###.00'\n"

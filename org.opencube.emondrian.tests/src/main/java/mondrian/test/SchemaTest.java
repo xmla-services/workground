@@ -839,7 +839,7 @@ public class SchemaTest {
             + "Axis #1:\n"
             + "{[Customers].[USA].[South West]}\n"
             + "Axis #2:\n"
-            + "{[Store].[MyHierarchy].[USA].[South West]}\n"
+            + "{[Store.MyHierarchy].[USA].[South West]}\n"
             + "Row #0: 72,631\n");
     }
 
@@ -1370,7 +1370,7 @@ public class SchemaTest {
             "Axis #0:\n"
             + "{}\n"
             + "Axis #1:\n"
-            + "{[Store].[All Stores]}\n"
+            + "{[Store].[Store].[All Stores]}\n"
             + "Axis #2:\n"
             + "{[Store2].[Store].[All Stores]}\n"
             + "Row #0: 266,773\n");
@@ -2228,7 +2228,7 @@ public class SchemaTest {
                 + "    + [Store].[USA].[CA].[Los Angeles]\n"
                 + "  </Formula>\n"
                 + "</CalculatedMember>",
-                null));
+                null, false));
 
         // Because there are no explicit stored measures, the default measure is
         // the implicit stored measure, [Fact Count]. Stored measures, even
@@ -2269,7 +2269,7 @@ public class SchemaTest {
                     + "    + [Store].[USA].[CA].[Los Angeles]\n"
                     + "  </Formula>\n"
                     + "</CalculatedMember>",
-                    null));
+                    null, false));
             assertQueryReturns(context.createConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -2300,7 +2300,7 @@ public class SchemaTest {
                     + "    + [Store].[USA].[CA].[Los Angeles]\n"
                     + "  </Formula>\n"
                     + "</CalculatedMember>",
-                    null));
+                    null, false));
             assertQueryReturns(context.createConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -2330,7 +2330,7 @@ public class SchemaTest {
                     + "    Baconating!\n"
                     + "  </Formula>\n"
                     + "</CalculatedMember>",
-                    null));
+                    null, false));
             assertQueryReturns(context.createConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -2360,7 +2360,7 @@ public class SchemaTest {
                     + "    + [Store].[USA].[CA].[Los Angeles]\n"
                     + "  </Formula>\n"
                     + "</CalculatedMember>",
-                    null));
+                    null, false));
             assertQueryReturns(context.createConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -2392,7 +2392,7 @@ public class SchemaTest {
                     + "    + [Store].[USA].[CA].[Los Angeles]\n"
                     + "  </Formula>\n"
                     + "</CalculatedMember>",
-                    null));
+                    null, false));
             assertQueryReturns(context.createConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -2423,7 +2423,7 @@ public class SchemaTest {
                     + "  <Formula>\n"
                     + "  </Formula>\n"
                     + "</CalculatedMember>",
-                    null));
+                    null, false));
             assertQueryReturns(context.createConnection(),
                 "select {[Store].[All Stores].[USA].[CA].[SF and LA]} on columns from [Sales]",
                 "Axis #0:\n"
@@ -3001,7 +3001,7 @@ public class SchemaTest {
             + "       )\n"
             + "    )\n"
             + "   '\n"
-            + "SELECT [Measures].[SalesPerWorkingDay]  ON 0\n"
+            + "SELECT [Measures].[SalesPerWorkingDay] ON 0\n"
             + ", [Date].[Calendar].[Month].MEMBERS ON 1\n"
             + "FROM [Adventure Works]",
             "x");
@@ -3437,12 +3437,12 @@ public class SchemaTest {
         }
         // The description is prefixed by the dimension usage name.
         assertEquals(
-            "Time usage caption.Time shared hierarchy description",
+            "Time shared hierarchy description",
             timeHierarchy.getDescription());
         // The hierarchy caption is prefixed by the caption of the dimension
         // usage.
         assertEquals(
-            "Time usage caption.Time shared hierarchy caption",
+            "Time shared hierarchy caption",
             timeHierarchy.getCaption());
         // No annotations.
         checkAnnotations(timeHierarchy.getAnnotationMap());
@@ -3452,7 +3452,7 @@ public class SchemaTest {
         assertEquals("Time2", time2Dimension.getName());
         assertEquals(
             "Time shared description", time2Dimension.getDescription());
-        assertEquals("Time shared caption", time2Dimension.getCaption());
+        assertEquals("Time2", time2Dimension.getCaption());
         checkAnnotations(time2Dimension.getAnnotationMap(), "a", "Time shared");
 
         final Hierarchy time2Hierarchy = time2Dimension.getHierarchies()[0];
@@ -3467,12 +3467,12 @@ public class SchemaTest {
         // The description is prefixed by the dimension usage name (because
         // dimension usage has no caption).
         assertEquals(
-            "Time2.Time shared hierarchy description",
+            "Time shared hierarchy description",
             time2Hierarchy.getDescription());
         // The hierarchy caption is prefixed by the dimension usage name
         // (because the dimension usage has no caption.
         assertEquals(
-            "Time2.Time shared hierarchy caption",
+            "Time shared hierarchy caption",
             time2Hierarchy.getCaption());
         // No annotations.
         checkAnnotations(time2Hierarchy.getAnnotationMap());
@@ -4802,7 +4802,7 @@ public class SchemaTest {
                     + "    </Level>\n"
                     + "  </Hierarchy>\n"
                     + "</Dimension>"),
-                null));
+                null, false));
         assertQueryReturns(context.createConnection(),
             "select from [HR]",
             "Axis #0:\n"

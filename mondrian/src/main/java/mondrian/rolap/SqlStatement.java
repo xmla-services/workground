@@ -346,7 +346,7 @@ public class SqlStatement {
         null ) );
   }
 
-  String formatTimingStatus( long totalMs, int rowCount ) {
+  public String formatTimingStatus( long totalMs, int rowCount ) {
     return ", exec+fetch " + totalMs + " ms, " + rowCount + " rows";
   }
 
@@ -488,7 +488,7 @@ public class SqlStatement {
   /**
    * For tests
    */
-  protected Dialect createDialect() {
+  public Dialect createDialect() {
     return DialectManager.createDialect( dataSource, jdbcConnection );
   }
 

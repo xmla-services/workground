@@ -27,6 +27,11 @@ public class SchemaUpdater implements PropertyUpdater {
 		this.function = function;
 	}
 
+	public static SchemaUpdater createSubstitutingCube(final String cubeName, final String dimensionDefs, boolean removeCatalog) {
+		return new SchemaUpdater((schema) -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs), removeCatalog);
+
+	}
+
 	public static SchemaUpdater createSubstitutingCube(final String cubeName, final String dimensionDefs) {
 
 		return new SchemaUpdater((schema) -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs));
@@ -38,6 +43,14 @@ public class SchemaUpdater implements PropertyUpdater {
 
 		return new SchemaUpdater(
 				(schema) -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs, memberDefs));
+
+	}
+
+	public static SchemaUpdater createSubstitutingCube(final String cubeName, final String dimensionDefs,
+													   final String memberDefs, boolean removeCatalog) {
+
+		return new SchemaUpdater(
+				(schema) -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs, memberDefs), removeCatalog);
 
 	}
 

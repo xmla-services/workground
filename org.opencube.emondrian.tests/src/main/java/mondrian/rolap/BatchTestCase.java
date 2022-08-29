@@ -563,17 +563,20 @@ public class BatchTestCase{
         // Clear the cache for the Sales cube, so the query runs as if
         // for the first time. (TODO: Cleaner way to do this.)
         final Cube salesCube =
-                connection.getSchema().lookupCube("Sales", true);
-        RolapHierarchy hierarchy =
-            (RolapHierarchy) salesCube.lookupHierarchy(
-                new Id.NameSegment("Store", Id.Quoting.UNQUOTED),
-                false);
-        SmartMemberReader memberReader =
-            (SmartMemberReader) hierarchy.getMemberReader();
-        MemberCacheHelper cacheHelper = memberReader.cacheHelper;
-        cacheHelper.mapLevelToMembers.cache.clear();
-        cacheHelper.mapMemberToChildren.cache.clear();
-
+                connection.getSchema().lookupCube("Sales", false);
+        if (salesCube != null) {
+            RolapHierarchy hierarchy =
+                    (RolapHierarchy) salesCube.lookupHierarchy(
+                            new Id.NameSegment("Store", Id.Quoting.UNQUOTED),
+                            false);
+            if (hierarchy != null) {
+                SmartMemberReader memberReader =
+                    (SmartMemberReader) hierarchy.getMemberReader();
+                MemberCacheHelper cacheHelper = memberReader.cacheHelper;
+                cacheHelper.mapLevelToMembers.cache.clear();
+                cacheHelper.mapMemberToChildren.cache.clear();
+            }
+        }
         // Flush the cache, to ensure that the query gets executed.
         cube.clearCachedAggregations(true);
 
