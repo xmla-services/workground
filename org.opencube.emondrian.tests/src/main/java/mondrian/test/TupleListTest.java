@@ -193,7 +193,8 @@ public class TupleListTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testDelegatingTupleListSlice(Context context) {
         // Functional test.
-        assertQueryReturns(context.createConnection(),
+        Connection connection = context.createConnection();
+        assertQueryReturns(connection,
             "select {[Measures].[Store Sales]} ON COLUMNS, Hierarchize(Except({[Customers].[All Customers], [Customers].[All Customers].Children}, {[Customers].[All Customers]})) ON ROWS from [Sales] ",
             "Axis #0:\n"
             + "{}\n"
@@ -206,9 +207,8 @@ public class TupleListTest {
             + "Row #0: \n"
             + "Row #1: \n"
             + "Row #2: 565,238.13\n");
-        Connection connection = context.createConnection();
         Locus.execute(
-            (RolapConnection)context.createConnection(),
+            (RolapConnection)connection,
             "testDelegatingTupleListSlice",
             new Locus.Action<Void>() {
                 public Void execute() {
@@ -221,7 +221,7 @@ public class TupleListTest {
                         new DelegatingTupleList(2, arrayList);
                     fm.addTuple(genderFMember, storeUsaMember);
                     final List<Member> sliced = fm.slice(0);
-                    assertEquals(2, sliced.size());
+                    assertEquals(1, sliced.size());
                     assertEquals(1, fm.size());
                     return null;
                 }
