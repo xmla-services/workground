@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import mondrian.olap.Property;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 
@@ -50,6 +51,7 @@ public class SqlTupleReaderTest {
     RolapProperty rolapProperty = mock( TestPublicRolapProperty.class, Answers.RETURNS_MOCKS );
     String propertyName = "property_1";
     when( rolapProperty.getName() ).thenReturn( propertyName );
+    when( rolapProperty.getType() ).thenReturn(Property.Datatype.TYPE_STRING);
     RolapProperty[] properties = { rolapProperty };
     when( levelIter.getProperties() ).thenReturn( properties );
     when( levelIter.getKeyExp() ).thenReturn( mock( MondrianDef.Expression.class ) );

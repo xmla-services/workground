@@ -569,11 +569,13 @@ public class BatchTestCase{
                     (RolapHierarchy) salesCube.lookupHierarchy(
                             new Id.NameSegment("Store", Id.Quoting.UNQUOTED),
                             false);
-            SmartMemberReader memberReader =
+            if (hierarchy != null) {
+                SmartMemberReader memberReader =
                     (SmartMemberReader) hierarchy.getMemberReader();
-            MemberCacheHelper cacheHelper = memberReader.cacheHelper;
-            cacheHelper.mapLevelToMembers.cache.clear();
-            cacheHelper.mapMemberToChildren.cache.clear();
+                MemberCacheHelper cacheHelper = memberReader.cacheHelper;
+                cacheHelper.mapLevelToMembers.cache.clear();
+                cacheHelper.mapMemberToChildren.cache.clear();
+            }
         }
         // Flush the cache, to ensure that the query gets executed.
         cube.clearCachedAggregations(true);
