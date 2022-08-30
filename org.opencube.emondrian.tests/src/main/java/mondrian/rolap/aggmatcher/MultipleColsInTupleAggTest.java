@@ -13,7 +13,6 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.Result;
 import mondrian.rolap.RolapAxis;
 import mondrian.spi.Dialect;
-import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +40,6 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
     @BeforeEach
     public void beforeEach() {
         super.beforeEach();
-        propSaver = new PropertySaver5();
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
     }
 

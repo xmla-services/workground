@@ -21,7 +21,6 @@ import org.apache.logging.log4j.Logger;
 import org.eigenbase.util.property.BooleanProperty;
 import org.eigenbase.util.property.DoubleProperty;
 import org.eigenbase.util.property.IntegerProperty;
-import org.eigenbase.util.property.Property;
 import org.eigenbase.util.property.StringProperty;
 
 import mondrian.olap.MondrianProperties;
@@ -39,8 +38,8 @@ public class PropertySaver5 {
     public final MondrianProperties properties =
         MondrianProperties.instance();
 
-    private final Map<Property, String> originalValues =
-        new HashMap<Property, String>();
+    private final Map<String, String> originalValues =
+        new HashMap<String, String>();
 
     private final Map<Logger, Level> originalLoggerLevels =
         new HashMap<Logger, Level>();
@@ -57,13 +56,13 @@ public class PropertySaver5 {
      * @param value New value
      */
     public void set(BooleanProperty property, boolean value) {
-        if (!originalValues.containsKey(property)) {
+        if (!originalValues.containsKey(property.getPath())) {
             final String originalValue =
                 properties.containsKey(property.getPath())
                     ? properties.getProperty(property.getPath())
                     : NOT_SET;
             originalValues.put(
-                property,
+                property.getPath(),
                 originalValue);
         }
         property.set(value);
@@ -76,13 +75,13 @@ public class PropertySaver5 {
      * @param value New value
      */
     public void set(IntegerProperty property, int value) {
-        if (!originalValues.containsKey(property)) {
+        if (!originalValues.containsKey(property.getPath())) {
             final String originalValue =
                 properties.containsKey(property.getPath())
                     ? properties.getProperty(property.getPath())
                     : NOT_SET;
             originalValues.put(
-                property,
+                property.getPath(),
                 originalValue);
         }
         property.set(value);
@@ -95,13 +94,13 @@ public class PropertySaver5 {
      * @param value New value
      */
     public void set(StringProperty property, String value) {
-        if (!originalValues.containsKey(property)) {
+        if (!originalValues.containsKey(property.getPath())) {
             final String originalValue =
                 properties.containsKey(property.getPath())
                     ? properties.getProperty(property.getPath())
                     : NOT_SET;
             originalValues.put(
-                property,
+                property.getPath(),
                 originalValue);
         }
         property.set(value);
@@ -114,13 +113,13 @@ public class PropertySaver5 {
      * @param value New value
      */
     public void set(DoubleProperty property, Double value) {
-        if (!originalValues.containsKey(property)) {
+        if (!originalValues.containsKey(property.getPath())) {
             final String originalValue =
                 properties.containsKey(property.getPath())
                     ? properties.getProperty(property.getPath())
                     : NOT_SET;
             originalValues.put(
-                property,
+                property.getPath(),
                 originalValue);
         }
         property.set(value);
@@ -130,16 +129,15 @@ public class PropertySaver5 {
      * Sets all properties back to their original values.
      */
     public void reset() {
-        for (Map.Entry<Property, String> entry : originalValues.entrySet()) {
+        for (Map.Entry<String, String> entry : originalValues.entrySet()) {
             final String value = entry.getValue();
             //noinspection StringEquality
             if (value == NOT_SET) {
-                properties.remove(entry.getKey().getPath());
+                properties.remove(entry.getKey());
             } else {
-                properties.setProperty(entry.getKey().getPath(), value);
+                properties.setProperty(entry.getKey(), value);
             }
-            if (entry.getKey()
-                == MondrianProperties.instance().NullMemberRepresentation)
+            if (entry.getKey().equals(MondrianProperties.instance().NullMemberRepresentation.getPath()))
             {
                 RolapUtil.reloadNullLiteral();
             }

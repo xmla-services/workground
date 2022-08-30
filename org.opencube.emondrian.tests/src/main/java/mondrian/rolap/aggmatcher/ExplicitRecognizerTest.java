@@ -9,7 +9,6 @@
 */
 package mondrian.rolap.aggmatcher;
 
-import mondrian.test.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -30,7 +29,6 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
     @BeforeEach
     public void beforeEach() {
         super.beforeEach();
-        propSaver = new PropertySaver5();
         propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
         propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);

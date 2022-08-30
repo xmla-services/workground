@@ -91,7 +91,7 @@ public class TupleListTest {
         assertTrue(list0.isEmpty());
         assertEquals(0, list0.size());
 
-        assertEquals(list0, TupleCollections.emptyList(2));
+        assertIterableEquals(list0, TupleCollections.emptyList(2));
 
         TupleList list1 = new ArrayTupleList(2);
         assertEquals(list0, list1);
@@ -148,7 +148,7 @@ public class TupleListTest {
             assertNotNull(sublist);
             assertNotNull(sublist.toString());
             assertEquals(sublist.isEmpty(), list.isEmpty());
-            assertEquals(list, sublist);
+            assertIterableEquals(list, sublist);
             assertNotSame(list, sublist);
         }
 
