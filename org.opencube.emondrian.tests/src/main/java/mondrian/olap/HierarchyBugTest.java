@@ -203,7 +203,7 @@ TestUtil.flushSchemaCache(conn);
     public void testNamesIdentitySsasCompatibleOlap4j(Context foodMartContext) throws SQLException {
         propSaver.set(
             MondrianProperties.instance().SsasCompatibleNaming, true);
-        verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(foodMartContext, "[Time].[Time]");
+        verifyLevelMemberNamesIdentityOlap4jTimeHierarchy(foodMartContext, "[Time]");
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
