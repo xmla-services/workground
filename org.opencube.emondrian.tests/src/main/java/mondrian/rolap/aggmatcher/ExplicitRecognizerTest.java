@@ -13,6 +13,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.Context;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
@@ -72,6 +73,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
             "select {[Measures].[Unit Sales]} on columns, "
             + "non empty CrossJoin({[TimeExtra].[Month].members},{[Gender].[M]}) on rows "
             + "from [ExtraCol] ";
+        TestUtil.flushSchemaCache(context.createConnection());
         assertQuerySql(
             context.createConnection(),
             query,
