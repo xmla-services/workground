@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.sql.SQLException;
 import java.util.List;
 
+import mondrian.rolap.RolapConnectionProperties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -134,6 +135,7 @@ TestUtil.flushSchemaCache(conn);
         
        // Fresh sets this before get new Conn
        //  RolapConnectionProperties.UseSchemaPool.name(), false);
+        foodMartContext.setProperty(RolapConnectionProperties.UseSchemaPool.name(), Boolean.toString(false));
         Connection conn=foodMartContext.createConnection();
         Result resultWeekly =TestUtil.executeQuery(conn, mdxWeekly);
         verifyMemberLevelNamesIdentityMeasureAxis(
