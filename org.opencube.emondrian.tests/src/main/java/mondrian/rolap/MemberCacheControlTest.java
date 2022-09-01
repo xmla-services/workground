@@ -306,7 +306,7 @@ public class MemberCacheControlTest {
             cc.execute(command);
             fail("expected exception");
         } catch (IllegalArgumentException e) {
-            assertEquals(conn,
+            assertEquals(
                 "Member cache control operations are not allowed unless "
                 + "property mondrian.rolap.EnableRolapCubeMemberCache is "
                 + "false",
