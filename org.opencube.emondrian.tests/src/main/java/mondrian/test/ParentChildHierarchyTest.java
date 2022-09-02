@@ -237,7 +237,7 @@ public class ParentChildHierarchyTest {
             + "Row #1: 7,236\n"
             + "Row #2: 948\n"
             + "Row #3: 48\n"
-            + "Row #4: 36\n");
+            + "Row #4: 36\n", 120000l);
     }
 
     /**
@@ -307,7 +307,7 @@ public class ParentChildHierarchyTest {
         getEmpNonClosureTestContext(context);
         assertQueryReturns(context.createConnection(),
             "Select {[EmployeesNonClosure].members} on columns from HR",
-          expected);
+          expected, 120000l);
     }
 
     @ParameterizedTest
@@ -871,8 +871,8 @@ public class ParentChildHierarchyTest {
             "select"
             + " `time_by_day`.`the_year` as `Year`,"
             + " `salary`.`salary_paid` as `Org Salary` "
-            + "from `time_by_day` =as= `time_by_day`,"
-            + " `salary` =as= `salary` "
+            + "from `salary` =as= `salary`,"
+            + " `time_by_day` =as= `time_by_day` "
             + "where `salary`.`pay_date` = `time_by_day`.`the_date`"
             + " and `time_by_day`.`the_year` = 1997 "
             + (getDialect(context.createConnection()).requiresOrderByAlias()
@@ -893,8 +893,8 @@ public class ParentChildHierarchyTest {
             "select `time_by_day`.`the_year` as `Year`,"
             + " `employee`.`employee_id` as `Employee Id (Key)`,"
             + " `salary`.`salary_paid` as `Org Salary` "
-            + "from `time_by_day` =as= `time_by_day`,"
-            + " `salary` =as= `salary`,"
+            + "from `salary` =as= `salary`,"
+            + " `time_by_day` =as= `time_by_day`,"
             + " `employee` =as= `employee` "
             + "where `salary`.`pay_date` = `time_by_day`.`the_date`"
             + " and `time_by_day`.`the_year` = 1997"
@@ -916,8 +916,8 @@ public class ParentChildHierarchyTest {
             "select `time_by_day`.`the_year` as `Year`,"
             + " `employee`.`employee_id` as `Employee Id (Key)`,"
             + " `salary`.`salary_paid` as `Org Salary` "
-            + "from `time_by_day` =as= `time_by_day`,"
-            + " `salary` =as= `salary`,"
+            + "from `salary` =as= `salary`,"
+            + " `time_by_day` =as= `time_by_day`,"
             + " `employee` =as= `employee` "
             + "where `salary`.`pay_date` = `time_by_day`.`the_date`"
             + " and `time_by_day`.`the_year` = 1997"

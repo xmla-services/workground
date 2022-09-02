@@ -847,6 +847,16 @@ public class TestUtil {
 		return result;
 	}
 
+	public static Result executeQuery(Connection connection, String queryString, long timeoutIntervalMillis) {
+		Query query = parseQuery(connection, queryString);
+		assertThat(query).isNotNull();
+		Statement statement = query.getStatement();
+		assertThat(statement).isNotNull();
+
+		Result result = statement.getMondrianConnection().execute(new Execution(statement, timeoutIntervalMillis));
+		return result;
+	}
+	
 	public static Query parseQuery(Connection connection, String queryString) {
 
 		assertThat(connection).isNotNull();
@@ -964,10 +974,10 @@ public class TestUtil {
 		}
 		return actual;
 	}
-	
-	public static void assertQueryReturns(Connection connection, String queryString, String expectedResult) {
 
-		Result result = executeQuery(connection, queryString);
+	public static void assertQueryReturns(Connection connection, String queryString, String expectedResult, long timeoutIntervalMillis) {
+
+		Result result = executeQuery(connection, queryString, timeoutIntervalMillis);
 
 		assertThat(result).isNotNull();
 
@@ -979,6 +989,10 @@ public class TestUtil {
 
 		assertThat(sw.getBuffer().toString()).isNotNull().isEqualTo(expectedResult);
 
+	}
+
+	public static void assertQueryReturns(Connection connection, String queryString, String expectedResult) {
+		assertQueryReturns(connection, queryString, expectedResult, 60000l);
 	}
 
 	/**
