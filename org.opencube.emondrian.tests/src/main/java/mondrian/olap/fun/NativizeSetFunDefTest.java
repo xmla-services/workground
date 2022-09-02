@@ -1350,7 +1350,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
                 + "  member [Time].[_Nativized_Sentinel_Time_Year_] as '101010'\n"
                 + "  member [Gender].[_Nativized_Sentinel_Gender_(All)_] as '101010'\n"
                 + "select NativizeSet(Crossjoin([_Nativized_Set_Time_Weekly_Week_], {[Gender].[M]})) ON COLUMNS\n"
-                + "from [Sales]\n");
+                + "from [sales]\n");
         } finally {
             connection.close();
         }

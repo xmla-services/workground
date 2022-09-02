@@ -3197,7 +3197,7 @@ public class SchemaTest {
             + "</Hierarchy>\n"
             + "</Dimension>";
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
-            "Sales", xml));
+            "Sales", xml, false));
 
         assertQueryReturns(context.createConnection(),
             "select Head([Time2].[Quarter hours].Members, 3) on columns\n"
@@ -3227,7 +3227,7 @@ public class SchemaTest {
         try {
             ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                     "Sales",
-                    Util.replace(xml, "TimeUndefined", "TimeUnspecified")));
+                    Util.replace(xml, "TimeUndefined", "TimeUnspecified"), false));
                 assertSimpleQuery(context.createConnection());
             fail("expected error");
         } catch (Throwable e) {
