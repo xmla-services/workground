@@ -9300,11 +9300,11 @@ public class FunctionTest {//extends FoodMartTestCase {
         "Axis #0:\n"
           + "{}\n"
           + "Axis #1:\n"
-          + "{[Customers].[USA].[CA].[Santa Monica].[Adeline Chun], [Store].[USA].[CA]}\n"
           + "{[Customers].[USA].[CA].[Woodland Hills].[Abel Young], [Store].[USA].[CA]}\n"
+          + "{[Customers].[USA].[CA].[Santa Monica].[Adeline Chun], [Store].[USA].[CA]}\n"
           + "{[Customers].[USA].[WA].[Issaquah].[Abe Tramel], [Store].[USA].[WA].[Seattle]}\n"
-          + "Row #0: 33\n"
           + "Row #0: 75\n"
+          + "Row #0: 33\n"
           + "Row #0: 33\n" );
     } finally {
       connection.close();

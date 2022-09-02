@@ -11,7 +11,10 @@
 package mondrian.test;
 
 import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
 import mondrian.spi.Dialect;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.BaseTestContext;
@@ -33,6 +36,19 @@ import static org.opencube.junit5.TestUtil.getDialect;
  * @since Apr 19, 2004
  */
 public class RaggedHierarchyTest {
+	
+	private PropertySaver5 propSaver;
+
+	  @BeforeEach
+	  public void beforeEach() {
+	    propSaver = new PropertySaver5();
+	  }
+
+	  @AfterEach
+	  public void afterEach() {
+	    propSaver.reset();
+	  }
+	
     private void assertRaggedReturns(Connection connection, String expression, String expected) {
         //getTestContext().withCube("[Sales Ragged]")
         assertAxisReturns(connection, "[Sales Ragged]", expression, expected);
@@ -80,6 +96,8 @@ public class RaggedHierarchyTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void dont_testChildrenOfVatican(Context context) {
+	    propSaver.set(
+	            MondrianProperties.instance().NullMemberRepresentation, "null");
         assertRaggedReturns(context.createConnection(),
             "[Store].[Vatican].children",
             "[Store].[Vatican].[Vatican].[null].[Store 17]");

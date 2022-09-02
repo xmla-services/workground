@@ -929,7 +929,7 @@ public class BasicQueryTest {
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testConstantString(Context context) {
-    String s = executeExpr(context.createConnection(), " a string " );
+    String s = executeExpr(context.createConnection(), " \"a string\" " );
     assertEquals( "a string", s );
   }
 
@@ -3243,7 +3243,16 @@ public class BasicQueryTest {
   public void _testWarehouseProfit(Context context) {
     assertQueryReturns( context.createConnection(),"select \n"
         + "{[Measures].[Warehouse Cost], [Measures].[Warehouse Sales], [Measures].[Warehouse Profit]}\n"
-        + " ON COLUMNS from [Warehouse]", "" );
+        + " ON COLUMNS from [Warehouse]", 
+        "Axis #0:\n"
+        + "{}\n"
+        + "Axis #1:\n"
+        + "{[Measures].[Warehouse Cost]}\n"
+        + "{[Measures].[Warehouse Sales]}\n"
+        + "{[Measures].[Warehouse Profit]}\n"
+        + "Row #0: 89,043.253\n"
+        + "Row #0: 196,770.888\n"
+        + "Row #0: 107,727.635\n" );
   }
 
   /**
@@ -5698,6 +5707,7 @@ public class BasicQueryTest {
                     .quoteIdentifier( "product", "product_name" ) + "]]>\n" + "        </SQL>\n"
                 + "      </NameExpression>\n" + "    </Level>\n" + "  </Hierarchy>\n" + "</Dimension>\n", null, null,
             null ));
+    connection = context.createConnection();
     assertAxisReturns(connection, "[Example.Example Hierarchy].[Non-Zero]",
         "[Example.Example Hierarchy].[Non-Zero]" );
     assertAxisReturns(connection, "[Example.Example Hierarchy].[Non-Zero].Children",
