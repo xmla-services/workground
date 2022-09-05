@@ -21,6 +21,8 @@ import java.util.ArrayList;
 
 import mondrian.olap.*;
 import org.apache.logging.log4j.Level;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
@@ -47,6 +49,17 @@ import static org.opencube.junit5.TestUtil.checkThrowable;
  *
  */
 public class ExplainPlanTest {
+
+  private PropertySaver5 propSaver;
+  @BeforeEach
+  public void beforeEach() {
+    propSaver = new PropertySaver5();
+  }
+
+  @AfterEach
+  public void afterEach() {
+    propSaver.reset();
+  }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
@@ -347,10 +360,9 @@ public class ExplainPlanTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testAggBelowSlicerSolveOrder(Context context) throws SQLException {
-
-    int original = MondrianProperties.instance().CompoundSlicerMemberSolveOrder.get();
-    MondrianProperties.instance().CompoundSlicerMemberSolveOrder.set( 0 );
-
+    propSaver.set(MondrianProperties.instance().DisableCaching, true );
+    propSaver.set(MondrianProperties.instance().CompoundSlicerMemberSolveOrder, 0);
+	  
     final String mdx =
         "WITH\r\n"
             + " SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Customers_],[*BASE_MEMBERS__Product_]))'\r\n"
@@ -369,13 +381,9 @@ public class ExplainPlanTest {
             + " UNION(CROSSJOIN({[Education Level].[*TOTAL_MEMBER_SEL~AGG]},{([Customers].[*DEFAULT_MEMBER])}),[*SORTED_ROW_AXIS]) ON ROWS\r\n"
             + " FROM [Sales]\r\n" + " WHERE ([*CJ_SLICER_AXIS])";
 
-    try {
-      ArrayList<String> strings = executeOlapQuery(context, mdx);
-      assertTrue(strings.get( 19 ).contains( "EvalForSlicer invoked 6 times" ), strings.get( 19 ));
-      assertTrue(strings.get( 19 ).contains( "AggregateFunDef invoked 4 times" ), strings.get( 19 ));
-    } finally {
-      MondrianProperties.instance().CompoundSlicerMemberSolveOrder.set( original );
-    }
+    ArrayList<String> strings = executeOlapQuery(context, mdx);
+    assertTrue(strings.get( 19 ).contains( "EvalForSlicer invoked 6 times" ), strings.get( 19 ));
+    assertTrue(strings.get( 19 ).contains( "AggregateFunDef invoked 4 times" ), strings.get( 19 ));
   }
 
   private ArrayList<String> executeOlapQuery(Context context, String mdx ) throws SQLException {

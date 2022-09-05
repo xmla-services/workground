@@ -21,7 +21,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import mondrian.olap.MondrianServer;
@@ -38,16 +38,16 @@ import mondrian.spi.Dialect;
  */
 public class SqlStatementTest {
 
-  private static Monitor monitor;
-  private static MondrianServer srv;
-  private static RolapConnection rolapConnection;
-  private static StatementImpl statMock;
-  private static Execution execution;
-  private static Locus locus;
-  private static SqlStatement statement;
+  private Monitor monitor;
+  private MondrianServer srv;
+  private RolapConnection rolapConnection;
+  private StatementImpl statMock;
+  private Execution execution;
+  private Locus locus;
+  private SqlStatement statement;
 
-  @BeforeAll
-  public static void beforeAll() {
+  @BeforeEach
+  public void beforeEach() {
     monitor = mock(Monitor.class);
 
     srv = mock(MondrianServer.class);
