@@ -65,9 +65,11 @@ import static org.opencube.junit5.TestUtil.*;
  */
 @SuppressWarnings( "squid:S2699" )
 public class BasicQueryTest {
+
   static final String EmptyResult = "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "Axis #2:\n";
 
   private static final String timeWeekly = TestUtil.hierarchyName( "Time", "Weekly" );
+  public static final int MAX_EVAL_DEPTH_VALUE = 5000;
 
   private MondrianProperties props = MondrianProperties.instance();
   
@@ -3293,6 +3295,8 @@ public class BasicQueryTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void dont_testParallelMutliple(Context context) {
+    propSaver.set(
+            MondrianProperties.instance().MaxEvalDepth, MAX_EVAL_DEPTH_VALUE);
     Connection connection = context.createConnection();
     for ( int i = 0; i < 5; i++ ) {
       runParallelQueries(connection, 1, 1, false );
@@ -3317,12 +3321,16 @@ public class BasicQueryTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void dont_testParallelFlushCache(Context context) {
+    propSaver.set(
+            MondrianProperties.instance().MaxEvalDepth, MAX_EVAL_DEPTH_VALUE);
     runParallelQueries(context.createConnection(), 4, 6, true );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void dont_testParallelVery(Context context) {
+	propSaver.set(
+	            MondrianProperties.instance().MaxEvalDepth, MAX_EVAL_DEPTH_VALUE);
     runParallelQueries(context.createConnection(), 6, 10, false );
   }
 

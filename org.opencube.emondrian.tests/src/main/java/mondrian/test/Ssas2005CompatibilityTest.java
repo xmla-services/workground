@@ -427,6 +427,7 @@ public class Ssas2005CompatibilityTest {
         // [dimension].members for a dimension with one hierarchy
         // (and no attributes)
         // SSAS2005 succeeds
+    	prepareContext(context);
         assertQueryReturns(context.createConnection(), "Warehouse and Sales",
             "select [Currency].Members on 0\n"
             + "from [Warehouse and Sales]",
@@ -1457,6 +1458,7 @@ public class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testNameAfterKey(Context context) {
+        prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "select [Measures].[Unit Sales] on 0,\n"
             + hierarchyName("Store", "Stores")

@@ -37,7 +37,7 @@ public class NativeFilterAgainstAggTableTest extends BatchTestCase {
         propSaver.set(propSaver.properties.ReadAggregates, true);
         propSaver.set(propSaver.properties.EnableNativeFilter, true);
         propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
-        propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
+        propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);        
     }
 
     @AfterEach
@@ -150,7 +150,7 @@ public class NativeFilterAgainstAggTableTest extends BatchTestCase {
         // If a filter condition contains one or more measures that are
         // not present in the aggregate table, the SQL should omit the
         // having clause altogether.
-
+    	propSaver.set(propSaver.properties.DisableCaching, true);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
 
         String sqlMysqlNoHaving =
