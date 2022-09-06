@@ -945,7 +945,7 @@ public class UdfTest {
             "<UserDefinedFunction name=\"Reverse2\" className=\""
             + ReverseFunctionNotStatic.class.getName()
             + "\"/>\n");
-        assertQueryThrows(context.createConnection(),
+        assertQueryThrows(context,
             "select Reverse2([Gender].Members) on 0\n" + "from [Sales]",
             "Failed to load user-defined function 'Reverse2': class "
             + "'mondrian.test.UdfTest$ReverseFunctionNotStatic' must be "
