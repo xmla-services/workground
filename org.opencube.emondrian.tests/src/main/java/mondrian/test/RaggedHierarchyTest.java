@@ -42,6 +42,8 @@ public class RaggedHierarchyTest {
 	  @BeforeEach
 	  public void beforeEach() {
 	    propSaver = new PropertySaver5();
+	    propSaver.set(
+	            MondrianProperties.instance().NullMemberRepresentation, "null");	    
 	  }
 
 	  @AfterEach
