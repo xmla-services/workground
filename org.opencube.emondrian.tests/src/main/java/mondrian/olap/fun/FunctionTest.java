@@ -8264,7 +8264,7 @@ public class FunctionTest {//extends FoodMartTestCase {
         + "</Cube>" );
 
     // The [Time_Alphabetical] is ordered alphabetically by month
-    assertAxisReturns(connection,
+    assertAxisReturns(connection, "[Sales_Hierarchize]",
       "Hierarchize([Time_Alphabetical].members)",
       "[Time_Alphabetical].[1997]\n"
         + "[Time_Alphabetical].[1997].[Q1]\n"
@@ -9241,11 +9241,11 @@ public class FunctionTest {//extends FoodMartTestCase {
         "Axis #0:\n"
           + "{}\n"
           + "Axis #1:\n"
-          + "{[Customers].[USA].[CA].[Santa Monica].[Adeline Chun]}\n"
           + "{[Customers].[USA].[CA].[Woodland Hills].[Abel Young]}\n"
+          + "{[Customers].[USA].[CA].[Santa Monica].[Adeline Chun]}\n"          
           + "{[Customers].[USA].[WA].[Issaquah].[Abe Tramel]}\n"
-          + "Row #0: 33\n"
           + "Row #0: 75\n"
+          + "Row #0: 33\n"          
           + "Row #0: 33\n" );
     } finally {
       connection.close();

@@ -104,6 +104,10 @@ public class PropertySaver5 {
                 originalValue);
         }
         property.set(value);
+        if (property.getPath().equals(MondrianProperties.instance().NullMemberRepresentation.getPath()))
+        {
+            RolapUtil.reloadNullLiteral();
+        }
     }
 
     /**

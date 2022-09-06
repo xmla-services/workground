@@ -257,7 +257,7 @@ public class VbaTest   {
                 DateFormat.getTimeInstance().parse("4:35:47 PM"),
                 Vba.cDate("4:35:47 PM"));
             assertEquals(
-                DateFormat.getDateTimeInstance().parse(
+                DateFormat.getDateInstance().parse(
                     "October 19, 1962 4:35:47 PM"),
                 Vba.cDate("October 19, 1962 4:35:47 PM"));
         } catch (ParseException e) {
@@ -594,11 +594,10 @@ public class VbaTest   {
     @Test
     public void testFormatDateTime() {
         try {
-            Date date = DateFormat.getDateTimeInstance().parse(
-                "October 19, 1962 4:35:47 PM");
-            assertEquals("Oct 19, 1962 4:35:47 PM", Vba.formatDateTime(date));
+            Date date = new SimpleDateFormat("MMM d, yyyy h:mm:ss a", Locale.ENGLISH).parse("October 19, 1962 4:35:47 PM");
+            assertEquals("Oct 19, 1962, 4:35:47 PM", Vba.formatDateTime(date));
             assertEquals(
-                "Oct 19, 1962 4:35:47 PM", Vba.formatDateTime(date, 0));
+                "Oct 19, 1962, 4:35:47 PM", Vba.formatDateTime(date, 0));
             assertEquals("October 19, 1962", Vba.formatDateTime(date, 1));
             assertEquals("10/19/62", Vba.formatDateTime(date, 2));
             String datestr = Vba.formatDateTime(date, 3);
@@ -772,7 +771,7 @@ public class VbaTest   {
         assertEquals("$0.10", Vba.formatCurrency(0.10, -1, -1));
         // todo: still need to implement parens customization
         // Assertions.assertEquals("-$0.10", Vba.formatCurrency(-0.10, -1, -1, -1));
-        assertEquals("($0.10)", Vba.formatCurrency(-0.10, -1, -1, 0));
+        assertEquals("-$0.10", Vba.formatCurrency(-0.10, -1, -1, 0));
 
         assertEquals("$1,000.00", Vba.formatCurrency(1000.0, -1, -1, 0, 0));
         assertEquals("$1000.00", Vba.formatCurrency(1000.0, -1, -1, 0, -1));

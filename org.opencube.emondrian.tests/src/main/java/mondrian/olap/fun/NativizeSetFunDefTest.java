@@ -1308,9 +1308,9 @@ public class NativizeSetFunDefTest extends BatchTestCase {
             + "  set [COG_OQP_INT_s1] as 'Crossjoin({[Product].[COG_OQP_INT_umg1]}, {[Customers].DefaultMember})'\n"
             + "select {[Measures].[Unit Sales]} DIMENSION PROPERTIES PARENT_LEVEL, CHILDREN_CARDINALITY, PARENT_UNIQUE_NAME ON COLUMNS,\n"
             + "  NativizeSet(Generate({[Education Level].[Graduate Degree]}, "
-            + "Crossjoin(Head({[Education Level].CurrentMember}, IIf((Count([COG_OQP_INT_s5], INCLUDEEMPTY) > 0), 1, 0)), "
+            + "Crossjoin(Head({([Education Level].CurrentMember)}, IIf((Count([COG_OQP_INT_s5], INCLUDEEMPTY) > 0), 1, 0)), "
             + "Generate({[Marital Status].[S]}, "
-            + "Crossjoin(Head({[Marital Status].CurrentMember}, "
+            + "Crossjoin(Head({([Marital Status].CurrentMember)}, "
             + "IIf((Count([COG_OQP_INT_s4], INCLUDEEMPTY) > 0), 1, 0)), [COG_OQP_INT_s3]), ALL)), ALL)) "
             + "DIMENSION PROPERTIES PARENT_LEVEL, CHILDREN_CARDINALITY, PARENT_UNIQUE_NAME ON ROWS\n"
             + "from [Sales]\n");
