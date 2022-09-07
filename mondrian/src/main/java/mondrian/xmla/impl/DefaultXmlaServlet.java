@@ -293,6 +293,18 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                         continue;
                     }
 
+                    // Make sure Element has mustUnderstand=1 attribute.
+                    Attr attr = e.getAttributeNode(SOAP_MUST_UNDERSTAND_ATTR);
+                    if(attr != null) {
+                        boolean mustUnderstandValue =
+                                        attr.getValue() != null
+                                        && attr.getValue().equals("1");
+
+                        if (!mustUnderstandValue) {
+                            continue;
+                        }
+                    }
+
                     // Is it an XMLA element
                     if (!NS_XMLA.equals(e.getNamespaceURI())) {
                         continue;
@@ -345,6 +357,18 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                                 CONTEXT_XMLA_SESSION_STATE,
                                 CONTEXT_XMLA_SESSION_STATE_END);
                         // Session is closed in XmlaServlet doPost
+                    } else {
+                        // error
+                        String msg =
+                            "Invalid XML/A message: Unknown "
+                            + "\"mustUnderstand\" XMLA Header element \""
+                            + localName
+                            + "\"";
+                        throw new XmlaException(
+                            MUST_UNDERSTAND_FAULT_FC,
+                            HSH_MUST_UNDERSTAND_CODE,
+                            HSH_MUST_UNDERSTAND_FAULT_FS,
+                            new RuntimeException(msg));
                     }
 
                     if (sessionIdStr != null) {

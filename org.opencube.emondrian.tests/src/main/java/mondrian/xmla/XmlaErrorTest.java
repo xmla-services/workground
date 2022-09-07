@@ -751,10 +751,12 @@ System.out.println("DO IT AGAIN");
             new Fault(
                 XmlaException.formatFaultCode(
                     MUST_UNDERSTAND_FAULT_FC,
-                    HSB_PROCESS_CODE),
+                    HSH_MUST_UNDERSTAND_CODE),
                     HSH_MUST_UNDERSTAND_FAULT_FS,
                     FAULT_ACTOR,
-                    null, null, null);
+                    null, 
+                    "3238658121", 
+                    "Invalid XML/A message: Unknown \"mustUnderstand\" XMLA Header element \"Foo\"");
 
         doTest(expectedFault, context.createConnection());
     }
