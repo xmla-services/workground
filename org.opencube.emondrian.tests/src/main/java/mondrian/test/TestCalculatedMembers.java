@@ -29,15 +29,9 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 import org.opentest4j.AssertionFailedError;
 
-import static mondrian.test.FoodMartTestCase.assertExprReturns;
-import static mondrian.test.FoodMartTestCase.assertExprThrows;
-import static mondrian.test.FoodMartTestCase.assertQueryThrows;
-import static mondrian.test.FoodMartTestCase.executeExpr;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.executeExprRaw;
-import static org.opencube.junit5.TestUtil.withSchema;
+import static org.opencube.junit5.TestUtil.*;
 
 /**
  * Tests the expressions used for calculated members. Please keep in sync
@@ -63,7 +57,7 @@ public class TestCalculatedMembers extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testCalculatedMemberInCube(Context context) {
-        assertExprReturns("[Measures].[Profit]", "$339,610.90");
+        assertExprReturns(context.createConnection(), "[Measures].[Profit]", "$339,610.90");
 
         // Testcase for bug 829012.
         assertQueryReturns(context.createConnection(),
@@ -91,7 +85,7 @@ public class TestCalculatedMembers extends BatchTestCase {
             + "  dimension='Measures'"
             + "  formula='[Measures].[Store Sales]-[Measures].[Store Cost]'/>");
 
-        String s = executeExpr("[Measures].[Profit2]");
+        String s = executeExpr(context.createConnection(), "[Measures].[Profit2]");
         assertEquals("339,610.90", s);
 
         // should fail if member of same name exists
@@ -494,7 +488,7 @@ public class TestCalculatedMembers extends BatchTestCase {
         String pattern =
             "Member expression 'Filter([Product].Members, (1 <> 0))' must "
             + "not be a set";
-        assertQueryThrows(queryString, pattern);
+        assertQueryThrows(context, queryString, pattern);
 
         // A tuple is OK, because it can be converted to a scalar expression.
         queryString =
@@ -504,49 +498,49 @@ public class TestCalculatedMembers extends BatchTestCase {
         Util.discard(result);
 
         // Level cannot be converted.
-        assertExprThrows(
+        assertExprThrows(context,
             "[Customers].[Country]",
             "Member expression '[Customers].[Country]' must not be a set");
 
         // Hierarchy can be converted.
-        assertExprReturns("[Customers].[Customers]", "266,773");
+        assertExprReturns(context.createConnection(), "[Customers].[Customers]", "266,773");
 
         // Dimension can be converted, if unambiguous.
-        assertExprReturns("[Customers]", "266,773");
+        assertExprReturns(context.createConnection(), "[Customers]", "266,773");
 
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // SSAS 2005 does not have default hierarchies.
-            assertExprThrows(
+            assertExprThrows(context,
                 "[Time]",
                 "The 'Time' dimension contains more than one hierarchy, "
                 + "therefore the hierarchy must be explicitly specified.");
         } else {
             // Default to first hierarchy.
-            assertExprReturns("[Time]", "266,773");
+            assertExprReturns(context.createConnection(), "[Time]", "266,773");
         }
 
         // Explicit hierarchy OK.
-        assertExprReturns("[Time].[Time]", "266,773");
+        assertExprReturns(context.createConnection(), "[Time].[Time]", "266,773");
 
         // Member can be converted.
-        assertExprReturns("[Customers].[USA]", "266,773");
+        assertExprReturns(context.createConnection(), "[Customers].[USA]", "266,773");
 
         // Tuple can be converted.
-        assertExprReturns(
+        assertExprReturns(context.createConnection(),
             "([Customers].[USA], [Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer])",
             "1,683");
 
         // Set of tuples cannot be converted.
-        assertExprThrows(
+        assertExprThrows(context,
             "{([Customers].[USA], [Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer])}",
             "Member expression '{([Customers].[USA], [Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer])}' must not be a set");
-        assertExprThrows(
+        assertExprThrows(context,
             "{([Customers].[USA], [Product].[Food]),"
             + "([Customers].[USA], [Product].[Drink])}",
             "{([Customers].[USA], [Product].[Food]), ([Customers].[USA], [Product].[Drink])}' must not be a set");
 
         // Sets cannot be converted.
-        assertExprThrows(
+        assertExprThrows(context,
             "{[Product].[Food]}",
             "Member expression '{[Product].[Food]}' must not be a set");
     }
@@ -636,7 +630,7 @@ public class TestCalculatedMembers extends BatchTestCase {
         String schema = SchemaUtil.getSchema(baseSchema,
             null, s, null, null, null, null);
         withSchema(context, schema);
-        assertQueryThrows(
+        assertQueryThrows(context,
             "select {[Measures].[With a [bracket] inside it]} on columns,\n"
             + " {[Gender].Members} on rows\n"
             + "from [" + cubeName + "]",
@@ -702,7 +696,7 @@ public class TestCalculatedMembers extends BatchTestCase {
 
         // single-quote inside double-quoted string literal
         // MSAS does not allow this
-        assertQueryThrows(
+        assertQueryThrows(context,
             "with member [Measures].[Foo] as ' \"quoted string with 'apostrophe' in it\" ' "
             + "select {[Measures].[Foo]} on columns "
             + "from [Sales]",
@@ -1048,7 +1042,7 @@ public class TestCalculatedMembers extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testCalcMemberCustomFormatterInQueryNegative(Context context) {
-        assertQueryThrows(
+        assertQueryThrows(context,
             "with member [Measures].[Foo] as ' [Measures].[Unit Sales] * 2 ',\n"
             + " CELL_FORMATTER='mondrian.test.NonExistentCellFormatter' \n"
             + "select {[Measures].[Unit Sales], [Measures].[Foo]} on 0,\n"
@@ -1059,17 +1053,17 @@ public class TestCalculatedMembers extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberCustomFormatterInQueryNegative2() {
+    public void testCalcMemberCustomFormatterInQueryNegative2(Context context) {
         String query =
             "with member [Measures].[Foo] as ' [Measures].[Unit Sales] * 2 ',\n"
             + " CELL_FORMATTER='java.lang.String' \n"
             + "select {[Measures].[Unit Sales], [Measures].[Foo]} on 0,\n"
             + " {[Store].Children} on rows\n"
             + "from [Sales]";
-        assertQueryThrows(
+        assertQueryThrows(context,
             query,
             "Failed to load formatter class 'java.lang.String' for member '[Measures].[Foo]'.");
-        assertQueryThrows(
+        assertQueryThrows(context,
             query,
               "class java.lang.String cannot be cast to class mondrian.spi.CellFormatter" );
     }
@@ -1152,7 +1146,7 @@ public class TestCalculatedMembers extends BatchTestCase {
                 + "  <CalculatedMemberProperty name=\"FORMAT_STRING\" value=\"$#,##0.00\"/>\n"
                 + "  <CalculatedMemberProperty name=\"CELL_FORMATTER\" value=\"mondrian.test.NonExistentCellFormatter\"/>\n"
                 + "</CalculatedMember>\n"));
-        assertQueryThrows(
+        assertQueryThrows(context,
             "select {[Measures].[Unit Sales], [Measures].[Profit Formatted]} on 0,\n"
             + " {[Store].Children} on rows\n"
             + "from [Sales]",
@@ -1917,7 +1911,7 @@ public class TestCalculatedMembers extends BatchTestCase {
     public void testCalcMemberParentOfCalcMember(Context context) {
         // SSAS fails with "The X calculated member cannot be used as a parent
         // of another calculated member."
-        assertQueryThrows(
+        assertQueryThrows(context,
             "with member [Gender].[X] as 4\n"
             + " member [Gender].[X].[Y] as 5\n"
             + " select [Gender].[X].[Y] on 0\n"
@@ -1942,11 +1936,12 @@ public class TestCalculatedMembers extends BatchTestCase {
             + "Row #0: 5\n");
     }
 
-    @Test
-    public void testCalcMemberTooDeep() {
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    public void testCalcMemberTooDeep(Context context) {
         // SSAS fails with "The X calculated member cannot be created because
         // its parent is at the lowest level in the Gender hierarchy."
-        assertQueryThrows(
+        assertQueryThrows(context,
             "with member [Gender].[M].[X] as 4\n"
             + " select [Gender].[M].[X] on 0\n"
             + " from [Sales]",

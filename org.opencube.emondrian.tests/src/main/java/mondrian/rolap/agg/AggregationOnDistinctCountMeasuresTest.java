@@ -1139,7 +1139,7 @@ public class AggregationOnDistinctCountMeasuresTest {
             + "where [Time.Weekly].[1997]";
         String expected =
             "Axis #0:\n"
-            + "{[Time].[Weekly].[1997]}\n"
+            + "{[Time.Weekly].[1997]}\n"
             + "Axis #1:\n"
             + "{[Product].[Agg]}\n"
             + "Axis #2:\n"

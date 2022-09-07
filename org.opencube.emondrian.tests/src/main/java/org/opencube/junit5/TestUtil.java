@@ -1639,10 +1639,10 @@ public class TestUtil {
 			RolapUtil.setHook(hook);
 			Bomb bomb = null;
 			try {
-				//if (bypassSchemaCache) {
+				if (bypassSchemaCache) {
 				//	connection =
 				//			testContext.withSchemaPool(false).getConnection();
-				//}
+				}
 				final Query query = connection.parseQuery(mdxQuery);
 				if (clearCache) {
 					clearCache(connection, (RolapCube)query.getCube());
@@ -1781,12 +1781,13 @@ public class TestUtil {
 				(RolapHierarchy) salesCube.lookupHierarchy(
 						new Id.NameSegment("Store", Id.Quoting.UNQUOTED),
 						false);
-		SmartMemberReader memberReader =
-				(SmartMemberReader) hierarchy.getMemberReader();
-		MemberCacheHelper cacheHelper = memberReader.cacheHelper;
-		cacheHelper.mapLevelToMembers.cache.clear();
-		cacheHelper.mapMemberToChildren.cache.clear();
-
+		if (hierarchy != null) {
+			SmartMemberReader memberReader =
+					(SmartMemberReader) hierarchy.getMemberReader();
+			MemberCacheHelper cacheHelper = memberReader.cacheHelper;
+			cacheHelper.mapLevelToMembers.cache.clear();
+			cacheHelper.mapMemberToChildren.cache.clear();
+		}
 		// Flush the cache, to ensure that the query gets executed.
 		cube.clearCachedAggregations(true);
 

@@ -172,7 +172,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     }
     static final String result =
       "Axis #0:\n"
-        + "{[Time].[Weekly].[x]}\n"
+        + "{[Time.Weekly].[x]}\n"
         + "Axis #1:\n"
         + "{[Measures].[Store Sales]}\n"
         + "{[Measures].[x1]}\n"
@@ -1327,10 +1327,10 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     assertQueryReturns(context.createConnection(),
       mdx,
       "Axis #0:\n"
-        + "{[Time].[Weekly].[1997].[48].[17]}\n"
-        + "{[Time].[Weekly].[1997].[48].[18]}\n"
-        + "{[Time].[Weekly].[1997].[48].[19]}\n"
-        + "{[Time].[Weekly].[1997].[48].[20]}\n"
+        + "{[Time.Weekly].[1997].[48].[17]}\n"
+        + "{[Time.Weekly].[1997].[48].[18]}\n"
+        + "{[Time.Weekly].[1997].[48].[19]}\n"
+        + "{[Time.Weekly].[1997].[48].[20]}\n"
         + "Axis #1:\n"
         + "{[Customers].[USA].[WA].[Yakima].[Joanne Skuderna]}\n"
         + "{[Customers].[USA].[WA].[Yakima].[Paula Stevens]}\n"
