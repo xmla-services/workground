@@ -89,16 +89,16 @@ public class MultipleHierarchyTest {
             + "{[Time].[1997].[Q3]}\n"
             + "{[Time].[1997].[Q4]}\n"
             + "Row #0: 66,291\n"
-            + "Row #0: [Time].[Weekly].[All Weeklys]\n"
+            + "Row #0: [Time.Weekly].[All Time.Weeklys]\n"
             + "Row #0: [Time].[1997].[Q1]\n"
             + "Row #1: 62,610\n"
-            + "Row #1: [Time].[Weekly].[All Weeklys]\n"
+            + "Row #1: [Time.Weekly].[All Time.Weeklys]\n"
             + "Row #1: [Time].[1997].[Q2]\n"
             + "Row #2: 65,848\n"
-            + "Row #2: [Time].[Weekly].[All Weeklys]\n"
+            + "Row #2: [Time.Weekly].[All Time.Weeklys]\n"
             + "Row #2: [Time].[1997].[Q3]\n"
             + "Row #3: 72,024\n"
-            + "Row #3: [Time].[Weekly].[All Weeklys]\n"
+            + "Row #3: [Time.Weekly].[All Time.Weeklys]\n"
             + "Row #3: [Time].[1997].[Q4]\n");
     }
 
@@ -124,7 +124,7 @@ public class MultipleHierarchyTest {
             + hierarchyName("Time", "Weekly")
             + ".[1997], [Time].[1997].[Q1])",
             "Axis #0:\n"
-            + "{[Gender].[M], [Time].[Weekly].[1997], [Time].[1997].[Q1]}\n"
+            + "{[Gender].[M], [Time.Weekly].[1997], [Time].[1997].[Q1]}\n"
             + "Axis #1:\n"
             + "{[Measures].[Unit Sales]}\n"
             + "Axis #2:\n"
@@ -171,9 +171,9 @@ public class MultipleHierarchyTest {
             + "Axis #1:\n"
             + "{[Measures].[Sales to Date]}\n"
             + "Axis #2:\n"
-            + "{[Time].[Weekly].[1997].[14]}\n"
-            + "{[Time].[Weekly].[1997].[15]}\n"
-            + "{[Time].[Weekly].[1997].[16]}\n"
+            + "{[Time.Weekly].[1997].[14]}\n"
+            + "{[Time.Weekly].[1997].[15]}\n"
+            + "{[Time.Weekly].[1997].[16]}\n"
             + "Row #0: 81,670\n"
             + "Row #1: 86,300\n"
             + "Row #2: 90,139\n");

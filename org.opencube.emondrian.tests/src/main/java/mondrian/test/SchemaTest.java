@@ -768,7 +768,7 @@ public class SchemaTest {
             + "Axis #1:\n"
             + "{[Customers].[USA].[South West]}\n"
             + "Axis #2:\n"
-            + "{[Store].[MyHierarchy].[Mexico]}\n"
+            + "{[Store.MyHierarchy].[Mexico]}\n"
             + "Row #0: 51,298\n");
     }
 

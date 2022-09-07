@@ -104,7 +104,7 @@ public class DefaultRecognizerTest {
             + "    `agg_c_10_sales_fact_1997`.`month_of_year` in (1, 2, 3)";
 
         withSchema(context,simpleSchema);
-        assertQuerySqlOrNot(connection,
+        assertQuerySqlOrNot(context.createConnection(),
             query,
             mysqlPattern(expectedSql),
             false, true, true);
