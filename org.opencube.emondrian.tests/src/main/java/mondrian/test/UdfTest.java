@@ -457,7 +457,7 @@ public class UdfTest {
         // FoodMart is from '98
         assertQueryReturns(context.createConnection(),
             "SELECT { CurrentDateMember([Time].[Time], "
-            + "\"[Ti\\me]\\.[yyyy]\\.[Qq]\\.[m]\")} "
+            + "\"[Ti\\me]\\.[yyyy]\\.[Qq]\\.[m]\", EXACT)} "
             + "ON COLUMNS FROM [Sales]",
             "Axis #0:\n"
             + "{}\n"
@@ -494,7 +494,7 @@ public class UdfTest {
         // than a dimension
         assertQueryReturns(context.createConnection(),
             "SELECT { CurrentDateMember([Time.Weekly], "
-            + "\"[Ti\\me]\\.[yyyy]\\.[Qq]\\.[m]\")} "
+            + "\"[Ti\\me]\\.[yyyy]\\.[Qq]\\.[m]\", EXACT)} "
             + "ON COLUMNS FROM [Sales]",
             "Axis #0:\n"
             + "{}\n"
@@ -528,7 +528,7 @@ public class UdfTest {
         // exact logic
         assertQueryReturns(context.createConnection(),
             "SELECT { CurrentDateMember([Time].[Time], "
-            + "\"[Ti\\me]\\.[1997]\")} "
+            + "\"[Ti\\me]\\.[1997]\", EXACT)} "
             + "ON COLUMNS FROM [Sales]",
             "Axis #0:\n"
             + "{}\n"
@@ -546,7 +546,7 @@ public class UdfTest {
         // exact logic
         assertQueryReturns(context.createConnection(),
             "SELECT { CurrentDateMember([Time].[Time], "
-            + "\"[Ti\\me]\\.[1997]\\.[Q2]\\.[5]\")} "
+            + "\"[Ti\\me]\\.[1997]\\.[Q2]\\.[5]\", EXACT)} "
             + "ON COLUMNS FROM [Sales]",
             "Axis #0:\n"
             + "{}\n"

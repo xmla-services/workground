@@ -8,7 +8,6 @@
 */
 package mondrian.udf;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
@@ -66,7 +65,7 @@ public class CurrentDateMemberUdfTest {
     public void testGetReturnType(Context context) {
 		Connection connection=context.createConnection();
         String query = "WITH MEMBER [Time].[YTD] AS SUM( YTD(CurrentDateMember"
-             + "([Time], '[\"Time\"]\\.[yyyy]\\.[Qq].[m]')), Measures.[Unit Sales]) SELECT Time.YTD on 0 FROM sales";
+             + "([Time], '[\"Time\"]\\.[yyyy]\\.[Qq].[m]', EXACT)), Measures.[Unit Sales]) SELECT Time.YTD on 0 FROM sales";
         String expected = "Axis #0:\n" + "{}\n" + "Axis #1:\n"
              + "{[Time].[YTD]}\n" + "Row #0: \n";
         TestUtil.assertQueryReturns(connection,query, expected);
