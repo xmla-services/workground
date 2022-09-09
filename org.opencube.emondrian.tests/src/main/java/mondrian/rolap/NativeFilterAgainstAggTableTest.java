@@ -12,6 +12,7 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -30,6 +31,11 @@ import mondrian.test.SqlPattern;
 public class NativeFilterAgainstAggTableTest extends BatchTestCase {
 
     private PropertySaver5 propSaver;
+    @BeforeAll
+    public static void beforeAll() {
+        RolapConnectionPool.instance().clearPool();
+    }
+
     @BeforeEach
     public void beforeEach() {
         propSaver = new PropertySaver5();
@@ -176,6 +182,9 @@ public class NativeFilterAgainstAggTableTest extends BatchTestCase {
         // This query should hit the agg_c_10_sales_fact_1997 agg table,
         // which has [unit sales] but not [store count], so should
         // not include the filter condition in the having.
+        Connection connection = context.createConnection();
+        TestUtil.flushCache(connection);
+        TestUtil.flushSchemaCache(connection);
         assertQuerySqlOrNot(
              context.createConnection(),
             "select filter(Time.[1997].children,  "
