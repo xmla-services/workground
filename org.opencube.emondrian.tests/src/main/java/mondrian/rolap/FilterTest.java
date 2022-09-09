@@ -1160,10 +1160,11 @@ public class FilterTest extends BatchTestCase {
           + "uniqueMembers='false'/>\n"
           + "    </Hierarchy>\n"
           + "  </Dimension>\n" ));
-    Connection connection = context.createConnection();
+    Connection connection = context.createConnection();    
     assertQuerySqlOrNot(connection, mdx, badPatterns, true, true, true );
-    assertQuerySqlOrNot(connection, mdx, goodPatterns, false, true, true );
-    assertQueryReturns(connection,
+    TestUtil.flushSchemaCache(connection);
+    assertQuerySqlOrNot(context.createConnection(), mdx, goodPatterns, false, true, true );       
+    assertQueryReturns(context.createConnection(),
       mdx,
       "Axis #0:\n"
         + "{}\n"
