@@ -956,11 +956,12 @@ System.out.println("DO IT AGAIN");
             new Fault(
                 XmlaException.formatFaultCode(
                     CLIENT_FAULT_FC,
-                    HSB_BAD_STATEMENT_CODE),
-                    HSB_BAD_STATEMENT_FAULT_FS,
+                    HSB_BAD_COMMAND_CODE),
+                    HSB_BAD_COMMAND_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    HSB_BAD_STATEMENT_CODE, null);
+                    "3238658121",
+                    "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of Command children elements: 2");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -971,13 +972,13 @@ System.out.println("DO IT AGAIN");
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
-                    CLIENT_FAULT_FC,
-                    HSB_DRILL_THROUGH_FORMAT_CODE),
-                HSB_DRILL_THROUGH_FORMAT_FAULT_FS,
-                FAULT_ACTOR,
-                null,
-                HSB_DRILL_THROUGH_FORMAT_CODE,
-                null);
+                	SERVER_FAULT_FC,
+                    HSB_PROCESS_CODE),
+                    HSB_PROCESS_FAULT_FS,
+                    FAULT_ACTOR,
+                    null,
+                    "3238658121",
+                    "Mondrian Error:Syntax error at line 2, column 22, token '-'");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -988,13 +989,13 @@ System.out.println("DO IT AGAIN");
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
-                    CLIENT_FAULT_FC,
-                    HSB_DRILL_THROUGH_FORMAT_CODE),
-                HSB_DRILL_THROUGH_FORMAT_FAULT_FS,
-                FAULT_ACTOR,
-                null,
-                HSB_DRILL_THROUGH_FORMAT_CODE,
-                null);
+                    	SERVER_FAULT_FC,
+                        HSB_PROCESS_CODE),
+                        HSB_PROCESS_FAULT_FS,
+                        FAULT_ACTOR,
+                        null,
+                        "3238658121",
+                        "Mondrian Error:Syntax error at line 2, column 39, token '-'");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -1005,13 +1006,13 @@ System.out.println("DO IT AGAIN");
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
-                    CLIENT_FAULT_FC,
-                    HSB_DRILL_THROUGH_FORMAT_CODE),
-                HSB_DRILL_THROUGH_FORMAT_FAULT_FS,
-                FAULT_ACTOR,
-                null,
-                HSB_DRILL_THROUGH_FORMAT_CODE,
-                null);
+                    	SERVER_FAULT_FC,
+                        HSB_PROCESS_CODE),
+                        HSB_PROCESS_FAULT_FS,
+                        FAULT_ACTOR,
+                        null,
+                        "3238658121",
+                        "Mondrian Error:Syntax error at line 5, column 1, token 'DRILLTHROUGH'");
 
         doTest(expectedFault, context.createConnection());
     }
