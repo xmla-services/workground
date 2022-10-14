@@ -38,6 +38,7 @@ import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.Context;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
@@ -450,7 +451,7 @@ public class IdBatchResolverTest  {
     }
 
     public IdBatchResolver makeTestBatchResolver(Context context,String mdx) {
-//    	TestUtil.flushSchemaCache(connection);
+    	TestUtil.flushSchemaCache(context.createConnection());
         Parser.FactoryImpl factoryImpl = new FactoryImplTestWrapper();
         MdxParserValidator parser = new JavaccParserValidatorImpl(factoryImpl);
 

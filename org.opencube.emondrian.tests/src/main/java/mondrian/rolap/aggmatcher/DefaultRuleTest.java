@@ -20,6 +20,7 @@ import org.apache.logging.log4j.LogManager;
 import org.eigenbase.xom.*;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.Constants.TESTFILES_DIR;
 
 import java.io.File;
 import java.io.FileReader;
@@ -33,8 +34,6 @@ import java.util.Iterator;
 public class DefaultRuleTest {
     private static final Logger LOGGER =
         LogManager.getLogger(DefaultRuleTest.class);
-    private static final String DIRECTORY =
-        "testsrc/main/mondrian/rolap/aggmatcher";
     private static final String TEST_RULE_XML = "TestRule.xml";
 
     private static DefaultDef.AggRules rules;
@@ -45,7 +44,7 @@ public class DefaultRuleTest {
 
     @BeforeAll
     public static void beforeAll() throws Exception {
-        File file = new File(DIRECTORY, TEST_RULE_XML);
+        File file = new File(TESTFILES_DIR, TEST_RULE_XML);
         FileReader reader = new FileReader(file);
 
         Parser xmlParser = XOMUtil.createDefaultParser();
