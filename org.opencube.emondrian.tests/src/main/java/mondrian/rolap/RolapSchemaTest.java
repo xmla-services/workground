@@ -98,6 +98,7 @@ public class RolapSchemaTest {
         fail("Should fail if union and schema grants exist simultaneously");
     }
 
+    @Test
     public void testCreateUnionRole_ThrowsException_WhenRoleNameIsUnknown() {
         final String roleName = "non-existing role name";
         MondrianDef.RoleUsage usage = new MondrianDef.RoleUsage();
@@ -118,6 +119,7 @@ public class RolapSchemaTest {
     }
 
 
+    @Test
     public void testHandleSchemaGrant() {
         RolapSchema schema = createSchema();
         schema = spy(schema);
@@ -139,6 +141,7 @@ public class RolapSchemaTest {
     }
 
 
+    @Test
     public void testHandleCubeGrant_ThrowsException_WhenCubeIsUnknown() {
         RolapSchema schema = createSchema();
         schema = spy(schema);
@@ -157,6 +160,7 @@ public class RolapSchemaTest {
         fail("Should fail if cube is unknown");
     }
 
+    @Test
     public void testHandleCubeGrant_GrantsCubeDimensionsAndHierarchies() {
         RolapSchema schema = createSchema();
         schema = spy(schema);
@@ -171,7 +175,7 @@ public class RolapSchemaTest {
         SchemaReader reader = mockSchemaReader(Category.Dimension, dimension);
 
         RolapCube cube = mockCube(schema);
-        when(cube.getSchemaReader(any(Role.class))).thenReturn(reader);
+        when(cube.getSchemaReader(any())).thenReturn(reader);               
         doReturn(cube).when(schema).lookupCube("cube");
 
         MondrianDef.DimensionGrant dimensionGrant =

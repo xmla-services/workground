@@ -122,4 +122,13 @@
         </dependency>
 
 	</dependencies>
+
+	<build>
+		<resources>
+			<resource>
+				<directory>${project.basedir}/testfiles</directory>
+				<targetPath>${project.build.directory}/testfiles</targetPath>
+			</resource>
+		</resources>
+	</build>
 </project>

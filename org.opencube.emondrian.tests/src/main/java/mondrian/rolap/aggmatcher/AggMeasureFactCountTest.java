@@ -152,6 +152,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testAggName(Context context) {
+    	prepareContext(context);
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"fact_count\"/>\n"

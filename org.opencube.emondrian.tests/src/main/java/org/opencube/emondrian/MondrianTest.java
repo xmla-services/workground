@@ -38,7 +38,7 @@ public class MondrianTest {
 		PropertyList propertyList = new PropertyList();
 		propertyList.put(RolapConnectionProperties.Provider.name(), "mondrian");
 		propertyList.put(RolapConnectionProperties.Catalog.name(),
-				"file:"+Constants.PROJECT_DIR + "Mensch.xml");
+				Constants.TESTFILES_DIR + "Mensch.xml");
 
 		CatalogLocator catalogLocator = new CatalogLocator() {
 
@@ -49,7 +49,7 @@ public class MondrianTest {
 		};
 
 		SQLiteDataSource ds = new SQLiteDataSource();
-		ds.setUrl("jdbc:sqlite:"+Constants.PROJECT_DIR+"sqlite.db");
+		ds.setUrl("jdbc:sqlite:" + Constants.TESTFILES_DIR + "sqlite.db");
 
 		Connection c = DriverManager.getConnection(propertyList, catalogLocator, ds);
 		System.out.println(c);
@@ -72,9 +72,9 @@ public class MondrianTest {
 		org.sqlite.JDBC j = new org.sqlite.JDBC();
 		PropertyList propertyList = new PropertyList();
 		propertyList.put(RolapConnectionProperties.Provider.name(), "mondrian");
-		propertyList.put("Jdbc", "jdbc:sqlite:"+Constants.PROJECT_DIR+"sqlite.db");
+		propertyList.put("Jdbc", "jdbc:sqlite:" + Constants.TESTFILES_DIR + "sqlite.db");
 		propertyList.put(RolapConnectionProperties.Catalog.name(),
-				"file:"+Constants.PROJECT_DIR+"Mensch.xml");
+				Constants.TESTFILES_DIR + "Mensch.xml");
 		propertyList.put("JdbcDrivers", "org.sqlite.JDBC");
 
 		CatalogLocator catalogLocator = new CatalogLocator() {
@@ -102,7 +102,6 @@ public class MondrianTest {
 	}
 
 	@Test
-
 	@Disabled
 	void testOlap() throws Exception {
 		mondrian.olap4j.MondrianOlap4jDriver d = new MondrianOlap4jDriver();

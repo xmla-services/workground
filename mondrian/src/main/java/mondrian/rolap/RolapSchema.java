@@ -711,7 +711,7 @@ public class RolapSchema implements Schema {
     }
 
     // package-local visibility for testing purposes
-    void handleCubeGrant(RoleImpl role, MondrianDef.CubeGrant cubeGrant) {
+    public void handleCubeGrant(RoleImpl role, MondrianDef.CubeGrant cubeGrant) {
         RolapCube cube = lookupCube(cubeGrant.cube);
         if (cube == null) {
             throw Util.newError("Unknown cube '" + cubeGrant.cube + "'");
@@ -737,7 +737,7 @@ public class RolapSchema implements Schema {
     }
 
     // package-local visibility for testing purposes
-    void handleHierarchyGrant(
+    public void handleHierarchyGrant(
         RoleImpl role,
         RolapCube cube,
         SchemaReader reader,
@@ -1344,7 +1344,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
     }
 
  // package-local visibility for testing purposes
-    RolapStar makeRolapStar(final MondrianDef.Relation fact) {
+    public RolapStar makeRolapStar(final MondrianDef.Relation fact) {
         DataSource dataSource = getInternalConnection().getDataSource();
         return new RolapStar(this, dataSource, fact);
     }

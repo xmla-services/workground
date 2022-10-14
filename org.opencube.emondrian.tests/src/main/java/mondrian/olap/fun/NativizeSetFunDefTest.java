@@ -1345,8 +1345,8 @@ public class NativizeSetFunDefTest extends BatchTestCase {
                 connection,
                 "select nativizeSet(crossjoin(time.[week].members, { gender.m })) on 0 "
                 + "from sales",
-                "with member [Time].[Weekly].[_Nativized_Member_Time_Weekly_Week_] as '[Time].[Weekly].DefaultMember'\n"
-                + "  set [_Nativized_Set_Time_Weekly_Week_] as '{[Time].[Weekly].[_Nativized_Member_Time_Weekly_Week_]}'\n"
+                "with member [Time.Weekly].[_Nativized_Member_Time_Weekly_Week_] as '[Time.Weekly].DefaultMember'\n"
+                + "  set [_Nativized_Set_Time_Weekly_Week_] as '{[Time.Weekly].[_Nativized_Member_Time_Weekly_Week_]}'\n"
                 + "  member [Time].[_Nativized_Sentinel_Time_Year_] as '101010'\n"
                 + "  member [Gender].[_Nativized_Sentinel_Gender_(All)_] as '101010'\n"
                 + "select NativizeSet(Crossjoin([_Nativized_Set_Time_Weekly_Week_], {[Gender].[M]})) ON COLUMNS\n"
