@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import mondrian.olap.Member;
@@ -42,15 +42,15 @@ public class RolapMemberBaseTest {
     private static final String ROLAP_FORMATTED_CAPTION =
             "rolapFormattedCaption";
 
-    private static RolapMemberBase rolapMemberBase;
+    private RolapMemberBase rolapMemberBase;
 
     // mocks
-    private static Object memberKey;
-    private static RolapLevel level;
-    private static PropertyFormatter propertyFormatter;
+    private Object memberKey;
+    private RolapLevel level;
+    private PropertyFormatter propertyFormatter;
 
-    @BeforeAll
-    public static void beforeAll() {
+    @BeforeEach
+    public void beforeEach() {
         level = mock(RolapLevel.class);
         propertyFormatter = mock(PropertyFormatter.class);
         memberKey = Integer.MAX_VALUE;

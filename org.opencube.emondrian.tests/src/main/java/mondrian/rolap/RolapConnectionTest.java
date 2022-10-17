@@ -18,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -227,9 +229,9 @@ public class RolapConnectionTest {
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testFormatLocale(Context context) {
         String expr = "FORMAT(1234.56, \"#,##.#\")";
-        checkLocale("es_ES", expr, "1.234,6", false);
-        checkLocale("es_MX", expr, "1,234.6", false);
-        checkLocale("en_US", expr, "1,234.6", false);
+        checkLocale(context, "es_ES", expr, "1.234,6", false);
+        checkLocale(context, "es_MX", expr, "1,234.6", false);
+        checkLocale(context, "en_US", expr, "1,234.6", false);
     }
 
     /**
@@ -238,16 +240,16 @@ public class RolapConnectionTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testFormatStringLocale(Context context) {
-        checkLocale("es_ES", "1234.56", "1.234,6", true);
-        checkLocale("es_MX", "1234.56", "1,234.6", true);
-        checkLocale("en_US", "1234.56", "1,234.6", true);
+        checkLocale(context, "es_ES", "1234.56", "1.234,6", true);
+        checkLocale(context, "es_MX", "1234.56", "1,234.6", true);
+        checkLocale(context, "en_US", "1234.56", "1,234.6", true);
     }
 
-    private static void checkLocale(
+    private static void checkLocale(Context context,
         final String localeName, String expr, String expected, boolean isQuery)
     {
     	//TODO:
-    	fail("uncomment here");
+    	//fail("uncomment here");
 //        TestContext testContextSpain = new TestContext() {
 //            public mondrian.olap.Connection getConnection() {
 //                Util.PropertyList properties =
@@ -258,20 +260,22 @@ public class RolapConnectionTest {
 //                return DriverManager.getConnection(properties, null);
 //            }
 //        };
-//        if (isQuery) {
-//            String query = "WITH MEMBER [Measures].[Foo] AS '" + expr + "',\n"
-//                + " FORMAT_STRING = '#,##.#' \n"
-//                + "SELECT {[MEasures].[Foo]} ON COLUMNS FROM [Sales]";
-//            String expected2 =
-//                "Axis #0:\n"
-//                + "{}\n"
-//                + "Axis #1:\n"
-//                + "{[Measures].[Foo]}\n"
-//                + "Row #0: " + expected + "\n";
-//            testContextSpain.assertQueryReturns(query, expected2);
-//        } else {
-//            testContextSpain.assertExprReturns(expr, expected);
-//        }
+          context.setProperty(RolapConnectionProperties.Locale.name(),
+                    localeName);
+        if (isQuery) {
+            String query = "WITH MEMBER [Measures].[Foo] AS '" + expr + "',\n"
+                + " FORMAT_STRING = '#,##.#' \n"
+                + "SELECT {[MEasures].[Foo]} ON COLUMNS FROM [Sales]";
+            String expected2 =
+                "Axis #0:\n"
+                + "{}\n"
+                + "Axis #1:\n"
+                + "{[Measures].[Foo]}\n"
+                + "Row #0: " + expected + "\n";
+            assertQueryReturns(context.createConnection(), query, expected2);
+        } else {
+            assertExprReturns(context.createConnection(), expr, expected);
+        }
     }
 
 	@ParameterizedTest

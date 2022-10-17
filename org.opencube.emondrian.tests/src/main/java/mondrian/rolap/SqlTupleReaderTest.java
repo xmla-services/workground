@@ -47,11 +47,13 @@ public class SqlTupleReaderTest {
     SqlQuery sqlQuery = mock( SqlQuery.class, Answers.RETURNS_MOCKS );
     RolapCube baseCube = mock( RolapCube.class );
     RolapLevel targetLevel = mock( RolapLevel.class );
+    MondrianDef.Expression expression =  mock(MondrianDef.Expression.class);
     RolapCubeLevel levelIter = mock( RolapCubeLevel.class, Answers.RETURNS_MOCKS );
     RolapProperty rolapProperty = mock( TestPublicRolapProperty.class, Answers.RETURNS_MOCKS );
     String propertyName = "property_1";
     when( rolapProperty.getName() ).thenReturn( propertyName );
     when( rolapProperty.getType() ).thenReturn(Property.Datatype.TYPE_STRING);
+    when(rolapProperty.getExp()).thenReturn(expression);
     RolapProperty[] properties = { rolapProperty };
     when( levelIter.getProperties() ).thenReturn( properties );
     when( levelIter.getKeyExp() ).thenReturn( mock( MondrianDef.Expression.class ) );

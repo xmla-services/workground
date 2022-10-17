@@ -56,7 +56,7 @@ public class UnionFunDef extends FunDefBase {
         };
     }
 
-    TupleList union(TupleList list0, TupleList list1, final boolean all) {
+    public TupleList union(TupleList list0, TupleList list1, final boolean all) {
         assert list0 != null;
         assert list1 != null;
         if (all) {

@@ -190,11 +190,9 @@ public class CVConcurrentMdxTest {
         List<QueryAndResult> queryList = new ArrayList<QueryAndResult>();
         for (int i = 0; i < testList.size(); i++) {
             Class testClass = testList.get(i);
-            Class[] types = new Class[] { String.class };
             try {
-                Constructor cons = testClass.getConstructor(types);
-                Object[] args = new Object[] { "" };
-                Object newCon = cons.newInstance(args);
+                Constructor cons = testClass.getConstructor();
+                Object newCon = cons.newInstance();
                 DiffRepository diffRepos =
                     ((ClearViewBase) newCon).getDiffRepos();
 

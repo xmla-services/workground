@@ -117,7 +117,7 @@ public class UnionFunDefTest {
 
     UnionFunDef unionFunDefMock = mock(UnionFunDef.class);
     doCallRealMethod().when(unionFunDefMock).union(
-    		listForUnion1, listForUnion2, anyBoolean());
+    		any(), any(), anyBoolean());
 
     TupleList tupleList =
         unionFunDefMock.union(listForUnion1, listForUnion2, false);
