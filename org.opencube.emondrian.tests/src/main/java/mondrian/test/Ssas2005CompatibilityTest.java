@@ -1961,10 +1961,11 @@ public class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testRootMembers(Context context) {
+    	prepareContext(context);
         // for member defined in the database
         final String timeByWeek =
             hierarchyName("Time", "Time By Week");
-        assertExprReturns(context.createConnection(),
+        assertExprReturns(context.createConnection(), "Warehouse and Sales",
             "[Time].[1997].Level.UniqueName",
             timeByWeek + ".[Year2]");
 

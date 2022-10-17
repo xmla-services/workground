@@ -23,7 +23,7 @@ import org.apache.logging.log4j.LogManager;
  *
  * @author jhyde
  */
-class RolapProperty extends Property {
+public class RolapProperty extends Property {
 
     private static final Logger LOGGER = LogManager.getLogger(RolapProperty.class);
 
@@ -68,7 +68,7 @@ class RolapProperty extends Property {
             dependsOnLevelValue != null && dependsOnLevelValue;
     }
 
-    MondrianDef.Expression getExp() {
+    public MondrianDef.Expression getExp() {
         return exp;
     }
 

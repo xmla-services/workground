@@ -302,7 +302,7 @@ public class RolapLevel extends LevelBase {
         return parentExp != null;
     }
 
-    MondrianDef.Expression getParentExp() {
+    public MondrianDef.Expression getParentExp() {
         return parentExp;
     }
 

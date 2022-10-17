@@ -481,7 +481,7 @@ public class UdfTest {
             "Axis #0:\n"
             + "{}\n"
             + "Axis #1:\n"
-            + "{[Time].[Weekly].[1998].[52]}\n"
+            + "{[Time.Weekly].[1998].[52]}\n"
             + "Row #0: \n");
     }
 
