@@ -1478,6 +1478,21 @@ public class TestUtil {
 		return propertyList;
 	}
 
+	public static Util.PropertyList getConnectionProperties(Connection connection) {
+		final Util.PropertyList propertyList =
+				Util.parseConnectString(((RolapConnection)connection).getConnectInfo().toString());
+		if ( MondrianProperties.instance().TestHighCardinalityDimensionList
+				.get() != null
+				&& propertyList.get(
+				RolapConnectionProperties.DynamicSchemaProcessor.name() )
+				== null ) {
+			propertyList.put(
+					RolapConnectionProperties.DynamicSchemaProcessor.name(),
+					FoodmartTestContextImpl.HighCardDynamicSchemaProcessor.class.getName() );
+		}
+		return propertyList;
+	}
+
 	/**
 	 * Constructs a connect string by which the unit tests can talk to the FoodMart database.
 	 * <p>
