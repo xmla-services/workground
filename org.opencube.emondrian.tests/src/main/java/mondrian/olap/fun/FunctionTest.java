@@ -25,6 +25,7 @@ import org.apache.logging.log4j.Logger;
 import org.eigenbase.xom.StringEscaper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
@@ -4986,7 +4987,7 @@ public class FunctionTest {//extends FoodMartTestCase {
         + "Axis #1:\n"
         + "{[Measures].[Unit Sales]}\n"
         + "Axis #2:\n"
-        + "{[Time].[1997].[Q1], [Time].[Weekly].[1997].[10]}\n"
+        + "{[Time].[1997].[Q1], [Time.Weekly].[1997].[10]}\n"
         + "Row #0: 4,395\n";
     final String timeWeekly = hierarchyName( "Time", "Weekly" );
     assertQueryReturns(context.createConnection(),
@@ -9093,10 +9094,10 @@ public class FunctionTest {//extends FoodMartTestCase {
         "Axis #0:\n"
           + "{}\n"
           + "Axis #1:\n"
-          + "{[Customers].[USA].[CA].[Santa Monica].[Adeline Chun]}\n"
           + "{[Customers].[USA].[CA].[Woodland Hills].[Abel Young]}\n"
-          + "Row #0: 33\n"
-          + "Row #0: 75\n" );
+          + "{[Customers].[USA].[CA].[Santa Monica].[Adeline Chun]}\n"          
+          + "Row #0: 75\n"
+          + "Row #0: 33\n" );
     } finally {
       if ( connection != null ) {
         connection.close();
@@ -10736,7 +10737,7 @@ public class FunctionTest {//extends FoodMartTestCase {
     // Applied to a member (extra set of parens)
     assertExprReturns(context.createConnection(),
       "TupleToStr(([Store].[USA].[OR]))",
-      "[Store].[USA].[OR]" );
+      "([Store].[USA].[OR])" );
 
     // Now, applied to a tuple
     assertExprReturns(context.createConnection(),
@@ -12549,8 +12550,7 @@ Intel platforms):
    * implemented functions into a file called "functions.html". You can manually include that table in the <a
    * href="{@docRoot}/../mdx.html">MDX specification</a>.
    */
-  @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @Test
   public void testDumpFunctions() throws IOException {
     final List<FunInfo> funInfoList = new ArrayList<FunInfo>();
     funInfoList.addAll( BuiltinFunTable.instance().getFunInfoList() );
@@ -12577,7 +12577,7 @@ Intel platforms):
             null ) ) ) );
     Collections.sort( funInfoList );
 
-    final File file = new File( "target/functions.html" );
+    final File file = new File( "functions.html" );
     final FileOutputStream os = new FileOutputStream( file );
     final PrintWriter pw = new PrintWriter( os );
     pw.println( "<table border='1'>" );
@@ -13158,7 +13158,7 @@ Intel platforms):
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testVbaExceptions(Context context) {
-    assertExprThrows(context.createConnection(),
+    assertExprThrows(context,
       "right(\"abc\", -4)",
       Util.IBM_JVM
         ? "StringIndexOutOfBoundsException: null"
@@ -13399,7 +13399,7 @@ Intel platforms):
       "Axis #0:\n"
         + "{}\n"
         + "Axis #1:\n"
-        + "{[Time].[1997], [Time].[Weekly].[1997].[16]}\n"
+        + "{[Time].[1997], [Time.Weekly].[1997].[16]}\n"
         + "Row #0: 3,839\n" );
 
     assertQueryReturns(context.createConnection(),
@@ -14553,12 +14553,12 @@ Intel platforms):
         + "{[Measures].[*FORMATTED_MEASURE_0]}\n"
         + "{[Measures].[CALCULATED_MEASURE_1]}\n"
         + "Axis #2:\n"
-        + "{[Time].[Weekly].[1997].[2]}\n"
-        + "{[Time].[Weekly].[1997].[24]}\n"
+        + "{[Time.Weekly].[1997].[2]}\n"
+        + "{[Time.Weekly].[1997].[24]}\n"
         + "Row #0: 19,756.43\n"
-        + "Row #0: {[Time].[Weekly].[1997].[2]}\n"
+        + "Row #0: {[Time.Weekly].[1997].[2]}\n"
         + "Row #1: 11,371.84\n"
-        + "Row #1: {[Time].[Weekly].[1997].[24]}\n" );
+        + "Row #1: {[Time.Weekly].[1997].[24]}\n" );
   }
 
   @ParameterizedTest
