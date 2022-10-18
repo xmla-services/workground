@@ -35,7 +35,7 @@ public class LocalizingDynamicSchemaProcessorTest
         String variable = "%{translate}";
         String translation = "Translate";
         String catalog = "..." + variable + "...";
-        MondrianProperties.instance().LocalePropFile.set("mondrian/i18n/LocalizingDynamicSchemaProcessor/resources.properties" );
+        MondrianProperties.instance().LocalePropFile.set("mondrian/i18n/localizingdynamicschemaprocessor/resources.properties" );
         DynamicSchemaProcessor dsp = new LocalizingDynamicSchemaProcessor();
         Util.PropertyList connectInfo = new Util.PropertyList();
 

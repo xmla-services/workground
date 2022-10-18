@@ -11,6 +11,7 @@
 
 package mondrian.test.build;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -20,6 +21,8 @@ import org.junit.jupiter.api.Test;
  * @author Chard Nelson
  * @since Sep 8, 2009
  */
+@Disabled
+//ant test was disabled
 public class CodeComplianceTest
         extends AntTestBase
 {
