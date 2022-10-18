@@ -129,6 +129,9 @@
 				<directory>${project.basedir}/testfiles</directory>
 				<targetPath>${project.build.directory}/testfiles</targetPath>
 			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
 		</resources>
 	</build>
 </project>

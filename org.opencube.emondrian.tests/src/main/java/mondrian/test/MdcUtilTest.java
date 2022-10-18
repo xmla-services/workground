@@ -14,6 +14,7 @@ import mondrian.rolap.RolapUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.Context;
@@ -31,6 +32,8 @@ import static org.opencube.junit5.TestUtil.flushSchemaCache;
  * 
  * @author Benny
  */
+//disabled by reason of we don't plan use log4j
+@Disabled
 public class MdcUtilTest {
 
   private static Logger rolapUtilLogger = LogManager.getLogger( RolapUtil.class );

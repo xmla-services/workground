@@ -36,7 +36,7 @@ public class SchemaVersionTest {
     public void testSchema3withVersion(Context context) {
         withSchema(context, SCHEMA_3_VHEADER + SCHEMA_3_BODY);
         Util.PropertyList connectInfo =
-            getConnectionProperties();
+            getConnectionProperties(context.createConnection());
         Connection conn = DriverManager.getConnection(connectInfo, null);
         assertNotNull(conn);
         conn.close();
@@ -47,7 +47,7 @@ public class SchemaVersionTest {
     public void testSchema3noVersion(Context context) {
         withSchema(context,SCHEMA_3_HEADER + SCHEMA_3_BODY);
         Util.PropertyList connectInfo =
-            getConnectionProperties();
+            getConnectionProperties(context.createConnection());
         Connection conn = DriverManager.getConnection(connectInfo, null);
         assertNotNull(conn);
         conn.close();
@@ -55,11 +55,11 @@ public class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchema4withVersion(Context context) {
-       withSchema(context,SCHEMA_4_HEADER + SCHEMA_4_BODY);
-        Util.PropertyList connectInfo =
-            getConnectionProperties();
+    public void testSchema4withVersion(Context context) {       
+        withSchema(context,SCHEMA_4_HEADER + SCHEMA_4_BODY);
         try {
+            Util.PropertyList connectInfo =
+                    getConnectionProperties(context.createConnection());
             Connection conn = DriverManager.getConnection(connectInfo, null);
             conn.close();
             fail("No exception thrown for version 4 schema.");
@@ -72,10 +72,10 @@ public class SchemaVersionTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testSchema4noVersion(Context context) {
         withSchema(context,
-                SCHEMA_4_NVHEADER + SCHEMA_4_BODY);
-        Util.PropertyList connectInfo =
-            getConnectionProperties();
+                SCHEMA_4_NVHEADER + SCHEMA_4_BODY);        
         try {
+            Util.PropertyList connectInfo =
+                    getConnectionProperties(context.createConnection());
             Connection conn = DriverManager.getConnection(connectInfo, null);
             conn.close();
             fail("No exception thrown for version 4 schema.");
