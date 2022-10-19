@@ -17,7 +17,7 @@ import mondrian.olap.Util.PropertyList;
 
 public class TestTest {
 
-	class ExampleDatabaseProvider implements DatabaseProvider {
+	public static class ExampleDatabaseProvider implements DatabaseProvider {
 
 		@Override
 		public void close() throws IOException {
@@ -38,7 +38,7 @@ public class TestTest {
 
 	}
 
-	class ExampleDataLoader implements DataLoader {
+	public static class ExampleDataLoader implements DataLoader {
 
 		public ExampleDataLoader() {
 		}

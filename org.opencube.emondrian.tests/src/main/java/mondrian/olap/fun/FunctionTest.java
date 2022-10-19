@@ -278,7 +278,7 @@ public class FunctionTest {//extends FoodMartTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testParallelperiodOnStrToMember(Context context) {
-    TestUtil.assertQueryReturns(context.createConnection(),
+    assertQueryReturns(context.createConnection(),
       "with member Measures.[Prev Unit Sales] as 'parallelperiod(strToMember(\"[Time].[1997].[Q2]\"))'\n"
         + "select {[Measures].[Unit Sales], Measures.[Prev Unit Sales]} ON COLUMNS,\n"
         + "[Gender].members ON ROWS\n"
@@ -300,7 +300,7 @@ public class FunctionTest {//extends FoodMartTestCase {
         + "Row #2: 10,545\n"
         + "Row #2: 10,691\n" );
 
-    TestUtil.assertQueryReturns(context.createConnection(),
+    assertQueryThrows(context.createConnection(),
       "with member Measures.[Prev Unit Sales] as 'parallelperiod(strToMember(\"[Time].[Quarter]\"))'\n"
         + "select {[Measures].[Unit Sales], Measures.[Prev Unit Sales]} ON COLUMNS,\n"
         + "[Gender].members ON ROWS\n"
@@ -1078,9 +1078,9 @@ public class FunctionTest {//extends FoodMartTestCase {
     //final TestContext testContext =
     //  getTestContext().withCube( "[Sales Ragged]" );
     Member member =
-      executeSingletonAxis(context.createConnection(),"[Sales Ragged]",
+      executeSingletonAxis(context.createConnection(),
         "Ancestor([Store].[All Stores].[Israel].[Haifa], "
-          + "[Store].[Store Country])" );
+          + "[Store].[Store Country])", "[Sales Ragged]");
 
     assertNotNull(member, "Member must not be null.");
     assertEquals( "Israel", member.getName() );
@@ -1488,7 +1488,7 @@ public class FunctionTest {//extends FoodMartTestCase {
       "ClosingPeriod([Time].[Year], [Store].[All Stores].[Israel])",
       "The <level> and <member> arguments to ClosingPeriod must be "
         + "from the same hierarchy. The level was from '[Time]' but "
-        + "the member was from '[Store]'." );
+        + "the member was from '[Store]'.", "[Sales Ragged]");
   }
 
   @ParameterizedTest
@@ -1613,7 +1613,7 @@ public class FunctionTest {//extends FoodMartTestCase {
 
     // Ascendants(<Member>) applied to parent-child hierarchy accessed via
     // <Level>.Members
-    assertAxisReturns(connection,
+    assertAxisReturns(connection, "HR",
       "Ascendants([Employees].Members.Item(73))",
       "[Employees].[Sheri Nowmer].[Derrick Whelply].[Beverly Baker].[Jacqueline Wyllie].[Ralph Mccoy].[Bertha "
         + "Jameson].[James Bailey]\n"
@@ -5078,14 +5078,14 @@ public class FunctionTest {//extends FoodMartTestCase {
       "[Store].[Israel].[Israel].[Haifa]\n" + "[Store].[Israel].[Israel].[Tel Aviv]" );
 
     // all cities are leaves
-    assertAxisReturns(context.createConnection(),
+    assertAxisReturns(context.createConnection(), "[Sales Ragged]",
       "Descendants([Geography].[Israel], [Geography].[City], leaves)",
       "[Geography].[Israel].[Israel].[Haifa]\n"
         + "[Geography].[Israel].[Israel].[Tel Aviv]" );
 
     // No state is a leaf (not even Israel, which is both a country and a
     // a state, or Vatican, with is a country/state/city)
-    assertAxisReturns(context.createConnection(),
+    assertAxisReturns(context.createConnection(), "[Sales Ragged]",
       "Descendants([Geography], [Geography].[State], leaves)",
       "[Geography].[Canada].[BC]\n" +
               "[Geography].[Mexico].[DF]\n" +
