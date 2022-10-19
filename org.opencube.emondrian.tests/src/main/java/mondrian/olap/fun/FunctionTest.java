@@ -300,7 +300,7 @@ public class FunctionTest {//extends FoodMartTestCase {
         + "Row #2: 10,545\n"
         + "Row #2: 10,691\n" );
 
-    assertQueryReturns(context.createConnection(),
+    assertQueryThrows(context.createConnection(),
       "with member Measures.[Prev Unit Sales] as 'parallelperiod(strToMember(\"[Time].[Quarter]\"))'\n"
         + "select {[Measures].[Unit Sales], Measures.[Prev Unit Sales]} ON COLUMNS,\n"
         + "[Gender].members ON ROWS\n"
