@@ -6779,17 +6779,17 @@ public class FunctionTest {//extends FoodMartTestCase {
     assertAxisReturns(context.createConnection(), "OpeningPeriod()", "[Time].[1997].[Q1]" );
 
     //TestContext testContext = getTestContext().withCube( "[Sales Ragged]" );
-    assertAxisThrows(context.createConnection(), "[Sales Ragged]",
+    assertAxisThrows(context.createConnection(),
       "OpeningPeriod([Time].[Year], [Store].[All Stores].[Israel])",
       "The <level> and <member> arguments to OpeningPeriod must be "
         + "from the same hierarchy. The level was from '[Time]' but "
-        + "the member was from '[Store]'." );
+        + "the member was from '[Store]'.", "[Sales Ragged]");
 
-    assertAxisThrows(context.createConnection(), "[Sales Ragged]",
+    assertAxisThrows(context.createConnection(),
       "OpeningPeriod([Store].[Store City])",
       "The <level> and <member> arguments to OpeningPeriod must be "
         + "from the same hierarchy. The level was from '[Store]' but "
-        + "the member was from '[Time]'." );
+        + "the member was from '[Time]'.", "[Sales Ragged]");
   }
 
   /**
