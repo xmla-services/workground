@@ -1138,7 +1138,7 @@ public class AccessControlTest {
         TestUtil.assertExprThrows(
     		connection,
             "[Store].DefaultMember",
-            "'[Store]' not found in cube 'Sales'");
+            "cube 'Sales' not found");
     }
 
     @ParameterizedTest

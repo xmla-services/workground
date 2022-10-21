@@ -13,6 +13,7 @@ package mondrian.rolap.agg;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -25,7 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.OlapConnection;
@@ -50,8 +51,8 @@ public class DrillThroughQuerySpecTest {
   private static RolapStar.Column includedColumn;
   private static RolapStar.Column excludedColumn;
 
-  @BeforeAll
-  public static void beforeAll() throws Exception {
+  @BeforeEach
+  public void beforeAll() throws Exception {
 
     requestMock = mock(DrillThroughCellRequest.class);
     starPredicateMock = mock(StarPredicate.class);
@@ -89,9 +90,9 @@ public class DrillThroughQuerySpecTest {
 
   @Test
   public void testOneColumnExists() {
-    drillThroughQuerySpec.extraPredicates(sqlQueryMock);
+    drillThroughQuerySpec.extraPredicates(sqlQueryMock);        
     verify(sqlQueryMock, times(1))
-      .addSelect(anyString(), any(SqlStatement.Type.class), anyString());
+      .addSelect(isNull(), isNull(), anyString());
   }
 
   @Test
@@ -100,7 +101,7 @@ public class DrillThroughQuerySpecTest {
       .thenReturn(Arrays.asList(includedColumn, excludedColumn));
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(2))
-      .addSelect(anyString(), any(SqlStatement.Type.class), anyString());
+      .addSelect(isNull(), isNull(), anyString());
   }
 
   @Test
@@ -125,7 +126,7 @@ public class DrillThroughQuerySpecTest {
 
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(1))
-      .addSelect(anyString(), any(SqlStatement.Type.class), anyString());
+      .addSelect(isNull(), isNull(), anyString());
   }
 
   // test that returns correct number of columns
