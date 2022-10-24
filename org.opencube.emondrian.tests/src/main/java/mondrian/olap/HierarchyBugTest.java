@@ -364,7 +364,7 @@ TestUtil.flushSchemaCache(conn);
         String yearHierarchyName = year.getHierarchy().getUniqueName();
         assertEquals(year1997HierarchyName, yearHierarchyName);
         
-        TestUtil.flushSchemaCache(null);
+        TestUtil.flushSchemaCache(context.createConnection());
     }
 
 
