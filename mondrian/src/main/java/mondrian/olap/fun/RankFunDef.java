@@ -196,7 +196,7 @@ public class RankFunDef extends FunDefBase {
         // Evaluate the list (or retrieve from cache).
         // If there is an exception while calculating the
         // list, propagate it up.
-        final TupleSortResult sortResult = (TupleSortResult) evaluator.getCachedResult( cacheDescriptor );
+        final SortResult sortResult = (SortResult) evaluator.getCachedResult( cacheDescriptor );
         if ( debug ) {
           sortResult.print( new PrintWriter( System.out ) );
         }
@@ -207,7 +207,15 @@ public class RankFunDef extends FunDefBase {
         }
 
         // First try to find the member in the cached SortResult
-        Integer rank = sortResult.rankOf( members );
+        Integer rank = null;
+        if (sortResult instanceof TupleSortResult) {
+          rank = ((TupleSortResult)sortResult).rankOf(members);
+        }
+        if (sortResult instanceof MemberSortResult) {
+          if (members.length > 0) {
+            rank = ((MemberSortResult)sortResult).rankOf(members[0]);
+          }
+        }
         if ( rank != null ) {
           return rank;
         }
