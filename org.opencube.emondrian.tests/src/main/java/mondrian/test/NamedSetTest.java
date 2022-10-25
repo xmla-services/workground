@@ -20,6 +20,7 @@ import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
@@ -348,6 +349,7 @@ public class NamedSetTest {
     // Disabled because fails with error '<Value> = <String> is not a function'
     // Also, don't know whether [oNormal] will correctly resolve to
     // [Store Type].[oNormal].
+    @Disabled
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void _testXxx(Context context) {

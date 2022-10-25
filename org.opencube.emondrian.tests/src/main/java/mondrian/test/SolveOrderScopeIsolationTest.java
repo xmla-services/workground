@@ -12,6 +12,7 @@ package mondrian.test;
 import mondrian.olap.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.BaseTestContext;
@@ -206,6 +207,7 @@ public class SolveOrderScopeIsolationTest {
      * Test for future capability: SCOPE_ISOLATION=CUBE which is implemented in
      * Analysis Services but not yet in Mondrian.
      */
+    @Disabled
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void _future_testOverrideCubeMemberHappensWithScopeIsolation(Context context) { 
