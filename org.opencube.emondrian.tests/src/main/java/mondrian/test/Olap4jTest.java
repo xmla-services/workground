@@ -460,7 +460,7 @@ public class Olap4jTest {
         final String mdx =
             "SELECT\n"
             + "NON EMPTY {Hierarchize({[Measures].[Customer Count]})} ON COLUMNS,\n"
-            + "CurrentDateMember([Time], \"\"\"[Time].[Year].[1997]\"\"\") ON ROWS\n"
+            + "CurrentDateMember([Time], \"\"\"[Time].[Year].[1997]\"\"\", EXACT) ON ROWS\n"
             + "FROM [Sales 2]";
         try {
             final MdxParserFactory parserFactory =
