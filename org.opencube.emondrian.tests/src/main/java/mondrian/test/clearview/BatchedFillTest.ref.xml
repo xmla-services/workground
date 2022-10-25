@@ -119,8 +119,8 @@ select
   sum("sales_fact_1997"."store_sales") as "m0", 
   sum("sales_fact_1997"."unit_sales") as "m1" 
 from
-  "time_by_day" as "time_by_day", 
-  "sales_fact_1997" as "sales_fact_1997", 
+  "sales_fact_1997" as "sales_fact_1997",
+  "time_by_day" as "time_by_day",
   "product_class" as "product_class", 
   "product" as "product"
 where
@@ -141,8 +141,8 @@ select
   sum("sales_fact_1997"."unit_sales") as "m0",
   sum("sales_fact_1997"."store_sales") as "m1"
 from
-  "time_by_day" as "time_by_day",
   "sales_fact_1997" as "sales_fact_1997",
+  "time_by_day" as "time_by_day",
   "product_class" as "product_class",
   "product" as "product"
 where
