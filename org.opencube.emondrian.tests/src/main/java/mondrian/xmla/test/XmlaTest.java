@@ -61,6 +61,9 @@ import mondrian.xmla.impl.DefaultXmlaResponse;
  * @author Gang Chen
  */
 public class XmlaTest{
+	
+    protected static final String SCHEMA_TEST_DATE =
+            "xxxx-xx-xxTxx:xx:xx";
 
     private static final Logger LOGGER =
             LogManager.getLogger(XmlaTest.class);
@@ -133,6 +136,7 @@ public class XmlaTest{
             new DOMSource(responseElem), new StreamResult(bufWriter));
         bufWriter.write(Util.nl);
         String actualResponse = bufWriter.getBuffer().toString();// removes upgrade
+        actualResponse = ignoreLastUpdateDate(actualResponse);
         try {
 			actualResponse = actualResponse.trim();
 			expectedResponse = expectedResponse.trim();
@@ -151,6 +155,22 @@ public class XmlaTest{
         }finally {
         	tearDown();
 		}
+    }
+
+    private String ignoreLastUpdateDate(String document) {
+        document = document.replaceAll(
+            "<DATE_MODIFIED>....-..-..T..:..:..</DATE_MODIFIED>",
+            "<DATE_MODIFIED>" + SCHEMA_TEST_DATE + "</DATE_MODIFIED>");
+        document = document.replaceAll(
+                ">....-..-..T..:..:..</LastSchemaUpdate>",
+                ">" + SCHEMA_TEST_DATE + "</LastSchemaUpdate>");
+        document = document.replaceAll(
+                ">....-..-..T..:..:..</LastDataUpdate>",
+                ">" + SCHEMA_TEST_DATE + "</LastDataUpdate>");
+        document = document.replaceAll(
+                ">....-..-..T..:..:..</LAST_DATA_UPDATE>",
+                ">" + SCHEMA_TEST_DATE + "</LAST_DATA_UPDATE>"); 
+        return document;
     }
 
     private Element ignoreLastUpdateDate(Element element) {
