@@ -202,6 +202,7 @@ public class NamedSetTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testIntrinsic(Context context) {
+    	propSaver.set( MondrianProperties.instance().CaseSensitiveMdxInstr, true);
         assertQueryReturns(context.createConnection(),
             "WITH SET [ChardonnayChablis] AS\n"
             + "   'Filter([Product].Members, (InStr(1, [Product].CurrentMember.Name, \"chardonnay\") <> 0) OR (InStr(1, [Product].CurrentMember.Name, \"chablis\") <> 0))'\n"

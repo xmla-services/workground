@@ -4512,7 +4512,7 @@ public class BasicQueryTest {
     Throwable throwable = null;
     propSaver.set( props.QueryTimeout, 2 );
     try {
-      executeQuery(context.createConnection(), query);
+    	executeQueryTimeoutTest(context.createConnection(), query);
     } catch ( Throwable ex ) {
       throwable = ex;
     }
