@@ -838,14 +838,17 @@ public class TestUtil {
 	}
 
 	public static Result executeQuery(Connection connection, String queryString) {
-		Query query = parseQuery(connection, queryString);
-		assertThat(query).isNotNull();
-		Statement statement = query.getStatement();
-		assertThat(statement).isNotNull();
-
-		Result result = statement.getMondrianConnection().execute(new Execution(statement, 60000l));
-		return result;
+		return executeQuery(connection, queryString, 60000l);
 	}
+	
+	public static Result executeQueryTimeoutTest(Connection connection, String queryString ) {	    
+	    queryString = upgradeQuery( queryString );
+	    Query query = connection.parseQuery( queryString );
+	    Statement statement = query.getStatement();
+	    assertThat(statement).isNotNull();	    
+	    final Result result = statement.getMondrianConnection().execute(new Execution(statement, statement.getQueryTimeoutMillis()));	    	    
+	    return result;
+	  }
 
 	public static Result executeQuery(Connection connection, String queryString, long timeoutIntervalMillis) {
 		Query query = parseQuery(connection, queryString);
@@ -1946,6 +1949,7 @@ public class TestUtil {
 		propSaver.set(propSaver.properties.EnableNativeTopCount, true);
 
 		Result resultNative = executeQuery(connection, query);
+		propSaver.reset();
 
 		propSaver.set(propSaver.properties.EnableNativeCrossJoin, false);
 		propSaver.set(propSaver.properties.EnableNativeFilter, false);
@@ -1953,13 +1957,14 @@ public class TestUtil {
 		propSaver.set(propSaver.properties.EnableNativeTopCount, false);
 
 		Result resultNonNative = executeQuery(connection, query);
+		propSaver.reset();
 
 		assertEquals(
 				FoodmartTestContextImpl.toString(resultNative),
 				FoodmartTestContextImpl.toString(resultNonNative),
 				message);
 
-		propSaver.reset();
+		
 	}
 
 

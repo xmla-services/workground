@@ -569,6 +569,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         mysqlQuery,
         mysqlQuery.indexOf( "(" ) );
     if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+      context.createConnection().getCacheControl(null).flushSchemaCache();	
       assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.createConnection(),
@@ -979,6 +980,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         mysql );
 
     if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
+      context.createConnection().getCacheControl(null).flushSchemaCache();	
       assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
@@ -1088,8 +1090,8 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         + "    `customer`.`education` as `c5`,\n"
         + "    `customer`.`yearly_income` as `c6`\n"
         + "from\n"
-        + "    `time_by_day` as `time_by_day`,\n"
         + "    `sales_fact_1997` as `sales_fact_1997`,\n"
+        + "    `time_by_day` as `time_by_day`,\n"        
         + "    `customer` as `customer`\n"
         + "where\n"
         + "    `sales_fact_1997`.`time_id` = `time_by_day`.`time_id`\n"
@@ -1553,6 +1555,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         + "Row #0: 10,152\n"
         + "Row #1: 90,413\n"
         + "Row #2: 23,813\n" );
+    context.createConnection().getCacheControl(null).flushSchemaCache();
     if ( !MondrianProperties.instance().EnableNativeFilter.get() ) {
       return;
     }
