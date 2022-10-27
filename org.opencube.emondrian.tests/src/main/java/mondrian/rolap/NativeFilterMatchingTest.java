@@ -407,10 +407,10 @@ public class NativeFilterMatchingTest extends BatchTestCase {
                         : "    ISNULL(`agg_c_14_sales_fact_1997`.`the_year`) ASC, `agg_c_14_sales_fact_1997`.`the_year` ASC,\n"
                         + "    ISNULL(`agg_c_14_sales_fact_1997`.`quarter`) ASC, `agg_c_14_sales_fact_1997`.`quarter` ASC");
             final SqlPattern[] patterns = mysqlPattern(sqlMysql);
-            Connection connection = context.createConnection();
+            context.createConnection().getCacheControl(null).flushSchemaCache();            
             // Make sure the tuples list is using the HAVING clause.
             assertQuerySqlOrNot(
-                connection,
+            	context.createConnection(),
                 mdx,
                 patterns,
                 false,
@@ -475,6 +475,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
             final SqlPattern[] patterns = mysqlPattern(sqlMysql);
 
             // Make sure the tuples list is using the HAVING clause.
+            context.createConnection().getCacheControl(null).flushSchemaCache();
             assertQuerySqlOrNot(
                 context.createConnection(),
                 mdx,
