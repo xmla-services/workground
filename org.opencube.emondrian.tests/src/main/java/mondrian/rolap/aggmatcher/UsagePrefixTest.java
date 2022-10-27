@@ -89,6 +89,7 @@ public class UsagePrefixTest extends AggTableTestCase {
                 +   "{ measures.[Amount] } on rows from Cheques";
 
         withSchema(context, schema);
+        context.createConnection().getCacheControl(null).flushSchemaCache();
         assertQueryReturns(context.createConnection(),
             mdx,
             "Axis #0:\n"
@@ -123,6 +124,7 @@ public class UsagePrefixTest extends AggTableTestCase {
             +   "{ measures.[Amount] } on rows from Cheques";
 
         withSchema(context, schema);
+        context.createConnection().getCacheControl(null).flushSchemaCache();
         assertQueryReturns(context.createConnection(),
             mdx,
                 "Axis #0:\n"

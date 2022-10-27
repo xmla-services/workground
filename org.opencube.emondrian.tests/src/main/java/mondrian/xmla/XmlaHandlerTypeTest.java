@@ -176,7 +176,7 @@ public class XmlaHandlerTypeTest  {
             + "  <SQL dialect='generic'>\n"
             + expression
             + "  </SQL></MeasureExpression></Measure>",
-            null, null));
+            null, null, false));
     }
 
     static class TestVal {

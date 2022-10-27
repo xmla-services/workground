@@ -221,14 +221,12 @@ public class ParserTest {
         QueryAxis[] axes = p.getAxes();
 
         assertEquals(2, axes.length, "Number of axes");
-        assertEquals(
-            "Axis index name must be correct",
+        assertEquals(            
             AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(0).name(),
-            axes[0].getAxisName());
-        assertEquals(
-            "Axis index name must be correct",
+            axes[0].getAxisName(), "Axis index name must be correct");
+        assertEquals(            
             AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(1).name(),
-            axes[1].getAxisName());
+            axes[1].getAxisName(), "Axis index name must be correct");
 
         query = "select {[axis1mbr]} on aXiS(1), "
                 + "{[axis0mbr]} on AxIs(0) from cube";
@@ -237,14 +235,12 @@ public class ParserTest {
             p.parseInternal(null, query, false, funTable, false), "Test parser should return null query");
 
         assertEquals(2, axes.length, "Number of axes");
-        assertEquals(
-            "Axis index name must be correct",
+        assertEquals(            
             AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(0).name(),
-            axes[0].getAxisName());
-        assertEquals(
-            "Axis index name must be correct",
+            axes[0].getAxisName(),"Axis index name must be correct");
+        assertEquals(            
             AxisOrdinal.StandardAxisOrdinal.forLogicalOrdinal(1).name(),
-            axes[1].getAxisName());
+            axes[1].getAxisName(), "Axis index name must be correct");
 
         Exp colsSetExpr = axes[0].getSet();
         assertNotNull(colsSetExpr, "Column tuples");
@@ -252,7 +248,7 @@ public class ParserTest {
         UnresolvedFunCall fun = (UnresolvedFunCall)colsSetExpr;
         Id arg0 = (Id) (fun.getArgs()[0]);
         Id.NameSegment id = (Id.NameSegment) arg0.getElement(0);
-        assertEquals("Correct member on axis", "axis0mbr", id.name);
+        assertEquals("axis0mbr", id.name, "Correct member on axis");
 
         Exp rowsSetExpr = axes[1].getSet();
         assertNotNull(rowsSetExpr, "Row tuples");
@@ -260,7 +256,7 @@ public class ParserTest {
         fun = (UnresolvedFunCall) rowsSetExpr;
         arg0 = (Id) (fun.getArgs()[0]);
         id = (Id.NameSegment) arg0.getElement(0);
-        assertEquals("Correct member on axis", "axis1mbr", id.name);
+        assertEquals("axis1mbr", id.name, "Correct member on axis");
     }
 
     /**
@@ -280,7 +276,7 @@ public class ParserTest {
         assertParseQuery(
             "with member [Measures].[Foo] as "
             + " ' case when x = y then \"eq\" when x < y then \"lt\" else \"gt\" end '"
-            + "select {[foo]} on axis(0) from cube",
+            + "select {[foo]} on axis(0) from [cube]",
             "with member [Measures].[Foo] as 'CASE WHEN (x = y) THEN \"eq\" WHEN (x < y) THEN \"lt\" ELSE \"gt\" END'\n"
             + "select {[foo]} ON COLUMNS\n"
             + "from [cube]\n");
@@ -291,7 +287,7 @@ public class ParserTest {
         assertParseQuery(
             "with member [Measures].[Foo] as "
             + " ' case x when 1 then 2 when 3 then 4 else 5 end '"
-            + "select {[foo]} on axis(0) from cube",
+            + "select {[foo]} on axis(0) from [cube]",
             "with member [Measures].[Foo] as 'CASE x WHEN 1 THEN 2 WHEN 3 THEN 4 ELSE 5 END'\n"
             + "select {[foo]} ON COLUMNS\n"
             + "from [cube]\n");
@@ -744,25 +740,25 @@ public class ParserTest {
     public void testAsPrecedence() {
         // low precedence operator (AND) in CAST.
         assertParseQuery(
-            "select cast(a and b as string) on 0 from cube",
+            "select cast(a and b as string) on 0 from [cube]",
             "select CAST((a AND b) AS string) ON COLUMNS\n"
             + "from [cube]\n");
 
         // medium precedence operator (:) in CAST
         assertParseQuery(
-            "select cast(a : b as string) on 0 from cube",
+            "select cast(a : b as string) on 0 from [cube]",
             "select CAST((a : b) AS string) ON COLUMNS\n" + "from [cube]\n");
 
         // high precedence operator (IS) in CAST
         assertParseQuery(
-            "select cast(a is b as string) on 0 from cube",
+            "select cast(a is b as string) on 0 from [cube]",
             "select CAST((a IS b) AS string) ON COLUMNS\n"
             + "from [cube]\n");
 
         // low precedence operator in axis expression. According to spec, 'AS'
         // has higher precedence than '*' but we give it lower. Bug.
         assertParseQuery(
-            "select a * b as c on 0 from cube",
+            "select a * b as c on 0 from [cube]",
             Bug.BugMondrian648Fixed
                 ? "select (a * (b AS c) ON COLUMNS\n"
                   + "from [cube]\n"
@@ -772,21 +768,21 @@ public class ParserTest {
         if (Bug.BugMondrian648Fixed) {
             // Note that 'AS' has higher precedence than '*'.
             assertParseQuery(
-                "select a * b as c * d on 0 from cube",
+                "select a * b as c * d on 0 from [cube]",
                 "select (((a * b) AS c) * d) ON COLUMNS\n"
                 + "from [cube]\n");
 
         } else {
             // Bug. Even with MONDRIAN-648, Mondrian should parse this query.
             assertParseQueryFails(
-                "select a * b as c * d on 0 from cube",
+                "select a * b as c * d on 0 from [cube]",
                 "Syntax error at line 1, column 19, token '*'");
         }
 
         // Spec says that ':' has a higher precedence than '*'.
         // Mondrian currently does it wrong.
         assertParseQuery(
-            "select a : b * c : d on 0 from cube",
+            "select a : b * c : d on 0 from [cube]",
             Bug.BugMondrian648Fixed
                 ? "select ((a : b) * (c : d)) ON COLUMNS\n"
                   + "from [cube]\n"
@@ -797,13 +793,13 @@ public class ParserTest {
             // Note that 'AS' has higher precedence than ':', has higher
             // precedence than '*'.
             assertParseQuery(
-                "select a : b as n * c : d as n2 as n3 on 0 from cube",
+                "select a : b as n * c : d as n2 as n3 on 0 from [cube]",
                 "select (((a : b) as n) * ((c : d) AS n2) as n3) ON COLUMNS\n"
                 + "from [cube]\n");
         } else {
             // Bug. Even with MONDRIAN-648, Mondrian should parse this query.
             assertParseQueryFails(
-                "select a : b as n * c : d as n2 as n3 on 0 from cube",
+                "select a : b as n * c : d as n2 as n3 on 0 from [cube]",
                 "Syntax error at line 1, column 19, token '*'");
         }
     }
