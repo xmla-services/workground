@@ -22,6 +22,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.spi.LoggerContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.metadata.NamedList;
 import org.opencube.junit5.ContextSource;
@@ -2769,6 +2770,7 @@ public class SchemaTest {
         }
     }
 
+    @Disabled //not implemented yet
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void _testValidatorFindsNumericLevel(Context context) {
@@ -2968,6 +2970,7 @@ public class SchemaTest {
             "In Schema: In Cube: In Dimension: In Hierarchy: In Level: Value 'char' of attribute 'internalType' has illegal value 'char'.  Legal values: {int, long, Object, String}");
     }
 
+    @Disabled // Adventure Works schema not found 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void _testAttributeHierarchy(Context context) {
@@ -3000,7 +3003,6 @@ public class SchemaTest {
             + "         )\n"
             + "       )\n"
             + "    )\n"
-            + "   '\n"
             + "SELECT [Measures].[SalesPerWorkingDay] ON 0\n"
             + ", [Date].[Calendar].[Month].MEMBERS ON 1\n"
             + "FROM [Adventure Works]",
@@ -3050,6 +3052,7 @@ public class SchemaTest {
     // TODO: enable this test as part of PhysicalSchema work
     // TODO: also add a test that Table.alias, Join.leftAlias and
     // Join.rightAlias cannot be the empty string.
+    @Disabled //not implemented yet
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void _testNonUniqueAlias(Context context) {

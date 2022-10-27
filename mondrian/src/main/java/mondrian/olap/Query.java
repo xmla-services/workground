@@ -401,6 +401,7 @@ public class Query extends QueryPart {
             statement,
             cube,
             Formula.cloneArray(formulas),
+            subcube,
             QueryAxis.cloneArray(axes),
             (slicerAxis == null) ? null : (QueryAxis) slicerAxis.clone(),
             cellProps,

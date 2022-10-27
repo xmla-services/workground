@@ -1823,7 +1823,9 @@ public class TestUtil {
 
 	public static CellSet executeOlap4jXmlaQuery(Context context, String queryString )
 			throws SQLException {
-		String schema = getConnectionProperties()
+		/*
+		Connection connection = context.createConnection();
+		String schema = getConnectionProperties(connection)
 				.get( RolapConnectionProperties.CatalogContent.name() );
 		if ( schema == null ) {
 			schema = getRawSchema(context);
@@ -1832,7 +1834,7 @@ public class TestUtil {
 		// Util.parseValue does not appear to allow escaping them.
 		schema = schema.replace( "&quot;", "" ).replace( ";", "" );
 
-		String Jdbc = getConnectionProperties()
+		String Jdbc = getConnectionProperties(connection)
 				.get( RolapConnectionProperties.Jdbc.name() );
 
 		String cookie = XmlaOlap4jDriver.nextCookie();
@@ -1853,12 +1855,13 @@ public class TestUtil {
 		Properties info = new Properties();
 		info.setProperty(
 				XmlaOlap4jDriver.Property.CATALOG.name(), "FoodMart" );
-		java.sql.Connection connection = java.sql.DriverManager.getConnection(
+		java.sql.Connection con = java.sql.DriverManager.getConnection(
 				"jdbc:xmla:Server=http://whatever;Catalog=FoodMart;TestProxyCookie="
 						+ cookie,
 				info );
-		OlapConnection olapConnection =
-				connection.unwrap( OlapConnection.class );
+		*/		
+		OlapConnection olapConnection = context.createOlap4jConnection();
+		//		con.unwrap( OlapConnection.class );
 		OlapStatement statement = olapConnection.createStatement();
 		return statement.executeOlapQuery( queryString );
 	}
