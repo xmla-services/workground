@@ -6993,7 +6993,7 @@ public class FunctionTest {//extends FoodMartTestCase {
     assertQueryThrows(context,
       "select {parallelperiod([Time].[Year], 1)} on columns "
         + "from [Sales] where ([Time].[1998].[Q1].[2])",
-      "This should say something about Time appearing on two different axes (slicer an columns)" );
+      "Hierarchy '[Time]' appears in more than one independent axis" );
   }
 
   @ParameterizedTest
