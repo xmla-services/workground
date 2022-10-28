@@ -20,7 +20,6 @@ import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapSchema;
 import mondrian.spi.CatalogLocator;
 import mondrian.tui.XmlaSupport;
-import mondrian.util.ClassResolver;
 import mondrian.util.LockBox;
 import mondrian.util.Pair;
 import mondrian.xmla.DataSourcesConfig;
@@ -206,7 +205,7 @@ public class FileRepository implements Repository {
         throw Util.newError("No suitable connection found");
     }
 
-    OlapConnection getConnection(
+    public OlapConnection getConnection(
         CatalogInfo catalogInfo,
         MondrianServer server,
         String roleName,

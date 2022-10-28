@@ -24,7 +24,6 @@ import mondrian.test.SqlPattern;
 import mondrian.test.TestContext;
 import mondrian.util.DelegatingInvocationHandler;
 import org.olap4j.*;
-import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.impl.CoordinateIterator;
 import org.olap4j.layout.TraditionalCellSetFormatter;
 import org.opencube.junit5.context.Context;
@@ -1963,8 +1962,8 @@ public class TestUtil {
 		propSaver.reset();
 
 		assertEquals(
-				FoodmartTestContextImpl.toString(resultNative),
-				FoodmartTestContextImpl.toString(resultNonNative),
+				toString(resultNative),
+				toString(resultNonNative),
 				message);
 
 		
