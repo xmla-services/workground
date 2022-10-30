@@ -12,7 +12,11 @@ package mondrian.rolap;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
 import mondrian.spi.DynamicSchemaProcessor;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.Context;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -29,14 +33,15 @@ import static org.opencube.junit5.TestUtil.getDefaultConnectString;
  */
 public class RolapSchemaPoolTest {
 
-    @Test
-    public void testBasicSchemaFetch() {
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    public void testBasicSchemaFetch(Context context) {
         RolapSchemaPool schemaPool = RolapSchemaPool.instance();
         schemaPool.clear();
 
         String catalogUrl = getFoodmartCatalogUrl().toString();
         PropertyList connectInfo =
-            Util.parseConnectString(getDefaultConnectString());
+            Util.parseConnectString(context.getOlapConnectString());
 
         RolapSchema schema =
             schemaPool.get(
@@ -56,15 +61,16 @@ public class RolapSchemaPoolTest {
         assertTrue(schema == schemaA);
     }
 
-    @Test
-    public void testSchemaFetchCatalogUrlJdbcUuid() {
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    public void testSchemaFetchCatalogUrlJdbcUuid(Context context) {
         RolapSchemaPool schemaPool = RolapSchemaPool.instance();
         schemaPool.clear();
         final String uuid = "UUID-1";
 
         String catalogUrl = getFoodmartCatalogUrl().toString();
         PropertyList connectInfo =
-            Util.parseConnectString(getDefaultConnectString());
+            Util.parseConnectString(context.getOlapConnectString());
         connectInfo.put(
             RolapConnectionProperties.JdbcConnectionUuid.name(),
             uuid);
@@ -112,14 +118,15 @@ public class RolapSchemaPoolTest {
      * Test using JdbcConnectionUUID and useSchemaChecksum
      * fetches the same schema in all scenarios.
      */
-    @Test
-    public void testSchemaFetchMd5JdbcUid() throws IOException {
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    public void testSchemaFetchMd5JdbcUid(Context context) throws IOException {
         RolapSchemaPool pool = RolapSchemaPool.instance();
         pool.clear();
         final String uuid = "UUID-1";
         String catalogUrl = getFoodmartCatalogUrl().toString();
         PropertyList connectInfo =
-            Util.parseConnectString(getDefaultConnectString());
+            Util.parseConnectString(context.getOlapConnectString());
         connectInfo.put(
             RolapConnectionProperties.JdbcConnectionUuid.name(),
             uuid);
