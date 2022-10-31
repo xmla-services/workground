@@ -104,7 +104,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             pw.flush();
             propSaver.set(
                 MondrianProperties.instance().DisableCaching,
-                true);
+                false);
             propSaver.set(
                 MondrianProperties.instance().EnableInMemoryRollup,
                 rollup);
@@ -130,6 +130,7 @@ public class SegmentLoaderTest extends BatchTestCase {
                 rollup,
                 false,
                 false);
+            propSaver.reset();
         }
     }
 
@@ -741,10 +742,10 @@ public class SegmentLoaderTest extends BatchTestCase {
         key.set(1);
         assertEquals(key, bitKeysList.get(1));
 
-        assertTrue(
-            new GroupingSetsList(
+        List<BitKey> list = new GroupingSetsList(
                 new ArrayList<GroupingSet>())
-            .getRollupColumnsBitKeyList().isEmpty());
+                .getRollupColumnsBitKeyList();
+        assertTrue(list.size() == 1 && list.get(0).equals(BitKey.EMPTY));
     }
 
     private GroupingSet getGroupingSetRollupOnGenderAndProductFamily(Connection connection) {
@@ -1150,6 +1151,11 @@ public class SegmentLoaderTest extends BatchTestCase {
         @Override
         public ResultSet getResultSet() {
             return toResultSet(data);
+        }
+        
+        @Override
+        public void close() {
+        	
         }
     }
 }
