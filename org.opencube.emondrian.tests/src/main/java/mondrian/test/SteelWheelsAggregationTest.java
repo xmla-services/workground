@@ -15,8 +15,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.Context;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
+import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
 
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.withRole;
@@ -95,7 +95,7 @@ public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
     public void testWithAggregation(Context context) throws Exception {
         final String schema = getSchemaWith
                 (""
@@ -120,7 +120,7 @@ public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
     public void testWithAggregationNoRestrictionsOnTopLevel(Context context) throws Exception {
         final String schema = getSchemaWith
                 (""
@@ -144,7 +144,7 @@ public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
     public void testUnionWithAggregation(Context context) throws Exception {
         final String schema = getSchemaWith
                 (""
@@ -179,7 +179,7 @@ public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
     public void testWithAggregationUnionRolesWithSameGrants(Context context) throws Exception {
         final String schema = getSchemaWith
                 (""
