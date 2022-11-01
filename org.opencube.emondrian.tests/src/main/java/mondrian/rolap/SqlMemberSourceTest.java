@@ -75,7 +75,7 @@ public class SqlMemberSourceTest {
 
     String result = runMakeLeveMemberCountSql( cityLevelMock, dataSourceMock, mustCount );
     assertNotNull( result );
-    assertEquals( "select count(DISTINCT `store`.`store_city`, `store`.`store_state`, `store`.`store_country`) as `c0`", result );
+    assertEquals( "select count(DISTINCT `store`.`store_city`, `store`.`store_state`, `store`.`store_country`) as `c0` from  as `store`", result );
   }
 
   private String runMakeLeveMemberCountSql( RolapLevel level, DataSource dataSource, boolean[] mustCount ) throws Exception {
@@ -115,7 +115,7 @@ public class SqlMemberSourceTest {
 
   // Mock for the Store hierarchy
   private RolapHierarchy getStoreHierarchyMock() {
-    MondrianDef.Relation relationMock = mock( MondrianDef.Relation.class );
+    MondrianDef.Relation relationMock = mock( MondrianDef.Table.class );
     when( relationMock.getAlias() ).thenReturn( STORE_TABLE );
     Dimension dimMock = mock( Dimension.class );
     when( dimMock.getDimensionType() ).thenReturn( null );
@@ -132,6 +132,7 @@ public class SqlMemberSourceTest {
     when( rlHierarchyStoreMock.getUniqueTable() ).thenReturn( relationMock );
     when( rlHierarchyStoreMock.getDimension() ).thenReturn( dimMock );
     when( rlHierarchyStoreMock.tableExists( STORE_TABLE ) ).thenReturn( true );
+    when( rlHierarchyStoreMock.getRelation()).thenReturn(relationMock);
     return rlHierarchyStoreMock;
   }
 
