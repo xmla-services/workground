@@ -2693,6 +2693,7 @@ public class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testLevelMembersWithoutNonEmpty(Context context)  {
+	context.createConnection().getCacheControl(null).flushSchemaCache();  
     SmartMemberReader smr = getSmartMemberReader(context.createConnection(), "Customers" );
 
     MemberCacheHelper smrch =
