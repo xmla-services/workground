@@ -44,6 +44,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 	private ContextSource contextSource;
 
 	private static Map<Class<? extends DatabaseProvider>, Map<Class<? extends DataLoader>, Entry<PropertyList, DataSource>>> store = new HashMap<>();
+	public static boolean dockerWasChanged = true;
 
 	@Override
 	public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
@@ -170,14 +171,16 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 								Map<Class<? extends DataLoader>, Entry<PropertyList, DataSource>> storedLoaders = store
 										.get(clazzProvider);
-								if (storedLoaders.containsKey(dataLoaderClass)) {
+								if (storedLoaders.containsKey(dataLoaderClass) && !dockerWasChanged) {
 									dataSource = storedLoaders.get(dataLoaderClass);
 									dataSource.getKey().put(RolapConnectionProperties.Jdbc.name(), dbp.getJdbcUrl());
 								} else {
 									dataSource = dbp.activate();
 									DataLoader dataLoader = dataLoaderClass.getConstructor().newInstance();
 									dataLoader.loadData(dataSource.getValue());
+									storedLoaders.clear();
 									storedLoaders.put(dataLoaderClass, dataSource);
+									dockerWasChanged = false;
 								}
 
 							} catch (Exception e) {

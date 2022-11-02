@@ -58,6 +58,8 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 					.build();
 			dc = DockerClientImpl.getInstance(config, client);
 
+		findContainerForReuse("1").ifPresent(id->dc.stopContainerCmd(id).exec());
+
 		if(!findContainerForReuse("1").isPresent()) {
 
 			
