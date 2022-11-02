@@ -83,8 +83,10 @@ public class Subcube extends QueryPart {
         if(this.subcube != null) {
             exps.addAll(this.subcube.getAxisExps());
         }
-        for(int i =0; i < this.axes.length; i++) {
-            exps.add(this.axes[i].getSet());
+        if (this.axes != null) {
+        	for(int i =0; i < this.axes.length; i++) {
+        		exps.add(this.axes[i].getSet());
+        	}
         }
         if(this.slicerAxis != null) {
             exps.add(this.slicerAxis.getSet());
