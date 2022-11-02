@@ -46,12 +46,12 @@ public class SteelWheelsTestCase {
         final String schema)
     {
         final Util.PropertyList properties =
-            getConnectionProperties().clone();
-        final String jdbc = properties.get(
-            RolapConnectionProperties.Jdbc.name());
-        context.setProperty(
-            RolapConnectionProperties.Jdbc.name(),
-            Util.replace(jdbc, "/foodmart", "/steelwheels"));
+            getConnectionProperties(context.createConnection()).clone();
+        //final String jdbc = properties.get(
+        //   RolapConnectionProperties.Jdbc.name());
+        //context.setProperty(
+        //    RolapConnectionProperties.Jdbc.name(),
+        //    Util.replace(jdbc, "/foodmart", "/steelwheels"));
         if (schema != null) {
             context.setProperty(
                 RolapConnectionProperties.CatalogContent.name(),

@@ -15,8 +15,10 @@ import mondrian.rolap.RolapAxis;
 import mondrian.spi.Dialect;
 import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.Context;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
@@ -36,6 +38,10 @@ import static org.opencube.junit5.TestUtil.getDialect;
  */
 public class MultipleColsInTupleAggTest extends AggTableTestCase {
 
+    @BeforeAll
+    public static void beforeAll() {
+        ContextArgumentsProvider.dockerWasChanged = true;
+    }
 
     @BeforeEach
     public void beforeEach() {
@@ -97,7 +103,7 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTupleSelection(Context context) throws Exception {
+    public void testTupleSelection(Context context) throws Exception {    	
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;

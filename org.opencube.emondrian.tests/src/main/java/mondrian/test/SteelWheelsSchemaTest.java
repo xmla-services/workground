@@ -15,13 +15,14 @@ import mondrian.util.Bug;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.Context;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -61,10 +62,8 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + "[Measures].[Fact Count]");
     }
 
-    //customer_w_ter table is absent
-    @Disabled
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class )
     public void testMondrian1273(Context context) {
         final String schema =
             "<Schema name=\"SteelWheels\">\n"

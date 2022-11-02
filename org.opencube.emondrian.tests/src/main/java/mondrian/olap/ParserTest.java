@@ -18,6 +18,7 @@ import mondrian.parser.JavaccParserValidatorImpl;
 import mondrian.parser.MdxParserValidator;
 import mondrian.server.Statement;
 import mondrian.util.Bug;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -714,6 +715,7 @@ public class ParserTest {
     /**
      * Test case for SELECT in the FROM clause.
      */
+    @Disabled
     @Test
     public void _testInnerSelect() {
         assertParseQuery(
@@ -727,6 +729,21 @@ public class ParserTest {
             + "    FROM [cube])\n"
             + "CELL PROPERTIES VALUE");
     }
+
+    @Disabled
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    public void _testRealInnerSelect(Context context) {
+        Connection connection = context.createConnection();
+        assertQueryReturns(connection,
+        "select\n"
+        + "from\n"
+        + "(\n"
+        + "select ({([Product].[Food].[Baked Goods].[Bread])}) on 0 from [Sales]\n"
+        + ")\n"
+        + "CELL PROPERTIES VALUE",
+        "xxx"); //need check result
+    }    
 
     /**
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-648">

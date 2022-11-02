@@ -12,7 +12,10 @@ package mondrian.rolap.aggmatcher;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;
+
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.Context;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
@@ -31,6 +34,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
   *
   */
 public class AggSchemaScanTest {
+	
+  @BeforeAll
+  public static void beforeAll() {
+      ContextArgumentsProvider.dockerWasChanged = true;
+  }
+	
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )

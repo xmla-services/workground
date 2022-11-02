@@ -11,6 +11,7 @@ package mondrian.test;
 
 import mondrian.olap.Result;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.*;
 import org.opencube.junit5.ContextSource;
@@ -199,6 +200,7 @@ public class ScenarioTest {
     /**
      * Tests setting cells by the "equal increment" allocation policy.
      */
+    @Disabled //disabled by reason wrong Scenario with InlineTabl foo
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testEqualIncrement(Context context) throws SQLException {
@@ -208,6 +210,7 @@ public class ScenarioTest {
     /**
      * Tests setting cells by the "equal allocation" allocation policy.
      */
+    @Disabled //disabled by reason wrong Scenario with InlineTabl foo
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testEqualAllocation(Context context) throws SQLException {

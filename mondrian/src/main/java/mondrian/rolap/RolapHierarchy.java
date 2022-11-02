@@ -674,15 +674,15 @@ public class RolapHierarchy extends HierarchyBase {
      *    joins
      */
     void addToFrom(SqlQuery query, MondrianDef.Expression expression) {
-        if (relation == null) {
+        if (getRelation() == null) {
             throw Util.newError(
                 "cannot add hierarchy " + getUniqueName()
                 + " to query: it does not have a <Table>, <View> or <Join>");
         }
-        query.registerRootRelation(relation);
+        query.registerRootRelation(getRelation());
         final boolean failIfExists = false;
-        MondrianDef.RelationOrJoin subRelation = relation;
-        if (relation instanceof MondrianDef.Join) {
+        MondrianDef.RelationOrJoin subRelation = getRelation();
+        if (getRelation() instanceof MondrianDef.Join) {
             if (expression != null) {
                 // Suppose relation is
                 //   (((A join B) join C) join D)
@@ -693,9 +693,9 @@ public class RolapHierarchy extends HierarchyBase {
                 // Search for the smallest subset of the relation which
                 // uses C.
                 subRelation =
-                    relationSubset(relation, expression.getTableAlias());
+                    relationSubset(getRelation(), expression.getTableAlias());
                 if (subRelation == null) {
-                    subRelation = relation;
+                    subRelation = getRelation();
                 }
             }
         }
