@@ -683,6 +683,7 @@ public class SegmentBuilderTest {
         // This tests a wildcarded segment (on year) rolled up w/ a seg
         // containing a single val.
         // The resulting segment contains only empty results (for 1998)
+    	context.createConnection().getCacheControl(null).flushSchemaCache();
         runRollupTest(context.createConnection(),
             // queries to populate the cache with segments which will be rolled
             // up
@@ -721,6 +722,7 @@ public class SegmentBuilderTest {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
         // Tests a wildcarded segment rolled up w/ a seg containing a single
         // val.  Both segments are associated w/ non empty results.
+    	context.createConnection().getCacheControl(null).flushSchemaCache();
         runRollupTest(context.createConnection(),
             new String[]{
                 "select {{[Product].[Drink].[Alcoholic Beverages]},\n"
@@ -774,6 +776,7 @@ public class SegmentBuilderTest {
     public void testSameRollupRegardlessOfSegmentOrderThreeSegs(Context context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
         // Tests 3 segments, each w/ no wildcarded values.
+    	context.createConnection().getCacheControl(null).flushSchemaCache();
         runRollupTest(context.createConnection(),
             new String[]{
                 "select {{[Product].[Drink].[Alcoholic Beverages]},\n"

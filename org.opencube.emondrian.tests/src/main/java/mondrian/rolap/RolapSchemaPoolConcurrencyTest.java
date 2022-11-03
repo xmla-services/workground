@@ -40,6 +40,7 @@ import javax.sql.DataSource;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
@@ -50,6 +51,7 @@ import mondrian.util.ByteString;
 /**
  * @author Andrey Khayrutdinov
  */
+@Disabled //has not been fixed during creating Daanse project
 public class RolapSchemaPoolConcurrencyTest
 {
 

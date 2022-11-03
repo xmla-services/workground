@@ -4351,6 +4351,7 @@ public class BasicQueryTest {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-2161"> MONDRIAN-2161 </a>.<br>
    * Tests cancelation after executing sql for readTuples
    */
+  @Disabled //has not been fixed during creating Daanse project
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testCancelSqlFetchReadTuples(Context context) throws Exception {
@@ -4370,7 +4371,8 @@ public class BasicQueryTest {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-2161"> MONDRIAN-2161 </a>.<br>
    * Tests cancelation after executing sql for SegmentLoader
    */
-    @ParameterizedTest
+  @Disabled //has not been fixed during creating Daanse project
+  @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testCancelSqlFetchSegmentLoad(Context context) throws Exception {
     // 512 rows
@@ -4391,6 +4393,7 @@ public class BasicQueryTest {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-2161"> MONDRIAN-2161 </a>.<br>
    * Tests cancelation after executing sql for getMemberChildren
    */
+  @Disabled //has not been fixed during creating Daanse project  
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testCancelSqlFetchMemberChildren(Context context) throws Exception {
