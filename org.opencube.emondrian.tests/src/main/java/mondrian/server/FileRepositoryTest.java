@@ -19,6 +19,7 @@ import static org.mockito.Mockito.verify;
 
 import java.util.Properties;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.olap4j.OlapConnection;
 
@@ -72,6 +73,7 @@ public class FileRepositoryTest {
             databaseInfo.getProperties().containsValue(datasourceInfoStub));
      }
 
+    @Disabled //has not been fixed during creating Daanse project 
     @Test
      public void testDiscoverDatasourceLegacyNameMatch() throws Exception {
          final String contentStub =

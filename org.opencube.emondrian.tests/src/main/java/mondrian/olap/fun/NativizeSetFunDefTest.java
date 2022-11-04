@@ -18,6 +18,7 @@ import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.Context;
@@ -619,6 +620,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
             + "on 0 from sales");
     }
 
+    @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void disabled_testCalculatedRelativeMonth(Context context) {
@@ -1316,6 +1318,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
             + "from [Sales]\n");
     }
 
+    @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void DISABLED_testParallelCrossjoins(Context context) {
@@ -1556,6 +1559,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
             + "from [Warehouse and Sales]");
     }
 
+    @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void disabled_testAggregatesInSparseResultsGetSortedCorrectly(Context context) {
