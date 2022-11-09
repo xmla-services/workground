@@ -12,6 +12,8 @@ package mondrian.test;
 import mondrian.olap.Connection;
 import mondrian.util.Bug;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -33,6 +35,19 @@ import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
  * @since 15 May, 2009
  */
 public class CompoundSlicerTest {
+
+    private PropertySaver5 propSaver;
+
+    @BeforeEach
+    public void beforeEach() {
+        propSaver = new PropertySaver5();
+    }
+
+    @AfterEach
+    public void afterEach() {
+        propSaver.reset();
+    }
+
 
     /**
      * Query that simulates a compound slicer by creating a calculated member
@@ -1474,7 +1489,7 @@ public class CompoundSlicerTest {
 
         verifySameNativeAndNot(context.createConnection(),
                 query,
-                "Compound aggregated member should return same results with native filter on/off");
+                "Compound aggregated member should return same results with native filter on/off", propSaver);
     }
 
     @ParameterizedTest
@@ -1487,7 +1502,7 @@ public class CompoundSlicerTest {
 
         verifySameNativeAndNot(context.createConnection(),
                 query,
-                "Compound aggregated member should return same results with native filter on/off");
+                "Compound aggregated member should return same results with native filter on/off", propSaver);
     }
 
     @ParameterizedTest
@@ -1508,7 +1523,7 @@ public class CompoundSlicerTest {
                 + "SELECT\n"
                 + "[*BASE_MEMBERS__Measures_] ON COLUMNS\n"
                 + ",[*SORTED_ROW_AXIS] ON ROWS\n"
-                + "FROM [Sales]", "");
+                + "FROM [Sales]", "", propSaver);
     }
 }
 

@@ -10,6 +10,9 @@
 package mondrian.rolap;
 
 import mondrian.olap.Connection;
+import mondrian.test.PropertySaver5;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
@@ -28,6 +31,18 @@ import static org.opencube.junit5.TestUtil.withSchema;
  */
 public class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
 
+    private PropertySaver5 propSaver;
+
+    @BeforeEach
+    public void beforeEach() {
+        propSaver = new PropertySaver5();
+    }
+
+    @AfterEach
+    public void afterEach() {
+        propSaver.reset();
+    }
+
     private void assertResultsAreEqual(
         Connection connection,
         String testCase,
@@ -37,7 +52,7 @@ public class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
             "[%s]: native and non-native results of the query differ. The query:\n\t\t%s",
             testCase,
             query);
-        verifySameNativeAndNot(connection, query, message);
+        verifySameNativeAndNot(connection, query, message, propSaver);
     }
 
     @ParameterizedTest
