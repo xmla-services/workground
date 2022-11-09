@@ -1169,7 +1169,7 @@ public class NamedSetTest {
             + "Row #0: 257\n"
             + "Row #0: 258\n"
             + "Row #0: 227\n");
-        verifySameNativeAndNot(context.createConnection(), mdx, "");
+        verifySameNativeAndNot(context.createConnection(), mdx, "", propSaver);
     }
 
     /**

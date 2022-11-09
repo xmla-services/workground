@@ -46,7 +46,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         "select {measures.[unit sales], measures.[warehouse sales]} on 0, "
         + " nonemptycrossjoin( Gender.Gender.members, product.[product category].members) on 1 "
         + "from [warehouse and sales]",
-        "");
+        "", propSaver);
   }
 
   @ParameterizedTest
@@ -56,7 +56,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
       + " NON EMPTY Crossjoin ( Gender.gender.members, product.[product category].members) on 1 "
       + " from [warehouse and sales]";
 
-      verifySameNativeAndNot(context.createConnection(), query, "");
+      verifySameNativeAndNot(context.createConnection(), query, "", propSaver);
       assertQueryReturns(context.createConnection(),
           query,
           "Axis #0:\n"
@@ -76,7 +76,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         "select {measures.[unit sales], measures.[warehouse sales]} on 0, "
         + " nonemptycrossjoin( Gender.Gender.members, product.[product category].members) on 1 "
         + "from [warehouse and sales]",
-        "");
+        "", propSaver);
   }
 
   public void testNoApplicableCube(Context context) {
@@ -84,7 +84,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         "select {measures.[unit sales]} on 0, "
         + " nonemptycrossjoin( Gender.Gender.members, [Warehouse].[All Warehouses].children) on 1 "
         + "from [warehouse and sales]",
-        "");
+        "", propSaver);
   }
 
   /**
@@ -100,7 +100,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         + " nonemptycrossjoin( Gender.[All Gender], "
         + "product.[product category].members)"
         + " on 1 "
-        + " from [warehouse and sales]", "");
+        + " from [warehouse and sales]", "", propSaver);
   }
 
   @ParameterizedTest
@@ -114,7 +114,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
           + "ON COLUMNS,\n"
           + "{ [Measures].[allW]}\n"
           + "ON ROWS\n"
-          + "from [Warehouse and Sales]", "");
+          + "from [Warehouse and Sales]", "", propSaver);
   }
 
   @ParameterizedTest
@@ -129,7 +129,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "{ [Measures].[allW]}\n"
         + "ON ROWS\n"
         + "from [Warehouse and Sales]";
-    verifySameNativeAndNot(context.createConnection(), query, "");
+    verifySameNativeAndNot(context.createConnection(), query, "", propSaver);
     assertQueryReturns(context.createConnection(),
         query,
         "Axis #0:\n"
@@ -249,7 +249,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "ON COLUMNS,\n"
         + "{ [Measures].[validUS]}\n"
         + "ON ROWS\n"
-        + "from [Warehouse and Sales]", "");
+        + "from [Warehouse and Sales]", "", propSaver);
   }
 
   @ParameterizedTest

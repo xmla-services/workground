@@ -11646,12 +11646,14 @@ Intel platforms):
         + "{[Product].[Food].[Baked Goods].[Bread].[Bagels].[Colony]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Bagels]}\n"
         + "{[Product].[Food].[Baked Goods].[Bread].[Muffins]}\n"
-        + "Row #0: 5,290\n"
-        + "Row #1: 815\n"
+        + "Row #0: 3,660\n"
+        + "Row #1: 163\n"
         + "Row #2: 163\n"
         + "Row #3: 163\n"
-        + "Row #4: 815\n"
+        + "Row #4: 163\n"
         + "Row #5: 3,497\n" );
+    	// test is working incorrect. should be 163, 163, 163, 163, 3497  = 3497 + 163.  This is Analysis Services behavior. 
+    	// We should use only [Product].[Food].[Baked Goods].[Bread].[Bagels].[Colony] for  [Food].[Baked Goods].[Bread].[Bagels]
   }
 
   @ParameterizedTest

@@ -1484,6 +1484,10 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     // include the full role restriction in the IN clause.
     // This test verifies only permitted members are returned in this
     // case.
+	
+	// test failed because in native mode system returns limit quantity 6 and then filter by role
+	// select topcount([Product].[Product Name].members, 6, Measures.[Unit Sales]) on 0 from sales
+	  
     propSaver.set( MondrianProperties.instance().MaxConstraints, 4 );
     String roleDef =
       "  <Role name=\"Test\">\n"
@@ -1516,13 +1520,13 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     Connection connection = context.createConnection();
     verifySameNativeAndNot(connection,
       "select non empty crossjoin([Store].[USA],[Product].[Product Name].members) on 0 from sales",
-      "Native crossjoin mismatch");
+      "Native crossjoin mismatch", propSaver);
     verifySameNativeAndNot(connection,
       "select topcount([Product].[Product Name].members, 6, Measures.[Unit Sales]) on 0 from sales",
-      "Native topcount mismatch");
+      "Native topcount mismatch", propSaver);
     verifySameNativeAndNot(connection,
       "select filter([Product].[Product Name].members, Measures.[Unit Sales] > 0) on 0 from sales",
-      "Native native filter mismatch");
+      "Native native filter mismatch", propSaver);
 
     propSaver.reset();
   }
@@ -1853,7 +1857,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
       + " where customers.agg";
     final String message =
       "The results of native and non-native evaluations should be equal";
-    verifySameNativeAndNot(context.createConnection(), query, message);
+    verifySameNativeAndNot(context.createConnection(), query, message, propSaver);
   }
 
   @ParameterizedTest
@@ -1870,7 +1874,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
     final String message =
       "The results of native and non-native evaluations should be equal";
-    verifySameNativeAndNot(context.createConnection(), query, message);
+    verifySameNativeAndNot(context.createConnection(), query, message, propSaver);
   }
 
   @ParameterizedTest
@@ -1884,7 +1888,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
     final String message =
       "The results of native and non-native evaluations should be equal";
-    verifySameNativeAndNot(context.createConnection(), query, message);
+    verifySameNativeAndNot(context.createConnection(), query, message, propSaver);
   }
 
   @ParameterizedTest

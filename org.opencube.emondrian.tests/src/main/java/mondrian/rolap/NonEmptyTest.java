@@ -4610,7 +4610,7 @@ public class NonEmptyTest extends BatchTestCase {
         + " \n"
         + "SELECT {[Measures].[Unit Sales], [Measures].[Store Sales]} on columns, \n"
         + "NON EMPTY Hierarchize({[#DataSet#]}) on rows FROM [Sales]",
-      "testBugMondrian321 failed"
+      "testBugMondrian321 failed", propSaver
     );
   }
 
@@ -6999,7 +6999,7 @@ public class NonEmptyTest extends BatchTestCase {
         + " [Measures].[dummyMeasure2] on COLUMNS, "
         + " NON EMPTY CrossJoin([Store].[Store State].Members, Time.[Year].members) ON ROWS "
         + " from [virtual] ",
-      "");
+      "", propSaver);
   }
 }
 

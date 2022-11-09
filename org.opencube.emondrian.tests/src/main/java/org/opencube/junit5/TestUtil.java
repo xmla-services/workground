@@ -994,7 +994,7 @@ public class TestUtil {
 	}
 
 	public static void assertQueryReturns(Connection connection, String queryString, String expectedResult) {
-		assertQueryReturns(connection, queryString, expectedResult, 60000l);
+		assertQueryReturns(connection, queryString, expectedResult, 600000l);
 	}
 
 	/**
@@ -1941,9 +1941,8 @@ public class TestUtil {
 	 * @param connection Connection
 	 */
 	public static void verifySameNativeAndNot(Connection connection,
-			String query, String message)
-	{
-		PropertySaver5 propSaver=new PropertySaver5();
+			String query, String message, PropertySaver5 propSaver)
+	{		
 
 		propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
 		propSaver.set(propSaver.properties.EnableNativeFilter, true);
@@ -1951,7 +1950,6 @@ public class TestUtil {
 		propSaver.set(propSaver.properties.EnableNativeTopCount, true);
 
 		Result resultNative = executeQuery(connection, query);
-		propSaver.reset();
 
 		propSaver.set(propSaver.properties.EnableNativeCrossJoin, false);
 		propSaver.set(propSaver.properties.EnableNativeFilter, false);
@@ -1959,7 +1957,6 @@ public class TestUtil {
 		propSaver.set(propSaver.properties.EnableNativeTopCount, false);
 
 		Result resultNonNative = executeQuery(connection, query);
-		propSaver.reset();
 
 		assertEquals(
 				toString(resultNative),
@@ -1968,7 +1965,6 @@ public class TestUtil {
 
 		
 	}
-
 
 /**
 	 * Fake exception to interrupt the test when we see the desired query.

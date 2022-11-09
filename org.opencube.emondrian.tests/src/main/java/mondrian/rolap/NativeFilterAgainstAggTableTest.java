@@ -146,7 +146,7 @@ public class NativeFilterAgainstAggTableTest extends BatchTestCase {
             "[%s]: Native and non-native executions of FILTER() differ. "
             + "The query:\n\t\t%s",
             query, testCase);
-        TestUtil.verifySameNativeAndNot(connection, query, message);
+        TestUtil.verifySameNativeAndNot(connection, query, message, propSaver);
     }
 
     @ParameterizedTest
