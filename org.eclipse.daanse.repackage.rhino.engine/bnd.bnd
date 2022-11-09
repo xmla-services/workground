@@ -1,0 +1,8 @@
+-includeresource: \
+	@rhino-engine-1.7.14.jar
+
+Export-Package: \
+	org.mozilla.javascript.engine
+
+Import-Package: *
+
