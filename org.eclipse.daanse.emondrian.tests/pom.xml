@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.opencube</groupId>
-		<artifactId>org.opencube.pom.parent</artifactId>
+		<groupId>org.eclipse.daanse</groupId>
+		<artifactId>org.eclipse.daanse.pom.parent</artifactId>
 		<version>${revision}</version>
 	</parent>
-	<artifactId>org.opencube.emondrian.tests</artifactId>
+	<artifactId>org.eclipse.daanse.emondrian.tests</artifactId>
 
 	<dependencies>
 
@@ -31,15 +31,15 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.opencube</groupId>
-			<artifactId>org.opencube.emondrian</artifactId>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.emondrian</artifactId>
 			<version>${revision}</version>
 			<scope>compile</scope>
 		</dependency>
 
 		<dependency>
-			<groupId>org.opencube</groupId>
-			<artifactId>org.opencube.repackage.dockerjava</artifactId>
+			<groupId>org.eclipse.daanse</groupId>
+			<artifactId>org.eclipse.daanse.repackage.dockerjava</artifactId>
 			<version>${revision}</version>
 			<scope>compile</scope>
 		</dependency>

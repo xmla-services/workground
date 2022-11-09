@@ -1,4 +1,4 @@
-Fragment-Host: org.opencube.emondrian
+Fragment-Host: org.eclipse.daanse.emondrian
 Test-Cases: ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
 
 Import-Package: \

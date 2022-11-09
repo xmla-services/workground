@@ -1,18 +1,20 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.opencube</groupId>
-    <artifactId>org.opencube.pom.parent</artifactId>
+    <groupId>org.eclipse.daanse</groupId>
+    <artifactId>org.eclipse.daanse.pom.parent</artifactId>
     <version>${revision}</version>
   </parent>
-  <artifactId>org.opencube.repackage.apache.commons.dbcp</artifactId>
-  <version>${commons-dbcp.version}</version>
+  <artifactId>org.eclipse.daanse.repackage.eigenbase.xom</artifactId>
+	<version>${eigenbase-xom.version}</version>
   
+
 	<dependencies>
 		<dependency>
-			<groupId>commons-dbcp</groupId>
-			<artifactId>commons-dbcp</artifactId>
-			<version>${commons-dbcp.version}</version>
+			<groupId>eigenbase</groupId>
+			<artifactId>eigenbase-xom</artifactId>
+			<version>${eigenbase-xom.version}</version>
 		</dependency>
 	</dependencies>
+  
 </project>
