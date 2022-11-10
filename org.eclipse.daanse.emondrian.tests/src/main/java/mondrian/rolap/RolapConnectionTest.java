@@ -37,7 +37,6 @@ import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.NamingManager;
 import javax.sql.DataSource;
 
-import org.apache.commons.lang.StringUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -520,8 +519,9 @@ public class RolapConnectionTest {
             DataSource dataSource =
                 RolapConnection.createDataSource(null, properties, connectInfo);
         } catch (RuntimeException ex) {
+            String s=connectInfo.toString();
             assertTrue(
-                StringUtils.isBlank(connectInfo.toString()),
+                s==null||s.length()==0,
                 connectInfo.toString());
         }
     }
@@ -541,8 +541,8 @@ public class RolapConnectionTest {
 
         DataSource dataSource =
             RolapConnection.createDataSource(null, properties, connectInfo);
-
-        assertFalse(StringUtils.isBlank(connectInfo.toString()));
+        String s=connectInfo.toString();
+        assertFalse(s==null||s.length()==0);
 
         String[] parseconnectInfo = connectInfo.toString().split(";");
         for (String parseconnectInfoVals : parseconnectInfo) {
@@ -567,8 +567,8 @@ public class RolapConnectionTest {
 
         DataSource dataSource =
             RolapConnection.createDataSource(null, properties, connectInfo);
-
-        assertFalse(StringUtils.isBlank(connectInfo.toString()));
+        String s=connectInfo.toString();
+        assertFalse(s==null||s.length()==0);
         assertFalse(connectInfo.toString().contains("databaseName"));
     }
 
@@ -584,7 +584,8 @@ public class RolapConnectionTest {
         DataSource dataSource =
             RolapConnection.createDataSource(null, properties, connectInfo);
 
-        assertFalse(StringUtils.isBlank(connectInfo.toString()));
+        String s=connectInfo.toString();
+        assertFalse(s==null||s.length()==0);
         assertFalse(connectInfo.toString().contains("integratedSecurity"));
     }
 }

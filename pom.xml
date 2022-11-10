@@ -35,7 +35,7 @@
 
 		<asm.version>9.3</asm.version>
 		<spifly.version>1.3.5</spifly.version>
-		<bnd.version>6.2.0</bnd.version>
+		<bnd.version>6.3.0</bnd.version>
 		<junit-jupiter.compile.version>5.6.0</junit-jupiter.compile.version>
 		<junit-platform.compile.version>1.6.0</junit-platform.compile.version>
 		<junit-jupiter.version>5.8.2</junit-jupiter.version>
@@ -62,12 +62,8 @@
 
 		<olap4j.version>1.2.0</olap4j.version>
 		<eigenbase-properties.version>1.1.2</eigenbase-properties.version>
-<<<<<<< HEAD
 		<commons-io.version>1.4</commons-io.version>
 		<mysql-connector-java.version>8.0.28</mysql-connector-java.version>
-=======
-		<mysql-connector-java.version>8.0.27</mysql-connector-java.version>
->>>>>>> 218ac0738 (rm commons-io)
 		<olap4j-tck.version>1.0.1.539</olap4j-tck.version>
 		<eigenbase-resgen.version>1.3.1</eigenbase-resgen.version>
 		<junit.version>3.8.1</junit.version>
@@ -82,7 +78,6 @@
 		<olap4j-xmlaserver.version>1.2.0</olap4j-xmlaserver.version>
 		<eigenbase-xom.version>1.3.5</eigenbase-xom.version>
 		<servlet-api.version>2.4</servlet-api.version>
-		<commons-lang.version>2.4</commons-lang.version>
 		<xmlunit.version>2.9.0</xmlunit.version>
 		<javacup.version>10k</javacup.version>
 	</properties>
@@ -474,12 +469,6 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 				<version>${asm.version}</version>
 			</dependency>
 
-
-			<dependency>
-				<groupId>commons-lang</groupId>
-				<artifactId>commons-lang</artifactId>
-				<version>${commons-lang.version}</version>
-			</dependency>
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>

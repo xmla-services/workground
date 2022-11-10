@@ -16,8 +16,6 @@ import mondrian.rolap.RolapUtil;
 import mondrian.spi.Dialect;
 import mondrian.spi.DialectManager;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
 import org.apache.logging.log4j.core.layout.PatternLayout;
@@ -352,7 +350,7 @@ public class MondrianFoodMartLoader {
      * populating tables and creating indexes
      */
     private void load() throws Exception {
-        if (!StringUtils.isBlank(jdbcDrivers)) {
+        if (jdbcDrivers!=null&&jdbcDrivers.length()>0) {
             RolapUtil.loadDrivers(jdbcDrivers);
         }
 
