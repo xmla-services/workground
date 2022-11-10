@@ -684,6 +684,7 @@ public class SegmentBuilderTest {
         // containing a single val.
         // The resulting segment contains only empty results (for 1998)
     	context.createConnection().getCacheControl(null).flushSchemaCache();
+    	clearAggregationCache(context.createConnection());
         runRollupTest(context.createConnection(),
             // queries to populate the cache with segments which will be rolled
             // up
@@ -723,6 +724,7 @@ public class SegmentBuilderTest {
         // Tests a wildcarded segment rolled up w/ a seg containing a single
         // val.  Both segments are associated w/ non empty results.
     	context.createConnection().getCacheControl(null).flushSchemaCache();
+    	clearAggregationCache(context.createConnection());
         runRollupTest(context.createConnection(),
             new String[]{
                 "select {{[Product].[Drink].[Alcoholic Beverages]},\n"
@@ -745,6 +747,13 @@ public class SegmentBuilderTest {
             + "Excluded Regions:[]\n"
             + "Compound Predicates:[]\n");
     }
+
+    private void clearAggregationCache(Connection connection) {
+    	SegmentCache segmentCache = MondrianServer.forConnection(
+    			connection).getAggregationManager()
+            .cacheMgr.compositeCache;
+    	segmentCache.getSegmentHeaders().stream().forEach(it -> segmentCache.remove(it));
+	}
 
     public void testSameRollupRegardlessOfSegmentOrderNoWildcards(Context context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
@@ -777,6 +786,7 @@ public class SegmentBuilderTest {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
         // Tests 3 segments, each w/ no wildcarded values.
     	context.createConnection().getCacheControl(null).flushSchemaCache();
+    	clearAggregationCache(context.createConnection());
         runRollupTest(context.createConnection(),
             new String[]{
                 "select {{[Product].[Drink].[Alcoholic Beverages]},\n"
