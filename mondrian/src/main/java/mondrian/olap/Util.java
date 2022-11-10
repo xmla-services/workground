@@ -74,7 +74,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.collections.keyvalue.AbstractMapEntry;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.vfs2.FileContent;
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
@@ -3449,11 +3448,8 @@ public class Util extends XOMUtil {
         throws IOException
     {
         InputStream in = readVirtualFile(catalogUrl);
-        try {
-            return IOUtils.toString(in);
-        } finally {
-            IOUtils.closeQuietly(in);
-        }
+        return new String(in.readAllBytes());
+
     }
 
     /**

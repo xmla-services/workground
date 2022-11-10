@@ -19,9 +19,6 @@ import mondrian.olap.Util.PropertyList;
 import mondrian.server.MondrianServerRegistry;
 import mondrian.util.UnionIterator;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
-
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
@@ -44,6 +41,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.List;
 import javax.swing.*;
@@ -197,8 +195,7 @@ public class Workbench extends javax.swing.JFrame {
             File file = new File(DB_META_CONFIG_FILE);
             if (file.exists()) {
                 try {
-                    final String fileContents =
-                        FileUtils.readFileToString(file);
+                    final String fileContents =Files.readString(file.toPath());
                     if (Util.isBlank(fileContents)) {
                         LOGGER.error(
                             "DB Meta file is empty at: "
@@ -1097,7 +1094,7 @@ public class Workbench extends javax.swing.JFrame {
             URL versionUrl = myClassLoader.getResource(
                 getResourceConverter().getGUIReference("version"));
             InputStream versionIn = versionUrl.openStream();
-            String ver = IOUtils.toString(versionIn);
+            String ver = new String(versionIn.readAllBytes());
             ver = ver.replace(
                 "PRODUCT_VERSION",
                 MondrianServerRegistry.INSTANCE.getProductVersion());
