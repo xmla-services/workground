@@ -16,7 +16,6 @@ import mondrian.rolap.RolapSchema;
 import mondrian.rolap.aggmatcher.AggTableManager;
 import mondrian.spi.PropertyFormatter;
 import mondrian.util.Bug;
-import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.spi.LoggerContext;
@@ -5092,7 +5091,7 @@ public class SchemaTest {
         File schemaFile = File.createTempFile("multiByteSchema", ",xml");
         schemaFile.deleteOnExit();
         FileOutputStream output = new FileOutputStream(schemaFile);
-        IOUtils.write(rawSchema, output);
+        output.write(rawSchema.getBytes());
         output.close();
 
         //final Util.PropertyList properties =

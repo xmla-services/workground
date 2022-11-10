@@ -22,8 +22,6 @@ import mondrian.spi.Dialect;
 import mondrian.spi.PropertyFormatter;
 import mondrian.util.Bug;
 
-import org.apache.commons.io.IOUtils;
-
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.LoggerContext;
