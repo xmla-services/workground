@@ -2,9 +2,16 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.eclipse.daanse</groupId>
-    <artifactId>org.eclipse.daanse.sql.dialect</artifactId>
+    <artifactId>org.eclipse.daanse.sql.dialect.resolver</artifactId>
     <version>${revision}</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>org.eclipse.daanse.sql.dialect.common</artifactId>
+  <artifactId>org.eclipse.daanse.sql.dialect.resolver.basic</artifactId>
+  
+  <dependencies>
+ <dependency>
+  <groupId>org.eclipse.daanse</groupId>
+    <artifactId>org.eclipse.daanse.sql.dialect.api</artifactId>
+    <version>${revision}</version>
+    </dependency>
+  </dependencies>
 </project>
