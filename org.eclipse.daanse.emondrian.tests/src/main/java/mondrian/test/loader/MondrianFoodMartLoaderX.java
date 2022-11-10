@@ -43,7 +43,6 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -365,7 +364,7 @@ public class MondrianFoodMartLoaderX {
      * populating tables and creating indexes
      */
     private void load() throws Exception {
-        if (!StringUtils.isBlank(jdbcDrivers)) {
+        if (jdbcDrivers!=null&&jdbcDrivers.length()>0) {
             RolapUtil.loadDrivers(jdbcDrivers);
         }
 

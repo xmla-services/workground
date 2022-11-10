@@ -22,8 +22,6 @@ import mondrian.util.Pair;
 
 import junit.framework.TestCase;
 
-import org.apache.commons.lang.StringUtils;
-
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -491,9 +489,10 @@ public class RolapConnectionTest extends TestCase {
             DataSource dataSource =
                 RolapConnection.createDataSource(null, properties, connectInfo);
         } catch (RuntimeException ex) {
+            String s=connectInfo.toString();
             assertTrue(
                 connectInfo.toString(),
-                StringUtils.isBlank(connectInfo.toString()));
+                s.toString()==null||s.length()==0));
         }
     }
 
@@ -511,7 +510,8 @@ public class RolapConnectionTest extends TestCase {
         DataSource dataSource =
             RolapConnection.createDataSource(null, properties, connectInfo);
 
-        assertFalse(StringUtils.isBlank(connectInfo.toString()));
+        String s=connectInfo.toString();
+        assertFalse(s.toString()==null||s.length()==0);
 
         String[] parseconnectInfo = connectInfo.toString().split(";");
         for (String parseconnectInfoVals : parseconnectInfo) {

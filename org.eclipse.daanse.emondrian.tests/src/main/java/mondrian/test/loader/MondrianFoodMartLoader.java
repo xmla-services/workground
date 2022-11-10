@@ -16,11 +16,11 @@ import mondrian.rolap.RolapUtil;
 import mondrian.spi.Dialect;
 import mondrian.spi.DialectManager;
 
-import org.apache.commons.lang.StringUtils;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.slf4j.Logger;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -353,7 +353,7 @@ public class MondrianFoodMartLoader {
      * populating tables and creating indexes
      */
     private void load() throws Exception {
-        if (!StringUtils.isBlank(jdbcDrivers)) {
+        if (jdbcDrivers!=null&&jdbcDrivers.length()>0) {
             RolapUtil.loadDrivers(jdbcDrivers);
         }
 
