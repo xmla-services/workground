@@ -5,17 +5,14 @@
     <artifactId>org.eclipse.daanse.pom.parent</artifactId>
     <version>${revision}</version>
   </parent>
-  <groupId>org.osgi</groupId>
-  <artifactId>org.osgi.impl.service.jdbc.common</artifactId>
-
-<dependencies>
-
-<dependency>
-    <groupId>org.osgi</groupId>
-    <artifactId>org.osgi.annotation.bundle</artifactId>
-    <version>2.0.0</version>
-    <scope>provided</scope>
-</dependency>
-
-</dependencies>
+  <artifactId>org.eclipse.daanse.repackage.olap4j</artifactId>
+	<version>${olap4j.version}</version>
+  
+  	<dependencies>
+		<dependency>
+			<groupId>org.olap4j</groupId>
+			<artifactId>olap4j</artifactId>
+			<version>${olap4j.version}</version>
+		</dependency>
+	</dependencies>
 </project>

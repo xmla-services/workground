@@ -3,12 +3,12 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.opencube</groupId>
-    <artifactId>org.opencube.pom.parent</artifactId>
+    <groupId>org.eclipse.daanse</groupId>
+    <artifactId>org.eclipse.daanse.pom.parent</artifactId>
     <version>${revision}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>org.opencube.emondrian</artifactId>
+  <artifactId>org.eclipse.daanse.emondrian</artifactId>
   <description>eMondrian OLAP Engine</description>
   <properties>
     <project.version.minor>000</project.version.minor>
@@ -36,8 +36,8 @@
       <artifactId>commons-collections</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opencube</groupId>
-      <artifactId>org.opencube.repackage.apache.commons.dbcp</artifactId>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.repackage.apache.commons.dbcp</artifactId>
       <version>${commons-dbcp.version}</version>
       <exclusions>
       	<exclusion>
@@ -75,26 +75,26 @@
       <artifactId>validation-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opencube</groupId>
-      <artifactId>org.opencube.repackage.eigenbase.xom</artifactId>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.repackage.eigenbase.xom</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opencube</groupId>
-      <artifactId>org.opencube.repackage.eigenbase.properties</artifactId>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.repackage.eigenbase.properties</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opencube</groupId>
-      <artifactId>org.opencube.repackage.eigenbase.resgen</artifactId>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.repackage.eigenbase.resgen</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opencube</groupId>
-      <artifactId>org.opencube.repackage.olap4j</artifactId>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.repackage.olap4j</artifactId>
 
     </dependency>
     
     <dependency>
-      <groupId>org.opencube</groupId>
-      <artifactId>org.opencube.repackage.olap4j.xmla</artifactId>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.repackage.olap4j.xmla</artifactId>
     </dependency>
     <dependency>
       <groupId>org.olap4j</groupId>
@@ -135,8 +135,8 @@
       <artifactId>javacup</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.opencube</groupId>
-      <artifactId>org.opencube.repackage.javacup</artifactId>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.repackage.javacup</artifactId>
     </dependency>
     <dependency>
       <groupId>net.java.dev.javacc</groupId>

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.opencube</groupId>
-	<artifactId>org.opencube.pom.parent</artifactId>
+	<groupId>org.eclipse.daanse</groupId>
+	<artifactId>org.eclipse.daanse.pom.parent</artifactId>
 	<version>${revision}</version>
 
 	<packaging>pom</packaging>
@@ -131,10 +131,10 @@
 								<bnd>
 									<![CDATA[
 SPDX-License-Identifier: ${project.licenses[0].name}
--includeresource.legal:\
- "META-INF/=${project.parent.basedir}/LICENSE.html",\
- "META-INF/=${project.parent.basedir}/LICENSE.txt",\
- "META-INF/=${project.parent.basedir}/RELEASE.txt"
+//-includeresource.legal:\
+// "META-INF/=${project.parent.basedir}/LICENSE.html",\
+// "META-INF/=${project.parent.basedir}/LICENSE.txt",\
+// "META-INF/=${project.parent.basedir}/RELEASE.txt"
 ]]>
 								</bnd>
 							</configuration>
@@ -507,8 +507,8 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 				<version>${validation-api.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.opencube</groupId>
-				<artifactId>org.opencube.repackage.eigenbase.xom</artifactId>
+				<groupId>org.eclipse.daanse</groupId>
+				<artifactId>org.eclipse.daanse.repackage.eigenbase.xom</artifactId>
 				<version>${eigenbase-xom.version}</version>
 				<exclusions>
 					<exclusion>
@@ -518,18 +518,18 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 				</exclusions>
 			</dependency>
 			<dependency>
-				<groupId>org.opencube</groupId>
-				<artifactId>org.opencube.repackage.eigenbase.properties</artifactId>
+				<groupId>org.eclipse.daanse</groupId>
+				<artifactId>org.eclipse.daanse.repackage.eigenbase.properties</artifactId>
 				<version>${eigenbase-properties.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.opencube</groupId>
-				<artifactId>org.opencube.repackage.eigenbase.resgen</artifactId>
+				<groupId>org.eclipse.daanse</groupId>
+				<artifactId>org.eclipse.daanse.repackage.eigenbase.resgen</artifactId>
 				<version>${eigenbase-resgen.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.opencube</groupId>
-				<artifactId>org.opencube.repackage.olap4j</artifactId>
+				<groupId>org.eclipse.daanse</groupId>
+				<artifactId>org.eclipse.daanse.repackage.olap4j</artifactId>
 				<version>${olap4j.version}</version>
 				<exclusions>
 					<exclusion>
@@ -540,8 +540,8 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 			</dependency>
 
 			<dependency>
-				<groupId>org.opencube</groupId>
-				<artifactId>org.opencube.repackage.olap4j.xmla</artifactId>
+				<groupId>org.eclipse.daanse</groupId>
+				<artifactId>org.eclipse.daanse.repackage.olap4j.xmla</artifactId>
 				<version>${olap4j-xmla.version}</version>
 			</dependency>
 			<dependency>
@@ -619,8 +619,8 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 				<version>${javacup.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.opencube</groupId>
-				<artifactId>org.opencube.repackage.javacup</artifactId>
+				<groupId>org.eclipse.daanse</groupId>
+				<artifactId>org.eclipse.daanse.repackage.javacup</artifactId>
 				<version>${javacup.version}</version>
 			</dependency>
 			<dependency>
@@ -753,20 +753,22 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 	<modules>
 		<module>mondrian</module>
 		<module>workbench</module>
-		<module>org.opencube.repackage.olap4j.xmla</module>
-		<module>org.opencube.repackage.olap4j</module>
-		<module>org.opencube.repackage.javacup</module>
-		<module>org.opencube.repackage.eigenbase.xom</module>
-		<module>org.opencube.repackage.eigenbase.resgen</module>
-		<module>org.opencube.repackage.eigenbase.properties</module>
-		<module>org.opencube.repackage.apache.commons.dbcp</module>
-		<module>org.opencube.repackage.dockerjava</module>
+		<module>org.eclipse.daanse.repackage.olap4j.xmla</module>
+		<module>org.eclipse.daanse.repackage.olap4j</module>
+		<module>org.eclipse.daanse.repackage.javacup</module>
+		<module>org.eclipse.daanse.repackage.eigenbase.xom</module>
+		<module>org.eclipse.daanse.repackage.eigenbase.resgen</module>
+		<module>org.eclipse.daanse.repackage.eigenbase.properties</module>
+		<module>org.eclipse.daanse.repackage.apache.commons.dbcp</module>
+		<module>org.eclipse.daanse.repackage.dockerjava</module>
+		<module>org.eclipse.daanse.function</module>
+		<module>org.eclipse.daanse.sql</module>
 		<module>org.osgi.impl.service.jdbc.common</module>
 		<module>org.osgi.impl.service.jdbc.sqlite</module>
 		<module>org.osgi.impl.service.jdbc.oracle11</module>
 		<module>org.osgi.impl.service.jdbc.mssqlserver</module>
 		<module>org.osgi.impl.service.jdbc.jtdssqlserver</module>
 		<module>org.osgi.impl.service.jdbc.clickhouse</module>
-		<module>org.opencube.emondrian.tests</module>
+		<module>org.eclipse.daanse.emondrian.tests</module>
 	</modules>
 </project>
