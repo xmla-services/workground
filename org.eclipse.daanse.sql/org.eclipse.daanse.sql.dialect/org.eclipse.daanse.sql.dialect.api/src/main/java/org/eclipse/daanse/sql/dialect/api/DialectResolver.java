@@ -16,8 +16,25 @@ package org.eclipse.daanse.sql.dialect.api;
 
 import javax.sql.DataSource;
 
+/**
+ * A {@link DialectResolver} gives access to Dialects that are compatible with a
+ * {@link DataSource}
+ * 
+ * @author stbischof
+ *
+ */
 public interface DialectResolver {
 
-	Dialect resolve(DataSource dataSource);
+    /**
+     * Returns a dialect that could operate on the given DataSource. The given
+     * dialect MUST be compatible. Must return value >=0 on
+     * {@link org.eclipse.daanse.sql.dialect.api.Dialect#compatibility(DataSource)}.
+     * 
+     * The implementation COULD choose others than the best Dialect.
+     * 
+     * @param dataSource
+     * @returns a Dialect
+     */
+    Dialect resolve(DataSource dataSource);
 
 }
