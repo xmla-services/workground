@@ -11,8 +11,9 @@
 
 package mondrian.test;
 
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.olap4j.impl.Olap4jUtil;
 
 import java.util.Set;
@@ -31,7 +32,7 @@ import java.util.Set;
 public class SqlPattern {
     private final String sql;
     private final String triggerSql;
-    private final Set<Dialect.DatabaseProduct> databaseProducts;
+    private final Set<DatabaseProduct> databaseProducts;
 
     /**
      * Creates a pattern which applies to a collection of dialects
@@ -42,7 +43,7 @@ public class SqlPattern {
      * @param startsWithLen Length of prefix of statement to consider
      */
     public SqlPattern(
-        Set<Dialect.DatabaseProduct> databaseProducts,
+        Set<DatabaseProduct> databaseProducts,
         String sql,
         int startsWithLen)
     {
@@ -58,7 +59,7 @@ public class SqlPattern {
      * @param startsWithLen Length of prefix of statement to consider
      */
     public SqlPattern(
-        Dialect.DatabaseProduct databaseProduct,
+        DatabaseProduct databaseProduct,
         final String sql,
         final int startsWithLen)
     {
@@ -74,7 +75,7 @@ public class SqlPattern {
      *                   means whole statement
      */
     public SqlPattern(
-        Dialect.DatabaseProduct databaseProduct,
+        DatabaseProduct databaseProduct,
          final String sql,
          final String triggerSql)
     {
@@ -90,7 +91,7 @@ public class SqlPattern {
      *                   means whole statement
      */
     public SqlPattern(
-        Set<Dialect.DatabaseProduct> databaseProducts,
+        Set<DatabaseProduct> databaseProducts,
         String sql,
         String triggerSql)
     {
@@ -100,10 +101,10 @@ public class SqlPattern {
     }
 
     public static SqlPattern getPattern(
-        Dialect.DatabaseProduct d,
+        DatabaseProduct d,
         SqlPattern[] patterns)
     {
-        if (d == Dialect.DatabaseProduct.UNKNOWN) {
+        if (d == DatabaseProduct.UNKNOWN) {
             return null;
         }
         for (SqlPattern pattern : patterns) {
@@ -114,7 +115,7 @@ public class SqlPattern {
         return null;
     }
 
-    public boolean hasDatabaseProduct(Dialect.DatabaseProduct databaseProduct) {
+    public boolean hasDatabaseProduct(DatabaseProduct databaseProduct) {
         return databaseProducts.contains(databaseProduct);
     }
 

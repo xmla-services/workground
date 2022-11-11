@@ -19,11 +19,11 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Statement;
 
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import mondrian.olap.Util;
-import mondrian.spi.Dialect;
 
 public class MicrosoftSqlServerDialectTest{
 
@@ -44,7 +44,7 @@ public class MicrosoftSqlServerDialectTest{
   @BeforeEach
   protected void setUp() throws Exception {
     when(metaData.getDatabaseProductName()).thenReturn(
-        Dialect.DatabaseProduct.MSSQL.name());
+        DatabaseProduct.MSSQL.name());
     when(statmentMock.execute(any())).thenReturn(false);
     when(connection.getMetaData()).thenReturn(metaData);
     when(connection.createStatement()).thenReturn(statmentMock);
@@ -66,7 +66,7 @@ public class MicrosoftSqlServerDialectTest{
     assertEquals(Util.singleQuoteString(
         BOOLEAN_LITERAL_FALSE), buf.toString());
   }
-  
+
   @Test
   public void testQuoteBooleanLiteral_One() throws Exception {
     assertEquals(0, buf.length());

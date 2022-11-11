@@ -20,7 +20,7 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.olap.*;
 import mondrian.olap.fun.*;
 import mondrian.server.Statement;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.util.*;
 
 import org.apache.logging.log4j.Logger;
@@ -505,7 +505,7 @@ public class RolapEvaluator implements Evaluator {
 
   /**
    * Return the list of slicer members in the current evaluator context.
-   * 
+   *
    * @return slicerMembers
    */
   public final List<Member> getSlicerMembers() {
@@ -1328,7 +1328,7 @@ public class RolapEvaluator implements Evaluator {
 
   /**
    * Checks if unrelated dimensions to the measure in the current context should be ignored.
-   * 
+   *
    * @return boolean
    */
   public boolean shouldIgnoreUnrelatedDimensions() {

@@ -14,7 +14,8 @@ package mondrian.rolap;
 import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.agg.CellRequest;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
@@ -50,10 +51,10 @@ public class GroupingSetQueryTest extends BatchTestCase{
     private static final String measureCustomerCount =
         "[Measures].[Customer Count]";
 
-    private static final Set<Dialect.DatabaseProduct> ORACLE_TERADATA =
+    private static final Set<DatabaseProduct> ORACLE_TERADATA =
         Olap4jUtil.enumSetOf(
-            Dialect.DatabaseProduct.ORACLE,
-            Dialect.DatabaseProduct.TERADATA);
+            DatabaseProduct.ORACLE,
+            DatabaseProduct.TERADATA);
 
     private PropertySaver5 propSaver;
     @BeforeEach
@@ -74,8 +75,8 @@ public class GroupingSetQueryTest extends BatchTestCase{
         // ORACLE
         final Dialect dialect = getDialect(context.createConnection());
         if (prop.WarnIfNoPatternForDialect.get().equals("ANY")
-                || dialect.getDatabaseProduct() == Dialect.DatabaseProduct.ACCESS
-                || dialect.getDatabaseProduct() == Dialect.DatabaseProduct.ORACLE)
+                || dialect.getDatabaseProduct() == DatabaseProduct.ACCESS
+                || dialect.getDatabaseProduct() == DatabaseProduct.ORACLE)
         {
             propSaver.set(prop.WarnIfNoPatternForDialect, dialect.getDatabaseProduct().toString());
         } else {
@@ -160,7 +161,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
         SqlPattern[] patternsWithoutGsets = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS,
+                DatabaseProduct.ACCESS,
                 "select \"customer\".\"gender\" as \"c0\", sum(\"sales_fact_1997\".\"unit_sales\") as \"m0\" "
                 + "from \"customer\" as \"customer\", \"sales_fact_1997\" as \"sales_fact_1997\" "
                 + "where \"sales_fact_1997\".\"customer_id\" = \"customer\".\"customer_id\" "
@@ -227,7 +228,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
         SqlPattern[] patternsWithoutGsets = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS,
+                DatabaseProduct.ACCESS,
                 "select \"agg_g_ms_pcat_sales_fact_1997\".\"gender\" as \"c0\", "
                 + "sum(\"agg_g_ms_pcat_sales_fact_1997\".\"unit_sales\") as \"m0\" "
                 + "from \"agg_g_ms_pcat_sales_fact_1997\" as \"agg_g_ms_pcat_sales_fact_1997\" "
@@ -279,7 +280,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
         SqlPattern[] patternsWithoutGsets = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS,
+                DatabaseProduct.ACCESS,
                 "select \"customer\".\"gender\" as \"c0\", sum(\"sales_fact_1997\".\"unit_sales\") as \"m0\" "
                 + "from \"customer\" as \"customer\", \"sales_fact_1997\" as \"sales_fact_1997\" "
                 + "where \"sales_fact_1997\".\"customer_id\" = \"customer\".\"customer_id\" "
@@ -343,7 +344,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
         SqlPattern[] patternsWithoutGsets = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS,
+                DatabaseProduct.ACCESS,
                 "select \"customer\".\"gender\" as \"c0\", sum(\"sales_fact_1997\".\"unit_sales\") as \"m0\", "
                 + "sum(\"sales_fact_1997\".\"store_sales\") as \"m1\" "
                 + "from \"customer\" as \"customer\", \"sales_fact_1997\" as \"sales_fact_1997\" "
@@ -419,7 +420,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
         SqlPattern[] patternWithoutGsets = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS,
+                DatabaseProduct.ACCESS,
                 "select sum(\"sales_fact_1997\".\"unit_sales\") as \"m0\" "
                 + "from \"sales_fact_1997\" as \"sales_fact_1997\"",
                 40),
@@ -490,7 +491,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
         SqlPattern[] patternsWithoutGsets = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS,
+                DatabaseProduct.ACCESS,
                 "select \"time_by_day\".\"the_year\" as \"c0\", \"customer\".\"gender\" as \"c1\", "
                 + "sum(\"sales_fact_1997\".\"unit_sales\") as \"m0\" "
                 + "from \"time_by_day\" as \"time_by_day\", \"sales_fact_1997\" as \"sales_fact_1997\", "

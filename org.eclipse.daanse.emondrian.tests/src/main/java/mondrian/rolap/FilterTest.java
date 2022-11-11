@@ -11,9 +11,10 @@ package mondrian.rolap;
 
 import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -454,9 +455,9 @@ public class FilterTest extends BatchTestCase {
 
     SqlPattern[] patterns = {
       new SqlPattern(
-        Dialect.DatabaseProduct.DERBY, necjSqlDerby, necjSqlDerby ),
+        DatabaseProduct.DERBY, necjSqlDerby, necjSqlDerby ),
       new SqlPattern(
-        Dialect.DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
+        DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
     };
 
     assertQuerySql(context.createConnection(), query, patterns );
@@ -527,9 +528,9 @@ public class FilterTest extends BatchTestCase {
 
     SqlPattern[] patterns = {
       new SqlPattern(
-        Dialect.DatabaseProduct.DERBY, necjSqlDerby, necjSqlDerby ),
+        DatabaseProduct.DERBY, necjSqlDerby, necjSqlDerby ),
       new SqlPattern(
-        Dialect.DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
+        DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
     };
 
     assertQuerySql(context.createConnection(), query, patterns );
@@ -632,9 +633,9 @@ public class FilterTest extends BatchTestCase {
 
     SqlPattern[] patterns = {
       new SqlPattern(
-        Dialect.DatabaseProduct.DERBY, necjSqlDerby, necjSqlDerby ),
+        DatabaseProduct.DERBY, necjSqlDerby, necjSqlDerby ),
       new SqlPattern(
-        Dialect.DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
+        DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
     };
 
     String baseSchema = TestUtil.getRawSchema(context);
@@ -739,9 +740,9 @@ public class FilterTest extends BatchTestCase {
 
     SqlPattern[] patterns = {
       new SqlPattern(
-        Dialect.DatabaseProduct.DERBY, necjSqlDerby, necjSqlDerby ),
+        DatabaseProduct.DERBY, necjSqlDerby, necjSqlDerby ),
       new SqlPattern(
-        Dialect.DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
+        DatabaseProduct.MYSQL, necjSqlMySql, necjSqlMySql )
     };
 
     String baseSchema = TestUtil.getRawSchema(context);
@@ -1133,13 +1134,13 @@ public class FilterTest extends BatchTestCase {
         + "From [Store] \n";
     final SqlPattern[] badPatterns = {
       new SqlPattern(
-        Dialect.DatabaseProduct.MYSQL,
+        DatabaseProduct.MYSQL,
         badMysqlSQL,
         null )
     };
     final SqlPattern[] goodPatterns = {
       new SqlPattern(
-        Dialect.DatabaseProduct.MYSQL,
+        DatabaseProduct.MYSQL,
         goodMysqlSQL,
         null )
     };
@@ -1160,10 +1161,10 @@ public class FilterTest extends BatchTestCase {
           + "uniqueMembers='false'/>\n"
           + "    </Hierarchy>\n"
           + "  </Dimension>\n" ));
-    Connection connection = context.createConnection();    
+    Connection connection = context.createConnection();
     assertQuerySqlOrNot(connection, mdx, badPatterns, true, true, true );
     TestUtil.flushSchemaCache(connection);
-    assertQuerySqlOrNot(context.createConnection(), mdx, goodPatterns, false, true, true );       
+    assertQuerySqlOrNot(context.createConnection(), mdx, goodPatterns, false, true, true );
     assertQueryReturns(context.createConnection(),
       mdx,
       "Axis #0:\n"
@@ -1346,7 +1347,7 @@ public class FilterTest extends BatchTestCase {
     assertQuerySql(context.createConnection(),
       mdx,
       new SqlPattern[] {
-        new SqlPattern( Dialect.DatabaseProduct.MYSQL, sql, null )
+        new SqlPattern( DatabaseProduct.MYSQL, sql, null )
       } );
   }
 

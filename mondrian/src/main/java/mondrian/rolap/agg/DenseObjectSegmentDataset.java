@@ -13,6 +13,7 @@ import mondrian.rolap.CellKey;
 import mondrian.rolap.SqlStatement;
 import mondrian.spi.SegmentBody;
 import mondrian.util.Pair;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 
 import java.util.List;
 import java.util.SortedSet;
@@ -85,8 +86,8 @@ class DenseObjectSegmentDataset extends DenseSegmentDataset {
         values[offset] = rowList.getObject(column);
     }
 
-    public SqlStatement.Type getType() {
-        return SqlStatement.Type.OBJECT;
+    public BestFitColumnType getType() {
+        return BestFitColumnType.OBJECT;
     }
 
     public void put(CellKey key, Object value) {

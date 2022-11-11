@@ -21,10 +21,9 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Statement;
 
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import mondrian.spi.Dialect;
 
 public class MySqlDialectTest{
   private static final String ILLEGAL_BOOLEAN_LITERAL =
@@ -44,7 +43,7 @@ public class MySqlDialectTest{
   @BeforeEach
   protected void setUp() throws Exception {
     when(metaData.getDatabaseProductName()).thenReturn(
-        Dialect.DatabaseProduct.MYSQL.name());
+        DatabaseProduct.MYSQL.name());
     when(metaData.getDatabaseProductVersion()).thenReturn("5.0");
     when(statmentMock.execute(any())).thenReturn(false);
     when(connection.getMetaData()).thenReturn(metaData);

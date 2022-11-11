@@ -9,7 +9,7 @@
 package mondrian.rolap;
 
 import mondrian.olap.MondrianDef;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Datatype;
 import mondrian.test.PropertySaver5;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,7 +57,7 @@ public class RolapDimensionTest {
     level.visible = true;
     level.properties = new MondrianDef.Property[0];
     level.uniqueMembers = true;
-    level.type = Dialect.Datatype.String.name();
+    level.type = Datatype.String.name();
     level.hideMemberIf = "Never";
     level.levelType = "Regular";
   }

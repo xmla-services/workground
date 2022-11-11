@@ -19,10 +19,11 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Statement;
 
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 public class OracleDialectTest{
   private Connection connection = mock( Connection.class );
@@ -32,7 +33,7 @@ public class OracleDialectTest{
 
   @BeforeEach
   public void setUp() throws Exception {
-    when( metaData.getDatabaseProductName() ).thenReturn( Dialect.DatabaseProduct.ORACLE.name() );
+    when( metaData.getDatabaseProductName() ).thenReturn( DatabaseProduct.ORACLE.name() );
     when( connection.getMetaData() ).thenReturn( metaData );
     dialect = new OracleDialect( connection );
   }

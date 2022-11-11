@@ -15,7 +15,6 @@ import mondrian.olap4j.MondrianOlap4jConnection;
 import mondrian.rolap.*;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
-import mondrian.spi.Dialect;
 import mondrian.spi.DialectManager;
 import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.test.FoodmartTestContextImpl;
@@ -23,6 +22,8 @@ import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import mondrian.test.TestContext;
 import mondrian.util.DelegatingInvocationHandler;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.olap4j.*;
 import org.olap4j.impl.CoordinateIterator;
 import org.olap4j.layout.TraditionalCellSetFormatter;
@@ -71,7 +72,7 @@ public class TestUtil {
 	        + Util.singleQuoteString( expression )
 	        + " select {[Measures].[Foo]} on columns from " + cubeName;
 	  }
-	  
+
 	   public static TupleList productMembersPotScrubbersPotsAndPans(
 		        SchemaReader salesCubeSchemaReader)
 		    {
@@ -141,13 +142,13 @@ public class TestUtil {
 	      }
 	      checkThrowable( throwable, pattern );
 	    }
-	    
+
 	    public static void assertAxisThrows(Connection connection,
 	  	      String expression,
 	  	      String pattern) {
 	    	assertAxisThrows(connection, expression, pattern, getDefaultCubeName());
 	    }
-	    
+
 		/**
 		 * Executes a query, and asserts that it throws an exception which contains the
 		 * given pattern.
@@ -406,7 +407,7 @@ public class TestUtil {
 	private static String dialectize(Connection connection, String sql ) {
 		final String search = "fname \\+ ' ' \\+ lname";
 		final Dialect dialect = getDialect(connection);
-		final Dialect.DatabaseProduct databaseProduct =
+		final DatabaseProduct databaseProduct =
 				dialect.getDatabaseProduct();
 		switch ( databaseProduct ) {
 			case MYSQL:
@@ -443,7 +444,7 @@ public class TestUtil {
 				break;
 		}
 
-		if ( dialect.getDatabaseProduct() == Dialect.DatabaseProduct.ORACLE ) {
+		if ( dialect.getDatabaseProduct() == DatabaseProduct.ORACLE ) {
 			// " + tableQualifier + "
 			sql = sql.replaceAll( " =as= ", " " );
 		} else {
@@ -534,7 +535,7 @@ public class TestUtil {
 	 * @param product Database product
 	 * @return dialect of an required persuasion
 	 */
-	public static Dialect getFakeDialect( Dialect.DatabaseProduct product ) {
+	public static Dialect getFakeDialect( DatabaseProduct product ) {
 		final DatabaseMetaData metaData =
 				(DatabaseMetaData) Proxy.newProxyInstance(
 						TestContext.class.getClassLoader(),
@@ -595,10 +596,10 @@ public class TestUtil {
 	@SuppressWarnings( "UnusedDeclaration" )
 	public static class DatabaseMetaDataInvocationHandler
 			extends DelegatingInvocationHandler {
-		private final Dialect.DatabaseProduct product;
+		private final DatabaseProduct product;
 
 		DatabaseMetaDataInvocationHandler(
-				Dialect.DatabaseProduct product ) {
+				DatabaseProduct product ) {
 			this.product = product;
 		}
 
@@ -721,7 +722,7 @@ public class TestUtil {
 			}
 			return s;
 		}
-		
+
 		/**
 		 * Checks that an actual string matches an expected string.
 		 *
@@ -754,8 +755,8 @@ public class TestUtil {
 				message += "Actual java:" + nl + toJavaString(actual) + nl;
 			}
 			assertEquals(expected, actual, message);
-		}		
-		
+		}
+
 		/**
 		 * Executes an expression and asserts that it returns a given result.
 		 */
@@ -766,14 +767,14 @@ public class TestUtil {
 			}
 			assertEqualsVerbose(expected, cell.getFormattedValue());
 		}
-		
+
 		/**
 		 * Executes an expression and asserts that it returns a given result.
 		 */
 		public static void assertExprReturns(Connection connection, String expression, String expected) {
 			assertExprReturns(connection, getDefaultCubeName(), expression, expected);
 		}
-		
+
 		public static String getDefaultCubeName() {
 			return "Sales";
 		}
@@ -800,14 +801,14 @@ public class TestUtil {
 	      pw.flush();
 	      return sw.toString();
 	    }
-	
+
 	public static Cube cubeByName(Connection connection, String cubeName) {
         SchemaReader reader = connection.getSchemaReader().withLocus();
 
         Cube[] cubes = reader.getCubes();
         return cubeByName(cubeName, cubes);
     }
-	
+
     public static Cube cubeByName(String cubeName, Cube[] cubes) {
         Cube resultCube = null;
         for (Cube cube : cubes) {
@@ -818,7 +819,7 @@ public class TestUtil {
         }
         return resultCube;
     }
-    
+
 
 	public static synchronized void flushSchemaCache(Connection connection) {
 		// it's pointless to flush the schema cache if we
@@ -839,13 +840,13 @@ public class TestUtil {
 	public static Result executeQuery(Connection connection, String queryString) {
 		return executeQuery(connection, queryString, 60000l);
 	}
-	
-	public static Result executeQueryTimeoutTest(Connection connection, String queryString ) {	    
+
+	public static Result executeQueryTimeoutTest(Connection connection, String queryString ) {
 	    queryString = upgradeQuery( queryString );
 	    Query query = connection.parseQuery( queryString );
 	    Statement statement = query.getStatement();
-	    assertThat(statement).isNotNull();	    
-	    final Result result = statement.getMondrianConnection().execute(new Execution(statement, statement.getQueryTimeoutMillis()));	    	    
+	    assertThat(statement).isNotNull();
+	    final Result result = statement.getMondrianConnection().execute(new Execution(statement, statement.getQueryTimeoutMillis()));
 	    return result;
 	  }
 
@@ -858,7 +859,7 @@ public class TestUtil {
 		Result result = statement.getMondrianConnection().execute(new Execution(statement, timeoutIntervalMillis));
 		return result;
 	}
-	
+
 	public static Query parseQuery(Connection connection, String queryString) {
 
 		assertThat(connection).isNotNull();
@@ -874,7 +875,7 @@ public class TestUtil {
 		Result result = executeQuery(connection, "select {" + expression + "} on columns from " + cubeName);
 		return result.getAxes()[0];
 	}
-	
+
 	public static Axis executeAxis(Connection connection, String expression) {
 		return executeAxis(connection, getDefaultCubeName(), expression);
 	}
@@ -930,8 +931,8 @@ public class TestUtil {
 		result.print(pw);
 		pw.flush();
 		return sw.toString();
-	}	
-	
+	}
+
 	/**
 	 * Executes a query with a given expression on an axis, and asserts that it
 	 * returns the expected string.
@@ -940,11 +941,11 @@ public class TestUtil {
 		Axis axis = executeAxis(connection, cubeName, expression);
 		assertEqualsVerbose(expected, upgradeActual(toString(axis.getPositions())));
 	}
-	
+
 	public static void assertAxisReturns(Connection connection, String expression, String expected) {
 		assertAxisReturns(connection, getDefaultCubeName(), expression, expected);
 	}
-	
+
 	/**
 	 * Massages the actual result of executing a query to handle differences in
 	 * unique names betweeen old and new behavior.
@@ -1012,12 +1013,12 @@ public class TestUtil {
 	public static CellSet executeOlap4jQuery(OlapConnection olapConnection, String queryString ) throws SQLException {
 	//TODO: may better fix querys then use upgradeQuery
 	  //  queryString = upgradeQuery( queryString );
-		
+
 		assertThat(olapConnection).isNotNull();
 		assertThat(queryString).isNotNull().isNotBlank();
-	    
+
 		OlapStatement stmt = olapConnection.createStatement();
-	
+
 	    assertThat(stmt).isNotNull();
 
 	    final CellSet cellSet = stmt.executeOlapQuery( queryString );
@@ -1068,7 +1069,7 @@ public class TestUtil {
 		throw new RuntimeException(message);
 	}
 
-	
+
 	  /**
 	   * Checks that a {@link CellSet} is valid.
 	   *
@@ -1139,13 +1140,13 @@ public class TestUtil {
 	        }
 	      };
 	    }
-	    
+
 	static public Dialect getDialect(Connection connection){
 	    	   DataSource dataSource =connection.getDataSource();
 	    	    return DialectManager.createDialect( dataSource, null );
-	    	
+
 	    }
-	
+
 		public static Member executeSingletonAxis(Connection connection, String expression) {
 			final String cubeName = getDefaultCubeName();
 			return executeSingletonAxis(connection, expression, cubeName);
@@ -1174,7 +1175,7 @@ public class TestUtil {
 	}
 
 		static String rawSchema = null;
-		
+
 		public static String getRawSchema(Context context) {
 			if(rawSchema == null) {
 				try {
@@ -1192,7 +1193,7 @@ public class TestUtil {
 			}
 			return rawSchema;
 		}
-		
+
 		public static void withSchema(Context context, String schema) {
 			context.setProperty(RolapConnectionProperties.CatalogContent.name(), schema);
 		}
@@ -1631,7 +1632,7 @@ public class TestUtil {
 		// (We could optimize and run it once, collecting multiple queries, and
 		// comparing all queries at the end.)
 		Dialect dialect = getDialect(connection);
-		Dialect.DatabaseProduct d = dialect.getDatabaseProduct();
+		DatabaseProduct d = dialect.getDatabaseProduct();
 		boolean patternFound = false;
 		for (SqlPattern sqlPattern : patterns) {
 			if (!sqlPattern.hasDatabaseProduct(d)) {
@@ -1735,7 +1736,7 @@ public class TestUtil {
 		return queryString;
 	}
 
-	public static String dialectize(Dialect.DatabaseProduct d, String sql) {
+	public static String dialectize(DatabaseProduct d, String sql) {
 		sql = sql.replaceAll("\r\n", "\n");
 		switch (d) {
 			case ORACLE:
@@ -1858,7 +1859,7 @@ public class TestUtil {
 				"jdbc:xmla:Server=http://whatever;Catalog=FoodMart;TestProxyCookie="
 						+ cookie,
 				info );
-		*/		
+		*/
 		OlapConnection olapConnection = context.createOlap4jConnection();
 		//		con.unwrap( OlapConnection.class );
 		OlapStatement statement = olapConnection.createStatement();
@@ -1925,12 +1926,12 @@ public class TestUtil {
 		return !cacheState.contains("Cube:[" + cubeName + "]");
 	}
 
-	private static SqlPattern[] sqlPattern(Dialect.DatabaseProduct db, String sql) {
+	private static SqlPattern[] sqlPattern(DatabaseProduct db, String sql) {
 		return new SqlPattern[]{new SqlPattern(db, sql, sql.length())};
 	}
 
 	public static SqlPattern[] mysqlPattern(String sql) {
-		return sqlPattern(Dialect.DatabaseProduct.MYSQL, sql);
+		return sqlPattern(DatabaseProduct.MYSQL, sql);
 	}
 
 	/**
@@ -1942,7 +1943,7 @@ public class TestUtil {
 	 */
 	public static void verifySameNativeAndNot(Connection connection,
 			String query, String message, PropertySaver5 propSaver)
-	{		
+	{
 
 		propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
 		propSaver.set(propSaver.properties.EnableNativeFilter, true);
@@ -1963,7 +1964,7 @@ public class TestUtil {
 				toString(resultNonNative),
 				message);
 
-		
+
 	}
 
 /**

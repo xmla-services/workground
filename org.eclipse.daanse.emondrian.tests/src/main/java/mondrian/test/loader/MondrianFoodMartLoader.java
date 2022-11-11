@@ -13,11 +13,11 @@ package mondrian.test.loader;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
-import mondrian.spi.Dialect;
 import mondrian.spi.DialectManager;
 
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.slf4j.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -387,7 +387,7 @@ public class MondrianFoodMartLoader {
             "Mondrian Dialect is " + dialect
             + ", detected database product: " + dialect.getDatabaseProduct());
 
-        if (dialect.getDatabaseProduct() == Dialect.DatabaseProduct.INFOBRIGHT
+        if (dialect.getDatabaseProduct() == DatabaseProduct.INFOBRIGHT
             && indexes)
         {
             System.out.println("Infobright engine detected: ignoring indexes");
@@ -398,7 +398,7 @@ public class MondrianFoodMartLoader {
             // No explicit batch size was set by user, so assign a good
             // default now
             if (dialect.getDatabaseProduct()
-                == Dialect.DatabaseProduct.LUCIDDB)
+                == DatabaseProduct.LUCIDDB)
             {
                 // LucidDB column-store writes perform better with large batches
                 outputBatchSize = 1000;
@@ -407,7 +407,7 @@ public class MondrianFoodMartLoader {
             }
         }
 
-        if (dialect.getDatabaseProduct() == Dialect.DatabaseProduct.LUCIDDB) {
+        if (dialect.getDatabaseProduct() == DatabaseProduct.LUCIDDB) {
             // LucidDB doesn't support CREATE UNIQUE INDEX, but it
             // does support standard UNIQUE constraints
             generateUniqueConstraints = true;
@@ -530,7 +530,7 @@ public class MondrianFoodMartLoader {
         }
 
         if (dialect.getDatabaseProduct()
-            == Dialect.DatabaseProduct.INFOBRIGHT)
+            == DatabaseProduct.INFOBRIGHT)
         {
             infobrightLoad = true;
             file = File.createTempFile("tmpfile", ".csv");
@@ -1170,7 +1170,7 @@ public class MondrianFoodMartLoader {
         }
 
         if (dialect.getDatabaseProduct()
-            == Dialect.DatabaseProduct.INFOBRIGHT)
+            == DatabaseProduct.INFOBRIGHT)
         {
             for (String sql : sqls) {
                 fileOutput.write(sql);
@@ -1184,7 +1184,7 @@ public class MondrianFoodMartLoader {
         } else {
             final boolean useTxn;
             if (dialect.getDatabaseProduct()
-                == Dialect.DatabaseProduct.NEOVIEW)
+                == DatabaseProduct.NEOVIEW)
             {
                 // setAutoCommit can not changed to true again, throws
                 // "com.hp.t4jdbc.HPT4Exception: SetAutoCommit not possible",
@@ -2184,7 +2184,7 @@ public class MondrianFoodMartLoader {
             buf.append(isUnique ? "CREATE UNIQUE INDEX " : "CREATE INDEX ")
                 .append(quoteId(indexName));
             if (dialect.getDatabaseProduct()
-                != Dialect.DatabaseProduct.TERADATA)
+                != DatabaseProduct.TERADATA)
             {
                 buf.append(" ON ").append(quoteId(schema, tableName));
             }
@@ -2198,7 +2198,7 @@ public class MondrianFoodMartLoader {
             }
             buf.append(")");
             if (dialect.getDatabaseProduct()
-                == Dialect.DatabaseProduct.TERADATA)
+                == DatabaseProduct.TERADATA)
             {
                 buf.append(" ON ").append(quoteId(schema, tableName));
             }
@@ -3114,7 +3114,7 @@ public class MondrianFoodMartLoader {
         /*
          * Output for a TIMESTAMP
          */
-        final Dialect.DatabaseProduct product = dialect.getDatabaseProduct();
+        final DatabaseProduct product = dialect.getDatabaseProduct();
         if (columnType.startsWith("TIMESTAMP")) {
             switch (product) {
             case ORACLE:

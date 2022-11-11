@@ -17,6 +17,8 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -27,7 +29,6 @@ import mondrian.olap.Literal;
 import mondrian.olap.fun.MondrianEvaluationException;
 import mondrian.olap.type.NullType;
 import mondrian.rolap.sql.SqlQuery;
-import mondrian.spi.Dialect;
 
 /**
  * @author Andrey Khayrutdinov
@@ -40,7 +41,7 @@ public class NumberSqlCompilerTest {
     public static void beforeAll() throws Exception {
         Dialect dialect = mock(Dialect.class);
         when(dialect.getDatabaseProduct())
-            .thenReturn(Dialect.DatabaseProduct.MYSQL);
+            .thenReturn(DatabaseProduct.MYSQL);
 
         SqlQuery query = mock(SqlQuery.class);
         when(query.getDialect()).thenReturn(dialect);

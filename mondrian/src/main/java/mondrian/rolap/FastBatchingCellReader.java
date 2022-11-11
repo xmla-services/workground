@@ -26,6 +26,7 @@ import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 import java.util.concurrent.Future;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 /**
  * A <code>FastBatchingCellReader</code> doesn't really Read cells: when asked
@@ -994,7 +995,7 @@ class BatchLoader {
         private final Dialect dialect;
         private final RolapCube cube;
         private final List<CellRequest> cellRequests;
-        
+
         public LoadBatchCommand(
             Locus locus,
             SegmentCacheManager cacheMgr,

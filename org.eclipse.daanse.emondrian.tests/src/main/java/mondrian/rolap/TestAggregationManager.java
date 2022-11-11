@@ -18,9 +18,10 @@ import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
-import mondrian.spi.Dialect;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -52,10 +53,10 @@ import static org.opencube.junit5.TestUtil.*;
  * @since 21 March, 2002
  */
 public class TestAggregationManager extends BatchTestCase {
-    private static final Set<Dialect.DatabaseProduct> ACCESS_MYSQL =
+    private static final Set<DatabaseProduct> ACCESS_MYSQL =
         Olap4jUtil.enumSetOf(
-            Dialect.DatabaseProduct.ACCESS,
-            Dialect.DatabaseProduct.MYSQL);
+            DatabaseProduct.ACCESS,
+            DatabaseProduct.MYSQL);
 
     private Locus locus;
     private Execution execution;
@@ -443,7 +444,7 @@ public class TestAggregationManager extends BatchTestCase {
                     ACCESS_MYSQL,
                     accessMysqlSql, 50),
                 new SqlPattern(
-                    Dialect.DatabaseProduct.DERBY, derbySql, derbySql)
+                    DatabaseProduct.DERBY, derbySql, derbySql)
             };
         } else {
             accessMysqlSql =
@@ -477,7 +478,7 @@ public class TestAggregationManager extends BatchTestCase {
                     ACCESS_MYSQL,
                     accessMysqlSql, 50),
                 new SqlPattern(
-                    Dialect.DatabaseProduct.DERBY, derbySql, derbySql)
+                    DatabaseProduct.DERBY, derbySql, derbySql)
             };
         }
         assertQuerySql(context.createConnection(), mdxQuery, patterns);
@@ -497,7 +498,7 @@ public class TestAggregationManager extends BatchTestCase {
         // For now, only run it for derby.
         Connection connection = context.createConnection();
         final Dialect dialect = getDialect(connection);
-        if (dialect.getDatabaseProduct() != Dialect.DatabaseProduct.DERBY) {
+        if (dialect.getDatabaseProduct() != DatabaseProduct.DERBY) {
             return;
         }
         String mdxQuery =
@@ -541,7 +542,7 @@ public class TestAggregationManager extends BatchTestCase {
             + "\"product_class\".\"product_family\"";
 
         SqlPattern[] patterns = {
-            new SqlPattern(Dialect.DatabaseProduct.DERBY, derbySql, derbySql)};
+            new SqlPattern(DatabaseProduct.DERBY, derbySql, derbySql)};
 
         // For derby, the TestAggregationManager.testNonEmptyCrossJoinLoneAxis
         // test fails if the non-empty crossjoin optimizer is used.
@@ -585,7 +586,7 @@ public class TestAggregationManager extends BatchTestCase {
         SqlPattern[] patterns = {
             new SqlPattern(
                 ACCESS_MYSQL, accessMysqlSql, 26),
-            new SqlPattern(Dialect.DatabaseProduct.DERBY, derbySql, derbySql)
+            new SqlPattern(DatabaseProduct.DERBY, derbySql, derbySql)
         };
 
         assertRequestSql(connection, new CellRequest[]{request}, patterns);
@@ -642,7 +643,7 @@ public class TestAggregationManager extends BatchTestCase {
             + "count(distinct \"sales_fact_1997\".\"customer_id\") as \"m0\" "
             + "from "
             + "\"sales_fact_1997\" as \"sales_fact_1997\", "
-            + "\"time_by_day\" as \"time_by_day\" "            
+            + "\"time_by_day\" as \"time_by_day\" "
             + "where "
             + "\"sales_fact_1997\".\"time_id\" = \"time_by_day\".\"time_id\" and "
             + "\"time_by_day\".\"the_year\" = 1997 and "
@@ -650,9 +651,9 @@ public class TestAggregationManager extends BatchTestCase {
             + "group by \"time_by_day\".\"the_year\", \"time_by_day\".\"quarter\"";
 
         SqlPattern[] patterns = {
-            new SqlPattern(Dialect.DatabaseProduct.ACCESS, accessSql, 26),
-            new SqlPattern(Dialect.DatabaseProduct.MYSQL, mysqlSql, 26),
-            new SqlPattern(Dialect.DatabaseProduct.DERBY, derbySql, derbySql)
+            new SqlPattern(DatabaseProduct.ACCESS, accessSql, 26),
+            new SqlPattern(DatabaseProduct.MYSQL, mysqlSql, 26),
+            new SqlPattern(DatabaseProduct.DERBY, derbySql, derbySql)
         };
 
         assertRequestSql(connection, new CellRequest[]{request}, patterns);
@@ -688,7 +689,7 @@ public class TestAggregationManager extends BatchTestCase {
             + "`agg_c_10_sales_fact_1997`.`month_of_year` = 1";
 
         SqlPattern[] patterns = {
-            new SqlPattern(Dialect.DatabaseProduct.ACCESS, accessSql, 26)};
+            new SqlPattern(DatabaseProduct.ACCESS, accessSql, 26)};
 
         assertRequestSql(connection, new CellRequest[]{request}, patterns);
     }
@@ -709,7 +710,7 @@ public class TestAggregationManager extends BatchTestCase {
 
         SqlPattern[] patterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.MYSQL,
+                DatabaseProduct.MYSQL,
                 "select"
                 + " `time_by_day`.`the_year` as `c0`,"
                 + " `time_by_day`.`quarter` as `c1`,"
@@ -730,7 +731,7 @@ public class TestAggregationManager extends BatchTestCase {
                 + " `product_class`.`product_family`",
                 23),
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS,
+                DatabaseProduct.ACCESS,
                 "select"
                 + " `d0` as `c0`,"
                 + " `d1` as `c1`,"
@@ -754,7 +755,7 @@ public class TestAggregationManager extends BatchTestCase {
                 + "group by `d0`, `d1`, `d2`",
                 23),
              new SqlPattern(
-                 Dialect.DatabaseProduct.DERBY,
+                 DatabaseProduct.DERBY,
                  "select "
                  + "\"time_by_day\".\"the_year\" as \"c0\", \"time_by_day\".\"quarter\" as \"c1\", "
                  + "\"product_class\".\"product_family\" as \"c2\", "
@@ -959,8 +960,8 @@ public class TestAggregationManager extends BatchTestCase {
             + "group by \"product_class\".\"product_family\"";
 
         SqlPattern[] patterns = {
-            new SqlPattern(Dialect.DatabaseProduct.MYSQL, mysqlSql, mysqlSql),
-            new SqlPattern(Dialect.DatabaseProduct.DERBY, derbySql, derbySql)
+            new SqlPattern(DatabaseProduct.MYSQL, mysqlSql, mysqlSql),
+            new SqlPattern(DatabaseProduct.DERBY, derbySql, derbySql)
         };
 
         assertRequestSql(connection, new CellRequest[]{request1, request2}, patterns);
@@ -987,7 +988,7 @@ public class TestAggregationManager extends BatchTestCase {
         }
         SqlPattern[] patterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS,
+                DatabaseProduct.ACCESS,
                 "select `store`.`store_country` as `c0` "
                 + "from `agg_c_14_sales_fact_1997` as `agg_c_14_sales_fact_1997`,"
                 + " `store` as `store` "
@@ -998,7 +999,7 @@ public class TestAggregationManager extends BatchTestCase {
                 + " `store`.`store_country` ASC",
                 26),
             new SqlPattern(
-                Dialect.DatabaseProduct.MYSQL,
+                DatabaseProduct.MYSQL,
                 "select `store`.`store_country` as `c0` "
                 + "from `agg_c_14_sales_fact_1997` as `agg_c_14_sales_fact_1997`,"
                 + " `store` as `store` "
@@ -1118,11 +1119,11 @@ public class TestAggregationManager extends BatchTestCase {
         SqlPattern[] patterns =
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.DERBY,
+                    DatabaseProduct.DERBY,
                     cardinalitySqlDerby,
                     cardinalitySqlDerby),
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     cardinalitySqlMySql,
                     cardinalitySqlMySql)
             };
@@ -1247,11 +1248,11 @@ public class TestAggregationManager extends BatchTestCase {
         SqlPattern[] patterns1 =
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.DERBY,
+                    DatabaseProduct.DERBY,
                     cardinalitySqlDerby1,
                     cardinalitySqlDerby1),
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     cardinalitySqlMySql1,
                     cardinalitySqlMySql1)
             };
@@ -1259,11 +1260,11 @@ public class TestAggregationManager extends BatchTestCase {
         SqlPattern[] patterns2 =
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.DERBY,
+                    DatabaseProduct.DERBY,
                     cardinalitySqlDerby2,
                     cardinalitySqlDerby2),
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     cardinalitySqlMySql2,
                     cardinalitySqlMySql2)
             };
@@ -2026,11 +2027,11 @@ public class TestAggregationManager extends BatchTestCase {
             mdxQuery,
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.ORACLE,
+                    DatabaseProduct.ORACLE,
                     sqlOracle,
                     sqlOracle.length()),
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     sqlMysql,
                     sqlMysql.length())
             },
@@ -2102,11 +2103,11 @@ public class TestAggregationManager extends BatchTestCase {
             mdx,
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.ORACLE,
+                    DatabaseProduct.ORACLE,
                     sqlOracle,
                     sqlOracle.length()),
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     sqlMysql,
                     sqlMysql.length())
             },
@@ -2190,7 +2191,7 @@ public class TestAggregationManager extends BatchTestCase {
             mdx,
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     sqlMysql,
                     sqlMysql.length())
             },
@@ -2292,7 +2293,7 @@ public class TestAggregationManager extends BatchTestCase {
             mdx,
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     sqlMysql,
                     sqlMysql.length())
             },
@@ -2405,11 +2406,11 @@ public class TestAggregationManager extends BatchTestCase {
             mdx,
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.ORACLE,
+                    DatabaseProduct.ORACLE,
                     sqlOracle,
                     sqlOracle.length()),
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     sqlMysql,
                     sqlMysql.length())
             },
@@ -2572,7 +2573,7 @@ public class TestAggregationManager extends BatchTestCase {
                 mdx,
                 new SqlPattern[] {
                     new SqlPattern(
-                        Dialect.DatabaseProduct.MYSQL,
+                        DatabaseProduct.MYSQL,
                         sqlMysql,
                         sqlMysql.length())
                 },
@@ -2809,7 +2810,7 @@ public class TestAggregationManager extends BatchTestCase {
             mdx,
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     sqlMysqlTupleQuery,
                     sqlMysqlTupleQuery.length())
             },
@@ -2820,7 +2821,7 @@ public class TestAggregationManager extends BatchTestCase {
             mdx,
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     sqlMysqlSegmentQuery,
                     sqlMysqlSegmentQuery.length())
             },
@@ -2847,7 +2848,7 @@ public class TestAggregationManager extends BatchTestCase {
             mdxTooLowForAgg,
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     sqlMysqlTooLowTupleQuery,
                     sqlMysqlTooLowTupleQuery.length())
             },
@@ -2858,7 +2859,7 @@ public class TestAggregationManager extends BatchTestCase {
             mdxTooLowForAgg,
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     sqlMysqlTooLowSegmentQuery,
                     sqlMysqlTooLowSegmentQuery.length())
             },
@@ -2946,11 +2947,11 @@ public class TestAggregationManager extends BatchTestCase {
             "select Time.[1997] on 0 from sales",
             new SqlPattern[]{
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     sqlMysql,
                     sqlMysql.length()),
                 new SqlPattern(
-                    Dialect.DatabaseProduct.ORACLE,
+                    DatabaseProduct.ORACLE,
                     sqlOra,
                     sqlOra.length())},
             false, false, true);
@@ -3025,11 +3026,11 @@ public class TestAggregationManager extends BatchTestCase {
             "select gender.gender.members on 0 from sales",
             new SqlPattern[]{
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     sqlMysql,
                     sqlMysql.length()),
                 new SqlPattern(
-                    Dialect.DatabaseProduct.ORACLE,
+                    DatabaseProduct.ORACLE,
                     sqlOra,
                     sqlOra.length())},
             false, false, true);
@@ -3095,7 +3096,7 @@ public class TestAggregationManager extends BatchTestCase {
             + "    \"time_by_day\".\"the_year\" as \"c0\",\n"
             + "    count(distinct \"sales_fact_1997\".\"customer_id\") as \"m0\"\n"
             + "from\n"
-            + "    \"sales_fact_1997\" \"sales_fact_1997\",\n"            
+            + "    \"sales_fact_1997\" \"sales_fact_1997\",\n"
             + "    \"time_by_day\" \"time_by_day\"\n"
             + "where\n"
             + "    \"sales_fact_1997\".\"time_id\" = \"time_by_day\".\"time_id\"\n"
@@ -3122,11 +3123,11 @@ public class TestAggregationManager extends BatchTestCase {
             + "measures.[Customer Count]",
             new SqlPattern[]{
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     sqlMysql,
                     sqlMysql.length()),
                 new SqlPattern(
-                    Dialect.DatabaseProduct.ORACLE,
+                    DatabaseProduct.ORACLE,
                     sqlOra,
                     sqlOra.length())},
             false, false, true);
@@ -3147,7 +3148,7 @@ public class TestAggregationManager extends BatchTestCase {
             "select from sales",
             new SqlPattern[]{
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL, sql, sql.length()) },
+                    DatabaseProduct.MYSQL, sql, sql.length()) },
             true, true, true);
     }
 

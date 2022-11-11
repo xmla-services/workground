@@ -17,7 +17,8 @@ import mondrian.olap.type.MemberType;
 import mondrian.olap.type.StringType;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.SqlQuery;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -141,7 +142,7 @@ public class RolapNativeSql {
             }
 
             if (dialect.getDatabaseProduct().getFamily()
-                == Dialect.DatabaseProduct.DB2)
+                == DatabaseProduct.DB2)
             {
                 expr = "FLOAT(" + expr + ")";
             }
@@ -216,7 +217,7 @@ public class RolapNativeSql {
 
             String expr = aggregator.getExpression(exprInner);
             if (dialect.getDatabaseProduct().getFamily()
-                == Dialect.DatabaseProduct.DB2)
+                == DatabaseProduct.DB2)
             {
                 expr = "FLOAT(" + expr + ")";
             }

@@ -29,7 +29,7 @@ import mondrian.olap.type.Type;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.server.Execution;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.spi.DialectManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -819,7 +819,7 @@ public class SqlConstraintUtilsTest {
         String levelStr = SqlConstraintUtils.constrainLevel(level, query, baseCube, aggStar, columnValue, false);
         assertEquals("dummyName = 'dummyValue'",  levelStr);
     }
-    
+
     private void setSlicerContext(RolapEvaluator e, Member m) {
       List<Member> members = new ArrayList<Member>();
       members.add( m );

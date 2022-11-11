@@ -14,6 +14,7 @@ import mondrian.rolap.CellKey;
 import mondrian.rolap.SqlStatement;
 import mondrian.spi.SegmentBody;
 import mondrian.util.Pair;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 
 import java.util.*;
 
@@ -102,8 +103,8 @@ class DenseIntSegmentDataset extends DenseNativeSegmentDataset {
         }
     }
 
-    public SqlStatement.Type getType() {
-        return SqlStatement.Type.INT;
+    public BestFitColumnType getType() {
+        return BestFitColumnType.INT;
     }
 
     public void put(CellKey key, int value) {

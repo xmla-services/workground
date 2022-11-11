@@ -21,6 +21,7 @@ import mondrian.server.Locus;
 import mondrian.server.monitor.SqlStatementEvent;
 import mondrian.util.Pair;
 import mondrian.util.TraversalList;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -75,10 +76,10 @@ public class HighCardSqlTupleReader extends SqlTupleReader {
             partialTargets.add( target );
           }
         }
-        final Pair<String, List<SqlStatement.Type>> pair =
+        final Pair<String, List<BestFitColumnType>> pair =
           makeLevelMembersSql( dataSource, targetGroup );
         String sql = pair.left;
-        List<SqlStatement.Type> types = pair.right;
+        List<BestFitColumnType> types = pair.right;
         stmt = RolapUtil.executeQuery(
           dataSource, sql, types, maxRows, 0,
           new SqlStatement.StatementLocus(

@@ -15,6 +15,7 @@ package mondrian.rolap.agg;
 
 import mondrian.rolap.*;
 import mondrian.util.Pair;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 
 import java.util.List;
 
@@ -44,7 +45,7 @@ public interface QuerySpec {
      */
     StarColumnPredicate getColumnPredicate(int i);
 
-    Pair<String, List<SqlStatement.Type>> generateSqlQuery();
+    Pair<String, List<BestFitColumnType>> generateSqlQuery();
 }
 
 // End QuerySpec.java

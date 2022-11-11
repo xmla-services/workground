@@ -17,9 +17,9 @@ import mondrian.olap.fun.CrossJoinFunDef;
 import mondrian.rolap.RolapCube;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.spi.Dialect.DatabaseProduct;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -91,7 +91,7 @@ public class AggregationOnDistinctCountMeasuresTest {
             null);
         withSchema(context, schema);
         Connection connection = context.createConnection();
-        
+
         schemaReader =
                 connection.getSchemaReader().withLocus();
         salesCube = (RolapCube) cubeByName(
@@ -1754,13 +1754,13 @@ public class AggregationOnDistinctCountMeasuresTest {
             true,
             true);
     }
-    
+
   /**
    * Verify that the CACHE MDX function includes aggregation lists in the current evaluation context. In this test, the
    * CM with solve order 20 will set an aggregation list for the distinct count measure. The cache key on the CM with
    * solve order 10 needs to include the aggregation list or else the cache generated for [Gender].[F], [Store
    * Type].[*TOTAL_MEMBER_SEL~AGG] would be re-used for [Gender].[M], [Store Type].[*TOTAL_MEMBER_SEL~AGG]
-   * 
+   *
    */
     @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
@@ -1870,54 +1870,54 @@ public class AggregationOnDistinctCountMeasuresTest {
     assertEquals( 13, e.getExpCacheHitCount() );
     assertEquals( 23, e.getExpCacheMissCount() );
   }
-  
+
 @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testExpCacheHit2(Context context) {
     prepareContext(context);
     Result result =
         executeQuery(context.createConnection(), "WITH\r\n" +
-            " SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Customers_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Promotion Media_]))))'\r\n" + 
-            " SET [*NATIVE_CJ_SET] AS 'GENERATE([*NATIVE_CJ_SET_WITH_SLICER], {([Customers].CURRENTMEMBER,[Education Level].CURRENTMEMBER,[Time].CURRENTMEMBER)})'\r\n" + 
-            " SET [*METRIC_CJ_SET] AS 'FILTER([*NATIVE_CJ_SET],[Customers].CURRENTMEMBER IN [*METRIC_CACHE_SET])'\r\n" + 
-            " SET [*SORTED_ROW_AXIS] AS 'ORDER([*CJ_ROW_AXIS],[Customers].CURRENTMEMBER.ORDERKEY,BASC,ANCESTOR([Customers].CURRENTMEMBER,[Customers].[City]).ORDERKEY,BASC,[Measures].[*SORTED_MEASURE],BASC)'\r\n" + 
-            " SET [*BASE_MEMBERS__Education Level_] AS '{[Education Level].[All Education Levels].[Graduate Degree],[Education Level].[All Education Levels].[High School Degree],[Education Level].[All Education Levels].[Partial College],[Education Level].[All Education Levels].[Partial High School]}'\r\n" + 
-            " SET [*BASE_MEMBERS__Customers_] AS '[Customers].[Name].MEMBERS'\r\n" + 
-            " SET [*METRIC_CACHE_SET] AS 'FILTER(GENERATE([*NATIVE_CJ_SET],{([Customers].CURRENTMEMBER)}),[Measures].[**CALCULATED_MEASURE_3_SEL~SUM] > 0)'\r\n" + 
-            " SET [*METRIC_MEMBERS__Time_] AS 'GENERATE([*METRIC_CJ_SET], {[Time].CURRENTMEMBER})'\r\n" + 
-            " SET [*SORTED_COL_AXIS] AS 'ORDER([*CJ_COL_AXIS],[Time].CURRENTMEMBER.ORDERKEY,BASC,ANCESTOR([Time].CURRENTMEMBER,[Time].[Quarter]).ORDERKEY,BASC,[Measures].CURRENTMEMBER.ORDERKEY,BASC)'\r\n" + 
-            " SET [*BASE_MEMBERS__Measures_] AS '{[Measures].[*FORMATTED_MEASURE_0],[Measures].[*CALCULATED_MEASURE_2],[Measures].[*CALCULATED_MEASURE_1],[Measures].[*CALCULATED_MEASURE_4],[Measures].[*CALCULATED_MEASURE_3]}'\r\n" + 
-            " SET [*CJ_SLICER_AXIS] AS 'GENERATE([*NATIVE_CJ_SET_WITH_SLICER], {([Product].CURRENTMEMBER,[Promotion Media].CURRENTMEMBER)})'\r\n" + 
-            " SET [*CJ_COL_AXIS] AS 'GENERATE([*METRIC_CJ_SET], {([Time].CURRENTMEMBER)})'\r\n" + 
-            " SET [*BASE_MEMBERS__Product_] AS '{[Product].[All Products].[Drink]}'\r\n" + 
-            " SET [*CJ_ROW_AXIS] AS 'GENERATE([*METRIC_CJ_SET], {([Customers].CURRENTMEMBER,[Education Level].CURRENTMEMBER)})'\r\n" + 
-            " SET [*BASE_MEMBERS__Time_] AS '{[Time].[1997].[Q4].[12]}'\r\n" + 
-            " SET [*BASE_MEMBERS__Promotion Media_] AS '{[Promotion Media].[All Media].[Bulk Mail],[Promotion Media].[All Media].[Cash Register Handout]}'\r\n" + 
-            " MEMBER [Store].[*METRIC_CTX_SET_SUM] AS 'CACHE(SUM(CACHEDEXISTS([*NATIVE_CJ_SET],([Customers].CURRENTMEMBER),\"[*NATIVE_CJ_SET]\")))', SOLVE_ORDER=100\r\n" + 
-            " MEMBER [Measures].[**CALCULATED_MEASURE_3_SEL~SUM] AS '([Measures].[*CALCULATED_MEASURE_3], [Store].[*METRIC_CTX_SET_SUM])', SOLVE_ORDER=400\r\n" + 
-            " MEMBER [Measures].[*CALCULATED_MEASURE_1] AS 'CACHE(SUM(\r\n" + 
-            "\r\n" + 
-            "PERIODSTODATE([Time].[Year], \r\n" + 
-            "\r\n" + 
-            "ParallelPeriod(\r\n" + 
-            "[Time].[Quarter], 1,\r\n" + 
-            "[Time].CurrentMember)\r\n" + 
-            "\r\n" + 
-            ")\r\n" + 
-            ", [Measures].[Unit Sales]))', SOLVE_ORDER=200\r\n" + 
-            " MEMBER [Measures].[*CALCULATED_MEASURE_2] AS 'CACHE(SUM(\r\n" + 
-            "\r\n" + 
-            "PERIODSTODATE([Time].[Year], [Time].CurrentMember), [Measures].[Unit Sales]))', SOLVE_ORDER=0\r\n" + 
-            " MEMBER [Measures].[*CALCULATED_MEASURE_3] AS '([Measures].[*CALCULATED_MEASURE_2]-[Measures].[*CALCULATED_MEASURE_1])/[Measures].[*CALCULATED_MEASURE_1]', FORMAT_STRING = '###0.00%', SOLVE_ORDER=0\r\n" + 
-            " MEMBER [Measures].[*CALCULATED_MEASURE_4] AS '[Measures].[*CALCULATED_MEASURE_2]-[Measures].[*CALCULATED_MEASURE_1]', SOLVE_ORDER=0\r\n" + 
-            " MEMBER [Measures].[*FORMATTED_MEASURE_0] AS '[Measures].[Unit Sales]', FORMAT_STRING = 'Standard', SOLVE_ORDER=500\r\n" + 
-            " MEMBER [Measures].[*SORTED_MEASURE] AS '([Measures].[*CALCULATED_MEASURE_3],[Time].[*CTX_MEMBER_SEL~SUM])', SOLVE_ORDER=400\r\n" + 
-            " MEMBER [Time].[*CTX_MEMBER_SEL~SUM] AS 'SUM([*METRIC_MEMBERS__Time_])', SOLVE_ORDER=98\r\n" + 
-            " SELECT\r\n" + 
-            " CROSSJOIN([*SORTED_COL_AXIS],[*BASE_MEMBERS__Measures_]) ON COLUMNS\r\n" + 
-            " , NON EMPTY\r\n" + 
-            " [*SORTED_ROW_AXIS] ON ROWS\r\n" + 
-            " FROM [Sales]\r\n" + 
+            " SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Customers_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Promotion Media_]))))'\r\n" +
+            " SET [*NATIVE_CJ_SET] AS 'GENERATE([*NATIVE_CJ_SET_WITH_SLICER], {([Customers].CURRENTMEMBER,[Education Level].CURRENTMEMBER,[Time].CURRENTMEMBER)})'\r\n" +
+            " SET [*METRIC_CJ_SET] AS 'FILTER([*NATIVE_CJ_SET],[Customers].CURRENTMEMBER IN [*METRIC_CACHE_SET])'\r\n" +
+            " SET [*SORTED_ROW_AXIS] AS 'ORDER([*CJ_ROW_AXIS],[Customers].CURRENTMEMBER.ORDERKEY,BASC,ANCESTOR([Customers].CURRENTMEMBER,[Customers].[City]).ORDERKEY,BASC,[Measures].[*SORTED_MEASURE],BASC)'\r\n" +
+            " SET [*BASE_MEMBERS__Education Level_] AS '{[Education Level].[All Education Levels].[Graduate Degree],[Education Level].[All Education Levels].[High School Degree],[Education Level].[All Education Levels].[Partial College],[Education Level].[All Education Levels].[Partial High School]}'\r\n" +
+            " SET [*BASE_MEMBERS__Customers_] AS '[Customers].[Name].MEMBERS'\r\n" +
+            " SET [*METRIC_CACHE_SET] AS 'FILTER(GENERATE([*NATIVE_CJ_SET],{([Customers].CURRENTMEMBER)}),[Measures].[**CALCULATED_MEASURE_3_SEL~SUM] > 0)'\r\n" +
+            " SET [*METRIC_MEMBERS__Time_] AS 'GENERATE([*METRIC_CJ_SET], {[Time].CURRENTMEMBER})'\r\n" +
+            " SET [*SORTED_COL_AXIS] AS 'ORDER([*CJ_COL_AXIS],[Time].CURRENTMEMBER.ORDERKEY,BASC,ANCESTOR([Time].CURRENTMEMBER,[Time].[Quarter]).ORDERKEY,BASC,[Measures].CURRENTMEMBER.ORDERKEY,BASC)'\r\n" +
+            " SET [*BASE_MEMBERS__Measures_] AS '{[Measures].[*FORMATTED_MEASURE_0],[Measures].[*CALCULATED_MEASURE_2],[Measures].[*CALCULATED_MEASURE_1],[Measures].[*CALCULATED_MEASURE_4],[Measures].[*CALCULATED_MEASURE_3]}'\r\n" +
+            " SET [*CJ_SLICER_AXIS] AS 'GENERATE([*NATIVE_CJ_SET_WITH_SLICER], {([Product].CURRENTMEMBER,[Promotion Media].CURRENTMEMBER)})'\r\n" +
+            " SET [*CJ_COL_AXIS] AS 'GENERATE([*METRIC_CJ_SET], {([Time].CURRENTMEMBER)})'\r\n" +
+            " SET [*BASE_MEMBERS__Product_] AS '{[Product].[All Products].[Drink]}'\r\n" +
+            " SET [*CJ_ROW_AXIS] AS 'GENERATE([*METRIC_CJ_SET], {([Customers].CURRENTMEMBER,[Education Level].CURRENTMEMBER)})'\r\n" +
+            " SET [*BASE_MEMBERS__Time_] AS '{[Time].[1997].[Q4].[12]}'\r\n" +
+            " SET [*BASE_MEMBERS__Promotion Media_] AS '{[Promotion Media].[All Media].[Bulk Mail],[Promotion Media].[All Media].[Cash Register Handout]}'\r\n" +
+            " MEMBER [Store].[*METRIC_CTX_SET_SUM] AS 'CACHE(SUM(CACHEDEXISTS([*NATIVE_CJ_SET],([Customers].CURRENTMEMBER),\"[*NATIVE_CJ_SET]\")))', SOLVE_ORDER=100\r\n" +
+            " MEMBER [Measures].[**CALCULATED_MEASURE_3_SEL~SUM] AS '([Measures].[*CALCULATED_MEASURE_3], [Store].[*METRIC_CTX_SET_SUM])', SOLVE_ORDER=400\r\n" +
+            " MEMBER [Measures].[*CALCULATED_MEASURE_1] AS 'CACHE(SUM(\r\n" +
+            "\r\n" +
+            "PERIODSTODATE([Time].[Year], \r\n" +
+            "\r\n" +
+            "ParallelPeriod(\r\n" +
+            "[Time].[Quarter], 1,\r\n" +
+            "[Time].CurrentMember)\r\n" +
+            "\r\n" +
+            ")\r\n" +
+            ", [Measures].[Unit Sales]))', SOLVE_ORDER=200\r\n" +
+            " MEMBER [Measures].[*CALCULATED_MEASURE_2] AS 'CACHE(SUM(\r\n" +
+            "\r\n" +
+            "PERIODSTODATE([Time].[Year], [Time].CurrentMember), [Measures].[Unit Sales]))', SOLVE_ORDER=0\r\n" +
+            " MEMBER [Measures].[*CALCULATED_MEASURE_3] AS '([Measures].[*CALCULATED_MEASURE_2]-[Measures].[*CALCULATED_MEASURE_1])/[Measures].[*CALCULATED_MEASURE_1]', FORMAT_STRING = '###0.00%', SOLVE_ORDER=0\r\n" +
+            " MEMBER [Measures].[*CALCULATED_MEASURE_4] AS '[Measures].[*CALCULATED_MEASURE_2]-[Measures].[*CALCULATED_MEASURE_1]', SOLVE_ORDER=0\r\n" +
+            " MEMBER [Measures].[*FORMATTED_MEASURE_0] AS '[Measures].[Unit Sales]', FORMAT_STRING = 'Standard', SOLVE_ORDER=500\r\n" +
+            " MEMBER [Measures].[*SORTED_MEASURE] AS '([Measures].[*CALCULATED_MEASURE_3],[Time].[*CTX_MEMBER_SEL~SUM])', SOLVE_ORDER=400\r\n" +
+            " MEMBER [Time].[*CTX_MEMBER_SEL~SUM] AS 'SUM([*METRIC_MEMBERS__Time_])', SOLVE_ORDER=98\r\n" +
+            " SELECT\r\n" +
+            " CROSSJOIN([*SORTED_COL_AXIS],[*BASE_MEMBERS__Measures_]) ON COLUMNS\r\n" +
+            " , NON EMPTY\r\n" +
+            " [*SORTED_ROW_AXIS] ON ROWS\r\n" +
+            " FROM [Sales]\r\n" +
             " WHERE ([*CJ_SLICER_AXIS])" );
     Execution e = ( (ResultBase) result ).getExecution();
     assertEquals( 3581, e.getExpCacheHitCount() );

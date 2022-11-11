@@ -19,10 +19,9 @@ import static org.mockito.Mockito.when;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import mondrian.spi.Dialect;
 
 /**
  * @author Andrey Khayrutdinov
@@ -34,7 +33,7 @@ public class ImpalaDialectTest{
 
   @BeforeEach
   protected void setUp() throws Exception {
-    when( metaData.getDatabaseProductName() ).thenReturn( Dialect.DatabaseProduct.IMPALA.name() );
+    when( metaData.getDatabaseProductName() ).thenReturn( DatabaseProduct.IMPALA.name() );
     when( connection.getMetaData() ).thenReturn( metaData );
     impalaDialect = new ImpalaDialect( connection );
   }
@@ -43,12 +42,12 @@ public class ImpalaDialectTest{
   public void testAllowsRegularExpressionInWhereClause() {
     assertTrue( impalaDialect.allowsRegularExpressionInWhereClause() );
   }
-  
+
   @Test
   public void testGenerateRegularExpression_InvalidRegex() throws Exception {
     assertNull( impalaDialect.generateRegularExpression( "table.column", "(a" ), "Invalid regex should be ignored" );
   }
-  
+
   @Test
   public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
     String sql = impalaDialect.generateRegularExpression( "table.column", "(?i)|(?u).*a.*" );

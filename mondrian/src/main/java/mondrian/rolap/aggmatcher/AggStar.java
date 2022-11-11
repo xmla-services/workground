@@ -26,6 +26,8 @@ import mondrian.spi.Dialect;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.sql.dialect.api.Datatype;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -580,7 +582,7 @@ public class AggStar {
 
             private final String name;
             private final MondrianDef.Expression expression;
-            private final Dialect.Datatype datatype;
+            private final Datatype datatype;
             /**
              * This is only used in RolapAggregationManager and adds
              * non-constraining columns making the drill-through queries
@@ -594,7 +596,7 @@ public class AggStar {
             protected Column(
                 final String name,
                 final MondrianDef.Expression expression,
-                final Dialect.Datatype datatype,
+                final Datatype datatype,
                 final int bitPosition)
             {
                 this.name = name;
@@ -636,7 +638,7 @@ public class AggStar {
             /**
              * Returns the datatype of this column.
              */
-            public Dialect.Datatype getDatatype() {
+            public Datatype getDatatype() {
                 return datatype;
             }
 
@@ -699,7 +701,7 @@ public class AggStar {
                 pw.print(generateExprString(sqlQuery));
             }
 
-            public SqlStatement.Type getInternalType() {
+            public BestFitColumnType getInternalType() {
                 return null;
             }
         }
@@ -713,7 +715,7 @@ public class AggStar {
             private ForeignKey(
                 final String name,
                 final MondrianDef.Expression expression,
-                final Dialect.Datatype datatype,
+                final Datatype datatype,
                 final int bitPosition)
             {
                 super(name, expression, datatype, bitPosition);
@@ -764,7 +766,7 @@ public class AggStar {
             }
 
             @Override
-            public SqlStatement.Type getInternalType() {
+            public BestFitColumnType getInternalType() {
                 return starColumn.getInternalType();
             }
 
@@ -1071,7 +1073,7 @@ public class AggStar {
             private Measure(
                 final String name,
                 final MondrianDef.Expression expression,
-                final Dialect.Datatype datatype,
+                final Datatype datatype,
                 final int bitPosition,
                 final RolapAggregator aggregator,
                 final MondrianDef.Expression argument)
@@ -1279,7 +1281,7 @@ public class AggStar {
 
                 MondrianDef.Expression expression =
                     new MondrianDef.Column(getName(), name);
-                Dialect.Datatype datatype = column.getDatatype();
+                Datatype datatype = column.getDatatype();
                 RolapStar.Column rColumn = usage.rColumn;
                 if (rColumn == null) {
                     getLogger().warn(
@@ -1306,7 +1308,7 @@ public class AggStar {
             if (symbolicName == null) {
                 symbolicName = name;
             }
-            Dialect.Datatype datatype = column.getDatatype();
+            Datatype datatype = column.getDatatype();
             RolapAggregator aggregator = usage.getAggregator();
 
             MondrianDef.Expression expression;
@@ -1355,7 +1357,7 @@ public class AggStar {
 
             MondrianDef.Expression expression =
                 new MondrianDef.Column(getName(), name);
-            Dialect.Datatype datatype = usage.getColumn().getDatatype();
+            Datatype datatype = usage.getColumn().getDatatype();
             int bitPosition = -1;
 
             Column aggColumn =
@@ -1381,7 +1383,7 @@ public class AggStar {
 
             MondrianDef.Expression expression =
                     new MondrianDef.Column(getName(), name);
-            Dialect.Datatype datatype = usage.getColumn().getDatatype();
+            Datatype datatype = usage.getColumn().getDatatype();
             int bitPosition = -1;
 
             Column aggColumn =

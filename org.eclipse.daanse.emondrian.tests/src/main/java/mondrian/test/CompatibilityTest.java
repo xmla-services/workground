@@ -19,6 +19,7 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,7 +36,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.*;
 import mondrian.rolap.RolapConnectionProperties;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.spi.DialectManager;
 
 
@@ -69,7 +70,7 @@ public class CompatibilityTest {
 	public void afterEach() {
 		propSaver.reset();
 	}
-    
+
     /**
      * Cube names are case insensitive.
      */
@@ -280,19 +281,19 @@ public class CompatibilityTest {
         checkAxis(connection, "[Measures].[Profit]", "[Measures].profit");
 
         checkAxis(
-    		connection, 
+    		connection,
             "[Customers].[Mexico]",
             "[Customers].Mexico");
         checkAxis(
-    		connection, 
+    		connection,
             "[Customers].[Mexico]",
             "[Customers].MEXICO");
         checkAxis(
-    		connection, 
+    		connection,
             "[Customers].[Mexico]",
             "[Customers].mExIcO");
         checkAxis(
-    		connection, 
+    		connection,
             "[Customers].[Mexico]",
             "[Customers].mexico");
     }
@@ -307,21 +308,21 @@ public class CompatibilityTest {
     	Connection connection = foodMartContext.createConnection();
         checkAxis(connection, "[Customers].[All Customers]", "[Customers].[All Customers]");
         checkAxis(
-    		connection, 
+    		connection,
             "[Customers].[All Customers]",
             "[Customers].[Customers].[All Customers]");
         checkAxis(
-    		connection, 
+    		connection,
             "[Customers].[All Customers]",
             "Customers.[Customers].[All Customers]");
         checkAxis(
-    		connection, 
+    		connection,
             "[Customers].[All Customers]",
             "[Customers].Customers.[All Customers]");
         if (false) {
             // don't know if this makes sense
             checkAxis(
-        		connection, 
+        		connection,
                 "[Customers].[All Customers]",
                 "[Customers.Customers].[All Customers]");
         }
@@ -347,7 +348,7 @@ public class CompatibilityTest {
     	Connection connection = foodMartContext.createConnection();
         DataSource dataSource = connection.getDataSource();
         final Dialect dialect = DialectManager.createDialect( dataSource, null );
-        if (dialect.getDatabaseProduct() == Dialect.DatabaseProduct.LUCIDDB) {
+        if (dialect.getDatabaseProduct() == DatabaseProduct.LUCIDDB) {
             // TODO jvs 29-Nov-2006:  LucidDB is strict about
             // null literals (type can't be inferred in this context);
             // maybe enhance the inline table to use the columndef
@@ -394,7 +395,7 @@ public class CompatibilityTest {
             null,
             null,
             null);
-        
+
         TestUtil.withSchema(foodMartContext, schema);
         connection = foodMartContext.createConnection();
 
@@ -486,7 +487,7 @@ public class CompatibilityTest {
             + "  <Measure name=\"Store Sales\" column=\"store_sales\" aggregator=\"sum\"\n"
             + "      formatString=\"#,###.00\"/>\n"
             + "</Cube>", null, null, null, null);
-        
+
         TestUtil.withSchema(foodMartContext, schema);
         connection = foodMartContext.createConnection();
 
@@ -563,7 +564,7 @@ public class CompatibilityTest {
             + "      formatString=\"#,###\"/>\n"
             + "</Cube>",
             null, null, null, null);
-        
+
         TestUtil.withSchema(foodMartContext, schema);
         connection = foodMartContext.createConnection();
 

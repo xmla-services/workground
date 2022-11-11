@@ -22,7 +22,7 @@
  dtdName="mondrian_SW.dtd"
  className="MondrianGuiDef"
  packageName="mondrian.gui"
- importName="mondrian.olap.*:mondrian.rolap.sql.SqlQuery"
+ importName="mondrian.olap.*:mondrian.rolap.sql.SqlQuery:org.eclipse.daanse.sql.dialect.api.*"
  root="Schema"
  version="1.0">
     <Doc>
@@ -1520,7 +1520,7 @@
                 String leftAlias,
                 String leftKey,
                 RelationOrJoin left,
-                String rightAlias, 
+                String rightAlias,
                 String rightKey,
                 RelationOrJoin right)
             {

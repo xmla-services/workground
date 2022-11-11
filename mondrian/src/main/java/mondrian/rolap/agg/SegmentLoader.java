@@ -22,6 +22,7 @@ import mondrian.server.Locus;
 import mondrian.server.monitor.SqlStatementEvent;
 import mondrian.spi.*;
 import mondrian.util.*;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -247,7 +248,7 @@ public class SegmentLoader {
     SegmentAxis[] axes = groupingSetsList.getDefaultAxes();
     int segmentLength = groupingSetsList.getDefaultSegments().size();
 
-    final List<SqlStatement.Type> types = rows.getTypes();
+    final List<BestFitColumnType> types = rows.getTypes();
     final boolean useGroupingSet = groupingSetsList.useGroupingSets();
     for ( rows.first(); rows.next(); ) {
       final BitKey groupingBitKey;
@@ -261,7 +262,7 @@ public class SegmentLoader {
       }
       final int[] pos = cohort.pos;
       for ( int j = 0, k = 0; j < arity; j++ ) {
-        final SqlStatement.Type type = types.get( j );
+        final BestFitColumnType type = types.get( j );
         switch ( type ) {
           // TODO: different treatment for INT, LONG, DOUBLE
           case OBJECT:
@@ -358,7 +359,7 @@ public class SegmentLoader {
   }
 
   private Map<BitKey, GroupingSetsList.Cohort> createDataSetsForGroupingSets( GroupingSetsList groupingSetsList,
-      boolean sparse, List<SqlStatement.Type> types ) {
+      boolean sparse, List<BestFitColumnType> types ) {
     if ( !groupingSetsList.useGroupingSets() ) {
       final GroupingSetsList.Cohort datasets =
           createDataSets( sparse, groupingSetsList.getDefaultSegments(), groupingSetsList.getDefaultAxes(), types );
@@ -385,7 +386,7 @@ public class SegmentLoader {
   }
 
   private GroupingSetsList.Cohort createDataSets( boolean sparse, List<Segment> segments, SegmentAxis[] axes,
-      List<SqlStatement.Type> types ) {
+      List<BestFitColumnType> types ) {
     final List<SegmentDataset> datasets = new ArrayList<SegmentDataset>( segments.size() );
     final int n;
     if ( sparse ) {
@@ -429,7 +430,7 @@ public class SegmentLoader {
   SqlStatement createExecuteSql( int cellRequestCount, final GroupingSetsList groupingSetsList,
       List<StarPredicate> compoundPredicateList ) {
     RolapStar star = groupingSetsList.getStar();
-    Pair<String, List<SqlStatement.Type>> pair =
+    Pair<String, List<BestFitColumnType>> pair =
         AggregationManager.generateSql( groupingSetsList, compoundPredicateList );
     final Locus locus =
         new SqlStatement.StatementLocus( Locus.peek().execution, "Segment.load", "Error while loading segment",
@@ -500,17 +501,17 @@ public class SegmentLoader {
     int measureCount = segments.size();
     ResultSet rawRows = loadData( stmt, groupingSetsList );
     assert stmt != null;
-    final List<SqlStatement.Type> types = stmt.guessTypes();
+    final List<BestFitColumnType> types = stmt.guessTypes();
     int arity = axisValueSets.length;
     final int groupingColumnStartIndex = arity + measureCount;
 
     // If we're using grouping sets, the SQL query will have a number of
     // indicator columns, and we roll these into a single BitSet column in
     // the processed data set.
-    final List<SqlStatement.Type> processedTypes;
+    final List<BestFitColumnType> processedTypes;
     if ( groupingSetsList.useGroupingSets() ) {
-      processedTypes = new ArrayList<SqlStatement.Type>( types.subList( 0, groupingColumnStartIndex ) );
-      processedTypes.add( SqlStatement.Type.OBJECT );
+      processedTypes = new ArrayList<BestFitColumnType>( types.subList( 0, groupingColumnStartIndex ) );
+      processedTypes.add( BestFitColumnType.OBJECT );
     } else {
       processedTypes = types;
     }
@@ -527,7 +528,7 @@ public class SegmentLoader {
       // get the columns
       int columnIndex = 0;
       for ( int axisIndex = 0; axisIndex < arity; axisIndex++, columnIndex++ ) {
-        final SqlStatement.Type type = types.get( columnIndex );
+        final BestFitColumnType type = types.get( columnIndex );
         switch ( type ) {
           case OBJECT:
           case STRING:
@@ -624,7 +625,7 @@ public class SegmentLoader {
 
       // get the measure
       for ( int i = 0; i < measureCount; i++, columnIndex++ ) {
-        final SqlStatement.Type type = types.get( columnIndex );
+        final BestFitColumnType type = types.get( columnIndex );
         switch ( type ) {
           case OBJECT:
           case STRING:
@@ -731,7 +732,7 @@ public class SegmentLoader {
     int arity = groupingSetsList.getDefaultColumns().length;
     int measureCount = groupingSetsList.getDefaultSegments().size();
     int groupingFunctionsCount = groupingSetsList.getRollupColumns().size();
-    List<SqlStatement.Type> types = stmt.guessTypes();
+    List<BestFitColumnType> types = stmt.guessTypes();
     assert arity + measureCount + groupingFunctionsCount == types.size();
 
     return stmt.getResultSet();
@@ -822,7 +823,7 @@ public class SegmentLoader {
      * @param types
      *          Column types
      */
-    RowList( List<SqlStatement.Type> types ) {
+    RowList( List<BestFitColumnType> types ) {
       this( types, 100 );
     }
 
@@ -834,7 +835,7 @@ public class SegmentLoader {
      * @param capacity
      *          Initial capacity
      */
-    RowList( List<SqlStatement.Type> types, int capacity ) {
+    RowList( List<BestFitColumnType> types, int capacity ) {
       this.columns = new Column[types.size()];
       this.capacity = capacity;
       for ( int i = 0; i < columns.length; i++ ) {
@@ -879,9 +880,9 @@ public class SegmentLoader {
       }
     }
 
-    public List<SqlStatement.Type> getTypes() {
-      return new AbstractList<SqlStatement.Type>() {
-        public SqlStatement.Type get( int index ) {
+    public List<BestFitColumnType> getTypes() {
+      return new AbstractList<BestFitColumnType>() {
+        public BestFitColumnType get( int index ) {
           return columns[index].type;
         }
 
@@ -960,14 +961,14 @@ public class SegmentLoader {
 
     static abstract class Column {
       final int ordinal;
-      final SqlStatement.Type type;
+      final BestFitColumnType type;
 
-      protected Column( int ordinal, SqlStatement.Type type ) {
+      protected Column( int ordinal, BestFitColumnType type ) {
         this.ordinal = ordinal;
         this.type = type;
       }
 
-      static Column forType( int ordinal, SqlStatement.Type type, int capacity ) {
+      static Column forType( int ordinal, BestFitColumnType type, int capacity ) {
         switch ( type ) {
           case OBJECT:
           case STRING:
@@ -1028,7 +1029,7 @@ public class SegmentLoader {
     static class ObjectColumn extends Column {
       private Object[] objects;
 
-      ObjectColumn( int ordinal, SqlStatement.Type type, int size ) {
+      ObjectColumn( int ordinal, BestFitColumnType type, int size ) {
         super( ordinal, type );
         objects = new Object[size];
       }
@@ -1061,7 +1062,7 @@ public class SegmentLoader {
     static abstract class NativeColumn extends Column {
       protected BitSet nullIndicators;
 
-      NativeColumn( int ordinal, SqlStatement.Type type ) {
+      NativeColumn( int ordinal, BestFitColumnType type ) {
         super( ordinal, type );
       }
 
@@ -1080,7 +1081,7 @@ public class SegmentLoader {
     static class IntColumn extends NativeColumn {
       private int[] ints;
 
-      IntColumn( int ordinal, SqlStatement.Type type, int size ) {
+      IntColumn( int ordinal, BestFitColumnType type, int size ) {
         super( ordinal, type );
         ints = new int[size];
       }
@@ -1120,7 +1121,7 @@ public class SegmentLoader {
     static class LongColumn extends NativeColumn {
       private long[] longs;
 
-      LongColumn( int ordinal, SqlStatement.Type type, int size ) {
+      LongColumn( int ordinal, BestFitColumnType type, int size ) {
         super( ordinal, type );
         longs = new long[size];
       }
@@ -1160,7 +1161,7 @@ public class SegmentLoader {
     static class DoubleColumn extends NativeColumn {
       private double[] doubles;
 
-      DoubleColumn( int ordinal, SqlStatement.Type type, int size ) {
+      DoubleColumn( int ordinal, BestFitColumnType type, int size ) {
         super( ordinal, type );
         doubles = new double[size];
       }

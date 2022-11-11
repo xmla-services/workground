@@ -14,7 +14,9 @@ package mondrian.rolap.agg;
 import mondrian.olap.Util;
 import mondrian.rolap.*;
 import mondrian.rolap.sql.SqlQuery;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.util.Pair;
 
 import java.util.*;
@@ -91,7 +93,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
         RolapStar.Column[] columns = getColumns();
         int arity = columns.length;
         if (countOnly) {
-            sqlQuery.addSelect("count(*)", SqlStatement.Type.INT);
+            sqlQuery.addSelect("count(*)", BestFitColumnType.INT);
         }
         for (int i = 0; i < arity; i++) {
             RolapStar.Column column = columns[i];
@@ -126,9 +128,9 @@ public abstract class AbstractQuerySpec implements QuerySpec {
             // there and *not* used in a subsequent order by/group by
             final Dialect dialect = sqlQuery.getDialect();
             final String alias;
-            final Dialect.DatabaseProduct databaseProduct =
+            final DatabaseProduct databaseProduct =
                 dialect.getDatabaseProduct();
-            if (databaseProduct == Dialect.DatabaseProduct.DB2_AS400) {
+            if (databaseProduct == DatabaseProduct.DB2_AS400) {
                 alias =
                     sqlQuery.addSelect(expr, column.getInternalType(), null);
             } else {
@@ -189,7 +191,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
         return false;
     }
 
-    public Pair<String, List<SqlStatement.Type>> generateSqlQuery() {
+    public Pair<String, List<BestFitColumnType>> generateSqlQuery() {
         SqlQuery sqlQuery = newSqlQuery();
 
         int k = getDistinctMeasureCount();
@@ -256,7 +258,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
         boolean countOnly)
     {
         final Dialect dialect = outerSqlQuery.getDialect();
-        final Dialect.DatabaseProduct databaseProduct =
+        final DatabaseProduct databaseProduct =
             dialect.getDatabaseProduct();
         final Map<String, String> groupingSetsAliases =
             new HashMap<String, String>();
@@ -280,7 +282,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
         //    and dim2.k = f.k2) as dummyname
 
         final SqlQuery innerSqlQuery = newSqlQuery();
-        if (databaseProduct == Dialect.DatabaseProduct.GREENPLUM) {
+        if (databaseProduct == DatabaseProduct.GREENPLUM) {
             innerSqlQuery.setDistinct(false);
         } else {
             innerSqlQuery.setDistinct(true);
@@ -311,7 +313,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
             }
             String alias = "d" + i;
             alias = innerSqlQuery.addSelect(expr, null, alias);
-            if (databaseProduct == Dialect.DatabaseProduct.GREENPLUM) {
+            if (databaseProduct == DatabaseProduct.GREENPLUM) {
                 innerSqlQuery.addGroupBy(expr, alias);
             }
             final String quotedAlias = dialect.quoteIdentifier(alias);
@@ -339,7 +341,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
                 expr,
                 measure.getInternalType(),
                 alias);
-            if (databaseProduct == Dialect.DatabaseProduct.GREENPLUM) {
+            if (databaseProduct == DatabaseProduct.GREENPLUM) {
                 innerSqlQuery.addGroupBy(expr, alias);
             }
             outerSqlQuery.addSelect(

@@ -12,7 +12,7 @@ import mondrian.olap.Axis;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Result;
 import mondrian.rolap.RolapAxis;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -103,7 +103,7 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTupleSelection(Context context) throws Exception {    	
+    public void testTupleSelection(Context context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -212,7 +212,7 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
               query,
               new SqlPattern[] {
                   new SqlPattern(
-                      Dialect.DatabaseProduct.MYSQL,
+                      DatabaseProduct.MYSQL,
                   "select\n"
                   + "    `cat`.`cat` as `c0`,\n"
                   + "    `cat`.`cap` as `c1`,\n"

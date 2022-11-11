@@ -13,7 +13,7 @@ package mondrian.rolap.aggmatcher;
 
 import mondrian.olap.MondrianException;
 import mondrian.olap.Result;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import mondrian.test.loader.CsvDBTestCase;
@@ -491,7 +491,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
         String resultWithAggStr = TestUtil.toString(resultWithAgg);
         assertEquals(
         		resultStr,
-        		resultWithAggStr, 
+        		resultWithAggStr,
         		"Results with and without agg table should be equal");
     }
 
@@ -513,7 +513,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
                 (context.createConnection(), query, new SqlPattern[]
                         {
                                 new SqlPattern
-                                        (Dialect.DatabaseProduct.MYSQL,
+                                        (DatabaseProduct.MYSQL,
                                                 sql,
                                                 sql.length())
                         });

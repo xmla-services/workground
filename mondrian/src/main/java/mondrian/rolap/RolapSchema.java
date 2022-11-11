@@ -39,6 +39,7 @@ import java.sql.DriverManager;
 import java.util.*;
 
 import javax.sql.DataSource;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 /**
  * A <code>RolapSchema</code> is a collection of {@link RolapCube}s and

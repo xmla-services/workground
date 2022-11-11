@@ -20,7 +20,8 @@ import mondrian.server.monitor.SqlStatementEvent;
 import mondrian.server.monitor.SqlStatementEvent.Purpose;
 import mondrian.server.monitor.SqlStatementExecuteEvent;
 import mondrian.server.monitor.SqlStatementStartEvent;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.spi.DialectManager;
 import mondrian.util.Counters;
 import mondrian.util.DelegatingInvocationHandler;
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 /**
  * SqlStatement contains a SQL statement and associated resources throughout its lifetime.
@@ -79,7 +81,7 @@ public class SqlStatement {
   private Connection jdbcConnection;
   private ResultSet resultSet;
   private final String sql;
-  private final List<Type> types;
+  private final List<BestFitColumnType> types;
   private final int maxRows;
   private final int firstRowOrdinal;
   private final Locus locus;
@@ -109,7 +111,7 @@ public class SqlStatement {
   public SqlStatement(
     DataSource dataSource,
     String sql,
-    List<Type> types,
+    List<BestFitColumnType> types,
     int maxRows,
     int firstRowOrdinal,
     Locus locus,
@@ -246,7 +248,7 @@ public class SqlStatement {
       // return something daft like a BigDecimal (does, on the Oracle JDBC
       // driver).
       accessors.clear();
-      for ( Type type : guessTypes() ) {
+      for ( BestFitColumnType type : guessTypes() ) {
         accessors.add( createAccessor( accessors.size(), type ) );
       }
     } catch ( Throwable e ) {
@@ -374,7 +376,7 @@ public class SqlStatement {
 
   // warning suppressed because breaking this method up would reduce readability
   @SuppressWarnings( "squid:S3776" )
-  private Accessor createAccessor( int column, Type type ) {
+  private Accessor createAccessor( int column, BestFitColumnType type ) {
     final int columnPlusOne = column + 1;
     switch ( type ) {
       case OBJECT:
@@ -441,14 +443,14 @@ public class SqlStatement {
     }
   }
 
-  public List<Type> guessTypes() throws SQLException {
+  public List<BestFitColumnType> guessTypes() throws SQLException {
     final ResultSetMetaData metaData = resultSet.getMetaData();
     final int columnCount = metaData.getColumnCount();
     assert this.types == null || this.types.size() == columnCount;
-    List<Type> typeList = new ArrayList<>();
+    List<BestFitColumnType> typeList = new ArrayList<>();
 
     for ( int i = 0; i < columnCount; i++ ) {
-      final Type suggestedType =
+      final BestFitColumnType suggestedType =
         this.types == null ? null : this.types.get( i );
       // There might not be a schema constructed yet,
       // so watch out here for NPEs.
@@ -463,7 +465,7 @@ public class SqlStatement {
       } else if ( dialect != null ) {
         typeList.add( dialect.getType( metaData, i ) );
       } else {
-        typeList.add( Type.OBJECT );
+        typeList.add( BestFitColumnType.OBJECT );
       }
     }
     return typeList;

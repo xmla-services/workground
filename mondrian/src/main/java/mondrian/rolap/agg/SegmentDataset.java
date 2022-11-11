@@ -17,6 +17,7 @@ import mondrian.rolap.CellKey;
 import mondrian.rolap.SqlStatement;
 import mondrian.spi.SegmentBody;
 import mondrian.util.Pair;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 
 import java.util.*;
 
@@ -88,9 +89,9 @@ public interface SegmentDataset extends Iterable<Map.Entry<CellKey, Object>> {
 
     /**
      * Returns the SQL type of the data contained in this dataset.
-     * @return A value of SqlStatement.Type
+     * @return A value of BestFitColumnType
      */
-    SqlStatement.Type getType();
+    BestFitColumnType getType();
 
     /**
      * Return an immutable, final and serializable implementation

@@ -41,6 +41,7 @@ import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.Assertions;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -75,7 +76,7 @@ import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapUtil;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.spi.DialectManager;
 import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
@@ -144,7 +145,7 @@ public class FoodmartTestContextImpl implements TestContext {
     // Run all tests in the US locale, not the system default locale,
     // because the results all assume the US locale.
     MondrianResource.setThreadLocale( Locale.US );
-    
+
 
 
     this.pw = new PrintWriter( System.out, true );
@@ -1234,7 +1235,7 @@ public void assertSimpleQuery() {
     if ( java ) {
       message += "Actual java:" + nl + toJavaString( actual ) + nl;
     }
-    
+
     Assertions.assertEquals( expected, actual ,message);
   }
 
@@ -1301,7 +1302,7 @@ public void assertMatchesVerbose(
       "Expected pattern:" + nl + expected + nl
         + "Actual: " + nl + actual + nl
         + "Actual java: " + nl + s + nl;
-    
+
     Assertions.assertEquals( expected.pattern(), actual ,message);
 
 
@@ -1401,7 +1402,7 @@ public void assertMatchesVerbose(
     return buf.toString();
   }
 
-  
+
 
   @Override
 public void close() {
@@ -1487,7 +1488,7 @@ public synchronized Dialect getDialect() {
    * @param product Database product
    * @return dialect of an required persuasion
    */
-  public static Dialect getFakeDialect( Dialect.DatabaseProduct product ) {
+  public static Dialect getFakeDialect( DatabaseProduct product ) {
     final DatabaseMetaData metaData =
       (DatabaseMetaData) Proxy.newProxyInstance(
         null,
@@ -1543,7 +1544,7 @@ public void assertSqlEquals(
   private String dialectize( String sql ) {
     final String search = "fname \\+ ' ' \\+ lname";
     final Dialect dialect = getDialect();
-    final Dialect.DatabaseProduct databaseProduct =
+    final DatabaseProduct databaseProduct =
       dialect.getDatabaseProduct();
     switch ( databaseProduct ) {
       case MYSQL:
@@ -1580,7 +1581,7 @@ public void assertSqlEquals(
         break;
     }
 
-    if ( dialect.getDatabaseProduct() == Dialect.DatabaseProduct.ORACLE ) {
+    if ( dialect.getDatabaseProduct() == DatabaseProduct.ORACLE ) {
       // " + tableQualifier + "
       sql = sql.replaceAll( " =as= ", " " );
     } else {
@@ -2137,10 +2138,10 @@ public boolean databaseIsValid() {
   @SuppressWarnings( "UnusedDeclaration" )
   public static class DatabaseMetaDataInvocationHandler
     extends DelegatingInvocationHandler {
-    private final Dialect.DatabaseProduct product;
+    private final DatabaseProduct product;
 
     DatabaseMetaDataInvocationHandler(
-      Dialect.DatabaseProduct product ) {
+      DatabaseProduct product ) {
       this.product = product;
     }
 

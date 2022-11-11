@@ -13,7 +13,7 @@ package mondrian.xmla;
 import mondrian.olap.*;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.rolap.RolapConnection;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.test.DiffRepository;
 import mondrian.test.PropertySaver5;
 import mondrian.tui.XmlUtil;

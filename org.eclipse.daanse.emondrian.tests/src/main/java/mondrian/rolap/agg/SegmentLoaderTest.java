@@ -16,7 +16,8 @@ import mondrian.olap.Connection;
 import mondrian.rolap.*;
 import mondrian.server.*;
 import mondrian.server.Statement;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import mondrian.util.DelegatingInvocationHandler;
@@ -120,11 +121,11 @@ public class SegmentLoaderTest extends BatchTestCase {
                 "select {[Time].[Time].[Year].Members} on columns from [Sales]",
                 new SqlPattern[] {
                     new SqlPattern(
-                        Dialect.DatabaseProduct.ORACLE,
+                        DatabaseProduct.ORACLE,
                         queryOracle,
                         queryOracle.length()),
                     new SqlPattern(
-                        Dialect.DatabaseProduct.MYSQL,
+                        DatabaseProduct.MYSQL,
                         queryMySQL,
                         queryMySQL.length())
                 },
@@ -134,7 +135,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             propSaver.reset();
         }
     }
-        
+
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
@@ -190,7 +191,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             new MyDelegatingInvocationHandler(list);
         Object o =
             Proxy.newProxyInstance(
-                this.getClass().getClassLoader(), 
+                this.getClass().getClassLoader(),
                 new Class[] {ResultSet.class, ResultSetMetaData.class},
                 handler);
         handler.resultSetMetaData = (ResultSetMetaData) o;
@@ -202,7 +203,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             new SegmentLoader.RowList(
                 Collections.nCopies(
                     list.get(0).length,
-                    SqlStatement.Type.OBJECT));
+                    BestFitColumnType.OBJECT));
         for (Object[] objects : list) {
             rowList.createRow();
             for (int i = 0; i < objects.length; i++) {
@@ -1148,20 +1149,20 @@ public class SegmentLoaderTest extends BatchTestCase {
         }
 
         @Override
-        public List<Type> guessTypes() throws SQLException {
+        public List<BestFitColumnType> guessTypes() throws SQLException {
             return Collections.nCopies(
                 getResultSet().getMetaData().getColumnCount(),
-                Type.OBJECT);
+                BestFitColumnType.OBJECT);
         }
 
         @Override
         public ResultSet getResultSet() {
             return toResultSet(data);
         }
-        
+
         @Override
         public void close() {
-        	
+
         }
     }
 }

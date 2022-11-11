@@ -15,6 +15,7 @@ import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,7 +29,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Result;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 
@@ -71,15 +72,15 @@ public class NativeFilterMatchingTest extends BatchTestCase {
 
         SqlPattern[] patterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ORACLE,
+                DatabaseProduct.ORACLE,
                 sqlOracle,
                 sqlOracle.length()),
             new SqlPattern(
-                Dialect.DatabaseProduct.MYSQL,
+                DatabaseProduct.MYSQL,
                 sqlMysql,
                 sqlMysql.length()),
             new SqlPattern(
-                Dialect.DatabaseProduct.POSTGRESQL,
+                DatabaseProduct.POSTGRESQL,
                 sqlPgsql,
                 sqlPgsql.length())
         };
@@ -154,15 +155,15 @@ public class NativeFilterMatchingTest extends BatchTestCase {
                     : "ISNULL(`customer`.`country`) ASC, `customer`.`country` ASC, ISNULL(`customer`.`state_province`) ASC, `customer`.`state_province` ASC, ISNULL(`customer`.`city`) ASC, `customer`.`city` ASC, ISNULL(CONCAT(`customer`.`fname`, ' ', `customer`.`lname`)) ASC, CONCAT(`customer`.`fname`, ' ', `customer`.`lname`) ASC");
         SqlPattern[] patterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ORACLE,
+                DatabaseProduct.ORACLE,
                 sqlOracle,
                 sqlOracle.length()),
             new SqlPattern(
-                Dialect.DatabaseProduct.MYSQL,
+                DatabaseProduct.MYSQL,
                 sqlMysql,
                 sqlMysql.length()),
             new SqlPattern(
-                Dialect.DatabaseProduct.POSTGRESQL,
+                DatabaseProduct.POSTGRESQL,
                 sqlPgsql,
                 sqlPgsql.length())
         };
@@ -279,7 +280,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)    
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testMatchesWithAccessControl(Context context) {
         String dimension =
             "<Dimension name=\"Store2\">\n"
@@ -336,7 +337,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
     }
 
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)    
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testNativeFilterWithCompoundSlicer(Context context) {
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
         final String mdx =
@@ -407,7 +408,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
                         : "    ISNULL(`agg_c_14_sales_fact_1997`.`the_year`) ASC, `agg_c_14_sales_fact_1997`.`the_year` ASC,\n"
                         + "    ISNULL(`agg_c_14_sales_fact_1997`.`quarter`) ASC, `agg_c_14_sales_fact_1997`.`quarter` ASC");
             final SqlPattern[] patterns = mysqlPattern(sqlMysql);
-            context.createConnection().getCacheControl(null).flushSchemaCache();            
+            context.createConnection().getCacheControl(null).flushSchemaCache();
             // Make sure the tuples list is using the HAVING clause.
             assertQuerySqlOrNot(
             	context.createConnection(),
@@ -432,7 +433,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
             + "Row #0: \n"
             + "Row #0: \n");
     }
-    
+
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testNativeFilterWithCompoundSlicerWithAggs(Context context) {

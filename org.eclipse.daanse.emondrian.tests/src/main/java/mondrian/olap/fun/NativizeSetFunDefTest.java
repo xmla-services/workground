@@ -13,7 +13,7 @@ import mondrian.olap.*;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.RolapConnection;
 import mondrian.server.Locus;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
@@ -66,7 +66,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
     public void afterEach() {
         propSaver.reset();
     }
-    
+
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testIsNoOpWithAggregatesTablesOn(Context context) {
@@ -1261,8 +1261,8 @@ public class NativizeSetFunDefTest extends BatchTestCase {
             + "  set [COG_OQP_INT_s2] as 'Crossjoin({[Gender].[F]}, [COG_OQP_INT_s1])'\n"
             + "  set [COG_OQP_INT_s1] as 'Crossjoin({[_Nativized_Set_Product_Product Name_]}, {[_Nativized_Set_Customers_Name_]})'\n"
             + "  member [Product].[_Nativized_Member_Product_Product Name_] as '[Product].DefaultMember'\n"
-            + "  set [_Nativized_Set_Product_Product Name_] as '{[Product].[_Nativized_Member_Product_Product Name_]}'\n"                        
-            + "  member [Customers].[_Nativized_Member_Customers_Name_] as '[Customers].DefaultMember'\n"            
+            + "  set [_Nativized_Set_Product_Product Name_] as '{[Product].[_Nativized_Member_Product_Product Name_]}'\n"
+            + "  member [Customers].[_Nativized_Member_Customers_Name_] as '[Customers].DefaultMember'\n"
             + "  set [_Nativized_Set_Customers_Name_] as '{[Customers].[_Nativized_Member_Customers_Name_]}'\n"
             + "  member [Education Level].[_Nativized_Sentinel_Education Level_(All)_] as '101010'\n"
             + "  member [Marital Status].[_Nativized_Sentinel_Marital Status_(All)_] as '101010'\n"
@@ -1473,7 +1473,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
             MondrianProperties.instance().NativizeMinThreshold, 10000);
         SqlPattern[] patterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS,
+                DatabaseProduct.ACCESS,
                 "select `customer`.`gender` as `c0` "
                 + "from `customer` as `customer`, `sales_fact_1997` as `sales_fact_1997` "
                 + "where `sales_fact_1997`.`customer_id` = `customer`.`customer_id` "
@@ -1509,7 +1509,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
     public void testAxisWithArityOneIsNotNativelyEvaluated(Context context) {
         SqlPattern[] patterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS,
+                DatabaseProduct.ACCESS,
                 "select `promotion`.`media_type` as `c0` "
                 + "from `promotion` as `promotion`, `sales_fact_1997` as `sales_fact_1997` "
                 + "where `sales_fact_1997`.`promotion_id` = `promotion`.`promotion_id` "
@@ -1615,14 +1615,14 @@ public class NativizeSetFunDefTest extends BatchTestCase {
     public void testCardinalityQueriesOnlyExecuteOnce(Context context) {
         SqlPattern[] patterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ORACLE,
+                DatabaseProduct.ORACLE,
                 "select count(*) as \"c0\" "
                 + "from (select "
                 + "distinct \"customer\".\"gender\" as \"c0\" "
                 + "from \"customer\" \"customer\") \"init\"",
                 108),
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS,
+                DatabaseProduct.ACCESS,
                 "select count(*) as `c0` "
                 + "from (select "
                 + "distinct `customer`.`gender` as `c0` "
@@ -1677,7 +1677,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
             + "\"customer\".\"state_province\" ASC NULLS LAST, \"customer\".\"city\" ASC NULLS LAST, "
             + "\"fname\" || ' ' || \"lname\" ASC NULLS LAST";
         SqlPattern oraclePattern =
-            new SqlPattern(Dialect.DatabaseProduct.ORACLE, sql, sql.length());
+            new SqlPattern(DatabaseProduct.ORACLE, sql, sql.length());
         Connection connection = context.createConnection();
         assertQuerySql(connection, mdx1, new SqlPattern[]{oraclePattern});
         assertQuerySql(connection, mdx2, new SqlPattern[]{oraclePattern});
