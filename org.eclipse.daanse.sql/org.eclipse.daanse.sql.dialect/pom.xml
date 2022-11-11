@@ -12,6 +12,5 @@
   	<module>org.eclipse.daanse.sql.dialect.api</module>
   	<module>org.eclipse.daanse.sql.dialect.resolver</module>
   	<module>org.eclipse.daanse.sql.dialect.db</module>
-    <module>org.eclipse.daanse.sql.dialect.mysql</module>
   </modules>
 </project>

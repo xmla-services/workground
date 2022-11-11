@@ -1,20 +1,23 @@
-package org.eclipse.daanse.sql.dialect.impl.mysql;
+package org.eclipse.daanse.sql.dialect.db.mysql;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.sql.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.sql.dialect.db.common.JdbcDialectImpl;
+import org.eclipse.daanse.sql.dialect.db.common.factory.JdbcDialectFactory;
+import org.eclipse.daanse.sql.dialect.db.common.Util;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
-
-import org.eclipse.daanse.sql.dialect.api.Dialect;
-import org.eclipse.daanse.sql.dialect.impl.DialectUtil;
-import org.eclipse.daanse.sql.dialect.impl.JdbcDialectImpl;
-import org.eclipse.daanse.sql.dialect.impl.Util;
-import org.eclipse.daanse.sql.dialect.impl.factory.JdbcDialectFactory;
 
 /**
  * Implementation of {@link org.eclipse.daanse.sql.dialect.api.Dialect} for the MySQL database.

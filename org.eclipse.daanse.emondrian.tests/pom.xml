@@ -117,9 +117,33 @@
 			<artifactId>junit-platform-engine</artifactId>
 			<version>1.8.2</version>
 			<scope>compile</scope>
-		</dependency>
-		<!-- Thanks for using https://jar-download.com -->
-
+			
+			
+  </dependency>
+  <dependency>
+    <groupId>org.eclipse.daanse</groupId>
+    <artifactId>org.eclipse.daanse.sql.dialect.api</artifactId>
+    <version>${revision}</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
+    <groupId>org.eclipse.daanse</groupId>
+    <artifactId>org.eclipse.daanse.sql.statistics.api</artifactId>
+    <version>${revision}</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
+    <groupId>org.eclipse.daanse</groupId>
+    <artifactId>org.eclipse.daanse.sql.dialect.db.common</artifactId>
+    <version>${revision}</version>
+    <scope>compile</scope>
+  </dependency>
+  <dependency>
+    <groupId>org.eclipse.daanse</groupId>
+    <artifactId>org.eclipse.daanse.sql.dialect.db.mysql</artifactId>
+    <version>${revision}</version>
+    <scope>runtime</scope>
+  </dependency>
 
 		<dependency>
             <groupId>org.olap4j</groupId>

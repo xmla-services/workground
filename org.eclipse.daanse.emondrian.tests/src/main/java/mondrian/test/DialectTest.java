@@ -13,7 +13,8 @@ import mondrian.olap.Util;
 import mondrian.rolap.RolapMember;
 import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.sql.dialect.api.Dialect;
-import org.eclipse.daanse.sql.dialect.impl.JdbcDialectImpl;
+import org.eclipse.daanse.sql.dialect.db.common.JdbcDialectImpl;
+
 import mondrian.spi.DialectManager;
 import mondrian.spi.impl.*;
 import mondrian.util.DelegatingInvocationHandler;
