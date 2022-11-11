@@ -33,7 +33,7 @@
 	assertj-core;version='[3.22.0,3.22.1)',\
 	biz.aQute.gogo.commands.provider;version='[1.8.0,1.8.1)',\
 	com.google.guava;version='[17.0.0,17.0.1)',\
-	com.mysql.cj;version='[8.0.27,8.0.28)',\
+	com.mysql.cj;version='[8.0.28,8.0.29)',\
 	com.sun.activation.jakarta.activation;version='[2.0.1,2.0.2)',\
 	com.sun.jna;version='[5.11.0,5.11.1)',\
 	com.sun.xml.bind.jaxb-core;version='[4.0.0,4.0.1)',\
