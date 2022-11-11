@@ -7,7 +7,7 @@
 // Copyright (c) 2015-2017 Hitachi Vantara.
 // All rights reserved.
  */
-package org.eclipse.daanse.sql.dialect.impl;
+package org.eclipse.daanse.sql.dialect.db.common;
 
 import java.util.regex.Pattern;
 

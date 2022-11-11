@@ -4,11 +4,13 @@
     <groupId>org.eclipse.daanse</groupId>
     <artifactId>org.eclipse.daanse.sql.dialect</artifactId>
     <version>${revision}</version>
+    <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>org.eclipse.daanse.sql.dialect.db</artifactId>
   <packaging>pom</packaging>
   <modules>
-      <module>org.eclipse.daanse.sql.dialect.db.common</module>
-      <module>org.eclipse.daanse.sql.dialect.db.sqlite</module>
+    <module>org.eclipse.daanse.sql.dialect.db.common</module>
+    <module>org.eclipse.daanse.sql.dialect.db.sqlite</module>
+    <module>org.eclipse.daanse.sql.dialect.db.mysql</module>
   </modules>
 </project>

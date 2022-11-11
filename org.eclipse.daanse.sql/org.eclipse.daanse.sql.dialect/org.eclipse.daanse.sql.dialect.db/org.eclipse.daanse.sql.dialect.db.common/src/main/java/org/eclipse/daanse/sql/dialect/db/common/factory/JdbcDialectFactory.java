@@ -7,11 +7,11 @@
  * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
  */
 
-package org.eclipse.daanse.sql.dialect.impl.factory;
+package org.eclipse.daanse.sql.dialect.db.common.factory;
 
 import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.eclipse.daanse.sql.dialect.api.DialectFactory;
-import org.eclipse.daanse.sql.dialect.impl.JdbcDialectImpl;
+import org.eclipse.daanse.sql.dialect.db.common.JdbcDialectImpl;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 
 /**
  * Implementation of {@link org.eclipse.daanse.sql.dialect.api.DialectFactory} for subclasses
- * of {@link org.eclipse.daanse.sql.dialect.impl.JdbcDialectImpl}.
+ * of {@link org.eclipse.daanse.sql.dialect.db.common.JdbcDialectImpl}.
  *
  * <p>Assumes that the dialect has a public constructor that takes a
  * {@link java.sql.Connection} as a parameter.

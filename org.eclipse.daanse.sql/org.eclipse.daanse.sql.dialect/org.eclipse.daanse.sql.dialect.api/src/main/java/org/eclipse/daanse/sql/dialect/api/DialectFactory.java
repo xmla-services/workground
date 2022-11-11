@@ -57,6 +57,7 @@ import javax.sql.DataSource;
  * @author jhyde
  * @since Jan 13, 2009
  */
+@Deprecated
 public interface DialectFactory {
     /**
      * Creates a Dialect.

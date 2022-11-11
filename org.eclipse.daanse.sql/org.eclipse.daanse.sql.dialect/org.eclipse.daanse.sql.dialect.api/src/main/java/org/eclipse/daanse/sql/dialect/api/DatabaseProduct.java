@@ -1,5 +1,7 @@
 package org.eclipse.daanse.sql.dialect.api;
 
+
+// To be removed
 /**
  * Enumeration of common database types.
  *
@@ -14,6 +16,8 @@ package org.eclipse.daanse.sql.dialect.api;
  * treat them all as one product, note that the {@link #getFamily()} method
  * for {@link #DB2_AS400} and {@link #DB2_OLD_AS400} returns {@link #DB2}.
  */
+
+@Deprecated
 public enum DatabaseProduct {
     ACCESS,
     UNKNOWN,

@@ -1,4 +1,4 @@
-package org.eclipse.daanse.sql.dialect.impl;
+package org.eclipse.daanse.sql.dialect.db.common;
 
 public class Util {
 

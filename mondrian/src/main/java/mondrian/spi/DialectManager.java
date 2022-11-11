@@ -22,8 +22,8 @@ import java.util.*;
 import javax.sql.DataSource;
 import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.eclipse.daanse.sql.dialect.api.DialectFactory;
-import org.eclipse.daanse.sql.dialect.impl.factory.JdbcDialectFactory;
-import org.eclipse.daanse.sql.dialect.impl.JdbcDialectImpl;
+import org.eclipse.daanse.sql.dialect.db.common.JdbcDialectImpl;
+import org.eclipse.daanse.sql.dialect.db.common.factory.JdbcDialectFactory;
 
 /**
  * Manages {@link mondrian.spi.Dialect} and {@link mondrian.spi.DialectFactory}
