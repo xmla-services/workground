@@ -23,6 +23,7 @@
   <dependency>
     <groupId>org.eclipse.daanse</groupId>
     <artifactId>org.eclipse.daanse.repackage.javacup</artifactId>
+    <scope>runtime</scope>
   </dependency>
 
 	    <dependency>
