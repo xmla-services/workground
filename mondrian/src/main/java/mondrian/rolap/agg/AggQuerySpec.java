@@ -13,7 +13,6 @@
 package mondrian.rolap.agg;
 
 import mondrian.rolap.RolapStar;
-import mondrian.rolap.SqlStatement.Type;
 import mondrian.rolap.StarColumnPredicate;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.SqlQuery;
@@ -21,6 +20,7 @@ import mondrian.util.Pair;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +109,7 @@ class AggQuerySpec {
         return segment0.predicates[i];
     }
 
-    public Pair<String, List<Type>> generateSqlQuery() {
+    public Pair<String, List<BestFitColumnType>> generateSqlQuery() {
         SqlQuery sqlQuery = newSqlQuery();
         generateSql(sqlQuery);
         return sqlQuery.toSqlAndTypes();

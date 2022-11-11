@@ -14,12 +14,13 @@ import mondrian.olap.*;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.format.FormatterCreateContext;
 import mondrian.rolap.format.FormatterFactory;
-import mondrian.spi.Dialect;
 import mondrian.spi.PropertyFormatter;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.sql.dialect.api.Datatype;
 import org.olap4j.impl.UnmodifiableArrayMap;
 
 import java.util.AbstractList;
@@ -52,7 +53,7 @@ public class RolapLevel extends LevelBase {
      */
     protected MondrianDef.Expression captionExp;
 
-    private final Dialect.Datatype datatype;
+    private final Datatype datatype;
 
     private final int flags;
 
@@ -85,7 +86,7 @@ public class RolapLevel extends LevelBase {
     private final HideMemberCondition hideMemberCondition;
     protected final MondrianDef.Closure xmlClosure;
     private final Map<String, Annotation> annotationMap;
-    private final SqlStatement.Type internalType; // may be null
+    private final BestFitColumnType internalType; // may be null
 
     /**
      * Creates a level.
@@ -111,8 +112,8 @@ public class RolapLevel extends LevelBase {
         MondrianDef.Closure xmlClosure,
         RolapProperty[] properties,
         int flags,
-        Dialect.Datatype datatype,
-        SqlStatement.Type internalType,
+        Datatype datatype,
+        BestFitColumnType internalType,
         HideMemberCondition hideMemberCondition,
         LevelType levelType,
         String approxRowCount,
@@ -287,7 +288,7 @@ public class RolapLevel extends LevelBase {
         return (flags & FLAG_UNIQUE) != 0;
     }
 
-    public final Dialect.Datatype getDatatype() {
+    public final Datatype getDatatype() {
         return datatype;
     }
 
@@ -326,6 +327,7 @@ public class RolapLevel extends LevelBase {
         int depth,
         MondrianDef.Level xmlLevel)
     {
+
         this(
             hierarchy,
             xmlLevel.name,
@@ -480,16 +482,16 @@ public class RolapLevel extends LevelBase {
         return approxRowCount;
     }
 
-    private static final Map<String, SqlStatement.Type> VALUES =
+    private static final Map<String, BestFitColumnType> VALUES =
         UnmodifiableArrayMap.of(
-            "int", SqlStatement.Type.INT,
-            "double", SqlStatement.Type.DOUBLE,
-            "Object", SqlStatement.Type.OBJECT,
-            "String", SqlStatement.Type.STRING,
-            "long", SqlStatement.Type.LONG);
+            "int", BestFitColumnType.INT,
+            "double", BestFitColumnType.DOUBLE,
+            "Object", BestFitColumnType.OBJECT,
+            "String", BestFitColumnType.STRING,
+            "long", BestFitColumnType.LONG);
 
-    private static SqlStatement.Type toInternalType(String internalTypeName) {
-        SqlStatement.Type type = VALUES.get(internalTypeName);
+    private static BestFitColumnType toInternalType(String internalTypeName) {
+        BestFitColumnType type = VALUES.get(internalTypeName);
         if (type == null && internalTypeName != null) {
             throw Util.newError(
                 "Invalid value '" + internalTypeName
@@ -500,7 +502,7 @@ public class RolapLevel extends LevelBase {
         return type;
     }
 
-    public SqlStatement.Type getInternalType() {
+    public BestFitColumnType getInternalType() {
         return internalType;
     }
 

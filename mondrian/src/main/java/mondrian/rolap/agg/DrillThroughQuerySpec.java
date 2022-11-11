@@ -17,6 +17,7 @@ import mondrian.rolap.RolapStar.Column;
 import mondrian.rolap.RolapStar.Measure;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.util.Pair;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 
 import java.util.*;
 
@@ -186,7 +187,7 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
             : constr;
     }
 
-    public Pair<String, List<SqlStatement.Type>> generateSqlQuery() {
+    public Pair<String, List<BestFitColumnType>> generateSqlQuery() {
         SqlQuery sqlQuery = newSqlQuery();
         nonDistinctGenerateSql(sqlQuery);
         appendInapplicableFields(sqlQuery);
@@ -207,7 +208,7 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
     private void appendInapplicableFields(SqlQuery sqlQuery) {
         for (OlapElement member : request.getNonApplicableMembers()) {
             sqlQuery.addSelect(
-                "NULL", SqlStatement.Type.STRING, member.getName());
+                "NULL", BestFitColumnType.STRING, member.getName());
         }
     }
 

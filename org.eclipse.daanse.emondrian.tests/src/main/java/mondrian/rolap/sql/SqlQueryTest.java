@@ -13,10 +13,11 @@ package mondrian.rolap.sql;
 import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.BatchTestCase;
-import mondrian.spi.Dialect;
-import mondrian.spi.impl.JdbcDialectImpl;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
+import org.eclipse.daanse.sql.dialect.impl.JdbcDialectImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,8 +35,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static mondrian.spi.Dialect.DatabaseProduct.MYSQL;
-import static mondrian.spi.Dialect.DatabaseProduct.POSTGRESQL;
+import static org.eclipse.daanse.sql.dialect.api.DatabaseProduct.MYSQL;
+import static org.eclipse.daanse.sql.dialect.api.DatabaseProduct.POSTGRESQL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -71,7 +72,7 @@ public class SqlQueryTest  extends BatchTestCase {
         } else {
             // Do not warn unless the dialect is "MYSQL", or
             // if the test chooses to warn regardless of the dialect.
-        	propSaver.set(prop.WarnIfNoPatternForDialect, "NONE");            
+        	propSaver.set(prop.WarnIfNoPatternForDialect, "NONE");
         }
 
     }
@@ -241,7 +242,7 @@ public class SqlQueryTest  extends BatchTestCase {
         SqlPattern[] patterns)
     {
         Dialect dialect = getDialect(connection);
-        Dialect.DatabaseProduct d = dialect.getDatabaseProduct();
+        DatabaseProduct d = dialect.getDatabaseProduct();
         boolean patternFound = false;
         for (SqlPattern sqlPattern : patterns) {
             if (!sqlPattern.hasDatabaseProduct(d)) {
@@ -319,7 +320,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS, accessSql, accessSql),
+                DatabaseProduct.ACCESS, accessSql, accessSql),
             new SqlPattern(MYSQL, mysqlSql, mysqlSql)};
 
         assertSqlEqualsOptimzePredicates(context, true, mdx, sqlPatterns);
@@ -361,7 +362,7 @@ public class SqlQueryTest  extends BatchTestCase {
             + ") DIMENSION PROPERTIES PARENT_LEVEL, CHILDREN_CARDINALITY, PARENT_UNIQUE_NAME ON AXIS(0) \n"
             + "FROM [HR]  CELL PROPERTIES VALUE, FORMAT_STRING";
         SqlPattern[] sqlPatterns = {
-            new SqlPattern(Dialect.DatabaseProduct.ACCESS, sql, sql)
+            new SqlPattern(DatabaseProduct.ACCESS, sql, sql)
         };
         assertQuerySql(context.createConnection(), mdx, sqlPatterns);
     }
@@ -384,7 +385,7 @@ public class SqlQueryTest  extends BatchTestCase {
         String accessSql =
             "select `time_by_day`.`the_year` as `c0`, "
             + "`time_by_day`.`quarter` as `c1`, "
-            + "sum(`sales_fact_1997`.`unit_sales`) as `m0` "          
+            + "sum(`sales_fact_1997`.`unit_sales`) as `m0` "
             + "from `sales_fact_1997` as `sales_fact_1997`, "
             + "`time_by_day` as `time_by_day` "
             + "where `sales_fact_1997`.`time_id` = "
@@ -407,7 +408,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS, accessSql, accessSql),
+                DatabaseProduct.ACCESS, accessSql, accessSql),
             new SqlPattern(MYSQL, mysqlSql, mysqlSql)};
 
         assertSqlEqualsOptimzePredicates(context, false, mdx, sqlPatterns);
@@ -452,7 +453,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ACCESS, accessSql, accessSql),
+                DatabaseProduct.ACCESS, accessSql, accessSql),
             new SqlPattern(MYSQL, mysqlSql, mysqlSql)};
 
         assertSqlEqualsOptimzePredicates(context, true, mdx, sqlPatterns);
@@ -468,10 +469,10 @@ public class SqlQueryTest  extends BatchTestCase {
             prop.OptimizePredicates.get();
 
         try {
-        	propSaver.set(prop.OptimizePredicates, optimizePredicatesValue);            
+        	propSaver.set(prop.OptimizePredicates, optimizePredicatesValue);
             assertQuerySql(context.createConnection(), inputMdx, sqlPatterns);
         } finally {
-        	propSaver.set(prop.OptimizePredicates, intialValueOptimize);            
+        	propSaver.set(prop.OptimizePredicates, intialValueOptimize);
         }
     }
 
@@ -602,7 +603,7 @@ public class SqlQueryTest  extends BatchTestCase {
         Connection connection = context.createConnection();
         prepareContext(connection);
         final Dialect dialect = getDialect(context.createConnection());
-        if (dialect.getDatabaseProduct() != Dialect.DatabaseProduct.LUCIDDB) {
+        if (dialect.getDatabaseProduct() != DatabaseProduct.LUCIDDB) {
             return;
         }
 
@@ -673,7 +674,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
         SqlPattern[] patterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.LUCIDDB,
+                DatabaseProduct.LUCIDDB,
                 loadSqlLucidDB,
                 loadSqlLucidDB)
         };
@@ -718,7 +719,7 @@ public class SqlQueryTest  extends BatchTestCase {
         SqlPattern[] patterns = {
             new SqlPattern(MYSQL, sqlMySql, sqlMySql),
             new SqlPattern(
-                Dialect.DatabaseProduct.ORACLE, sqlOracle, sqlOracle),
+                DatabaseProduct.ORACLE, sqlOracle, sqlOracle),
         };
 
         assertNoQuerySql(connection,
@@ -762,7 +763,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
         SqlPattern[] patterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.ORACLE, forbiddenSqlOracle, null),
+                DatabaseProduct.ORACLE, forbiddenSqlOracle, null),
             new SqlPattern(
                 MYSQL, forbiddenSqlMysql, null)
         };
@@ -880,7 +881,7 @@ public class SqlQueryTest  extends BatchTestCase {
             + "or (`time_by_day`.`month_of_year` = 4 and `time_by_day`.`quarter` = 'Q2' "
             + "and `time_by_day`.`the_year` = 1997))";
         SqlPattern mySqlPattern =
-            new SqlPattern(Dialect.DatabaseProduct.MYSQL, sql, sql.length());
+            new SqlPattern(DatabaseProduct.MYSQL, sql, sql.length());
         assertQuerySql(context.createConnection(), mdx, new SqlPattern[]{mySqlPattern});
     }
 

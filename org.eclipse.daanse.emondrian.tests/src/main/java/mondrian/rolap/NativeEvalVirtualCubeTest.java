@@ -10,7 +10,7 @@
 package mondrian.rolap;
 
 import mondrian.olap.Connection;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
@@ -415,7 +415,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
     context.setProperty(RolapConnectionProperties.UseSchemaPool.name(), Boolean.toString(false));
     SqlPattern mysqlPattern =
       new SqlPattern(
-          Dialect.DatabaseProduct.MYSQL,
+          DatabaseProduct.MYSQL,
           mySqlGenderQuery,
           mySqlGenderQuery);
     String mdx =
@@ -494,7 +494,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
     //final TestContext context = getTestContext().withFreshConnection();
     SqlPattern mysqlPatternMembers =
       new SqlPattern(
-          Dialect.DatabaseProduct.MYSQL,
+          DatabaseProduct.MYSQL,
           mySqlMembersQuery,
           mySqlMembersQuery);
     //The MDX with default measure of [Warehouse and Sales] virtual cube:

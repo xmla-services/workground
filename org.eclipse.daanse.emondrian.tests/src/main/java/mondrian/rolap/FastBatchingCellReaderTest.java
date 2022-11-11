@@ -15,7 +15,9 @@ import mondrian.rolap.agg.*;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Datatype;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import mondrian.util.Bug;
@@ -782,7 +784,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     prepareContext(context);
     Connection connection = context.createConnection();
     final Dialect dialect = getDialect(connection);
-    final Dialect.DatabaseProduct product = dialect.getDatabaseProduct();
+    final DatabaseProduct product = dialect.getDatabaseProduct();
     switch ( product ) {
       case TERADATA:
       case INFOBRIGHT:
@@ -955,7 +957,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             + "   <Measure name=\"Store Count\" column=\"stores_id\" aggregator=\"count\" formatString=\"#,###\"/>"
             + "</Cube>";
     cube = cube.replaceAll( "`", dialect.getQuoteIdentifierString() );
-    if ( dialect.getDatabaseProduct() == Dialect.DatabaseProduct.ORACLE ) {
+    if ( dialect.getDatabaseProduct() == DatabaseProduct.ORACLE ) {
       cube = cube.replaceAll( " AS ", " " );
     }
 
@@ -1036,16 +1038,16 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             + "where `warehouse`.`stores_id` = `store`.`store_id` " + "group by `store`.`store_type`";
 
     SqlPattern[] patterns =
-        { new SqlPattern( Dialect.DatabaseProduct.LUCIDDB, loadCountDistinct_luciddb1, loadCountDistinct_luciddb1 ),
-          new SqlPattern( Dialect.DatabaseProduct.LUCIDDB, loadCountDistinct_luciddb2, loadCountDistinct_luciddb2 ),
-          new SqlPattern( Dialect.DatabaseProduct.LUCIDDB, loadOtherAggs_luciddb, loadOtherAggs_luciddb ),
+        { new SqlPattern( DatabaseProduct.LUCIDDB, loadCountDistinct_luciddb1, loadCountDistinct_luciddb1 ),
+          new SqlPattern( DatabaseProduct.LUCIDDB, loadCountDistinct_luciddb2, loadCountDistinct_luciddb2 ),
+          new SqlPattern( DatabaseProduct.LUCIDDB, loadOtherAggs_luciddb, loadOtherAggs_luciddb ),
 
-          new SqlPattern( Dialect.DatabaseProduct.DERBY, loadCountDistinct_derby1, loadCountDistinct_derby1 ),
-          new SqlPattern( Dialect.DatabaseProduct.DERBY, loadCountDistinct_derby2, loadCountDistinct_derby2 ),
-          new SqlPattern( Dialect.DatabaseProduct.DERBY, loadCountDistinct_derby3, loadCountDistinct_derby3 ),
-          new SqlPattern( Dialect.DatabaseProduct.DERBY, loadOtherAggs_derby, loadOtherAggs_derby ),
+          new SqlPattern( DatabaseProduct.DERBY, loadCountDistinct_derby1, loadCountDistinct_derby1 ),
+          new SqlPattern( DatabaseProduct.DERBY, loadCountDistinct_derby2, loadCountDistinct_derby2 ),
+          new SqlPattern( DatabaseProduct.DERBY, loadCountDistinct_derby3, loadCountDistinct_derby3 ),
+          new SqlPattern( DatabaseProduct.DERBY, loadOtherAggs_derby, loadOtherAggs_derby ),
 
-          new SqlPattern( Dialect.DatabaseProduct.MYSQL, load_mysql, load_mysql ), };
+          new SqlPattern( DatabaseProduct.MYSQL, load_mysql, load_mysql ), };
 
     assertQuerySql(context.createConnection(), query, patterns );
   }
@@ -1164,9 +1166,9 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
         + "SELECT {[Promotion Media].[TV plus Radio],\n" + "        [Promotion Media].[TV],\n"
         + "        [Promotion Media].[Radio]} ON COLUMNS,\n" + "       {[Time].[1997],\n"
         + "        [Time].[1997].[Q1],\n" + "        [Time].[1997 Q1 plus July]} ON ROWS\n" + "FROM Sales\n"
-        + "WHERE [Measures].[Customer Count]", new SqlPattern[] { new SqlPattern( Dialect.DatabaseProduct.ORACLE,
-            oracleSql, oracleSql ), new SqlPattern( Dialect.DatabaseProduct.MYSQL, mysqlSql, mysqlSql ),
-          new SqlPattern( Dialect.DatabaseProduct.DERBY, derbySql, derbySql ) } );
+        + "WHERE [Measures].[Customer Count]", new SqlPattern[] { new SqlPattern( DatabaseProduct.ORACLE,
+            oracleSql, oracleSql ), new SqlPattern( DatabaseProduct.MYSQL, mysqlSql, mysqlSql ),
+          new SqlPattern( DatabaseProduct.DERBY, derbySql, derbySql ) } );
   }
 
   /**
@@ -1236,8 +1238,8 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             + "group by `store`.`store_state`, `time_by_day`.`the_year`";
 
     SqlPattern[] patterns =
-        { new SqlPattern( Dialect.DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern(
-            Dialect.DatabaseProduct.MYSQL, mysqlSql, mysqlSql ) };
+        { new SqlPattern( DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern(
+            DatabaseProduct.MYSQL, mysqlSql, mysqlSql ) };
 
      assertQuerySql(context.createConnection(), query, patterns );
   }
@@ -1333,8 +1335,8 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             + "group by \"store\".\"store_state\", \"time_by_day\".\"the_year\"";
 
     SqlPattern[] patterns =
-        { new SqlPattern( Dialect.DatabaseProduct.ACCESS, accessSql, accessSql ), new SqlPattern(
-            Dialect.DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern( Dialect.DatabaseProduct.MYSQL,
+        { new SqlPattern( DatabaseProduct.ACCESS, accessSql, accessSql ), new SqlPattern(
+            DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern( DatabaseProduct.MYSQL,
                 mysqlSql, mysqlSql ) };
 
      assertQuerySql(context.createConnection(), query, patterns );
@@ -1373,8 +1375,8 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             + "and \"time_by_day\".\"the_year\" = 1997 " + "group by \"time_by_day\".\"the_year\"";
 
     SqlPattern[] patterns =
-        { new SqlPattern( Dialect.DatabaseProduct.ACCESS, accessSql, accessSql ), new SqlPattern(
-            Dialect.DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern( Dialect.DatabaseProduct.MYSQL,
+        { new SqlPattern( DatabaseProduct.ACCESS, accessSql, accessSql ), new SqlPattern(
+            DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern( DatabaseProduct.MYSQL,
                 mysqlSql, mysqlSql ) };
 
     assertQuerySql(context.createConnection(), query, patterns );
@@ -1516,8 +1518,8 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             + "\"store\".\"store_state\", \"time_by_day\".\"the_year\"";
 
     SqlPattern[] patterns =
-        { new SqlPattern( Dialect.DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern(
-            Dialect.DatabaseProduct.MYSQL, mysqlSql, mysqlSql ) };
+        { new SqlPattern( DatabaseProduct.DERBY, derbySql, derbySql ), new SqlPattern(
+            DatabaseProduct.MYSQL, mysqlSql, mysqlSql ) };
 
      assertQuerySql(context.createConnection(), query, patterns );
   }
@@ -1548,7 +1550,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testInMemoryAggSum(Context context) throws Exception {
-	prepareContext(context);  
+	prepareContext(context);
     // Double arrays
     final Object[] dblSet1 = new Double[] { null, 0.0, 1.1, 2.4 };
     final Object[] dblSet2 = new Double[] { null, null, null };
@@ -1562,32 +1564,32 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     final Object[] intSet4 = new Integer[] { 3, 7 };
 
     // Test with double
-    assertEquals( 3.5, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet1 ), Dialect.Datatype.Numeric ) );
-    assertEquals( null, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet2 ), Dialect.Datatype.Numeric ) );
+    assertEquals( 3.5, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet1 ), Datatype.Numeric ) );
+    assertEquals( null, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet2 ), Datatype.Numeric ) );
     try {
-      RolapAggregator.Sum.aggregate( Arrays.asList( dblSet3 ), Dialect.Datatype.Numeric );
+      RolapAggregator.Sum.aggregate( Arrays.asList( dblSet3 ), Datatype.Numeric );
       fail();
     } catch ( AssertionError e ) {
       // ok.
     }
-    assertEquals( 4.6, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet4 ), Dialect.Datatype.Numeric ) );
+    assertEquals( 4.6, RolapAggregator.Sum.aggregate( Arrays.asList( dblSet4 ), Datatype.Numeric ) );
 
     // test with int
-    assertEquals( 5, RolapAggregator.Sum.aggregate( Arrays.asList( intSet1 ), Dialect.Datatype.Integer ) );
-    assertEquals( null, RolapAggregator.Sum.aggregate( Arrays.asList( intSet2 ), Dialect.Datatype.Integer ) );
+    assertEquals( 5, RolapAggregator.Sum.aggregate( Arrays.asList( intSet1 ), Datatype.Integer ) );
+    assertEquals( null, RolapAggregator.Sum.aggregate( Arrays.asList( intSet2 ), Datatype.Integer ) );
     try {
-      RolapAggregator.Sum.aggregate( Arrays.asList( intSet3 ), Dialect.Datatype.Integer );
+      RolapAggregator.Sum.aggregate( Arrays.asList( intSet3 ), Datatype.Integer );
       fail();
     } catch ( AssertionError e ) {
       // ok.
     }
-    assertEquals( 10, RolapAggregator.Sum.aggregate( Arrays.asList( intSet4 ), Dialect.Datatype.Integer ) );
+    assertEquals( 10, RolapAggregator.Sum.aggregate( Arrays.asList( intSet4 ), Datatype.Integer ) );
   }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testInMemoryAggMin(Context context) throws Exception {
-	prepareContext(context);  
+	prepareContext(context);
     // Double arrays
     final Object[] dblSet1 = new Double[] { null, 0.0, 1.1, 2.4 };
     final Object[] dblSet2 = new Double[] { null, null, null };
@@ -1601,26 +1603,26 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     final Object[] intSet4 = new Integer[] { 3, 7 };
 
     // Test with double
-    assertEquals( 0.0, RolapAggregator.Min.aggregate( Arrays.asList( dblSet1 ), Dialect.Datatype.Numeric ) );
-    assertEquals( null, RolapAggregator.Min.aggregate( Arrays.asList( dblSet2 ), Dialect.Datatype.Numeric ) );
+    assertEquals( 0.0, RolapAggregator.Min.aggregate( Arrays.asList( dblSet1 ), Datatype.Numeric ) );
+    assertEquals( null, RolapAggregator.Min.aggregate( Arrays.asList( dblSet2 ), Datatype.Numeric ) );
     try {
-      RolapAggregator.Min.aggregate( Arrays.asList( dblSet3 ), Dialect.Datatype.Numeric );
+      RolapAggregator.Min.aggregate( Arrays.asList( dblSet3 ), Datatype.Numeric );
       fail();
     } catch ( AssertionError e ) {
       // ok.
     }
-    assertEquals( 1.9, RolapAggregator.Min.aggregate( Arrays.asList( dblSet4 ), Dialect.Datatype.Numeric ) );
+    assertEquals( 1.9, RolapAggregator.Min.aggregate( Arrays.asList( dblSet4 ), Datatype.Numeric ) );
 
     // test with int
-    assertEquals( 0, RolapAggregator.Min.aggregate( Arrays.asList( intSet1 ), Dialect.Datatype.Integer ) );
-    assertEquals( null, RolapAggregator.Min.aggregate( Arrays.asList( intSet2 ), Dialect.Datatype.Integer ) );
+    assertEquals( 0, RolapAggregator.Min.aggregate( Arrays.asList( intSet1 ), Datatype.Integer ) );
+    assertEquals( null, RolapAggregator.Min.aggregate( Arrays.asList( intSet2 ), Datatype.Integer ) );
     try {
-      RolapAggregator.Min.aggregate( Arrays.asList( intSet3 ), Dialect.Datatype.Integer );
+      RolapAggregator.Min.aggregate( Arrays.asList( intSet3 ), Datatype.Integer );
       fail();
     } catch ( AssertionError e ) {
       // ok.
     }
-    assertEquals( 3, RolapAggregator.Min.aggregate( Arrays.asList( intSet4 ), Dialect.Datatype.Integer ) );
+    assertEquals( 3, RolapAggregator.Min.aggregate( Arrays.asList( intSet4 ), Datatype.Integer ) );
   }
 
   @ParameterizedTest
@@ -1641,27 +1643,27 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     final Object[] intSet4 = new Integer[] { 3, 7 };
 
     // Test with double
-    assertEquals( 2.4, RolapAggregator.Max.aggregate( Arrays.asList( dblSet1 ), Dialect.Datatype.Numeric ) );
-    assertEquals( null, RolapAggregator.Max.aggregate( Arrays.asList( dblSet2 ), Dialect.Datatype.Numeric ) );
-    assertEquals( -1.2, RolapAggregator.Max.aggregate( Arrays.asList( dblSet5 ), Dialect.Datatype.Numeric ) );
+    assertEquals( 2.4, RolapAggregator.Max.aggregate( Arrays.asList( dblSet1 ), Datatype.Numeric ) );
+    assertEquals( null, RolapAggregator.Max.aggregate( Arrays.asList( dblSet2 ), Datatype.Numeric ) );
+    assertEquals( -1.2, RolapAggregator.Max.aggregate( Arrays.asList( dblSet5 ), Datatype.Numeric ) );
     try {
-      RolapAggregator.Max.aggregate( Arrays.asList( dblSet3 ), Dialect.Datatype.Numeric );
+      RolapAggregator.Max.aggregate( Arrays.asList( dblSet3 ), Datatype.Numeric );
       fail();
     } catch ( AssertionError e ) {
       // ok.
     }
-    assertEquals( 2.7, RolapAggregator.Max.aggregate( Arrays.asList( dblSet4 ), Dialect.Datatype.Numeric ) );
+    assertEquals( 2.7, RolapAggregator.Max.aggregate( Arrays.asList( dblSet4 ), Datatype.Numeric ) );
 
     // test with int
-    assertEquals( 4, RolapAggregator.Max.aggregate( Arrays.asList( intSet1 ), Dialect.Datatype.Integer ) );
-    assertEquals( null, RolapAggregator.Max.aggregate( Arrays.asList( intSet2 ), Dialect.Datatype.Integer ) );
+    assertEquals( 4, RolapAggregator.Max.aggregate( Arrays.asList( intSet1 ), Datatype.Integer ) );
+    assertEquals( null, RolapAggregator.Max.aggregate( Arrays.asList( intSet2 ), Datatype.Integer ) );
     try {
-      RolapAggregator.Max.aggregate( Arrays.asList( intSet3 ), Dialect.Datatype.Integer );
+      RolapAggregator.Max.aggregate( Arrays.asList( intSet3 ), Datatype.Integer );
       fail();
     } catch ( AssertionError e ) {
       // ok.
     }
-    assertEquals( 7, RolapAggregator.Max.aggregate( Arrays.asList( intSet4 ), Dialect.Datatype.Integer ) );
+    assertEquals( 7, RolapAggregator.Max.aggregate( Arrays.asList( intSet4 ), Datatype.Integer ) );
   }
 
   /**

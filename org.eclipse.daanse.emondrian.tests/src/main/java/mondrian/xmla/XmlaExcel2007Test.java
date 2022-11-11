@@ -10,7 +10,7 @@ package mondrian.xmla;
 
 import mondrian.olap.Connection;
 import mondrian.olap.Util;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.test.DiffRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;

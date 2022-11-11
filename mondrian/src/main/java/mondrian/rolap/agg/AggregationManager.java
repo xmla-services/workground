@@ -14,13 +14,13 @@ package mondrian.rolap.agg;
 
 import mondrian.olap.*;
 import mondrian.rolap.*;
-import mondrian.rolap.SqlStatement.Type;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.server.Locus;
 import mondrian.util.Pair;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 
 import java.io.PrintWriter;
 import java.util.*;
@@ -206,7 +206,7 @@ public class AggregationManager extends RolapAggregationManager {
                 starPredicateSlicer,
                 fields,
                 countOnly);
-        Pair<String, List<SqlStatement.Type>> pair = spec.generateSqlQuery();
+        Pair<String, List<BestFitColumnType>> pair = spec.generateSqlQuery();
 
         if (getLogger().isDebugEnabled()) {
             getLogger().debug(
@@ -225,7 +225,7 @@ public class AggregationManager extends RolapAggregationManager {
      * @return A pair consisting of a SQL statement and a list of suggested
      *     types of columns
      */
-    public static Pair<String, List<SqlStatement.Type>> generateSql(
+    public static Pair<String, List<BestFitColumnType>> generateSql(
         GroupingSetsList groupingSetsList,
         List<StarPredicate> compoundPredicateList)
     {
@@ -278,7 +278,7 @@ public class AggregationManager extends RolapAggregationManager {
                 AggQuerySpec aggQuerySpec =
                     new AggQuerySpec(
                         aggStar, rollup[0], groupingSetsList);
-                Pair<String, List<Type>> sql = aggQuerySpec.generateSqlQuery();
+                Pair<String, List<BestFitColumnType>> sql = aggQuerySpec.generateSqlQuery();
 
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(
@@ -318,7 +318,7 @@ public class AggregationManager extends RolapAggregationManager {
         SegmentArrayQuerySpec spec =
             new SegmentArrayQuerySpec(groupingSetsList, compoundPredicateList);
 
-        Pair<String, List<SqlStatement.Type>> pair = spec.generateSqlQuery();
+        Pair<String, List<BestFitColumnType>> pair = spec.generateSqlQuery();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(

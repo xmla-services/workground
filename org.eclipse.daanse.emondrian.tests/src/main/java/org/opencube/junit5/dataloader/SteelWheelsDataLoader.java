@@ -1,6 +1,6 @@
 package org.opencube.junit5.dataloader;
 
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.spi.DialectManager;
 import org.opencube.junit5.Constants;
 

@@ -10,8 +10,8 @@
 package mondrian.spi;
 
 import mondrian.olap.Util;
-import mondrian.spi.impl.JdbcDialectFactory;
-import mondrian.spi.impl.JdbcDialectImpl;
+
+
 import mondrian.util.ClassResolver;
 import mondrian.util.ServiceDiscovery;
 
@@ -20,6 +20,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 import javax.sql.DataSource;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DialectFactory;
+import org.eclipse.daanse.sql.dialect.impl.factory.JdbcDialectFactory;
+import org.eclipse.daanse.sql.dialect.impl.JdbcDialectImpl;
 
 /**
  * Manages {@link mondrian.spi.Dialect} and {@link mondrian.spi.DialectFactory}

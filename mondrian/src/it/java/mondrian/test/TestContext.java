@@ -39,7 +39,7 @@ import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapUtil;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.spi.DialectManager;
 import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
@@ -403,7 +403,7 @@ public class TestContext {
     return schema;
   }
 
- 
+
 
   /**
    * Executes a query.

@@ -13,8 +13,8 @@ package mondrian.olap;
 
 import mondrian.calc.Calc;
 import mondrian.calc.TupleList;
-import mondrian.spi.Dialect.Datatype;
 import mondrian.spi.SegmentBody;
+import org.eclipse.daanse.sql.dialect.api.Datatype;
 
 import java.util.List;
 
@@ -66,7 +66,7 @@ public interface Aggregator {
      * and we are dealing with a raw {@link SegmentBody} object.
      *
      * <p>Only gets called if
-     * {@link #supportsFastAggregates(mondrian.spi.Dialect.Datatype)} is true.
+     * {@link #supportsFastAggregates(Datatype)} is true.
      *
      * <p>This is only invoked for rollup operations.
      *

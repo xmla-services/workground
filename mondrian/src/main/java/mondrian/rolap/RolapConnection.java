@@ -23,6 +23,7 @@ import mondrian.util.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.eigenbase.util.property.StringProperty;
 
 import org.olap4j.Scenario;
@@ -37,6 +38,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 /**
  * A <code>RolapConnection</code> is a connection to a Mondrian OLAP Server.
@@ -225,8 +227,8 @@ public class RolapConnection extends ConnectionBase {
         conn = this.dataSource.getConnection();
         Dialect dialect =
           DialectManager.createDialect( this.dataSource, conn );
-        if ( dialect.getDatabaseProduct()
-          == Dialect.DatabaseProduct.DERBY ) {
+          if ( dialect.getDatabaseProduct()
+          == DatabaseProduct.DERBY ) {
           // Derby requires a little extra prodding to do the
           // validation to detect an error.
           statement = conn.createStatement();

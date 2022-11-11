@@ -47,11 +47,12 @@ import mondrian.rolap.agg.OrPredicate;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.CrossJoinArg;
 import mondrian.rolap.sql.SqlQuery;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.util.FilteredIterableList;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.eclipse.daanse.sql.dialect.api.Datatype;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -753,7 +754,7 @@ public class SqlConstraintUtils {
   /**
    * Gets a list of unique ordinal cube members to make sure our cell request isn't unsatisfiable, following the same
    * logic as RolapEvaluator
-   * 
+   *
    * @return Unique ordinal cube members
    */
   protected static List<Member> getUniqueOrdinalMembers( List<Member> members ) {
@@ -802,14 +803,14 @@ public class SqlConstraintUtils {
    * <p>
    * This is required only if the default member is not the ALL member. The time dimension for example, has 1997 as
    * default member. When we evaluate the query
-   * 
+   *
    * <pre>
    *   select NON EMPTY crossjoin(
    *     {[Time].[1998]}, [Customer].[All].children
    *  ) on columns
    *   from [sales]
    * </pre>
-   * 
+   *
    * the <code>[Customer].[All].children</code> is evaluated with the default member <code>[Time].[1997]</code> in the
    * evaluator context. This is wrong because the NON EMPTY must filter out Customers with no rows in the fact table for
    * 1998 not 1997. So we do not restrict the time dimension and fetch all children.
@@ -1309,7 +1310,7 @@ public class SqlConstraintUtils {
    *
    * @return string value corresponding to the member
    */
-  private static String getColumnValue( Object key, Dialect dialect, Dialect.Datatype datatype ) {
+  private static String getColumnValue( Object key, Dialect dialect, Datatype datatype ) {
     if ( key != RolapUtil.sqlNullValue ) {
       return key.toString();
     } else {
@@ -1352,7 +1353,7 @@ public class SqlConstraintUtils {
     }
 
     String columnString;
-    Dialect.Datatype datatype;
+    Datatype datatype;
     if ( column != null ) {
       if ( column.getNameColumn() == null ) {
         datatype = level.getDatatype();
@@ -1360,7 +1361,7 @@ public class SqlConstraintUtils {
         column = column.getNameColumn();
         // The schema doesn't specify the datatype of the name column,
         // but we presume that it is a string.
-        datatype = Dialect.Datatype.String;
+        datatype = Datatype.String;
       }
       if ( aggStar != null ) {
         // this makes the assumption that the name column is the same
@@ -1386,7 +1387,7 @@ public class SqlConstraintUtils {
       } else {
         // The schema doesn't specify the datatype of the name column,
         // but we presume that it is a string.
-        datatype = Dialect.Datatype.String;
+        datatype = Datatype.String;
       }
       columnString = exp.getExpression( query );
     }
@@ -1399,7 +1400,7 @@ public class SqlConstraintUtils {
   }
 
   private static String getColumnValueConstraint( SqlQuery query, String[] columnValues, boolean caseSensitive,
-      String columnString, Dialect.Datatype datatype ) {
+      String columnString, Datatype datatype ) {
     String constraint;
     List<String> values = new ArrayList<String>();
     boolean containsNull = false;
@@ -1416,7 +1417,7 @@ public class SqlConstraintUtils {
         final StringBuilder buf = new StringBuilder();
         query.getDialect().quote( buf, columnValue, datatype );
         String value = buf.toString();
-        if ( caseSensitive && datatype == Dialect.Datatype.String ) {
+        if ( caseSensitive && datatype == Datatype.String ) {
           // Some databases (like DB2) compare case-sensitive.
           // We convert
           // the value to upper-case in the DBMS (e.g. UPPER('Foo'))
@@ -1430,7 +1431,7 @@ public class SqlConstraintUtils {
       }
     }
 
-    if ( caseSensitive && datatype == Dialect.Datatype.String && !MondrianProperties.instance().CaseSensitive.get() ) {
+    if ( caseSensitive && datatype == Datatype.String && !MondrianProperties.instance().CaseSensitive.get() ) {
       columnString = query.getDialect().toUpper( columnString );
     }
 
@@ -1480,7 +1481,7 @@ public class SqlConstraintUtils {
    *
    * @return generated string corresponding to the expression
    */
-  public static String constrainLevel2( SqlQuery query, MondrianDef.Expression exp, Dialect.Datatype datatype,
+  public static String constrainLevel2( SqlQuery query, MondrianDef.Expression exp, Datatype datatype,
       Comparable columnValue ) {
     String columnString = exp.getExpression( query );
     if ( columnValue == RolapUtil.sqlNullValue ) {

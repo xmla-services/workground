@@ -11,7 +11,8 @@
 package mondrian.rolap;
 
 import mondrian.olap.*;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
@@ -946,7 +947,7 @@ public class VirtualCubeTest extends BatchTestCase {
         // Only need to run this against one db to verify caching
         // behavior is correct.
         final Dialect dialect = getDialect(context.createConnection());
-        if (dialect.getDatabaseProduct() != Dialect.DatabaseProduct.DERBY) {
+        if (dialect.getDatabaseProduct() != DatabaseProduct.DERBY) {
             return;
         }
 
@@ -1038,12 +1039,12 @@ public class VirtualCubeTest extends BatchTestCase {
 
         SqlPattern[] patterns1 = {
             new SqlPattern(
-                Dialect.DatabaseProduct.DERBY, derbyNecjSql1, derbyNecjSql1)
+                DatabaseProduct.DERBY, derbyNecjSql1, derbyNecjSql1)
         };
 
         SqlPattern[] patterns2 = {
             new SqlPattern(
-                Dialect.DatabaseProduct.DERBY, derbyNecjSql2, derbyNecjSql2)
+                DatabaseProduct.DERBY, derbyNecjSql2, derbyNecjSql2)
         };
 
         // Run query 1 with cleared cache;
@@ -1392,7 +1393,7 @@ public class VirtualCubeTest extends BatchTestCase {
             + "    ISNULL(4) ASC, 4 ASC";
 
         SqlPattern[] mysqlPattern = {
-            new SqlPattern(Dialect.DatabaseProduct.MYSQL, mysqlSQL, mysqlSQL)
+            new SqlPattern(DatabaseProduct.MYSQL, mysqlSQL, mysqlSQL)
         };
 
         String result =
@@ -1571,7 +1572,7 @@ public class VirtualCubeTest extends BatchTestCase {
 
         SqlPattern[] mysqlPattern = {
             new SqlPattern(
-                Dialect.DatabaseProduct.MYSQL, mysqlSQL, mysqlSQL)
+                DatabaseProduct.MYSQL, mysqlSQL, mysqlSQL)
         };
 
         Connection connection = context.createConnection();

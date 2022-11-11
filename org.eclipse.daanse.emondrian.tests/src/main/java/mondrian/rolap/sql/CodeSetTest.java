@@ -10,7 +10,6 @@
 package mondrian.rolap.sql;
 
 import mondrian.olap.MondrianException;
-import mondrian.spi.impl.PostgreSqlDialect;
 
 import org.junit.jupiter.api.Test;
 
@@ -56,6 +55,8 @@ public class CodeSetTest {
   public void testSucces_CodeSetContainsOnlyCodeForPostgresDialect()
     throws Exception
     {
+    fail("PostgreSqlDialect not implemented yet");
+    /*
     PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
@@ -70,6 +71,7 @@ public class CodeSetTest {
           "Not expected any MondrianException but it occured: "
           + mExc.getLocalizedMessage());
     }
+    */
   }
 
   /**
@@ -83,6 +85,8 @@ public class CodeSetTest {
   public void testSucces_CodeSetContainsCodeForBothPostgresAndGenericDialects()
     throws Exception
     {
+    fail("PostgreSqlDialect not implemented yet");
+    /*
     PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
@@ -98,6 +102,7 @@ public class CodeSetTest {
           "Not expected any MondrianException but it occured: "
           + mExc.getLocalizedMessage());
     }
+     */
   }
 
   /**
@@ -112,6 +117,8 @@ public class CodeSetTest {
     testSucces_CodeSetContainsCodeForBothPostgresAndPostgresqlDialects()
       throws Exception
       {
+    fail("PostgreSqlDialect not implemented yet");
+    /*
     PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
@@ -127,6 +134,7 @@ public class CodeSetTest {
           "Not expected any MondrianException but it occured: "
           + mExc.getLocalizedMessage());
     }
+     */
   }
 
   /**
@@ -139,6 +147,8 @@ public class CodeSetTest {
   public void testSucces_CodeSetContainsOnlyCodeForGenericlDialect()
     throws Exception
     {
+    fail("PostgreSqlDialect not implemented yet");
+    /*
     PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
@@ -153,6 +163,7 @@ public class CodeSetTest {
           "Not expected any MondrianException but it occured: "
           + mExc.getLocalizedMessage());
     }
+     */
   }
 
   /**
@@ -165,6 +176,8 @@ public class CodeSetTest {
   public void testMondrianExceptionThrown_WhenCodeSetContainsNOCodeForDialect()
     throws Exception
     {
+    fail("PostgreSqlDialect not implemented yet");
+    /*
     PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
@@ -180,6 +193,7 @@ public class CodeSetTest {
           MONDRIAN_ERROR_NO_GENERIC_VARIANT,
           mExc.getLocalizedMessage());
     }
+     */
   }
 
   private Connection mockConnection(

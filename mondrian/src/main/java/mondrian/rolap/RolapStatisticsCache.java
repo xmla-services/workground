@@ -12,8 +12,9 @@ package mondrian.rolap;
 import mondrian.olap.MondrianDef;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.server.Execution;
-import mondrian.spi.Dialect;
-import mondrian.spi.StatisticsProvider;
+import mondrian.spi.impl.SqlStatisticsProviderNew;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.sql.statistics.api.StatisticsProvider;
 
 import java.util.*;
 import javax.sql.DataSource;
@@ -66,14 +67,15 @@ public class RolapStatisticsCache {
             rowCount = tableMap.get(key);
         } else {
             final Dialect dialect = star.getSqlQueryDialect();
-            final List<StatisticsProvider> statisticsProviders =
-                dialect.getStatisticsProviders();
+            //final List<StatisticsProvider> statisticsProviders =
+            //    dialect.getStatisticsProviders();
+            final List<SqlStatisticsProviderNew> statisticsProviders = List.of(new SqlStatisticsProviderNew());
             final Execution execution =
                 new Execution(
                     star.getSchema().getInternalConnection()
                         .getInternalStatement(),
                     0);
-            for (StatisticsProvider statisticsProvider : statisticsProviders) {
+            for (SqlStatisticsProviderNew statisticsProvider : statisticsProviders) {
                 rowCount = statisticsProvider.getTableCardinality(
                     dialect,
                     star.getDataSource(),
@@ -99,16 +101,16 @@ public class RolapStatisticsCache {
             rowCount = queryMap.get(sql);
         } else {
             final Dialect dialect = star.getSqlQueryDialect();
-            final List<StatisticsProvider> statisticsProviders =
-                dialect.getStatisticsProviders();
+            //final List<StatisticsProvider> statisticsProviders =
+            //    dialect.getStatisticsProviders();
+            final List<SqlStatisticsProviderNew> statisticsProviders = List.of(new SqlStatisticsProviderNew());
             final Execution execution =
                 new Execution(
                     star.getSchema().getInternalConnection()
                         .getInternalStatement(),
                     0);
-            for (StatisticsProvider statisticsProvider : statisticsProviders) {
-                rowCount = statisticsProvider.getQueryCardinality(
-                    dialect, star.getDataSource(), sql, execution);
+            for (SqlStatisticsProviderNew statisticsProvider : statisticsProviders) {
+                rowCount = statisticsProvider.getQueryCardinality(dialect, star.getDataSource(), sql, execution);
                 if (rowCount >= 0) {
                     break;
                 }
@@ -160,14 +162,15 @@ public class RolapStatisticsCache {
             rowCount = columnMap.get(key);
         } else {
             final Dialect dialect = star.getSqlQueryDialect();
-            final List<StatisticsProvider> statisticsProviders =
-                dialect.getStatisticsProviders();
+            final List<SqlStatisticsProviderNew> statisticsProviders = List.of(new SqlStatisticsProviderNew());
+            //final List<StatisticsProvider> statisticsProviders =
+            //    dialect.getStatisticsProviders();
             final Execution execution =
                 new Execution(
                     star.getSchema().getInternalConnection()
                         .getInternalStatement(),
                     0);
-            for (StatisticsProvider statisticsProvider : statisticsProviders) {
+            for (SqlStatisticsProviderNew statisticsProvider : statisticsProviders) {
                 rowCount = statisticsProvider.getColumnCardinality(
                     dialect,
                     star.getDataSource(),

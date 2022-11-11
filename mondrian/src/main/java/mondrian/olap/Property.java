@@ -14,6 +14,7 @@ package mondrian.olap;
 
 import mondrian.rolap.SqlStatement;
 import mondrian.spi.PropertyFormatter;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 
 import java.util.*;
 
@@ -63,21 +64,21 @@ public class Property extends EnumeratedValues.BasicValue {
     public enum Datatype {
         TYPE_STRING(null),
         TYPE_NUMERIC(null),
-        TYPE_INTEGER(SqlStatement.Type.INT),
-        TYPE_LONG(SqlStatement.Type.LONG),
+        TYPE_INTEGER(BestFitColumnType.INT),
+        TYPE_LONG(BestFitColumnType.LONG),
         TYPE_BOOLEAN(null),
         TYPE_DATE(null),
         TYPE_TIME(null),
         TYPE_TIMESTAMP(null),
         TYPE_OTHER(null);
 
-        private SqlStatement.Type type;
+        private BestFitColumnType type;
 
-        Datatype(SqlStatement.Type type) {
+        Datatype(BestFitColumnType type) {
             this.type = type;
         }
 
-        public SqlStatement.Type getInternalType() {
+        public BestFitColumnType getInternalType() {
             return type;
         }
 

@@ -25,6 +25,8 @@ import org.apache.commons.collections.map.ReferenceMap;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.sql.dialect.api.Datatype;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -35,6 +37,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.sql.DataSource;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 /**
  * A <code>RolapStar</code> is a star schema. It is the means to read cell
@@ -848,8 +851,8 @@ public class RolapStar {
 
         private final Table table;
         private final MondrianDef.Expression expression;
-        private final Dialect.Datatype datatype;
-        private final SqlStatement.Type internalType;
+        private final Datatype datatype;
+        private final BestFitColumnType internalType;
         private final String name;
 
         /**
@@ -887,7 +890,7 @@ public class RolapStar {
             String name,
             Table table,
             MondrianDef.Expression expression,
-            Dialect.Datatype datatype)
+            Datatype datatype)
         {
             this(
                 name, table, expression, datatype, null, null,
@@ -898,8 +901,8 @@ public class RolapStar {
             String name,
             Table table,
             MondrianDef.Expression expression,
-            Dialect.Datatype datatype,
-            SqlStatement.Type internalType,
+            Datatype datatype,
+            BestFitColumnType internalType,
             Column nameColumn,
             Column parentColumn,
             String usagePrefix,
@@ -931,7 +934,7 @@ public class RolapStar {
          *
          * @param datatype Datatype
          */
-        protected Column(Dialect.Datatype datatype)
+        protected Column(Datatype datatype)
         {
             this(
                 null,
@@ -1053,7 +1056,7 @@ public class RolapStar {
         public static String createInExpr(
             final String expr,
             StarColumnPredicate predicate,
-            Dialect.Datatype datatype,
+            Datatype datatype,
             SqlQuery sqlQuery)
         {
             // Sometimes a column predicate is created without a column. This
@@ -1101,7 +1104,7 @@ public class RolapStar {
             pw.print(generateExprString(sqlQuery));
         }
 
-        public Dialect.Datatype getDatatype() {
+        public Datatype getDatatype() {
             return datatype;
         }
 
@@ -1161,7 +1164,7 @@ public class RolapStar {
             }
         }
 
-        public SqlStatement.Type getInternalType() {
+        public BestFitColumnType getInternalType() {
             return internalType;
         }
     }
@@ -1182,7 +1185,7 @@ public class RolapStar {
             RolapAggregator aggregator,
             Table table,
             MondrianDef.Expression expression,
-            Dialect.Datatype datatype)
+            Datatype datatype)
         {
             super(name, table, expression, datatype);
             this.cubeName = cubeName;
@@ -1489,7 +1492,7 @@ public class RolapStar {
                     level,
                     level.getName(),
                     level.getNameExp(),
-                    Dialect.Datatype.String,
+                    Datatype.String,
                     null,
                     null,
                     null,
@@ -1527,8 +1530,8 @@ public class RolapStar {
             RolapLevel level,
             String name,
             MondrianDef.Expression xmlExpr,
-            Dialect.Datatype datatype,
-            SqlStatement.Type internalType,
+            Datatype datatype,
+            BestFitColumnType internalType,
             Column nameColumn,
             Column parentColumn,
             String usagePrefix)

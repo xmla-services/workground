@@ -12,7 +12,7 @@ package mondrian.test;
 import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
 
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
@@ -417,7 +417,7 @@ public class MultipleHierarchyTest {
             "with member [Time.Weekly].blah as '1' select from sales",
             new SqlPattern[]{
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL,
+                    DatabaseProduct.MYSQL,
                     forbiddenSql, forbiddenSql)
             }
         );

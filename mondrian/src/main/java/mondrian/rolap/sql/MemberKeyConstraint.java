@@ -14,6 +14,7 @@ import mondrian.rolap.*;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.spi.Dialect;
 import mondrian.util.Pair;
+import org.eclipse.daanse.sql.dialect.api.Datatype;
 
 import java.util.List;
 
@@ -28,12 +29,12 @@ public class MemberKeyConstraint
 {
     private final Pair<List<MondrianDef.Expression>, List<Comparable>> cacheKey;
     private final List<MondrianDef.Expression> columnList;
-    private final List<Dialect.Datatype> datatypeList;
+    private final List<Datatype> datatypeList;
     private final List<Comparable> valueList;
 
     public MemberKeyConstraint(
         List<MondrianDef.Expression> columnList,
-        List<Dialect.Datatype> datatypeList,
+        List<Datatype> datatypeList,
         List<Comparable> valueList)
     {
         this.columnList = columnList;
@@ -48,7 +49,7 @@ public class MemberKeyConstraint
         for (int i = 0; i < columnList.size(); i++) {
             MondrianDef.Expression expression = columnList.get(i);
             final Comparable value = valueList.get(i);
-            final Dialect.Datatype datatype = datatypeList.get(i);
+            final Datatype datatype = datatypeList.get(i);
             sqlQuery.addWhere(
                 SqlConstraintUtils.constrainLevel2(
                     sqlQuery,

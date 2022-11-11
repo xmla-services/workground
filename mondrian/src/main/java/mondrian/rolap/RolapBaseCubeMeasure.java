@@ -13,6 +13,7 @@ import mondrian.olap.*;
 import mondrian.resource.MondrianResource;
 import mondrian.spi.CellFormatter;
 import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Datatype;
 
 import java.util.*;
 
@@ -178,14 +179,14 @@ public class RolapBaseCubeMeasure
         return annotationMap;
     }
 
-    public Dialect.Datatype getDatatype() {
+    public Datatype getDatatype() {
         Object datatype = getPropertyValue(Property.DATATYPE.name);
         try {
-            return Dialect.Datatype.valueOf((String) datatype);
+            return Datatype.valueOf((String) datatype);
         } catch (ClassCastException e) {
-            return Dialect.Datatype.String;
+            return Datatype.String;
         } catch (IllegalArgumentException e) {
-            return Dialect.Datatype.String;
+            return Datatype.String;
         }
     }
 }

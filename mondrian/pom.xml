@@ -22,7 +22,7 @@
     <maven-failsafe-plugin.argLine>-Duser.language=en -Duser.country=US</maven-failsafe-plugin.argLine>
   </properties>
   <dependencies>
-  
+
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
@@ -83,7 +83,7 @@
       <artifactId>org.eclipse.daanse.repackage.olap4j</artifactId>
 
     </dependency>
-    
+
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.repackage.olap4j.xmla</artifactId>
@@ -101,7 +101,7 @@
     <groupId>org.apache.servicemix.bundles</groupId>
       <artifactId>org.apache.servicemix.bundles.xmlresolver</artifactId>
     </dependency>
-    <dependency>    
+    <dependency>
         <groupId>org.apache.servicemix.bundles</groupId>
     	<artifactId>org.apache.servicemix.bundles.dom4j</artifactId>
        </dependency>
@@ -143,6 +143,18 @@
       <groupId>org.mozilla</groupId>
       <artifactId>rhino</artifactId>
       <version>1.7.14</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.sql.dialect.api</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.sql.dialect.common</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
       <scope>compile</scope>
     </dependency>
   </dependencies>
@@ -292,7 +304,7 @@
           </systemPropertyVariables>
         </configuration>
       </plugin>
-      
+
       <plugin>
         <groupId>biz.aQute.bnd</groupId>
         <artifactId>bnd-maven-plugin</artifactId>

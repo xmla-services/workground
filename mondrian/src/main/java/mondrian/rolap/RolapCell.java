@@ -19,7 +19,7 @@ import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.*;
 import mondrian.server.*;
 import mondrian.server.monitor.SqlStatementEvent;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 import org.apache.logging.log4j.Logger;
 

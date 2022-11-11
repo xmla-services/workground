@@ -19,10 +19,9 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Statement;
 
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import mondrian.spi.Dialect;
 
 public class PostgreSqlDialectTest{
   private Connection connection = mock( Connection.class );
@@ -32,21 +31,21 @@ public class PostgreSqlDialectTest{
 
   @BeforeEach
   protected void setUp() throws Exception {
-    when( metaData.getDatabaseProductName() ).thenReturn( Dialect.DatabaseProduct.POSTGRESQL.name() );
+    when( metaData.getDatabaseProductName() ).thenReturn( DatabaseProduct.POSTGRESQL.name() );
     when( connection.getMetaData() ).thenReturn( metaData );
     dialect = new PostgreSqlDialect( connection );
   }
-  
+
   @Test
   public void testAllowsRegularExpressionInWhereClause() {
     assertTrue( dialect.allowsRegularExpressionInWhereClause() );
   }
-  
+
   @Test
   public void testGenerateRegularExpression_InvalidRegex() throws Exception {
     assertNull( dialect.generateRegularExpression( "table.column", "(a" ),"Invalid regex should be ignored" );
   }
-  
+
   @Test
   public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
     String sql = dialect.generateRegularExpression( "table.column", "(?i)|(?u).*a.*" );

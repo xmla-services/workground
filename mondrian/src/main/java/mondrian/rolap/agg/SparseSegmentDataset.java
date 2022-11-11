@@ -13,6 +13,7 @@ import mondrian.rolap.CellKey;
 import mondrian.rolap.SqlStatement;
 import mondrian.spi.SegmentBody;
 import mondrian.util.Pair;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 
 import java.util.*;
 
@@ -96,8 +97,8 @@ class SparseSegmentDataset implements SegmentDataset {
         put(CellKey.Generator.newCellKey(pos), o);
     }
 
-    public SqlStatement.Type getType() {
-        return SqlStatement.Type.OBJECT;
+    public BestFitColumnType getType() {
+        return BestFitColumnType.OBJECT;
     }
 
     public SegmentBody createSegmentBody(

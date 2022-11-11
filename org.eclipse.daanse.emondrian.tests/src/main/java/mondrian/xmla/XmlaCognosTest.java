@@ -11,7 +11,8 @@ package mondrian.xmla;
 import mondrian.olap.Connection;
 import mondrian.olap.Util;
 import mondrian.olap4j.MondrianOlap4jDriver;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.test.DiffRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -57,7 +58,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
         } else if ("testCognosMDXSuiteHR_001".equals(testCaseName)
             && filename.equals("response")
             && getDialect(connection).getDatabaseProduct()
-                .equals(Dialect.DatabaseProduct.VERTICA))
+                .equals(DatabaseProduct.VERTICA))
         {
             content = content.replaceAll(
                 "(<Cell CellOrdinal=\\\"(?:5|6|7|8|9|10|12|14|15|16|17|19|21|22|24)\\\">\\s*"
@@ -65,7 +66,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
         } else if ("testCognosMDXSuiteHR_002".equals(testCaseName)
             && filename.equals("response")
             && getDialect(connection).getDatabaseProduct()
-                .equals(Dialect.DatabaseProduct.VERTICA))
+                .equals(DatabaseProduct.VERTICA))
         {
             content = content.replaceAll(
                 "(<Cell CellOrdinal=\\\"(?:1|2|3|4|5|7|9|10|11|12|13|14|16|18|19|20|21|22|23|25|27|28|29|30|32|34|35|37)\\\">\\s*"
@@ -266,7 +267,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
 
 //    public void testWithFilter() throws Exception {
 //        if (getTestContext().getDialect().getDatabaseProduct()
-//            == Dialect.DatabaseProduct.ACCESS)
+//            == DatabaseProduct.ACCESS)
 //        {
 //            // Disabled because of bug on access: generates query with
 //            // distinct-count even though access does not support it. Bug

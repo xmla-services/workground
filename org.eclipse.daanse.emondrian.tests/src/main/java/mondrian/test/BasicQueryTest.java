@@ -20,14 +20,16 @@ import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapUtil;
 import mondrian.server.Execution;
-import mondrian.spi.Dialect;
 import mondrian.spi.DialectManager;
 import mondrian.spi.StatisticsProvider;
 import mondrian.spi.UserDefinedFunction;
 import mondrian.spi.impl.JdbcStatisticsProvider;
 import mondrian.spi.impl.SqlStatisticsProvider;
+import mondrian.spi.impl.SqlStatisticsProviderNew;
 import mondrian.util.Bug;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.eigenbase.util.property.StringProperty;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -73,7 +75,7 @@ public class BasicQueryTest {
   public static final int MAX_EVAL_DEPTH_VALUE = 5000;
 
   private MondrianProperties props = MondrianProperties.instance();
-  
+
   private static final QueryAndResult[] sampleQueries = {
     // 0
     new QueryAndResult( "select {[Measures].[Unit Sales]} on columns\n" + " from Sales",
@@ -339,7 +341,7 @@ public class BasicQueryTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testSample8(Context context) {
     Connection connection = context.createConnection();
-    if (TestUtil.getDialect(connection).getDatabaseProduct() == Dialect.DatabaseProduct.INFOBRIGHT ) {
+    if (TestUtil.getDialect(connection).getDatabaseProduct() == DatabaseProduct.INFOBRIGHT ) {
       // Skip this test on Infobright, because [Promotion Sales] is
       // defined wrong.
       return;
@@ -731,7 +733,7 @@ public class BasicQueryTest {
         + "      [Promotion Media].[All Media].[Street Handout] }\n" + "   ) on columns\n" + "from Sales\n"
         + "where ([Time].[1997])", 2, 2 );
   }
-  
+
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testOneDimensionalQueryWithTupleAsSlicer(Context context) {
@@ -745,7 +747,7 @@ public class BasicQueryTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )  
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testSlicerIsEvaluatedBeforeAxes(Context context) {
     // about 10 products exceeded 20000 units in 1997, only 2 for Q1
     assertSize(context.createConnection(), "SELECT {[Measures].[Unit Sales]} on columns,\n"
@@ -754,7 +756,7 @@ public class BasicQueryTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )  
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testSlicerWithCalculatedMembers(Context context) {
     assertSize(context.createConnection(), "WITH Member [Time].[Time].[1997].[H1] as ' Aggregate({[Time].[1997].[Q1], [Time].[1997].[Q2]})' \n"
         + "  MEMBER [Measures].[Store Margin] as '[Measures].[Store Sales] - [Measures].[Store Cost]'\n"
@@ -762,17 +764,17 @@ public class BasicQueryTest {
         + "FROM Sales\n" + "WHERE ([Time].[1997].[H1], [Measures].[Store Margin])", 3, 6 );
   }
 
-  // [Measures].[Ever] not found in cube Sales 
+  // [Measures].[Ever] not found in cube Sales
   @Disabled
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )  
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void _testEver(Context context) {
     assertQueryReturns(context.createConnection(), "select\n" + " {[Measures].[Unit Sales], [Measures].[Ever]} on columns,\n"
         + " [Gender].members on rows\n" + "from Sales", "xxx" );
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )  
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void _testDairy(Context context) {
     assertQueryReturns(context.createConnection(), "with\n"
         + "  member [Product].[Non dairy] as '[Product].[All Products] - [Product].[Food].[Dairy]'\n"
@@ -790,7 +792,7 @@ public class BasicQueryTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )  
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testSolveOrder(Context context) {
     assertQueryReturns(context.createConnection(), "WITH\n" + "   MEMBER [Measures].[StoreType] AS \n"
         + "   '[Store].CurrentMember.Properties(\"Store Type\")',\n" + "   SOLVE_ORDER = 2\n"
@@ -828,7 +830,7 @@ public class BasicQueryTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )  
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testSolveOrderNonMeasure(Context context) {
     assertQueryReturns(context.createConnection(), "WITH\n" + "   MEMBER [Product].[ProdCalc] as '1', SOLVE_ORDER=1\n"
         + "   MEMBER [Measures].[MeasuresCalc] as '2', SOLVE_ORDER=2\n"
@@ -841,7 +843,7 @@ public class BasicQueryTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )  
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testSolveOrderNonMeasure2(Context context) {
     assertQueryReturns(context.createConnection(), "WITH\n" + "   MEMBER [Store].[StoreCalc] as '0', SOLVE_ORDER=0\n"
         + "   MEMBER [Product].[ProdCalc] as '1', SOLVE_ORDER=1\n" + "SELECT\n"
@@ -860,7 +862,7 @@ public class BasicQueryTest {
    * In the first test, the answer should be 1 because Promotions comes before Customers in the FoodMart.xml schema.
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )  
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testSolveOrderAmbiguous1(Context context) {
     assertQueryReturns(context.createConnection(), "WITH\n" + "   MEMBER [Promotions].[Calc] AS '1'\n" + "   MEMBER [Customers].[Calc] AS '2'\n"
         + "SELECT\n" + "   { [Promotions].[Calc] } ON COLUMNS,\n" + "   {  [Customers].[Calc] } ON ROWS\n"
@@ -874,7 +876,7 @@ public class BasicQueryTest {
    * In the second test, the answer should be 2 because Product comes before Promotions in the FoodMart.xml schema.
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )  
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testSolveOrderAmbiguous2(Context context) {
     assertQueryReturns(context.createConnection(), "WITH\n" + "   MEMBER [Promotions].[Calc] AS '1'\n" + "   MEMBER [Product].[Calc] AS '2'\n"
         + "SELECT\n" + "   { [Promotions].[Calc] } ON COLUMNS,\n" + "   { [Product].[Calc] } ON ROWS\n" + "FROM Sales",
@@ -884,7 +886,7 @@ public class BasicQueryTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )  
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testCalculatedMemberWhichIsNotAMeasure(Context context) {
     assertQueryReturns(context.createConnection(), "WITH MEMBER [Product].[BigSeller] AS\n"
         + "  'IIf([Product].[Drink].[Alcoholic Beverages].[Beer and Wine] > 100, \"Yes\",\"No\")'\n"
@@ -901,7 +903,7 @@ public class BasicQueryTest {
   }
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )  
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testMultipleCalculatedMembersWhichAreNotMeasures(Context context) {
     assertQueryReturns(context.createConnection(), "WITH\n" + "  MEMBER [Store].[x] AS '1'\n" + "  MEMBER [Product].[x] AS '1'\n"
         + "SELECT {[Store].[x]} ON COLUMNS\n" + "FROM Sales", "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Store].[x]}\n"
@@ -918,7 +920,7 @@ public class BasicQueryTest {
    * work ok.
    */
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )  
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testMultipleCalculatedMembersWhichAreNotMeasures2(Context context) {
     assertQueryReturns( context.createConnection(),"WITH\n" + "  MEMBER [Product].[x] AS '1'\n" + "  MEMBER [Store].[x] AS '1'\n"
         + "SELECT {[Store].[x]} ON COLUMNS\n" + "FROM Sales", "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Store].[x]}\n"
@@ -3103,11 +3105,11 @@ public class BasicQueryTest {
    * would resemble:
    *
    * <blockquote>
-   * 
+   *
    * <pre>
    * [Time].[1998].[1]:[Time].[1998].[6]
    * </pre>
-   * 
+   *
    * </blockquote>
    *
    * <p>
@@ -3335,7 +3337,7 @@ public class BasicQueryTest {
   public void _testWarehouseProfit(Context context) {
     assertQueryReturns( context.createConnection(),"select \n"
         + "{[Measures].[Warehouse Cost], [Measures].[Warehouse Sales], [Measures].[Warehouse Profit]}\n"
-        + " ON COLUMNS from [Warehouse]", 
+        + " ON COLUMNS from [Warehouse]",
         "Axis #0:\n"
         + "{}\n"
         + "Axis #1:\n"
@@ -3376,7 +3378,7 @@ public class BasicQueryTest {
             + "  '[Measures].[YTD Unit Sales] - ([Measures].[Previous YTD Unit Sales])'\n"
             + "SELECT {[Time].[1998]} ON COLUMNS,\n"
             + "  {[Measures].[YTD Unit Sales], [Measures].[Previous YTD Unit Sales], [Measures].[YTD Growth]} ON ROWS\n"
-            + "FROM Sales ", 
+            + "FROM Sales ",
             "Axis #0:\n"
             + "{}\n"
             + "Axis #1:\n"
@@ -3755,7 +3757,7 @@ public class BasicQueryTest {
 
     String tableQualifier = "as ";
     final Dialect dialect = getDialect(connection);
-    if ( dialect.getDatabaseProduct() == Dialect.DatabaseProduct.ORACLE ) {
+    if ( dialect.getDatabaseProduct() == DatabaseProduct.ORACLE ) {
       // " + tableQualifier + "
       tableQualifier = "";
     }
@@ -4393,7 +4395,7 @@ public class BasicQueryTest {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-2161"> MONDRIAN-2161 </a>.<br>
    * Tests cancelation after executing sql for getMemberChildren
    */
-  @Disabled //has not been fixed during creating Daanse project  
+  @Disabled //has not been fixed during creating Daanse project
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testCancelSqlFetchMemberChildren(Context context) throws Exception {
@@ -5394,17 +5396,18 @@ public class BasicQueryTest {
       // with our custom providers
       Dialect dialect =
           DialectManager.createDialect( connection.getDataSource(), null, dialectClassName );
-      final List<StatisticsProvider> statisticsProviders = dialect.getStatisticsProviders();
-      assertEquals( 2, statisticsProviders.size() );
-      assertTrue( statisticsProviders.get( 0 ) instanceof MyJdbcStatisticsProvider );
-      assertTrue( statisticsProviders.get( 1 ) instanceof SqlStatisticsProvider );
+      //final List<StatisticsProvider> statisticsProviders = dialect.getStatisticsProviders();
+      final List<SqlStatisticsProviderNew> statisticsProviders = List.of(new SqlStatisticsProviderNew());
+      //assertEquals( 2, statisticsProviders.size() );
+      //assertTrue( statisticsProviders.get( 0 ) instanceof MyJdbcStatisticsProvider );
+      //assertTrue( statisticsProviders.get( 1 ) instanceof SqlStatisticsProvider );
 
-      for ( StatisticsProvider statisticsProvider : statisticsProviders ) {
+      for ( SqlStatisticsProviderNew statisticsProvider : statisticsProviders ) {
         long rowCount =
             statisticsProvider.getTableCardinality( dialect, connection.getDataSource(), null, null,
                 "customer", new Execution( ( (RolapSchema) connection.getSchema() )
                     .getInternalConnection().getInternalStatement(), 0 ) );
-        if ( statisticsProvider instanceof SqlStatisticsProvider ) {
+        if ( statisticsProvider instanceof SqlStatisticsProviderNew ) {
           assertTrue(rowCount > 10000 && rowCount < 15000, "Row count estimate: " + rowCount + " (actual 10281)");
         }
 
@@ -5412,7 +5415,7 @@ public class BasicQueryTest {
             statisticsProvider.getColumnCardinality( dialect, connection.getDataSource(), null, null,
                 "customer", "gender", new Execution( ( (RolapSchema) connection.getSchema() )
                     .getInternalConnection().getInternalStatement(), 0 ) );
-        assertTrue(statisticsProvider instanceof JdbcStatisticsProvider ? valueCount == -1 : valueCount == 2, "Value count estimate: " + valueCount + " (actual 2)");
+        assertTrue(statisticsProvider instanceof SqlStatisticsProviderNew ? valueCount == -1 : valueCount == 2, "Value count estimate: " + valueCount + " (actual 2)");
       }
     } finally {
       connection.close();
@@ -5617,7 +5620,7 @@ public class BasicQueryTest {
   }
 
   private void runMondrian1506(Context context, Mondrian1506Lambda lambda ) throws Exception {
-    if ( getDialect(context.createConnection()).getDatabaseProduct() != Dialect.DatabaseProduct.MYSQL ) {
+    if ( getDialect(context.createConnection()).getDatabaseProduct() != DatabaseProduct.MYSQL ) {
       // This only works on MySQL because of Sleep()
       return;
     }
@@ -5870,7 +5873,7 @@ public class BasicQueryTest {
         "" + "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Measures].[Sales]}\n" + "Axis #2:\n"
             + "{[Product - no Bug].[Drink]}\n" + "{[Product - no Bug].[Food]}\n"
             + "{[Product - no Bug].[Non-Consumable]}\n" + "Row #0: 48,836.21\n" + "Row #1: 409,035.59\n"
-            + "Row #2: 107,366.33\n";    
+            + "Row #2: 107,366.33\n";
     //TestContext testContext = TestContext.instance().withFreshConnection().withSchema( schema );
     withSchema(context, schema);
     Connection connection = context.createConnection();

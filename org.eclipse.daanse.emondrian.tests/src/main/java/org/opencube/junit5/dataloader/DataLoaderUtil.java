@@ -20,7 +20,8 @@ import com.univocity.parsers.csv.Csv;
 import com.univocity.parsers.csv.CsvParserSettings;
 
 import mondrian.olap.Util;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 public class DataLoaderUtil {
 
@@ -45,7 +46,7 @@ public class DataLoaderUtil {
 
 			buf.append(constraint.unique ? "CREATE UNIQUE INDEX " : "CREATE INDEX ")
 					.append(dialect.quoteIdentifier(constraint.name));
-			if (dialect.getDatabaseProduct() != Dialect.DatabaseProduct.TERADATA) {
+			if (dialect.getDatabaseProduct() != DatabaseProduct.TERADATA) {
 				buf.append(" ON ").append(dialect.quoteIdentifier(table.schemaName, table.tableName));
 			}
 			buf.append(" (");
@@ -61,7 +62,7 @@ public class DataLoaderUtil {
 				buf.append(dialect.quoteIdentifier(columnName));
 			}
 			buf.append(")");
-			if (dialect.getDatabaseProduct() == Dialect.DatabaseProduct.TERADATA) {
+			if (dialect.getDatabaseProduct() == DatabaseProduct.TERADATA) {
 				buf.append(" ON ").append(dialect.quoteIdentifier(table.schemaName, table.tableName));
 			}
 			final String createDDL = buf.toString();
@@ -374,7 +375,7 @@ public class DataLoaderUtil {
 		settings.setNullValue("NULL");
 		settings.getFormat().setQuoteEscape('\\');
 		settings.getFormat().setQuote('"');
-		
+
 		settings.setQuoteDetectionEnabled(true);
 
 		tables.parallelStream().forEach(table -> {
@@ -387,9 +388,9 @@ public class DataLoaderUtil {
 					System.out.println("file does not exist-" + table.tableName);
 
 				}
-				
+
 //				if (table.tableName.startsWith("agg_")) {
-//					//aggregation tables are calculated 
+//					//aggregation tables are calculated
 //					//TODO: also load them
 //					return;
 //				}

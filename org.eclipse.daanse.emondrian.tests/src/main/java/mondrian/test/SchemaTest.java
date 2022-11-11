@@ -41,7 +41,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import static mondrian.spi.Dialect.DatabaseProduct.MYSQL;
+import static org.eclipse.daanse.sql.dialect.api.DatabaseProduct.MYSQL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.opencube.junit5.TestUtil.*;
 
@@ -62,7 +62,7 @@ public class SchemaTest {
     public void beforeEach() {
         propSaver = new PropertySaver5();
         propSaver.set(
-                MondrianProperties.instance().SsasCompatibleNaming, false);        
+                MondrianProperties.instance().SsasCompatibleNaming, false);
     }
 
     @AfterEach
@@ -1333,7 +1333,7 @@ public class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testAllMemberMultipleDimensionUsages(Context context) {
         propSaver.set(
-                MondrianProperties.instance().SsasCompatibleNaming, true);        
+                MondrianProperties.instance().SsasCompatibleNaming, true);
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -2969,7 +2969,7 @@ public class SchemaTest {
             "In Schema: In Cube: In Dimension: In Hierarchy: In Level: Value 'char' of attribute 'internalType' has illegal value 'char'.  Legal values: {int, long, Object, String}");
     }
 
-    @Disabled // Adventure Works schema not found 
+    @Disabled // Adventure Works schema not found
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void _testAttributeHierarchy(Context context) {

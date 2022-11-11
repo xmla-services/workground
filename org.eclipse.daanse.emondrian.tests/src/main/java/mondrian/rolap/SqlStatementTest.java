@@ -31,7 +31,7 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.StatementImpl;
 import mondrian.server.monitor.Monitor;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 /**
  * @author Andrey Khayrutdinov

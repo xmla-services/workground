@@ -25,6 +25,7 @@ import mondrian.util.ClassResolver;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import org.eclipse.daanse.sql.dialect.api.Datatype;
 import org.olap4j.impl.Olap4jUtil;
 
 import java.io.PrintWriter;
@@ -276,36 +277,36 @@ public class JdbcSchema {
 
     /**
      * Converts a {@link java.sql.Types} value to a
-     * {@link mondrian.spi.Dialect.Datatype}.
+     * {@link Datatype}.
      *
      * @param javaType JDBC type code, as per {@link java.sql.Types}
      * @return Datatype
      */
-    public static Dialect.Datatype getDatatype(int javaType) {
+    public static Datatype getDatatype(int javaType) {
         switch (javaType) {
         case Types.TINYINT:
         case Types.SMALLINT:
         case Types.INTEGER:
-            return Dialect.Datatype.Integer;
+            return Datatype.Integer;
         case Types.FLOAT:
         case Types.REAL:
         case Types.DOUBLE:
         case Types.NUMERIC:
         case Types.DECIMAL:
         case Types.BIGINT:
-            return Dialect.Datatype.Numeric;
+            return Datatype.Numeric;
         case Types.BOOLEAN:
-            return Dialect.Datatype.Boolean;
+            return Datatype.Boolean;
         case Types.DATE:
-            return Dialect.Datatype.Date;
+            return Datatype.Date;
         case Types.TIME:
-            return Dialect.Datatype.Time;
+            return Datatype.Time;
         case Types.TIMESTAMP:
-            return Dialect.Datatype.Timestamp;
+            return Datatype.Timestamp;
         case Types.CHAR:
         case Types.VARCHAR:
         default:
-            return Dialect.Datatype.String;
+            return Datatype.String;
         }
     }
 
@@ -602,7 +603,7 @@ public class JdbcSchema {
             /**
              * Return true if this column is numeric.
              */
-            public Dialect.Datatype getDatatype() {
+            public Datatype getDatatype() {
                 return JdbcSchema.getDatatype(getType());
             }
 

@@ -11,7 +11,8 @@ package mondrian.xmla;
 
 import mondrian.olap.Result;
 import mondrian.rolap.RolapCube;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.CellSet;
@@ -114,9 +115,9 @@ public class XmlaHandlerTypeTest  {
         Dialect dialect = cube.getStar().getSqlQueryDialect();
 
         if (!dialect.getDatabaseProduct()
-            .equals(Dialect.DatabaseProduct.MYSQL)
+            .equals(DatabaseProduct.MYSQL)
             && !dialect.getDatabaseProduct()
-                .equals(Dialect.DatabaseProduct.ORACLE))
+                .equals(DatabaseProduct.ORACLE))
         {
             return;
         }

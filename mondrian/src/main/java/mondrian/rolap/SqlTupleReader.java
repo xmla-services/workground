@@ -43,6 +43,7 @@ import mondrian.util.Pair;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -453,10 +454,10 @@ public class SqlTupleReader implements TupleReader {
             partialTargets.add( target );
           }
         }
-        final Pair<String, List<SqlStatement.Type>> pair =
+        final Pair<String, List<BestFitColumnType>> pair =
           makeLevelMembersSql( dataSource, targetGroup );
         String sql = pair.left;
-        List<SqlStatement.Type> types = pair.right;
+        List<BestFitColumnType> types = pair.right;
         assert sql != null && !sql.equals( "" );
         stmt = RolapUtil.executeQuery(
           dataSource, sql, types, maxRows, 0,
@@ -929,7 +930,7 @@ public class SqlTupleReader implements TupleReader {
     partialResult.add( row );
   }
 
-  Pair<String, List<SqlStatement.Type>> makeLevelMembersSql(
+  Pair<String, List<BestFitColumnType>> makeLevelMembersSql(
     DataSource dataSource, List<TargetBase> targetGroup ) {
     // In the case of a virtual cube, if we need to join to the fact
     // table, we do not necessarily have a single underlying fact table,
@@ -968,7 +969,7 @@ public class SqlTupleReader implements TupleReader {
       // the fact table referenced
       String prependString = "";
       final StringBuilder selectString = new StringBuilder();
-      List<SqlStatement.Type> types = null;
+      List<BestFitColumnType> types = null;
 
       final int savepoint =
         getEvaluator( constraint ).savepoint();
@@ -1017,7 +1018,7 @@ public class SqlTupleReader implements TupleReader {
           // than one base cube and it isn't the last one so that
           // the order by clause is not added to unionized queries
           // (that would be illegal SQL)
-          final Pair<String, List<SqlStatement.Type>> pair =
+          final Pair<String, List<BestFitColumnType>> pair =
             generateSelectForLevels(
               dataSource, baseCube,
               fullyJoiningBaseCubes.size() == 1
@@ -1164,7 +1165,7 @@ public class SqlTupleReader implements TupleReader {
     return ( (RolapCube) query.getCube() ).getMeasures();
   }
 
-  Pair<String, List<SqlStatement.Type>> sqlForEmptyTuple(
+  Pair<String, List<BestFitColumnType>> sqlForEmptyTuple(
     DataSource dataSource,
     final Collection<RolapCube> baseCubes ) {
     final SqlQuery sqlQuery = SqlQuery.newQuery( dataSource, null );
@@ -1183,7 +1184,7 @@ public class SqlTupleReader implements TupleReader {
    * @param targetGroup the set of targets for which to generate a select
    * @return SQL statement string and types
    */
-  Pair<String, List<SqlStatement.Type>> generateSelectForLevels(
+  Pair<String, List<BestFitColumnType>> generateSelectForLevels(
     DataSource dataSource,
     RolapCube baseCube,
     WhichSelect whichSelect, List<TargetBase> targetGroup ) {

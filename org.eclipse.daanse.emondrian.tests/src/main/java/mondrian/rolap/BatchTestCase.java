@@ -19,7 +19,8 @@ import mondrian.rolap.agg.*;
 import mondrian.rolap.cache.HardSmartCache;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.test.SqlPattern;
 import mondrian.util.Pair;
 import org.apache.logging.log4j.LogManager;
@@ -258,9 +259,9 @@ public class BatchTestCase{
         final String cubeName = requests[0].getMeasure().getCubeName();
         final RolapCube cube = lookupCube(connection, cubeName);
         final Dialect sqlDialect = star.getSqlQueryDialect();
-        Dialect.DatabaseProduct d = sqlDialect.getDatabaseProduct();
+        DatabaseProduct d = sqlDialect.getDatabaseProduct();
         SqlPattern sqlPattern = SqlPattern.getPattern(d, patterns);
-        if (d == Dialect.DatabaseProduct.UNKNOWN) {
+        if (d == DatabaseProduct.UNKNOWN) {
             // If the dialect is not one in the pattern set, do not run the
             // test. We do not print any warning message.
             return;
@@ -450,7 +451,7 @@ public class BatchTestCase{
         // (We could optimize and run it once, collecting multiple queries, and
         // comparing all queries at the end.)
         Dialect dialect = getDialect(connection);
-        Dialect.DatabaseProduct d = dialect.getDatabaseProduct();
+        DatabaseProduct d = dialect.getDatabaseProduct();
         boolean patternFound = false;
         for (SqlPattern sqlPattern : patterns) {
             if (!sqlPattern.hasDatabaseProduct(d)) {
@@ -531,15 +532,15 @@ public class BatchTestCase{
         }
     }
 
-    protected SqlPattern[] sqlPattern(Dialect.DatabaseProduct db, String sql) {
+    protected SqlPattern[] sqlPattern(DatabaseProduct db, String sql) {
         return new SqlPattern[]{new SqlPattern(db, sql, sql.length())};
     }
 
     protected SqlPattern[] mysqlPattern(String sql) {
-        return sqlPattern(Dialect.DatabaseProduct.MYSQL, sql);
+        return sqlPattern(DatabaseProduct.MYSQL, sql);
     }
 
-    protected String dialectize(Dialect.DatabaseProduct d, String sql) {
+    protected String dialectize(DatabaseProduct d, String sql) {
         sql = sql.replaceAll("\r\n", "\n");
         switch (d) {
         case ORACLE:
