@@ -15,8 +15,7 @@ import mondrian.calc.TupleList;
 import mondrian.olap.*;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.FunUtil;
-import mondrian.spi.Dialect;
-import mondrian.spi.Dialect.Datatype;
+import org.eclipse.daanse.sql.dialect.api.Datatype;
 
 import java.util.List;
 
@@ -34,7 +33,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       return FunUtil.sum( evaluator, members, exp );
     }
 
-    public boolean supportsFastAggregates( Dialect.Datatype dataType ) {
+    public boolean supportsFastAggregates( Datatype dataType ) {
       switch ( dataType ) {
         case Integer:
         case Numeric:
@@ -93,7 +92,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       return FunUtil.min( evaluator, members, exp );
     }
 
-    public boolean supportsFastAggregates( Dialect.Datatype dataType ) {
+    public boolean supportsFastAggregates( Datatype dataType ) {
       switch ( dataType ) {
         case Integer:
         case Numeric:
@@ -133,7 +132,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       return FunUtil.max( evaluator, members, exp );
     }
 
-    public boolean supportsFastAggregates( Dialect.Datatype dataType ) {
+    public boolean supportsFastAggregates( Datatype dataType ) {
       switch ( dataType ) {
         case Integer:
         case Numeric:
@@ -203,7 +202,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
     }
 
     @Override
-    public boolean supportsFastAggregates( mondrian.spi.Dialect.Datatype dataType ) {
+    public boolean supportsFastAggregates( Datatype dataType ) {
       // We can't rollup using the raw data, because this is
       // a distinct-count operation.
       return false;
@@ -324,11 +323,11 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
   /**
    * This is an aggregator used for aggregate tables implementing the sum aggregator. It uses the aggregate table
    * fact_count column and an average measure to create the query used to generate a sum:
-   * 
+   *
    * <pre>
    * sum == sum( column_avg * factcount )
    * </pre>
-   * 
+   *
    * If the fact table has both a sum and average over the same column and the aggregate table only has an average and
    * fact count column, then the sum aggregator can be generated using this aggregator.
    */
@@ -403,11 +402,11 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
   /**
    * By default, fast rollup is not supported for all classes.
    */
-  public boolean supportsFastAggregates( Dialect.Datatype dataType ) {
+  public boolean supportsFastAggregates( Datatype dataType ) {
     return false;
   }
 
-  public Object aggregate( List<Object> rawData, Dialect.Datatype datatype ) {
+  public Object aggregate( List<Object> rawData, Datatype datatype ) {
     throw new UnsupportedOperationException();
   }
 }

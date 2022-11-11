@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 
 import org.opencube.junit5.Constants;
 
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.spi.DialectManager;
 
 public class FastFoodmardDataLoader implements DataLoader {
@@ -376,12 +376,12 @@ public class FastFoodmardDataLoader implements DataLoader {
 	    DataLoaderUtil.executeSql(connection, createIndexesSqls,true);
 
 	   Path dir= Paths.get(Constants.TESTFILES_DIR+"loader/foodmart/data");
-	    
+
 	    DataLoaderUtil.importCSV(dataSource, dialect,foodmardTables,dir);
 
 //	   imported by csv no agg using sql
 //	    InputStream sqlFile= new FileInputStream(new File(Constants.TESTFILES_DIR+"loader/foodmart/insert.sql"));
-//	    
+//
 //	   DataLoaderUtil.loadFromSqlInserts(connection, dialect,sqlFile);
 
 	}
@@ -390,7 +390,7 @@ public class FastFoodmardDataLoader implements DataLoader {
     /**
      * create indexes for the FoodMart database.
      * <p/>
-     * 
+     *
      * @param dialect
      *
      */
@@ -402,7 +402,7 @@ public class FastFoodmardDataLoader implements DataLoader {
     /**
      * drop all existing tables for the FoodMart database.
      * <p/>
-     * 
+     *
      * @param dialect
      *
      */
@@ -415,7 +415,7 @@ public class FastFoodmardDataLoader implements DataLoader {
     /**
      * Defines all tables for the FoodMart database.
      * <p/>
-     * 
+     *
      * @param dialect
      *
      */

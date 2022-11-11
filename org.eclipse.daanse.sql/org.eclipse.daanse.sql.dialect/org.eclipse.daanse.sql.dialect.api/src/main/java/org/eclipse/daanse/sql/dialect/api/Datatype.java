@@ -12,7 +12,7 @@ package org.eclipse.daanse.sql.dialect.api;
 /**
  * Datatype of a column.
  */
-enum Datatype {
+public enum Datatype {
     String {
         public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)

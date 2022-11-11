@@ -17,10 +17,10 @@ import mondrian.rolap.RolapNative.NativeEvent;
 import mondrian.rolap.RolapNative.TupleEvent;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
-import mondrian.spi.Dialect.DatabaseProduct;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import mondrian.util.Bug;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.eigenbase.util.property.BooleanProperty;
 import org.eigenbase.util.property.StringProperty;
 import org.junit.jupiter.api.AfterEach;
@@ -2693,7 +2693,7 @@ public class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testLevelMembersWithoutNonEmpty(Context context)  {
-	context.createConnection().getCacheControl(null).flushSchemaCache();  
+	context.createConnection().getCacheControl(null).flushSchemaCache();
     SmartMemberReader smr = getSmartMemberReader(context.createConnection(), "Customers" );
 
     MemberCacheHelper smrch =
@@ -5894,7 +5894,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "    sum(`sales_fact_1997`.`unit_sales`) as `m0`\n"
         + "from\n"
         + "    `sales_fact_1997` as `sales_fact_1997`,\n"
-        + "    `time_by_day` as `time_by_day`,\n"        
+        + "    `time_by_day` as `time_by_day`,\n"
         + "    `product_class` as `product_class`,\n"
         + "    `product` as `product`,\n"
         + "    `customer` as `customer`\n"

@@ -13,7 +13,8 @@ package mondrian.rolap.sql;
 
 import mondrian.olap.*;
 import mondrian.rolap.*;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.spi.DialectManager;
 import mondrian.util.Pair;
 
@@ -85,8 +86,8 @@ public class SqlQuery {
     private final ClauseList groupingFunctions;
     private final ClauseList rowLimit;
 
-    private final List<SqlStatement.Type> types =
-        new ArrayList<SqlStatement.Type>();
+    private final List<BestFitColumnType> types =
+        new ArrayList<BestFitColumnType>();
 
     /** Controls whether table optimization hints are used */
     private boolean allowHints;
@@ -471,7 +472,7 @@ public class SqlQuery {
      * Adds an expression to the select clause, automatically creating a
      * column alias.
      */
-    public String addSelect(final String expression, SqlStatement.Type type) {
+    public String addSelect(final String expression, BestFitColumnType type) {
         // Some DB2 versions (AS/400) throw an error if a column alias is
         //  *not* used in a subsequent order by (Group by).
         // Derby fails on 'SELECT... HAVING' if column has alias.
@@ -493,7 +494,7 @@ public class SqlQuery {
      */
     public String addSelectGroupBy(
         final String expression,
-        SqlStatement.Type type)
+        BestFitColumnType type)
     {
         final String alias = addSelect(expression, type);
         addGroupBy(expression, alias);
@@ -520,7 +521,7 @@ public class SqlQuery {
      */
     public String addSelect(
         final String expression,
-        final SqlStatement.Type type,
+        final BestFitColumnType type,
         String alias)
     {
         buf.setLength(0);
@@ -733,11 +734,11 @@ public class SqlQuery {
         types.add(null);
     }
 
-    private void addType(SqlStatement.Type type) {
+    private void addType(BestFitColumnType type) {
         types.add(type);
     }
 
-    public Pair<String, List<SqlStatement.Type>> toSqlAndTypes() {
+    public Pair<String, List<BestFitColumnType>> toSqlAndTypes() {
         assert types.size() == select.size() + groupingFunctions.size()
             : types.size() + " types, "
               + (select.size() + groupingFunctions.size())

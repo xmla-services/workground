@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -40,7 +41,7 @@ import mondrian.rolap.RolapStar;
 import mondrian.rolap.SqlStatement;
 import mondrian.rolap.StarPredicate;
 import mondrian.rolap.sql.SqlQuery;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 public class DrillThroughQuerySpecTest {
 
@@ -85,12 +86,12 @@ public class DrillThroughQuerySpecTest {
       .thenReturn(columns);
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(0))
-      .addSelect(anyString(), any(SqlStatement.Type.class), anyString());
+      .addSelect(anyString(), any(BestFitColumnType.class), anyString());
   }
 
   @Test
   public void testOneColumnExists() {
-    drillThroughQuerySpec.extraPredicates(sqlQueryMock);        
+    drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(1))
       .addSelect(isNull(), isNull(), anyString());
   }
@@ -109,12 +110,12 @@ public class DrillThroughQuerySpecTest {
     when(requestMock.includeInSelect(includedColumn)).thenReturn(false);
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(0))
-      .addSelect(anyString(), any(SqlStatement.Type.class), anyString());
+      .addSelect(anyString(), any(BestFitColumnType.class), anyString());
 
     when(starPredicateMock.getConstrainedColumnList())
       .thenReturn(Arrays.asList(includedColumn, excludedColumn));
     verify(sqlQueryMock, times(0))
-      .addSelect(anyString(), any(SqlStatement.Type.class), anyString());
+      .addSelect(anyString(), any(BestFitColumnType.class), anyString());
   }
 
   @Test

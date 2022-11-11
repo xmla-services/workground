@@ -16,6 +16,7 @@ package mondrian.rolap.agg;
 import mondrian.olap.Util;
 import mondrian.rolap.*;
 import mondrian.spi.SegmentHeader;
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
 
 import java.io.PrintWriter;
 import java.util.*;
@@ -256,7 +257,7 @@ public class Segment {
     return excludedRegions;
   }
 
-  SegmentDataset createDataset( SegmentAxis[] axes, boolean sparse, SqlStatement.Type type, int size ) {
+  SegmentDataset createDataset(SegmentAxis[] axes, boolean sparse, BestFitColumnType type, int size ) {
     if ( sparse ) {
       return new SparseSegmentDataset();
     } else {

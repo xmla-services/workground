@@ -16,7 +16,7 @@ import mondrian.olap.Connection;
 import mondrian.olap.Member;
 import mondrian.olap.Result;
 import mondrian.olap.Util;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 /**
  * <code>TestContext</code> is a class which contains the information

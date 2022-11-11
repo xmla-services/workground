@@ -21,7 +21,7 @@
     <commons-xul.version>9.3.0.0-SNAPSHOT</commons-xul.version>
   </properties>
   <dependencies>
-  
+
 			<dependency>
 				<groupId>org.apache.logging.log4j</groupId>
 				<artifactId>log4j-api</artifactId>
@@ -102,6 +102,11 @@
           <groupId>*</groupId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.sql.dialect.api</artifactId>
+      <version>${revision}</version>
     </dependency>
   </dependencies>
   <build>

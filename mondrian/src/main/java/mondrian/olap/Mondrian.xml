@@ -899,8 +899,8 @@ Revision is $Id$
                 return new Column(table, properties[i].column);
             }
 
-            public mondrian.spi.Dialect.Datatype getDatatype() {
-                return mondrian.spi.Dialect.Datatype.valueOf(type);
+            public org.eclipse.daanse.sql.dialect.api.Datatype getDatatype() {
+                return org.eclipse.daanse.sql.dialect.api.Datatype.valueOf(type);
             }
         </Code>
     </Element>
@@ -1486,7 +1486,7 @@ Revision is $Id$
                 String leftAlias,
                 String leftKey,
                 RelationOrJoin left,
-                String rightAlias, 
+                String rightAlias,
                 String rightKey,
                 RelationOrJoin right)
             {
@@ -1588,7 +1588,7 @@ Revision is $Id$
 
             public Table(Table tbl, String possibleName) {
                 this(tbl.schema, tbl.name, possibleName, tbl.tableHints);
-                
+
                 // Remake the filter with the new alias
                 if (tbl.filter != null) {
                     this.filter = new SQL();
@@ -1603,7 +1603,7 @@ Revision is $Id$
                     }
                 }
             }
-            
+
             private java.util.Map<String,String> buildHintMap(Hint[] th) {
                 java.util.Map<String,String> h =
                     new java.util.HashMap<String,String>();

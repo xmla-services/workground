@@ -14,7 +14,7 @@ package mondrian.test.loader;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.spi.DialectManager;
 
 import org.apache.logging.log4j.Logger;

@@ -11,7 +11,8 @@ package mondrian.rolap.sql;
 
 import mondrian.olap.Connection;
 import mondrian.rolap.BatchTestCase;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
@@ -169,7 +170,7 @@ public class SelectNotInGroupByTest extends BatchTestCase {
             sqlpat = sqlWithAllGroupBy;
         }
         SqlPattern[] sqlPatterns = {
-            new SqlPattern(Dialect.DatabaseProduct.MYSQL, sqlpat, sqlpat)
+            new SqlPattern(DatabaseProduct.MYSQL, sqlpat, sqlpat)
         };
 
         // Use dimension with level-dependent property
@@ -190,7 +191,7 @@ public class SelectNotInGroupByTest extends BatchTestCase {
     public void testIndependentPropertyNotSkipped(Context context) {
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.MYSQL,
+                DatabaseProduct.MYSQL,
                 sqlWithAllGroupBy,
                 sqlWithAllGroupBy)
         };
@@ -215,7 +216,7 @@ public class SelectNotInGroupByTest extends BatchTestCase {
         // dependent, then group by can be skipped regardless of dialect
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.MYSQL,
+                DatabaseProduct.MYSQL,
                 sqlWithNoGroupBy,
                 sqlWithNoGroupBy)
         };
@@ -238,7 +239,7 @@ public class SelectNotInGroupByTest extends BatchTestCase {
     public void testGroupByNotSkippedIfIndependentProperty(Context context) {
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
-                Dialect.DatabaseProduct.MYSQL,
+                DatabaseProduct.MYSQL,
                 sqlWithAllGroupBy,
                 sqlWithAllGroupBy)
         };

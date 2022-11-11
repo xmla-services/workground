@@ -1505,7 +1505,7 @@ public class DialectTest extends TestCase {
           .withPrecision( 0 )
           .withScale( 0 )
           .build(),
-        0 ) == SqlStatement.Type.INT );
+        0 ) == BestFitColumnType.INT );
 
     assertTrue(
       "Oracle dialect NUMERIC type with non-zero precision, -127 scale "
@@ -1516,7 +1516,7 @@ public class DialectTest extends TestCase {
           .withPrecision( 5 )
           .withScale( -127 )
           .build(),
-        0 ) == SqlStatement.Type.DOUBLE );
+        0 ) == BestFitColumnType.DOUBLE );
     assertTrue(
       "Oracle dialect NUMERIC type with precision less than 10, 0 scale "
         + " should map to INT. ",
@@ -1526,7 +1526,7 @@ public class DialectTest extends TestCase {
           .withPrecision( 9 )
           .withScale( 0 )
           .build(),
-        0 ) == SqlStatement.Type.INT );
+        0 ) == BestFitColumnType.INT );
     assertTrue(
       "Oracle dialect NUMERIC type with precision = 38, scale = 0"
         + " should map to INT.  38 is a magic number in Oracle "
@@ -1537,7 +1537,7 @@ public class DialectTest extends TestCase {
           .withPrecision( 38 )
           .withScale( 0 )
           .build(),
-        0 ) == SqlStatement.Type.INT );
+        0 ) == BestFitColumnType.INT );
     assertTrue(
       "Oracle dialect DECIMAL type with precision > 9, scale = 0"
         + " should map to DOUBLE (unless magic #38)",
@@ -1547,7 +1547,7 @@ public class DialectTest extends TestCase {
           .withPrecision( 20 )
           .withScale( 0 )
           .build(),
-        0 ) == SqlStatement.Type.DOUBLE );
+        0 ) == BestFitColumnType.DOUBLE );
 
     assertTrue(
       "Oracle dialect NUMBER type with precision =0 , scale = -127"
@@ -1560,7 +1560,7 @@ public class DialectTest extends TestCase {
           .withPrecision( 0 )
           .withScale( -127 )
           .build(),
-        0 ) == SqlStatement.Type.INT );
+        0 ) == BestFitColumnType.INT );
     assertTrue(
       "Oracle dialect NUMBER type with precision =0 , scale = -127"
         + " should map to OBJECT if measure name starts with 'm'",
@@ -1570,7 +1570,7 @@ public class DialectTest extends TestCase {
           .withPrecision( 0 )
           .withScale( -127 )
           .build(),
-        0 ) == SqlStatement.Type.OBJECT );
+        0 ) == BestFitColumnType.OBJECT );
   }
 
   public void testPostgresGreenplumTypeMapQuirks() throws SQLException {
@@ -1586,7 +1586,7 @@ public class DialectTest extends TestCase {
           .withPrecision( 0 )
           .withScale( 0 )
           .build(),
-        0 ) == SqlStatement.Type.OBJECT );
+        0 ) == BestFitColumnType.OBJECT );
   }
 
   public void testSnowflakeTypeMapQuirks() throws SQLException {
@@ -1602,7 +1602,7 @@ public class DialectTest extends TestCase {
           .withPrecision( 5 )
           .withScale( 2 )
           .build(),
-        0 ) == SqlStatement.Type.DECIMAL );
+        0 ) == BestFitColumnType.DECIMAL );
   }
 
   public void testNetezzaTypeMapQuirks() throws SQLException {
@@ -1618,7 +1618,7 @@ public class DialectTest extends TestCase {
           .withPrecision( 38 )
           .withScale( 0 )
           .build(),
-        0 ) == SqlStatement.Type.DOUBLE );
+        0 ) == BestFitColumnType.DOUBLE );
     assertTrue(
       "Netezza dialect NUMERIC/DECIMAL with precision =38, scale = 0"
         + " means long.  Should be mapped to DOUBLE",
@@ -1628,7 +1628,7 @@ public class DialectTest extends TestCase {
           .withPrecision( 38 )
           .withScale( 0 )
           .build(),
-        0 ) == SqlStatement.Type.DOUBLE );
+        0 ) == BestFitColumnType.DOUBLE );
   }
 
   public void testMonetDBTypeMapQuirks() throws SQLException {
@@ -1644,7 +1644,7 @@ public class DialectTest extends TestCase {
           .withPrecision( 0 )
           .withScale( 0 )
           .build(),
-        0 ) == SqlStatement.Type.DOUBLE );
+        0 ) == BestFitColumnType.DOUBLE );
   }
 
   public void testJdbcDialectTypeMap() throws SQLException {
@@ -1659,7 +1659,7 @@ public class DialectTest extends TestCase {
           .withPrecision( 5 )
           .withScale( 0 )
           .build(),
-        0 ) == SqlStatement.Type.INT );
+        0 ) == BestFitColumnType.INT );
     assertTrue(
       "JdbcDialectImpl NUMERIC/DECIMAL types w/ precision 0-9"
         + " and scale=0 should return INT",
@@ -1669,15 +1669,15 @@ public class DialectTest extends TestCase {
           .withPrecision( 5 )
           .withScale( 0 )
           .build(),
-        0 ) == SqlStatement.Type.INT );
+        0 ) == BestFitColumnType.INT );
   }
 
   public void testMonetBooleanColumn() throws SQLException {
     ResultSetMetaData resultSet = new MockResultSetMetadata()
       .withColumnType( Types.BOOLEAN ).build();
     MonetDbDialect monetDbDialect = new MonetDbDialect();
-    SqlStatement.Type type = monetDbDialect.getType( resultSet, 0 );
-    assertEquals( SqlStatement.Type.OBJECT, type );
+    BestFitColumnType type = monetDbDialect.getType( resultSet, 0 );
+    assertEquals( BestFitColumnType.OBJECT, type );
   }
 
   public void testHiveTimestampQuoteLiteral() throws SQLException {

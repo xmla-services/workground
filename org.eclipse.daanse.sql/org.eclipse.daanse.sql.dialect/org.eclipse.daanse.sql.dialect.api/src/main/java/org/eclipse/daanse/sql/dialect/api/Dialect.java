@@ -18,7 +18,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 /**
- * 
+ *
  *  @author jhyde
  * @since Oct 10, 2008
  */
@@ -612,7 +612,7 @@ public interface Dialect {
      * collections, namely the {@link Object#equals(Object)} and
      * {@link Object#hashCode()} methods.</p>
      *
-     * @see mondrian.spi.DialectFactory#createDialect(javax.sql.DataSource, java.sql.Connection)
+     * @see DialectFactory#createDialect(javax.sql.DataSource, java.sql.Connection)
      *
      * @return Whether this dialect can be used for other connections created
      * from the same data source
@@ -721,11 +721,13 @@ public interface Dialect {
     /**
      * Checks the compatibility of the Dialect.
      * if it not fully compatible it must return -1
-     * with values > 0 implementations could rank based on efficiency. 
-     * 
+     * with values > 0 implementations could rank based on efficiency.
+     *
      * @param dataSource
      * @return compatibility ranking
-     * 
+     *
      */
 	int compatibility(DataSource dataSource);
+
+    DatabaseProduct getDatabaseProduct();
 }

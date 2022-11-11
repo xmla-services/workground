@@ -10,7 +10,7 @@
 package mondrian.test;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
@@ -144,7 +144,7 @@ public class InlineTableTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testInlineTableSnowflake(Context context) {
         if (getDialect(context.createConnection()).getDatabaseProduct()
-            == Dialect.DatabaseProduct.INFOBRIGHT)
+            == DatabaseProduct.INFOBRIGHT)
         {
             // Infobright has a bug joining an inline table. Gives error
             // "Illegal mix of collations (ascii_bin,IMPLICIT) and

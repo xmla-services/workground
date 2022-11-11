@@ -27,6 +27,8 @@ import mondrian.util.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.sql.dialect.api.Datatype;
 import org.eigenbase.util.property.StringProperty;
 
 import java.sql.*;
@@ -101,7 +103,7 @@ class SqlMemberSource
         if (level.isAll()) {
             return null;
         }
-        List<Dialect.Datatype> datatypeList = new ArrayList<Dialect.Datatype>();
+        List<Datatype> datatypeList = new ArrayList<Datatype>();
         List<MondrianDef.Expression> columnList =
             new ArrayList<MondrianDef.Expression>();
         for (RolapLevel x = level;; x = (RolapLevel) x.getParentLevel()) {
@@ -316,9 +318,9 @@ class SqlMemberSource
     }
 
     private List<RolapMember> getMembers(DataSource dataSource) {
-        Pair<String, List<SqlStatement.Type>> pair = makeKeysSql(dataSource);
+        Pair<String, List<BestFitColumnType>> pair = makeKeysSql(dataSource);
         final String sql = pair.left;
-        List<SqlStatement.Type> types = pair.right;
+        List<BestFitColumnType> types = pair.right;
         RolapLevel[] levels = (RolapLevel[]) hierarchy.getLevels();
         SqlStatement stmt =
             RolapUtil.executeQuery(
@@ -451,7 +453,7 @@ RME is this right
         list.add(i + 1, member);
     }
 
-    private Pair<String, List<SqlStatement.Type>> makeKeysSql(
+    private Pair<String, List<BestFitColumnType>> makeKeysSql(
         DataSource dataSource)
     {
         SqlQuery sqlQuery =
@@ -576,7 +578,7 @@ RME is this right
      *
      * <p>See also {@link SqlTupleReader#makeLevelMembersSql}.
      */
-    Pair<String, List<SqlStatement.Type>> makeChildMemberSql(
+    Pair<String, List<BestFitColumnType>> makeChildMemberSql(
         RolapMember member,
         DataSource dataSource,
         MemberChildrenConstraint constraint)
@@ -965,7 +967,7 @@ RME is this right
         Execution execution = Locus.peek().execution;
         execution.checkCancelOrTimeout();
 
-        Pair<String, List<SqlStatement.Type>> pair;
+        Pair<String, List<BestFitColumnType>> pair;
         boolean parentChild;
         final RolapLevel parentLevel = parentMember.getLevel();
         RolapLevel childLevel;
@@ -992,7 +994,7 @@ RME is this right
         int startChildrenSize = children.size();
         HashMap<RolapMember, Object> rolapToOrdinalMap = new HashMap<>();
 
-        final List<SqlStatement.Type> types = pair.right;
+        final List<BestFitColumnType> types = pair.right;
         SqlStatement stmt =
             RolapUtil.executeQuery(
                 dataSource, sql, types, 0, 0,
@@ -1189,7 +1191,7 @@ RME is this right
      * <p>Currently, parent-child hierarchies may have only one level (plus the
      * 'All' level).
      */
-    private Pair<String, List<SqlStatement.Type>> makeChildMemberSql_PCRoot(
+    private Pair<String, List<BestFitColumnType>> makeChildMemberSql_PCRoot(
         RolapMember member)
     {
         SqlQuery sqlQuery =
@@ -1303,7 +1305,7 @@ RME is this right
      *
      * <p>See also {@link SqlTupleReader#makeLevelMembersSql}.
      */
-    private Pair<String, List<SqlStatement.Type>> makeChildMemberSqlPC(
+    private Pair<String, List<BestFitColumnType>> makeChildMemberSqlPC(
         RolapMember member)
     {
         SqlQuery sqlQuery =

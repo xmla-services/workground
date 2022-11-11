@@ -10,6 +10,8 @@
   <packaging>pom</packaging>
   <modules>
   	<module>org.eclipse.daanse.sql.dialect.api</module>
+	<module>org.eclipse.daanse.sql.dialect.common</module>
+        <module>org.eclipse.daanse.sql.dialect.mysql</module>
   	<module>org.eclipse.daanse.sql.dialect.resolver</module>
   	<module>org.eclipse.daanse.sql.dialect.db</module>
   </modules>

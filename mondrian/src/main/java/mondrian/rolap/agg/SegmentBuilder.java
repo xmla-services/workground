@@ -14,13 +14,13 @@ import mondrian.rolap.*;
 import mondrian.rolap.agg.Segment.ExcludedRegion;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.spi.*;
-import mondrian.spi.Dialect.Datatype;
 import mondrian.util.ArraySortedSet;
 import mondrian.util.Pair;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import org.eclipse.daanse.sql.dialect.api.Datatype;
 import org.olap4j.impl.UnmodifiableArrayList;
 
 import java.math.BigInteger;
@@ -185,7 +185,7 @@ public class SegmentBuilder {
         Aggregator rollupAggregator,
         Datatype datatype)
     {
-        long startTime = System.currentTimeMillis(); 
+        long startTime = System.currentTimeMillis();
         class AxisInfo {
             SegmentColumn column;
             SortedSet<Comparable> requestedValues;
@@ -195,7 +195,7 @@ public class SegmentBuilder {
             int src;
             boolean lostPredicate;
         }
-        
+
         assert allHeadersHaveSameDimensionality(map.keySet());
 
         // store the map values in a list to assure the first header
@@ -884,15 +884,15 @@ public class SegmentBuilder {
             return addData(segment, body);
         }
     }
-    
+
     /**
      * Converts a segment's CellKey into axis values
-     * so that they can be compared across segments.    
-     * 
+     * so that they can be compared across segments.
+     *
      * Ex. (0, 2, 0) to [1997, 21, M]
      */
     private static class ColumnValues implements Comparable {
-      
+
       List<Comparable> colVals;
 
       ColumnValues( SegmentBody body, CellKey cellKey, ArrayList<List<Comparable>> axisValues ) {
@@ -914,7 +914,7 @@ public class SegmentBuilder {
         for ( int i = 0; i < colVals.size(); i++ ) {
           Comparable thisVal = colVals.get( i );
           Comparable otherVal = other.colVals.get( i );
-          
+
           int result = -1;
           if ( thisVal != null && otherVal != null ) {
             result = thisVal.compareTo( otherVal );
@@ -926,7 +926,7 @@ public class SegmentBuilder {
             } else {
               result = -1;
             }
-          }          
+          }
           if ( result != 0 ) {
             return result;
           }
@@ -948,11 +948,11 @@ public class SegmentBuilder {
       public boolean equals( Object obj ) {
         throw new UnsupportedOperationException();
       }
-      
-      
+
+
     }
-    
-    
+
+
 }
 
 // End SegmentBuilder.java

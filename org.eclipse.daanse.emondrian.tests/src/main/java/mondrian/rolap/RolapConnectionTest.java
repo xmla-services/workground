@@ -37,6 +37,9 @@ import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.NamingManager;
 import javax.sql.DataSource;
 
+import org.apache.commons.lang.StringUtils;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -51,7 +54,6 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.Query;
 import mondrian.olap.Result;
 import mondrian.olap.Util;
-import mondrian.spi.Dialect;
 import mondrian.util.Pair;
 
 /**
@@ -367,7 +369,7 @@ public class RolapConnectionTest {
         Util.PropertyList properties =
             spy(baseProperties(context));
         final Dialect dialect = TestUtil.getDialect(context.createConnection());
-        if (dialect.getDatabaseProduct() == Dialect.DatabaseProduct.ACCESS) {
+        if (dialect.getDatabaseProduct() == DatabaseProduct.ACCESS) {
             // Access doesn't accept user/password, so this test is pointless.
             return;
         }

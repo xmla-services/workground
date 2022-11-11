@@ -10,9 +10,9 @@
 package mondrian.rolap.sql;
 
 import mondrian.olap.Connection;
-import mondrian.spi.Dialect;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -73,7 +73,7 @@ public class EffectiveMemberCacheTest {
             + " on 0 from sales",
             new SqlPattern[]{
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL, sql, null)}
+                    DatabaseProduct.MYSQL, sql, null)}
         );
     }
 
@@ -112,7 +112,7 @@ public class EffectiveMemberCacheTest {
             + " on 0 from sales",
             new SqlPattern[]{
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL, sql, null) }
+                    DatabaseProduct.MYSQL, sql, null) }
         );
     }
 
@@ -141,7 +141,7 @@ public class EffectiveMemberCacheTest {
             + "[Store Type].[HeadQuarters]} on 0 from sales",
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL, sql, null)
+                    DatabaseProduct.MYSQL, sql, null)
             });
     }
 
@@ -174,7 +174,7 @@ public class EffectiveMemberCacheTest {
             + "[Store Type].[HeadQuarters]} on 0 from sales",
             new SqlPattern[] {
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL, sql, null)
+                    DatabaseProduct.MYSQL, sql, null)
             });
     }
 
@@ -205,7 +205,7 @@ public class EffectiveMemberCacheTest {
             "select {[Has coffee bar].[All Has coffee bars].[false]} on 0 from Store",
             new SqlPattern[]{
                 new SqlPattern(
-                    Dialect.DatabaseProduct.MYSQL, sql, null)});
+                    DatabaseProduct.MYSQL, sql, null)});
     }
 
 

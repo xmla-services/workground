@@ -11,9 +11,9 @@ package mondrian.test;
 import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapMember;
-import mondrian.rolap.SqlStatement;
-import mondrian.rolap.sql.SqlQuery;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.sql.dialect.impl.JdbcDialectImpl;
 import mondrian.spi.DialectManager;
 import mondrian.spi.impl.*;
 import mondrian.util.DelegatingInvocationHandler;
@@ -104,7 +104,7 @@ public class DialectTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testDialectVsDatabaseProduct(Context context) throws SQLException {
     final Dialect dialect = getDialect(context);
-    final Dialect.DatabaseProduct databaseProduct =
+    final DatabaseProduct databaseProduct =
             dialect.getDatabaseProduct();
     final DatabaseMetaData databaseMetaData = getConnection(context).getMetaData();
     switch ( databaseProduct ) {
@@ -683,7 +683,7 @@ public class DialectTest {
     assertEquals( "DATE '2007-01-15'", buf.toString() );
 
     if ( getDialect(context).getDatabaseProduct()
-            != Dialect.DatabaseProduct.ORACLE ) {
+            != DatabaseProduct.ORACLE ) {
       // the following test is specifically for Oracle.
       return;
     }
@@ -726,7 +726,7 @@ public class DialectTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testBigInt(Context context) {
     if ( getDialect(context).getDatabaseProduct()
-            != Dialect.DatabaseProduct.VERTICA ) {
+            != DatabaseProduct.VERTICA ) {
       // currently only checks VERTICA
       // Once MONDRIAN-1890 is fixed this test should minimally cover
       // Oracle and MySQL as well.
@@ -1067,7 +1067,7 @@ public class DialectTest {
     if ( dialect == null ) {
       dialect = getDialect(context);
     }
-    final Dialect.DatabaseProduct databaseProduct =
+    final DatabaseProduct databaseProduct =
             dialect.getDatabaseProduct();
 
     // Some DBs require the schema to be a prfix of the table
@@ -1519,6 +1519,8 @@ public class DialectTest {
 
   @Test
   public void testOracleTypeMapQuirks() throws SQLException {
+    fail("other dialect not implemented yet");
+    /*
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect oracleDialect = new OracleDialect();
 
@@ -1529,7 +1531,7 @@ public class DialectTest {
                             .withPrecision( 0 )
                             .withScale( 0 )
                             .build(),
-                    0 ) == SqlStatement.Type.INT, "Oracle dialect NUMERIC type with 0 precision, 0 scale should map "
+                    0 ) == BestFitColumnType.INT, "Oracle dialect NUMERIC type with 0 precision, 0 scale should map "
                     + "to INT, unless column starts with 'm'");
 
     assertTrue(
@@ -1539,7 +1541,7 @@ public class DialectTest {
                             .withPrecision( 5 )
                             .withScale( -127 )
                             .build(),
-                    0 ) == SqlStatement.Type.DOUBLE, "Oracle dialect NUMERIC type with non-zero precision, -127 scale "
+                    0 ) == BestFitColumnType.DOUBLE, "Oracle dialect NUMERIC type with non-zero precision, -127 scale "
                     + " should map to DOUBLE.  MONDRIAN-1044");
     assertTrue(
             oracleDialect.getType(
@@ -1548,7 +1550,7 @@ public class DialectTest {
                             .withPrecision( 9 )
                             .withScale( 0 )
                             .build(),
-                    0 ) == SqlStatement.Type.INT, "Oracle dialect NUMERIC type with precision less than 10, 0 scale "
+                    0 ) == BestFitColumnType.INT, "Oracle dialect NUMERIC type with precision less than 10, 0 scale "
                     + " should map to INT. "
     );
     assertTrue(
@@ -1558,7 +1560,7 @@ public class DialectTest {
                             .withPrecision( 38 )
                             .withScale( 0 )
                             .build(),
-                    0 ) == SqlStatement.Type.INT, "Oracle dialect NUMERIC type with precision = 38, scale = 0"
+                    0 ) == BestFitColumnType.INT, "Oracle dialect NUMERIC type with precision = 38, scale = 0"
                     + " should map to INT.  38 is a magic number in Oracle "
                     + " for integers of unspecified precision.");
     assertTrue(
@@ -1568,7 +1570,7 @@ public class DialectTest {
                             .withPrecision( 20 )
                             .withScale( 0 )
                             .build(),
-                    0 ) == SqlStatement.Type.DOUBLE,
+                    0 ) == BestFitColumnType.DOUBLE,
             "Oracle dialect DECIMAL type with precision > 9, scale = 0"
                     + " should map to DOUBLE (unless magic #38)");
 
@@ -1579,7 +1581,7 @@ public class DialectTest {
                             .withPrecision( 0 )
                             .withScale( -127 )
                             .build(),
-                    0 ) == SqlStatement.Type.INT, "Oracle dialect NUMBER type with precision =0 , scale = -127"
+                    0 ) == BestFitColumnType.INT, "Oracle dialect NUMBER type with precision =0 , scale = -127"
                     + " should map to INT.  GROUPING SETS queries can shift"
                     + " scale for columns to -127, whether INT or other NUMERIC."
                     + " Assume INT unless the column name indicates it is a measure.");
@@ -1590,15 +1592,18 @@ public class DialectTest {
                             .withPrecision( 0 )
                             .withScale( -127 )
                             .build(),
-                    0 ) == SqlStatement.Type.OBJECT, "Oracle dialect NUMBER type with precision =0 , scale = -127"
+                    0 ) == BestFitColumnType.OBJECT, "Oracle dialect NUMBER type with precision =0 , scale = -127"
                     + " should map to OBJECT if measure name starts with 'm'");
+     */
   }
 
   @Test
   public void testPostgresGreenplumTypeMapQuirks() throws SQLException {
+    fail("other dialect not implemented yet");
+    /*
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect greenplumDialect =
-            getFakeDialect( Dialect.DatabaseProduct.GREENPLUM );
+            getFakeDialect( DatabaseProduct.GREENPLUM );
     assertTrue(
             greenplumDialect.getType(
                     mockResultSetMeta.withColumnName( "m0" )
@@ -1606,7 +1611,7 @@ public class DialectTest {
                             .withPrecision( 0 )
                             .withScale( 0 )
                             .build(),
-                    0 ) == SqlStatement.Type.OBJECT, "Postgres/Greenplum dialect NUMBER with precision =0, scale = 0"
+                    0 ) == BestFitColumnType.OBJECT, "Postgres/Greenplum dialect NUMBER with precision =0, scale = 0"
                     + ", measure name starts with 'm' maps to OBJECT");
   }
 
@@ -1614,7 +1619,7 @@ public class DialectTest {
   public void testSnowflakeTypeMapQuirks() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect greenplumDialect =
-            getFakeDialect( Dialect.DatabaseProduct.SNOWFLAKE );
+            getFakeDialect( DatabaseProduct.SNOWFLAKE );
     assertTrue(
             greenplumDialect.getType(
                     mockResultSetMeta
@@ -1622,15 +1627,18 @@ public class DialectTest {
                             .withPrecision( 5 )
                             .withScale( 2 )
                             .build(),
-                    0 ) == SqlStatement.Type.DECIMAL, "Snowflake dialect NUMBER with precision =X, scale != 0"
+                    0 ) == BestFitColumnType.DECIMAL, "Snowflake dialect NUMBER with precision =X, scale != 0"
                     + ", maps to DECIMAL");
+     */
   }
 
   @Test
   public void testNetezzaTypeMapQuirks() throws SQLException {
+    fail("other dialect not implemented yet");
+    /*
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect netezzaDialect =
-            getFakeDialect( Dialect.DatabaseProduct.NETEZZA );
+            getFakeDialect( DatabaseProduct.NETEZZA );
     assertTrue(
             netezzaDialect.getType(
                     mockResultSetMeta
@@ -1638,7 +1646,7 @@ public class DialectTest {
                             .withPrecision( 38 )
                             .withScale( 0 )
                             .build(),
-                    0 ) == SqlStatement.Type.DOUBLE, "Netezza dialect NUMERIC/DECIMAL with precision =38, scale = 0"
+                    0 ) == BestFitColumnType.DOUBLE, "Netezza dialect NUMERIC/DECIMAL with precision =38, scale = 0"
                     + " means long.  Should be mapped to DOUBLE");
     assertTrue(
             netezzaDialect.getType(
@@ -1647,15 +1655,18 @@ public class DialectTest {
                             .withPrecision( 38 )
                             .withScale( 0 )
                             .build(),
-                    0 ) == SqlStatement.Type.DOUBLE, "Netezza dialect NUMERIC/DECIMAL with precision =38, scale = 0"
+                    0 ) == BestFitColumnType.DOUBLE, "Netezza dialect NUMERIC/DECIMAL with precision =38, scale = 0"
                     + " means long.  Should be mapped to DOUBLE");
+     */
   }
 
   @Test
   public void testMonetDBTypeMapQuirks() throws SQLException {
+    fail("other dialect not implemented yet");
+    /*
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect monetDbDialect =
-            getFakeDialect( Dialect.DatabaseProduct.MONETDB );
+            getFakeDialect( DatabaseProduct.MONETDB );
     assertTrue(
             monetDbDialect.getType(
                     mockResultSetMeta
@@ -1663,12 +1674,15 @@ public class DialectTest {
                             .withPrecision( 0 )
                             .withScale( 0 )
                             .build(),
-                    0 ) == SqlStatement.Type.DOUBLE, "MonetDB dialect NUMERIC with precision =0, scale = 0"
+                    0 ) == BestFitColumnType.DOUBLE, "MonetDB dialect NUMERIC with precision =0, scale = 0"
                     + " may be an aggregated decimal, should assume DOUBLE");
+     */
   }
 
   @Test
   public void testJdbcDialectTypeMap() throws SQLException {
+    fail("other dialect not implemented yet");
+    /*
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect postgresDialect = new JdbcDialectImpl();
     assertTrue(
@@ -1678,7 +1692,7 @@ public class DialectTest {
                             .withPrecision( 5 )
                             .withScale( 0 )
                             .build(),
-                    0 ) == SqlStatement.Type.INT, "JdbcDialectImpl NUMERIC/DECIMAL types w/ precision 0-9"
+                    0 ) == BestFitColumnType.INT, "JdbcDialectImpl NUMERIC/DECIMAL types w/ precision 0-9"
                     + " and scale=0 should return INT");
     assertTrue(
             postgresDialect.getType(
@@ -1687,28 +1701,32 @@ public class DialectTest {
                             .withPrecision( 5 )
                             .withScale( 0 )
                             .build(),
-                    0 ) == SqlStatement.Type.INT, "JdbcDialectImpl NUMERIC/DECIMAL types w/ precision 0-9"
+                    0 ) == BestFitColumnType.INT, "JdbcDialectImpl NUMERIC/DECIMAL types w/ precision 0-9"
                     + " and scale=0 should return INT");
+     */
   }
 
   @Test
   public void testMonetBooleanColumn() throws SQLException {
+    fail("MonetDbDialect dialect not implemented yet");
+    /*
     ResultSetMetaData resultSet = new MockResultSetMetadata()
             .withColumnType( Types.BOOLEAN ).build();
     MonetDbDialect monetDbDialect = new MonetDbDialect();
-    SqlStatement.Type type = monetDbDialect.getType( resultSet, 0 );
-    assertEquals( SqlStatement.Type.OBJECT, type );
+    BestFitColumnType type = monetDbDialect.getType( resultSet, 0 );
+    assertEquals( BestFitColumnType.OBJECT, type );
+     */
   }
 
   @Test
   public void testHiveTimestampQuoteLiteral() throws SQLException {
     /*MONDRIAN-2208*/
     Dialect hiveDbDialect =
-            getFakeDialect( Dialect.DatabaseProduct.HIVE );
+            getFakeDialect( DatabaseProduct.HIVE );
     StringBuilder buf = new StringBuilder();
     hiveDbDialect.quoteTimestampLiteral( buf, "2014-10-29 10:27:55.12" );
     assertEquals(
-    		"cast( '2014-10-29 10:27:55.12' as timestamp )", 
+    		"cast( '2014-10-29 10:27:55.12' as timestamp )",
     		buf.toString(),
     		"TIMESTAMP literal for Hive requires special syntax (cast)");
   }
@@ -1786,7 +1804,10 @@ public class DialectTest {
     }
   }
 
-  public void testMondrian2253(Context context) throws SQLException {
+  @Test
+  public void testMondrian2253() throws SQLException {
+    fail("other dialect not implemented yet");
+    /*
     String expected = "    1 ASC";
     // "1" is supposed to be a column number
     String expr = "1";
@@ -1798,6 +1819,7 @@ public class DialectTest {
             dialect.requiresUnionOrderByOrdinal(), true );
 
     assertTrue( query.toString().contains( expected ) );
+     */
   }
 }
 

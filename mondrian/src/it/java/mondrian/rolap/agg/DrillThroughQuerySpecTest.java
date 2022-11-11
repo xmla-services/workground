@@ -73,13 +73,13 @@ public class DrillThroughQuerySpecTest extends TestCase {
       .thenReturn(columns);
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(0))
-      .addSelect(anyString(), any(SqlStatement.Type.class), anyString());
+      .addSelect(anyString(), any(BestFitColumnType.class), anyString());
   }
 
   public void testOneColumnExists() {
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(1))
-      .addSelect(anyString(), any(SqlStatement.Type.class), anyString());
+      .addSelect(anyString(), any(BestFitColumnType.class), anyString());
   }
 
   public void testTwoColumnsExist() {
@@ -87,19 +87,19 @@ public class DrillThroughQuerySpecTest extends TestCase {
       .thenReturn(Arrays.asList(includedColumn, excludedColumn));
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(2))
-      .addSelect(anyString(), any(SqlStatement.Type.class), anyString());
+      .addSelect(anyString(), any(BestFitColumnType.class), anyString());
   }
 
   public void testColumnsNotIncludedInSelect() {
     when(requestMock.includeInSelect(includedColumn)).thenReturn(false);
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(0))
-      .addSelect(anyString(), any(SqlStatement.Type.class), anyString());
+      .addSelect(anyString(), any(BestFitColumnType.class), anyString());
 
     when(starPredicateMock.getConstrainedColumnList())
       .thenReturn(Arrays.asList(includedColumn, excludedColumn));
     verify(sqlQueryMock, times(0))
-      .addSelect(anyString(), any(SqlStatement.Type.class), anyString());
+      .addSelect(anyString(), any(BestFitColumnType.class), anyString());
   }
 
   public void testColumnsPartiallyIncludedInSelect() {
@@ -110,7 +110,7 @@ public class DrillThroughQuerySpecTest extends TestCase {
 
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(1))
-      .addSelect(anyString(), any(SqlStatement.Type.class), anyString());
+      .addSelect(anyString(), any(BestFitColumnType.class), anyString());
   }
 
   // test that returns correct number of columns

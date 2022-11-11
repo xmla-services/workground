@@ -162,7 +162,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             new MyDelegatingInvocationHandler(list);
         Object o =
             Proxy.newProxyInstance(
-                this.getClass().getClassLoader(), 
+                this.getClass().getClassLoader(),
                 new Class[] {ResultSet.class, ResultSetMetaData.class},
                 handler);
         handler.resultSetMetaData = (ResultSetMetaData) o;
@@ -174,7 +174,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             new SegmentLoader.RowList(
                 Collections.nCopies(
                     list.get(0).length,
-                    SqlStatement.Type.OBJECT));
+                    BestFitColumnType.OBJECT));
         for (Object[] objects : list) {
             rowList.createRow();
             for (int i = 0; i < objects.length; i++) {

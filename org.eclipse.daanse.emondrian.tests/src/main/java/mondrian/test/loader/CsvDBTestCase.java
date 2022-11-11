@@ -12,7 +12,8 @@ package mondrian.test.loader;
 
 import mondrian.olap.Connection;
 import mondrian.rolap.BatchTestCase;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 import org.opencube.junit5.Constants;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
@@ -66,7 +67,7 @@ public abstract class CsvDBTestCase extends BatchTestCase {
         final Dialect dialect = getDialect(connection);
         return dialect.allowsDdl()
                 && dialect.getDatabaseProduct()
-                != Dialect.DatabaseProduct.INFOBRIGHT;
+                != DatabaseProduct.INFOBRIGHT;
     }
 
     protected abstract String getFileName();

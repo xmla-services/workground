@@ -9,7 +9,8 @@
 package mondrian.util;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.spi.Dialect;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.sql.dialect.api.Dialect;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -269,7 +270,7 @@ public class Bug {
      * @return Whether to avoid a test
      */
     public static boolean avoidMemoryOverflow(Dialect dialect) {
-        return dialect.getDatabaseProduct() == Dialect.DatabaseProduct.ACCESS
+        return dialect.getDatabaseProduct() == DatabaseProduct.ACCESS
             && MondrianProperties.instance().MemoryMonitor.get();
     }
 
@@ -294,7 +295,7 @@ public class Bug {
     public static boolean avoidSlowTestOnLucidDB(Dialect dialect) {
         return
             !BugMondrian759Fixed
-            && dialect.getDatabaseProduct() == Dialect.DatabaseProduct.LUCIDDB
+            && dialect.getDatabaseProduct() == DatabaseProduct.LUCIDDB
             && !LogManager.getLogger("mondrian.test.PerformanceTest")
                 .isDebugEnabled();
     }

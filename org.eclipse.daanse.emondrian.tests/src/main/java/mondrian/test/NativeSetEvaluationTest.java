@@ -14,8 +14,8 @@ import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
-import mondrian.spi.Dialect.DatabaseProduct;
 import mondrian.util.Bug;
+import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -569,7 +569,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         mysqlQuery,
         mysqlQuery.indexOf( "(" ) );
     if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
-      context.createConnection().getCacheControl(null).flushSchemaCache();	
+      context.createConnection().getCacheControl(null).flushSchemaCache();
       assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
     assertQueryReturns(context.createConnection(),
@@ -980,7 +980,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         mysql );
 
     if ( MondrianProperties.instance().EnableNativeTopCount.get() ) {
-      context.createConnection().getCacheControl(null).flushSchemaCache();	
+      context.createConnection().getCacheControl(null).flushSchemaCache();
       assertQuerySql(context.createConnection(), mdx, new SqlPattern[] { mysqlPattern } );
     }
 
@@ -1091,7 +1091,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         + "    `customer`.`yearly_income` as `c6`\n"
         + "from\n"
         + "    `sales_fact_1997` as `sales_fact_1997`,\n"
-        + "    `time_by_day` as `time_by_day`,\n"        
+        + "    `time_by_day` as `time_by_day`,\n"
         + "    `customer` as `customer`\n"
         + "where\n"
         + "    `sales_fact_1997`.`time_id` = `time_by_day`.`time_id`\n"
@@ -1484,10 +1484,10 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     // include the full role restriction in the IN clause.
     // This test verifies only permitted members are returned in this
     // case.
-	
+
 	// test failed because in native mode system returns limit quantity 6 and then filter by role
 	// select topcount([Product].[Product Name].members, 6, Measures.[Unit Sales]) on 0 from sales
-	  
+
     propSaver.set( MondrianProperties.instance().MaxConstraints, 4 );
     String roleDef =
       "  <Role name=\"Test\">\n"
