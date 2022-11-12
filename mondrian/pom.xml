@@ -113,23 +113,14 @@
       <groupId>javax.servlet</groupId>
       <artifactId>jsp-api</artifactId>
     </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-    </dependency>
 
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-all</artifactId>
-    </dependency>
+<!--
     <dependency>
       <groupId>javacup</groupId>
       <artifactId>javacup</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.repackage.javacup</artifactId>
-    </dependency>
+-->
+
     <dependency>
       <groupId>net.java.dev.javacc</groupId>
       <artifactId>javacc</artifactId>
@@ -163,8 +154,142 @@
       <version>${revision}</version>
       <scope>compile</scope>
     </dependency>
+    
+
+      <dependency>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.xml.bind</groupId>
+      <artifactId>jaxb-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.repackage.javacup</artifactId>
+      <version>${javacup.version}</version>
+      <scope>compile</scope>
+    </dependency>
+
+
+    <dependency>
+      <groupId>biz.aQute.bnd</groupId>
+      <artifactId>biz.aQute.bndlib</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.univocity</groupId>
+      <artifactId>univocity-parsers</artifactId>
+      <version>2.9.1</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.repackage.dockerjava</artifactId>
+      <version>${revision}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>net.java.dev.jna</groupId>
+      <artifactId>jna</artifactId>
+      <version>5.11.0</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.xerial</groupId>
+      <artifactId>sqlite-jdbc</artifactId>
+      <version>3.36.0.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+        <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.36</version>
+    </dependency>
+    <dependency>
+      <groupId>org.awaitility</groupId>
+      <artifactId>awaitility</artifactId>
+      <version>4.2.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.xmlunit</groupId>
+      <artifactId>xmlunit-assertj3</artifactId>
+      <version>2.9.0</version>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-suite-engine</artifactId>
+      <version>1.8.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+    </dependency> 
+     <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-launcher</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.junit.platform</groupId>
+      <artifactId>junit-platform-engine</artifactId>
+  </dependency>
+
+
+  <dependency>
+    <groupId>org.eclipse.daanse</groupId>
+    <artifactId>org.eclipse.daanse.sql.dialect.db.mysql</artifactId>
+    <version>${revision}</version>
+    <scope>runtime</scope>
+  </dependency>
+
+    <dependency>
+            <groupId>org.olap4j</groupId>
+            <artifactId>olap4j-tck</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+    <dependency>
+      <groupId>org.mozilla</groupId>
+      <artifactId>rhino</artifactId>
+      <version>1.7.14</version>
+      <scope>runtime</scope>
+    </dependency>
         </dependencies>
   <build>
+  <!--
+  
+    <resources>
+      <resource>
+        <directory>${project.basedir}/testfiles</directory>
+        <targetPath>${project.build.directory}/testfiles</targetPath>
+      </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+    </resources>
+    -->
     <plugins>
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
@@ -316,297 +441,17 @@
         <artifactId>bnd-maven-plugin</artifactId>
       </plugin>
     </plugins>
-  </build>
-  <profiles>
-    <profile>
-      <id>load-mondrian-properties</id>
-      <activation>
-        <file>
-          <exists>mondrian.properties</exists>
-        </file>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>properties-maven-plugin</artifactId>
-            <version>1.0.0</version>
-            <executions>
-              <execution>
-                <phase>initialize</phase>
-                <goals>
-                  <goal>read-project-properties</goal>
-                </goals>
-                <configuration>
-                  <files>
-                    <file>mondrian.properties</file>
-                  </files>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>embedded-mysql</id>
-      <activation>
-        <property>
-          <name>runITs</name>
-        </property>
-        <file>
-          <missing>mondrian.properties</missing>
-        </file>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>io.fabric8</groupId>
-            <artifactId>docker-maven-plugin</artifactId>
-            <version>0.26.0</version>
-            <executions>
-              <execution>
-                <id>start</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>stop</goal>
-                  <goal>start</goal>
-                </goals>
-              </execution>
-              <execution>
-                <id>stop</id>
-                <phase>post-integration-test</phase>
-                <goals>
-                  <goal>stop</goal>
-                  <goal>remove</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <images>
-                <image>
-                  <name>mysql:8.0.27</name>
-                  <alias>mondrian-mysql8027-db</alias>
-                  <run>
-                    <!-- prevents spam of mbind: Operation not permitted log messages -->
-                    <capAdd>SYS_NICE</capAdd>
-                    <env>
-                      <MYSQL_ROOT_PASSWORD>${mondrian.foodmart.jdbcPassword}</MYSQL_ROOT_PASSWORD>
-                      <MYSQL_DATABASE>foodmart</MYSQL_DATABASE>
-                      <MYSQL_USER>${mondrian.foodmart.jdbcUser}</MYSQL_USER>
-                      <MYSQL_PASSWORD>${mondrian.foodmart.jdbcPassword}</MYSQL_PASSWORD>
-                    </env>
-                    <!-- dramatic performance improvement on docker -->
-                    <cmd>mysqld --disable-log-bin</cmd>
-                    <ports>
-                      <port>3306:3306</port>
-                    </ports>
-                    <wait>
-                      <log>.*ready for connections.*port: 3306.*</log>
-                      <time>150000</time>
-                      <tcp><ports><port>3306</port></ports></tcp>
-                    </wait>
-                    <log><color>yellow</color></log>
-                  </run>
-                </image>
-              </images>
-            </configuration>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>build-helper-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <phase>process-test-sources</phase>
-                <goals>
-                  <goal>reserve-network-port</goal>
-                </goals>
-                <configuration>
-                  <portNames>
-                    <portName>mysql.port</portName>
-                  </portNames>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>sql-maven-plugin</artifactId>
-            <version>${dependency.sql-maven-plugin.version}</version>
-            <executions>
-              <execution>
-                <id>create-foodmart</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>execute</goal>
-                </goals>
-                <configuration>
-                  <url>${mysql.url.default}</url>
-                  <autocommit>true</autocommit>
-                  <orderFile>ascending</orderFile>
-                  <fileset>
-                    <basedir>${project.basedir}/src/it/resources/sql/</basedir>
-                    <includes>
-                      <include>create-foodmart.sql</include>
-                    </includes>
-                  </fileset>
-                  <onError>continue</onError>
-                </configuration>
-              </execution>
-              <execution>
-                <id>create-steelwheels</id>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>execute</goal>
-                </goals>
-                <configuration>
-                  <url>${mysql.url.default}</url>
-                  <autocommit>true</autocommit>
-                  <orderFile>ascending</orderFile>
-                  <fileset>
-                    <basedir>${project.basedir}/src/it/resources/mondrian/test/loader/</basedir>
-                    <includes>
-                      <include>SteelWheels.mysql.sql</include>
-                    </includes>
-                  </fileset>
-                  <onError>continue</onError>
-                </configuration>
-              </execution>
-            </executions>
-            <dependencies>
-              <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql-connector-java.version}</version>
-              </dependency>
-            </dependencies>
-            <configuration>
-              <driver>${mysql.driver}</driver>
-              <url>${mondrian.foodmart.jdbcURL}</url>
-              <username>${root.foodmart.jdbcUser}</username>
-              <password>${mondrian.foodmart.jdbcPassword}</password>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-      <properties>
-        <mondrian.foodmart.jdbcPassword>password</mondrian.foodmart.jdbcPassword>
-        <root.foodmart.jdbcUser>root</root.foodmart.jdbcUser>
-        <mondrian.foodmart.jdbcUser>mondrian</mondrian.foodmart.jdbcUser>
-        <mondrian.jdbcDrivers>${mysql.driver}</mondrian.jdbcDrivers>
-        <mysql.driver>com.mysql.cj.jdbc.Driver</mysql.driver>
-        <mondrian.foodmart.jdbcURL>jdbc:mysql://${docker.container.mondrian-mysql8027-db.ip}:3306/foodmart</mondrian.foodmart.jdbcURL>
-        <dependency.sql-maven-plugin.version>1.5</dependency.sql-maven-plugin.version>
-        <mysql.url.default>jdbc:mysql://${docker.container.mondrian-mysql8027-db.ip}:3306/mysql</mysql.url.default>
-      </properties>
-    </profile>
-    <profile>
-      <id>load-foodmart</id>
-      <activation>
-        <property>
-          <name>runITs</name>
-        </property>
-        <file>
-          <missing>mondrian.properties</missing>
-        </file>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <version>1.5.0</version>
-            <executions>
-              <execution>
-                <phase>pre-integration-test</phase>
-                <goals>
-                  <goal>java</goal>
-                </goals>
-                <configuration>
-                  <includeProjectDependencies>true</includeProjectDependencies>
-                  <includePluginDependencies>true</includePluginDependencies>
-                  <mainClass>mondrian.test.loader.MondrianFoodMartLoader</mainClass>
-                  <arguments>
-                    <argument>-verbose</argument>
-                    <argument>-tables</argument>
-                    <argument>-data</argument>
-                    <argument>-indexes</argument>
-                    <argument>-outputJdbcURL=${mondrian.foodmart.jdbcURL}</argument>
-                    <argument>-outputJdbcUser=${mondrian.foodmart.jdbcUser}</argument>
-                    <argument>-outputJdbcPassword=${mondrian.foodmart.jdbcPassword}</argument>
-                    <argument>-outputJdbcBatchSize=50</argument>
-                    <argument>-jdbcDrivers=${mondrian.jdbcDrivers}</argument>
-                  </arguments>
-                  <classpathScope>test</classpathScope>
-                  <additionalClasspathElements>
-                    <additionalClasspathElement>${project.build.directory}/it-classes</additionalClasspathElement>
-                  </additionalClasspathElements>
-                  <cleanupDaemonThreads>false</cleanupDaemonThreads>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-    <profile>
-      <id>cmdrunner</id>
-      <build>
-        <defaultGoal>verify</defaultGoal>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <phase>integration-test</phase>
-                <goals>
-                  <goal>java</goal>
-                </goals>
-                <configuration>
-                  <mainClass>mondrian.tui.CmdRunner</mainClass>
-                  <systemProperties>
-                    <systemProperty>
-                      <key>mondrian.foodmart.jdbcURL</key>
-                      <value>${mondrian.foodmart.jdbcURL}</value>
-                    </systemProperty>
-                    <systemProperty>
-                      <key>mondrian.foodmart.jdbcUser</key>
-                      <value>${mondrian.foodmart.jdbcUser}</value>
-                    </systemProperty>
-                    <systemProperty>
-                      <key>mondrian.foodmart.jdbcPassword</key>
-                      <value>${mondrian.foodmart.jdbcPassword}</value>
-                    </systemProperty>
-                    <systemProperty>
-                      <key>mondrian.catalogURL</key>
-                      <value>${mondrian.catalogURL}</value>
-                    </systemProperty>
-                  </systemProperties>
-                  <classpathScope>test</classpathScope>
-                  <additionalClasspathElements>
-                    <additionalClasspathElement>${project.build.directory}/it-classes</additionalClasspathElement>
-                  </additionalClasspathElements>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>${maven-surefire-plugin.version}</version>
-            <configuration>
-              <skipTests>true</skipTests>
-            </configuration>
-          </plugin>
-          <plugin>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <version>${maven-failsafe-plugin.version}</version>
-            <configuration>
-              <skipTests>true</skipTests>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
+    
+    
+			<resources>
+				<resource>
+					<directory>${project.basedir}/testfiles</directory>
+					<targetPath>${project.build.directory}/testfiles</targetPath>
+				</resource>
+				<resource>
+					<directory>src/test/resources</directory>
+				</resource>
+			</resources>
+		</build>
+
 </project>

@@ -55,10 +55,10 @@ public class Test {
         java.sql.Connection connection = null;
         java.sql.Statement statement = null, statement2 = null;
         try {
-            try {
-                Class.forName("com.ms.jdbc.odbc.JdbcOdbcDriver");
-            } catch (ClassNotFoundException e) {
-            }
+//            try {
+//                Class.forName("com.ms.jdbc.odbc.JdbcOdbcDriver");
+//            } catch (ClassNotFoundException e) {
+//            }
             String connectString = "jdbc:odbc:DSN=FoodMart2";
             connection = java.sql.DriverManager.getConnection(connectString);
             statement = connection.createStatement();
