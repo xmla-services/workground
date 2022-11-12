@@ -41,7 +41,7 @@
     <junit-jupiter.version>5.8.2</junit-jupiter.version>
     <junit-platform.version>1.8.2</junit-platform.version>
     <assertj.version>3.22.0</assertj.version>
-    <mockito.version>4.5.1</mockito.version>
+    <mockito.version>4.8.1</mockito.version>
     <awaitility.version>4.2.0</awaitility.version>
     <osgi.annotation.version>8.1.0</osgi.annotation.version>
     <osgi.dto.version>1.0.0</osgi.dto.version>
@@ -136,6 +136,24 @@ SPDX-License-Identifier: ${project.licenses[0].name}
 // "META-INF/=${project.parent.basedir}/RELEASE.txt"
 ]]>
                 </bnd>
+              </configuration>
+            </execution>
+            <execution>
+              <id>test-jar</id>
+              <goals>
+                <goal>test-jar</goal>
+              </goals>
+              <configuration>
+               <bndfile>tests.bnd</bndfile>
+                <bnd>
+                  <![CDATA[
+              //Fragment-Host: ${project.artifactId}
+              -noextraheaders: true
+              -noimportjava: true
+              Test-Cases: ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
+              ]]>
+                </bnd>
+                <artifactFragment>false</artifactFragment>
               </configuration>
             </execution>
           </executions>
@@ -256,6 +274,7 @@ SPDX-License-Identifier: ${project.licenses[0].name}
           </execution>
         </executions>
       </plugin>
+
       <plugin>
         <groupId>biz.aQute.bnd</groupId>
         <artifactId>bnd-baseline-maven-plugin</artifactId>
@@ -294,7 +313,6 @@ SPDX-License-Identifier: ${project.licenses[0].name}
         <artifactId>geronimo-stax-api_1.2_spec</artifactId>
         <version>1.2</version>
       </dependency>
-
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.gogo.runtime</artifactId>
@@ -306,7 +324,6 @@ SPDX-License-Identifier: ${project.licenses[0].name}
         <artifactId>jakarta.xml.bind-api</artifactId>
         <version>4.0.0</version>
       </dependency>
-
       <dependency>
         <groupId>com.sun.xml.bind</groupId>
         <artifactId>jaxb-impl</artifactId>
@@ -353,13 +370,13 @@ SPDX-License-Identifier: ${project.licenses[0].name}
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.test.common</artifactId>
         <version>${org.osgi.test.version}</version>
-        <scope>compile</scope>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.test.assertj.framework</artifactId>
         <version>${org.osgi.test.version}</version>
-        <scope>compile</scope>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>
@@ -371,44 +388,44 @@ SPDX-License-Identifier: ${project.licenses[0].name}
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.test.assertj.promise</artifactId>
         <version>${org.osgi.test.version}</version>
-        <scope>compile</scope>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.test.junit5</artifactId>
         <version>${org.osgi.test.version}</version>
-        <scope>compile</scope>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.test.junit5.cm</artifactId>
         <version>${org.osgi.test.version}</version>
-        <scope>compile</scope>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.test.junit5.listeners.log.osgi</artifactId>
         <version>${org.osgi.test.version}</version>
-        <scope>compile</scope>
+        <scope>test</scope>
       </dependency>
 
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
         <version>${junit-jupiter.version}</version>
-        <scope>compile</scope>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.junit.platform</groupId>
         <artifactId>junit-platform-commons</artifactId>
         <version>${junit-platform.version}</version>
-        <scope>compile</scope>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-params</artifactId>
         <version>${junit-jupiter.version}</version>
-        <scope>compile</scope>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
@@ -438,7 +455,7 @@ SPDX-License-Identifier: ${project.licenses[0].name}
         <groupId>org.mockito</groupId>
         <artifactId>mockito-core</artifactId>
         <version>${mockito.version}</version>
-        <scope>compile</scope>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.apache.servicemix.bundles</groupId>
@@ -575,6 +592,7 @@ SPDX-License-Identifier: ${project.licenses[0].name}
       <dependency>
         <groupId>org.xmlunit</groupId>
         <artifactId>xmlunit-core</artifactId>
+        <scope>test</scope>
         <version>${xmlunit.version}</version>
       </dependency>
 
@@ -582,11 +600,13 @@ SPDX-License-Identifier: ${project.licenses[0].name}
         <groupId>org.xmlunit</groupId>
         <artifactId>xmlunit-matchers</artifactId>
         <version>${xmlunit.version}</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.xmlunit</groupId>
         <artifactId>xmlunit-jakarta-jaxb-impl</artifactId>
         <version>${xmlunit.version}</version>
+        <scope>test</scope>
       </dependency>
 
       <dependency>
@@ -604,11 +624,6 @@ SPDX-License-Identifier: ${project.licenses[0].name}
       <dependency>
         <groupId>javacup</groupId>
         <artifactId>javacup</artifactId>
-        <version>${javacup.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.eclipse.daanse</groupId>
-        <artifactId>org.eclipse.daanse.repackage.javacup</artifactId>
         <version>${javacup.version}</version>
       </dependency>
       <dependency>
@@ -636,6 +651,7 @@ SPDX-License-Identifier: ${project.licenses[0].name}
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
         <version>3.22.0</version>
+        <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.slf4j</groupId>
@@ -643,6 +659,12 @@ SPDX-License-Identifier: ${project.licenses[0].name}
         <version>1.7.36</version>
         <scope>compile</scope>
       </dependency>
+              <dependency>
+      <groupId>com.microsoft.sqlserver</groupId>
+      <artifactId>mssql-jdbc</artifactId>
+      <version>10.2.0.jre11</version>
+      <scope>runtime</scope>
+    </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -666,115 +688,69 @@ SPDX-License-Identifier: ${project.licenses[0].name}
       <version>1.5.0</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>1.7.36</version>
+      <scope>runtime</scope>
+    </dependency>
+
+
+    <dependency>
+      <groupId>org.xmlunit</groupId>
+      <artifactId>xmlunit-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.xmlunit</groupId>
+      <artifactId>xmlunit-matchers</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.test.common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.test.assertj.framework</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.test.assertj.log</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.test.assertj.promise</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.test.junit5</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.test.junit5.cm</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+    </dependency>
   </dependencies>
-
-  <profiles>
-    <profile>
-      <activation>
-        <file>
-          <exists>test.bndrun</exists>
-        </file>
-      </activation>
-      <dependencies>
-
-        <dependency>
-          <groupId>org.xmlunit</groupId>
-          <artifactId>xmlunit-core</artifactId>
-        </dependency>
-
-        <dependency>
-          <groupId>org.xmlunit</groupId>
-          <artifactId>xmlunit-matchers</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter-api</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter-engine</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.junit.jupiter</groupId>
-          <artifactId>junit-jupiter-params</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.mockito</groupId>
-          <artifactId>mockito-core</artifactId>
-        </dependency>
-
-        <dependency>
-          <groupId>org.osgi</groupId>
-          <artifactId>org.osgi.test.common</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.osgi</groupId>
-          <artifactId>org.osgi.test.assertj.framework</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.osgi</groupId>
-          <artifactId>org.osgi.test.assertj.log</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.osgi</groupId>
-          <artifactId>org.osgi.test.assertj.promise</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.osgi</groupId>
-          <artifactId>org.osgi.test.junit5</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.osgi</groupId>
-          <artifactId>org.osgi.test.junit5.cm</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.assertj</groupId>
-          <artifactId>assertj-core</artifactId>
-        </dependency>
-        <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-          <scope>compile</scope>
-        </dependency>
-        <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-simple</artifactId>
-          <version>1.7.36</version>
-          <scope>runtime</scope>
-        </dependency>
-      </dependencies>
-
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>biz.aQute.bnd</groupId>
-            <artifactId>bnd-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <id>jar</id>
-                <goals>
-                  <goal>jar</goal>
-                </goals>
-                <configuration>
-                  <bnd>
-                    <![CDATA[
-							-noextraheaders: true
-							-noimportjava: true
-							Test-Cases: ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
-							]]>
-                  </bnd>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>biz.aQute.bnd</groupId>
-            <artifactId>bnd-testing-maven-plugin</artifactId>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 
   <modules>
     <module>mondrian</module>
@@ -795,6 +771,5 @@ SPDX-License-Identifier: ${project.licenses[0].name}
     <module>org.osgi.impl.service.jdbc.mssqlserver</module>
     <module>org.osgi.impl.service.jdbc.jtdssqlserver</module>
     <module>org.osgi.impl.service.jdbc.clickhouse</module>
-    <module>org.eclipse.daanse.emondrian.tests</module>
   </modules>
 </project>

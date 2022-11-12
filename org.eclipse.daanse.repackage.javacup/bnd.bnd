@@ -1,9 +1,10 @@
--includeresource: \
+-includeresource.d: \
 	@javacup-10k.jar
 	
 Export-Package: \
                 !org.osgi.*,\
                 *
+                
 Import-Package: \
 	org.apache.tools.ant;'resolution:'=optional,\
 	*
