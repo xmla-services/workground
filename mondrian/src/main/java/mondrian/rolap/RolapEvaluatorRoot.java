@@ -13,7 +13,7 @@ import mondrian.calc.*;
 import mondrian.olap.*;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import mondrian.spi.DialectManager;
 
 import java.util.*;

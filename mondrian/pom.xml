@@ -138,19 +138,19 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.sql.dialect.api</artifactId>
+      <artifactId>org.eclipse.daanse.db.dialect.api</artifactId>
       <version>${revision}</version>
       <scope>compile</scope>
     </dependency>
         <dependency>
       <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.sql.statistics.api</artifactId>
+      <artifactId>org.eclipse.daanse.db.statistics.api</artifactId>
       <version>${revision}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.sql.dialect.db.common</artifactId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.common</artifactId>
       <version>${revision}</version>
       <scope>compile</scope>
     </dependency>
@@ -259,7 +259,7 @@
 
   <dependency>
     <groupId>org.eclipse.daanse</groupId>
-    <artifactId>org.eclipse.daanse.sql.dialect.db.mysql</artifactId>
+    <artifactId>org.eclipse.daanse.db.dialect.db.mysql</artifactId>
     <version>${revision}</version>
     <scope>runtime</scope>
   </dependency>

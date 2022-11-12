@@ -13,9 +13,9 @@ package mondrian.rolap.sql;
 import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.BatchTestCase;
-import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
-import org.eclipse.daanse.sql.dialect.db.common.JdbcDialectImpl;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
@@ -37,8 +37,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.eclipse.daanse.sql.dialect.api.DatabaseProduct.MYSQL;
-import static org.eclipse.daanse.sql.dialect.api.DatabaseProduct.POSTGRESQL;
+import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.MYSQL;
+import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.POSTGRESQL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;

@@ -20,10 +20,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.*;
 import javax.sql.DataSource;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
-import org.eclipse.daanse.sql.dialect.api.DialectFactory;
-import org.eclipse.daanse.sql.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.sql.dialect.db.common.factory.JdbcDialectFactory;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DialectFactory;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
+import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 
 /**
  * Manages {@link mondrian.spi.Dialect} and {@link mondrian.spi.DialectFactory}

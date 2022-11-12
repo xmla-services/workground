@@ -41,7 +41,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-import static org.eclipse.daanse.sql.dialect.api.DatabaseProduct.MYSQL;
+import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.MYSQL;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.opencube.junit5.TestUtil.*;
 

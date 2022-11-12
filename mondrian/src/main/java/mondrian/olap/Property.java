@@ -14,7 +14,7 @@ package mondrian.olap;
 
 import mondrian.rolap.SqlStatement;
 import mondrian.spi.PropertyFormatter;
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
 import java.util.*;
 

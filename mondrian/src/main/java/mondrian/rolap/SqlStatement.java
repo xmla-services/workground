@@ -20,8 +20,8 @@ import mondrian.server.monitor.SqlStatementEvent;
 import mondrian.server.monitor.SqlStatementEvent.Purpose;
 import mondrian.server.monitor.SqlStatementExecuteEvent;
 import mondrian.server.monitor.SqlStatementStartEvent;
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import mondrian.spi.DialectManager;
 import mondrian.util.Counters;
 import mondrian.util.DelegatingInvocationHandler;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 /**
  * SqlStatement contains a SQL statement and associated resources throughout its lifetime.

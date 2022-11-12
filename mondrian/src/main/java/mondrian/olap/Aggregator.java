@@ -14,7 +14,7 @@ package mondrian.olap;
 import mondrian.calc.Calc;
 import mondrian.calc.TupleList;
 import mondrian.spi.SegmentBody;
-import org.eclipse.daanse.sql.dialect.api.Datatype;
+import org.eclipse.daanse.db.dialect.api.Datatype;
 
 import java.util.List;
 

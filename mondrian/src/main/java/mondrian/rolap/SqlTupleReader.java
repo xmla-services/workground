@@ -43,7 +43,7 @@ import mondrian.util.Pair;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;

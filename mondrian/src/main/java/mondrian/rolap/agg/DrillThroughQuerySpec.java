@@ -17,7 +17,7 @@ import mondrian.rolap.RolapStar.Column;
 import mondrian.rolap.RolapStar.Measure;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.util.Pair;
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
 import java.util.*;
 

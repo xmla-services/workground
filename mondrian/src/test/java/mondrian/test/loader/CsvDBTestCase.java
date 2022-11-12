@@ -12,8 +12,8 @@ package mondrian.test.loader;
 
 import mondrian.olap.Connection;
 import mondrian.rolap.BatchTestCase;
-import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.opencube.junit5.Constants;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
