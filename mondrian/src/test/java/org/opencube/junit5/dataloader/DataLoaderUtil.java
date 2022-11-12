@@ -20,8 +20,8 @@ import com.univocity.parsers.csv.Csv;
 import com.univocity.parsers.csv.CsvParserSettings;
 
 import mondrian.olap.Util;
-import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 public class DataLoaderUtil {
 

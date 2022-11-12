@@ -12,7 +12,7 @@ import mondrian.olap.Axis;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Result;
 import mondrian.rolap.RolapAxis;
-import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;

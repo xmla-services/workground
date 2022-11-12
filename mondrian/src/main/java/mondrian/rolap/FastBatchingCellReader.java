@@ -26,7 +26,7 @@ import org.apache.logging.log4j.LogManager;
 
 import java.util.*;
 import java.util.concurrent.Future;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 /**
  * A <code>FastBatchingCellReader</code> doesn't really Read cells: when asked

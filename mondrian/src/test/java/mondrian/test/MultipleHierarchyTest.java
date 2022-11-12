@@ -12,7 +12,7 @@ package mondrian.test;
 import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
 
-import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;

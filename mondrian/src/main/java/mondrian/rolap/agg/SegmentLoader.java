@@ -22,7 +22,7 @@ import mondrian.server.Locus;
 import mondrian.server.monitor.SqlStatementEvent;
 import mondrian.spi.*;
 import mondrian.util.*;
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

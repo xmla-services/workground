@@ -13,7 +13,7 @@ import mondrian.rolap.RolapUtil;
 import mondrian.rolap.SqlStatement;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 import java.sql.*;
 import java.util.Arrays;

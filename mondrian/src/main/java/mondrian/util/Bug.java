@@ -9,8 +9,8 @@
 package mondrian.util;
 
 import mondrian.olap.MondrianProperties;
-import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;

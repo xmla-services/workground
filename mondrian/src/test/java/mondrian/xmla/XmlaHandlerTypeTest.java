@@ -11,8 +11,8 @@ package mondrian.xmla;
 
 import mondrian.olap.Result;
 import mondrian.rolap.RolapCube;
-import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.CellSet;

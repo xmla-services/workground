@@ -37,8 +37,8 @@ import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.NamingManager;
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;

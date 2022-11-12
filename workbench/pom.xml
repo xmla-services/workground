@@ -105,7 +105,7 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.sql.dialect.api</artifactId>
+      <artifactId>org.eclipse.daanse.db.dialect.api</artifactId>
       <version>${revision}</version>
     </dependency>
   </dependencies>

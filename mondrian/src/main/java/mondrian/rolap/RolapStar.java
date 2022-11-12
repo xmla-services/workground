@@ -25,8 +25,8 @@ import org.apache.commons.collections.map.ReferenceMap;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.sql.dialect.api.Datatype;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Datatype;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -37,7 +37,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.sql.DataSource;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 /**
  * A <code>RolapStar</code> is a star schema. It is the means to read cell

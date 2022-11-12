@@ -19,8 +19,8 @@ import mondrian.spi.PropertyFormatter;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.sql.dialect.api.Datatype;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.olap4j.impl.UnmodifiableArrayMap;
 
 import java.util.AbstractList;

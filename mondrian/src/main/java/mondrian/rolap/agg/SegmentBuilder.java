@@ -20,7 +20,7 @@ import mondrian.util.Pair;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-import org.eclipse.daanse.sql.dialect.api.Datatype;
+import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.olap4j.impl.UnmodifiableArrayList;
 
 import java.math.BigInteger;

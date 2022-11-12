@@ -13,8 +13,8 @@ package mondrian.rolap.sql;
 
 import mondrian.olap.*;
 import mondrian.rolap.*;
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import mondrian.spi.DialectManager;
 import mondrian.util.Pair;
 

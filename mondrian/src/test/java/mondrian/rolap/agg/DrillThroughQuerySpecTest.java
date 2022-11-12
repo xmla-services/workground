@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -41,7 +41,7 @@ import mondrian.rolap.RolapStar;
 import mondrian.rolap.SqlStatement;
 import mondrian.rolap.StarPredicate;
 import mondrian.rolap.sql.SqlQuery;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 public class DrillThroughQuerySpecTest {
 

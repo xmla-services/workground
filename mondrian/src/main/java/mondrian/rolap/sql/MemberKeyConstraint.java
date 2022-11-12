@@ -14,7 +14,7 @@ import mondrian.rolap.*;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.spi.Dialect;
 import mondrian.util.Pair;
-import org.eclipse.daanse.sql.dialect.api.Datatype;
+import org.eclipse.daanse.db.dialect.api.Datatype;
 
 import java.util.List;
 

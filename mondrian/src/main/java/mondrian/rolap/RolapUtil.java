@@ -20,8 +20,8 @@ import mondrian.olap.fun.FunUtil;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
 import mondrian.server.*;
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import mondrian.util.ClassResolver;
 
 import org.apache.logging.log4j.Logger;

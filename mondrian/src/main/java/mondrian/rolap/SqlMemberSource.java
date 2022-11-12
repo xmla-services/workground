@@ -27,8 +27,8 @@ import mondrian.util.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.sql.dialect.api.Datatype;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eigenbase.util.property.StringProperty;
 
 import java.sql.*;

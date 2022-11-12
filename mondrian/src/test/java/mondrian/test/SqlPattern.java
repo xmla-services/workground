@@ -11,9 +11,9 @@
 
 package mondrian.test;
 
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
-import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.olap4j.impl.Olap4jUtil;
 
 import java.util.Set;

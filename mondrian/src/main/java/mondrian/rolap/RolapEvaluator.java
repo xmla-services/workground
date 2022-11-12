@@ -20,7 +20,7 @@ import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.olap.*;
 import mondrian.olap.fun.*;
 import mondrian.server.Statement;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import mondrian.util.*;
 
 import org.apache.logging.log4j.Logger;

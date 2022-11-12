@@ -16,8 +16,8 @@ import mondrian.rolap.RolapUtil;
 import mondrian.spi.DialectManager;
 
 import org.apache.logging.log4j.LogManager;
-import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.slf4j.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;

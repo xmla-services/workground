@@ -13,7 +13,7 @@ import mondrian.olap.*;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.RolapConnection;
 import mondrian.server.Locus;
-import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;

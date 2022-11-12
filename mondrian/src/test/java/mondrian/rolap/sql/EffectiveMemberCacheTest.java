@@ -12,7 +12,7 @@ package mondrian.rolap.sql;
 import mondrian.olap.Connection;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
-import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;

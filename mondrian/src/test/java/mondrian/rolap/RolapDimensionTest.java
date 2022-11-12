@@ -9,7 +9,7 @@
 package mondrian.rolap;
 
 import mondrian.olap.MondrianDef;
-import org.eclipse.daanse.sql.dialect.api.Datatype;
+import org.eclipse.daanse.db.dialect.api.Datatype;
 import mondrian.test.PropertySaver5;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

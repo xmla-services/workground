@@ -15,7 +15,7 @@ import mondrian.calc.TupleList;
 import mondrian.olap.*;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.FunUtil;
-import org.eclipse.daanse.sql.dialect.api.Datatype;
+import org.eclipse.daanse.db.dialect.api.Datatype;
 
 import java.util.List;
 

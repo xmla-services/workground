@@ -15,7 +15,7 @@ import mondrian.rolap.CellKey;
 import mondrian.rolap.SqlStatement;
 import mondrian.spi.SegmentBody;
 import mondrian.util.Pair;
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
 import java.util.*;
 

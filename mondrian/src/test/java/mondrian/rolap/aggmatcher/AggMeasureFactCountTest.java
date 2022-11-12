@@ -13,7 +13,7 @@ package mondrian.rolap.aggmatcher;
 
 import mondrian.olap.MondrianException;
 import mondrian.olap.Result;
-import org.eclipse.daanse.sql.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import mondrian.test.loader.CsvDBTestCase;

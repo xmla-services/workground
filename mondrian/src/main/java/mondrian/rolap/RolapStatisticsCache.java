@@ -13,8 +13,8 @@ import mondrian.olap.MondrianDef;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.server.Execution;
 import mondrian.spi.impl.SqlStatisticsProviderNew;
-import org.eclipse.daanse.sql.dialect.api.Dialect;
-import org.eclipse.daanse.sql.statistics.api.StatisticsProvider;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 
 import java.util.*;
 import javax.sql.DataSource;

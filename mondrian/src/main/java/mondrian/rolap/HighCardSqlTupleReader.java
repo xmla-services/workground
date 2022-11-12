@@ -21,7 +21,7 @@ import mondrian.server.Locus;
 import mondrian.server.monitor.SqlStatementEvent;
 import mondrian.util.Pair;
 import mondrian.util.TraversalList;
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;

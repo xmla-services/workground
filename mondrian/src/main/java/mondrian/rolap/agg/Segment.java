@@ -16,7 +16,7 @@ package mondrian.rolap.agg;
 import mondrian.olap.Util;
 import mondrian.rolap.*;
 import mondrian.spi.SegmentHeader;
-import org.eclipse.daanse.sql.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
 import java.io.PrintWriter;
 import java.util.*;

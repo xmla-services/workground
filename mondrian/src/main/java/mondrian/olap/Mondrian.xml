@@ -899,8 +899,8 @@ Revision is $Id$
                 return new Column(table, properties[i].column);
             }
 
-            public org.eclipse.daanse.sql.dialect.api.Datatype getDatatype() {
-                return org.eclipse.daanse.sql.dialect.api.Datatype.valueOf(type);
+            public org.eclipse.daanse.db.dialect.api.Datatype getDatatype() {
+                return org.eclipse.daanse.db.dialect.api.Datatype.valueOf(type);
             }
         </Code>
     </Element>
