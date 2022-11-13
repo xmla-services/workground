@@ -28,7 +28,7 @@ import org.osgi.service.metatype.annotations.Designate;
 import com.microsoft.sqlserver.jdbc.SQLServerConnectionPoolDataSource;
 
 @Designate(ocd = MsSqlConfig.class, factory = true)
-@Component(service = ConnectionPoolDataSource.class, scope = ServiceScope.PROTOTYPE)
+@Component(service = ConnectionPoolDataSource.class, scope = ServiceScope.SINGLETON)
 public class ConnectionPoolDataSourceService
         extends AbstractDelegateConnectionPoolDataSource<SQLServerConnectionPoolDataSource> {
 

@@ -27,7 +27,7 @@ import org.osgi.service.metatype.annotations.Designate;
 import org.sqlite.SQLiteDataSource;
 
 @Designate(ocd = SqliteConfig.class, factory = true)
-@Component(service = DataSource.class, scope = ServiceScope.PROTOTYPE)
+@Component(service = DataSource.class, scope = ServiceScope.SINGLETON)
 public class DataSourceService extends AbstractDelegateDataSource<SQLiteDataSource> {
 
     private SqliteConfig config;

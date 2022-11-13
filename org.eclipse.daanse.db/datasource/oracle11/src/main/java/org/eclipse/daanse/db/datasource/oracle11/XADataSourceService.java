@@ -28,7 +28,7 @@ import org.osgi.service.metatype.annotations.Designate;
 import oracle.jdbc.xa.client.OracleXADataSource;
 
 @Designate(ocd = Oracle11Config.class, factory = true)
-@Component(service = XADataSource.class, scope = ServiceScope.PROTOTYPE)
+@Component(service = XADataSource.class, scope = ServiceScope.SINGLETON)
 public class XADataSourceService extends AbstractDelegateXADataSource<OracleXADataSource> {
 
     private Oracle11Config config;

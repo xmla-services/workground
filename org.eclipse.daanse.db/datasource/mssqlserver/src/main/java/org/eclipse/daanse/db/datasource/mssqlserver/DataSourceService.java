@@ -28,7 +28,7 @@ import org.osgi.service.metatype.annotations.Designate;
 import com.microsoft.sqlserver.jdbc.SQLServerDataSource;
 
 @Designate(ocd = MsSqlConfig.class, factory = true)
-@Component(service = DataSource.class, scope = ServiceScope.PROTOTYPE)
+@Component(service = DataSource.class, scope = ServiceScope.SINGLETON)
 public class DataSourceService extends AbstractDelegateDataSource<SQLServerDataSource> {
 
     private MsSqlConfig config;

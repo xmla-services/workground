@@ -28,7 +28,7 @@ import org.osgi.service.metatype.annotations.Designate;
 import com.microsoft.sqlserver.jdbc.SQLServerXADataSource;
 
 @Designate(ocd = MsSqlConfig.class, factory = true)
-@Component(service = XADataSource.class, scope = ServiceScope.PROTOTYPE)
+@Component(service = XADataSource.class, scope = ServiceScope.SINGLETON)
 public class XADataSourceService extends AbstractDelegateXADataSource<SQLServerXADataSource> {
 
     private MsSqlConfig config;
