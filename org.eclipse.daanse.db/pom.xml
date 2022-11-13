@@ -11,6 +11,7 @@
 	<modules>
 		<module>dialect</module>
 		<module>statistics</module>
+		<module>datasource</module>
 	</modules>
 
 

@@ -130,6 +130,9 @@
                 <bnd>
                   <![CDATA[
 SPDX-License-Identifier: ${project.licenses[0].name}
+-dsannotations-options: felixExtensions
+-noextraheaders: true
+
 //-includeresource.legal:\
 // "META-INF/=${project.parent.basedir}/LICENSE.html",\
 // "META-INF/=${project.parent.basedir}/LICENSE.txt",\
@@ -148,6 +151,7 @@ SPDX-License-Identifier: ${project.licenses[0].name}
                 <bnd>
                   <![CDATA[
               //Fragment-Host: ${project.artifactId}
+-dsannotations-options: felixExtensions
               -noextraheaders: true
               -noimportjava: true
               Test-Cases: ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
@@ -763,13 +767,9 @@ SPDX-License-Identifier: ${project.licenses[0].name}
     <module>org.eclipse.daanse.repackage.eigenbase.properties</module>
     <module>org.eclipse.daanse.repackage.apache.commons.dbcp</module>
     <module>org.eclipse.daanse.repackage.dockerjava</module>
+    <module>org.eclipse.daanse.repackage.rhino.engine</module>
     <module>org.eclipse.daanse.function</module>
     <module>org.eclipse.daanse.db</module>
-    <module>org.osgi.impl.service.jdbc.common</module>
-    <module>org.osgi.impl.service.jdbc.sqlite</module>
-    <module>org.osgi.impl.service.jdbc.oracle11</module>
-    <module>org.osgi.impl.service.jdbc.mssqlserver</module>
-    <module>org.osgi.impl.service.jdbc.jtdssqlserver</module>
-    <module>org.osgi.impl.service.jdbc.clickhouse</module>
+
   </modules>
 </project>
