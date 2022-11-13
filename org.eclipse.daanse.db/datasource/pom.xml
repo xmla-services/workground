@@ -14,5 +14,6 @@
   	<module>mssqlserver</module>
   	<module>jtdssqlserver</module>
   	<module>clickhouse</module>
+  	<module>mysql</module>
   </modules>
 </project>

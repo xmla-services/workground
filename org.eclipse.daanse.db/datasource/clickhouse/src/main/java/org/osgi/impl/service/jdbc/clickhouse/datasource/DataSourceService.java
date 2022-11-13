@@ -28,7 +28,7 @@ import org.osgi.service.metatype.annotations.Designate;
 import com.clickhouse.jdbc.ClickHouseDataSource;
 
 @Designate(ocd = ClickHouseConfig.class, factory = true)
-@Component(service = DataSource.class, scope = ServiceScope.PROTOTYPE)
+@Component(service = DataSource.class, scope = ServiceScope.SINGLETON)
 public class DataSourceService extends AbstractDelegateDataSource<ClickHouseDataSource> {
 
     private ClickHouseConfig config;

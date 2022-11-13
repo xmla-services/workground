@@ -28,7 +28,7 @@ import org.osgi.service.metatype.annotations.Designate;
 import net.sourceforge.jtds.jdbcx.JtdsDataSource;
 
 @Designate(ocd = JtdsConfig.class, factory = true)
-@Component(service = DataSource.class, scope = ServiceScope.PROTOTYPE)
+@Component(service = DataSource.class, scope = ServiceScope.SINGLETON)
 public class DataSourceService extends AbstractDelegateDataSource<JtdsDataSource> {
 
     private JtdsConfig config;

@@ -28,7 +28,7 @@ import org.osgi.service.metatype.annotations.Designate;
 import oracle.jdbc.datasource.impl.OracleDataSource;
 
 @Designate(ocd = Oracle11Config.class, factory = true)
-@Component(service = DataSource.class, scope = ServiceScope.PROTOTYPE)
+@Component(service = DataSource.class, scope = ServiceScope.SINGLETON)
 public class DataSourceService extends AbstractDelegateDataSource<OracleDataSource> {
 
     private Oracle11Config config;

@@ -11,49 +11,55 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 **********************************************************************/
-package org.eclipse.daanse.db.datasource.sqlite;
+package org.eclipse.daanse.db.datasource.mysql;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
-import javax.sql.ConnectionPoolDataSource;
-import javax.sql.PooledConnection;
+import javax.sql.DataSource;
 
-import org.eclipse.daanse.db.datasource.common.AbstractDelegateConnectionPoolDataSource;
+import org.eclipse.daanse.db.datasource.common.AbstractDelegateDataSource;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
-import org.sqlite.javax.SQLiteConnectionPoolDataSource;
 
-@Designate(ocd = SqliteConfig.class, factory = true)
-@Component(service = ConnectionPoolDataSource.class, scope = ServiceScope.SINGLETON)
-public class ConnectionPoolDataSourceService
-        extends AbstractDelegateConnectionPoolDataSource<SQLiteConnectionPoolDataSource> {
+import com.mysql.cj.jdbc.MysqlDataSource;
 
-    private SqliteConfig config;
-    private SQLiteConnectionPoolDataSource ds;
+@Designate(ocd = MySqlConfig.class, factory = true)
+@Component(service = DataSource.class, scope = ServiceScope.SINGLETON)
+public class DataSourceService extends AbstractDelegateDataSource<MysqlDataSource> {
+
+    private MySqlConfig config;
+    private MysqlDataSource ds;
 
     @Activate
-    public ConnectionPoolDataSourceService(SqliteConfig config) throws SQLException {
-
-        this.ds = new SQLiteConnectionPoolDataSource(Util.transformConfig(config));
+    public DataSourceService(MySqlConfig config) throws SQLException {
+        this.ds = new MysqlDataSource();
         this.config = config;
+
+        ds.setUser(config.username());
+        ds.setPassword(config._password());
+        ds.setUrl(config.url());
     }
 
     // no @Modified to force consumed Services get new configured connections.
+
     @Deactivate
     public void deactivate() {
+
         config = null;
     }
 
     @Override
-    public PooledConnection getPooledConnection() throws SQLException {
-        return super.getPooledConnection(config.username(), config._password());
+    public Connection getConnection() throws SQLException {
+
+        return super.getConnection(config.username(), config._password());
     }
 
     @Override
-    protected SQLiteConnectionPoolDataSource delegate() {
+    protected MysqlDataSource delegate() {
         return ds;
     }
 

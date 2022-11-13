@@ -11,7 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 **********************************************************************/
-package org.eclipse.daanse.db.datasource.sqlite;
+package org.eclipse.daanse.db.datasource.mysql;
 
 import java.sql.SQLException;
 
@@ -24,20 +24,20 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
-import org.sqlite.javax.SQLiteConnectionPoolDataSource;
 
-@Designate(ocd = SqliteConfig.class, factory = true)
+import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
+
+@Designate(ocd = MySqlConfig.class, factory = true)
 @Component(service = ConnectionPoolDataSource.class, scope = ServiceScope.SINGLETON)
 public class ConnectionPoolDataSourceService
-        extends AbstractDelegateConnectionPoolDataSource<SQLiteConnectionPoolDataSource> {
+        extends AbstractDelegateConnectionPoolDataSource<MysqlConnectionPoolDataSource> {
 
-    private SqliteConfig config;
-    private SQLiteConnectionPoolDataSource ds;
+    private MySqlConfig config;
+    private MysqlConnectionPoolDataSource ds;
 
     @Activate
-    public ConnectionPoolDataSourceService(SqliteConfig config) throws SQLException {
-
-        this.ds = new SQLiteConnectionPoolDataSource(Util.transformConfig(config));
+    public ConnectionPoolDataSourceService(MySqlConfig config) throws SQLException {
+        this.ds = new MysqlConnectionPoolDataSource();
         this.config = config;
     }
 
@@ -53,7 +53,7 @@ public class ConnectionPoolDataSourceService
     }
 
     @Override
-    protected SQLiteConnectionPoolDataSource delegate() {
+    protected MysqlConnectionPoolDataSource delegate() {
         return ds;
     }
 
