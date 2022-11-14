@@ -154,7 +154,7 @@
       <version>${revision}</version>
       <scope>compile</scope>
     </dependency>
-    
+
 
       <dependency>
       <groupId>jakarta.xml.bind</groupId>
@@ -240,7 +240,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-    </dependency> 
+    </dependency>
      <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
@@ -269,7 +269,7 @@
             <artifactId>olap4j-tck</artifactId>
             <scope>test</scope>
         </dependency>
-        
+
     <dependency>
       <groupId>org.mozilla</groupId>
       <artifactId>rhino</artifactId>
@@ -279,7 +279,7 @@
         </dependencies>
   <build>
   <!--
-  
+
     <resources>
       <resource>
         <directory>${project.basedir}/testfiles</directory>
@@ -441,8 +441,8 @@
         <artifactId>bnd-maven-plugin</artifactId>
       </plugin>
     </plugins>
-    
-    
+
+
 			<resources>
 				<resource>
 					<directory>${project.basedir}/testfiles</directory>
@@ -451,6 +451,9 @@
 				<resource>
 					<directory>src/test/resources</directory>
 				</resource>
+        <resource>
+          <directory>src/main/resources</directory>
+        </resource>
 			</resources>
 		</build>
 
