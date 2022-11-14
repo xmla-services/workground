@@ -18,7 +18,8 @@
 	bnd.identity;id='org.apache.aries.spifly.dynamic.bundle',\
 	bnd.identity;id='org.glassfish.hk2.osgi-resource-locator',\
 	bnd.identity;id='com.sun.xml.bind.jaxb-impl',\
-	bnd.identity;id='org.mozilla.rhino'
+	bnd.identity;id='org.mozilla.rhino',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.mysql'
 	
 #bnd.identity;id='org.mozilla.rhino.engine',\
 
@@ -68,6 +69,7 @@
 	org.apache.servicemix.bundles.xmlresolver;version='[1.2.0,1.2.1)',\
 	org.eclipse.daanse.db.dialect.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.db.common;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.mysql;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.emondrian;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.emondrian-tests;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.repackage.apache.commons.dbcp;version='[1.2.1,1.2.2)',\
