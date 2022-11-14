@@ -76,56 +76,6 @@ public class ServiceDiscovery<T> {
         return rtn;
     }
 
-    /**
-     * Parses a list of classes that implement a service.
-     *
-     * @param clazz Class name (or list of class names)
-     * @param cLoader Class loader
-     * @param uniqueClasses Set of classes (output)
-     * @deprecated use ServiceLoader
-     */
-@Deprecated
-    protected void parseImplementor(
-        String clazz,
-        ClassLoader cLoader,
-        Set<Class<T>> uniqueClasses)
-    {
-        // Split should leave me with a class name in the first string
-        // which will nicely ignore comments in the line. I checked
-        // and found that it also doesn't choke if:
-        // a- There are no spaces on the line - you end up with one entry
-        // b- A line begins with a whitespace character (the trim() fixes that)
-        // c- Multiples of the same interface are filtered out
-        assert clazz != null;
-
-        String[] classList = clazz.trim().split("#");
-        String theClass = classList[0].trim(); // maybe overkill, maybe not. :-D
-        if (theClass.length() == 0) {
-            // Ignore lines that are empty after removing comments & trailing
-            // spaces.
-            return;
-        }
-        try {
-            // I want to look up the class but not cause the static
-            // initializer to execute.
-            Class interfaceImplementor =
-                Class.forName(theClass, false, cLoader);
-            if (theInterface.isAssignableFrom(interfaceImplementor)) {
-                //noinspection unchecked
-                uniqueClasses.add((Class<T>) interfaceImplementor);
-            } else {
-                logger.error(
-                    "Class " + interfaceImplementor
-                    + " cannot be assigned to interface "
-                    + theInterface);
-            }
-        } catch (ClassNotFoundException ignored) {
-            ignored.printStackTrace();
-        } catch (LinkageError ignored) {
-            // including ExceptionInInitializerError
-            ignored.printStackTrace();
-        }
-    }
 }
 
 // End ServiceDiscovery.java
