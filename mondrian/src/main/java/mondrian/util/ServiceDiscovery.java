@@ -70,49 +70,7 @@ public class ServiceDiscovery<T> {
         // Use linked hash set to eliminate duplicates but still return results
         // in the order they were added.
         Set<Class<T>> uniqueClasses = new LinkedHashSet<Class<T>>();
-
-        ClassLoader[] classLoaders = new ClassLoader[]{ this.getClass().getClassLoader(), Thread.currentThread().getContextClassLoader() };
-
-        for ( ClassLoader cLoader : classLoaders ) {
-            if( cLoader == null ){
-                continue;
-            }
-            try {
-                // Enumerate the files because I may have more than one .jar file
-                // that contains an implementation for the interface, and therefore,
-                // more than one list of entries.
-                String lookupName = "META-INF/services/" + theInterface.getName();
-                Enumeration<URL> urlEnum = cLoader.getResources( lookupName );
-                while ( urlEnum.hasMoreElements() ) {
-                    URL resourceURL = urlEnum.nextElement();
-                    InputStream is = null;
-                    try {
-                        is = resourceURL.openStream();
-                        BufferedReader reader =
-                            new BufferedReader( new InputStreamReader( is ) );
-
-                        // read each class and parse it
-                        String clazz;
-                        while ( ( clazz = reader.readLine() ) != null ) {
-                            parseImplementor( clazz, cLoader, uniqueClasses );
-                        }
-                    } catch ( IOException e ) {
-                        logger.warn(
-                            "Error while finding service file " + resourceURL
-                                + " for " + theInterface,
-                            e );
-                    } finally {
-                        if ( is != null ) {
-                            is.close();
-                        }
-                    }
-                }
-            } catch ( IOException e ) {
-                logger.warn(
-                    "Error while finding service files for " + theInterface,
-                    e );
-            }
-        }
+        ServiceLoader.load(theInterface).forEach(s->uniqueClasses.add((Class<T>) s.getClass()));
         List<Class<T>> rtn = new ArrayList<Class<T>>();
         rtn.addAll(uniqueClasses);
         return rtn;
