@@ -155,7 +155,7 @@ public class DiffRepository
     /**
      * Default prefix directories.
      */
-    private static final String[] DefaultPrefixes = {"src", "main", "java"};
+    private static final String[] DefaultPrefixes = {"src", "test", "java"};
 
     private static File findFile(
         Class clazz, String[] prefixes, final String suffix)
