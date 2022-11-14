@@ -49,7 +49,8 @@ public class MySqlDialect extends JdbcDialectImpl {
                 }
             }
         };
-
+public MySqlDialect() {
+}
     /**
      * Creates a MySqlDialect.
      *

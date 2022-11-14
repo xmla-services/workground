@@ -771,5 +771,6 @@ SPDX-License-Identifier: ${project.licenses[0].name}
     <module>org.eclipse.daanse.function</module>
     <module>org.eclipse.daanse.db</module>
 
+    <module>engine</module>
   </modules>
 </project>
