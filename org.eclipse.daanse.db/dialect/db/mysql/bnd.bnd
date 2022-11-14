@@ -1,0 +1,3 @@
+
+// as long as mondrian uses ServiceDiscovery for lookup services and instantiating them by itsown over looking the classpath we have to put in on the classpath over fragments 
+Fragment-Host: org.eclipse.daanse.emondrian
