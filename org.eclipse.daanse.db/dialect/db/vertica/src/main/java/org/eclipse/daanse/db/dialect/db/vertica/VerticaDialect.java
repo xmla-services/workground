@@ -15,6 +15,8 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 import java.sql.Connection;
 import java.sql.ResultSetMetaData;
@@ -35,11 +37,14 @@ import java.util.regex.PatternSyntaxException;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='VERTICA'",
 		"database.product:String='VERTICA'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class VerticaDialect extends JdbcDialectImpl {
 
   public static final JdbcDialectFactory FACTORY =
       new JdbcDialectFactory( VerticaDialect.class);
 
+  public VerticaDialect() {
+  }
   /**
    * Creates a VerticaDialect.
    *

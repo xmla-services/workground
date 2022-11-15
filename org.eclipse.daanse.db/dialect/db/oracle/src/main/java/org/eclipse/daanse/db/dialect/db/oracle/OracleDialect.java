@@ -18,6 +18,8 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * Implementation of {@link Dialect} for the Oracle database.
@@ -27,6 +29,7 @@ import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='ORACLE'",
 		"database.product:String='ORACLE'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class OracleDialect extends JdbcDialectImpl {
 
     private final String escapeRegexp = "(\\\\Q([^\\\\Q]+)\\\\E)";
@@ -36,6 +39,7 @@ public class OracleDialect extends JdbcDialectImpl {
         new JdbcDialectFactory(
             OracleDialect.class);
 
+    
     /**
      * Creates an OracleDialect.
      *

@@ -16,6 +16,8 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.eclipse.daanse.db.dialect.db.luciddb.LucidDbDialect;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * Implementation of {@link Dialect} for the SQLstream streaming
@@ -26,8 +28,11 @@ import org.eclipse.daanse.db.dialect.db.luciddb.LucidDbDialect;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='SQLSTREAM'",
 		"database.product:String='SQLSTREAM'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class SqlStreamDialect extends LucidDbDialect {
 
+    public SqlStreamDialect() {
+    }
     public static final JdbcDialectFactory FACTORY =
         new JdbcDialectFactory(
             SqlStreamDialect.class);

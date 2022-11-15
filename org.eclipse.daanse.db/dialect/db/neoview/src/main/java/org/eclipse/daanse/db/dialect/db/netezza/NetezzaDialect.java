@@ -22,6 +22,8 @@ import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * Implementation of {@link Dialect} for the Netezza database.
@@ -30,7 +32,8 @@ import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
  * @since April 17, 2009
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='NETEZZA'",
-		"database.product:String='NETEZZA'" })
+        "database.product:String='NETEZZA'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class NetezzaDialect extends PostgreSqlDialect {
 
     public static final JdbcDialectFactory FACTORY =
@@ -44,6 +47,8 @@ public class NetezzaDialect extends PostgreSqlDialect {
             }
         };
 
+    public NetezzaDialect() {
+    }
     /**
      * Creates a NetezzaDialect.
      *

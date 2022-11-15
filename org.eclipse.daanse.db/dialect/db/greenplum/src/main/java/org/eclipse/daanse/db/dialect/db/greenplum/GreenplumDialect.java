@@ -19,6 +19,8 @@ import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * Implementation of {@link Dialect} for the GreenplumSQL database.
@@ -28,8 +30,11 @@ import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='POSTGRESQL'",
 		"database.product:String='GREENPLUM'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class GreenplumDialect extends PostgreSqlDialect {
 
+    public GreenplumDialect() {
+    }
     /**
      * Creates a GreenplumDialect.
      *

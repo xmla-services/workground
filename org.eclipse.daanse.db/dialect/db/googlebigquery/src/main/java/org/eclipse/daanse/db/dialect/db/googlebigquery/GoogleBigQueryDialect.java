@@ -14,6 +14,8 @@ import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.Util;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -28,12 +30,15 @@ import java.util.regex.PatternSyntaxException;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='GOOGLEBIGQUERY'",
 		"database.product:String='GOOGLEBIGQUERY'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class GoogleBigQueryDialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =
             new JdbcDialectFactory(
                 GoogleBigQueryDialect.class);
 
+    public GoogleBigQueryDialect() {
+    }
     public GoogleBigQueryDialect(Connection connection) throws SQLException {
         super(connection);
     }

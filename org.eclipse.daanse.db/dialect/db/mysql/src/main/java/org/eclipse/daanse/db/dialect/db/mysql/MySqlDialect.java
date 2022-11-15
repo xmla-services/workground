@@ -15,6 +15,8 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 import org.eclipse.daanse.db.dialect.db.common.Util;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
@@ -27,6 +29,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MYSQL'",
     "database.product:String='MYSQL'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class MySqlDialect extends JdbcDialectImpl {
 
     private final String escapeRegexp = "(\\\\Q([^\\\\Q]+)\\\\E)";

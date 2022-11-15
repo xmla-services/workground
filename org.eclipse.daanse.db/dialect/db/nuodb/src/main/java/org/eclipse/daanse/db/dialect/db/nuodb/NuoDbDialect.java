@@ -19,6 +19,8 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.Util;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * Implementation of {@link Dialect} for the NuoDB database.
@@ -30,12 +32,15 @@ import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='NUODB'",
 		"database.product:String='NUODB'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class NuoDbDialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =
             new JdbcDialectFactory(
                     NuoDbDialect.class);
 
+    public NuoDbDialect() {
+    }
     /**
      * Creates a NuoDbDialect.
      *

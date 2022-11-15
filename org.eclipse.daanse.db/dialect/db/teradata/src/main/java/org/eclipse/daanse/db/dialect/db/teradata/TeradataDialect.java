@@ -17,6 +17,8 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * Implementation of {@link Dialect} for the Teradata database.
@@ -26,12 +28,15 @@ import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='TERADATA'",
 		"database.product:String='TERADATA'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class TeradataDialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =
         new JdbcDialectFactory(
             TeradataDialect.class);
 
+    public TeradataDialect() {
+    }
     /**
      * Creates a TeradataDialect.
      *
