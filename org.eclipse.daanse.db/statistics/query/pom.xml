@@ -7,4 +7,11 @@
 	<relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>org.eclipse.daanse.db.statistics.query</artifactId>
+      <dependencies>
+        <dependency>
+            <groupId>org.eclipse.daanse</groupId>
+            <artifactId>org.eclipse.daanse.db.statistics.api</artifactId>
+            <version>${revision}</version>
+        </dependency>
+    </dependencies>
 </project>
