@@ -26,5 +26,10 @@
       <groupId>biz.aQute.bnd</groupId>
       <artifactId>biz.aQute.bndlib</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.hive</artifactId>
+      <version>${revision}</version>
+    </dependency>
   </dependencies>
 </project>
