@@ -30,7 +30,7 @@ public class ClickHouseDialect extends JdbcDialectImpl {
                     DatabaseProduct.CLICKHOUSE);
 
     /**
-     * Creates a Db2OldAs400Dialect.
+     * Creates a ClickHouseDialect.
      *
      * @param connection Connection
      */
