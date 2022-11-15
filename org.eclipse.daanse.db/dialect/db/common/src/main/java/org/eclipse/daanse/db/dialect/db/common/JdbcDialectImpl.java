@@ -10,15 +10,7 @@
 */
 package org.eclipse.daanse.db.dialect.db.common;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.Date;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.sql.Types;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -56,7 +48,7 @@ import org.slf4j.LoggerFactory;
  * @since Oct 10, 2008
  */
 public class JdbcDialectImpl implements Dialect {
-    private Logger LOGGER = LoggerFactory.getLogger(JdbcDialectImpl.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(JdbcDialectImpl.class);
 
     /**
      * String used to quote identifiers.
@@ -1007,7 +999,7 @@ public class JdbcDialectImpl implements Dialect {
     }
 
 
-    void logTypeInfo(
+    protected void logTypeInfo(
         ResultSetMetaData metaData, int columnIndex,
         BestFitColumnType internalType)
         throws SQLException
@@ -1178,6 +1170,68 @@ public class JdbcDialectImpl implements Dialect {
             javaRegex = javaRegex.substring( 0, flagsMatcher.start( 1 ) ) + javaRegex.substring( flagsMatcher.end( 1 ) );
         }
         return javaRegex;
+    }
+
+    /**
+     * Helper method to determine if a connection would work with
+     * a given database product. This can be used to differenciate
+     * between databases which use the same driver as others.
+     *
+     * <p>It will first try to use
+     * {@link DatabaseMetaData#getDatabaseProductName()} and match the
+     * name of {@link DatabaseProduct} passed as an argument.
+     *
+     * <p>If that fails, it will try to execute <code>select version();</code>
+     * and obtains some information directly from the server.
+     *
+     * @param databaseProduct Database product instance
+     * @param connection SQL connection
+     * @return true if a match was found. false otherwise.
+     */
+    protected static boolean isDatabase(
+        DatabaseProduct databaseProduct,
+        Connection connection)
+    {
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        String dbProduct = databaseProduct.name().toLowerCase();
+
+        try {
+            // Quick and dirty check first.
+            if (connection.getMetaData().getDatabaseProductName()
+                .toLowerCase().contains(dbProduct))
+            {
+                LOGGER.debug("Using " + databaseProduct.name() + " dialect");
+                return true;
+            }
+
+            // Let's try using version().
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("select version()");
+            if (resultSet.next()) {
+                String version = resultSet.getString(1);
+                LOGGER.debug("Version=" + version);
+                if (version != null) {
+                    if (version.toLowerCase().contains(dbProduct)) {
+                        LOGGER.info(
+                            "Using " + databaseProduct.name() + " dialect");
+                        return true;
+                    }
+                }
+            }
+            LOGGER.debug("NOT Using " + databaseProduct.name() + " dialect");
+            return false;
+        } catch (SQLException e) {
+            // this exception can be hit by any db types that don't support
+            // 'select version()'
+            // no need to log exception, this is an "expected" error as we
+            // loop through all dialects looking for one that matches.
+            LOGGER.debug("NOT Using " + databaseProduct.name() + " dialect.");
+            return false;
+        } finally {
+            Util.close(resultSet, statement, null);
+        }
     }
 
     @Override
