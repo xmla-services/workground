@@ -24,14 +24,19 @@ import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.Util;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='SNOWFLAKE'",
 		"database.product:String='SNOWFLAKE'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class SnowflakeDialect extends JdbcDialectImpl {
 
   public static final JdbcDialectFactory FACTORY =
     new JdbcDialectFactory( SnowflakeDialect.class);
 
+  public SnowflakeDialect() {
+  }
   public SnowflakeDialect( Connection connection ) throws SQLException {
     super( connection );
   }

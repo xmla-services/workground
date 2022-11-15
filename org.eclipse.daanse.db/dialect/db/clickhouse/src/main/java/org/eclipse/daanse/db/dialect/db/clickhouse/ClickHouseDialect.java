@@ -5,6 +5,8 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.Util;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -14,12 +16,16 @@ import java.sql.SQLException;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='CLICKHOUSE'",
     "database.product:String='CLICKHOUSE'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class ClickHouseDialect extends JdbcDialectImpl {
 
+    
     public static final JdbcDialectFactory FACTORY =
         new JdbcDialectFactory(
             ClickHouseDialect.class);
 
+    public ClickHouseDialect() {
+    }
     /**
      * Creates a Db2OldAs400Dialect.
      *

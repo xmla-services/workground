@@ -3,6 +3,8 @@ package org.eclipse.daanse.db.dialect.db.db2;
 import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -19,12 +21,14 @@ import java.sql.SQLException;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='DB2_OLD_AS400'",
     "database.product:String='DB2_OLD_AS400'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class Db2OldAs400Dialect extends Db2Dialect {
-
     public static final JdbcDialectFactory FACTORY =
         new JdbcDialectFactory(
             Db2OldAs400Dialect.class);
 
+    public Db2OldAs400Dialect() {
+    }
     /**
      * Creates a Db2OldAs400Dialect.
      *

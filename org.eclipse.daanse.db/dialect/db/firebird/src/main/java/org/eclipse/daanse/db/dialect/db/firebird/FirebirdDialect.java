@@ -16,6 +16,8 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * Implementation of {@link Dialect} for the Firebird database.
@@ -25,12 +27,15 @@ import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='FIREBIRD'",
 		"database.product:String='FIREBIRD'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class FirebirdDialect extends JdbcDialectImpl {
 
     public static final JdbcDialectFactory FACTORY =
         new JdbcDialectFactory(
             FirebirdDialect.class);
 
+    public FirebirdDialect() {
+    }
     /**
      * Creates a FirebirdDialect.
      *

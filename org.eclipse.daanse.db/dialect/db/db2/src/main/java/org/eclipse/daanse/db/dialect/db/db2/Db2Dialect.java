@@ -4,6 +4,8 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -18,8 +20,11 @@ import java.sql.SQLException;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='DB2'",
     "database.product:String='DB2'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class Db2Dialect extends JdbcDialectImpl {
 
+    public Db2Dialect() {
+    }
     public static final JdbcDialectFactory FACTORY =
         new JdbcDialectFactory(
             Db2Dialect.class);

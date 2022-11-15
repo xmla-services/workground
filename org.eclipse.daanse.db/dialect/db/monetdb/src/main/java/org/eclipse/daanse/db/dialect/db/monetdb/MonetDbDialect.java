@@ -20,6 +20,8 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.Util;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * Implementation of {@link Dialect} for the MonetDB database.
@@ -29,6 +31,7 @@ import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MONETDB'",
 		"database.product:String='MONETDB'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class MonetDbDialect extends JdbcDialectImpl {
   private static final String DOT = "\\.";
 
@@ -36,6 +39,7 @@ public class MonetDbDialect extends JdbcDialectImpl {
         new JdbcDialectFactory(
             MonetDbDialect.class);
 
+    
     /**
      * Creates a MonetDbDialect.
      *

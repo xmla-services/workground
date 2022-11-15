@@ -18,9 +18,12 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MARIADB'",
 		"database.product:String='MARIADB'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class MariaDBDialect extends MySqlDialect {
 
   public static final JdbcDialectFactory FACTORY =
@@ -34,6 +37,8 @@ public class MariaDBDialect extends MySqlDialect {
       };
 
 
+  public MariaDBDialect() {
+  }
   public MariaDBDialect( Connection connection ) throws SQLException {
     super( connection );
   }

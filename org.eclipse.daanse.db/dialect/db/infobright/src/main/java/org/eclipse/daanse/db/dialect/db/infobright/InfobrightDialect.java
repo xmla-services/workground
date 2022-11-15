@@ -17,6 +17,8 @@ import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * Implementation of {@link Dialect} for the Infobright database.
@@ -26,6 +28,7 @@ import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MYSQL'",
 		"database.product:String='INFOBRIGHT'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class InfobrightDialect extends MySqlDialect {
 
     public static final JdbcDialectFactory FACTORY =
@@ -42,6 +45,8 @@ public class InfobrightDialect extends MySqlDialect {
             }
         };
 
+    public InfobrightDialect() {
+    }
     /**
      * Creates an InfobrightDialect.
      *

@@ -18,9 +18,12 @@ import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='PDI'",
 		"database.product:String='PDI'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class PdiDataServiceDialect extends JdbcDialectImpl {
 
   public static final JdbcDialectFactory FACTORY =

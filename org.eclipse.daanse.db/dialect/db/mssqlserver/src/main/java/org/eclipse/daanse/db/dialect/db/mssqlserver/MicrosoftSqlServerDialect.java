@@ -21,6 +21,8 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.Util;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * Implementation of {@link Dialect} for the Microsoft SQL Server
@@ -31,6 +33,7 @@ import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MSSQL'",
 		"database.product:String='MSSQL'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class MicrosoftSqlServerDialect extends JdbcDialectImpl {
 
     private final DateFormat df =
@@ -40,6 +43,8 @@ public class MicrosoftSqlServerDialect extends JdbcDialectImpl {
         new JdbcDialectFactory(
             MicrosoftSqlServerDialect.class);
 
+    public MicrosoftSqlServerDialect() {
+    }
     /**
      * Creates a MicrosoftSqlServerDialect.
      *

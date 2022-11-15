@@ -16,6 +16,8 @@ import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.eclipse.daanse.db.dialect.db.ingres.IngresDialect;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * Implementation of {@link Dialect} for the Vertica database.
@@ -25,12 +27,15 @@ import org.eclipse.daanse.db.dialect.db.ingres.IngresDialect;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='VECTORWISE'",
 		"database.product:String='VECTORWISE'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class VectorwiseDialect extends IngresDialect {
 
     public static final JdbcDialectFactory FACTORY =
         new JdbcDialectFactory(
             VectorwiseDialect.class);
 
+    public VectorwiseDialect() {
+    }
     /**
      * Creates a VectorwiseDialect.
      *

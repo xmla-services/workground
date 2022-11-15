@@ -21,6 +21,8 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.eclipse.daanse.db.dialect.db.hive.HiveDialect;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * Dialect for Cloudera's Impala DB.
@@ -30,10 +32,13 @@ import org.eclipse.daanse.db.dialect.db.hive.HiveDialect;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='IMPALA'",
 		"database.product:String='IMPALA'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class ImpalaDialect extends HiveDialect {
     private final String escapeRegexp = "(\\\\Q([^\\\\Q]+)\\\\E)";
     private final Pattern escapePattern = Pattern.compile(escapeRegexp);
 
+    public ImpalaDialect() {
+    }
     /**
      * Creates an ImpalaDialect.
      *
