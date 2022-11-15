@@ -31,7 +31,7 @@
       <groupId>biz.aQute.bnd</groupId>
       <artifactId>biz.aQute.bndlib</artifactId>
     </dependency>
-     <dependency>
+    <dependency>
       <groupId>commons-collections</groupId>
       <artifactId>commons-collections</artifactId>
     </dependency>
@@ -40,10 +40,10 @@
       <artifactId>org.eclipse.daanse.repackage.apache.commons.dbcp</artifactId>
       <version>${commons-dbcp.version}</version>
       <exclusions>
-      	<exclusion>
-      		<groupId>xerces</groupId>
-      		<artifactId>xercesImpl</artifactId>
-      	</exclusion>
+        <exclusion>
+          <groupId>xerces</groupId>
+          <artifactId>xercesImpl</artifactId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
@@ -51,8 +51,8 @@
       <artifactId>guava</artifactId>
     </dependency>
     <dependency>
-    <groupId>org.apache.commons</groupId>
-    <artifactId>commons-math3</artifactId>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-math3</artifactId>
     </dependency>
     <dependency>
       <groupId>commons-pool</groupId>
@@ -94,17 +94,17 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-    <groupId>org.apache.servicemix.bundles</groupId>
+      <groupId>org.apache.servicemix.bundles</groupId>
       <artifactId>org.apache.servicemix.bundles.xerces</artifactId>
     </dependency>
     <dependency>
-    <groupId>org.apache.servicemix.bundles</groupId>
+      <groupId>org.apache.servicemix.bundles</groupId>
       <artifactId>org.apache.servicemix.bundles.xmlresolver</artifactId>
     </dependency>
     <dependency>
-        <groupId>org.apache.servicemix.bundles</groupId>
-    	<artifactId>org.apache.servicemix.bundles.dom4j</artifactId>
-       </dependency>
+      <groupId>org.apache.servicemix.bundles</groupId>
+      <artifactId>org.apache.servicemix.bundles.dom4j</artifactId>
+    </dependency>
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
@@ -114,7 +114,7 @@
       <artifactId>jsp-api</artifactId>
     </dependency>
 
-<!--
+    <!--
     <dependency>
       <groupId>javacup</groupId>
       <artifactId>javacup</artifactId>
@@ -142,7 +142,7 @@
       <version>${revision}</version>
       <scope>compile</scope>
     </dependency>
-        <dependency>
+    <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.db.statistics.api</artifactId>
       <version>${revision}</version>
@@ -156,7 +156,7 @@
     </dependency>
 
 
-      <dependency>
+    <dependency>
       <groupId>jakarta.xml.bind</groupId>
       <artifactId>jakarta.xml.bind-api</artifactId>
     </dependency>
@@ -212,7 +212,7 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-        <dependency>
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>1.7.36</version>
@@ -241,7 +241,7 @@
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
     </dependency>
-     <dependency>
+    <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
     </dependency>
@@ -254,21 +254,21 @@
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-engine</artifactId>
-  </dependency>
+    </dependency>
 
-
-  <dependency>
-    <groupId>org.eclipse.daanse</groupId>
-    <artifactId>org.eclipse.daanse.db.dialect.db.mysql</artifactId>
-    <version>${revision}</version>
-    <scope>runtime</scope>
-  </dependency>
 
     <dependency>
-            <groupId>org.olap4j</groupId>
-            <artifactId>olap4j-tck</artifactId>
-            <scope>test</scope>
-        </dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.mysql</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.olap4j</groupId>
+      <artifactId>olap4j-tck</artifactId>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.mozilla</groupId>
@@ -276,7 +276,13 @@
       <version>1.7.14</version>
       <scope>runtime</scope>
     </dependency>
-        </dependencies>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.repackage.rhino.engine</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+  </dependencies>
   <build>
   <!--
 
