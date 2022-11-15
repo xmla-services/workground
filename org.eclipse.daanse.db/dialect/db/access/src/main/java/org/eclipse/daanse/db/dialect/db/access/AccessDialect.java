@@ -14,7 +14,6 @@ import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
@@ -30,15 +29,17 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author jhyde
  * @since Nov 23, 2008
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='ACCESS'",
-		"database.product:String='ACCESS'" })
+@ServiceProvider(value = Dialect.class)
 @Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class AccessDialect extends JdbcDialectImpl {
 
+    static final String ACCESS = "ACCESS";
     public static final JdbcDialectFactory FACTORY =
         new JdbcDialectFactory(
             AccessDialect.class);
 
+    public AccessDialect() {
+    }
     /**
      * Creates an AccessDialect.
      *

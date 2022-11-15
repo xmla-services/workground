@@ -1,4 +1,15 @@
 <?xml version="1.0"?>
+<!--
+/*********************************************************************
+* Copyright (c) 2022 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+**********************************************************************/
+-->
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.eclipse.daanse</groupId>
@@ -7,20 +18,49 @@
 
   <packaging>pom</packaging>
   <name>OpenCube Parent POM</name>
-  <description>Container pom for mondrian and mondrian workbench</description>
-  <url>http://www.opencube.org</url>
-  <licenses>
-    <license>
-      <name>Eclipse Public License (EPL), Version 1.0</name>
-      <url>http://www.eclipse.org/legal/epl-v10.html</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
-  <scm>
-    <connection>scm:git:git@github.com:pentaho/mondrian.git</connection>
-    <developerConnection>scm:git:git@github.com:pentaho/mondrian.git</developerConnection>
-    <url>scm:git:git@github.com:pentaho/mondrian.git</url>
-  </scm>
+  <description>daanse XMLA/Olap related sources</description>
+    <url>https://www.daanse.org</url>
+    <organization>
+        <name>Eclipse Foundation - Project Daanse</name>
+        <url>https://www.daanse.org</url>
+    </organization>
+    <licenses>
+        <license>
+            <name>EPL-2.0</name>
+            <comments>Eclipse Public License, Version 2.0</comments>
+            <url>https://opensource.org/licenses/EPL-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+        <license>
+          <name>Eclipse Public License (EPL), Version 1.0</name>
+          <url>http://www.eclipse.org/legal/epl-v10.html</url>
+          <distribution>repo</distribution>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/xmla-services/org.eclipse.daanse</url>
+        <connection>scm:git:https://github.com/xmla-services/org.eclipse.daanse.git</connection>
+        <developerConnection>scm:git:git@github.com:xmla-services/org.eclipse.daanse.git</developerConnection>
+    </scm>
+    <developers>
+        <developer>
+            <id>stbischof</id>
+            <name>Stefan Bischof</name>
+            <email>stbischof@bipolis.org</email>
+            <url>https://www.bipolis.org</url>
+            <organization>bipolis</organization>
+            <organizationUrl>https://www.bipolis.org</organizationUrl>
+            <roles>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Berlin</timezone>
+        </developer>
+    </developers>
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/xmla-services/org.eclipse.daanse/issues</url>
+    </issueManagement>
+
   <properties>
 
     <!-- openCube -->
@@ -28,8 +68,8 @@
     <revision>0.0.1-SNAPSHOT</revision>
     <project.build.outputTimestamp>1980-02-01T00:00:00Z</project.build.outputTimestamp>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>1.8</java.version>
-    <java.release>8</java.release>
+    <java.version>17</java.version>
+    <java.release>17</java.release>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
@@ -129,15 +169,15 @@
               <configuration>
                 <bnd>
                   <![CDATA[
-SPDX-License-Identifier: ${project.licenses[0].name}
--dsannotations-options: felixExtensions
--noextraheaders: true
+                Bundle-Copyright: Copyright (c) (${now;YYYY}) Contributors to the Eclipse Foundation.
+                Git-Descriptor: ${system-allow-fail;git describe --dirty --always --abbrev=9}
+                Git-SHA: ${system-allow-fail;git rev-list -1 --no-abbrev-commit HEAD}
+                -noextraheaders: true
+                -reproducible: true
+                -dsannotations-options: felixExtensions
 
-//-includeresource.legal:\
-// "META-INF/=${project.parent.basedir}/LICENSE.html",\
-// "META-INF/=${project.parent.basedir}/LICENSE.txt",\
-// "META-INF/=${project.parent.basedir}/RELEASE.txt"
-]]>
+                SPDX-License-Identifier: ${project.licenses[0].name}
+                ]]>
                 </bnd>
               </configuration>
             </execution>
@@ -150,14 +190,14 @@ SPDX-License-Identifier: ${project.licenses[0].name}
                <bndfile>tests.bnd</bndfile>
                 <bnd>
                   <![CDATA[
-              //Fragment-Host: ${project.artifactId}
--dsannotations-options: felixExtensions
+              -dsannotations-options: felixExtensions
               -noextraheaders: true
               -noimportjava: true
               Test-Cases: ${classes;HIERARCHY_INDIRECTLY_ANNOTATED;org.junit.platform.commons.annotation.Testable;CONCRETE}
               ]]>
                 </bnd>
-                <artifactFragment>false</artifactFragment>
+                <artifactFragment>true</artifactFragment>
+                <testCases>useTestCasesHeader</testCases>
               </configuration>
             </execution>
           </executions>
@@ -178,6 +218,9 @@ SPDX-License-Identifier: ${project.licenses[0].name}
                 <bndruns>
                   <include>test.bndrun</include>
                 </bndruns>
+                <bundles>
+                    <bundle>${project.build.directory}/${project.build.finalName}-tests.jar</bundle>
+                </bundles>
                 <failOnChanges>false</failOnChanges>
                 <includeDependencyManagement>true</includeDependencyManagement>
                 <reportOptional>false</reportOptional>
@@ -295,11 +338,32 @@ SPDX-License-Identifier: ${project.licenses[0].name}
           </execution>
         </executions>
       </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>2.22.2</version>
+          <!-- We let bnd-testing-maven-plugin do all the testing -->
+          <configuration>
+            <skipTests>true</skipTests>
+          </configuration>
+        </plugin>
     </plugins>
   </build>
 
   <dependencyManagement>
     <dependencies>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.service.component</artifactId>
+            <version>1.5.0</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.scr</artifactId>
+            <version>2.2.4</version>
+            <scope>runtime</scope>
+        </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.gogo.shell</artifactId>
@@ -757,8 +821,6 @@ SPDX-License-Identifier: ${project.licenses[0].name}
   </dependencies>
 
   <modules>
-    <module>mondrian</module>
-    <module>workbench</module>
     <module>org.eclipse.daanse.repackage.olap4j.xmla</module>
     <module>org.eclipse.daanse.repackage.olap4j</module>
     <module>org.eclipse.daanse.repackage.javacup</module>
@@ -771,5 +833,7 @@ SPDX-License-Identifier: ${project.licenses[0].name}
     <module>org.eclipse.daanse.function</module>
     <module>org.eclipse.daanse.db</module>
     <module>engine</module>
+    <module>mondrian</module>
+    <module>workbench</module>
   </modules>
 </project>

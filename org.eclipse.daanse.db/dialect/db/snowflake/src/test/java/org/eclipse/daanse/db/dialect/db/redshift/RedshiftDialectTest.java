@@ -19,7 +19,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.Statement;
 
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.db.dialect.db.redstift.RedshiftDialect;
+import org.eclipse.daanse.db.dialect.db.redshift.RedshiftDialect;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -26,6 +26,7 @@
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.db.dialect.db.postgresql</artifactId>
       <version>${revision}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>biz.aQute.bnd</groupId>
