@@ -1,8 +1,12 @@
--includeresource: \
+-includeresource.rhino: \
 	@rhino-engine-1.7.14.jar
 
-Export-Package: \
-	org.mozilla.javascript.engine
+//Export-Package: \
+//	org.mozilla.javascript.engine
+
+-privatepackage.rhino: \
+    org.eclipse.daanse.repackage.rhino.engine
 
 Import-Package: *
 
+Fragment-Host: org.eclipse.daanse.emondrian

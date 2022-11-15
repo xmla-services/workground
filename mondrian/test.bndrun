@@ -19,8 +19,8 @@
 	bnd.identity;id='org.glassfish.hk2.osgi-resource-locator',\
 	bnd.identity;id='com.sun.xml.bind.jaxb-impl',\
 	bnd.identity;id='org.mozilla.rhino',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.mysql'
-	
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.mysql',\
+	bnd.identity;id='org.eclipse.daanse.repackage.rhino.engine'
 #bnd.identity;id='org.mozilla.rhino.engine',\
 
 -runee: JavaSE-17
@@ -79,6 +79,7 @@
 	org.eclipse.daanse.repackage.javacup;version='[10.0.0,10.0.1)',\
 	org.eclipse.daanse.repackage.olap4j;version='[1.2.0,1.2.1)',\
 	org.eclipse.daanse.repackage.olap4j.xmla;version='[1.2.0,1.2.1)',\
+	org.eclipse.daanse.repackage.rhino.engine;version='[0.0.1,0.0.2)',\
 	org.glassfish.hk2.osgi-resource-locator;version='[2.5.0,2.5.1)',\
 	org.hamcrest;version='[2.1.0,2.1.1)',\
 	org.mockito.mockito-core;version='[4.8.1,4.8.2)',\
