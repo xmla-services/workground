@@ -33,7 +33,7 @@ public class HsqldbDialect extends JdbcDialectImpl {
             HsqldbDialect.class);
 
     /**
-     * Creates a FirebirdDialect.
+     * Creates a HsqldbDialect.
      *
      * @param connection Connection
      */
