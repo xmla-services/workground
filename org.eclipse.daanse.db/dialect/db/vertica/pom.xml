@@ -6,7 +6,7 @@
     <version>${revision}</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>org.eclipse.daanse.db.dialect.db.mysql</artifactId>
+  <artifactId>org.eclipse.daanse.db.dialect.db.vertica</artifactId>
   <dependencies>
     <dependency>
       <groupId>org.slf4j</groupId>
