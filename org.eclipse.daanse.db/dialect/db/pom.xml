@@ -10,7 +10,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>common</module>
-    <module>sqlite</module>
     <module>mysql</module>
     <module>access</module>
     <module>clickhouse</module>

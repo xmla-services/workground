@@ -30,6 +30,7 @@
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.db.dialect.db.hive</artifactId>
       <version>${revision}</version>
+      <scope>compile</scope>
     </dependency>
   </dependencies>
 </project>

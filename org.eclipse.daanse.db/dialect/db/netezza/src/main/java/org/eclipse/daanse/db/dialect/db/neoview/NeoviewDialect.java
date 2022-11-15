@@ -17,6 +17,8 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
 
 /**
  * Implementation of {@link Dialect} for the Neoview database.
@@ -25,12 +27,11 @@ import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
  * @since Dec 4, 2009
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='NEOVIEW'",
-		"database.product:String='NEOVIEW'" })
+        "database.product:String='NEOVIEW'" })
+@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class NeoviewDialect extends JdbcDialectImpl {
 
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            NeoviewDialect.class);
+    public static final JdbcDialectFactory FACTORY = new JdbcDialectFactory(NeoviewDialect.class);
 
     /**
      * Creates a NeoviewDialect.
@@ -39,6 +40,9 @@ public class NeoviewDialect extends JdbcDialectImpl {
      */
     public NeoviewDialect(Connection connection) throws SQLException {
         super(connection);
+    }
+
+    public NeoviewDialect() {
     }
 
     public boolean _supportsOrderByNullsLast() {
@@ -66,13 +70,8 @@ public class NeoviewDialect extends JdbcDialectImpl {
         return false;
     }
 
-    public String generateInline(
-        List<String> columnNames,
-        List<String> columnTypes,
-        List<String[]> valueList)
-    {
-        return generateInlineForAnsi(
-            "t", columnNames, columnTypes, valueList, true);
+    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+        return generateInlineForAnsi("t", columnNames, columnTypes, valueList, true);
     }
 }
 

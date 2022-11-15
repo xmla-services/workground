@@ -9,12 +9,17 @@
 
 package mondrian.util;
 
-import java.io.*;
-import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.ServiceLoader;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import aQute.bnd.annotation.spi.ServiceConsumer;
+import mondrian.spi.UserDefinedFunction;
 
 /**
  * Utility functions to discover Java services.
@@ -30,6 +35,8 @@ import org.apache.logging.log4j.Logger;
  * @deprecated use ServiceLoader
  */
 @Deprecated()
+@ServiceConsumer(UserDefinedFunction.class)
+@ServiceConsumer(org.eclipse.daanse.db.dialect.api.Dialect.class)
 public class ServiceDiscovery<T> {
 
     private static final Logger logger = LogManager.getLogger(ServiceDiscovery.class);
