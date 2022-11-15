@@ -12,5 +12,36 @@
     <module>common</module>
     <module>sqlite</module>
     <module>mysql</module>
+    <module>access</module>
+    <module>clickhouse</module>
+    <module>db2</module>
+    <module>derby</module>
+    <module>firebird</module>
+    <module>googlebigquery</module>
+    <module>greenplum</module>
+    <module>hive</module>
+    <module>hsqldb</module>
+    <module>impala</module>
+    <module>infobright</module>
+    <module>informix</module>
+    <module>ingres</module>
+    <module>interbase</module>
+    <module>luciddb</module>
+    <module>mariadb</module>
+    <module>monetdb</module>
+    <module>mssqlserver</module>
+    <module>neoview</module>
+    <module>netezza</module>
+    <module>nuodb</module>
+    <module>oracle</module>
+    <module>pdidataservice</module>
+    <module>postgresql</module>
+    <module>redshift</module>
+    <module>snowflake</module>
+    <module>sqlstream</module>
+    <module>sybase</module>
+    <module>teradata</module>
+    <module>vectorwise</module>
+    <module>vertica</module>
   </modules>
 </project>
