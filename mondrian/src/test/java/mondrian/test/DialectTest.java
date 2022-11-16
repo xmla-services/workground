@@ -11,13 +11,28 @@ package mondrian.test;
 import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapMember;
+
+import mondrian.rolap.sql.SqlQuery;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 
 import mondrian.spi.DialectManager;
-import mondrian.spi.impl.*;
 import mondrian.util.DelegatingInvocationHandler;
+import org.eclipse.daanse.db.dialect.db.hive.HiveDialect;
+import org.eclipse.daanse.db.dialect.db.infobright.InfobrightDialect;
+import org.eclipse.daanse.db.dialect.db.mariadb.MariaDBDialect;
+import org.eclipse.daanse.db.dialect.db.mssqlserver.MicrosoftSqlServerDialect;
+import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
+import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
+import org.eclipse.daanse.db.dialect.db.googlebigquery.GoogleBigQueryDialect;
+import org.eclipse.daanse.db.dialect.db.oracle.OracleDialect;
+import org.eclipse.daanse.db.dialect.db.monetdb.MonetDbDialect;
+import org.eclipse.daanse.db.dialect.db.vectorwise.VectorwiseDialect;
+import org.eclipse.daanse.db.dialect.db.netezza.NetezzaDialect;
+import org.eclipse.daanse.db.dialect.db.nuodb.NuoDbDialect;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -111,9 +126,9 @@ public class DialectTest {
     switch ( databaseProduct ) {
       case MARIADB:
         // Dialect has identified that it is MariaDB.
-        assertTrue( dialect instanceof MySqlDialect );
-        assertFalse( dialect instanceof InfobrightDialect );
-        assertTrue( dialect instanceof MariaDBDialect );
+        assertTrue( dialect instanceof MySqlDialect);
+        assertFalse( dialect instanceof InfobrightDialect);
+        assertTrue( dialect instanceof MariaDBDialect);
         assertFalse( MySqlDialect.isInfobright( databaseMetaData ) );
         assertEquals( "MariaDB", databaseMetaData.getDatabaseProductName() );
         break;
@@ -126,7 +141,7 @@ public class DialectTest {
         break;
       case HIVE:
         // Dialect has identified that it is Hive.
-        assertTrue( dialect instanceof HiveDialect );
+        assertTrue( dialect instanceof HiveDialect);
         break;
       case INFOBRIGHT:
         // Dialect has identified that it is MySQL.
@@ -137,15 +152,15 @@ public class DialectTest {
         break;
       case POSTGRESQL:
         // Dialect has identified that it is PostgreSQL.
-        assertTrue( dialect instanceof PostgreSqlDialect );
-        assertFalse( dialect instanceof NetezzaDialect );
+        assertTrue( dialect instanceof PostgreSqlDialect);
+        assertFalse( dialect instanceof NetezzaDialect);
         assertTrue(
                 databaseMetaData.getDatabaseProductName()
                         .indexOf( "PostgreSQL" ) >= 0 );
         break;
       case MSSQL:
         // Dialect has identified that it is MSSQL.
-        assertTrue( dialect instanceof MicrosoftSqlServerDialect );
+        assertTrue( dialect instanceof MicrosoftSqlServerDialect);
         assertTrue(
                 databaseMetaData.getDatabaseProductName()
                         .contains( "Microsoft" ) );
@@ -161,7 +176,7 @@ public class DialectTest {
         break;
       case NUODB:
         // Dialect has identified that it is NUODB.
-        assertTrue( dialect instanceof NuoDbDialect );
+        assertTrue( dialect instanceof NuoDbDialect);
         assertTrue(
                 databaseMetaData.getDatabaseProductName()
                         .contains( "NuoDB" ) );
@@ -1520,8 +1535,6 @@ public class DialectTest {
 
   @Test
   public void testOracleTypeMapQuirks() throws SQLException {
-    fail("other dialect not implemented yet");
-    /*
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect oracleDialect = new OracleDialect();
 
@@ -1595,13 +1608,10 @@ public class DialectTest {
                             .build(),
                     0 ) == BestFitColumnType.OBJECT, "Oracle dialect NUMBER type with precision =0 , scale = -127"
                     + " should map to OBJECT if measure name starts with 'm'");
-     */
   }
 
   @Test
   public void testPostgresGreenplumTypeMapQuirks() throws SQLException {
-    fail("other dialect not implemented yet");
-    /*
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect greenplumDialect =
             getFakeDialect( DatabaseProduct.GREENPLUM );
@@ -1630,13 +1640,10 @@ public class DialectTest {
                             .build(),
                     0 ) == BestFitColumnType.DECIMAL, "Snowflake dialect NUMBER with precision =X, scale != 0"
                     + ", maps to DECIMAL");
-     */
   }
 
   @Test
   public void testNetezzaTypeMapQuirks() throws SQLException {
-    fail("other dialect not implemented yet");
-    /*
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect netezzaDialect =
             getFakeDialect( DatabaseProduct.NETEZZA );
@@ -1658,13 +1665,10 @@ public class DialectTest {
                             .build(),
                     0 ) == BestFitColumnType.DOUBLE, "Netezza dialect NUMERIC/DECIMAL with precision =38, scale = 0"
                     + " means long.  Should be mapped to DOUBLE");
-     */
   }
 
   @Test
   public void testMonetDBTypeMapQuirks() throws SQLException {
-    fail("other dialect not implemented yet");
-    /*
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect monetDbDialect =
             getFakeDialect( DatabaseProduct.MONETDB );
@@ -1677,13 +1681,10 @@ public class DialectTest {
                             .build(),
                     0 ) == BestFitColumnType.DOUBLE, "MonetDB dialect NUMERIC with precision =0, scale = 0"
                     + " may be an aggregated decimal, should assume DOUBLE");
-     */
   }
 
   @Test
   public void testJdbcDialectTypeMap() throws SQLException {
-    fail("other dialect not implemented yet");
-    /*
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect postgresDialect = new JdbcDialectImpl();
     assertTrue(
@@ -1704,19 +1705,15 @@ public class DialectTest {
                             .build(),
                     0 ) == BestFitColumnType.INT, "JdbcDialectImpl NUMERIC/DECIMAL types w/ precision 0-9"
                     + " and scale=0 should return INT");
-     */
   }
 
   @Test
   public void testMonetBooleanColumn() throws SQLException {
-    fail("MonetDbDialect dialect not implemented yet");
-    /*
     ResultSetMetaData resultSet = new MockResultSetMetadata()
             .withColumnType( Types.BOOLEAN ).build();
     MonetDbDialect monetDbDialect = new MonetDbDialect();
     BestFitColumnType type = monetDbDialect.getType( resultSet, 0 );
     assertEquals( BestFitColumnType.OBJECT, type );
-     */
   }
 
   @Test
@@ -1805,10 +1802,10 @@ public class DialectTest {
     }
   }
 
-  @Test
-  public void testMondrian2253() throws SQLException {
-    fail("other dialect not implemented yet");
-    /*
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    public void testMondrian2253(Context context) throws SQLException {
+
     String expected = "    1 ASC";
     // "1" is supposed to be a column number
     String expr = "1";
@@ -1820,7 +1817,6 @@ public class DialectTest {
             dialect.requiresUnionOrderByOrdinal(), true );
 
     assertTrue( query.toString().contains( expected ) );
-     */
   }
 }
 
