@@ -265,6 +265,104 @@
     </dependency>
 
     <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.oracle</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.mssqlserver</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.infobright</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.mariadb</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.hive</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.postgresql</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.netezza</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.googlebigquery</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.oracle</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.monetdb</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.vectorwise</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.netezza</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.neoview</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.dialect.db.nuodb</artifactId>
+      <version>${revision}</version>
+      <scope>runtime</scope>
+    </dependency>
+
+    <dependency>
       <groupId>org.olap4j</groupId>
       <artifactId>olap4j-tck</artifactId>
       <scope>test</scope>
