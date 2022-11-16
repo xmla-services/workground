@@ -22,7 +22,6 @@ import mondrian.rolap.aggmatcher.JdbcSchema.UsageType;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.spi.Dialect;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
