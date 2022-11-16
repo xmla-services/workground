@@ -10,6 +10,7 @@
 package mondrian.spi;
 
 import mondrian.server.Execution;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 import javax.sql.DataSource;
 

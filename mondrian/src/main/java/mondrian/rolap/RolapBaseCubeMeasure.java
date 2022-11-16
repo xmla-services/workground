@@ -12,7 +12,6 @@ package mondrian.rolap;
 import mondrian.olap.*;
 import mondrian.resource.MondrianResource;
 import mondrian.spi.CellFormatter;
-import mondrian.spi.Dialect;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 
 import java.util.*;

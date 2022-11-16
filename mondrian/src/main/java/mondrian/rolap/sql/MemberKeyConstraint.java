@@ -12,7 +12,6 @@ import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianDef;
 import mondrian.rolap.*;
 import mondrian.rolap.aggmatcher.AggStar;
-import mondrian.spi.Dialect;
 import mondrian.util.Pair;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 
