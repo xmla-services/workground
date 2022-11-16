@@ -21,7 +21,6 @@ import mondrian.rolap.sql.*;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.monitor.SqlStatementEvent;
-import mondrian.spi.Dialect;
 import mondrian.util.*;
 
 import org.apache.logging.log4j.Logger;
