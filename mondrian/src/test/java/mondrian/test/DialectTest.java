@@ -8,31 +8,36 @@
 */
 package mondrian.test;
 
-import mondrian.olap.Result;
-import mondrian.olap.Util;
-import mondrian.rolap.RolapMember;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.getFakeDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
 
-import mondrian.rolap.sql.SqlQuery;
+import java.lang.reflect.Proxy;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.sql.DataSource;
+
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-
-import mondrian.spi.DialectManager;
-import mondrian.util.DelegatingInvocationHandler;
-import org.eclipse.daanse.db.dialect.db.hive.HiveDialect;
-import org.eclipse.daanse.db.dialect.db.infobright.InfobrightDialect;
-import org.eclipse.daanse.db.dialect.db.mariadb.MariaDBDialect;
-import org.eclipse.daanse.db.dialect.db.mssqlserver.MicrosoftSqlServerDialect;
-import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
-import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
-import org.eclipse.daanse.db.dialect.db.googlebigquery.GoogleBigQueryDialect;
-import org.eclipse.daanse.db.dialect.db.oracle.OracleDialect;
-import org.eclipse.daanse.db.dialect.db.monetdb.MonetDbDialect;
-import org.eclipse.daanse.db.dialect.db.vectorwise.VectorwiseDialect;
-import org.eclipse.daanse.db.dialect.db.netezza.NetezzaDialect;
-import org.eclipse.daanse.db.dialect.db.nuodb.NuoDbDialect;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -42,16 +47,12 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opentest4j.AssertionFailedError;
 
-import javax.sql.DataSource;
-import java.lang.reflect.Proxy;
-import java.sql.*;
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.getFakeDialect;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapMember;
+import mondrian.rolap.sql.SqlQuery;
+import mondrian.spi.DialectManager;
+import mondrian.util.DelegatingInvocationHandler;
 
 /**
  * Unit test which checks that {@link Dialect} accurately represents the capabilities of the underlying
@@ -116,85 +117,85 @@ public class DialectTest {
     return connection;
   }
 
-  @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testDialectVsDatabaseProduct(Context context) throws SQLException {
-    final Dialect dialect = getDialect(context);
-    final DatabaseProduct databaseProduct =
-            dialect.getDatabaseProduct();
-    final DatabaseMetaData databaseMetaData = getConnection(context).getMetaData();
-    switch ( databaseProduct ) {
-      case MARIADB:
-        // Dialect has identified that it is MariaDB.
-        assertTrue( dialect instanceof MySqlDialect);
-        assertFalse( dialect instanceof InfobrightDialect);
-        assertTrue( dialect instanceof MariaDBDialect);
-        assertFalse( MySqlDialect.isInfobright( databaseMetaData ) );
-        assertEquals( "MariaDB", databaseMetaData.getDatabaseProductName() );
-        break;
-      case MYSQL:
-        // Dialect has identified that it is MySQL.
-        assertTrue( dialect instanceof MySqlDialect );
-        assertFalse( dialect instanceof InfobrightDialect );
-        assertFalse( MySqlDialect.isInfobright( databaseMetaData ) );
-        assertEquals( "MySQL", databaseMetaData.getDatabaseProductName() );
-        break;
-      case HIVE:
-        // Dialect has identified that it is Hive.
-        assertTrue( dialect instanceof HiveDialect);
-        break;
-      case INFOBRIGHT:
-        // Dialect has identified that it is MySQL.
-        assertTrue( dialect instanceof MySqlDialect );
-        assertTrue( dialect instanceof InfobrightDialect );
-        assertTrue( MySqlDialect.isInfobright( databaseMetaData ) );
-        assertEquals( "MySQL", databaseMetaData.getDatabaseProductName() );
-        break;
-      case POSTGRESQL:
-        // Dialect has identified that it is PostgreSQL.
-        assertTrue( dialect instanceof PostgreSqlDialect);
-        assertFalse( dialect instanceof NetezzaDialect);
-        assertTrue(
-                databaseMetaData.getDatabaseProductName()
-                        .indexOf( "PostgreSQL" ) >= 0 );
-        break;
-      case MSSQL:
-        // Dialect has identified that it is MSSQL.
-        assertTrue( dialect instanceof MicrosoftSqlServerDialect);
-        assertTrue(
-                databaseMetaData.getDatabaseProductName()
-                        .contains( "Microsoft" ) );
-        break;
-      case NETEZZA:
-        // Dialect has identified that it is Netezza and a sub class of
-        // PostgreSql.
-        assertTrue( dialect instanceof PostgreSqlDialect );
-        assertTrue( dialect instanceof NetezzaDialect );
-        assertTrue(
-                databaseMetaData.getDatabaseProductName()
-                        .indexOf( "Netezza" ) >= 0 );
-        break;
-      case NUODB:
-        // Dialect has identified that it is NUODB.
-        assertTrue( dialect instanceof NuoDbDialect);
-        assertTrue(
-                databaseMetaData.getDatabaseProductName()
-                        .contains( "NuoDB" ) );
-        break;
-      case GOOGLEBIGQUERY:
-        assertTrue( dialect instanceof GoogleBigQueryDialect );
-        assertTrue(
-                databaseMetaData.getDatabaseProductName()
-                        .contains( "Google BigQuery" ) );
-        break;
-      default:
-        // Neither MySQL nor Infobright.
-        assertFalse( dialect instanceof MySqlDialect );
-        assertFalse( dialect instanceof InfobrightDialect );
-        assertNotSame( "MySQL", databaseMetaData.getDatabaseProductName() );
-        break;
-    }
-  }
+//  @ParameterizedTest
+//  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+//  public void testDialectVsDatabaseProduct(Context context) throws SQLException {
+//    final Dialect dialect = getDialect(context);
+//    final DatabaseProduct databaseProduct =
+//            dialect.getDatabaseProduct();
+//    final DatabaseMetaData databaseMetaData = getConnection(context).getMetaData();
+//    switch ( databaseProduct ) {
+//      case MARIADB:
+//        // Dialect has identified that it is MariaDB.
+//        assertTrue( dialect instanceof MySqlDialect);
+//        assertFalse( dialect instanceof InfobrightDialect);
+//        assertTrue( dialect instanceof MariaDBDialect);
+//        assertFalse( MySqlDialect.isInfobright( databaseMetaData ) );
+//        assertEquals( "MariaDB", databaseMetaData.getDatabaseProductName() );
+//        break;
+//      case MYSQL:
+//        // Dialect has identified that it is MySQL.
+//        assertTrue( dialect instanceof MySqlDialect );
+//        assertFalse( dialect instanceof InfobrightDialect );
+//        assertFalse( MySqlDialect.isInfobright( databaseMetaData ) );
+//        assertEquals( "MySQL", databaseMetaData.getDatabaseProductName() );
+//        break;
+//      case HIVE:
+//        // Dialect has identified that it is Hive.
+//        assertTrue( dialect instanceof HiveDialect);
+//        break;
+//      case INFOBRIGHT:
+//        // Dialect has identified that it is MySQL.
+//        assertTrue( dialect instanceof MySqlDialect );
+//        assertTrue( dialect instanceof InfobrightDialect );
+//        assertTrue( MySqlDialect.isInfobright( databaseMetaData ) );
+//        assertEquals( "MySQL", databaseMetaData.getDatabaseProductName() );
+//        break;
+//      case POSTGRESQL:
+//        // Dialect has identified that it is PostgreSQL.
+//        assertTrue( dialect instanceof PostgreSqlDialect);
+//        assertFalse( dialect instanceof NetezzaDialect);
+//        assertTrue(
+//                databaseMetaData.getDatabaseProductName()
+//                        .indexOf( "PostgreSQL" ) >= 0 );
+//        break;
+//      case MSSQL:
+//        // Dialect has identified that it is MSSQL.
+//        assertTrue( dialect instanceof MicrosoftSqlServerDialect);
+//        assertTrue(
+//                databaseMetaData.getDatabaseProductName()
+//                        .contains( "Microsoft" ) );
+//        break;
+//      case NETEZZA:
+//        // Dialect has identified that it is Netezza and a sub class of
+//        // PostgreSql.
+//        assertTrue( dialect instanceof PostgreSqlDialect );
+//        assertTrue( dialect instanceof NetezzaDialect );
+//        assertTrue(
+//                databaseMetaData.getDatabaseProductName()
+//                        .indexOf( "Netezza" ) >= 0 );
+//        break;
+//      case NUODB:
+//        // Dialect has identified that it is NUODB.
+//        assertTrue( dialect instanceof NuoDbDialect);
+//        assertTrue(
+//                databaseMetaData.getDatabaseProductName()
+//                        .contains( "NuoDB" ) );
+//        break;
+//      case GOOGLEBIGQUERY:
+//        assertTrue( dialect instanceof GoogleBigQueryDialect );
+//        assertTrue(
+//                databaseMetaData.getDatabaseProductName()
+//                        .contains( "Google BigQuery" ) );
+//        break;
+//      default:
+//        // Neither MySQL nor Infobright.
+//        assertFalse( dialect instanceof MySqlDialect );
+//        assertFalse( dialect instanceof InfobrightDialect );
+//        assertNotSame( "MySQL", databaseMetaData.getDatabaseProductName() );
+//        break;
+//    }
+//  }
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
@@ -1533,82 +1534,6 @@ public class DialectTest {
     }
   }
 
-  @Test
-  public void testOracleTypeMapQuirks() throws SQLException {
-    MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
-    Dialect oracleDialect = new OracleDialect();
-
-    assertTrue(
-            oracleDialect.getType(
-                    mockResultSetMeta.withColumnName( "c0" )
-                            .withColumnType( Types.NUMERIC )
-                            .withPrecision( 0 )
-                            .withScale( 0 )
-                            .build(),
-                    0 ) == BestFitColumnType.INT, "Oracle dialect NUMERIC type with 0 precision, 0 scale should map "
-                    + "to INT, unless column starts with 'm'");
-
-    assertTrue(
-            oracleDialect.getType(
-                    mockResultSetMeta.withColumnName( "c0" )
-                            .withColumnType( Types.NUMERIC )
-                            .withPrecision( 5 )
-                            .withScale( -127 )
-                            .build(),
-                    0 ) == BestFitColumnType.DOUBLE, "Oracle dialect NUMERIC type with non-zero precision, -127 scale "
-                    + " should map to DOUBLE.  MONDRIAN-1044");
-    assertTrue(
-            oracleDialect.getType(
-                    mockResultSetMeta.withColumnName( "c0" )
-                            .withColumnType( Types.NUMERIC )
-                            .withPrecision( 9 )
-                            .withScale( 0 )
-                            .build(),
-                    0 ) == BestFitColumnType.INT, "Oracle dialect NUMERIC type with precision less than 10, 0 scale "
-                    + " should map to INT. "
-    );
-    assertTrue(
-            oracleDialect.getType(
-                    mockResultSetMeta.withColumnName( "c0" )
-                            .withColumnType( Types.NUMERIC )
-                            .withPrecision( 38 )
-                            .withScale( 0 )
-                            .build(),
-                    0 ) == BestFitColumnType.INT, "Oracle dialect NUMERIC type with precision = 38, scale = 0"
-                    + " should map to INT.  38 is a magic number in Oracle "
-                    + " for integers of unspecified precision.");
-    assertTrue(
-            oracleDialect.getType(
-                    mockResultSetMeta.withColumnName( "c0" )
-                            .withColumnType( Types.NUMERIC )
-                            .withPrecision( 20 )
-                            .withScale( 0 )
-                            .build(),
-                    0 ) == BestFitColumnType.DOUBLE,
-            "Oracle dialect DECIMAL type with precision > 9, scale = 0"
-                    + " should map to DOUBLE (unless magic #38)");
-
-    assertTrue(
-            oracleDialect.getType(
-                    mockResultSetMeta.withColumnName( "c0" )
-                            .withColumnType( Types.NUMERIC )
-                            .withPrecision( 0 )
-                            .withScale( -127 )
-                            .build(),
-                    0 ) == BestFitColumnType.INT, "Oracle dialect NUMBER type with precision =0 , scale = -127"
-                    + " should map to INT.  GROUPING SETS queries can shift"
-                    + " scale for columns to -127, whether INT or other NUMERIC."
-                    + " Assume INT unless the column name indicates it is a measure.");
-    assertTrue(
-            oracleDialect.getType(
-                    mockResultSetMeta.withColumnName( "m0" )
-                            .withColumnType( Types.NUMERIC )
-                            .withPrecision( 0 )
-                            .withScale( -127 )
-                            .build(),
-                    0 ) == BestFitColumnType.OBJECT, "Oracle dialect NUMBER type with precision =0 , scale = -127"
-                    + " should map to OBJECT if measure name starts with 'm'");
-  }
 
   @Test
   public void testPostgresGreenplumTypeMapQuirks() throws SQLException {
@@ -1707,14 +1632,7 @@ public class DialectTest {
                     + " and scale=0 should return INT");
   }
 
-  @Test
-  public void testMonetBooleanColumn() throws SQLException {
-    ResultSetMetaData resultSet = new MockResultSetMetadata()
-            .withColumnType( Types.BOOLEAN ).build();
-    MonetDbDialect monetDbDialect = new MonetDbDialect();
-    BestFitColumnType type = monetDbDialect.getType( resultSet, 0 );
-    assertEquals( BestFitColumnType.OBJECT, type );
-  }
+
 
   @Test
   public void testHiveTimestampQuoteLiteral() throws SQLException {
@@ -1741,8 +1659,7 @@ public class DialectTest {
 
   public static class MockResultSetMetadata
           extends DelegatingInvocationHandler {
-    private int precision;
-    private int scale;
+    private int precision;    private int scale;
     private int columnType;
     private String columnName;
 
@@ -1802,14 +1719,20 @@ public class DialectTest {
     }
   }
 
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMondrian2253(Context context) throws SQLException {
+  //TODO; this tests more SqlQuery. so move it there
+  @Test 
+  public void testMondrian2253() throws SQLException {
 
     String expected = "    1 ASC";
     // "1" is supposed to be a column number
     String expr = "1";
-    JdbcDialectImpl dialect = new VectorwiseDialect( getConnection(context) );
+    Dialect dialect = new JdbcDialectImpl() {
+      
+        @Override
+        public boolean requiresUnionOrderByOrdinal() {
+            return false;
+        }
+    };
 
     SqlQuery query = new SqlQuery( dialect, true );
     query.addOrderBy(

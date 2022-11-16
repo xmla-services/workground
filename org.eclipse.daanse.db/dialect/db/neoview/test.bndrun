@@ -29,9 +29,8 @@
 	org.apache.felix.scr;version='[2.2.4,2.2.5)',\
 	org.eclipse.daanse.db.dialect.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.db.common;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.netezza;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.netezza-tests;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.postgresql;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.neoview;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.neoview-tests;version='[0.0.1,0.0.2)',\
 	org.objectweb.asm;version='[9.3.0,9.3.1)',\
 	org.objectweb.asm.commons;version='[9.3.0,9.3.1)',\
 	org.objectweb.asm.tree;version='[9.3.0,9.3.1)',\
