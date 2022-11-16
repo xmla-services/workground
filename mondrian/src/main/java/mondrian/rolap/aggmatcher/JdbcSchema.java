@@ -19,7 +19,6 @@ import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapStar;
-import mondrian.spi.Dialect;
 import mondrian.util.ClassResolver;
 
 import org.apache.logging.log4j.Logger;

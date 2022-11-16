@@ -11,11 +11,11 @@ package mondrian.spi.impl;
 
 import mondrian.olap.Util;
 import mondrian.server.Execution;
-import mondrian.spi.Dialect;
 import mondrian.spi.StatisticsProvider;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 
 import java.sql.*;
 import javax.sql.DataSource;
