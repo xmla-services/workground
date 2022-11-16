@@ -3,7 +3,7 @@
 
 
 -tester: biz.aQute.tester.junit-platform
-    
+
 -runfw: org.apache.felix.framework
 
 -runsystemcapabilities: ${native_capability}
@@ -19,6 +19,17 @@
 	bnd.identity;id='org.glassfish.hk2.osgi-resource-locator',\
 	bnd.identity;id='com.sun.xml.bind.jaxb-impl',\
 	bnd.identity;id='org.eclipse.daanse.db.dialect.db.mysql',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.hive',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.infobright',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.mariadb',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.mssqlserver',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.postgresql',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.googlebigquery',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.oracle',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.monetdb',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.vectorwise',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.netezza',\
+	bnd.identity;id='org.eclipse.daanse.db.dialect.db.nuodb',\
 	bnd.identity;id='org.eclipse.daanse.repackage.rhino.engine'
 
 
@@ -70,6 +81,17 @@
 	org.eclipse.daanse.db.dialect.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.db.common;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.db.mysql;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.hive;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.infobright;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.mariadb;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.mssqlserver;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.postgresql;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.googlebigquery;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.oracle;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.monetdb;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.vectorwise;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.netezza;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.nuodb;version='[0.0.1,0.0.2)'
 	org.eclipse.daanse.emondrian;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.emondrian-tests;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.repackage.apache.commons.dbcp;version='[1.2.1,1.2.2)',\
