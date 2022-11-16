@@ -18,18 +18,6 @@
 	bnd.identity;id='org.apache.aries.spifly.dynamic.bundle',\
 	bnd.identity;id='org.glassfish.hk2.osgi-resource-locator',\
 	bnd.identity;id='com.sun.xml.bind.jaxb-impl',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.mysql',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.hive',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.infobright',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.mariadb',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.mssqlserver',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.postgresql',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.googlebigquery',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.oracle',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.monetdb',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.vectorwise',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.netezza',\
-	bnd.identity;id='org.eclipse.daanse.db.dialect.db.nuodb',\
 	bnd.identity;id='org.eclipse.daanse.repackage.rhino.engine'
 
 
@@ -38,7 +26,6 @@
 -runstartlevel: \
     order=sortbynameversion,\
     begin=-1
-
 -runbundles: \
 	assertj-core;version='[3.22.0,3.22.1)',\
 	biz.aQute.gogo.commands.provider;version='[1.8.0,1.8.1)',\
@@ -80,18 +67,9 @@
 	org.apache.servicemix.bundles.xmlresolver;version='[1.2.0,1.2.1)',\
 	org.eclipse.daanse.db.dialect.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.db.common;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.mysql;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.hive;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.infobright;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.db.mariadb;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.mssqlserver;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.db.dialect.db.mysql;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.db.dialect.db.postgresql;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.googlebigquery;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.oracle;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.monetdb;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.vectorwise;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.netezza;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.db.dialect.db.nuodb;version='[0.0.1,0.0.2)'
 	org.eclipse.daanse.emondrian;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.emondrian-tests;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.repackage.apache.commons.dbcp;version='[1.2.1,1.2.2)',\
