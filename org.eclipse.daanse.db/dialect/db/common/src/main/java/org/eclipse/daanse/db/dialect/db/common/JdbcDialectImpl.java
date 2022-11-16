@@ -340,7 +340,7 @@ public class JdbcDialectImpl implements Dialect {
             return;
         }
 
-        String val2 = Util.replace(val, q, q + q);
+        String val2 = val.replace(q, q + q);
         buf.append(q);
         buf.append(val2);
         buf.append(q);

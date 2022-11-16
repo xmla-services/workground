@@ -19,7 +19,7 @@ import java.sql.SQLException;
 @Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
 public class ClickHouseDialect extends JdbcDialectImpl {
 
-    
+
     public static final JdbcDialectFactory FACTORY =
         new JdbcDialectFactory(
             ClickHouseDialect.class);
@@ -45,8 +45,8 @@ public class ClickHouseDialect extends JdbcDialectImpl {
     {
         buf.append('\'');
 
-        String s0 = Util.replace(s, "\\", "\\\\");
-        s0 = Util.replace(s0, "'", "\\'");
+        String s0 = s.replace("\\", "\\\\");
+        s0 = s0.replace("'", "\\'");
         buf.append(s0);
 
         buf.append('\'');
