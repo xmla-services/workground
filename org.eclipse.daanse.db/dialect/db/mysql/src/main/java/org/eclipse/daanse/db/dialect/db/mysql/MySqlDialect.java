@@ -223,8 +223,8 @@ public MySqlDialect() {
     public void quoteStringLiteral(StringBuilder buf, String s) {
         // Go beyond Util.singleQuoteString; also quote backslash.
         buf.append('\'');
-        String s0 = Util.replace(s, "'", "''");
-        String s1 = Util.replace(s0, "\\", "\\\\");
+        String s0 = s.replace("'", "''");
+        String s1 = s0.replace("\\", "\\\\");
         buf.append(s1);
         buf.append('\'');
     }

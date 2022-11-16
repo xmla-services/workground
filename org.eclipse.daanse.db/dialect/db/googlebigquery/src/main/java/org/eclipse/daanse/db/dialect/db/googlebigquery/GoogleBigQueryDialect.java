@@ -94,8 +94,8 @@ public class GoogleBigQueryDialect extends JdbcDialectImpl {
         // BQQ requires single quotes to be doubled and backslash
         // do be doubled too.
         buf.append('\'');
-        s = Util.replace(s, "\\", "\\\\");
-        s = Util.replace(s, "'", "\\'");
+        s = s.replace("\\", "\\\\");
+        s = s.replace("'", "\\'");
         buf.append(s);
         buf.append('\'');
     }
