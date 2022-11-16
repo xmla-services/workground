@@ -1,0 +1,110 @@
+package org.eclipse.daanse.db.dialect.db.oracle;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Types;
+
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.junit.jupiter.api.Test;
+
+public class AdditionalTest {
+
+
+    @Test
+    public void testOracleTypeMapQuirks() throws SQLException {
+
+        ResultSetMetaData resultSet = mock(ResultSetMetaData.class);
+        when(resultSet.getColumnName(1)).thenReturn("c0");
+        when(resultSet.getColumnType(1)).thenReturn(Types.NUMERIC );
+        when(resultSet.getPrecision(1)).thenReturn(0);
+        when(resultSet.getScale(1)).thenReturn(0);
+
+        
+      Dialect oracleDialect = new OracleDialect();
+
+      assertTrue(
+              oracleDialect.getType(
+                      resultSet,
+                      0 ) == BestFitColumnType.INT, "Oracle dialect NUMERIC type with 0 precision, 0 scale should map "
+                      + "to INT, unless column starts with 'm'");
+
+      
+      resultSet = mock(ResultSetMetaData.class);
+      when(resultSet.getColumnName(1)).thenReturn("c0");
+      when(resultSet.getColumnType(1)).thenReturn(Types.NUMERIC );
+      when(resultSet.getPrecision(1)).thenReturn(5);
+      when(resultSet.getScale(1)).thenReturn(-127);
+
+      assertTrue(
+              oracleDialect.getType(
+                      resultSet,
+                      0 ) == BestFitColumnType.DOUBLE, "Oracle dialect NUMERIC type with non-zero precision, -127 scale "
+                      + " should map to DOUBLE.  MONDRIAN-1044");
+      
+      resultSet = mock(ResultSetMetaData.class);
+      when(resultSet.getColumnName(1)).thenReturn("c0");
+      when(resultSet.getColumnType(1)).thenReturn(Types.NUMERIC );
+      when(resultSet.getPrecision(1)).thenReturn(9);
+      when(resultSet.getScale(1)).thenReturn(0);
+      assertTrue(
+              oracleDialect.getType(
+                      resultSet,
+                      0 ) == BestFitColumnType.INT, "Oracle dialect NUMERIC type with precision less than 10, 0 scale "
+                      + " should map to INT. "
+      );
+      
+      resultSet = mock(ResultSetMetaData.class);
+      when(resultSet.getColumnName(1)).thenReturn("c0");
+      when(resultSet.getColumnType(1)).thenReturn(Types.NUMERIC );
+      when(resultSet.getPrecision(1)).thenReturn(38);
+      when(resultSet.getScale(1)).thenReturn(0);
+      assertTrue(
+              oracleDialect.getType(
+                      resultSet,
+                      0 ) == BestFitColumnType.INT, "Oracle dialect NUMERIC type with precision = 38, scale = 0"
+                      + " should map to INT.  38 is a magic number in Oracle "
+                      + " for integers of unspecified precision.");
+      
+      resultSet = mock(ResultSetMetaData.class);
+      when(resultSet.getColumnName(1)).thenReturn("c0");
+      when(resultSet.getColumnType(1)).thenReturn(Types.NUMERIC );
+      when(resultSet.getPrecision(1)).thenReturn(20);
+      when(resultSet.getScale(1)).thenReturn(0);
+      assertTrue(
+              oracleDialect.getType(
+                      resultSet,
+                      0 ) == BestFitColumnType.DOUBLE,
+              "Oracle dialect DECIMAL type with precision > 9, scale = 0"
+                      + " should map to DOUBLE (unless magic #38)");
+
+      
+      resultSet = mock(ResultSetMetaData.class);
+      when(resultSet.getColumnName(1)).thenReturn("c0");
+      when(resultSet.getColumnType(1)).thenReturn(Types.NUMERIC );
+      when(resultSet.getPrecision(1)).thenReturn(0);
+      when(resultSet.getScale(1)).thenReturn(-127);
+      assertTrue(
+              oracleDialect.getType(
+                      resultSet,
+                      0 ) == BestFitColumnType.INT, "Oracle dialect NUMBER type with precision =0 , scale = -127"
+                      + " should map to INT.  GROUPING SETS queries can shift"
+                      + " scale for columns to -127, whether INT or other NUMERIC."
+                      + " Assume INT unless the column name indicates it is a measure.");
+      
+      resultSet = mock(ResultSetMetaData.class);
+      when(resultSet.getColumnName(1)).thenReturn("m0");
+      when(resultSet.getColumnType(1)).thenReturn(Types.NUMERIC );
+      when(resultSet.getPrecision(1)).thenReturn(0);
+      when(resultSet.getScale(1)).thenReturn(-127);
+      assertTrue(
+              oracleDialect.getType(
+     resultSet,
+                      0 ) == BestFitColumnType.OBJECT, "Oracle dialect NUMBER type with precision =0 , scale = -127"
+                      + " should map to OBJECT if measure name starts with 'm'");
+    }
+}
