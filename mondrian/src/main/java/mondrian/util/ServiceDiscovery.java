@@ -15,10 +15,13 @@ import java.util.List;
 import java.util.ServiceLoader;
 import java.util.Set;
 
+import javax.script.ScriptEngineFactory;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import aQute.bnd.annotation.spi.ServiceConsumer;
+import mondrian.spi.SegmentCache;
 import mondrian.spi.UserDefinedFunction;
 
 /**
@@ -36,6 +39,7 @@ import mondrian.spi.UserDefinedFunction;
  */
 @Deprecated()
 @ServiceConsumer(UserDefinedFunction.class)
+@ServiceConsumer(ScriptEngineFactory.class)
 @ServiceConsumer(org.eclipse.daanse.db.dialect.api.Dialect.class)
 public class ServiceDiscovery<T> {
 
