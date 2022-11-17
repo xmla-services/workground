@@ -41,6 +41,7 @@ import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static mondrian.olap.Util.filter;
 import static mondrian.xmla.XmlaConstants.*;
@@ -7524,13 +7525,7 @@ TODO: see above
         };
 
     static void serialize(StringBuilder buf, Collection<String> strings) {
-        int k = 0;
-        for (String name : Util.sort(strings)) {
-            if (k++ > 0) {
-                buf.append(',');
-            }
-            buf.append(name);
-        }
+        buf.append(strings.stream().sorted().collect(Collectors.joining(",")));
     }
 
     private static Level lookupLevel(Cube cube, String levelUniqueName) {

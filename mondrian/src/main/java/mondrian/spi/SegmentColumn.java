@@ -13,6 +13,7 @@ import mondrian.olap.Util;
 import mondrian.util.ArraySortedSet;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.SortedSet;
 
 
@@ -116,7 +117,7 @@ public class SegmentColumn implements Serializable {
             return true;
         }
         return this.columnExpression.equals(that.columnExpression)
-            && Util.equals(this.values, that.values);
+            && Objects.equals(this.values, that.values);
     }
 
     @Override

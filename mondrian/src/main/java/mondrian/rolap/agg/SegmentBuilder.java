@@ -267,7 +267,7 @@ public class SegmentBuilder {
                     }
                     axis.valueSet = filteredValues;
                     axis.hasNull = axis.hasNull || filteredHasNull;
-                    if (!Util.equals(axis.requestedValues, requestedValues)) {
+                    if (!Objects.equals(axis.requestedValues, requestedValues)) {
                         if (axis.requestedValues == null) {
                             // Downgrade from wildcard to a specific list.
                             axis.requestedValues = requestedValues;

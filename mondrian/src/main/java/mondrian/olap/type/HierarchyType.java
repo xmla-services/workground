@@ -13,6 +13,8 @@ package mondrian.olap.type;
 
 import mondrian.olap.*;
 
+import java.util.Objects;
+
 /**
  * The type of an expression which represents a hierarchy.
  *
@@ -91,8 +93,8 @@ public class HierarchyType implements Type {
     public boolean equals(Object obj) {
         if (obj instanceof HierarchyType) {
             HierarchyType that = (HierarchyType) obj;
-            return Util.equals(this.hierarchy, that.hierarchy)
-                && Util.equals(this.dimension, that.dimension);
+            return Objects.equals(this.hierarchy, that.hierarchy)
+                && Objects.equals(this.dimension, that.dimension);
         }
         return false;
     }

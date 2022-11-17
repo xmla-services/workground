@@ -15,6 +15,8 @@ package mondrian.rolap;
 
 import mondrian.olap.Util;
 
+import java.util.Objects;
+
 /**
  * <code>MemberKey</code> todo:
  *
@@ -36,8 +38,8 @@ class MemberKey {
             return false;
         }
         MemberKey other = (MemberKey) o;
-        return Util.equals(this.parent, other.parent)
-            && Util.equals(this.value, other.value);
+        return Objects.equals(this.parent, other.parent)
+            && Objects.equals(this.value, other.value);
     }
 
     @Override

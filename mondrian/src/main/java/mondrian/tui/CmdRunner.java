@@ -206,7 +206,7 @@ public class CmdRunner {
             MondrianProperties.instance(),
             name);
         String oldValue = property.getString();
-        if (! Util.equals(oldValue, value)) {
+        if (! Objects.equals(oldValue, value)) {
             property.setString(value);
             return true;
         } else {

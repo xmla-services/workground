@@ -60,14 +60,7 @@ import mondrian.util.CancellationChecker;
 import mondrian.util.ConcatenableList;
 import mondrian.util.IdentifierParser;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static mondrian.olap.fun.sort.Sorter.hierarchizeTupleList;
 
@@ -1339,7 +1332,7 @@ public class FunUtil extends Util {
     m1 = unwrapLimitedRollupMember( m1 );
     m2 = unwrapLimitedRollupMember( m2 );
 
-    if ( equals( m1, m2 ) ) {
+    if ( Objects.equals( m1, m2 ) ) {
       return 0;
     }
 
@@ -1348,12 +1341,12 @@ public class FunUtil extends Util {
       int depth2 = m2.getDepth();
       if ( depth1 < depth2 ) {
         m2 = m2.getParentMember();
-        if ( equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           return post ? 1 : -1;
         }
       } else if ( depth1 > depth2 ) {
         m1 = m1.getParentMember();
-        if ( equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           return post ? -1 : 1;
         }
       } else {
@@ -1361,7 +1354,7 @@ public class FunUtil extends Util {
         Member prev2 = m2;
         m1 = unwrapLimitedRollupMember( m1.getParentMember() );
         m2 = unwrapLimitedRollupMember( m2.getParentMember() );
-        if ( equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           final int c = compareSiblingMembers( prev1, prev2 );
           // compareHierarchically needs to impose a total order;
           // cannot return 0 for non-equal members

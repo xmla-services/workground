@@ -35,30 +35,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.AbstractList;
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Random;
-import java.util.RandomAccess;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.Timer;
-import java.util.TreeSet;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -72,7 +49,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
+import com.google.common.collect.Ordering;
 import org.apache.commons.collections.keyvalue.AbstractMapEntry;
 import org.apache.commons.vfs2.FileContent;
 import org.apache.commons.vfs2.FileObject;
@@ -215,17 +194,11 @@ public class Util extends XOMUtil {
      * @param list List
      * @return whether list is sorted
      */
-    public static <T> boolean isSorted(List<T> list) {
-        T prev = null;
-        for (T t : list) {
-            if (prev != null
-                && ((Comparable<T>) prev).compareTo(t) >= 0)
-            {
-                return false;
-            }
-            prev = t;
+    public static <T extends Comparable> boolean isSorted(List<T> list) {
+        if (list == null || list.size() <= 1) {
+            return true;
         }
-        return true;
+        return Ordering.natural().nullsLast().isOrdered(list);
     }
 
     /**
@@ -404,9 +377,7 @@ public class Util extends XOMUtil {
 
     public static void quoteMdxIdentifier(String id, StringBuilder buf) {
         buf.append('[');
-        int start = buf.length();
-        buf.append(id);
-        replace(buf, start, "]", "]]");
+        buf.append(id.replace("]", "]]"));
         buf.append(']');
     }
 
@@ -464,16 +435,6 @@ public class Util extends XOMUtil {
         return s.equals(t);
     }
 
-    /**
-     * Returns true if two strings are equal, or are both null.
-     *
-     * <p>The result is not affected by
-     * {@link MondrianProperties#CaseSensitive the case sensitive option}; if
-     * you wish to compare names, use {@link #equalName(String, String)}.
-     */
-    public static boolean equals(String s, String t) {
-        return equals((Object) s, (Object) t);
-    }
 
     /**
      * Returns whether two names are equal.
@@ -499,6 +460,9 @@ public class Util extends XOMUtil {
      * @return Whether strings are equal
      */
     public static boolean equal(String s, String t, boolean matchCase) {
+        if (s == null) {
+            return t == null;
+        }
         return matchCase ? s.equals(t) : s.equalsIgnoreCase(t);
     }
 
@@ -549,68 +513,11 @@ public class Util extends XOMUtil {
 
     /**
      * Returns the result of ((Comparable) k1).compareTo(k2), with
-     * special-casing for the fact that Boolean only became
-     * comparable in JDK 1.5.
      *
      * @see Comparable#compareTo
      */
     public static int compareKey(Object k1, Object k2) {
-        if (k1 instanceof Boolean) {
-            // Luckily, "F" comes before "T" in the alphabet.
-            k1 = k1.toString();
-            k2 = k2.toString();
-        }
         return ((Comparable) k1).compareTo(k2);
-    }
-
-    /**
-     * Compares integer values.
-     *
-     * @param i0 First integer
-     * @param i1 Second integer
-     * @return Comparison of integers
-     */
-    public static int compare(int i0, int i1) {
-        return i0 < i1 ? -1 : (i0 == i1 ? 0 : 1);
-    }
-
-    /**
-     * Replaces all occurrences of a string in a buffer with another.
-     *
-     * @param buf String buffer to act on
-     * @param start Ordinal within <code>find</code> to start searching
-     * @param find String to find
-     * @param replace String to replace it with
-     * @return The string buffer
-     */
-    public static StringBuilder replace(
-        StringBuilder buf,
-        int start,
-        String find,
-        String replace)
-    {
-        // Search and replace from the end towards the start, to avoid O(n ^ 2)
-        // copying if the string occurs very commonly.
-        int findLength = find.length();
-        if (findLength == 0) {
-            // Special case where the seek string is empty.
-            for (int j = buf.length(); j >= 0; --j) {
-                buf.insert(j, replace);
-            }
-            return buf;
-        }
-        int k = buf.length();
-        while (k > 0) {
-            int i = buf.lastIndexOf(find, k);
-            if (i < start) {
-                break;
-            }
-            buf.replace(i, i + find.length(), replace);
-            // Step back far enough to ensure that the beginning of the section
-            // we just replaced does not cause a match.
-            k = i - findLength;
-        }
-        return buf;
     }
 
     /**
@@ -1253,7 +1160,7 @@ public class Util extends XOMUtil {
      * Returns whether a string is null or empty.
      */
     public static boolean isEmpty(String s) {
-        return (s == null) || (s.length() == 0);
+        return (s == null) || (s.isEmpty());
     }
 
     /**
@@ -1598,15 +1505,11 @@ public class Util extends XOMUtil {
         List<T> list)
     {
         final StringBuilder buf = new StringBuilder(s);
-        buf.append("(");
-        int k = -1;
-        for (T t : list) {
-            if (++k > 0) {
-                buf.append(", ");
-            }
-            buf.append(t);
-        }
-        buf.append(")");
+        buf.append("(")
+            .append(list.stream()
+                .map(String::valueOf)
+            .collect(Collectors.joining(", ")))
+            .append(")");
         return buf.toString();
     }
 
@@ -1850,11 +1753,7 @@ public class Util extends XOMUtil {
     public static List<Id.Segment> convert(
         List<IdentifierSegment> olap4jSegmentList)
     {
-        final List<Id.Segment> list = new ArrayList<Id.Segment>();
-        for (IdentifierSegment olap4jSegment : olap4jSegmentList) {
-            list.add(convert(olap4jSegment));
-        }
-        return list;
+        return olap4jSegmentList.stream().map(it -> convert(it)).collect(Collectors.toList());
     }
 
     /**
@@ -1978,21 +1877,6 @@ public class Util extends XOMUtil {
         } else {
             return conds;
         }
-    }
-
-    /**
-     * Sorts a collection of {@link Comparable} objects and returns a list.
-     *
-     * @param collection Collection
-     * @param <T> Element type
-     * @return Sorted list
-     */
-    public static <T extends Comparable> List<T> sort(
-        Collection<T> collection)
-    {
-        Object[] a = collection.toArray(new Object[collection.size()]);
-        Arrays.sort(a);
-        return cast(Arrays.asList(a));
     }
 
     /**
@@ -2287,17 +2171,6 @@ public class Util extends XOMUtil {
         return new ArraySortedSet(result, 0, i);
     }
 
-    /**
-     * Compares two integers using the same algorithm as
-     * {@link Integer#compareTo(Integer)}.
-     *
-     * @param i0 First integer
-     * @param i1 Second integer
-     * @return Comparison
-     */
-    public static int compareIntegers(int i0, int i1) {
-        return (i0 < i1 ? -1 : (i0 == i1 ? 0 : 1));
-    }
 
     /**
      * Returns the last item in a list.
@@ -2311,24 +2184,6 @@ public class Util extends XOMUtil {
         return list.get(list.size() - 1);
     }
 
-    /**
-     * Returns the sole item in a list.
-     *
-     * <p>If the list has 0 or more than one element, throws.</p>
-     *
-     * @param list List
-     * @param <T> Element type
-     * @return Sole item in the list
-     * @throws IndexOutOfBoundsException if list is empty or has more than 1 elt
-     */
-    public static <T> T only(List<T> list) {
-        if (list.size() != 1) {
-            throw new IndexOutOfBoundsException(
-                "list " + list + " has " + list.size()
-                + " elements, expected 1");
-        }
-        return list.get(0);
-    }
 
     /**
      * Closes a JDBC result set, statement, and connection, ignoring any errors.
@@ -4077,8 +3932,8 @@ public class Util extends XOMUtil {
         public boolean equals(Object o) {
             if (o instanceof Flat2List) {
                 Flat2List that = (Flat2List) o;
-                return Util.equals(this.t0, that.t0)
-                    && Util.equals(this.t1, that.t1);
+                return Objects.equals(this.t0, that.t0)
+                    && Objects.equals(this.t1, that.t1);
             }
             return Arrays.asList(t0, t1).equals(o);
         }
@@ -4175,9 +4030,9 @@ public class Util extends XOMUtil {
         public boolean equals(Object o) {
             if (o instanceof Flat3List) {
                 Flat3List that = (Flat3List) o;
-                return Util.equals(this.t0, that.t0)
-                    && Util.equals(this.t1, that.t1)
-                    && Util.equals(this.t2, that.t2);
+                return Objects.equals(this.t0, that.t0)
+                    && Objects.equals(this.t1, that.t1)
+                    && Objects.equals(this.t2, that.t2);
             }
             return o.equals(this);
         }

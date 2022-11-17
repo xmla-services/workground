@@ -832,7 +832,7 @@ public class ExplicitRules {
 
             public static RollupType getAggregatorType(String friendlyName) {
                 for (RollupType rollupType : RollupType.values()) {
-                    if (Util.equals(rollupType.getFriendlyName(),
+                    if (Objects.equals(rollupType.getFriendlyName(),
                         friendlyName))
                     {
                         return rollupType;

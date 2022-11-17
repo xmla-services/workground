@@ -674,7 +674,7 @@ public class Sorter {
     m1 = unwrapLimitedRollupMember( m1 );
     m2 = unwrapLimitedRollupMember( m2 );
 
-    if ( Util.equals( m1, m2 ) ) {
+    if ( Objects.equals( m1, m2 ) ) {
       return 0;
     }
 
@@ -683,12 +683,12 @@ public class Sorter {
       int depth2 = m2.getDepth();
       if ( depth1 < depth2 ) {
         m2 = m2.getParentMember();
-        if ( Util.equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           return post ? 1 : -1;
         }
       } else if ( depth1 > depth2 ) {
         m1 = m1.getParentMember();
-        if ( Util.equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           return post ? -1 : 1;
         }
       } else {
@@ -696,7 +696,7 @@ public class Sorter {
         Member prev2 = m2;
         m1 = unwrapLimitedRollupMember( m1.getParentMember() );
         m2 = unwrapLimitedRollupMember( m2.getParentMember() );
-        if ( Util.equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           final int c = compareSiblingMembers( prev1, prev2 );
           // compareHierarchically needs to impose a total order
           // cannot return 0 for non-equal members
@@ -900,7 +900,7 @@ public class Sorter {
       ( o1, o2 ) -> {
         int c = comp.compare( o1.t, o2.t );
         if ( c == 0 ) {
-          c = Util.compare( o1.i, o2.i );
+          c = Integer.compare(o1.i,o2.i);
         }
         return -c;
       };
@@ -983,7 +983,7 @@ public class Sorter {
       return this == obj
         || obj instanceof ObjIntPair
         && this.i == ( (ObjIntPair) obj ).i
-        && Util.equals( this.t, ( (ObjIntPair) obj ).t );
+        && Objects.equals( this.t, ( (ObjIntPair) obj ).t );
     }
 
     public String toString() {
