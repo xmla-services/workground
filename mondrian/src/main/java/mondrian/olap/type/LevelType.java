@@ -13,6 +13,8 @@ package mondrian.olap.type;
 
 import mondrian.olap.*;
 
+import java.util.Objects;
+
 /**
  * The type of an expression which represents a level.
  *
@@ -114,9 +116,9 @@ public class LevelType implements Type {
     public boolean equals(Object obj) {
         if (obj instanceof LevelType) {
             LevelType that = (LevelType) obj;
-            return Util.equals(this.level, that.level)
-                && Util.equals(this.hierarchy, that.hierarchy)
-                && Util.equals(this.dimension, that.dimension);
+            return Objects.equals(this.level, that.level)
+                && Objects.equals(this.hierarchy, that.hierarchy)
+                && Objects.equals(this.dimension, that.dimension);
         }
         return false;
     }

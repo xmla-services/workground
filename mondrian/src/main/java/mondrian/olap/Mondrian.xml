@@ -18,7 +18,7 @@
  dtdName="mondrian.dtd"
  className="MondrianDef"
  packageName="mondrian.olap"
- importName="mondrian.rolap.sql.SqlQuery"
+ importName="mondrian.rolap.sql.SqlQuery:java.util.Objects"
  root="Schema"
  version="1.0">
     <Doc>
@@ -858,7 +858,7 @@ Revision is $Id$
             public Expression getNameExp() {
                 if (nameExp != null) {
                     return nameExp;
-                } else if (nameColumn != null &amp;&amp; !Util.equals(nameColumn, column)) {
+                } else if (nameColumn != null &amp;&amp; !Objects.equals(nameColumn, column)) {
                     return new Column(table, nameColumn);
                 } else {
                     return null;
@@ -1371,15 +1371,15 @@ Revision is $Id$
             public boolean equals(Object o) {
                 if (o instanceof View) {
                     View that = (View) o;
-                    if (!Util.equals(this.alias, that.alias)) {
+                    if (!Objects.equals(this.alias, that.alias)) {
                         return false;
                     }
                     if (this.selects == null || that.selects == null || this.selects.length != that.selects.length) {
                         return false;
                     }
                     for (int i = 0; i &lt; selects.length; i++) {
-                        if (!Util.equals(this.selects[i].dialect, that.selects[i].dialect)
-                            || !Util.equals(this.selects[i].cdata, that.selects[i].cdata))
+                        if (!Objects.equals(this.selects[i].dialect, that.selects[i].dialect)
+                            || !Objects.equals(this.selects[i].cdata, that.selects[i].cdata))
                         {
                             return false;
                         }
@@ -1445,7 +1445,7 @@ Revision is $Id$
                 }
                 SQL that = (SQL) obj;
                 return this.dialect.equals(that.dialect) &&
-                        Util.equals(this.cdata, that.cdata);
+                        Objects.equals(this.cdata, that.cdata);
             }
 
             /**
@@ -1632,8 +1632,8 @@ Revision is $Id$
                 if (o instanceof Table) {
                     Table that = (Table) o;
                     return this.name.equals(that.name) &&
-                        Util.equals(this.alias, that.alias) &&
-                        Util.equals(this.schema, that.schema);
+                        Objects.equals(this.alias, that.alias) &&
+                        Objects.equals(this.schema, that.schema);
                 } else {
                     return false;
                 }
@@ -2093,7 +2093,7 @@ Revision is $Id$
                 }
                 Column that = (Column) obj;
                 return this.name.equals(that.name) &&
-                        Util.equals(this.table, that.table);
+                        Objects.equals(this.table, that.table);
             }]]>
         </Code>
     </Element>

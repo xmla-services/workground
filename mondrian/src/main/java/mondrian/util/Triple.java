@@ -12,6 +12,7 @@ package mondrian.util;
 import mondrian.olap.Util;
 
 import java.util.Iterator;
+import java.util.Objects;
 
 /**
  * Tuple of three values.
@@ -58,9 +59,9 @@ public class Triple<T0, T1, T2>
         if (obj instanceof Triple) {
             //noinspection unchecked
             Triple<T0, T1, T2> pair = (Triple) obj;
-            return Util.equals(this.v0, pair.v0)
-                && Util.equals(this.v1, pair.v1)
-                && Util.equals(this.v2, pair.v2);
+            return Objects.equals(this.v0, pair.v0)
+                && Objects.equals(this.v1, pair.v1)
+                && Objects.equals(this.v2, pair.v2);
         }
         return false;
     }

@@ -19,6 +19,8 @@ import mondrian.resource.MondrianResource;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import java.util.Objects;
+
 /**
  * A <code>HierarchyUsage</code> is the usage of a hierarchy in the context
  * of a cube. Private hierarchies can only be used in their own
@@ -299,7 +301,7 @@ public class HierarchyUsage {
         if (o instanceof HierarchyUsage) {
             HierarchyUsage other = (HierarchyUsage) o;
             return (this.kind == other.kind)
-                && Util.equals(this.fact, other.fact)
+                && Objects.equals(this.fact, other.fact)
                 && this.hierarchyName.equals(other.hierarchyName)
                 && Util.equalName(this.name, other.name)
                 && Util.equalName(this.source, other.source)

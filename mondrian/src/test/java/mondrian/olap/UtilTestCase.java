@@ -372,6 +372,7 @@ public class UtilTestCase{
             "\"a\\\\b\\\"c\"", Util.quoteJavaString("a\\b\"c"));
     }
 
+    @Test
     public void testBufReplace() {
         // Replace with longer string. Search pattern at beginning & end.
         checkReplace("xoxox", "x", "yy", "yyoyyoyy");
@@ -402,6 +403,11 @@ public class UtilTestCase{
         checkReplace("fox", "", "dog", "dogfdogodogxdog");
     }
 
+    @Test
+    public void testCompareKey() {
+    	assertEquals(Util.compareKey(Boolean.FALSE, Boolean.TRUE) < 0, true);
+    }
+
     private static void checkReplace(
         String original, String seek, String replace, String expected)
     {
@@ -410,11 +416,8 @@ public class UtilTestCase{
         assertEquals(expected, original.replaceAll(seek, replace));
 
         // Check the StringBuilder version of replace.
-        StringBuilder buf = new StringBuilder(original);
-        StringBuilder buf2 = Util.replace(buf, 0, seek, replace);
-        assertEquals(expected, buf.toString());
-        assertEquals(expected, buf2.toString());
-        assertTrue(buf == buf2);
+        String modified = original.replace(seek, replace);
+        assertEquals(expected, modified);
 
         // Check the String version of replace.
         assertEquals(expected, original.replace(seek, replace));
@@ -1617,6 +1620,14 @@ public class UtilTestCase{
         } catch (NullPointerException e) {
             // ok
         }
+    }
+
+    @Test
+    public void testIsTested()  {
+        assertTrue(Util.isSorted(List.of(1,2,3,4)));
+        assertFalse(Util.isSorted(List.of(1,2,5,4)));
+        assertTrue(Util.isSorted(List.of("a","b","c","d")));
+        assertFalse(Util.isSorted(List.of("a","b","d","c")));        
     }
 }
 

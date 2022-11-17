@@ -843,7 +843,7 @@ public class RolapStar {
                     Column object1,
                     Column object2)
                 {
-                    return Util.compare(
+                    return Integer.compare(
                         object1.getBitPosition(),
                         object2.getBitPosition());
                 }
@@ -957,7 +957,7 @@ public class RolapStar {
             // Note: both columns have to be from the same table
             return
                 other.table == this.table
-                && Util.equals(other.expression, this.expression)
+                && Objects.equals(other.expression, this.expression)
                 && other.datatype == this.datatype
                 && other.name.equals(this.name);
         }

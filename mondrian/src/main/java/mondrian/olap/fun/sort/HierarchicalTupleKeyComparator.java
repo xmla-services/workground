@@ -20,6 +20,7 @@ import mondrian.olap.Member;
 import mondrian.olap.Util;
 
 import java.util.List;
+import java.util.Objects;
 
 class HierarchicalTupleKeyComparator extends TupleExpMemoComparator {
 
@@ -44,7 +45,7 @@ class HierarchicalTupleKeyComparator extends TupleExpMemoComparator {
     }
     Member m1 = k1.member;
     Member m2 = k2.member;
-    if ( Util.equals( m1, m2 ) ) {
+    if ( Objects.equals( m1, m2 ) ) {
       return 0;
     }
     while ( true ) {
@@ -52,12 +53,12 @@ class HierarchicalTupleKeyComparator extends TupleExpMemoComparator {
       int depth2 = m2.getDepth();
       if ( depth1 < depth2 ) {
         m2 = m2.getParentMember();
-        if ( Util.equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           return -1;
         }
       } else if ( depth1 > depth2 ) {
         m1 = m1.getParentMember();
-        if ( Util.equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           return 1;
         }
       } else {
@@ -65,7 +66,7 @@ class HierarchicalTupleKeyComparator extends TupleExpMemoComparator {
         Member prev2 = m2;
         m1 = m1.getParentMember();
         m2 = m2.getParentMember();
-        if ( Util.equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           OrderKey pk1 = new OrderKey( prev1 );
           OrderKey pk2 = new OrderKey( prev2 );
           return Sorter.compareValues( pk1, pk2 );

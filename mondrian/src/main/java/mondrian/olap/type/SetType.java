@@ -16,6 +16,7 @@ import mondrian.olap.*;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Set type.
@@ -50,7 +51,7 @@ public class SetType implements Type {
     public boolean equals(Object obj) {
         if (obj instanceof SetType) {
             SetType that = (SetType) obj;
-            return Util.equals(this.elementType, that.elementType);
+            return Objects.equals(this.elementType, that.elementType);
         } else {
             return false;
         }

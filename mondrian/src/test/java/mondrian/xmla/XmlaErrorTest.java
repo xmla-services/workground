@@ -128,7 +128,7 @@ if (DEBUG) {
 System.out.println("userid=" + userid);
 System.out.println("password=" + password);
 }
-                if (!Util.equals(userid, XmlaErrorTest.user)) {
+                if (!Objects.equals(userid, XmlaErrorTest.user)) {
                     throw Helper.authorizationException(
                         new Exception(
                             "Authorization: bad userid: "
@@ -136,7 +136,7 @@ System.out.println("password=" + password);
                             + " should be: "
                             + XmlaErrorTest.user));
                 }
-                if (!Util.equals(password, XmlaErrorTest.password)) {
+                if (!Objects.equals(password, XmlaErrorTest.password)) {
                     throw Helper.authorizationException(
                         new Exception(
                             "Authorization: bad password: "
@@ -319,20 +319,20 @@ System.out.println("password=" + password);
         }
 
         void checkSame(Fault expectedFault) throws Exception {
-            if (!Util.equals(this.faultCode, expectedFault.faultCode)) {
+            if (!Objects.equals(this.faultCode, expectedFault.faultCode)) {
                 notSame("faultcode", expectedFault.faultCode, this.faultCode);
             }
-            if (!Util.equals(this.faultString, expectedFault.faultString)) {
+            if (!Objects.equals(this.faultString, expectedFault.faultString)) {
                 notSame(
                     "faultstring", expectedFault.faultString, this.faultString);
             }
-            if (!Util.equals(this.faultActor, expectedFault.faultActor)) {
+            if (!Objects.equals(this.faultActor, expectedFault.faultActor)) {
                 notSame(
                     "faultactor",
                     expectedFault.faultActor,
                     this.faultActor);
             }
-            if (!Util.equals(this.errorNS, expectedFault.errorNS)) {
+            if (!Objects.equals(this.errorNS, expectedFault.errorNS)) {
                 throw new Exception(
                     "For error element namespace "
                     + " Expected "
@@ -340,7 +340,7 @@ System.out.println("password=" + password);
                     + " but Got "
                     + this.errorNS);
             }
-            if (!Util.equals(this.errorCode, expectedFault.errorCode)) {
+            if (!Objects.equals(this.errorCode, expectedFault.errorCode)) {
                 notSame("error.code", expectedFault.errorCode, this.errorCode);
             }
         }
@@ -414,7 +414,7 @@ System.out.println("password=" + password);
                     USM_DOM_PARSE_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Premature end of file.");
 
         doTest(expectedFault, context.createConnection());
@@ -432,7 +432,7 @@ System.out.println("password=" + password);
                     USM_DOM_PARSE_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "The element type \"soapenv:FOOEnvelope\" must be terminated by the matching end-tag \"</soapenv:FOOEnvelope>\".");
 
         doTest(expectedFault, context.createConnection());
@@ -450,7 +450,7 @@ System.out.println("password=" + password);
                     USM_DOM_PARSE_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Invalid SOAP message: Envelope element not in SOAP namespace");
 
         doTest(expectedFault, context.createConnection());
@@ -470,7 +470,7 @@ System.out.println("password=" + password);
                     HSB_BAD_SOAP_BODY_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Invalid XML/A message: Body has 0 Discover Requests and 0 Execute Requests");
 
         doTest(expectedFault, context.createConnection());
@@ -487,7 +487,7 @@ System.out.println("password=" + password);
                     HSB_BAD_SOAP_BODY_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Invalid XML/A message: Body has 2 Discover Requests and 0 Execute Requests");
 
         doTest(expectedFault, context.createConnection());
@@ -504,7 +504,7 @@ System.out.println("password=" + password);
                     HSB_BAD_SOAP_BODY_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Invalid XML/A message: Body has 1 Discover Requests and 1 Execute Requests");
 
         doTest(expectedFault, context.createConnection());
@@ -524,8 +524,8 @@ System.out.println("password=" + password);
                     USM_DOM_PARSE_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
-                    "Invalid SOAP message: More than one Header elements"); 
+                    "3238658121",
+                    "Invalid SOAP message: More than one Header elements");
 
         doTest(expectedFault, context.createConnection());
     }
@@ -560,7 +560,7 @@ System.out.println("password=" + password);
                     CHH_AUTHORIZATION_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Authorization: no header value");
         doAuthorization = true;
         try {
@@ -582,7 +582,7 @@ System.out.println("password=" + password);
                     CHH_AUTHORIZATION_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Authorization: badly formed userPass in encoding: FOOBAR");
 
         doAuthorization = true;
@@ -662,7 +662,7 @@ System.out.println("DO IT AGAIN");
                     CHH_AUTHORIZATION_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Authorization: bad userid: MY_USER should be: MY_USERFOO");
 
         doAuthorization = true;
@@ -708,7 +708,7 @@ System.out.println("DO IT AGAIN");
                     CHH_AUTHORIZATION_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Authorization: bad password: MY_PASSWORD should be: MY_PASSWORDFOO");
 
         doAuthorization = true;
@@ -754,8 +754,8 @@ System.out.println("DO IT AGAIN");
                     HSH_MUST_UNDERSTAND_CODE),
                     HSH_MUST_UNDERSTAND_FAULT_FS,
                     FAULT_ACTOR,
-                    null, 
-                    "3238658121", 
+                    null,
+                    "3238658121",
                     "Invalid XML/A message: Unknown \"mustUnderstand\" XMLA Header element \"Foo\"");
 
         doTest(expectedFault, context.createConnection());
@@ -773,7 +773,7 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_SOAP_BODY_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Invalid XML/A message: Body has 1 Discover Requests and 1 Execute Requests");
 
         doTest(expectedFault, context.createConnection());
@@ -790,7 +790,7 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_SOAP_BODY_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Invalid XML/A message: Body has 0 Discover Requests and 0 Execute Requests");
 
         doTest(expectedFault, context.createConnection());
@@ -807,7 +807,7 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_SOAP_BODY_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Invalid XML/A message: Body has 0 Discover Requests and 0 Execute Requests");
 
         doTest(expectedFault, context.createConnection());
@@ -824,7 +824,7 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_REQUEST_TYPE_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of RequestType elements: 0");
 
         doTest(expectedFault, context.createConnection());
@@ -841,7 +841,7 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_RESTRICTIONS_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of Restrictions elements: 0");
 
         doTest(expectedFault, context.createConnection());
@@ -858,7 +858,7 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_PROPERTIES_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of Properties elements: 0");
 
         doTest(expectedFault, context.createConnection());
@@ -875,7 +875,7 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_COMMAND_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of Command elements: 0");
 
         doTest(expectedFault, context.createConnection());
@@ -892,7 +892,7 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_PROPERTIES_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of Properties elements: 0");
 
         doTest(expectedFault, context.createConnection());
@@ -909,7 +909,7 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_RESTRICTION_LIST_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of RestrictionList elements: 2");
 
         doTest(expectedFault, context.createConnection());
@@ -926,7 +926,7 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_PROPERTIES_LIST_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of PropertyList elements: 2");
 
         doTest(expectedFault, context.createConnection());
@@ -943,7 +943,7 @@ System.out.println("DO IT AGAIN");
                     HSB_BAD_PROPERTIES_LIST_FAULT_FS,
                     FAULT_ACTOR,
                     null,
-                    "3238658121", 
+                    "3238658121",
                     "Mondrian Error:Internal error: Invalid XML/A message: Wrong number of PropertyList elements: 2");
 
         doTest(expectedFault, context.createConnection());

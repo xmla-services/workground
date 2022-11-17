@@ -286,10 +286,10 @@ public class NoCacheMemberReader implements MemberReader, MemberCache {
         final RolapMember m2,
         final boolean siblingsAreEqual)
     {
-        if (Util.equals(m1, m2)) {
+        if (Objects.equals(m1, m2)) {
             return 0;
         }
-        if (Util.equals(m1.getParentMember(), m2.getParentMember())) {
+        if (Objects.equals(m1.getParentMember(), m2.getParentMember())) {
             // including case where both parents are null
             if (siblingsAreEqual) {
                 return 0;

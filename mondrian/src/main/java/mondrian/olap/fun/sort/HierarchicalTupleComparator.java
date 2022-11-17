@@ -17,6 +17,7 @@ import mondrian.olap.Member;
 import mondrian.olap.Util;
 
 import java.util.List;
+import java.util.Objects;
 
 class HierarchicalTupleComparator extends TupleExpMemoComparator {
   private final boolean desc;
@@ -52,7 +53,7 @@ class HierarchicalTupleComparator extends TupleExpMemoComparator {
   protected int compareHierarchicallyButSiblingsByValue(
     Member m1,
     Member m2 ) {
-    if ( Util.equals( m1, m2 ) ) {
+    if ( Objects.equals( m1, m2 ) ) {
       return 0;
     }
     while ( true ) {
@@ -60,12 +61,12 @@ class HierarchicalTupleComparator extends TupleExpMemoComparator {
       int depth2 = m2.getDepth();
       if ( depth1 < depth2 ) {
         m2 = m2.getParentMember();
-        if ( Util.equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           return -1;
         }
       } else if ( depth1 > depth2 ) {
         m1 = m1.getParentMember();
-        if ( Util.equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           return 1;
         }
       } else {
@@ -73,7 +74,7 @@ class HierarchicalTupleComparator extends TupleExpMemoComparator {
         Member prev2 = m2;
         m1 = m1.getParentMember();
         m2 = m2.getParentMember();
-        if ( Util.equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           // including case where both parents are null
           int c = compareByValue( prev1, prev2 );
           if ( c == 0 ) {

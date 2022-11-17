@@ -22,10 +22,7 @@ import mondrian.olap.Util;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Comparator for members.
@@ -107,7 +104,7 @@ abstract class MemberComparator implements Comparator<Member> {
 
   protected final int compareHierarchicallyButSiblingsByValue(
     Member m1, Member m2 ) {
-    if ( Util.equals( m1, m2 ) ) {
+    if ( Objects.equals( m1, m2 ) ) {
       return 0;
     }
     while ( true ) {
@@ -115,12 +112,12 @@ abstract class MemberComparator implements Comparator<Member> {
       int depth2 = m2.getDepth();
       if ( depth1 < depth2 ) {
         m2 = m2.getParentMember();
-        if ( Util.equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           return -1;
         }
       } else if ( depth1 > depth2 ) {
         m1 = m1.getParentMember();
-        if ( Util.equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           return 1;
         }
       } else {
@@ -128,7 +125,7 @@ abstract class MemberComparator implements Comparator<Member> {
         Member prev2 = m2;
         m1 = m1.getParentMember();
         m2 = m2.getParentMember();
-        if ( Util.equals( m1, m2 ) ) {
+        if ( Objects.equals( m1, m2 ) ) {
           // including case where both parents are null
           int c = compareByValue( prev1, prev2 );
           if ( c != 0 ) {

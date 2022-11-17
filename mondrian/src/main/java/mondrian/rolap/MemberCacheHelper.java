@@ -324,7 +324,7 @@ public class MemberCacheHelper implements MemberCache {
                         // If constraint is trivial remove member from list
                         // of siblings; otherwise it's safer to nuke the cache
                         // entry
-                        if (Util.equals(member1, parent)) {
+                        if (Objects.equals(member1, parent)) {
                             if (constraint
                                 == DefaultMemberChildrenConstraint.instance())
                             {
@@ -339,7 +339,7 @@ public class MemberCacheHelper implements MemberCache {
                         // cache is (member, some constraint);
                         // cache value is list of member's children;
                         // remove cache entry
-                        if (Util.equals(member1, member)) {
+                        if (Objects.equals(member1, member)) {
                             iter.remove();
                         }
                     }

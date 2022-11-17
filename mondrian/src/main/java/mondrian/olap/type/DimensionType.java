@@ -13,6 +13,8 @@ package mondrian.olap.type;
 
 import mondrian.olap.*;
 
+import java.util.Objects;
+
 /**
  * The type of an expression which represents a Dimension.
  *
@@ -93,7 +95,7 @@ public class DimensionType implements Type {
     public boolean equals(Object obj) {
         if (obj instanceof DimensionType) {
             DimensionType that = (DimensionType) obj;
-            return Util.equals(this.getDimension(), that.getDimension());
+            return Objects.equals(this.getDimension(), that.getDimension());
         }
         return false;
     }
@@ -105,7 +107,7 @@ public class DimensionType implements Type {
     public Type computeCommonType(Type type, int[] conversionCount) {
         if (conversionCount != null && type instanceof HierarchyType) {
             HierarchyType hierarchyType = (HierarchyType) type;
-            if (Util.equals(hierarchyType.getDimension(), dimension)) {
+            if (Objects.equals(hierarchyType.getDimension(), dimension)) {
                 ++conversionCount[0];
                 return this;
             }

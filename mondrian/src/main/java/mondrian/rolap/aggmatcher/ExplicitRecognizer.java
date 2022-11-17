@@ -438,7 +438,7 @@ class ExplicitRecognizer extends Recognizer {
                     Pair<RolapLevel, ExplicitRules.TableDef.Level> o1,
                     Pair<RolapLevel, ExplicitRules.TableDef.Level> o2)
                 {
-                    return Util.compareIntegers(
+                    return Integer.compare(
                         o1.left.getDepth(),
                         o2.left.getDepth());
                 }
@@ -450,7 +450,7 @@ class ExplicitRecognizer extends Recognizer {
                     ExplicitRules.TableDef.Level o1,
                     ExplicitRules.TableDef.Level o2)
                 {
-                    return Util.compareIntegers(
+                    return Integer.compare(
                         o1.getRolapLevel().getDepth(),
                         o2.getRolapLevel().getDepth());
                 }

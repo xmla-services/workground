@@ -18,10 +18,7 @@ import mondrian.xmla.DataSourcesConfig;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -195,7 +192,7 @@ public class DynamicContentFinder
         DataSourcesConfig.Catalog catalog2)
     {
         return
-            Util.equals(dsi(dataSource1, catalog1), dsi(dataSource2, catalog2))
+            Objects.equals(dsi(dataSource1, catalog1), dsi(dataSource2, catalog2))
             && catalog1.name.equals(catalog2.name)
             && catalog1.definition.equals(catalog2.definition);
     }

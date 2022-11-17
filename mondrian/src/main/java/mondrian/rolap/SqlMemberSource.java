@@ -174,7 +174,7 @@ class SqlMemberSource
                     boolean isEqual = true;
                     for (int i = 0; i < nColumns; i++) {
                         String colStr = resultSet.getString(i + 1);
-                        if (!Util.equals(colStr, colStrings[i])) {
+                        if (!Objects.equals(colStr, colStrings[i])) {
                             isEqual = false;
                         }
                         colStrings[i] = colStr;
@@ -1055,7 +1055,7 @@ RME is this right
                 {
                     Object ordinal = accessors.get(columnOffset).get();
                     Object prevValue = rolapToOrdinalMap.put(member, ordinal);
-                    if (prevValue != null && !Util.equals(prevValue, ordinal)) {
+                    if (prevValue != null && !Objects.equals(prevValue, ordinal)) {
                         LOGGER.error(
                             "Column expression for "
                             + member.getUniqueName()

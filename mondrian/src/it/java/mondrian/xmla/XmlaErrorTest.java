@@ -111,7 +111,7 @@ if (DEBUG) {
 System.out.println("userid=" + userid);
 System.out.println("password=" + password);
 }
-                if (!Util.equals(userid, XmlaErrorTest.user)) {
+                if (!Objects.equals(userid, XmlaErrorTest.user)) {
                     throw XmlaRequestCallback.Helper.authorizationException(
                         new Exception(
                             "Authorization: bad userid: "
@@ -119,7 +119,7 @@ System.out.println("password=" + password);
                             + " should be: "
                             + XmlaErrorTest.user));
                 }
-                if (!Util.equals(password, XmlaErrorTest.password)) {
+                if (!Objects.equals(password, XmlaErrorTest.password)) {
                     throw XmlaRequestCallback.Helper.authorizationException(
                         new Exception(
                             "Authorization: bad password: "
@@ -304,20 +304,20 @@ System.out.println("password=" + password);
         }
 
         void checkSame(Fault expectedFault) throws Exception {
-            if (!Util.equals(this.faultCode, expectedFault.faultCode)) {
+            if (!Objects.equals(this.faultCode, expectedFault.faultCode)) {
                 notSame("faultcode", expectedFault.faultCode, this.faultCode);
             }
-            if (!Util.equals(this.faultString, expectedFault.faultString)) {
+            if (!Objects.equals(this.faultString, expectedFault.faultString)) {
                 notSame(
                     "faultstring", expectedFault.faultString, this.faultString);
             }
-            if (!Util.equals(this.faultActor, expectedFault.faultActor)) {
+            if (!Objects.equals(this.faultActor, expectedFault.faultActor)) {
                 notSame(
                     "faultactor",
                     expectedFault.faultActor,
                     this.faultActor);
             }
-            if (!Util.equals(this.errorNS, expectedFault.errorNS)) {
+            if (!Objects.equals(this.errorNS, expectedFault.errorNS)) {
                 throw new Exception(
                     "For error element namespace "
                     + " Expected "
@@ -325,7 +325,7 @@ System.out.println("password=" + password);
                     + " but Got "
                     + this.errorNS);
             }
-            if (!Util.equals(this.errorCode, expectedFault.errorCode)) {
+            if (!Objects.equals(this.errorCode, expectedFault.errorCode)) {
                 notSame("error.code", expectedFault.errorCode, this.errorCode);
             }
         }

@@ -48,17 +48,7 @@ import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static mondrian.olap.fun.sort.Sorter.hierarchizeTupleList;
 
@@ -254,7 +244,7 @@ public class SqlTupleReader implements TupleReader {
             Object prevValue = rolapToOrdinalMap
               .put( member, ordinal );
             if ( prevValue != null
-              && !Util.equals( prevValue, ordinal ) ) {
+              && !Objects.equals( prevValue, ordinal ) ) {
               LOGGER.error(
                 "Column expression for "
                   + member.getUniqueName()

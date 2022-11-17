@@ -392,7 +392,7 @@ public class SmartMemberReader implements MemberReader {
         if (m1.equals(m2)) {
             return 0;
         }
-        if (Util.equals(m1.getParentMember(), m2.getParentMember())) {
+        if (Objects.equals(m1.getParentMember(), m2.getParentMember())) {
             // including case where both parents are null
             if (siblingsAreEqual) {
                 return 0;
