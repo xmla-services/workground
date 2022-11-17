@@ -720,14 +720,13 @@ public interface Dialect {
 
     /**
      * Checks the compatibility of the Dialect.
-     * if it not fully compatible it must return -1
-     * with values > 0 implementations could rank based on efficiency.
+     * if it not fully compatible it must return false
      *
      * @param dataSource
-     * @return compatibility ranking
+     * @return compatibility
      *
      */
-	int compatibility(DataSource dataSource);
+	boolean isCompatible(DataSource dataSource);
 
     DatabaseProduct getDatabaseProduct();
 }

@@ -28,7 +28,7 @@ public interface DialectResolver {
     /**
      * Returns a dialect that could operate on the given DataSource. The given
      * dialect MUST be compatible. Must return value >=0 on
-     * {@link org.eclipse.daanse.db.dialect.api.Dialect#compatibility(DataSource)}.
+     * {@link org.eclipse.daanse.db.dialect.api.Dialect#isCompatible(DataSource)}.
      * 
      * The implementation COULD choose others than the best Dialect.
      * 

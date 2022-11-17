@@ -1240,9 +1240,8 @@ public class JdbcDialectImpl implements Dialect {
     }
 
     @Override
-    public int compatibility(DataSource dataSource) {
-        //TODO
-        return 0;
+    public boolean isCompatible(DataSource dataSource) {
+       throw new UnsupportedOperationException();
     }
 }
 

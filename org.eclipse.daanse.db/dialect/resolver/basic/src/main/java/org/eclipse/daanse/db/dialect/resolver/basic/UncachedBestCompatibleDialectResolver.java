@@ -1,7 +1,6 @@
 package org.eclipse.daanse.db.dialect.resolver.basic;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,7 +19,7 @@ import org.osgi.service.component.annotations.Reference;
  *
  * - does not cache <br>
  * - returns Dialect with best ranking - calculated using
- * {@link org.eclipse.daanse.db.dialect.api.Dialect#compatibility(DataSource)}.
+ * {@link org.eclipse.daanse.db.dialect.api.Dialect#isCompatible(DataSource)}.
  *
  * @author stbischof
  *
@@ -47,25 +46,16 @@ public class UncachedBestCompatibleDialectResolver implements DialectResolver {
     @Override
     public Dialect resolve(DataSource dataSource) {
 
-        return dialects.parallelStream()
-                .map(calcCompatibility(dataSource))
-                .filter(compatibleDialect())
-                .sorted(comparedByRanking())
-                .findFirst()
-                .map(Entry::getKey)
-                .orElse(null);
+        return dialects.parallelStream().map(calcCompatibility(dataSource)).filter(compatibleDialect()).findFirst()
+                .map(Entry::getKey).orElse(null);
     }
 
-    private Predicate<Entry<Dialect, Integer>> compatibleDialect() {
-        return entry -> entry.getValue() >= 0;
+    private Function<? super Dialect, ? extends Entry<Dialect, Boolean>> calcCompatibility(DataSource dataSource) {
+        return dialect -> Map.entry(dialect, dialect.isCompatible(dataSource));
     }
 
-    private Comparator<Entry<Dialect, Integer>> comparedByRanking() {
-        return (entry1, entry2) -> entry1.getValue() - entry2.getValue();
-    }
-
-    private Function<? super Dialect, ? extends Entry<Dialect, Integer>> calcCompatibility(DataSource dataSource) {
-        return dialect -> Map.entry(dialect, dialect.compatibility(dataSource));
+    private Predicate<Entry<Dialect, Boolean>> compatibleDialect() {
+        return entry -> entry.getValue();
     }
 
 }
