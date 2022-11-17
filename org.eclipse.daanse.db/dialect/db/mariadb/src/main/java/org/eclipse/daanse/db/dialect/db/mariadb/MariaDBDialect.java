@@ -14,17 +14,18 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
-import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
+import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect3;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MARIADB'",
 		"database.product:String='MARIADB'" })
 @Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
-public class MariaDBDialect extends MySqlDialect {
+public class MariaDBDialect extends MySqlDialect3 {
 
   public static final JdbcDialectFactory FACTORY =
       new JdbcDialectFactory(

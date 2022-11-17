@@ -21,11 +21,11 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Statement;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class MySqlDialectTest{
+public class MySqlDialect3Test{
   private static final String ILLEGAL_BOOLEAN_LITERAL =
       "illegal for this dialect boolean literal";
   private static final String ILLEGAL_BOOLEAN_LITERAL_MESSAGE =
@@ -37,18 +37,18 @@ public class MySqlDialectTest{
   private Connection connection = mock(Connection.class);
   private DatabaseMetaData metaData = mock(DatabaseMetaData.class);
   Statement statmentMock = mock(Statement.class);
-  private MySqlDialect dialect;
+  private Dialect dialect;
   private StringBuilder buf;
 
   @BeforeEach
   protected void setUp() throws Exception {
     when(metaData.getDatabaseProductName()).thenReturn(
-        DatabaseProduct.MYSQL.name());
+        "MYSQL");
     when(metaData.getDatabaseProductVersion()).thenReturn("5.0");
     when(statmentMock.execute(any())).thenReturn(false);
     when(connection.getMetaData()).thenReturn(metaData);
     when(connection.createStatement()).thenReturn(statmentMock);
-    dialect = new MySqlDialect(connection);
+    dialect = new MySqlDialect3();
     buf = new StringBuilder();
   }
 

@@ -11,15 +11,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-import org.eclipse.daanse.db.dialect.db.common.Util;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link org.eclipse.daanse.db.dialect.api.Dialect} for the MySQL database.
@@ -27,17 +21,15 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author jhyde
  * @since Nov 23, 2008
  */
-@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MYSQL'",
-    "database.product:String='MYSQL'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
-public class MySqlDialect extends JdbcDialectImpl {
 
-    private final String escapeRegexp = "(\\\\Q([^\\\\Q]+)\\\\E)";
-    private final Pattern escapePattern = Pattern.compile(escapeRegexp);
+public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
+
+    private static final String ESCAPE_REGEXP = "(\\\\Q([^\\\\Q]+)\\\\E)";
+    private static final Pattern ESCAPE_PATTERN = Pattern.compile(ESCAPE_REGEXP);
 
     public static final JdbcDialectFactory FACTORY =
         new JdbcDialectFactory(
-            MySqlDialect.class)
+            AbstractMySqlDialect.class)
         {
             @Override
             protected boolean acceptsConnection(Connection connection) {
@@ -52,8 +44,8 @@ public class MySqlDialect extends JdbcDialectImpl {
                 }
             }
         };
-public MySqlDialect() {
-}
+        public AbstractMySqlDialect() {
+        }
     /**
      * Creates a MySqlDialect.
      *
@@ -61,7 +53,7 @@ public MySqlDialect() {
      *
      * @throws SQLException on error
      */
-    public MySqlDialect(Connection connection) throws SQLException {
+    public AbstractMySqlDialect(Connection connection) throws SQLException {
         super(connection);
     }
 
@@ -208,13 +200,6 @@ public MySqlDialect() {
     }
 
     @Override
-    public boolean allowsFromQuery() {
-        // MySQL before 4.0 does not allow FROM
-        // subqueries in the FROM clause.
-        return productVersion.compareTo("4.") >= 0;
-    }
-
-    @Override
     public boolean allowsCompoundCountDistinct() {
         return true;
     }
@@ -315,7 +300,7 @@ public MySqlDialect() {
         if (mappedFlags.toString().contains( "i" )) {
             caseSensitive = false;
         }
-        final Matcher escapeMatcher = escapePattern.matcher(javaRegex);
+        final Matcher escapeMatcher = ESCAPE_PATTERN.matcher(javaRegex);
         while (escapeMatcher.find()) {
             javaRegex =
                 javaRegex.replace(
@@ -343,28 +328,13 @@ public MySqlDialect() {
         return sb.toString();
     }
 
-    /**
-     * Required for MySQL 5.7+, where SQL_MODE include ONLY_FULL_GROUP_BY
-     * by default. This prevent expressions like
-     *
-     * ISNULL(RTRIM(`promotion_name`)) ASC
-     *
-     * from being used in ORDER BY section.
-     *
-     * ISNULL(`c0`) ASC
-     *
-     * will be used, where `c0` is an alias of the RTRIM(`promotion_name`).
-     * And this is important for the cases where we're using SQL
-     * expressions in a Level definition.
-     *
-     * Jira ticket, that describes the issue: http://jira.pentaho.com/browse/MONDRIAN-2451
-     *
-     * @return true when MySQL version is 5.7 or larger
-     */
-    @Override
-    public boolean requiresOrderByAlias() {
-        return productVersion.compareTo("5.7") >= 0;
+    
+    protected boolean compatibleProduct(DatabaseMetaData databaseMetaData) throws SQLException{
+       return !isInfobright(databaseMetaData)&&databaseMetaData.getDatabaseProductName().equalsIgnoreCase("mysql");
     }
+    @Override
+    public abstract boolean allowsFromQuery();
+ 
+    @Override
+    public abstract boolean requiresOrderByAlias() ;
 }
-
-// End MySqlDialect.java
