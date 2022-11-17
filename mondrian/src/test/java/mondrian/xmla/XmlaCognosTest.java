@@ -49,8 +49,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
             switch (dialect.getDatabaseProduct()) {
             case DERBY:
             case VERTICA:
-                content = Util.replace(
-                    content,
+                content = content.replace(
                     "<Value xsi:type=\"xsd:double\">",
                     "<Value xsi:type=\"xsd:int\">");
                 break;

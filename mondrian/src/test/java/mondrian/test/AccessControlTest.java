@@ -70,11 +70,11 @@ public class AccessControlTest {
 	public void afterEach() {
 		propSaver.reset();
 	}
-    
+
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testSchemaReader(Context foodMartContext) {
-        final Connection connection = foodMartContext.createConnection(); 
+        final Connection connection = foodMartContext.createConnection();
         Schema schema = connection.getSchema();
         final boolean fail = true;
         Cube cube = schema.lookupCube("Sales", fail);
@@ -112,7 +112,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testRestrictMeasures(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema( 
+    	String schema = SchemaUtil.getSchema(
 			baseSchema, null, null, null, null, null,
             "<Role name=\"Role1\">\n"
             + "  <SchemaGrant access=\"all\">\n"
@@ -133,10 +133,10 @@ public class AccessControlTest {
             + "</Role>");
 
     	TestUtil.withSchema(foodMartContext, schema);
-    	
+
     	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
-    	
+
         TestUtil.assertQueryReturns(
     		connection,
             "SELECT {[Measures].Members} ON COLUMNS FROM [SALES]",
@@ -155,7 +155,7 @@ public class AccessControlTest {
             + "Row #0: 86,837\n"
             + "Row #0: 5,581\n"
             + "Row #0: 151,211.21\n");
-        
+
     	TestUtil.withRole(foodMartContext, "Role2");
     	connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
@@ -223,9 +223,9 @@ public class AccessControlTest {
           + "   </SchemaGrant>\n"
           + " </Role>\n"
           + "</Schema>";
-      
-      TestUtil.withRole(foodMartContext, "Administrator"); 
-      TestUtil.withSchema(foodMartContext, schema); 
+
+      TestUtil.withRole(foodMartContext, "Administrator");
+      TestUtil.withSchema(foodMartContext, schema);
 
       Connection connection = foodMartContext.createConnection();
 
@@ -365,7 +365,7 @@ public class AccessControlTest {
           + dimensionsDef
           + "</Cube>";
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, 
+        String schema = SchemaUtil.getSchema(baseSchema,
             null, null, cubeDef, null, null,
             "<Role name=\"MR\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -382,7 +382,7 @@ public class AccessControlTest {
             + "   </SchemaGrant>\n"
             + "</Role>");
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "MR,DBPentUsers"); 
+        TestUtil.withRole(foodMartContext, "MR,DBPentUsers");
         Connection connection = foodMartContext.createConnection();
 
         final Role.HierarchyAccess hierarchyAccess =
@@ -396,7 +396,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testRoleMemberAccessNonExistentMemberFails(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
             "<Role name=\"Role1\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -408,7 +408,7 @@ public class AccessControlTest {
             + "  </SchemaGrant>\n"
             + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1");    	
+    	TestUtil.withRole(foodMartContext, "Role1");
         TestUtil.assertQueryThrows(
         	foodMartContext,
             "select {[Store].Children} on 0 from [Sales]",
@@ -597,7 +597,7 @@ public class AccessControlTest {
     public void testGrantHierarchy4(Context foodMartContext) {
         // assert: can not access Oregon (rule 1 - order matters)
         Connection connection = getRestrictedConnection(foodMartContext);
-        TestUtil.assertAxisThrows(connection, 
+        TestUtil.assertAxisThrows(connection,
             "[Store].[USA].[OR].children", "not found");
     }
 
@@ -747,11 +747,11 @@ public class AccessControlTest {
             + "</Role>";
 
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, 
+        String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null, test_1201_Roles);
         TestUtil.withSchema(foodMartContext, schema);
         TestUtil.withRole(foodMartContext, "Role1");
-        
+
         Connection connection = foodMartContext.createConnection();
 
         // Must return only 2 [USA].[CA] stores
@@ -809,11 +809,11 @@ public class AccessControlTest {
             + "Row #0: 4,617\n"
             + "Row #1: 10,319\n");
 
-        schema = SchemaUtil.getSchema(baseSchema, 
+        schema = SchemaUtil.getSchema(baseSchema,
                     null, null, null, null, null, test_1201_Roles);
         TestUtil.withSchema(foodMartContext, schema);
         TestUtil.withRole(foodMartContext, "Role2");
-        
+
         connection = foodMartContext.createConnection();
 
         // Full Rollup: [USA].[CA] rolls up to 6.021
@@ -847,10 +847,10 @@ public class AccessControlTest {
           + "  </SchemaGrant>\n"
           + "</Role>";
       String baseSchema = TestUtil.getRawSchema(foodMartContext);
-      String schema = SchemaUtil.getSchema(baseSchema, 
+      String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null, raggedUser);
       TestUtil.withSchema(foodMartContext, schema);
-      TestUtil.withRole(foodMartContext, "Sales Ragged"); 
+      TestUtil.withRole(foodMartContext, "Sales Ragged");
     //[Geography].[Country]
       Connection connection = foodMartContext.createConnection();
       TestUtil.assertQueryReturns(
@@ -910,10 +910,10 @@ public class AccessControlTest {
             + "</Role>";
 
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, 
+        String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null, test_1201_Roles);
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "Role1"); 
+        TestUtil.withRole(foodMartContext, "Role1");
         Connection connection = foodMartContext.createConnection();
 
         // Put query into cache
@@ -934,12 +934,12 @@ public class AccessControlTest {
             + "Row #0: 2,614\n"
             + "Row #1: 187\n");
 
-        schema = SchemaUtil.getSchema(baseSchema, 
+        schema = SchemaUtil.getSchema(baseSchema,
                     null, null, null, null, null, test_1201_Roles);
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "Role2"); 
+        TestUtil.withRole(foodMartContext, "Role2");
         connection = foodMartContext.createConnection();
-        
+
         // Run same query using another role with different access controls
         TestUtil.assertQueryReturns(
     		connection,
@@ -1091,7 +1091,7 @@ public class AccessControlTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testGrantHierarchyA(Context foodMartContext) {
-    	final Connection connection = getRestrictedConnection(foodMartContext);    	
+    	final Connection connection = getRestrictedConnection(foodMartContext);
         // assert: totals for USA include missing cells
     	TestUtil.assertQueryReturns(
 			connection,
@@ -1245,7 +1245,7 @@ public class AccessControlTest {
     private void setRollupTestContext(Context foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
             "<Role name=\"Role1\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -1260,7 +1260,7 @@ public class AccessControlTest {
             + "  </SchemaGrant>\n"
             + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1"); 
+    	TestUtil.withRole(foodMartContext, "Role1");
     }
 
     /**
@@ -1354,7 +1354,7 @@ public class AccessControlTest {
             + "{[Gender].[M]}\n"
             + "Row #0: 131,558\n"
             + "Row #0: 135,215\n");
-        
+
         setRollupTestContext(foodMartContext);
         connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
@@ -1390,7 +1390,7 @@ public class AccessControlTest {
         String v3)
     {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"Role1\">\n"
                 + "  <SchemaGrant access=\"none\">\n"
@@ -1406,7 +1406,7 @@ public class AccessControlTest {
                     + "  </SchemaGrant>\n"
                     + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1"); 
+    	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
         // All of the children of [San Francisco] are invisible, because [City]
         // is the bottom level, but that shouldn't affect the total.
@@ -1465,7 +1465,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testRollupPolicyNegative(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"Role1\">\n"
                 + "  <SchemaGrant access=\"none\">\n"
@@ -1478,7 +1478,7 @@ public class AccessControlTest {
                 + "  </SchemaGrant>\n"
                 + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1"); 
+    	TestUtil.withRole(foodMartContext, "Role1");
     	TestUtil.assertQueryThrows(
     			foodMartContext,
     			"select from [Sales]",
@@ -1506,7 +1506,7 @@ public class AccessControlTest {
         String v2)
     {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"Role1\">\n"
                 + "  <SchemaGrant access=\"none\">\n"
@@ -1521,7 +1521,7 @@ public class AccessControlTest {
                 + "  </SchemaGrant>\n"
                 + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1"); 
+    	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertExprReturns(connection, "[Measures].[Unit Sales]", v1);
     	TestUtil.assertExprReturns(
@@ -1556,7 +1556,7 @@ public class AccessControlTest {
         String v3)
     {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"Role1\">\n"
                 + "  <SchemaGrant access=\"none\">\n"
@@ -1577,7 +1577,7 @@ public class AccessControlTest {
                 + "  </SchemaGrant>\n"
                 + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1"); 
+    	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertExprReturns(connection, "[Measures].[Unit Sales]", v1);
     	TestUtil.assertExprReturns(
@@ -1607,7 +1607,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testUnionRole(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"Role1\">\n"
                 + "  <SchemaGrant access=\"none\">\n"
@@ -1642,7 +1642,7 @@ public class AccessControlTest {
         Connection connection;
 
         try {
-        	TestUtil.withRole(foodMartContext, "Role3,Role2"); 
+        	TestUtil.withRole(foodMartContext, "Role3,Role2");
         	connection = foodMartContext.createConnection();
         	fail("expected exception, got " + connection);
         } catch (RuntimeException e) {
@@ -1651,7 +1651,7 @@ public class AccessControlTest {
         }
 
         try {
-        	TestUtil.withRole(foodMartContext, "Role1,Role3"); 
+        	TestUtil.withRole(foodMartContext, "Role1,Role3");
         	connection = foodMartContext.createConnection();
             fail("expected exception, got " + connection);
         } catch (RuntimeException e) {
@@ -1659,7 +1659,7 @@ public class AccessControlTest {
             assertTrue(message.indexOf("Role 'Role3' not found") >= 0, message);
         }
 
-    	TestUtil.withRole(foodMartContext, "Role1,Role2"); 
+    	TestUtil.withRole(foodMartContext, "Role1,Role2");
     	connection = foodMartContext.createConnection();
 
         // Cube access:
@@ -1752,14 +1752,14 @@ public class AccessControlTest {
             + "Row #0: 7,961\n"
             + "Row #0: 124,366\n");
 
-    	TestUtil.withRole(foodMartContext, "Role1"); 
+    	TestUtil.withRole(foodMartContext, "Role1");
     	connection = foodMartContext.createConnection();
     	TestUtil.assertQueryThrows(
 			connection,
             mdx,
             "MDX object '[Customers].[USA].[OR]' not found in cube 'Sales'");
 
-    	TestUtil.withRole(foodMartContext, "Role2"); 
+    	TestUtil.withRole(foodMartContext, "Role2");
     	connection = foodMartContext.createConnection();
     	TestUtil.assertQueryThrows(
 			connection,
@@ -1769,7 +1769,7 @@ public class AccessControlTest {
         // Compared to above:
         // a. cities in Oregon are missing besides Portland
         // b. total for Oregon = total for Portland
-    	TestUtil.withRole(foodMartContext, "Role1,Role2");    	
+    	TestUtil.withRole(foodMartContext, "Role1,Role2");
     	connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
 			connection,
@@ -1816,7 +1816,7 @@ public class AccessControlTest {
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
         String schema = SchemaUtil.getSchema(baseSchema, null, null, null, null, null, roleDefs);
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "grandparent of USA manager"); 
+        TestUtil.withRole(foodMartContext, "grandparent of USA manager");
         Connection connection = foodMartContext.createConnection();
 
         // Can access [Sales]?
@@ -1848,7 +1848,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testUnionRoleHasInaccessibleDescendants(Context foodMartContext) throws Exception {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"Role1\">\n"
                 + "  <SchemaGrant access=\"none\">\n"
@@ -1864,7 +1864,7 @@ public class AccessControlTest {
                 + "  </SchemaGrant>\n"
                 + "</Role>\n");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1,Role2"); 
+    	TestUtil.withRole(foodMartContext, "Role1,Role2");
     	Connection connection = foodMartContext.createConnection();
         final Cube cube =
             connection.getSchema()
@@ -1894,7 +1894,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testRoleUnionWithLevelRestrictions(Context foodMartContext)  throws Exception {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"Role1\">\n"
                 + "  <SchemaGrant access=\"all\">\n"
@@ -1910,7 +1910,7 @@ public class AccessControlTest {
                 + "  </SchemaGrant>\n"
                 + "</Role>\n");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1,Role2"); 
+    	TestUtil.withRole(foodMartContext, "Role1,Role2");
     	Connection connection = foodMartContext.createConnection();
 
     	TestUtil.assertQueryReturns(
@@ -1978,7 +1978,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testNonEmptyAccess(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"Role1\">\n"
                 + "  <SchemaGrant access=\"none\">\n"
@@ -1990,7 +1990,7 @@ public class AccessControlTest {
                 + "  </SchemaGrant>\n"
                 + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1"); 
+    	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
 
         // regular crossjoin returns the correct list of product children
@@ -2026,7 +2026,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testNonEmptyAccessLevelMembers(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
             null,
             null,
             null,
@@ -2042,7 +2042,7 @@ public class AccessControlTest {
             + "  </SchemaGrant>\n"
             + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1"); 
+    	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
 
         // <Level>.members inside regular crossjoin returns the correct list of
@@ -2184,7 +2184,7 @@ public class AccessControlTest {
 
     private static void setGoodmanContext(Context foodMartContext, final Role.RollupPolicy policy) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"California manager\">\n"
                 + "  <SchemaGrant access=\"none\">\n"
@@ -2199,7 +2199,7 @@ public class AccessControlTest {
                 + "  </SchemaGrant>\n"
                 + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "California manager"); 
+    	TestUtil.withRole(foodMartContext, "California manager");
     }
 
     /**
@@ -2212,7 +2212,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testBugMondrian402(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"California manager\">\n"
                 + "  <SchemaGrant access=\"none\">\n"
@@ -2225,7 +2225,7 @@ public class AccessControlTest {
                 + "  </SchemaGrant>\n"
                 + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "California manager"); 
+    	TestUtil.withRole(foodMartContext, "California manager");
     	Connection connection = foodMartContext.createConnection();
         assertHierarchyAccess(
     		connection, Access.NONE, "Sales", "Store");
@@ -2240,7 +2240,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testPartialRollupParentChildHierarchy(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
             "<Role name=\"Buggy Role\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -2259,7 +2259,7 @@ public class AccessControlTest {
             + "  </SchemaGrant>\n"
             + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Buggy Role"); 
+    	TestUtil.withRole(foodMartContext, "Buggy Role");
     	Connection connection = foodMartContext.createConnection();
 
         final String mdx = "select\n"
@@ -2371,10 +2371,10 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testBugBiserver1574(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null, BiServer1574Role1);
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "role1"); 
+    	TestUtil.withRole(foodMartContext, "role1");
     	Connection connection = foodMartContext.createConnection();
         final String mdx =
             "select {([Measures].[Store Invoice], [Store Size in SQFT].[All Store Size in SQFTs])} ON COLUMNS,\n"
@@ -2403,10 +2403,10 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testBugMondrian435(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null, BiServer1574Role1);
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "role1"); 
+    	TestUtil.withRole(foodMartContext, "role1");
     	Connection connection = foodMartContext.createConnection();
 
         // minimal testcase
@@ -2566,10 +2566,10 @@ public class AccessControlTest {
 
     private void checkBugMondrian436(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null, BiServer1574Role1);
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "role1"); 
+    	TestUtil.withRole(foodMartContext, "role1");
     	Connection connection = foodMartContext.createConnection();
 
     	TestUtil.assertQueryReturns(
@@ -2623,7 +2623,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testVirtualCube(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
             "<Role name=\"VCRole\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -2642,7 +2642,7 @@ public class AccessControlTest {
             + "  </SchemaGrant>\n"
             + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "VCRole"); 
+    	TestUtil.withRole(foodMartContext, "VCRole");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
 			connection,
@@ -2697,7 +2697,7 @@ public class AccessControlTest {
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
         String schema = SchemaUtil.getSchema(baseSchema, null, null, null, null, null, BiServer2491Role2);
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "role2"); 
+        TestUtil.withRole(foodMartContext, "role2");
         Connection connection = foodMartContext.createConnection();
 
         final String firstBrokenMdx =
@@ -2759,13 +2759,13 @@ public class AccessControlTest {
                 + member.getName(); // e.g. "BC.Burnaby"
             // e.g. "[Customers].[State Province].[BC].[Burnaby]"
             String uniqueName =
-                Util.replace(member.getUniqueName(), ".[All Customers]", "");
+                member.getUniqueName().replace(".[All Customers]", "");
             // e.g. "[Customers2].[State Province].[BC].[Burnaby]"
             String uniqueName2 =
-                Util.replace(uniqueName, "Customers", "Customers2");
+                uniqueName.replace("Customers", "Customers2");
             // e.g. "[Customers3].[State Province].[BC].[Burnaby]"
             String uniqueName3 =
-                Util.replace(uniqueName, "Customers", "Customers3");
+                uniqueName.replace("Customers", "Customers3");
             buf.append(
                 "  <Role name=\"" + name + "\"> \n"
                 + "    <SchemaGrant access=\"none\"> \n"
@@ -2790,7 +2790,7 @@ public class AccessControlTest {
             buf2.append("    <RoleUsage roleName=\"" + name + "\"/>\n");
         }
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, 
+        String schema = SchemaUtil.getSchema(baseSchema,
             " <Dimension name=\"Customers\"> \n"
             + "    <Hierarchy hasAll=\"true\" primaryKey=\"customer_id\"> \n"
             + "      <Table name=\"customer\"/> \n"
@@ -2818,7 +2818,7 @@ public class AccessControlTest {
             + "  </Role>\n");
         final long t0 = System.currentTimeMillis();
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "Test"); 
+        TestUtil.withRole(foodMartContext, "Test");
         connection = foodMartContext.createConnection();
         TestUtil.executeQuery(connection, "select from [" + cubeName + "]");
         final long t1 = System.currentTimeMillis();
@@ -2842,7 +2842,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testBugMondrian694(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"REG1\"> \n"
                 + "  <SchemaGrant access=\"none\"> \n"
@@ -2857,7 +2857,7 @@ public class AccessControlTest {
                 + "  </SchemaGrant> \n"
                 + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "REG1"); 
+    	TestUtil.withRole(foodMartContext, "REG1");
     	Connection connection = foodMartContext.createConnection();
 
         // With bug MONDRIAN-694 returns 874.80, should return 79.20.
@@ -2939,7 +2939,7 @@ public class AccessControlTest {
             MondrianProperties.instance().IgnoreInvalidMembers,
             true);
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, 
+        String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
             "<Role name=\"CTO\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -2958,7 +2958,7 @@ public class AccessControlTest {
             + "  </SchemaGrant>\n"
             + "</Role>");
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "CTO"); 
+        TestUtil.withRole(foodMartContext, "CTO");
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
         		connection,
@@ -2991,9 +2991,9 @@ public class AccessControlTest {
     public void testCalcMemberLevel(Context foodMartContext) {
     	Connection connection = foodMartContext.createConnection();
         checkCalcMemberLevel(connection);
-        
+
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, 
+        String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"Role1\">\n"
                 + "  <SchemaGrant access=\"none\">\n"
@@ -3004,7 +3004,7 @@ public class AccessControlTest {
                 + "  </SchemaGrant>\n"
                 + "</Role>\n");
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "Role1"); 
+        TestUtil.withRole(foodMartContext, "Role1");
         connection = foodMartContext.createConnection();
         checkCalcMemberLevel(connection);
     }
@@ -3018,7 +3018,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testBugMondrian568(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"Role1\">\n"
                 + "  <SchemaGrant access=\"none\">\n"
@@ -3035,14 +3035,14 @@ public class AccessControlTest {
                 + "  </SchemaGrant>\n"
                 + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1"); 
+    	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
         assertMemberAccess(
         		connection,
                 Access.NONE,
                 "[Measures].[Store Cost]");
-        
-    	TestUtil.withRole(foodMartContext, "Role1,Role2"); 
+
+    	TestUtil.withRole(foodMartContext, "Role1,Role2");
     	connection = foodMartContext.createConnection();
         assertMemberAccess(
         		connection,
@@ -3081,7 +3081,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testBugMondrian935(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name='Role1'>\n"
                 + "  <SchemaGrant access='none'>\n"
@@ -3101,7 +3101,7 @@ public class AccessControlTest {
                 + "</Role>\n");
 
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1"); 
+    	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
 			connection,
@@ -3123,7 +3123,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testDimensionGrant(Context foodMartContext) throws Exception {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
             "<Role name=\"Role1\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -3152,7 +3152,7 @@ public class AccessControlTest {
             + "  </SchemaGrant>\n"
             + "</Role>\n");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1"); 
+    	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertAxisReturns(
 			connection,
@@ -3187,13 +3187,13 @@ public class AccessControlTest {
             + "Row #0: 78,664\n"
             + "Row #0: 24,545\n"
             + "Row #0: 79,155\n");
-    	TestUtil.withRole(foodMartContext, "Role2"); 
+    	TestUtil.withRole(foodMartContext, "Role2");
     	connection = foodMartContext.createConnection();
     	TestUtil.assertAxisThrows(
 			connection,
             "[Customers].Members",
             "Mondrian Error:Failed to parse query 'select {[Customers].Members} on columns from Sales'");
-    	TestUtil.withRole(foodMartContext, "Role3"); 
+    	TestUtil.withRole(foodMartContext, "Role3");
     	connection = foodMartContext.createConnection();
     	TestUtil.assertQueryThrows(
 			connection,
@@ -3292,7 +3292,7 @@ public class AccessControlTest {
             + "Non Empty [*BASE_MEMBERS_Product] on rows\n"
             + "From [Sales] \n";
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, 
+        String schema = SchemaUtil.getSchema(baseSchema,
                     null, null, null, null, null,
                     "  <Role name=\"Role1\">\n"
                     + "    <SchemaGrant access=\"all\">\n"
@@ -3316,7 +3316,7 @@ public class AccessControlTest {
                     + "  </Role>\n");
         // Control tests
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "Role1"); 
+        TestUtil.withRole(foodMartContext, "Role1");
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -3338,7 +3338,7 @@ public class AccessControlTest {
             + "Row #3: 551\n"
             + "Row #4: 253\n"
             + "Row #5: 823\n");
-        TestUtil.withRole(foodMartContext, "Role2"); 
+        TestUtil.withRole(foodMartContext, "Role2");
         connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -3360,7 +3360,7 @@ public class AccessControlTest {
             + "Row #3: 1,029\n"
             + "Row #4: 286\n"
             + "Row #5: 731\n");
-        TestUtil.withRole(foodMartContext, "Role1,Role2"); 
+        TestUtil.withRole(foodMartContext, "Role1,Role2");
         connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -3395,7 +3395,7 @@ public class AccessControlTest {
             + "Row #10: 253\n"
             + "Row #11: 823\n");
         // Actual tests
-        TestUtil.withRole(foodMartContext, "Role1"); 
+        TestUtil.withRole(foodMartContext, "Role1");
         connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -3417,7 +3417,7 @@ public class AccessControlTest {
             + "Row #3: 551\n"
             + "Row #4: 253\n"
             + "Row #5: 823\n");
-        TestUtil.withRole(foodMartContext, "Role2"); 
+        TestUtil.withRole(foodMartContext, "Role2");
         connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -3439,7 +3439,7 @@ public class AccessControlTest {
             + "Row #3: 1,029\n"
             + "Row #4: 286\n"
             + "Row #5: 731\n");
-        TestUtil.withRole(foodMartContext, "Role1,Role2"); 
+        TestUtil.withRole(foodMartContext, "Role1,Role2");
         connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -3477,7 +3477,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testBugMondrian1030_2(Context foodMartContext) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
             "<Role name=\"Bacon\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -3489,7 +3489,7 @@ public class AccessControlTest {
             + "  </SchemaGrant>\n"
             + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Bacon"); 
+    	TestUtil.withRole(foodMartContext, "Bacon");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
     			connection,
@@ -3516,7 +3516,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testMondrian1091(Context foodMartContext) throws Exception {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
             "<Role name=\"Role1\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -3528,7 +3528,7 @@ public class AccessControlTest {
             + "  </SchemaGrant>\n"
             + "</Role>");
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "Role1"); 
+    	TestUtil.withRole(foodMartContext, "Role1");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
 			connection,
@@ -3590,7 +3590,7 @@ public class AccessControlTest {
         final String mdx =
             "select non empty {[Store].Members} on columns from [Sales]";
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, 
+        String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
             "<Role name=\"Role1\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -3611,7 +3611,7 @@ public class AccessControlTest {
             + "  </SchemaGrant>\n"
             + "</Role>");
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "Role1"); 
+        TestUtil.withRole(foodMartContext, "Role1");
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -3641,7 +3641,7 @@ public class AccessControlTest {
             + "Row #0: 25,635\n"
             + "Row #0: 2,117\n"
             + "Row #0: 2,117\n");
-        TestUtil.withRole(foodMartContext, "Role2"); 
+        TestUtil.withRole(foodMartContext, "Role2");
         connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -3684,7 +3684,7 @@ public class AccessControlTest {
             + "From [Sales]\n";
 
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, 
+        String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"Admin\">\n"
                 + "  <SchemaGrant access=\"none\">\n"
@@ -3713,7 +3713,7 @@ public class AccessControlTest {
                 + "Axis #1:\n"
                 + "{[Measures].[Unit Sales]}\n"
                 + "Row #0: 266,773\n");
-        TestUtil.withRole(foodMartContext, "Admin"); 
+        TestUtil.withRole(foodMartContext, "Admin");
         connection = foodMartContext.createConnection();
         TestUtil
             .assertQueryReturns(
@@ -3743,7 +3743,7 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testMondrian936(Context foodMartContext) throws Exception {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-    	String schema = SchemaUtil.getSchema(baseSchema, 
+    	String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
             "<Role name=\"test\">\n"
             + " <SchemaGrant access=\"none\">\n"
@@ -3767,7 +3767,7 @@ public class AccessControlTest {
             + "</Role>");
 
     	TestUtil.withSchema(foodMartContext, schema);
-    	TestUtil.withRole(foodMartContext, "test"); 
+    	TestUtil.withRole(foodMartContext, "test");
     	Connection connection = foodMartContext.createConnection();
     	TestUtil.assertQueryReturns(
 			connection,
@@ -3843,7 +3843,7 @@ public class AccessControlTest {
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
         String schema = SchemaUtil.getSchema(baseSchema, null, null, null, null, null, roleDef);
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "dev"); 
+        TestUtil.withRole(foodMartContext, "dev");
         Connection connection = foodMartContext.createConnection();
         TestUtil.executeQuery(
     		connection,
@@ -3866,7 +3866,7 @@ public class AccessControlTest {
             + "</Role>";
         schema = SchemaUtil.getSchema(baseSchema, null, null, null, null, null, roleDef);
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "dev"); 
+        TestUtil.withRole(foodMartContext, "dev");
         connection = foodMartContext.createConnection();
         TestUtil.executeQuery(
     		connection,
@@ -3900,7 +3900,7 @@ public class AccessControlTest {
             + "Non Empty [*SORTED_ROW_AXIS] on rows\n"
             + "From [Sales]\n";
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
-        String schema = SchemaUtil.getSchema(baseSchema, 
+        String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
                 "<Role name=\"Admin\">\n"
                 + "    <SchemaGrant access=\"none\">\n"
@@ -3913,7 +3913,7 @@ public class AccessControlTest {
                 + "    </SchemaGrant>\n"
                 + "  </Role>\n");
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "Admin"); 
+        TestUtil.withRole(foodMartContext, "Admin");
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -3987,7 +3987,7 @@ public class AccessControlTest {
                     // MONDRIAN-1568 showed different results with different
                     // rollup policies and different default members
                 	String baseSchema = TestUtil.getRawSchema(foodMartContext);
-                	String schema = SchemaUtil.getSchema(baseSchema, 
+                	String schema = SchemaUtil.getSchema(baseSchema,
                         // swap in hasAll and defaultMember
                         String.format(dimension, hasAll, defaultMember),
                         cube, null, null, null,
@@ -3995,7 +3995,7 @@ public class AccessControlTest {
                         String.format(roleDefs, policy));
                     // RolapNativeCrossjoin
                 	TestUtil.withSchema(foodMartContext, schema);
-                	TestUtil.withRole(foodMartContext, "test"); 
+                	TestUtil.withRole(foodMartContext, "test");
                 	Connection connection = foodMartContext.createConnection();
                 	TestUtil.assertQueryReturns(
             			connection,
@@ -4088,7 +4088,7 @@ public class AccessControlTest {
         String baseSchema = TestUtil.getRawSchema(foodMartContext);
         String schema = SchemaUtil.getSchema(baseSchema, null, null, null, null, null, roleDefs);
         TestUtil.withSchema(foodMartContext, schema);
-        TestUtil.withRole(foodMartContext, "noBaseCubes"); 
+        TestUtil.withRole(foodMartContext, "noBaseCubes");
         Connection connection = foodMartContext.createConnection();
 
         TestUtil.assertQueryReturns(

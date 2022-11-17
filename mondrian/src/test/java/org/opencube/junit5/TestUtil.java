@@ -197,7 +197,7 @@ public class TestUtil {
 				if (cubeName.indexOf(' ') >= 0) {
 					cubeName = Util.quoteMdxIdentifier(cubeName);
 				}
-				expression = Util.replace(expression, "'", "''");
+				expression = expression.replace("'", "''");
 				Result result = executeQuery(connection, "with member [Measures].[Foo] as '" + expression
 						+ "' select {[Measures].[Foo]} on columns from " + cubeName);
 				Cell cell = result.getCell(new int[] { 0 });
@@ -221,7 +221,7 @@ public class TestUtil {
 			if (cubeName.indexOf(' ') >= 0) {
 				cubeName = Util.quoteMdxIdentifier(cubeName);
 			}
-			expression = Util.replace(expression, "'", "''");
+			expression = expression.replace("'", "''");
 			Result result = executeQuery(context.createConnection(), "with member [Measures].[Foo] as '" + expression
 					+ "' select {[Measures].[Foo]} on columns from " + cubeName);
 			Cell cell = result.getCell(new int[] { 0 });
@@ -502,7 +502,7 @@ public class TestUtil {
 	 */
 	public static String unfold( String string ) {
 		if ( !nl.equals( "\n" ) ) {
-			string = Util.replace( string, nl, "\n" );
+			string = string.replace(nl, "\n" );
 		}
 		if ( string == null ) {
 			return null;
@@ -698,7 +698,7 @@ public class TestUtil {
 			if (nl.equals("\n") || string.indexOf(nl) != -1) {
 				return new SafeString(string);
 			}
-			return new SafeString(Util.replace(string, "\n", nl));
+			return new SafeString(string.replace( "\n", nl));
 		}
 
 		private static final String indent = "                ";
@@ -712,7 +712,7 @@ public class TestUtil {
 			// into ["string with \"quotes\" split\n"
 			// + "across lines
 			//
-			s = Util.replace(s, "\"", "\\\"");
+			s = s.replace("\"", "\\\"");
 			s = LineBreakPattern.matcher(s).replaceAll(lineBreak2);
 			s = TabPattern.matcher(s).replaceAll("\\\\t");
 			s = "\"" + s + "\"";
@@ -960,20 +960,20 @@ public class TestUtil {
 	 */
 	public static String upgradeActual(String actual) {
 		if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
-			actual = Util.replace(actual, "[Time.Weekly]", "[Time].[Weekly]");
-			actual = Util.replace(actual, "[All Time.Weeklys]", "[All Weeklys]");
-			actual = Util.replace(actual, "<HIERARCHY_NAME>Time.Weekly</HIERARCHY_NAME>",
+			actual = actual.replace("[Time.Weekly]", "[Time].[Weekly]");
+			actual = actual.replace("[All Time.Weeklys]", "[All Weeklys]");
+			actual = actual.replace("<HIERARCHY_NAME>Time.Weekly</HIERARCHY_NAME>",
 					"<HIERARCHY_NAME>Weekly</HIERARCHY_NAME>");
 
 			// for a few tests in SchemaTest
-			actual = Util.replace(actual, "[Store.MyHierarchy]", "[Store].[MyHierarchy]");
-			actual = Util.replace(actual, "[All Store.MyHierarchys]", "[All MyHierarchys]");
-			actual = Util.replace(actual, "[Store2].[All Store2s]", "[Store2].[Store].[All Stores]");
-			actual = Util.replace(actual, "[Store Type 2.Store Type 2].[All Store Type 2.Store Type 2s]",
+			actual = actual.replace("[Store.MyHierarchy]", "[Store].[MyHierarchy]");
+			actual = actual.replace("[All Store.MyHierarchys]", "[All MyHierarchys]");
+			actual = actual.replace("[Store2].[All Store2s]", "[Store2].[Store].[All Stores]");
+			actual = actual.replace("[Store Type 2.Store Type 2].[All Store Type 2.Store Type 2s]",
 					"[Store Type 2].[All Store Type 2s]");
-			actual = Util.replace(actual, "[TIME.CALENDAR]", "[TIME].[CALENDAR]");
-			actual = Util.replace(actual, "<Store>true</Store>", "<Store>1</Store>");
-			actual = Util.replace(actual, "<Employees>80000.0000</Employees>", "<Employees>80000</Employees>");
+			actual = actual.replace("[TIME.CALENDAR]", "[TIME].[CALENDAR]");
+			actual = actual.replace("<Store>true</Store>", "<Store>1</Store>");
+			actual = actual.replace("<Employees>80000.0000</Employees>", "<Employees>80000</Employees>");
 		}
 		return actual;
 	}
@@ -1053,7 +1053,7 @@ public class TestUtil {
 		// into ["string with \"quotes\" split" + nl +
 		// "across lines
 		//
-		s = Util.replace( s, "\"", "\\\"" );
+		s = s.replace("\"", "\\\"" );
 		s = LineBreakPattern.matcher( s ).replaceAll( lineBreak );
 		s = TabPattern.matcher( s ).replaceAll( "\\\\t" );
 		s = "\"" + s + "\"";
@@ -1723,13 +1723,11 @@ public class TestUtil {
 					"[Yearly Income]",
 			};
 			for ( String name : names ) {
-				queryString = Util.replace(
-						queryString,
+				queryString = queryString.replace(
 						name + "." + name,
 						name + "." + name + "." + name );
 			}
-			queryString = Util.replace(
-					queryString,
+			queryString = queryString.replace(
 					"[Time.Weekly].[All Time.Weeklys]",
 					"[Time].[Weekly].[All Weeklys]" );
 		}

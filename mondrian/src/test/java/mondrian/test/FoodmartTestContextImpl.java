@@ -782,7 +782,7 @@ public void assertExprThrows( String expression, String pattern ) {
       if ( cubeName.indexOf( ' ' ) >= 0 ) {
         cubeName = Util.quoteMdxIdentifier( cubeName );
       }
-      expression = Util.replace( expression, "'", "''" );
+      expression = expression.replace("'", "''" );
       Result result = executeQuery(
         "with member [Measures].[Foo] as '"
           + expression
@@ -905,46 +905,36 @@ public void assertAxisReturns(
   @Override
 public String upgradeActual( String actual ) {
     if ( !MondrianProperties.instance().SsasCompatibleNaming.get() ) {
-      actual = Util.replace(
-        actual,
+      actual = actual.replace(
         "[Time.Weekly]",
         "[Time].[Weekly]" );
-      actual = Util.replace(
-        actual,
+      actual = actual.replace(
         "[All Time.Weeklys]",
         "[All Weeklys]" );
-      actual = Util.replace(
-        actual,
+      actual = actual.replace(
         "<HIERARCHY_NAME>Time.Weekly</HIERARCHY_NAME>",
         "<HIERARCHY_NAME>Weekly</HIERARCHY_NAME>" );
 
       // for a few tests in SchemaTest
-      actual = Util.replace(
-        actual,
+      actual = actual.replace(
         "[Store.MyHierarchy]",
         "[Store].[MyHierarchy]" );
-      actual = Util.replace(
-        actual,
+      actual = actual.replace(
         "[All Store.MyHierarchys]",
         "[All MyHierarchys]" );
-      actual = Util.replace(
-        actual,
+      actual = actual.replace(
         "[Store2].[All Store2s]",
         "[Store2].[Store].[All Stores]" );
-      actual = Util.replace(
-        actual,
+      actual = actual.replace(
         "[Store Type 2.Store Type 2].[All Store Type 2.Store Type 2s]",
         "[Store Type 2].[All Store Type 2s]" );
-      actual = Util.replace(
-        actual,
+      actual = actual.replace(
         "[TIME.CALENDAR]",
         "[TIME].[CALENDAR]" );
-      actual = Util.replace(
-        actual,
+      actual = actual.replace(
         "<Store>true</Store>",
         "<Store>1</Store>" );
-      actual = Util.replace(
-        actual,
+      actual = actual.replace(
         "<Employees>80000.0000</Employees>",
         "<Employees>80000</Employees>" );
     }
@@ -982,13 +972,11 @@ public String upgradeQuery( String queryString ) {
         "[Yearly Income]",
       };
       for ( String name : names ) {
-        queryString = Util.replace(
-          queryString,
+        queryString = queryString.replace(
           name + "." + name,
           name + "." + name + "." + name );
       }
-      queryString = Util.replace(
-        queryString,
+      queryString = queryString.replace(
         "[Time.Weekly].[All Time.Weeklys]",
         "[Time].[Weekly].[All Weeklys]" );
     }
@@ -1260,7 +1248,7 @@ public void assertSimpleQuery() {
     // into ["string with \"quotes\" split\n"
     //                 + "across lines
     //
-    s = Util.replace( s, "\"", "\\\"" );
+    s = s.replace("\"", "\\\"" );
     s = LineBreakPattern.matcher( s ).replaceAll( lineBreak2 );
     s = TabPattern.matcher( s ).replaceAll( "\\\\t" );
     s = "\"" + s + "\"";
@@ -1290,7 +1278,7 @@ public void assertMatchesVerbose(
     // into ["string with \"quotes\" split" + nl +
     // "across lines
     //
-    s = Util.replace( s, "\"", "\\\"" );
+    s = s.replace("\"", "\\\"" );
     s = LineBreakPattern.matcher( s ).replaceAll( lineBreak );
     s = TabPattern.matcher( s ).replaceAll( "\\\\t" );
     s = "\"" + s + "\"";
@@ -1448,7 +1436,7 @@ public CacheControl getCacheControl() {
     if ( nl.equals( "\n" ) || string.indexOf( nl ) != -1 ) {
       return new SafeString( string );
     }
-    return new SafeString( Util.replace( string, "\n", nl ) );
+    return new SafeString(string.replace("\n", nl ) );
   }
 
   /**
@@ -1460,7 +1448,7 @@ public CacheControl getCacheControl() {
    */
   public static String unfold( String string ) {
     if ( !nl.equals( "\n" ) ) {
-      string = Util.replace( string, nl, "\n" );
+      string = string.replace(nl, "\n" );
     }
     if ( string == null ) {
       return null;

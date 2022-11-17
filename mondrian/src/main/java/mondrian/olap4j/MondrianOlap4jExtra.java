@@ -104,8 +104,7 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
             // Convert Windows newlines in 'description' to UNIX format.
             String description = fi.getDescription();
             if (description != null) {
-                description = Util.replace(
-                    fi.getDescription(),
+                description = fi.getDescription().replace(
                     "\r",
                     "");
             }
@@ -373,12 +372,12 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
             throw new OlapException(e);
         }
     }
-    
+
     public String getLevelDataType( Level level ) {
         MondrianOlap4jLevel olap4jLevel = (MondrianOlap4jLevel) level;
         if ( olap4jLevel.level instanceof RolapLevel ) {
             return ( (RolapLevel) olap4jLevel.level ).getDatatype().name();
-    
+
         }
         return null;
     }
