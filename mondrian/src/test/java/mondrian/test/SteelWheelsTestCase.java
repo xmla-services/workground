@@ -63,8 +63,7 @@ public class SteelWheelsTestCase {
                 properties.get(RolapConnectionProperties.Catalog.name());
             context.setProperty(
                 RolapConnectionProperties.Catalog.name(),
-                Util.replace(
-                    catalog,
+                catalog.replace(
                     "FoodMart.xml",
                     "SteelWheels.xml"));
         }

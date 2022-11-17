@@ -148,7 +148,7 @@ public class MdxParserImpl
     {
         assert s.startsWith(prefix) && s.endsWith(suffix);
         s = s.substring(prefix.length(), s.length() - suffix.length());
-        s = Util.replace(s, quoted, suffix);
+        s = s.replace(quoted, suffix);
         return s;
     }
 

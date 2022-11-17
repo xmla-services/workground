@@ -104,8 +104,8 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
     private String foo(String content, String tag, String from, String to) {
         String start = "<" + tag + ">";
         String end = "</" + tag + ">";
-        final String s = Util.replace(
-            content, start + from + end, start + to + end);
+        final String s = content.replace(
+            start + from + end, start + to + end);
         assert !s.contains(start + from + end);
         return s;
     }

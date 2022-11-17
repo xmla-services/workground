@@ -385,7 +385,7 @@ public class Util extends XOMUtil {
      */
     public static StringBuilder quoteForMdx(StringBuilder buf, String val) {
         buf.append("\"");
-        String s0 = replace(val, "\"", "\"\"");
+        String s0 = val.replace("\"", "\"\"");
         buf.append(s0);
         buf.append("\"");
         return buf;
@@ -572,41 +572,6 @@ public class Util extends XOMUtil {
      */
     public static int compare(int i0, int i1) {
         return i0 < i1 ? -1 : (i0 == i1 ? 0 : 1);
-    }
-
-    /**
-     * Returns a string with every occurrence of a seek string replaced with
-     * another.
-     */
-    public static String replace(String s, String find, String replace) {
-        // let's be optimistic
-        int found = s.indexOf(find);
-        if (found == -1) {
-            return s;
-        }
-        StringBuilder sb = new StringBuilder(s.length() + 20);
-        int start = 0;
-        char[] chars = s.toCharArray();
-        final int step = find.length();
-        if (step == 0) {
-            // Special case where find is "".
-            sb.append(s);
-            replace(sb, 0, find, replace);
-        } else {
-            for (;;) {
-                sb.append(chars, start, found - start);
-                if (found == s.length()) {
-                    break;
-                }
-                sb.append(replace);
-                start = found + step;
-                found = s.indexOf(find, start);
-                if (found == -1) {
-                    found = s.length();
-                }
-            }
-        }
-        return sb.toString();
     }
 
     /**
@@ -1310,7 +1275,7 @@ public class Util extends XOMUtil {
     public static void singleQuoteString(String val, StringBuilder buf) {
         buf.append('\'');
 
-        String s0 = replace(val, "'", "''");
+        String s0 = val.replace("'", "''");
         buf.append(s0);
 
         buf.append('\'');
@@ -2773,7 +2738,7 @@ public class Util extends XOMUtil {
                         if (right.charAt(0) != '\'') {
                             sb.append("'");
                         }
-                        sb.append(replace(right, "'", "''"));
+                        sb.append(right.replace("'", "''"));
                         if (right.charAt(right.length() - 1) != '\'') {
                             sb.append("'");
                         }
@@ -4567,11 +4532,11 @@ public class Util extends XOMUtil {
             }
         }
     }
-    
+
   /**
    * Called during major steps of executing a MDX query to provide insight into Calc calls/times
    * and key function calls/times.
-   * 
+   *
    * @param handler
    * @param title
    * @param calc

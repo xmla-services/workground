@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.opencube.junit5.TestUtil.*;
 
 public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
-	
+
 	private PropertySaver5 propSaver;
 
     @BeforeEach
@@ -44,7 +44,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
     public void afterEach() {
         propSaver.reset();
     }
-    
+
     /**
      * Sanity check, that enumerates the Measures dimension.
      */
@@ -425,8 +425,8 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             InputStream stream) throws Exception
         {
             String schema = super.filter(schemaUrl, connectInfo, stream);
-            return Util.replace(
-                schema, " hasAll=\"true\"", " hasAll=\"false\"");
+            return schema.replace(
+                " hasAll=\"true\"", " hasAll=\"false\"");
         }
     }
 
@@ -1608,7 +1608,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
         getTestContext(context);
         if (!databaseIsValid(context.createConnection())) {
             return;
-        }        
+        }
         propSaver.set(MondrianProperties.instance().IgnoreInvalidMembers, true);
         propSaver.set(
             MondrianProperties.instance().IgnoreInvalidMembersDuringQuery,

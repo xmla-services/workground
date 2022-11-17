@@ -669,22 +669,18 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
             Dialect dialect = getDialect(connection);
             switch (dialect.getDatabaseProduct()) {
             case ORACLE:
-                content = Util.replace(
-                    content,
+                content = content.replace(
                     " type=\"xsd:double\"",
                     " type=\"xsd:decimal\"");
-                content = Util.replace(
-                    content,
+                content = content.replace(
                     " type=\"xsd:integer\"",
                     " type=\"xsd:decimal\"");
                 break;
             case POSTGRESQL:
-                content = Util.replace(
-                    content,
+                content = content.replace(
                     " sql:field=\"Store Sqft\" type=\"xsd:double\"",
                     " sql:field=\"Store Sqft\" type=\"xsd:integer\"");
-                content = Util.replace(
-                    content,
+                content = content.replace(
                     " sql:field=\"Unit Sales\" type=\"xsd:double\"",
                     " sql:field=\"Unit Sales\" type=\"xsd:decimal\"");
                 break;
@@ -697,42 +693,34 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
             case NEOVIEW:
             case NETEZZA:
             case TERADATA:
-                content = Util.replace(
-                    content,
+                content = content.replace(
                     " sql:field=\"Store Sqft\" type=\"xsd:double\"",
                     " sql:field=\"Store Sqft\" type=\"xsd:integer\"");
-                content = Util.replace(
-                    content,
+                content = content.replace(
                     " sql:field=\"Unit Sales\" type=\"xsd:double\"",
                     " sql:field=\"Unit Sales\" type=\"xsd:string\"");
-                content = Util.replace(
-                    content,
+                content = content.replace(
                     " sql:field=\"Week\" type=\"xsd:decimal\"",
                     " sql:field=\"Week\" type=\"xsd:integer\"");
-                content = Util.replace(
-                    content,
+                content = content.replace(
                     " sql:field=\"Day\" type=\"xsd:decimal\"",
                     " sql:field=\"Day\" type=\"xsd:integer\"");
                 break;
             case VERTICA:
                 // vertica has no int32, bigint is being translated to
                 // integer in sqlToXsdType
-                content = Util.replace(
-                    content,
+                content = content.replace(
                     "type=\"xsd:int\"",
                     "type=\"xsd:integer\"");
-                content = Util.replace(
-                    content,
+                content = content.replace(
                     "type=\"xsd:decimal\"",
                     "type=\"xsd:double\"");
                 break;
             case ACCESS:
-                content = Util.replace(
-                    content,
+                content = content.replace(
                     " sql:field=\"Week\" type=\"xsd:decimal\"",
                     " sql:field=\"Week\" type=\"xsd:double\"");
-                content = Util.replace(
-                    content,
+                content = content.replace(
                     " sql:field=\"Day\" type=\"xsd:decimal\"",
                     " sql:field=\"Day\" type=\"xsd:integer\"");
                 break;

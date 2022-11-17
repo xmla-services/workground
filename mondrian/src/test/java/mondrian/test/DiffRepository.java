@@ -522,8 +522,8 @@ public class DiffRepository
             // insensitivity, it can report on the line
             // at which the first diff occurs, which is useful
             // for largish snippets
-            String expectedCanonical = Util.replace(expected2, Util.nl, "\n");
-            String actualCanonical = Util.replace(actual, Util.nl, "\n");
+            String expectedCanonical = expected2.replace(Util.nl, "\n");
+            String actualCanonical = actual.replace( Util.nl, "\n");
 
             if ( !expectedCanonical.startsWith( "<?xml" ) && expectedCanonical.contains( "*Segment Header" ) ) {
 

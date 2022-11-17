@@ -417,7 +417,7 @@ public class UtilTestCase{
         assertTrue(buf == buf2);
 
         // Check the String version of replace.
-        assertEquals(expected, Util.replace(original, seek, replace));
+        assertEquals(expected, original.replace(seek, replace));
     }
 
     @Test
@@ -552,7 +552,7 @@ public class UtilTestCase{
             "${foobarbaz}",
             Util.replaceProperties("${foo${foo}baz}", map));
     }
-    
+
     @Test
     public void testWildcard() {
         assertEquals(

@@ -3229,7 +3229,7 @@ public class SchemaTest {
         try {
             ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                     "Sales",
-                    Util.replace(xml, "TimeUndefined", "TimeUnspecified"), false));
+                xml.replace("TimeUndefined", "TimeUnspecified"), false));
                 assertSimpleQuery(context.createConnection());
             fail("expected error");
         } catch (Throwable e) {
