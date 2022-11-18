@@ -30,8 +30,8 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 
 	private static final String THIS_IS_MONDRIAN_INSTANCE = "thisIsMondrianInstance";
 	private DockerClient dc;
-	
-	
+
+
 	 protected Optional<String> findContainerForReuse(String param) {
 	        Map<String,String>lblFilter=new HashMap<>();
 	        lblFilter.put(THIS_IS_MONDRIAN_INSTANCE,param );
@@ -58,11 +58,11 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 					.build();
 			dc = DockerClientImpl.getInstance(config, client);
 
-		findContainerForReuse("1").ifPresent(id->dc.stopContainerCmd(id).exec());
+        findContainerForReuse("1").ifPresent(id->dc.removeContainerCmd(id).withRemoveVolumes(true).withForce(true).exec());
 
 		if(!findContainerForReuse("1").isPresent()) {
 
-			
+
 	//		findContainerForReuse("1").ifPresent(id->dc.stopContainerCmd(id).exec());
 
 			System.out.println(12);
@@ -74,13 +74,13 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 				throw new RuntimeException(e);
 			}
 
-		
+
 
 
 			HostConfig hostConfig = HostConfig.newHostConfig()//
 //					.withAutoRemove(true)
 					.withShmSize(1024l*1024l*1024l*4l)
-					.withNanoCPUs(16l)	
+					.withNanoCPUs(16l)
 					.withPortBindings(portBinding());
 
 			HashMap<String, String> lbl=new HashMap<>();
@@ -98,9 +98,9 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 			dc.startContainerCmd(containerId).exec();
 		}
 
-			
+
 			return createConnection();
-		
+
 		}
 
 	protected abstract SimpleEntry<PropertyList, DataSource> createConnection();
@@ -110,7 +110,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 	protected abstract String image();
 
 	protected abstract PortBinding portBinding();
-	  
+
 		@Override
 		public void close() {
 			try {
@@ -124,5 +124,5 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 			}
 
 		}
-	  
+
 }
