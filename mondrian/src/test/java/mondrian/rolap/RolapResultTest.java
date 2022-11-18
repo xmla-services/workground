@@ -11,6 +11,8 @@ package mondrian.rolap;
 
 import mondrian.olap.Result;
 import mondrian.rolap.aggmatcher.AggTableTestCase;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
@@ -173,6 +175,7 @@ Axis #2:
      *
      * @throws Exception
      */
+    @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void _testNullDefaultMeasure(Context context) throws Exception {

@@ -5379,7 +5379,8 @@ public class BasicQueryTest {
    * Unit test for {@link StatisticsProvider} and implementations {@link JdbcStatisticsProvider} and
    * {@link SqlStatisticsProvider}.
    */
-    @ParameterizedTest
+  @Disabled //disabled for CI build
+  @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testStatistics(Context context) {
     Connection connection = context.createConnection();

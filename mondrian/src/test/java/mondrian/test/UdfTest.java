@@ -21,7 +21,7 @@ import mondrian.spi.PropertyFormatter;
 import mondrian.spi.*;
 
 import org.apache.logging.log4j.ThreadContext;
-
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.*;
 import org.olap4j.metadata.Property;
@@ -972,6 +972,7 @@ public class UdfTest {
     /**
      * Unit test that ensures that a UDF has either a script or a className.
      */
+    @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testUdfNeitherScriptNorClassname(Context context) {
@@ -986,6 +987,7 @@ public class UdfTest {
      * Unit test that ensures that a UDF does not have both a script
      * and a className.
      */
+    @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testUdfBothScriptAndClassname(Context context) {
@@ -1001,6 +1003,7 @@ public class UdfTest {
     /**
      * Unit test that ensures that a UDF has either a script or a className.
      */
+    @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testUdfScriptBadLanguage(Context context) {

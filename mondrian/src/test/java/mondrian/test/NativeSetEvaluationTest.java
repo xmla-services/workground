@@ -18,6 +18,7 @@ import mondrian.util.Bug;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
@@ -482,6 +483,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-1430"> Mondrian-1430:</a> Native top count support
    * for + and tuple (Parentheses) expressions in Calculated member slicer
    */
+  @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testNativeTopCountWithParenthesesMemberSlicer(Context context) {
@@ -1473,6 +1475,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         + "From [Warehouse and Sales]\n", context.createConnection());
   }
 
+  @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testNativeHonorsRoleRestrictions(Context context) {
