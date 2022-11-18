@@ -10,6 +10,8 @@
 package mondrian.test.clearview;
 
 import mondrian.test.DiffRepository;
+
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.Context;
@@ -26,6 +28,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  *
  * @author Khanh Vu
  */
+@Disabled //disabled for CI build
 public class MemHungryTest extends ClearViewBase {
 
     public DiffRepository getDiffRepos() {
@@ -36,6 +39,7 @@ public class MemHungryTest extends ClearViewBase {
         return DiffRepository.lookup(MemHungryTest.class);
     }
 
+    @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     protected void runTest(Context context) {

@@ -15,6 +15,7 @@ import mondrian.test.PropertySaver5;
 import mondrian.util.Bug;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
@@ -152,6 +153,7 @@ public class HighDimensionsTest {
     }
 
     // disabled pending fix of bug MONDRIAN-527
+    @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void _testTopCount(Context context) throws Exception {
