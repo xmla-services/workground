@@ -1536,7 +1536,7 @@ public class DialectTest {
   }
 
 
-  @Disabled //disabled for CI build
+  //@Disabled //disabled for CI build
   @Test
   public void testPostgresGreenplumTypeMapQuirks() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
