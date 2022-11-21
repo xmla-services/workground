@@ -851,12 +851,13 @@
     <module>org.eclipse.daanse.repackage.rhino.engine</module>
     <module>org.eclipse.daanse.function</module>
     <module>org.eclipse.daanse.db</module>
+    <module>org.eclipse.daanse.core</module>
     <module>tooling</module>
     <module>engine</module>
     <module>mondrian</module>
     <module>workbench</module>
   </modules>
-  
+
   <profiles>
     <profile>
       <id>eclipse-licenses-check</id>

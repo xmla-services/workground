@@ -347,13 +347,6 @@
 
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.netezza</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.db.dialect.db.neoview</artifactId>
       <version>${revision}</version>
       <scope>runtime</scope>
