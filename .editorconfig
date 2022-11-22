@@ -2,6 +2,10 @@
 # coding styles between different editors and IDEs
 # editorconfig.org
 
+# EditorConfig helps developers define and maintain consistent
+# coding styles between different editors and IDEs
+# editorconfig.org
+
 root = true
 
 [*]
@@ -15,5 +19,9 @@ trim_trailing_whitespace = true
 [*.{xml,json}]
 indent_size = 2
 
-[*.feature]
-indent_size = 2
+[*.md]
+trim_trailing_whitespace = false
+indent_size = 1
+
+[*.bndrun]
+indent_style = tab

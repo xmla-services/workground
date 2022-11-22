@@ -23,6 +23,7 @@
   </properties>
   <dependencies>
 
+
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
@@ -197,7 +198,6 @@
     <dependency>
       <groupId>net.java.dev.jna</groupId>
       <artifactId>jna</artifactId>
-      <version>5.11.0</version>
       <scope>compile</scope>
     </dependency>
 
