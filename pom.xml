@@ -73,6 +73,7 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
+    <slf4j.version>1.7.36</slf4j.version>
     <asm.version>9.3</asm.version>
     <spifly.version>1.3.5</spifly.version>
     <bnd.version>6.3.0</bnd.version>
@@ -736,15 +737,21 @@
       <dependency>
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
-        <version>1.7.36</version>
+        <version>${slf4j.version}</version>
         <scope>compile</scope>
       </dependency>
-              <dependency>
-      <groupId>com.microsoft.sqlserver</groupId>
-      <artifactId>mssql-jdbc</artifactId>
-      <version>10.2.0.jre11</version>
-      <scope>runtime</scope>
-    </dependency>
+      <dependency>
+        <groupId>com.microsoft.sqlserver</groupId>
+        <artifactId>mssql-jdbc</artifactId>
+        <version>10.2.0.jre11</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>net.java.dev.jna</groupId>
+        <artifactId>jna</artifactId>
+        <version>5.11.0</version>
+        <scope>runtime</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
@@ -771,7 +778,7 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
-      <version>1.7.36</version>
+      <version>${slf4j.version}</version>
       <scope>runtime</scope>
     </dependency>
 
@@ -844,8 +851,48 @@
     <module>org.eclipse.daanse.repackage.rhino.engine</module>
     <module>org.eclipse.daanse.function</module>
     <module>org.eclipse.daanse.db</module>
+    <module>tooling</module>
     <module>engine</module>
     <module>mondrian</module>
     <module>workbench</module>
   </modules>
+  
+  <profiles>
+    <profile>
+      <id>eclipse-licenses-check</id>
+      <activation>
+        <property>
+          <name>licenses-check</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <pluginRepositories>
+        <pluginRepository>
+          <id>dash-licenses-snapshots</id>
+          <url>https://repo.eclipse.org/content/repositories/dash-licenses-snapshots/</url>
+          <snapshots>
+            <enabled>true</enabled>
+          </snapshots>
+        </pluginRepository>
+      </pluginRepositories>
+      <build>
+        <plugins>
+          <!-- https://github.com/eclipse/dash-licenses/blob/master/README.md#maven-plugin-options -->
+          <plugin>
+            <groupId>org.eclipse.dash</groupId>
+            <artifactId>license-tool-plugin</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <executions>
+              <execution>
+                <id>license-check</id>
+                <goals>
+                  <goal>license-check</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
