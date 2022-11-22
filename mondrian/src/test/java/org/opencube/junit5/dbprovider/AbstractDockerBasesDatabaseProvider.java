@@ -87,7 +87,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 			System.out.println(12);
 
 			try {
-				dc.pullImageCmd(image()).exec(new PullImageResultCallback()).awaitCompletion(60, TimeUnit.SECONDS);
+				dc.pullImageCmd(image()).exec(new PullImageResultCallback()).awaitCompletion(5*60, TimeUnit.SECONDS);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 				throw new RuntimeException(e);

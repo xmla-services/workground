@@ -18,9 +18,9 @@
  **********************************************************************/
 package org.eclipse.daanse.db.dialect.resolver.basic;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -69,7 +69,7 @@ public class UncachedBestCompatibleDialectResolver implements DialectResolver {
     }
 
     private Function<? super Dialect, ? extends Entry<Dialect, Boolean>> calcCompatibility(DataSource dataSource) {
-        return dialect -> Map.entry(dialect, dialect.isCompatible(dataSource));
+        return dialect ->  new AbstractMap.SimpleEntry(dialect, dialect.isCompatible(dataSource));
     }
 
     private Predicate<Entry<Dialect, Boolean>> compatibleDialect() {
