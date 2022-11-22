@@ -1,14 +1,14 @@
 /*
  *
- * // This software is subject to the terms of the Eclipse Public License v1.0
- * // Agreement, available at the following URL:
- * // http://www.eclipse.org/legal/epl-v10.html.
- * // You must accept the terms of that agreement to use this software.
- * //
- * // Copyright (C) 2001-2005 Julian Hyde
- * // Copyright (C) 2005-2020 Hitachi Vantara and others
- * // All Rights Reserved.
- * /
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (C) 2001-2005 Julian Hyde
+ * Copyright (C) 2005-2020 Hitachi Vantara and others
+ * All Rights Reserved.
+ *
  *
  */
 
@@ -66,7 +66,7 @@ public class SorterTest{
 
   @BeforeEach
   public void setUp() throws Exception {
-    
+
     MockitoAnnotations.initMocks( this );
     when( sortKeySpec1.getKey() ).thenReturn( calc1 );
     when( sortKeySpec2.getKey() ).thenReturn( calc2 );
