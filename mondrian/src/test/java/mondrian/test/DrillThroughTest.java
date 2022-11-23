@@ -24,7 +24,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.OlapConnection;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
@@ -124,7 +124,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTrivialCalcMemberDrillThrough(Context context) {
+    public void testTrivialCalcMemberDrillThrough(TestingContext context) {
         Result result = executeQuery(context.createConnection(),
             "WITH MEMBER [Measures].[Formatted Unit Sales]"
             + " AS '[Measures].[Unit Sales]', FORMAT_STRING='$#,###.000'\n"
@@ -219,7 +219,7 @@ public class DrillThroughTest {
     }
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTrivialCalcMemberNotMeasure(Context context) {
+    public void testTrivialCalcMemberNotMeasure(TestingContext context) {
         // [Product].[My Food] is trivial because it maps to a single member.
         // First, on ROWS axis.
         Connection connection = context.createConnection();
@@ -285,7 +285,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDrillthroughCompoundSlicer(Context context) {
+    public void testDrillthroughCompoundSlicer(TestingContext context) {
         // Tests a case associated with
         // http://jira.pentaho.com/browse/MONDRIAN-1587
         // hsqldb was failing with SQL that included redundant parentheses
@@ -325,7 +325,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDrillThrough(Context context) {
+    public void testDrillThrough(TestingContext context) {
         Result result = executeQuery(context.createConnection(),
             "WITH MEMBER [Measures].[Price] AS '[Measures].[Store Sales] / ([Measures].[Store Sales], [Time].[Time].PrevMember)'\n"
             + "SELECT {[Measures].[Unit Sales], [Measures].[Price]} on columns,\n"
@@ -390,7 +390,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDrillThrough2(Context context) {
+    public void testDrillThrough2(TestingContext context) {
         Result result = executeQuery(context.createConnection(),
             "WITH MEMBER [Measures].[Price] AS '[Measures].[Store Sales] / ([Measures].[Unit Sales], [Time].[Time].PrevMember)'\n"
             + "SELECT {[Measures].[Unit Sales], [Measures].[Price]} on columns,\n"
@@ -515,7 +515,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDrillThrough3(Context context) {
+    public void testDrillThrough3(TestingContext context) {
         Result result = executeQuery(context.createConnection(),
             "select {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, \n"
             + "Hierarchize(Union(Union(Crossjoin({[Promotion Media].[All Media]}, {[Product].[All Products]}), \n"
@@ -651,7 +651,7 @@ public class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDrillThroughBugMondrian180(Context context) {
+    public void testDrillThroughBugMondrian180(TestingContext context) {
         Result result = executeQuery(context.createConnection(),
             "with set [Date Range] as '{[Time].[1997].[Q1], [Time].[1997].[Q2]}'\n"
             + "member [Time].[Time].[Date Range] as 'Aggregate([Date Range])'\n"
@@ -785,7 +785,7 @@ public class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDrillThroughMeasureExp(Context context) {
+    public void testDrillThroughMeasureExp(TestingContext context) {
         Result result = executeQuery(context.createConnection(),
             "SELECT {[Measures].[Promotion Sales]} on columns,\n"
             + " {[Product].Children} on rows\n"
@@ -843,7 +843,7 @@ public class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillThroughDupKeys(Context context) {
+    public void  testDrillThroughDupKeys(TestingContext context) {
          // Note here that the type on the Store Id level is Integer or
          // Numeric. The default, of course, would be String.
          //
@@ -900,7 +900,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillThroughDupKeysAndMeasure(Context context) throws Exception {
+    public void  testDrillThroughDupKeysAndMeasure(TestingContext context) throws Exception {
         if (!getDialect(context.createConnection()).getDatabaseProduct()
             .equals(DatabaseProduct.MYSQL))
         {
@@ -974,7 +974,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillThroughDupKeysAndMeasure_2(Context context) throws Exception {
+    public void  testDrillThroughDupKeysAndMeasure_2(TestingContext context) throws Exception {
         withSchema(context,
             "<Schema name=\"dsad\">\n"
             + "  <Dimension name=\"Frozen sqft\">\n"
@@ -1051,7 +1051,7 @@ public class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillThroughVirtualCube(Context context) {
+    public void  testDrillThroughVirtualCube(TestingContext context) {
         Result result = executeQuery(context.createConnection(),
             "select Crossjoin([Customers].[All Customers].[USA].[OR].Children, {[Measures].[Unit Sales]}) ON COLUMNS, "
             + " [Gender].[All Gender].Children ON ROWS"
@@ -1103,7 +1103,7 @@ public class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testBug1438285(Context context) {
+    public void  testBug1438285(TestingContext context) {
         final Dialect dialect = getDialect(context.createConnection());
         if (dialect.getDatabaseProduct() == DatabaseProduct.TERADATA) {
             // On default Teradata express instance there isn't enough spool
@@ -1255,7 +1255,7 @@ public class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testTruncateLevelName(Context context) throws Exception {
+    public void  testTruncateLevelName(TestingContext context) throws Exception {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Education Level2\" foreignKey=\"customer_id\">\n"
@@ -1306,7 +1306,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillThroughExprs(Context context) {
+    public void  testDrillThroughExprs(TestingContext context) {
         Connection connection = context.createConnection();
         assertCanDrillThrough(connection,
             true,
@@ -1368,7 +1368,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillthroughMaxRows(Context context) throws SQLException {
+    public void  testDrillthroughMaxRows(TestingContext context) throws SQLException {
         OlapConnection connection = context.createOlap4jConnection();
         assertMaxRows(connection, "", 29);
         assertMaxRows(connection, "maxrows 1000", 29);
@@ -1402,7 +1402,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillthroughNegativeMaxRowsFails(Context context) throws SQLException {
+    public void  testDrillthroughNegativeMaxRowsFails(TestingContext context) throws SQLException {
         try {
             final ResultSet resultSet = executeStatement(context.createOlap4jConnection(),
                 "DRILLTHROUGH MAXROWS -3\n"
@@ -1418,7 +1418,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillThroughCalculatedMemberMeasure(Context context) {
+    public void  testDrillThroughCalculatedMemberMeasure(TestingContext context) {
         try {
             final ResultSet resultSet = executeStatement(context.createOlap4jConnection(),
                 "DRILLTHROUGH\n"
@@ -1436,7 +1436,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillThroughNotDrillableFails(Context context) {
+    public void  testDrillThroughNotDrillableFails(TestingContext context) {
         try {
             final ResultSet resultSet = executeStatement(context.createOlap4jConnection(),
                 "DRILLTHROUGH\n"
@@ -1488,7 +1488,7 @@ public class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillThroughOneAxis(Context context) {
+    public void  testDrillThroughOneAxis(TestingContext context) {
         Result result = executeQuery(context.createConnection(),
             "SELECT [Measures].[Unit Sales] on 0\n"
             + "from Sales");
@@ -1505,7 +1505,7 @@ public class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillThroughCalcMemberInSlicer(Context context) {
+    public void  testDrillThroughCalcMemberInSlicer(TestingContext context) {
         Result result = executeQuery(context.createConnection(),
             "WITH MEMBER [Product].[Aggregate Food Drink] AS \n"
             + " Aggregate({[Product].[Food], [Product].[Drink]})\n"
@@ -1524,7 +1524,7 @@ public class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillThroughMultiPositionCompoundSlicer(Context context) {
+    public void  testDrillThroughMultiPositionCompoundSlicer(TestingContext context) {
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         // A query with a simple multi-position compound slicer
         Result result =
@@ -1808,7 +1808,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillthroughDisable(Context context) {
+    public void  testDrillthroughDisable(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableDrillThrough,
             true);
@@ -1848,7 +1848,7 @@ public class DrillThroughTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testColumnAliasQuotedInOrderBy(Context context) throws Exception {
+    public void  testColumnAliasQuotedInOrderBy(TestingContext context) throws Exception {
         Result result = executeQuery(context.createConnection(),
             "WITH\n"
             + "SET [*NATIVE_CJ_SET] AS 'FILTER([*BASE_MEMBERS__Customers_], NOT ISEMPTY ([Measures].[Unit Sales]))'\n"
@@ -1939,7 +1939,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillthroughVirtualCubeWithReturnClause(Context context)
+    public void  testDrillthroughVirtualCubeWithReturnClause(TestingContext context)
         throws SQLException
     {
         // Validates that a RETURN clause including a mix of applicable
@@ -2001,7 +2001,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillThroughWithReturnClause_ReturnsNameColumn(Context context)
+    public void  testDrillThroughWithReturnClause_ReturnsNameColumn(TestingContext context)
         throws SQLException
     {
         ResultSet rs = null;
@@ -2055,7 +2055,7 @@ public class DrillThroughTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void  testDrillThroughWithReturnClause_ReturnsNoNameColumn(Context context)
+    public void  testDrillThroughWithReturnClause_ReturnsNoNameColumn(TestingContext context)
             throws SQLException
     {
         ResultSet rs = null;
@@ -2096,7 +2096,7 @@ public class DrillThroughTest {
     */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMultipleFilterByLevel_NoDuplicatedColumnsInResult(Context context)
+    public void testMultipleFilterByLevel_NoDuplicatedColumnsInResult(TestingContext context)
         throws SQLException
     {
         String[] expectedColumnValues = {"Gourmet Supermarket",

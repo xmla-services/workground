@@ -45,7 +45,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.olap4j.*;
 import org.olap4j.impl.CoordinateIterator;
 import org.olap4j.layout.TraditionalCellSetFormatter;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -193,7 +193,7 @@ public class TestUtil {
 	 * @param queryString Query string
 	 * @param pattern     Pattern which exception must match
 	 */
-	public static void assertQueryThrows(Context context, String queryString, String pattern) {
+	public static void assertQueryThrows(TestingContext context, String queryString, String pattern) {
 		Throwable throwable;
 		try {
 			Result result = executeQuery(context.createConnection(), queryString);
@@ -233,7 +233,7 @@ public class TestUtil {
 	 * particular pattern. The error might occur during parsing, or might be
 	 * contained within the cell value.
 	 */
-	public static void assertExprThrows(Context context, String cubeName, String expression, String pattern) {
+	public static void assertExprThrows(TestingContext context, String cubeName, String expression, String pattern) {
 		Throwable throwable = null;
 		try {
 			if (cubeName.indexOf(' ') >= 0) {
@@ -267,7 +267,7 @@ public class TestUtil {
 	 * particular pattern. The error might occur during parsing, or might be
 	 * contained within the cell value.
 	 */
-	public static void assertExprThrows(Context context, String expression, String pattern) {
+	public static void assertExprThrows(TestingContext context, String expression, String pattern) {
 		String cubeName = getDefaultCubeName();
 		assertExprThrows(context, cubeName, expression, pattern);
 	}
@@ -481,7 +481,7 @@ public class TestUtil {
 	 * Returns a connection to the FoodMart database with a dynamic schema processor and disables use of RolapSchema
 	 * Pool.
 	 */
-	public static void withSchemaProcessor(Context context,
+	public static void withSchemaProcessor(TestingContext context,
 			Class<? extends DynamicSchemaProcessor> dynProcClass ) {
 		final Util.PropertyList properties = getConnectionProperties().clone();
 		context.setProperty(RolapConnectionProperties.DynamicSchemaProcessor.name(), dynProcClass.getName());
@@ -534,7 +534,7 @@ public class TestUtil {
 	 *
 	 * @return Warnings encountered while loading schema
 	 */
-	public static List<Exception> getSchemaWarnings(Context context) {
+	public static List<Exception> getSchemaWarnings(TestingContext context) {
 		//final Util.PropertyList propertyList =
 		//		getConnectionProperties().clone();
 		//propertyList.put(
@@ -1194,7 +1194,7 @@ public class TestUtil {
 
 		static String rawSchema = null;
 
-		public static String getRawSchema(Context context) {
+		public static String getRawSchema(TestingContext context) {
 			if(rawSchema == null) {
 				try {
 					OlapConnection connection = context.createOlap4jConnection();
@@ -1212,11 +1212,11 @@ public class TestUtil {
 			return rawSchema;
 		}
 
-		public static void withSchema(Context context, String schema) {
+		public static void withSchema(TestingContext context, String schema) {
 			context.setProperty(RolapConnectionProperties.CatalogContent.name(), schema);
 		}
 
-		public static void withRole(Context context, String roleName) {
+		public static void withRole(TestingContext context, String roleName) {
 			context.setProperty(RolapConnectionProperties.Role.name(), roleName);
 		}
 
@@ -1837,7 +1837,7 @@ public class TestUtil {
 		return genderDimension.getHierarchy().getAllMember();
 	}
 
-	public static CellSet executeOlap4jXmlaQuery(Context context, String queryString )
+	public static CellSet executeOlap4jXmlaQuery(TestingContext context, String queryString )
 			throws SQLException {
 		/*
 		Connection connection = context.createConnection();

@@ -9,15 +9,12 @@
 
 package org.eclipse.daanse.db.dialect.db.interbase;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the Interbase database.
@@ -26,23 +23,15 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @since Nov 23, 2008
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='INTERBASE'",
-		"database.product:String='INTERBASE'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+        "database.product:String='INTERBASE'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class InterbaseDialect extends JdbcDialectImpl {
 
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            InterbaseDialect.class);
+    private static final String SUPPORTED_PRODUCT_NAME = "INTERBASE";
 
-    public InterbaseDialect() {
-    }
-    /**
-     * Creates an InterbaseDialect.
-     *
-     * @param connection Connection
-     */
-    public InterbaseDialect(Connection connection) throws SQLException {
-        super(connection);
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
     public boolean allowsAs() {

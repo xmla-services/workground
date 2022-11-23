@@ -25,7 +25,7 @@ import java.util.Map.Entry;
 import javax.sql.DataSource;
 
 import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.DataLoader;
 import org.opencube.junit5.dbprovider.DatabaseProvider;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
@@ -69,7 +69,7 @@ public class TestTest {
 
 	@ParameterizedTest
 	@ContextSource(database = ExampleDatabaseProvider.class, dataloader = ExampleDataLoader.class,propertyUpdater = AppandFoodMartCatalogAsFile.class)
-	protected void runTest(Context context) {
+	protected void runTest(TestingContext context) {
 		System.out.println(context);
 	}
 }

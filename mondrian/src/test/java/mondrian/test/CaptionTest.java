@@ -13,7 +13,7 @@ import mondrian.olap.*;
 import mondrian.spi.DynamicSchemaProcessor;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -35,7 +35,7 @@ public class CaptionTest{
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMeasureCaption(Context context) {
+    public void testMeasureCaption(TestingContext context) {
         withSchemaProcessor(context, MyFoodmart.class);
         final Connection monConnection =
                 context.createConnection();
@@ -56,7 +56,7 @@ public class CaptionTest{
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDimCaption(Context context) {
+    public void testDimCaption(TestingContext context) {
         withSchemaProcessor(context, MyFoodmart.class);
         final Connection monConnection =
                 context.createConnection();
@@ -78,7 +78,7 @@ public class CaptionTest{
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDimCaptionShared(Context context) {
+    public void testDimCaptionShared(TestingContext context) {
         String mdxQuery =
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
                         + "{[Store Size in SQFT].[All Store Size in SQFTs]} ON ROWS "
@@ -107,7 +107,7 @@ public class CaptionTest{
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testLevelCaptionExpression(Context context) {
+    public void testLevelCaptionExpression(TestingContext context) {
 
         switch (getDialect(context.createConnection()).getDatabaseProduct()) {
             case ACCESS:

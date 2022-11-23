@@ -23,7 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.impl.Olap4jUtil;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -68,7 +68,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
         propSaver.reset();
     }
 
-    private void pripareContext(Context context) {
+    private void pripareContext(TestingContext context) {
         // This test warns of missing sql patterns for
         //
         // ACCESS
@@ -89,7 +89,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGroupingSetsWithAggregateOverDefaultMember(Context context) {
+    public void testGroupingSetsWithAggregateOverDefaultMember(TestingContext context) {
         pripareContext(context);
         // testcase for MONDRIAN-705
         Connection connection = context.createConnection();
@@ -118,7 +118,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGroupingSetForSingleColumnConstraint(Context context) {
+    public void testGroupingSetForSingleColumnConstraint(TestingContext context) {
         pripareContext(context);
         propSaver.set(prop.DisableCaching, false);
         Connection connection = context.createConnection();
@@ -203,7 +203,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
     }
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNotUsingGroupingSetWhenGroupUsesDifferentAggregateTable(Context context) {
+    public void testNotUsingGroupingSetWhenGroupUsesDifferentAggregateTable(TestingContext context) {
         pripareContext(context);
         if (!(prop.UseAggregates.get()
               && prop.ReadAggregates.get()))
@@ -249,7 +249,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNotUsingGroupingSet(Context context) {
+    public void testNotUsingGroupingSet(TestingContext context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
@@ -299,7 +299,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGroupingSetForMultipleMeasureAndSingleConstraint(Context context) {
+    public void testGroupingSetForMultipleMeasureAndSingleConstraint(TestingContext context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
@@ -366,7 +366,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGroupingSetForASummaryCanBeGroupedWith2DetailBatch(Context context) {
+    public void testGroupingSetForASummaryCanBeGroupedWith2DetailBatch(TestingContext context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
@@ -439,7 +439,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGroupingSetForMultipleColumnConstraint(Context context) {
+    public void testGroupingSetForMultipleColumnConstraint(TestingContext context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
@@ -521,7 +521,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void
-        testGroupingSetForMultipleColumnConstraintAndCompoundConstraint(Context context)
+        testGroupingSetForMultipleColumnConstraintAndCompoundConstraint(TestingContext context)
     {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
@@ -586,7 +586,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBug2004202(Context context) {
+    public void testBug2004202(TestingContext context) {
         pripareContext(context);
         assertQueryReturns(context.createConnection(),
             "with member store.allbutwallawalla as\n"

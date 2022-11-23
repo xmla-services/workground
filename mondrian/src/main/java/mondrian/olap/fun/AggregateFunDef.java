@@ -175,11 +175,14 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             // Similar optimization can also be done for list of members.
 
             boolean unlimitedIn  = false;
-            if (evaluator instanceof RolapEvaluator) {
-                unlimitedIn =
-                    ((RolapEvaluator) evaluator).getDialect()
-                        .supportsUnlimitedValueList();
-            }
+            
+            //TODO: reactivate
+            //TODO: Functions should know their context , (dialext and configProps) 
+//            if (evaluator instanceof RolapEvaluator) {
+//                unlimitedIn =
+//                    ((RolapEvaluator) evaluator).getDialect()
+//                        .supportsUnlimitedValueList();
+//            }
             boolean tupleSizeWithinInListSize =
                 tupleList.size()
                     <= MondrianProperties.instance().MaxConstraints.get();

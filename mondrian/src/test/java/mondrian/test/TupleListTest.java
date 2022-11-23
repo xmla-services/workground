@@ -18,7 +18,7 @@ import mondrian.server.Locus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -42,7 +42,7 @@ public class TupleListTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUnaryTupleList(Context context) {
+    public void testUnaryTupleList(TestingContext context) {
         // empty list
         final TupleList list0 = new UnaryTupleList();
         assertTrue(list0.isEmpty());
@@ -81,7 +81,7 @@ public class TupleListTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testArrayTupleList(Context context) {
+    public void testArrayTupleList(TestingContext context) {
         Connection connection = context.createConnection();
         final Member genderFMember = xxx(connection, "[Gender].[F]");
         final Member genderMMember = xxx(connection,"[Gender].[M]");
@@ -164,7 +164,7 @@ public class TupleListTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDelegatingTupleList(Context context) {
+    public void testDelegatingTupleList(TestingContext context) {
         Connection connection = context.createConnection();
         final Member genderFMember = xxx(connection, "[Gender].[F]");
         final Member genderMMember = xxx(connection, "[Gender].[M]");
@@ -191,7 +191,7 @@ public class TupleListTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDelegatingTupleListSlice(Context context) {
+    public void testDelegatingTupleListSlice(TestingContext context) {
         // Functional test.
         Connection connection = context.createConnection();
         assertQueryReturns(connection,

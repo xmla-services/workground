@@ -27,7 +27,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -51,7 +51,7 @@ public class NonEmptyPropertyForAllAxisTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonEmptyForAllAxesWithPropertySet(Context context) {
+    public void testNonEmptyForAllAxesWithPropertySet(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, true);
         final String MDX_QUERY =
@@ -103,7 +103,7 @@ public class NonEmptyPropertyForAllAxisTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonEmptyForAllAxesWithOutPropertySet(Context context) {
+    public void testNonEmptyForAllAxesWithOutPropertySet(TestingContext context) {
         final String MDX_QUERY =
             "SELECT {customers.USA.CA.[Santa Cruz].[Brian Merlo]} on 0, "
             + "[product].[product category].members on 1 FROM [sales]";
@@ -228,7 +228,7 @@ public class NonEmptyPropertyForAllAxisTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSlicerAxisDoesNotGetNonEmptyApplied(Context context) {
+    public void testSlicerAxisDoesNotGetNonEmptyApplied(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, true);
         String mdxQuery = "select from [Sales]\n"

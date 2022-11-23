@@ -22,6 +22,8 @@ import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
 import mondrian.server.*;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.engine.api.Context;
+
 import mondrian.util.ClassResolver;
 
 import org.apache.logging.log4j.Logger;
@@ -299,12 +301,12 @@ public class RolapUtil {
      * @return ResultSet
      */
     public static SqlStatement executeQuery(
-        DataSource dataSource,
+        Context context,
         String sql,
         Locus locus)
     {
         return executeQuery(
-            dataSource, sql, null, 0, 0, locus, -1, -1,
+                context, sql, null, 0, 0, locus, -1, -1,
             getDefaultCallback(locus));
     }
 
@@ -333,7 +335,7 @@ public class RolapUtil {
      * @return ResultSet
      */
     public static SqlStatement executeQuery(
-        DataSource dataSource,
+        Context context,
         String sql,
         List<BestFitColumnType> types,
         int maxRowCount,
@@ -345,7 +347,7 @@ public class RolapUtil {
     {
         SqlStatement stmt =
             new SqlStatement(
-                dataSource, sql, types, maxRowCount, firstRowOrdinal, locus,
+                    context, sql, types, maxRowCount, firstRowOrdinal, locus,
                 resultSetType, resultSetConcurrency,
                 callback == null
                     ? getDefaultCallback(locus)

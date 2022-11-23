@@ -17,6 +17,8 @@ import mondrian.mdx.ResolvedFunCall;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.engine.api.Context;
+
 /**
  * Definition of an MDX function. See also {@link FunTable}.
  *
@@ -79,6 +81,14 @@ public interface FunDef {
      * an object which implements {@link mondrian.calc.IntegerCalc}.
      */
     Calc compileCall(ResolvedFunCall call, ExpCompiler compiler);
+    
+    /**
+     * Gives access to the Context, that holds Dialect and Context related Properties.
+     * @param context
+     */
+    default void init(Context context) {
+        //nothing
+    }
 
 }
 

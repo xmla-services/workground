@@ -9,41 +9,29 @@
 
 package org.eclipse.daanse.db.dialect.db.sqlstream;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.eclipse.daanse.db.dialect.db.luciddb.LucidDbDialect;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+
 /**
- * Implementation of {@link Dialect} for the SQLstream streaming
- * SQL system.
+ * Implementation of {@link Dialect} for the SQLstream streaming SQL system.
  *
  * @author jhyde
  * @since Mar 23, 2009
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='SQLSTREAM'",
-		"database.product:String='SQLSTREAM'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+        "database.product:String='SQLSTREAM'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class SqlStreamDialect extends LucidDbDialect {
 
-    public SqlStreamDialect() {
-    }
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            SqlStreamDialect.class);
+    private static final String SUPPORTED_PRODUCT_NAME = "SQLSTREAM";
 
-    /**
-     * Creates a SqlStreamDialect.
-     *
-     * @param connection Connection
-     */
-    public SqlStreamDialect(Connection connection) throws SQLException {
-        super(connection);
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 }
 

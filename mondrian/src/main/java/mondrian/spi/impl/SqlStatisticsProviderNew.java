@@ -14,6 +14,7 @@ import mondrian.rolap.SqlStatement;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.engine.api.Context;
 
 import java.sql.*;
 import java.util.Arrays;
@@ -26,19 +27,18 @@ import javax.sql.DataSource;
 //TODO remove this class when new SqlStatisticsProvider will ready
 public class SqlStatisticsProviderNew  {
     public long getTableCardinality(
-        Dialect dialect,
-        DataSource dataSource,
+        Context context,
         String catalog,
         String schema,
         String table,
         Execution execution)
     {
         StringBuilder buf = new StringBuilder("select count(*) from ");
-        dialect.quoteIdentifier(buf, catalog, schema, table);
+        context.getDialect().quoteIdentifier(buf, catalog, schema, table);
         final String sql = buf.toString();
         SqlStatement stmt =
             RolapUtil.executeQuery(
-                dataSource,
+                context,
                 sql,
                 new Locus(
                     execution,
@@ -60,11 +60,11 @@ public class SqlStatisticsProviderNew  {
     }
 
     public long getQueryCardinality(
-        Dialect dialect,
-        DataSource dataSource,
+        Context context,
         String sql,
         Execution execution)
     {
+        Dialect dialect=context.getDialect();
         final StringBuilder buf = new StringBuilder();
         buf.append(
             "select count(*) from (").append(sql).append(")");
@@ -79,7 +79,7 @@ public class SqlStatisticsProviderNew  {
         final String countSql = buf.toString();
         SqlStatement stmt =
             RolapUtil.executeQuery(
-                dataSource,
+                context,
                 countSql,
                 new Locus(
                     execution,
@@ -100,8 +100,7 @@ public class SqlStatisticsProviderNew  {
     }
 
     public long getColumnCardinality(
-        Dialect dialect,
-        DataSource dataSource,
+       Context context,
         String catalog,
         String schema,
         String table,
@@ -110,13 +109,13 @@ public class SqlStatisticsProviderNew  {
     {
         final String sql =
             generateColumnCardinalitySql(
-                dialect, schema, table, column);
+                    context.getDialect(), schema, table, column);
         if (sql == null) {
             return -1;
         }
         SqlStatement stmt =
             RolapUtil.executeQuery(
-                dataSource,
+                context,
                 sql,
                 new Locus(
                     execution,

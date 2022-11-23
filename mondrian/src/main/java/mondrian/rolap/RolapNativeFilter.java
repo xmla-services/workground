@@ -25,6 +25,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.engine.api.Context;
+
 /**
  * Computes a Filter(set, condition) in SQL.
  *
@@ -87,13 +89,13 @@ public class RolapNativeFilter extends RolapNativeSet {
       }
     }
 
-    public boolean isSuported( DataSource ds ) {
+    public boolean isSuported( Context context ) {
       Evaluator evaluator = this.getEvaluator();
-      SqlQuery testQuery = SqlQuery.newQuery( ds, "testQuery" );
+      SqlQuery testQuery = SqlQuery.newQuery( context, "testQuery" );
       SqlTupleReader sqlTupleReader = new SqlTupleReader( this );
 
       Role role = evaluator.getSchemaReader().getRole();
-      RolapSchemaReader reader = new RolapSchemaReader( role, evaluator.getSchemaReader().getSchema() );
+      RolapSchemaReader reader = new RolapSchemaReader( context,role, evaluator.getSchemaReader().getSchema() );
 
       for ( CrossJoinArg arg : args ) {
         addLevel( sqlTupleReader, reader, arg );
@@ -181,13 +183,12 @@ public class RolapNativeFilter extends RolapNativeSet {
 
     // extract "order by" expression
     SchemaReader schemaReader = evaluator.getSchemaReader();
-    DataSource ds = schemaReader.getDataSource();
-
+    Context context=schemaReader.getContext();
     // generate the WHERE condition
     // Need to generate where condition here to determine whether
     // or not the filter condition can be created. The filter
     // condition could change to use an aggregate table later in evaluation
-    SqlQuery sqlQuery = SqlQuery.newQuery( ds, "NativeFilter" );
+    SqlQuery sqlQuery = SqlQuery.newQuery( context, "NativeFilter" );
     RolapNativeSql sql = new RolapNativeSql( sqlQuery, null, evaluator, cjArgs[0].getLevel() );
     final Exp filterExpr = args[1];
     String filterExprStr = sql.generateFilterCondition( filterExpr );
@@ -231,7 +232,7 @@ public class RolapNativeFilter extends RolapNativeSet {
 
       FilterConstraint constraint = new FilterConstraint( combinedArgs, evaluator, filterExpr );
 
-      if ( !constraint.isSuported( ds ) ) {
+      if ( !constraint.isSuported( context ) ) {
         return null;
       }
 

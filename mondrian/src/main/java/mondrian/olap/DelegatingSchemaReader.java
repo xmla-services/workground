@@ -21,6 +21,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.engine.api.Context;
+
 /**
  * <code>DelegatingSchemaReader</code> implements {@link SchemaReader} by
  * delegating all methods to an underlying {@link SchemaReader}.
@@ -306,6 +308,10 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
         Evaluator evaluator)
     {
         return schemaReader.getMemberChildrenWithDetails(member, evaluator);
+    }
+    @Override
+    public Context getContext() {
+        return schemaReader.getContext();
     }
 }
 

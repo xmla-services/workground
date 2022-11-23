@@ -18,10 +18,13 @@
  **********************************************************************/
 package org.eclipse.daanse.db.dialect.resolver.basic;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -31,13 +34,15 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of {@link DialectResolver} that:<br>
  *
  * - does not cache <br>
  * - returns Dialect with best ranking - calculated using
- * {@link org.eclipse.daanse.db.dialect.api.Dialect#isCompatible(DataSource)}.
+ * {@link org.eclipse.daanse.db.dialect.api.Dialect#tryInitalisation(DataSource)}.
  *
  * @author stbischof
  *
@@ -45,7 +50,8 @@ import org.osgi.service.component.annotations.Reference;
 @Component(service = DialectResolver.class)
 public class UncachedBestCompatibleDialectResolver implements DialectResolver {
 
-    List<Dialect> dialects = new ArrayList<>();
+    private static final Logger LOGGER = LoggerFactory.getLogger(UncachedBestCompatibleDialectResolver.class);
+    private List<Dialect> dialects = new ArrayList<>();
 
     @Reference(service = Dialect.class)
     public void bindDialect(Dialect dialect) {
@@ -62,14 +68,22 @@ public class UncachedBestCompatibleDialectResolver implements DialectResolver {
     }
 
     @Override
-    public Dialect resolve(DataSource dataSource) {
+    public Optional<Dialect> resolve(DataSource dataSource) {
 
-        return dialects.parallelStream().map(calcCompatibility(dataSource)).filter(compatibleDialect()).findFirst()
-                .map(Entry::getKey).orElse(null);
+        try (Connection c = dataSource.getConnection()) {
+            return dialects.parallelStream()
+                    .map(calcCompatibility(c))
+                    .filter(compatibleDialect())
+                    .findFirst()
+                    .map(Entry::getKey);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
     }
 
-    private Function<? super Dialect, ? extends Entry<Dialect, Boolean>> calcCompatibility(DataSource dataSource) {
-        return dialect ->  new AbstractMap.SimpleEntry(dialect, dialect.isCompatible(dataSource));
+    private Function<? super Dialect, ? extends Entry<Dialect, Boolean>> calcCompatibility(Connection c) {
+        return dialect -> new AbstractMap.SimpleEntry(dialect, dialect.initialize(c));
     }
 
     private Predicate<Entry<Dialect, Boolean>> compatibleDialect() {

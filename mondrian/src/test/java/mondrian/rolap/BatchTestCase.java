@@ -26,7 +26,7 @@ import mondrian.util.Pair;
 import org.apache.logging.log4j.LogManager;
 import org.eigenbase.util.property.IntegerProperty;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -778,7 +778,7 @@ public class BatchTestCase{
      * @param rowCount number of rows returned
      * @param mdx      query
      */
-    protected void checkNotNative(Context context, int rowCount, String mdx) {
+    protected void checkNotNative(TestingContext context, int rowCount, String mdx) {
         checkNotNative(context, rowCount, mdx, null);
     }
 
@@ -789,7 +789,7 @@ public class BatchTestCase{
      * @param mdx            Query
      * @param expectedResult Expected result string
      */
-    protected void checkNotNative(Context context,
+    protected void checkNotNative(TestingContext context,
         int rowCount,
         String mdx,
         String expectedResult)
@@ -847,7 +847,7 @@ public class BatchTestCase{
      * @param rowCount    Number of rows returned
      * @param mdx         Query
      */
-    protected void checkNative(Context context,
+    protected void checkNative(TestingContext context,
         int resultLimit, int rowCount, String mdx)
     {
         checkNative(context, resultLimit, rowCount, mdx, null, false);
@@ -875,7 +875,7 @@ public class BatchTestCase{
      * @param freshConnection Whether fresh connection is required
      */
     protected void checkNative(
-        Context context,
+        TestingContext context,
         int resultLimit,
         int rowCount,
         String mdx,
@@ -985,11 +985,11 @@ public class BatchTestCase{
     /**
      * Convenience method for debugging; please do not delete.
      */
-    public void assertNotNative(Context context, String mdx) {
+    public void assertNotNative(TestingContext context, String mdx) {
         new BatchTestCase().checkNotNative(context, mdx, null);
     }
 
-    public static void checkNotNative(Context context, String mdx, Result expectedResult) {
+    public static void checkNotNative(TestingContext context, String mdx, Result expectedResult) {
         BatchTestCase test = new BatchTestCase();
         test.checkNotNative(context,
                 getRowCount(expectedResult),
@@ -997,7 +997,7 @@ public class BatchTestCase{
                 TestUtil.toString(expectedResult));
     }
 
-    public static void checkNative(Context context, String mdx, Result expectedResult) {
+    public static void checkNative(TestingContext context, String mdx, Result expectedResult) {
         BatchTestCase test = new BatchTestCase();
         test.checkNative(context,
                 0,
@@ -1009,7 +1009,7 @@ public class BatchTestCase{
     /**
      * Convenience method for debugging; please do not delete.
      */
-    public void assertNative(Context context, String mdx) {
+    public void assertNative(TestingContext context, String mdx) {
         new BatchTestCase().checkNative(context,0, 0, mdx, null, true);
     }
 

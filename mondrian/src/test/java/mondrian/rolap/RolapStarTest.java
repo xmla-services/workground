@@ -16,7 +16,7 @@ import mondrian.rolap.RolapStar.Column;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -73,7 +73,7 @@ public class RolapStarTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCloneRelationWithFilteredTable(Context context) {
+    public void testCloneRelationWithFilteredTable(TestingContext context) {
       RolapStarForTests rs = getStar(context.createConnection(), "sales");
       MondrianDef.Table original = new MondrianDef.Table();
       original.name = "TestTable";

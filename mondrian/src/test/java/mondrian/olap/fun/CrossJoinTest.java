@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -158,7 +158,7 @@ private PropertySaver5 propSaver;
   // in CrossJoinFunDef$CrossJoinIterCalc$1$1.forward()
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testCrossJoinIterCalc_IterationCancellationOnForward(Context foodMartContext) {
+  public void testCrossJoinIterCalc_IterationCancellationOnForward(TestingContext foodMartContext) {
     propSaver.set( propSaver.properties.CheckCancelOrTimeoutInterval, 1 );
     // Get product members as TupleList
    Connection con= foodMartContext.createConnection();
@@ -362,13 +362,13 @@ private PropertySaver5 propSaver;
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-public void testResultLimitWithinCrossjoin_1(Context foodMartContext) {
+public void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
 	}
 
   
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testResultLimitWithinCrossjoin(Context foodMartContext) {
+  public void testResultLimitWithinCrossjoin(TestingContext foodMartContext) {
     propSaver.set( MondrianProperties.instance().ResultLimit, 1000 );
    Connection connection= foodMartContext.createConnection();
     TestUtil.assertAxisThrows(connection, "Hierarchize(Crossjoin(Union({[Gender].CurrentMember}, [Gender].Children), "

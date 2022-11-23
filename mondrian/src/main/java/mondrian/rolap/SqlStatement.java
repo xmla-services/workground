@@ -9,24 +9,6 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.olap.Util.Functor1;
-import mondrian.resource.MondrianResource;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.server.monitor.SqlStatementEndEvent;
-import mondrian.server.monitor.SqlStatementEvent;
-import mondrian.server.monitor.SqlStatementEvent.Purpose;
-import mondrian.server.monitor.SqlStatementExecuteEvent;
-import mondrian.server.monitor.SqlStatementStartEvent;
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import mondrian.spi.DialectManager;
-import mondrian.util.Counters;
-import mondrian.util.DelegatingInvocationHandler;
-
-import javax.sql.DataSource;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 import java.math.BigDecimal;
@@ -39,7 +21,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
+
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.engine.api.Context;
+
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.olap.Util.Functor1;
+import mondrian.resource.MondrianResource;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.server.monitor.SqlStatementEndEvent;
+import mondrian.server.monitor.SqlStatementEvent;
+import mondrian.server.monitor.SqlStatementEvent.Purpose;
+import mondrian.server.monitor.SqlStatementExecuteEvent;
+import mondrian.server.monitor.SqlStatementStartEvent;
+import mondrian.util.Counters;
+import mondrian.util.DelegatingInvocationHandler;
 
 /**
  * SqlStatement contains a SQL statement and associated resources throughout its lifetime.
@@ -77,7 +76,7 @@ public class SqlStatement {
   private static final Semaphore querySemaphore = new Semaphore(
     MondrianProperties.instance().QueryLimit.get(), true );
 
-  private final DataSource dataSource;
+  private final Context context;
   private Connection jdbcConnection;
   private ResultSet resultSet;
   private final String sql;
@@ -109,7 +108,7 @@ public class SqlStatement {
    * @param resultSetConcurrency Result set concurrency
    */
   public SqlStatement(
-    DataSource dataSource,
+    Context context,
     String sql,
     List<BestFitColumnType> types,
     int maxRows,
@@ -120,7 +119,7 @@ public class SqlStatement {
     Util.Functor1<Void, Statement> callback ) {
     this.callback = callback;
     this.id = ID_GENERATOR.getAndIncrement();
-    this.dataSource = dataSource;
+    this.context = context;
     this.sql = sql;
     this.types = types;
     this.maxRows = maxRows;
@@ -145,7 +144,7 @@ public class SqlStatement {
       // Check execution state
       locus.execution.checkCancelOrTimeout();
 
-      this.jdbcConnection = dataSource.getConnection();
+      this.jdbcConnection = context.getDataSource().getConnection();
       querySemaphore.acquire();
       haveSemaphore = true;
       // Trace start of execution.
@@ -482,17 +481,11 @@ public class SqlStatement {
     if ( schema != null && schema.getDialect() != null ) {
       dialect = schema.getDialect();
     } else {
-      dialect = createDialect();
+      dialect = context.getDialect();
     }
     return dialect;
   }
 
-  /**
-   * For tests
-   */
-  public Dialect createDialect() {
-    return DialectManager.createDialect( dataSource, jdbcConnection );
-  }
 
   public List<Accessor> getAccessors() {
     return accessors;

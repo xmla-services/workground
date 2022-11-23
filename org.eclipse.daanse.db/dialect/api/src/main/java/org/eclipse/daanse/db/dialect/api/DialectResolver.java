@@ -14,10 +14,12 @@
 **********************************************************************/
 package org.eclipse.daanse.db.dialect.api;
 
+import java.util.Optional;
+
 import javax.sql.DataSource;
 
 /**
- * A {@link DialectResolver} gives access to Dialects that are compatible with a
+ * A {@link DialectResolver} gives access to Dialect that is compatible with a
  * {@link DataSource}
  * 
  * @author stbischof
@@ -27,14 +29,11 @@ public interface DialectResolver {
 
     /**
      * Returns a dialect that could operate on the given DataSource. The given
-     * dialect MUST be compatible. Must return value >=0 on
-     * {@link org.eclipse.daanse.db.dialect.api.Dialect#isCompatible(DataSource)}.
-     * 
-     * The implementation COULD choose others than the best Dialect.
+     * dialect MUST be FULLY compatible.
      * 
      * @param dataSource
-     * @returns a Dialect
+     * @returns a Optional of Dialect
      */
-    Dialect resolve(DataSource dataSource);
+    Optional<Dialect> resolve(DataSource dataSource);
 
 }

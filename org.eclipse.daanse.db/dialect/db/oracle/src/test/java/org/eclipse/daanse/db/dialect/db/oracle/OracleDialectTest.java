@@ -23,39 +23,40 @@ import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class OracleDialectTest{
-  private Connection connection = mock( Connection.class );
-  private DatabaseMetaData metaData = mock( DatabaseMetaData.class );
-  Statement statmentMock = mock( Statement.class );
-  private OracleDialect dialect;
+public class OracleDialectTest {
+    private Connection connection = mock(Connection.class);
+    private DatabaseMetaData metaData = mock(DatabaseMetaData.class);
+    Statement statmentMock = mock(Statement.class);
+    private OracleDialect dialect;
 
-  @BeforeEach
-  public void setUp() throws Exception {
-    when( metaData.getDatabaseProductName() ).thenReturn( DatabaseProduct.ORACLE.name() );
-    when( connection.getMetaData() ).thenReturn( metaData );
-    dialect = new OracleDialect( connection );
-  }
+    @BeforeEach
+    public void setUp() throws Exception {
+        when(metaData.getDatabaseProductName()).thenReturn(DatabaseProduct.ORACLE.name());
+        when(connection.getMetaData()).thenReturn(metaData);
+        dialect = new OracleDialect();
+        dialect.initialize(connection);
+    }
 
-  @Test
-  public void testAllowsRegularExpressionInWhereClause() {
-    assertTrue( dialect.allowsRegularExpressionInWhereClause() );
-  }
+    @Test
+    public void testAllowsRegularExpressionInWhereClause() {
+        assertTrue(dialect.allowsRegularExpressionInWhereClause());
+    }
 
-  @Test
-  public void testGenerateRegularExpression_InvalidRegex() throws Exception {
-    assertNull( dialect.generateRegularExpression( "table.column", "(a" ), "Invalid regex should be ignored" );
-  }
+    @Test
+    public void testGenerateRegularExpression_InvalidRegex() throws Exception {
+        assertNull(dialect.generateRegularExpression("table.column", "(a"), "Invalid regex should be ignored");
+    }
 
-  @Test
-  public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
-    String sql = dialect.generateRegularExpression( "table.column", "(?i)|(?u).*a.*" );
-    assertEquals( "table.column IS NOT NULL AND REGEXP_LIKE(table.column, '.*a.*', 'i')", sql );
-  }
+    @Test
+    public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
+        String sql = dialect.generateRegularExpression("table.column", "(?i)|(?u).*a.*");
+        assertEquals("table.column IS NOT NULL AND REGEXP_LIKE(table.column, '.*a.*', 'i')", sql);
+    }
 
-  @Test
-  public void testGenerateRegularExpression_CaseSensitive() throws Exception {
-    String sql = dialect.generateRegularExpression( "table.column", ".*a.*" );
-    assertEquals( "table.column IS NOT NULL AND REGEXP_LIKE(table.column, '.*a.*', '')", sql );
-  }
+    @Test
+    public void testGenerateRegularExpression_CaseSensitive() throws Exception {
+        String sql = dialect.generateRegularExpression("table.column", ".*a.*");
+        assertEquals("table.column IS NOT NULL AND REGEXP_LIKE(table.column, '.*a.*', '')", sql);
+    }
 }
 //End OracleDialectTest.java

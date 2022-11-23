@@ -16,7 +16,7 @@ package mondrian.olap.fun;
 import mondrian.olap.Connection;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -33,7 +33,7 @@ public class SetFunDefTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSetWithMembersFromDifferentHierarchies(Context context) {
+    public void testSetWithMembersFromDifferentHierarchies(TestingContext context) {
         assertQueryFailsInSetValidation(context.createConnection(),
             "with member store.x as "
             + "'{[Gender].[M],[Store].[USA].[CA]}' "
@@ -42,7 +42,7 @@ public class SetFunDefTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSetWith2TuplesWithDifferentHierarchies(Context context) {
+    public void testSetWith2TuplesWithDifferentHierarchies(TestingContext context) {
         assertQueryFailsInSetValidation(context.createConnection(),
             "with member store.x as '{([Gender].[M],[Store].[All Stores].[USA].[CA]),"
             + "([Store].[USA].[OR],[Gender].[F])}'\n"

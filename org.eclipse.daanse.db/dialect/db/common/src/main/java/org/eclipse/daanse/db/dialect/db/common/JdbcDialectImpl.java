@@ -10,7 +10,16 @@
 */
 package org.eclipse.daanse.db.dialect.db.common;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.Date;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,8 +30,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
@@ -47,49 +54,49 @@ import org.slf4j.LoggerFactory;
  * @author jhyde
  * @since Oct 10, 2008
  */
-public class JdbcDialectImpl implements Dialect {
+public abstract class JdbcDialectImpl implements Dialect {
     private static Logger LOGGER = LoggerFactory.getLogger(JdbcDialectImpl.class);
 
     /**
      * String used to quote identifiers.
      */
-    private final String quoteIdentifierString;
+    private  String quoteIdentifierString="";
 
     /**
      * Product name per JDBC driver.
      */
-    private final String productName;
+    private String productName="";;
 
     /**
      * Product version per JDBC driver.
      */
-    protected final String productVersion;
+    protected  String productVersion="";
 
     /**
      * Supported result set types.
      */
-    private final Set<List<Integer>> supportedResultSetTypes;
+    private  Set<List<Integer>> supportedResultSetTypes=null;
 
     /**
      * Whether database is read-only
      */
-    private final boolean readOnly;
+    private  boolean readOnly=true;
 
     /**
      * Maximum column name length
      */
-    private final int maxColumnNameLength;
+    private  int maxColumnNameLength=0;
 
     /**
      * Indicates whether the database allows selection of columns
      * not listed in the group by clause.
      */
-    protected boolean permitsSelectNotInGroupBy;
+    protected boolean permitsSelectNotInGroupBy =true;
 
     /**
      * Major database product (or null if product is not a common one)
      */
-    protected final DatabaseProduct databaseProduct;
+    protected DatabaseProduct databaseProduct=null;
 
     /**
      * List of statistics providers.
@@ -135,47 +142,35 @@ public class JdbcDialectImpl implements Dialect {
     private final Pattern flagsPattern = Pattern.compile( flagsRegexp );
 
 
-    /**
-     * Creates a JdbcDialectImpl.
-     *
-     * <p>To prevent connection leaks, this constructor does not hold a
-     * reference to the connection after the call returns. It makes a copy of
-     * everything useful during the call.  Derived classes must do the
-     * same.</p>
-     *
-     * @param connection Connection
-     *
-     * @throws java.sql.SQLException on error
-     */
-    public JdbcDialectImpl(
-        Connection connection)
-        throws SQLException
-    {
-        final DatabaseMetaData metaData = connection.getMetaData();
-        this.quoteIdentifierString = deduceIdentifierQuoteString(metaData);
-        this.productName = deduceProductName(metaData);
-        this.productVersion = deduceProductVersion(metaData);
-        this.supportedResultSetTypes = deduceSupportedResultSetStyles(metaData);
-        this.readOnly = deduceReadOnly(metaData);
-        this.maxColumnNameLength = deduceMaxColumnNameLength(metaData);
-        this.databaseProduct =
-            getProduct(this.productName, this.productVersion);
-        this.permitsSelectNotInGroupBy =
-            deduceSupportsSelectNotInGroupBy(connection);
-        //this.statisticsProviders = computeStatisticsProviders();
-    }
+    @Override
+    public boolean initialize(Connection connection) {
 
-    public JdbcDialectImpl() {
-        quoteIdentifierString = "";
-        productName = "";
-        productVersion = "";
-        supportedResultSetTypes = null;
-        readOnly = true;
-        maxColumnNameLength = 0;
-        databaseProduct = null;
-        permitsSelectNotInGroupBy = true;
-        //statisticsProviders = null;
+        DatabaseMetaData metaData;
+        try {
+            metaData = connection.getMetaData();
+            
+            //init
+            this.quoteIdentifierString = deduceIdentifierQuoteString(metaData);
+            this.productName = deduceProductName(metaData);
+            this.productVersion = deduceProductVersion(metaData);
+            this.supportedResultSetTypes = deduceSupportedResultSetStyles(metaData);
+            this.readOnly = deduceReadOnly(metaData);
+            this.maxColumnNameLength = deduceMaxColumnNameLength(metaData);
+            this.databaseProduct = getProduct(this.productName, this.productVersion);
+            this.permitsSelectNotInGroupBy = deduceSupportsSelectNotInGroupBy(connection);
+       
+            //check
+            return isSupportedProduct(productName, productVersion);
+
+            
+            
+        } catch (SQLException e) {
+            LOGGER.info("initialize failed", e);
+            return false;
+        }
     }
+    protected abstract boolean isSupportedProduct(String productName, String productVersion);
+
 
     @Override
     public DatabaseProduct getDatabaseProduct() {
@@ -1239,10 +1234,7 @@ public class JdbcDialectImpl implements Dialect {
         return false;
     }
 
-    @Override
-    public boolean isCompatible(DataSource dataSource) {
-       throw new UnsupportedOperationException();
-    }
+
 }
 
 // End JdbcDialectImpl.java

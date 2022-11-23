@@ -21,6 +21,8 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.engine.api.Context;
+
 /**
  * Computes a TopCount in SQL.
  *
@@ -210,13 +212,13 @@ public class RolapNativeTopCount extends RolapNativeSet {
 
         // extract "order by" expression
         SchemaReader schemaReader = evaluator.getSchemaReader();
-        DataSource ds = schemaReader.getDataSource();
 
+        Context context=schemaReader.getContext();
         // generate the ORDER BY Clause
         // Need to generate top count order by to determine whether
         // or not it can be created. The top count
         // could change to use an aggregate table later in evaulation
-        SqlQuery sqlQuery = SqlQuery.newQuery(ds, "NativeTopCount");
+        SqlQuery sqlQuery = SqlQuery.newQuery(context, "NativeTopCount");
         RolapNativeSql sql =
             new RolapNativeSql(
                 sqlQuery, null, evaluator, null);

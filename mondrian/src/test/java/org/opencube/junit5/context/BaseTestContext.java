@@ -34,7 +34,7 @@ import mondrian.olap.Util.PropertyList;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.rolap.RolapConnectionProperties;
 
-public class BaseTestContext implements Context {
+public class BaseTestContext implements TestingContext {
 
 	private DataSource dataSource;
 	private Util.PropertyList properties = new Util.PropertyList();

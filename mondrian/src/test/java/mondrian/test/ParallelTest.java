@@ -12,7 +12,7 @@ package mondrian.test;
 import mondrian.olap.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -32,7 +32,7 @@ public class ParallelTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testParallelSchemaFlush(Context context) {
+    public void testParallelSchemaFlush(TestingContext context) {
         // 5 threads, 8 cycles each, flush cache 1/10 of the time
         checkSchemaFlush(context.createConnection(), 5, 8, 10);
     }

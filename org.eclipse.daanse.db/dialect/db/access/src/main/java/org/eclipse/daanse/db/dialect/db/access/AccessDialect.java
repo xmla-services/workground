@@ -8,15 +8,12 @@
 */
 package org.eclipse.daanse.db.dialect.db.access;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.List;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
@@ -30,23 +27,14 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @since Nov 23, 2008
  */
 @ServiceProvider(value = Dialect.class)
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class AccessDialect extends JdbcDialectImpl {
 
-    static final String ACCESS = "ACCESS";
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            AccessDialect.class);
+    private static final String SUPPORTED_PRODUCT_NAME = "ACCESS";
 
-    public AccessDialect() {
-    }
-    /**
-     * Creates an AccessDialect.
-     *
-     * @param connection Connection
-     */
-    public AccessDialect(Connection connection) throws SQLException {
-        super(connection);
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
     public String toUpper(String expr) {
@@ -57,11 +45,7 @@ public class AccessDialect extends JdbcDialectImpl {
         return "IIF(" + cond + "," + thenExpr + "," + elseExpr + ")";
     }
 
-    protected void quoteDateLiteral(
-        StringBuilder buf,
-        String value,
-        Date date)
-    {
+    protected void quoteDateLiteral(StringBuilder buf, String value, Date date) {
         // Access accepts #01/23/2008# but not SQL:2003 format.
         buf.append("#");
         Calendar calendar = Calendar.getInstance();
@@ -75,11 +59,7 @@ public class AccessDialect extends JdbcDialectImpl {
     }
 
     @Override
-    protected String generateOrderByNulls(
-        String expr,
-        boolean ascending,
-        boolean collateNullsLast)
-    {
+    protected String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
         if (collateNullsLast) {
             if (ascending) {
                 return "Iif(" + expr + " IS NULL, 1, 0), " + expr + " ASC";
@@ -103,17 +83,12 @@ public class AccessDialect extends JdbcDialectImpl {
         return false;
     }
 
-    public String generateInline(
-        List<String> columnNames,
-        List<String> columnTypes,
-        List<String[]> valueList)
-    {
+    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         // Fall back to using the FoodMart 'days' table, because
         // Access SQL has no way to generate values not from a table.
-        return generateInlineGeneric(
-            columnNames, columnTypes, valueList,
-            " from `days` where `day` = 1", false);
+        return generateInlineGeneric(columnNames, columnTypes, valueList, " from `days` where `day` = 1", false);
     }
+
 }
 
 // End AccessDialect.java

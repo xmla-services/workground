@@ -20,6 +20,7 @@ import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
 
 import org.apache.logging.log4j.Logger;
+import org.eclipse.daanse.engine.api.Context;
 import org.apache.logging.log4j.LogManager;
 
 import org.eigenbase.util.property.Property;
@@ -48,6 +49,7 @@ public class RolapSchemaReader
     protected final RolapSchema schema;
     private final SqlConstraintFactory sqlConstraintFactory =
         SqlConstraintFactory.instance();
+    private Context context;
     private static final Logger LOGGER =
         LogManager.getLogger(RolapSchemaReader.class);
 
@@ -57,9 +59,11 @@ public class RolapSchemaReader
      * @param role Role for access control, must not be null
      * @param schema Schema
      */
-    RolapSchemaReader(Role role, RolapSchema schema) {
+    RolapSchemaReader(Context context, Role role, RolapSchema schema) {
         assert role != null : "precondition: role != null";
         assert schema != null;
+        assert context != null;
+        this.context=context;
         this.role = role;
         this.schema = schema;
     }
@@ -370,7 +374,7 @@ public class RolapSchemaReader
         if (role == schema.getDefaultRole()) {
             return this;
         }
-        return new RolapSchemaReader(schema.getDefaultRole(), schema);
+        return new RolapSchemaReader(context,schema.getDefaultRole(), schema);
     }
 
     public OlapElement getElementChild(OlapElement parent, Id.Segment name) {
@@ -813,6 +817,11 @@ public class RolapSchemaReader
                 }
             };
         }
+    }
+
+    @Override
+    public Context getContext() {
+        return context;
     }
 }
 

@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.xmltests.ResourceTestCase;
@@ -78,7 +78,7 @@ public class XmlaTest{
 
     // implement TestCase
 
-    protected void setUp(Context context) throws Exception {
+    protected void setUp(TestingContext context) throws Exception {
   
         server = MondrianServer.createWithRepository(
             new StringRepositoryContentFinder(
@@ -100,7 +100,7 @@ public class XmlaTest{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    protected void runTest(Context context,ResourceTestCase testCase) throws Exception {
+    protected void runTest(TestingContext context,ResourceTestCase testCase) throws Exception {
     	java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
 
     	java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver());// finy out why this dies not happend automatically

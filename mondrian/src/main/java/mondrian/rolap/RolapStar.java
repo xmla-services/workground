@@ -38,6 +38,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.sql.DataSource;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.engine.api.Context;
 
 /**
  * A <code>RolapStar</code> is a star schema. It is the means to read cell
@@ -54,8 +55,7 @@ public class RolapStar {
 
     private final RolapSchema schema;
 
-    // not final for test purposes
-    private DataSource dataSource;
+    private final Context context;
 
     private final Table factTable;
 
@@ -70,7 +70,6 @@ public class RolapStar {
      */
     private final List<Column> columnList = new ArrayList<Column>();
 
-    private final Dialect sqlQueryDialect;
 
     /**
      * If true, then database aggregation information is cached, otherwise
@@ -101,19 +100,18 @@ public class RolapStar {
      */
     RolapStar(
         final RolapSchema schema,
-        final DataSource dataSource,
+        final Context context,
         final MondrianDef.Relation fact)
     {
         this.cacheAggregations = true;
         this.schema = schema;
-        this.dataSource = dataSource;
+        this.context = context;
         this.factTable = new RolapStar.Table(this, fact, null, null);
 
         // phase out and replace with Table, Column network
         this.factNode =
             new StarNetworkNode(null, factTable.alias, null, null, null);
 
-        this.sqlQueryDialect = schema.getDialect();
         this.changeListener = schema.getDataSourceChangeListener();
         this.statisticsCache = new RolapStatisticsCache(this);
     }
@@ -501,7 +499,7 @@ public class RolapStar {
      * Returns this RolapStar's SQL dialect.
      */
     public Dialect getSqlQueryDialect() {
-        return sqlQueryDialect;
+        return context.getDialect();
     }
 
     /**
@@ -605,10 +603,7 @@ public class RolapStar {
         return localBars.get().aggregations.get(aggregationKey);
     }
 
-    /** For testing purposes only.  */
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+
 
     /**
      * Returns the DataSource used to connect to the underlying DBMS.
@@ -616,7 +611,17 @@ public class RolapStar {
      * @return DataSource
      */
     public DataSource getDataSource() {
-        return dataSource;
+        return context.getDataSource();
+    }
+    
+
+    /**
+     * Returns the Context
+     *
+     * @return Context
+     */
+    public Context getContext() {
+        return context;
     }
 
     /**
@@ -700,7 +705,7 @@ public class RolapStar {
     private boolean containsColumn(String tableName, String columnName) {
         Connection jdbcConnection;
         try {
-            jdbcConnection = dataSource.getConnection();
+            jdbcConnection = context.getDataSource().getConnection();
         } catch (SQLException e1) {
             throw Util.newInternal(
                 e1, "Error while creating connection from data source");
@@ -761,7 +766,7 @@ public class RolapStar {
         List<Column> columnList,
         List<String> columnNameList)
     {
-        final SqlQuery query = new SqlQuery(sqlQueryDialect, true);
+        final SqlQuery query = new SqlQuery(context.getDialect(), true);
         query.addFrom(
             factTable.relation,
             factTable.relation.getAlias(),
@@ -1125,7 +1130,7 @@ public class RolapStar {
             final String sql = query.toString();
             Connection jdbcConnection = null;
             try {
-                jdbcConnection = table.star.dataSource.getConnection();
+                jdbcConnection = table.star.context.getDataSource().getConnection();
                 final PreparedStatement pstmt =
                     jdbcConnection.prepareStatement(sql);
                 final ResultSetMetaData resultSetMetaData =

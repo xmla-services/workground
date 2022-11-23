@@ -17,6 +17,7 @@ import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.util.*;
 
 import org.apache.logging.log4j.Logger;
+import org.eclipse.daanse.engine.api.Context;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.IOException;
@@ -81,7 +82,7 @@ public class RolapSchemaPool {
 
     RolapSchema get(
         final String catalogUrl,
-        final DataSource dataSource,
+        final Context context,
         final Util.PropertyList connectInfo)
     {
         return get(
@@ -89,7 +90,7 @@ public class RolapSchemaPool {
             null,
             null,
             null,
-            dataSource,
+            context,
             connectInfo);
     }
 
@@ -98,7 +99,7 @@ public class RolapSchemaPool {
         final String connectionKey,
         final String jdbcUser,
         final String dataSourceStr,
-        final DataSource dataSource,
+        final Context context,
         final Util.PropertyList connectInfo)
     {
         final String connectionUuidStr = connectInfo.get(
@@ -120,7 +121,7 @@ public class RolapSchemaPool {
                 + ", connectionKey=" + connectionKey
                 + ", jdbcUser=" + jdbcUser
                 + ", dataSourceStr=" + dataSourceStr
-                + ", dataSource=" + dataSource
+                + ", dataSource=" + context.getDataSource()
                 + ", jdbcConnectionUuid=" + connectionUuidStr
                 + ", useSchemaPool=" + useSchemaPool
                 + ", useContentChecksum=" + useContentChecksum
@@ -130,7 +131,7 @@ public class RolapSchemaPool {
         final ConnectionKey connectionKey1 =
             ConnectionKey.create(
                 connectionUuidStr,
-                dataSource,
+                context.getDataSource(),
                 catalogUrl,
                 connectionKey,
                 jdbcUser,
@@ -148,7 +149,7 @@ public class RolapSchemaPool {
         // Use the schema pool unless "UseSchemaPool" is explicitly false.
         if (!useSchemaPool) {
             RolapSchema schema = createRolapSchema(
-                catalogUrl, dataSource, connectInfo, catalogStr, key, null);
+                catalogUrl, context, connectInfo, catalogStr, key, null);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
                     "create (no pool): schema-name=" + schema.getName()
@@ -161,14 +162,14 @@ public class RolapSchemaPool {
         if (useContentChecksum) {
             return getByChecksum(
                 catalogUrl,
-                dataSource,
+                context,
                 connectInfo,
                 pinSchemaTimeout,
                 catalogStr,
                 key);
         }
         return getByKey(
-            catalogUrl, dataSource, connectInfo, pinSchemaTimeout,
+            catalogUrl, context, connectInfo, pinSchemaTimeout,
             catalogStr, key);
     }
 
@@ -199,7 +200,7 @@ public class RolapSchemaPool {
 
     private RolapSchema getByKey(
         String catalogUrl,
-        DataSource dataSource,
+        Context context,
         Util.PropertyList connectInfo,
         String pinSchemaTimeout,
         String catalogStr,
@@ -229,7 +230,7 @@ public class RolapSchemaPool {
             }
 
             schema = createRolapSchema(
-                catalogUrl, dataSource, connectInfo, catalogStr, key, null);
+                catalogUrl, context, connectInfo, catalogStr, key, null);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("create: " + schema);
             }
@@ -242,7 +243,7 @@ public class RolapSchemaPool {
 
     private RolapSchema getByChecksum(
         String catalogUrl,
-        DataSource dataSource,
+        Context context,
         Util.PropertyList connectInfo,
         String pinSchemaTimeout,
         String catalogStr,
@@ -272,7 +273,7 @@ public class RolapSchemaPool {
             }
 
             schema = createRolapSchema(
-                catalogUrl, dataSource, connectInfo, catalogStr,
+                catalogUrl, context, connectInfo, catalogStr,
                 key, md5Bytes);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
@@ -289,7 +290,7 @@ public class RolapSchemaPool {
     // is extracted and made package-local for testing purposes
     RolapSchema createRolapSchema(
         String catalogUrl,
-        DataSource dataSource,
+        Context context,
         Util.PropertyList connectInfo,
         String catalogStr,
         SchemaKey key,
@@ -301,7 +302,7 @@ public class RolapSchemaPool {
             catalogUrl,
             catalogStr,
             connectInfo,
-            dataSource);
+            context);
     }
 
     /**

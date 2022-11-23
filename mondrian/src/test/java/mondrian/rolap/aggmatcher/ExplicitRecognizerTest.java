@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -53,7 +53,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExplicitAggExtraColsRequiringJoin(Context context) throws SQLException {
+    public void testExplicitAggExtraColsRequiringJoin(TestingContext context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context,
             "    <AggName name=\"agg_g_ms_pcat_sales_fact_1997\">\n"
@@ -132,7 +132,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExplicitForeignKey(Context context) {
+    public void testExplicitForeignKey(TestingContext context) {
         prepareContext(context);
         setupMultiColDimCube(context,
             "    <AggName name=\"agg_c_14_sales_fact_1997\">\n"
@@ -232,7 +232,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExplicitAggOrdinalOnAggTable(Context context) throws SQLException {
+    public void testExplicitAggOrdinalOnAggTable(TestingContext context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context,
             "    <AggName name=\"exp_agg_test\">\n"
@@ -287,7 +287,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExplicitAggCaptionOnAggTable(Context context) throws SQLException {
+    public void testExplicitAggCaptionOnAggTable(TestingContext context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context,
             "    <AggName name=\"exp_agg_test\">\n"
@@ -342,7 +342,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExplicitAggNameColumnOnAggTable(Context context) throws SQLException {
+    public void testExplicitAggNameColumnOnAggTable(TestingContext context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context,
             "    <AggName name=\"exp_agg_test\">\n"
@@ -402,7 +402,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExplicitAggPropertiesOnAggTable(Context context) throws SQLException {
+    public void testExplicitAggPropertiesOnAggTable(TestingContext context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context,
             "    <AggName name=\"exp_agg_test_distinct_count\">\n"
@@ -502,7 +502,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testCountDistinctAllowableRollup(Context context) throws SQLException {
+    public void testCountDistinctAllowableRollup(TestingContext context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context,
             "    <AggName name=\"exp_agg_test_distinct_count\">\n"
@@ -588,7 +588,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testCountDisallowedRollup(Context context) throws SQLException {
+    public void testCountDisallowedRollup(TestingContext context) throws SQLException {
         prepareContext(context);
         setupMultiColDimCube(context,
             "    <AggName name=\"exp_agg_test_distinct_count\">\n"
@@ -643,7 +643,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `customer`.`gender`"));
     }
 
-    public static void setupMultiColDimCube(Context context,
+    public static void setupMultiColDimCube(TestingContext context,
         String aggName, String yearCols, String qtrCols, String monthCols,
         String monthProp)
     {
@@ -651,7 +651,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
             aggName, yearCols, qtrCols, monthCols, monthProp, "Unit Sales");
     }
 
-    public static void setupMultiColDimCube(Context context,
+    public static void setupMultiColDimCube(TestingContext context,
         String aggName, String yearCols, String qtrCols, String monthCols,
         String monthProp, String defaultMeasure)
     {

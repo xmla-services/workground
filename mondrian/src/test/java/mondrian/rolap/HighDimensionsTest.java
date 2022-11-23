@@ -21,7 +21,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
@@ -56,7 +56,7 @@ public class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBug1971406(Context context) throws Exception {
+    public void testBug1971406(TestingContext context) throws Exception {
         if (!MondrianProperties.instance().EnableNativeCrossJoin.get()) {
             return;
         }
@@ -124,7 +124,7 @@ public class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testPromotionsTwoDimensions(Context context) throws Exception {
+    public void testPromotionsTwoDimensions(TestingContext context) throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -139,7 +139,7 @@ public class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHead(Context context) throws Exception {
+    public void testHead(TestingContext context) throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -156,7 +156,7 @@ public class HighDimensionsTest {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void _testTopCount(Context context) throws Exception {
+    public void _testTopCount(TestingContext context) throws Exception {
         final Connection connection = context.createConnection();
         final StringBuffer buffer = new StringBuffer();
         Query query =
@@ -206,7 +206,7 @@ public class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonEmpty(Context context) throws Exception {
+    public void testNonEmpty(TestingContext context) throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -221,7 +221,7 @@ public class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testFilter(Context context) throws Exception {
+    public void testFilter(TestingContext context) throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -246,7 +246,7 @@ public class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMondrian1488(Context context) {
+    public void testMondrian1488(TestingContext context) {
         //  MONDRIAN-1501 / MONDRIAN-1488
         // Both involve an attempt to modify the list backing
         // HighCardSqlTupleReader when handling null values.
@@ -283,7 +283,7 @@ public class HighDimensionsTest {
      * into an axis from the results.
      */
     private void execHighCardTest(
-        Context context,
+        TestingContext context,
         final String queryString,
         final int axisIndex,
         final String highDimensionName,

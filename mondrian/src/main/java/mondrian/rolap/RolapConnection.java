@@ -10,35 +10,71 @@
 */
 package mondrian.rolap;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.olap.*;
-import mondrian.parser.MdxParserValidator;
-import mondrian.resource.MondrianResource;
-import mondrian.server.*;
-import mondrian.spi.*;
-import mondrian.spi.impl.JndiDataSourceResolver;
-import mondrian.util.*;
-
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
-import org.eigenbase.util.property.StringProperty;
-
-import org.olap4j.Scenario;
-
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.engine.api.Context;
+import org.eigenbase.util.property.StringProperty;
+import org.olap4j.Scenario;
+
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleCursor;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.DelegatingTupleList;
+import mondrian.olap.CacheControl;
+import mondrian.olap.Cell;
+import mondrian.olap.ConnectionBase;
+import mondrian.olap.DriverManager;
+import mondrian.olap.Exp;
+import mondrian.olap.FunTable;
+import mondrian.olap.Member;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.MondrianServer;
+import mondrian.olap.Position;
+import mondrian.olap.Query;
+import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryCanceledException;
+import mondrian.olap.QueryPart;
+import mondrian.olap.QueryTimeoutException;
+import mondrian.olap.ResourceLimitExceededException;
+import mondrian.olap.Result;
+import mondrian.olap.ResultBase;
+import mondrian.olap.ResultLimitExceededException;
+import mondrian.olap.Role;
+import mondrian.olap.RoleImpl;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.parser.MdxParserValidator;
+import mondrian.resource.MondrianResource;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.server.Statement;
+import mondrian.server.StatementImpl;
+import mondrian.spi.DataSourceResolver;
+import mondrian.spi.impl.JndiDataSourceResolver;
+import mondrian.util.ClassResolver;
+import mondrian.util.FilteredIterableList;
+import mondrian.util.LockBox;
+import mondrian.util.MemoryMonitor;
+import mondrian.util.MemoryMonitorFactory;
+import mondrian.util.Pair;
 
 /**
  * A <code>RolapConnection</code> is a connection to a Mondrian OLAP Server.
@@ -61,11 +97,7 @@ public class RolapConnection extends ConnectionBase {
 
   private final Util.PropertyList connectInfo;
 
-  /**
-   * Factory for JDBC connections to talk to the RDBMS. This factory will
-   * usually use a connection pool.
-   */
-  private final DataSource dataSource;
+  private Context context = null;
   private final String catalogUrl;
   private final RolapSchema schema;
   private SchemaReader schemaReader;
@@ -131,9 +163,6 @@ public class RolapConnection extends ConnectionBase {
     final String jdbcConnectString = getJdbcConnectionString( connectInfo );
     final String strDataSource =
       connectInfo.get( RolapConnectionProperties.DataSource.name() );
-    StringBuilder buf = new StringBuilder();
-    this.dataSource =
-      createDataSource( dataSource, connectInfo, buf );
     Role role = null;
 
     // Register this connection before we register its internal statement.
@@ -167,7 +196,7 @@ public class RolapConnection extends ConnectionBase {
         } else {
           schema = RolapSchemaPool.instance().get(
             catalogUrl,
-            dataSource,
+            context,
             connectInfo );
         }
       } finally {
@@ -224,9 +253,8 @@ public class RolapConnection extends ConnectionBase {
       Connection conn = null;
       java.sql.Statement statement = null;
       try {
-        conn = this.dataSource.getConnection();
-        Dialect dialect =
-          DialectManager.createDialect( this.dataSource, conn );
+        conn = this.context.getDataSource().getConnection();
+        Dialect dialect =context.getDialect();
           if ( dialect.getDatabaseProduct()
           == DatabaseProduct.DERBY ) {
           // Derby requires a little extra prodding to do the
@@ -244,7 +272,7 @@ public class RolapConnection extends ConnectionBase {
         } else {
           throw Util.newError(
             e,
-            "Error while creating SQL connection: " + buf );
+            "Error while creating SQL connection: "  );
         }
       } finally {
         try {
@@ -301,142 +329,6 @@ public class RolapConnection extends ConnectionBase {
 
   protected Logger getLogger() {
     return LOGGER;
-  }
-
-  /**
-   * Creates a JDBC data source from the JDBC credentials contained within a
-   * set of mondrian connection properties.
-   *
-   * <p>This method is package-level so that it can be called from the
-   * RolapConnectionTest unit test.
-   *
-   * @param dataSource  Anonymous data source from user, or null
-   * @param connectInfo Mondrian connection properties
-   * @param buf         Into which method writes a description of the JDBC credentials
-   * @return Data source
-   */
-  static DataSource createDataSource(
-    DataSource dataSource,
-    Util.PropertyList connectInfo,
-    StringBuilder buf ) {
-    assert buf != null;
-    final String jdbcConnectString = getJdbcConnectionString( connectInfo );
-    final String jdbcUser =
-      connectInfo.get( RolapConnectionProperties.JdbcUser.name() );
-    final String jdbcPassword =
-      connectInfo.get( RolapConnectionProperties.JdbcPassword.name() );
-    final String dataSourceName =
-      connectInfo.get( RolapConnectionProperties.DataSource.name() );
-
-    if ( dataSource != null ) {
-      appendKeyValue( buf, "Anonymous data source", dataSource );
-      appendKeyValue(
-        buf, RolapConnectionProperties.JdbcUser.name(), jdbcUser );
-      if ( jdbcUser != null || jdbcPassword != null ) {
-        dataSource =
-          new UserPasswordDataSource(
-            dataSource, jdbcUser, jdbcPassword );
-      }
-      return dataSource;
-
-    } else if ( jdbcConnectString != null ) {
-      // Get connection through own pooling datasource
-      appendKeyValue(
-        buf, RolapConnectionProperties.Jdbc.name(), jdbcConnectString );
-      appendKeyValue(
-        buf, RolapConnectionProperties.JdbcUser.name(), jdbcUser );
-      String jdbcDrivers =
-        connectInfo.get( RolapConnectionProperties.JdbcDrivers.name() );
-      if ( jdbcDrivers != null ) {
-        RolapUtil.loadDrivers( jdbcDrivers );
-      }
-      final String jdbcDriversProp =
-        MondrianProperties.instance().JdbcDrivers.get();
-      RolapUtil.loadDrivers( jdbcDriversProp );
-
-      Properties jdbcProperties = getJdbcProperties( connectInfo );
-      final Map<String, String> map = Util.toMap( jdbcProperties );
-      for ( Map.Entry<String, String> entry : map.entrySet() ) {
-        // FIXME ordering is non-deterministic
-        appendKeyValue( buf, entry.getKey(), entry.getValue() );
-      }
-
-      if ( jdbcUser != null ) {
-        jdbcProperties.put( "user", jdbcUser );
-      }
-      if ( jdbcPassword != null ) {
-        jdbcProperties.put( "password", jdbcPassword );
-      }
-
-      // JDBC connections are dumb beasts, so we assume they're not
-      // pooled. Therefore the default is true.
-      final boolean poolNeeded =
-        connectInfo.get(
-          RolapConnectionProperties.PoolNeeded.name(),
-          "true" ).equalsIgnoreCase( "true" );
-
-      if ( !poolNeeded ) {
-        // Connection is already pooled; don't pool it again.
-        return new DriverManagerDataSource(
-          jdbcConnectString,
-          jdbcProperties );
-      }
-      String connLc = jdbcConnectString.toLowerCase();
-      if ( ( connLc.indexOf( "mysql" ) > -1 )
-        || ( connLc.indexOf( "mariadb" ) > -1 ) ) {
-        // mysql driver needs this autoReconnect parameter
-        jdbcProperties.setProperty( "autoReconnect", "true" );
-      }
-      return RolapConnectionPool.instance()
-        .getDriverManagerPoolingDataSource(
-          jdbcConnectString, jdbcProperties );
-
-    } else if ( dataSourceName != null ) {
-      appendKeyValue(
-        buf,
-        RolapConnectionProperties.DataSource.name(),
-        dataSourceName );
-      appendKeyValue(
-        buf,
-        RolapConnectionProperties.JdbcUser.name(),
-        jdbcUser );
-
-      // Data sources are fairly smart, so we assume they look after
-      // their own pooling. Therefore the default is false.
-      final boolean poolNeeded =
-        connectInfo.get(
-          RolapConnectionProperties.PoolNeeded.name(),
-          "false" ).equalsIgnoreCase( "true" );
-
-      // Get connection from datasource.
-      DataSourceResolver dataSourceResolver = getDataSourceResolver();
-      try {
-        dataSource = dataSourceResolver.lookup( dataSourceName );
-      } catch ( Exception e ) {
-        throw Util.newInternal(
-          e,
-          "Error while looking up data source ("
-            + dataSourceName + ")" );
-      }
-      if ( poolNeeded ) {
-        dataSource =
-          RolapConnectionPool.instance()
-            .getDataSourcePoolingDataSource(
-              dataSource, dataSourceName, jdbcUser, jdbcPassword );
-      } else {
-        if ( jdbcUser != null || jdbcPassword != null ) {
-          dataSource =
-            new UserPasswordDataSource(
-              dataSource, jdbcUser, jdbcPassword );
-        }
-      }
-      return dataSource;
-    } else {
-      throw Util.newInternal(
-        "Connect string '" + connectInfo.toString()
-          + "' must contain either '" + RolapConnectionProperties.Jdbc
-          + "' or '" + RolapConnectionProperties.DataSource + "'" );
-    }
   }
 
   /**
@@ -705,7 +597,7 @@ public class RolapConnection extends ConnectionBase {
     assert role != null;
 
     this.role = role;
-    this.schemaReader = new RolapSchemaReader( role, schema );
+    this.schemaReader = new RolapSchemaReader( context,role, schema );
   }
 
   public Role getRole() {
@@ -883,8 +775,11 @@ public class RolapConnection extends ConnectionBase {
   }
 
   public DataSource getDataSource() {
-    return dataSource;
-  }
+      return getContext().getDataSource();
+    }
+  public Context getContext() {
+      return context;
+    }
 
   /**
    * Helper method to allow olap4j wrappers to implement

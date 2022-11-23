@@ -1,21 +1,3 @@
-/*********************************************************************
- * Copyright (c) 2022 Contributors to the Eclipse Foundation.
- *
- * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * History:
- *  This files came from the mondrian project. Some of the Flies
- *  (mostly the Tests) did not have License Header.
- *  But the Project is EPL Header. 2002-2022 Hitachi Vantara.
- *
- * Contributors:
- *   Hitachi Vantara.
- *   SmartCity Jena - initial  Java 8, Junit5
- **********************************************************************/
 package org.eclipse.daanse.db.dialect.db.mysql;
 
 import java.sql.Connection;
@@ -29,68 +11,79 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
- * Implementation of {@link org.eclipse.daanse.db.dialect.api.Dialect} for the MySQL database.
+ * Implementation of {@link org.eclipse.daanse.db.dialect.api.Dialect} for the
+ * MySQL database.
  *
  * @author jhyde
  * @since Nov 23, 2008
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MYSQL'",
+        "database.product:String='MYSQL'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
+public class MySqlDialect extends JdbcDialectImpl {
 
-public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
+    private static Logger LOGGER = LoggerFactory.getLogger(MySqlDialect.class);
+    private final String escapeRegexp = "(\\\\Q([^\\\\Q]+)\\\\E)";
+    private final Pattern escapePattern = Pattern.compile(escapeRegexp);
 
-    private static final String ESCAPE_REGEXP = "(\\\\Q([^\\\\Q]+)\\\\E)";
-    private static final Pattern ESCAPE_PATTERN = Pattern.compile(ESCAPE_REGEXP);
+    private static final String SUPPORTED_PRODUCT_NAME = "MYSQL";
 
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
+    }
 
-        public AbstractMySqlDialect() {
+    @Override
+    public boolean initialize(Connection connection) {
+
+        try {
+            DatabaseMetaData dbMetaData = connection.getMetaData();
+            return super.initialize(connection) && !isInfobright(dbMetaData);
+        } catch (Exception e) {
+            LOGGER.warn("Could not get DatabaseMetadata", e);
         }
-    /**
-     * Creates a MySqlDialect.
-     *
-     * @param connection Connection
-     *
-     * @throws SQLException on error
-     */
-    public AbstractMySqlDialect(Connection connection) throws SQLException {
-        super(connection);
+
+        return false;
     }
 
     /**
      * Detects whether this database is Infobright.
      *
-     * <p>Infobright uses the MySQL driver and appears to be a MySQL instance.
-     * The only difference is the presence of the BRIGHTHOUSE engine.
+     * <p>
+     * Infobright uses the MySQL driver and appears to be a MySQL instance. The only
+     * difference is the presence of the BRIGHTHOUSE engine.
      *
      * @param databaseMetaData Database metadata
      *
      * @return Whether this is Infobright
      */
-    public static boolean isInfobright(
-        DatabaseMetaData databaseMetaData)
-    {
+    public static boolean isInfobright(DatabaseMetaData databaseMetaData) {
         Statement statement = null;
         try {
-            String productVersion =
-                databaseMetaData.getDatabaseProductVersion();
+            String productVersion = databaseMetaData.getDatabaseProductVersion();
             if (productVersion.compareTo("5.1") >= 0) {
-                statement = databaseMetaData.getConnection().createStatement();
-                final ResultSet resultSet =
-                    statement.executeQuery(
-                        "select * from INFORMATION_SCHEMA.engines "
-                            + "where ENGINE in ( 'BRIGHTHOUSE', 'INFOBRIGHT' )");
+                statement = databaseMetaData.getConnection()
+                        .createStatement();
+                final ResultSet resultSet = statement.executeQuery("select * from INFORMATION_SCHEMA.engines "
+                        + "where ENGINE in ( 'BRIGHTHOUSE', 'INFOBRIGHT' )");
                 if (resultSet.next()) {
                     return true;
                 }
             }
-            return false;
         } catch (SQLException e) {
-            //throw Util.newInternal(
-            throw new RuntimeException(
-                "while running query to detect Brighthouse engine", e);
+            // throw Util.newInternal(
+            throw new RuntimeException("while running query to detect Brighthouse engine", e);
         } finally {
             if (statement != null) {
                 try {
@@ -100,6 +93,7 @@ public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
                 }
             }
         }
+        return false;
     }
 
     @Override
@@ -112,11 +106,8 @@ public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
     }
 
     @Override
-    protected String deduceIdentifierQuoteString(
-        DatabaseMetaData databaseMetaData)
-    {
-        String quoteIdentifierString =
-            super.deduceIdentifierQuoteString(databaseMetaData);
+    protected String deduceIdentifierQuoteString(DatabaseMetaData databaseMetaData) {
+        String quoteIdentifierString = super.deduceIdentifierQuoteString(databaseMetaData);
 
         if (quoteIdentifierString == null) {
             // mm.mysql.2.0.4 driver lies. We know better.
@@ -126,9 +117,7 @@ public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
     }
 
     @Override
-    protected boolean deduceSupportsSelectNotInGroupBy(Connection connection)
-        throws SQLException
-    {
+    protected boolean deduceSupportsSelectNotInGroupBy(Connection connection) throws SQLException {
         boolean supported = false;
         String sqlmode = getCurrentSqlMode(connection);
         if (sqlmode == null) {
@@ -141,15 +130,11 @@ public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
         return supported;
     }
 
-    private String getCurrentSqlMode(Connection connection)
-        throws SQLException
-    {
+    private String getCurrentSqlMode(Connection connection) throws SQLException {
         return getSqlMode(connection, Scope.SESSION);
     }
 
-    private String getSqlMode(Connection connection, Scope scope)
-        throws SQLException
-    {
+    private String getSqlMode(Connection connection, Scope scope) throws SQLException {
         String sqlmode = null;
         Statement s = null;
         ResultSet rs = null;
@@ -180,12 +165,8 @@ public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
         return sqlmode;
     }
 
-
     @Override
-    public void appendHintsAfterFromClause(
-        StringBuilder buf,
-        Map<String, String> hints)
-    {
+    public void appendHintsAfterFromClause(StringBuilder buf, Map<String, String> hints) {
         if (hints != null) {
             String forcedIndex = hints.get("force_index");
             if (forcedIndex != null) {
@@ -199,6 +180,13 @@ public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
     @Override
     public boolean requiresAliasForFromQuery() {
         return true;
+    }
+
+    @Override
+    public boolean allowsFromQuery() {
+        // MySQL before 4.0 does not allow FROM
+        // subqueries in the FROM clause.
+        return productVersion.compareTo("4.") >= 0;
     }
 
     @Override
@@ -216,13 +204,9 @@ public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
         buf.append('\'');
     }
 
-
-
     @Override
     public void quoteBooleanLiteral(StringBuilder buf, String value) {
-        if (!value.equalsIgnoreCase("1")
-            && !(value.equalsIgnoreCase("0")))
-        {
+        if (!value.equalsIgnoreCase("1") && !(value.equalsIgnoreCase("0"))) {
             super.quoteBooleanLiteral(buf, value);
         } else {
             buf.append(value);
@@ -230,21 +214,12 @@ public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateInline(
-        List<String> columnNames,
-        List<String> columnTypes,
-        List<String[]> valueList)
-    {
-        return generateInlineGeneric(
-            columnNames, columnTypes, valueList, null, false);
+    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+        return generateInlineGeneric(columnNames, columnTypes, valueList, null, false);
     }
 
     @Override
-    protected String generateOrderByNulls(
-        String expr,
-        boolean ascending,
-        boolean collateNullsLast)
-    {
+    protected String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
         // In MYSQL, Null values are worth negative infinity.
         if (collateNullsLast) {
             if (ascending) {
@@ -272,8 +247,7 @@ public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
     }
 
     private enum Scope {
-        SESSION,
-        GLOBAL
+        SESSION, GLOBAL
     }
 
     @Override
@@ -282,10 +256,7 @@ public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateRegularExpression(
-        String source,
-        String javaRegex)
-    {
+    public String generateRegularExpression(String source, String javaRegex) {
         try {
             Pattern.compile(javaRegex);
         } catch (PatternSyntaxException e) {
@@ -296,18 +267,16 @@ public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
         // We might have to use case-insensitive matching
         javaRegex = DialectUtil.cleanUnicodeAwareCaseFlag(javaRegex);
         StringBuilder mappedFlags = new StringBuilder();
-        String[][] mapping = new String[][]{{"i","i"}};
-        javaRegex = extractEmbeddedFlags( javaRegex, mapping, mappedFlags );
+        String[][] mapping = new String[][] { { "i", "i" } };
+        javaRegex = extractEmbeddedFlags(javaRegex, mapping, mappedFlags);
         boolean caseSensitive = true;
-        if (mappedFlags.toString().contains( "i" )) {
+        if (mappedFlags.toString()
+                .contains("i")) {
             caseSensitive = false;
         }
-        final Matcher escapeMatcher = ESCAPE_PATTERN.matcher(javaRegex);
+        final Matcher escapeMatcher = escapePattern.matcher(javaRegex);
         while (escapeMatcher.find()) {
-            javaRegex =
-                javaRegex.replace(
-                    escapeMatcher.group(1),
-                    escapeMatcher.group(2));
+            javaRegex = javaRegex.replace(escapeMatcher.group(1), escapeMatcher.group(2));
         }
         final StringBuilder sb = new StringBuilder();
 
@@ -330,13 +299,30 @@ public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
         return sb.toString();
     }
 
-
-    protected boolean compatibleProduct(DatabaseMetaData databaseMetaData) throws SQLException{
-       return !isInfobright(databaseMetaData)&&databaseMetaData.getDatabaseProductName().equalsIgnoreCase("mysql");
+    /**
+     * Required for MySQL 5.7+, where SQL_MODE include ONLY_FULL_GROUP_BY by
+     * default. This prevent expressions like
+     *
+     * ISNULL(RTRIM(`promotion_name`)) ASC
+     *
+     * from being used in ORDER BY section.
+     *
+     * ISNULL(`c0`) ASC
+     *
+     * will be used, where `c0` is an alias of the RTRIM(`promotion_name`). And this
+     * is important for the cases where we're using SQL expressions in a Level
+     * definition.
+     *
+     * Jira ticket, that describes the issue:
+     * http://jira.pentaho.com/browse/MONDRIAN-2451
+     *
+     * @return true when MySQL version is 5.7 or larger
+     */
+    @Override
+    public boolean requiresOrderByAlias() {
+        return productVersion.compareTo("5.7") >= 0;
     }
-    @Override
-    public abstract boolean allowsFromQuery();
 
-    @Override
-    public abstract boolean requiresOrderByAlias() ;
 }
+
+// End MySqlDialect.java

@@ -14,7 +14,7 @@ import mondrian.olap.Util.PropertyList;
 import mondrian.spi.DynamicSchemaProcessor;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -35,7 +35,7 @@ public class RolapSchemaPoolTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBasicSchemaFetch(Context context) {
+    public void testBasicSchemaFetch(TestingContext context) {
         RolapSchemaPool schemaPool = RolapSchemaPool.instance();
         schemaPool.clear();
 
@@ -63,7 +63,7 @@ public class RolapSchemaPoolTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchemaFetchCatalogUrlJdbcUuid(Context context) {
+    public void testSchemaFetchCatalogUrlJdbcUuid(TestingContext context) {
         RolapSchemaPool schemaPool = RolapSchemaPool.instance();
         schemaPool.clear();
         final String uuid = "UUID-1";
@@ -120,7 +120,7 @@ public class RolapSchemaPoolTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchemaFetchMd5JdbcUid(Context context) throws IOException {
+    public void testSchemaFetchMd5JdbcUid(TestingContext context) throws IOException {
         RolapSchemaPool pool = RolapSchemaPool.instance();
         pool.clear();
         final String uuid = "UUID-1";

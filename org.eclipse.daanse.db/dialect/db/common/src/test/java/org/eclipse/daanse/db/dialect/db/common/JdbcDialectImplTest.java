@@ -27,7 +27,12 @@ public class JdbcDialectImplTest{
   private static final String BOOLEAN_LITERAL_ONE = "1";
   private static final String BOOLEAN_LITERAL_ZERO = "0";
 
-  private JdbcDialectImpl jdbcDialect = new JdbcDialectImpl();
+  private JdbcDialectImpl jdbcDialect = new JdbcDialectImpl() {
+
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return true;
+    } };
   private static StringBuilder buf;
 
   @BeforeEach

@@ -17,7 +17,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.opencube.junit5.Constants;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 
 import java.io.File;
 
@@ -38,7 +38,7 @@ import static org.opencube.junit5.TestUtil.getDialect;
  */
 public abstract class CsvDBTestCase extends BatchTestCase {
 
-    protected void prepareContext(Context context) {
+    protected void prepareContext(TestingContext context) {
         try {
             File inputFile = new File(Constants.TESTFILES_DIR + "/mondrian/rolap/agg/" +  getFileName());
 
