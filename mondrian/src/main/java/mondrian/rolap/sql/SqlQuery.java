@@ -11,16 +11,23 @@
 */
 package mondrian.rolap.sql;
 
-import mondrian.olap.*;
-import mondrian.rolap.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import mondrian.spi.DialectManager;
+import org.eclipse.daanse.engine.api.Context;
+
+import mondrian.olap.MondrianDef;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.RolapUtil;
 import mondrian.util.Pair;
-
-import java.util.*;
-
-import javax.sql.DataSource;
 
 /**
  * <code>SqlQuery</code> allows us to build a <code>select</code>
@@ -712,10 +719,9 @@ public class SqlQuery {
         return dialect;
     }
 
-    public static SqlQuery newQuery(DataSource dataSource, String err) {
-        final Dialect dialect =
-            DialectManager.createDialect(dataSource, null);
-        return new SqlQuery(dialect);
+    public static SqlQuery newQuery(Context context, String err) {
+        
+        return new SqlQuery(context.getDialect());
     }
 
     public void addGroupingSet(List<String> groupingColumnsExpr) {

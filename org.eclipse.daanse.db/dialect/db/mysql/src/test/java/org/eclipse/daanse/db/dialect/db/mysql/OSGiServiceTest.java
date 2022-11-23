@@ -25,7 +25,6 @@ public class OSGiServiceTest {
     @Test
     void serviceExists(@InjectService List<Dialect> dialects) throws Exception {
 
-        assertThat(dialects).isNotNull().isNotEmpty().anyMatch(MySqlDialect1.class::isInstance)
-                .anyMatch(MySqlDialect2.class::isInstance).anyMatch(MySqlDialect3.class::isInstance);
+        assertThat(dialects).isNotNull().isNotEmpty().anyMatch(MySqlDialect.class::isInstance);
     }
 }

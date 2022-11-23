@@ -8,18 +8,22 @@
 */
 package org.eclipse.daanse.db.dialect.db.oracle;
 
-import java.sql.*;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the Oracle database.
@@ -28,42 +32,25 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @since Nov 23, 2008
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='ORACLE'",
-		"database.product:String='ORACLE'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+        "database.product:String='ORACLE'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class OracleDialect extends JdbcDialectImpl {
 
     private final String escapeRegexp = "(\\\\Q([^\\\\Q]+)\\\\E)";
     private final Pattern escapePattern = Pattern.compile(escapeRegexp);
+    private static final String SUPPORTED_PRODUCT_NAME = "ORACLE";
 
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            OracleDialect.class);
-
-    
-    /**
-     * Creates an OracleDialect.
-     *
-     * @param connection Connection
-     */
-    public OracleDialect(Connection connection) throws SQLException {
-        super(connection);
-    }
-
-    public OracleDialect() {
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
     public boolean allowsAs() {
         return false;
     }
 
-    public String generateInline(
-        List<String> columnNames,
-        List<String> columnTypes,
-        List<String[]> valueList)
-    {
-        return generateInlineGeneric(
-            columnNames, columnTypes, valueList,
-            " from dual", false);
+    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+        return generateInlineGeneric(columnNames, columnTypes, valueList, " from dual", false);
     }
 
     public boolean supportsGroupingSets() {
@@ -71,11 +58,7 @@ public class OracleDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateOrderByNulls(
-        String expr,
-        boolean ascending,
-        boolean collateNullsLast)
-    {
+    public String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
         return generateOrderByNullsAnsi(expr, ascending, collateNullsLast);
     }
 
@@ -90,10 +73,7 @@ public class OracleDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateRegularExpression(
-        String source,
-        String javaRegex)
-    {
+    public String generateRegularExpression(String source, String javaRegex) {
         try {
             Pattern.compile(javaRegex);
         } catch (PatternSyntaxException e) {
@@ -102,15 +82,12 @@ public class OracleDialect extends JdbcDialectImpl {
         }
         javaRegex = DialectUtil.cleanUnicodeAwareCaseFlag(javaRegex);
         StringBuilder mappedFlags = new StringBuilder();
-        String[][] mapping = new String[][]{{"c","c"},{"i","i"},{"m","m"}};
-        javaRegex = extractEmbeddedFlags( javaRegex, mapping, mappedFlags );
+        String[][] mapping = new String[][] { { "c", "c" }, { "i", "i" }, { "m", "m" } };
+        javaRegex = extractEmbeddedFlags(javaRegex, mapping, mappedFlags);
 
         final Matcher escapeMatcher = escapePattern.matcher(javaRegex);
         while (escapeMatcher.find()) {
-            javaRegex =
-                javaRegex.replace(
-                    escapeMatcher.group(1),
-                    escapeMatcher.group(2));
+            javaRegex = javaRegex.replace(escapeMatcher.group(1), escapeMatcher.group(2));
         }
         final StringBuilder sb = new StringBuilder();
         sb.append(source);
@@ -126,26 +103,23 @@ public class OracleDialect extends JdbcDialectImpl {
     }
 
     /**
-     * Chooses the most appropriate type for accessing the values of a
-     * column in a result set.
+     * Chooses the most appropriate type for accessing the values of a column in a
+     * result set.
      *
-     * The OracleDialect implementation handles some of the specific
-     * quirks of Oracle:  e.g. scale = -127 has special meaning with
-     * NUMERIC types and may indicate a FLOAT value if precision is non-zero.
+     * The OracleDialect implementation handles some of the specific quirks of
+     * Oracle: e.g. scale = -127 has special meaning with NUMERIC types and may
+     * indicate a FLOAT value if precision is non-zero.
      *
-     * @param metaData  Resultset metadata
-     * @param columnIndex  index of the column in the result set
-     * @return  For Types.NUMERIC and Types.DECIMAL, getType()
-     * will return a Type.INT, Type.DOUBLE, or Type.OBJECT based on
-     * scale, precision, and column name.
+     * @param metaData    Resultset metadata
+     * @param columnIndex index of the column in the result set
+     * @return For Types.NUMERIC and Types.DECIMAL, getType() will return a
+     *         Type.INT, Type.DOUBLE, or Type.OBJECT based on scale, precision, and
+     *         column name.
      *
      * @throws SQLException
      */
     @Override
-    public BestFitColumnType getType(
-        ResultSetMetaData metaData, int columnIndex)
-        throws SQLException
-    {
+    public BestFitColumnType getType(ResultSetMetaData metaData, int columnIndex) throws SQLException {
         final int columnType = metaData.getColumnType(columnIndex + 1);
         final int precision = metaData.getPrecision(columnIndex + 1);
         final int scale = metaData.getScale(columnIndex + 1);
@@ -156,10 +130,8 @@ public class OracleDialect extends JdbcDialectImpl {
             if (scale == -127 && precision != 0) {
                 // non zero precision w/ -127 scale means float in Oracle.
                 type = BestFitColumnType.DOUBLE;
-            } else if (columnType == Types.NUMERIC
-                && (scale == 0 || scale == -127)
-                && precision == 0 && columnName.startsWith("m"))
-            {
+            } else if (columnType == Types.NUMERIC && (scale == 0 || scale == -127) && precision == 0
+                    && columnName.startsWith("m")) {
                 // In GROUPING SETS queries, Oracle
                 // loosens the type of columns compared to mere GROUP BY
                 // queries. We need integer GROUP BY columns to remain integers,
@@ -167,7 +139,7 @@ public class OracleDialect extends JdbcDialectImpl {
                 // measure (whose column names are like "m0", "m1") to integers,
                 // data loss will occur.
                 type = BestFitColumnType.OBJECT;
-            } else if (scale == -127 && precision ==0) {
+            } else if (scale == -127 && precision == 0) {
                 type = BestFitColumnType.INT;
             } else if (scale == 0 && (precision == 38 || precision == 0)) {
                 // NUMBER(38, 0) is conventionally used in

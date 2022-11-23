@@ -16,7 +16,7 @@ import mondrian.olap.Util;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -33,7 +33,7 @@ public class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchema3withVersion(Context context) {
+    public void testSchema3withVersion(TestingContext context) {
         withSchema(context, SCHEMA_3_VHEADER + SCHEMA_3_BODY);
         Util.PropertyList connectInfo =
             getConnectionProperties(context.createConnection());
@@ -44,7 +44,7 @@ public class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchema3noVersion(Context context) {
+    public void testSchema3noVersion(TestingContext context) {
         withSchema(context,SCHEMA_3_HEADER + SCHEMA_3_BODY);
         Util.PropertyList connectInfo =
             getConnectionProperties(context.createConnection());
@@ -55,7 +55,7 @@ public class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchema4withVersion(Context context) {       
+    public void testSchema4withVersion(TestingContext context) {       
         withSchema(context,SCHEMA_4_HEADER + SCHEMA_4_BODY);
         try {
             Util.PropertyList connectInfo =
@@ -70,7 +70,7 @@ public class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchema4noVersion(Context context) {
+    public void testSchema4noVersion(TestingContext context) {
         withSchema(context,
                 SCHEMA_4_NVHEADER + SCHEMA_4_BODY);        
         try {

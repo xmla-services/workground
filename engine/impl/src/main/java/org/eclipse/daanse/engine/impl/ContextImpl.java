@@ -37,6 +37,8 @@ public class ContextImpl implements Context {
 
     private StatisticsProvider statisticsProvider;
 
+    private Dialect dialect = null;
+
     @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)
     public void bindDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
@@ -67,6 +69,8 @@ public class ContextImpl implements Context {
 
     @Activate
     public void activate(Map<String, Object> coniguration) {
+        dialect = dialectResolver.resolve(getDataSource())
+                .orElseThrow(() -> new RuntimeException("No Duatable Dialect"));
         statisticsProvider.init(dataSource, getDialect());
     }
 
@@ -77,7 +81,7 @@ public class ContextImpl implements Context {
 
     @Override
     public Dialect getDialect() {
-        return dialectResolver.resolve(getDataSource());
+        return dialect;
     }
 
     @Override

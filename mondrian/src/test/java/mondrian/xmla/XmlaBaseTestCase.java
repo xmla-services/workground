@@ -27,7 +27,7 @@ import mondrian.util.LockBox;
 import mondrian.xmla.test.XmlaTestContext;
 import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.metadata.XmlaConstants;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opentest4j.AssertionFailedError;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -266,7 +266,7 @@ System.out.println("Got CONTINUE");
         }
     }
 
-    protected void helperTestExpect(Context context, boolean doSessionId)
+    protected void helperTestExpect(TestingContext context, boolean doSessionId)
     {
         try {
             java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
@@ -303,7 +303,7 @@ System.out.println("Got CONTINUE");
         }
     }
 
-    protected void helperTest(Context context, boolean doSessionId)
+    protected void helperTest(TestingContext context, boolean doSessionId)
     {
         try {
             java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
@@ -332,7 +332,7 @@ System.out.println("Got CONTINUE");
         }
     }
 
-    protected void addDatasourceInfoResponseKey(Context context, Properties props) {
+    protected void addDatasourceInfoResponseKey(TestingContext context, Properties props) {
         XmlaTestContext s = new XmlaTestContext();
         String con = s.getConnectString(context).replaceAll("&amp;","&");
         PropertyList pl = Util.parseConnectString(con);

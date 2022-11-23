@@ -13,7 +13,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsContent;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
@@ -31,7 +31,7 @@ public class CachedExistsTest{
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testEducationLevelSubtotals(Context context) {
+    public void testEducationLevelSubtotals(TestingContext context) {
     String query =
         "WITH "
             + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],[*BASE_MEMBERS__Product_])' "
@@ -60,7 +60,7 @@ public class CachedExistsTest{
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testProductFamilySubtotals(Context context) {
+    public void testProductFamilySubtotals(TestingContext context) {
     String query =
         "WITH\r\n"
             + "SET [*NATIVE_CJ_SET] AS 'FILTER(FILTER([Product].[Product Department].MEMBERS,ANCESTOR([Product].CURRENTMEMBER, [Product].[Product Family]) IN {[Product].[All Products].[Drink],[Product].[All Products].[Non-Consumable]}), NOT ISEMPTY ([Measures].[Unit Sales]))'\r\n"
@@ -89,7 +89,7 @@ public class CachedExistsTest{
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testProductFamilyProductDepartmentSubtotals(Context context) {
+    public void testProductFamilyProductDepartmentSubtotals(TestingContext context) {
     String query =
         "WITH\r\n"
             + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Gender_])'\r\n"
@@ -124,7 +124,7 @@ public class CachedExistsTest{
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testRowColumSubtotals(Context context) {
+    public void testRowColumSubtotals(TestingContext context) {
     String query =
         "WITH\r\n"
             + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Gender_]))'\r\n"
@@ -162,7 +162,7 @@ public class CachedExistsTest{
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testProductFamilyDisplayMember(Context context) {
+    public void testProductFamilyDisplayMember(TestingContext context) {
     String query =
         "WITH\r\n" + 
         "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Gender_])'\r\n" + 
@@ -204,7 +204,7 @@ public class CachedExistsTest{
   
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTop10Customers(Context context) {
+    public void testTop10Customers(TestingContext context) {
     String query =
         "WITH\r\n" + 
         "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Customers_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Store_]))'\r\n" + 
@@ -276,7 +276,7 @@ public class CachedExistsTest{
   
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTop1CustomersWithColumnLevel(Context context) {
+    public void testTop1CustomersWithColumnLevel(TestingContext context) {
     String query =
         "WITH\n"
             + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],[*BASE_MEMBERS__Customers_])))'\n"
@@ -306,7 +306,7 @@ public class CachedExistsTest{
   
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsContent.class,dataloader = FastFoodmardDataLoader.class )
-    public void testMondrian2704(Context context) {
+    public void testMondrian2704(TestingContext context) {
     String cube=    "<Cube name=\"Alternate Sales\">\n"
             + "  <Table name=\"sales_fact_1997\"/>\n"
             + "<Dimension name=\"Time\" type=\"TimeDimension\" foreignKey=\"time_id\">\n" + 

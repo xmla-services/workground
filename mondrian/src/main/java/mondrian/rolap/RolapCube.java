@@ -11,10 +11,66 @@
 */
 package mondrian.rolap;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.eclipse.daanse.engine.api.Context;
+import org.eigenbase.xom.DOMWrapper;
+import org.eigenbase.xom.Parser;
+import org.eigenbase.xom.XOMException;
+import org.eigenbase.xom.XOMUtil;
+import org.olap4j.mdx.IdentifierNode;
+import org.olap4j.mdx.IdentifierSegment;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.mdx.*;
-import mondrian.olap.*;
+import mondrian.mdx.MdxVisitorImpl;
+import mondrian.mdx.MemberExpr;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Access;
+import mondrian.olap.Annotation;
+import mondrian.olap.CacheControl;
+import mondrian.olap.Category;
+import mondrian.olap.Cube;
+import mondrian.olap.CubeBase;
+import mondrian.olap.Dimension;
+import mondrian.olap.DimensionType;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.Formula;
+import mondrian.olap.Hierarchy;
+import mondrian.olap.Id;
+import mondrian.olap.Level;
+import mondrian.olap.MatchType;
+import mondrian.olap.Member;
+import mondrian.olap.MemberProperty;
+import mondrian.olap.MondrianDef;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.NameResolver;
+import mondrian.olap.NamedSet;
+import mondrian.olap.OlapElement;
+import mondrian.olap.Parameter;
+import mondrian.olap.Property;
+import mondrian.olap.Query;
+import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryPart;
+import mondrian.olap.Role;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.SetBase;
+import mondrian.olap.Util;
 import mondrian.olap.fun.FunDefBase;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.aggmatcher.ExplicitRules;
@@ -24,17 +80,6 @@ import mondrian.rolap.format.FormatterFactory;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.spi.CellFormatter;
-
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-
-import org.eigenbase.xom.*;
-import org.eigenbase.xom.Parser;
-
-import org.olap4j.mdx.IdentifierNode;
-import org.olap4j.mdx.IdentifierSegment;
-
-import java.util.*;
 
 /**
  * <code>RolapCube</code> implements {@link Cube} for a ROLAP database.
@@ -1544,7 +1589,7 @@ public class RolapCube extends CubeBase {
     public synchronized SchemaReader getSchemaReader() {
         if (schemaReader == null) {
             schemaReader =
-                new RolapCubeSchemaReader(Util.createRootRole(schema));
+                new RolapCubeSchemaReader(schemaReader.getContext(),Util.createRootRole(schema));
         }
         return schemaReader;
     }
@@ -1553,7 +1598,7 @@ public class RolapCube extends CubeBase {
         if (role == null) {
             return getSchemaReader();
         } else {
-            return new RolapCubeSchemaReader(role);
+            return new RolapCubeSchemaReader(schemaReader.getContext(),role);
         }
     }
 
@@ -3140,8 +3185,8 @@ public class RolapCube extends CubeBase {
         extends RolapSchemaReader
         implements NameResolver.Namespace
     {
-        public RolapCubeSchemaReader(Role role) {
-            super(role, RolapCube.this.schema);
+        public RolapCubeSchemaReader(Context context,Role role) {
+            super(context,role, RolapCube.this.schema);
             assert role != null : "precondition: role != null";
         }
 

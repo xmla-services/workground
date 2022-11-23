@@ -22,6 +22,7 @@ import mondrian.server.monitor.SqlStatementEvent;
 import mondrian.util.Pair;
 import mondrian.util.TraversalList;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.engine.api.Context;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -58,7 +59,7 @@ public class HighCardSqlTupleReader extends SqlTupleReader {
   }
 
   protected void prepareTuples(
-    final DataSource dataSource,
+    final Context context,
     final TupleList partialResult,
     final List<List<RolapMember>> newPartialResult,
     final List<TargetBase> targetGroup ) {
@@ -77,11 +78,11 @@ public class HighCardSqlTupleReader extends SqlTupleReader {
           }
         }
         final Pair<String, List<BestFitColumnType>> pair =
-          makeLevelMembersSql( dataSource, targetGroup );
+          makeLevelMembersSql( context, targetGroup );
         String sql = pair.left;
         List<BestFitColumnType> types = pair.right;
         stmt = RolapUtil.executeQuery(
-          dataSource, sql, types, maxRows, 0,
+          context, sql, types, maxRows, 0,
           new SqlStatement.StatementLocus(
             Locus.peek().execution,
             "HighCardSqlTupleReader.readTuples " + partialTargets,
@@ -134,10 +135,10 @@ public class HighCardSqlTupleReader extends SqlTupleReader {
   }
 
   public TupleList readMembers(
-    final DataSource dataSource,
+    final Context context,
     final TupleList partialResult,
     final List<List<RolapMember>> newPartialResult ) {
-    prepareTuples( dataSource, partialResult, newPartialResult, targets );
+    prepareTuples( context, partialResult, newPartialResult, targets );
 
     assert targets.size() == 1;
 
@@ -146,11 +147,11 @@ public class HighCardSqlTupleReader extends SqlTupleReader {
   }
 
   public TupleList readTuples(
-    final DataSource jdbcConnection,
+    final Context context,
     final TupleList partialResult,
     final List<List<RolapMember>> newPartialResult ) {
     prepareTuples(
-      jdbcConnection, partialResult, newPartialResult, targets );
+      context, partialResult, newPartialResult, targets );
 
     // List of tuples
     final int n = targets.size();

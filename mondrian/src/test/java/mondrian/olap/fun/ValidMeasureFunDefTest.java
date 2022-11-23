@@ -12,7 +12,7 @@ package mondrian.olap.fun;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -32,7 +32,7 @@ public class ValidMeasureFunDefTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testSecondHierarchyInDimension(Context context) throws SQLException {
+  public void testSecondHierarchyInDimension(TestingContext context) throws SQLException {
     final String schema = "<?xml version=\"1.0\"?>\n"
     + "<Schema name=\"FoodMart\">\n"
     + "  <Dimension name=\"Product\">\n"
@@ -87,7 +87,7 @@ public class ValidMeasureFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testValidMeasureWithNullTuple(Context context) {
+  public void testValidMeasureWithNullTuple(TestingContext context) {
     assertQueryReturns(context.createConnection(),
         "with member measures.vm as "
         + "'ValidMeasure((Measures.[Unit Sales], Store.[All Stores].Parent))' "

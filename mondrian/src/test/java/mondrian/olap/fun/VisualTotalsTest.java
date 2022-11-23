@@ -27,7 +27,7 @@ import org.olap4j.Position;
 import org.olap4j.metadata.Member;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -93,7 +93,7 @@ public class VisualTotalsTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDrillthroughVisualTotal(Context foodMartContext) throws SQLException {
+    public void testDrillthroughVisualTotal(TestingContext foodMartContext) throws SQLException {
         OlapConnection conn = foodMartContext.createOlap4jConnection();
         CellSet cellSet =
     		TestUtil.executeOlap4jQuery(conn,
@@ -132,7 +132,7 @@ public class VisualTotalsTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testVisualTotalCaptionBug(Context foodMartContext) throws SQLException {        
+    public void testVisualTotalCaptionBug(TestingContext foodMartContext) throws SQLException {        
         CellSet cellSet =
     		TestUtil.executeOlap4jQuery(foodMartContext.createOlap4jConnection(),
                 "select {[Measures].[Unit Sales]} on columns, "
@@ -160,7 +160,7 @@ public class VisualTotalsTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testVisualTotalsAggregatedMemberBug(Context foodMartContext) throws SQLException {        
+    public void testVisualTotalsAggregatedMemberBug(TestingContext foodMartContext) throws SQLException {        
         CellSet cellSet =
     		TestUtil.executeOlap4jQuery(foodMartContext.createOlap4jConnection(),
                 " with  member [Gender].[YTD] as 'AGGREGATE(YTD(),[Gender].[M])'" 

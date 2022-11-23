@@ -32,7 +32,7 @@ import org.olap4j.layout.RectangularCellSetFormatter;
 import mondrian.rolap.RolapUtil;
 import mondrian.spi.ProfileHandler;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -63,7 +63,7 @@ public class ExplainPlanTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testExplain(Context context) throws SQLException {
+  public void testExplain(TestingContext context) throws SQLException {
     Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
     //Util.setLevel( RolapUtil.PROFILE_LOGGER, Level.OFF ); // Must turn off in case test environment has enabled profiling
     OlapConnection connection = context.createOlap4jConnection();
@@ -100,7 +100,7 @@ public class ExplainPlanTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testExplainComplex(Context context) throws SQLException {
+  public void testExplainComplex(TestingContext context) throws SQLException {
     Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
     //Util.setLevel( RolapUtil.PROFILE_LOGGER, Level.OFF );; // Must turn off in case test environment has enabled profiling
     OlapConnection connection = context.createOlap4jConnection();
@@ -200,7 +200,7 @@ public class ExplainPlanTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testExplainInvalid(Context context) throws SQLException {
+  public void testExplainInvalid(TestingContext context) throws SQLException {
     OlapConnection connection = context.createOlap4jConnection();
     final OlapStatement statement = connection.createStatement();
     try {
@@ -220,7 +220,7 @@ public class ExplainPlanTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testQueryTimingAnalyzer(Context context) throws SQLException {
+  public void testQueryTimingAnalyzer(TestingContext context) throws SQLException {
 
     final String mdx =
         "WITH\r\n"
@@ -261,7 +261,7 @@ public class ExplainPlanTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testMutiKeySort(Context context) throws SQLException {
+  public void testMutiKeySort(TestingContext context) throws SQLException {
     final String mdx =
         "WITH\r\n"
             + " SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Gender_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],[*BASE_MEMBERS__Product_]))'\r\n"
@@ -291,7 +291,7 @@ public class ExplainPlanTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testNestedSumFunDef(Context context) throws SQLException {
+  public void testNestedSumFunDef(TestingContext context) throws SQLException {
     final String mdx =
         "WITH\r\n"
             + " SET [*NATIVE_CJ_SET] AS 'FILTER([Time].[Month].MEMBERS, NOT ISEMPTY ([Measures].[Unit Sales]))'\r\n"
@@ -321,7 +321,7 @@ public class ExplainPlanTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testAggAboveSlicerSolveOrder(Context context) throws SQLException {
+  public void testAggAboveSlicerSolveOrder(TestingContext context) throws SQLException {
 
     final String mdx =
         "WITH\r\n"
@@ -356,7 +356,7 @@ public class ExplainPlanTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testAggBelowSlicerSolveOrder(Context context) throws SQLException {
+  public void testAggBelowSlicerSolveOrder(TestingContext context) throws SQLException {
     propSaver.set(MondrianProperties.instance().DisableCaching, true );
     propSaver.set(MondrianProperties.instance().CompoundSlicerMemberSolveOrder, 0);
 	  
@@ -383,7 +383,7 @@ public class ExplainPlanTest {
     assertTrue(strings.get( 19 ).contains( "AggregateFunDef invoked 4 times" ), strings.get( 19 ));
   }
 
-  private ArrayList<String> executeOlapQuery(Context context, String mdx ) throws SQLException {
+  private ArrayList<String> executeOlapQuery(TestingContext context, String mdx ) throws SQLException {
     OlapConnection connection = context.createOlap4jConnection();
     Connection connection1 = context.createConnection();
     final CacheControl cacheControl = connection1.getCacheControl( null );

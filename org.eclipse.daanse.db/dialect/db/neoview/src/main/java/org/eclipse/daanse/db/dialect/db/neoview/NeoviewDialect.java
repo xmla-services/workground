@@ -9,16 +9,14 @@
 
 package org.eclipse.daanse.db.dialect.db.neoview;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the Neoview database.
@@ -28,21 +26,13 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='NEOVIEW'",
         "database.product:String='NEOVIEW'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class NeoviewDialect extends JdbcDialectImpl {
+    private static final String SUPPORTED_PRODUCT_NAME = "NEOVIEW";
 
-    public static final JdbcDialectFactory FACTORY = new JdbcDialectFactory(NeoviewDialect.class);
-
-    /**
-     * Creates a NeoviewDialect.
-     *
-     * @param connection Connection
-     */
-    public NeoviewDialect(Connection connection) throws SQLException {
-        super(connection);
-    }
-
-    public NeoviewDialect() {
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
     public boolean _supportsOrderByNullsLast() {

@@ -40,6 +40,7 @@ import java.util.*;
 
 import javax.sql.DataSource;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.engine.api.Context;
 
 /**
  * A <code>RolapSchema</code> is a collection of {@link RolapCube}s and
@@ -160,6 +161,8 @@ public class RolapSchema implements Schema {
      */
     private final String id;
 
+    private Context context;
+
     /**
      * This is ONLY called by other constructors (and MUST be called
      * by them) and NEVER by the Pool.
@@ -173,7 +176,7 @@ public class RolapSchema implements Schema {
     private RolapSchema(
         final SchemaKey key,
         final Util.PropertyList connectInfo,
-        final DataSource dataSource,
+        final Context context,
         final ByteString md5Bytes,
         boolean useContentChecksum)
     {
@@ -184,12 +187,13 @@ public class RolapSchema implements Schema {
             throw new AssertionError();
         }
 
+        this.context=context;
         DriverManager.drivers().forEach(System.out::println);
         // the order of the next two lines is important
         this.defaultRole = Util.createRootRole(this);
         final MondrianServer internalServer = MondrianServer.forId(null);
         this.internalConnection =
-            new RolapConnection(internalServer, connectInfo, this, dataSource);
+            new RolapConnection(internalServer, connectInfo, this, context.getDataSource());
         internalServer.removeConnection(internalConnection);
         internalServer.removeStatement(
             internalConnection.getInternalStatement());
@@ -214,9 +218,9 @@ public class RolapSchema implements Schema {
         String catalogUrl,
         String catalogStr,
         Util.PropertyList connectInfo,
-        DataSource dataSource)
+        Context context)
     {
-        this(key, connectInfo, dataSource, md5Bytes, md5Bytes != null);
+        this(key, connectInfo, context, md5Bytes, md5Bytes != null);
         load(catalogUrl, catalogStr, connectInfo);
         assert this.md5Bytes != null;
     }
@@ -495,8 +499,7 @@ public class RolapSchema implements Schema {
      * @return dialect
      */
     public Dialect getDialect() {
-        DataSource dataSource = getInternalConnection().getDataSource();
-        return DialectManager.createDialect(dataSource, null);
+        return context.getDialect();
     }
 
     private void load(MondrianDef.Schema xmlSchema) {
@@ -1285,7 +1288,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
     }
 
     public SchemaReader getSchemaReader() {
-        return new RolapSchemaReader(defaultRole, this).withLocus();
+        return new RolapSchemaReader(context,defaultRole, this).withLocus();
     }
 
     /**
@@ -1346,8 +1349,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
 
  // package-local visibility for testing purposes
     public RolapStar makeRolapStar(final MondrianDef.Relation fact) {
-        DataSource dataSource = getInternalConnection().getDataSource();
-        return new RolapStar(this, dataSource, fact);
+        return new RolapStar(this, context, fact);
     }
 
     /**

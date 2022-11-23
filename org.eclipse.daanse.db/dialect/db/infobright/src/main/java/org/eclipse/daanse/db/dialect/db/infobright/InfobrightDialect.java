@@ -14,10 +14,11 @@ import java.sql.SQLException;
 
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
-import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect3;
+import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 
@@ -28,33 +29,26 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @since Nov 23, 2008
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MYSQL'",
-		"database.product:String='INFOBRIGHT'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
-public class InfobrightDialect extends MySqlDialect3 {
+        "database.product:String='INFOBRIGHT'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
+public class InfobrightDialect extends MySqlDialect {
 
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            InfobrightDialect.class)
-        {
-            protected boolean acceptsConnection(Connection connection) {
-                try {
-                    return super.acceptsConnection(connection)
-                        && isInfobright(connection.getMetaData());
-                } catch (SQLException e) {
-                    throw new RuntimeException("Error while instantiating dialect",  e);
-                }
-            }
-        };
+    Logger LOGGER = LoggerFactory.getLogger(InfobrightDialect.class);
+    private static final String SUPPORTED_PRODUCT_NAME = "INFOBRIGHT";
 
-    public InfobrightDialect() {
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
-    /**
-     * Creates an InfobrightDialect.
-     *
-     * @param connection Connection
-     */
-    public InfobrightDialect(Connection connection) throws SQLException {
-        super(connection);
+
+    @Override
+    public boolean initialize(Connection connection) {
+        try {
+            return super.initialize(connection) && isInfobright(connection.getMetaData());
+        } catch (SQLException e) {
+            LOGGER.warn("", e);
+        }
+        return false;
     }
 
     public DatabaseProduct getDatabaseProduct() {
@@ -66,12 +60,7 @@ public class InfobrightDialect extends MySqlDialect3 {
     }
 
     @Override
-    public String generateOrderItem(
-        String expr,
-        boolean nullable,
-        boolean ascending,
-        boolean collateNullsLast)
-    {
+    public String generateOrderItem(String expr, boolean nullable, boolean ascending, boolean collateNullsLast) {
         // Like MySQL, Infobright collates NULL values as negative-infinity
         // (first in ASC, last in DESC). But we can't generate ISNULL to
         // correct the NULL ordering, as we do for MySQL, because Infobright

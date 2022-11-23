@@ -44,6 +44,7 @@ import mondrian.util.Pair;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.engine.api.Context;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;
@@ -426,7 +427,7 @@ public class SqlTupleReader implements TupleReader {
   }
 
   protected void prepareTuples(
-    DataSource dataSource,
+    Context context,
     TupleList partialResult,
     List<List<RolapMember>> newPartialResult, List<TargetBase> targetGroup ) {
     String message = "Populating member cache with members for "
@@ -445,12 +446,12 @@ public class SqlTupleReader implements TupleReader {
           }
         }
         final Pair<String, List<BestFitColumnType>> pair =
-          makeLevelMembersSql( dataSource, targetGroup );
+          makeLevelMembersSql( context, targetGroup );
         String sql = pair.left;
         List<BestFitColumnType> types = pair.right;
         assert sql != null && !sql.equals( "" );
         stmt = RolapUtil.executeQuery(
-          dataSource, sql, types, maxRows, 0,
+          context, sql, types, maxRows, 0,
           new SqlStatement.StatementLocus(
             Locus.peek().execution,
             "SqlTupleReader.readTuples " + partialTargets,
@@ -558,7 +559,7 @@ public class SqlTupleReader implements TupleReader {
   }
 
   public TupleList readMembers(
-    DataSource dataSource,
+    Context context,
     TupleList partialResult,
     List<List<RolapMember>> newPartialResult ) {
     int memberCount = countMembers();
@@ -567,7 +568,7 @@ public class SqlTupleReader implements TupleReader {
       missedMemberCount = 0;
       int memberCountBefore = memberCount;
 
-      prepareTuples( dataSource, partialResult, newPartialResult, targets );
+      prepareTuples( context, partialResult, newPartialResult, targets );
 
       memberCount = countMembers();
       if ( missedMemberCount == 0 ) {
@@ -617,7 +618,7 @@ public class SqlTupleReader implements TupleReader {
   }
 
   public TupleList readTuples(
-    DataSource jdbcConnection,
+    Context context,
     TupleList partialResult,
     List<List<RolapMember>> newPartialResult ) {
     // The following algorithm will first group targets based on the cubes
@@ -643,7 +644,7 @@ public class SqlTupleReader implements TupleReader {
       }
 
       prepareTuples(
-        jdbcConnection, partialResult, newPartialResult, targetGroup );
+        context, partialResult, newPartialResult, targetGroup );
 
       int size = targetGroup.size();
       final Iterator<Member>[] iter = new Iterator[ size ];
@@ -921,7 +922,7 @@ public class SqlTupleReader implements TupleReader {
   }
 
   Pair<String, List<BestFitColumnType>> makeLevelMembersSql(
-    DataSource dataSource, List<TargetBase> targetGroup ) {
+          Context context, List<TargetBase> targetGroup ) {
     // In the case of a virtual cube, if we need to join to the fact
     // table, we do not necessarily have a single underlying fact table,
     // as the underlying base cubes in the virtual cube may all reference
@@ -953,7 +954,7 @@ public class SqlTupleReader implements TupleReader {
       Collection<RolapCube> fullyJoiningBaseCubes =
         getFullyJoiningBaseCubes( baseCubes, targetGroup );
       if ( fullyJoiningBaseCubes.size() == 0 ) {
-        return sqlForEmptyTuple( dataSource, baseCubes );
+        return sqlForEmptyTuple( context, baseCubes );
       }
       // generate sub-selects, each one joining with one of
       // the fact table referenced
@@ -964,7 +965,7 @@ public class SqlTupleReader implements TupleReader {
       final int savepoint =
         getEvaluator( constraint ).savepoint();
 
-      SqlQuery unionQuery = SqlQuery.newQuery( dataSource, "" );
+      SqlQuery unionQuery = SqlQuery.newQuery( context, "" );
 
       try {
         for ( RolapCube baseCube : fullyJoiningBaseCubes ) {
@@ -1010,7 +1011,7 @@ public class SqlTupleReader implements TupleReader {
           // (that would be illegal SQL)
           final Pair<String, List<BestFitColumnType>> pair =
             generateSelectForLevels(
-              dataSource, baseCube,
+              context, baseCube,
               fullyJoiningBaseCubes.size() == 1
                 ? WhichSelect.ONLY
                 : WhichSelect.NOT_LAST,
@@ -1067,7 +1068,7 @@ public class SqlTupleReader implements TupleReader {
       // This is the standard code path with regular single-fact table
       // cubes.
       return generateSelectForLevels(
-        dataSource, cube, WhichSelect.ONLY, targetGroup );
+        context, cube, WhichSelect.ONLY, targetGroup );
     }
   }
 
@@ -1156,9 +1157,9 @@ public class SqlTupleReader implements TupleReader {
   }
 
   Pair<String, List<BestFitColumnType>> sqlForEmptyTuple(
-    DataSource dataSource,
+    final Context context,
     final Collection<RolapCube> baseCubes ) {
-    final SqlQuery sqlQuery = SqlQuery.newQuery( dataSource, null );
+    final SqlQuery sqlQuery = SqlQuery.newQuery( context, null );
     sqlQuery.addSelect( "0", null );
     sqlQuery.addFrom( baseCubes.iterator().next().getFact(), null, true );
     sqlQuery.addWhere( "1 = 0" );
@@ -1175,14 +1176,14 @@ public class SqlTupleReader implements TupleReader {
    * @return SQL statement string and types
    */
   Pair<String, List<BestFitColumnType>> generateSelectForLevels(
-    DataSource dataSource,
+    Context context,
     RolapCube baseCube,
     WhichSelect whichSelect, List<TargetBase> targetGroup ) {
     String s =
       "while generating query to retrieve members of level(s) " + targets;
 
     // Allow query to use optimization hints from the table definition
-    SqlQuery sqlQuery = SqlQuery.newQuery( dataSource, s );
+    SqlQuery sqlQuery = SqlQuery.newQuery( context, s );
     sqlQuery.setAllowHints( allowHints );
 
 

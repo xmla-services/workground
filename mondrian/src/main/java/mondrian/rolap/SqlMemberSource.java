@@ -11,29 +11,50 @@
 */
 package mondrian.rolap;
 
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.engine.api.Context;
+import org.eigenbase.util.property.StringProperty;
+
 import mondrian.calc.TupleList;
-import mondrian.olap.*;
+import mondrian.olap.Access;
+import mondrian.olap.Dimension;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.Id;
+import mondrian.olap.Member;
+import mondrian.olap.MondrianDef;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Property;
+import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.CellRequest;
 import mondrian.rolap.aggmatcher.AggStar;
-import mondrian.rolap.sql.*;
+import mondrian.rolap.sql.MemberChildrenConstraint;
+import mondrian.rolap.sql.MemberKeyConstraint;
+import mondrian.rolap.sql.SqlQuery;
+import mondrian.rolap.sql.TupleConstraint;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.monitor.SqlStatementEvent;
-import mondrian.util.*;
-
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.Datatype;
-import org.eigenbase.util.property.StringProperty;
-
-import java.sql.*;
-import java.util.*;
-
-import javax.sql.DataSource;
+import mondrian.util.CancellationChecker;
+import mondrian.util.CreationException;
+import mondrian.util.ObjectFactory;
+import mondrian.util.Pair;
 
 /**
  * A <code>SqlMemberSource</code> reads members from a SQL database.
@@ -51,7 +72,7 @@ class SqlMemberSource
     private final SqlConstraintFactory sqlConstraintFactory =
         SqlConstraintFactory.instance();
     private final RolapHierarchy hierarchy;
-    private final DataSource dataSource;
+    private final Context context;
     private MemberCache cache;
     private int lastOrdinal = 0;
     private boolean assignOrderKeys;
@@ -59,8 +80,8 @@ class SqlMemberSource
 
     SqlMemberSource(RolapHierarchy hierarchy) {
         this.hierarchy = hierarchy;
-        this.dataSource =
-            hierarchy.getRolapSchema().getInternalConnection().getDataSource();
+        this.context =
+            hierarchy.getRolapSchema().getSchemaReader().getContext();
         assignOrderKeys =
             MondrianProperties.instance().CompareSiblingsByOrderKey.get();
         valuePool = ValuePoolFactoryFactory.getValuePoolFactory().create(this);
@@ -142,15 +163,15 @@ class SqlMemberSource
         if (level.isAll()) {
             return 1;
         }
-        return getMemberCount(level, dataSource);
+        return getMemberCount(level, context);
     }
 
-    private int getMemberCount(RolapLevel level, DataSource dataSource) {
+    private int getMemberCount(RolapLevel level, Context context) {
         boolean[] mustCount = new boolean[1];
-        String sql = makeLevelMemberCountSql(level, dataSource, mustCount);
+        String sql = makeLevelMemberCountSql(level, context, mustCount);
         final SqlStatement stmt =
             RolapUtil.executeQuery(
-                dataSource,
+                    context,
                 sql,
                 new Locus(
                     Locus.peek().execution,
@@ -214,13 +235,13 @@ class SqlMemberSource
      */
     private String makeLevelMemberCountSql(
         RolapLevel level,
-        DataSource dataSource,
+        Context context,
         boolean[] mustCount)
     {
         mustCount[0] = false;
         SqlQuery sqlQuery =
             SqlQuery.newQuery(
-                dataSource,
+                    context,
                 "while generating query to count members in level " + level);
         int levelDepth = level.getDepth();
         RolapLevel[] levels = (RolapLevel[]) hierarchy.getLevels();
@@ -299,7 +320,7 @@ class SqlMemberSource
             }
             SqlQuery outerQuery =
                 SqlQuery.newQuery(
-                    dataSource,
+                    context,
                     "while generating query to count members in level "
                     + level);
             outerQuery.addSelect("count(*)", null);
@@ -313,17 +334,17 @@ class SqlMemberSource
 
 
     public List<RolapMember> getMembers() {
-        return getMembers(dataSource);
+        return getMembers(context);
     }
 
-    private List<RolapMember> getMembers(DataSource dataSource) {
-        Pair<String, List<BestFitColumnType>> pair = makeKeysSql(dataSource);
+    private List<RolapMember> getMembers(Context context) {
+        Pair<String, List<BestFitColumnType>> pair = makeKeysSql(context);
         final String sql = pair.left;
         List<BestFitColumnType> types = pair.right;
         RolapLevel[] levels = (RolapLevel[]) hierarchy.getLevels();
         SqlStatement stmt =
             RolapUtil.executeQuery(
-                dataSource, sql, types, 0, 0,
+                context, sql, types, 0, 0,
                 new SqlStatement.StatementLocus(
                     null,
                     "SqlMemberSource.getMembers",
@@ -453,11 +474,11 @@ RME is this right
     }
 
     private Pair<String, List<BestFitColumnType>> makeKeysSql(
-        DataSource dataSource)
+        Context context)
     {
         SqlQuery sqlQuery =
             SqlQuery.newQuery(
-                dataSource,
+                context,
                 "while generating query to retrieve members of " + hierarchy);
         RolapLevel[] levels = (RolapLevel[]) hierarchy.getLevels();
         for (RolapLevel level : levels) {
@@ -542,7 +563,7 @@ RME is this right
         }
         tupleReader.addLevelMembers(level, this, null);
         final TupleList tupleList =
-            tupleReader.readMembers(dataSource, null, null);
+            tupleReader.readMembers(context, null, null);
 
         assert tupleList.getArity() == 1;
         return Util.cast(tupleList.slice(0));
@@ -579,12 +600,12 @@ RME is this right
      */
     Pair<String, List<BestFitColumnType>> makeChildMemberSql(
         RolapMember member,
-        DataSource dataSource,
+        Context context,
         MemberChildrenConstraint constraint)
     {
         SqlQuery sqlQuery =
             SqlQuery.newQuery(
-                dataSource,
+                context,
                 "while generating query to retrieve children of member "
                     + member);
 
@@ -984,7 +1005,7 @@ RME is this right
                 pair = makeChildMemberSql_PCRoot(parentMember);
                 parentChild = true;
             } else {
-                pair = makeChildMemberSql(parentMember, dataSource, constraint);
+                pair = makeChildMemberSql(parentMember, context, constraint);
                 parentChild = false;
             }
         }
@@ -996,7 +1017,7 @@ RME is this right
         final List<BestFitColumnType> types = pair.right;
         SqlStatement stmt =
             RolapUtil.executeQuery(
-                dataSource, sql, types, 0, 0,
+                    context, sql, types, 0, 0,
                 new SqlStatement.StatementLocus(
                     Locus.peek().execution,
                     "SqlMemberSource.getMemberChildren",
@@ -1195,7 +1216,7 @@ RME is this right
     {
         SqlQuery sqlQuery =
             SqlQuery.newQuery(
-                dataSource,
+                context,
                 "while generating query to retrieve children of parent/child "
                 + "hierarchy member " + member);
         Util.assertTrue(
@@ -1309,7 +1330,7 @@ RME is this right
     {
         SqlQuery sqlQuery =
             SqlQuery.newQuery(
-                dataSource,
+                context,
                 "while generating query to retrieve children of "
                 + "parent/child hierarchy member " + member);
         RolapLevel level = member.getLevel();

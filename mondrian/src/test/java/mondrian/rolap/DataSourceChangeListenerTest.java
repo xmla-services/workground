@@ -25,7 +25,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -65,7 +65,7 @@ public class DataSourceChangeListenerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDataSourceChangeListenerPlugin(Context context) {
+    public void testDataSourceChangeListenerPlugin(TestingContext context) {
         final MondrianProperties properties = MondrianProperties.instance();
         if (properties.TestExpDependencies.get() > 0) {
             // Dependency testing produces side-effects in the cache.
@@ -213,7 +213,7 @@ public class DataSourceChangeListenerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void dont_testParallelDataSourceChangeListenerPlugin(Context context) {
+    public void dont_testParallelDataSourceChangeListenerPlugin(TestingContext context) {
         if (true) {
             return;
         }
@@ -234,7 +234,7 @@ public class DataSourceChangeListenerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    private void checkCacheFlushing(Context context,
+    private void checkCacheFlushing(TestingContext context,
         final int workerCount,
         final int cycleCount)
     {

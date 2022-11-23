@@ -10,11 +10,12 @@
 */
 package mondrian.rolap;
 
-import mondrian.calc.TupleList;
-
 import java.sql.SQLException;
 import java.util.List;
-import javax.sql.DataSource;
+
+import org.eclipse.daanse.engine.api.Context;
+
+import mondrian.calc.TupleList;
 
 /**
  * Describes the public methods of {@link mondrian.rolap.SqlTupleReader}.
@@ -105,7 +106,7 @@ public interface TupleReader {
      * @return a list of tuples
      */
     TupleList readTuples(
-        DataSource dataSource,
+        Context context,
         TupleList partialResult,
         List<List<RolapMember>> newPartialResult);
 
@@ -121,7 +122,7 @@ public interface TupleReader {
      * @return a list of RolapMember
      */
     TupleList readMembers(
-        DataSource dataSource,
+        Context context,
         TupleList partialResult,
         List<List<RolapMember>> newPartialResult);
 

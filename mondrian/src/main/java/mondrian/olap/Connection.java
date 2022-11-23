@@ -15,6 +15,8 @@ import java.io.PrintWriter;
 import java.util.Locale;
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.engine.api.Context;
+
 /**
  * Connection to a multi-dimensional database.
  *
@@ -133,6 +135,8 @@ public interface Connection {
      * @return Data source
      */
     DataSource getDataSource();
+
+    Context getContext();
 }
 
 // End Connection.java

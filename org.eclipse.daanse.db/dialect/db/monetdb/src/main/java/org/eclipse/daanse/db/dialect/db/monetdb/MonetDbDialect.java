@@ -9,19 +9,19 @@
 */
 package org.eclipse.daanse.db.dialect.db.monetdb;
 
-import java.sql.Connection;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
+import javax.sql.DataSource;
+
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.common.Util;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the MonetDB database.
@@ -30,29 +30,16 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @since Nov 10, 2012
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MONETDB'",
-		"database.product:String='MONETDB'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+        "database.product:String='MONETDB'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class MonetDbDialect extends JdbcDialectImpl {
-  private static final String DOT = "\\.";
+    private static final String DOT = "\\.";
 
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            MonetDbDialect.class);
+    private static final String SUPPORTED_PRODUCT_NAME = "MONETDB";
 
-
-    /**
-     * Creates a MonetDbDialect.
-     *
-     * @param connection Connection
-     *
-     * @throws java.sql.SQLException on error
-     */
-    public MonetDbDialect(Connection connection) throws SQLException {
-        super(connection);
-    }
-
-    public MonetDbDialect() {
-        super();
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
     @Override
@@ -62,19 +49,20 @@ public class MonetDbDialect extends JdbcDialectImpl {
 
     @Override
     public boolean allowsCountDistinct() {
-      // MonetDB before Aug 2011-SP2 bugfix release (11.5.7) has the issue http://bugs.monetdb.org/2890
-      // So we uses count distinct only started from V11.5.7+
-      return compareVersions( productVersion, "11.5.7" ) >= 0;
+        // MonetDB before Aug 2011-SP2 bugfix release (11.5.7) has the issue
+        // http://bugs.monetdb.org/2890
+        // So we uses count distinct only started from V11.5.7+
+        return compareVersions(productVersion, "11.5.7") >= 0;
     }
 
     @Override
     public boolean allowsCountDistinctWithOtherAggs() {
-      return false;
+        return false;
     }
 
     @Override
     public boolean allowsMultipleCountDistinct() {
-      return false;
+        return false;
     }
 
     @Override
@@ -103,10 +91,7 @@ public class MonetDbDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public BestFitColumnType getType(
-        ResultSetMetaData metaData, int columnIndex)
-        throws SQLException
-    {
+    public BestFitColumnType getType(ResultSetMetaData metaData, int columnIndex) throws SQLException {
         final int columnType = metaData.getColumnType(columnIndex + 1);
         final int precision = metaData.getPrecision(columnIndex + 1);
         final int scale = metaData.getScale(columnIndex + 1);
@@ -134,35 +119,38 @@ public class MonetDbDialect extends JdbcDialectImpl {
      * <p>11.5.3
       * </code>
      *
-     * @param v1
-     *          the first version be compared
-     * @param v2
-     *          the second version to be compared
-     * @return the value 0 if two versions are equal; a value less than 0 if the first version number is less than the
-     *         second one; and a value greater than 0 if the first version number is greater than the second one.
+     * @param v1 the first version be compared
+     * @param v2 the second version to be compared
+     * @return the value 0 if two versions are equal; a value less than 0 if the
+     *         first version number is less than the second one; and a value greater
+     *         than 0 if the first version number is greater than the second one.
      */
-    public int compareVersions( String v1, String v2 ) {
-      int result = v1.compareTo( v2 );
-      if ( result == 0 ) {
-        return result;
-      }
-      // MonetDB versions consists of didgits separated by dots. E.g.: 11.17.17, 11.5.3
-      // So parsing parts as String and then compare them as Integer.
-      String[] parts1 = v1.split( DOT );
-      String[] parts2 = v2.split( DOT );
-
-      int partsCount = Math.min( parts1.length, parts2.length );
-      for ( int i = 0; i < partsCount; i++ ) {
-        result = Integer.valueOf( parts1[i] ).compareTo( Integer.valueOf( parts2[i] ) );
-        if ( result != 0 ) {
-          return result;
+    public int compareVersions(String v1, String v2) {
+        int result = v1.compareTo(v2);
+        if (result == 0) {
+            return result;
         }
-      }
+        // MonetDB versions consists of didgits separated by dots. E.g.: 11.17.17,
+        // 11.5.3
+        // So parsing parts as String and then compare them as Integer.
+        String[] parts1 = v1.split(DOT);
+        String[] parts2 = v2.split(DOT);
 
-      result = parts1.length - parts2.length;
-      return result;
+        int partsCount = Math.min(parts1.length, parts2.length);
+        for (int i = 0; i < partsCount; i++) {
+            result = Integer.valueOf(parts1[i])
+                    .compareTo(Integer.valueOf(parts2[i]));
+            if (result != 0) {
+                return result;
+            }
+        }
+
+        result = parts1.length - parts2.length;
+        return result;
     }
 
-  }
+
+
+}
 
 // End MonetDbDialect.java

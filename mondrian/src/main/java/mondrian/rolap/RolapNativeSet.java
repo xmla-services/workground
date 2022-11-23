@@ -40,6 +40,7 @@ import mondrian.rolap.sql.TupleConstraint;
 import org.apache.commons.collections.Predicate;
 
 import org.apache.logging.log4j.Logger;
+import org.eclipse.daanse.engine.api.Context;
 import org.apache.logging.log4j.LogManager;
 
 import java.util.ArrayList;
@@ -273,15 +274,15 @@ public abstract class RolapNativeSet extends RolapNative {
       if ( hasEnumTargets && partialResult == null ) {
         newPartialResult = new ArrayList<List<RolapMember>>();
       }
-      DataSource dataSource = schemaReader.getDataSource();
+      Context context= schemaReader.getContext();
       if ( args.length == 1 ) {
         result =
           tr.readMembers(
-            dataSource, partialResult, newPartialResult );
+              context, partialResult, newPartialResult );
       } else {
         result =
           tr.readTuples(
-            dataSource, partialResult, newPartialResult );
+              context, partialResult, newPartialResult );
       }
 
       // Check limit of result size already is too large
@@ -310,7 +311,7 @@ public abstract class RolapNativeSet extends RolapNative {
         str.setMaxRows( maxRows - result.size() );
         result.addAll(
           str.readMembers(
-            dataSource, null, new ArrayList<List<RolapMember>>() ) );
+            context, null, new ArrayList<List<RolapMember>>() ) );
       }
 
       if ( !MondrianProperties.instance().DisableCaching.get() ) {
@@ -554,6 +555,11 @@ public abstract class RolapNativeSet extends RolapNative {
         hierarchyReaders.put( hierarchy, memberReader );
       }
       return memberReader;
+    }
+
+    @Override
+    public Context getContext() {
+        return schemaReader.getContext();
     }
   }
 

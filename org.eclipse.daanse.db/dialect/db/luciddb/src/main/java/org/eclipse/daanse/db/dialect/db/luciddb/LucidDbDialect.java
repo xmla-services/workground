@@ -9,15 +9,12 @@
 
 package org.eclipse.daanse.db.dialect.db.luciddb;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the LucidDB database.
@@ -26,25 +23,15 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @since Nov 23, 2008
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='LUCIDDB'",
-		"database.product:String='LUCIDDB'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+        "database.product:String='LUCIDDB'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class LucidDbDialect extends JdbcDialectImpl {
 
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            LucidDbDialect.class);
+    private static final String SUPPORTED_PRODUCT_NAME = "LUCIDDB";
 
-    public LucidDbDialect() {
-    }
-    /**
-     * Creates a LucidDbDialect.
-     *
-     * @param connection Connection
-     *
-     * @throws java.sql.SQLException on error
-     */
-    public LucidDbDialect(Connection connection) throws SQLException {
-        super(connection);
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
     public boolean allowsMultipleDistinctSqlMeasures() {

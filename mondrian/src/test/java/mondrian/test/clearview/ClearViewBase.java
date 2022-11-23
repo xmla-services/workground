@@ -25,7 +25,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import static org.opencube.junit5.TestUtil.getDialect;
@@ -70,7 +70,7 @@ import static org.opencube.junit5.TestUtil.getDialect;
 
 
     // implement TestCase
-    protected void runTest(Context context) {
+    protected void runTest(TestingContext context) {
             DiffRepository diffRepos = getDiffRepos();
             // add calculated member to a cube if specified in the xml file
             String cubeName = diffRepos.expand(null, "${modifiedCubeName}").trim();

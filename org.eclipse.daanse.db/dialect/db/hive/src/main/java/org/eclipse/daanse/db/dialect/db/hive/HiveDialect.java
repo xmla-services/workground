@@ -9,18 +9,23 @@
 */
 package org.eclipse.daanse.db.dialect.db.hive;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.Date;
-import java.util.*;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.Util;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the Hive database.
@@ -29,43 +34,28 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @since Jan 10, 2011
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='HIVE'",
-		"database.product:String='HIVE'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+        "database.product:String='HIVE'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class HiveDialect extends JdbcDialectImpl {
     private static final int MAX_COLUMN_NAME_LENGTH = 128;
 
-    public HiveDialect() {
-    }
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            HiveDialect.class)
-        {
-            protected boolean acceptsConnection(Connection connection) {
-                return super.acceptsConnection(connection)
-                    && !isDatabase(DatabaseProduct.IMPALA, connection);
-            }
-        };
+    private static final String SUPPORTED_PRODUCT_NAME = "HIVE";
 
-    /**
-     * Creates a HiveDialect.
-     *
-     * @param connection Connection
-     *
-     * @throws SQLException on error
-     */
-    public HiveDialect(Connection connection) throws SQLException {
-        super(connection);
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
-    protected String deduceIdentifierQuoteString(
-        DatabaseMetaData databaseMetaData)
-    {
+    @Override
+    public boolean initialize(Connection connection) {
+        return super.initialize(connection) && !isDatabase(DatabaseProduct.IMPALA, connection);
+    }
+
+    protected String deduceIdentifierQuoteString(DatabaseMetaData databaseMetaData) {
         return null;
     }
 
-    protected Set<List<Integer>> deduceSupportedResultSetStyles(
-        DatabaseMetaData databaseMetaData)
-    {
+    protected Set<List<Integer>> deduceSupportedResultSetStyles(DatabaseMetaData databaseMetaData) {
         // Hive don't support this, so just return an empty set.
         return Collections.emptySet();
     }
@@ -118,32 +108,18 @@ public class HiveDialect extends JdbcDialectImpl {
         return false;
     }
 
-    public String generateInline(
-        List<String> columnNames,
-        List<String> columnTypes,
-        List<String[]> valueList)
-    {
-        return "select * from ("
-            + generateInlineGeneric(
-                columnNames, columnTypes, valueList, " from dual", false)
-            + ") x limit " + valueList.size();
+    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+        return "select * from (" + generateInlineGeneric(columnNames, columnTypes, valueList, " from dual", false)
+                + ") x limit " + valueList.size();
     }
 
-    protected void quoteDateLiteral(
-        StringBuilder buf,
-        String value,
-        Date date)
-    {
+    protected void quoteDateLiteral(StringBuilder buf, String value, Date date) {
         // Hive doesn't support Date type; treat date as a string '2008-01-23'
         Util.singleQuoteString(value, buf);
     }
 
     @Override
-    protected String generateOrderByNulls(
-        String expr,
-        boolean ascending,
-        boolean collateNullsLast)
-    {
+    protected String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
         // In Hive, Null values are worth negative infinity.
         if (collateNullsLast) {
             if (ascending) {
@@ -168,15 +144,11 @@ public class HiveDialect extends JdbcDialectImpl {
         return false;
     }
 
-    public void quoteTimestampLiteral(
-        StringBuilder buf,
-        String value)
-    {
+    public void quoteTimestampLiteral(StringBuilder buf, String value) {
         try {
             Timestamp.valueOf(value);
         } catch (IllegalArgumentException ex) {
-            throw new NumberFormatException(
-                "Illegal TIMESTAMP literal:  " + value);
+            throw new NumberFormatException("Illegal TIMESTAMP literal:  " + value);
         }
         buf.append("cast( ");
         Util.singleQuoteString(value, buf);

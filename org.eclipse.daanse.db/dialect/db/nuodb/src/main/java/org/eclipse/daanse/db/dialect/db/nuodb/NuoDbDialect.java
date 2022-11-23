@@ -8,51 +8,40 @@
 */
 package org.eclipse.daanse.db.dialect.db.nuodb;
 
-import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.List;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.Util;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
+import aQute.bnd.annotation.spi.ServiceProvider;
+
 /**
- * Implementation of {@link Dialect} for the NuoDB database.
- * In order to use NuoDB with Hitachi Vantara Mondrian users can only use NuoDB
- * version 2.0.4 or newer.
+ * Implementation of {@link Dialect} for the NuoDB database. In order to use
+ * NuoDB with Hitachi Vantara Mondrian users can only use NuoDB version 2.0.4 or
+ * newer.
  *
  * @author rbuck
  * @since Mar 20, 2014
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='NUODB'",
-		"database.product:String='NUODB'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+        "database.product:String='NUODB'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class NuoDbDialect extends JdbcDialectImpl {
+    private static final String SUPPORTED_PRODUCT_NAME = "NUODB";
 
-    public static final JdbcDialectFactory FACTORY =
-            new JdbcDialectFactory(
-                    NuoDbDialect.class);
-
-    public NuoDbDialect() {
-    }
-    /**
-     * Creates a NuoDbDialect.
-     *
-     * @param connection Connection
-     */
-    public NuoDbDialect(Connection connection) throws SQLException {
-        super(connection);
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
     /**
-     * In order to generate a SQL statement to represent an inline dataset
-     * NuoDB requires that you use FROM DUAL.
+     * In order to generate a SQL statement to represent an inline dataset NuoDB
+     * requires that you use FROM DUAL.
      *
      * @param columnNames the list of column names
      * @param columnTypes the list of column types
@@ -61,14 +50,12 @@ public class NuoDbDialect extends JdbcDialectImpl {
      */
     @Override
     public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
-        return generateInlineGeneric(
-                columnNames, columnTypes, valueList,
-                " FROM DUAL", false);
+        return generateInlineGeneric(columnNames, columnTypes, valueList, " FROM DUAL", false);
     }
 
     /**
-     * NuoDB does not yet support ANSI SQL:2003 for DATE literals so we have
-     * to cast dates using a function.
+     * NuoDB does not yet support ANSI SQL:2003 for DATE literals so we have to cast
+     * dates using a function.
      *
      * @param buf   Buffer to append to
      * @param value Value as string
@@ -82,13 +69,12 @@ public class NuoDbDialect extends JdbcDialectImpl {
     }
 
     /**
-     * The NuoDB JDBC driver lists " " as the string to use for quoting, but we
-     * know better. Ideally the quotation character ought to have been "`" but
-     * if that is used and a generated query uses non quoted object names, not-
-     * found exceptions will occur for the object. So we here fall back to using
-     * the double quote character. We ought to investigate why back-tick won't
-     * work. But for now this makes all the tests work with Nuo (besides the
-     * tweaks above).
+     * The NuoDB JDBC driver lists " " as the string to use for quoting, but we know
+     * better. Ideally the quotation character ought to have been "`" but if that is
+     * used and a generated query uses non quoted object names, not- found
+     * exceptions will occur for the object. So we here fall back to using the
+     * double quote character. We ought to investigate why back-tick won't work. But
+     * for now this makes all the tests work with Nuo (besides the tweaks above).
      *
      * @param databaseMetaData the database metadata from the connection
      * @return the quotation character
@@ -104,4 +90,3 @@ public class NuoDbDialect extends JdbcDialectImpl {
 }
 
 // End NuoDbDialect.java
-

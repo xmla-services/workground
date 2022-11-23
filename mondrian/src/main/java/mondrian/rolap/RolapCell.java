@@ -20,7 +20,7 @@ import mondrian.rolap.agg.*;
 import mondrian.server.*;
 import mondrian.server.monitor.SqlStatementEvent;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-
+import org.eclipse.daanse.engine.api.Context;
 import org.apache.logging.log4j.Logger;
 
 import org.olap4j.AllocationPolicy;
@@ -182,7 +182,7 @@ public class RolapCell implements Cell {
 
         final SqlStatement stmt =
             RolapUtil.executeQuery(
-                connection.getDataSource(),
+                connection.getContext(),
                 sql,
                 new Locus(
                     new Execution(connection.getInternalStatement(), 0),
@@ -499,6 +499,7 @@ public class RolapCell implements Cell {
         final Statement statement =
             result.getExecution().getMondrianStatement();
         final Execution execution = new Execution(statement, 0);
+        
         final Connection connection = statement.getMondrianConnection();
         int resultSetType = ResultSet.TYPE_SCROLL_INSENSITIVE;
         int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
@@ -512,9 +513,10 @@ public class RolapCell implements Cell {
             // fake absolute() via forward fetch
             resultSetType = ResultSet.TYPE_FORWARD_ONLY;
         }
+        Context context= connection.getContext();
         return
             RolapUtil.executeQuery(
-                connection.getDataSource(),
+                context,
                 sql,
                 null,
                 maxRowCount,

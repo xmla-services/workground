@@ -13,7 +13,7 @@ import mondrian.olap.Connection;
 import mondrian.tui.CmdRunner;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -33,14 +33,14 @@ public class CmdRunnerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testQuery(Context context) throws IOException {
+    public void testQuery(TestingContext context) throws IOException {
         connection = context.createConnection();
         doTest();
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void test7731(Context context) throws IOException {
+    public void test7731(TestingContext context) throws IOException {
         connection = context.createConnection();
         doTest();
     }

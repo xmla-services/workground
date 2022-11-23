@@ -11,7 +11,7 @@ package mondrian.rolap;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -23,7 +23,7 @@ public class RolapEvaluatorTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testGetSlicerPredicateInfo(Context context) throws Exception {
+    public void testGetSlicerPredicateInfo(TestingContext context) throws Exception {
         RolapResult result = (RolapResult) executeQuery(context.createConnection(),
             "select  from sales "
             + "WHERE {[Time].[1997].Q1, [Time].[1997].Q2} "
@@ -56,7 +56,7 @@ public class RolapEvaluatorTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testListColumnPredicateInfo(Context context) throws Exception {
+    public void testListColumnPredicateInfo(TestingContext context) throws Exception {
       RolapResult result = (RolapResult) executeQuery(context.createConnection(),
           "select  from sales "
           + "WHERE {[Product].[Drink],[Product].[Non-Consumable]} ");
@@ -71,7 +71,7 @@ public class RolapEvaluatorTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testOrPredicateInfo(Context context) throws Exception {
+    public void testOrPredicateInfo(TestingContext context) throws Exception {
       RolapResult result = (RolapResult) executeQuery(context.createConnection(),
           "select  from sales "
           + "WHERE {[Product].[Drink].[Beverages],[Product].[Food].[Produce],[Product].[Non-Consumable]} ");

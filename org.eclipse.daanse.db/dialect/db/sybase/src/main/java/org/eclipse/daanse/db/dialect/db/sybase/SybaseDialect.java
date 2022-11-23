@@ -9,17 +9,15 @@
 */
 package org.eclipse.daanse.db.dialect.db.sybase;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.SQLException;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.Util;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the Sybase database.
@@ -29,22 +27,14 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='SYBASE'",
 		"database.product:String='SYBASE'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class SybaseDialect extends JdbcDialectImpl {
 
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            SybaseDialect.class);
+    private static final String SUPPORTED_PRODUCT_NAME = "SQLSTREAM";
 
-    public SybaseDialect() {
-    }
-    /**
-     * Creates a SybaseDialect.
-     *
-     * @param connection Connection
-     */
-    public SybaseDialect(Connection connection) throws SQLException {
-        super(connection);
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
     public boolean allowsAs() {

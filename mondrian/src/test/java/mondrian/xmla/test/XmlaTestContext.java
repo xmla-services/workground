@@ -23,7 +23,7 @@ import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.Olap4jUtil;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnectionProperties;
@@ -58,7 +58,7 @@ public class XmlaTestContext {
         new CatalogLocatorImpl();
 
 
-    public static String getConnectString(Context context) {
+    public static String getConnectString(TestingContext context) {
 
 
 		String connectString = context.getOlapConnectString();
@@ -68,7 +68,7 @@ public class XmlaTestContext {
         return connectString;
     }
 
-    public DataSourcesConfig.DataSources dataSources(Context context) {
+    public DataSourcesConfig.DataSources dataSources(TestingContext context) {
         if (DATASOURCES != null) {
             return DATASOURCES;
         }
@@ -86,7 +86,7 @@ public class XmlaTestContext {
         return DATASOURCES;
     }
 
-    public static String getDataSourcesString(Context context) {
+    public static String getDataSourcesString(TestingContext context) {
     	String connectString=getConnectString(context);
         Util.PropertyList connectProperties =
             Util.parseConnectString(connectString);
