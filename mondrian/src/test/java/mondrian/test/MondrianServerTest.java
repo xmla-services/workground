@@ -21,7 +21,7 @@ import org.olap4j.OlapConnection;
 import org.olap4j.metadata.Catalog;
 import org.olap4j.metadata.NamedList;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -43,7 +43,7 @@ public class MondrianServerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testEmbedded(Context context) {
+    public void testEmbedded(TestingContext context) {
         final MondrianServer server =
             MondrianServer.forConnection(context.createConnection());
         final int id = server.getId();
@@ -71,7 +71,7 @@ public class MondrianServerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testRepository(Context context) throws MalformedURLException, SQLException {
+    public void testRepository(TestingContext context) throws MalformedURLException, SQLException {
         final XmlaTestContext xmlaTestContext = new XmlaTestContext();
         final MondrianServer server =
             MondrianServer.createWithRepository(
@@ -94,7 +94,7 @@ public class MondrianServerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testRepositoryWithBadCatalog(Context context) throws Exception {
+    public void testRepositoryWithBadCatalog(TestingContext context) throws Exception {
         final XmlaTestContext xmlaTestContext = new XmlaTestContext() {
             Util.PropertyList connectProperties =
                 Util.parseConnectString(context.createConnection().getConnectString());

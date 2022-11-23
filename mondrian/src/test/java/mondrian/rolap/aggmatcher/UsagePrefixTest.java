@@ -12,7 +12,7 @@ package mondrian.rolap.aggmatcher;
 import mondrian.olap.MondrianProperties;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -73,7 +73,7 @@ public class UsagePrefixTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testUsagePrefix(Context context) throws Exception {
+    public void testUsagePrefix(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -107,7 +107,7 @@ public class UsagePrefixTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testUsagePrefixTwoDims(Context context) throws Exception {
+    public void testUsagePrefixTwoDims(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;

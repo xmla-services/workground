@@ -11,6 +11,7 @@ package mondrian.spi;
 
 import mondrian.server.Execution;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.engine.api.Context;
 
 import javax.sql.DataSource;
 
@@ -44,8 +45,7 @@ public interface StatisticsProvider {
      * is no estimate
      */
     long getTableCardinality(
-        Dialect dialect,
-        DataSource dataSource,
+        Context context,
         String catalog,
         String schema,
         String table,
@@ -63,8 +63,7 @@ public interface StatisticsProvider {
      * is no estimate
      */
     long getQueryCardinality(
-        Dialect dialect,
-        DataSource dataSource,
+        Context context,
         String sql,
         Execution execution);
 
@@ -83,8 +82,7 @@ public interface StatisticsProvider {
      * is no estimate
      */
     long getColumnCardinality(
-        Dialect dialect,
-        DataSource dataSource,
+        Context context,
         String catalog,
         String schema,
         String table,

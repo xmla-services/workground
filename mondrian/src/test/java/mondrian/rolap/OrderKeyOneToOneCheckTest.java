@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -52,7 +52,7 @@ class OrderKeyOneToOneCheckTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void prepareContext(Context context) {
+  public void prepareContext(TestingContext context) {
     //TestContext testContext = super.getTestContext()
     //        .withFreshConnection();
     flushSchemaCache(context.createConnection());
@@ -81,7 +81,7 @@ class OrderKeyOneToOneCheckTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testMemberSource(Context context) {
+  public void testMemberSource(TestingContext context) {
     String mdx =
             "with member [Measures].[Count Month] as 'Count(Descendants(Time.CurrentMember, [Time].[Month]))' \n"
                     + "select [Measures].[Count Month] on 0,\n"
@@ -103,7 +103,7 @@ class OrderKeyOneToOneCheckTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testSqlReader(Context context) {
+  public void testSqlReader(TestingContext context) {
     String mdx = ""
             + "select [Time].[Quarter].Members on 0"
             + "from [Sales]";

@@ -9,19 +9,22 @@
 
 package org.eclipse.daanse.db.dialect.db.postgresql;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the PostgreSQL database.
@@ -30,32 +33,22 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @since Nov 23, 2008
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='POSTGRESQL'",
-		"database.product:String='POSTGRESQL'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+        "database.product:String='POSTGRESQL'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class PostgreSqlDialect extends JdbcDialectImpl {
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            PostgreSqlDialect.class)
-        {
-            protected boolean acceptsConnection(Connection connection) {
-                // Greenplum looks a lot like Postgres. If this is a
-                // Greenplum connection, yield to the Greenplum dialect.
-                return super.acceptsConnection(connection)
-                    && !isDatabase(DatabaseProduct.GREENPLUM, connection)
-                    && !isDatabase(DatabaseProduct.NETEZZA, connection)
-                    && !isDatabase(DatabaseProduct.REDSHIFT, connection);
-            }
-        };
 
-    public PostgreSqlDialect() {
+    private static final String SUPPORTED_PRODUCT_NAME = "POSTGRESQL";
+
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
-    /**
-     * Creates a PostgreSqlDialect.
-     *
-     * @param connection Connection
-     */
-    public PostgreSqlDialect(Connection connection) throws SQLException {
-        super(connection);
+
+    @Override
+    public boolean initialize(Connection connection) {
+        return super.initialize(connection) && !isDatabase(DatabaseProduct.GREENPLUM, connection)
+                && !isDatabase(DatabaseProduct.NETEZZA, connection)
+                && !isDatabase(DatabaseProduct.REDSHIFT, connection);
     }
 
     public boolean requiresAliasForFromQuery() {
@@ -63,24 +56,12 @@ public class PostgreSqlDialect extends JdbcDialectImpl {
     }
 
     @Override
-    protected String generateOrderByNulls(
-        String expr,
-        boolean ascending,
-        boolean collateNullsLast)
-    {
+    protected String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
         // Support for "ORDER BY ... NULLS LAST" was introduced in Postgres 8.3.
         if (productVersion.compareTo("8.3") >= 0) {
-            return
-                generateOrderByNullsAnsi(
-                    expr,
-                    ascending,
-                    collateNullsLast);
+            return generateOrderByNullsAnsi(expr, ascending, collateNullsLast);
         } else {
-            return
-                super.generateOrderByNulls(
-                    expr,
-                    ascending,
-                    collateNullsLast);
+            return super.generateOrderByNulls(expr, ascending, collateNullsLast);
         }
     }
 
@@ -115,21 +96,15 @@ public class PostgreSqlDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public BestFitColumnType getType(
-        ResultSetMetaData metaData, int columnIndex)
-        throws SQLException
-    {
+    public BestFitColumnType getType(ResultSetMetaData metaData, int columnIndex) throws SQLException {
         final int precision = metaData.getPrecision(columnIndex + 1);
         final int scale = metaData.getScale(columnIndex + 1);
         final int columnType = metaData.getColumnType(columnIndex + 1);
         final String columnName = metaData.getColumnName(columnIndex + 1);
 
-        //  TODO - Do we need the check for "m"??
-        if (columnType == Types.NUMERIC
-            && scale == 0 && precision == 0
-            && columnName.startsWith("m"))
-        {
-            // In Greenplum  NUMBER/NUMERIC w/ no precision or
+        // TODO - Do we need the check for "m"??
+        if (columnType == Types.NUMERIC && scale == 0 && precision == 0 && columnName.startsWith("m")) {
+            // In Greenplum NUMBER/NUMERIC w/ no precision or
             // scale means floating point.
             logTypeInfo(metaData, columnIndex, BestFitColumnType.OBJECT);
             return BestFitColumnType.OBJECT; // TODO - can this be DOUBLE?

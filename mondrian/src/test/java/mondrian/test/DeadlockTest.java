@@ -15,7 +15,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -39,7 +39,7 @@ public class DeadlockTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testSegmentLoadDeadlock(Context context) {
+    public void testSegmentLoadDeadlock(TestingContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1726
         // Deadlock can occur if a cardinality query is fired after
         // all available database connections have been consumed and active

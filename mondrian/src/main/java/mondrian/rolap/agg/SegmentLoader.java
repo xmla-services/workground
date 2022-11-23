@@ -482,7 +482,7 @@ public class SegmentLoader {
     };
 
     try {
-      return RolapUtil.executeQuery( star.getDataSource(), pair.left, pair.right, 0, 0, locus, -1, -1,
+      return RolapUtil.executeQuery( star.getContext(), pair.left, pair.right, 0, 0, locus, -1, -1,
           // Only one of the two callbacks are required, depending if we
           // cache the segments or not.
           MondrianProperties.instance().DisableCaching.get() ? callbackNoCaching : callbackWithCaching );

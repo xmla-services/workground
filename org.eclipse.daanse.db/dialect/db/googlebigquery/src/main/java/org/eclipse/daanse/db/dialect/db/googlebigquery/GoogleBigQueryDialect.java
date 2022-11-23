@@ -8,39 +8,33 @@
 */
 package org.eclipse.daanse.db.dialect.db.googlebigquery;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.common.Util;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
-import org.osgi.service.component.annotations.Component;
-import org.osgi.service.component.annotations.ServiceScope;
-
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
+import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
+
 /**
  * This is the Mondrian dialect for Google BigQuery. It was tested against
  * google-api-services-bigquery-v2-rev355-1.22.0 in Q1 2018.
+ * 
  * @author lucboudreau
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='GOOGLEBIGQUERY'",
-		"database.product:String='GOOGLEBIGQUERY'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+        "database.product:String='GOOGLEBIGQUERY'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class GoogleBigQueryDialect extends JdbcDialectImpl {
+    private static final String SUPPORTED_PRODUCT_NAME = "GOOGLEBIGQUERY";
 
-    public static final JdbcDialectFactory FACTORY =
-            new JdbcDialectFactory(
-                GoogleBigQueryDialect.class);
-
-    public GoogleBigQueryDialect() {
-    }
-    public GoogleBigQueryDialect(Connection connection) throws SQLException {
-        super(connection);
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
     @Override
@@ -67,13 +61,8 @@ public class GoogleBigQueryDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateInline(
-        List<String> columnNames,
-        List<String> columnTypes,
-        List<String[]> valueList)
-    {
-        return generateInlineGeneric(
-            columnNames, columnTypes, valueList, null, false);
+    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+        return generateInlineGeneric(columnNames, columnTypes, valueList, null, false);
     }
 
     @Override
@@ -84,8 +73,7 @@ public class GoogleBigQueryDialect extends JdbcDialectImpl {
         // drillthrough operation, it might. A level name with a space
         // may be used as an alias, so we need to override it here.
         // Same with non alpha characters, we have to remove them.
-        super.quoteIdentifier(
-            val.replace(' ', '_')
+        super.quoteIdentifier(val.replace(' ', '_')
                 .replaceAll("[^A-Za-z0-9\\_\\.`]", ""), buf);
     }
 

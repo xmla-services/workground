@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -165,7 +165,7 @@ public class ParserTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUnparse(Context context) {
+    public void testUnparse(TestingContext context) {
         checkUnparse(context.createConnection(),
             "with member [Measures].[Foo] as ' 123 '\n"
             + "select {[Measures].members} on columns,\n"
@@ -416,7 +416,7 @@ public class ParserTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMultiplication(Context context) {
+    public void testMultiplication(TestingContext context) {
         Parser p = new Parser();
         final String mdx =
             wrapExpr(
@@ -545,7 +545,7 @@ public class ParserTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCloneQuery(Context context) {
+    public void testCloneQuery(TestingContext context) {
         Connection connection = context.createConnection();
         Query query = connection.parseQuery(
             "select {[Measures].Members} on columns,\n"
@@ -733,7 +733,7 @@ public class ParserTest {
     @Disabled
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void _testRealInnerSelect(Context context) {
+    public void _testRealInnerSelect(TestingContext context) {
         Connection connection = context.createConnection();
         assertQueryReturns(connection,
         "select\n"
@@ -904,7 +904,7 @@ public class ParserTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMultipleSpaces(Context context) {
+    public void testMultipleSpaces(TestingContext context) {
         assertParseQuery(
             "select [Store].[With   multiple  spaces] on 0\n"
             + "from [Sales]",

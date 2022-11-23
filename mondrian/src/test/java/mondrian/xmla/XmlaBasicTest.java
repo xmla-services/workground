@@ -25,7 +25,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.metadata.XmlaConstants;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.w3c.dom.Document;
@@ -121,7 +121,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDDatasource(Context context) throws Exception {
+    public void testDDatasource(TestingContext context) throws Exception {
         String requestType = "DISCOVER_DATASOURCES";
 
         Properties props = new Properties();
@@ -134,35 +134,35 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDEnumerators(Context context) throws Exception {
+    public void testDEnumerators(TestingContext context) throws Exception {
         String requestType = "DISCOVER_ENUMERATORS";
         doTestRT(requestType, context.createConnection());
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDKeywords(Context context) throws Exception {
+    public void testDKeywords(TestingContext context) throws Exception {
         String requestType = "DISCOVER_KEYWORDS";
         doTestRT(requestType, context.createConnection());
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDLiterals(Context context) throws Exception {
+    public void testDLiterals(TestingContext context) throws Exception {
         String requestType = "DISCOVER_LITERALS";
         doTestRT(requestType, context.createConnection());
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDProperties(Context context) throws Exception {
+    public void testDProperties(TestingContext context) throws Exception {
         String requestType = "DISCOVER_PROPERTIES";
         doTestRT(requestType, context.createConnection());
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDSchemaRowsets(Context context) throws Exception {
+    public void testDSchemaRowsets(TestingContext context) throws Exception {
         String requestType = "DISCOVER_SCHEMA_ROWSETS";
         doTestRT(requestType, context.createConnection());
     }
@@ -173,36 +173,36 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDBCatalogs(Context context) throws Exception {
+    public void testDBCatalogs(TestingContext context) throws Exception {
         String requestType = "DBSCHEMA_CATALOGS";
         doTestRT(requestType, context.createConnection());
     }
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDBSchemata(Context context) throws Exception {
+    public void testDBSchemata(TestingContext context) throws Exception {
         String requestType = "DBSCHEMA_SCHEMATA";
         doTestRT(requestType, context.createConnection());
     }
     // passes 2/25 - I think that this is good but not sure
-    public void _testDBColumns(Context context) throws Exception {
+    public void _testDBColumns(TestingContext context) throws Exception {
         String requestType = "DBSCHEMA_COLUMNS";
         doTestRT(requestType, context.createConnection());
     }
     // passes 2/25 - I think that this is good but not sure
-    public void _testDBProviderTypes(Context context) throws Exception {
+    public void _testDBProviderTypes(TestingContext context) throws Exception {
         String requestType = "DBSCHEMA_PROVIDER_TYPES";
         doTestRT(requestType, context.createConnection());
     }
     // passes 2/25 - I think that this is good but not sure
     // Should this even be here
-    public void _testDBTablesInfo(Context context) throws Exception {
+    public void _testDBTablesInfo(TestingContext context) throws Exception {
         String requestType = "DBSCHEMA_TABLES_INFO";
         doTestRT(requestType, context.createConnection());
     }
     // passes 2/25 - I think that this is good but not sure
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDBTables(Context context) throws Exception {
+    public void testDBTables(TestingContext context) throws Exception {
         String requestType = "DBSCHEMA_TABLES";
         doTestRT(requestType, context.createConnection());
     }
@@ -213,7 +213,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDActions(Context context) throws Exception {
+    public void testMDActions(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_ACTIONS";
 
         Properties props = new Properties();
@@ -227,7 +227,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDCubes(Context context) throws Exception {
+    public void testMDCubes(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_CUBES";
 
         Properties props = new Properties();
@@ -241,7 +241,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDCubesJson(Context context) throws Exception {
+    public void testMDCubesJson(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_CUBES";
 
         Properties props = new Properties();
@@ -255,22 +255,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDCubesDeep(Context context) throws Exception {
-        String requestType = "MDSCHEMA_CUBES";
-
-        Properties props = new Properties();
-        props.setProperty(REQUEST_TYPE_PROP, requestType);
-        props.setProperty(DATA_SOURCE_INFO_PROP, DATA_SOURCE_INFO);
-        props.setProperty(CATALOG_PROP, CATALOG);
-        props.setProperty(CUBE_NAME_PROP, "HR");
-        props.setProperty(FORMAT_PROP, FORMAT_TABLULAR);
-
-        doTest(requestType, props, context.createConnection());
-    }
-
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDCubesDeepJson(Context context) throws Exception {
+    public void testMDCubesDeep(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_CUBES";
 
         Properties props = new Properties();
@@ -285,7 +270,22 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDCubesLocale(Context context) throws Exception {
+    public void testMDCubesDeepJson(TestingContext context) throws Exception {
+        String requestType = "MDSCHEMA_CUBES";
+
+        Properties props = new Properties();
+        props.setProperty(REQUEST_TYPE_PROP, requestType);
+        props.setProperty(DATA_SOURCE_INFO_PROP, DATA_SOURCE_INFO);
+        props.setProperty(CATALOG_PROP, CATALOG);
+        props.setProperty(CUBE_NAME_PROP, "HR");
+        props.setProperty(FORMAT_PROP, FORMAT_TABLULAR);
+
+        doTest(requestType, props, context.createConnection());
+    }
+
+    @ParameterizedTest
+    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
+    public void testMDCubesLocale(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_CUBES";
 
         Properties props = new Properties();
@@ -301,7 +301,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDCubesLcid(Context context) throws Exception {
+    public void testMDCubesLcid(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_CUBES";
 
         Properties props = new Properties();
@@ -317,7 +317,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDSets(Context context) throws Exception {
+    public void testMDSets(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_SETS";
 
         Properties props = new Properties();
@@ -331,7 +331,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDDimensions(Context context) throws Exception {
+    public void testMDDimensions(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_DIMENSIONS";
 
         Properties props = new Properties();
@@ -345,7 +345,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDDimensionsShared(Context context) throws Exception {
+    public void testMDDimensionsShared(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_DIMENSIONS";
 
         Properties props = new Properties();
@@ -360,7 +360,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDFunction(Context context) throws Exception {
+    public void testMDFunction(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_FUNCTIONS";
         String restrictionName = "FUNCTION_NAME";
         String restrictionValue = "Item";
@@ -381,7 +381,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDFunctions(Context context) throws Exception {
+    public void testMDFunctions(TestingContext context) throws Exception {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // <Dimension>.CurrentMember function exists if
             // SsasCompatibleNaming=false.
@@ -399,7 +399,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
     // good 2/25 : (partial implementation)
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDHierarchies(Context context) throws Exception {
+    public void testMDHierarchies(TestingContext context) throws Exception {
         if (!MondrianProperties.instance().FilterChildlessSnowflakeMembers
             .get())
         {
@@ -418,7 +418,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDLevels(Context context) throws Exception {
+    public void testMDLevels(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_LEVELS";
 
         Properties props = new Properties();
@@ -436,7 +436,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDLevelsAccessControlled(Context context) throws Exception {
+    public void testMDLevelsAccessControlled(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_LEVELS";
 
         Properties props = new Properties();
@@ -456,7 +456,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDMeasures(Context context) throws Exception {
+    public void testMDMeasures(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_MEASURES";
 
         Properties props = new Properties();
@@ -477,7 +477,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDMembers(Context context) throws Exception {
+    public void testMDMembers(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_MEMBERS";
 
         Properties props = new Properties();
@@ -495,7 +495,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDMembersMulti(Context context) throws Exception {
+    public void testMDMembersMulti(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_MEMBERS";
 
         Properties props = new Properties();
@@ -511,7 +511,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDMembersTreeop(Context context) throws Exception {
+    public void testMDMembersTreeop(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_MEMBERS";
 
         // Treeop 34 = Ancestors | Siblings
@@ -530,7 +530,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMDProperties(Context context) throws Exception {
+    public void testMDProperties(TestingContext context) throws Exception {
         String requestType = "MDSCHEMA_PROPERTIES";
 
         Properties props = new Properties();
@@ -542,7 +542,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testApproxRowCountOverridesCountCallsToDatabase(Context context)
+    public void testApproxRowCountOverridesCountCallsToDatabase(TestingContext context)
         throws Exception
     {
         String requestType = "MDSCHEMA_LEVELS";
@@ -561,7 +561,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testApproxRowCountInHierarchyOverridesCountCallsToDatabase(Context context)
+    public void testApproxRowCountInHierarchyOverridesCountCallsToDatabase(TestingContext context)
         throws Exception
     {
         String requestType = "MDSCHEMA_HIERARCHIES";
@@ -585,7 +585,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDrillThroughMaxRows(Context context) throws Exception {
+    public void testDrillThroughMaxRows(TestingContext context) throws Exception {
         // NOTE: this test uses the filter method to adjust the expected result
         // for different databases
         if (!MondrianProperties.instance().EnableTotalCount.booleanValue()) {
@@ -610,7 +610,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDrillThrough(Context context) throws Exception {
+    public void testDrillThrough(TestingContext context) throws Exception {
         // NOTE: this test uses the filter method to adjust the expected result
         // for different databases
         if (!MondrianProperties.instance().EnableTotalCount.booleanValue()) {
@@ -636,7 +636,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDrillThroughZeroDimensionalQuery(Context context) throws Exception {
+    public void testDrillThroughZeroDimensionalQuery(TestingContext context) throws Exception {
         // NOTE: this test uses the filter method to adjust the expected result
         // for different databases
         if (!MondrianProperties.instance().EnableTotalCount.booleanValue()) {
@@ -731,7 +731,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteSlicer(Context context) throws Exception {
+    public void testExecuteSlicer(TestingContext context) throws Exception {
         String requestType = "EXECUTE";
         Properties props = getDefaultRequestProperties(requestType);
         doTest(requestType, props, context.createConnection());
@@ -739,7 +739,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteSlicerJson(Context context) throws Exception {
+    public void testExecuteSlicerJson(TestingContext context) throws Exception {
         String requestType = "EXECUTE";
         Properties props = getDefaultRequestProperties(requestType);
         doTest(requestType, props, context.createConnection());
@@ -747,7 +747,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteSlicer_ContentDataOmitDefaultSlicer(Context context)
+    public void testExecuteSlicer_ContentDataOmitDefaultSlicer(TestingContext context)
         throws Exception
     {
         doTestExecuteContent(context.createConnection(), XmlaConstants.Content.DataOmitDefaultSlicer);
@@ -755,7 +755,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteNoSlicer_ContentDataOmitDefaultSlicer(Context context)
+    public void testExecuteNoSlicer_ContentDataOmitDefaultSlicer(TestingContext context)
         throws Exception
     {
         doTestExecuteContent(context.createConnection(), XmlaConstants.Content.DataOmitDefaultSlicer);
@@ -763,7 +763,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteSlicer_ContentDataIncludeDefaultSlicer(Context context)
+    public void testExecuteSlicer_ContentDataIncludeDefaultSlicer(TestingContext context)
         throws Exception
     {
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
@@ -775,7 +775,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteNoSlicer_ContentDataIncludeDefaultSlicer(Context context)
+    public void testExecuteNoSlicer_ContentDataIncludeDefaultSlicer(TestingContext context)
         throws Exception
     {
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
@@ -787,7 +787,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteEmptySlicer_ContentDataIncludeDefaultSlicer(Context context)
+    public void testExecuteEmptySlicer_ContentDataIncludeDefaultSlicer(TestingContext context)
         throws Exception
     {
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
@@ -799,7 +799,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteEmptySlicer_ContentDataOmitDefaultSlicer(Context context)
+    public void testExecuteEmptySlicer_ContentDataOmitDefaultSlicer(TestingContext context)
         throws Exception
     {
         doTestExecuteContent(context.createConnection(), XmlaConstants.Content.DataOmitDefaultSlicer);
@@ -807,7 +807,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteWithoutCellProperties(Context context) throws Exception
+    public void testExecuteWithoutCellProperties(TestingContext context) throws Exception
     {
         String requestType = "EXECUTE";
         Properties props = getDefaultRequestProperties(requestType);
@@ -816,7 +816,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteWithCellProperties(Context context)
+    public void testExecuteWithCellProperties(TestingContext context)
             throws Exception
     {
         String requestType = "EXECUTE";
@@ -826,7 +826,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteWithMemberKeyDimensionPropertyForMemberWithoutKey(Context context)
+    public void testExecuteWithMemberKeyDimensionPropertyForMemberWithoutKey(TestingContext context)
         throws Exception
     {
         String requestType = "EXECUTE";
@@ -836,7 +836,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteAliasWithSharedDimension(Context context)
+    public void testExecuteAliasWithSharedDimension(TestingContext context)
       throws Exception
     {
         String requestType = "EXECUTE";
@@ -864,7 +864,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteWithMemberKeyDimensionPropertyForMemberWithKey(Context context)
+    public void testExecuteWithMemberKeyDimensionPropertyForMemberWithKey(TestingContext context)
         throws Exception
     {
         String requestType = "EXECUTE";
@@ -874,7 +874,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteWithMemberKeyDimensionPropertyForAllMember(Context context)
+    public void testExecuteWithMemberKeyDimensionPropertyForAllMember(TestingContext context)
         throws Exception
     {
         String requestType = "EXECUTE";
@@ -884,7 +884,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteWithKeyDimensionProperty(Context context)
+    public void testExecuteWithKeyDimensionProperty(TestingContext context)
         throws Exception
     {
         String requestType = "EXECUTE";
@@ -894,7 +894,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteWithDimensionProperties(Context context)
+    public void testExecuteWithDimensionProperties(TestingContext context)
         throws Exception
     {
         String requestType = "EXECUTE";
@@ -909,7 +909,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteCrossjoin(Context context) throws Exception {
+    public void testExecuteCrossjoin(TestingContext context) throws Exception {
         if (!MondrianProperties.instance().FilterChildlessSnowflakeMembers
             .get())
         {
@@ -955,7 +955,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteCrossjoinRole(Context context) throws Exception {
+    public void testExecuteCrossjoinRole(TestingContext context) throws Exception {
         if (!MondrianProperties.instance().FilterChildlessSnowflakeMembers
             .get())
         {
@@ -1088,7 +1088,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteBugMondrian762(Context context)
+    public void testExecuteBugMondrian762(TestingContext context)
         throws Exception
     {
         String requestType = "EXECUTE";
@@ -1101,7 +1101,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteBugMondrian1316(Context context) throws Exception {
+    public void testExecuteBugMondrian1316(TestingContext context) throws Exception {
         String requestType = "EXECUTE";
         Properties props = getDefaultRequestProperties(requestType);
         doTest(requestType, props, context.createConnection());
@@ -1109,7 +1109,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testExecuteWithLocale(Context context) throws Exception {
+    public void testExecuteWithLocale(TestingContext context) throws Exception {
         //TestContext context1 = getTestContext().withCube("Sales");
         String requestType = "EXECUTE";
         Properties props = getDefaultRequestProperties(requestType);
@@ -1133,7 +1133,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testEmptySet(Context context) throws Exception {
+    public void testEmptySet(TestingContext context) throws Exception {
       //TestContext context1 = getTestContext().withCube("Sales");
       String requestType = "EXECUTE";
       Properties props = getDefaultRequestProperties(requestType);

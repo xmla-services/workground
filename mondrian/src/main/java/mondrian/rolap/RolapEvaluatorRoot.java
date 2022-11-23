@@ -9,14 +9,27 @@
 
 package mondrian.rolap;
 
-import mondrian.calc.*;
-import mondrian.olap.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ParameterSlot;
+import mondrian.calc.ResultStyle;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.NamedSet;
+import mondrian.olap.Query;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.SolveOrderMode;
+import mondrian.olap.Util;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import mondrian.spi.DialectManager;
-
-import java.util.*;
 
 /**
  * Context at the root of a tree of evaluators.
@@ -37,7 +50,6 @@ class RolapEvaluatorRoot {
   final Statement statement;
   final Query query;
   private final Date queryStartTime;
-  final Dialect currentDialect;
 
   int expResultCacheHitCount;
   int expResultCacheMissCount;
@@ -112,7 +124,6 @@ class RolapEvaluatorRoot {
       }
     }
     this.defaultMembers = list.toArray( new RolapMember[list.size()] );
-    this.currentDialect = DialectManager.createDialect( schemaReader.getDataSource(), null );
 
     this.recursionCheckCommandCount = ( defaultMembers.length << 4 );
   }

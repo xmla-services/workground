@@ -9,20 +9,21 @@
 */
 package org.eclipse.daanse.db.dialect.db.impala;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.eclipse.daanse.db.dialect.db.hive.HiveDialect;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Dialect for Cloudera's Impala DB.
@@ -31,38 +32,28 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @since 2/11/13
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='IMPALA'",
-		"database.product:String='IMPALA'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+        "database.product:String='IMPALA'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class ImpalaDialect extends HiveDialect {
     private final String escapeRegexp = "(\\\\Q([^\\\\Q]+)\\\\E)";
     private final Pattern escapePattern = Pattern.compile(escapeRegexp);
 
-    public ImpalaDialect() {
-    }
-    /**
-     * Creates an ImpalaDialect.
-     *
-     * @param connection Connection
-     * @throws java.sql.SQLException on error
-     */
-    public ImpalaDialect(Connection connection) throws SQLException {
-        super(connection);
+    private static final String SUPPORTED_PRODUCT_NAME = "IMPALA";
+
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
-    protected String deduceIdentifierQuoteString(
-        DatabaseMetaData databaseMetaData)
-    {
+    @Override
+    public boolean initialize(Connection connection) {
+        // TODO Auto-generated method stub
+        return super.initialize(connection) && isDatabase(DatabaseProduct.IMPALA, connection);
+    }
+
+    protected String deduceIdentifierQuoteString(DatabaseMetaData databaseMetaData) {
         return "`";
     }
-
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            ImpalaDialect.class)
-        {
-            protected boolean acceptsConnection(Connection connection) {
-                return isDatabase(DatabaseProduct.IMPALA, connection);
-            }
-        };
 
     @Override
     public DatabaseProduct getDatabaseProduct() {
@@ -70,11 +61,7 @@ public class ImpalaDialect extends HiveDialect {
     }
 
     @Override
-    protected String generateOrderByNulls(
-        String expr,
-        boolean ascending,
-        boolean collateNullsLast)
-    {
+    protected String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
         if (ascending) {
             return expr + " ASC";
         } else {
@@ -82,14 +69,8 @@ public class ImpalaDialect extends HiveDialect {
         }
     }
 
-
     @Override
-    public String generateOrderItem(
-        String expr,
-        boolean nullable,
-        boolean ascending,
-        boolean collateNullsLast)
-    {
+    public String generateOrderItem(String expr, boolean nullable, boolean ascending, boolean collateNullsLast) {
         String ret = null;
 
         if (nullable && collateNullsLast) {
@@ -138,13 +119,8 @@ public class ImpalaDialect extends HiveDialect {
     }
 
     @Override
-    public String generateInline(
-        List<String> columnNames,
-        List<String> columnTypes,
-        List<String[]> valueList)
-    {
-        return generateInlineGeneric(
-            columnNames, columnTypes, valueList, null, false);
+    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+        return generateInlineGeneric(columnNames, columnTypes, valueList, null, false);
     }
 
     public boolean allowsJoinOn() {
@@ -152,10 +128,7 @@ public class ImpalaDialect extends HiveDialect {
     }
 
     @Override
-    public void quoteStringLiteral(
-        StringBuilder buf,
-        String value)
-    {
+    public void quoteStringLiteral(StringBuilder buf, String value) {
         String quote = "\'";
         String s0 = value;
 
@@ -177,10 +150,7 @@ public class ImpalaDialect extends HiveDialect {
         return true;
     }
 
-    public String generateRegularExpression(
-        String source,
-        String javaRegex)
-    {
+    public String generateRegularExpression(String source, String javaRegex) {
         try {
             Pattern.compile(javaRegex);
         } catch (PatternSyntaxException e) {
@@ -190,18 +160,16 @@ public class ImpalaDialect extends HiveDialect {
         javaRegex = DialectUtil.cleanUnicodeAwareCaseFlag(javaRegex);
         // We might have to use case-insensitive matching
         StringBuilder mappedFlags = new StringBuilder();
-        String[][] mapping = new String[][]{{"i","i"}};
-        javaRegex = extractEmbeddedFlags( javaRegex, mapping, mappedFlags );
+        String[][] mapping = new String[][] { { "i", "i" } };
+        javaRegex = extractEmbeddedFlags(javaRegex, mapping, mappedFlags);
         boolean caseSensitive = true;
-        if (mappedFlags.toString().contains( "i" )) {
-          caseSensitive = false;
+        if (mappedFlags.toString()
+                .contains("i")) {
+            caseSensitive = false;
         }
         final Matcher escapeMatcher = escapePattern.matcher(javaRegex);
         while (escapeMatcher.find()) {
-            javaRegex =
-                javaRegex.replace(
-                    escapeMatcher.group(1),
-                    escapeMatcher.group(2));
+            javaRegex = javaRegex.replace(escapeMatcher.group(1), escapeMatcher.group(2));
         }
 
         source = "cast(" + source + " as string)";

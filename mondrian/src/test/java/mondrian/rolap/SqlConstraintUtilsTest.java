@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mockito;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -374,7 +374,7 @@ public class SqlConstraintUtilsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testReplaceCompoundSlicerPlaceholder(Context context) {
+    public void testReplaceCompoundSlicerPlaceholder(TestingContext context) {
         final Connection connection = context.createConnection();
 
         final String queryText =
@@ -596,7 +596,7 @@ public class SqlConstraintUtilsTest {
     // test with a placeholder member
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testExpandSupportedCalculatedMembers2(Context context) {
+    public void testExpandSupportedCalculatedMembers2(TestingContext context) {
       final Connection connection = context.createConnection();
 
       final String queryText =
@@ -797,7 +797,7 @@ public class SqlConstraintUtilsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testConstrainLevel(Context context){
+    public void testConstrainLevel(TestingContext context){
 
         final RolapCubeLevel level = mock( RolapCubeLevel.class);
         final RolapCube baseCube = mock(RolapCube.class);

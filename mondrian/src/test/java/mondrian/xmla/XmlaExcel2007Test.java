@@ -15,7 +15,7 @@ import mondrian.test.DiffRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -117,7 +117,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void test01(Context context) {
+    public void test01(TestingContext context) {
         helperTest(context, false);
     }
 
@@ -127,7 +127,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMemberPropertiesAndSlicer(Context context) {
+    public void testMemberPropertiesAndSlicer(TestingContext context) {
         helperTestExpect(context, true);
     }
 
@@ -137,7 +137,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMdschemaPropertiesMember(Context context) {
+    public void testMdschemaPropertiesMember(TestingContext context) {
         helperTest(context, true);
     }
 
@@ -149,7 +149,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMdschemaPropertiesCell(Context context) {
+    public void testMdschemaPropertiesCell(TestingContext context) {
         helperTest(context, true);
     }
 
@@ -160,7 +160,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUniqueName(Context context) {
+    public void testUniqueName(TestingContext context) {
         Connection connection = context.createConnection();
         assertQueryReturns(connection,
             "WITH MEMBER [Store].[XL_PT0] AS 'strtomember(\"[Store].[USA].[CA]\").UniqueName' SELECT {[Store].[XL_PT0]} ON 0 FROM \n"
@@ -194,7 +194,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCellInfo(Context context) {
+    public void testCellInfo(TestingContext context) {
         helperTest(context, true);
     }
 
@@ -205,7 +205,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBugMondrian761(Context context) {
+    public void testBugMondrian761(TestingContext context) {
         helperTest(context, false);
     }
 }

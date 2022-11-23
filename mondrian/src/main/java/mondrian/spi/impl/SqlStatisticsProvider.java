@@ -9,36 +9,40 @@
 
 package mondrian.spi.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
+
+import javax.sql.DataSource;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.engine.api.Context;
+
 import mondrian.rolap.RolapUtil;
 import mondrian.rolap.SqlStatement;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.spi.StatisticsProvider;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-
-import java.sql.*;
-import java.util.Arrays;
-import javax.sql.DataSource;
 
 /**
  * Implementation of {@link mondrian.spi.StatisticsProvider} that generates
  * SQL queries to count rows and distinct values.
  */
 public class SqlStatisticsProvider implements StatisticsProvider {
+
     public long getTableCardinality(
-        Dialect dialect,
-        DataSource dataSource,
+        Context context,
         String catalog,
         String schema,
         String table,
         Execution execution)
     {
         StringBuilder buf = new StringBuilder("select count(*) from ");
-        dialect.quoteIdentifier(buf, catalog, schema, table);
+        context.getDialect().quoteIdentifier(buf, catalog, schema, table);
         final String sql = buf.toString();
         SqlStatement stmt =
             RolapUtil.executeQuery(
-                dataSource,
+                context,
                 sql,
                 new Locus(
                     execution,
@@ -60,11 +64,11 @@ public class SqlStatisticsProvider implements StatisticsProvider {
     }
 
     public long getQueryCardinality(
-        Dialect dialect,
-        DataSource dataSource,
+        Context context,
         String sql,
         Execution execution)
     {
+        Dialect dialect=context.getDialect();
         final StringBuilder buf = new StringBuilder();
         buf.append(
             "select count(*) from (").append(sql).append(")");
@@ -79,7 +83,7 @@ public class SqlStatisticsProvider implements StatisticsProvider {
         final String countSql = buf.toString();
         SqlStatement stmt =
             RolapUtil.executeQuery(
-                dataSource,
+                context,
                 countSql,
                 new Locus(
                     execution,
@@ -100,8 +104,7 @@ public class SqlStatisticsProvider implements StatisticsProvider {
     }
 
     public long getColumnCardinality(
-        Dialect dialect,
-        DataSource dataSource,
+        Context context,
         String catalog,
         String schema,
         String table,
@@ -110,13 +113,13 @@ public class SqlStatisticsProvider implements StatisticsProvider {
     {
         final String sql =
             generateColumnCardinalitySql(
-                dialect, schema, table, column);
+                context.getDialect(), schema, table, column);
         if (sql == null) {
             return -1;
         }
         SqlStatement stmt =
             RolapUtil.executeQuery(
-                dataSource,
+                context,
                 sql,
                 new Locus(
                     execution,

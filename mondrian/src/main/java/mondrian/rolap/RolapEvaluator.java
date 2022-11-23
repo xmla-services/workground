@@ -391,9 +391,6 @@ public class RolapEvaluator implements Evaluator {
     return root.getQueryStartTime();
   }
 
-  public Dialect getDialect() {
-    return root.currentDialect;
-  }
 
   public final RolapEvaluator push( Member[] members ) {
     final RolapEvaluator evaluator = _push( null );

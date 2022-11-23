@@ -16,14 +16,14 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Types;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the Netezza database.
@@ -33,29 +33,21 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='NETEZZA'",
         "database.product:String='NETEZZA'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class NetezzaDialect extends PostgreSqlDialect {
 
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            NetezzaDialect.class)
-            // Netezza behaves the same as PostGres but doesn't use the
-            // postgres driver, so we setup the factory to NETEZZA.
-        {
-            protected boolean acceptsConnection(Connection connection) {
-                return isDatabase(DatabaseProduct.NETEZZA, connection);
-            }
-        };
+    private static final String SUPPORTED_PRODUCT_NAME = "NETEZZA";
 
-    public NetezzaDialect() {
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
-    /**
-     * Creates a NetezzaDialect.
-     *
-     * @param connection Connection
-     */
-    public NetezzaDialect(Connection connection) throws SQLException {
-        super(connection);
+
+    @Override
+    public boolean initialize(Connection connection) {
+        return super.initialize(connection) && isDatabase(DatabaseProduct.NETEZZA, connection);
+        // Netezza behaves the same as PostGres but doesn't use the
+        // postgres driver, so we setup the factory to NETEZZA.
     }
 
     @Override
@@ -74,17 +66,12 @@ public class NetezzaDialect extends PostgreSqlDialect {
     }
 
     @Override
-    public BestFitColumnType getType(
-        ResultSetMetaData metaData, int columnIndex)
-        throws SQLException
-    {
+    public BestFitColumnType getType(ResultSetMetaData metaData, int columnIndex) throws SQLException {
         final int precision = metaData.getPrecision(columnIndex + 1);
         final int scale = metaData.getScale(columnIndex + 1);
         final int columnType = metaData.getColumnType(columnIndex + 1);
 
-        if (columnType == Types.NUMERIC || columnType == Types.DECIMAL
-            && (scale == 0 && precision == 38))
-        {
+        if (columnType == Types.NUMERIC || columnType == Types.DECIMAL && (scale == 0 && precision == 38)) {
             // Netezza marks longs as scale 0 and precision 38.
             // An int would overflow.
             logTypeInfo(metaData, columnIndex, BestFitColumnType.DOUBLE);

@@ -77,8 +77,7 @@ public class RolapStatisticsCache {
                     0);
             for (SqlStatisticsProviderNew statisticsProvider : statisticsProviders) {
                 rowCount = statisticsProvider.getTableCardinality(
-                    dialect,
-                    star.getDataSource(),
+                    star.getContext(),
                     catalog,
                     schema,
                     table,
@@ -110,7 +109,7 @@ public class RolapStatisticsCache {
                         .getInternalStatement(),
                     0);
             for (SqlStatisticsProviderNew statisticsProvider : statisticsProviders) {
-                rowCount = statisticsProvider.getQueryCardinality(dialect, star.getDataSource(), sql, execution);
+                rowCount = statisticsProvider.getQueryCardinality( star.getContext(), sql, execution);
                 if (rowCount >= 0) {
                     break;
                 }
@@ -172,8 +171,7 @@ public class RolapStatisticsCache {
                     0);
             for (SqlStatisticsProviderNew statisticsProvider : statisticsProviders) {
                 rowCount = statisticsProvider.getColumnCardinality(
-                    dialect,
-                    star.getDataSource(),
+                    star.getContext(),
                     catalog,
                     schema,
                     table,

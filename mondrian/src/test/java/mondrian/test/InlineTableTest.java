@@ -15,7 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -33,7 +33,7 @@ public class InlineTableTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testInlineTable(Context context) {
+    public void testInlineTable(TestingContext context) {
         final String cubeName = "Sales_inline";
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -86,7 +86,7 @@ public class InlineTableTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testInlineTableInSharedDim(Context context) {
+    public void testInlineTableInSharedDim(TestingContext context) {
         final String cubeName = "Sales_inline_shared";
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -142,7 +142,7 @@ public class InlineTableTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testInlineTableSnowflake(Context context) {
+    public void testInlineTableSnowflake(TestingContext context) {
         if (getDialect(context.createConnection()).getDatabaseProduct()
             == DatabaseProduct.INFOBRIGHT)
         {
@@ -215,7 +215,7 @@ public class InlineTableTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testInlineTableDate(Context context) {
+    public void testInlineTableDate(TestingContext context) {
         final String cubeName = "Sales_Inline_Date";
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,

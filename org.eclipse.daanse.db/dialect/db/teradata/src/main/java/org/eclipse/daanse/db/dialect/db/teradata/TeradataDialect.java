@@ -9,16 +9,14 @@
 
 package org.eclipse.daanse.db.dialect.db.teradata;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the Teradata database.
@@ -27,34 +25,22 @@ import org.osgi.service.component.annotations.ServiceScope;
  * @since Nov 23, 2008
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='TERADATA'",
-		"database.product:String='TERADATA'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+        "database.product:String='TERADATA'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class TeradataDialect extends JdbcDialectImpl {
 
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            TeradataDialect.class);
+    private static final String SUPPORTED_PRODUCT_NAME = "TERADATA";
 
-    public TeradataDialect() {
-    }
-    /**
-     * Creates a TeradataDialect.
-     *
-     * @param connection Connection
-     */
-    public TeradataDialect(Connection connection) throws SQLException {
-        super(connection);
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
     public boolean requiresAliasForFromQuery() {
         return true;
     }
 
-    public String generateInline(
-        List<String> columnNames,
-        List<String> columnTypes,
-        List<String[]> valueList)
-    {
+    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         String fromClause = null;
         if (valueList.size() > 1) {
             // In Teradata, "SELECT 1,2" is valid but "SELECT 1,2 UNION
@@ -62,8 +48,7 @@ public class TeradataDialect extends JdbcDialectImpl {
             // MINUS must reference a table."
             fromClause = " FROM (SELECT 1 a) z ";
         }
-        return generateInlineGeneric(
-            columnNames, columnTypes, valueList, fromClause, true);
+        return generateInlineGeneric(columnNames, columnTypes, valueList, fromClause, true);
     }
 
     public boolean supportsGroupingSets() {

@@ -27,7 +27,7 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
@@ -87,7 +87,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testToStringForSingleGroupingSetSql(Context context) {
+    public void testToStringForSingleGroupingSetSql(TestingContext context) {
         Connection connection = context.createConnection();
         prepareContext(connection);
         if (!isGroupingSetsSupported(connection)) {
@@ -136,7 +136,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOrderBy(Context context) throws SQLException {
+    public void testOrderBy(TestingContext context) throws SQLException {
         Connection connection = context.createConnection();
         prepareContext(connection);
         // Test with requireAlias = true
@@ -190,7 +190,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testToStringForForcedIndexHint(Context context) {
+    public void testToStringForForcedIndexHint(TestingContext context) {
         Connection connection = context.createConnection();
         prepareContext(connection);
         Map<String, String> hints = new HashMap<String, String>();
@@ -284,7 +284,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testPredicatesAreOptimizedWhenPropertyIsTrue(Context context) {
+    public void testPredicatesAreOptimizedWhenPropertyIsTrue(TestingContext context) {
         Connection connection = context.createConnection();
         prepareContext(connection);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
@@ -330,7 +330,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testTableNameIsIncludedWithParentChildQuery(Context context) {
+    public void testTableNameIsIncludedWithParentChildQuery(TestingContext context) {
         Connection connection = context.createConnection();
         prepareContext(connection);
         String sql =
@@ -371,7 +371,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testPredicatesAreNotOptimizedWhenPropertyIsFalse(Context context) {
+    public void testPredicatesAreNotOptimizedWhenPropertyIsFalse(TestingContext context) {
         Connection connection = context.createConnection();
         prepareContext(connection);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
@@ -418,7 +418,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testPredicatesAreOptimizedWhenAllTheMembersAreIncluded(Context context) {
+    public void testPredicatesAreOptimizedWhenAllTheMembersAreIncluded(TestingContext context) {
         Connection connection = context.createConnection();
         prepareContext(connection);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
@@ -462,7 +462,7 @@ public class SqlQueryTest  extends BatchTestCase {
         assertSqlEqualsOptimzePredicates(context, false, mdx, sqlPatterns);
     }
 
-    private void assertSqlEqualsOptimzePredicates(Context context,
+    private void assertSqlEqualsOptimzePredicates(TestingContext context,
         boolean optimizePredicatesValue,
         String inputMdx,
         SqlPattern[] sqlPatterns)
@@ -480,7 +480,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testToStringForGroupingSetSqlWithEmptyGroup(Context context) {
+    public void testToStringForGroupingSetSqlWithEmptyGroup(TestingContext context) {
         Connection connection = context.createConnection();
         prepareContext(connection);
         if (!isGroupingSetsSupported(connection)) {
@@ -532,7 +532,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testToStringForMultipleGroupingSetsSql(Context context) {
+    public void testToStringForMultipleGroupingSetsSql(TestingContext context) {
         Connection connection = context.createConnection();
         prepareContext(connection);
         if (!isGroupingSetsSupported(connection)) {
@@ -601,7 +601,7 @@ public class SqlQueryTest  extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDoubleInList(Context context) {
+    public void testDoubleInList(TestingContext context) {
         Connection connection = context.createConnection();
         prepareContext(connection);
         final Dialect dialect = getDialect(context.createConnection());
@@ -704,7 +704,7 @@ public class SqlQueryTest  extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testInvalidSqlMemberLookup(Context context) {
+    public void testInvalidSqlMemberLookup(TestingContext context) {
         Connection connection = context.createConnection();
         prepareContext(connection);
         String sqlMySql =
@@ -739,7 +739,7 @@ public class SqlQueryTest  extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testApproxRowCountOverridesCount(Context context) {
+    public void testApproxRowCountOverridesCount(TestingContext context) {
         Connection connection = context.createConnection();
         prepareContext(connection);
         final String cubeSchema =
@@ -790,7 +790,7 @@ public class SqlQueryTest  extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLimitedRollupMemberRetrievableFromCache(Context context) throws Exception {
+    public void testLimitedRollupMemberRetrievableFromCache(TestingContext context) throws Exception {
         Connection connection = context.createConnection();
         prepareContext(connection);
         final String mdx =
@@ -849,7 +849,7 @@ public class SqlQueryTest  extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAvgAggregator(Context context) {
+    public void testAvgAggregator(TestingContext context) {
         Connection connection = context.createConnection();
         prepareContext(connection);
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);

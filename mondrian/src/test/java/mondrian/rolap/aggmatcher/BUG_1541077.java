@@ -13,7 +13,7 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.Result;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -33,7 +33,7 @@ public class BUG_1541077 extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testStoreCount(Context context) throws Exception {
+    public void testStoreCount(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -59,7 +59,7 @@ public class BUG_1541077 extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testSalesCount(Context context) throws Exception {
+    public void testSalesCount(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -85,7 +85,7 @@ public class BUG_1541077 extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTotalAmount(Context context) throws Exception {
+    public void testTotalAmount(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -111,7 +111,7 @@ public class BUG_1541077 extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testBug1541077(Context context) throws Exception {
+    public void testBug1541077(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;

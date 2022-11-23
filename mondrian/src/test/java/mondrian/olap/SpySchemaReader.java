@@ -24,6 +24,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.engine.api.Context;
+
 import mondrian.calc.Calc;
 import mondrian.olap.Id.NameSegment;
 import mondrian.olap.Id.Segment;
@@ -230,6 +232,11 @@ public class SpySchemaReader implements SchemaReader {
 	public Map<? extends Member, Access> getMemberChildrenWithDetails(Member member, Evaluator evaluator) {
 		return delegate.getMemberChildrenWithDetails(member, evaluator);
 	}
+
+    @Override
+    public Context getContext() {
+        return delegate.getContext();
+    }
 
 
 }

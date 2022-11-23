@@ -18,19 +18,15 @@
  **********************************************************************/
 package org.eclipse.daanse.db.dialect.db.db2;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 
-import java.sql.Connection;
-import java.sql.SQLException;
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
- * Implementation of {@link Dialect} for old versions of the IBM
- * DB2/AS400 database. Modern versions of DB2/AS400 use
- * {@link Db2Dialect}.
+ * Implementation of {@link Dialect} for old versions of the IBM DB2/AS400
+ * database. Modern versions of DB2/AS400 use {@link Db2Dialect}.
  *
  * @see Db2Dialect
  *
@@ -38,22 +34,15 @@ import java.sql.SQLException;
  * @since Nov 23, 2008
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='DB2_OLD_AS400'",
-    "database.product:String='DB2_OLD_AS400'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+        "database.product:String='DB2_OLD_AS400'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class Db2OldAs400Dialect extends Db2Dialect {
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            Db2OldAs400Dialect.class);
 
-    public Db2OldAs400Dialect() {
-    }
-    /**
-     * Creates a Db2OldAs400Dialect.
-     *
-     * @param connection Connection
-     */
-    public Db2OldAs400Dialect(Connection connection) throws SQLException {
-        super(connection);
+    private static final String SUPPORTED_PRODUCT_NAME = "DB2_OLD_AS400";
+
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
     public boolean allowsFromQuery() {

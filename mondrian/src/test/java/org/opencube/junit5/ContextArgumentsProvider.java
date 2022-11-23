@@ -43,7 +43,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.support.AnnotationConsumer;
 import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.DataLoader;
 import org.opencube.junit5.dbprovider.DatabaseProvider;
 import org.opencube.junit5.xmltests.ResourceTestCase;
@@ -68,7 +68,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 	public Stream<? extends Arguments> provideArguments(ExtensionContext extensionContext) throws Exception {
 
 		// TODO: parallel
-		List<Context> contexts = prepareContexts(extensionContext);
+		List<TestingContext> contexts = prepareContexts(extensionContext);
 		List<XmlResourceTestCase> xmlTestCases = readTestcases(extensionContext);
 
 		List<Arguments> argumentss = new ArrayList<>();
@@ -82,7 +82,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 				}
 			}
 		} else {
-			for (Context context : contexts) {
+			for (TestingContext context : contexts) {
 
 				if (xmlTestCases == null || xmlTestCases.isEmpty()) {
 					argumentss.add(Arguments.of(context));
@@ -145,7 +145,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 		return null;
 	}
 
-	private List<Context> prepareContexts(ExtensionContext extensionContext) {
+	private List<TestingContext> prepareContexts(ExtensionContext extensionContext) {
 		Stream<DatabaseProvider> providers;
 		Thread.currentThread().setContextClassLoader(getClass().getClassLoader()); //for withSchemaProcessor(context, MyFoodmart.class);
 		Class<? extends DatabaseProvider>[] dbHandlerClasses = contextSource.database();
@@ -162,7 +162,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 				}
 			});
 		}
-		List<Context> args = providers.parallel().map(dbp -> {
+		List<TestingContext> args = providers.parallel().map(dbp -> {
 
 			Entry<PropertyList, DataSource> dataSource = null;
 			Class<? extends DatabaseProvider> clazzProvider = dbp.getClass();
@@ -173,14 +173,14 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 			}
 
-			List<Context> aaa = new ArrayList<>();
+			List<TestingContext> aaa = new ArrayList<>();
 
 			Optional<AnnotatedElement> oElement = extensionContext.getElement();
 			if (oElement.isPresent()) {
 				if (oElement.get() instanceof Method) {
 					Method method = (Method) oElement.get();
 					for (Parameter param : method.getParameters()) {
-						if (Context.class.isAssignableFrom(param.getType())) {
+						if (TestingContext.class.isAssignableFrom(param.getType())) {
 							ContextSource contextSource=method.getAnnotation(ContextSource.class);
 
 							try {
@@ -237,13 +237,13 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 	class NamedArguments implements Arguments {
 
-		public NamedArguments(Context context, ResourceTestCase res) {
+		public NamedArguments(TestingContext context, ResourceTestCase res) {
 			super();
 			this.context = context;
 			this.res = res;
 		}
 
-		Context context;
+		TestingContext context;
 		ResourceTestCase res;
 
 		@Override

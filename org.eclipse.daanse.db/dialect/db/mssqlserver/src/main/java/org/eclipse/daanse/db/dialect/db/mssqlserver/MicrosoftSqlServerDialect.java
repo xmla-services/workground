@@ -8,21 +8,19 @@
 */
 package org.eclipse.daanse.db.dialect.db.mssqlserver;
 
-import java.sql.Connection;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.Util;
-import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * Implementation of {@link Dialect} for the Microsoft SQL Server
@@ -33,26 +31,17 @@ import org.osgi.service.component.annotations.ServiceScope;
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MSSQL'",
 		"database.product:String='MSSQL'" })
-@Component(service = Dialect.class, scope = ServiceScope.SINGLETON)
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
 public class MicrosoftSqlServerDialect extends JdbcDialectImpl {
 
     private final DateFormat df =
         new SimpleDateFormat("yyyyMMdd");
 
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            MicrosoftSqlServerDialect.class);
+    private static final String SUPPORTED_PRODUCT_NAME = "MSSQL";
 
-    public MicrosoftSqlServerDialect() {
-    }
-    /**
-     * Creates a MicrosoftSqlServerDialect.
-     *
-     * @param connection Connection
-     */
-    public MicrosoftSqlServerDialect(Connection connection) throws SQLException
-    {
-        super(connection);
+    @Override
+    protected boolean isSupportedProduct(String productName, String productVersion) {
+        return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
     public String generateInline(

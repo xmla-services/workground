@@ -21,6 +21,8 @@ import mondrian.olap.type.LevelType;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.engine.api.Context;
+
 /**
  * <code>FunDefBase</code> is the default implementation of {@link FunDef}.
  *
@@ -83,6 +85,7 @@ public abstract class FunDefBase extends FunUtil implements FunDef {
     private final String description;
     protected final int returnCategory;
     protected final int[] parameterCategories;
+    private Context context;
 
     /**
      * Creates an operator.
@@ -215,6 +218,10 @@ public abstract class FunDefBase extends FunUtil implements FunDef {
             funDef.getReturnCategory(), funDef.getParameterCategories());
     }
 
+    @Override
+    public void init(Context context) {
+        this.context=context;        
+    }
     public String getName() {
         return name;
     }

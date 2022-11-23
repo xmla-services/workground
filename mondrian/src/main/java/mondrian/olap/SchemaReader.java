@@ -20,6 +20,8 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.engine.api.Context;
+
 /**
  * A <code>SchemaReader</code> queries schema objects ({@link Schema},
  * {@link Cube}, {@link Dimension}, {@link Hierarchy}, {@link Level},
@@ -548,6 +550,8 @@ public interface SchemaReader {
      */
     Map<? extends Member, Access>
         getMemberChildrenWithDetails(Member member, Evaluator evaluator);
+    
+    Context getContext();
 }
 
 // End SchemaReader.java

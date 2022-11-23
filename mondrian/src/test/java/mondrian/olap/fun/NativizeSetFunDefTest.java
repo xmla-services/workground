@@ -21,7 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -69,7 +69,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testIsNoOpWithAggregatesTablesOn(Context context) {
+    public void testIsNoOpWithAggregatesTablesOn(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().UseAggregates, true);
         propSaver.set(
@@ -85,7 +85,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLevelHierarchyHighCardinality(Context context) {
+    public void testLevelHierarchyHighCardinality(TestingContext context) {
         // The cardinality for the hierarchy looks like this:
         //    Year: 2 (level * gender cardinality:2)
         //    Quarter: 16 (level * gender cardinality:2)
@@ -105,7 +105,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLevelHierarchyLowCardinality(Context context) {
+    public void testLevelHierarchyLowCardinality(TestingContext context) {
         // The cardinality for the hierarchy looks like this:
         //    Year: 2 (level * gender cardinality:2)
         //    Quarter: 16 (level * gender cardinality:2)
@@ -125,7 +125,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetLowCardinality(Context context) {
+    public void testNamedSetLowCardinality(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().NativizeMinThreshold,
             Integer.MAX_VALUE);
@@ -139,7 +139,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCrossjoinWithNamedSetLowCardinality(Context context) {
+    public void testCrossjoinWithNamedSetLowCardinality(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().NativizeMinThreshold,
             Integer.MAX_VALUE);
@@ -154,7 +154,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMeasureInCrossJoinWithTwoDimensions(Context context) {
+    public void testMeasureInCrossJoinWithTwoDimensions(TestingContext context) {
         checkNative(context,
             "select NativizeSet("
             + "CrossJoin( "
@@ -168,7 +168,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativeResultLimitAtZero(Context context) {
+    public void testNativeResultLimitAtZero(TestingContext context) {
         // This query will return exactly 6 rows:
         // {Female,Male,Agg}x{Married,Single}
         String mdx =
@@ -186,7 +186,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativeResultLimitBeforeMerge(Context context) {
+    public void testNativeResultLimitBeforeMerge(TestingContext context) {
         // This query will return exactly 6 rows:
         // {Female,Male,Agg}x{Married,Single}
         String mdx =
@@ -216,7 +216,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativeResultLimitDuringMerge(Context context) {
+    public void testNativeResultLimitDuringMerge(TestingContext context) {
         // This query will return exactly 6 rows:
         // {Female,Male,Agg}x{Married,Single}
         String mdx =
@@ -244,7 +244,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMeasureAndDimensionInCrossJoin(Context context) {
+    public void testMeasureAndDimensionInCrossJoin(TestingContext context) {
         checkNotNative(context,
             // There's no crossjoin left after the measure is set aside,
             // so it's not even a candidate for native evaluation.
@@ -260,7 +260,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionAndMeasureInCrossJoin(Context context) {
+    public void testDimensionAndMeasureInCrossJoin(TestingContext context) {
         checkNotNative(context,
             // There's no crossjoin left after the measure is set aside,
             // so it's not even a candidate for native evaluation.
@@ -276,7 +276,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAllByAll(Context context) {
+    public void testAllByAll(TestingContext context) {
         checkNotNative(context,
             // There's no crossjoin left after all members are set aside,
             // so it's not even a candidate for native evaluation.
@@ -292,7 +292,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAllByAllByAll(Context context) {
+    public void testAllByAllByAll(TestingContext context) {
         checkNotNative(context,
             // There's no crossjoin left after all members are set aside,
             // so it's not even a candidate for native evaluation.
@@ -310,7 +310,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativizeTwoAxes(Context context) {
+    public void testNativizeTwoAxes(TestingContext context) {
         String mdx =
             "select "
             + "NativizeSet("
@@ -338,7 +338,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCurrentMemberAsFunArg(Context context) {
+    public void testCurrentMemberAsFunArg(TestingContext context) {
         checkNative(context,
             "with "
             ////////////////////////////////////////////////////////////
@@ -364,7 +364,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOnlyMeasureIsLiteral(Context context) {
+    public void testOnlyMeasureIsLiteral(TestingContext context) {
         checkNotNative(context,
             //////////////////////////////////////////////////////////////////
             // There's no base cube, so this should NOT be natively evaluated.
@@ -382,7 +382,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testTwoLiteralMeasuresAndUnitAndStoreSales(Context context) {
+    public void testTwoLiteralMeasuresAndUnitAndStoreSales(TestingContext context) {
         checkNative(context,
             // Should be natively evaluated because the unit sales
             // measure will bring in a base cube.
@@ -407,7 +407,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLiteralMeasuresWithinParentheses(Context context) {
+    public void testLiteralMeasuresWithinParentheses(TestingContext context) {
         checkNative(context,
             // Should be natively evaluated because the unit sales
             // measure will bring in a base cube.  The extra parens
@@ -434,7 +434,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testIsEmptyOnMeasures(Context context) {
+    public void testIsEmptyOnMeasures(TestingContext context) {
         checkNative(context,
             "with "
             ////////////////////////////////////////////////////////
@@ -458,7 +458,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLagOnMeasures(Context context) {
+    public void testLagOnMeasures(TestingContext context) {
         checkNotNative(context,
             "with "
             /////////////////////////////////////////////
@@ -483,7 +483,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLagOnMeasuresWithinParentheses(Context context) {
+    public void testLagOnMeasuresWithinParentheses(TestingContext context) {
         checkNotNative(context,
             "with "
             /////////////////////////////////////////////
@@ -511,7 +511,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testRangeOfMeasures(Context context) {
+    public void testRangeOfMeasures(TestingContext context) {
         checkNotNative(context,
             "select "
             + "   NativizeSet(CrossJoin("
@@ -532,7 +532,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOrderOnMeasures(Context context) {
+    public void testOrderOnMeasures(TestingContext context) {
         checkNative(context,
             "with "
             ///////////////////////////////////////////////////
@@ -557,7 +557,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLiteralMeasureAndUnitSalesUsingSet(Context context) {
+    public void testLiteralMeasureAndUnitSalesUsingSet(TestingContext context) {
         checkNative(context,
             // Should be natively evaluated because the unit sales
             "with "   // measure will bring in a base cube.
@@ -583,7 +583,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNoSubstitutionsArityOne(Context context) {
+    public void testNoSubstitutionsArityOne(TestingContext context) {
         checkNotNative(context,
             // no crossjoin, so not native
             "SELECT NativizeSet({Gender.F, Gender.M}) on 0 from sales");
@@ -591,7 +591,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNoSubstitutionsArityTwo(Context context) {
+    public void testNoSubstitutionsArityTwo(TestingContext context) {
         checkNotNative(context,
             "SELECT NativizeSet(CrossJoin("
             + "{Gender.F, Gender.M}, "
@@ -601,7 +601,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testExplicitCurrentMonth(Context context) {
+    public void testExplicitCurrentMonth(TestingContext context) {
         checkNative(context,
             "SELECT NativizeSet(CrossJoin( "
             + "   { [Time].[Month].currentmember }, "
@@ -610,7 +610,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void disabled_testCalculatedCurrentMonth(Context context) {
+    public void disabled_testCalculatedCurrentMonth(TestingContext context) {
         checkNative(context,
             "WITH "
             + "SET [Current Month] AS 'tail([Time].[month].members, 1)'"
@@ -623,7 +623,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void disabled_testCalculatedRelativeMonth(Context context) {
+    public void disabled_testCalculatedRelativeMonth(TestingContext context) {
         checkNative(context,
             "with "
             + "member [gender].[cog_oqp_int_t2] as '1', solve_order = 65535 "
@@ -638,7 +638,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAcceptsAllDimensionMembersSetAsInput(Context context) {
+    public void testAcceptsAllDimensionMembersSetAsInput(TestingContext context) {
         checkNotNative(context,
             // no crossjoin, so not native
             "SELECT NativizeSet({[Marital Status].[Marital Status].members})"
@@ -647,7 +647,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAcceptsCrossJoinAsInput(Context context) {
+    public void testAcceptsCrossJoinAsInput(TestingContext context) {
         checkNative(context,
             "SELECT NativizeSet( CrossJoin({ Gender.F, Gender.M }, "
             + "{[Marital Status].[Marital Status].members})) on 0 from sales");
@@ -655,7 +655,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testRedundantEnumMembersFirst(Context context) {
+    public void testRedundantEnumMembersFirst(TestingContext context) {
         checkNative(context,
             // In the enumerated marital status values { M, S, S }
             // the second S is clearly redundant, but should be
@@ -674,7 +674,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testRedundantEnumMembersMiddle(Context context) {
+    public void testRedundantEnumMembersMiddle(TestingContext context) {
         checkNative(context,
             // In the enumerated gender values { F, M, M, M }
             // the last two M values are redunant, but should be
@@ -693,7 +693,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testRedundantEnumMembersLast(Context context) {
+    public void testRedundantEnumMembersLast(TestingContext context) {
         checkNative(context,
             // In the enumerated time quarter values { Q1, Q2, Q2 }
             // the last two Q2 values are redunant, but should be
@@ -712,7 +712,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testRedundantLevelMembersFirst(Context context) {
+    public void testRedundantLevelMembersFirst(TestingContext context) {
         checkNative(context,
             // The second marital status members function is clearly
             // redundant, but should be included in the result
@@ -731,7 +731,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testRedundantLevelMembersMiddle(Context context) {
+    public void testRedundantLevelMembersMiddle(TestingContext context) {
         checkNative(context,
             // The second gender members function is clearly
             // redundant, but should be included in the result
@@ -750,7 +750,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testRedundantLevelMembersLast(Context context) {
+    public void testRedundantLevelMembersLast(TestingContext context) {
         checkNative(context,
             // The second time.quarter members function is clearly
             // redundant, but should be included in the result
@@ -769,7 +769,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonEmptyNestedCrossJoins(Context context) {
+    public void testNonEmptyNestedCrossJoins(TestingContext context) {
         checkNative(context,
             "SELECT "
             + "NativizeSet(CrossJoin("
@@ -785,7 +785,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLevelMembersAndAll(Context context) {
+    public void testLevelMembersAndAll(TestingContext context) {
         checkNative(context,
             "select NativizeSet ("
             + "crossjoin( "
@@ -796,7 +796,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCrossJoinArgInNestedBraces(Context context) {
+    public void testCrossJoinArgInNestedBraces(TestingContext context) {
         checkNative(context,
             "select NativizeSet ("
             + "crossjoin( "
@@ -807,7 +807,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLevelMembersAndAllWhereOrderMatters(Context context) {
+    public void testLevelMembersAndAllWhereOrderMatters(TestingContext context) {
         checkNative(context,
             "select NativizeSet ("
             + "crossjoin( "
@@ -818,7 +818,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testEnumMembersAndAll(Context context) {
+    public void testEnumMembersAndAll(TestingContext context) {
         checkNative(context,
             "select NativizeSet ("
             + "crossjoin( "
@@ -829,7 +829,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativizeWithASetAtTopLevel(Context context) {
+    public void testNativizeWithASetAtTopLevel(TestingContext context) {
         checkNative(context,
             "WITH"
             + "  MEMBER [Gender].[umg1] AS "
@@ -853,7 +853,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativizeWithASetAtTopLevel3Levels(Context context) {
+    public void testNativizeWithASetAtTopLevel3Levels(TestingContext context) {
         checkNative(context,
             "WITH\n"
             + "MEMBER [Gender].[COG_OQP_INT_umg2] AS 'IIF([Measures].CURRENTMEMBER IS [Measures].[Unit Sales], "
@@ -888,7 +888,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativizeWithASetAtTopLevel2(Context context) {
+    public void testNativizeWithASetAtTopLevel2(TestingContext context) {
         checkNative(context,
             "WITH"
             + "  MEMBER [Gender].[umg1] AS "
@@ -914,7 +914,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGenderMembersAndAggByMaritalStatus(Context context) {
+    public void testGenderMembersAndAggByMaritalStatus(TestingContext context) {
         checkNative(context,
             "with member gender.agg as 'Aggregate( gender.gender.members )' "
             + "select NativizeSet("
@@ -926,7 +926,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGenderAggAndMembersByMaritalStatus(Context context) {
+    public void testGenderAggAndMembersByMaritalStatus(TestingContext context) {
         checkNative(context,
             "with member gender.agg as 'Aggregate( gender.gender.members )' "
             + "select NativizeSet("
@@ -938,7 +938,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGenderAggAndMembersAndAllByMaritalStatus(Context context) {
+    public void testGenderAggAndMembersAndAllByMaritalStatus(TestingContext context) {
         checkNative(context,
             "with member gender.agg as 'Aggregate( gender.gender.members )' "
             + "select NativizeSet("
@@ -950,7 +950,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMaritalStatusByGenderMembersAndAgg(Context context) {
+    public void testMaritalStatusByGenderMembersAndAgg(TestingContext context) {
         checkNative(context,
             "with member gender.agg as 'Aggregate( gender.gender.members )' "
             + "select NativizeSet("
@@ -962,7 +962,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMaritalStatusByGenderAggAndMembers(Context context) {
+    public void testMaritalStatusByGenderAggAndMembers(TestingContext context) {
         checkNative(context,
             "with member gender.agg as 'Aggregate( gender.gender.members )' "
             + "select NativizeSet("
@@ -974,7 +974,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAggWithEnumMembers(Context context) {
+    public void testAggWithEnumMembers(TestingContext context) {
         checkNative(context,
             "with member gender.agg as 'Aggregate( gender.gender.members )' "
             + "select NativizeSet("
@@ -986,7 +986,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCrossjoinArgWithMultipleElementTypes(Context context) {
+    public void testCrossjoinArgWithMultipleElementTypes(TestingContext context) {
         checkNative(context,
             // Test for correct handling of a crossjoin arg that contains
             // a combination of element types: a members function, an
@@ -1003,7 +1003,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testProductFamilyMembers(Context context) {
+    public void testProductFamilyMembers(TestingContext context) {
         checkNative(context,
             "select non empty NativizeSet("
             + "crossjoin( "
@@ -1014,7 +1014,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNestedCrossJoinWhereAllColsHaveNative(Context context) {
+    public void testNestedCrossJoinWhereAllColsHaveNative(TestingContext context) {
         checkNative(context,
             "with "
             + "member gender.agg as 'Aggregate( gender.gender.members )' "
@@ -1030,7 +1030,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNestedCrossJoinWhereFirstColumnNonNative(Context context) {
+    public void testNestedCrossJoinWhereFirstColumnNonNative(TestingContext context) {
         checkNative(context,
             "with "
             + "member gender.agg as 'Aggregate( gender.gender.members )' "
@@ -1046,7 +1046,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNestedCrossJoinWhereMiddleColumnNonNative(Context context) {
+    public void testNestedCrossJoinWhereMiddleColumnNonNative(TestingContext context) {
         checkNative(context,
             "with "
             + "member gender.agg as 'Aggregate( gender.gender.members )' "
@@ -1062,7 +1062,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNestedCrossJoinWhereLastColumnNonNative(Context context) {
+    public void testNestedCrossJoinWhereLastColumnNonNative(TestingContext context) {
         checkNative(context,
             "with "
             + "member gender.agg as 'Aggregate( gender.gender.members )' "
@@ -1078,7 +1078,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGenderAggByMaritalStatus(Context context) {
+    public void testGenderAggByMaritalStatus(TestingContext context) {
         checkNotNative(context,
             // NativizeSet removes the crossjoin, so not native
             "with member gender.agg as 'Aggregate( gender.gender.members )' "
@@ -1091,7 +1091,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGenderAggTwiceByMaritalStatus(Context context) {
+    public void testGenderAggTwiceByMaritalStatus(TestingContext context) {
         checkNotNative(context,
             // NativizeSet removes the crossjoin, so not native
             "with "
@@ -1106,7 +1106,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSameGenderAggTwiceByMaritalStatus(Context context) {
+    public void testSameGenderAggTwiceByMaritalStatus(TestingContext context) {
         checkNotNative(context,
             // NativizeSet removes the crossjoin, so not native
             "with "
@@ -1120,7 +1120,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMaritalStatusByGenderAgg(Context context) {
+    public void testMaritalStatusByGenderAgg(TestingContext context) {
         checkNotNative(context,
             // NativizeSet removes the crossjoin, so not native
             "with member gender.agg as 'Aggregate( gender.gender.members )' "
@@ -1133,7 +1133,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMaritalStatusByTwoGenderAggs(Context context) {
+    public void testMaritalStatusByTwoGenderAggs(TestingContext context) {
         checkNotNative(context,
             // NativizeSet removes the crossjoin, so not native
             "with "
@@ -1148,7 +1148,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMaritalStatusBySameGenderAggTwice(Context context) {
+    public void testMaritalStatusBySameGenderAggTwice(TestingContext context) {
         checkNotNative(context,
             // NativizeSet removes the crossjoin, so not native
             "with "
@@ -1162,7 +1162,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMultipleLevelsOfSameDimInConcatenatedJoins(Context context) {
+    public void testMultipleLevelsOfSameDimInConcatenatedJoins(TestingContext context) {
         checkNotNative(context,
             // See notes for testMultipleLevelsOfSameDimInSingleArg
             // because the NativizeSetFunDef transforms this mdx into the
@@ -1179,7 +1179,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMultipleLevelsOfSameDimInSingleArg(Context context) {
+    public void testMultipleLevelsOfSameDimInSingleArg(TestingContext context) {
         checkNotNative(context,
             // Although it's legal MDX, the RolapNativeSet.checkCrossJoinArg
             // can't deal with an arg that contains multiple .members functions.
@@ -1196,7 +1196,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDoesNoHarmToPlainEnumeratedMembers(Context context) {
+    public void testDoesNoHarmToPlainEnumeratedMembers(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, false);
 
@@ -1210,7 +1210,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDoesNoHarmToPlainDotMembers(Context context) {
+    public void testDoesNoHarmToPlainDotMembers(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, false);
 
@@ -1224,7 +1224,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testTransformsCallToRemoveDotMembersInCrossJoin(Context context) {
+    public void testTransformsCallToRemoveDotMembersInCrossJoin(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, false);
 
@@ -1243,7 +1243,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void DISABLED_testTransformsWithSeveralDimensionsNestedOnRows(Context context) {
+    public void DISABLED_testTransformsWithSeveralDimensionsNestedOnRows(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, false);
 
@@ -1276,7 +1276,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testTransformsComplexQueryWithGenerateAndAggregate(Context context) {
+    public void testTransformsComplexQueryWithGenerateAndAggregate(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, false);
 
@@ -1321,7 +1321,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void DISABLED_testParallelCrossjoins(Context context) {
+    public void DISABLED_testParallelCrossjoins(TestingContext context) {
         checkNative(context,
             // DE2185
             "select NativizeSet( {"
@@ -1332,7 +1332,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMultipleHierarchySsasTrue(Context context) {
+    public void testMultipleHierarchySsasTrue(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().SsasCompatibleNaming, true);
         propSaver.set(
@@ -1361,7 +1361,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMultipleHierarchySsasFalse(Context context) {
+    public void testMultipleHierarchySsasFalse(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().SsasCompatibleNaming, false);
         propSaver.set(
@@ -1381,7 +1381,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testComplexCrossjoinAggInMiddle(Context context) {
+    public void testComplexCrossjoinAggInMiddle(TestingContext context) {
         checkNative(context,
             "WITH\n"
             + "\tMEMBER [Time].[Time].[COG_OQP_USR_Aggregate(Time Values)] AS "
@@ -1432,7 +1432,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testTopCountDoesNotGetTransformed(Context context) {
+    public void testTopCountDoesNotGetTransformed(TestingContext context) {
         assertQueryIsReWritten(context.createConnection(),
             "select "
             + "   NativizeSet(Crossjoin([Gender].[Gender].members,"
@@ -1450,7 +1450,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCrossjoinWithFilter(Context context) {
+    public void testCrossjoinWithFilter(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "select\n"
             + "NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS,   \n"
@@ -1468,7 +1468,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testEvaluationIsNonNativeWhenBelowHighcardThreshoold(Context context) {
+    public void testEvaluationIsNonNativeWhenBelowHighcardThreshoold(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().NativizeMinThreshold, 10000);
         SqlPattern[] patterns = {
@@ -1491,7 +1491,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalculatedLevelsDoNotCauseException(Context context) {
+    public void testCalculatedLevelsDoNotCauseException(TestingContext context) {
         String mdx =
             "SELECT "
             + "  Nativizeset"
@@ -1506,7 +1506,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAxisWithArityOneIsNotNativelyEvaluated(Context context) {
+    public void testAxisWithArityOneIsNotNativelyEvaluated(TestingContext context) {
         SqlPattern[] patterns = {
             new SqlPattern(
                 DatabaseProduct.ACCESS,
@@ -1536,7 +1536,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAxisWithNamedSetArityOneIsNotNativelyEvaluated(Context context) {
+    public void testAxisWithNamedSetArityOneIsNotNativelyEvaluated(TestingContext context) {
         checkNotNative(context,
             "with "
             + "set [COG_OQP_INT_s1] as "
@@ -1548,7 +1548,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOneAxisHighAndOneLowGetsNativeEvaluation(Context context) {
+    public void testOneAxisHighAndOneLowGetsNativeEvaluation(TestingContext context) {
         propSaver.set(MondrianProperties.instance().NativizeMinThreshold, 19);
         checkNative(context,
             "select NativizeSet("
@@ -1562,7 +1562,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void disabled_testAggregatesInSparseResultsGetSortedCorrectly(Context context) {
+    public void disabled_testAggregatesInSparseResultsGetSortedCorrectly(TestingContext context) {
         propSaver.set(MondrianProperties.instance().NativizeMinThreshold, 0);
         checkNative(context,
             "select non empty NativizeSet("
@@ -1573,7 +1573,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLeafMembersOfParentChildDimensionAreNativelyEvaluated(Context context) {
+    public void testLeafMembersOfParentChildDimensionAreNativelyEvaluated(TestingContext context) {
         checkNative(context,
             "SELECT"
             + " NON EMPTY "
@@ -1591,7 +1591,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAggregatedCrossjoinWithZeroMembersInNativeList(Context context) {
+    public void testAggregatedCrossjoinWithZeroMembersInNativeList(TestingContext context) {
         propSaver.set(MondrianProperties.instance().NativizeMinThreshold, 0);
         checkNative(context,
             "with"
@@ -1612,7 +1612,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCardinalityQueriesOnlyExecuteOnce(Context context) {
+    public void testCardinalityQueriesOnlyExecuteOnce(TestingContext context) {
         SqlPattern[] patterns = {
             new SqlPattern(
                 DatabaseProduct.ORACLE,
@@ -1643,7 +1643,7 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSingleLevelDotMembersIsNativelyEvaluated(Context context) {
+    public void testSingleLevelDotMembersIsNativelyEvaluated(TestingContext context) {
         String mdx1 =
             "with member [Customers].[agg] as '"
             + "AGGREGATE({[Customers].[name].MEMBERS}, [Measures].[Unit Sales])'"
@@ -1685,13 +1685,13 @@ public class NativizeSetFunDefTest extends BatchTestCase {
 
     // ~ ====== Helper methods =================================================
 
-    private void checkNotNative(Context context, String mdx) {
+    private void checkNotNative(TestingContext context, String mdx) {
         final String mdx2 = removeNativize(mdx);
         final Result result = executeQuery(mdx2, context.createConnection());
         checkNotNative(context, mdx, result);
     }
 
-    private void checkNative(Context context, String mdx) {
+    private void checkNative(TestingContext context, String mdx) {
         final String mdx2 = removeNativize(mdx);
         final Result result = executeQuery(mdx2, context.createConnection());
         checkNative(context, mdx, result);

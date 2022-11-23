@@ -18,7 +18,7 @@ import mondrian.olap.MondrianDef.RelationOrJoin;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -33,7 +33,7 @@ public class RolapCubeHierarchyTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)	
-  public void testMONDRIAN2535(Context context) {
+  public void testMONDRIAN2535(TestingContext context) {
     assertQueryReturns(context.createConnection(),
         "Select\n"
         + "  [Customers].children on rows,\n"

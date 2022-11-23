@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.*;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -1299,7 +1299,7 @@ public class ConcurrentMdxTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testFlushingDoesNotCauseDeadlock(Context context) throws Exception {
+    public void testFlushingDoesNotCauseDeadlock(TestingContext context) throws Exception {
         // Create a seeded deterministic random generator.
         final long seed = new Random().nextLong();
         LOGGER.debug("Test seed: " + seed);

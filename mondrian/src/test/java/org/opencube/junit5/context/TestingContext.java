@@ -28,7 +28,7 @@ import org.olap4j.OlapConnection;
 import mondrian.olap.Connection;
 import mondrian.olap.Util.PropertyList;
 
-public interface Context {
+public interface TestingContext {
 
 	public void init(Entry<PropertyList, DataSource> dataSource);
 

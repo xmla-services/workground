@@ -17,7 +17,7 @@ import org.olap4j.CellSet;
 import org.olap4j.OlapStatement;
 import org.olap4j.layout.RectangularCellSetFormatter;
 import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.Context;
+import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
@@ -45,7 +45,7 @@ public class MonitorTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMe(Context context) throws SQLException {
+    public void testMe(TestingContext context) throws SQLException {
         String queryString =
             "WITH MEMBER [Measures].[Foo] AS\n"
             + " [Measures].[Unit Sales]"

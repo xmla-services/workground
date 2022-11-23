@@ -27,6 +27,7 @@ import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.engine.api.Context;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -1529,10 +1530,10 @@ public class AggStar {
             SqlQuery query = getSqlQuery();
             query.addSelect("count(*)", null);
             query.addFrom(getRelation(), getName(), false);
-            DataSource dataSource = getAggStar().getStar().getDataSource();
+            Context context = getAggStar().getStar().getContext();
             SqlStatement stmt =
                 RolapUtil.executeQuery(
-                    dataSource,
+                        context,
                     query.toString(),
                     new Locus(
                         new Execution(

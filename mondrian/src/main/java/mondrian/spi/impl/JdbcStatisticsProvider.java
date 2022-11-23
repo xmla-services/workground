@@ -9,16 +9,18 @@
 
 package mondrian.spi.impl;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.eclipse.daanse.engine.api.Context;
+
 import mondrian.olap.Util;
 import mondrian.server.Execution;
 import mondrian.spi.StatisticsProvider;
-
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-
-import java.sql.*;
-import javax.sql.DataSource;
 
 /**
  * Implementation of {@link mondrian.spi.StatisticsProvider} that uses JDBC
@@ -28,8 +30,7 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
     private static final Logger LOG =
         LogManager.getLogger(JdbcStatisticsProvider.class);
     public long getTableCardinality(
-        Dialect dialect,
-        DataSource dataSource,
+        Context context,
         String catalog,
         String schema,
         String table,
@@ -38,7 +39,7 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = dataSource.getConnection();
+            connection = context.getDataSource().getConnection();
             resultSet =
                 connection
                     .getMetaData()
@@ -77,8 +78,7 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
     }
 
     public long getQueryCardinality(
-        Dialect dialect,
-        DataSource dataSource,
+        Context context,
         String sql,
         Execution execution)
     {
@@ -87,8 +87,7 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
     }
 
     public long getColumnCardinality(
-        Dialect dialect,
-        DataSource dataSource,
+        Context context,
         String catalog,
         String schema,
         String table,
@@ -98,7 +97,7 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
         Connection connection = null;
         ResultSet resultSet = null;
         try {
-            connection = dataSource.getConnection();
+            connection = context.getDataSource().getConnection();
             resultSet =
                 connection
                     .getMetaData()
