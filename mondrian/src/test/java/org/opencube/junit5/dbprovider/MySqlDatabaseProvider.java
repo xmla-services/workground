@@ -47,7 +47,7 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 
 	@Override
 	protected PortBinding portBinding() {
-		return PortBinding.parse(PORT + ":" + PORT);
+		return PortBinding.parse(port + ":" + PORT);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 	protected SimpleEntry<PropertyList, DataSource> createConnection() {
 		MysqlDataSource dataSource = new MysqlDataSource();
 		dataSource.setServerName(serverName);
-		dataSource.setPort(PORT);
+		dataSource.setPort(port);
 		dataSource.setPassword(MYSQL_PASSWORD);
 		dataSource.setUser(MYSQL_USER);
 		dataSource.setDatabaseName(MYSQL_DATABASE);
@@ -88,7 +88,7 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 
 				Connection connection = dataSource.getConnection(MYSQL_USER, MYSQL_PASSWORD);
 
-				String jdbc = "jdbc:mysql://" + serverName + ":" + PORT + "/" + MYSQL_DATABASE;
+				String jdbc = "jdbc:mysql://" + serverName + ":" + port + "/" + MYSQL_DATABASE;
 				PropertyList connectProperties = new PropertyList();
 				connectProperties.put(RolapConnectionProperties.Jdbc.name(), jdbc);
 				connectProperties.put(RolapConnectionProperties.JdbcUser.name(), MYSQL_USER);
@@ -113,7 +113,7 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 
 	@Override
 	public String getJdbcUrl() {
-		return "jdbc:mysql:" + "//" + serverName + ":" + PORT + "/" + MYSQL_DATABASE;
+		return "jdbc:mysql:" + "//" + serverName + ":" + port + "/" + MYSQL_DATABASE;
 				//+ "?user=" + MYSQL_USER
 				//+ "&password=" + MYSQL_PASSWORD; // + "&rewriteBatchedStatements=true";
 	}
