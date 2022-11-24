@@ -131,7 +131,7 @@ public class RolapSchemaPool {
         final ConnectionKey connectionKey1 =
             ConnectionKey.create(
                 connectionUuidStr,
-                context.getDataSource(),
+                context == null ? null : context.getDataSource(),
                 catalogUrl,
                 connectionKey,
                 jdbcUser,

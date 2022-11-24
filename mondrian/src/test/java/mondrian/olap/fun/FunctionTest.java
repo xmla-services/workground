@@ -13,7 +13,7 @@ package mondrian.olap.fun;
 
 import mondrian.olap.*;
 import mondrian.resource.MondrianResource;
-import mondrian.spi.DialectManager;
+//import mondrian.spi.DialectManager;
 import mondrian.test.BasicQueryTest;
 import mondrian.test.PropertySaver5;
 import mondrian.udf.CurrentDateMemberExactUdf;
@@ -1402,7 +1402,7 @@ public class FunctionTest {//extends FoodMartTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testClosingPeriod(TestingContext context) {
-	Connection connection = context.createConnection();  
+	Connection connection = context.createConnection();
     assertMemberExprDependsOn(connection,
       "ClosingPeriod([Time].[Month], [Time].[Time].CurrentMember)",
       "{[Time]}" );
@@ -5302,7 +5302,7 @@ public class FunctionTest {//extends FoodMartTestCase {
   public void testDescendantsParentChildLeaves(TestingContext context) {
     //final TestContext testContext = getTestContext().withCube( "HR" );
     DataSource dataSource = context.createConnection().getDataSource();
-    if (Bug.avoidSlowTestOnLucidDB( DialectManager.createDialect( dataSource, null ))) {
+    if (Bug.avoidSlowTestOnLucidDB( context.getContext().getDialect())) {
       return;
     }
 
@@ -9098,7 +9098,7 @@ public class FunctionTest {//extends FoodMartTestCase {
           + "{}\n"
           + "Axis #1:\n"
           + "{[Customers].[USA].[CA].[Woodland Hills].[Abel Young]}\n"
-          + "{[Customers].[USA].[CA].[Santa Monica].[Adeline Chun]}\n"          
+          + "{[Customers].[USA].[CA].[Santa Monica].[Adeline Chun]}\n"
           + "Row #0: 75\n"
           + "Row #0: 33\n" );
     } finally {
@@ -9246,10 +9246,10 @@ public class FunctionTest {//extends FoodMartTestCase {
           + "{}\n"
           + "Axis #1:\n"
           + "{[Customers].[USA].[CA].[Woodland Hills].[Abel Young]}\n"
-          + "{[Customers].[USA].[CA].[Santa Monica].[Adeline Chun]}\n"          
+          + "{[Customers].[USA].[CA].[Santa Monica].[Adeline Chun]}\n"
           + "{[Customers].[USA].[WA].[Issaquah].[Abe Tramel]}\n"
           + "Row #0: 75\n"
-          + "Row #0: 33\n"          
+          + "Row #0: 33\n"
           + "Row #0: 33\n" );
     } finally {
       connection.close();
@@ -11660,7 +11660,7 @@ Intel platforms):
         + "Row #3: 163\n"
         + "Row #4: 163\n"
         + "Row #5: 3,497\n" );
-    	// test is working incorrect. should be 163, 163, 163, 163, 3497  = 3497 + 163.  This is Analysis Services behavior. 
+    	// test is working incorrect. should be 163, 163, 163, 163, 3497  = 3497 + 163.  This is Analysis Services behavior.
     	// We should use only [Product].[Food].[Baked Goods].[Bread].[Bagels].[Colony] for  [Food].[Baked Goods].[Bread].[Bagels]
   }
 

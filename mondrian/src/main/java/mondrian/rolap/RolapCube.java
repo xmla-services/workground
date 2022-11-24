@@ -159,6 +159,7 @@ public class RolapCube extends CubeBase {
      * Contains a list of all base cubes related to a virtual cube
      */
     private List<RolapCube> baseCubes;
+    private Context context;
 
     /**
      * Private constructor used by both normal cubes and virtual cubes.
@@ -182,7 +183,8 @@ public class RolapCube extends CubeBase {
         MondrianDef.Relation fact,
         MondrianDef.CubeDimension[] dimensions,
         boolean load,
-        Map<String, Annotation> annotationMap)
+        Map<String, Annotation> annotationMap,
+        Context context)
     {
         super(
             name,
@@ -197,6 +199,7 @@ public class RolapCube extends CubeBase {
         this.caption = caption;
         this.fact = fact;
         this.hierarchyUsages = new ArrayList<HierarchyUsage>();
+        this.context = context;
 
         if (! isVirtual()) {
             this.star = schema.getRolapStarRegistry().getOrCreateStar(fact);
@@ -287,7 +290,7 @@ public class RolapCube extends CubeBase {
         RolapSchema schema,
         MondrianDef.Schema xmlSchema,
         MondrianDef.Cube xmlCube,
-        boolean load)
+        boolean load, Context context)
     {
         this(
             schema,
@@ -300,7 +303,7 @@ public class RolapCube extends CubeBase {
             xmlCube.fact,
             xmlCube.dimensions,
             load,
-            RolapHierarchy.createAnnotationMap(xmlCube.annotations));
+            RolapHierarchy.createAnnotationMap(xmlCube.annotations), context);
 
         if (fact == null) {
             throw Util.newError(
@@ -668,7 +671,7 @@ public class RolapCube extends CubeBase {
         RolapSchema schema,
         MondrianDef.Schema xmlSchema,
         MondrianDef.VirtualCube xmlVirtualCube,
-        boolean load)
+        boolean load, Context context)
     {
         this(
             schema,
@@ -681,7 +684,8 @@ public class RolapCube extends CubeBase {
             null,
             xmlVirtualCube.dimensions,
             load,
-            RolapHierarchy.createAnnotationMap(xmlVirtualCube.annotations));
+            RolapHierarchy.createAnnotationMap(xmlVirtualCube.annotations),
+            context);
 
         // Since MondrianDef.Measure and MondrianDef.VirtualCubeMeasure cannot
         // be treated as the same, measure creation cannot be done in a common
@@ -703,13 +707,13 @@ public class RolapCube extends CubeBase {
 
         this.cubeUsages = new RolapCubeUsages(xmlVirtualCube.cubeUsage);
 
-        HashMap<String, MondrianDef.VirtualCubeMeasure> measureHash = new HashMap<String, MondrianDef.VirtualCubeMeasure>(); 
-        
+        HashMap<String, MondrianDef.VirtualCubeMeasure> measureHash = new HashMap<String, MondrianDef.VirtualCubeMeasure>();
+
         for (MondrianDef.VirtualCubeMeasure xmlMeasure
             : xmlVirtualCube.measures)
         {
         	measureHash.put(xmlMeasure.name, xmlMeasure);
-        	
+
             // Lookup a measure in an existing cube.
             RolapCube cube = schema.lookupCube(xmlMeasure.cubeName);
             if (cube == null) {
@@ -925,7 +929,7 @@ public class RolapCube extends CubeBase {
                 break;
             }
         }
-        
+
         // We modify the measures schema reader one last time with a version
         // which includes all calculated members as well.
         final List<RolapMember> finalMeasureMembers =
@@ -940,7 +944,7 @@ public class RolapCube extends CubeBase {
                 ((RolapHierarchy.RolapCalculatedMeasure) calcMeasure)
                         .setBaseCube(calcMeasuresWithBaseCube.get(calcMeasure.getUniqueName()).getBaseCube());
             }
-            
+
         	MondrianDef.VirtualCubeMeasure xmlMeasure = measureHash.get(calcMeasure.getUniqueName());
         	if(xmlMeasure != null) {
 	            Boolean visible = xmlMeasure.visible;
@@ -950,7 +954,7 @@ public class RolapCube extends CubeBase {
 	                        visible);
 	            }
         	}
-            
+
             finalMeasureMembers.add(calcMeasure);
         }
         setMeasuresHierarchyMemberReader(
@@ -1589,7 +1593,7 @@ public class RolapCube extends CubeBase {
     public synchronized SchemaReader getSchemaReader() {
         if (schemaReader == null) {
             schemaReader =
-                new RolapCubeSchemaReader(schemaReader.getContext(),Util.createRootRole(schema));
+                new RolapCubeSchemaReader(context, Util.createRootRole(schema));
         }
         return schemaReader;
     }
@@ -1598,7 +1602,7 @@ public class RolapCube extends CubeBase {
         if (role == null) {
             return getSchemaReader();
         } else {
-            return new RolapCubeSchemaReader(schemaReader.getContext(),role);
+            return new RolapCubeSchemaReader(context, role);
         }
     }
 

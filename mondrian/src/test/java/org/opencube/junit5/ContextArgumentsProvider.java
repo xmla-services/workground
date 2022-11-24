@@ -37,6 +37,7 @@ import java.util.stream.Stream;
 import javax.sql.DataSource;
 
 import mondrian.rolap.RolapConnectionProperties;
+import org.eclipse.daanse.engine.api.Context;
 import org.glassfish.jaxb.runtime.v2.JAXBContextFactory;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.provider.Arguments;
@@ -61,7 +62,7 @@ import mondrian.olap.Util.PropertyList;
 public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationConsumer<ContextSource> {
 	private ContextSource contextSource;
 
-	private static Map<Class<? extends DatabaseProvider>, Map<Class<? extends DataLoader>, Entry<PropertyList, DataSource>>> store = new HashMap<>();
+	private static Map<Class<? extends DatabaseProvider>, Map<Class<? extends DataLoader>, Entry<PropertyList, Context>>> store = new HashMap<>();
 	public static boolean dockerWasChanged = true;
 
 	@Override
@@ -164,7 +165,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 		}
 		List<TestingContext> args = providers.parallel().map(dbp -> {
 
-			Entry<PropertyList, DataSource> dataSource = null;
+			Entry<PropertyList, Context> dataSource = null;
 			Class<? extends DatabaseProvider> clazzProvider = dbp.getClass();
 
 			if (!store.containsKey(clazzProvider)) {
@@ -187,7 +188,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 
 								Class<? extends DataLoader> dataLoaderClass = contextSource.dataloader();
 
-								Map<Class<? extends DataLoader>, Entry<PropertyList, DataSource>> storedLoaders = store
+								Map<Class<? extends DataLoader>, Entry<PropertyList, Context>> storedLoaders = store
 										.get(clazzProvider);
 								if (storedLoaders.containsKey(dataLoaderClass) && !dockerWasChanged) {
 									dataSource = storedLoaders.get(dataLoaderClass);

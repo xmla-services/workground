@@ -20,7 +20,6 @@ import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapUtil;
 import mondrian.server.Execution;
-import mondrian.spi.DialectManager;
 import mondrian.spi.StatisticsProvider;
 import mondrian.spi.UserDefinedFunction;
 import mondrian.spi.impl.JdbcStatisticsProvider;
@@ -5395,8 +5394,9 @@ public class BasicQueryTest {
       assertSimpleQuery(connection);
       // bypass dialect cache and always get a fresh dialect instance
       // with our custom providers
-      Dialect dialect =
-          DialectManager.createDialect( connection.getDataSource(), null, dialectClassName );
+      Dialect dialect = context.getContext().getDialect();
+      //Dialect dialect =
+        //DialectManager.createDialect( connection.getDataSource(), null, dialectClassName );
       //final List<StatisticsProvider> statisticsProviders = dialect.getStatisticsProviders();
       final List<SqlStatisticsProviderNew> statisticsProviders = List.of(new SqlStatisticsProviderNew());
       //assertEquals( 2, statisticsProviders.size() );
@@ -5405,7 +5405,7 @@ public class BasicQueryTest {
 
       for ( SqlStatisticsProviderNew statisticsProvider : statisticsProviders ) {
         long rowCount =
-            statisticsProvider.getTableCardinality( dialect, connection.getDataSource(), null, null,
+            statisticsProvider.getTableCardinality( context.getContext(), null, null,
                 "customer", new Execution( ( (RolapSchema) connection.getSchema() )
                     .getInternalConnection().getInternalStatement(), 0 ) );
         if ( statisticsProvider instanceof SqlStatisticsProviderNew ) {
@@ -5413,7 +5413,7 @@ public class BasicQueryTest {
         }
 
         long valueCount =
-            statisticsProvider.getColumnCardinality( dialect, connection.getDataSource(), null, null,
+            statisticsProvider.getColumnCardinality(context.getContext(), null, null,
                 "customer", "gender", new Execution( ( (RolapSchema) connection.getSchema() )
                     .getInternalConnection().getInternalStatement(), 0 ) );
         assertTrue(statisticsProvider instanceof SqlStatisticsProviderNew ? valueCount == -1 : valueCount == 2, "Value count estimate: " + valueCount + " (actual 2)");

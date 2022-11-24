@@ -1136,7 +1136,9 @@ public class SegmentLoaderTest extends BatchTestCase {
             List<Object[]> data)
         {
             super(
-                groupingSetsList.getStar().getDataSource(),
+                //groupingSetsList.getStar().getDataSource(),
+                //TODO Commented by reason context implementation
+                null,
                 "",
                 null,
                 cellRequestCount,

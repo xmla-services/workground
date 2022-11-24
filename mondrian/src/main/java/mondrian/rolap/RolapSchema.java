@@ -169,7 +169,7 @@ public class RolapSchema implements Schema {
      *
      * @param key Key
      * @param connectInfo Connect properties
-     * @param dataSource Data source
+     * @param context Context
      * @param md5Bytes MD5 hash
      * @param useContentChecksum Whether to use content checksum
      */
@@ -193,7 +193,7 @@ public class RolapSchema implements Schema {
         this.defaultRole = Util.createRootRole(this);
         final MondrianServer internalServer = MondrianServer.forId(null);
         this.internalConnection =
-            new RolapConnection(internalServer, connectInfo, this, context.getDataSource());
+            new RolapConnection(internalServer, connectInfo, this, context);
         internalServer.removeConnection(internalConnection);
         internalServer.removeStatement(
             internalConnection.getInternalStatement());
@@ -563,7 +563,7 @@ public class RolapSchema implements Schema {
         // Create cubes.
         for (MondrianDef.Cube xmlCube : xmlSchema.cubes) {
             if (xmlCube.isEnabled()) {
-                RolapCube cube = new RolapCube(this, xmlSchema, xmlCube, true);
+                RolapCube cube = new RolapCube(this, xmlSchema, xmlCube, true, context);
                 Util.discard(cube);
             }
         }
@@ -572,7 +572,7 @@ public class RolapSchema implements Schema {
         for (MondrianDef.VirtualCube xmlVirtualCube : xmlSchema.virtualCubes) {
             if (xmlVirtualCube.isEnabled()) {
                 RolapCube cube =
-                    new RolapCube(this, xmlSchema, xmlVirtualCube, true);
+                    new RolapCube(this, xmlSchema, xmlVirtualCube, true, context);
                 Util.discard(cube);
             }
         }
@@ -896,13 +896,13 @@ public class RolapSchema implements Schema {
                 // okay, because there are no forward-references to resolve.
                 final MondrianDef.Schema xmlSchema = new MondrianDef.Schema();
                 MondrianDef.Cube xmlDimension = new MondrianDef.Cube(def);
-                cube = new RolapCube(this, xmlSchema, xmlDimension, false);
+                cube = new RolapCube(this, xmlSchema, xmlDimension, false, context);
             } else if (tagName.equals("VirtualCube")) {
                 // Need the real schema here.
                 MondrianDef.Schema xmlSchema = getXMLSchema();
                 MondrianDef.VirtualCube xmlDimension =
                         new MondrianDef.VirtualCube(def);
-                cube = new RolapCube(this, xmlSchema, xmlDimension, false);
+                cube = new RolapCube(this, xmlSchema, xmlDimension, false, context);
             } else {
                 throw new XOMException(
                     "Got <" + tagName + "> when expecting <Cube>");

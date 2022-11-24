@@ -37,7 +37,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import mondrian.olap.*;
 import mondrian.rolap.RolapConnectionProperties;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import mondrian.spi.DialectManager;
+//import mondrian.spi.DialectManager;
 
 
 /**
@@ -347,7 +347,7 @@ public class CompatibilityTest {
     public void testCaseInsensitiveNullMember(TestingContext foodMartContext) throws SQLException, OlapException, IOException {
     	Connection connection = foodMartContext.createConnection();
         DataSource dataSource = connection.getDataSource();
-        final Dialect dialect = DialectManager.createDialect( dataSource, null );
+        final Dialect dialect = foodMartContext.getContext().getDialect();
         if (dialect.getDatabaseProduct() == DatabaseProduct.LUCIDDB) {
             // TODO jvs 29-Nov-2006:  LucidDB is strict about
             // null literals (type can't be inferred in this context);
@@ -425,7 +425,7 @@ public class CompatibilityTest {
     public void testNullNameColumn(TestingContext foodMartContext) throws SQLException, OlapException, IOException  {
     	Connection connection = foodMartContext.createConnection();
         DataSource dataSource = connection.getDataSource();
-        final Dialect dialect = DialectManager.createDialect( dataSource, null );
+        final Dialect dialect = foodMartContext.getContext().getDialect();
         switch (dialect.getDatabaseProduct()) {
         case LUCIDDB:
             // TODO jvs 29-Nov-2006:  See corresponding comment in
@@ -516,7 +516,7 @@ public class CompatibilityTest {
     public void testNullCollation(TestingContext foodMartContext) throws SQLException, OlapException, IOException  {
     	Connection connection = foodMartContext.createConnection();
         DataSource dataSource = connection.getDataSource();
-        final Dialect dialect = DialectManager.createDialect( dataSource, null );
+        final Dialect dialect = foodMartContext.getContext().getDialect();
         if (dialect.supportsGroupByExpressions()) {
             // Derby does not support expressions in the GROUP BY clause,
             // therefore this testing strategy of using an expression for the

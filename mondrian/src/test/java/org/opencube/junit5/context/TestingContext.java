@@ -21,8 +21,7 @@ package org.opencube.junit5.context;
 import java.sql.SQLException;
 import java.util.Map.Entry;
 
-import javax.sql.DataSource;
-
+import org.eclipse.daanse.engine.api.Context;
 import org.olap4j.OlapConnection;
 
 import mondrian.olap.Connection;
@@ -30,7 +29,7 @@ import mondrian.olap.Util.PropertyList;
 
 public interface TestingContext {
 
-	public void init(Entry<PropertyList, DataSource> dataSource);
+	void init(Entry<PropertyList, Context> dataSource);
 
 	/**
 	 * Returns the olap.Connection.
@@ -45,4 +44,5 @@ public interface TestingContext {
 
 	void setProperty(String key, String value);
 
+	Context getContext();
 }

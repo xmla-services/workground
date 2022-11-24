@@ -77,7 +77,7 @@ import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapUtil;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import mondrian.spi.DialectManager;
+//import mondrian.spi.DialectManager;
 import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 import mondrian.util.DelegatingInvocationHandler;
@@ -1467,7 +1467,9 @@ public synchronized Dialect getDialect() {
 
   private Dialect getDialectInternal() {
     DataSource dataSource = getConnection().getDataSource();
-    return DialectManager.createDialect( dataSource, null );
+    //TODO Commented by reason context implementation
+    //return DialectManager.createDialect( dataSource, null );
+    return null;
   }
 
   /**
@@ -1487,7 +1489,9 @@ public synchronized Dialect getDialect() {
         null,
         new Class<?>[] { java.sql.Connection.class },
         new ConnectionInvocationHandler( metaData ) );
-    final Dialect dialect = DialectManager.createDialect( null, connection );
+    //TODO Commented by reason context implementation
+    final Dialect dialect = null;
+    //final Dialect dialect = DialectManager.createDialect( null, connection );
     assert dialect.getDatabaseProduct() == product;
     return dialect;
   }

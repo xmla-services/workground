@@ -20,6 +20,7 @@ import mondrian.xmla.XmlaHandler;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
+import org.eclipse.daanse.engine.api.Context;
 import org.olap4j.Axis;
 import org.olap4j.Cell;
 import org.olap4j.*;
@@ -139,7 +140,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         Factory factory,
         MondrianOlap4jDriver driver,
         String url,
-        Properties info)
+        Properties info, Context context)
         throws SQLException
     {
         // Required for the logic below to work.
@@ -166,7 +167,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
 
         this.mondrianConnection =
             (RolapConnection) mondrian.olap.DriverManager
-                .getConnection(list, null);
+                .getConnection(list, null, context);
 
         this.olap4jDatabaseMetaData =
             factory.newDatabaseMetaData(this, mondrianConnection);
