@@ -24,10 +24,11 @@ import java.util.Map.Entry;
 import javax.sql.DataSource;
 
 import mondrian.olap.Util.PropertyList;
+import org.eclipse.daanse.engine.api.Context;
 
 public interface DatabaseProvider extends Closeable {
 
-	public Entry<PropertyList, DataSource> activate();
+	public Entry<PropertyList, Context> activate();
 
 	public String getJdbcUrl();
 

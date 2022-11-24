@@ -13,6 +13,7 @@ import mondrian.olap.Connection;
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianDef.SQL;
 import mondrian.rolap.RolapStar.Column;
+import org.eclipse.daanse.engine.api.Context;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -38,10 +39,10 @@ public class RolapStarTest {
     static class RolapStarForTests extends RolapStar {
         public RolapStarForTests(
             final RolapSchema schema,
-            final DataSource dataSource,
+            final Context context,
             final MondrianDef.Relation fact)
         {
-            super(schema, dataSource, fact);
+            super(schema, context, fact);
         }
 
         public MondrianDef.RelationOrJoin cloneRelationForTests(
@@ -63,7 +64,7 @@ public class RolapStarTest {
 
         return new RolapStarForTests(
             rs.getSchema(),
-            rs.getDataSource(),
+            rs.getContext(),
             rs.getFactTable().getRelation());
     }
 

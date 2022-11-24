@@ -25,10 +25,11 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.engine.api.Context;
 import org.opencube.junit5.Constants;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import mondrian.spi.DialectManager;
+//import mondrian.spi.DialectManager;
 
 public class FastFoodmardDataLoader implements DataLoader {
 
@@ -379,10 +380,10 @@ public class FastFoodmardDataLoader implements DataLoader {
 
 
 	@Override
-	public boolean loadData(DataSource dataSource) throws Exception {
-	try (Connection connection = dataSource.getConnection()) {
+	public boolean loadData(Context context) throws Exception {
+	try (Connection connection = context.getDataSource().getConnection()) {
 
-	    Dialect dialect = DialectManager.createDialect(null, connection);
+	    Dialect dialect = context.getDialect();
 
 	    List<String> dropTableSQLs = dropTableSQLs(dialect);
 	    DataLoaderUtil.executeSql(connection, dropTableSQLs,true);
@@ -395,7 +396,7 @@ public class FastFoodmardDataLoader implements DataLoader {
 
 	   Path dir= Paths.get(Constants.TESTFILES_DIR+"loader/foodmart/data");
 
-	    DataLoaderUtil.importCSV(dataSource, dialect,foodmardTables,dir);
+	    DataLoaderUtil.importCSV(context.getDataSource(), dialect,foodmardTables,dir);
 
 //	   imported by csv no agg using sql
 //	    InputStream sqlFile= new FileInputStream(new File(Constants.TESTFILES_DIR+"loader/foodmart/insert.sql"));

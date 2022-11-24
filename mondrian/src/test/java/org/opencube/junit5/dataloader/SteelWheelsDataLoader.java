@@ -19,7 +19,8 @@
 package org.opencube.junit5.dataloader;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import mondrian.spi.DialectManager;
+//import mondrian.spi.DialectManager;
+import org.eclipse.daanse.engine.api.Context;
 import org.opencube.junit5.Constants;
 
 import javax.sql.DataSource;
@@ -36,16 +37,15 @@ public class SteelWheelsDataLoader implements DataLoader {
 	"payments", "products", "quadrant_actuals", "time", "trial_balance");
 
 	@Override
-	public boolean loadData(DataSource dataSource) throws Exception {
-	try (Connection connection = dataSource.getConnection()) {
+	public boolean loadData(Context context) throws Exception {
+	try (Connection connection = context.getDataSource().getConnection()) {
 
-	    Dialect dialect = DialectManager.createDialect(null, connection);
+	    Dialect dialect = context.getDialect();
 
 	    List<String> dropTableSQLs = dropTableSQLs();
 	    DataLoaderUtil.executeSql(connection, dropTableSQLs,true);
 
 	    InputStream sqlFile= new FileInputStream(new File(Constants.TESTFILES_DIR + "loader/steelwheel/SteelWheels.mysql.sql"));
-
 	    DataLoaderUtil.loadFromSqlInserts(connection, dialect, sqlFile);
 
 	}

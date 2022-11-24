@@ -38,6 +38,7 @@ import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.engine.api.Context;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -66,7 +67,7 @@ public class RolapSchemaPoolConcurrencyTest
         doAnswer(new RolapAnswer()).when(poolSpy)
                 .createRolapSchema(
                     anyString(),
-                    any(DataSource.class),
+                    any(Context.class),
                     any(Util.PropertyList.class),
                     anyString(),
                     any(SchemaKey.class),
@@ -157,17 +158,17 @@ public class RolapSchemaPoolConcurrencyTest
         for (int i = 0; i < actorsAmount; i++) {
             String catalogUrl = UUID.randomUUID().toString();
 
-            DataSource ds = mock(DataSource.class);
+            Context context = mock(Context.class);
 
             Util.PropertyList list = new Util.PropertyList();
             list.put(CatalogContent.name(), UUID.randomUUID().toString());
 
             // force the pool to create the fake schema
-            RolapSchema schema = poolSpy.get(catalogUrl, ds, list);
+            RolapSchema schema = poolSpy.get(catalogUrl, context, list);
             addedSchemas.add(schema);
 
             actors.add(new SingleSchemaGetter(
-                poolSpy, cycles, catalogUrl, ds, list));
+                poolSpy, cycles, catalogUrl, context, list));
         }
 
         runTest(actors);
@@ -283,7 +284,7 @@ public class RolapSchemaPoolConcurrencyTest
         public String call() throws Exception {
             Random random = new Random();
             for (int i = 0; i < cycles; i++) {
-                DataSource ds = mock(DataSource.class);
+                Context context = mock(Context.class);
 
                 Util.PropertyList list = new Util.PropertyList();
                 list.put(CatalogContent.name(), UUID.randomUUID().toString());
@@ -291,7 +292,7 @@ public class RolapSchemaPoolConcurrencyTest
                     list.put(UseContentChecksum.name(), "true");
                 }
 
-                RolapSchema schema = pool.get(catalogUrl, ds, list);
+                RolapSchema schema = pool.get(catalogUrl, context, list);
                 added.add(schema);
                 if (sharedQueue != null) {
                     sharedQueue.add(schema);
@@ -369,27 +370,27 @@ public class RolapSchemaPoolConcurrencyTest
         private final RolapSchemaPool pool;
         private final int cycles;
         private final String catalogUrl;
-        private final DataSource dataSource;
+        private final Context context;
         private final Util.PropertyList list;
 
         public SingleSchemaGetter(
             RolapSchemaPool pool,
             int cycles,
             String catalogUrl,
-            DataSource dataSource,
+            Context context,
             Util.PropertyList list)
         {
             this.pool = pool;
             this.cycles = cycles;
             this.catalogUrl = catalogUrl;
-            this.dataSource = dataSource;
+            this.context = context;
             this.list = list;
         }
 
         @Override
         public String call() throws Exception {
             for (int i = 0; i < cycles; i++) {
-                RolapSchema schema = pool.get(catalogUrl, dataSource, list);
+                RolapSchema schema = pool.get(catalogUrl, context, list);
                 assertNotNull(schema,
             		String.format(
                     "Catalog: [%s], catalog content: [%s]", catalogUrl,

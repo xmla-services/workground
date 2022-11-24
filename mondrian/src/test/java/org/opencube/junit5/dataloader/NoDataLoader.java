@@ -18,12 +18,12 @@
  **********************************************************************/
 package org.opencube.junit5.dataloader;
 
-import javax.sql.DataSource;
+import org.eclipse.daanse.engine.api.Context;
 
 public class NoDataLoader implements DataLoader{
 
 	@Override
-	public boolean loadData(DataSource dataSource) throws Exception {
+	public boolean loadData(Context dataSource) throws Exception {
 		// TODO Auto-generated method stub
 		return false;
 	}

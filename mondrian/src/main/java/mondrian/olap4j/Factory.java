@@ -11,6 +11,7 @@ package mondrian.olap4j;
 
 import mondrian.rolap.RolapConnection;
 
+import org.eclipse.daanse.engine.api.Context;
 import org.olap4j.OlapException;
 
 import java.sql.*;
@@ -40,7 +41,7 @@ interface Factory {
     Connection newConnection(
         MondrianOlap4jDriver driver,
         String url,
-        Properties info) throws SQLException;
+        Properties info, Context context) throws SQLException;
 
     /**
      * Creates an empty result set.

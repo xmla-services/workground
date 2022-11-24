@@ -13,7 +13,7 @@ package mondrian.test.loader;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
-import mondrian.spi.DialectManager;
+//import mondrian.spi.DialectManager;
 
 import org.apache.logging.log4j.LogManager;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
@@ -380,8 +380,8 @@ public class MondrianFoodMartLoader {
         LOGGER.info(
             "Output connection is " + productName
             + ", version: " + version);
-
-        dialect = DialectManager.createDialect(null, connection);
+        //TODO Commented by reason context implementation
+        //dialect = DialectManager.createDialect(null, connection);
 
         LOGGER.info(
             "Mondrian Dialect is " + dialect

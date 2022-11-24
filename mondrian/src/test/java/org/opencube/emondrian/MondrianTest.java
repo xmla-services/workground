@@ -24,6 +24,7 @@ import java.util.Properties;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opencube.junit5.Constants;
+import org.opencube.junit5.context.SQLLiteContext;
 import org.sqlite.SQLiteDataSource;
 
 import mondrian.olap.Connection;
@@ -69,8 +70,8 @@ public class MondrianTest {
 
 		SQLiteDataSource ds = new SQLiteDataSource();
 		ds.setUrl("jdbc:sqlite:" + Constants.TESTFILES_DIR + "sqlite.db");
-
-		Connection c = DriverManager.getConnection(propertyList, catalogLocator, ds);
+        SQLLiteContext context = new SQLLiteContext(ds);
+		Connection c = DriverManager.getConnection(propertyList, catalogLocator, context);
 		System.out.println(c);
 		System.out.println(c.getCatalogName());
 

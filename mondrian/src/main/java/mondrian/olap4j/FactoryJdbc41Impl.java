@@ -11,6 +11,7 @@ package mondrian.olap4j;
 
 import mondrian.rolap.RolapConnection;
 
+import org.eclipse.daanse.engine.api.Context;
 import org.olap4j.OlapException;
 
 import java.sql.*;
@@ -26,10 +27,10 @@ class FactoryJdbc41Impl implements Factory {
     public Connection newConnection(
         MondrianOlap4jDriver driver,
         String url,
-        Properties info)
+        Properties info, Context context)
         throws SQLException
     {
-        return new MondrianOlap4jConnectionJdbc41(this, driver, url, info);
+        return new MondrianOlap4jConnectionJdbc41(this, driver, url, info, context);
     }
 
     public EmptyResultSet newEmptyResultSet(
@@ -113,9 +114,9 @@ class FactoryJdbc41Impl implements Factory {
             Factory factory,
             MondrianOlap4jDriver driver,
             String url,
-            Properties info) throws SQLException
+            Properties info, Context context) throws SQLException
         {
-            super(factory, driver, url, info);
+            super(factory, driver, url, info, context);
         }
 
         public void abort(Executor executor) throws SQLException {

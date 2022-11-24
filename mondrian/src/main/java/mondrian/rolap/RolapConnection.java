@@ -116,13 +116,13 @@ public class RolapConnection extends ConnectionBase {
    * @param server      Server instance this connection belongs to
    * @param connectInfo Connection properties; keywords are described in
    *                    {@link RolapConnectionProperties}.
-   * @param dataSource  JDBC data source
+   * @param context  Context
    */
   public RolapConnection(
     MondrianServer server,
     Util.PropertyList connectInfo,
-    DataSource dataSource ) {
-    this( server, connectInfo, null, dataSource );
+    Context context ) {
+    this( server, connectInfo, null, context );
   }
 
   /**
@@ -138,17 +138,18 @@ public class RolapConnection extends ConnectionBase {
    *                    {@link RolapConnectionProperties}.
    * @param schema      Schema for the connection. Must be null unless this is to
    *                    be an internal connection.
-   * @param dataSource  If not null an external DataSource to be used
+   * @param context  If not null an external DataSource to be used
    *                    by Mondrian
    */
   RolapConnection(
     MondrianServer server,
     Util.PropertyList connectInfo,
     RolapSchema schema,
-    DataSource dataSource ) {
+    Context context ) {
     super();
     assert server != null;
     this.server = server;
+    this.context = context;
     this.id = ID_GENERATOR.getAndIncrement();
 
     assert connectInfo != null;
@@ -179,7 +180,7 @@ public class RolapConnection extends ConnectionBase {
           "Initializing connection" );
       Locus.push( locus );
       try {
-        if ( dataSource == null ) {
+        if ( context == null ) {
           // If there is no external data source is passed in, we
           // expect the properties Jdbc, JdbcUser, DataSource to be
           // set, as they are used to generate the schema cache key.

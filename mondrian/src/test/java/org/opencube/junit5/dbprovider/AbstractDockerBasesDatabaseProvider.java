@@ -45,6 +45,7 @@ import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
 
 import mondrian.olap.Util.PropertyList;
+import org.eclipse.daanse.engine.api.Context;
 
 public abstract class AbstractDockerBasesDatabaseProvider implements DatabaseProvider{
 
@@ -68,7 +69,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 	         return id;
 	    }
 
-	  public Entry<PropertyList, DataSource> activate() {
+	  public Entry<PropertyList, Context> activate() {
 
             port = freePort();
 			DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
@@ -124,7 +125,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 
 		}
 
-	protected abstract SimpleEntry<PropertyList, DataSource> createConnection();
+	protected abstract SimpleEntry<PropertyList, Context> createConnection();
 
 	protected abstract List<String> env();
 
