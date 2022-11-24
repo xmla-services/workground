@@ -16,6 +16,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
+import org.eclipse.daanse.engine.api.Context;
 
 /**
  * Olap4j driver for Mondrian.
@@ -65,7 +66,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 @ServiceProvider(value = Driver.class)
 public class MondrianOlap4jDriver implements Driver {
     protected final Factory factory;
-
+    private Context context = null;
     static {
         try {
             register();
@@ -78,6 +79,11 @@ public class MondrianOlap4jDriver implements Driver {
      * Creates a MondrianOlap4jDriver.
      */
     public MondrianOlap4jDriver() {
+        this.factory = new FactoryJdbc41Impl();
+    }
+
+    public MondrianOlap4jDriver(Context context) {
+        this.context = context;
         this.factory = new FactoryJdbc41Impl();
     }
 
@@ -97,7 +103,7 @@ public class MondrianOlap4jDriver implements Driver {
         if (!MondrianOlap4jConnection.acceptsURL(url)) {
             return null;
         }
-        return factory.newConnection(this, url, info);
+        return factory.newConnection(this, url, info, context);
     }
 
     public boolean acceptsURL(String url) throws SQLException {

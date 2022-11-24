@@ -24,7 +24,9 @@ import java.util.Map.Entry;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.engine.api.Context;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.context.SQLLiteContext;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.DataLoader;
 import org.opencube.junit5.dbprovider.DatabaseProvider;
@@ -43,10 +45,10 @@ public class TestTest {
 		}
 
 		@Override
-		public Entry<PropertyList, DataSource> activate() {
+		public Entry<PropertyList, Context> activate() {
 			PropertyList props = new PropertyList();
 			props.put("x", "y");
-			return new AbstractMap.SimpleEntry<PropertyList, DataSource>(props, new SQLiteDataSource());
+			return new AbstractMap.SimpleEntry<PropertyList, Context>(props, new SQLLiteContext());
 		}
 
 		@Override
@@ -61,7 +63,7 @@ public class TestTest {
 		public ExampleDataLoader() {
 		}
 		@Override
-		public boolean loadData(DataSource dataSource) throws Exception {
+		public boolean loadData(Context context) throws Exception {
 			return true;
 		}
 

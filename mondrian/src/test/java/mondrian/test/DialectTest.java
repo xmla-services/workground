@@ -52,7 +52,7 @@ import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.sql.SqlQuery;
-import mondrian.spi.DialectManager;
+//import mondrian.spi.DialectManager;
 import mondrian.util.DelegatingInvocationHandler;
 
 /**
@@ -102,7 +102,7 @@ public class DialectTest {
 
   protected Dialect getDialect(TestingContext context) {
     if ( dialect == null ) {
-      dialect = DialectManager.createDialect( getDataSource(context), null );
+        dialect = context.getContext().getDialect();
     }
     return dialect;
   }
@@ -692,7 +692,9 @@ public class DialectTest {
     //
     // verify jdbc dialect - some jdbc drivers return TIMESTAMP too
     // http://jira.pentaho.com/browse/MONDRIAN-2038
-    Dialect jdbcDialect = new JdbcDialectImpl();
+    //TODO Commented by reason context implementation
+    //Dialect jdbcDialect = new JdbcDialectImpl();
+    Dialect jdbcDialect = null;
     StringBuilder buf = new StringBuilder();
     jdbcDialect.quoteDateLiteral( buf, "2003-12-12" );
     assertEquals( "DATE '2003-12-12'", buf.toString() );
@@ -1616,7 +1618,9 @@ public class DialectTest {
   @Test
   public void testJdbcDialectTypeMap() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
-    Dialect postgresDialect = new JdbcDialectImpl();
+    //TODO Commented by reason context implementation
+    Dialect postgresDialect = null;
+    //Dialect postgresDialect = new JdbcDialectImpl();
     assertTrue(
             postgresDialect.getType(
                     mockResultSetMeta
@@ -1726,19 +1730,21 @@ public class DialectTest {
   }
 
   //TODO; this tests more SqlQuery. so move it there
-  @Test 
+  @Test
   public void testMondrian2253() throws SQLException {
 
     String expected = "    1 ASC";
     // "1" is supposed to be a column number
     String expr = "1";
-    Dialect dialect = new JdbcDialectImpl() {
-      
+    //TODO Commented by reason context implementation
+    Dialect dialect = null;
+    /*Dialect dialect = new JdbcDialectImpl() {
+
         @Override
         public boolean requiresUnionOrderByOrdinal() {
             return false;
         }
-    };
+    };*/
 
     SqlQuery query = new SqlQuery( dialect, true );
     query.addOrderBy(

@@ -11,6 +11,7 @@ package mondrian.olap4j;
 
 import mondrian.rolap.RolapConnection;
 
+import org.eclipse.daanse.engine.api.Context;
 import org.olap4j.*;
 
 import java.io.InputStream;
@@ -318,9 +319,9 @@ class FactoryJdbc4Plus {
             Factory factory,
             MondrianOlap4jDriver driver,
             String url,
-            Properties info) throws SQLException
+            Properties info, Context context) throws SQLException
         {
-            super(factory, driver, url, info);
+            super(factory, driver, url, info, context);
         }
 
         public OlapStatement createStatement() {

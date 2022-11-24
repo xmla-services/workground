@@ -15,7 +15,6 @@ import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import mondrian.spi.DialectManager;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
@@ -730,7 +729,9 @@ public abstract class DBLoader {
         if (!metaData.supportsBatchUpdates()) {
             this.batchSize = 1;
         }
-        this.dialect = DialectManager.createDialect(null, this.connection);
+        //this.dialect = DialectManager.createDialect(null, this.connection);
+        //TODO Commented by reason context implementation
+        this.dialect =null;
         this.initialize = true;
     }
 

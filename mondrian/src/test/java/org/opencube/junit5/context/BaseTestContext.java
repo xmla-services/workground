@@ -18,31 +18,29 @@
  **********************************************************************/
 package org.opencube.junit5.context;
 
-import java.sql.SQLException;
-import java.util.Map.Entry;
-
-import javax.sql.DataSource;
-
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapWrapper;
-import org.opencube.junit5.propupdator.PropertyUpdater;
-
 import mondrian.olap.Connection;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.rolap.RolapConnectionProperties;
+import org.eclipse.daanse.engine.api.Context;
+import org.olap4j.OlapConnection;
+import org.olap4j.OlapWrapper;
+import org.opencube.junit5.propupdator.PropertyUpdater;
+
+import java.sql.SQLException;
+import java.util.Map.Entry;
 
 public class BaseTestContext implements TestingContext {
 
-	private DataSource dataSource;
+	private Context context;
 	private Util.PropertyList properties = new Util.PropertyList();
 
 	@Override
-	public void init(Entry<PropertyList, DataSource> dataSource) {
-		this.dataSource = dataSource.getValue();
-		this.properties = dataSource.getKey().clone();
+	public void init(Entry<PropertyList, Context> contextEntry) {
+		this.context = contextEntry.getValue();
+		this.properties = contextEntry.getKey().clone();
 		init();
 
 	}
@@ -61,10 +59,10 @@ public class BaseTestContext implements TestingContext {
 	@Override
 	public Connection createConnection() {
 
-		if (dataSource == null) {
+		if (context == null) {
 			return DriverManager.getConnection(getJDBCConnectString(), null);
 		}
-		return DriverManager.getConnection(properties, null, dataSource);
+		return DriverManager.getConnection(properties, null, context);
 
 	}
 
@@ -90,7 +88,12 @@ public class BaseTestContext implements TestingContext {
 		properties.put(key, value);
 	}
 
-	@Override
+    @Override
+    public Context getContext() {
+        return context;
+    }
+
+    @Override
 	public OlapConnection createOlap4jConnection() throws SQLException {
 
 		MondrianOlap4jDriver d = new MondrianOlap4jDriver();

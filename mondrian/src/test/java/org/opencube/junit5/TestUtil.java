@@ -33,7 +33,7 @@ import mondrian.olap4j.MondrianOlap4jConnection;
 import mondrian.rolap.*;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
-import mondrian.spi.DialectManager;
+//import mondrian.spi.DialectManager;
 import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.test.FoodmartTestContextImpl;
 import mondrian.test.PropertySaver5;
@@ -564,8 +564,10 @@ public class TestUtil {
 						TestContext.class.getClassLoader(),
 						new Class<?>[] { java.sql.Connection.class },
 						new ConnectionInvocationHandler( metaData ) );
-		final Dialect dialect = DialectManager.createDialect( null, connection );
-		assert dialect.getDatabaseProduct() == product;
+        //TODO Commented by reason context implementation
+		//final Dialect dialect = DialectManager.createDialect( null, connection );
+        final Dialect dialect = null;
+        assert dialect.getDatabaseProduct() == product;
 		return dialect;
 	}
 
@@ -1160,15 +1162,13 @@ public class TestUtil {
 	    }
 
 	static public Dialect getDialect(Connection connection){
-	    	   DataSource dataSource =connection.getDataSource();
-	    	    return DialectManager.createDialect( dataSource, null );
+		return connection.getContext().getDialect();
+    }
 
-	    }
-
-		public static Member executeSingletonAxis(Connection connection, String expression) {
-			final String cubeName = getDefaultCubeName();
-			return executeSingletonAxis(connection, expression, cubeName);
-		}
+	public static Member executeSingletonAxis(Connection connection, String expression) {
+		final String cubeName = getDefaultCubeName();
+		return executeSingletonAxis(connection, expression, cubeName);
+	}
 
 	public static Member executeSingletonAxis(Connection connection, String expression, String cubeName) {
 		Result result = executeQuery(connection, "select {" + expression + "} on columns from " + cubeName);

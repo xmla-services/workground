@@ -18,11 +18,11 @@
  **********************************************************************/
 package org.opencube.junit5.dataloader;
 
-import javax.sql.DataSource;
+import org.eclipse.daanse.engine.api.Context;
 
 public interface DataLoader {
 
-    boolean loadData(DataSource dataSource) throws Exception;
+    boolean loadData(Context context) throws Exception;
 
 
 }

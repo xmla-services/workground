@@ -14,8 +14,7 @@ package mondrian.olap;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.spi.CatalogLocator;
-
-import javax.sql.DataSource;
+import org.eclipse.daanse.engine.api.Context;
 
 /**
  * The basic service for managing a set of OLAP drivers.
@@ -81,14 +80,14 @@ public class DriverManager {
      * @param locator Use to locate real catalog url by a customized
      *   configuration value. If <code>null</code>, leave the catalog url
      *   unchanged.
-     * @param dataSource - if not null an external DataSource to be used
+     * @param context - if not null an external DataSource to be used
      *        by Mondrian
      * @return A {@link Connection}, never null
      */
     public static Connection getConnection(
         Util.PropertyList properties,
         CatalogLocator locator,
-        DataSource dataSource)
+        Context context)
     {
         String provider = properties.get("PROVIDER", "mondrian");
         if (!provider.equalsIgnoreCase("mondrian")) {
@@ -111,7 +110,7 @@ public class DriverManager {
                 locator.locate(catalog));
         }
         final RolapConnection connection =
-            new RolapConnection(server, properties, dataSource);
+            new RolapConnection(server, properties, context);
         return connection;
     }
 }

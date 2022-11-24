@@ -40,6 +40,7 @@ import java.util.Map;
 import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.MYSQL;
 import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.POSTGRESQL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 import static org.opencube.junit5.TestUtil.*;
@@ -166,16 +167,21 @@ public class SqlQueryTest  extends BatchTestCase {
      * Uses a Mockito spy to construct a dialect which will give the desired
      * boolean value for reqOrderByAlias.
      */
+
     private SqlQuery makeTestSqlQuery(
         String expr, String alias, boolean ascending,
         boolean nullable, boolean collateNullsLast, boolean reqOrderByAlias)
     {
+        //TODO Commented by reason context implementation
+        /*
         JdbcDialectImpl dialect = spy(new JdbcDialectImpl());
         when(dialect.requiresOrderByAlias()).thenReturn(reqOrderByAlias);
         SqlQuery query = new SqlQuery(dialect, true);
         query.addOrderBy(
             expr, alias, ascending, true, nullable, collateNullsLast);
         return query;
+         */
+        return null;
     }
 
     private String queryUnixString(

@@ -34,6 +34,8 @@ import com.mysql.jdbc.Driver;
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Util.PropertyList;
 import mondrian.rolap.RolapConnectionProperties;
+import org.eclipse.daanse.engine.api.Context;
+import org.opencube.junit5.context.MysqlContext;
 
 @ServiceProvider(value = DatabaseProvider.class)
 public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
@@ -62,7 +64,7 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 	}
 
 	@Override
-	protected SimpleEntry<PropertyList, DataSource> createConnection() {
+	protected SimpleEntry<PropertyList, Context> createConnection() {
 		MysqlDataSource dataSource = new MysqlDataSource();
 		dataSource.setServerName(serverName);
 		dataSource.setPort(PORT);
@@ -95,7 +97,7 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 				connectProperties.put(RolapConnectionProperties.JdbcPassword.name(), MYSQL_PASSWORD);
 
 				// jdbc:mysql://<hostname>:<port>/<dbname>?prop1;
-				return new AbstractMap.SimpleEntry<PropertyList, DataSource>(connectProperties, dataSource);
+				return new AbstractMap.SimpleEntry<PropertyList, Context>(connectProperties, new MysqlContext(dataSource));
 
 			} catch (Exception e) {
 //				e.printStackTrace();

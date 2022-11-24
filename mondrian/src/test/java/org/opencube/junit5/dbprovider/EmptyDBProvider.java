@@ -24,6 +24,7 @@ import java.util.Map.Entry;
 import javax.sql.DataSource;
 
 import mondrian.olap.Util.PropertyList;
+import org.eclipse.daanse.engine.api.Context;
 
 public class EmptyDBProvider implements DatabaseProvider {
 
@@ -38,7 +39,7 @@ public class EmptyDBProvider implements DatabaseProvider {
 	}
 
 	@Override
-	public Entry<PropertyList, DataSource> activate() {
+	public Entry<PropertyList, Context> activate() {
 		return null;
 	}
 
