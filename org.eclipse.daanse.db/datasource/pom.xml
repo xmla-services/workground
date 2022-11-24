@@ -8,12 +8,12 @@
   <artifactId>org.eclipse.daanse.db.datasource</artifactId>
   <packaging>pom</packaging>
   <modules>
-  	<module>sqlite</module>
-  	<module>common</module>
-  	<module>oracle11</module>
-  	<module>mssqlserver</module>
-  	<module>jtdssqlserver</module>
-  	<module>clickhouse</module>
-  	<module>mysql</module>
+    <module>sqlite</module>
+    <module>common</module>
+    <module>oracle11</module>
+    <module>mssqlserver</module>
+    <module>jtdssqlserver</module>
+    <module>clickhouse</module>
+    <module>mysql</module>
   </modules>
 </project>

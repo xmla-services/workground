@@ -13,26 +13,10 @@
 **********************************************************************/
 package org.eclipse.daanse.db.datasource.mysql;
 
-import org.osgi.service.metatype.annotations.AttributeDefinition;
-import org.osgi.service.metatype.annotations.AttributeType;
 import org.osgi.service.metatype.annotations.ObjectClassDefinition;
 
-@ObjectClassDefinition()
-public interface MySqlConfig {
-    @AttributeDefinition(description = "username")
-    default String username() {
-        return null;
-    }
-
-    @AttributeDefinition(description = "password", type = AttributeType.PASSWORD)
-    default String _password() {
-        return null;
-    }
-    
-    @AttributeDefinition(description = "url")
-    default String url() {
-        return null;
-    }
-    
+@ObjectClassDefinition(name = "%cpds.ocd.name", description = "%cpds.ocd.description",localization = "OSGI-INF/l10n/config")
+public interface ConfigConnectionPooledDataSource extends ConfigBase {
+  
 
 }
