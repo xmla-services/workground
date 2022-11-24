@@ -2,13 +2,8 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.eclipse.daanse</groupId>
-    <artifactId>org.eclipse.daanse.pom.parent</artifactId>
+    <artifactId>org.eclipse.daanse.tooling.webconsole</artifactId>
     <version>${revision}</version>
   </parent>
-  <artifactId>org.eclipse.daanse.tooling</artifactId>
-  <packaging>pom</packaging>
-  <modules>
-    <module>container</module>
-    <module>webconsole</module>
-  </modules>
+  <artifactId>org.eclipse.daanse.tooling.webconsole.branding</artifactId>
 </project>
