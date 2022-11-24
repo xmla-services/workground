@@ -217,7 +217,7 @@
               </goals>
               <configuration>
                 <bndruns>
-                  <include>test.bndrun</include>
+                  <include>*.bndrun</include>
                 </bndruns>
                 <bundles>
                     <bundle>${project.build.directory}/${project.build.finalName}-tests.jar</bundle>
@@ -247,7 +247,7 @@
               </goals>
               <configuration>
                 <bndruns>
-                  <include>test.bndrun</include>
+                  <include>*.bndrun</include>
                 </bndruns>
                 <failOnChanges>false</failOnChanges>
                 <includeDependencyManagement>true</includeDependencyManagement>
@@ -436,6 +436,7 @@
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.framework</artifactId>
         <version>7.0.3</version>
+        <scope>runtime</scope>
       </dependency>
 
       <!-- run -->
@@ -840,6 +841,12 @@
       <artifactId>org.osgi.service.component.annotations</artifactId>
       <version>1.5.0</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.osgi</groupId>
+          <artifactId>org.osgi.util.function</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
