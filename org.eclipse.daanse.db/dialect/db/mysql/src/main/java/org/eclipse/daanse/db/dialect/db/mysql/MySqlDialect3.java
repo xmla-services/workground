@@ -20,6 +20,7 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.db.dialect.db.common.factory.JdbcDialectFactory;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.ServiceScope;
 import org.slf4j.Logger;
@@ -32,6 +33,25 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 public class MySqlDialect3 extends AbstractMySqlDialect {
 
     private Logger LOGGER = LoggerFactory.getLogger(MySqlDialect3.class);
+
+    public static final JdbcDialectFactory FACTORY =
+        new JdbcDialectFactory(
+            MySqlDialect3.class)
+        {
+            @Override
+            protected boolean acceptsConnection(Connection connection) {
+                try {
+                    // Infobright looks a lot like MySQL. If this is an
+                    // Infobright connection, yield to the Infobright dialect.
+                    return super.acceptsConnection(connection)
+                        && !isInfobright(connection.getMetaData());
+                } catch (SQLException e) {
+                    throw new RuntimeException(
+                        "Error while instantiating dialect", e);
+                }
+            }
+        };
+
 
     public MySqlDialect3() {
     }

@@ -45,23 +45,7 @@ public abstract class AbstractMySqlDialect extends JdbcDialectImpl {
     private static final String ESCAPE_REGEXP = "(\\\\Q([^\\\\Q]+)\\\\E)";
     private static final Pattern ESCAPE_PATTERN = Pattern.compile(ESCAPE_REGEXP);
 
-    public static final JdbcDialectFactory FACTORY =
-        new JdbcDialectFactory(
-            AbstractMySqlDialect.class)
-        {
-            @Override
-            protected boolean acceptsConnection(Connection connection) {
-                try {
-                    // Infobright looks a lot like MySQL. If this is an
-                    // Infobright connection, yield to the Infobright dialect.
-                    return super.acceptsConnection(connection)
-                        && !isInfobright(connection.getMetaData());
-                } catch (SQLException e) {
-                    throw new RuntimeException(
-                        "Error while instantiating dialect", e);
-                }
-            }
-        };
+
         public AbstractMySqlDialect() {
         }
     /**
