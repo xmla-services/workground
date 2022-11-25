@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
@@ -29,13 +30,15 @@ import org.slf4j.LoggerFactory;
  */
 @Component(service = StatisticsProvider.class, scope = ServiceScope.PROTOTYPE)
 public class SqlStatisticsProvider implements StatisticsProvider {
-    Logger LOGGER = LoggerFactory.getLogger(SqlStatisticsProvider.class);
+    private static final int FIRST_ROW = 1;
+
+    public static final Logger LOGGER = LoggerFactory.getLogger(SqlStatisticsProvider.class);
 
     private DataSource dataSource;
     private Dialect dialect;
 
     @Override
-    public void init(DataSource dataSource, Dialect dialect) {
+    public void initialize(DataSource dataSource, Dialect dialect) {
         this.dataSource = dataSource;
         this.dialect = dialect;
     }
@@ -49,7 +52,9 @@ public class SqlStatisticsProvider implements StatisticsProvider {
 
     public long getQueryCardinality(String sql) {
         final StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("select count(*) from (").append(sql).append(")");
+        stringBuilder.append("select count(*) from (")
+                .append(sql)
+                .append(")");
         if (dialect.requiresAliasForFromQuery()) {
             if (dialect.allowsAs()) {
                 stringBuilder.append(" as ");
@@ -63,11 +68,11 @@ public class SqlStatisticsProvider implements StatisticsProvider {
     }
 
     public long getColumnCardinality(String catalog, String schema, String table, String column) {
-        final String sql = generateColumnCardinalitySql(dialect, schema, table, column);
-        if (sql == null) {
-            return -1;
-        }
-        return query(sql);
+        final Optional<String> oSql = generateColumnCardinalitySql(dialect, schema, table, column);
+
+        return oSql.map(this::query)
+                .orElse(CARDINALITY_UNKNOWN);
+
     }
 
     private long query(final String sql) {
@@ -75,27 +80,31 @@ public class SqlStatisticsProvider implements StatisticsProvider {
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery(sql);) {
             if (resultSet.next()) {
-                return resultSet.getInt(1);
+                return resultSet.getLong(FIRST_ROW);
             }
-            return -1;
+            return CARDINALITY_UNKNOWN;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private static String generateColumnCardinalitySql(Dialect dialect, String schema, String table, String column) {
+    private static Optional<String> generateColumnCardinalitySql(Dialect dialect, String schema, String table, String column) {
         final StringBuilder buf = new StringBuilder();
         String exprString = dialect.quoteIdentifier(column);
         if (dialect.allowsCountDistinct()) {
             // e.g. "select count(distinct product_id) from product"
-            buf.append("select count(distinct ").append(exprString).append(") from ");
+            buf.append("select count(distinct ")
+                    .append(exprString)
+                    .append(") from ");
             dialect.quoteIdentifier(buf, schema, table);
-            return buf.toString();
+            return Optional.of(buf.toString());
         } else if (dialect.allowsFromQuery()) {
             // Some databases (e.g. Access) don't like 'count(distinct)',
             // so use, e.g., "select count(*) from (select distinct
             // product_id from product)"
-            buf.append("select count(*) from (select distinct ").append(exprString).append(" from ");
+            buf.append("select count(*) from (select distinct ")
+                    .append(exprString)
+                    .append(" from ");
             dialect.quoteIdentifier(buf, schema, table);
             buf.append(")");
             if (dialect.requiresAliasForFromQuery()) {
@@ -106,11 +115,11 @@ public class SqlStatisticsProvider implements StatisticsProvider {
                 }
                 dialect.quoteIdentifier(buf, "init");
             }
-            return buf.toString();
+            return Optional.of(buf.toString());
         } else {
-            // Cannot compute cardinality: this database neither supports COUNT
-            // DISTINCT nor SELECT in the FROM clause.
-            return null;
+            LOGGER.warn(
+                    "Cannot compute cardinality: this database neither supports COUNT DISTINCT nor SELECT in the FROM clause.");
+            return Optional.empty();
         }
     }
 

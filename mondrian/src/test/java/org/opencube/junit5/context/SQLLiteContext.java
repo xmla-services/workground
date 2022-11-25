@@ -42,7 +42,7 @@ public class SQLLiteContext  implements Context {
         }
         statisticsProvider = new StatisticsProvider() {
             @Override
-            public void init(DataSource dataSource, Dialect dialect) {
+            public void initialize(DataSource dataSource, Dialect dialect) {
 
             }
 
