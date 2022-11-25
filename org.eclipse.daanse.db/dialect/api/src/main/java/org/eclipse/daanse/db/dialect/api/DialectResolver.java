@@ -1,4 +1,4 @@
-/*********************************************************************
+/*
 * Copyright (c) 2022 Contributors to the Eclipse Foundation.
 *
 * This program and the accompanying materials are made
@@ -11,7 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 *   Sergei Semenkov - initial
-**********************************************************************/
+*/
 package org.eclipse.daanse.db.dialect.api;
 
 import java.util.Optional;

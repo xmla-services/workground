@@ -5,6 +5,10 @@
 * You must accept the terms of that agreement to use this software.
 *
 * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+*
+* Contributors:
+*   SmartCity Jena - major API, docs, code-quality changes
+*   Stefan Bischof (bipolis.org)
 */
 
 package org.eclipse.daanse.db.statistics.query;

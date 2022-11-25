@@ -1,4 +1,4 @@
-/*********************************************************************
+/*
 * Copyright (c) 2022 Contributors to the Eclipse Foundation.
 *
 * This program and the accompanying materials are made
@@ -10,12 +10,11 @@
 * Contributors:
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
-**********************************************************************/
+*/
 package org.eclipse.daanse.engine.impl;
 
 import java.sql.Connection;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.sql.DataSource;
 

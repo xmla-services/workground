@@ -73,7 +73,7 @@
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
-    <slf4j.version>1.7.36</slf4j.version>
+    <slf4j.version>2.0.4</slf4j.version>
     <asm.version>9.3</asm.version>
     <spifly.version>1.3.5</spifly.version>
     <bnd.version>6.3.0</bnd.version>
