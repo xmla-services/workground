@@ -39,26 +39,12 @@ public class DataSourceService extends AbstractDelegateDataSource<MysqlDataSourc
     private MysqlDataSource ds;
 
     @Activate
-    public DataSourceService(Map<String, Object> configMap) throws SQLException {
+    public DataSourceService(Map<String, Object> coniguration) throws SQLException {
         this.ds = new MysqlDataSource();
-        this.config = CONVERTER.convert(configMap)
+        this.config = CONVERTER.convert(coniguration)
                 .to(ConfigConnectionPooledDataSource.class);
 
-        if (config.username() == null) {
-            ds.setUser(config.username());
-        }
-        if (config._password() == null) {
-            ds.setPassword(config._password());
-        }
-        if (config.serverName() == null) {
-            ds.setServerName(config.serverName());
-        }
-        if (config.databaseName() == null) {
-            ds.setDatabaseName(config.databaseName());
-        }
-        if (config.port() == null) {
-            ds.setPort(config.port());
-        }
+        ConfigUtil.configBase(ds, config);
     }
 
     // no @Modified to force consumed Services get new configured connections.
@@ -67,6 +53,7 @@ public class DataSourceService extends AbstractDelegateDataSource<MysqlDataSourc
     public void deactivate() {
 
         config = null;
+        ds=null;
     }
 
     @Override

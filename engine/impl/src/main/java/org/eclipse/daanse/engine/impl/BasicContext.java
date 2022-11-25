@@ -18,59 +18,43 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.engine.api.Context;
+import org.osgi.namespace.unresolvable.UnresolvableNamespace;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
-import org.osgi.service.component.annotations.ReferenceCardinality;
-import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.component.annotations.ServiceScope;
+import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.util.converter.Converter;
+import org.osgi.util.converter.Converters;
 
+@Designate(ocd = BasicContextConfig.class)
 @Component(service = Context.class, scope = ServiceScope.SINGLETON)
-public class ContextImpl implements Context {
+public class BasicContext implements Context {
+    private static final String REF_NAME_DIALECT = "dialect";
+    private static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
+    private static final String REF_NAME_DATA_SOURCE = "dataSource";
 
+    private static final Converter CONVERTER = Converters.standardConverter();
+
+    @Reference(name = REF_NAME_DATA_SOURCE, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
     private DataSource dataSource = null;
 
-    private DialectResolver dialectResolver = null;
-
-    private StatisticsProvider statisticsProvider;
-
+    @Reference(name = REF_NAME_DIALECT, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
     private Dialect dialect = null;
 
-    @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)
-    public void bindDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
+    @Reference(name = REF_NAME_STATISTICS_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
+    private StatisticsProvider statisticsProvider;
 
-    public void unbindDataSource(DataSource dataSource) {
-        this.dataSource = null;
-    }
-
-    @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)
-    public void bindDialectResolver(DialectResolver dialectResolver) {
-        this.dialectResolver = dialectResolver;
-    }
-
-    public void unbindDialectResolver(DialectResolver dialectResolver) {
-        this.dialectResolver = null;
-    }
-
-    @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)
-    public void bindStatisticsProvider(StatisticsProvider statisticsProvider) {
-        this.statisticsProvider = statisticsProvider;
-
-    }
-
-    public void unbindStatisticsProvider(StatisticsProvider statisticsProvider) {
-        this.statisticsProvider = null;
-    }
+    private BasicContextConfig config;
 
     @Activate
     public void activate(Map<String, Object> coniguration) {
-        dialect = dialectResolver.resolve(getDataSource())
-                .orElseThrow(() -> new RuntimeException("No Duatable Dialect"));
+
+        this.config = CONVERTER.convert(coniguration)
+                .to(BasicContextConfig.class);
+        // dialect.init(dataSource);
         statisticsProvider.init(dataSource, getDialect());
     }
 

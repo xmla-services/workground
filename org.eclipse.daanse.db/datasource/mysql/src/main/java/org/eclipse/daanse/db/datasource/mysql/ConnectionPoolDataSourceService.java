@@ -14,6 +14,7 @@
 package org.eclipse.daanse.db.datasource.mysql;
 
 import java.sql.SQLException;
+import java.util.Map;
 
 import javax.sql.ConnectionPoolDataSource;
 import javax.sql.PooledConnection;
@@ -24,6 +25,8 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.util.converter.Converter;
+import org.osgi.util.converter.Converters;
 
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 
@@ -31,14 +34,17 @@ import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 @Component(service = ConnectionPoolDataSource.class, scope = ServiceScope.SINGLETON)
 public class ConnectionPoolDataSourceService
         extends AbstractDelegateConnectionPoolDataSource<MysqlConnectionPoolDataSource> {
-
+    private static final Converter CONVERTER = Converters.standardConverter();
     private ConfigConnectionPooledDataSource config;
     private MysqlConnectionPoolDataSource ds;
 
     @Activate
-    public ConnectionPoolDataSourceService(ConfigConnectionPooledDataSource config) throws SQLException {
+    public ConnectionPoolDataSourceService(Map<String, Object> coniguration) throws SQLException {
         this.ds = new MysqlConnectionPoolDataSource();
-        this.config = config;
+        this.config = CONVERTER.convert(coniguration)
+                .to(ConfigConnectionPooledDataSource.class);
+
+        ConfigUtil.configBase(ds, config);
     }
 
     // no @Modified to force consumed Services get new configured connections.

@@ -247,7 +247,7 @@
               </goals>
               <configuration>
                 <bndruns>
-                  <include>*.bndrun</include>
+                  <include>test.bndrun</include>
                 </bndruns>
                 <failOnChanges>false</failOnChanges>
                 <includeDependencyManagement>true</includeDependencyManagement>
@@ -353,18 +353,24 @@
 
   <dependencyManagement>
     <dependencies>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.component</artifactId>
-            <version>1.5.0</version>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.service.metatype.annotations</artifactId>
-            <version>1.4.1</version>
-            <scope>compile</scope>
-        </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.service.component</artifactId>
+        <version>1.5.0</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.service.metatype.annotations</artifactId>
+        <version>1.4.1</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.namespace.unresolvable</artifactId>
+        <version>1.0.0</version>
+        <scope>compile</scope>
+      </dependency>
       <dependency>
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.util.converter</artifactId>
