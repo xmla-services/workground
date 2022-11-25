@@ -270,7 +270,7 @@ System.out.println("Got CONTINUE");
     {
         try {
             java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
-            java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver());// finy out why this dies not happend automatically
+            java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(context.getContext()));// finy out why this dies not happend automatically
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }

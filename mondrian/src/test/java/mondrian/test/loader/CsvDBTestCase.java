@@ -42,7 +42,7 @@ public abstract class CsvDBTestCase extends BatchTestCase {
         try {
             File inputFile = new File(Constants.TESTFILES_DIR + "/mondrian/rolap/agg/" +  getFileName());
 
-            CsvDBLoader loader = new CsvDBLoader();
+            CsvDBLoader loader = new CsvDBLoader(context.getContext());
             loader.setConnection(context.createConnection().getDataSource().getConnection());
             loader.initialize();
             loader.setInputFile(inputFile);

@@ -11,6 +11,8 @@
 
 package mondrian.test.loader;
 
+import org.eclipse.daanse.engine.api.Context;
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.Pattern;
@@ -82,6 +84,10 @@ public class CsvDBLoader extends DBLoader {
     private String inputDirectoryRegex;
     private File[] inputFiles;
     private File inputFile;
+
+    public CsvDBLoader(Context context) {
+        super(context);
+    }
 
     public CsvDBLoader() {
         super();

@@ -38,7 +38,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.sql.DriverManager;
 import java.util.*;
 
-import javax.sql.DataSource;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
 

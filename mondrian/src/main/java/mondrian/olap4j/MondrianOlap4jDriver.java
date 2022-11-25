@@ -17,6 +17,9 @@ import java.util.logging.Logger;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.engine.api.Context;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 
 /**
  * Olap4j driver for Mondrian.
@@ -67,14 +70,22 @@ import org.eclipse.daanse.engine.api.Context;
 public class MondrianOlap4jDriver implements Driver {
     protected final Factory factory;
     private Context context = null;
-    static {
-        try {
-            register();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    //static {
+    //    try {
+    //        register();
+    //    } catch (SQLException e) {
+    //        e.printStackTrace();
+    //    }
+    //}
+
+    @Reference(policy = ReferencePolicy.DYNAMIC, cardinality = ReferenceCardinality.MANDATORY)
+    public void bindContext(Context context) {
+        this.context = context;
     }
 
+    public void unbindContextResolver(Context context) {
+        this.context = context;
+    }
     /**
      * Creates a MondrianOlap4jDriver.
      */

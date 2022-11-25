@@ -32,6 +32,7 @@ import mondrian.server.Locus;
 import mondrian.server.StatementImpl;
 import mondrian.server.monitor.Monitor;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.engine.api.Context;
 
 /**
  * @author Andrey Khayrutdinov
@@ -124,9 +125,10 @@ public class SqlStatementTest {
   public void testCreateDialect() {
     statement = mock(SqlStatement.class);
     Dialect dialect = mock(Dialect.class);
+    Context context = mock(Context.class);
+    when(statement.getContext()).thenReturn(context);
     when(statement.getDialect(any())).thenCallRealMethod();
-    //TODO Commented by reason context implementation
-    //when(statement.createDialect()).thenReturn(dialect);
+    when(context.getDialect()).thenReturn(dialect);
     Dialect dialectReturn = statement.getDialect(null);
     assertNotNull(dialectReturn);
     assertEquals(dialect, dialectReturn);

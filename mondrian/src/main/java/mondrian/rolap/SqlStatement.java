@@ -481,7 +481,7 @@ public class SqlStatement {
     if ( schema != null && schema.getDialect() != null ) {
       dialect = schema.getDialect();
     } else {
-      dialect = context.getDialect();
+      dialect = getContext().getDialect();
     }
     return dialect;
   }
@@ -631,6 +631,10 @@ public class SqlStatement {
       this.purpose = purpose;
       this.cellRequestCount = cellRequestCount;
     }
+  }
+
+  public Context getContext() {
+        return context;
   }
 }
 

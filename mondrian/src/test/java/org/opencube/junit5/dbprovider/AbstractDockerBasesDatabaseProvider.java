@@ -21,6 +21,8 @@ package org.opencube.junit5.dbprovider;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -30,8 +32,6 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
-
-import javax.sql.DataSource;
 
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
@@ -45,6 +45,7 @@ import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
 
 import mondrian.olap.Util.PropertyList;
+import mondrian.rolap.RolapSchemaPool;
 import org.eclipse.daanse.engine.api.Context;
 
 public abstract class AbstractDockerBasesDatabaseProvider implements DatabaseProvider{
@@ -72,6 +73,8 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 	  public Entry<PropertyList, Context> activate() {
 
             port = freePort();
+            RolapSchemaPool.instance().clear();
+            deregisterDrivers();
 			DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
 			DockerHttpClient client = new ZerodepDockerHttpClient.Builder().dockerHost(config.getDockerHost())
@@ -125,7 +128,17 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 
 		}
 
-	protected abstract SimpleEntry<PropertyList, Context> createConnection();
+    private void deregisterDrivers() {
+        DriverManager.drivers().forEach(it -> {
+            try {
+                DriverManager.deregisterDriver(it);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
+    }
+
+    protected abstract SimpleEntry<PropertyList, Context> createConnection();
 
 	protected abstract List<String> env();
 

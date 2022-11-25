@@ -103,7 +103,7 @@ public class XmlaTest{
     protected void runTest(TestingContext context,ResourceTestCase testCase) throws Exception {
     	java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
 
-    	java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver());// finy out why this dies not happend automatically
+    	java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(context.getContext()));// finy out why this dies not happend automatically
 
 
 		String name = testCase.getName();

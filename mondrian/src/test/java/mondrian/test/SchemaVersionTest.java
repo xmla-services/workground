@@ -26,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.getConnectionProperties;
 import static org.opencube.junit5.TestUtil.withSchema;
 
+import java.sql.SQLException;
+
 /**
  * Unit test for automatic detection of schema version.
  */
@@ -33,34 +35,34 @@ public class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchema3withVersion(TestingContext context) {
+    public void testSchema3withVersion(TestingContext context) throws SQLException {
         withSchema(context, SCHEMA_3_VHEADER + SCHEMA_3_BODY);
         Util.PropertyList connectInfo =
             getConnectionProperties(context.createConnection());
-        Connection conn = DriverManager.getConnection(connectInfo, null);
+        Connection conn = DriverManager.getConnection(connectInfo, null, context.getContext());
         assertNotNull(conn);
         conn.close();
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchema3noVersion(TestingContext context) {
+    public void testSchema3noVersion(TestingContext context) throws SQLException {
         withSchema(context,SCHEMA_3_HEADER + SCHEMA_3_BODY);
         Util.PropertyList connectInfo =
             getConnectionProperties(context.createConnection());
-        Connection conn = DriverManager.getConnection(connectInfo, null);
+        Connection conn = DriverManager.getConnection(connectInfo, null, context.getContext());
         assertNotNull(conn);
         conn.close();
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchema4withVersion(TestingContext context) {       
+    public void testSchema4withVersion(TestingContext context) {
         withSchema(context,SCHEMA_4_HEADER + SCHEMA_4_BODY);
         try {
             Util.PropertyList connectInfo =
                     getConnectionProperties(context.createConnection());
-            Connection conn = DriverManager.getConnection(connectInfo, null);
+            Connection conn = DriverManager.getConnection(connectInfo, null, context.getContext());
             conn.close();
             fail("No exception thrown for version 4 schema.");
         } catch (MondrianException e) {
@@ -72,11 +74,11 @@ public class SchemaVersionTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testSchema4noVersion(TestingContext context) {
         withSchema(context,
-                SCHEMA_4_NVHEADER + SCHEMA_4_BODY);        
+                SCHEMA_4_NVHEADER + SCHEMA_4_BODY);
         try {
             Util.PropertyList connectInfo =
                     getConnectionProperties(context.createConnection());
-            Connection conn = DriverManager.getConnection(connectInfo, null);
+            Connection conn = DriverManager.getConnection(connectInfo, null, context.getContext());
             conn.close();
             fail("No exception thrown for version 4 schema.");
         } catch (MondrianException e) {
