@@ -18,7 +18,6 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import javax.sql.DataSource;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -49,6 +48,7 @@ public class RolapSchemaPoolTest {
                 "connectionKeyA",
                 "joeTheUser",
                 "aDataSource",
+                context.getContext(),
                 connectInfo);
         RolapSchema schemaA =
             schemaPool.get(
@@ -56,6 +56,7 @@ public class RolapSchemaPoolTest {
                 "connectionKeyA",
                 "joeTheUser",
                 "aDataSource",
+                context.getContext(),
                 connectInfo);
         //same arguments, same object
         assertTrue(schema == schemaA);
@@ -82,6 +83,7 @@ public class RolapSchemaPoolTest {
                 "connectionKeyA",
                 "joeTheUser",
                 "aDataSource",
+                context.getContext(),
                 connectInfo);
 
         // Same catalogUrl, same JdbcUuid
@@ -96,6 +98,7 @@ public class RolapSchemaPoolTest {
                 "aDifferentConnectionKey",
                 "mrDoeTheOtherUser",
                 "someDataSource",
+                context.getContext(),
                 connectInfoA);
         //must fetch the same object
         assertTrue(schema == sameSchema);
@@ -109,6 +112,7 @@ public class RolapSchemaPoolTest {
                 "connectionKeyA",
                 "joeTheUser",
                 "aDataSource",
+                context.getContext(),
                 connectInfo);
         //must create a new object
         assertTrue(schema != aNewSchema);
@@ -118,8 +122,6 @@ public class RolapSchemaPoolTest {
      * Test using JdbcConnectionUUID and useSchemaChecksum
      * fetches the same schema in all scenarios.
      */
-    //TODO Commented by reason context implementation
-    /*
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testSchemaFetchMd5JdbcUid(TestingContext context) throws IOException {
@@ -142,6 +144,7 @@ public class RolapSchemaPoolTest {
                 "connectionKeyA",
                 "joeTheUser",
                 "aDataSource",
+                context.getContext(),
                 connectInfo);
 
         PropertyList connectInfoDyn = connectInfo.clone();
@@ -154,6 +157,7 @@ public class RolapSchemaPoolTest {
                 "connectionKeyB",
                 "jed",
                 "dsName",
+                context.getContext(),
                 connectInfo);
 
         assertTrue(schema == schemaDyn);
@@ -171,13 +175,13 @@ public class RolapSchemaPoolTest {
         assertTrue(schema == schemaCont);
 
         PropertyList connectInfoDS = connectInfo.clone();
-        final StringBuilder buf = new StringBuilder();
-        DataSource dataSource =
-            RolapConnection.createDataSource(null, connectInfoDS, buf);
-        RolapSchema schemaDS = pool.get(catalogUrl, dataSource, connectInfoDS);
+        //final StringBuilder buf = new StringBuilder();
+        //DataSource dataSource =
+        //    RolapConnection.createDataSource(null, connectInfoDS, buf);
+        RolapSchema schemaDS = pool.get(catalogUrl, context.getContext(), connectInfoDS);
 
         assertTrue(schema == schemaDS);
-    }*/
+    }
 
     protected URL getFoodmartCatalogUrl() {
         // Works if we are running in root directory of source tree

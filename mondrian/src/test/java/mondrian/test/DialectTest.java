@@ -52,7 +52,6 @@ import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.sql.SqlQuery;
-//import mondrian.spi.DialectManager;
 import mondrian.util.DelegatingInvocationHandler;
 
 /**
@@ -692,9 +691,12 @@ public class DialectTest {
     //
     // verify jdbc dialect - some jdbc drivers return TIMESTAMP too
     // http://jira.pentaho.com/browse/MONDRIAN-2038
-    //TODO Commented by reason context implementation
-    //Dialect jdbcDialect = new JdbcDialectImpl();
-    Dialect jdbcDialect = null;
+    Dialect jdbcDialect = new JdbcDialectImpl(){
+        @Override
+        protected boolean isSupportedProduct(String productName, String productVersion) {
+            return true;
+        }
+    };
     StringBuilder buf = new StringBuilder();
     jdbcDialect.quoteDateLiteral( buf, "2003-12-12" );
     assertEquals( "DATE '2003-12-12'", buf.toString() );
@@ -1618,9 +1620,12 @@ public class DialectTest {
   @Test
   public void testJdbcDialectTypeMap() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
-    //TODO Commented by reason context implementation
-    Dialect postgresDialect = null;
-    //Dialect postgresDialect = new JdbcDialectImpl();
+    Dialect postgresDialect = new JdbcDialectImpl(){
+        @Override
+        protected boolean isSupportedProduct(String productName, String productVersion) {
+            return true;
+        }
+    };
     assertTrue(
             postgresDialect.getType(
                     mockResultSetMeta
@@ -1736,15 +1741,18 @@ public class DialectTest {
     String expected = "    1 ASC";
     // "1" is supposed to be a column number
     String expr = "1";
-    //TODO Commented by reason context implementation
-    Dialect dialect = null;
-    /*Dialect dialect = new JdbcDialectImpl() {
+    Dialect dialect = new JdbcDialectImpl() {
+
+        @Override
+        protected boolean isSupportedProduct(String productName, String productVersion) {
+            return false;
+        }
 
         @Override
         public boolean requiresUnionOrderByOrdinal() {
             return false;
         }
-    };*/
+    };
 
     SqlQuery query = new SqlQuery( dialect, true );
     query.addOrderBy(

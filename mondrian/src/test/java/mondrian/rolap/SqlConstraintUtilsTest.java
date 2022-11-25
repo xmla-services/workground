@@ -30,7 +30,6 @@ import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.server.Execution;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-//import mondrian.spi.DialectManager;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mockito;
@@ -795,8 +794,6 @@ public class SqlConstraintUtilsTest {
         return mock;
     }
 
-    //TODO Commented by reason context implementation
-    /*
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testConstrainLevel(TestingContext context){
@@ -805,10 +802,8 @@ public class SqlConstraintUtilsTest {
         final RolapCube baseCube = mock(RolapCube.class);
         final RolapStar.Column column = mock(RolapStar.Column.class);
 
-        final Connection connection = context.createConnection();
-
         final AggStar aggStar = null;
-        final Dialect dialect =  DialectManager.createDialect(connection.getDataSource(), null);
+        final Dialect dialect =  context.getContext().getDialect();
         final SqlQuery query = new SqlQuery(dialect);
 
         when(level.getBaseStarKeyColumn(baseCube)).thenReturn(column);
@@ -820,7 +815,7 @@ public class SqlConstraintUtilsTest {
 
         String levelStr = SqlConstraintUtils.constrainLevel(level, query, baseCube, aggStar, columnValue, false);
         assertEquals("dummyName = 'dummyValue'",  levelStr);
-    }*/
+    }
 
     private void setSlicerContext(RolapEvaluator e, Member m) {
       List<Member> members = new ArrayList<Member>();
