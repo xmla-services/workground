@@ -46,6 +46,10 @@ import aQute.bnd.annotation.spi.ServiceProvider;
  * @author jhyde
  * @since Nov 23, 2008
  */
+@ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='MYSQL'",
+        "database.product:String='MYSQL'" })
+@Component(service = Dialect.class, scope = ServiceScope.PROTOTYPE)
+public class MySqlDialect extends JdbcDialectImpl {
 
     private static Logger LOGGER = LoggerFactory.getLogger(MySqlDialect.class);
     private final String escapeRegexp = "(\\\\Q([^\\\\Q]+)\\\\E)";
