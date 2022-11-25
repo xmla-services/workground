@@ -38,7 +38,7 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
     private DataSource dataSource;
 
     @Override
-    public void init(DataSource dataSource, Dialect dialect) {
+    public void initialize(DataSource dataSource, Dialect dialect) {
         this.dataSource = dataSource;
     }
 
@@ -46,7 +46,7 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
     public long getTableCardinality(String catalog, String schema, String table) {
         try (Connection connection = dataSource.getConnection();
                 ResultSet resultSet = connection.getMetaData().getIndexInfo(catalog, schema, table, false, true);) {
-            int maxNonUnique = -1;
+            long maxNonUnique = CARDINALITY_UNKNOWN;
             while (resultSet.next()) {
                 final int type = resultSet.getInt(TYPE_COLUMN);
                 final int cardinality = resultSet.getInt(CARDINALITY_COLUMN);
@@ -67,14 +67,14 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
 
             LOGGER.debug("JdbcStatisticsProvider failed to get the cardinality of the table " + table, e);
 
-            return -1;
+            return CARDINALITY_UNKNOWN;
         }
     }
 
     @Override
     public long getQueryCardinality(String sql) {
         // JDBC cannot help with this. Defer to another statistics provider.
-        return -1;
+        return CARDINALITY_UNKNOWN;
     }
 
     @Override
@@ -95,12 +95,12 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
                     }
                 }
             }
-            return -1;
+            return CARDINALITY_UNKNOWN;
         } catch (SQLException e) {
 
             LOGGER.debug("JdbcStatisticsProvider failed to get the cardinality of the tablColumn " + table, e);
 
-            return -1;
+            return CARDINALITY_UNKNOWN;
         }
     }
 

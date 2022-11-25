@@ -13,7 +13,9 @@
 **********************************************************************/
 package org.eclipse.daanse.engine.impl;
 
+import java.sql.Connection;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
@@ -28,14 +30,18 @@ import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Designate(ocd = BasicContextConfig.class)
 @Component(service = Context.class, scope = ServiceScope.SINGLETON)
 public class BasicContext implements Context {
+
+    private static String ERR_MSG_DIALECT_INIT = "Could not activate context. Error on initialisation of Dialect";
     private static final String REF_NAME_DIALECT = "dialect";
     private static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
     private static final String REF_NAME_DATA_SOURCE = "dataSource";
-
+    private static Logger LOGGER = LoggerFactory.getLogger(BasicContext.class);
     private static final Converter CONVERTER = Converters.standardConverter();
 
     @Reference(name = REF_NAME_DATA_SOURCE, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
@@ -44,18 +50,22 @@ public class BasicContext implements Context {
     @Reference(name = REF_NAME_DIALECT, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
     private Dialect dialect = null;
 
-    @Reference(name = REF_NAME_STATISTICS_PROVIDER, target = UnresolvableNamespace.UNRESOLVABLE_FILTER)
-    private StatisticsProvider statisticsProvider;
+    @Reference(name = REF_NAME_STATISTICS_PROVIDER)
+    private StatisticsProvider statisticsProvider = null;
 
     private BasicContextConfig config;
 
     @Activate
-    public void activate(Map<String, Object> coniguration) {
+    public void activate(Map<String, Object> coniguration) throws Exception {
 
         this.config = CONVERTER.convert(coniguration)
                 .to(BasicContextConfig.class);
-        // dialect.init(dataSource);
-        statisticsProvider.init(dataSource, getDialect());
+        try (Connection connection = dataSource.getConnection()) {
+            if (!dialect.initialize(connection)) {
+                throw new Exception(ERR_MSG_DIALECT_INIT);
+            }
+        }
+        statisticsProvider.initialize(dataSource, getDialect());
     }
 
     @Override

@@ -98,10 +98,6 @@ public abstract class JdbcDialectImpl implements Dialect {
      */
     protected DatabaseProduct databaseProduct=null;
 
-    /**
-     * List of statistics providers.
-     */
-    //private final List<StatisticsProvider> statisticsProviders;
 
     private static final int[] RESULT_SET_TYPE_VALUES = {
         ResultSet.TYPE_FORWARD_ONLY,
@@ -962,9 +958,7 @@ public abstract class JdbcDialectImpl implements Dialect {
         return null;
     }
 
-    //public List<StatisticsProvider> getStatisticsProviders() {
-    //    return statisticsProviders;
-    //}
+
 
     @Override
     public BestFitColumnType getType(

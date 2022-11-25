@@ -12,11 +12,17 @@ package org.eclipse.daanse.db.statistics.api;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.osgi.annotation.bundle.Requirement.Cardinality;
 
 /**
  * Provides estimates of the number of rows in a database.
  */
 public interface StatisticsProvider {
+
+    /**
+     * The constant that will be returned if there is no estimate.
+     */
+    public static final long CARDINALITY_UNKNOWN = -1;
 
     /**
      * Initializes the {@link StatisticsProvider} with a {@link DataSource}. The
@@ -26,7 +32,7 @@ public interface StatisticsProvider {
      * @param dataSource
      * @param dialect
      */
-    void init(DataSource dataSource, Dialect dialect);
+    void initialize(DataSource dataSource, Dialect dialect);
 
     /**
      * Returns an estimate of the number of rows in a table.
@@ -36,7 +42,9 @@ public interface StatisticsProvider {
      * @param schema     Schema name
      * @param table      Table name
      *
-     * @return Estimated number of rows in table, or -1 if there is no estimate
+     * @return Estimated number of rows in table, or -1
+     *         ({@link StatisticsProvider.CARDINALITY_UNKNOWN}) if there is no
+     *         estimate
      */
     long getTableCardinality(String catalog, String schema, String table);
 
@@ -46,7 +54,8 @@ public interface StatisticsProvider {
      * @param dataSource Data source
      * @param sql        Query, e.g. "select * from customers where age < 20"
      *
-     * @return Estimated number of rows returned by query, or -1 if there is no
+     * @return Estimated number of rows returned by query, or -1
+     *         ({@link StatisticsProvider.CARDINALITY_UNKNOWN}) if there is no
      *         estimate
      */
     long getQueryCardinality(String sql);
@@ -60,7 +69,9 @@ public interface StatisticsProvider {
      * @param table      Table name
      * @param column     Column name
      *
-     * @return column cardinality, or -1 if there is no estimate
+     * @return column cardinality, or -1
+     *         ({@link StatisticsProvider.CARDINALITY_UNKNOWN}) if there is no
+     *         estimate
      */
     long getColumnCardinality(String catalog, String schema, String table, String column);
 }
