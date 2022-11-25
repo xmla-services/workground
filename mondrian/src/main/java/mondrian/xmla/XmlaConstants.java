@@ -93,7 +93,7 @@ public interface XmlaConstants {
     public static final String CONTEXT_XMLA_SESSION_STATE_END =
         "SessionStateEnd";
 
-    /*************************************************************************
+    /*****
     *
     * The following are XMLA exception fault codes used as faultcode entries
     * in the SOAP Fault element.
@@ -106,7 +106,7 @@ public interface XmlaConstants {
     *
     * Currently, SOAP 1.2 errors are not supported.
     *
-    *************************************************************************/
+    ****/
 
    /**
     * This is the namespace used to qualify the faultcode identifier.

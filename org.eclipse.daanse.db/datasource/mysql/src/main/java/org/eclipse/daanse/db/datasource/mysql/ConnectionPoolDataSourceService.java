@@ -1,4 +1,4 @@
-/*********************************************************************
+/*
 * Copyright (c) 2022 Contributors to the Eclipse Foundation.
 *
 * This program and the accompanying materials are made
@@ -10,7 +10,7 @@
 * Contributors:
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
-**********************************************************************/
+*/
 package org.eclipse.daanse.db.datasource.mysql;
 
 import java.sql.SQLException;

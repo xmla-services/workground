@@ -1,4 +1,4 @@
-/*********************************************************************
+/*
  * Copyright (c) 2022 Contributors to the Eclipse Foundation.
  *
  * This program and the accompanying materials are made
@@ -15,7 +15,7 @@
  * Contributors:
  *   Hitachi Vantara.
  *   SmartCity Jena - initial  Java 8, Junit5
- **********************************************************************/
+ */
 package org.eclipse.daanse.db.dialect.db.vectorwise;
 
 import static org.assertj.core.api.Assertions.assertThat;
