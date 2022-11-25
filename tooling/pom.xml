@@ -9,5 +9,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>container</module>
+    <module>webconsole</module>
   </modules>
 </project>

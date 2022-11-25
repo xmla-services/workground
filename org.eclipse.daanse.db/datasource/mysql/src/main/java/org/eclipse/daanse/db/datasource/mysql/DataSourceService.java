@@ -15,6 +15,7 @@ package org.eclipse.daanse.db.datasource.mysql;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Map;
 
 import javax.sql.DataSource;
 
@@ -24,24 +25,40 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.ServiceScope;
 import org.osgi.service.metatype.annotations.Designate;
+import org.osgi.util.converter.Converter;
+import org.osgi.util.converter.Converters;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 
-@Designate(ocd = MySqlConfig.class, factory = true)
+@Designate(ocd = ConfigDataSource.class, factory = true)
 @Component(service = DataSource.class, scope = ServiceScope.SINGLETON)
 public class DataSourceService extends AbstractDelegateDataSource<MysqlDataSource> {
+    private static final Converter CONVERTER = Converters.standardConverter();
 
-    private MySqlConfig config;
+    private ConfigConnectionPooledDataSource config;
     private MysqlDataSource ds;
 
     @Activate
-    public DataSourceService(MySqlConfig config) throws SQLException {
+    public DataSourceService(Map<String, Object> configMap) throws SQLException {
         this.ds = new MysqlDataSource();
-        this.config = config;
+        this.config = CONVERTER.convert(configMap)
+                .to(ConfigConnectionPooledDataSource.class);
 
-        ds.setUser(config.username());
-        ds.setPassword(config._password());
-        ds.setUrl(config.url());
+        if (config.username() == null) {
+            ds.setUser(config.username());
+        }
+        if (config._password() == null) {
+            ds.setPassword(config._password());
+        }
+        if (config.serverName() == null) {
+            ds.setServerName(config.serverName());
+        }
+        if (config.databaseName() == null) {
+            ds.setDatabaseName(config.databaseName());
+        }
+        if (config.port() == null) {
+            ds.setPort(config.port());
+        }
     }
 
     // no @Modified to force consumed Services get new configured connections.

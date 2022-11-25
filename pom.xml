@@ -217,7 +217,7 @@
               </goals>
               <configuration>
                 <bndruns>
-                  <include>test.bndrun</include>
+                  <include>*.bndrun</include>
                 </bndruns>
                 <bundles>
                     <bundle>${project.build.directory}/${project.build.finalName}-tests.jar</bundle>
@@ -247,7 +247,7 @@
               </goals>
               <configuration>
                 <bndruns>
-                  <include>test.bndrun</include>
+                  <include>*.bndrun</include>
                 </bndruns>
                 <failOnChanges>false</failOnChanges>
                 <includeDependencyManagement>true</includeDependencyManagement>
@@ -365,12 +365,12 @@
             <version>1.4.1</version>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-    <groupId>org.osgi</groupId>
-    <artifactId>org.osgi.util.converter</artifactId>
-    <version>1.0.9</version>
-    <scope>compile</scope>
-</dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.util.converter</artifactId>
+        <version>1.0.9</version>
+        <scope>compile</scope>
+      </dependency>
         <dependency>
             <groupId>org.apache.felix</groupId>
             <artifactId>org.apache.felix.scr</artifactId>
@@ -436,6 +436,7 @@
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.framework</artifactId>
         <version>7.0.3</version>
+        <scope>runtime</scope>
       </dependency>
 
       <!-- run -->
@@ -545,7 +546,73 @@
         <scope>runtime</scope>
       </dependency>
 
-
+      <!-- Webconsole -->
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.webconsole</artifactId>
+        <version>4.8.4</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.webconsole.plugins.ds</artifactId>
+        <scope>runtime</scope>
+        <version>2.2.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.inventory</artifactId>
+        <version>1.1.0</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>commons-fileupload</groupId>
+        <artifactId>commons-fileupload</artifactId>
+        <version>1.4</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.service.http</artifactId>
+        <version>1.2.2</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.http.jetty</artifactId>
+        <version>4.2.2</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.util.pushstream</artifactId>
+        <version>1.0.2</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.util.function</artifactId>
+        <version>1.2.0</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.util.promise</artifactId>
+        <version>1.2.0</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.configadmin</artifactId>
+        <version>1.9.26</version>
+        <scope>runtime</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.metatype</artifactId>
+        <version>1.2.4</version>
+        <scope>runtime</scope>
+      </dependency>
       <dependency>
         <groupId>org.apache.aries.spifly</groupId>
         <artifactId>org.apache.aries.spifly.dynamic.bundle</artifactId>
@@ -774,6 +841,12 @@
       <artifactId>org.osgi.service.component.annotations</artifactId>
       <version>1.5.0</version>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.osgi</groupId>
+          <artifactId>org.osgi.util.function</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>

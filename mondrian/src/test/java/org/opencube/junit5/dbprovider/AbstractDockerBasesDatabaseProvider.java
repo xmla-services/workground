@@ -20,6 +20,7 @@
 package org.opencube.junit5.dbprovider;
 
 import java.io.IOException;
+import java.net.ServerSocket;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -50,6 +51,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 
 	private static final String THIS_IS_MONDRIAN_INSTANCE = "thisIsMondrianInstance";
 	private DockerClient dc;
+    protected int port;
 
 
 	 protected Optional<String> findContainerForReuse(String param) {
@@ -69,7 +71,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 
 	  public Entry<PropertyList, Context> activate() {
 
-
+            port = freePort();
 			DockerClientConfig config = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
 
 			DockerHttpClient client = new ZerodepDockerHttpClient.Builder().dockerHost(config.getDockerHost())
@@ -145,4 +147,12 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 
 		}
 
+    protected int freePort() {
+        try (ServerSocket serverSocket = new ServerSocket(0)) {
+
+            return serverSocket.getLocalPort();
+        } catch (IOException e) {
+            throw new RuntimeException("get free port failed");
+        }
+    }
 }

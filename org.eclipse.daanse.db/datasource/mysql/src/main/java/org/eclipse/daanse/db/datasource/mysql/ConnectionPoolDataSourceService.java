@@ -27,16 +27,16 @@ import org.osgi.service.metatype.annotations.Designate;
 
 import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
 
-@Designate(ocd = MySqlConfig.class, factory = true)
+@Designate(ocd = ConfigConnectionPooledDataSource.class, factory = true)
 @Component(service = ConnectionPoolDataSource.class, scope = ServiceScope.SINGLETON)
 public class ConnectionPoolDataSourceService
         extends AbstractDelegateConnectionPoolDataSource<MysqlConnectionPoolDataSource> {
 
-    private MySqlConfig config;
+    private ConfigConnectionPooledDataSource config;
     private MysqlConnectionPoolDataSource ds;
 
     @Activate
-    public ConnectionPoolDataSourceService(MySqlConfig config) throws SQLException {
+    public ConnectionPoolDataSourceService(ConfigConnectionPooledDataSource config) throws SQLException {
         this.ds = new MysqlConnectionPoolDataSource();
         this.config = config;
     }
