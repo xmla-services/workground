@@ -41,7 +41,7 @@ public class XmlaDimensionPropertiesTest extends XmlaBaseTestCase {
     public void afterEach() {
         tearDown();
     }
-	
+
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testOneHierarchyProperties(TestingContext context) throws Exception {
@@ -65,6 +65,7 @@ public class XmlaDimensionPropertiesTest extends XmlaBaseTestCase {
         String requestType = "EXECUTE";
         Properties props = getDefaultRequestProperties(requestType);
         props.setProperty(CUBE_NAME_PROP, cubeName);
+        java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(connection.getContext()));
         doTest( requestType, props, connection);
     }
 

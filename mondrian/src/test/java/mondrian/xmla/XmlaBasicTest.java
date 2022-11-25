@@ -1117,13 +1117,13 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
         doTest(requestType, props, context.createConnection());
     }
 
-    public void doTestRT(String requestType, Connection connection)
+    private void doTestRT(String requestType, Connection connection)
         throws Exception
     {
         Properties props = new Properties();
         props.setProperty(REQUEST_TYPE_PROP, requestType);
         props.setProperty(DATA_SOURCE_INFO_PROP, DATA_SOURCE_INFO);
-
+        java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(connection.getContext()));
         doTest(requestType, props, connection);
     }
 

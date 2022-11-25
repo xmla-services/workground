@@ -177,7 +177,7 @@ public class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
         props.setProperty(REQUEST_TYPE_PROP, requestType);
         props.setProperty(DATA_SOURCE_INFO_PROP, DATA_SOURCE_INFO);
         props.setProperty(CATALOG_NAME_PROP, catalog);
-
+        java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(connection.getContext()));
         try {
             doTest(requestType, props, connection);
         } catch (Throwable t) {

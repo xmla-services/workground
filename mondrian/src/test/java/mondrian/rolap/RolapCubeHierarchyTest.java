@@ -15,6 +15,8 @@ import mondrian.olap.Level;
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianDef.Relation;
 import mondrian.olap.MondrianDef.RelationOrJoin;
+import mondrian.olap.SchemaReader;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -66,6 +68,7 @@ public class RolapCubeHierarchyTest {
     RolapConnection cubeDimension_schema_connection =
         mock(RolapConnection.class);
     DataSource cubeDimension_schema_connection_DS = mock(DataSource.class);
+    SchemaReader schemaReader = mock(SchemaReader.class);
 
     MondrianDef.CubeDimension cubeDim = null;
 
@@ -83,6 +86,8 @@ public class RolapCubeHierarchyTest {
     doReturn(cubeDimension_cube).when(cubeDimension).getCube();
     doReturn(cubeDimension_cube_isVirtual).when(cubeDimension_cube).isVirtual();
     doReturn(cubeDimension_schema).when(cubeDimension).getSchema();
+    doReturn(schemaReader).when(cubeDimension_schema)
+    .getSchemaReader();
     doReturn(cubeDimension_schema_connection).when(cubeDimension_schema)
       .getInternalConnection();
     doReturn(cubeDimension_schema_connection_DS)
@@ -111,6 +116,7 @@ public class RolapCubeHierarchyTest {
     RolapConnection cubeDimension_schema_connection =
         mock(RolapConnection.class);
     DataSource cubeDimension_schema_connection_DS = mock(DataSource.class);
+    SchemaReader schemaReader = mock(SchemaReader.class);
 
     MondrianDef.CubeDimension cubeDim = null;
 
@@ -131,6 +137,8 @@ public class RolapCubeHierarchyTest {
     doReturn(cubeDimension_schema).when(cubeDimension).getSchema();
     doReturn(cubeDimension_schema_connection).when(cubeDimension_schema)
       .getInternalConnection();
+    doReturn(schemaReader).when(cubeDimension_schema)
+    .getSchemaReader();
     doReturn(cubeDimension_schema_connection_DS)
       .when(cubeDimension_schema_connection).getDataSource();
     doReturn(cubeDimension_uniqueName).when(cubeDimension).getUniqueName();
@@ -162,6 +170,7 @@ public class RolapCubeHierarchyTest {
     String rolapHierarchy_uniqueName = "TheDimUniqueName";
     Level[] rolapHierarchy_levels = new Level[]{};
     RelationOrJoin rolapHierarchy_relation = mock(Relation.class);
+    SchemaReader schemaReader = mock(SchemaReader.class);
 
     String subName = null;
 
@@ -182,6 +191,8 @@ public class RolapCubeHierarchyTest {
     doReturn(cubeDimension_schema).when(cubeDimension).getSchema();
     doReturn(cubeDimension_schema_connection).when(cubeDimension_schema)
       .getInternalConnection();
+    doReturn(schemaReader).when(cubeDimension_schema)
+    .getSchemaReader();    
     doReturn(cubeDimension_schema_connection_DS)
       .when(cubeDimension_schema_connection).getDataSource();
     doReturn(cubeDimension_uniqueName).when(cubeDimension).getUniqueName();
@@ -206,6 +217,7 @@ public class RolapCubeHierarchyTest {
     RolapConnection cubeDimension_schema_connection =
         mock(RolapConnection.class);
     DataSource cubeDimension_schema_connection_DS = mock(DataSource.class);
+    SchemaReader schemaReader = mock(SchemaReader.class);
 
     MondrianDef.CubeDimension cubeDim = null;
 
@@ -234,6 +246,8 @@ public class RolapCubeHierarchyTest {
     doReturn(cubeDimension_schema).when(cubeDimension).getSchema();
     doReturn(cubeDimension_schema_connection).when(cubeDimension_schema)
       .getInternalConnection();
+    doReturn(schemaReader).when(cubeDimension_schema)
+    .getSchemaReader();
     doReturn(cubeDimension_schema_connection_DS)
       .when(cubeDimension_schema_connection).getDataSource();
     doReturn(cubeDimension_uniqueName).when(cubeDimension).getUniqueName();

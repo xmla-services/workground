@@ -1069,6 +1069,7 @@ System.out.println("Got CONTINUE");
             Fault expectedFault, Connection connection
             ) throws Exception
     {
+    	java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(connection.getContext()));
         String requestText = fileToString("request");
         Servlet servlet = getServlet(connection);
         // do SOAP-XMLA

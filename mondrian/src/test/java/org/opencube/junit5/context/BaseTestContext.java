@@ -31,6 +31,7 @@ import org.opencube.junit5.propupdator.PropertyUpdater;
 
 import java.sql.SQLException;
 import java.util.Map.Entry;
+import java.util.Properties;
 
 public class BaseTestContext implements TestingContext {
 
@@ -96,9 +97,9 @@ public class BaseTestContext implements TestingContext {
     @Override
 	public OlapConnection createOlap4jConnection() throws SQLException {
 
-		MondrianOlap4jDriver d = new MondrianOlap4jDriver();
-
-		final java.sql.Connection connection = java.sql.DriverManager.getConnection("jdbc:mondrian:" + getOlapConnectString());
+		//final java.sql.Connection connection = java.sql.DriverManager.getConnection("jdbc:mondrian:" + getOlapConnectString());
+        MondrianOlap4jDriver driver = new MondrianOlap4jDriver(context);
+        final java.sql.Connection connection =  driver.connect("jdbc:mondrian:" + getOlapConnectString(), new Properties());
 		return ((OlapWrapper) connection).unwrap(OlapConnection.class);
 	}
 

@@ -20,6 +20,7 @@ import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 
+import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -172,16 +173,12 @@ public class SqlQueryTest  extends BatchTestCase {
         String expr, String alias, boolean ascending,
         boolean nullable, boolean collateNullsLast, boolean reqOrderByAlias)
     {
-        //TODO Commented by reason context implementation
-        /*
-        JdbcDialectImpl dialect = spy(new JdbcDialectImpl());
+        JdbcDialectImpl dialect = spy(new MySqlDialect());
         when(dialect.requiresOrderByAlias()).thenReturn(reqOrderByAlias);
         SqlQuery query = new SqlQuery(dialect, true);
         query.addOrderBy(
             expr, alias, ascending, true, nullable, collateNullsLast);
         return query;
-         */
-        return null;
     }
 
     private String queryUnixString(

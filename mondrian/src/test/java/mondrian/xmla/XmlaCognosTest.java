@@ -79,7 +79,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
     public void testCognosMDXSuiteHR_001(TestingContext context) throws Exception {
         java.sql.DriverManager.registerDriver(new XmlaOlap4jDriver());// finy out why this dies not happend automatically
 
-        java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver());// finy out why this dies not happend automatically
+        java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(context.getContext()));// finy out why this dies not happend automatically
 
         Dialect dialect = getDialect(context.createConnection());
         switch (dialect.getDatabaseProduct()) {

@@ -18,6 +18,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+import org.eclipse.daanse.engine.api.Context;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -612,8 +613,15 @@ public abstract class DBLoader {
     private Dialect dialect;
     private int batchSize;
     private boolean initialize;
+    protected Context context;
 
     protected DBLoader() {
+        this.batchSize = DEFAULT_BATCH_SIZE;
+        this.fileWriter = null;
+    }
+
+    protected DBLoader(Context context) {
+        this.context = context;
         this.batchSize = DEFAULT_BATCH_SIZE;
         this.fileWriter = null;
     }
@@ -729,9 +737,7 @@ public abstract class DBLoader {
         if (!metaData.supportsBatchUpdates()) {
             this.batchSize = 1;
         }
-        //this.dialect = DialectManager.createDialect(null, this.connection);
-        //TODO Commented by reason context implementation
-        this.dialect =null;
+        this.dialect = context.getDialect();
         this.initialize = true;
     }
 
