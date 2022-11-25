@@ -56,12 +56,11 @@ public class CodeSetTest {
   public void testSucces_CodeSetContainsOnlyCodeForPostgresDialect()
     throws Exception
     {
-    //TODO Commented by reason context implementation
-    PostgreSqlDialect postgreSqlDialect = null;
-    /*PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
+    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect();
+    postgreSqlDialect.initialize(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
-            POSTGRESQL_PRODUCT_VERSION));*/
+            POSTGRESQL_PRODUCT_VERSION));
     codeSet = new SqlQuery.CodeSet();
     codeSet.put(POSTGRES_DIALECT, SQL_CODE_FOR_POSTGRES_DIALECT);
     try {
@@ -85,12 +84,11 @@ public class CodeSetTest {
   public void testSucces_CodeSetContainsCodeForBothPostgresAndGenericDialects()
     throws Exception
     {
-    //TODO Commented by reason context implementation
-    PostgreSqlDialect postgreSqlDialect = null;
-    /*PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
+	    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect();
+	    postgreSqlDialect.initialize(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
-            POSTGRESQL_PRODUCT_VERSION));*/
+            POSTGRESQL_PRODUCT_VERSION));
     codeSet = new SqlQuery.CodeSet();
     codeSet.put(POSTGRES_DIALECT, SQL_CODE_FOR_POSTGRES_DIALECT);
     codeSet.put(GENERIC_DIALECT, SQL_CODE_FOR_GENERIC_DIALECT);
@@ -116,12 +114,11 @@ public class CodeSetTest {
     testSucces_CodeSetContainsCodeForBothPostgresAndPostgresqlDialects()
       throws Exception
       {
-          //TODO Commented by reason context implementation
-          PostgreSqlDialect postgreSqlDialect = null;
-          /*PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
+	    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect();
+	    postgreSqlDialect.initialize(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
-            POSTGRESQL_PRODUCT_VERSION));*/
+            POSTGRESQL_PRODUCT_VERSION));
     codeSet = new SqlQuery.CodeSet();
     codeSet.put(POSTGRES_DIALECT, SQL_CODE_FOR_POSTGRES_DIALECT);
     codeSet.put(POSTGRESQL_DIALECT, SQL_CODE_FOR_POSTGRESQL_DIALECT);
@@ -145,12 +142,11 @@ public class CodeSetTest {
   public void testSucces_CodeSetContainsOnlyCodeForGenericlDialect()
     throws Exception
     {
-        //TODO Commented by reason context implementation
-        PostgreSqlDialect postgreSqlDialect = null;
-        /*PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
+	    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect();
+	    postgreSqlDialect.initialize(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
-            POSTGRESQL_PRODUCT_VERSION));*/
+            POSTGRESQL_PRODUCT_VERSION));
     codeSet = new SqlQuery.CodeSet();
     codeSet.put(GENERIC_DIALECT, SQL_CODE_FOR_GENERIC_DIALECT);
     try {
@@ -173,12 +169,11 @@ public class CodeSetTest {
   public void testMondrianExceptionThrown_WhenCodeSetContainsNOCodeForDialect()
     throws Exception
     {
-        //TODO Commented by reason context implementation
-        PostgreSqlDialect postgreSqlDialect = null;
-        /*PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
+	    PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect();
+	    postgreSqlDialect.initialize(
         mockConnection(
             POSTGRESQL_PRODUCT_NAME,
-            POSTGRESQL_PRODUCT_VERSION));*/
+            POSTGRESQL_PRODUCT_VERSION));
     codeSet = new SqlQuery.CodeSet();
     try {
       String chooseQuery = codeSet.chooseQuery(postgreSqlDialect);

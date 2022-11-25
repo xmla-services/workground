@@ -94,7 +94,7 @@ public class RolapSchemaPool {
             connectInfo);
     }
 
-    private RolapSchema get(
+    public RolapSchema get(
         final String catalogUrl,
         final String connectionKey,
         final String jdbcUser,
