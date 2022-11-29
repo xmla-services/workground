@@ -15,6 +15,7 @@ package org.eclipse.daanse.engine.impl;
 
 import java.sql.Connection;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
@@ -32,14 +33,15 @@ import org.osgi.util.converter.Converters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Designate(ocd = BasicContextConfig.class)
+@Designate(ocd = BasicContextConfig.class, factory = true)
 @Component(service = Context.class, scope = ServiceScope.SINGLETON)
 public class BasicContext implements Context {
 
-    private static String ERR_MSG_DIALECT_INIT = "Could not activate context. Error on initialisation of Dialect";
-    private static final String REF_NAME_DIALECT = "dialect";
-    private static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
-    private static final String REF_NAME_DATA_SOURCE = "dataSource";
+    public static final String PID = "org.eclipse.daanse.engine.impl.BasicContext";
+    public static final String REF_NAME_DIALECT = "dialect";
+    public static final String REF_NAME_STATISTICS_PROVIDER = "statisticsProvider";
+    public static final String REF_NAME_DATA_SOURCE = "dataSource";
+    private static final String ERR_MSG_DIALECT_INIT = "Could not activate context. Error on initialisation of Dialect";
     private static Logger LOGGER = LoggerFactory.getLogger(BasicContext.class);
     private static final Converter CONVERTER = Converters.standardConverter();
 
@@ -80,6 +82,16 @@ public class BasicContext implements Context {
     @Override
     public StatisticsProvider getStatisticsProvider() {
         return statisticsProvider;
+    }
+
+    @Override
+    public String getName() {
+        return config.name();
+    }
+
+    @Override
+    public Optional<String> getDescription() {
+        return Optional.ofNullable(config.description());
     }
 
 }
