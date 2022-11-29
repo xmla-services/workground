@@ -21,6 +21,7 @@ import org.eclipse.daanse.engine.api.Context;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class SQLLiteContext  implements Context {
     //TODO need implementation
@@ -76,5 +77,15 @@ public class SQLLiteContext  implements Context {
     @Override
     public StatisticsProvider getStatisticsProvider() {
         return statisticsProvider;
+    }
+
+    @Override
+    public String getName() {
+        return "sqliteBaseContext";
+    }
+
+    @Override
+    public Optional<String> getDescription() {
+        return Optional.empty();
     }
 }
