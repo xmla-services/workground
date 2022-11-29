@@ -14,6 +14,7 @@
 package org.eclipse.daanse.engine.api;
 
 import java.sql.Connection;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
@@ -52,5 +53,15 @@ public interface Context {
      * @return StatisticsProvider
      */
     StatisticsProvider getStatisticsProvider();
+
+    /*
+     * The human readable name of the Context
+     */
+    String getName();
+
+    /*
+     * The human readable description of the Context.
+     */
+    Optional<String> getDescription();
 
 }

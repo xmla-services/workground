@@ -36,5 +36,10 @@
       <artifactId>org.osgi.namespace.unresolvable</artifactId>
       <scope>compile</scope>
     </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.resource</artifactId>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 </project>
