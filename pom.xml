@@ -76,13 +76,12 @@
     <slf4j.version>2.0.4</slf4j.version>
     <asm.version>9.3</asm.version>
     <spifly.version>1.3.5</spifly.version>
-    <bnd.version>6.3.0</bnd.version>
-    <junit-jupiter.compile.version>5.6.0</junit-jupiter.compile.version>
-    <junit-platform.compile.version>1.6.0</junit-platform.compile.version>
-    <junit-jupiter.version>5.8.2</junit-jupiter.version>
-    <junit-platform.version>1.8.2</junit-platform.version>
+    <bnd.version>6.3.1</bnd.version>
+
+    <junit-jupiter.version>5.9.1</junit-jupiter.version>
+    <junit-platform.version>1.9.1</junit-platform.version>
     <assertj.version>3.22.0</assertj.version>
-    <mockito.version>4.8.1</mockito.version>
+    <mockito.version>4.9.0</mockito.version>
     <awaitility.version>4.2.0</awaitility.version>
     <osgi.annotation.version>8.1.0</osgi.annotation.version>
     <osgi.dto.version>1.0.0</osgi.dto.version>
@@ -114,7 +113,6 @@
     <commons-math3.version>3.6.1</commons-math3.version>
     <olap4j-xmla.version>1.2.0</olap4j-xmla.version>
     <jsp-api.version>2.0</jsp-api.version>
-    <mockito-all.version>1.9.5</mockito-all.version>
     <commons-dbcp.version>1.2.1</commons-dbcp.version>
     <olap4j-xmlaserver.version>1.2.0</olap4j-xmlaserver.version>
     <eigenbase-xom.version>1.3.5</eigenbase-xom.version>
@@ -552,6 +550,12 @@
         <scope>test</scope>
       </dependency>
       <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-junit-jupiter</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
         <groupId>org.apache.servicemix.bundles</groupId>
         <artifactId>org.apache.servicemix.bundles.junit</artifactId>
         <version>4.13.2_1</version>
@@ -780,13 +784,14 @@
         <artifactId>jaxb-api</artifactId>
         <version>2.3.1</version>
       </dependency>
-
+<!-- 
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-all</artifactId>
         <version>${mockito-all.version}</version>
         <scope>test</scope>
       </dependency>
+-->
       <dependency>
         <groupId>javacup</groupId>
         <artifactId>javacup</artifactId>
@@ -899,7 +904,10 @@
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.test.common</artifactId>

@@ -21,6 +21,7 @@ import org.eclipse.daanse.engine.api.Context;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Optional;
 
 public class MysqlContext implements Context {
 
@@ -72,5 +73,15 @@ public class MysqlContext implements Context {
     @Override
     public StatisticsProvider getStatisticsProvider() {
         return statisticsProvider;
+    }
+
+    @Override
+    public String getName() {
+        return "mysqlBaseContext";
+    }
+
+    @Override
+    public Optional<String> getDescription() {
+        return Optional.empty();
     }
 }

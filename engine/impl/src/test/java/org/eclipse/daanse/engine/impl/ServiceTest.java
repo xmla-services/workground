@@ -30,7 +30,9 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.engine.api.Context;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.cm.Configuration;
 import org.osgi.test.assertj.servicereference.ServiceReferenceAssert;
@@ -39,7 +41,10 @@ import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.common.annotation.config.InjectConfiguration;
 import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
 import org.osgi.test.common.service.ServiceAware;
+import org.osgi.test.junit5.cm.ConfigurationExtension;
 
+@ExtendWith(ConfigurationExtension.class)
+@ExtendWith(MockitoExtension.class)
 public class ServiceTest {
 
     @InjectBundleContext
@@ -56,13 +61,13 @@ public class ServiceTest {
     @Test
     public void serviceExists(
             @InjectConfiguration(withFactoryConfig = @WithFactoryConfiguration(factoryPid = BasicContext.PID, name = "name1")) Configuration c,
-            @InjectService ServiceAware<Context> saContext) throws Exception {
+            @InjectService(cardinality = 0) ServiceAware<Context> saContext) throws Exception {
         assertThat(saContext).isNotNull()
                 .extracting(ServiceAware::size)
                 .isEqualTo(0);
 
         ServiceReferenceAssert.assertThat(saContext.getServiceReference())
-                .isNotNull();
+                .isNull();
 
         bc.registerService(DataSource.class, dataSource, dictionaryOf("ds", "1"));
         bc.registerService(Dialect.class, dialect, dictionaryOf("d", "2"));
@@ -79,7 +84,7 @@ public class ServiceTest {
         props.put("name", theName);
         props.put("description", theDescription);
         c.update(props);
-        Context ctx = saContext.waitForService(100);
+        Context ctx = saContext.waitForService(1000);
 
         assertThat(ctx).satisfies(x -> {
             assertThat(x.getName()).isEqualTo(theName);
