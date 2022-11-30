@@ -63,13 +63,11 @@
 
   <properties>
 
-    <!-- openCube -->
-
     <revision>0.0.1-SNAPSHOT</revision>
     <project.build.outputTimestamp>1980-02-01T00:00:00Z</project.build.outputTimestamp>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <java.version>8</java.version>
-    <java.release>8</java.release>
+    <java.version>17</java.version>
+    <java.release>17</java.release>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
@@ -97,7 +95,6 @@
     <org.osgi.test.version>1.1.0</org.osgi.test.version>
 
     <!-- Original Mondrian -->
-    <license.licenseName>epl_only_v1</license.licenseName>
     <guava.version>17.0</guava.version>
 
     <olap4j.version>1.2.0</olap4j.version>
@@ -368,6 +365,30 @@
         <artifactId>org.osgi.namespace.unresolvable</artifactId>
         <version>1.0.0</version>
         <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.annotation.bundle</artifactId>
+        <version>2.0.0</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.service.component.annotations</artifactId>
+        <version>1.5.0</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.service.jdbc</artifactId>
+        <version>1.0.0</version>
+        <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.framework</artifactId>
+        <version>1.10.0</version>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>org.osgi</groupId>
@@ -848,22 +869,16 @@
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.annotation.bundle</artifactId>
-      <version>2.0.0</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.framework</artifactId>
-      <version>1.10.0</version>
-      <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.service.component.annotations</artifactId>
-      <version>1.5.0</version>
-      <scope>provided</scope>
       <exclusions>
         <exclusion>
           <groupId>org.osgi</groupId>
@@ -948,8 +963,8 @@
     <module>org.eclipse.daanse.repackage.apache.commons.dbcp</module>
     <module>org.eclipse.daanse.repackage.dockerjava</module>
     <module>org.eclipse.daanse.repackage.rhino.engine</module>
-    <module>org.eclipse.daanse.function</module>
-    <module>org.eclipse.daanse.db</module>
+    <module>function</module>
+    <module>db</module>
     <module>tooling</module>
     <module>engine</module>
     <module>mondrian</module>
