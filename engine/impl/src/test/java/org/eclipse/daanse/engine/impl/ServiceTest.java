@@ -1,26 +1,24 @@
 /*
-uuid * Copyright (c) 2022 Contributors to the Eclipse Foundation.
- *
- * This program and the accompanying materials are made
- * available under the terms of the Eclipse Public License 2.0
- * which is available at https://www.eclipse.org/legal/epl-2.0/
- *
- * SPDX-License-Identifier: EPL-2.0
- *
- * History:
- *  This files came from the mondrian project. Some of the Flies
- *  (mostly the Tests) did not have License Header.
- *  But the Project is EPL Header. 2002-2022 Hitachi Vantara.
- *
- * Contributors:
- *   Hitachi Vantara.
- *   SmartCity Jena - initial  Java 8, Junit5
- */
+* Copyright (c) 2022 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors:
+*   SmartCity Jena - initial
+*   Stefan Bischof (bipolis.org) - initial
+*/
 package org.eclipse.daanse.engine.impl;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 import static org.osgi.test.common.dictionary.Dictionaries.dictionaryOf;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -29,6 +27,7 @@ import javax.sql.DataSource;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.engine.api.Context;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -47,6 +46,7 @@ import org.osgi.test.junit5.cm.ConfigurationExtension;
 @ExtendWith(MockitoExtension.class)
 public class ServiceTest {
 
+    private static final String TARGET_EXT = ".target";
     @InjectBundleContext
     BundleContext bc;
     @Mock
@@ -56,12 +56,24 @@ public class ServiceTest {
     DataSource dataSource;
 
     @Mock
+    Connection connection;
+
+    @Mock
     StatisticsProvider statisticsProvider;
+
+    @BeforeEach
+    public void setup() throws SQLException {
+
+    }
 
     @Test
     public void serviceExists(
             @InjectConfiguration(withFactoryConfig = @WithFactoryConfiguration(factoryPid = BasicContext.PID, name = "name1")) Configuration c,
             @InjectService(cardinality = 0) ServiceAware<Context> saContext) throws Exception {
+
+        when(dataSource.getConnection()).thenReturn(connection);
+        when(dialect.initialize(connection)).thenReturn(true);
+
         assertThat(saContext).isNotNull()
                 .extracting(ServiceAware::size)
                 .isEqualTo(0);
@@ -75,9 +87,9 @@ public class ServiceTest {
 
         Dictionary<String, Object> props = new Hashtable<>();
 
-        props.put("target." + BasicContext.REF_NAME_DATA_SOURCE, "(ds=1)");
-        props.put("target." + BasicContext.REF_NAME_DIALECT, "(d=2)");
-        props.put("target." + BasicContext.REF_NAME_STATISTICS_PROVIDER, "(sp=3)");
+        props.put(BasicContext.REF_NAME_DATA_SOURCE + TARGET_EXT, "(ds=1)");
+        props.put(BasicContext.REF_NAME_DIALECT + TARGET_EXT, "(d=2)");
+        props.put(BasicContext.REF_NAME_STATISTICS_PROVIDER + TARGET_EXT, "(sp=3)");
 
         String theName = "theName";
         String theDescription = "theDescription";
@@ -86,9 +98,16 @@ public class ServiceTest {
         c.update(props);
         Context ctx = saContext.waitForService(1000);
 
+        assertThat(saContext).isNotNull()
+                .extracting(ServiceAware::size)
+                .isEqualTo(1);
+
         assertThat(ctx).satisfies(x -> {
             assertThat(x.getName()).isEqualTo(theName);
-            assertThat(x.getDescription()).isEqualTo(theDescription);
+            assertThat(x.getDescription()
+                    .isPresent()).isTrue();
+            assertThat(x.getDescription()
+                    .get()).isEqualTo(theDescription);
             assertThat(x.getDataSource()).isEqualTo(dataSource);
             assertThat(x.getDialect()).isEqualTo(dialect);
             assertThat(x.getStatisticsProvider()).isEqualTo(statisticsProvider);
