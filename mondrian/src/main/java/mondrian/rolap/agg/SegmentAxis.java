@@ -11,13 +11,19 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.olap.Util;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+
 import mondrian.rolap.RolapUtil;
 import mondrian.rolap.StarColumnPredicate;
 import mondrian.util.ArraySortedSet;
 import mondrian.util.Pair;
-
-import java.util.*;
 
 /**
  * Collection of values of one of the columns that parameterizes a
@@ -82,7 +88,21 @@ public class SegmentAxis {
             }
         }
         assert predicate != null;
-        assert safe || Util.isSorted(Arrays.asList(keys));
+        assert safe || isSorted(keys);
+    }
+    
+    /**
+     * Returns whether a list is strictly sorted.
+     *
+     * @param list List
+     * @return whether list is sorted
+     */
+    static boolean isSorted(Comparable[] array) {
+        for (int i = 0; i < array.length - 1; ++i) {
+            if (array[i].compareTo(array[i + 1]) > 0)
+                return false;
+        }
+        return true;
     }
 
     private static Set<Object> predicateValueSet(

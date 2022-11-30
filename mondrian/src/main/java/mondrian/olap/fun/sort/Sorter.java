@@ -11,7 +11,28 @@
 */
 package mondrian.olap.fun.sort;
 
-import com.google.common.annotations.VisibleForTesting;
+import static mondrian.olap.Util.newInternal;
+import static mondrian.olap.fun.FunUtil.DoubleNull;
+import static mondrian.olap.fun.FunUtil.IntegerNull;
+import static org.eigenbase.xom.XOMUtil.discard;
+
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.PriorityQueue;
+
+import org.apache.commons.collections.ComparatorUtils;
+import org.apache.commons.collections.comparators.ComparatorChain;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import mondrian.calc.Calc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
@@ -29,30 +50,7 @@ import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapUtil;
 import mondrian.server.Execution;
-
 import mondrian.util.CancellationChecker;
-import org.apache.commons.collections.ComparatorUtils;
-import org.apache.commons.collections.comparators.ComparatorChain;
-
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
-
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.PriorityQueue;
-
-import static mondrian.olap.Util.newInternal;
-import static mondrian.olap.fun.FunUtil.DoubleNull;
-import static mondrian.olap.fun.FunUtil.IntegerNull;
-import static org.eigenbase.xom.XOMUtil.discard;
 
 @SuppressWarnings( "squid:S4274" )
 public class Sorter {
@@ -424,7 +422,9 @@ public class Sorter {
     return tupleList;
   }
 
-  @VisibleForTesting
+  /*
+   * ONLY VisibleForTesting
+   */
   static void applySortSpecToComparator( Evaluator evaluator, int arity, ComparatorChain chain,
                                          SortKeySpec key ) {
     boolean brk = key.getDirection().brk;

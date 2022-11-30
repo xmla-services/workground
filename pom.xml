@@ -93,9 +93,8 @@
     <osgi.function.version>1.2.0</osgi.function.version>
     <osgi.promise.version>1.2.0</osgi.promise.version>
     <org.osgi.test.version>1.1.0</org.osgi.test.version>
-
+    <caffeine.version>3.1.2</caffeine.version>
     <!-- Original Mondrian -->
-    <guava.version>17.0</guava.version>
 
     <olap4j.version>1.2.0</olap4j.version>
     <eigenbase-properties.version>1.1.2</eigenbase-properties.version>
@@ -678,10 +677,12 @@
       </dependency>
 
       <dependency>
-        <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
-        <version>${guava.version}</version>
+        <groupId>com.github.ben-manes.caffeine</groupId>
+        <artifactId>caffeine</artifactId>
+        <version>${caffeine.version}</version>
+        <scope>compile</scope>
       </dependency>
+
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-math3</artifactId>

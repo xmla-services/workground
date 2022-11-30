@@ -1,13 +1,17 @@
 /*
-// This software is subject to the terms of the Eclipse Public License v1.0
-// Agreement, available at the following URL:
-// http://www.eclipse.org/legal/epl-v10.html.
-// You must accept the terms of that agreement to use this software.
-//
-// Copyright (C) 2001-2005 Julian Hyde
-// Copyright (C) 2005-2021 Hitachi Vantara and others
-// All Rights Reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (C) 2001-2005 Julian Hyde
+ * Copyright (C) 2005-2021 Hitachi Vantara and others
+ * All Rights Reserved.
+ * 
+ * Contributors:
+ *   SmartCity Jena, Stefan Bischof - removements- use plain jdk8++ java
+ * 
+ */
 package mondrian.olap;
 
 import java.io.BufferedReader;
@@ -35,7 +39,31 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.Random;
+import java.util.RandomAccess;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.Timer;
+import java.util.TreeSet;
+import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -51,7 +79,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import com.google.common.collect.Ordering;
 import org.apache.commons.collections.keyvalue.AbstractMapEntry;
 import org.apache.commons.vfs2.FileContent;
 import org.apache.commons.vfs2.FileObject;
@@ -61,7 +88,6 @@ import org.apache.commons.vfs2.VFS;
 import org.apache.commons.vfs2.provider.http.HttpFileObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.Olap4jUtil;
 import org.olap4j.mdx.IdentifierNode;
@@ -186,19 +212,6 @@ public class Util extends XOMUtil {
 
     public static boolean isNull(Object o) {
         return o == null || o == nullValue;
-    }
-
-    /**
-     * Returns whether a list is strictly sorted.
-     *
-     * @param list List
-     * @return whether list is sorted
-     */
-    public static <T extends Comparable> boolean isSorted(List<T> list) {
-        if (list == null || list.size() <= 1) {
-            return true;
-        }
-        return Ordering.natural().nullsLast().isOrdered(list);
     }
 
     /**

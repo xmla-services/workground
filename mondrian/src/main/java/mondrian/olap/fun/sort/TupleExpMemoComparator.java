@@ -1,5 +1,4 @@
 /*
- *
  * This software is subject to the terms of the Eclipse Public License v1.0
  * Agreement, available at the following URL:
  * http://www.eclipse.org/legal/epl-v10.html.
@@ -9,25 +8,26 @@
  * Copyright (C) 2005-2020 Hitachi Vantara and others
  * All Rights Reserved.
  *
- *
+ * Contributors:
+ *   SmartCity Jena, Stefan Bischof - switch Cache to caffeine
  */
 
 package mondrian.olap.fun.sort;
 
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.util.concurrent.UncheckedExecutionException;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+
 import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Member;
 import mondrian.olap.Util;
 import mondrian.rolap.agg.CellRequestQuantumExceededException;
 import mondrian.util.CancellationChecker;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Collectors;
 
 /**
  * Supports comparison of tuples, caching results such that .compare calls involving the same tuple do not result in
@@ -38,10 +38,8 @@ import java.util.stream.Collectors;
  * require evaluation of the complete cross product.
  */
 
-// guava cache api was marked unstable in 17.0, but is consistent with the current, stable api
-@SuppressWarnings( "UnstableApiUsage" )
 abstract class TupleExpMemoComparator extends TupleComparator.TupleExpComparator {
-  Cache<List<Member>, Object> valueCache = CacheBuilder.newBuilder().maximumSize( 100000 ).build();
+  Cache<List<Member>, Object> valueCache = Caffeine.newBuilder().maximumSize( 100000 ).build();
 
   private int[] dependentHierarchiesIndices;
   private int count = 0;
@@ -53,8 +51,8 @@ abstract class TupleExpMemoComparator extends TupleComparator.TupleExpComparator
   // applies the Calc to a tuple, memorizing results
   protected Object eval( List<Member> key ) {
     try {
-      return valueCache.get( key, () -> evaluateCalc( key ) );
-    } catch ( UncheckedExecutionException e ) {
+      return valueCache.get( key, (k) -> evaluateCalc( k ) );
+    } catch ( Exception e ) {
       if ( e.getCause() instanceof CellRequestQuantumExceededException ) {
         // this exception can occur if evaluation required greater than
         // mondrian.result.limit batched cells.  Throwing the exception
@@ -64,9 +62,7 @@ abstract class TupleExpMemoComparator extends TupleComparator.TupleExpComparator
         throw CellRequestQuantumExceededException.INSTANCE;
       }
       throw e;
-    } catch ( ExecutionException e ) {
-      return evaluateCalc( key );
-    }
+    } 
   }
 
   private List<Member> dependentMembers( List<Member> tuple ) {

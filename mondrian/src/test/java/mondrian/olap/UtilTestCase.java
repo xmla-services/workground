@@ -1622,13 +1622,7 @@ public class UtilTestCase{
         }
     }
 
-    @Test
-    public void testIsTested()  {
-        assertTrue(Util.isSorted(List.of(1,2,3,4)));
-        assertFalse(Util.isSorted(List.of(1,2,5,4)));
-        assertTrue(Util.isSorted(List.of("a","b","c","d")));
-        assertFalse(Util.isSorted(List.of("a","b","d","c")));        
-    }
+
 }
 
 // End UtilTestCase.java
