@@ -68,10 +68,6 @@
       <artifactId>commons-vfs2</artifactId>
     </dependency>
     <dependency>
-      <groupId>javax.validation</groupId>
-      <artifactId>validation-api</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.repackage.eigenbase.xom</artifactId>
     </dependency>
