@@ -11,8 +11,8 @@
 */
 package mondrian.gui;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -30,7 +30,7 @@ import java.util.concurrent.ConcurrentSkipListMap;
  */
 public class JdbcMetaData {
 
-    private static final Logger LOGGER = LogManager.getLogger(JdbcMetaData.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JdbcMetaData.class);
 
     // E.g. "org.postgresql.Driver"
     String jdbcDriverClassName = null;
@@ -165,7 +165,7 @@ public class JdbcMetaData {
             conn.close();
             LOGGER.debug("JDBC connection CLOSE");
         } catch (Exception e) {
-            LOGGER.error(e);
+            LOGGER.error("",e);
         }
         conn = null;
     }

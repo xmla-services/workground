@@ -16,11 +16,11 @@ import mondrian.rolap.RolapUtil;
 import mondrian.spi.Dialect;
 import mondrian.spi.DialectManager;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import org.apache.logging.log4j.core.appender.ConsoleAppender;
 import org.apache.logging.log4j.core.layout.PatternLayout;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -98,7 +98,7 @@ public class MondrianFoodMartLoader {
     // Constants
 
     private static final Logger LOGGER =
-        LogManager.getLogger(MondrianFoodMartLoader.class);
+        LoggerFactory.getLogger(MondrianFoodMartLoader.class);
     private static final String nl = Util.nl;
 
     // Fields

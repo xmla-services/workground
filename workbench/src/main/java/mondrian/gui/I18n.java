@@ -11,8 +11,8 @@
 
 package mondrian.gui;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,7 +24,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 
 public class I18n {
-    private static final Logger LOGGER = LogManager.getLogger(I18n.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(I18n.class);
 
     // Default to english
     private Locale currentLocale = Locale.ENGLISH;

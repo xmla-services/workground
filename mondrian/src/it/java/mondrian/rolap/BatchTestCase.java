@@ -33,8 +33,8 @@ import mondrian.test.FoodMartTestCase;
 import mondrian.test.SqlPattern;
 import mondrian.test.TestContext;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.eigenbase.util.property.IntegerProperty;
 
@@ -907,7 +907,7 @@ public class BatchTestCase extends FoodMartTestCase {
 
         getConnection().getCacheControl(null).flushSchemaCache();
         try {
-            LogManager.getLogger(getClass()).debug("*** Native: " + mdx);
+            LoggerFactory.getLogger(getClass()).debug("*** Native: " + mdx);
             boolean reuseConnection = !freshConnection;
             Connection con =
                 getTestContext()
@@ -939,7 +939,7 @@ public class BatchTestCase extends FoodMartTestCase {
             }
             con.close();
 
-            LogManager.getLogger(getClass()).debug("*** Interpreter: " + mdx);
+            LoggerFactory.getLogger(getClass()).debug("*** Interpreter: " + mdx);
 
             getConnection().getCacheControl(null).flushSchemaCache();
             con = getTestContext().withSchemaPool(false).getConnection();

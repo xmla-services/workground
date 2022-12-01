@@ -17,8 +17,8 @@ import mondrian.test.DiffRepository;
 import mondrian.test.TestContext;
 import mondrian.xmla.DataSourcesConfig;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.eigenbase.xom.*;
 
@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
 public class XmlaTestContext {
 
     private static final Logger LOGGER =
-        LogManager.getLogger(XmlaTestContext.class);
+        LoggerFactory.getLogger(XmlaTestContext.class);
 
     public static final String CATALOG_NAME = "FoodMart";
     public static final String DATASOURCE_NAME = "FoodMart";

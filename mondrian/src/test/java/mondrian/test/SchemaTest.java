@@ -16,9 +16,9 @@ import mondrian.rolap.RolapSchema;
 import mondrian.rolap.aggmatcher.AggTableManager;
 import mondrian.spi.PropertyFormatter;
 import mondrian.util.Bug;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.spi.LoggerContext;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+//import org.apache.logging.log4j.spi.LoggerContext;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -1709,7 +1709,7 @@ public class SchemaTest {
         if (!MondrianProperties.instance().ReadAggregates.get()) {
             return;
         }
-        final Logger logger = LogManager.getLogger(AggTableManager.class);
+        final Logger logger = LoggerFactory.getLogger(AggTableManager.class);
         //propSaver.setAtLeast(logger, org.apache.logging.log4j.Level.WARN);
 
         final StringWriter sw = new StringWriter();
@@ -1790,7 +1790,7 @@ public class SchemaTest {
         if (!MondrianProperties.instance().ReadAggregates.get()) {
             return;
         }
-        final Logger logger = LogManager.getLogger(AggTableManager.class);
+        final Logger logger = LoggerFactory.getLogger(AggTableManager.class);
         //propSaver.setAtLeast(logger, org.apache.logging.log4j.Level.WARN);
 
         final StringWriter sw = new StringWriter();
@@ -1802,7 +1802,7 @@ public class SchemaTest {
         //        .setTarget(sw)
         //        .build();
 
-        LoggerContext ctx = (LoggerContext) LogManager.getContext( false );
+//        LoggerContext ctx = (LoggerContext) LogManager.getContext( false );
         //Configuration config = ctx.getConfiguration();
         //LoggerConfig loggerConfig = config.getLoggerConfig( logger.getName() );
         //loggerConfig.addAppender( appender, org.apache.logging.log4j.Level.ALL, null );

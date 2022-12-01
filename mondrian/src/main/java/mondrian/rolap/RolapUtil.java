@@ -26,8 +26,8 @@ import org.eclipse.daanse.engine.api.Context;
 
 import mondrian.util.ClassResolver;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.eigenbase.util.property.StringProperty;
 
@@ -45,14 +45,14 @@ import javax.sql.DataSource;
  * @since 22 December, 2001
  */
 public class RolapUtil {
-    public static final Logger MDX_LOGGER = LogManager.getLogger("mondrian.mdx");
-    public static final Logger SQL_LOGGER = LogManager.getLogger("mondrian.sql");
+    public static final Logger MDX_LOGGER = LoggerFactory.getLogger("mondrian.mdx");
+    public static final Logger SQL_LOGGER = LoggerFactory.getLogger("mondrian.sql");
     public static final Logger MONITOR_LOGGER =
-        LogManager.getLogger("mondrian.server.monitor");
+        LoggerFactory.getLogger("mondrian.server.monitor");
     public static final Logger PROFILE_LOGGER =
-        LogManager.getLogger("mondrian.profile");
+        LoggerFactory.getLogger("mondrian.profile");
 
-    static final Logger LOGGER = LogManager.getLogger(RolapUtil.class);
+    static final Logger LOGGER = LoggerFactory.getLogger(RolapUtil.class);
 
     /**
      * Special cell value indicates that the value is not in cache yet.

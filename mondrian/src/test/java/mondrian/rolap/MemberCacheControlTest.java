@@ -17,7 +17,7 @@ import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.test.*;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

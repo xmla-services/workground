@@ -13,8 +13,8 @@ package mondrian.rolap;
 import java.util.Collection;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.apache.logging.log4j.core.LogEvent;
 import org.eigenbase.util.property.BooleanProperty;
 import org.eigenbase.util.property.StringProperty;
@@ -2944,7 +2944,7 @@ public class NonEmptyTest extends BatchTestCase {
 
     // set up log4j listener to detect alerts
     TestAppender alertListener = new TestAppender();
-    final Logger rolapUtilLogger = LogManager.getLogger( RolapUtil.class );
+    final Logger rolapUtilLogger = LoggerFactory.getLogger( RolapUtil.class );
     propSaver.setAtLeast( rolapUtilLogger, org.apache.logging.log4j.Level.WARN );
     Util.addAppender( alertListener, rolapUtilLogger, null );
     String expectedMessage =

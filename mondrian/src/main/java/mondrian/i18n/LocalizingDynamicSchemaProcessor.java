@@ -14,8 +14,8 @@ import mondrian.olap.Util;
 import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.InputStream;
 import java.util.Locale;
@@ -35,7 +35,7 @@ public class LocalizingDynamicSchemaProcessor
     implements DynamicSchemaProcessor
 {
     private static final Logger LOGGER =
-        LogManager.getLogger(LocalizingDynamicSchemaProcessor.class);
+        LoggerFactory.getLogger(LocalizingDynamicSchemaProcessor.class);
 
     /** Creates a new instance of LocalizingDynamicSchemaProcessor */
     public LocalizingDynamicSchemaProcessor() {

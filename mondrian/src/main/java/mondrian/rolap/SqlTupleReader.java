@@ -41,8 +41,8 @@ import mondrian.server.monitor.SqlStatementEvent;
 import mondrian.util.CancellationChecker;
 import mondrian.util.Pair;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.engine.api.Context;
 
@@ -91,7 +91,7 @@ import static mondrian.olap.fun.sort.Sorter.hierarchizeTupleList;
  */
 public class SqlTupleReader implements TupleReader {
   private static final Logger LOGGER =
-    LogManager.getLogger( SqlTupleReader.class );
+    LoggerFactory.getLogger( SqlTupleReader.class );
   protected final TupleConstraint constraint;
   List<TargetBase> targets = new ArrayList<TargetBase>();
   int maxRows = 0;

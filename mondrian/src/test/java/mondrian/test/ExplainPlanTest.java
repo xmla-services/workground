@@ -64,7 +64,7 @@ public class ExplainPlanTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testExplain(TestingContext context) throws SQLException {
-    Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
+//    Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
     //Util.setLevel( RolapUtil.PROFILE_LOGGER, Level.OFF ); // Must turn off in case test environment has enabled profiling
     OlapConnection connection = context.createOlap4jConnection();
     final OlapStatement statement = connection.createStatement();
@@ -101,7 +101,7 @@ public class ExplainPlanTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testExplainComplex(TestingContext context) throws SQLException {
-    Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
+//    Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
     //Util.setLevel( RolapUtil.PROFILE_LOGGER, Level.OFF );; // Must turn off in case test environment has enabled profiling
     OlapConnection connection = context.createOlap4jConnection();
     final OlapStatement statement = connection.createStatement();

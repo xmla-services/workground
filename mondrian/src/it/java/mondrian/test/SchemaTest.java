@@ -22,7 +22,7 @@ import mondrian.spi.Dialect;
 import mondrian.spi.PropertyFormatter;
 import mondrian.util.Bug;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.appender.WriterAppender;
@@ -30,7 +30,7 @@ import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.apache.logging.log4j.core.filter.LevelRangeFilter;
 import org.apache.logging.log4j.core.layout.PatternLayout;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.LoggerFactory;
 
 import org.olap4j.metadata.NamedList;
 
@@ -1602,7 +1602,7 @@ public class SchemaTest extends FoodMartTestCase {
         if (!MondrianProperties.instance().ReadAggregates.get()) {
             return;
         }
-        final Logger logger = LogManager.getLogger(AggTableManager.class);
+        final Logger logger = LoggerFactory.getLogger(AggTableManager.class);
         propSaver.setAtLeast(logger, org.apache.logging.log4j.Level.WARN);
 
         final StringWriter sw = new StringWriter();
@@ -1681,7 +1681,7 @@ public class SchemaTest extends FoodMartTestCase {
         if (!MondrianProperties.instance().ReadAggregates.get()) {
             return;
         }
-        final Logger logger = LogManager.getLogger(AggTableManager.class);
+        final Logger logger = LoggerFactory.getLogger(AggTableManager.class);
         propSaver.setAtLeast(logger, org.apache.logging.log4j.Level.WARN);
 
         final StringWriter sw = new StringWriter();

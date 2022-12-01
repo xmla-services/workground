@@ -86,8 +86,8 @@ import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.VFS;
 import org.apache.commons.vfs2.provider.http.HttpFileObject;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.Olap4jUtil;
 import org.olap4j.mdx.IdentifierNode;
@@ -135,7 +135,7 @@ public class Util extends XOMUtil {
 
     public static final String nl = System.getProperty("line.separator");
 
-    private static final Logger LOGGER = LogManager.getLogger(Util.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Util.class);
 
     /**
      * Placeholder which indicates a value NULL.

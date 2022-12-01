@@ -14,8 +14,8 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.eclipse.daanse.engine.api.Context;
 
 import mondrian.olap.Util;
@@ -28,7 +28,7 @@ import mondrian.spi.StatisticsProvider;
  */
 public class JdbcStatisticsProvider implements StatisticsProvider {
     private static final Logger LOG =
-        LogManager.getLogger(JdbcStatisticsProvider.class);
+        LoggerFactory.getLogger(JdbcStatisticsProvider.class);
     public long getTableCardinality(
         Context context,
         String catalog,

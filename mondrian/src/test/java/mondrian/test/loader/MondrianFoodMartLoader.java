@@ -15,7 +15,7 @@ import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
 //import mondrian.spi.DialectManager;
 
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.LoggerFactory;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.slf4j.Logger;
@@ -98,7 +98,7 @@ public class MondrianFoodMartLoader {
     // Constants
 
     private static final Logger LOGGER =
-            (Logger)LogManager.getLogger(MondrianFoodMartLoader.class);
+            (Logger)LoggerFactory.getLogger(MondrianFoodMartLoader.class);
     private static final String nl = Util.nl;
 
     // Fields

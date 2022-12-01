@@ -18,8 +18,8 @@ import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.server.Locus;
 import mondrian.util.Pair;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
 import java.io.PrintWriter;
@@ -39,7 +39,7 @@ public class AggregationManager extends RolapAggregationManager {
         MondrianProperties.instance();
 
     private static final Logger LOGGER =
-        LogManager.getLogger(AggregationManager.class);
+        LoggerFactory.getLogger(AggregationManager.class);
 
     public final SegmentCacheManager cacheMgr;
 

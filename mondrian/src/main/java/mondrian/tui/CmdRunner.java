@@ -19,10 +19,10 @@ import mondrian.olap.type.TypeUtil;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import org.apache.logging.log4j.spi.LoggerContext;
 import org.apache.logging.log4j.spi.LoggerRegistry;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.LoggerFactory;
 import org.apache.logging.log4j.Level;
 
 import org.eigenbase.util.property.Property;

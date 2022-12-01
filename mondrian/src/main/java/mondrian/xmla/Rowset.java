@@ -13,8 +13,8 @@ package mondrian.xmla;
 
 import mondrian.olap.Util;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.olap4j.OlapConnection;
 import org.olap4j.metadata.Catalog;
@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
  * @since May 2, 2003
  */
 abstract class Rowset implements XmlaConstants {
-    protected static final Logger LOGGER = LogManager.getLogger(Rowset.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(Rowset.class);
 
     protected final RowsetDefinition rowsetDefinition;
     protected final Map<String, Object> restrictions;

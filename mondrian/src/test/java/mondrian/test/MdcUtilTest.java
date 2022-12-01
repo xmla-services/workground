@@ -11,9 +11,9 @@ package mondrian.test;
 
 import mondrian.olap.Connection;
 import mondrian.rolap.RolapUtil;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.ThreadContext;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+//import org.apache.logging.log4j.ThreadContext;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -36,7 +36,7 @@ import static org.opencube.junit5.TestUtil.flushSchemaCache;
 @Disabled
 public class MdcUtilTest {
 
-  private static Logger rolapUtilLogger = LogManager.getLogger( RolapUtil.class );
+  private static Logger rolapUtilLogger = LoggerFactory.getLogger( RolapUtil.class );
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
@@ -45,7 +45,7 @@ public class MdcUtilTest {
     Connection connection = context.createConnection();
     flushSchemaCache(connection);
 
-    ThreadContext.put( "sessionName", "hello-world" );
+//    ThreadContext.put( "sessionName", "hello-world" );
     StringWriter writer = new StringWriter();
 
     //final Appender appender =

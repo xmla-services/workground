@@ -39,8 +39,8 @@ import mondrian.util.BlockingHashMap;
 import mondrian.util.MDCUtil;
 import mondrian.util.Pair;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -296,7 +296,7 @@ public class SegmentCacheManager {
   private final SegmentCacheIndexRegistry indexRegistry;
 
   private static final Logger LOGGER =
-    LogManager.getLogger( AggregationManager.class );
+    LoggerFactory.getLogger( AggregationManager.class );
   private final MondrianServer server;
 
 
@@ -1053,7 +1053,10 @@ public class SegmentCacheManager {
               event.acceptWithoutResponse( handler );
 
               // Broadcast the event to anyone who is interested.
-              RolapUtil.MONITOR_LOGGER.debug( message );
+              RolapUtil.MONITOR_LOGGER.debug( message.toString() );
+              //TODO: here had log4j Logger been used to broadcast the full message.
+              //if necessary we should use eventadmin or something to broadcast events
+              
             }
           } catch ( Exception e ) {
             LOGGER.error( e.getMessage(), e );

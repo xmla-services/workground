@@ -15,8 +15,8 @@ import mondrian.tui.XmlaSupport;
 import mondrian.util.Pair;
 import mondrian.xmla.DataSourcesConfig;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +42,7 @@ public class DynamicContentFinder
     protected DataSourcesConfig.DataSources dataSources;
 
     private static final Logger LOGGER =
-        LogManager.getLogger(MondrianServer.class);
+        LoggerFactory.getLogger(MondrianServer.class);
 
     private final Timer timer;
 

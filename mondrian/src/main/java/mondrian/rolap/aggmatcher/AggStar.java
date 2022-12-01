@@ -23,8 +23,8 @@ import mondrian.rolap.sql.SqlQuery;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.engine.api.Context;
@@ -58,7 +58,7 @@ import javax.sql.DataSource;
  * @author Richard M. Emberson
  */
 public class AggStar {
-    private static final Logger LOGGER = LogManager.getLogger(AggStar.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AggStar.class);
     private boolean hasIgnoredColumns;
 
     static Logger getLogger() {
@@ -464,7 +464,7 @@ public class AggStar {
     }
 
     private static final Logger JOIN_CONDITION_LOGGER =
-            LogManager.getLogger(AggStar.Table.JoinCondition.class);
+            LoggerFactory.getLogger(AggStar.Table.JoinCondition.class);
 
     public boolean hasIgnoredColumns() {
         return hasIgnoredColumns;

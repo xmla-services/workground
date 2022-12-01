@@ -23,8 +23,8 @@ import mondrian.server.Statement;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import mondrian.util.*;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -67,7 +67,7 @@ import java.util.*;
  * @since 10 August, 2001
  */
 public class RolapEvaluator implements Evaluator {
-  private static final Logger LOGGER = LogManager.getLogger( RolapEvaluator.class );
+  private static final Logger LOGGER = LoggerFactory.getLogger( RolapEvaluator.class );
 
   /**
    * Dummy value to represent null results in the expression cache.

@@ -10,8 +10,8 @@
 */
 package mondrian.util;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.dom4j.io.SAXReader;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.SAXException;
@@ -31,7 +31,7 @@ import javax.xml.parsers.SAXParserFactory;
  */
 public class XmlParserFactoryProducer {
     private static final Logger logger =
-        LogManager.getLogger(XmlParserFactoryProducer.class);
+        LoggerFactory.getLogger(XmlParserFactoryProducer.class);
     /**
      * Creates an instance of {@link DocumentBuilderFactory} class
      * with enabled {@link XMLConstants#FEATURE_SECURE_PROCESSING} property.

@@ -13,9 +13,9 @@ import mondrian.olap.*;
 import mondrian.rolap.RolapConnection;
 import mondrian.test.FoodMartTestCase;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.LoggerFactory;
 
 import java.io.StringWriter;
 import java.sql.Connection;
@@ -41,7 +41,7 @@ public class AggGenTest extends FoodMartTestCase {
         testCallingLoadColumnsInAddCollapsedColumnOrAddzSpecialCollapsedColumn()
         throws Exception
     {
-        Logger logger = LogManager.getLogger(AggGen.class);
+        Logger logger = LoggerFactory.getLogger(AggGen.class);
         StringWriter writer = new StringWriter();
 
         final Appender appender =

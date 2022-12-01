@@ -31,8 +31,8 @@ import mondrian.udf.CurrentDateMemberExactUdf;
 import mondrian.udf.CurrentDateMemberUdf;
 import mondrian.udf.CurrentDateStringUdf;
 import mondrian.util.Bug;
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eigenbase.xom.StringEscaper;
 
 import java.io.File;
@@ -52,7 +52,7 @@ import java.util.concurrent.CancellationException;
  */
 public class FunctionTest extends FoodMartTestCase {
 
-  private static final Logger LOGGER = LogManager.getLogger( FunctionTest.class );
+  private static final Logger LOGGER = LoggerFactory.getLogger( FunctionTest.class );
   private static final int NUM_EXPECTED_FUNCTIONS = 329;
 
   private static final String months =

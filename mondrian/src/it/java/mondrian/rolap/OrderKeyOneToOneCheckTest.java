@@ -10,8 +10,8 @@
 */
 package mondrian.rolap;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import mondrian.olap.Util;
 import mondrian.test.FoodMartTestCase;
@@ -25,8 +25,8 @@ public class OrderKeyOneToOneCheckTest extends FoodMartTestCase {
 
   @Override
   protected void setUp() throws Exception {
-    Logger memberSourceLogger = LogManager.getLogger(SqlMemberSource.class);
-    Logger sqlReaderLogger = LogManager.getLogger(SqlTupleReader.class);
+    Logger memberSourceLogger = LoggerFactory.getLogger(SqlMemberSource.class);
+    Logger sqlReaderLogger = LoggerFactory.getLogger(SqlTupleReader.class);
 
     memberSourceAppender = new TestAppender();
     sqlReaderAppender = new TestAppender();
@@ -36,8 +36,8 @@ public class OrderKeyOneToOneCheckTest extends FoodMartTestCase {
 
   @Override
   protected void tearDown() throws Exception {
-    Logger memberSourceLogger = LogManager.getLogger(SqlMemberSource.class);
-    Logger sqlReaderLogger = LogManager.getLogger(SqlTupleReader.class);
+    Logger memberSourceLogger = LoggerFactory.getLogger(SqlMemberSource.class);
+    Logger sqlReaderLogger = LoggerFactory.getLogger(SqlTupleReader.class);
     Util.removeAppender( memberSourceAppender, memberSourceLogger );
     Util.removeAppender( sqlReaderAppender, sqlReaderLogger );
   }

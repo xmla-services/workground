@@ -22,8 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.engine.api.Context;
@@ -68,7 +68,7 @@ class SqlMemberSource
     implements MemberReader, SqlTupleReader.MemberBuilder
 {
     private static final Logger LOGGER =
-        LogManager.getLogger(SqlMemberSource.class);
+        LoggerFactory.getLogger(SqlMemberSource.class);
     private final SqlConstraintFactory sqlConstraintFactory =
         SqlConstraintFactory.instance();
     private final RolapHierarchy hierarchy;

@@ -20,7 +20,7 @@ import mondrian.spi.MemberFormatter;
 import mondrian.spi.PropertyFormatter;
 import mondrian.spi.*;
 
-import org.apache.logging.log4j.ThreadContext;
+//import org.apache.logging.log4j.ThreadContext;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.*;
@@ -1492,73 +1492,6 @@ public class UdfTest {
             member.getPropertyFormattedValue(property));
     }
 
-    private static String MDC_KEY = "Chunky Bacon!";
-    private static String MDC_OBJECT = new String();
-
-    /**
-     * This is a test for
-     * <a href="http://jira.pentaho.com/browse/MONDRIAN-994">MONDRIAN-994</a>.
-     * It checks that the MDC logging context is passed through all the
-     * threads.
-     */
-    @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMdc(TestingContext context) {
-
-        udfTestContext(context,
-                "<UserDefinedFunction name=\"Mdc\" className=\""
-                + MdcUdf.class.getName()
-                + "\"/>\n");
-        ThreadContext.put(MDC_KEY, MDC_OBJECT);
-        try {
-            executeQuery(context.createConnection(),
-                "with member [Measures].[MDC] as 'Mdc([Measures].[Unit Sales])' "
-                + "select {[Measures].[MDC]} on columns from [Sales]");
-        } finally {
-            ThreadContext.remove(MDC_KEY);
-        }
-    }
-
-    // ~ Inner classes --------------------------------------------------------
-
-    /**
-     * A simple UDF that checks the object inside of the MDC logging context.
-     */
-    public static class MdcUdf implements UserDefinedFunction {
-        public String getName() {
-            return "Mdc";
-        }
-
-        public String getDescription() {
-            return "";
-        }
-
-        public Syntax getSyntax() {
-            return Syntax.Function;
-        }
-
-        public Type getReturnType(Type[] parameterTypes) {
-            return new NumericType();
-        }
-
-        public Type[] getParameterTypes() {
-            return new Type[] {new NumericType()};
-        }
-
-        public Object execute(Evaluator evaluator, Argument[] arguments) {
-            Map<String, String> context = ThreadContext.getContext();
-            if (!context.containsKey(MDC_KEY)
-                || context.get(MDC_KEY) != MDC_OBJECT)
-            {
-                fail();
-            }
-            return arguments[0].evaluateScalar(evaluator);
-        }
-
-        public String[] getReservedWords() {
-            return null;
-        }
-    }
 
     /**
      * A simple user-defined function which adds one to its argument.

@@ -13,8 +13,8 @@ import mondrian.mdx.*;
 
 import org.apache.commons.collections.*;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -40,7 +40,7 @@ import static org.apache.commons.collections.CollectionUtils.filter;
  *
  */
 public final class IdBatchResolver {
-    static final Logger LOGGER = LogManager.getLogger(IdBatchResolver.class);
+    static final Logger LOGGER = LoggerFactory.getLogger(IdBatchResolver.class);
 
     private final Query query;
     private final Formula[] formulas;

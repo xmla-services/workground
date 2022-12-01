@@ -19,8 +19,8 @@ import mondrian.olap.Evaluator;
 import mondrian.olap.Member;
 import mondrian.olap.Util;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -33,7 +33,7 @@ import java.util.*;
  */
 abstract class MemberComparator implements Comparator<Member> {
   private static final Logger LOGGER =
-    LogManager.getLogger( MemberComparator.class );
+    LoggerFactory.getLogger( MemberComparator.class );
   final Evaluator evaluator;
   final Calc exp;
 

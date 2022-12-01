@@ -14,8 +14,8 @@ import mondrian.olap.Query;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnection;
 import mondrian.test.PropertySaver5;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -61,7 +61,7 @@ public class AggGenTest {
         testCallingLoadColumnsInAddCollapsedColumnOrAddzSpecialCollapsedColumn(TestingContext context)
         throws Exception
     {
-        Logger logger = LogManager.getLogger(AggGen.class);
+        Logger logger = LoggerFactory.getLogger(AggGen.class);
         StringWriter writer = new StringWriter();
 
         //TODO use log in tests?

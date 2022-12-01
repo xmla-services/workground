@@ -17,8 +17,8 @@ import mondrian.resource.MondrianResource;
 import mondrian.rolap.*;
 import mondrian.rolap.sql.SqlQuery;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -42,7 +42,7 @@ import java.util.*;
 abstract class Recognizer {
 
     private static final MondrianResource mres = MondrianResource.instance();
-    private static final Logger LOGGER = LogManager.getLogger(Recognizer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Recognizer.class);
     /**
      * This is used to wrap column name matching rules.
      */

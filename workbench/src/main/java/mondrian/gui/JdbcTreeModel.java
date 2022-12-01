@@ -11,8 +11,8 @@
 
 package mondrian.gui;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.*;
 import java.util.*;
@@ -25,7 +25,7 @@ import javax.swing.tree.TreePath;
  */
 public class JdbcTreeModel implements javax.swing.tree.TreeModel {
 
-    private static final Logger LOGGER = LogManager.getLogger(JdbcTreeModel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JdbcTreeModel.class);
 
     private Vector treeModelListeners = new Vector();
     Connection connection;

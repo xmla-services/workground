@@ -30,8 +30,8 @@ import java.util.PriorityQueue;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.collections.comparators.ComparatorChain;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import mondrian.calc.Calc;
 import mondrian.calc.TupleCollections;
@@ -58,7 +58,7 @@ public class Sorter {
   private static final String SORT_TIMING_NAME = "Sort";
   private static final String SORT_EVAL_TIMING_NAME = "EvalForSort";
 
-  private static final Logger LOGGER = LogManager.getLogger( Sorter.class );
+  private static final Logger LOGGER = LoggerFactory.getLogger( Sorter.class );
 
   /**
    * For each member in a list, evaluates an expression and creates a map from members to values.

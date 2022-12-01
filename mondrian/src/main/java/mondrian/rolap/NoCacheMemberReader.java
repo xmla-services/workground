@@ -19,8 +19,8 @@ import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
 import mondrian.util.ConcatenableList;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -33,7 +33,7 @@ import java.util.*;
  */
 public class NoCacheMemberReader implements MemberReader, MemberCache {
     private static final Logger LOGGER =
-        LogManager.getLogger(NoCacheMemberReader.class);
+        LoggerFactory.getLogger(NoCacheMemberReader.class);
 
     private final SqlConstraintFactory sqlConstraintFactory =
         SqlConstraintFactory.instance();

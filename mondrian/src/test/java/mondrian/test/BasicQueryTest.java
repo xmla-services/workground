@@ -26,7 +26,7 @@ import mondrian.spi.impl.JdbcStatisticsProvider;
 import mondrian.spi.impl.SqlStatisticsProvider;
 import mondrian.spi.impl.SqlStatisticsProviderNew;
 import mondrian.util.Bug;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eigenbase.util.property.StringProperty;

@@ -16,8 +16,8 @@ import mondrian.olap.type.Type;
 import mondrian.spi.UserDefinedFunction;
 import mondrian.util.Bug;
 import org.apache.commons.collections.ComparatorUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -48,7 +48,7 @@ public class PerformanceTest {
    * Certain tests are enabled only if logging is enabled at debug level or higher.
    */
   public static final Logger LOGGER =
-    LogManager.getLogger( PerformanceTest.class );
+    LoggerFactory.getLogger( PerformanceTest.class );
 
   private PropertySaver5 propSaver;
 

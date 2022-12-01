@@ -20,8 +20,8 @@ import mondrian.udf.CurrentDateMemberExactUdf;
 import mondrian.udf.CurrentDateMemberUdf;
 import mondrian.udf.CurrentDateStringUdf;
 import mondrian.util.Bug;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.eigenbase.xom.StringEscaper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,7 +64,7 @@ import static org.opencube.junit5.TestUtil.*;
  */
 public class FunctionTest {//extends FoodMartTestCase {
 
-  private static final Logger LOGGER = LogManager.getLogger( FunctionTest.class );
+  private static final Logger LOGGER = LoggerFactory.getLogger( FunctionTest.class );
   private static final int NUM_EXPECTED_FUNCTIONS = 329;
 
   private static final String[] AllHiers = {

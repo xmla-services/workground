@@ -9,8 +9,8 @@
 */
 package mondrian.olap;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 class UnionRoleImpl implements Role {
     private static final Logger LOGGER =
-        LogManager.getLogger(UnionRoleImpl.class);
+        LoggerFactory.getLogger(UnionRoleImpl.class);
     private final List<Role> roleList;
 
     /**
