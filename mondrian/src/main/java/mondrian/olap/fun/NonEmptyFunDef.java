@@ -20,11 +20,11 @@ import mondrian.util.CancellationChecker;
 
 import java.util.*;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 class NonEmptyFunDef extends FunDefBase {
-    private static final Logger LOGGER = LogManager.getLogger( NonEmptyFunDef.class );
+    private static final Logger LOGGER = LoggerFactory.getLogger( NonEmptyFunDef.class );
     static final ReflectiveMultiResolver Resolver =
             new ReflectiveMultiResolver(
                     "NonEmpty",

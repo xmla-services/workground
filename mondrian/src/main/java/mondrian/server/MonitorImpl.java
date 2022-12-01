@@ -16,8 +16,8 @@ import mondrian.server.monitor.*;
 import mondrian.server.monitor.MonitorMXBean;
 import mondrian.util.*;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -61,7 +61,7 @@ import java.util.concurrent.BlockingQueue;
  * </ul>
  */
 class MonitorImpl implements Monitor, MonitorMXBean {
-  private static final Logger LOGGER = LogManager.getLogger( MonitorImpl.class );
+  private static final Logger LOGGER = LoggerFactory.getLogger( MonitorImpl.class );
   private final Handler handler = new Handler();
 
   protected static final Util.MemoryInfo MEMORY_INFO = Util.getMemoryInfo();
@@ -489,7 +489,7 @@ class MonitorImpl implements Monitor, MonitorMXBean {
 
       // Since the connection info will no longer be in the table,
       // broadcast the final info to anyone who is interested.
-      RolapUtil.MONITOR_LOGGER.debug( conn.fix() );
+      RolapUtil.MONITOR_LOGGER.debug( "",conn.fix() );
       return null;
     }
 
@@ -529,7 +529,7 @@ class MonitorImpl implements Monitor, MonitorMXBean {
 
       // Since the statement info will no longer be in the table,
       // broadcast the final info to anyone who is interested.
-      RolapUtil.MONITOR_LOGGER.debug( stmt.fix() );
+      RolapUtil.MONITOR_LOGGER.debug("", stmt.fix() );
       return null;
     }
 
@@ -594,7 +594,7 @@ class MonitorImpl implements Monitor, MonitorMXBean {
 
       // Since the execution info will no longer be in the table,
       // broadcast the final info to anyone who is interested.
-      RolapUtil.MONITOR_LOGGER.debug( exec.fix() );
+      RolapUtil.MONITOR_LOGGER.debug( "",exec.fix() );
       return null;
     }
 
@@ -728,7 +728,7 @@ class MonitorImpl implements Monitor, MonitorMXBean {
 
       // Since the SQL statement info will no longer be in the table,
       // broadcast the final info to anyone who is interested.
-      RolapUtil.MONITOR_LOGGER.debug( sql.fix() );
+      RolapUtil.MONITOR_LOGGER.debug( "",sql.fix() );
       return null;
     }
 
@@ -791,7 +791,7 @@ class MonitorImpl implements Monitor, MonitorMXBean {
               responseMap.put( (Command) message, result );
             } else {
               // Broadcast the event to anyone who is interested.
-              RolapUtil.MONITOR_LOGGER.debug( message );
+              RolapUtil.MONITOR_LOGGER.debug( "",message );
             }
             if ( message instanceof ShutdownCommand ) {
               LOGGER.debug( "ShutdownCommand received. Monitor thread is shutting down." );

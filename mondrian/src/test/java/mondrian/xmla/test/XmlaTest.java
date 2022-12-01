@@ -23,8 +23,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.hamcrest.MatcherAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -66,7 +66,7 @@ public class XmlaTest{
             "xxxx-xx-xxTxx:xx:xx";
 
     private static final Logger LOGGER =
-            LogManager.getLogger(XmlaTest.class);
+            LoggerFactory.getLogger(XmlaTest.class);
 
 
     private static final String DATA_SOURCE_INFO_RESPONSE_PROP =

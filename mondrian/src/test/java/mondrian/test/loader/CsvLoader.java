@@ -11,8 +11,8 @@
 
 package mondrian.test.loader;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -74,7 +74,7 @@ import java.util.List;
  * @author <a>Richard M. Emberson</a>
  */
 public class CsvLoader {
-    protected static final Logger LOGGER = LogManager.getLogger(CsvLoader.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(CsvLoader.class);
     public static final char DEFAULT_SEPARATOR = ',';
     public static final char DOUBLE_QUOTE = '"';
     public static final char SINGLE_QUOTE = '\'';

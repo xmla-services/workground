@@ -17,9 +17,9 @@ import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.test.*;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import org.apache.logging.log4j.core.Appender;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.LoggerFactory;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

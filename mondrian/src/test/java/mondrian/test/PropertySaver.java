@@ -16,7 +16,7 @@ package mondrian.test;
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.RolapUtil;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import org.eigenbase.util.property.*;
 
 import java.util.HashMap;
@@ -144,34 +144,8 @@ public class PropertySaver {
         }
     }
 
-    /**
-     * Sets a logger's level.
-     *
-     * @param logger Logger
-     * @param level Logging level
-     */
-    public void set(Logger logger, Level level) {
-        final Level prevLevel = logger.getLevel();
-        if (!originalLoggerLevels.containsKey(logger)) {
-            originalLoggerLevels.put(logger, prevLevel);
-        }
-        //Util.setLevel( logger, level );
-    }
 
-    /**
-     * Sets a logger's level to at least the given level.
-     *
-     * @param logger Logger
-     * @param level Logging level
-     */
-    public void setAtLeast(Logger logger, Level level) {
-        final Level prevLevel = logger.getLevel();
-        if (prevLevel == null
-            || !(prevLevel.compareTo(level) <= 0))
-        {
-            set(logger, level);
-        }
-    }
+   
 }
 
 // End PropertySaver.java

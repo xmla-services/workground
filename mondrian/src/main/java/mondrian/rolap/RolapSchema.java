@@ -23,8 +23,8 @@ import mondrian.util.ClassResolver;
 
 import org.apache.commons.vfs2.FileSystemException;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.eigenbase.xom.*;
 import org.eigenbase.xom.Parser;
@@ -51,7 +51,7 @@ import org.eclipse.daanse.engine.api.Context;
  * @since 26 July, 2001
  */
 public class RolapSchema implements Schema {
-    static final Logger LOGGER = LogManager.getLogger(RolapSchema.class);
+    static final Logger LOGGER = LoggerFactory.getLogger(RolapSchema.class);
 
     private static final Set<Access> schemaAllowed =
         Olap4jUtil.enumSetOf(

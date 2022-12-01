@@ -13,8 +13,8 @@ package mondrian.test;
 
 import mondrian.olap.*;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.olap4j.*;
 
@@ -32,7 +32,7 @@ import java.util.concurrent.*;
  */
 public class ConcurrentMdxTest extends FoodMartTestCase {
     private static final Logger LOGGER =
-        LogManager.getLogger(FoodMartTestCase.class);
+        LoggerFactory.getLogger(FoodMartTestCase.class);
 
     private MondrianProperties props;
 

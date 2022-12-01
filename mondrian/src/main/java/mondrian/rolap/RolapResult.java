@@ -22,8 +22,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mondrian.calc.Calc;
 import mondrian.calc.DummyExp;
@@ -92,7 +92,7 @@ import java.io.PrintWriter;
  */
 public class RolapResult extends ResultBase {
 
-  static final Logger LOGGER = LogManager.getLogger( ResultBase.class );
+  static final Logger LOGGER = LoggerFactory.getLogger( ResultBase.class );
 
   private RolapEvaluator evaluator;
   RolapEvaluator slicerEvaluator;

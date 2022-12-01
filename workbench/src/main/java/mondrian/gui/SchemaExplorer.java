@@ -12,8 +12,8 @@
 
 package mondrian.gui;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.eigenbase.xom.*;
 
@@ -40,7 +40,7 @@ public class SchemaExplorer
     extends javax.swing.JPanel
     implements TreeSelectionListener, CellEditorListener
 {
-    private static final Logger LOGGER = LogManager.getLogger(SchemaExplorer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SchemaExplorer.class);
 
     private final Workbench workbench;
     private MondrianGuiDef.Schema schema;

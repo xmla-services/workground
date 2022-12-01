@@ -11,11 +11,11 @@ package mondrian.test;
 
 import java.io.StringWriter;
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.LoggerFactory;
 
 import mondrian.olap.Util;
 import mondrian.rolap.BatchTestCase;
@@ -28,7 +28,7 @@ import mondrian.rolap.RolapUtil;
  */
 public class MdcUtilTest extends BatchTestCase {
 
-  private static Logger rolapUtilLogger = LogManager.getLogger( mondrian.rolap.RolapUtil.class );
+  private static Logger rolapUtilLogger = LoggerFactory.getLogger( mondrian.rolap.RolapUtil.class );
 
   public void testMdcContext() throws Exception {
 

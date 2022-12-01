@@ -23,7 +23,7 @@ import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import mondrian.test.SqlPattern;
 import mondrian.util.Pair;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.LoggerFactory;
 import org.eigenbase.util.property.IntegerProperty;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestingContext;
@@ -891,7 +891,7 @@ public class BatchTestCase{
 
         context.createConnection().getCacheControl(null).flushSchemaCache();
         try {
-            LogManager.getLogger(getClass()).debug("*** Native: " + mdx);
+            LoggerFactory.getLogger(getClass()).debug("*** Native: " + mdx);
             boolean reuseConnection = !freshConnection;
             //Connection con =
             //    getTestContext()
@@ -924,7 +924,7 @@ public class BatchTestCase{
             }
             con.close();
 
-            LogManager.getLogger(getClass()).debug("*** Interpreter: " + mdx);
+            LoggerFactory.getLogger(getClass()).debug("*** Interpreter: " + mdx);
 
             context.createConnection().getCacheControl(null).flushSchemaCache();
             //con = getTestContext().withSchemaPool(false).getConnection();

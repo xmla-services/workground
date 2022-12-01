@@ -26,8 +26,8 @@ import mondrian.xmla.*;
 
 import org.apache.commons.collections.map.ReferenceMap;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.olap4j.OlapConnection;
 
@@ -99,7 +99,7 @@ class MondrianServerImpl
     private boolean shutdown = false;
 
     private static final Logger LOGGER =
-        LogManager.getLogger(MondrianServerImpl.class);
+        LoggerFactory.getLogger(MondrianServerImpl.class);
 
     private static final AtomicInteger ID_GENERATOR = new AtomicInteger();
 

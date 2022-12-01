@@ -57,8 +57,8 @@ import mondrian.server.Locus;
 import mondrian.util.CancellationChecker;
 import mondrian.util.CartesianProductList;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.AbstractList;
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ import java.util.Set;
  * @since Mar 23, 2006
  */
 public class CrossJoinFunDef extends FunDefBase {
-  private static final Logger LOGGER = LogManager.getLogger( CrossJoinFunDef.class );
+  private static final Logger LOGGER = LoggerFactory.getLogger( CrossJoinFunDef.class );
 
   static final ResolverImpl Resolver = new ResolverImpl();
 

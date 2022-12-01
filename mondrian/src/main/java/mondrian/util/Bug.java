@@ -12,8 +12,8 @@ import mondrian.olap.MondrianProperties;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Holder for constants which indicate whether particular issues have been
@@ -296,7 +296,7 @@ public class Bug {
         return
             !BugMondrian759Fixed
             && dialect.getDatabaseProduct() == DatabaseProduct.LUCIDDB
-            && !LogManager.getLogger("mondrian.test.PerformanceTest")
+            && !LoggerFactory.getLogger("mondrian.test.PerformanceTest")
                 .isDebugEnabled();
     }
 }

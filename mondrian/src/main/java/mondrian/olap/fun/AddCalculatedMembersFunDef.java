@@ -16,8 +16,8 @@ import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.*;
 import mondrian.olap.type.*;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -36,7 +36,7 @@ import java.util.*;
  */
 class AddCalculatedMembersFunDef extends FunDefBase {
     private static final Logger LOGGER =
-            LogManager.getLogger(AddCalculatedMembersFunDef.class);
+            LoggerFactory.getLogger(AddCalculatedMembersFunDef.class);
 
     private static final AddCalculatedMembersFunDef instance =
         new AddCalculatedMembersFunDef();

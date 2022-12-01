@@ -11,8 +11,8 @@ package mondrian.server;
 
 import java.util.*;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.olap4j.OlapException;
 
@@ -24,7 +24,7 @@ import org.olap4j.Scenario;
 
 public class Session
 {
-    private static final Logger LOGGER = LogManager.getLogger(Session.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Session.class);
     final static Map<String, Session> sessions = new HashMap<String, Session>();
 
     static java.util.Timer timer = new Timer(true);

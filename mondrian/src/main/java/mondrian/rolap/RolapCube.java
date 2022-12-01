@@ -24,8 +24,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.eclipse.daanse.engine.api.Context;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
@@ -89,7 +89,7 @@ import mondrian.spi.CellFormatter;
  */
 public class RolapCube extends CubeBase {
 
-    private static final Logger LOGGER = LogManager.getLogger(RolapCube.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RolapCube.class);
 
     private final RolapSchema schema;
     private final Map<String, Annotation> annotationMap;

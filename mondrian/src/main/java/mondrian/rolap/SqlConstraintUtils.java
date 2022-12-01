@@ -50,8 +50,8 @@ import mondrian.rolap.sql.SqlQuery;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import mondrian.util.FilteredIterableList;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 
 import java.util.ArrayList;
@@ -76,7 +76,7 @@ import java.util.Set;
  */
 public class SqlConstraintUtils {
 
-  private static final Logger LOG = LogManager.getLogger( SqlConstraintUtils.class );
+  private static final Logger LOG = LoggerFactory.getLogger( SqlConstraintUtils.class );
   private static final MondrianResource mres = MondrianResource.instance();
 
   /** Utility class */

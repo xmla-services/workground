@@ -17,8 +17,8 @@ import java.util.Set;
 
 import javax.script.ScriptEngineFactory;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import aQute.bnd.annotation.spi.ServiceConsumer;
 import mondrian.spi.SegmentCache;
@@ -43,7 +43,7 @@ import mondrian.spi.UserDefinedFunction;
 @ServiceConsumer(org.eclipse.daanse.db.dialect.api.Dialect.class)
 public class ServiceDiscovery<T> {
 
-    private static final Logger logger = LogManager.getLogger(ServiceDiscovery.class);
+    private static final Logger logger = LoggerFactory.getLogger(ServiceDiscovery.class);
 
     private final Class<T> theInterface;
 

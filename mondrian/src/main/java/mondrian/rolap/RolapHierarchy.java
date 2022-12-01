@@ -29,8 +29,8 @@ import mondrian.rolap.sql.SqlQuery;
 import mondrian.spi.CellFormatter;
 import mondrian.util.UnionIterator;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.PrintWriter;
 import java.util.*;
@@ -51,7 +51,7 @@ import java.util.*;
   */
 public class RolapHierarchy extends HierarchyBase {
 
-    private static final Logger LOGGER = LogManager.getLogger(RolapHierarchy.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RolapHierarchy.class);
 
     /**
      * The raw member reader. For a member reader which incorporates access

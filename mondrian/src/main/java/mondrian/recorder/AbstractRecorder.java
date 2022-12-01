@@ -16,6 +16,8 @@ import mondrian.resource.MondrianResource;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+
 /**
  * Abstract implemention of the {@link MessageRecorder} interface.
  *
@@ -30,7 +32,7 @@ public abstract class AbstractRecorder implements MessageRecorder {
         final String context,
         final String msg,
         final MsgType msgType,
-        final org.apache.logging.log4j.Logger logger)
+        final Logger logger)
     {
         StringBuilder buf = new StringBuilder(64);
         buf.append(context);

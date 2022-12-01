@@ -15,8 +15,8 @@ import mondrian.xmla.XmlaHandler;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.DelegatingConnection;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapWrapper;
@@ -36,7 +36,7 @@ import javax.servlet.ServletException;
  */
 public class Olap4jXmlaServlet extends DefaultXmlaServlet {
     private static final Logger LOGGER =
-        LogManager.getLogger(Olap4jXmlaServlet.class);
+        LoggerFactory.getLogger(Olap4jXmlaServlet.class);
 
     private static final String OLAP_DRIVER_CLASS_NAME_PARAM =
         "OlapDriverClassName";

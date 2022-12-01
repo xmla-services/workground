@@ -14,8 +14,8 @@ package mondrian.web.taglib;
 import mondrian.olap.*;
 import mondrian.spi.impl.ServletContextCatalogLocator;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.w3c.dom.Document;
 
@@ -29,7 +29,7 @@ import javax.xml.parsers.ParserConfigurationException;
  * @author Andreas Voss, 22 March, 2002
  */
 public class ResultCache implements HttpSessionBindingListener {
-    private static final Logger LOGGER = LogManager.getLogger(ResultCache.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ResultCache.class);
     private static final String ATTR_NAME = "mondrian.web.taglib.ResultCache.";
     private Query query = null;
     private Result result = null;
@@ -88,7 +88,7 @@ public class ResultCache implements HttpSessionBindingListener {
             }
             return document;
         } catch (ParserConfigurationException e) {
-            LOGGER.error(e);
+            LOGGER.error("",e);
             throw new RuntimeException(e.toString());
         }
     }

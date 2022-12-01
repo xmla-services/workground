@@ -16,8 +16,8 @@ import mondrian.rolap.format.FormatterCreateContext;
 import mondrian.rolap.format.FormatterFactory;
 import mondrian.spi.PropertyFormatter;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
@@ -36,7 +36,7 @@ import java.util.Map;
  */
 public class RolapLevel extends LevelBase {
 
-    private static final Logger LOGGER = LogManager.getLogger(RolapLevel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RolapLevel.class);
 
     /**
      * The column or expression which yields the level's key.

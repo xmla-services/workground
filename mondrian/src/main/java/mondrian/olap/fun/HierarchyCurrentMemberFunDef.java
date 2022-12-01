@@ -16,8 +16,8 @@ import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapEvaluator;
 import mondrian.rolap.RolapHierarchy;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.eigenbase.util.property.StringProperty;
 
@@ -31,7 +31,7 @@ import java.util.Set;
  * @since Mar 23, 2006
  */
 public class HierarchyCurrentMemberFunDef extends FunDefBase {
-  private static final Logger LOGGER = LogManager.getLogger( HierarchyCurrentMemberFunDef.class );
+  private static final Logger LOGGER = LoggerFactory.getLogger( HierarchyCurrentMemberFunDef.class );
 
   static final HierarchyCurrentMemberFunDef instance = new HierarchyCurrentMemberFunDef();
 

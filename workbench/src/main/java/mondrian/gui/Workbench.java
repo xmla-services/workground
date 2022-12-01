@@ -19,8 +19,8 @@ import mondrian.olap.Util.PropertyList;
 import mondrian.server.MondrianServerRegistry;
 import mondrian.util.UnionIterator;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.eigenbase.xom.XMLOutput;
 import org.eigenbase.xom.*;
@@ -77,7 +77,7 @@ public class Workbench extends javax.swing.JFrame {
         "mondrian.gui.resources.text";
     private static final String FILTER_SCHEMA_LIST = "FILTER_SCHEMA_LIST";
 
-    private static final Logger LOGGER = LogManager.getLogger(Workbench.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Workbench.class);
 
     private String jdbcDriverClassName;
     private String jdbcConnectionUrl;
@@ -1041,7 +1041,7 @@ public class Workbench extends javax.swing.JFrame {
                     schemaFrame.setClosed(false);
                     schemaFrame.show();
                 } catch (Exception ex) {
-                    LOGGER.error(ex);
+                    LOGGER.error("",ex);
                 }
             }
             return answer;
@@ -1548,7 +1548,7 @@ public class Workbench extends javax.swing.JFrame {
                     // with updated catalog list.
                     updateMDXCatalogList();
                 } catch (Exception ex) {
-                    LOGGER.error(ex);
+                    LOGGER.error("",ex);
                 }
             }
         }
@@ -1971,7 +1971,7 @@ public class Workbench extends javax.swing.JFrame {
                     jfc.getSelectedFile().getName(),
                     jfc.getSelectedFile().toURI().toURL().toString());
             } catch (MalformedURLException e) {
-                LOGGER.error(e);
+                LOGGER.error("",e);
             }
 
             openSchemaFrame(jfc.getSelectedFile(), false);

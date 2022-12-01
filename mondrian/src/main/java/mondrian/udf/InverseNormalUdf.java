@@ -17,12 +17,12 @@ import mondrian.olap.type.Type;
 import mondrian.spi.UserDefinedFunction;
 
 
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 
 import org.apache.commons.math3.distribution.NormalDistribution;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -47,7 +47,7 @@ import org.apache.logging.log4j.LogManager;
 @ServiceProvider(value = UserDefinedFunction.class)
 public class InverseNormalUdf implements UserDefinedFunction {
     private static final Logger LOGGER =
-        LogManager.getLogger(InverseNormalUdf.class);
+        LoggerFactory.getLogger(InverseNormalUdf.class);
 
 
     // the zero arg constructor sets the mean equal to zero and standard

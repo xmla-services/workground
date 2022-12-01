@@ -21,8 +21,8 @@ import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapStar;
 import mondrian.util.ClassResolver;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.olap4j.impl.Olap4jUtil;
@@ -56,7 +56,7 @@ import javax.sql.DataSource;
  */
 public class JdbcSchema {
     private static final Logger LOGGER =
-        LogManager.getLogger(JdbcSchema.class);
+        LoggerFactory.getLogger(JdbcSchema.class);
 
     private static final MondrianResource mres = MondrianResource.instance();
 
@@ -202,7 +202,7 @@ public class JdbcSchema {
                     } catch (Exception ex) {
                         // Should not happen, but might still like to
                         // know that something's funky.
-                        LOGGER.warn(ex);
+                        LOGGER.warn("",ex);
                     }
                 }
             }

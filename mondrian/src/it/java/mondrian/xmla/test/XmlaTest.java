@@ -21,8 +21,8 @@ import mondrian.xmla.impl.DefaultXmlaResponse;
 
 import junit.framework.*;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
@@ -48,7 +48,7 @@ import javax.xml.transform.stream.StreamResult;
 public class XmlaTest extends TestCase {
 
     private static final Logger LOGGER =
-            LogManager.getLogger(XmlaTest.class);
+            LoggerFactory.getLogger(XmlaTest.class);
 
     static {
         XMLUnit.setControlParser(

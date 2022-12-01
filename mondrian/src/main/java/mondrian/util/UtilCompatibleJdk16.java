@@ -13,8 +13,8 @@ import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Statement;
 import java.util.*;
@@ -35,7 +35,7 @@ import javax.script.*;
  */
 public class UtilCompatibleJdk16 extends UtilCompatibleJdk15 {
     private static final Logger LOGGER =
-        LogManager.getLogger(Util.class);
+        LoggerFactory.getLogger(Util.class);
 
     public <T> T compileScript(
         Class<T> iface,
@@ -76,7 +76,7 @@ public class UtilCompatibleJdk16 extends UtilCompatibleJdk15 {
             // We can't protect ourselves against this. That's a bug on their
             // side.
             if (LOGGER.isTraceEnabled()) {
-                LOGGER.trace(
+                LOGGER.trace("",
                     MondrianResource.instance()
                         .ExecutionStatementCleanupException
                             .ex(t.getMessage(), t),

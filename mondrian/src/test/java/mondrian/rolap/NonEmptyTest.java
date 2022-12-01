@@ -3099,7 +3099,7 @@ public class NonEmptyTest extends BatchTestCase {
     //TODO test loging
     /*
     TestAppender alertListener = new TestAppender();
-    final Logger rolapUtilLogger = LogManager.getLogger( RolapUtil.class );
+    final Logger rolapUtilLogger = LoggerFactory.getLogger( RolapUtil.class );
     propSaver.setAtLeast( rolapUtilLogger, org.apache.logging.log4j.Level.WARN );
     Util.addAppender( alertListener, rolapUtilLogger, null );
     String expectedMessage =

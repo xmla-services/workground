@@ -23,8 +23,8 @@ import mondrian.spi.UserDefinedFunction;
 import mondrian.util.Bug;
 import org.apache.commons.collections.ComparatorUtils;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +44,7 @@ public class PerformanceTest extends FoodMartTestCase {
    * Certain tests are enabled only if logging is enabled at debug level or higher.
    */
   public static final Logger LOGGER =
-    LogManager.getLogger( PerformanceTest.class );
+    LoggerFactory.getLogger( PerformanceTest.class );
 
   public PerformanceTest( String name ) {
     super( name );

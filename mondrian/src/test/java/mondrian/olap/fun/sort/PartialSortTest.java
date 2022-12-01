@@ -24,8 +24,8 @@ import java.util.Random;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.collections.comparators.ReverseComparator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.junit.jupiter.api.Test;
 
 
@@ -40,7 +40,7 @@ import org.junit.jupiter.api.Test;
  */
 public class PartialSortTest{
     public static final Logger LOGGER =
-	    LogManager.getLogger( PartialSortTest.class );
+	    LoggerFactory.getLogger( PartialSortTest.class );
   final Random random = new Random();
 
   // subroutines

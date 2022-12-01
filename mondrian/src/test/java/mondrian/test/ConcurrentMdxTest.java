@@ -13,8 +13,8 @@ package mondrian.test;
 
 import mondrian.olap.*;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  */
 public class ConcurrentMdxTest {
     private static final Logger LOGGER =
-        LogManager.getLogger(FoodMartTestCase.class);
+        LoggerFactory.getLogger(FoodMartTestCase.class);
 
     private MondrianProperties props;
 
@@ -1344,7 +1344,7 @@ public class ConcurrentMdxTest {
     }
     private synchronized void logStatus() {
         if (count % 100 == 0) {
-            LOGGER.debug(count);
+            LOGGER.debug("",count);
             System.out.println(count);
         }
         count++;

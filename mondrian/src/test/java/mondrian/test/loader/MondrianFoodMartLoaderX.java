@@ -43,8 +43,8 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
@@ -118,7 +118,7 @@ public class MondrianFoodMartLoaderX {
     // Constants
 
     private static final Logger LOGGER =
-	 LogManager.getLogger(MondrianFoodMartLoaderX.class);
+	 LoggerFactory.getLogger(MondrianFoodMartLoaderX.class);
     private static final String nl = Util.nl;
 
     // Fields

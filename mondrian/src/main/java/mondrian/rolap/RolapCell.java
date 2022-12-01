@@ -21,7 +21,7 @@ import mondrian.server.*;
 import mondrian.server.monitor.SqlStatementEvent;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
 
 import org.olap4j.AllocationPolicy;
 import org.olap4j.Scenario;

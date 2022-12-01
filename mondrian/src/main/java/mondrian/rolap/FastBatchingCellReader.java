@@ -21,8 +21,8 @@ import mondrian.server.Locus;
 import mondrian.spi.*;
 import mondrian.util.*;
 
-import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.LogManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.Future;
@@ -43,7 +43,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
  */
 public class FastBatchingCellReader implements CellReader {
     private static final Logger LOGGER =
-        LogManager.getLogger(FastBatchingCellReader.class);
+        LoggerFactory.getLogger(FastBatchingCellReader.class);
 
     private final int cellRequestLimit;
 
@@ -551,7 +551,7 @@ public class FastBatchingCellReader implements CellReader {
  */
 class BatchLoader {
     private static final Logger LOGGER =
-        LogManager.getLogger(FastBatchingCellReader.class);
+        LoggerFactory.getLogger(FastBatchingCellReader.class);
 
     private final Locus locus;
     private final SegmentCacheManager cacheMgr;
@@ -1068,7 +1068,7 @@ class BatchLoader {
         }
     }
 
-    private static final Logger BATCH_LOGGER = LogManager.getLogger(Batch.class);
+    private static final Logger BATCH_LOGGER = LoggerFactory.getLogger(Batch.class);
 
     public static class RollupInfo {
         final RolapStar.Column[] constrainedColumns;

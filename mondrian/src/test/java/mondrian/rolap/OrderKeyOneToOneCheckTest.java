@@ -33,8 +33,8 @@ class OrderKeyOneToOneCheckTest {
 
   @BeforeEach
   public void beforeEach() throws Exception {
-    //Logger memberSourceLogger = (Logger) LogManager.getLogger(SqlMemberSource.class);
-    //Logger sqlReaderLogger = (Logger) LogManager.getLogger(SqlTupleReader.class);
+    //Logger memberSourceLogger = (Logger) LoggerFactory.getLogger(SqlMemberSource.class);
+    //Logger sqlReaderLogger = (Logger) LoggerFactory.getLogger(SqlTupleReader.class);
 
     //memberSourceAppender = new TestAppender();
     //sqlReaderAppender = new TestAppender();
@@ -44,8 +44,8 @@ class OrderKeyOneToOneCheckTest {
 
   @AfterEach
   protected void afterEach() throws Exception {
-    //Logger memberSourceLogger = (Logger) LogManager.getLogger(SqlMemberSource.class);
-    //Logger sqlReaderLogger = (Logger) LogManager.getLogger(SqlTupleReader.class);
+    //Logger memberSourceLogger = (Logger) LoggerFactory.getLogger(SqlMemberSource.class);
+    //Logger sqlReaderLogger = (Logger) LoggerFactory.getLogger(SqlTupleReader.class);
     //memberSourceLogger.removeAppender(memberSourceAppender);
     //sqlReaderLogger.removeAppender(sqlReaderAppender);
   }
