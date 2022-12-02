@@ -14,6 +14,7 @@ import static org.opencube.junit5.TestUtil.getDialect;
 
 import java.io.File;
 
+import mondrian.rolap.RolapSchemaPool;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
@@ -52,7 +53,7 @@ public abstract class CsvDBTestCase extends BatchTestCase {
 
             // create database tables
             loader.executeStatements(tables);
-
+            RolapSchemaPool.instance().clear();
             String baseSchema = TestUtil.getRawSchema(context);
             String schema = SchemaUtil.getSchema(baseSchema,
                     getParameterDescription(), getCubeDescription(), getVirtualCubeDescription(), getNamedSetDescription(),
