@@ -174,7 +174,7 @@ public class SqlQueryTest  extends BatchTestCase {
         String expr, String alias, boolean ascending,
         boolean nullable, boolean collateNullsLast, boolean reqOrderByAlias)
     {
-        JdbcDialectImpl dialect = spy(new MySqlDialect());
+        JdbcDialectImpl dialect = spy(new JdbcDialectImplForTest());
         when(dialect.requiresOrderByAlias()).thenReturn(reqOrderByAlias);
         SqlQuery query = new SqlQuery(dialect, true);
         query.addOrderBy(
@@ -894,6 +894,14 @@ public class SqlQueryTest  extends BatchTestCase {
     private boolean isGroupingSetsSupported(Connection connection) {
         return MondrianProperties.instance().EnableGroupingSets.get()
                 && getDialect(connection).supportsGroupingSets();
+    }
+
+    public class JdbcDialectImplForTest extends JdbcDialectImpl{
+
+        @Override
+        protected boolean isSupportedProduct(String productName, String productVersion) {
+            return true;
+        }
     }
 }
 
