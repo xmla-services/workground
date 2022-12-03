@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -377,11 +379,12 @@ abstract class Rowset implements XmlaConstants {
      *     {@link org.olap4j.metadata.Level}
      * @return Condition functor
      */
-    <E> Util.Functor1<Boolean, E> makeCondition(
+    <E> Predicate<E> makeCondition(
         RowsetDefinition.Column column)
     {
         return makeCondition(
-            Util.<E>identityFunctor(),
+                Function.identity()
+            ,
             column);
     }
 
@@ -399,30 +402,30 @@ abstract class Rowset implements XmlaConstants {
      *     work on the name or unique name of elements
      * @return Condition functor
      */
-    <E, V> Util.Functor1<Boolean, E> makeCondition(
-        final Util.Functor1<V, ? super E> getter,
+    <E, V> Predicate< E> makeCondition(
+        final Function< ? super E,V> getter,
         RowsetDefinition.Column column)
     {
         final Object restriction = restrictions.get(column.name);
 
         if (restriction == null) {
-            return Util.trueFunctor();
+            return (input)->true;
         } else if (restriction instanceof XmlaUtil.Wildcard) {
             XmlaUtil.Wildcard wildcard = (XmlaUtil.Wildcard) restriction;
             String regexp =
                 Util.wildcardToRegexp(
                     Collections.singletonList(wildcard.pattern));
             final Matcher matcher = Pattern.compile(regexp).matcher("");
-            return new Util.Functor1<Boolean, E>() {
-                public Boolean apply(E element) {
+            return new Predicate<E>() {
+                public boolean test(E element) {
                     V value = getter.apply(element);
                     return matcher.reset(String.valueOf(value)).matches();
                 }
             };
         } else if (restriction instanceof List) {
             final List<V> requiredValues = (List) restriction;
-            return new Util.Functor1<Boolean, E>() {
-                public Boolean apply(E element) {
+            return new Predicate<E>() {
+                public boolean test(E element) {
                     if (element == null) {
                         return requiredValues.contains("");
                     }
@@ -484,18 +487,18 @@ abstract class Rowset implements XmlaConstants {
         return (restrictions.get(column.name) != null);
     }
 
-    protected Util.Functor1<Boolean, Catalog> catNameCond() {
+    protected Predicate<Catalog> catNameCond() {
         Map<String, String> properties = request.getProperties();
         final String catalogName =
             properties.get(PropertyDefinition.Catalog.name());
         if (catalogName != null) {
-            return new Util.Functor1<Boolean, Catalog>() {
-                public Boolean apply(Catalog catalog) {
+            return new Predicate< Catalog>() {
+                public boolean test(Catalog catalog) {
                     return catalog.getName().equals(catalogName);
                 }
             };
         } else {
-            return Util.trueFunctor();
+            return (in)->true;
         }
     }
 

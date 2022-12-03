@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -578,7 +579,7 @@ public class CmdRunner {
         if (USE_OLAP4J) {
             return runQuery(
                 queryString,
-                new Util.Functor1<String, CellSet>() {
+                new Function<CellSet,String>() {
                     public String apply(CellSet param) {
                         StringWriter stringWriter = new StringWriter();
                         PrintWriter printWriter = new PrintWriter(stringWriter);
@@ -630,7 +631,7 @@ public class CmdRunner {
      *
      * @param queryString MDX query text
      */
-    public <T> T runQuery(String queryString, Util.Functor1<T, CellSet> f) {
+    public <T> T runQuery(String queryString, Function<CellSet, T> f) {
         long start = System.currentTimeMillis();
         OlapConnection connection = null;
         OlapStatement statement = null;

@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import org.eclipse.daanse.olap.api.MetaElement;
 import org.olap4j.Cell;
@@ -101,7 +102,7 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
     public void getSchemaFunctionList(
         List<FunctionDefinition> funDefs,
         Schema schema,
-        Util.Functor1<Boolean, String> functionFilter)
+        Predicate<String> functionFilter)
     {
         final FunTable funTable =
             ((MondrianOlap4jSchema) schema).schema.getFunTable();
@@ -113,7 +114,7 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
             case Parentheses:
                 continue;
             }
-            final Boolean passes = functionFilter.apply(fi.getName());
+            final Boolean passes = functionFilter.test(fi.getName());
             if (passes == null || !passes) {
                 continue;
             }

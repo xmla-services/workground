@@ -71,6 +71,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import org.olap4j.AllocationPolicy;
 import org.olap4j.Cell;
@@ -3737,7 +3738,7 @@ public class XmlaHandler {
         void getSchemaFunctionList(
             List<FunctionDefinition> funDefs,
             Schema schema,
-            Util.Functor1<Boolean, String> functionFilter);
+            Predicate<String> functionFilter);
 
         int getHierarchyCardinality(Hierarchy hierarchy) throws OlapException;
 
@@ -3913,7 +3914,7 @@ public class XmlaHandler {
         public void getSchemaFunctionList(
             List<FunctionDefinition> funDefs,
             Schema schema,
-            Util.Functor1<Boolean, String> functionFilter)
+            Predicate<String> functionFilter)
         {
             // no function definitions
         }

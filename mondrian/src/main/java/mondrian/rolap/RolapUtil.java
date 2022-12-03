@@ -31,6 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.function.Consumer;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
@@ -91,15 +92,8 @@ public class RolapUtil {
     public static final Comparable<?> sqlNullValue =
         RolapUtilComparable.INSTANCE;
 
-    public static Util.Functor1<Void, java.sql.Statement> getDefaultCallback(
-        final Locus locus)
-    {
-        return new Util.Functor1<Void, java.sql.Statement>() {
-            public Void apply(java.sql.Statement stmt) {
-                locus.execution.registerStatement(locus, stmt);
-                return null;
-            }
-        };
+    public static Consumer<java.sql.Statement> getDefaultCallback(final Locus locus) {
+        return stmt -> locus.execution.registerStatement(locus, stmt);
     }
 
     /**
@@ -363,7 +357,7 @@ public class RolapUtil {
         Locus locus,
         int resultSetType,
         int resultSetConcurrency,
-        Util.Functor1<Void, java.sql.Statement> callback)
+        Consumer<java.sql.Statement> callback)
     {
         SqlStatement stmt =
             new SqlStatement(

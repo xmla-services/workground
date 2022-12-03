@@ -27,6 +27,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
@@ -458,8 +459,8 @@ public class SegmentLoader {
     // When caching is enabled, we must register the SQL statement
     // in the index. We don't want to cancel SQL statements that are shared
     // across threads unless it is safe.
-    final Util.Functor1<Void, Statement> callbackWithCaching = new Util.Functor1<Void, Statement>() {
-      public Void apply( final Statement stmt ) {
+    final Consumer<Statement>  callbackWithCaching = new Consumer<Statement> () {
+      public void accept( final Statement stmt ) {
         cacheMgr.execute( new SegmentCacheManager.Command<Void>() {
           public Void call() throws Exception {
             boolean atLeastOneActive = false;
@@ -487,17 +488,15 @@ public class SegmentLoader {
             return locus;
           }
         } );
-        return null;
       }
     };
 
     // When using no cache, we register the SQL statement directly
     // with the execution instance for cleanup.
-    final Util.Functor1<Void, Statement> callbackNoCaching = new Util.Functor1<Void, Statement>() {
-      public Void apply( final Statement stmt ) {
-        locus.execution.registerStatement( locus, stmt );
-        return null;
-      }
+    final Consumer<Statement> callbackNoCaching = new Consumer<Statement>() {
+        public void accept(final Statement stmt) {
+            locus.execution.registerStatement(locus, stmt);
+        }
     };
 
     try {
