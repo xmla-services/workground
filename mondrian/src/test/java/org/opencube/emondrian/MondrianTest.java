@@ -107,8 +107,6 @@ public class MondrianTest {
 		};
 
 		Connection c = DriverManager.getConnection(propertyList, catalogLocator);
-		System.out.println(c);
-		System.out.println(c.getCatalogName());
 
 		Query q = c.parseQuery(query);
 		Statement s = q.getStatement();
