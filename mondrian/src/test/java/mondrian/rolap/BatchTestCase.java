@@ -26,21 +26,21 @@ import java.util.concurrent.Future;
 
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.util.property.IntegerProperty;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestingContext;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ResultStyle;
-import mondrian.olap.Axis;
 import mondrian.olap.CacheControl;
-import mondrian.olap.Connection;
 import mondrian.olap.Id;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapNative.Listener;
 import mondrian.rolap.RolapNative.NativeEvent;

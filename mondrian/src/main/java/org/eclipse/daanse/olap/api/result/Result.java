@@ -1,17 +1,24 @@
 /*
-// This software is subject to the terms of the Eclipse Public License v1.0
-// Agreement, available at the following URL:
-// http://www.eclipse.org/legal/epl-v10.html.
-// You must accept the terms of that agreement to use this software.
-//
-// Copyright (C) 2001-2005 Julian Hyde
-// Copyright (C) 2005-2017 Hitachi Vantara and others
-// All Rights Reserved.
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (C) 2001-2005 Julian Hyde
+ * Copyright (C) 2005-2017 Hitachi Vantara and others
+ * All Rights Reserved.
+ * 
+ * Contributors:
+ *  SmartCity Jena - refactor, clean API
 */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api.result;
 
 import java.io.PrintWriter;
+
+import org.eclipse.daanse.olap.api.Connection;
+
+import mondrian.olap.Query;
 
 /**
  * A <code>Result</code> is the result of running an MDX query. See {@link
@@ -34,5 +41,3 @@ public interface Result {
     void print(PrintWriter pw);
     void close();
 }
-
-// End Result.java

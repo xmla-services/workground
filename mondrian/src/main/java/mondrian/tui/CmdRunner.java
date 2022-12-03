@@ -35,11 +35,13 @@ import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.util.property.Property;
 import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
@@ -48,13 +50,11 @@ import org.olap4j.OlapWrapper;
 import org.olap4j.layout.RectangularCellSetFormatter;
 
 import mondrian.olap.Category;
-import mondrian.olap.Connection;
 import mondrian.olap.DriverManager;
 import mondrian.olap.FunTable;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Parameter;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunInfo;
 import mondrian.olap.type.TypeUtil;
@@ -427,8 +427,8 @@ public class CmdRunner {
         if (element instanceof Member) {
             Member member = (Member) element;
             return new Expr(member, Expr.Type.MEMBER);
-        } else if (element instanceof org.eclipse.daanse.olap.api.Level) {
-            org.eclipse.daanse.olap.api.Level level = (org.eclipse.daanse.olap.api.Level) element;
+        } else if (element instanceof org.eclipse.daanse.olap.api.model.Level) {
+            org.eclipse.daanse.olap.api.model.Level level = (org.eclipse.daanse.olap.api.model.Level) element;
             return new Expr(level, Expr.Type.MEMBER);
         } else if (element instanceof Hierarchy) {
             Hierarchy hier = (Hierarchy) element;

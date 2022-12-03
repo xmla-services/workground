@@ -22,6 +22,7 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 import java.sql.SQLException;
 import java.util.Arrays;
 
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.AllocationPolicy;
@@ -38,8 +39,6 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
-
-import mondrian.olap.Result;
 
 /**
  * Test for writeback functionality.

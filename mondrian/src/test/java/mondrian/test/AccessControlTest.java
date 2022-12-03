@@ -18,12 +18,20 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.Schema;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.HierarchyAccess;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.access.RollupPolicy;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -35,18 +43,11 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.Access;
-import mondrian.olap.Axis;
 import mondrian.olap.Category;
-import mondrian.olap.Connection;
 import mondrian.olap.DelegatingRole;
 import mondrian.olap.Id;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Position;
-import mondrian.olap.Result;
-import mondrian.olap.Role;
-import mondrian.olap.Role.HierarchyAccess;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
@@ -404,7 +405,7 @@ public class AccessControlTest {
         TestUtil.withRole(foodMartContext, "MR,DBPentUsers");
         Connection connection = foodMartContext.createConnection();
 
-        final Role.HierarchyAccess hierarchyAccess =
+        final HierarchyAccess hierarchyAccess =
           getHierarchyAccess(connection, "Sales1", "[Customers]");
 
         assertEquals(2, hierarchyAccess.getTopLevelDepth());
@@ -513,7 +514,7 @@ public class AccessControlTest {
         assertEquals(expectedAccess, actualAccess, cubeName);
     }
 
-    private Role.HierarchyAccess getHierarchyAccess(
+    private HierarchyAccess getHierarchyAccess(
         final Connection connection,
         String cubeName,
         String hierarchyName)
@@ -1145,7 +1146,7 @@ public class AccessControlTest {
         role.grant(schema, Access.NONE);
         role.grant(salesCube, Access.NONE);
         // For using hierarchy Measures in #assertExprThrows
-        Role.RollupPolicy rollupPolicy = Role.RollupPolicy.FULL;
+        RollupPolicy rollupPolicy = RollupPolicy.FULL;
         role.grant(
             measuresInSales, Access.ALL, null, null, rollupPolicy);
         role.grant(warehouseCube, Access.NONE);
@@ -1195,7 +1196,7 @@ public class AccessControlTest {
         role.grant(salesCube, Access.ALL);
         Level nationLevel =
             Util.lookupHierarchyLevel(storeHierarchy, "Store Country");
-        Role.RollupPolicy rollupPolicy = Role.RollupPolicy.FULL;
+        RollupPolicy rollupPolicy = RollupPolicy.FULL;
         role.grant(
             storeHierarchy, Access.CUSTOM, nationLevel, null, rollupPolicy);
         role.grant(
@@ -1395,15 +1396,15 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testRollupBottomLevel(TestingContext foodMartContext) {
         rollupPolicyBottom(
-    		foodMartContext, Role.RollupPolicy.FULL, "74,748", "36,759", "266,773");
+    		foodMartContext, RollupPolicy.FULL, "74,748", "36,759", "266,773");
         rollupPolicyBottom(
-        		foodMartContext, Role.RollupPolicy.PARTIAL, "72,739", "35,775", "264,764");
-        rollupPolicyBottom(foodMartContext, Role.RollupPolicy.HIDDEN, "", "", "");
+        		foodMartContext, RollupPolicy.PARTIAL, "72,739", "35,775", "264,764");
+        rollupPolicyBottom(foodMartContext, RollupPolicy.HIDDEN, "", "", "");
     }
 
     private void rollupPolicyBottom(
 		TestingContext foodMartContext,
-        Role.RollupPolicy rollupPolicy,
+        RollupPolicy rollupPolicy,
         String v1,
         String v2,
         String v3)
@@ -1511,16 +1512,16 @@ public class AccessControlTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testRollupPolicyGreatGrandchildInvisible(TestingContext foodMartContext) {
         rollupPolicyGreatGrandchildInvisible(
-    		foodMartContext, Role.RollupPolicy.FULL, "266,773", "74,748");
+    		foodMartContext, RollupPolicy.FULL, "266,773", "74,748");
         rollupPolicyGreatGrandchildInvisible(
-    		foodMartContext, Role.RollupPolicy.PARTIAL, "266,767", "74,742");
+    		foodMartContext, RollupPolicy.PARTIAL, "266,767", "74,742");
         rollupPolicyGreatGrandchildInvisible(
-    		foodMartContext, Role.RollupPolicy.HIDDEN, "", "");
+    		foodMartContext, RollupPolicy.HIDDEN, "", "");
     }
 
     private void rollupPolicyGreatGrandchildInvisible(
 		TestingContext foodMartContext,
-        Role.RollupPolicy policy,
+        RollupPolicy policy,
         String v1,
         String v2)
     {
@@ -1560,16 +1561,16 @@ public class AccessControlTest {
     public void testRollupPolicySimultaneous(TestingContext foodMartContext) {
 //         note that v2 is different for full vs partial, v3 is the same
         rollupPolicySimultaneous(
-    		foodMartContext, Role.RollupPolicy.FULL, "266,773", "74,748", "25,635");
+    		foodMartContext, RollupPolicy.FULL, "266,773", "74,748", "25,635");
         rollupPolicySimultaneous(
-    		foodMartContext, Role.RollupPolicy.PARTIAL, "72,631", "72,631", "25,635");
+    		foodMartContext, RollupPolicy.PARTIAL, "72,631", "72,631", "25,635");
         rollupPolicySimultaneous(
-    		foodMartContext, Role.RollupPolicy.HIDDEN, "", "", "");
+    		foodMartContext, RollupPolicy.HIDDEN, "", "", "");
     }
 
     private void rollupPolicySimultaneous(
 		TestingContext foodMartContext,
-        Role.RollupPolicy policy,
+        RollupPolicy policy,
         String v1,
         String v2,
         String v3)
@@ -1704,10 +1705,10 @@ public class AccessControlTest {
             connection, Access.NONE, "Sales", "[Marital Status]");
 
         // Rollup policy is the greater of Role1's partian and Role2's hidden
-        final Role.HierarchyAccess hierarchyAccess =
+        final HierarchyAccess hierarchyAccess =
             getHierarchyAccess(connection, "Sales", "[Store]");
         assertEquals(
-            Role.RollupPolicy.PARTIAL,
+            RollupPolicy.PARTIAL,
             hierarchyAccess.getRollupPolicy());
         // One of the roles is restricting the levels, so we
         // expect only the levels from 2 to 4 to be available.
@@ -1845,7 +1846,7 @@ public class AccessControlTest {
         assertHierarchyAccess
                 (connection, Access.CUSTOM, "Sales", "[Customers]");
 
-        final Role.HierarchyAccess hierarchyAccess =
+        final HierarchyAccess hierarchyAccess =
                 getHierarchyAccess(connection, "Sales", "[Customers]");
 
         // Can access all levels of the [Customers] hierarchy?
@@ -2112,7 +2113,7 @@ public class AccessControlTest {
 
         // Note that total for [Store].[All Stores] and [Store].[USA] is sum
         // of visible children [Store].[CA] and [Store].[OR].[Portland].
-        setGoodmanContext(foodMartContext, Role.RollupPolicy.PARTIAL);
+        setGoodmanContext(foodMartContext, RollupPolicy.PARTIAL);
         Connection connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -2141,7 +2142,7 @@ public class AccessControlTest {
             + "Row #7: 2,117\n"
             + "Row #8: 26,079\n");
 
-        setGoodmanContext(foodMartContext, Role.RollupPolicy.FULL);
+        setGoodmanContext(foodMartContext, RollupPolicy.FULL);
         connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -2170,7 +2171,7 @@ public class AccessControlTest {
             + "Row #7: 2,117\n"
             + "Row #8: 67,659\n");
 
-        setGoodmanContext(foodMartContext, Role.RollupPolicy.HIDDEN);
+        setGoodmanContext(foodMartContext, RollupPolicy.HIDDEN);
         connection = foodMartContext.createConnection();
         TestUtil.assertQueryReturns(
     		connection,
@@ -2201,7 +2202,7 @@ public class AccessControlTest {
         checkQuery(connection, query);
     }
 
-    private static void setGoodmanContext(TestingContext foodMartContext, final Role.RollupPolicy policy) {
+    private static void setGoodmanContext(TestingContext foodMartContext, final RollupPolicy policy) {
     	String baseSchema = TestUtil.getRawSchema(foodMartContext);
     	String schema = SchemaUtil.getSchema(baseSchema,
                 null, null, null, null, null,
@@ -2382,7 +2383,7 @@ public class AccessControlTest {
      * <a href="http://jira.pentaho.com/browse/BISERVER-1574">BISERVER-1574,
      * "Cube role rollupPolicy='partial' failure"</a>. The problem was a
      * NullPointerException in
-     * {@link SchemaReader#getMemberParent(org.eclipse.daanse.olap.api.Member)} when called
+     * {@link SchemaReader#getMemberParent(org.eclipse.daanse.olap.api.model.Member)} when called
      * on a members returned in a result set. JPivot calls that method but
      * Mondrian normally does not.
      */
@@ -3995,7 +3996,7 @@ public class AccessControlTest {
 
         String nonAllDefaultMem = "defaultMember=\"[Store2].[USA].[CA]\"";
 
-        for (Role.RollupPolicy policy : Role.RollupPolicy.values()) {
+        for (RollupPolicy policy : RollupPolicy.values()) {
             for (String defaultMember : new String[]{nonAllDefaultMem, "" }) {
                 for (boolean hasAll : new Boolean[]{true, false}) {
                     // Results in this test should be the same regardless

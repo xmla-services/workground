@@ -21,13 +21,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.engine.api.Context;
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.NamedSet;
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.HierarchyAccess;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eigenbase.util.property.Property;
 import org.olap4j.mdx.IdentifierSegment;
 import org.slf4j.Logger;
@@ -38,7 +41,6 @@ import mondrian.calc.DummyExp;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.GenericCalc;
-import mondrian.olap.Access;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
@@ -50,7 +52,6 @@ import mondrian.olap.NameResolver;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.Parameter;
 import mondrian.olap.ParameterImpl;
-import mondrian.olap.Role;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.olap.type.StringType;
@@ -99,7 +100,7 @@ public class RolapSchemaReader
     }
 
     public List<Member> getHierarchyRootMembers(Hierarchy hierarchy) {
-        final Role.HierarchyAccess hierarchyAccess =
+        final HierarchyAccess hierarchyAccess =
             role.getAccessDetails(hierarchy);
         final Level[] levels = hierarchy.getLevels();
         final Level firstLevel;
@@ -167,7 +168,7 @@ public class RolapSchemaReader
     }
 
     public int getMemberDepth(Member member) {
-        final Role.HierarchyAccess hierarchyAccess =
+        final HierarchyAccess hierarchyAccess =
             role.getAccessDetails(member.getHierarchy());
         if (hierarchyAccess != null) {
             final int memberDepth = member.getLevel().getDepth();
@@ -651,7 +652,7 @@ public class RolapSchemaReader
 
     public List<Level> getHierarchyLevels(Hierarchy hierarchy) {
         assert hierarchy != null;
-        final Role.HierarchyAccess hierarchyAccess =
+        final HierarchyAccess hierarchyAccess =
             role.getAccessDetails(hierarchy);
         final Level[] levels = hierarchy.getLevels();
         if (hierarchyAccess == null) {

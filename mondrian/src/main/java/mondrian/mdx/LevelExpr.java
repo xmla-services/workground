@@ -9,7 +9,7 @@
 
 package mondrian.mdx;
 
-import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.model.Level;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
@@ -23,7 +23,7 @@ import mondrian.olap.type.LevelType;
 import mondrian.olap.type.Type;
 
 /**
- * Usage of a {@link org.eclipse.daanse.olap.api.Level} as an MDX expression.
+ * Usage of a {@link org.eclipse.daanse.olap.api.model.Level} as an MDX expression.
  *
  * @author jhyde
  * @since Sep 26, 2005

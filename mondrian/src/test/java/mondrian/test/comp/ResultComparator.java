@@ -20,20 +20,20 @@ import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.opencube.junit5.TestUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 
-import mondrian.olap.Axis;
 import mondrian.olap.AxisOrdinal;
-import mondrian.olap.Cell;
-import mondrian.olap.Position;
-import mondrian.olap.Result;
 import mondrian.olap.Util;
 
 /**

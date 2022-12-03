@@ -18,19 +18,19 @@ import junit.framework.TestSuite;
 import mondrian.calc.Calc;
 import mondrian.calc.CalcWriter;
 import mondrian.calc.ResultStyle;
-import mondrian.olap.Axis;
+import org.eclipse.daanse.olap.api.result.Axis;
 import mondrian.olap.CacheControl;
-import mondrian.olap.Cell;
-import mondrian.olap.Connection;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.Connection;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;
 import mondrian.olap.Formula;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Position;
+import org.eclipse.daanse.olap.api.result.Position;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap4j.MondrianInprocProxy;
@@ -1193,7 +1193,7 @@ public class TestContext {
   }
 
   /**
-   * Converts a {@link mondrian.olap.Result} to text in traditional format.
+   * Converts a {@link org.eclipse.daanse.olap.api.result.Result} to text in traditional format.
    *
    * <p>For more exotic formats, see
    * {@link org.olap4j.layout.CellSetFormatter}.

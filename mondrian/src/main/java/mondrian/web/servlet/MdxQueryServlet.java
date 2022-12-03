@@ -21,15 +21,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.xom.StringEscaper;
 
-import mondrian.olap.Cell;
 import mondrian.olap.DriverManager;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Position;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.spi.CatalogLocator;
 import mondrian.spi.impl.ServletContextCatalogLocator;
@@ -86,7 +86,7 @@ public class MdxQueryServlet extends HttpServlet {
         }
         String queryString = request.getParameter("queryString");
         request.setAttribute("queryString", queryString);
-        mondrian.olap.Connection mdxConnection = null;
+        org.eclipse.daanse.olap.api.Connection mdxConnection = null;
         StringBuilder html = new StringBuilder();
 
         // execute the query

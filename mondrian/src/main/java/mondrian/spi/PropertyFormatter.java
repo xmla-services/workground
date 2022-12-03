@@ -11,7 +11,7 @@
 
 package mondrian.spi;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
 
 /**
  * SPI to redefine a member property display string.

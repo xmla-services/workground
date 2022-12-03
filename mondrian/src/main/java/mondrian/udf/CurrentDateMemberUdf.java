@@ -14,8 +14,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Evaluator;

@@ -15,6 +15,8 @@ import static org.opencube.junit5.TestUtil.executeAxis;
 import static org.opencube.junit5.TestUtil.getDialect;
 
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -25,9 +27,7 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.Axis;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Result;
 import mondrian.rolap.RolapAxis;
 import mondrian.test.SqlPattern;
 

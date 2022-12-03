@@ -11,15 +11,15 @@
 package mondrian.rolap;
 
 import mondrian.calc.ResultStyle;
-import mondrian.olap.Axis;
+import org.eclipse.daanse.olap.api.result.Axis;
 import mondrian.olap.CacheControl;
-import mondrian.olap.Connection;
+import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.Cube;
 import mondrian.olap.Id;
 import org.eclipse.daanse.olap.api.Member;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapNative.*;
 import mondrian.rolap.agg.*;

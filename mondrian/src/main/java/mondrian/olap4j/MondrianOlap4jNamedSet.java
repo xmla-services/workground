@@ -11,7 +11,7 @@
 
 package mondrian.olap4j;
 
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.olap4j.impl.Named;
 import org.olap4j.mdx.ParseTreeNode;
 import org.olap4j.metadata.Cube;
@@ -29,11 +29,11 @@ public class MondrianOlap4jNamedSet
     implements NamedSet, Named
 {
     private final MondrianOlap4jCube olap4jCube;
-    private org.eclipse.daanse.olap.api.NamedSet namedSet;
+    private org.eclipse.daanse.olap.api.model.NamedSet namedSet;
 
     MondrianOlap4jNamedSet(
         MondrianOlap4jCube olap4jCube,
-        org.eclipse.daanse.olap.api.NamedSet namedSet)
+        org.eclipse.daanse.olap.api.model.NamedSet namedSet)
     {
         this.olap4jCube = olap4jCube;
         this.namedSet = namedSet;
@@ -50,7 +50,7 @@ public class MondrianOlap4jNamedSet
         return olap4jConnection.toOlap4j(namedSet.getExp());
     }
 
-    public org.eclipse.daanse.olap.api.NamedSet getNamedSet() {
+    public org.eclipse.daanse.olap.api.model.NamedSet getNamedSet() {
         return this.namedSet;
     }
 

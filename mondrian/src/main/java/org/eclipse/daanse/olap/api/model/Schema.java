@@ -5,16 +5,20 @@
 * You must accept the terms of that agreement to use this software.
 *
 * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+* 
+* Contributors:
+*  SmartCity Jena - refactor, clean API
 */
 
-package org.eclipse.daanse.olap.api;
+package org.eclipse.daanse.olap.api.model;
 
 import java.util.Date;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.access.Role;
+
 import mondrian.olap.FunTable;
 import mondrian.olap.Parameter;
-import mondrian.olap.Role;
 import mondrian.olap.SchemaReader;
 
 /**

@@ -12,7 +12,7 @@
 package mondrian.test;
 
 import org.eclipse.daanse.olap.api.OlapElement;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.rolap.RolapCell;
 
 import java.util.Arrays;

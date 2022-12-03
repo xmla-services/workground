@@ -11,8 +11,8 @@ package mondrian.rolap;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.NamedSet;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ResultStyle;

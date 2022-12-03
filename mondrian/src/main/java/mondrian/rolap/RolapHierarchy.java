@@ -22,11 +22,15 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.HierarchyAccess;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.access.RollupPolicy;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +46,6 @@ import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.HierarchyExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.mdx.UnresolvedFunCall;
-import mondrian.olap.Access;
 import mondrian.olap.Category;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
@@ -55,8 +58,6 @@ import mondrian.olap.MatchType;
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.Role;
-import mondrian.olap.Role.HierarchyAccess;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -925,9 +926,9 @@ public class RolapHierarchy extends HierarchyBase {
                 : getMemberReader();
 
         case CUSTOM:
-            final Role.HierarchyAccess hierarchyAccess =
+            final HierarchyAccess hierarchyAccess =
                 role.getAccessDetails(this);
-            final Role.RollupPolicy rollupPolicy =
+            final RollupPolicy rollupPolicy =
                 hierarchyAccess.getRollupPolicy();
             final NumericType returnType = new NumericType();
             switch (rollupPolicy) {
@@ -1382,7 +1383,7 @@ public class RolapHierarchy extends HierarchyBase {
      * As part of {@link mondrian.util.Bug#BugSegregateRolapCubeMemberFixed},
      * maybe make {@link mondrian.rolap.RolapCubeMember} an interface.
      *
-     * @see mondrian.olap.Role.RollupPolicy
+     * @see org.eclipse.daanse.olap.api.access.Role.RollupPolicy
      */
     public static class LimitedRollupMember extends RolapCubeMember {
         public final RolapMember member;
@@ -1440,7 +1441,7 @@ public class RolapHierarchy extends HierarchyBase {
     private static class LimitedRollupSubstitutingMemberReader
         extends SubstitutingMemberReader
     {
-        private final Role.HierarchyAccess hierarchyAccess;
+        private final HierarchyAccess hierarchyAccess;
         private final Exp exp;
 
         /**
@@ -1454,7 +1455,7 @@ public class RolapHierarchy extends HierarchyBase {
         public LimitedRollupSubstitutingMemberReader(
             MemberReader memberReader,
             Role role,
-            Role.HierarchyAccess hierarchyAccess,
+            HierarchyAccess hierarchyAccess,
             Exp exp)
         {
             super(

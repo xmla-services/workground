@@ -14,7 +14,7 @@ import mondrian.olap.DriverManager;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.olap.Util;
 import mondrian.spi.Dialect;
 import mondrian.test.TestContext;
@@ -229,7 +229,7 @@ public class RolapConnectionTest extends TestCase {
         final String localeName, String expr, String expected, boolean isQuery)
     {
         TestContext testContextSpain = new TestContext() {
-            public mondrian.olap.Connection getConnection() {
+            public org.eclipse.daanse.olap.api.Connection getConnection() {
                 Util.PropertyList properties =
                     Util.parseConnectString(getConnectString());
                 properties.put(
@@ -404,7 +404,7 @@ public class RolapConnectionTest extends TestCase {
         properties2.put(
             RolapConnectionProperties.JdbcPassword.name(),
             jdbcPassword);
-        mondrian.olap.Connection connection = null;
+        org.eclipse.daanse.olap.api.Connection connection = null;
         try {
             connection =
                 DriverManager.getConnection(properties2, null);

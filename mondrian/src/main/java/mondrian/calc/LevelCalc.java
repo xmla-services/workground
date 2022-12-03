@@ -9,12 +9,12 @@
 
 package mondrian.calc;
 
-import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.model.Level;
 
 import mondrian.olap.Evaluator;
 
 /**
- * Expression which yields a {@link org.eclipse.daanse.olap.api.Level}.
+ * Expression which yields a {@link org.eclipse.daanse.olap.api.model.Level}.
  *
  * <p>When implementing this interface, it is convenient to extend
  * {@link mondrian.calc.impl.AbstractLevelCalc}, but it is not required.

@@ -11,7 +11,7 @@
 package mondrian.test;
 
 import mondrian.olap.*;
-import mondrian.olap.Role.HierarchyAccess;
+import org.eclipse.daanse.olap.api.access.Role.HierarchyAccess;
 import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
 
 import junit.framework.Assert;

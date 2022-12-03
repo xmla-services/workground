@@ -9,7 +9,7 @@
 
 package mondrian.xmla;
 
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.rolap.RolapCube;
 import mondrian.spi.Dialect;
 import mondrian.test.*;

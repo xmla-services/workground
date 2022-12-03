@@ -46,7 +46,12 @@ import java.util.concurrent.CancellationException;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.xom.StringEscaper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,14 +70,9 @@ import org.opentest4j.AssertionFailedError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.Axis;
-import mondrian.olap.Cell;
-import mondrian.olap.Connection;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Position;
 import mondrian.olap.QueryTimeoutException;
-import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 //import mondrian.spi.DialectManager;

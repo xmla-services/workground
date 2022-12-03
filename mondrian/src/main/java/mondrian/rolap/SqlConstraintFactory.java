@@ -13,7 +13,7 @@ package mondrian.rolap;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.model.Level;
 
 import mondrian.olap.Evaluator;
 import mondrian.olap.Id;

@@ -22,8 +22,13 @@ import static org.opencube.junit5.TestUtil.executeExprRaw;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,12 +42,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 import org.opentest4j.AssertionFailedError;
 
-import mondrian.olap.Axis;
-import mondrian.olap.Cell;
-import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Position;
-import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.rolap.BatchTestCase;
 

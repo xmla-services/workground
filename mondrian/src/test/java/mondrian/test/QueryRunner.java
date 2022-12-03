@@ -16,7 +16,8 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import mondrian.olap.Connection;
+import org.eclipse.daanse.olap.api.Connection;
+
 import mondrian.olap.DriverManager;
 import mondrian.olap.Query;
 

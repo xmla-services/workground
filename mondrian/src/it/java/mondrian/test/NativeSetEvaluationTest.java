@@ -12,7 +12,7 @@ package mondrian.test;
 import mondrian.olap.CacheControl;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluationUnsupportedException;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapCube;
@@ -1730,7 +1730,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         DatabaseProduct.MYSQL,
         query,
         null );
-    mondrian.olap.Result rest = executeQuery( mdx );
+    org.eclipse.daanse.olap.api.result.Result rest = executeQuery( mdx );
     RolapCube cube = (RolapCube) rest.getQuery().getCube();
     RolapConnection con = (RolapConnection) rest.getQuery().getConnection();
     CacheControl cacheControl = con.getCacheControl( null );

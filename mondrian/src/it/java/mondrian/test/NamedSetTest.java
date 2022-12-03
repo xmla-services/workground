@@ -12,7 +12,7 @@
 */
 package mondrian.test;
 
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.olap.Util;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 

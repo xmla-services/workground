@@ -25,10 +25,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.NamedSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +70,7 @@ import mondrian.util.Format;
  *
  * <p>
  * The {@code savepoint} method is recommended for most purposes, because the initial checkpoint is extremely cheap.
- * Each call that modifies state (such as {@link mondrian.olap.Evaluator#setContext(org.eclipse.daanse.olap.api.Member)}) creates, at
+ * Each call that modifies state (such as {@link mondrian.olap.Evaluator#setContext(org.eclipse.daanse.olap.api.model.Member)}) creates, at
  * a modest cost, an entry on an internal command stack.
  *
  * <p>
@@ -778,7 +778,7 @@ public class RolapEvaluator implements Evaluator {
   }
 
   /**
-   * More specific version of {@link #getContext(org.eclipse.daanse.olap.api.Hierarchy)}, for internal code.
+   * More specific version of {@link #getContext(org.eclipse.daanse.olap.api.model.Hierarchy)}, for internal code.
    *
    * @param hierarchy
    *          Hierarchy

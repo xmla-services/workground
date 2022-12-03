@@ -38,7 +38,7 @@ public interface ParameterSlot {
      * Sets the value of this parameter.
      *
      * <p>NOTE: This method will be removed when we store parameter values
-     * in the {@link mondrian.olap.Result} rather than in the
+     * in the {@link org.eclipse.daanse.olap.api.result.Result} rather than in the
      * {@link mondrian.olap.Query}.
      *
      * @param value New value
@@ -52,7 +52,7 @@ public interface ParameterSlot {
      * Returns the value of this parameter.
      *
      * <p>NOTE: This method will be removed when we store parameter values
-     * in the {@link mondrian.olap.Result} rather than in the
+     * in the {@link org.eclipse.daanse.olap.api.result.Result} rather than in the
      * {@link mondrian.olap.Query}.
      */
     Object getParameterValue();

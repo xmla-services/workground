@@ -8,9 +8,9 @@
 */
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.Axis;
+import org.eclipse.daanse.olap.api.result.Axis;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.rolap.RolapAxis;
 import mondrian.spi.Dialect;
 import mondrian.test.SqlPattern;

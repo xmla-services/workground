@@ -14,7 +14,7 @@ package mondrian.olap.fun;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.model.Dimension;
 
 import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.HierarchyExpr;

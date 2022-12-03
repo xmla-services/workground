@@ -12,6 +12,7 @@
 package mondrian.olap;
 
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Connection;
 
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;

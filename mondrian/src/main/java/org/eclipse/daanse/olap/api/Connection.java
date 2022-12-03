@@ -1,15 +1,18 @@
 /*
-// This software is subject to the terms of the Eclipse Public License v1.0
-// Agreement, available at the following URL:
-// http://www.eclipse.org/legal/epl-v10.html.
-// You must accept the terms of that agreement to use this software.
-//
-// Copyright (C) 2000-2005 Julian Hyde
-// Copyright (C) 2005-2017 Hitachi Vantara and others
-// All Rights Reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (C) 2000-2005 Julian Hyde
+ * Copyright (C) 2005-2017 Hitachi Vantara and others
+ * All Rights Reserved.
+ * 
+ * Contributors:
+ *   SmartCity Jena - refactor, clean API
+ */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api;
 
 import java.io.PrintWriter;
 import java.util.Locale;
@@ -17,7 +20,17 @@ import java.util.Locale;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.engine.api.Context;
-import org.eclipse.daanse.olap.api.Schema;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.api.result.Result;
+
+import mondrian.olap.CacheControl;
+import mondrian.olap.DrillThrough;
+import mondrian.olap.DriverManager;
+import mondrian.olap.Exp;
+import mondrian.olap.Query;
+import mondrian.olap.QueryPart;
+import mondrian.olap.SchemaReader;
 
 /**
  * Connection to a multi-dimensional database.
@@ -65,6 +78,8 @@ public interface Connection {
      * to use olap4j and explicitly create a statement.
      */
     Result execute(Query query);
+    
+    Statement createStatement();
 
     /**
      * Returns the locale this connection belongs to.  Determines, for example,

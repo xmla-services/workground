@@ -10,8 +10,8 @@
 */
 package mondrian.rolap;
 
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 
 import mondrian.mdx.HierarchyExpr;
 import mondrian.mdx.ResolvedFunCall;

@@ -30,8 +30,8 @@ import java.util.PriorityQueue;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.collections.comparators.ComparatorChain;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

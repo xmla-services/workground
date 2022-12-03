@@ -26,7 +26,7 @@
 #    overview.html
 #    mondrian/
 #       olap/
-#          Connection.html (javadoc for mondrian.olap.Connection)
+#          Connection.html (javadoc for org.eclipse.daanse.olap.api.Connection)
 #    (etc.)
 
 pause() {

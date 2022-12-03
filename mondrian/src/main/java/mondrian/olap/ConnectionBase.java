@@ -11,6 +11,7 @@
 
 package mondrian.olap;
 
+import org.eclipse.daanse.olap.api.Connection;
 import org.slf4j.Logger;
 
 import mondrian.parser.JavaccParserValidatorImpl;

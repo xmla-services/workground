@@ -8,7 +8,7 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.Connection;
+import org.eclipse.daanse.olap.api.Connection;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
 import mondrian.rolap.agg.*;

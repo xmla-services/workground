@@ -65,7 +65,7 @@ public interface Statement {
      * Enables profiling.
      *
      * <p>Profiling information will be sent to the given writer when
-     * {@link mondrian.olap.Result#close()} is called.
+     * {@link org.eclipse.daanse.olap.api.result.Result#close()} is called.
      *
      * <p>If <tt>profileHandler</tt> is null, disables profiling.
      *

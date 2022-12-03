@@ -11,7 +11,7 @@ package mondrian.calc;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
 
 /**
  * Extension to {@link Iterable} that returns a {@link TupleIterator}.

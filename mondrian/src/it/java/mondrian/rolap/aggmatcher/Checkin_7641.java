@@ -9,7 +9,7 @@
 
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.test.TestContext;
 import mondrian.test.loader.CsvDBTestCase;
 

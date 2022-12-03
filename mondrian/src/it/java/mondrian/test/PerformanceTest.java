@@ -9,12 +9,12 @@
 
 package mondrian.test;
 
-import mondrian.olap.Axis;
+import org.eclipse.daanse.olap.api.result.Axis;
 import mondrian.olap.Evaluator;
 import org.eclipse.daanse.olap.api.Member;
-import mondrian.olap.Position;
+import org.eclipse.daanse.olap.api.result.Position;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.olap.Syntax;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.NumericType;

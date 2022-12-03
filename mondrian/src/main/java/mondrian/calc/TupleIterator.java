@@ -12,7 +12,7 @@ package mondrian.calc;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
 
 /**
  * Extension to {@link java.util.Iterator} that returns tuples.

@@ -12,8 +12,8 @@
 package mondrian.test;
 
 import mondrian.olap.*;
-import mondrian.olap.Axis;
-import mondrian.olap.Cell;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Cell;
 import mondrian.olap.type.*;
 import mondrian.spi.CellFormatter;
 import mondrian.spi.MemberFormatter;

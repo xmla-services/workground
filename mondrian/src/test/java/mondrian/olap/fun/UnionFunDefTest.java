@@ -19,7 +19,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.model.Member;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mockito;
@@ -33,7 +34,6 @@ import mondrian.calc.TupleList;
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.Connection;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
 import mondrian.olap.type.SetType;

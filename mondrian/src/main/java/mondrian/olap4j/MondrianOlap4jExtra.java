@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-import org.eclipse.daanse.olap.api.MetaElement;
+import org.eclipse.daanse.olap.api.model.MetaElement;
 import org.olap4j.Cell;
 import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;

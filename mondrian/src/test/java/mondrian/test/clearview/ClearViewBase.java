@@ -17,6 +17,7 @@ import static org.opencube.junit5.TestUtil.getDialect;
 
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.opencube.junit5.TestUtil;
@@ -24,7 +25,6 @@ import org.opencube.junit5.context.BaseTestContext;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.rolap.BatchTestCase;

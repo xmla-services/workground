@@ -39,6 +39,7 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -51,7 +52,6 @@ import mondrian.olap.DriverManager;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.util.Pair;
 
@@ -443,7 +443,7 @@ public class RolapConnectionTest {
         properties2.put(
             RolapConnectionProperties.JdbcPassword.name(),
             jdbcPassword);
-        mondrian.olap.Connection connection = null;
+        org.eclipse.daanse.olap.api.Connection connection = null;
         try {
             connection =
                 DriverManager.getConnection(properties2, null);

@@ -29,7 +29,11 @@ import javax.sql.DataSource;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.util.property.StringProperty;
 import org.olap4j.Scenario;
 import org.slf4j.Logger;
@@ -40,24 +44,20 @@ import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.olap.CacheControl;
-import mondrian.olap.Cell;
 import mondrian.olap.ConnectionBase;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;
 import mondrian.olap.FunTable;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
-import mondrian.olap.Position;
 import mondrian.olap.Query;
 import mondrian.olap.QueryAxis;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryPart;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.ResourceLimitExceededException;
-import mondrian.olap.Result;
 import mondrian.olap.ResultBase;
 import mondrian.olap.ResultLimitExceededException;
-import mondrian.olap.Role;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
@@ -1133,6 +1133,12 @@ public class RolapConnection extends ConnectionBase {
     public void close() {
       // do not close
     }
+  }
+
+  //TODO: Extract a statement between connection and Resuolt without the query
+  @Override
+  public org.eclipse.daanse.olap.api.Statement createStatement() {
+    throw new UnsupportedOperationException("TODO");
   }
 }
 

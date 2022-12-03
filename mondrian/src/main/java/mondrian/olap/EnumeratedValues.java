@@ -18,6 +18,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.daanse.olap.api.access.Access;
+
 /**
  * <code>EnumeratedValues</code> is a helper class for declaring a set of
  * symbolic constants which have names, ordinals, and possibly descriptions.

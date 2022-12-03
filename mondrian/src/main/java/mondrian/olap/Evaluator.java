@@ -15,10 +15,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.NamedSet;
 
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.TupleIterable;
@@ -444,7 +444,7 @@ public interface Evaluator {
     /**
      * Returns whether it is necessary to check whether to return null for
      * an unrelated dimension. If false, we never need to check: we can assume
-     * that {@link #needToReturnNullForUnrelatedDimension(org.eclipse.daanse.olap.api.Member[])}
+     * that {@link #needToReturnNullForUnrelatedDimension(org.eclipse.daanse.olap.api.model.Member[])}
      * will always return false.
      *
      * @return whether it is necessary to check whether to return null for

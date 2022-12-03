@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

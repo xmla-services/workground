@@ -9,7 +9,7 @@
 
 package mondrian.calc;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.olap.Evaluator;
 
@@ -27,7 +27,7 @@ public interface MemberCalc extends Calc {
      * Evaluates this expression to yield a member.
      *
      * <p>May return the null member (see
-     * {@link org.eclipse.daanse.olap.api.Hierarchy#getNullMember()}) but never null.
+     * {@link org.eclipse.daanse.olap.api.model.Hierarchy#getNullMember()}) but never null.
      *
      * @param evaluator Evaluation context
      * @return a member

@@ -9,7 +9,7 @@
 
 package mondrian.olap.fun.extra;
 
-import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
 import mondrian.calc.DoubleCalc;

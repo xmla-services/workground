@@ -21,16 +21,16 @@ package org.opencube.emondrian;
 
 import java.util.Properties;
 
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.opencube.junit5.Constants;
 import org.opencube.junit5.context.SQLLiteContext;
 import org.sqlite.SQLiteDataSource;
 
-import mondrian.olap.Connection;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
 import mondrian.olap.Util.PropertyList;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.rolap.RolapConnectionProperties;

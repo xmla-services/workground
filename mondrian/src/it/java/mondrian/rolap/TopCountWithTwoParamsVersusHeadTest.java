@@ -9,7 +9,7 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.test.TestContext;
 
 import static mondrian.rolap.RolapNativeTopCountTestCases.*;

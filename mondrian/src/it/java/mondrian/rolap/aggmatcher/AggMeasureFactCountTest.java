@@ -12,7 +12,7 @@
 package mondrian.rolap.aggmatcher;
 
 import mondrian.olap.MondrianException;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.spi.Dialect;
 import mondrian.test.SqlPattern;
 import mondrian.test.TestContext;

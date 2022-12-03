@@ -15,7 +15,7 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

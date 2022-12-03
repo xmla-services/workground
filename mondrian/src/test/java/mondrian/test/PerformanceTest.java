@@ -25,7 +25,11 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.apache.commons.collections.ComparatorUtils;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,13 +45,9 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.Axis;
-import mondrian.olap.Connection;
 import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Position;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
 import mondrian.olap.Syntax;
 import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.NumericType;

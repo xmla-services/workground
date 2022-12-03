@@ -16,8 +16,9 @@ import java.util.Locale;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.olap4j.OlapException;
 import org.olap4j.impl.Named;
 import org.olap4j.impl.NamedListImpl;
@@ -27,8 +28,6 @@ import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.NamedList;
 import org.olap4j.metadata.Schema;
-
-import mondrian.olap.Role;
 
 /**
  * Implementation of {@link org.olap4j.metadata.Schema}
@@ -43,7 +42,7 @@ class MondrianOlap4jSchema
 {
     final MondrianOlap4jCatalog olap4jCatalog;
     final String schemaName;
-    final org.eclipse.daanse.olap.api.Schema schema;
+    final org.eclipse.daanse.olap.api.model.Schema schema;
 
     /**
      * Creates a MondrianOlap4jSchema.
@@ -60,7 +59,7 @@ class MondrianOlap4jSchema
     MondrianOlap4jSchema(
         MondrianOlap4jCatalog olap4jCatalog,
         String schemaName,
-        org.eclipse.daanse.olap.api.Schema schema)
+        org.eclipse.daanse.olap.api.model.Schema schema)
     {
         this.olap4jCatalog = olap4jCatalog;
         this.schemaName = schemaName;
@@ -76,7 +75,7 @@ class MondrianOlap4jSchema
             new NamedListImpl<MondrianOlap4jCube>();
         final MondrianOlap4jConnection olap4jConnection =
             olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
-        for (org.eclipse.daanse.olap.api.Cube cube
+        for (org.eclipse.daanse.olap.api.model.Cube cube
             : olap4jConnection.getMondrianConnection()
                 .getSchemaReader().getCubes())
         {

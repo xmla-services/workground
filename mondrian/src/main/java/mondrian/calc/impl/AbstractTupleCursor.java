@@ -9,7 +9,7 @@
 
 package mondrian.calc.impl;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.TupleCursor;
 import mondrian.olap.Evaluator;

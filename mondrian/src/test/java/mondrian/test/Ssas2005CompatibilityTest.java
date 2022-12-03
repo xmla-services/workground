@@ -20,6 +20,8 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
 import java.sql.SQLException;
 
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -32,9 +34,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Result;
 import mondrian.olap.Util;
 
 /**

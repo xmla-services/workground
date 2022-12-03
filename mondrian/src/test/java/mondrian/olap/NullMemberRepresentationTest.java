@@ -14,6 +14,7 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 import java.io.IOException;
 
+import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
