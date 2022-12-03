@@ -75,6 +75,8 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -1832,12 +1834,13 @@ public class Util extends XOMUtil {
      * @return Iterable that returns only members of underlying iterable for
      *     for which all conditions evaluate to true
      */
+    //TODO: use streams
+    @Deprecated()
     public static <T> Iterable<T> filter(
         final Iterable<T> iterable,
-        final Functor1<Boolean, T>... conds)
+        final Predicate<T>... conds)
     {
-        final Functor1<Boolean, T>[] conds2 = optimizeConditions(conds);
-        if (conds2.length == 0) {
+        if (conds.length == 0) {
             return iterable;
         }
         return new Iterable<T>() {
@@ -1851,8 +1854,8 @@ public class Util extends XOMUtil {
                         outer:
                         while (iterator.hasNext()) {
                             next = iterator.next();
-                            for (Functor1<Boolean, T> cond : conds2) {
-                                if (!cond.apply(next)) {
+                            for (Predicate<T> cond : conds) {
+                                if (!cond.test(next)) {
                                     continue outer;
                                 }
                             }
@@ -1877,27 +1880,6 @@ public class Util extends XOMUtil {
                 };
             }
         };
-    }
-
-    private static <T> Functor1<Boolean, T>[] optimizeConditions(
-        Functor1<Boolean, T>[] conds)
-    {
-        final List<Functor1<Boolean, T>> functor1List =
-            new ArrayList<Functor1<Boolean, T>>(Arrays.asList(conds));
-        for (Iterator<Functor1<Boolean, T>> funcIter =
-            functor1List.iterator(); funcIter.hasNext();)
-        {
-            Functor1<Boolean, T> booleanTFunctor1 = funcIter.next();
-            if (booleanTFunctor1 == trueFunctor()) {
-                funcIter.remove();
-            }
-        }
-        if (functor1List.size() < conds.length) {
-            //noinspection unchecked
-            return functor1List.toArray(new Functor1[functor1List.size()]);
-        } else {
-            return conds;
-        }
     }
 
     /**
@@ -4167,45 +4149,6 @@ public class Util extends XOMUtil {
         }
     }
 
-    public static interface Functor1<RT, PT> {
-        RT apply(PT param);
-    }
-
-    public static <T> Functor1<T, T> identityFunctor() {
-        //noinspection unchecked
-        return IDENTITY_FUNCTOR;
-    }
-
-    private static final Functor1 IDENTITY_FUNCTOR =
-        new Functor1<Object, Object>() {
-            public Object apply(Object param) {
-                return param;
-            }
-        };
-
-    public static <PT> Functor1<Boolean, PT> trueFunctor() {
-        //noinspection unchecked
-        return TRUE_FUNCTOR;
-    }
-
-    public static <PT> Functor1<Boolean, PT> falseFunctor() {
-        //noinspection unchecked
-        return FALSE_FUNCTOR;
-    }
-
-    private static final Functor1 TRUE_FUNCTOR =
-        new Functor1<Boolean, Object>() {
-            public Boolean apply(Object param) {
-                return true;
-            }
-        };
-
-    private static final Functor1 FALSE_FUNCTOR =
-        new Functor1<Boolean, Object>() {
-            public Boolean apply(Object param) {
-                return false;
-            }
-        };
 
     /**
      * Information about memory usage.

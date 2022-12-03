@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.function.Consumer;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
@@ -28,7 +29,6 @@ import org.eclipse.daanse.engine.api.Context;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
-import mondrian.olap.Util.Functor1;
 import mondrian.resource.MondrianResource;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
@@ -92,7 +92,7 @@ public class SqlStatement {
   private final List<Accessor> accessors = new ArrayList<>();
   private State state = State.FRESH;
   private final long id;
-  private Functor1<Void, Statement> callback;
+  private Consumer<Statement> callback;
 
   /**
    * Creates a SqlStatement.
@@ -116,7 +116,7 @@ public class SqlStatement {
     Locus locus,
     int resultSetType,
     int resultSetConcurrency,
-    Util.Functor1<Void, Statement> callback ) {
+    Consumer<Statement>  callback ) {
     this.callback = callback;
     this.id = ID_GENERATOR.getAndIncrement();
     this.context = context;
@@ -192,7 +192,7 @@ public class SqlStatement {
         locus.execution.registerStatement( locus, statement );
       } else {
         if ( callback != null ) {
-          callback.apply( statement );
+          callback.accept(statement);
         }
       }
 
