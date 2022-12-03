@@ -13,7 +13,8 @@ import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.access.HierarchyAccess;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.olap4j.OlapException;
 import org.olap4j.impl.ArrayNamedListImpl;
 import org.olap4j.impl.Named;
@@ -24,7 +25,6 @@ import org.olap4j.metadata.Member;
 import org.olap4j.metadata.NamedList;
 import org.olap4j.metadata.Property;
 
-import mondrian.olap.Role;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnection;
 import mondrian.server.Locus;
@@ -41,7 +41,7 @@ class MondrianOlap4jLevel
     implements Level, Named
 {
     final MondrianOlap4jSchema olap4jSchema;
-    final org.eclipse.daanse.olap.api.Level level;
+    final org.eclipse.daanse.olap.api.model.Level level;
 
     /**
      * Creates a MondrianOlap4jLevel.
@@ -51,7 +51,7 @@ class MondrianOlap4jLevel
      */
     MondrianOlap4jLevel(
         MondrianOlap4jSchema olap4jSchema,
-        org.eclipse.daanse.olap.api.Level level)
+        org.eclipse.daanse.olap.api.model.Level level)
     {
         this.olap4jSchema = olap4jSchema;
         this.level = level;
@@ -71,7 +71,7 @@ class MondrianOlap4jLevel
     }
 
     private int getDepthOffset() {
-        final Role.HierarchyAccess accessDetails =
+        final HierarchyAccess accessDetails =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection
                 .getMondrianConnection2().getRole().getAccessDetails(
                     level.getHierarchy());
@@ -170,7 +170,7 @@ class MondrianOlap4jLevel
                 public List<Member> execute() {
                     final mondrian.olap.SchemaReader schemaReader =
                         mondrianConnection.getSchemaReader().withLocus();
-                    final List<org.eclipse.daanse.olap.api.Member> levelMembers =
+                    final List<org.eclipse.daanse.olap.api.model.Member> levelMembers =
                         schemaReader.getLevelMembers(level, true);
                     return new AbstractList<Member>() {
                         public Member get(int index) {

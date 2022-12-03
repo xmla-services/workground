@@ -9,7 +9,7 @@
 
 package mondrian.test;
 
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 
 import org.olap4j.*;
 

@@ -31,14 +31,17 @@ import java.util.Set;
 import org.apache.commons.vfs2.FileSystemException;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.NamedSet;
-import org.eclipse.daanse.olap.api.OlapElement;
-import org.eclipse.daanse.olap.api.Schema;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.access.RollupPolicy;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.model.Schema;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.ElementDef;
 import org.eigenbase.xom.Parser;
@@ -49,7 +52,6 @@ import org.olap4j.mdx.IdentifierSegment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.Access;
 import mondrian.olap.CacheControl;
 import mondrian.olap.Category;
 import mondrian.olap.Exp;
@@ -60,7 +62,6 @@ import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Parameter;
-import mondrian.olap.Role;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
@@ -796,11 +797,11 @@ public class RolapSchema implements Schema {
         Level bottomLevel = findLevelForHierarchyGrant(
             cube, reader, hierarchyAccess, grant.bottomLevel, "bottomLevel");
 
-        Role.RollupPolicy rollupPolicy;
+        RollupPolicy rollupPolicy;
         if (grant.rollupPolicy != null) {
             try {
                 rollupPolicy =
-                    Role.RollupPolicy.valueOf(
+                    RollupPolicy.valueOf(
                         grant.rollupPolicy.toUpperCase());
             } catch (IllegalArgumentException e) {
                 throw Util.newError(
@@ -809,7 +810,7 @@ public class RolapSchema implements Schema {
                         + "'");
             }
         } else {
-            rollupPolicy = Role.RollupPolicy.FULL;
+            rollupPolicy = RollupPolicy.FULL;
         }
         role.grant(
             hierarchy, hierarchyAccess, topLevel, bottomLevel, rollupPolicy);

@@ -36,7 +36,7 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Category;
-import mondrian.olap.Connection;
+import org.eclipse.daanse.olap.api.Connection;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Evaluator.SetEvaluator;
 import mondrian.olap.Exp;

@@ -23,11 +23,11 @@ import java.util.Map.Entry;
 import java.util.Properties;
 
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Connection;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapWrapper;
 import org.opencube.junit5.propupdator.PropertyUpdater;
 
-import mondrian.olap.Connection;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;

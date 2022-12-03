@@ -15,13 +15,12 @@ package mondrian.olap.fun;
 
 import static org.opencube.junit5.TestUtil.assertQueryThrows;
 
+import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
-import mondrian.olap.Connection;
 
 /**
  * Unit test for the set constructor function <code>{ ... }</code>,

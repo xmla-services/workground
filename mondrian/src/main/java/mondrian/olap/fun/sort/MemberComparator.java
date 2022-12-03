@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

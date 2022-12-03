@@ -13,7 +13,7 @@ package mondrian.rolap;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Schema;
+import org.eclipse.daanse.olap.api.model.Schema;
 
 import mondrian.olap.DimensionType;
 import mondrian.olap.HierarchyBase;

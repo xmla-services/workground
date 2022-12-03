@@ -9,7 +9,7 @@
 */
 package mondrian.olap4j;
 
-import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.model.Level;
 import org.olap4j.metadata.Property;
 
 /**

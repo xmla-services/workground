@@ -26,6 +26,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathException;
 
+import org.eclipse.daanse.olap.api.access.Role;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;
@@ -38,7 +39,6 @@ import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
 import mondrian.olap.MondrianServer;
-import mondrian.olap.Role;
 import mondrian.olap.Util;
 import mondrian.olap.Util.ByteMatcher;
 import mondrian.rolap.RolapConnectionProperties;

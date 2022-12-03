@@ -9,6 +9,7 @@
 
 package mondrian.xmla;
 
+import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +18,6 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.Connection;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.test.DiffRepository;
 

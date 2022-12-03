@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.HierarchyExpr;

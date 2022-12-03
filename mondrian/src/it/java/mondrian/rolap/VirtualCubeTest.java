@@ -10,12 +10,12 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.Axis;
+import org.eclipse.daanse.olap.api.result.Axis;
 import org.eclipse.daanse.olap.api.Member;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Position;
+import org.eclipse.daanse.olap.api.result.Position;
 import mondrian.olap.Property;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.spi.Dialect;
 import mondrian.test.SqlPattern;
 import mondrian.test.TestContext;

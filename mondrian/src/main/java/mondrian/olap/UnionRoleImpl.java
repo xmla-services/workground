@@ -12,14 +12,19 @@ package mondrian.olap;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.NamedSet;
-import org.eclipse.daanse.olap.api.OlapElement;
-import org.eclipse.daanse.olap.api.Schema;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.AllHierarchyAccess;
+import org.eclipse.daanse.olap.api.access.HierarchyAccess;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.access.RollupPolicy;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.model.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -226,7 +231,7 @@ class UnionRoleImpl implements Role {
     }
 
     /**
-     * Implementation of {@link mondrian.olap.Role.HierarchyAccess} that
+     * Implementation of {@link org.eclipse.daanse.olap.api.access.Role.HierarchyAccess} that
      * gives access to an object if any one of the constituent hierarchy
      * accesses has access to that object.
      */

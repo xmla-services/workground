@@ -13,6 +13,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Random;
 
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
@@ -20,9 +22,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.CacheControl;
-import mondrian.olap.Connection;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
 import mondrian.olap.Util;
 
 /**

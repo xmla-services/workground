@@ -13,7 +13,7 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 
-import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.model.Level;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;

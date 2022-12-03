@@ -17,8 +17,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
 
 import mondrian.recorder.MessageRecorder;
 import mondrian.resource.MondrianResource;

@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCall;

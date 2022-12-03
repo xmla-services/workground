@@ -16,9 +16,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.olap.Access;
 import mondrian.olap.Id;
 import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;
@@ -27,7 +27,7 @@ import mondrian.rolap.sql.TupleConstraint;
 
 /**
  * <code>CacheMemberReader</code> implements {@link MemberReader} by reading
- * from a pre-populated array of {@link org.eclipse.daanse.olap.api.Member}s.
+ * from a pre-populated array of {@link org.eclipse.daanse.olap.api.model.Member}s.
  * <p>Note: CacheMemberReader can not handle ragged hierarchies. (HR
  * Tests fail if {@link SmartMemberReader} is replaced with
  * CacheMemberReader).

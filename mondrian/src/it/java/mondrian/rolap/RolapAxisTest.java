@@ -12,7 +12,7 @@ package mondrian.rolap;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
 import org.eclipse.daanse.olap.api.Member;
-import mondrian.olap.Position;
+import org.eclipse.daanse.olap.api.result.Position;
 import mondrian.olap.fun.TestMember;
 import mondrian.test.FoodMartTestCase;
 

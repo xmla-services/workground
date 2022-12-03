@@ -19,10 +19,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.olap.Access;
 import mondrian.olap.Formula;
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;

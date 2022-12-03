@@ -17,7 +17,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.olap4j.OlapException;
 import org.olap4j.impl.Named;
 import org.olap4j.impl.NamedListImpl;
@@ -32,7 +33,6 @@ import org.olap4j.metadata.NamedList;
 import org.olap4j.metadata.NamedSet;
 import org.olap4j.metadata.Schema;
 
-import mondrian.olap.Role;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 
@@ -47,11 +47,11 @@ class MondrianOlap4jCube
     extends MondrianOlap4jMetadataElement
     implements Cube, Named
 {
-    final org.eclipse.daanse.olap.api.Cube cube;
+    final org.eclipse.daanse.olap.api.model.Cube cube;
     final MondrianOlap4jSchema olap4jSchema;
 
     MondrianOlap4jCube(
-        org.eclipse.daanse.olap.api.Cube cube,
+        org.eclipse.daanse.olap.api.model.Cube cube,
         MondrianOlap4jSchema olap4jSchema)
     {
         this.cube = cube;
@@ -84,7 +84,7 @@ class MondrianOlap4jCube
         final mondrian.olap.SchemaReader schemaReader =
             olap4jConnection.getMondrianConnection2().getSchemaReader()
             .withLocus();
-        for (org.eclipse.daanse.olap.api.Dimension dimension
+        for (org.eclipse.daanse.olap.api.model.Dimension dimension
             : schemaReader.getCubeDimensions(cube))
         {
             list.add(
@@ -102,10 +102,10 @@ class MondrianOlap4jCube
         final mondrian.olap.SchemaReader schemaReader =
             olap4jConnection.getMondrianConnection2().getSchemaReader()
             .withLocus();
-        for (org.eclipse.daanse.olap.api.Dimension dimension
+        for (org.eclipse.daanse.olap.api.model.Dimension dimension
             : schemaReader.getCubeDimensions(cube))
         {
-            for (org.eclipse.daanse.olap.api.Hierarchy hierarchy
+            for (org.eclipse.daanse.olap.api.model.Hierarchy hierarchy
                 : schemaReader.getDimensionHierarchies(dimension))
             {
                 list.add(
@@ -133,8 +133,8 @@ class MondrianOlap4jCube
                         .getLevels().get(0);
             final List<Measure> measures =
                 new ArrayList<Measure>();
-            List<org.eclipse.daanse.olap.api.Member> levelMembers = cube.getMeasures();
-            for (org.eclipse.daanse.olap.api.Member member : levelMembers) {
+            List<org.eclipse.daanse.olap.api.model.Member> levelMembers = cube.getMeasures();
+            for (org.eclipse.daanse.olap.api.model.Member member : levelMembers) {
                 // This corrects MONDRIAN-1123, a ClassCastException (see below)
                 // that occurs when you create a calculated member on a
                 // dimension other than Measures:
@@ -160,7 +160,7 @@ class MondrianOlap4jCube
             new NamedListImpl<MondrianOlap4jNamedSet>();
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
-        for (org.eclipse.daanse.olap.api.NamedSet namedSet : cube.getNamedSets()) {
+        for (org.eclipse.daanse.olap.api.model.NamedSet namedSet : cube.getNamedSets()) {
             list.add(olap4jConnection.toOlap4j(cube, namedSet));
         }
         return Olap4jUtil.cast(list);
@@ -214,7 +214,7 @@ class MondrianOlap4jCube
         for (IdentifierSegment namePart : nameParts) {
             segmentList.add(Util.convert(namePart));
         }
-        final org.eclipse.daanse.olap.api.Member member =
+        final org.eclipse.daanse.olap.api.model.Member member =
             schemaReader.getMemberByUniqueName(segmentList, false);
         if (member == null) {
             return null;
@@ -312,7 +312,7 @@ class MondrianOlap4jCube
         MondrianOlap4jMember member,
         boolean recurse)
     {
-        for (org.eclipse.daanse.olap.api.Member m
+        for (org.eclipse.daanse.olap.api.model.Member m
             : schemaReader.getMemberChildren(member.member))
         {
             MondrianOlap4jMember childMember = olap4jConnection.toOlap4j(m);

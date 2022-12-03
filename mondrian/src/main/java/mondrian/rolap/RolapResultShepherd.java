@@ -21,6 +21,7 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.util.property.IntegerProperty;
 
 import mondrian.olap.MondrianException;
@@ -28,7 +29,6 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryCanceledException;
 import mondrian.olap.QueryTimeoutException;
 import mondrian.olap.ResourceLimitExceededException;
-import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.server.Execution;

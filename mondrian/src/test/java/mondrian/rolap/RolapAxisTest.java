@@ -14,12 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.result.Position;
 import org.junit.jupiter.api.Test;
 
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
-import mondrian.olap.Position;
 import mondrian.olap.fun.TestMember;
 
 /**

@@ -23,21 +23,21 @@ import java.util.Map;
 
 import org.apache.commons.collections.Predicate;
 import org.eclipse.daanse.engine.api.Context;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.olap.Access;
 import mondrian.olap.DelegatingSchemaReader;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.ResultStyleException;
-import mondrian.olap.Role;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;

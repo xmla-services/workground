@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.olap.Access;
 import mondrian.olap.Id;
 import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;

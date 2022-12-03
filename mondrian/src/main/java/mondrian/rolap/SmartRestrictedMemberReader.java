@@ -17,10 +17,10 @@ import java.util.WeakHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.olap.Access;
-import mondrian.olap.Role;
 import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 

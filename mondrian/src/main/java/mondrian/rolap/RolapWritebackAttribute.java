@@ -10,7 +10,7 @@
 
 package mondrian.rolap;
 
-import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.model.Dimension;
 
 public class RolapWritebackAttribute extends RolapWritebackColumn{
     private final Dimension dimension;

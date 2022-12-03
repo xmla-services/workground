@@ -24,6 +24,7 @@ import java.io.StringWriter;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

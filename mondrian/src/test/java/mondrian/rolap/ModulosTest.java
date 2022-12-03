@@ -14,12 +14,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.Collections;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.result.Axis;
 import org.junit.jupiter.api.Test;
 
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Axis;
 
 /**
  * Test that the implementations of the Modulos interface are correct.

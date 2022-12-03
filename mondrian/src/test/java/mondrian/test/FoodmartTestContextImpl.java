@@ -43,8 +43,13 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.Assertions;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetAxis;
@@ -58,17 +63,12 @@ import org.olap4j.layout.TraditionalCellSetFormatter;
 import mondrian.calc.Calc;
 import mondrian.calc.CalcWriter;
 import mondrian.calc.ResultStyle;
-import mondrian.olap.Axis;
 import mondrian.olap.CacheControl;
-import mondrian.olap.Cell;
-import mondrian.olap.Connection;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;
 import mondrian.olap.Formula;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Position;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap4j.MondrianInprocProxy;
@@ -1308,7 +1308,7 @@ public void assertMatchesVerbose(
   }
 
   /**
-   * Converts a {@link mondrian.olap.Result} to text in traditional format.
+   * Converts a {@link org.eclipse.daanse.olap.api.result.Result} to text in traditional format.
    *
    * <p>For more exotic formats, see
    * {@link org.olap4j.layout.CellSetFormatter}.

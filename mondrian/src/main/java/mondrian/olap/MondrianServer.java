@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.eclipse.daanse.olap.api.Connection;
 import org.olap4j.OlapConnection;
 
 import mondrian.rolap.RolapConnection;

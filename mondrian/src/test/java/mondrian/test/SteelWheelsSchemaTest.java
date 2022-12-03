@@ -22,7 +22,11 @@ import static org.opencube.junit5.TestUtil.withSchema;
 import java.io.InputStream;
 import java.util.Arrays;
 
-import org.eclipse.daanse.olap.api.Schema;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,11 +38,7 @@ import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
 
-import mondrian.olap.Cell;
-import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Result;
-import mondrian.olap.Role;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnectionProperties;

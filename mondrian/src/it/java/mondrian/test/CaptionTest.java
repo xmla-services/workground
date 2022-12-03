@@ -36,7 +36,7 @@ public class CaptionTest extends TestCase {
             "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
             + "{[Time].[1997].[Q1]} ON ROWS FROM [Sales]";
         mondrian.olap.Query monQuery = monConnection.parseQuery(mdxQuery);
-        mondrian.olap.Result monResult = monConnection.execute(monQuery);
+        org.eclipse.daanse.olap.api.result.Result monResult = monConnection.execute(monQuery);
         Axis[] axes = monResult.getAxes();
         List<Position> positions = axes[0].getPositions();
         Member m0 = positions.get(0).get(0);
@@ -56,7 +56,7 @@ public class CaptionTest extends TestCase {
             "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
             + "{[Promotion Media].[All Media]} ON ROWS FROM [Sales]";
         mondrian.olap.Query monQuery = monConnection.parseQuery(mdxQuery);
-        mondrian.olap.Result monResult = monConnection.execute(monQuery);
+        org.eclipse.daanse.olap.api.result.Result monResult = monConnection.execute(monQuery);
         Axis[] axes = monResult.getAxes();
         List<Position> positions = axes[1].getPositions();
         Member mall = positions.get(0).get(0);
@@ -78,7 +78,7 @@ public class CaptionTest extends TestCase {
                 .withSchemaProcessor(MyFoodmart.class)
                 .getConnection();
         mondrian.olap.Query monQuery = monConnection.parseQuery(mdxQuery);
-        mondrian.olap.Result monResult = monConnection.execute(monQuery);
+        org.eclipse.daanse.olap.api.result.Result monResult = monConnection.execute(monQuery);
         Axis[] axes = monResult.getAxes();
         List<Position> positions = axes[1].getPositions();
         Member mall = positions.get(0).get(0);
@@ -116,7 +116,7 @@ public class CaptionTest extends TestCase {
             "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
             + "{[Time].[Year].Members} ON ROWS FROM [Sales]";
         mondrian.olap.Query monQuery = monConnection.parseQuery(mdxQuery);
-        mondrian.olap.Result monResult = monConnection.execute(monQuery);
+        org.eclipse.daanse.olap.api.result.Result monResult = monConnection.execute(monQuery);
         Axis[] axes = monResult.getAxes();
         List<Position> positions = axes[1].getPositions();
         Member mall = positions.get(0).get(0);

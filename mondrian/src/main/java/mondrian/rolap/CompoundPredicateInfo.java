@@ -16,7 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.TupleIterable;
 import mondrian.mdx.ResolvedFunCall;

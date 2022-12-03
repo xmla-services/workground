@@ -9,14 +9,17 @@
 
 package mondrian.olap;
 
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.NamedSet;
-import org.eclipse.daanse.olap.api.OlapElement;
-import org.eclipse.daanse.olap.api.Schema;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.HierarchyAccess;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.model.Schema;
 
 /**
  * <code>DelegatingRole</code> implements {@link Role} by

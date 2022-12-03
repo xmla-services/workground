@@ -9,7 +9,7 @@
 */
 package mondrian.rolap.format;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.spi.MemberFormatter;
 

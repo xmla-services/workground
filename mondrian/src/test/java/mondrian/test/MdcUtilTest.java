@@ -15,6 +15,7 @@ import static org.opencube.junit5.TestUtil.flushSchemaCache;
 
 import java.io.StringWriter;
 
+import org.eclipse.daanse.olap.api.Connection;
 //import org.apache.logging.log4j.ThreadContext;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,7 +26,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.Connection;
 import mondrian.rolap.RolapUtil;
 
 /**

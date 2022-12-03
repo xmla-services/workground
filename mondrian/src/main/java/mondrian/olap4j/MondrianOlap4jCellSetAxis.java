@@ -124,7 +124,7 @@ class MondrianOlap4jCellSetAxis implements CellSetAxis {
         public List<Member> getMembers() {
             return new AbstractList<Member>() {
                 public Member get(int slice) {
-                    final org.eclipse.daanse.olap.api.Member mondrianMember =
+                    final org.eclipse.daanse.olap.api.model.Member mondrianMember =
                         tupleList.get(slice, index);
                     return olap4jCellSet.olap4jStatement.olap4jConnection
                         .toOlap4j(mondrianMember);

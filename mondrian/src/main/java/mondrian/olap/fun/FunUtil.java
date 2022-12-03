@@ -23,11 +23,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 
 import mondrian.calc.Calc;
 import mondrian.calc.DoubleCalc;
@@ -41,7 +42,6 @@ import mondrian.mdx.HierarchyExpr;
 import mondrian.mdx.LevelExpr;
 import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.Access;
 import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
@@ -1725,7 +1725,7 @@ public class FunUtil extends Util {
   /**
    * Parses a tuple, of the form '(member, member, ...)'. There must be precisely one member for each hierarchy.
    *
-   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.Cube}
+   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.model.Cube}
    * @param string      String to parse
    * @param i           Position to start parsing in string
    * @param members     Output array of members
@@ -1754,7 +1754,7 @@ public class FunUtil extends Util {
   /**
    * Parses a tuple, such as "([Gender].[M], [Marital Status].[S])".
    *
-   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.Cube}
+   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.model.Cube}
    * @param string      String to parse
    * @param hierarchies Hierarchies of the members
    * @return Tuple represented as array of members

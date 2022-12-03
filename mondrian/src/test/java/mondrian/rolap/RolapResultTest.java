@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -23,7 +24,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.olap.Result;
 import mondrian.rolap.aggmatcher.AggTableTestCase;
 
 /**

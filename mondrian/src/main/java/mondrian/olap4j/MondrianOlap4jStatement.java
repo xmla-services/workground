@@ -18,7 +18,7 @@ import java.sql.SQLWarning;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.olap4j.CellSet;
 import org.olap4j.CellSetListener;
 import org.olap4j.OlapConnection;

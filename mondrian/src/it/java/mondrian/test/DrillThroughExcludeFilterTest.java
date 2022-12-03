@@ -8,8 +8,8 @@
 */
 package mondrian.test;
 
-import mondrian.olap.Cell;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Result;
 
 public class DrillThroughExcludeFilterTest extends FoodMartTestCase {
 

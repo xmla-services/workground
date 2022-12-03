@@ -10,11 +10,11 @@
 package mondrian.olap.fun;
 
 import mondrian.olap.Category;
-import mondrian.olap.Connection;
+import org.eclipse.daanse.olap.api.Connection;
 import mondrian.olap.Exp;
 import mondrian.olap.MondrianException;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;
 import mondrian.test.FoodMartTestCase;

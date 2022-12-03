@@ -13,7 +13,7 @@ import java.util.AbstractList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.TupleList;
 

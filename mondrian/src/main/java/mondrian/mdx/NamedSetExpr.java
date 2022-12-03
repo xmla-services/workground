@@ -11,8 +11,8 @@ package mondrian.mdx;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.NamedSet;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
@@ -28,7 +28,7 @@ import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
 
 /**
- * Usage of a {@link org.eclipse.daanse.olap.api.NamedSet} in an MDX expression.
+ * Usage of a {@link org.eclipse.daanse.olap.api.model.NamedSet} in an MDX expression.
  *
  * @author jhyde
  * @since Sep 26, 2005

@@ -30,6 +30,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.access.Role;
 import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.metadata.XmlaConstants;
 import org.opencube.junit5.context.TestingContext;
@@ -41,9 +43,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xmlunit.assertj3.XmlAssert;
 
-import mondrian.olap.Connection;
 import mondrian.olap.MondrianServer;
-import mondrian.olap.Role;
 import mondrian.olap.Util;
 import mondrian.olap.Util.PropertyList;
 import mondrian.olap4j.MondrianOlap4jDriver;

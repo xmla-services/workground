@@ -14,9 +14,9 @@ package mondrian.rolap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.olap.Access;
 import mondrian.olap.Id;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.sql.MemberChildrenConstraint;

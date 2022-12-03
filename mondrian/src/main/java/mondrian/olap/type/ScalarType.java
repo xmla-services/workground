@@ -11,9 +11,9 @@
 
 package mondrian.olap.type;
 
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
 
 /**
  * Base class for types which represent scalar values.

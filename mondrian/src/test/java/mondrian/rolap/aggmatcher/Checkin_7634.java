@@ -11,6 +11,7 @@ package mondrian.rolap.aggmatcher;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,7 +22,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Result;
 import mondrian.test.PropertySaver5;
 import mondrian.test.loader.CsvDBTestCase;
 

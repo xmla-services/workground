@@ -16,8 +16,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
 
-import org.eclipse.daanse.olap.api.MetaElement;
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.model.MetaElement;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.slf4j.Logger;
 
 /**

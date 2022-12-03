@@ -21,6 +21,8 @@ import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -35,10 +37,8 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.olap.CacheControl;
-import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluationUnsupportedException;
-import mondrian.olap.Result;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapCube;

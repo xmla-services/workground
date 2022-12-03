@@ -17,14 +17,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
 
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.NamedSet;
-import org.eclipse.daanse.olap.api.OlapElement;
-import org.eclipse.daanse.olap.api.Schema;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.AllHierarchyAccess;
+import org.eclipse.daanse.olap.api.access.HierarchyAccess;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.access.RollupPolicy;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.model.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -410,10 +415,10 @@ public class RoleImpl implements Role {
      * @param access An {@link Access access code}
      * @param topLevel Top-most level which can be accessed, or null if the
      *     highest level. May only be specified if <code>access</code> is
-     *    {@link mondrian.olap.Access#CUSTOM}.
+     *    {@link org.eclipse.daanse.olap.api.access.Access#CUSTOM}.
      * @param bottomLevel Bottom-most level which can be accessed, or null if
      *     the lowest level. May only be specified if <code>access</code> is
-     *    {@link mondrian.olap.Access#CUSTOM}.
+     *    {@link org.eclipse.daanse.olap.api.access.Access#CUSTOM}.
      *
      * @param rollupPolicy Rollup policy
      *
@@ -576,7 +581,7 @@ public class RoleImpl implements Role {
      * <li>The order of grants matters. If you grant/deny access to a
      *     member, previous grants/denials to its descendants are ignored.</li>
      * <li>Member grants do not supersde top/bottom levels set using
-     *     {@link #grant(Hierarchy, Access, Level, Level, mondrian.olap.Role.RollupPolicy)}.
+     *     {@link #grant(Hierarchy, Access, Level, Level, org.eclipse.daanse.olap.api.access.Role.RollupPolicy)}.
      * <li>If you have access to a member, then you can see its ancestors
      *     <em>even those explicitly denied</em>, up to the top level.
      * </ol>
@@ -663,7 +668,7 @@ public class RoleImpl implements Role {
     public static HierarchyAccess createAllAccess(Hierarchy hierarchy) {
         return new HierarchyAccessImpl(
             Util.createRootRole(hierarchy.getDimension().getSchema()),
-            hierarchy, Access.ALL, null, null, Role.RollupPolicy.FULL);
+            hierarchy, Access.ALL, null, null, RollupPolicy.FULL);
     }
 
     /**
@@ -682,7 +687,7 @@ public class RoleImpl implements Role {
     /**
      * Represents the access that a role has to a particular hierarchy.
      */
-    private static class HierarchyAccessImpl implements Role.AllHierarchyAccess
+    private static class HierarchyAccessImpl implements AllHierarchyAccess
     {
         private final Hierarchy hierarchy;
         private final Level topLevel;
@@ -1069,7 +1074,7 @@ public class RoleImpl implements Role {
     }
 
     /**
-     * Implementation of {@link mondrian.olap.Role.HierarchyAccess} that
+     * Implementation of {@link org.eclipse.daanse.olap.api.access.Role.HierarchyAccess} that
      * delegates all methods to an underlying hierarchy access.
      */
     public static abstract class DelegatingHierarchyAccess
@@ -1117,7 +1122,7 @@ public class RoleImpl implements Role {
     }
 
     /**
-     * Implementation of {@link mondrian.olap.Role.HierarchyAccess} that caches
+     * Implementation of {@link org.eclipse.daanse.olap.api.access.Role.HierarchyAccess} that caches
      * the access of each member and level.
      *
      * <p>This reduces the number of calls to the underlying HierarchyAccess,

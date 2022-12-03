@@ -20,7 +20,7 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.Id;
 import org.eclipse.daanse.olap.api.Member;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.olap.ResultBase;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;

@@ -17,7 +17,7 @@ package mondrian.olap.fun.sort;
 import java.util.List;
 import java.util.Objects;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;

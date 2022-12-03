@@ -25,13 +25,15 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.eclipse.daanse.engine.api.Context;
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.NamedSet;
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;
@@ -46,7 +48,6 @@ import mondrian.calc.ExpCompiler;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.Access;
 import mondrian.olap.CacheControl;
 import mondrian.olap.Category;
 import mondrian.olap.CubeBase;
@@ -66,7 +67,6 @@ import mondrian.olap.Property;
 import mondrian.olap.Query;
 import mondrian.olap.QueryAxis;
 import mondrian.olap.QueryPart;
-import mondrian.olap.Role;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.SetBase;
 import mondrian.olap.Util;
@@ -1131,7 +1131,7 @@ public class RolapCube extends CubeBase {
      *
      * @param xmlCalcMembers XML objects representing members
      * @param xmlNamedSets Array of XML definition of named set
-     * @param memberList Output list of {@link org.eclipse.daanse.olap.api.Member} objects
+     * @param memberList Output list of {@link org.eclipse.daanse.olap.api.model.Member} objects
      * @param formulaList Output list of {@link mondrian.olap.Formula} objects
      * @param cube the cube that the calculated members originate from
      * @param errOnDups throws an error if a duplicate member is found

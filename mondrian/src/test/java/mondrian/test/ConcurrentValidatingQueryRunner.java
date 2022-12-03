@@ -16,12 +16,12 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Member;
 import org.opencube.junit5.TestUtil;
 
 import mondrian.olap.CacheControl;
-import mondrian.olap.Connection;
 import mondrian.olap.Id;
 import mondrian.olap.SchemaReader;
 

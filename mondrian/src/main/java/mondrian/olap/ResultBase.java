@@ -14,8 +14,12 @@ package mondrian.olap;
 import java.io.PrintWriter;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Cell;
+import org.eclipse.daanse.olap.api.result.Position;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.slf4j.Logger;
 
 import mondrian.server.Execution;

@@ -16,11 +16,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.HierarchyAccess;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.model.Member;
 
-import mondrian.olap.Access;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Role;
 import mondrian.olap.RoleImpl;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.sql.MemberChildrenConstraint;
@@ -35,7 +36,7 @@ import mondrian.rolap.sql.TupleConstraint;
  */
 public class RestrictedMemberReader extends DelegatingMemberReader {
 
-    private final Role.HierarchyAccess hierarchyAccess;
+    private final HierarchyAccess hierarchyAccess;
     private final boolean ragged;
     private final SqlConstraintFactory sqlConstraintFactory =
         SqlConstraintFactory.instance();

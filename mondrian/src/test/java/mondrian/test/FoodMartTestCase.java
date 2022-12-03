@@ -18,18 +18,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Result;
 
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Axis;
-import mondrian.olap.Connection;
 import mondrian.olap.Id;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Query;
-import mondrian.olap.Result;
 import mondrian.olap.SchemaReader;
 
 /**

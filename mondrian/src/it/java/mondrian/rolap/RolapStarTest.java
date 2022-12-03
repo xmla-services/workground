@@ -9,7 +9,7 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.Connection;
+import org.eclipse.daanse.olap.api.Connection;
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianDef.SQL;
 import mondrian.rolap.RolapStar.Column;

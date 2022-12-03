@@ -25,13 +25,18 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.collections.collection.CompositeCollection;
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.NamedSet;
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.api.result.Axis;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.olap4j.impl.IdentifierParser;
 import org.olap4j.mdx.IdentifierSegment;
 
@@ -621,8 +626,8 @@ public class Query extends QueryPart {
 
             for(Hierarchy hierarchy : ((RolapCube) getCube()).getHierarchies()) {
 
-                org.eclipse.daanse.olap.api.Level[] levels = hierarchy.getLevels();
-                org.eclipse.daanse.olap.api.Level lastLevel = levels[levels.length - 1];
+                org.eclipse.daanse.olap.api.model.Level[] levels = hierarchy.getLevels();
+                org.eclipse.daanse.olap.api.model.Level lastLevel = levels[levels.length - 1];
                 mondrian.mdx.LevelExpr levelExpr = new mondrian.mdx.LevelExpr(lastLevel);
                 Exp levelMembers = new UnresolvedFunCall(
                   "AllMembers",

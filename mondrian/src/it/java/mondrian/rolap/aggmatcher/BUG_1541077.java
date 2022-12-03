@@ -10,7 +10,7 @@
 package mondrian.rolap.aggmatcher;
 
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 
 /**
  * Testcase for

@@ -24,8 +24,8 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Level;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;

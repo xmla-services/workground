@@ -11,7 +11,7 @@ package mondrian.udf;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.model.Member;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Evaluator;

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.model.NamedSet;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ParameterSlot;

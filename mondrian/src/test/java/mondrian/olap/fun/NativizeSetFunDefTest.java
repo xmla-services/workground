@@ -15,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -24,10 +26,8 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.ResourceLimitExceededException;
-import mondrian.olap.Result;
 import mondrian.olap.Util;
 import mondrian.rolap.BatchTestCase;
 import mondrian.rolap.RolapConnection;

@@ -13,9 +13,9 @@ package mondrian.rolap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 
 import mondrian.olap.Exp;
 import mondrian.olap.Id;

@@ -16,6 +16,8 @@ import mondrian.gui.validate.ValidationUtils;
 import mondrian.olap.*;
 import mondrian.olap.Util.PropertyList;
 
+import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.api.result.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

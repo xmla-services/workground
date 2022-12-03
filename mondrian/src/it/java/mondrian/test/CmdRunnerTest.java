@@ -9,7 +9,7 @@
 
 package mondrian.test;
 
-import mondrian.olap.Connection;
+import org.eclipse.daanse.olap.api.Connection;
 import mondrian.tui.CmdRunner;
 
 import java.io.*;

@@ -10,7 +10,7 @@ package mondrian.test;
 
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
-import mondrian.olap.Result;
+import org.eclipse.daanse.olap.api.result.Result;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapMember;
 import mondrian.rolap.SqlStatement;

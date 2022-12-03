@@ -29,6 +29,7 @@ import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
+import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -41,7 +42,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.BatchTestCase;
 import mondrian.test.PropertySaver5;

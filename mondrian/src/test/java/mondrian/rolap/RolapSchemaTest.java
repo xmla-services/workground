@@ -29,11 +29,13 @@ import static org.mockito.Mockito.when;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.RollupPolicy;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;
@@ -42,12 +44,10 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import mondrian.olap.Access;
 import mondrian.olap.Category;
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
-import mondrian.olap.Role;
 import mondrian.olap.RoleImpl;
 import mondrian.olap.SchemaReader;
 import mondrian.resource.MondrianResource;
@@ -386,7 +386,7 @@ public class RolapSchemaTest {
 
         MondrianDef.HierarchyGrant grant = new MondrianDef.HierarchyGrant();
         grant.access = Access.CUSTOM.toString();
-        grant.rollupPolicy = Role.RollupPolicy.FULL.toString();
+        grant.rollupPolicy = RollupPolicy.FULL.toString();
         grant.hierarchy = "hierarchy";
         grant.memberGrants = new MondrianDef.MemberGrant[] {memberGrant};
 

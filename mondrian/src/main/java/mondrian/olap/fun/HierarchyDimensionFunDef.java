@@ -9,8 +9,8 @@
 
 package mondrian.olap.fun;
 
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
