@@ -18,6 +18,11 @@ import mondrian.olap.type.LevelType;
 
 import java.util.Map;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Calculator which always returns the same value.
  *

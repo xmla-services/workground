@@ -12,14 +12,21 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.resource.MondrianResource;
+import java.util.Map;
 
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.Map;
+import mondrian.olap.DimensionBase;
+import mondrian.olap.DimensionType;
+import mondrian.olap.MondrianDef;
+import mondrian.olap.Util;
+import mondrian.resource.MondrianResource;
 
 /**
  * <code>RolapDimension</code> implements {@link Dimension}for a ROLAP
@@ -58,7 +65,7 @@ class RolapDimension extends DimensionBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(RolapDimension.class);
 
     private final Schema schema;
-    private final Map<String, Annotation> annotationMap;
+    private final Map<String, Object> metaData;
 
     RolapDimension(
         Schema schema,
@@ -68,7 +75,7 @@ class RolapDimension extends DimensionBase {
         String description,
         DimensionType dimensionType,
         final boolean highCardinality,
-        Map<String, Annotation> annotationMap)
+        Map<String, Object> metadata)
     {
         // todo: recognition of a time dimension should be improved
         // allow multiple time dimensions
@@ -79,9 +86,9 @@ class RolapDimension extends DimensionBase {
             description,
             dimensionType,
             highCardinality);
-        assert annotationMap != null;
+        assert metadata != null;
         this.schema = schema;
-        this.annotationMap = annotationMap;
+        this.metaData = metadata;
         this.hierarchies = new RolapHierarchy[0];
     }
 
@@ -104,7 +111,7 @@ class RolapDimension extends DimensionBase {
             xmlDimension.description,
             xmlDimension.getDimensionType(),
             xmlDimension.highCardinality,
-            RolapHierarchy.createAnnotationMap(xmlDimension.annotations));
+            RolapHierarchy.createMetadataMap(xmlDimension.annotations));
 
         Util.assertPrecondition(schema != null);
 
@@ -197,7 +204,7 @@ class RolapDimension extends DimensionBase {
             new RolapHierarchy(
                 this, subName,
                 caption, visible, description, null, hasAll, closureFor,
-                Collections.<String, Annotation>emptyMap());
+                Map.of());
         this.hierarchies = Util.append(this.hierarchies, hierarchy);
         return hierarchy;
     }
@@ -216,8 +223,8 @@ class RolapDimension extends DimensionBase {
         return schema;
     }
 
-    public Map<String, Annotation> getAnnotationMap() {
-        return annotationMap;
+    public Map<String, Object> getMetadata() {
+        return metaData;
     }
 
     @Override

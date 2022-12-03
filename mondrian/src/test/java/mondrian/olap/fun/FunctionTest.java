@@ -22,6 +22,7 @@ import mondrian.udf.CurrentDateStringUdf;
 import mondrian.util.Bug;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.eclipse.daanse.olap.api.Member;
 import org.eigenbase.xom.StringEscaper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

@@ -17,6 +17,9 @@ import mondrian.util.Format;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+
 import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**

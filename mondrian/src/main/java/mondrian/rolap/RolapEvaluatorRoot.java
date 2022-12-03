@@ -17,13 +17,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.NamedSet;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ParameterSlot;
 import mondrian.calc.ResultStyle;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.NamedSet;
 import mondrian.olap.Query;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.SolveOrderMode;

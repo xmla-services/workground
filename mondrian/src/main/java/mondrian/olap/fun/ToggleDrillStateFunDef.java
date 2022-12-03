@@ -19,6 +19,8 @@ import mondrian.resource.MondrianResource;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Definition of the <code>ToggleDrillState</code> MDX function.
  *

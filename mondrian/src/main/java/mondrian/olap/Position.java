@@ -15,6 +15,8 @@ package mondrian.olap;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * A <code>Position</code> is an item on an {@link Axis}.  It contains
  * one or more {@link Member}s.

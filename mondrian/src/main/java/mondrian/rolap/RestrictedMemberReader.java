@@ -17,6 +17,8 @@ import mondrian.rolap.sql.TupleConstraint;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * A <code>RestrictedMemberReader</code> reads only the members of a hierarchy
  * allowed by a role's access profile.

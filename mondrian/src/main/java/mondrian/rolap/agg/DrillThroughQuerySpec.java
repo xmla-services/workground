@@ -18,6 +18,7 @@ import mondrian.rolap.RolapStar.Measure;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.util.Pair;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.olap.api.OlapElement;
 
 import java.util.*;
 

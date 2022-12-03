@@ -10,6 +10,8 @@
 */
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+
 import mondrian.calc.*;
 import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.mdx.ResolvedFunCall;

@@ -12,6 +12,8 @@ package mondrian.test;
 
 import mondrian.olap.*;
 import mondrian.rolap.RolapConnectionProperties;
+
+import org.eclipse.daanse.olap.api.Member;
 import org.eigenbase.util.property.Property;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.impl.Olap4jUtil;

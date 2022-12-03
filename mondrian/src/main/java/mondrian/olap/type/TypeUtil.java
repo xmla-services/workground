@@ -17,6 +17,8 @@ import mondrian.olap.fun.Resolver;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+
 /**
  * Utility methods relating to types.
  *

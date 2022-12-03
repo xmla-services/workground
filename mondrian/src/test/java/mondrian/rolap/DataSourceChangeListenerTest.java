@@ -19,6 +19,8 @@ import mondrian.spi.impl.DataSourceChangeListenerImpl4;
 import mondrian.test.PropertySaver5;
 import mondrian.util.Bug;
 import mondrian.util.Pair;
+
+import org.eclipse.daanse.olap.api.Cube;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -20,6 +20,8 @@ import mondrian.rolap.RolapHierarchy;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+
 /**
  * Definition of the <code>Dimensions(&lt;Numeric Expression&gt;)</code>
  * MDX builtin function.

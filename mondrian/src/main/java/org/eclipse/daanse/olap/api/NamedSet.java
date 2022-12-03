@@ -9,8 +9,10 @@
 // All Rights Reserved.
 */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api;
 
+import mondrian.olap.Exp;
+import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
 
 /**
@@ -23,7 +25,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since 6 August, 2001
  */
-public interface NamedSet extends OlapElement, Annotated {
+public interface NamedSet extends OlapElement, MetaElement {
     /**
      * Sets the name of this named set.
      */

@@ -20,6 +20,9 @@ import mondrian.resource.MondrianResource;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+
 /**
  * Definition of the <code>StrToSet</code> MDX builtin function.
  *

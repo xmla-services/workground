@@ -28,9 +28,6 @@ import mondrian.olap.Category;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Level;
-import mondrian.olap.Member;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.fun.sort.Sorter;
@@ -38,6 +35,10 @@ import mondrian.olap.type.ScalarType;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Definition of the <code>DrilldownLevelTop</code> and

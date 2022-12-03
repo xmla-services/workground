@@ -20,6 +20,9 @@ import mondrian.util.CancellationChecker;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Definition of the <code>Filter</code> MDX function.
  *

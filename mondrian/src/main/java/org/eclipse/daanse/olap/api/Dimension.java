@@ -10,14 +10,16 @@
 // All Rights Reserved.
 */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api;
+
+import mondrian.olap.DimensionType;
 
 /**
  * A <code>Dimension</code> represents a dimension of a cube.
  *
  * @author jhyde, 1 March, 1999
  */
-public interface Dimension extends OlapElement, Annotated {
+public interface Dimension extends OlapElement, MetaElement {
     final public static String MEASURES_UNIQUE_NAME = "[Measures]";
     final public static String MEASURES_NAME = "Measures";
 

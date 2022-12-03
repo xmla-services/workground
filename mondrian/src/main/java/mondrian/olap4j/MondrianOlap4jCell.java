@@ -15,7 +15,7 @@ import mondrian.rolap.RolapCell;
 import mondrian.rolap.SqlStatement;
 
 import org.slf4j.Logger;
-
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.*;
 import org.olap4j.Cell;
 import org.olap4j.metadata.Property;

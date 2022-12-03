@@ -18,8 +18,6 @@ import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Level;
-import mondrian.olap.Member;
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Query;
@@ -45,6 +43,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;

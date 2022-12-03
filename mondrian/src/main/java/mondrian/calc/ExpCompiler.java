@@ -15,6 +15,10 @@ import mondrian.olap.type.Type;
 import mondrian.util.CreationException;
 import mondrian.util.ObjectFactory;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
 import org.eigenbase.util.property.StringProperty;
 
 import java.util.List;

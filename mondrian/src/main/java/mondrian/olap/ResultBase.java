@@ -14,6 +14,8 @@ package mondrian.olap;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

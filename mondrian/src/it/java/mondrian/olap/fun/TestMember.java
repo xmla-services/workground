@@ -8,18 +8,18 @@
 */
 package mondrian.olap.fun;
 
-import mondrian.olap.Annotation;
-import mondrian.olap.Dimension;
+import org.eclipse.daanse.olap.api.Annotation;
+import org.eclipse.daanse.olap.api.Dimension;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Exp;
-import mondrian.olap.Hierarchy;
+import org.eclipse.daanse.olap.api.Hierarchy;
 import mondrian.olap.Id;
-import mondrian.olap.Level;
+import org.eclipse.daanse.olap.api.Level;
 import mondrian.olap.MatchType;
-import mondrian.olap.Member;
-import mondrian.olap.OlapElement;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
 import mondrian.olap.Property;
-import mondrian.olap.Schema;
+import org.eclipse.daanse.olap.api.Schema;
 import mondrian.olap.SchemaReader;
 
 import java.util.List;

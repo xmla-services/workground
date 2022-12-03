@@ -8,9 +8,13 @@
 // Copyright (C) 2005-2020 Hitachi Vantara and others
 // All Rights Reserved.
 */
-package mondrian.olap;
+package org.eclipse.daanse.olap.api;
 
 import java.util.List;
+
+import mondrian.olap.Exp;
+import mondrian.olap.Property;
+import mondrian.olap.SchemaReader;
 
 /**
  * A <code>Member</code> is a 'point' on a dimension of a cube. Examples are
@@ -33,7 +37,7 @@ import java.util.List;
  *
  * @author jhyde, 2 March, 1999
  */
-public interface Member extends OlapElement, Comparable, Annotated {
+public interface Member extends OlapElement, Comparable, MetaElement {
 
   /**
    * Returns this member's parent, or null (not the 'null member', as returned by {@link Hierarchy#getNullMember})

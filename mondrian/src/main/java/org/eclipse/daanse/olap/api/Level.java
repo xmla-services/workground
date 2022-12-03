@@ -9,8 +9,11 @@
 // All Rights Reserved.
 */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api;
 
+import mondrian.olap.LevelType;
+import mondrian.olap.Property;
+import mondrian.olap.SchemaReader;
 import mondrian.spi.MemberFormatter;
 
 /**
@@ -19,7 +22,7 @@ import mondrian.spi.MemberFormatter;
  *
  * @author jhyde, 1 March, 1999
  */
-public interface Level extends OlapElement, Annotated {
+public interface Level extends OlapElement, MetaElement {
 
     /**
      * Returns the depth of this level.

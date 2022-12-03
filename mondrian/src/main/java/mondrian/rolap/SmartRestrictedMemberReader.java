@@ -16,6 +16,8 @@ import mondrian.rolap.sql.*;
 import java.util.*;
 import java.util.concurrent.locks.*;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * A {@link SmartRestrictedMemberReader} is a subclass of
  * {@link RestrictedMemberReader} which caches the access rights

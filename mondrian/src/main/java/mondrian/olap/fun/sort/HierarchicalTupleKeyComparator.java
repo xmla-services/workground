@@ -16,11 +16,12 @@ package mondrian.olap.fun.sort;
 
 import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Member;
 import mondrian.olap.Util;
 
 import java.util.List;
 import java.util.Objects;
+
+import org.eclipse.daanse.olap.api.Member;
 
 class HierarchicalTupleKeyComparator extends TupleExpMemoComparator {
 

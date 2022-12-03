@@ -9,10 +9,10 @@
 
 package mondrian.calc;
 
-import mondrian.olap.Member;
-
 import java.util.Iterator;
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Extension to {@link java.util.Iterator} that returns tuples.

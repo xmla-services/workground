@@ -9,11 +9,12 @@
 
 package mondrian.calc;
 
-import mondrian.olap.Dimension;
+import org.eclipse.daanse.olap.api.Dimension;
+
 import mondrian.olap.Evaluator;
 
 /**
- * Expression which yields a {@link mondrian.olap.Dimension}.
+ * Expression which yields a {@link org.eclipse.daanse.olap.api.Dimension}.
  *
  * <p>When implementing this interface, it is convenient to extend
  * {@link mondrian.calc.impl.AbstractDimensionCalc}, but it is not required.

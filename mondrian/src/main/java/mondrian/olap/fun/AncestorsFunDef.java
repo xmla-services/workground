@@ -19,6 +19,9 @@ import mondrian.olap.type.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+
 
 /**
  * Definition of the <code>Ancestors</code> MDX function.

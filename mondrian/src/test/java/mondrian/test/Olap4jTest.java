@@ -11,6 +11,8 @@ package mondrian.test;
 
 import mondrian.olap.*;
 import mondrian.xmla.XmlaHandler;
+
+import org.eclipse.daanse.olap.api.MetaElement;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -169,10 +171,10 @@ public class Olap4jTest {
                 "select from [Sales]");
         final CellSetMetaData metaData = cellSet.getMetaData();
         final Cube salesCube = metaData.getCube();
-        Annotated annotated = ((OlapWrapper) salesCube).unwrap(Annotated.class);
-        final Annotation annotation =
-            annotated.getAnnotationMap().get("caption.fr_FR");
-        assertEquals("Ventes", annotation.getValue());
+        MetaElement annotated = ((OlapWrapper) salesCube).unwrap(MetaElement.class);
+        final Object metaValue =
+            annotated.getMetadata().get("caption.fr_FR");
+        assertEquals("Ventes", metaValue);
 
         final Map<String, Object> map =
             XmlaHandler.getExtra(connection).getAnnotationMap(salesCube);
@@ -547,8 +549,8 @@ public class Olap4jTest {
             CacheControl cacheControl = context.createConnection().getCacheControl(null);
             Cube cube0 =
                 connection.getOlapSchema().getCubes().get("Sales");
-            mondrian.olap.Cube cube =
-                ((OlapWrapper) cube0).unwrap(mondrian.olap.Cube.class);
+            org.eclipse.daanse.olap.api.Cube cube =
+                ((OlapWrapper) cube0).unwrap(org.eclipse.daanse.olap.api.Cube.class);
             CacheControl.CellRegion cellRegion =
                 cacheControl.createMeasuresRegion(cube);
             final Random random = new Random();

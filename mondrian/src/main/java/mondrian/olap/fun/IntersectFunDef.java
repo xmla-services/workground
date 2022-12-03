@@ -18,6 +18,8 @@ import mondrian.olap.*;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Definition of the <code>INTERSECT</code> MDX function.
  *

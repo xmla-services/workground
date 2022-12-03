@@ -21,6 +21,9 @@ import mondrian.resource.MondrianResource;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+
 /**
  * Abstract implementation of the {@link mondrian.calc.ExpCompiler} interface.
  *

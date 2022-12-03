@@ -16,6 +16,9 @@ import mondrian.olap.type.Type;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * The <code>ResultStyleCompiler</code> can be used to assure that
  * the use of the container ResultStyle: ITERABLE, LIST and MUTABLE_LIST;

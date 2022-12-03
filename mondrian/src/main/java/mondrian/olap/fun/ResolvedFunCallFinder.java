@@ -13,6 +13,8 @@ import mondrian.olap.*;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Visitor class used to locate a resolved function call within an
  * expression

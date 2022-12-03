@@ -2644,13 +2644,13 @@ public class XmlaHandler {
                 "name", axisName);
             writer.startSequence("Tuples", "Tuple");
 
-            HashMap<Level, ArrayList<mondrian.olap.Member>> levelMembers = new HashMap<>();
+            HashMap<Level, ArrayList<org.eclipse.daanse.olap.api.Member>> levelMembers = new HashMap<>();
 
             for (Position p : axis.getPositions()) {
                 for (Member member : p.getMembers()) {
                     Level level = member.getLevel();
                     if(!levelMembers.containsKey(level)){
-                        levelMembers.put(level, new ArrayList<mondrian.olap.Member>());
+                        levelMembers.put(level, new ArrayList<org.eclipse.daanse.olap.api.Member>());
                     }
                     levelMembers.get(level)
                             .add(((mondrian.olap4j.MondrianOlap4jMember)member).getOlapMember());
@@ -2662,9 +2662,9 @@ public class XmlaHandler {
             final mondrian.server.Statement statement =
                     (mondrian.server.Statement) cellSet.getStatement();
 
-            for(Map.Entry<Level, ArrayList<mondrian.olap.Member>> entry : levelMembers.entrySet()) {
+            for(Map.Entry<Level, ArrayList<org.eclipse.daanse.olap.api.Member>> entry : levelMembers.entrySet()) {
                 Level level = entry.getKey();
-                ArrayList<mondrian.olap.Member> members = entry.getValue();
+                ArrayList<org.eclipse.daanse.olap.api.Member> members = entry.getValue();
 
                 if (members.size() > 0
                         && members.get(0).getLevel().getChildLevel() != null
@@ -2672,8 +2672,8 @@ public class XmlaHandler {
                     Locus.execute(
                             rolapConnection,
                             "MondrianOlap4jMember.getChildMembers",
-                            new Locus.Action<List<mondrian.olap.Member>>() {
-                                public List<mondrian.olap.Member> execute() {
+                            new Locus.Action<List<org.eclipse.daanse.olap.api.Member>>() {
+                                public List<org.eclipse.daanse.olap.api.Member> execute() {
                                     return
                                             statement.getQuery().getSchemaReader(true).getMemberChildren(members);
                                 }

@@ -11,10 +11,14 @@
 
 package mondrian.olap;
 
-import org.slf4j.Logger;
-
 import java.util.Locale;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Optional;
+
+import org.eclipse.daanse.olap.api.MetaElement;
+import org.eclipse.daanse.olap.api.OlapElement;
+import org.slf4j.Logger;
 
 /**
  * <code>OlapElementBase</code> is an abstract base class for implementations of
@@ -98,29 +102,35 @@ public abstract class OlapElementBase
     }
 
     public String getLocalized(LocalizedProperty prop, Locale locale) {
-        if (this instanceof Annotated) {
-            Annotated annotated = (Annotated) this;
-            final Map<String, Annotation> annotationMap =
-                annotated.getAnnotationMap();
-            if (!annotationMap.isEmpty()) {
-                String seek = prop.name().toLowerCase() + "." + locale;
-                for (;;) {
-                    for (Map.Entry<String, Annotation> entry
-                        : annotationMap.entrySet())
-                    {
-                        if (entry.getKey().startsWith(seek)) {
-                            return entry.getValue().getValue().toString();
-                        }
-                    }
+        if (this instanceof MetaElement) {
+            MetaElement metaElement = (MetaElement) this;
+            final Map<String, Object> metaMap = metaElement.getMetadata();
+            
+           final String seek = prop.name().toLowerCase() + "." + locale;
 
-                    // No match for locale. Is there a match for the parent
-                    // locale? For example, we've just looked for
-                    // 'caption.en_US', now look for 'caption.en'.
-                    final int underscore = seek.lastIndexOf('_');
-                    if (underscore < 0) {
-                        break;
-                    }
-                    seek = seek.substring(0, underscore - 1);
+            Optional<Entry<String, Object>> o = metaMap.entrySet()
+                    .stream()
+                    .filter(k -> k.getKey()
+                            .startsWith(seek))
+                    .findFirst();
+            
+            if (o.isPresent()){
+                return o.get().getValue().toString();
+            }
+
+            // No match for locale. Is there a match for the parent
+            // locale? For example, we've just looked for
+            // 'caption.en_US', now look for 'caption.en'.
+            final int underscore = seek.lastIndexOf('_');
+            if (underscore >= 0) {
+                final String     seek_ = seek.substring(0, underscore - 1);
+                o = metaMap.entrySet()
+                        .stream()
+                        .filter(k -> k.getKey()
+                                .startsWith(seek_))
+                        .findFirst();
+                if (o.isPresent()){
+                    return o.get().getValue().toString();
                 }
             }
         }

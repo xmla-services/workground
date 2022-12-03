@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -41,7 +42,6 @@ import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Connection;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.Member;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Position;
 import mondrian.olap.Result;

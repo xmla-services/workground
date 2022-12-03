@@ -11,7 +11,7 @@
 */
 package mondrian.test;
 
-import mondrian.olap.OlapElement;
+import org.eclipse.daanse.olap.api.OlapElement;
 import mondrian.olap.Result;
 import mondrian.rolap.RolapCell;
 

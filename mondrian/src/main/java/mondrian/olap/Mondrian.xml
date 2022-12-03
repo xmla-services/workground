@@ -2207,7 +2207,7 @@ Revision is $Id$
             If <code>access</code> is "custom", no access will be inherited
             by the dimensions of this cube, unless the parent SchemaGrant is
             set to "ALL_DIMENSIONS".
-            See <a href="api/mondrian/olap/Role.html#grant(mondrian.olap.Cube, int)">mondrian.olap.Role#grant(mondrian.olap.Cube,int)</a>.
+            See <a href="api/mondrian/olap/Role.html#grant(org.eclipse.daanse.olap.api.Cube, int)">mondrian.olap.Role#grant(org.eclipse.daanse.olap.api.Cube,int)</a>.
         </Doc>
         <Attribute name="cube" required="true">
             <Doc>The unique name of the cube</Doc>
@@ -2227,7 +2227,7 @@ Revision is $Id$
             If the parent schema <code>access</code> is "ALL_DIMENSIONS",
             this timension will inherit <code>access</code> "ALL".
             See also the "all_dimensions" option of the "SchemaGrant" element.
-            See <a href="api/mondrian/olap/Role.html#grant(mondrian.olap.Dimension, int)">mondrian.olap.Role#grant(mondrian.olap.Dimension,int)</a>.
+            See <a href="api/mondrian/olap/Role.html#grant(org.eclipse.daanse.olap.api.Dimension, int)">mondrian.olap.Role#grant(org.eclipse.daanse.olap.api.Dimension,int)</a>.
         </Doc>
         <Attribute name="dimension" required="true">
             <Doc>The unique name of the dimension</Doc>
@@ -2244,7 +2244,7 @@ Revision is $Id$
             If <code>access</code> is "custom", the child levels of this
             hierarchy will not inherit access rights from this hierarchy,
             should there be no explicit rules defined for the said child level.
-            See <a href="api/mondrian/olap/Role.html#grant(mondrian.olap.Hierarchy, int, mondrian.olap.Level)">mondrian.olap.Role#grant(mondrian.olap.Hierarchy, int, mondrian.olap.Level)</a>.
+            See <a href="api/mondrian/olap/Role.html#grant(org.eclipse.daanse.olap.api.Hierarchy, int, org.eclipse.daanse.olap.api.Level)">mondrian.olap.Role#grant(org.eclipse.daanse.olap.api.Hierarchy, int, org.eclipse.daanse.olap.api.Level)</a>.
         </Doc>
         <Attribute name="hierarchy" required="true">
             <Doc>The unique name of the hierarchy</Doc>
@@ -2275,7 +2275,7 @@ Revision is $Id$
             Grants (or denies) this role access to a member.
             The children of this member inherit that access.
             You can implicitly see a member if you can see any of its children.
-            See <a href="api/mondrian/olap/Role.html#grant(mondrian.olap.Member, int)">mondrian.olap.Role#grant(mondrian.olap.Member,int)</a>.
+            See <a href="api/mondrian/olap/Role.html#grant(org.eclipse.daanse.olap.api.Member, int)">mondrian.olap.Role#grant(org.eclipse.daanse.olap.api.Member,int)</a>.
         </Doc>
         <Attribute name="member" required="true">
             <Doc>The unique name of the member</Doc>

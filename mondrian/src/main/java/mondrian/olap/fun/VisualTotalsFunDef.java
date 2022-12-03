@@ -21,6 +21,8 @@ import mondrian.rolap.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Definition of the <code>VisualTotals</code> MDX function.
  *

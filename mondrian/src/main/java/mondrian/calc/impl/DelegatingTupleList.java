@@ -11,10 +11,11 @@ package mondrian.calc.impl;
 
 import mondrian.calc.TupleIterator;
 import mondrian.calc.TupleList;
-import mondrian.olap.Member;
 import mondrian.olap.Util;
 
 import java.util.*;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Implementation of {@link mondrian.calc.TupleList} based on a list of

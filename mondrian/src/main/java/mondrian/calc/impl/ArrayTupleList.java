@@ -13,7 +13,6 @@ import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterator;
 import mondrian.calc.TupleList;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Member;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
@@ -23,6 +22,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Implementation of {@link TupleList} that stores tuples end-to-end in an array.

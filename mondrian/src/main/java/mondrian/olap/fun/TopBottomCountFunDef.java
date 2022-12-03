@@ -25,14 +25,15 @@ import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Member;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.fun.sort.Sorter;
 
 import java.util.AbstractList;
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
 
 import static mondrian.olap.fun.sort.Sorter.partiallySortTuples;
 

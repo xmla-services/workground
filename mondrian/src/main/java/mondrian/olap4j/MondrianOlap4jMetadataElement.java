@@ -9,8 +9,7 @@
 
 package mondrian.olap4j;
 
-import mondrian.olap.OlapElement;
-
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.OlapWrapper;
 
 import java.sql.SQLException;

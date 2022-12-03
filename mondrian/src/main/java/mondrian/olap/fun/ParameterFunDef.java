@@ -18,6 +18,8 @@ import mondrian.olap.type.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Dimension;
+
 /**
  * A <code>ParameterFunDef</code> is a pseudo-function describing calls to
  * <code>Parameter</code> and <code>ParamRef</code> functions. It exists only

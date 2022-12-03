@@ -14,6 +14,15 @@ import mondrian.olap.*;
 import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.rolap.RolapConnection;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.Schema;
+
 import mondrian.test.DiffRepository;
 import mondrian.test.PropertySaver5;
 import mondrian.tui.XmlUtil;

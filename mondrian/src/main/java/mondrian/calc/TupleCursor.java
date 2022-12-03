@@ -10,9 +10,10 @@
 package mondrian.calc;
 
 import mondrian.olap.Evaluator;
-import mondrian.olap.Member;
 
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Cheap interface for iterating through the contents of a {@link TupleList}.

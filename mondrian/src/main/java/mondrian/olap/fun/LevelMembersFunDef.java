@@ -9,11 +9,12 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.olap.api.Level;
+
 import mondrian.calc.*;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Level;
 
 /**
  * Definition of the <code>&lt;Level&gt;.Members</code> MDX function.

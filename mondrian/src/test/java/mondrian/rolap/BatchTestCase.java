@@ -21,6 +21,9 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Member;
+
 import mondrian.test.SqlPattern;
 import mondrian.util.Pair;
 import org.slf4j.LoggerFactory;

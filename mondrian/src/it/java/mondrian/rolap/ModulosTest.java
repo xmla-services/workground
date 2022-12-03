@@ -12,7 +12,7 @@ package mondrian.rolap;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.Axis;
-import mondrian.olap.Member;
+import org.eclipse.daanse.olap.api.Member;
 
 import junit.framework.TestCase;
 

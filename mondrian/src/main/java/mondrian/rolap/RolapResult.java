@@ -22,6 +22,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.NamedSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,16 +50,12 @@ import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Axis;
 import mondrian.olap.Cell;
-import mondrian.olap.Dimension;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Member;
 import mondrian.olap.MemberBase;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.NamedSet;
 import mondrian.olap.Parameter;
 import mondrian.olap.Position;
 import mondrian.olap.Property;
@@ -264,8 +264,8 @@ public class RolapResult extends ResultBase {
 
       for(Map.Entry<Hierarchy, Calc> entry : query.subcubeHierarchyCalcs.entrySet()) {
         Hierarchy hierarchy = entry.getKey();
-        mondrian.olap.Level[] levels = hierarchy.getLevels();
-        mondrian.olap.Level lastLevel = levels[levels.length - 1];
+        org.eclipse.daanse.olap.api.Level[] levels = hierarchy.getLevels();
+        org.eclipse.daanse.olap.api.Level lastLevel = levels[levels.length - 1];
 
         Calc calc = entry.getValue();
 
@@ -2337,7 +2337,7 @@ public class RolapResult extends ResultBase {
     public boolean isOnSameHierarchyChainInternal( MemberBase member2 ) {
       // Stores the index of the corresponding member in each tuple
       int index = -1;
-      for ( List<mondrian.olap.Member> subList : tupleList ) {
+      for ( List<org.eclipse.daanse.olap.api.Member> subList : tupleList ) {
         if ( index == -1 ) {
           for ( int i = 0; i < subList.size(); i++ ) {
             if ( member2.getHierarchy().equals( subList.get( i ).getHierarchy() ) ) {

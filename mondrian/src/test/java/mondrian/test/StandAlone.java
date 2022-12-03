@@ -17,6 +17,13 @@ import java.io.*;
 import java.text.MessageFormat;
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.Schema;
+
 public class StandAlone {
     private static final String[] indents = new String[]{
         "    ", "        ", "            ", "                "

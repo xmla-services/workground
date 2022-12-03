@@ -10,10 +10,18 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
-
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
+
+import mondrian.olap.Exp;
+import mondrian.olap.Id;
+import mondrian.olap.MatchType;
+import mondrian.olap.Property;
+import mondrian.olap.SchemaReader;
 
 /**
  * Implementation of {@link mondrian.rolap.RolapMember} that delegates all calls
@@ -175,8 +183,8 @@ public class DelegatingRolapMember extends RolapMemberBase {
         return member.lookupChild(schemaReader, s, matchType);
     }
 
-    public Map<String, Annotation> getAnnotationMap() {
-        return member.getAnnotationMap();
+    public Map<String, Object> getMetadata()  {
+        return member.getMetadata();
     }
 
     public String getQualifiedName() {

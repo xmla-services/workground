@@ -189,8 +189,8 @@ and is created by parsing an MDX string. A
 to a JDBC <a href="http://java.sun.com/j2se/1.4/docs/api/java/sql/ResultSet.html">ResultSet</a>;
 since we are dealing with multi-dimensional data, it consists of axes and cells, rather than rows and columns. Since OLAP is
 intended for data exploration, you can modify the parse tree contained in a query by operations such as
-<a href="api/mondrian/olap/Query.html#drillDown(mondrian.olap.Level)">
-drillDown</a> and <a href="api/mondrian/olap/Query.html#sort(int, int, mondrian.olap.Member[])">
+<a href="api/mondrian/olap/Query.html#drillDown(org.eclipse.daanse.olap.api.Level)">
+drillDown</a> and <a href="api/mondrian/olap/Query.html#sort(int, int, org.eclipse.daanse.olap.api.Member[])">
 sort</a>, then re-execute the query.</p>
 
 <p>The API also presents the database schema as a set of objects:

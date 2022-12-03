@@ -16,6 +16,10 @@ import mondrian.resource.MondrianResource;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * This class implements object of type GrantCube to apply permissions
  * on user's MDX query

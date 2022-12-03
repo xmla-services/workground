@@ -496,8 +496,8 @@ public class Olap4jTest extends FoodMartTestCase {
             CacheControl cacheControl = testContext.getCacheControl();
             Cube cube0 =
                 connection.getOlapSchema().getCubes().get("Sales");
-            mondrian.olap.Cube cube =
-                ((OlapWrapper) cube0).unwrap(mondrian.olap.Cube.class);
+            org.eclipse.daanse.olap.api.Cube cube =
+                ((OlapWrapper) cube0).unwrap(org.eclipse.daanse.olap.api.Cube.class);
             CacheControl.CellRegion cellRegion =
                 cacheControl.createMeasuresRegion(cube);
             final Random random = new Random();

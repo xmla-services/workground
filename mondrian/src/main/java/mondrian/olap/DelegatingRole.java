@@ -9,6 +9,15 @@
 
 package mondrian.olap;
 
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.Schema;
+
 /**
  * <code>DelegatingRole</code> implements {@link Role} by
  * delegating all methods to an underlying {@link Role}.

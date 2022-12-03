@@ -11,9 +11,16 @@
 
 package mondrian.olap;
 
-import mondrian.resource.MondrianResource;
-
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
+
+import mondrian.resource.MondrianResource;
 
 /**
  * <code>CubeBase</code> is an abstract implementation of {@link Cube}.

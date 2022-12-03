@@ -11,7 +11,7 @@
 
 package mondrian.spi;
 
-import mondrian.olap.Member;
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * An SPI to redefine the caption displayed for members.

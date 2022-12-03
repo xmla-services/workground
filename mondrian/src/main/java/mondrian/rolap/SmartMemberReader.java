@@ -14,7 +14,6 @@ package mondrian.rolap;
 
 import mondrian.olap.Access;
 import mondrian.olap.Id;
-import mondrian.olap.Member;
 import mondrian.olap.Util;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.sql.MemberChildrenConstraint;
@@ -22,6 +21,8 @@ import mondrian.rolap.sql.TupleConstraint;
 import mondrian.util.ConcatenableList;
 
 import java.util.*;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * <code>SmartMemberReader</code> implements {@link MemberReader} by keeping a

@@ -17,6 +17,8 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Evaluation context to be able to expand a generic expression that returns a
  * set

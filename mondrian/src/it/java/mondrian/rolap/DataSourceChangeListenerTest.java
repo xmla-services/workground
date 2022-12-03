@@ -55,7 +55,7 @@ public class DataSourceChangeListenerTest extends BatchTestCase {
 
         // Flush the entire cache.
         final Connection connection = testContext.getConnection();
-        final mondrian.olap.Cube salesCube =
+        final org.eclipse.daanse.olap.api.Cube salesCube =
             connection.getSchema().lookupCube("Sales", true);
         final mondrian.olap.CacheControl.CellRegion measuresRegion =
             cacheControl.createMeasuresRegion(salesCube);

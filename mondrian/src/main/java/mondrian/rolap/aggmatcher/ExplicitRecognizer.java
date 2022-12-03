@@ -18,6 +18,9 @@ import mondrian.util.Pair;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+
 /**
  * This is the Recognizer for the aggregate table descriptions that appear in
  * the catalog schema files; the user explicitly defines the aggregate.

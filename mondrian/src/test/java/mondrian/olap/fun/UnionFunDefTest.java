@@ -16,9 +16,10 @@ import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Connection;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.Member;
 import mondrian.olap.type.SetType;
 import mondrian.rolap.RolapMemberBase;
+
+import org.eclipse.daanse.olap.api.Member;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.mockito.Mockito;

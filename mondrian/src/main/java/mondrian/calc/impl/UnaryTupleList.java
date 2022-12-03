@@ -11,9 +11,10 @@ package mondrian.calc.impl;
 
 import mondrian.calc.*;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Member;
 
 import java.util.*;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Implementation of {@link TupleList} where the tuples are unary (each tuple

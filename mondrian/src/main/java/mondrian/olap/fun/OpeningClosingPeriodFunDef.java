@@ -24,6 +24,10 @@ import mondrian.rolap.RolapHierarchy;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Definition of the <code>OpeningPeriod</code> and <code>ClosingPeriod</code>
  * builtin functions.

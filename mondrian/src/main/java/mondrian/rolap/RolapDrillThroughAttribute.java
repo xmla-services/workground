@@ -10,6 +10,11 @@
 
 package mondrian.rolap;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.OlapElement;
+
 import mondrian.olap.*;
 
 public class RolapDrillThroughAttribute extends RolapDrillThroughColumn {

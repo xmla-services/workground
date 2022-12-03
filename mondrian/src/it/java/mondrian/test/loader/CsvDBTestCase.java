@@ -10,7 +10,7 @@
 */
 package mondrian.test.loader;
 
-import mondrian.olap.Schema;
+import org.eclipse.daanse.olap.api.Schema;
 import mondrian.rolap.BatchTestCase;
 import mondrian.spi.Dialect;
 import mondrian.test.FoodMartTestCase;

@@ -12,18 +12,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import mondrian.olap.Annotation;
-import mondrian.olap.Dimension;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
+
 import mondrian.olap.DimensionType;
 import mondrian.olap.Exp;
-import mondrian.olap.Hierarchy;
 import mondrian.olap.Id;
-import mondrian.olap.Level;
 import mondrian.olap.MatchType;
-import mondrian.olap.Member;
-import mondrian.olap.OlapElement;
 import mondrian.olap.Property;
-import mondrian.olap.Schema;
+import org.eclipse.daanse.olap.api.Schema;
 import mondrian.olap.SchemaReader;
 
 /**
@@ -200,8 +200,11 @@ public class TestMember implements Member {
     return new MockDimension();
   }
 
-  public Map<String, Annotation> getAnnotationMap() {
-    throw new UnsupportedOperationException();
+
+  @Override
+  public Map<String, Object> getMetadata() {
+      throw new UnsupportedOperationException();
+
   }
 
   private static class MockDimension implements Dimension {
@@ -267,10 +270,12 @@ public class TestMember implements Member {
       throw new UnsupportedOperationException();
     }
 
-    public Map<String, Annotation> getAnnotationMap() {
+    public Map<String, Object> getMetadata() {
       throw new UnsupportedOperationException();
     }
+
   }
+
 }
 
 // End TestMember.java

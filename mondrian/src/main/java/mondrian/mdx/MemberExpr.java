@@ -9,6 +9,8 @@
 
 package mondrian.mdx;
 
+import org.eclipse.daanse.olap.api.Member;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.ConstantCalc;
@@ -17,7 +19,7 @@ import mondrian.olap.type.MemberType;
 import mondrian.olap.type.Type;
 
 /**
- * Usage of a {@link mondrian.olap.Member} as an MDX expression.
+ * Usage of a {@link org.eclipse.daanse.olap.api.Member} as an MDX expression.
  *
  * @author jhyde
  * @since Sep 26, 2005

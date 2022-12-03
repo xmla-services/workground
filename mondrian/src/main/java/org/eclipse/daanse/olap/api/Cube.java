@@ -10,17 +10,21 @@
 // All Rights Reserved.
 */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api;
 
 import java.util.List;
 import java.util.Set;
+
+import mondrian.olap.Id;
+import mondrian.olap.Role;
+import mondrian.olap.SchemaReader;
 
 /**
  * Cube.
  *
  * @author jhyde, 2 March, 1999
  */
-public interface Cube extends OlapElement, Annotated {
+public interface Cube extends OlapElement, MetaElement {
 
     String getName();
 

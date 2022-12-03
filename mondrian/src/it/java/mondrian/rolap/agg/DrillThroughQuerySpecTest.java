@@ -10,7 +10,7 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.olap.OlapElement;
+import org.eclipse.daanse.olap.api.OlapElement;
 import mondrian.rolap.*;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.spi.Dialect;

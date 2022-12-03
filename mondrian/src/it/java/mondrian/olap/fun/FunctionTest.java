@@ -16,7 +16,7 @@ import junit.framework.ComparisonFailure;
 import mondrian.olap.Axis;
 import mondrian.olap.Cell;
 import mondrian.olap.Connection;
-import mondrian.olap.Member;
+import org.eclipse.daanse.olap.api.Member;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Position;

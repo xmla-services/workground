@@ -11,8 +11,7 @@
 
 package mondrian.olap4j;
 
-import mondrian.olap.OlapElement;
-
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.OlapException;
 import org.olap4j.impl.*;
 import org.olap4j.metadata.*;
@@ -31,11 +30,11 @@ public class MondrianOlap4jHierarchy
     implements Hierarchy, Named
 {
     final MondrianOlap4jSchema olap4jSchema;
-    final mondrian.olap.Hierarchy hierarchy;
+    final org.eclipse.daanse.olap.api.Hierarchy hierarchy;
 
     MondrianOlap4jHierarchy(
         MondrianOlap4jSchema olap4jSchema,
-        mondrian.olap.Hierarchy hierarchy)
+        org.eclipse.daanse.olap.api.Hierarchy hierarchy)
     {
         this.olap4jSchema = olap4jSchema;
         this.hierarchy = hierarchy;
@@ -63,7 +62,7 @@ public class MondrianOlap4jHierarchy
         final mondrian.olap.SchemaReader schemaReader =
             olap4jConnection.getMondrianConnection2().getSchemaReader()
                 .withLocus();
-        for (mondrian.olap.Level level
+        for (org.eclipse.daanse.olap.api.Level level
             : schemaReader.getHierarchyLevels(hierarchy))
         {
             list.add(olap4jConnection.toOlap4j(level));
@@ -89,7 +88,7 @@ public class MondrianOlap4jHierarchy
     public NamedList<Member> getRootMembers() throws OlapException {
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
-        final List<mondrian.olap.Member> levelMembers =
+        final List<org.eclipse.daanse.olap.api.Member> levelMembers =
             olap4jConnection.getMondrianConnection().getSchemaReader()
                 .withLocus()
                 .getLevelMembers(
@@ -142,7 +141,7 @@ public class MondrianOlap4jHierarchy
         return hierarchy;
     }
 
-    public mondrian.olap.Hierarchy getHierarchy() {
+    public org.eclipse.daanse.olap.api.Hierarchy getHierarchy() {
         return this.hierarchy;
     }
 }

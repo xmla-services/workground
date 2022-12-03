@@ -10,7 +10,6 @@
 package mondrian.rolap.agg;
 
 import mondrian.olap.CacheControl.CellRegion;
-import mondrian.olap.Member;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Util;
@@ -39,6 +38,7 @@ import mondrian.util.BlockingHashMap;
 import mondrian.util.MDCUtil;
 import mondrian.util.Pair;
 
+import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

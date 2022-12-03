@@ -14,14 +14,15 @@
 package mondrian.rolap;
 
 import mondrian.olap.Access;
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Member;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
 
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * A <code>MemberReader</code> implements common operations to retrieve members

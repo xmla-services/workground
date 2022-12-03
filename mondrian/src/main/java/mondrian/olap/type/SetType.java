@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+
 /**
  * Set type.
  *

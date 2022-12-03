@@ -17,6 +17,10 @@ import mondrian.rolap.*;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Abstract base class for all aggregate functions (<code>Aggregate</code>,
  * <code>Sum</code>, <code>Avg</code>, et cetera).

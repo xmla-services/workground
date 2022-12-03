@@ -26,7 +26,7 @@ import org.olap4j.OlapStatement;
 import org.olap4j.layout.RectangularCellSetFormatter;
 
 import mondrian.olap.CacheControl;
-import mondrian.olap.Cube;
+import org.eclipse.daanse.olap.api.Cube;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.QueryTiming;
 import mondrian.olap.Util;

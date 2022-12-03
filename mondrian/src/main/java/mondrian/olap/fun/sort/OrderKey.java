@@ -14,7 +14,7 @@
 
 package mondrian.olap.fun.sort;
 
-import mondrian.olap.Member;
+import org.eclipse.daanse.olap.api.Member;
 
 
 public class OrderKey implements Comparable {

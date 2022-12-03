@@ -12,7 +12,11 @@ package mondrian.olap;
 import mondrian.mdx.*;
 
 import org.apache.commons.collections.*;
-
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -81,10 +81,10 @@ class MondrianOlap4jProperty implements IMondrianOlap4jProperty, Named {
         this.property = property;
     }
 
-    mondrian.olap.Level level;
+    org.eclipse.daanse.olap.api.Level level;
 
     MondrianOlap4jProperty
-        (mondrian.olap.Property property, mondrian.olap.Level level) {
+        (mondrian.olap.Property property, org.eclipse.daanse.olap.api.Level level) {
         this(property);
         this.level = level;
     }
@@ -140,7 +140,7 @@ class MondrianOlap4jProperty implements IMondrianOlap4jProperty, Named {
         return ContentType.REGULAR;
     }
 
-    public mondrian.olap.Level getLevel() {
+    public org.eclipse.daanse.olap.api.Level getLevel() {
         return level;
     }
 

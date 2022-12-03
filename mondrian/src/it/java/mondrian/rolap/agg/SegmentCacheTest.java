@@ -10,7 +10,7 @@
 package mondrian.rolap.agg;
 
 import mondrian.olap.CacheControl;
-import mondrian.olap.Cube;
+import org.eclipse.daanse.olap.api.Cube;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.MondrianServer;
 import mondrian.rolap.agg.SegmentCacheManager.CompositeSegmentCache;

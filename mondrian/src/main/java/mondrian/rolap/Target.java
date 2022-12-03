@@ -19,6 +19,8 @@ import mondrian.rolap.sql.TupleConstraint;
 import java.sql.SQLException;
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Member;
+
  /**
  * Helper class for {@link mondrian.rolap.HighCardSqlTupleReader} that
  * keeps track of target levels and constraints for adding to SQL query.

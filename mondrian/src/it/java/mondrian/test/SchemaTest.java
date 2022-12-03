@@ -11,8 +11,8 @@ package mondrian.test;
 import junit.framework.Assert;
 import mondrian.olap.*;
 import mondrian.olap.Category;
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Level;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapCube;
@@ -80,7 +80,7 @@ public class SchemaTest extends FoodMartTestCase {
 
     /**
      * Asserts that a list of exceptions (probably from
-     * {@link mondrian.olap.Schema#getWarnings()}) contains the expected
+     * {@link org.eclipse.daanse.olap.api.Schema#getWarnings()}) contains the expected
      * exception.
      *
      * @param exceptionList List of exceptions
@@ -3192,7 +3192,7 @@ public class SchemaTest extends FoodMartTestCase {
         assertEquals("Hierarchy caption", hierarchy.getCaption());
         checkAnnotations(hierarchy.getAnnotationMap(), "a", "Hierarchy");
 
-        final mondrian.olap.Level level = hierarchy.getLevels()[1];
+        final org.eclipse.daanse.olap.api.Level level = hierarchy.getLevels()[1];
         assertEquals("Level description", level.getDescription());
         assertEquals("Level caption", level.getCaption());
         checkAnnotations(level.getAnnotationMap(), "a", "Level");
@@ -3216,7 +3216,7 @@ public class SchemaTest extends FoodMartTestCase {
         assertNull(allMember.getDescription());
 
         // All level.
-        final mondrian.olap.Level allLevel = hierarchy.getLevels()[0];
+        final org.eclipse.daanse.olap.api.Level allLevel = hierarchy.getLevels()[0];
         assertEquals("(All)", allLevel.getName());
         assertNull(allLevel.getDescription());
         assertEquals(allLevel.getName(), allLevel.getCaption());
@@ -3290,7 +3290,7 @@ public class SchemaTest extends FoodMartTestCase {
         final Dimension measuresDimension = cube.getDimensions()[0];
         final Hierarchy measuresHierarchy =
             measuresDimension.getHierarchies()[0];
-        final mondrian.olap.Level measuresLevel =
+        final org.eclipse.daanse.olap.api.Level measuresLevel =
             measuresHierarchy.getLevels()[0];
         final SchemaReader schemaReader = cube.getSchemaReader(null);
         final List<Member> measures =
@@ -3351,7 +3351,7 @@ public class SchemaTest extends FoodMartTestCase {
         final Dimension measuresDimension2 = cube2.getDimensions()[0];
         final Hierarchy measuresHierarchy2 =
             measuresDimension2.getHierarchies()[0];
-        final mondrian.olap.Level measuresLevel2 =
+        final org.eclipse.daanse.olap.api.Level measuresLevel2 =
             measuresHierarchy2.getLevels()[0];
         final List<Member> measures2 =
             schemaReader2.getLevelMembers(measuresLevel2, true);
@@ -4120,7 +4120,7 @@ public class SchemaTest extends FoodMartTestCase {
                     ? "Bacon"
                     : "Bar.Bacon",
                 hier.getName());
-            final mondrian.olap.Level level = hier.getLevels()[0];
+            final org.eclipse.daanse.olap.api.Level level = hier.getLevels()[0];
             assertEquals("Samosa", level.getName());
             assertTrue(testValue.equals(level.isVisible()));
         }

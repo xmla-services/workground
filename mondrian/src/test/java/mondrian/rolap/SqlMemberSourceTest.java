@@ -10,10 +10,11 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.Dimension;
-import mondrian.olap.Level;
 import mondrian.olap.MondrianDef;
 import mondrian.util.ByteString;
+
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Level;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;

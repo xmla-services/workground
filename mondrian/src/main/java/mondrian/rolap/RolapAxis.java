@@ -17,6 +17,8 @@ import mondrian.olap.*;
 import java.util.AbstractList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Implementation of the Axis interface.
  *

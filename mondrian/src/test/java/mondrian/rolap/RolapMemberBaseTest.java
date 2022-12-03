@@ -17,10 +17,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import org.eclipse.daanse.olap.api.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import mondrian.olap.Member;
 import mondrian.olap.Property;
 import mondrian.spi.MemberFormatter;
 import mondrian.spi.PropertyFormatter;

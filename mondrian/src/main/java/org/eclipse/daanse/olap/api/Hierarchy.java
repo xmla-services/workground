@@ -9,12 +9,16 @@
 // All Rights Reserved.
 */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api;
+
+import mondrian.olap.Formula;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.SchemaReader;
 
 /**
  * A <code>Hierarchy</code> is a set of members, organized into levels.
  */
-public interface Hierarchy extends OlapElement, Annotated {
+public interface Hierarchy extends OlapElement, MetaElement {
     /**
      * Returns the dimension this hierarchy belongs to.
      */

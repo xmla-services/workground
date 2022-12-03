@@ -15,7 +15,6 @@ package mondrian.rolap;
 
 import mondrian.calc.ExpCompiler;
 import mondrian.olap.*;
-import mondrian.olap.Member;
 import mondrian.olap.fun.FunUtil;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
@@ -23,6 +22,7 @@ import mondrian.server.*;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Member;
 
 import mondrian.util.ClassResolver;
 

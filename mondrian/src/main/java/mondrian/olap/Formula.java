@@ -20,6 +20,13 @@ import mondrian.rolap.RolapCalculatedMember;
 import java.io.PrintWriter;
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.OlapElement;
+
 /**
  * A <code>Formula</code> is a clause in an MDX query which defines a Set or a
  * Member.
@@ -273,7 +280,7 @@ public class Formula extends QueryPart {
                     null,
                     exp,
                     false,
-                    Collections.<String, Annotation>emptyMap());
+                    Map.of());
         }
     }
 

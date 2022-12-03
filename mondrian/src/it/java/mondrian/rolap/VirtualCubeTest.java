@@ -11,7 +11,7 @@
 package mondrian.rolap;
 
 import mondrian.olap.Axis;
-import mondrian.olap.Member;
+import org.eclipse.daanse.olap.api.Member;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Position;
 import mondrian.olap.Property;

@@ -12,6 +12,10 @@ import mondrian.olap.*;
 import mondrian.olap.CacheControl.CellRegion;
 import mondrian.test.DiffRepository;
 import mondrian.test.PropertySaver5;
+
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;

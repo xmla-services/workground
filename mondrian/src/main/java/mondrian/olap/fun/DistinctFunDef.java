@@ -13,9 +13,10 @@ import mondrian.calc.*;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Member;
 
 import java.util.*;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Definition of the <code>Distinct</code> MDX function.

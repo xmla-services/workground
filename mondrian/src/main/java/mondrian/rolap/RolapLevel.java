@@ -21,6 +21,10 @@ import org.slf4j.LoggerFactory;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.impl.UnmodifiableArrayMap;
 
 import java.util.AbstractList;
@@ -85,7 +89,7 @@ public class RolapLevel extends LevelBase {
     /** Condition under which members are hidden. */
     private final HideMemberCondition hideMemberCondition;
     protected final MondrianDef.Closure xmlClosure;
-    private final Map<String, Annotation> annotationMap;
+    private final Map<String, Object> metadata;
     private final BestFitColumnType internalType; // may be null
 
     /**
@@ -117,11 +121,11 @@ public class RolapLevel extends LevelBase {
         HideMemberCondition hideMemberCondition,
         LevelType levelType,
         String approxRowCount,
-        Map<String, Annotation> annotationMap)
+        Map<String, Object> metadata)
     {
         super(
             hierarchy, name, caption, visible, description, depth, levelType);
-        assert annotationMap != null;
+        assert metadata != null;
         Util.assertPrecondition(properties != null, "properties != null");
         Util.assertPrecondition(
             hideMemberCondition != null,
@@ -131,7 +135,7 @@ public class RolapLevel extends LevelBase {
         if (keyExp instanceof MondrianDef.Column) {
             checkColumn((MondrianDef.Column) keyExp);
         }
-        this.annotationMap = annotationMap;
+        this.metadata = metadata;
         this.approxRowCount = loadApproxRowCount(approxRowCount);
         this.flags = flags;
         this.datatype = datatype;
@@ -225,8 +229,8 @@ public class RolapLevel extends LevelBase {
         return (RolapHierarchy) hierarchy;
     }
 
-    public Map<String, Annotation> getAnnotationMap() {
-        return annotationMap;
+    public Map<String, Object> getMetadata() {
+        return metadata;
     }
 
     private int loadApproxRowCount(String approxRowCount) {
@@ -352,7 +356,7 @@ public class RolapLevel extends LevelBase {
                     ? "TimeHalfYears"
                     : xmlLevel.levelType),
             xmlLevel.approxRowCount,
-            RolapHierarchy.createAnnotationMap(xmlLevel.annotations));
+            RolapHierarchy.createMetadataMap(xmlLevel.annotations));
 
         if (!Util.isEmpty(xmlLevel.caption)) {
             setCaption(xmlLevel.caption);

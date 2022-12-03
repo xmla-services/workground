@@ -11,7 +11,7 @@ package mondrian.rolap;
 
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
-import mondrian.olap.Member;
+import org.eclipse.daanse.olap.api.Member;
 import mondrian.olap.Position;
 import mondrian.olap.fun.TestMember;
 import mondrian.test.FoodMartTestCase;

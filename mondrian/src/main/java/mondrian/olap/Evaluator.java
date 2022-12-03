@@ -16,6 +16,11 @@ import mondrian.calc.TupleIterable;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.NamedSet;
+
 /**
  * An <code>Evaluator</code> holds the context necessary to evaluate an
  * expression.
@@ -437,7 +442,7 @@ public interface Evaluator {
     /**
      * Returns whether it is necessary to check whether to return null for
      * an unrelated dimension. If false, we never need to check: we can assume
-     * that {@link #needToReturnNullForUnrelatedDimension(mondrian.olap.Member[])}
+     * that {@link #needToReturnNullForUnrelatedDimension(org.eclipse.daanse.olap.api.Member[])}
      * will always return false.
      *
      * @return whether it is necessary to check whether to return null for

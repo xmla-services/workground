@@ -10,9 +10,10 @@
 package mondrian.calc.impl;
 
 import mondrian.calc.TupleList;
-import mondrian.olap.Member;
 
 import java.util.*;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Abstract implementation of a {@link mondrian.calc.TupleList} that stores

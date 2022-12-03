@@ -12,14 +12,20 @@
 
 package mondrian.olap;
 
-import mondrian.olap.type.*;
+import java.util.List;
+import java.util.Map;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.TupleType;
+import mondrian.olap.type.Type;
 
 /**
  * Skeleton implementation of {@link NamedSet} interface.
@@ -32,7 +38,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
     private static final Logger LOGGER = LoggerFactory.getLogger(SetBase.class);
 
     private String name;
-    private Map<String, Annotation> annotationMap;
+    private Map<String, Object> metaMap;
     private String description;
     private final String uniqueName;
     private Exp exp;
@@ -47,7 +53,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
      * @param description Description
      * @param exp Expression
      * @param validated Whether has been validated
-     * @param annotationMap Annotations
+     * @param metaMap metaMap
      */
     SetBase(
         String name,
@@ -55,10 +61,10 @@ public class SetBase extends OlapElementBase implements NamedSet {
         String description,
         Exp exp,
         boolean validated,
-        Map<String, Annotation> annotationMap)
+        Map<String, Object> metaMap)
     {
         this.name = name;
-        this.annotationMap = annotationMap;
+        this.metaMap = metaMap;
         this.caption = caption;
         this.description = description;
         this.exp = exp;
@@ -66,8 +72,8 @@ public class SetBase extends OlapElementBase implements NamedSet {
         this.uniqueName = "[" + name + "]";
     }
 
-    public Map<String, Annotation> getAnnotationMap() {
-        return annotationMap;
+    public Map<String, Object> getMetadata()  {
+        return metaMap;
     }
 
     public String getNameUniqueWithinQuery() {
@@ -80,7 +86,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
 
     public Object clone() {
         return new SetBase(
-            name, caption, description, exp.clone(), validated, annotationMap);
+            name, caption, description, exp.clone(), validated, metaMap);
     }
 
     protected Logger getLogger() {
@@ -137,8 +143,8 @@ public class SetBase extends OlapElementBase implements NamedSet {
         this.displayFolder = displayFolder;
     }
 
-    public void setAnnotationMap(Map<String, Annotation> annotationMap) {
-        this.annotationMap = annotationMap;
+    public void setMetadata(Map<String, Object> metaData) {
+        this.metaMap = metaData;
     }
 
     public Exp getExp() {
@@ -165,6 +171,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
         }
         return type;
     }
+
 }
 
 // End SetBase.java
