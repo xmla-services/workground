@@ -7,5 +7,4 @@ Import-Package: \
 DynamicImport-Package: *
 
 Export-Package: \
-	mondrian.*,\
-	org.eclipse.daanse.olap.api.*
+	mondrian.*
