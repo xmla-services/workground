@@ -11,11 +11,11 @@
 
 package mondrian.spi;
 
+import java.util.List;
+
 import mondrian.olap.Evaluator;
 import mondrian.olap.Syntax;
 import mondrian.olap.type.Type;
-
-import java.util.List;
 
 /**
  * Definition of a user-defined function.

@@ -9,13 +9,14 @@
 
 package mondrian.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+
 import mondrian.i18n.LocalizingDynamicSchemaProcessor;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.spi.DynamicSchemaProcessor;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Unit test LocalizingDynamicSchemaProcessor. Tests availability of properties that LDSP's

@@ -9,9 +9,9 @@
 
 package mondrian.olap4j;
 
-import mondrian.olap.*;
-import mondrian.rolap.RolapConnection;
-import mondrian.server.Locus;
+import java.util.AbstractList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.OlapException;
@@ -21,10 +21,13 @@ import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
-import org.olap4j.metadata.*;
+import org.olap4j.metadata.NamedList;
 import org.olap4j.metadata.Property;
 
-import java.util.*;
+import mondrian.olap.Role;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapConnection;
+import mondrian.server.Locus;
 
 /**
  * Implementation of {@link Level}

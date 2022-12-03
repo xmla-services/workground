@@ -10,25 +10,26 @@
 */
 package mondrian.rolap;
 
-import mondrian.calc.TupleIterable;
-import mondrian.calc.TupleList;
-import mondrian.calc.impl.AbstractTupleCursor;
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.Evaluator.SetEvaluator;
-import mondrian.olap.fun.AggregateFunDef;
-import mondrian.olap.fun.CrossJoinTest.NullFunDef;
-import mondrian.olap.fun.ParenthesesFunDef;
-import mondrian.olap.fun.TestMember;
-import mondrian.olap.type.DecimalType;
-import mondrian.olap.type.NullType;
-import mondrian.olap.type.TupleType;
-import mondrian.olap.type.Type;
-import mondrian.rolap.aggmatcher.AggStar;
-import mondrian.rolap.sql.SqlQuery;
-import mondrian.server.Execution;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
@@ -40,16 +41,32 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractTupleCursor;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.mdx.MemberExpr;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Category;
+import mondrian.olap.Connection;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Evaluator.SetEvaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Query;
+import mondrian.olap.QueryAxis;
+import mondrian.olap.Syntax;
+import mondrian.olap.fun.AggregateFunDef;
+import mondrian.olap.fun.CrossJoinTest.NullFunDef;
+import mondrian.olap.fun.ParenthesesFunDef;
+import mondrian.olap.fun.TestMember;
+import mondrian.olap.type.DecimalType;
+import mondrian.olap.type.NullType;
+import mondrian.olap.type.TupleType;
+import mondrian.olap.type.Type;
+import mondrian.rolap.aggmatcher.AggStar;
+import mondrian.rolap.sql.SqlQuery;
+import mondrian.server.Execution;
 
 /**
  * <code>SqlConstraintUtilsTest</code> tests the functions defined in

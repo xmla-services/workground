@@ -11,13 +11,13 @@
 
 package mondrian.web.taglib;
 
-import org.w3c.dom.Document;
-
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+
+import org.w3c.dom.Document;
 
 /**
  * A <code>TransformTag</code> renders the result of a {@link ResultCache}

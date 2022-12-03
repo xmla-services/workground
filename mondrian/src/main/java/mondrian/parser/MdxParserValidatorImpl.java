@@ -9,7 +9,10 @@
 
 package mondrian.parser;
 
-import mondrian.olap.*;
+import mondrian.olap.Exp;
+import mondrian.olap.FunTable;
+import mondrian.olap.Parser;
+import mondrian.olap.QueryPart;
 import mondrian.server.Statement;
 
 /**

@@ -12,16 +12,29 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.olap.fun.VisualTotalsFunDef.VisualTotalMember;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.agg.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.collections.*;
+import org.apache.commons.collections.CollectionUtils;
 import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.OlapElement;
 
-import java.util.*;
+import mondrian.olap.CacheControl;
+import mondrian.olap.Evaluator;
+import mondrian.olap.MondrianException;
+import mondrian.olap.Util;
+import mondrian.olap.fun.VisualTotalsFunDef.VisualTotalMember;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.agg.CellRequest;
+import mondrian.rolap.agg.DrillThroughCellRequest;
+import mondrian.rolap.agg.ListPredicate;
+import mondrian.rolap.agg.MemberColumnPredicate;
+import mondrian.rolap.agg.OrPredicate;
+import mondrian.rolap.agg.RangeColumnPredicate;
+import mondrian.rolap.agg.ValueColumnPredicate;
 
 /**
  * <code>RolapAggregationManager</code> manages all

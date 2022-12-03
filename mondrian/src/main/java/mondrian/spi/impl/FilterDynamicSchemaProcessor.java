@@ -9,10 +9,12 @@
 
 package mondrian.spi.impl;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
 import mondrian.olap.Util;
 import mondrian.spi.DynamicSchemaProcessor;
-
-import java.io.*;
 
 /**
  * Implementation of {@link DynamicSchemaProcessor} which allows a derived class

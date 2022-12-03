@@ -12,12 +12,10 @@
 
 package mondrian.xmla;
 
-import mondrian.olap.MondrianServer;
+import java.util.Set;
 
 import org.olap4j.impl.Olap4jUtil;
 import org.olap4j.metadata.XmlaConstants;
-
-import java.util.Set;
 
 /**
  * Defines an XML for Analysis Property.

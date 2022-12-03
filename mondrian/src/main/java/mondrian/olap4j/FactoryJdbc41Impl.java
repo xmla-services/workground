@@ -9,14 +9,18 @@
 
 package mondrian.olap4j;
 
-import mondrian.rolap.RolapConnection;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.Executor;
 
 import org.eclipse.daanse.engine.api.Context;
 import org.olap4j.OlapException;
 
-import java.sql.*;
-import java.util.*;
-import java.util.concurrent.Executor;
+import mondrian.rolap.RolapConnection;
 
 /**
  * Implementation of {@link mondrian.olap4j.Factory} for JDBC 4.1.

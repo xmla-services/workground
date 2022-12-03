@@ -9,35 +9,12 @@
 
 package mondrian.test;
 
-import mondrian.olap.*;
-import mondrian.xmla.XmlaHandler;
-
-import org.eclipse.daanse.olap.api.MetaElement;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.Cell;
-import org.olap4j.Position;
-import org.olap4j.*;
-import org.olap4j.mdx.IdentifierNode;
-import org.olap4j.mdx.SelectNode;
-import org.olap4j.mdx.parser.MdxParser;
-import org.olap4j.mdx.parser.MdxParserFactory;
-import org.olap4j.mdx.parser.MdxValidator;
-import org.olap4j.metadata.Cube;
-import org.olap4j.metadata.Hierarchy;
-import org.olap4j.metadata.Level;
-import org.olap4j.metadata.Member;
-import org.olap4j.metadata.Property;
-import org.olap4j.metadata.*;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.SchemaUtil;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.BaseTestContext;
-import org.opencube.junit5.context.TestingContext;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.opencube.junit5.propupdator.SchemaUpdater;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -56,8 +33,44 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.opencube.junit5.TestUtil.withSchema;
+import org.eclipse.daanse.olap.api.MetaElement;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.olap4j.Cell;
+import org.olap4j.CellSet;
+import org.olap4j.CellSetAxis;
+import org.olap4j.CellSetMetaData;
+import org.olap4j.OlapConnection;
+import org.olap4j.OlapException;
+import org.olap4j.OlapStatement;
+import org.olap4j.OlapWrapper;
+import org.olap4j.Position;
+import org.olap4j.mdx.IdentifierNode;
+import org.olap4j.mdx.SelectNode;
+import org.olap4j.mdx.parser.MdxParser;
+import org.olap4j.mdx.parser.MdxParserFactory;
+import org.olap4j.mdx.parser.MdxValidator;
+import org.olap4j.metadata.Cube;
+import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Level;
+import org.olap4j.metadata.Measure;
+import org.olap4j.metadata.Member;
+import org.olap4j.metadata.NamedList;
+import org.olap4j.metadata.Property;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.SchemaUtil;
+import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.BaseTestContext;
+import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.propupdator.SchemaUpdater;
+
+import mondrian.olap.CacheControl;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.xmla.XmlaHandler;
 
 /**
  * Tests mondrian's olap4j API.

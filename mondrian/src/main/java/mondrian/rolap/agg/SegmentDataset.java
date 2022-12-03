@@ -13,13 +13,15 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.rolap.CellKey;
-import mondrian.rolap.SqlStatement;
-import mondrian.spi.SegmentBody;
-import mondrian.util.Pair;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
-import java.util.*;
+import mondrian.rolap.CellKey;
+import mondrian.spi.SegmentBody;
+import mondrian.util.Pair;
 
 /**
  * A <code>SegmentDataset</code> holds the values in a segment.

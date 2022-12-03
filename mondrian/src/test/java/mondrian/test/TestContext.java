@@ -24,6 +24,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Member;
 import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
 
@@ -33,8 +35,6 @@ import mondrian.olap.Cell;
 import mondrian.olap.Connection;
 import mondrian.olap.Result;
 import mondrian.olap.Util;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.Member;
 
 /**
  * <code>TestContext</code> is a class which contains the information

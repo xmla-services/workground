@@ -21,10 +21,9 @@ package org.opencube.junit5.dbprovider;
 import java.io.IOException;
 import java.util.Map.Entry;
 
-import javax.sql.DataSource;
+import org.eclipse.daanse.engine.api.Context;
 
 import mondrian.olap.Util.PropertyList;
-import org.eclipse.daanse.engine.api.Context;
 
 public class EmptyDBProvider implements DatabaseProvider {
 

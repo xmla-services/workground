@@ -11,8 +11,8 @@
 
 package mondrian.test;
 
-import mondrian.olap.Connection;
-import mondrian.olap.MondrianProperties;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,7 +21,8 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
 
 /**
  * Test ignoring of measure when unrelated Dimension is in

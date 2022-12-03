@@ -23,13 +23,10 @@ import java.nio.file.Paths;
 import java.sql.Connection;
 import java.util.List;
 
-import javax.sql.DataSource;
-
-import org.eclipse.daanse.engine.api.Context;
-import org.opencube.junit5.Constants;
-
 import org.eclipse.daanse.db.dialect.api.Dialect;
 //import mondrian.spi.DialectManager;
+import org.eclipse.daanse.engine.api.Context;
+import org.opencube.junit5.Constants;
 
 public class FastFoodmardDataLoader implements DataLoader {
 

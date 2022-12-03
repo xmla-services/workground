@@ -10,21 +10,31 @@
 
 package mondrian.olap4j;
 
-import mondrian.olap.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.OlapException;
-import org.olap4j.impl.*;
+import org.olap4j.impl.Named;
+import org.olap4j.impl.NamedListImpl;
+import org.olap4j.impl.Olap4jUtil;
 import org.olap4j.mdx.IdentifierSegment;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Hierarchy;
-import org.olap4j.metadata.*;
+import org.olap4j.metadata.Measure;
 import org.olap4j.metadata.Member;
+import org.olap4j.metadata.NamedList;
 import org.olap4j.metadata.NamedSet;
 import org.olap4j.metadata.Schema;
 
-import java.util.*;
+import mondrian.olap.Role;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
 
 /**
  * Implementation of {@link Cube}

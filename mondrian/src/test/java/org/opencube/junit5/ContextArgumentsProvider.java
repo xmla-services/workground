@@ -34,9 +34,6 @@ import java.util.ServiceLoader.Provider;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.sql.DataSource;
-
-import mondrian.rolap.RolapConnectionProperties;
 import org.eclipse.daanse.engine.api.Context;
 import org.glassfish.jaxb.runtime.v2.JAXBContextFactory;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -57,6 +54,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import mondrian.olap.Util.PropertyList;
+import mondrian.rolap.RolapConnectionProperties;
 
 @ServiceConsumer(cardinality = Cardinality.MULTIPLE, value = DatabaseProvider.class)
 public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationConsumer<ContextSource> {

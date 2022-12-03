@@ -9,13 +9,21 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
+import java.util.List;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.TupleIterable;
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.mdx.NamedSetExpr;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-
-import java.util.List;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Query;
+import mondrian.olap.Syntax;
+import mondrian.olap.Validator;
 
 
 /**

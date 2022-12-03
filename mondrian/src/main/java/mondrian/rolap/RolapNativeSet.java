@@ -11,6 +11,24 @@
 */
 package mondrian.rolap;
 
+import static org.apache.commons.collections.CollectionUtils.exists;
+import static org.apache.commons.collections.CollectionUtils.filter;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.collections.Predicate;
+import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
@@ -27,33 +45,12 @@ import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.cache.HardSmartCache;
 import mondrian.rolap.cache.SmartCache;
 import mondrian.rolap.cache.SoftSmartCache;
-
 import mondrian.rolap.sql.CrossJoinArg;
 import mondrian.rolap.sql.CrossJoinArgFactory;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.MemberListCrossJoinArg;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.rolap.sql.TupleConstraint;
-import org.apache.commons.collections.Predicate;
-
-import org.slf4j.Logger;
-import org.eclipse.daanse.engine.api.Context;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
-import static org.apache.commons.collections.CollectionUtils.exists;
-import static org.apache.commons.collections.CollectionUtils.filter;
 
 /**
  * Analyses set expressions and executes them in SQL if possible. Supports crossjoin, member.children, level.members and

@@ -8,15 +8,15 @@
 */
 package mondrian.test.clearview;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.test.DiffRepository;
-import mondrian.util.Bug;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import mondrian.olap.MondrianProperties;
+import mondrian.test.DiffRepository;
+import mondrian.util.Bug;
 
 /**
  * <code>MetricFilterTest</code> is a test suite which tests scenarios of

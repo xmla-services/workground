@@ -8,16 +8,31 @@
 */
 package mondrian.test;
 
-import mondrian.olap.*;
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.rolap.RolapCube;
-import mondrian.rolap.RolapSchema;
-import mondrian.rolap.aggmatcher.AggTableManager;
-import mondrian.spi.PropertyFormatter;
-import mondrian.util.Bug;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.MYSQL;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.assertSimpleQuery;
+import static org.opencube.junit5.TestUtil.checkThrowable;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
@@ -39,18 +54,26 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.Map;
-
-import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.MYSQL;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Axis;
+import mondrian.olap.Category;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Position;
+import mondrian.olap.Property;
+import mondrian.olap.Result;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapSchema;
+import mondrian.rolap.aggmatcher.AggTableManager;
+import mondrian.spi.PropertyFormatter;
+import mondrian.util.Bug;
 
 /**
  * Unit tests for various schema features.

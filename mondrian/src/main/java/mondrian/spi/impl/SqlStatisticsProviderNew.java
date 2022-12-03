@@ -9,16 +9,17 @@
 
 package mondrian.spi.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Arrays;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.engine.api.Context;
+
 import mondrian.rolap.RolapUtil;
 import mondrian.rolap.SqlStatement;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.engine.api.Context;
-
-import java.sql.*;
-import java.util.Arrays;
-import javax.sql.DataSource;
 
 /**
  * Implementation of {@link mondrian.spi.StatisticsProvider} that generates

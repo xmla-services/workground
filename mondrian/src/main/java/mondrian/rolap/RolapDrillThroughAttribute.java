@@ -15,8 +15,6 @@ import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.OlapElement;
 
-import mondrian.olap.*;
-
 public class RolapDrillThroughAttribute extends RolapDrillThroughColumn {
     private final Dimension dimension;
     private final Hierarchy hierarchy;

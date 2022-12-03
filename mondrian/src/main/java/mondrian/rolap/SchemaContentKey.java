@@ -10,7 +10,8 @@
 package mondrian.rolap;
 
 import mondrian.olap.Util;
-import mondrian.util.*;
+import mondrian.util.ByteString;
+import mondrian.util.StringKey;
 
 /**
  * Globally unique identifier for the metadata content of a schema.

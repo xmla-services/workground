@@ -11,9 +11,13 @@
 
 package mondrian.test.build;
 
-import java.io.*;
-
 import static org.junit.jupiter.api.Assertions.fail;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintStream;
 
 /**
  * Base class for tests that execute Ant targets.  Sub-classes

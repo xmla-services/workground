@@ -9,14 +9,19 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.AbstractStringCalc;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ListCalc;
+import mondrian.calc.TupleCursor;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractStringCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
 
 /**
  * Definition of the <code>SetToStr</code> MDX function.

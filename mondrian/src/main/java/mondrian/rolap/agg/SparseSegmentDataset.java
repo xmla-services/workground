@@ -9,13 +9,17 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.rolap.CellKey;
-import mondrian.rolap.SqlStatement;
-import mondrian.spi.SegmentBody;
-import mondrian.util.Pair;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
-import java.util.*;
+import mondrian.rolap.CellKey;
+import mondrian.spi.SegmentBody;
+import mondrian.util.Pair;
 
 /**
  * A <code>SparseSegmentDataset</code> is a means of storing segment values

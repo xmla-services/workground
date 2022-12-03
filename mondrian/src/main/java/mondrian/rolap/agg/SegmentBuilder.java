@@ -8,24 +8,43 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.olap.Aggregator;
-import mondrian.olap.Util;
-import mondrian.rolap.*;
-import mondrian.rolap.agg.Segment.ExcludedRegion;
-import mondrian.rolap.sql.SqlQuery;
-import mondrian.spi.*;
-import mondrian.util.ArraySortedSet;
-import mondrian.util.Pair;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.math.BigInteger;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.olap4j.impl.UnmodifiableArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.math.BigInteger;
-import java.util.*;
-import java.util.Map.Entry;
+import mondrian.olap.Aggregator;
+import mondrian.olap.Util;
+import mondrian.rolap.BitKey;
+import mondrian.rolap.CellKey;
+import mondrian.rolap.RolapSchema;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.StarColumnPredicate;
+import mondrian.rolap.StarPredicate;
+import mondrian.rolap.agg.Segment.ExcludedRegion;
+import mondrian.rolap.sql.SqlQuery;
+import mondrian.spi.SegmentBody;
+import mondrian.spi.SegmentColumn;
+import mondrian.spi.SegmentHeader;
+import mondrian.util.ArraySortedSet;
+import mondrian.util.Pair;
 
 /**
  * Helper class that contains methods to convert between

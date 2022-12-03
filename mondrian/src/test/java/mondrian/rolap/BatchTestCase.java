@@ -10,26 +10,11 @@
 */
 package mondrian.rolap;
 
-import mondrian.calc.ResultStyle;
-import mondrian.olap.*;
-import mondrian.rolap.RolapNative.Listener;
-import mondrian.rolap.RolapNative.NativeEvent;
-import mondrian.rolap.RolapNative.TupleEvent;
-import mondrian.rolap.agg.*;
-import mondrian.rolap.cache.HardSmartCache;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.Cube;
-import org.eclipse.daanse.olap.api.Member;
-
-import mondrian.test.SqlPattern;
-import mondrian.util.Pair;
-import org.slf4j.LoggerFactory;
-import org.eigenbase.util.property.IntegerProperty;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestingContext;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.upgradeQuery;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -39,11 +24,40 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.upgradeQuery;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Member;
+import org.eigenbase.util.property.IntegerProperty;
+import org.opencube.junit5.TestUtil;
+import org.opencube.junit5.context.TestingContext;
+import org.slf4j.LoggerFactory;
+
+import mondrian.calc.ResultStyle;
+import mondrian.olap.Axis;
+import mondrian.olap.CacheControl;
+import mondrian.olap.Connection;
+import mondrian.olap.Id;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Query;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapNative.Listener;
+import mondrian.rolap.RolapNative.NativeEvent;
+import mondrian.rolap.RolapNative.TupleEvent;
+import mondrian.rolap.agg.AggregationManager;
+import mondrian.rolap.agg.AndPredicate;
+import mondrian.rolap.agg.CellRequest;
+import mondrian.rolap.agg.GroupingSet;
+import mondrian.rolap.agg.OrPredicate;
+import mondrian.rolap.agg.Segment;
+import mondrian.rolap.agg.SegmentWithData;
+import mondrian.rolap.agg.ValueColumnPredicate;
+import mondrian.rolap.cache.HardSmartCache;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.test.SqlPattern;
+import mondrian.util.Pair;
 
 /**
  * To support all <code>Batch</code> related tests.

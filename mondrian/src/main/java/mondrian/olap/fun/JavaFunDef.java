@@ -9,15 +9,33 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import mondrian.calc.Calc;
+import mondrian.calc.DoubleCalc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.IntegerCalc;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.StringCalc;
 import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-
-import java.lang.annotation.*;
-import java.lang.reflect.*;
-import java.util.*;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Syntax;
 
 /**
  * MDX function which is implemented by a Java method. When the function is

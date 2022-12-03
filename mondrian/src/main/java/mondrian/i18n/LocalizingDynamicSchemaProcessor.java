@@ -9,20 +9,20 @@
 
 package mondrian.i18n;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.spi.DynamicSchemaProcessor;
-import mondrian.spi.impl.FilterDynamicSchemaProcessor;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.InputStream;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.spi.DynamicSchemaProcessor;
+import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 
 /**
  * Schema processor which helps localize data and metadata.

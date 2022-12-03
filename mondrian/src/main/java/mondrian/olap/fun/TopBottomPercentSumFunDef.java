@@ -10,6 +10,12 @@
 */
 package mondrian.olap.fun;
 
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 import mondrian.calc.Calc;
 import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
@@ -22,12 +28,6 @@ import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
 import mondrian.olap.Util;
 import mondrian.olap.fun.sort.Sorter;
-
-import java.util.List;
-import java.util.Map;
-
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Definition of the <code>TopPercent</code>, <code>BottomPercent</code>,

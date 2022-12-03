@@ -9,20 +9,25 @@
 
 package mondrian.rolap;
 
-import mondrian.calc.Calc;
-import mondrian.calc.DummyExp;
-import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.type.ScalarType;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
 import org.olap4j.AllocationPolicy;
 import org.olap4j.Scenario;
 
-import java.util.ArrayList;
-import java.util.List;
+import mondrian.calc.Calc;
+import mondrian.calc.DummyExp;
+import mondrian.calc.impl.GenericCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Connection;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Formula;
+import mondrian.olap.Query;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.olap.type.ScalarType;
 
 /**
  * Implementation of {@link org.olap4j.Scenario}.

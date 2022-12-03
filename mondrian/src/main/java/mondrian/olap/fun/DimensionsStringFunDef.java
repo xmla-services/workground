@@ -12,10 +12,16 @@ package mondrian.olap.fun;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.OlapElement;
 
-import mondrian.calc.*;
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.StringCalc;
 import mondrian.calc.impl.AbstractHierarchyCalc;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
 import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.Type;
 

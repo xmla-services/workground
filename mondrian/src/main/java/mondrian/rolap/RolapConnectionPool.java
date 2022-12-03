@@ -12,14 +12,25 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.Util;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.WeakHashMap;
 
-import org.apache.commons.dbcp.*;
+import javax.sql.DataSource;
+
+import org.apache.commons.dbcp.AbandonedConfig;
+import org.apache.commons.dbcp.ConnectionFactory;
+import org.apache.commons.dbcp.DataSourceConnectionFactory;
+import org.apache.commons.dbcp.DriverManagerConnectionFactory;
+import org.apache.commons.dbcp.PoolableConnectionFactory;
+import org.apache.commons.dbcp.PoolingDataSource;
 import org.apache.commons.pool.ObjectPool;
 import org.apache.commons.pool.impl.GenericObjectPool;
 
-import java.util.*;
-import javax.sql.DataSource;
+import mondrian.olap.Util;
 
 /**
  * Singleton class that holds a connection pool.

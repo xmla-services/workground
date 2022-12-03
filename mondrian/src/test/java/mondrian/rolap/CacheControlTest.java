@@ -8,10 +8,18 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.olap.CacheControl.CellRegion;
-import mondrian.test.DiffRepository;
-import mondrian.test.PropertySaver5;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.flushCache;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Hierarchy;
@@ -24,18 +32,14 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.flushCache;
+import mondrian.olap.CacheControl;
+import mondrian.olap.CacheControl.CellRegion;
+import mondrian.olap.Connection;
+import mondrian.olap.Id;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.SchemaReader;
+import mondrian.test.DiffRepository;
+import mondrian.test.PropertySaver5;
 
 /**
  * Unit-test for cache-flushing functionality.

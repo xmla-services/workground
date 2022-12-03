@@ -9,9 +9,13 @@
 
 package mondrian.util;
 
-import mondrian.olap.Util;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.RandomAccess;
 
-import java.util.*;
+import mondrian.olap.Util;
 
 /**
  * List that generates the cartesian product of its component lists.

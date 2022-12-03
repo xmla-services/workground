@@ -9,12 +9,12 @@
 
 package mondrian.spi.impl;
 
+import java.util.Random;
+
 import mondrian.olap.MondrianDef;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.agg.AggregationKey;
 import mondrian.spi.DataSourceChangeListener;
-
-import java.util.Random;
 
 
 /**

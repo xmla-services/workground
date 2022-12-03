@@ -94,8 +94,6 @@ import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.NamedSet;
 import org.eclipse.daanse.olap.api.OlapElement;
 import org.eclipse.daanse.olap.api.Schema;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.Olap4jUtil;
 import org.olap4j.mdx.IdentifierNode;
@@ -103,6 +101,8 @@ import org.olap4j.mdx.IdentifierSegment;
 import org.olap4j.mdx.KeySegment;
 import org.olap4j.mdx.NameSegment;
 import org.olap4j.mdx.Quoting;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mondrian.calc.Calc;
 import mondrian.calc.CalcWriter;

@@ -10,9 +10,15 @@
 */
 package mondrian.xmla;
 
-import mondrian.olap.*;
-import mondrian.olap4j.MondrianOlap4jDriver;
-import mondrian.rolap.RolapConnection;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.upgradeQuery;
+import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Dimension;
@@ -22,16 +28,10 @@ import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.NamedSet;
 import org.eclipse.daanse.olap.api.OlapElement;
 import org.eclipse.daanse.olap.api.Schema;
-
-import mondrian.test.DiffRepository;
-import mondrian.test.PropertySaver5;
-import mondrian.tui.XmlUtil;
-import mondrian.tui.XmlaSupport;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.metadata.XmlaConstants;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
@@ -39,15 +39,17 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.w3c.dom.Document;
 
-import java.sql.SQLException;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Properties;
-
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.upgradeQuery;
-import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.Access;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Role;
+import mondrian.olap.RoleImpl;
+import mondrian.olap4j.MondrianOlap4jDriver;
+import mondrian.rolap.RolapConnection;
+import mondrian.test.DiffRepository;
+import mondrian.test.PropertySaver5;
+import mondrian.tui.XmlUtil;
+import mondrian.tui.XmlaSupport;
 
 /**
  * Test XML/A functionality.

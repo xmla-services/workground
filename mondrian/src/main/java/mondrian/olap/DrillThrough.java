@@ -9,7 +9,9 @@
 package mondrian.olap;
 
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.OlapElement;
 

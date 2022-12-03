@@ -10,11 +10,17 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.olap.Util;
-import mondrian.rolap.*;
-import mondrian.rolap.sql.SqlQuery;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import mondrian.olap.Util;
+import mondrian.rolap.BitKey;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.StarPredicate;
 
 /**
  * Column context that an Aggregation is computed for.

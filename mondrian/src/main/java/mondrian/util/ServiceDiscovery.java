@@ -17,11 +17,10 @@ import java.util.Set;
 
 import javax.script.ScriptEngineFactory;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import aQute.bnd.annotation.spi.ServiceConsumer;
-import mondrian.spi.SegmentCache;
 import mondrian.spi.UserDefinedFunction;
 
 /**

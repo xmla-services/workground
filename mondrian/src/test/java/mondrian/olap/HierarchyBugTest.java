@@ -18,8 +18,6 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.sql.SQLException;
 import java.util.List;
 
-import mondrian.rolap.RolapConnectionProperties;
-
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
@@ -37,6 +35,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
+import mondrian.rolap.RolapConnectionProperties;
 import mondrian.test.PropertySaver5;
 public class HierarchyBugTest {
 	private PropertySaver5 propSaver;

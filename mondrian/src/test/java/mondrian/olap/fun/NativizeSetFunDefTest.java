@@ -9,13 +9,12 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.*;
-import mondrian.rolap.BatchTestCase;
-import mondrian.rolap.RolapConnection;
-import mondrian.server.Locus;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -25,10 +24,16 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.ResourceLimitExceededException;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.rolap.BatchTestCase;
+import mondrian.rolap.RolapConnection;
+import mondrian.server.Locus;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
 
 /**
  * Unit test for the {@code NativizeSet} function.

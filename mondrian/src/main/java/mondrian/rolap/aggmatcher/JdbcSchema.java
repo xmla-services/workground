@@ -10,6 +10,32 @@
 */
 package mondrian.rolap.aggmatcher;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.ref.SoftReference;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import javax.sql.DataSource;
+
+import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.olap4j.impl.Olap4jUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
@@ -20,19 +46,6 @@ import mondrian.rolap.RolapConnectionProperties;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapStar;
 import mondrian.util.ClassResolver;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.eclipse.daanse.db.dialect.api.Datatype;
-import org.olap4j.impl.Olap4jUtil;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.lang.ref.SoftReference;
-import java.sql.*;
-import java.util.*;
-import javax.sql.DataSource;
 
 /**
  * Metadata gleaned from JDBC about the tables and columns in the star schema.

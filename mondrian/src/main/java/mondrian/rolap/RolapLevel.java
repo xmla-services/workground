@@ -10,14 +10,10 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.format.FormatterCreateContext;
-import mondrian.rolap.format.FormatterFactory;
-import mondrian.spi.PropertyFormatter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
@@ -26,11 +22,22 @@ import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.impl.UnmodifiableArrayMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import mondrian.olap.DimensionType;
+import mondrian.olap.Id;
+import mondrian.olap.LevelBase;
+import mondrian.olap.LevelType;
+import mondrian.olap.MatchType;
+import mondrian.olap.MondrianDef;
+import mondrian.olap.Property;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.format.FormatterCreateContext;
+import mondrian.rolap.format.FormatterFactory;
+import mondrian.spi.PropertyFormatter;
 
 /**
  * <code>RolapLevel</code> implements {@link Level} for a ROLAP database.

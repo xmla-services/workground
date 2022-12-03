@@ -9,11 +9,28 @@
 
 package mondrian.test;
 
-import mondrian.olap.Result;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.checkThrowable;
+import static org.opencube.junit5.TestUtil.executeQuery;
+
+import java.sql.SQLException;
+import java.util.Arrays;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.*;
+import org.olap4j.AllocationPolicy;
+import org.olap4j.Cell;
+import org.olap4j.CellSet;
+import org.olap4j.OlapConnection;
+import org.olap4j.OlapStatement;
+import org.olap4j.PreparedOlapStatement;
+import org.olap4j.Scenario;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.BaseTestContext;
@@ -22,14 +39,7 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import java.sql.SQLException;
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.checkThrowable;
-import static org.opencube.junit5.TestUtil.executeQuery;
+import mondrian.olap.Result;
 
 /**
  * Test for writeback functionality.

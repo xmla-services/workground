@@ -9,13 +9,13 @@
 */
 package mondrian.rolap.format;
 
+import java.lang.reflect.Constructor;
+
 import mondrian.resource.MondrianResource;
 import mondrian.spi.CellFormatter;
 import mondrian.spi.MemberFormatter;
 import mondrian.spi.PropertyFormatter;
 import mondrian.spi.impl.Scripts;
-
-import java.lang.reflect.Constructor;
 
 /**
  * Formatter factory to provide a single point

@@ -9,10 +9,11 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.Util;
-import mondrian.util.*;
-
 import javax.sql.DataSource;
+
+import mondrian.olap.Util;
+import mondrian.util.ByteString;
+import mondrian.util.StringKey;
 
 /**
  * Globally unique identifier for the definition of a JDBC database connection.

@@ -12,9 +12,19 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.rolap.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
-import java.util.*;
+import mondrian.rolap.BitKey;
+import mondrian.rolap.CompoundPredicateInfo;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.StarColumnPredicate;
+import mondrian.rolap.StarPredicate;
 
 /**
  * A <code>CellRequest</code> contains the context necessary to get a cell

@@ -11,13 +11,19 @@
 */
 package mondrian.olap.type;
 
-import mondrian.mdx.UnresolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.fun.Resolver;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
+
+import mondrian.mdx.UnresolvedFunCall;
+import mondrian.olap.Category;
+import mondrian.olap.Exp;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
+import mondrian.olap.fun.Resolver;
 
 /**
  * Utility methods relating to types.

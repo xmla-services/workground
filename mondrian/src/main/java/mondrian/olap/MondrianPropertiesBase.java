@@ -11,14 +11,19 @@
 
 package mondrian.olap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Enumeration;
 
 import org.eigenbase.util.property.TriggerableProperties;
-
-import java.io.*;
-import java.net.*;
-import java.util.Enumeration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>MondrianProperties</code> contains the properties which determine the

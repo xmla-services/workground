@@ -11,6 +11,24 @@
 */
 package mondrian.olap.fun;
 
+import static mondrian.olap.fun.sort.Sorter.hierarchizeTupleList;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
+
 import mondrian.calc.Calc;
 import mondrian.calc.DoubleCalc;
 import mondrian.calc.ResultStyle;
@@ -53,16 +71,6 @@ import mondrian.server.Execution;
 import mondrian.util.CancellationChecker;
 import mondrian.util.ConcatenableList;
 import mondrian.util.IdentifierParser;
-
-import java.util.*;
-
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.olap.api.OlapElement;
-
-import static mondrian.olap.fun.sort.Sorter.hierarchizeTupleList;
 
 /**
  * {@code FunUtil} contains a set of methods useful within the {@code mondrian.olap.fun} package.

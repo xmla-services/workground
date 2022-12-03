@@ -9,15 +9,26 @@
 
 package mondrian.olap4j;
 
-import mondrian.olap.Role;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Locale;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.OlapException;
-import org.olap4j.impl.*;
-import org.olap4j.metadata.*;
+import org.olap4j.impl.Named;
+import org.olap4j.impl.NamedListImpl;
+import org.olap4j.impl.Olap4jUtil;
+import org.olap4j.metadata.Catalog;
+import org.olap4j.metadata.Cube;
+import org.olap4j.metadata.Dimension;
+import org.olap4j.metadata.NamedList;
+import org.olap4j.metadata.Schema;
 
-import java.util.*;
+import mondrian.olap.Role;
 
 /**
  * Implementation of {@link org.olap4j.metadata.Schema}

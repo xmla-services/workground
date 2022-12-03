@@ -9,9 +9,9 @@
 
 package mondrian.test;
 
-import mondrian.olap.Connection;
-import mondrian.olap.Util;
-import mondrian.spi.DynamicSchemaProcessor;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.opencube.junit5.TestUtil.withSchemaProcessor;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -19,8 +19,9 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.opencube.junit5.TestUtil.withSchemaProcessor;
+import mondrian.olap.Connection;
+import mondrian.olap.Util;
+import mondrian.spi.DynamicSchemaProcessor;
 
 /**
  * Unit test DynamicSchemaProcessor. Tests availability of properties that DSP's

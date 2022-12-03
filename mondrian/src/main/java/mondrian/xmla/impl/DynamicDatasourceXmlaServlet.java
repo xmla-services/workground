@@ -9,11 +9,11 @@
 
 package mondrian.xmla.impl;
 
-import mondrian.server.DynamicContentFinder;
-import mondrian.server.RepositoryContentFinder;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import mondrian.server.DynamicContentFinder;
+import mondrian.server.RepositoryContentFinder;
 
 /**
  * Extends DefaultXmlaServlet to add dynamic datasource loading capability.

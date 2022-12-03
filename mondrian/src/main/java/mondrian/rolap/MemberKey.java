@@ -13,8 +13,6 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.Util;
-
 import java.util.Objects;
 
 /**

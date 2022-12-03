@@ -9,14 +9,14 @@
 
 package mondrian.server;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Util;
 import mondrian.spi.CatalogLocator;
 import mondrian.spi.impl.IdentityCatalogLocator;
 import mondrian.util.LockBox;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Registry of all servers within this JVM, and also serves as a factory for

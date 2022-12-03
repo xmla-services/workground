@@ -9,9 +9,9 @@
 
 package mondrian.xmla;
 
-import org.olap4j.metadata.XmlaConstants;
-
 import java.util.Map;
+
+import org.olap4j.metadata.XmlaConstants;
 
 /**
  * XML/A request interface.

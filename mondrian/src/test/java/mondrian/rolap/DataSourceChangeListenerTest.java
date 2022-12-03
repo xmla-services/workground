@@ -10,15 +10,20 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.rolap.cache.HardSmartCache;
-import mondrian.spi.impl.DataSourceChangeListenerImpl;
-import mondrian.spi.impl.DataSourceChangeListenerImpl2;
-import mondrian.spi.impl.DataSourceChangeListenerImpl3;
-import mondrian.spi.impl.DataSourceChangeListenerImpl4;
-import mondrian.test.PropertySaver5;
-import mondrian.util.Bug;
-import mondrian.util.Pair;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.getStackTrace;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Random;
 
 import org.eclipse.daanse.olap.api.Cube;
 import org.junit.jupiter.api.AfterEach;
@@ -31,16 +36,20 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.CacheControl;
+import mondrian.olap.Connection;
+import mondrian.olap.Id;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.rolap.cache.HardSmartCache;
+import mondrian.spi.impl.DataSourceChangeListenerImpl;
+import mondrian.spi.impl.DataSourceChangeListenerImpl2;
+import mondrian.spi.impl.DataSourceChangeListenerImpl3;
+import mondrian.spi.impl.DataSourceChangeListenerImpl4;
+import mondrian.test.PropertySaver5;
+import mondrian.util.Bug;
+import mondrian.util.Pair;
 
 /**
  * Tests for testing the DataSourceChangeListener plugin.

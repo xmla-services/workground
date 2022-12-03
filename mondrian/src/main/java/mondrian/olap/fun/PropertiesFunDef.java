@@ -11,16 +11,28 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.MemberCalc;
+import mondrian.calc.StringCalc;
+import mondrian.calc.impl.GenericCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Literal;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Property;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
 
 /**
  * Definition of the <code>Properties</code> MDX function.

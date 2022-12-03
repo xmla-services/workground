@@ -9,10 +9,16 @@
 
 package mondrian.util;
 
-import mondrian.olap.Util;
-
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractSet;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.SortedSet;
+
+import mondrian.olap.Util;
 
 /**
  * Implementation of {@link java.util.SortedSet} based on an array. The array

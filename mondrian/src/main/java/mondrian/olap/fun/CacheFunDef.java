@@ -9,16 +9,24 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
+import java.io.PrintWriter;
+import java.util.List;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ResultStyle;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.GenericIterCalc;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.ExpCacheDescriptor;
+import mondrian.olap.FunDef;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.Type;
-
-import java.io.PrintWriter;
-import java.util.List;
 
 /**
  * Definition of the <code>Cache</code> system function, which is smart enough

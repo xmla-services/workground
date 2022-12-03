@@ -11,21 +11,34 @@
 
 package mondrian.test;
 
-import mondrian.olap.*;
-import mondrian.olap.Axis;
-import mondrian.olap.Cell;
-import mondrian.olap.type.*;
-import mondrian.spi.CellFormatter;
-import mondrian.spi.MemberFormatter;
-import mondrian.spi.PropertyFormatter;
-import mondrian.spi.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertMatchesVerbose;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.executeExpr;
+import static org.opencube.junit5.TestUtil.executeExprRaw;
+import static org.opencube.junit5.TestUtil.executeOlap4jQuery;
+import static org.opencube.junit5.TestUtil.executeQuery;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
 //import org.apache.logging.log4j.ThreadContext;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.olap4j.*;
+import org.olap4j.CellSet;
+import org.olap4j.OlapConnection;
+import org.olap4j.OlapStatement;
 import org.olap4j.metadata.Property;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
@@ -36,14 +49,24 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import java.sql.SQLException;
-import java.util.*;
-import java.util.regex.Pattern;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Axis;
+import mondrian.olap.Cell;
+import mondrian.olap.Connection;
+import mondrian.olap.Evaluator;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Result;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.type.HierarchyType;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.Type;
+import mondrian.spi.CellFormatter;
+import mondrian.spi.MemberFormatter;
+import mondrian.spi.PropertyFormatter;
+import mondrian.spi.UserDefinedFunction;
 
 /**
  * Unit-test for {@link UserDefinedFunction user-defined functions}.

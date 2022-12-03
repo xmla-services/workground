@@ -11,22 +11,30 @@
 
 package mondrian.test.comp;
 
-import mondrian.olap.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+
+import java.util.HashSet;
+import java.util.List;
+
+import javax.xml.parsers.DocumentBuilder;
 
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Member;
-import org.junit.jupiter.api.Test;
 import org.opencube.junit5.TestUtil;
-import org.w3c.dom.*;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
-import java.util.HashSet;
-import java.util.List;
-import javax.xml.parsers.DocumentBuilder;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+import mondrian.olap.Axis;
+import mondrian.olap.AxisOrdinal;
+import mondrian.olap.Cell;
+import mondrian.olap.Position;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
 
 /**
  * Compares the {@link Result} produced by a query with the expected result

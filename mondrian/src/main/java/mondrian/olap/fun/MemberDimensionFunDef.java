@@ -12,10 +12,12 @@ package mondrian.olap.fun;
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Member;
 
-import mondrian.calc.*;
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.MemberCalc;
 import mondrian.calc.impl.AbstractDimensionCalc;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
+import mondrian.olap.Evaluator;
 
 /**
  * Definition of the <code>&lt;Measure&gt;.Dimension</code>

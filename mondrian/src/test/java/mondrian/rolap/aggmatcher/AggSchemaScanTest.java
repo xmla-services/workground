@@ -9,9 +9,14 @@
 
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.Util;
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapConnectionProperties;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.sql.DataSource;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -21,13 +26,9 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapConnectionProperties;
 
 /**
   * Test if AggSchemaScan and AggCatalogScan properties are used in JdbcSchema loadTablesOfType

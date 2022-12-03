@@ -12,10 +12,30 @@
 */
 package mondrian.test;
 
-import mondrian.olap.*;
-import mondrian.rolap.RolapCube;
-import mondrian.rolap.RolapLevel;
-import mondrian.rolap.RolapStar;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertSqlEquals;
+import static org.opencube.junit5.TestUtil.checkThrowable;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.executeStatement;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.sql.DataSource;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Cube;
@@ -32,18 +52,16 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import javax.sql.DataSource;
-import java.math.BigDecimal;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Cell;
+import mondrian.olap.Connection;
+import mondrian.olap.Id;
+import mondrian.olap.MondrianDef;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Result;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapLevel;
+import mondrian.rolap.RolapStar;
 
 /**
  * Test generation of SQL to access the fact table data underlying an MDX

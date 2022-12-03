@@ -13,9 +13,9 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.rolap.CellKey;
-
 import java.util.BitSet;
+
+import mondrian.rolap.CellKey;
 
 /**
  * Implementation of {@link DenseSegmentDataset} that stores

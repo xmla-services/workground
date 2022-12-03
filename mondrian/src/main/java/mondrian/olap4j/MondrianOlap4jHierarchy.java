@@ -11,12 +11,19 @@
 
 package mondrian.olap4j;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.OlapException;
-import org.olap4j.impl.*;
-import org.olap4j.metadata.*;
-
-import java.util.List;
+import org.olap4j.impl.AbstractNamedList;
+import org.olap4j.impl.Named;
+import org.olap4j.impl.NamedListImpl;
+import org.olap4j.impl.Olap4jUtil;
+import org.olap4j.metadata.Dimension;
+import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Level;
+import org.olap4j.metadata.Member;
+import org.olap4j.metadata.NamedList;
 
 /**
  * Implementation of {@link org.olap4j.metadata.Hierarchy}

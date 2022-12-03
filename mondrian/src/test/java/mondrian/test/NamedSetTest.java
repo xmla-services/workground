@@ -12,11 +12,17 @@
 */
 package mondrian.test;
 
-import mondrian.olap.Connection;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Result;
-import mondrian.olap.Util;
-import mondrian.spi.impl.FilterDynamicSchemaProcessor;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.assertSetExprDependsOn;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.flushSchemaCache;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
+import static org.opencube.junit5.TestUtil.withSchema;
+import static org.opencube.junit5.TestUtil.withSchemaProcessor;
+
+import java.io.InputStream;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,9 +35,11 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.io.InputStream;
-
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 
 /**
  * Unit-test for named sets, in all their various forms: <code>WITH SET</code>,

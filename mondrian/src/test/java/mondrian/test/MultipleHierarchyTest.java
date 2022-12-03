@@ -9,8 +9,10 @@
 
 package mondrian.test;
 
-import mondrian.olap.Connection;
-import mondrian.olap.MondrianProperties;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.hierarchyName;
 
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,10 +24,8 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.assertQueryThrows;
-import static org.opencube.junit5.TestUtil.hierarchyName;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
 
 /**
  * Tests multiple hierarchies within the same dimension.

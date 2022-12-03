@@ -9,11 +9,12 @@
 
 package mondrian.test;
 
-import mondrian.olap.Util;
-import mondrian.rolap.RolapConnectionProperties;
+import static org.opencube.junit5.TestUtil.getConnectionProperties;
+
 import org.opencube.junit5.context.TestingContext;
 
-import static org.opencube.junit5.TestUtil.getConnectionProperties;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapConnectionProperties;
 
 /**
  * Unit test against Pentaho's Steel Wheels sample database.

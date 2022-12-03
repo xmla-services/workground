@@ -11,10 +11,12 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.*;
-
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Util;
 
 /**
  * Resolver which uses reflection to instantiate a {@link FunDef}.

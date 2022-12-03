@@ -11,20 +11,29 @@
 
 package mondrian.web.servlet;
 
-import mondrian.olap.*;
-import mondrian.spi.CatalogLocator;
-import mondrian.spi.impl.ServletContextCatalogLocator;
-import mondrian.web.taglib.ResultCache;
+import java.io.IOException;
+import java.util.Enumeration;
+import java.util.List;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.eclipse.daanse.olap.api.Member;
 import org.eigenbase.xom.StringEscaper;
 
-import java.io.IOException;
-import java.util.Enumeration;
-import java.util.List;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.*;
+import mondrian.olap.Cell;
+import mondrian.olap.DriverManager;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Position;
+import mondrian.olap.Query;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.spi.CatalogLocator;
+import mondrian.spi.impl.ServletContextCatalogLocator;
+import mondrian.web.taglib.ResultCache;
 
 /**
  * <code>MdxQueryServlet</code> is a servlet which receives MDX queries,

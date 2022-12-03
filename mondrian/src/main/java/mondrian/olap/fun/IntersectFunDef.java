@@ -11,14 +11,23 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ListCalc;
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractListCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.FunDef;
 
 /**
  * Definition of the <code>INTERSECT</code> MDX function.

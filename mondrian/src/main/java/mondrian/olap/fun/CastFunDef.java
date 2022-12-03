@@ -9,16 +9,23 @@
 
 package mondrian.olap.fun;
 
+import java.util.List;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Literal;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
 import mondrian.olap.type.TypeUtil;
 import mondrian.resource.MondrianResource;
-
-import java.util.List;
 
 /**
  * Definition of the <code>CAST</code> MDX operator.

@@ -11,19 +11,37 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.*;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.type.TupleType;
-import mondrian.olap.type.Type;
-import mondrian.rolap.RolapUtil;
-
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.DummyExp;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ListCalc;
+import mondrian.calc.MemberCalc;
+import mondrian.calc.TupleCalc;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
+import mondrian.calc.impl.AbstractIntegerCalc;
+import mondrian.calc.impl.CacheCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.ExpCacheDescriptor;
+import mondrian.olap.FunDef;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.olap.type.TupleType;
+import mondrian.olap.type.Type;
+import mondrian.rolap.RolapUtil;
 
 /**
  * Definition of the <code>RANK</code> MDX function.

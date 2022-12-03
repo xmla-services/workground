@@ -11,13 +11,23 @@
 
 package mondrian.olap;
 
-import mondrian.calc.*;
+import java.util.List;
+
+import mondrian.calc.Calc;
+import mondrian.calc.DummyExp;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ParameterCompilable;
+import mondrian.calc.ParameterSlot;
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.MemberExpr;
-import mondrian.olap.type.*;
-
-import java.util.List;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.Type;
 
 /**
  * Implementation of {@link Parameter}.

@@ -13,6 +13,16 @@
 
 package mondrian.olap.fun;
 
+import static mondrian.olap.fun.sort.Sorter.hierarchizeMemberList;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.IntegerCalc;
@@ -37,16 +47,6 @@ import mondrian.olap.type.SetType;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.Type;
 import mondrian.resource.MondrianResource;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-
-import static mondrian.olap.fun.sort.Sorter.hierarchizeMemberList;
 
 /**
  * Definition of the <code>Descendants</code> MDX function.

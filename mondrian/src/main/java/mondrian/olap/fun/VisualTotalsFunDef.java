@@ -9,19 +9,35 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.AbstractListCalc;
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.*;
-import mondrian.olap.*;
-import mondrian.olap.type.*;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ListCalc;
+import mondrian.calc.StringCalc;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractListCalc;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.mdx.MemberExpr;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.UnresolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Property;
+import mondrian.olap.Syntax;
+import mondrian.olap.Validator;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.Type;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapLevel;
+import mondrian.rolap.RolapMember;
+import mondrian.rolap.RolapMemberBase;
+import mondrian.rolap.RolapUtil;
 
 /**
  * Definition of the <code>VisualTotals</code> MDX function.

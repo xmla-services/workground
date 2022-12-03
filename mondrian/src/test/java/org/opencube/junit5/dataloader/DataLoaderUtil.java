@@ -34,12 +34,13 @@ import java.util.stream.Stream;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+
 import com.univocity.parsers.csv.Csv;
 import com.univocity.parsers.csv.CsvParserSettings;
 
 import mondrian.olap.Util;
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.db.dialect.api.Dialect;
 
 public class DataLoaderUtil {
 

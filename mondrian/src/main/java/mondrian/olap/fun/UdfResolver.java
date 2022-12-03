@@ -10,18 +10,37 @@
 */
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.*;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.type.*;
-import mondrian.rolap.agg.CellRequestQuantumExceededException;
-import mondrian.spi.UserDefinedFunction;
-
-import java.util.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.IterCalc;
+import mondrian.calc.ListCalc;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractListCalc;
+import mondrian.calc.impl.GenericCalc;
+import mondrian.calc.impl.ListTupleList;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
+import mondrian.rolap.agg.CellRequestQuantumExceededException;
+import mondrian.spi.UserDefinedFunction;
 
 /**
  * Resolver for user-defined functions.

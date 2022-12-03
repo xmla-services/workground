@@ -10,8 +10,12 @@
 */
 package mondrian.olap;
 
-import mondrian.rolap.RolapCube;
-import mondrian.rolap.RolapCubeDimension;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Dimension;
@@ -24,7 +28,8 @@ import org.eclipse.daanse.olap.api.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapCubeDimension;
 
 /**
  * Default implementation of the {@link Role} interface.

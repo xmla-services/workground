@@ -11,7 +11,9 @@ package mondrian.udf;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.MondrianDef.UserDefinedFunction;
-import mondrian.olap.type.*;
+import mondrian.olap.type.HierarchyType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.Type;
 import mondrian.util.Format;
 
 /**

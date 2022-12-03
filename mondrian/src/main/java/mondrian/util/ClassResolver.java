@@ -11,12 +11,13 @@
 
 package mondrian.util;
 
-import org.apache.commons.collections.iterators.EnumerationIterator;
-
 import java.io.IOException;
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.util.*;
+import java.util.Enumeration;
+
+import org.apache.commons.collections.iterators.EnumerationIterator;
 
 /**
  * Instantiates a class.

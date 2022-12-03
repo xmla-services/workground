@@ -9,11 +9,12 @@
 
 package mondrian.util;
 
-import mondrian.olap.Util;
-
-import java.lang.ref.*;
-import java.util.*;
+import java.lang.ref.SoftReference;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
+
+import mondrian.olap.Util;
 
 /**
  * An expiring reference is a subclass of {@link SoftReference}

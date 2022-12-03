@@ -9,9 +9,12 @@
  */
 package mondrian.rolap.sql;
 
-import mondrian.olap.Connection;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
+import static org.opencube.junit5.TestUtil.assertQuerySql;
+import static org.opencube.junit5.TestUtil.assertQuerySqlOrNot;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.flushSchemaCache;
+import static org.opencube.junit5.TestUtil.getDialect;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +24,9 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Connection;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
 
 public class EffectiveMemberCacheTest {
 

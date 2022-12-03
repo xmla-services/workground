@@ -11,18 +11,32 @@
 
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.*;
-import mondrian.recorder.MessageRecorder;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.*;
-import mondrian.rolap.sql.SqlQuery;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import mondrian.olap.MondrianDef;
+import mondrian.olap.MondrianException;
+import mondrian.recorder.MessageRecorder;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.HierarchyUsage;
+import mondrian.rolap.RolapAggregator;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapLevel;
+import mondrian.rolap.RolapSchema;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.sql.SqlQuery;
 
 /**
  * Abstract Recognizer class used to determine if a candidate aggregate table

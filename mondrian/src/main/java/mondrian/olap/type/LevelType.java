@@ -11,13 +11,13 @@
 
 package mondrian.olap.type;
 
-import mondrian.olap.*;
-
 import java.util.Objects;
 
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
+
+import mondrian.olap.Util;
 
 /**
  * The type of an expression which represents a level.

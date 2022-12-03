@@ -13,36 +13,39 @@
 */
 package mondrian.xmla;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.olap4j.IMondrianOlap4jProperty;
-import mondrian.util.CompositeList;
-import mondrian.xmla.impl.DefaultSaxWriter;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import mondrian.olap.Formula;
-import mondrian.olap.QueryPart;
-import mondrian.olap.DrillThrough;
-import mondrian.olap.CalculatedFormula;
-import mondrian.olap.Refresh;
-import mondrian.olap.Update;
-import mondrian.olap.TransactionCommand;
-import mondrian.olap.DmvQuery;
-
-import mondrian.server.Session;
-
-import org.eigenbase.xom.Parser;
-import org.eigenbase.xom.XOMException;
-import org.eigenbase.xom.XOMUtil;
-import org.olap4j.*;
-import org.olap4j.impl.Olap4jUtil;
-import org.olap4j.metadata.*;
-import org.olap4j.metadata.Property.StandardCellProperty;
-import org.olap4j.metadata.Property.StandardMemberProperty;
-
-import org.xml.sax.SAXException;
+import static mondrian.xmla.XmlaConstants.CLIENT_FAULT_FC;
+import static mondrian.xmla.XmlaConstants.HSB_ACCESS_DENIED_CODE;
+import static mondrian.xmla.XmlaConstants.HSB_ACCESS_DENIED_FAULT_FS;
+import static mondrian.xmla.XmlaConstants.HSB_BAD_METHOD_CODE;
+import static mondrian.xmla.XmlaConstants.HSB_BAD_METHOD_FAULT_FS;
+import static mondrian.xmla.XmlaConstants.HSB_BAD_PROPERTIES_LIST_CODE;
+import static mondrian.xmla.XmlaConstants.HSB_BAD_PROPERTIES_LIST_FAULT_FS;
+import static mondrian.xmla.XmlaConstants.HSB_CONNECTION_DATA_SOURCE_CODE;
+import static mondrian.xmla.XmlaConstants.HSB_CONNECTION_DATA_SOURCE_FAULT_FS;
+import static mondrian.xmla.XmlaConstants.HSB_DISCOVER_FORMAT_CODE;
+import static mondrian.xmla.XmlaConstants.HSB_DISCOVER_FORMAT_FAULT_FS;
+import static mondrian.xmla.XmlaConstants.HSB_DISCOVER_UNPARSE_CODE;
+import static mondrian.xmla.XmlaConstants.HSB_DISCOVER_UNPARSE_FAULT_FS;
+import static mondrian.xmla.XmlaConstants.HSB_DRILL_THROUGH_FORMAT_CODE;
+import static mondrian.xmla.XmlaConstants.HSB_DRILL_THROUGH_FORMAT_FAULT_FS;
+import static mondrian.xmla.XmlaConstants.HSB_DRILL_THROUGH_SQL_CODE;
+import static mondrian.xmla.XmlaConstants.HSB_DRILL_THROUGH_SQL_FAULT_FS;
+import static mondrian.xmla.XmlaConstants.HSB_EXECUTE_QUERY_CODE;
+import static mondrian.xmla.XmlaConstants.HSB_EXECUTE_QUERY_FAULT_FS;
+import static mondrian.xmla.XmlaConstants.HSB_EXECUTE_UNPARSE_CODE;
+import static mondrian.xmla.XmlaConstants.HSB_EXECUTE_UNPARSE_FAULT_FS;
+import static mondrian.xmla.XmlaConstants.HSB_PARSE_QUERY_CODE;
+import static mondrian.xmla.XmlaConstants.HSB_PARSE_QUERY_FAULT_FS;
+import static mondrian.xmla.XmlaConstants.NS_AS_ENGINE;
+import static mondrian.xmla.XmlaConstants.NS_XMLA;
+import static mondrian.xmla.XmlaConstants.NS_XMLA_EMPTY;
+import static mondrian.xmla.XmlaConstants.NS_XMLA_EX;
+import static mondrian.xmla.XmlaConstants.NS_XMLA_MDDATASET;
+import static mondrian.xmla.XmlaConstants.NS_XMLA_ROWSET;
+import static mondrian.xmla.XmlaConstants.NS_XSD;
+import static mondrian.xmla.XmlaConstants.NS_XSI;
+import static mondrian.xmla.XmlaConstants.SERVER_FAULT_FC;
+import static mondrian.xmla.XmlaConstants.USM_DOM_PARSE_FAULT_FS;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -50,14 +53,72 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.*;
-import java.util.*;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.Set;
 
-import static mondrian.xmla.XmlaConstants.*;
-import static org.olap4j.metadata.XmlaConstants.*;
+import org.olap4j.AllocationPolicy;
+import org.olap4j.Cell;
+import org.olap4j.CellSet;
+import org.olap4j.CellSetAxis;
+import org.olap4j.CellSetAxisMetaData;
+import org.olap4j.OlapConnection;
+import org.olap4j.OlapException;
+import org.olap4j.OlapStatement;
+import org.olap4j.Position;
+import org.olap4j.PreparedOlapStatement;
+import org.olap4j.Scenario;
+import org.olap4j.impl.Olap4jUtil;
+import org.olap4j.metadata.Cube;
+import org.olap4j.metadata.Database;
+import org.olap4j.metadata.Datatype;
+import org.olap4j.metadata.Dimension;
+import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Level;
+import org.olap4j.metadata.Member;
+import org.olap4j.metadata.MetadataElement;
+import org.olap4j.metadata.Property;
+import org.olap4j.metadata.Property.StandardCellProperty;
+import org.olap4j.metadata.Property.StandardMemberProperty;
+import org.olap4j.metadata.Schema;
+import org.olap4j.metadata.XmlaConstants.AxisFormat;
+import org.olap4j.metadata.XmlaConstants.Content;
+import org.olap4j.metadata.XmlaConstants.Format;
+import org.olap4j.metadata.XmlaConstants.Method;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.xml.sax.SAXException;
 
+import mondrian.olap.CalculatedFormula;
+import mondrian.olap.DmvQuery;
+import mondrian.olap.DrillThrough;
+import mondrian.olap.Formula;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.QueryPart;
+import mondrian.olap.Refresh;
+import mondrian.olap.TransactionCommand;
+import mondrian.olap.Update;
+import mondrian.olap.Util;
+import mondrian.olap4j.IMondrianOlap4jProperty;
 import mondrian.server.Locus;
+import mondrian.server.Session;
+import mondrian.util.CompositeList;
+import mondrian.xmla.impl.DefaultSaxWriter;
 
 /**
  * An <code>XmlaHandler</code> responds to XML for Analysis (XML/A) requests.

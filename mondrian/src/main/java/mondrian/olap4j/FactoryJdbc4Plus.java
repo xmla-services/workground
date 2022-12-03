@@ -9,15 +9,30 @@
 
 package mondrian.olap4j;
 
-import mondrian.rolap.RolapConnection;
-
-import org.eclipse.daanse.engine.api.Context;
-import org.olap4j.*;
-
 import java.io.InputStream;
 import java.io.Reader;
-import java.sql.*;
-import java.util.*;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.NClob;
+import java.sql.ResultSet;
+import java.sql.RowId;
+import java.sql.RowIdLifetime;
+import java.sql.SQLClientInfoException;
+import java.sql.SQLException;
+import java.sql.SQLXML;
+import java.sql.Struct;
+import java.util.List;
+import java.util.Properties;
+
+import org.eclipse.daanse.engine.api.Context;
+import org.olap4j.CellSetMetaData;
+import org.olap4j.OlapConnection;
+import org.olap4j.OlapDatabaseMetaData;
+import org.olap4j.OlapException;
+import org.olap4j.OlapStatement;
+
+import mondrian.rolap.RolapConnection;
 
 /**
  * Abstract JDBC classes, for JDBC 4.0 and 4.1.

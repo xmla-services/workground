@@ -9,17 +9,24 @@
 
 package mondrian.olap4j;
 
-import mondrian.rolap.RolapConnectionProperties;
-
-import java.sql.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.DriverPropertyInfo;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Logger;
 
-import aQute.bnd.annotation.spi.ServiceProvider;
 import org.eclipse.daanse.engine.api.Context;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.rolap.RolapConnectionProperties;
 
 /**
  * Olap4j driver for Mondrian.

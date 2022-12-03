@@ -11,16 +11,15 @@
 
 package mondrian.olap;
 
-import mondrian.server.Execution;
-import mondrian.server.Statement;
+import java.io.PrintWriter;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.PrintWriter;
-import java.util.List;
+import mondrian.server.Execution;
+import mondrian.server.Statement;
 
 /**
  * Skeleton implementation of {@link Result}.

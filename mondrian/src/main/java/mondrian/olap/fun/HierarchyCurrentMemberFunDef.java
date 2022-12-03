@@ -8,22 +8,27 @@
 */
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.AbstractMemberCalc;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapEvaluator;
-import mondrian.rolap.RolapHierarchy;
+import java.util.Map;
+import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
 import org.eigenbase.util.property.StringProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-import java.util.Set;
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.HierarchyCalc;
+import mondrian.calc.impl.AbstractMemberCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapEvaluator;
+import mondrian.rolap.RolapHierarchy;
 
 /**
  * Definition of the <code>&lt;Hierarchy&gt;.CurrentMember</code> MDX builtin function.

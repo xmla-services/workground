@@ -11,14 +11,14 @@
 */
 package mondrian.rolap;
 
-import mondrian.mdx.*;
-import mondrian.olap.*;
-import mondrian.olap.fun.AggregateFunDef;
-import mondrian.olap.fun.SetFunDef;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.agg.*;
-import mondrian.server.*;
-import mondrian.server.monitor.SqlStatementEvent;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.Cube;
@@ -27,14 +27,45 @@ import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.OlapElement;
 import org.eclipse.daanse.olap.api.Schema;
-import org.slf4j.Logger;
-
 import org.olap4j.AllocationPolicy;
 import org.olap4j.Scenario;
+import org.slf4j.Logger;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
+import mondrian.mdx.DimensionExpr;
+import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.LevelExpr;
+import mondrian.mdx.MdxVisitorImpl;
+import mondrian.mdx.MemberExpr;
+import mondrian.mdx.NamedSetExpr;
+import mondrian.mdx.ParameterExpr;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.UnresolvedFunCall;
+import mondrian.olap.Axis;
+import mondrian.olap.Cell;
+import mondrian.olap.Connection;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.Formula;
+import mondrian.olap.FunDef;
+import mondrian.olap.Id;
+import mondrian.olap.Literal;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Position;
+import mondrian.olap.Property;
+import mondrian.olap.Query;
+import mondrian.olap.QueryAxis;
+import mondrian.olap.Util;
+import mondrian.olap.fun.AggregateFunDef;
+import mondrian.olap.fun.SetFunDef;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.agg.AndPredicate;
+import mondrian.rolap.agg.DrillThroughCellRequest;
+import mondrian.rolap.agg.MemberColumnPredicate;
+import mondrian.rolap.agg.OrPredicate;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.server.Statement;
+import mondrian.server.monitor.SqlStatementEvent;
 
 /**
  * <code>RolapCell</code> implements {@link mondrian.olap.Cell} within a

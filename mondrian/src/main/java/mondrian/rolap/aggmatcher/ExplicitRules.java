@@ -10,20 +10,37 @@
 */
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.*;
-import mondrian.recorder.MessageRecorder;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.*;
-import java.util.regex.Pattern;
+import mondrian.olap.Category;
+import mondrian.olap.Id;
+import mondrian.olap.MondrianDef;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Property;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.recorder.MessageRecorder;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapAggregator;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapLevel;
+import mondrian.rolap.RolapStar;
 
 /**
  * A class containing a RolapCube's Aggregate tables exclude/include

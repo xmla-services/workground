@@ -9,14 +9,15 @@
 
 package mondrian.udf;
 
-import mondrian.olap.Evaluator;
-import mondrian.olap.Syntax;
-import mondrian.olap.type.*;
-import mondrian.spi.UserDefinedFunction;
-
 import java.util.regex.Pattern;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Syntax;
+import mondrian.olap.type.BooleanType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.Type;
+import mondrian.spi.UserDefinedFunction;
 
 /**
  * User-defined function <code>MATCHES</code>.

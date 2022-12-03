@@ -12,21 +12,29 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.AbstractMemberCalc;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.type.MemberType;
-import mondrian.olap.type.Type;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapCube;
-import mondrian.rolap.RolapHierarchy;
-
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.DummyExp;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.LevelCalc;
+import mondrian.calc.MemberCalc;
+import mondrian.calc.impl.AbstractMemberCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Validator;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.Type;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapHierarchy;
 
 /**
  * Definition of the <code>OpeningPeriod</code> and <code>ClosingPeriod</code>

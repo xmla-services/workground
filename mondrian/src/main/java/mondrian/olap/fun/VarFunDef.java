@@ -11,11 +11,15 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 
-import mondrian.calc.*;
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ListCalc;
+import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
+import mondrian.olap.Evaluator;
+import mondrian.olap.FunDef;
 
 /**
  * Definition of the <code>Var</code> MDX builtin function

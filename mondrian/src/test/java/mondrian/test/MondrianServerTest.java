@@ -9,12 +9,12 @@
 
 package mondrian.test;
 
-import mondrian.olap.MondrianServer;
-import mondrian.olap.Util;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.server.StringRepositoryContentFinder;
-import mondrian.server.UrlRepositoryContentFinder;
-import mondrian.xmla.test.XmlaTestContext;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import java.net.MalformedURLException;
+import java.sql.SQLException;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.OlapConnection;
@@ -25,11 +25,12 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.net.MalformedURLException;
-import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import mondrian.olap.MondrianServer;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.server.StringRepositoryContentFinder;
+import mondrian.server.UrlRepositoryContentFinder;
+import mondrian.xmla.test.XmlaTestContext;
 
 /**
  * Test suite for server functionality in {@link MondrianServer}.

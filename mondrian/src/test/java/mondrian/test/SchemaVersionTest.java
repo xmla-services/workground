@@ -9,17 +9,6 @@
 
 package mondrian.test;
 
-import mondrian.olap.Connection;
-import mondrian.olap.DriverManager;
-import mondrian.olap.MondrianException;
-import mondrian.olap.Util;
-
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -27,6 +16,17 @@ import static org.opencube.junit5.TestUtil.getConnectionProperties;
 import static org.opencube.junit5.TestUtil.withSchema;
 
 import java.sql.SQLException;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
+import mondrian.olap.Connection;
+import mondrian.olap.DriverManager;
+import mondrian.olap.MondrianException;
+import mondrian.olap.Util;
 
 /**
  * Unit test for automatic detection of schema version.

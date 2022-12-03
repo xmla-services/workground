@@ -11,9 +11,12 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.*;
-
 import java.util.List;
+
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Syntax;
+import mondrian.olap.Validator;
 
 /**
  * A <code>Resolver</code> converts a function name, invocation type, and set

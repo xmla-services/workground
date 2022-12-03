@@ -10,7 +10,9 @@
 package mondrian.calc.impl;
 
 import mondrian.calc.Calc;
-import mondrian.olap.*;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.ExpCacheDescriptor;
 
 /**
  * Calculation which retrieves the value of an underlying calculation

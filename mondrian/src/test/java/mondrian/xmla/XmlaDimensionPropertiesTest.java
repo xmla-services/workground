@@ -9,9 +9,7 @@
 */
 package mondrian.xmla;
 
-import mondrian.olap.Connection;
-import mondrian.olap4j.MondrianOlap4jDriver;
-import mondrian.test.DiffRepository;
+import java.util.Properties;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +19,9 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.Properties;
+import mondrian.olap.Connection;
+import mondrian.olap4j.MondrianOlap4jDriver;
+import mondrian.test.DiffRepository;
 
 /**
  * Test of dimension properties in xmla response.

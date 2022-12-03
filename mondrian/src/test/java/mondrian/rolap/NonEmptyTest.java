@@ -10,16 +10,23 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.rolap.RolapConnection.NonEmptyResult;
-import mondrian.rolap.RolapNative.Listener;
-import mondrian.rolap.RolapNative.NativeEvent;
-import mondrian.rolap.RolapNative.TupleEvent;
-import mondrian.rolap.sql.MemberChildrenConstraint;
-import mondrian.rolap.sql.TupleConstraint;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
-import mondrian.util.Bug;
+import static mondrian.test.FoodmartTestContextImpl.levelName;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.flushSchemaCache;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
+import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
+import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.Collection;
+import java.util.List;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
@@ -37,12 +44,23 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import java.util.Collection;
-import java.util.List;
-
-import static mondrian.test.FoodmartTestContextImpl.levelName;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Axis;
+import mondrian.olap.Cell;
+import mondrian.olap.Connection;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Id;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.NativeEvaluationUnsupportedException;
+import mondrian.olap.Result;
+import mondrian.rolap.RolapConnection.NonEmptyResult;
+import mondrian.rolap.RolapNative.Listener;
+import mondrian.rolap.RolapNative.NativeEvent;
+import mondrian.rolap.RolapNative.TupleEvent;
+import mondrian.rolap.sql.MemberChildrenConstraint;
+import mondrian.rolap.sql.TupleConstraint;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
+import mondrian.util.Bug;
 
 /**
  * Tests for NON EMPTY Optimization, includes SqlConstraint type hierarchy and RolapNative classes.

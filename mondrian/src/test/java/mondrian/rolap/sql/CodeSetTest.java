@@ -9,18 +9,18 @@
  */
 package mondrian.rolap.sql;
 
-import mondrian.olap.MondrianException;
-
-import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
-import org.junit.jupiter.api.Test;
-
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+
+import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
+import org.junit.jupiter.api.Test;
+
+import mondrian.olap.MondrianException;
 
 /**
  * @author Tatsiana_Kasiankova

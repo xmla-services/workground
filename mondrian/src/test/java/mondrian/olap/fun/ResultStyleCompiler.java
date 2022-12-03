@@ -9,15 +9,22 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.DelegatingExpCompiler;
-import mondrian.olap.*;
-import mondrian.olap.type.Type;
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.CalcWriter;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.impl.DelegatingExpCompiler;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.Validator;
+import mondrian.olap.type.Type;
 
 /**
  * The <code>ResultStyleCompiler</code> can be used to assure that

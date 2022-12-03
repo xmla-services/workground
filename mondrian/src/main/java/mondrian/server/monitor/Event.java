@@ -9,11 +9,11 @@
 
 package mondrian.server.monitor;
 
-import mondrian.rolap.RolapUtil;
-import mondrian.util.MDCUtil;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
+
+import mondrian.rolap.RolapUtil;
+import mondrian.util.MDCUtil;
 
 /**
  * Base class for an event of interest.

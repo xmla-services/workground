@@ -10,16 +10,28 @@
 */
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.*;
-import mondrian.recorder.MessageRecorder;
-import mondrian.rolap.*;
-import mondrian.rolap.aggmatcher.JdbcSchema.Table.Column;
-import mondrian.util.Pair;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
+
+import mondrian.olap.Id;
+import mondrian.olap.Util;
+import mondrian.recorder.MessageRecorder;
+import mondrian.rolap.HierarchyUsage;
+import mondrian.rolap.RolapAggregator;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapLevel;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.aggmatcher.JdbcSchema.Table.Column;
+import mondrian.util.Pair;
 
 /**
  * This is the Recognizer for the aggregate table descriptions that appear in

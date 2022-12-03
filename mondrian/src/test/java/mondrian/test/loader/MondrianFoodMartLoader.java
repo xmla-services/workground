@@ -10,28 +10,44 @@
 */
 package mondrian.test.loader;
 
-import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapUtil;
-//import mondrian.spi.DialectManager;
-
-import org.slf4j.LoggerFactory;
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.slf4j.Logger;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.sql.*;
-import java.text.*;
-import java.util.*;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mondrian.olap.Util;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapUtil;
+//import mondrian.spi.DialectManager;
 
 /**
  * Utility to load the FoodMart dataset into an arbitrary JDBC database.

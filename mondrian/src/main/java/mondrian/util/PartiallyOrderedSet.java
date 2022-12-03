@@ -9,9 +9,20 @@
 
 package mondrian.util;
 
-import mondrian.olap.Util;
+import java.util.AbstractList;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
 
-import java.util.*;
+import mondrian.olap.Util;
 
 /**
  * Partially-ordered set.

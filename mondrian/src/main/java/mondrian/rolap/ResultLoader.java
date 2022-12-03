@@ -13,12 +13,12 @@
 
 package mondrian.rolap;
 
-import mondrian.calc.TupleList;
-import mondrian.olap.Util;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import mondrian.calc.TupleList;
+import mondrian.olap.Util;
 
 /**
  * Loader to be iterated to load all results from database.

@@ -12,8 +12,19 @@
 */
 package mondrian.test;
 
-import mondrian.olap.*;
-import mondrian.util.Bug;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertSqlEquals;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.unfold;
+import static org.opencube.junit5.TestUtil.upgradeActual;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Dimension;
@@ -31,12 +42,11 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Cell;
+import mondrian.olap.Connection;
+import mondrian.olap.Result;
+import mondrian.olap.SchemaReader;
+import mondrian.util.Bug;
 
 /**
  * Tests for parent-child hierarchies.

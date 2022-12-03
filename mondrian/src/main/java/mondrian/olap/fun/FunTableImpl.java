@@ -11,10 +11,20 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.*;
-import mondrian.util.Pair;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import java.util.*;
+import mondrian.olap.FunDef;
+import mondrian.olap.FunTable;
+import mondrian.olap.Syntax;
+import mondrian.util.Pair;
 
 /**
  * Abstract implementation of {@link FunTable}.

@@ -9,13 +9,13 @@
 
 package mondrian.server;
 
+import java.sql.SQLException;
+
 import mondrian.olap.Query;
 import mondrian.olap.SchemaReader;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapSchema;
 import mondrian.spi.ProfileHandler;
-
-import java.sql.SQLException;
 
 /**
  * Internal context corresponding to a statement.

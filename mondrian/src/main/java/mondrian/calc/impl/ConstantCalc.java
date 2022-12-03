@@ -9,19 +9,30 @@
 
 package mondrian.calc.impl;
 
-import mondrian.calc.*;
-import mondrian.olap.*;
-import mondrian.olap.fun.FunUtil;
-import mondrian.olap.type.*;
-import mondrian.olap.type.DimensionType;
-import mondrian.olap.type.LevelType;
-
 import java.util.Map;
 
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.BooleanCalc;
+import mondrian.calc.Calc;
+import mondrian.calc.DoubleCalc;
+import mondrian.calc.DummyExp;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.StringCalc;
+import mondrian.olap.Evaluator;
+import mondrian.olap.fun.FunUtil;
+import mondrian.olap.type.BooleanType;
+import mondrian.olap.type.DecimalType;
+import mondrian.olap.type.DimensionType;
+import mondrian.olap.type.HierarchyType;
+import mondrian.olap.type.LevelType;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.Type;
 
 /**
  * Calculator which always returns the same value.

@@ -25,7 +25,8 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.sql.DataSource;
+import org.eclipse.daanse.engine.api.Context;
+import org.opencube.junit5.context.MysqlContext;
 
 import com.github.dockerjava.api.model.PortBinding;
 import com.mysql.cj.jdbc.MysqlDataSource;
@@ -34,8 +35,6 @@ import com.mysql.jdbc.Driver;
 import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Util.PropertyList;
 import mondrian.rolap.RolapConnectionProperties;
-import org.eclipse.daanse.engine.api.Context;
-import org.opencube.junit5.context.MysqlContext;
 
 @ServiceProvider(value = DatabaseProvider.class)
 public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {

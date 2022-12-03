@@ -9,7 +9,11 @@
 
 package mondrian.rolap;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * A <code>RolapCacheRegion</code> represents a region of multidimensional space

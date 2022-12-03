@@ -10,6 +10,21 @@
 */
 package mondrian.olap.fun;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mondrian.calc.Calc;
 import mondrian.calc.DummyExp;
 import mondrian.calc.ExpCompiler;
@@ -53,21 +68,6 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.util.CancellationChecker;
 import mondrian.util.CartesianProductList;
-
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Member;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Definition of the <code>CrossJoin</code> MDX function.

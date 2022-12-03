@@ -11,10 +11,10 @@
 
 package mondrian.rolap;
 
-import mondrian.rolap.agg.GroupingSet;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import mondrian.rolap.agg.GroupingSet;
 
 /**
  * <p>The <code>GroupingSetsCollector</code> collects the GroupinpSets and pass

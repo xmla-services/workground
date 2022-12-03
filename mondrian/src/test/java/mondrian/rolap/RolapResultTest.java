@@ -9,8 +9,9 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.Result;
-import mondrian.rolap.aggmatcher.AggTableTestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,9 +23,8 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import mondrian.olap.Result;
+import mondrian.rolap.aggmatcher.AggTableTestCase;
 
 /**
  * Testcase for

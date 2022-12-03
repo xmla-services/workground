@@ -9,22 +9,8 @@
 
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
-import mondrian.olap.Util;
-import mondrian.rolap.RolapConnection;
-import mondrian.test.PropertySaver5;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import javax.sql.DataSource;
 import java.io.StringWriter;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
@@ -33,7 +19,23 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import javax.sql.DataSource;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Query;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapConnection;
+import mondrian.test.PropertySaver5;
 
 /**
  * Test if lookup columns are there after loading them in

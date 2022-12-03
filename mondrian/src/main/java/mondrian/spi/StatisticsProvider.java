@@ -9,11 +9,10 @@
 
 package mondrian.spi;
 
-import mondrian.server.Execution;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
 
-import javax.sql.DataSource;
+import mondrian.server.Execution;
 
 /**
  * Provides estimates of the number of rows in a database.

@@ -8,11 +8,32 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.olap.*;
-import mondrian.rolap.*;
-import mondrian.spi.*;
-import mondrian.test.*;
-import mondrian.util.*;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singleton;
+import static java.util.Collections.singletonMap;
+import static mondrian.util.Pair.of;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.flushSchemaCache;
+import static org.opencube.junit5.TestUtil.getDialect;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.junit.jupiter.api.AfterEach;
@@ -25,20 +46,21 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.*;
-
-import static mondrian.util.Pair.of;
-
-import static java.util.Arrays.asList;
-import static java.util.Collections.singletonMap;
-import static java.util.Collections.singleton;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.flushSchemaCache;
-import static org.opencube.junit5.TestUtil.getDialect;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.MondrianServer;
+import mondrian.olap.Result;
+import mondrian.rolap.BitKey;
+import mondrian.rolap.RolapAggregator;
+import mondrian.rolap.RolapUtil;
+import mondrian.spi.SegmentBody;
+import mondrian.spi.SegmentCache;
+import mondrian.spi.SegmentColumn;
+import mondrian.spi.SegmentHeader;
+import mondrian.test.PerformanceTest;
+import mondrian.test.PropertySaver5;
+import mondrian.util.ByteString;
+import mondrian.util.Pair;
 
 /**
  * <p>Test for <code>SegmentBuilder</code>.</p>

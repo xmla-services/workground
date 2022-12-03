@@ -10,23 +10,48 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.rolap.agg.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.concurrent.Future;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mondrian.olap.MondrianDef;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.rolap.agg.AggregationKey;
+import mondrian.rolap.agg.AggregationManager;
+import mondrian.rolap.agg.CellRequest;
+import mondrian.rolap.agg.CellRequestQuantumExceededException;
+import mondrian.rolap.agg.ListColumnPredicate;
+import mondrian.rolap.agg.LiteralStarPredicate;
+import mondrian.rolap.agg.Segment;
+import mondrian.rolap.agg.SegmentBuilder;
+import mondrian.rolap.agg.SegmentCacheManager;
+import mondrian.rolap.agg.SegmentLoader;
+import mondrian.rolap.agg.SegmentWithData;
+import mondrian.rolap.agg.ValueColumnPredicate;
 import mondrian.rolap.aggmatcher.AggGen;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.cache.SegmentCacheIndex;
 import mondrian.rolap.cache.SegmentCacheIndexImpl;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
-import mondrian.spi.*;
-import mondrian.util.*;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.*;
-import java.util.concurrent.Future;
-import org.eclipse.daanse.db.dialect.api.Dialect;
+import mondrian.spi.SegmentBody;
+import mondrian.spi.SegmentHeader;
+import mondrian.util.Pair;
 
 /**
  * A <code>FastBatchingCellReader</code> doesn't really Read cells: when asked

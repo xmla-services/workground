@@ -24,11 +24,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import mondrian.olap.Property;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 
 import mondrian.olap.MondrianDef;
+import mondrian.olap.Property;
 import mondrian.recorder.MessageRecorder;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.aggmatcher.JdbcSchema;

@@ -9,10 +9,8 @@
 
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Result;
-import mondrian.test.PropertySaver5;
-import mondrian.test.loader.CsvDBTestCase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,7 +20,10 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Result;
+import mondrian.test.PropertySaver5;
+import mondrian.test.loader.CsvDBTestCase;
 
 /**
  * Checkin 7634 attempted to correct a problem demonstrated by this

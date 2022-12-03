@@ -9,17 +9,23 @@
 
 package mondrian.util;
 
-import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapUtil;
+import java.sql.Statement;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Set;
+
+import javax.script.Invocable;
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Statement;
-import java.util.*;
-
-import javax.script.*;
+import mondrian.olap.Util;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapUtil;
 
 // Only in Java6 and above
 

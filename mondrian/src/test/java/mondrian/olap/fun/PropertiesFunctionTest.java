@@ -9,6 +9,16 @@
  */
 package mondrian.olap.fun;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+
 import mondrian.olap.Category;
 import mondrian.olap.Connection;
 import mondrian.olap.Exp;
@@ -17,18 +27,6 @@ import mondrian.olap.Query;
 import mondrian.olap.Result;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;
-import mondrian.test.FoodMartTestCase;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.context.TestingContext;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 public class PropertiesFunctionTest {
 

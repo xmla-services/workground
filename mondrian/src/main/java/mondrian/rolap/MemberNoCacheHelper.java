@@ -11,11 +11,11 @@
 
 package mondrian.rolap;
 
+import java.util.List;
+
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
 import mondrian.spi.DataSourceChangeListener;
-
-import java.util.List;
 
 /**
  * Encapsulation of member caching for no caching.

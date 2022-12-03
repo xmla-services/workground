@@ -10,18 +10,19 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.recorder.MessageRecorder;
-import mondrian.rolap.RolapStar;
-import mondrian.rolap.aggmatcher.AggStar;
-import mondrian.rolap.aggmatcher.JdbcSchema;
-import mondrian.test.PropertySaver5;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.mock;
+import mondrian.recorder.MessageRecorder;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.aggmatcher.AggStar;
+import mondrian.rolap.aggmatcher.JdbcSchema;
+import mondrian.test.PropertySaver5;
 
 public class AggStarTest {
 

@@ -11,6 +11,7 @@
 */
 package mondrian.rolap;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -81,8 +82,6 @@ import mondrian.spi.CellFormatter;
 import mondrian.util.CancellationChecker;
 import mondrian.util.Format;
 import mondrian.util.ObjectPool;
-
-import java.io.PrintWriter;
 
 /**
  * A <code>RolapResult</code> is the result of running a query.

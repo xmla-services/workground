@@ -15,8 +15,6 @@ import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
 
-import mondrian.olap.*;
-
 /**
  * Type of an MDX expression.
  *

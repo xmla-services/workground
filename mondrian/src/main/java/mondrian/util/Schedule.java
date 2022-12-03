@@ -12,7 +12,9 @@
 package mondrian.util;
 
 import java.sql.Time;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * A <code>Schedule</code> generates a series of time events.

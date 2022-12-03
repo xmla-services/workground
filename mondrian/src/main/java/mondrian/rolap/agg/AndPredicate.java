@@ -9,10 +9,15 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.rolap.*;
-import mondrian.rolap.sql.SqlQuery;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
-import java.util.*;
+import mondrian.rolap.BitKey;
+import mondrian.rolap.RolapUtil;
+import mondrian.rolap.StarPredicate;
+import mondrian.rolap.sql.SqlQuery;
 
 /**
  * Predicate which is the intersection of a list of predicates. It evaluates to

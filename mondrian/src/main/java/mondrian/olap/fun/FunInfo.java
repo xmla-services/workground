@@ -11,11 +11,13 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.*;
-
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+
+import mondrian.olap.FunDef;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
 
 /**
  * Support class for the {@link mondrian.tui.CmdRunner} allowing one to view

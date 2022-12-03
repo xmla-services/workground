@@ -12,16 +12,27 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.AbstractTupleCalc;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.type.*;
-
 import java.io.PrintWriter;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.MemberCalc;
+import mondrian.calc.impl.AbstractTupleCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.ExpBase;
+import mondrian.olap.FunDef;
+import mondrian.olap.Syntax;
+import mondrian.olap.Validator;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.TupleType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
 
 /**
  * <code>TupleFunDef</code> implements the '(...)' operator which builds

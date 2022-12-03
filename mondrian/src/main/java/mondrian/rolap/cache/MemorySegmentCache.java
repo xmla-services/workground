@@ -9,12 +9,16 @@
 
 package mondrian.rolap.cache;
 
-import mondrian.spi.*;
-
 import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import mondrian.spi.SegmentBody;
+import mondrian.spi.SegmentCache;
+import mondrian.spi.SegmentHeader;
 
 /**
  * Implementation of {@link mondrian.spi.SegmentCache} that stores segments

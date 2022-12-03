@@ -9,9 +9,9 @@
 
 package mondrian.rolap;
 
-import mondrian.rolap.sql.SqlQuery;
-
 import java.util.List;
+
+import mondrian.rolap.sql.SqlQuery;
 
 /**
  * Condition which constrains a set of values of a single

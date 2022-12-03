@@ -9,19 +9,24 @@
 
 package mondrian.olap4j;
 
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapMeasure;
-import mondrian.server.Locus;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.OlapException;
 import org.olap4j.impl.AbstractNamedList;
 import org.olap4j.impl.Named;
 import org.olap4j.mdx.ParseTreeNode;
-import org.olap4j.metadata.*;
+import org.olap4j.metadata.Dimension;
+import org.olap4j.metadata.Hierarchy;
+import org.olap4j.metadata.Level;
+import org.olap4j.metadata.Member;
+import org.olap4j.metadata.NamedList;
+import org.olap4j.metadata.Property;
 
-import java.util.ArrayList;
-import java.util.List;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapMeasure;
+import mondrian.server.Locus;
 
 /**
  * Implementation of {@link Member}

@@ -10,20 +10,30 @@
 */
 package mondrian.rolap;
 
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.rolap.RestrictedMemberReader.MultiCardinalityDefaultMember;
-import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
-import mondrian.rolap.aggmatcher.AggStar;
-import mondrian.rolap.sql.*;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.mdx.MemberExpr;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.Query;
+import mondrian.olap.Util;
+import mondrian.rolap.RestrictedMemberReader.MultiCardinalityDefaultMember;
+import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
+import mondrian.rolap.aggmatcher.AggStar;
+import mondrian.rolap.sql.MemberChildrenConstraint;
+import mondrian.rolap.sql.SqlQuery;
+import mondrian.rolap.sql.TupleConstraint;
 
 /**
  * limits the result of a Member SQL query to the current evaluation context.

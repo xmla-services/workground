@@ -11,12 +11,11 @@
 
 package mondrian.test;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
+import java.util.Set;
 
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.olap4j.impl.Olap4jUtil;
-
-import java.util.Set;
 
 /**
  * Pattern for a SQL statement (or fragment thereof) expected to be produced

@@ -13,19 +13,25 @@
 
 package mondrian.util;
 
-import mondrian.calc.TupleList;
-import mondrian.calc.impl.ArrayTupleList;
-import mondrian.olap.*;
-import mondrian.olap.fun.FunUtil;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapCube;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.OlapElement;
+
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.ArrayTupleList;
+import mondrian.olap.Category;
+import mondrian.olap.Id;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.olap.fun.FunUtil;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapCube;
 
 /**
  * Utilities for parsing fully-qualified member names, tuples, member lists,

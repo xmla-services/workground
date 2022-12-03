@@ -9,10 +9,17 @@
 
 package mondrian.test;
 
-import mondrian.olap.Connection;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Result;
-import mondrian.olap.Util;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertExprThrows;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.hierarchyName;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.sql.SQLException;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -25,10 +32,10 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import java.sql.SQLException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
 
 /**
  * Unit tests that check compatibility with Microsoft SQL Server Analysis

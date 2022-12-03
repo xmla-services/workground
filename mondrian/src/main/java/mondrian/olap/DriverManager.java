@@ -11,10 +11,11 @@
 
 package mondrian.olap;
 
+import org.eclipse.daanse.engine.api.Context;
+
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.spi.CatalogLocator;
-import org.eclipse.daanse.engine.api.Context;
 
 /**
  * The basic service for managing a set of OLAP drivers.

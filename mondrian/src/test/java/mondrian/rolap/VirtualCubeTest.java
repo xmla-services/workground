@@ -10,13 +10,18 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.List;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Member;
-
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -29,10 +34,14 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Axis;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Position;
+import mondrian.olap.Property;
+import mondrian.olap.Result;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
 
 /**
  * Unit tests for virtual cubes.

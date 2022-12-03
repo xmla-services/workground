@@ -9,12 +9,12 @@
 
 package mondrian.mdx;
 
-import mondrian.olap.Parameter;
-
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.HashSet;
 import java.util.Set;
+
+import mondrian.olap.Parameter;
 
 /**
  * PrintWriter used for unparsing queries. Remembers which parameters have

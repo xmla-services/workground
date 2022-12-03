@@ -11,10 +11,12 @@
 
 package mondrian.rolap.sql;
 
-import mondrian.rolap.*;
-import mondrian.rolap.aggmatcher.AggStar;
-
 import java.util.List;
+
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapLevel;
+import mondrian.rolap.RolapMember;
+import mondrian.rolap.aggmatcher.AggStar;
 
 /**
  * "Light version" of a {@link mondrian.rolap.sql.TupleConstraint},

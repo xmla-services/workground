@@ -8,18 +8,19 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.MondrianDef;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
 import org.eclipse.daanse.db.dialect.api.Datatype;
-import mondrian.test.PropertySaver5;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import mondrian.olap.MondrianDef;
+import mondrian.test.PropertySaver5;
 
 public class RolapDimensionTest {
 

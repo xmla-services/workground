@@ -9,23 +9,41 @@
 
 package mondrian.olap4j;
 
+import java.io.InputStream;
+import java.io.Reader;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.Date;
+import java.sql.Ref;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
+
+import org.olap4j.Cell;
+import org.olap4j.CellSet;
+import org.olap4j.CellSetAxis;
+import org.olap4j.CellSetMetaData;
+import org.olap4j.OlapException;
+import org.olap4j.OlapStatement;
+import org.olap4j.Position;
+
 import mondrian.olap.Axis;
-import mondrian.olap.*;
+import mondrian.olap.AxisOrdinal;
+import mondrian.olap.MondrianException;
+import mondrian.olap.Query;
+import mondrian.olap.QueryAxis;
+import mondrian.olap.Result;
 import mondrian.rolap.RolapAxis;
 import mondrian.rolap.RolapCell;
 import mondrian.server.Execution;
-import mondrian.spi.ProfileHandler;
-
-import org.olap4j.Cell;
-import org.olap4j.*;
-import org.olap4j.Position;
-
-import java.io.*;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.sql.*;
-import java.sql.Date;
-import java.util.*;
 
 /**
  * Implementation of {@link CellSet}

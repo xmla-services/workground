@@ -9,14 +9,22 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import mondrian.calc.BooleanCalc;
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.ConstantCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-
-import java.util.ArrayList;
-import java.util.List;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
 
 /**
  * Definition of the tested <code>CASE</code> MDX operator.

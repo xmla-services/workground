@@ -9,19 +9,35 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.AbstractListCalc;
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.*;
-import mondrian.olap.*;
-import mondrian.olap.type.*;
-import mondrian.resource.MondrianResource;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.StringCalc;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractListCalc;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.mdx.DimensionExpr;
+import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Syntax;
+import mondrian.olap.Validator;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.NullType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.TupleType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
+import mondrian.resource.MondrianResource;
 
 /**
  * Definition of the <code>StrToSet</code> MDX builtin function.

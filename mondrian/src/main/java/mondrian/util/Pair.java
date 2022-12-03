@@ -9,9 +9,11 @@
 
 package mondrian.util;
 
-import mondrian.olap.Util;
-
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Pair of values.

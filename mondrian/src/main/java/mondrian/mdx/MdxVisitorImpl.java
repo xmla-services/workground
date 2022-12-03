@@ -9,7 +9,12 @@
 
 package mondrian.mdx;
 
-import mondrian.olap.*;
+import mondrian.olap.Exp;
+import mondrian.olap.Formula;
+import mondrian.olap.Id;
+import mondrian.olap.Literal;
+import mondrian.olap.Query;
+import mondrian.olap.QueryAxis;
 
 /**
  * Default implementation of the visitor interface, {@link MdxVisitor}.

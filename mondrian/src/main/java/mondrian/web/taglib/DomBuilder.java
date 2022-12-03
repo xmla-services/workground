@@ -11,22 +11,33 @@
 
 package mondrian.web.taglib;
 
-import mondrian.olap.*;
-
-import org.eclipse.daanse.olap.api.Member;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.w3c.dom.*;
-
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.StringReader;
 import java.util.List;
-import javax.xml.parsers.*;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Templates;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+
+import org.eclipse.daanse.olap.api.Member;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.w3c.dom.CDATASection;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import mondrian.olap.Axis;
+import mondrian.olap.Cell;
+import mondrian.olap.Position;
+import mondrian.olap.Property;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
 
 /**
  * Transforms a mondrian result into a DOM (Document Object Model).

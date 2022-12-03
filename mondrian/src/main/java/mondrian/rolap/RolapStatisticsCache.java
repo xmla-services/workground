@@ -9,15 +9,19 @@
 
 package mondrian.rolap;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.sql.DataSource;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+
 import mondrian.olap.MondrianDef;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.server.Execution;
 import mondrian.spi.impl.SqlStatisticsProviderNew;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
-
-import java.util.*;
-import javax.sql.DataSource;
 
 /**
  * Provides and caches statistics.

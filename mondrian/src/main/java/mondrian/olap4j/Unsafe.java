@@ -9,12 +9,12 @@
 
 package mondrian.olap4j;
 
-import mondrian.olap.QueryTiming;
-import mondrian.spi.ProfileHandler;
+import java.io.PrintWriter;
 
 import org.olap4j.OlapStatement;
 
-import java.io.PrintWriter;
+import mondrian.olap.QueryTiming;
+import mondrian.spi.ProfileHandler;
 
 /**
  * Access to non-public methods in the package of the mondrian olap4j driver.

@@ -9,18 +9,31 @@
 
 package mondrian.rolap;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.*;
-import mondrian.olap.*;
-import mondrian.olap.type.SetType;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.DummyExp;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.DelegatingExpCompiler;
+import mondrian.calc.impl.GenericCalc;
+import mondrian.calc.impl.GenericIterCalc;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.olap.type.SetType;
 
 /**
  * Evaluator which checks dependencies of expressions.

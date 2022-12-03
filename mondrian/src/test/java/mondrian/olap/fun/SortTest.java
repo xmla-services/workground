@@ -9,8 +9,10 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.test.PropertySaver5;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,9 +21,8 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import mondrian.olap.MondrianProperties;
+import mondrian.test.PropertySaver5;
 
 /**
  * <code>SortTest</code> tests the collation order of positive and negative

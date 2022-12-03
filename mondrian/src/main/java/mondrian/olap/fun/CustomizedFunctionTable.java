@@ -9,11 +9,11 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.FunDef;
-import mondrian.olap.FunTable;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import mondrian.olap.FunDef;
+import mondrian.olap.FunTable;
 
 /**
  * Interface to build a customized function table, selecting functions from the

@@ -12,17 +12,48 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.*;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.type.*;
-import mondrian.resource.MondrianResource;
-
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.IterCalc;
+import mondrian.calc.ListCalc;
+import mondrian.calc.MemberCalc;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.TupleCalc;
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleCursor;
+import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleList;
+import mondrian.calc.VoidCalc;
+import mondrian.calc.impl.AbstractIterCalc;
+import mondrian.calc.impl.AbstractListCalc;
+import mondrian.calc.impl.AbstractTupleCursor;
+import mondrian.calc.impl.AbstractTupleIterable;
+import mondrian.calc.impl.AbstractVoidCalc;
+import mondrian.calc.impl.ListTupleList;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.ExpBase;
+import mondrian.olap.FunDef;
+import mondrian.olap.ResultStyleException;
+import mondrian.olap.Syntax;
+import mondrian.olap.Validator;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
+import mondrian.resource.MondrianResource;
 
 /**
  * <code>SetFunDef</code> implements the 'set' function (whose syntax is the

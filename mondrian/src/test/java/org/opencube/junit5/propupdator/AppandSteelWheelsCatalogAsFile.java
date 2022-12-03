@@ -18,9 +18,10 @@
  */
 package org.opencube.junit5.propupdator;
 
+import org.opencube.junit5.Constants;
+
 import mondrian.olap.Util.PropertyList;
 import mondrian.rolap.RolapConnectionProperties;
-import org.opencube.junit5.Constants;
 
 public class AppandSteelWheelsCatalogAsFile implements PropertyUpdater {
 

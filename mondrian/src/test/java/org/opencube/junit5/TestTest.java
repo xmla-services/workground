@@ -22,8 +22,6 @@ import java.io.IOException;
 import java.util.AbstractMap;
 import java.util.Map.Entry;
 
-import javax.sql.DataSource;
-
 import org.eclipse.daanse.engine.api.Context;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.context.SQLLiteContext;
@@ -31,7 +29,6 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.DataLoader;
 import org.opencube.junit5.dbprovider.DatabaseProvider;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-import org.sqlite.SQLiteDataSource;
 
 import mondrian.olap.Util.PropertyList;
 

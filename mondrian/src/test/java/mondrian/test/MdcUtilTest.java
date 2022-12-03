@@ -9,10 +9,12 @@
 */
 package mondrian.test;
 
-import mondrian.olap.Connection;
-import mondrian.rolap.RolapUtil;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.flushSchemaCache;
+
+import java.io.StringWriter;
+
 //import org.apache.logging.log4j.ThreadContext;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -20,12 +22,11 @@ import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.StringWriter;
-
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.flushSchemaCache;
+import mondrian.olap.Connection;
+import mondrian.rolap.RolapUtil;
 
 /**
  * Verifies that MDC context is passed between threads.

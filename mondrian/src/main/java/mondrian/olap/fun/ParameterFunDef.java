@@ -11,14 +11,30 @@
 
 package mondrian.olap.fun;
 
-import mondrian.mdx.*;
-import mondrian.olap.*;
-import mondrian.olap.type.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Dimension;
+
+import mondrian.mdx.DimensionExpr;
+import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.LevelExpr;
+import mondrian.mdx.MemberExpr;
+import mondrian.mdx.ParameterExpr;
+import mondrian.olap.Category;
+import mondrian.olap.Exp;
+import mondrian.olap.FunCall;
+import mondrian.olap.FunDef;
+import mondrian.olap.Id;
+import mondrian.olap.Literal;
+import mondrian.olap.Parameter;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.Type;
 
 /**
  * A <code>ParameterFunDef</code> is a pseudo-function describing calls to

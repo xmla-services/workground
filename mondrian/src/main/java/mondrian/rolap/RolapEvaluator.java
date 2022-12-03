@@ -13,25 +13,42 @@
 */
 package mondrian.rolap;
 
-import mondrian.calc.Calc;
-import mondrian.calc.ParameterSlot;
-import mondrian.calc.TupleList;
-import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.olap.*;
-import mondrian.olap.fun.*;
-import mondrian.server.Statement;
-import org.eclipse.daanse.db.dialect.api.Dialect;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.NamedSet;
-
-import mondrian.util.*;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import mondrian.calc.Calc;
+import mondrian.calc.ParameterSlot;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.DelegatingTupleList;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.ExpCacheDescriptor;
+import mondrian.olap.FunDef;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Property;
+import mondrian.olap.Query;
+import mondrian.olap.QueryTiming;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.olap.fun.FunUtil;
+import mondrian.server.Statement;
+import mondrian.util.Format;
 
 /**
  * <code>RolapEvaluator</code> evaluates expressions in a dimensional environment.

@@ -43,15 +43,15 @@ import java.util.regex.Pattern;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.slf4j.LoggerFactory;
+//import mondrian.spi.DialectManager;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
-//import mondrian.spi.DialectManager;
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.db.dialect.api.Dialect;
 
 /**
  * Utility to load the FoodMart dataset into an arbitrary JDBC database.

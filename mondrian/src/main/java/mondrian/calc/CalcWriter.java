@@ -9,11 +9,11 @@
 
 package mondrian.calc;
 
-import org.apache.commons.collections.map.CompositeMap;
-
 import java.io.PrintWriter;
 import java.util.IdentityHashMap;
 import java.util.Map;
+
+import org.apache.commons.collections.map.CompositeMap;
 
 /**
  * Visitor which serializes an expression to text.

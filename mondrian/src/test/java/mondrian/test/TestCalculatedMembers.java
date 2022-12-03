@@ -11,15 +11,21 @@
 
 package mondrian.test;
 
-import mondrian.olap.*;
-import mondrian.rolap.BatchTestCase;
-import org.eclipse.daanse.db.dialect.api.Dialect;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertExprThrows;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.executeExpr;
+import static org.opencube.junit5.TestUtil.executeExprRaw;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Member;
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.SchemaUtil;
@@ -31,9 +37,14 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 import org.opentest4j.AssertionFailedError;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Axis;
+import mondrian.olap.Cell;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Position;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.rolap.BatchTestCase;
 
 /**
  * Tests the expressions used for calculated members. Please keep in sync

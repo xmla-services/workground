@@ -9,13 +9,19 @@
 
 package mondrian.mdx;
 
+import java.io.PrintWriter;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-import mondrian.olap.*;
+import mondrian.olap.Exp;
+import mondrian.olap.ExpBase;
+import mondrian.olap.FunCall;
+import mondrian.olap.FunDef;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
 import mondrian.olap.fun.FunUtil;
 import mondrian.olap.type.Type;
-
-import java.io.PrintWriter;
 
 /**
  * An expression consisting of a named function or operator

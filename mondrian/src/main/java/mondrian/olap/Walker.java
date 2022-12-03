@@ -13,10 +13,10 @@
 
 package mondrian.olap;
 
-import mondrian.util.ArrayStack;
-
 import java.io.PrintWriter;
 import java.util.Enumeration;
+
+import mondrian.util.ArrayStack;
 
 /**
  * Walks over a tree, returning nodes in prefix order.  Objects which are an

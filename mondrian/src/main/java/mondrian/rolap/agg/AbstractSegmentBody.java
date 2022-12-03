@@ -8,11 +8,18 @@
 */
 package mondrian.rolap.agg;
 
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.BitSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+
 import mondrian.rolap.CellKey;
 import mondrian.spi.SegmentBody;
 import mondrian.util.Pair;
-
-import java.util.*;
 
 /**
  * Abstract implementation of a SegmentBody.

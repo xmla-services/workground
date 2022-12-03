@@ -9,12 +9,12 @@
 
 package mondrian.calc;
 
+import java.io.PrintWriter;
+
 import mondrian.mdx.MdxVisitor;
 import mondrian.olap.Exp;
 import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
-
-import java.io.PrintWriter;
 
 /**
  * Dummy expression which exists only to wrap a

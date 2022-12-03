@@ -11,14 +11,16 @@
 
 package mondrian.olap;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.BetterExpCompiler;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.impl.BetterExpCompiler;
 
 /**
  * Holds information necessary to add an expression to the expression result

@@ -9,6 +9,9 @@
 */
 package mondrian.olap;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
@@ -19,9 +22,6 @@ import org.eclipse.daanse.olap.api.OlapElement;
 import org.eclipse.daanse.olap.api.Schema;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Implementation of {@link Role} which combines the privileges of several

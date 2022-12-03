@@ -9,11 +9,7 @@
 
 package mondrian.calc;
 
-import mondrian.calc.impl.BetterExpCompiler;
-import mondrian.olap.*;
-import mondrian.olap.type.Type;
-import mondrian.util.CreationException;
-import mondrian.util.ObjectFactory;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
@@ -21,7 +17,15 @@ import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
 import org.eigenbase.util.property.StringProperty;
 
-import java.util.List;
+import mondrian.calc.impl.BetterExpCompiler;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Parameter;
+import mondrian.olap.Validator;
+import mondrian.olap.type.Type;
+import mondrian.util.CreationException;
+import mondrian.util.ObjectFactory;
 
 /**
  * Mediates the compilation of an expression ({@link mondrian.olap.Exp})

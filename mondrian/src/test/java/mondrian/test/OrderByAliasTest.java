@@ -8,8 +8,9 @@
 */
 package mondrian.test;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.rolap.BatchTestCase;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,8 +22,8 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.MondrianProperties;
+import mondrian.rolap.BatchTestCase;
 
 /**
  * Test cases to verify requiresOrderByAlias()=true for the MySQL 5.7+

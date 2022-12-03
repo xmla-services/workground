@@ -10,6 +10,17 @@
 */
 package mondrian.rolap;
 
+import static mondrian.olap.fun.sort.Sorter.hierarchizeTupleList;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Member;
+
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.UnaryTupleList;
@@ -20,17 +31,6 @@ import mondrian.server.Locus;
 import mondrian.server.monitor.SqlStatementEvent;
 import mondrian.util.Pair;
 import mondrian.util.TraversalList;
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.engine.api.Context;
-import org.eclipse.daanse.olap.api.Member;
-
-import javax.sql.DataSource;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import static mondrian.olap.fun.sort.Sorter.hierarchizeTupleList;
 
 /**
  * Reads the members of a single level (level.members) or of multiple levels (crossjoin).

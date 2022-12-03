@@ -9,11 +9,15 @@
 
 package mondrian.util;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.concurrent.*;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * Implementation of {@link java.util.concurrent.Future} that completes

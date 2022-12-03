@@ -11,13 +11,14 @@
 
 package mondrian.rolap;
 
-import mondrian.calc.TupleList;
-import mondrian.olap.*;
-
 import java.util.AbstractList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.TupleList;
+import mondrian.olap.Axis;
+import mondrian.olap.Position;
 
 /**
  * Implementation of the Axis interface.

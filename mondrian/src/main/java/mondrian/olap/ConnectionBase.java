@@ -11,11 +11,13 @@
 
 package mondrian.olap;
 
-import mondrian.parser.*;
+import org.slf4j.Logger;
+
+import mondrian.parser.JavaccParserValidatorImpl;
+import mondrian.parser.MdxParserValidator;
+import mondrian.parser.MdxParserValidatorImpl;
 import mondrian.resource.MondrianResource;
 import mondrian.server.Statement;
-
-import org.slf4j.Logger;
 
 /**
  * <code>ConnectionBase</code> implements some of the methods in

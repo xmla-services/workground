@@ -9,12 +9,14 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.*;
+import java.util.List;
+
+import mondrian.olap.FunTable;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
 import mondrian.olap.type.Type;
 import mondrian.spi.UserDefinedFunction;
 import mondrian.util.ServiceDiscovery;
-
-import java.util.List;
 
 /**
  * Global function table contains builtin functions and global user-defined

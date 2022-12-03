@@ -9,9 +9,24 @@
  */
 package mondrian.olap;
 
-import mondrian.mdx.*;
+import static org.apache.commons.collections.CollectionUtils.filter;
 
-import org.apache.commons.collections.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
+
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.Predicate;
+import org.apache.commons.collections.Transformer;
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
@@ -20,9 +35,10 @@ import org.eclipse.daanse.olap.api.OlapElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
-
-import static org.apache.commons.collections.CollectionUtils.filter;
+import mondrian.mdx.DimensionExpr;
+import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.MdxVisitor;
+import mondrian.mdx.MemberExpr;
 
 /**
  * Used to collect and resolve identifiers in groups of children

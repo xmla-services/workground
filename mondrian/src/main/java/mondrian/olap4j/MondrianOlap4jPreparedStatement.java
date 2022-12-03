@@ -9,25 +9,51 @@
 
 package mondrian.olap4j;
 
-import mondrian.olap.*;
-import mondrian.util.Pair;
+import java.io.InputStream;
+import java.io.Reader;
+import java.math.BigDecimal;
+import java.net.URL;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
+import java.sql.Date;
+import java.sql.ParameterMetaData;
+import java.sql.Ref;
+import java.sql.SQLException;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.sql.Types;
+import java.util.Calendar;
 
-import org.olap4j.*;
+import org.olap4j.CellSet;
+import org.olap4j.CellSetMetaData;
+import org.olap4j.OlapException;
+import org.olap4j.OlapParameterMetaData;
+import org.olap4j.PreparedOlapStatement;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
-import org.olap4j.type.*;
+import org.olap4j.type.BooleanType;
+import org.olap4j.type.CubeType;
+import org.olap4j.type.DecimalType;
 import org.olap4j.type.DimensionType;
+import org.olap4j.type.HierarchyType;
 import org.olap4j.type.LevelType;
+import org.olap4j.type.MemberType;
+import org.olap4j.type.NullType;
+import org.olap4j.type.NumericType;
+import org.olap4j.type.SetType;
+import org.olap4j.type.StringType;
+import org.olap4j.type.SymbolType;
+import org.olap4j.type.TupleType;
+import org.olap4j.type.Type;
 
-import java.io.InputStream;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.sql.*;
-import java.util.Calendar;
+import mondrian.olap.Parameter;
+import mondrian.olap.Query;
+import mondrian.olap.Util;
+import mondrian.util.Pair;
 
 /**
  * Implementation of {@link PreparedOlapStatement}

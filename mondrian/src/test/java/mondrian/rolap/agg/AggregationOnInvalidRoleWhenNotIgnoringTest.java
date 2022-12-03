@@ -8,8 +8,11 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.test.PropertySaver5;
-import mondrian.test.loader.CsvDBTestCase;
+import static mondrian.rolap.agg.AggregationOnInvalidRoleTest.CUBE;
+import static mondrian.rolap.agg.AggregationOnInvalidRoleTest.ROLE;
+import static mondrian.rolap.agg.AggregationOnInvalidRoleTest.executeAnalyzerQuery;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,10 +22,8 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static mondrian.rolap.agg.AggregationOnInvalidRoleTest.CUBE;
-import static mondrian.rolap.agg.AggregationOnInvalidRoleTest.ROLE;
-import static mondrian.rolap.agg.AggregationOnInvalidRoleTest.executeAnalyzerQuery;
-import static org.junit.jupiter.api.Assertions.fail;
+import mondrian.test.PropertySaver5;
+import mondrian.test.loader.CsvDBTestCase;
 
 /**
  * @author Andrey Khayrutdinov

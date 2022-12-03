@@ -9,9 +9,9 @@
 
 package mondrian.server;
 
-import mondrian.olap.Util;
-
 import java.io.IOException;
+
+import mondrian.olap.Util;
 
 /**
 * Implementation of {@link mondrian.server.RepositoryContentFinder} that reads

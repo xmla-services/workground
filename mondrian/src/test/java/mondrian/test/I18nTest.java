@@ -9,9 +9,12 @@
 
 package mondrian.test;
 
-import mondrian.olap.*;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.util.Format;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+
+import java.util.Calendar;
+import java.util.Locale;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -20,11 +23,12 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.Calendar;
-import java.util.Locale;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+import mondrian.olap.Connection;
+import mondrian.olap.Query;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.util.Format;
 
 /**
  * Test suite for internalization and localization.

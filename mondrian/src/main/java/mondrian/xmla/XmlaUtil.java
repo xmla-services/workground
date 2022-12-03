@@ -10,25 +10,22 @@
 */
 package mondrian.xmla;
 
-import mondrian.olap.MondrianException;
-import mondrian.olap.Util;
-import mondrian.util.XmlParserFactoryProducer;
-import mondrian.xmla.impl.DefaultXmlaResponse;
-
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapException;
-
-import org.olap4j.impl.LcidLocale;
-import org.w3c.dom.*;
-import org.xml.sax.InputSource;
-
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.nio.charset.Charset;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Pattern;
-import java.util.regex.Matcher;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -36,8 +33,22 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import static org.olap4j.metadata.XmlaConstants.Format;
-import static org.olap4j.metadata.XmlaConstants.Method;
+import org.olap4j.OlapConnection;
+import org.olap4j.OlapException;
+import org.olap4j.impl.LcidLocale;
+import org.olap4j.metadata.XmlaConstants.Format;
+import org.olap4j.metadata.XmlaConstants.Method;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
+import org.xml.sax.InputSource;
+
+import mondrian.olap.MondrianException;
+import mondrian.olap.Util;
+import mondrian.util.XmlParserFactoryProducer;
+import mondrian.xmla.impl.DefaultXmlaResponse;
 
 /**
  * Utility methods for XML/A implementation.

@@ -9,11 +9,12 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.olap.*;
-import mondrian.rolap.agg.SegmentCacheManager.CompositeSegmentCache;
-import mondrian.spi.SegmentCache;
-import mondrian.spi.SegmentHeader;
-import mondrian.test.BasicQueryTest;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.executeQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Cube;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,12 +23,13 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.executeQuery;
+import mondrian.olap.CacheControl;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianServer;
+import mondrian.rolap.agg.SegmentCacheManager.CompositeSegmentCache;
+import mondrian.spi.SegmentCache;
+import mondrian.spi.SegmentHeader;
+import mondrian.test.BasicQueryTest;
 
 /**
  * Test suite that runs the {@link BasicQueryTest} but with the

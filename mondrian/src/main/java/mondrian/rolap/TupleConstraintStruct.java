@@ -9,12 +9,12 @@
 */
 package mondrian.rolap;
 
-import mondrian.calc.TupleList;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.TupleList;
 
 public class TupleConstraintStruct {
 

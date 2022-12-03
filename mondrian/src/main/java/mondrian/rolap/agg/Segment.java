@@ -13,13 +13,18 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.olap.Util;
-import mondrian.rolap.*;
-import mondrian.spi.SegmentHeader;
+import java.io.PrintWriter;
+import java.util.AbstractList;
+import java.util.List;
+
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
-import java.io.PrintWriter;
-import java.util.*;
+import mondrian.olap.Util;
+import mondrian.rolap.BitKey;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.StarColumnPredicate;
+import mondrian.rolap.StarPredicate;
+import mondrian.spi.SegmentHeader;
 
 /**
  * A <code>Segment</code> is a collection of cell values parameterized by a measure, and a set of (column, value) pairs.

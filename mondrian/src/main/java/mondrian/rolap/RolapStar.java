@@ -12,34 +12,53 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.agg.*;
-import mondrian.rolap.aggmatcher.AggStar;
-import mondrian.rolap.sql.SqlQuery;
-import mondrian.server.Locus;
-import mondrian.spi.*;
-import mondrian.util.Bug;
-
-import org.apache.commons.collections.map.ReferenceMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.Datatype;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.ref.SoftReference;
 import java.sql.Connection;
-import java.sql.*;
-import java.util.*;
+import java.sql.DatabaseMetaData;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 
 import javax.sql.DataSource;
+
+import org.apache.commons.collections.map.ReferenceMap;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.Member;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mondrian.olap.MondrianDef;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.agg.Aggregation;
+import mondrian.rolap.agg.AggregationKey;
+import mondrian.rolap.agg.AggregationManager;
+import mondrian.rolap.agg.CellRequest;
+import mondrian.rolap.agg.SegmentWithData;
+import mondrian.rolap.aggmatcher.AggStar;
+import mondrian.rolap.sql.SqlQuery;
+import mondrian.server.Locus;
+import mondrian.spi.DataSourceChangeListener;
+import mondrian.util.Bug;
 
 /**
  * A <code>RolapStar</code> is a star schema. It is the means to read cell

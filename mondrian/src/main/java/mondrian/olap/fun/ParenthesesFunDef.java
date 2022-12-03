@@ -11,13 +11,17 @@
 
 package mondrian.olap.fun;
 
+import java.io.PrintWriter;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
+import mondrian.olap.Exp;
+import mondrian.olap.ExpBase;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
-
-import java.io.PrintWriter;
 
 /**
  * <code>ParenthesesFunDef</code> implements the parentheses operator as if it

@@ -11,9 +11,9 @@
 
 package mondrian.olap;
 
-import mondrian.calc.ResultStyle;
-
 import java.util.List;
+
+import mondrian.calc.ResultStyle;
 
 /**
  * Exception that indicates a compiler could not implement an expression in any

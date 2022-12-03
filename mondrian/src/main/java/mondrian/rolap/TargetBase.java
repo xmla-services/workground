@@ -9,13 +9,13 @@
 
 package mondrian.rolap;
 
-import mondrian.rolap.sql.TupleConstraint;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.RandomAccess;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.rolap.sql.TupleConstraint;
 
 /**
  * Base helper class for the SQL tuple readers

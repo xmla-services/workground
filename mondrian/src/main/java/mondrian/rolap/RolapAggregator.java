@@ -10,14 +10,18 @@
 */
 package mondrian.rolap;
 
-import mondrian.calc.Calc;
-import mondrian.calc.TupleList;
-import mondrian.olap.*;
-import mondrian.olap.fun.AggregateFunDef;
-import mondrian.olap.fun.FunUtil;
+import java.util.List;
+
 import org.eclipse.daanse.db.dialect.api.Datatype;
 
-import java.util.List;
+import mondrian.calc.Calc;
+import mondrian.calc.TupleList;
+import mondrian.olap.Aggregator;
+import mondrian.olap.EnumeratedValues;
+import mondrian.olap.Evaluator;
+import mondrian.olap.MondrianException;
+import mondrian.olap.fun.AggregateFunDef;
+import mondrian.olap.fun.FunUtil;
 
 /**
  * Describes an aggregation operator, such as "sum" or "count".

@@ -16,7 +16,7 @@ import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
 
-import mondrian.olap.*;
+import mondrian.olap.Util;
 
 /**
  * The type of an expression which represents a member.
