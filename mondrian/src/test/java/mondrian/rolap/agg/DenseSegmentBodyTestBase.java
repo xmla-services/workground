@@ -8,10 +8,13 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.rolap.CellKey;
-import mondrian.util.Pair;
-
-import org.junit.jupiter.api.Test;
+import static java.util.Arrays.asList;
+import static mondrian.util.Pair.of;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.BitSet;
 import java.util.Collections;
@@ -21,9 +24,10 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import static java.util.Arrays.asList;
-import static mondrian.util.Pair.of;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import mondrian.rolap.CellKey;
+import mondrian.util.Pair;
 
 /**
  * This is a base class for two heirs. It provides several template methods

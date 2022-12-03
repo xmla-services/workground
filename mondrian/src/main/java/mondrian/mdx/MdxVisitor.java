@@ -9,7 +9,11 @@
 
 package mondrian.mdx;
 
-import mondrian.olap.*;
+import mondrian.olap.Formula;
+import mondrian.olap.Id;
+import mondrian.olap.Literal;
+import mondrian.olap.Query;
+import mondrian.olap.QueryAxis;
 
 /**
  * Interface for a visitor to an MDX parse tree.

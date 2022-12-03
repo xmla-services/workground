@@ -9,12 +9,12 @@
 
 package mondrian.spi;
 
-import mondrian.olap.Util;
-import mondrian.util.ArraySortedSet;
-
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.SortedSet;
+
+import mondrian.olap.Util;
+import mondrian.util.ArraySortedSet;
 
 
 /**

@@ -11,11 +11,19 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 
-import mondrian.calc.*;
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.IterCalc;
+import mondrian.calc.ListCalc;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
+import mondrian.olap.Evaluator;
+import mondrian.olap.FunDef;
+import mondrian.olap.ResultStyleException;
 
 /**
  * Definition of the <code>Sum</code> MDX function.

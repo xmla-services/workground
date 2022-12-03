@@ -11,11 +11,11 @@
 
 package mondrian.olap;
 
+import java.util.List;
+
 import mondrian.mdx.ParameterExpr;
 import mondrian.olap.fun.Resolver;
 import mondrian.olap.type.Type;
-
-import java.util.List;
 
 /**
  * Provides context necessary to resolve identifiers to objects, function

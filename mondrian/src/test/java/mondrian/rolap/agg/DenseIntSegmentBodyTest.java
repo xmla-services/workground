@@ -8,11 +8,11 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.util.Pair;
-
 import java.util.BitSet;
 import java.util.List;
 import java.util.SortedSet;
+
+import mondrian.util.Pair;
 
 /**
  * @author Andrey Khayrutdinov

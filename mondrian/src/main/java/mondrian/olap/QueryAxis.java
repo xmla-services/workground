@@ -11,15 +11,25 @@
 
 package mondrian.olap;
 
-import mondrian.calc.*;
-import mondrian.mdx.*;
-import mondrian.olap.type.DimensionType;
-import mondrian.olap.type.*;
-import mondrian.resource.MondrianResource;
-
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.olap.api.Level;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ResultStyle;
+import mondrian.mdx.DimensionExpr;
+import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.LevelExpr;
+import mondrian.mdx.MdxVisitor;
+import mondrian.mdx.UnresolvedFunCall;
+import mondrian.olap.type.DimensionType;
+import mondrian.olap.type.HierarchyType;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.TupleType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
+import mondrian.resource.MondrianResource;
 
 /**
  * An axis in an MDX query. For example, the typical MDX query has two axes,

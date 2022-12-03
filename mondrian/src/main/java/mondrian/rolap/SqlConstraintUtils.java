@@ -12,6 +12,28 @@
 */
 package mondrian.rolap;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
@@ -43,30 +65,7 @@ import mondrian.rolap.agg.OrPredicate;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.CrossJoinArg;
 import mondrian.rolap.sql.SqlQuery;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.Dimension;
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
-
 import mondrian.util.FilteredIterableList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.eclipse.daanse.db.dialect.api.Datatype;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Utility class used by implementations of {@link mondrian.rolap.sql.SqlConstraint}, used to generate constraints into

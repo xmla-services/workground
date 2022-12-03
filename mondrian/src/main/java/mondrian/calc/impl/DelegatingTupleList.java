@@ -9,13 +9,16 @@
 
 package mondrian.calc.impl;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.daanse.olap.api.Member;
+
 import mondrian.calc.TupleIterator;
 import mondrian.calc.TupleList;
 import mondrian.olap.Util;
-
-import java.util.*;
-
-import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Implementation of {@link mondrian.calc.TupleList} based on a list of

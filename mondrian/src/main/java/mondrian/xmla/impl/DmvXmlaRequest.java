@@ -10,10 +10,11 @@
 
 package mondrian.xmla.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.olap4j.metadata.XmlaConstants;
 
-import java.util.Map;
-import java.util.HashMap;
 import mondrian.xmla.XmlaRequest;
 
 public class DmvXmlaRequest

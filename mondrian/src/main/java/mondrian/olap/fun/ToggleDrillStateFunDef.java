@@ -11,15 +11,21 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.AbstractListCalc;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.resource.MondrianResource;
-
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ListCalc;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractListCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.FunDef;
+import mondrian.resource.MondrianResource;
 
 /**
  * Definition of the <code>ToggleDrillState</code> MDX function.

@@ -17,11 +17,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.logging.log4j.Level;
-import org.slf4j.Logger;
 import org.eigenbase.util.property.BooleanProperty;
 import org.eigenbase.util.property.DoubleProperty;
 import org.eigenbase.util.property.IntegerProperty;
 import org.eigenbase.util.property.StringProperty;
+import org.slf4j.Logger;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.RolapUtil;

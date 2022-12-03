@@ -9,15 +9,25 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.olap.CacheControl.MemberEditCommand;
-import mondrian.rolap.agg.AggregationManager;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.server.Statement;
-import mondrian.test.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.flushCache;
 
-import org.slf4j.Logger;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
@@ -32,13 +42,27 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
+import org.slf4j.Logger;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Axis;
+import mondrian.olap.AxisOrdinal;
+import mondrian.olap.CacheControl;
+import mondrian.olap.CacheControl.MemberEditCommand;
+import mondrian.olap.Connection;
+import mondrian.olap.Id;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Position;
+import mondrian.olap.Property;
+import mondrian.olap.Query;
+import mondrian.olap.Result;
+import mondrian.olap.SchemaReader;
+import mondrian.rolap.agg.AggregationManager;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.server.Statement;
+import mondrian.test.DiffRepository;
+import mondrian.test.PropertySaver5;
 
 /**
  * Unit tests for flushing member cache and editing cached member properties.

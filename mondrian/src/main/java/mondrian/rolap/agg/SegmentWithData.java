@@ -9,10 +9,18 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.olap.Util;
-import mondrian.rolap.*;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import mondrian.olap.Util;
+import mondrian.rolap.BitKey;
+import mondrian.rolap.CellKey;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.StarColumnPredicate;
+import mondrian.rolap.StarPredicate;
 
 /**
  * Extension to {@link Segment} with a data set.

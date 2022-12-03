@@ -9,11 +9,16 @@
 
 package mondrian.xmla;
 
-import mondrian.olap.*;
-import mondrian.olap.Util.PropertyList;
-import mondrian.olap4j.MondrianOlap4jDriver;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.test.DiffRepository;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.InputStreamReader;
+import java.util.Map;
+import java.util.Properties;
+import java.util.TreeMap;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,13 +27,12 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.InputStreamReader;
-import java.util.*;
+import mondrian.olap.Connection;
+import mondrian.olap.Util;
+import mondrian.olap.Util.PropertyList;
+import mondrian.olap4j.MondrianOlap4jDriver;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.test.DiffRepository;
 
 /**
  * This test creates 2 catalogs and constraints on one of them.

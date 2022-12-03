@@ -9,17 +9,18 @@
 
 package mondrian.olap;
 
-import mondrian.rolap.RolapUtil;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+
+import java.io.IOException;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.io.IOException;
-
-import static org.opencube.junit5.TestUtil.assertExprReturns;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import mondrian.rolap.RolapUtil;
 
 /**
  * <code>NullMemberRepresentationTest</code> tests the null member

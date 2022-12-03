@@ -9,12 +9,24 @@
 
 package mondrian.calc;
 
-import mondrian.calc.impl.*;
-import mondrian.olap.*;
-
-import java.util.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.impl.AbstractTupleIterator;
+import mondrian.calc.impl.ArrayTupleList;
+import mondrian.calc.impl.DelegatingTupleList;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Util;
 
 /**
 * Utility methods for tuple collections and iterators.

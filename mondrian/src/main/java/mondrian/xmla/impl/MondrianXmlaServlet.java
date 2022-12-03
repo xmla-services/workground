@@ -9,6 +9,14 @@
 
 package mondrian.xmla.impl;
 
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Util;
 import mondrian.server.RepositoryContentFinder;
@@ -16,11 +24,6 @@ import mondrian.server.UrlRepositoryContentFinder;
 import mondrian.spi.CatalogLocator;
 import mondrian.spi.impl.ServletContextCatalogLocator;
 import mondrian.xmla.XmlaHandler;
-
-import java.io.File;
-import java.net.MalformedURLException;
-import java.net.URL;
-import javax.servlet.*;
 
 /**
  * Extension to {@link mondrian.xmla.XmlaServlet} that instantiates a

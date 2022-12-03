@@ -10,13 +10,24 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.olap.fun.*;
-import mondrian.rolap.sql.*;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.NativeEvaluator;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.olap.fun.NonEmptyCrossJoinFunDef;
+import mondrian.rolap.sql.CrossJoinArg;
+import mondrian.rolap.sql.MemberListCrossJoinArg;
+import mondrian.rolap.sql.TupleConstraint;
 
 /**
  * Creates a {@link mondrian.olap.NativeEvaluator} that evaluates NON EMPTY

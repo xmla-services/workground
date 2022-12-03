@@ -9,7 +9,13 @@
 
 package mondrian.calc.impl;
 
-import mondrian.calc.*;
+import mondrian.calc.Calc;
+import mondrian.calc.IterCalc;
+import mondrian.calc.ListCalc;
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleCursor;
+import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleList;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.type.SetType;

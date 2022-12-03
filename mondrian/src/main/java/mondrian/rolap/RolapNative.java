@@ -12,9 +12,11 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.*;
-
 import java.util.EventObject;
+
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.NativeEvaluator;
 
 /**
  * A factory for {@link mondrian.olap.NativeEvaluator}.

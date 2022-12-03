@@ -9,11 +9,17 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.olap.Util;
-import mondrian.rolap.*;
-import mondrian.rolap.sql.SqlQuery;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
-import java.util.*;
+import mondrian.olap.Util;
+import mondrian.rolap.BitKey;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.StarPredicate;
+import mondrian.rolap.sql.SqlQuery;
 
 /**
  * Base class for {@link AndPredicate} and {@link OrPredicate}.

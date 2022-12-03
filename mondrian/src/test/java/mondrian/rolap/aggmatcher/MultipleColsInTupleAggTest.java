@@ -8,12 +8,13 @@
 */
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.Axis;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Result;
-import mondrian.rolap.RolapAxis;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.executeAxis;
+import static org.opencube.junit5.TestUtil.getDialect;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
-import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,11 +25,11 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.executeAxis;
-import static org.opencube.junit5.TestUtil.getDialect;
+import mondrian.olap.Axis;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Result;
+import mondrian.rolap.RolapAxis;
+import mondrian.test.SqlPattern;
 
 /**
  * Testcase for levels that contain multiple columns and are

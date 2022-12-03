@@ -8,10 +8,10 @@
 */
 package mondrian.xmla;
 
-import mondrian.olap.Connection;
-import mondrian.olap.Util;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.getDialect;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import mondrian.test.DiffRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -19,8 +19,8 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.getDialect;
+import mondrian.olap.Connection;
+import mondrian.test.DiffRepository;
 
 /**
  * Test suite for compatibility of Mondrian XMLA with Excel 2007.

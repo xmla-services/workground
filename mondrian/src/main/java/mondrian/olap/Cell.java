@@ -11,12 +11,12 @@
 
 package mondrian.olap;
 
+import java.util.List;
+
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
 import org.olap4j.AllocationPolicy;
 import org.olap4j.Scenario;
-
-import java.util.List;
 
 /**
  * A <code>Cell</code> is an item in the grid of a {@link Result}.  It is

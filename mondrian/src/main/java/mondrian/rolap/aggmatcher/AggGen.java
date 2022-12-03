@@ -10,20 +10,26 @@
 */
 package mondrian.rolap.aggmatcher;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mondrian.olap.MondrianDef;
 import mondrian.olap.Util;
 import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.sql.SqlQuery;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.*;
 
 /**
  * This class is used to create "lost" and "collapsed" aggregate table

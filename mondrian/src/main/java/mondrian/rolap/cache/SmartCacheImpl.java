@@ -11,7 +11,8 @@ package mondrian.rolap.cache;
 
 import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.concurrent.locks.*;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 /**
  * A base implementation of the {@link SmartCache} interface which

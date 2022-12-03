@@ -9,16 +9,28 @@
 
 package mondrian.olap4j;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import org.olap4j.CellSetListener;
+import org.olap4j.OlapConnection;
+import org.olap4j.OlapDatabaseMetaData;
+import org.olap4j.OlapException;
+import org.olap4j.metadata.Catalog;
+import org.olap4j.metadata.Member;
+import org.olap4j.metadata.Schema;
+
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnection;
 import mondrian.xmla.XmlaUtil;
-
-import org.olap4j.*;
-import org.olap4j.metadata.*;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
 
 /**
  * Implementation of {@link org.olap4j.OlapDatabaseMetaData}

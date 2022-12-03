@@ -9,22 +9,22 @@
 
 package mondrian.rolap.aggmatcher;
 
-import mondrian.recorder.ListRecorder;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.eigenbase.xom.*;
-
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.opencube.junit5.Constants.TESTFILES_DIR;
 
 import java.io.File;
 import java.io.FileReader;
 import java.util.Iterator;
+
+import org.eigenbase.xom.DOMWrapper;
+import org.eigenbase.xom.Parser;
+import org.eigenbase.xom.XOMUtil;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mondrian.recorder.ListRecorder;
 
 /**
  * Testing the default aggregate table recognizer.

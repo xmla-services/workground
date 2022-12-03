@@ -9,11 +9,11 @@
 */
 package mondrian.rolap.format;
 
-import mondrian.olap.MondrianDef;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
+
+import mondrian.olap.MondrianDef;
 
 public class FormatterCreateContextTest {
 

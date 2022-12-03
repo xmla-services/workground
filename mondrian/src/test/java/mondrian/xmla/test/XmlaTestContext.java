@@ -17,13 +17,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.impl.Olap4jUtil;
 import org.opencube.junit5.context.TestingContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mondrian.olap.Util;
 import mondrian.rolap.RolapConnectionProperties;

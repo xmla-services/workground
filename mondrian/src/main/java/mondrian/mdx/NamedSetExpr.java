@@ -9,15 +9,23 @@
 
 package mondrian.mdx;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.AbstractIterCalc;
-import mondrian.olap.*;
-import mondrian.olap.type.Type;
-
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.NamedSet;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.TupleIterable;
+import mondrian.calc.impl.AbstractIterCalc;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.ExpBase;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
+import mondrian.olap.type.Type;
 
 /**
  * Usage of a {@link org.eclipse.daanse.olap.api.NamedSet} in an MDX expression.

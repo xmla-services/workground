@@ -10,16 +10,24 @@
 */
 package mondrian.rolap.sql;
 
-import mondrian.olap.Connection;
-import mondrian.olap.MondrianProperties;
-import mondrian.rolap.BatchTestCase;
+import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.MYSQL;
+import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.POSTGRESQL;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
-
 import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,18 +41,11 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.MYSQL;
-import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.POSTGRESQL;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.rolap.BatchTestCase;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
 
 /**
  * Test for <code>SqlQuery</code>.

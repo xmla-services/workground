@@ -11,17 +11,19 @@
 
 package mondrian.xmla.impl;
 
-import mondrian.olap.Util;
-import mondrian.util.ArrayStack;
-import mondrian.xmla.SaxWriter;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
+import java.util.regex.Pattern;
 
 import org.eigenbase.xom.XMLUtil;
 import org.eigenbase.xom.XOMUtil;
-
 import org.xml.sax.Attributes;
 
-import java.io.*;
-import java.util.regex.Pattern;
+import mondrian.util.ArrayStack;
+import mondrian.xmla.SaxWriter;
 
 /**
  * Default implementation of {@link SaxWriter}.

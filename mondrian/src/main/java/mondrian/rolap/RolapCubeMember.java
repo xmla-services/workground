@@ -15,7 +15,11 @@ import org.eclipse.daanse.olap.api.OlapElement;
 
 import mondrian.mdx.HierarchyExpr;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
+import mondrian.olap.Exp;
+import mondrian.olap.Id;
+import mondrian.olap.MatchType;
+import mondrian.olap.Property;
+import mondrian.olap.SchemaReader;
 import mondrian.olap.fun.VisualTotalsFunDef.VisualTotalMember;
 import mondrian.util.Bug;
 

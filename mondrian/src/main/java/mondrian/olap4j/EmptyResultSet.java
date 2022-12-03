@@ -9,16 +9,30 @@
 
 package mondrian.olap4j;
 
-import org.olap4j.OlapWrapper;
-
 import java.io.InputStream;
 import java.io.Reader;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.*;
+import java.sql.Array;
+import java.sql.Blob;
+import java.sql.Clob;
 import java.sql.Date;
-import java.util.*;
+import java.sql.Ref;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.Statement;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.sql.Types;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Map;
+
 import javax.sql.rowset.RowSetMetaDataImpl;
+
+import org.olap4j.OlapWrapper;
 
 /**
  * Implementation of {@link ResultSet} which returns 0 rows.

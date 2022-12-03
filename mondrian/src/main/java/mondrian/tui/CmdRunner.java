@@ -9,43 +9,56 @@
 
 package mondrian.tui;
 
-import mondrian.olap.*;
-import mondrian.olap.Connection;
-import mondrian.olap.DriverManager;
-import mondrian.olap.fun.FunInfo;
-import mondrian.olap.type.TypeUtil;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.rolap.RolapCube;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.slf4j.Logger;
-import org.apache.logging.log4j.spi.LoggerContext;
-import org.apache.logging.log4j.spi.LoggerRegistry;
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.OlapElement;
-import org.slf4j.LoggerFactory;
-import org.apache.logging.log4j.Level;
-
 import org.eigenbase.util.property.Property;
-
 import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapStatement;
 import org.olap4j.OlapWrapper;
 import org.olap4j.layout.RectangularCellSetFormatter;
 
-import java.io.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.sql.*;
-import java.text.NumberFormat;
-import java.text.ParseException;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import mondrian.olap.Category;
+import mondrian.olap.Connection;
+import mondrian.olap.DriverManager;
+import mondrian.olap.FunTable;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Parameter;
+import mondrian.olap.Query;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.olap.fun.FunInfo;
+import mondrian.olap.type.TypeUtil;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.RolapCube;
 
 /**
  * Command line utility which reads and executes MDX commands.

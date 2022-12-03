@@ -9,7 +9,10 @@
 
 package mondrian.util;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * A list that, given a collection of elements, contains every possible

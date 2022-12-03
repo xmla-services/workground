@@ -12,7 +12,8 @@ package mondrian.calc.impl;
 import org.eclipse.daanse.olap.api.Hierarchy;
 
 import mondrian.calc.Calc;
-import mondrian.olap.*;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
 
 /**
  * Expression which yields the value of the current member in the current

@@ -11,12 +11,19 @@ package mondrian.olap.fun.extra;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 
-import mondrian.calc.*;
+import mondrian.calc.Calc;
+import mondrian.calc.DoubleCalc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ListCalc;
+import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.fun.*;
+import mondrian.olap.Evaluator;
+import mondrian.olap.FunDef;
+import mondrian.olap.fun.AbstractAggregateFunDef;
+import mondrian.olap.fun.MultiResolver;
+import mondrian.olap.fun.ReflectiveMultiResolver;
 
 /**
  * Definition of the <code>FirstQ</code> and <code>ThirdQ</code> MDX extension

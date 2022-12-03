@@ -8,16 +8,16 @@
 */
 package mondrian.olap.fun;
 
-import mondrian.calc.Calc;
-import mondrian.calc.TupleList;
-import mondrian.calc.impl.ArrayTupleList;
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.Connection;
-import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
-import mondrian.olap.type.SetType;
-import mondrian.rolap.RolapMemberBase;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.mock;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Member;
 import org.junit.jupiter.api.Test;
@@ -28,16 +28,16 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.Mockito.doCallRealMethod;
-import static org.mockito.Mockito.mock;
-import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import mondrian.calc.Calc;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.ArrayTupleList;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Connection;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.type.SetType;
+import mondrian.rolap.RolapMemberBase;
 
 /**
  * Tests for UnionFunDef

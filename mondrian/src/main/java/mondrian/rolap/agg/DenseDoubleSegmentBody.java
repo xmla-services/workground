@@ -8,9 +8,12 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.util.Pair;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.List;
+import java.util.SortedSet;
 
-import java.util.*;
+import mondrian.util.Pair;
 
 /**
  * Implementation of a segment body which stores the data inside

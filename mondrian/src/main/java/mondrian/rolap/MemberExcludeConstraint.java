@@ -9,18 +9,18 @@
 */
 package mondrian.rolap;
 
+import static java.util.Arrays.asList;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import mondrian.olap.Evaluator;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.CrossJoinArg;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.rolap.sql.TupleConstraint;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import static java.util.Arrays.asList;
 
 /**
  * Constraint which excludes the members in the list received in constructor.

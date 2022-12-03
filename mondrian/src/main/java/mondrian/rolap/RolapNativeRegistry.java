@@ -10,15 +10,15 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.Exp;
-import mondrian.olap.FunDef;
-import mondrian.olap.NativeEvaluator;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.NativeEvaluator;
 
 /**
  * Composite of {@link RolapNative}s. Uses chain of responsibility

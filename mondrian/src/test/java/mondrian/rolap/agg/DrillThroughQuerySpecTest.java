@@ -27,6 +27,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,11 +39,8 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.rolap.RolapStar;
-import mondrian.rolap.SqlStatement;
 import mondrian.rolap.StarPredicate;
 import mondrian.rolap.sql.SqlQuery;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.OlapElement;
 
 public class DrillThroughQuerySpecTest {
 

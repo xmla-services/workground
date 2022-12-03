@@ -26,14 +26,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.sql.DataSource;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.Member;
 import org.eigenbase.util.property.StringProperty;
 import org.olap4j.Scenario;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;

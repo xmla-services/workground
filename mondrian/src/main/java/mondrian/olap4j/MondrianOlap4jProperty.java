@@ -10,14 +10,14 @@
 */
 package mondrian.olap4j;
 
-import org.olap4j.impl.Named;
-import org.olap4j.metadata.Datatype;
-import org.olap4j.metadata.Property;
-
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
+
+import org.olap4j.impl.Named;
+import org.olap4j.metadata.Datatype;
+import org.olap4j.metadata.Property;
 
 /**
  * Implementation of {@link org.olap4j.metadata.Property}

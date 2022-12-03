@@ -9,11 +9,26 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.*;
+import mondrian.calc.BooleanCalc;
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.StringCalc;
+import mondrian.calc.impl.AbstractBooleanCalc;
+import mondrian.calc.impl.AbstractStringCalc;
+import mondrian.calc.impl.GenericCalc;
+import mondrian.calc.impl.GenericIterCalc;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.type.*;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.Validator;
+import mondrian.olap.type.BooleanType;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
 
 /**
  * Definition of the <code>Iif</code> MDX function.

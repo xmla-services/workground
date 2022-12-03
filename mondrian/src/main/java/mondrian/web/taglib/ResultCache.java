@@ -11,17 +11,21 @@
 
 package mondrian.web.taglib;
 
-import mondrian.olap.*;
-import mondrian.spi.impl.ServletContextCatalogLocator;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionBindingEvent;
+import javax.servlet.http.HttpSessionBindingListener;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.w3c.dom.Document;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.*;
-import javax.xml.parsers.ParserConfigurationException;
+import mondrian.olap.Connection;
+import mondrian.olap.DriverManager;
+import mondrian.olap.Query;
+import mondrian.olap.Result;
+import mondrian.spi.impl.ServletContextCatalogLocator;
 
 /**
  * Holds a query/result pair in the user's session.

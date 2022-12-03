@@ -11,9 +11,10 @@
 
 package mondrian.rolap.cache;
 
-import org.apache.commons.collections.map.ReferenceMap;
+import java.util.Iterator;
+import java.util.Map;
 
-import java.util.*;
+import org.apache.commons.collections.map.ReferenceMap;
 
 /**
  * An implementation of {@link SmartCacheImpl} which uses a

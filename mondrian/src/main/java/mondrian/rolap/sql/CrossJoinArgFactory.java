@@ -10,14 +10,16 @@
 */
 package mondrian.rolap.sql;
 
-import mondrian.calc.*;
-import mondrian.mdx.*;
-import mondrian.olap.*;
-import mondrian.olap.Role.RollupPolicy;
-import mondrian.olap.fun.*;
-import mondrian.olap.type.HierarchyType;
-import mondrian.olap.type.Type;
-import mondrian.rolap.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
@@ -26,7 +28,31 @@ import org.eclipse.daanse.olap.api.NamedSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ListCalc;
+import mondrian.calc.TupleList;
+import mondrian.mdx.LevelExpr;
+import mondrian.mdx.MemberExpr;
+import mondrian.mdx.NamedSetExpr;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Access;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Literal;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.QueryAxis;
+import mondrian.olap.Role;
+import mondrian.olap.Role.RollupPolicy;
+import mondrian.olap.Util;
+import mondrian.olap.fun.ParenthesesFunDef;
+import mondrian.olap.fun.SetFunDef;
+import mondrian.olap.fun.TupleFunDef;
+import mondrian.olap.type.HierarchyType;
+import mondrian.olap.type.Type;
+import mondrian.rolap.RolapCalculatedMember;
+import mondrian.rolap.RolapEvaluator;
+import mondrian.rolap.RolapLevel;
+import mondrian.rolap.RolapMember;
 
 /**
  * Creates CrossJoinArgs for use in constraining SQL queries.

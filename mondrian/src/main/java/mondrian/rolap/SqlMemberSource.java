@@ -22,14 +22,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Member;
 import org.eigenbase.util.property.StringProperty;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mondrian.calc.TupleList;
 import mondrian.olap.Access;

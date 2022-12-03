@@ -11,9 +11,9 @@
 
 package mondrian.recorder;
 
-import mondrian.olap.Util;
-
 import java.io.PrintStream;
+
+import mondrian.olap.Util;
 
 /**
  * Implementation of {@link MessageRecorder} simply writes messages to

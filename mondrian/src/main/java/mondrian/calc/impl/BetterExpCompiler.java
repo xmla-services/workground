@@ -11,13 +11,24 @@
 
 package mondrian.calc.impl;
 
-import mondrian.calc.*;
-import mondrian.olap.*;
-import mondrian.olap.type.*;
-
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.DummyExp;
+import mondrian.calc.ListCalc;
+import mondrian.calc.MemberCalc;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.TupleCalc;
+import mondrian.calc.TupleList;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.TupleType;
+import mondrian.olap.type.Type;
 
 /**
  * Enhanced expression compiler. It can generate code to convert between

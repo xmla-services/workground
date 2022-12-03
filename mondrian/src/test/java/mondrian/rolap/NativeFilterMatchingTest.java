@@ -29,7 +29,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import mondrian.olap.Connection;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Result;
-import org.eclipse.daanse.db.dialect.api.Dialect;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 

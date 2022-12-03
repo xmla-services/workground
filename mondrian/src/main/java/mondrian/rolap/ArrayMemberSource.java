@@ -13,12 +13,12 @@
 
 package mondrian.rolap;
 
+import java.util.Collections;
+import java.util.List;
+
 import mondrian.olap.Id;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * <code>ArrayMemberSource</code> implements a flat, static hierarchy. There is

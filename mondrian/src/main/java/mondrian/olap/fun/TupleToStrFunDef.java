@@ -11,7 +11,10 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Member;
 
-import mondrian.calc.*;
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.MemberCalc;
+import mondrian.calc.TupleCalc;
 import mondrian.calc.impl.AbstractStringCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;

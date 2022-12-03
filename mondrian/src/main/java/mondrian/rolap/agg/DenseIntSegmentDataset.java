@@ -9,14 +9,16 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.olap.Util;
-import mondrian.rolap.CellKey;
-import mondrian.rolap.SqlStatement;
-import mondrian.spi.SegmentBody;
-import mondrian.util.Pair;
+import java.util.BitSet;
+import java.util.List;
+import java.util.SortedSet;
+
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
-import java.util.*;
+import mondrian.olap.Util;
+import mondrian.rolap.CellKey;
+import mondrian.spi.SegmentBody;
+import mondrian.util.Pair;
 
 /**
  * Implementation of {@link DenseSegmentDataset} that stores

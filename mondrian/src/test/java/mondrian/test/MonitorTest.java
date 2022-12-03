@@ -9,8 +9,10 @@
 */
 package mondrian.test;
 
-import mondrian.olap.MondrianServer;
-import mondrian.server.monitor.*;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.sql.SQLException;
+import java.util.List;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.CellSet;
@@ -21,10 +23,10 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.sql.SQLException;
-import java.util.List;
+import mondrian.olap.MondrianServer;
+import mondrian.server.monitor.ConnectionInfo;
+import mondrian.server.monitor.Monitor;
+import mondrian.server.monitor.ServerInfo;
 
 /**
  * Unit test for monitoring, including {@link Monitor}.

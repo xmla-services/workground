@@ -11,10 +11,14 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.*;
-import mondrian.olap.type.Type;
-
 import java.io.PrintWriter;
+
+import mondrian.olap.Category;
+import mondrian.olap.Exp;
+import mondrian.olap.ExpBase;
+import mondrian.olap.Syntax;
+import mondrian.olap.Validator;
+import mondrian.olap.type.Type;
 
 /**
  * A <code>ValueFunDef</code> is a pseudo-function to evaluate a member or

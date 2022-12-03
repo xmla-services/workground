@@ -13,7 +13,9 @@
 
 package mondrian.olap;
 
-import mondrian.server.Statement;
+import static mondrian.olap.Util.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -21,8 +23,7 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static mondrian.olap.Util.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import mondrian.server.Statement;
 
 /**
  * Query test.

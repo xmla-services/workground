@@ -11,32 +11,44 @@
 */
 package mondrian.server;
 
+import java.lang.management.ManagementFactory;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.management.InstanceAlreadyExistsException;
+import javax.management.MBeanRegistrationException;
+import javax.management.MBeanServer;
+import javax.management.MalformedObjectNameException;
+import javax.management.NotCompliantMBeanException;
+import javax.management.ObjectName;
+
+import org.apache.commons.collections.map.ReferenceMap;
+import org.olap4j.OlapConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
-import mondrian.olap4j.*;
+import mondrian.olap4j.CatalogFinder;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapResultShepherd;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.agg.AggregationManager;
-import mondrian.server.monitor.*;
+import mondrian.server.monitor.ConnectionEndEvent;
+import mondrian.server.monitor.ConnectionStartEvent;
+import mondrian.server.monitor.Monitor;
+import mondrian.server.monitor.StatementEndEvent;
+import mondrian.server.monitor.StatementStartEvent;
 import mondrian.spi.CatalogLocator;
 import mondrian.util.LockBox;
-import mondrian.xmla.*;
-
-import org.apache.commons.collections.map.ReferenceMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.olap4j.OlapConnection;
-
-import java.lang.management.ManagementFactory;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import javax.management.*;
+import mondrian.xmla.XmlaHandler;
 
 /**
  * Implementation of {@link mondrian.olap.MondrianServer}.

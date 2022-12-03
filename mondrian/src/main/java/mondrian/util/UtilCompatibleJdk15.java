@@ -9,22 +9,29 @@
 
 package mondrian.util;
 
-import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapUtil;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.lang.annotation.Annotation;
-import java.lang.management.*;
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryPoolMXBean;
+import java.lang.management.MemoryType;
+import java.lang.management.MemoryUsage;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.sql.Statement;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Set;
+import java.util.Timer;
+import java.util.UUID;
 import java.util.regex.Pattern;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mondrian.olap.Util;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapUtil;
 
 // Only in Java5 and above
 

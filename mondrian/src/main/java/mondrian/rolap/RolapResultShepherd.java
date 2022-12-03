@@ -9,17 +9,30 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.resource.MondrianResource;
-import mondrian.server.Execution;
-import mondrian.util.Pair;
-
-import org.eigenbase.util.property.IntegerProperty;
-
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.*;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+import org.eigenbase.util.property.IntegerProperty;
+
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.QueryCanceledException;
+import mondrian.olap.QueryTimeoutException;
+import mondrian.olap.ResourceLimitExceededException;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.resource.MondrianResource;
+import mondrian.server.Execution;
+import mondrian.util.Pair;
 
 /**
  * A utility class for {@link RolapConnection}. It specializes in

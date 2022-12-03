@@ -11,14 +11,14 @@
 
 package mondrian.olap;
 
-import mondrian.resource.MondrianResource;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.resource.MondrianResource;
 
 /**
  * This class implements object of type GrantCube to apply permissions

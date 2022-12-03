@@ -9,15 +9,16 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.Connection;
-import mondrian.olap.MondrianProperties;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
 
 /**
  * Test case for '&amp;[..]' capability in MDX identifiers.

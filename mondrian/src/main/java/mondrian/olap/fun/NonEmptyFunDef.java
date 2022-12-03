@@ -9,21 +9,25 @@
 */
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.*;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.type.*;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.util.CancellationChecker;
-
-import java.util.*;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ListCalc;
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractListCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Validator;
+import mondrian.olap.type.Type;
 
 class NonEmptyFunDef extends FunDefBase {
     private static final Logger LOGGER = LoggerFactory.getLogger( NonEmptyFunDef.class );

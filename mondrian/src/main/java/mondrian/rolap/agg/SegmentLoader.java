@@ -10,27 +10,46 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.*;
-import mondrian.rolap.agg.SegmentCacheManager.AbortException;
-import mondrian.rolap.cache.SegmentCacheIndex;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.server.monitor.SqlStatementEvent;
-import mondrian.spi.*;
-import mondrian.util.*;
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.*;
-import java.util.concurrent.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.BitKey;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.RolapUtil;
+import mondrian.rolap.SqlStatement;
+import mondrian.rolap.StarPredicate;
+import mondrian.rolap.agg.SegmentCacheManager.AbortException;
+import mondrian.rolap.cache.SegmentCacheIndex;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.server.monitor.SqlStatementEvent;
+import mondrian.spi.SegmentBody;
+import mondrian.spi.SegmentColumn;
+import mondrian.spi.SegmentHeader;
+import mondrian.util.CancellationChecker;
+import mondrian.util.MDCUtil;
+import mondrian.util.Pair;
 
 /**
  * <p>

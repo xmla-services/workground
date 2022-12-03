@@ -9,9 +9,9 @@
 
 package mondrian.util;
 
-import mondrian.olap.Util;
-
 import java.util.concurrent.ConcurrentHashMap;
+
+import mondrian.olap.Util;
 
 /**
  * A limited Map implementation which supports waiting for a value

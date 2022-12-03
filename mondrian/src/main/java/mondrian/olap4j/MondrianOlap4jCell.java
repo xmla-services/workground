@@ -10,19 +10,21 @@
 */
 package mondrian.olap4j;
 
-import mondrian.olap.*;
-import mondrian.rolap.RolapCell;
-import mondrian.rolap.SqlStatement;
-
-import org.slf4j.Logger;
-import org.eclipse.daanse.olap.api.OlapElement;
-import org.olap4j.*;
-import org.olap4j.Cell;
-import org.olap4j.metadata.Property;
-
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.OlapElement;
+import org.olap4j.AllocationPolicy;
+import org.olap4j.Cell;
+import org.olap4j.CellSet;
+import org.olap4j.OlapException;
+import org.olap4j.Scenario;
+import org.olap4j.metadata.Property;
+import org.slf4j.Logger;
+
+import mondrian.rolap.RolapCell;
+import mondrian.rolap.SqlStatement;
 
 /**
  * Implementation of {@link Cell}

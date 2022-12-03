@@ -9,15 +9,22 @@
 
 package mondrian.rolap;
 
-import mondrian.calc.*;
-import mondrian.olap.*;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleCursor;
+import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleList;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.Util;
 
 /**
  * Evaluation context to be able to expand a generic expression that returns a

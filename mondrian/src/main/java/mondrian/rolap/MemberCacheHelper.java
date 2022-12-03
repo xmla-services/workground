@@ -11,20 +11,27 @@
 */
 package mondrian.rolap;
 
+import static org.apache.commons.collections.CollectionUtils.filter;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
+import java.util.TreeSet;
+
+import org.apache.commons.collections.Predicate;
+
 import mondrian.olap.Util;
-import mondrian.rolap.cache.*;
+import mondrian.rolap.cache.SmartCache;
+import mondrian.rolap.cache.SoftSmartCache;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
 import mondrian.spi.DataSourceChangeListener;
-import mondrian.util.*;
-
-import org.apache.commons.collections.Predicate;
-import org.eclipse.daanse.olap.api.Level;
-
-import java.util.*;
-import java.util.Map.Entry;
-
-import static org.apache.commons.collections.CollectionUtils.filter;
+import mondrian.util.Pair;
 
 /**
  * Encapsulation of member caching.

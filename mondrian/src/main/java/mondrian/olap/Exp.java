@@ -11,12 +11,12 @@
 
 package mondrian.olap;
 
+import java.io.PrintWriter;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.mdx.MdxVisitor;
 import mondrian.olap.type.Type;
-
-import java.io.PrintWriter;
 
 /**
  * An <code>Exp</code> is an MDX expression.

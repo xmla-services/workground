@@ -9,16 +9,20 @@
 
 package mondrian.olap.fun.extra;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.AbstractMemberCalc;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.fun.FunDefBase;
-
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.MemberCalc;
+import mondrian.calc.StringCalc;
+import mondrian.calc.impl.AbstractMemberCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.fun.FunDefBase;
 
 /**
  * Definition of the <code>CalculatedChild</code> MDX function.

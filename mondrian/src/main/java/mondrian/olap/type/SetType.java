@@ -12,10 +12,8 @@
 
 package mondrian.olap.type;
 
-import mondrian.olap.*;
-
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.daanse.olap.api.Dimension;

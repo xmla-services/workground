@@ -9,8 +9,11 @@
 
 package mondrian.test;
 
-import mondrian.olap.*;
-import mondrian.spi.DynamicSchemaProcessor;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchemaProcessor;
+
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Member;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,11 +22,13 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.withSchemaProcessor;
+import mondrian.olap.Axis;
+import mondrian.olap.Connection;
+import mondrian.olap.Position;
+import mondrian.olap.Query;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.spi.DynamicSchemaProcessor;
 
 /**
  * Unit test special "caption" settings.

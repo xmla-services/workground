@@ -9,7 +9,9 @@
 
 package mondrian.util;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Implementation of {@link Future} that has already completed.

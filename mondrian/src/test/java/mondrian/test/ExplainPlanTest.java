@@ -12,6 +12,12 @@
 */
 package mondrian.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertStubbedEqualsVerbose;
+import static org.opencube.junit5.TestUtil.checkThrowable;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.ResultSet;
@@ -19,8 +25,6 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 
-import mondrian.olap.*;
-import org.apache.logging.log4j.Level;
 import org.eclipse.daanse.olap.api.Cube;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,19 +33,16 @@ import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapStatement;
 import org.olap4j.layout.RectangularCellSetFormatter;
-
-import mondrian.rolap.RolapUtil;
-import mondrian.spi.ProfileHandler;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertStubbedEqualsVerbose;
-import static org.opencube.junit5.TestUtil.checkThrowable;
+import mondrian.olap.CacheControl;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.QueryTiming;
+import mondrian.spi.ProfileHandler;
 
 /**
  * Tests related to explain plan and QueryTiming

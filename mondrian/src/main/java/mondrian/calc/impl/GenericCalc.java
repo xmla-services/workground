@@ -9,16 +9,28 @@
 
 package mondrian.calc.impl;
 
-import mondrian.calc.*;
-import mondrian.olap.*;
-import mondrian.olap.fun.FunUtil;
-
 import java.util.Date;
 
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.BooleanCalc;
+import mondrian.calc.Calc;
+import mondrian.calc.DateTimeCalc;
+import mondrian.calc.DimensionCalc;
+import mondrian.calc.DoubleCalc;
+import mondrian.calc.HierarchyCalc;
+import mondrian.calc.IntegerCalc;
+import mondrian.calc.LevelCalc;
+import mondrian.calc.MemberCalc;
+import mondrian.calc.StringCalc;
+import mondrian.calc.TupleCalc;
+import mondrian.calc.VoidCalc;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.fun.FunUtil;
 
 /**
  * Adapter which computes a scalar or tuple expression and converts it to any

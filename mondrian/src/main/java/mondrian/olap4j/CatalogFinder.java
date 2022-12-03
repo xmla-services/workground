@@ -9,11 +9,11 @@
 
 package mondrian.olap4j;
 
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapSchema;
-
 import java.util.List;
 import java.util.Map;
+
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapSchema;
 
 /**
  * Strategy to locate schemas and catalogs. Allows different

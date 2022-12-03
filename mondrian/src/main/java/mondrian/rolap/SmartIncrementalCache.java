@@ -10,11 +10,12 @@
 */
 package mondrian.rolap;
 
-import mondrian.rolap.cache.*;
-
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
+
+import mondrian.rolap.cache.SmartCache;
+import mondrian.rolap.cache.SoftSmartCache;
 
 /**
  * Uses a SmartCache to store a collection of values.

@@ -12,11 +12,15 @@
 */
 package mondrian.olap;
 
-import mondrian.rolap.SqlStatement;
-import mondrian.spi.PropertyFormatter;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
-import java.util.*;
+import mondrian.spi.PropertyFormatter;
 
 /**
  * <code>Property</code> is the definition of a member property.

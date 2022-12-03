@@ -18,18 +18,17 @@
  */
 package org.opencube.junit5.dataloader;
 
-import org.eclipse.daanse.db.dialect.api.Dialect;
-//import mondrian.spi.DialectManager;
-import org.eclipse.daanse.engine.api.Context;
-import org.opencube.junit5.Constants;
-
-import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+//import mondrian.spi.DialectManager;
+import org.eclipse.daanse.engine.api.Context;
+import org.opencube.junit5.Constants;
 
 public class SteelWheelsDataLoader implements DataLoader {
 	public static List<String> tables = List.of(

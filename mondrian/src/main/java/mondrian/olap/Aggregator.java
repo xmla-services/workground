@@ -11,12 +11,13 @@
 
 package mondrian.olap;
 
+import java.util.List;
+
+import org.eclipse.daanse.db.dialect.api.Datatype;
+
 import mondrian.calc.Calc;
 import mondrian.calc.TupleList;
 import mondrian.spi.SegmentBody;
-import org.eclipse.daanse.db.dialect.api.Datatype;
-
-import java.util.List;
 
 /**
  * Describes an aggregation operator, such as "sum" or "count".

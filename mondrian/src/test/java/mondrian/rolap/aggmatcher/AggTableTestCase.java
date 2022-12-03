@@ -9,11 +9,12 @@
 
 package mondrian.rolap.aggmatcher;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+
 import mondrian.olap.MondrianProperties;
 import mondrian.test.PropertySaver5;
 import mondrian.test.loader.CsvDBTestCase;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 
 /**
  * This abstract class can be used as the basis for writing aggregate table

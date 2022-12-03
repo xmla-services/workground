@@ -12,20 +12,38 @@
 
 package mondrian.test;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Util;
-import mondrian.test.clearview.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.lang.reflect.Constructor;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.platform.launcher.listeners.SummaryGeneratingListener;
 
-import java.lang.reflect.Constructor;
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.test.clearview.CVBasicTest;
+import mondrian.test.clearview.ClearViewBase;
+import mondrian.test.clearview.GrandTotalTest;
+import mondrian.test.clearview.MetricFilterTest;
+import mondrian.test.clearview.MiscTest;
+import mondrian.test.clearview.MultiDimTest;
+import mondrian.test.clearview.MultiDimVCTest;
+import mondrian.test.clearview.MultiLevelTest;
+import mondrian.test.clearview.PartialCacheTest;
+import mondrian.test.clearview.PartialCacheVCTest;
+import mondrian.test.clearview.PredicateFilterTest;
+import mondrian.test.clearview.QueryAllTest;
+import mondrian.test.clearview.QueryAllVCTest;
+import mondrian.test.clearview.SubTotalTest;
+import mondrian.test.clearview.SummaryMetricPercentTest;
+import mondrian.test.clearview.SummaryTest;
+import mondrian.test.clearview.TopBottomTest;
 
 /**
  * A copy of {@link ConcurrentMdxTest} with modifications to take

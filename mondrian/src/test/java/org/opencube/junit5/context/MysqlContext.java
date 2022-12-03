@@ -13,15 +13,16 @@
  */
 package org.opencube.junit5.context;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Optional;
+
+import javax.sql.DataSource;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 import org.eclipse.daanse.db.statistics.api.StatisticsProvider;
 import org.eclipse.daanse.engine.api.Context;
-
-import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.Optional;
 
 public class MysqlContext implements Context {
 

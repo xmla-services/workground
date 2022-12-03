@@ -9,10 +9,10 @@
 
 package mondrian.olap4j;
 
+import java.sql.SQLException;
+
 import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.OlapWrapper;
-
-import java.sql.SQLException;
 
 /**
  * Basic features of metadata elements in Mondrian's olap4j driver.

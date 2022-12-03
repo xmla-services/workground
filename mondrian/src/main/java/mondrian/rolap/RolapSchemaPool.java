@@ -10,26 +10,31 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.Util;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.aggmatcher.JdbcSchema;
-import mondrian.spi.DynamicSchemaProcessor;
-import mondrian.util.*;
-
-import org.slf4j.Logger;
-import org.eclipse.daanse.engine.api.Context;
-import org.slf4j.LoggerFactory;
+import static mondrian.rolap.RolapConnectionProperties.JdbcConnectionUuid;
+import static mondrian.rolap.RolapConnectionProperties.PinSchemaTimeout;
+import static mondrian.rolap.RolapConnectionProperties.UseSchemaPool;
 
 import java.io.IOException;
-import java.lang.ref.*;
-import java.util.*;
+import java.lang.ref.Reference;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import javax.sql.DataSource;
 
-import static mondrian.rolap.RolapConnectionProperties.JdbcConnectionUuid;
-import static mondrian.rolap.RolapConnectionProperties.PinSchemaTimeout;
-import static mondrian.rolap.RolapConnectionProperties.UseSchemaPool;
+import org.eclipse.daanse.engine.api.Context;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mondrian.olap.Util;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.aggmatcher.JdbcSchema;
+import mondrian.spi.DynamicSchemaProcessor;
+import mondrian.util.ByteString;
+import mondrian.util.ClassResolver;
+import mondrian.util.ExpiringReference;
 
 /**
  * A collection of schemas, identified by their connection properties

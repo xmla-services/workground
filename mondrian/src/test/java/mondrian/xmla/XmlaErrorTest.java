@@ -9,16 +9,23 @@
 
 package mondrian.xmla;
 
-import mondrian.olap.Connection;
-import mondrian.olap.Util;
-import mondrian.olap4j.MondrianOlap4jDriver;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.test.DiffRepository;
-import mondrian.test.TestContext;
-import mondrian.tui.MockHttpServletRequest;
-import mondrian.tui.MockHttpServletResponse;
-import mondrian.tui.XmlaSupport;
-import mondrian.util.Base64;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.TreeMap;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -31,17 +38,16 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.util.Enumeration;
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.fail;
+import mondrian.olap.Connection;
+import mondrian.olap.Util;
+import mondrian.olap4j.MondrianOlap4jDriver;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.test.DiffRepository;
+import mondrian.test.TestContext;
+import mondrian.tui.MockHttpServletRequest;
+import mondrian.tui.MockHttpServletResponse;
+import mondrian.tui.XmlaSupport;
+import mondrian.util.Base64;
 
 /**
  * Test of the XMLA Fault generation - errors occur/are-detected in

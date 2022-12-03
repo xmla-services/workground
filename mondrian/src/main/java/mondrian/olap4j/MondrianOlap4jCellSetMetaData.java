@@ -9,16 +9,17 @@
 
 package mondrian.olap4j;
 
-import mondrian.olap.*;
+import java.sql.SQLException;
 
 import org.olap4j.CellSetAxisMetaData;
 import org.olap4j.CellSetMetaData;
 import org.olap4j.impl.ArrayNamedListImpl;
-import org.olap4j.metadata.*;
 import org.olap4j.metadata.Cube;
+import org.olap4j.metadata.NamedList;
 import org.olap4j.metadata.Property;
 
-import java.sql.SQLException;
+import mondrian.olap.Query;
+import mondrian.olap.QueryAxis;
 
 /**
  * Implementation of {@link org.olap4j.CellSetMetaData}

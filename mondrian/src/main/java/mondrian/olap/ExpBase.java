@@ -11,10 +11,10 @@
 
 package mondrian.olap;
 
+import java.io.PrintWriter;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
-
-import java.io.PrintWriter;
 
 /**
  * Skeleton implementation of {@link Exp} interface.

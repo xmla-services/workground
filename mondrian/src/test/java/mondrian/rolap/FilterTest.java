@@ -9,11 +9,12 @@
  */
 package mondrian.rolap;
 
-import mondrian.olap.Connection;
-import mondrian.olap.MondrianProperties;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.hierarchyName;
+import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
+import static org.opencube.junit5.TestUtil.withSchema;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,7 +28,10 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
 
 /**
  * Tests for Filter and native Filters.

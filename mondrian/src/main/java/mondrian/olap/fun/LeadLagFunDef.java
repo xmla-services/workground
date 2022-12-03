@@ -11,10 +11,14 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Member;
 
-import mondrian.calc.*;
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.IntegerCalc;
+import mondrian.calc.MemberCalc;
 import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
+import mondrian.olap.Evaluator;
+import mondrian.olap.FunDef;
 
 /**
  * Definition of the <code>Lead</code> and <code>Lag</code> MDX functions.

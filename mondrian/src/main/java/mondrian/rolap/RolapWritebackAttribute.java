@@ -12,8 +12,6 @@ package mondrian.rolap;
 
 import org.eclipse.daanse.olap.api.Dimension;
 
-import mondrian.olap.*;
-
 public class RolapWritebackAttribute extends RolapWritebackColumn{
     private final Dimension dimension;
     private final String columnName;

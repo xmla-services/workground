@@ -9,20 +9,65 @@
 
 package mondrian.calc.impl;
 
-import mondrian.calc.*;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.UnresolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.fun.*;
-import mondrian.olap.type.*;
-import mondrian.olap.type.DimensionType;
-import mondrian.olap.type.LevelType;
-import mondrian.resource.MondrianResource;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
+
+import mondrian.calc.BooleanCalc;
+import mondrian.calc.Calc;
+import mondrian.calc.DateTimeCalc;
+import mondrian.calc.DimensionCalc;
+import mondrian.calc.DoubleCalc;
+import mondrian.calc.DummyExp;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.HierarchyCalc;
+import mondrian.calc.IntegerCalc;
+import mondrian.calc.IterCalc;
+import mondrian.calc.LevelCalc;
+import mondrian.calc.ListCalc;
+import mondrian.calc.MemberCalc;
+import mondrian.calc.ParameterSlot;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.StringCalc;
+import mondrian.calc.TupleCalc;
+import mondrian.calc.TupleList;
+import mondrian.mdx.MemberExpr;
+import mondrian.mdx.UnresolvedFunCall;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.Literal;
+import mondrian.olap.Parameter;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
+import mondrian.olap.fun.CastFunDef;
+import mondrian.olap.fun.FunUtil;
+import mondrian.olap.fun.HierarchyCurrentMemberFunDef;
+import mondrian.olap.fun.HierarchyDimensionFunDef;
+import mondrian.olap.fun.LevelHierarchyFunDef;
+import mondrian.olap.fun.MemberHierarchyFunDef;
+import mondrian.olap.fun.MemberLevelFunDef;
+import mondrian.olap.type.BooleanType;
+import mondrian.olap.type.DecimalType;
+import mondrian.olap.type.DimensionType;
+import mondrian.olap.type.HierarchyType;
+import mondrian.olap.type.LevelType;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.NullType;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.ScalarType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.TupleType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
+import mondrian.resource.MondrianResource;
 
 /**
  * Abstract implementation of the {@link mondrian.calc.ExpCompiler} interface.

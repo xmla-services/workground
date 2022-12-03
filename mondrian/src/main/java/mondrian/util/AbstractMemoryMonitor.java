@@ -9,12 +9,12 @@
 
 package mondrian.util;
 
-import mondrian.olap.MondrianProperties;
+import java.util.LinkedList;
+import java.util.ListIterator;
 
 import org.slf4j.Logger;
 
-import java.util.LinkedList;
-import java.util.ListIterator;
+import mondrian.olap.MondrianProperties;
 
 /**
  *  Abstract implementation of {@link MemoryMonitor}. Base class

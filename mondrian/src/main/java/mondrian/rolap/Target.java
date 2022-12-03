@@ -12,14 +12,18 @@
 
 package mondrian.rolap;
 
-import mondrian.calc.ResultStyle;
-import mondrian.olap.*;
-import mondrian.rolap.sql.TupleConstraint;
-
 import java.sql.SQLException;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.ResultStyle;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.rolap.sql.TupleConstraint;
 
  /**
  * Helper class for {@link mondrian.rolap.HighCardSqlTupleReader} that

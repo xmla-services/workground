@@ -9,20 +9,25 @@
 */
 package mondrian.rolap;
 
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+
+import java.math.BigDecimal;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import mondrian.calc.DummyExp;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
 import mondrian.olap.Literal;
 import mondrian.olap.type.EmptyType;
 import mondrian.test.PropertySaver5;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import java.math.BigDecimal;
-
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.mockito.Mockito.*;
 
 /**
  * This class contains tests for some cases related to creating

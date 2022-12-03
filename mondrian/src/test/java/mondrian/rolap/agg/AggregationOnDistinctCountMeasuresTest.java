@@ -8,17 +8,30 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.calc.TupleList;
-import mondrian.calc.impl.ArrayTupleList;
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.*;
-import mondrian.olap.fun.AggregateFunDef;
-import mondrian.olap.fun.CrossJoinFunDef;
-import mondrian.rolap.RolapCube;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.allMember;
+import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQuerySql;
+import static org.opencube.junit5.TestUtil.assertQuerySqlOrNot;
+import static org.opencube.junit5.TestUtil.cubeByName;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.isDefaultNullMemberRepresentation;
+import static org.opencube.junit5.TestUtil.member;
+import static org.opencube.junit5.TestUtil.productMembersPotScrubbersPotsAndPans;
+import static org.opencube.junit5.TestUtil.upgradeActual;
+import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Member;
@@ -32,12 +45,23 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.ArrayTupleList;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.olap.Connection;
+import mondrian.olap.Id;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Result;
+import mondrian.olap.ResultBase;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.olap.fun.AggregateFunDef;
+import mondrian.olap.fun.CrossJoinFunDef;
+import mondrian.rolap.RolapCube;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
 
 /**
  * <code>AggregationOnDistinctCountMeasureTest</code> tests the

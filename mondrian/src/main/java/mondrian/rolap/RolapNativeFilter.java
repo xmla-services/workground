@@ -11,22 +11,28 @@
 */
 package mondrian.rolap;
 
-import mondrian.mdx.MdxVisitorImpl;
-import mondrian.mdx.MemberExpr;
-import mondrian.olap.*;
-import mondrian.rolap.TupleReader.MemberBuilder;
-import mondrian.rolap.aggmatcher.AggStar;
-import mondrian.rolap.sql.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.sql.DataSource;
-
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.mdx.MdxVisitorImpl;
+import mondrian.mdx.MemberExpr;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.NativeEvaluator;
+import mondrian.olap.Role;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.rolap.TupleReader.MemberBuilder;
+import mondrian.rolap.aggmatcher.AggStar;
+import mondrian.rolap.sql.CrossJoinArg;
+import mondrian.rolap.sql.SqlQuery;
 
 /**
  * Computes a Filter(set, condition) in SQL.

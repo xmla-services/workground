@@ -9,12 +9,17 @@
 */
 package mondrian.test;
 
-import mondrian.olap.*;
-import mondrian.rolap.BatchTestCase;
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapCube;
-import mondrian.rolap.RolapHierarchy;
-import mondrian.util.Bug;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertAxisThrows;
+import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
+import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,9 +34,16 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.CacheControl;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.NativeEvaluationUnsupportedException;
+import mondrian.olap.Result;
+import mondrian.rolap.BatchTestCase;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapHierarchy;
+import mondrian.util.Bug;
 
 /**
  * Test native evaluation of supported set operations.

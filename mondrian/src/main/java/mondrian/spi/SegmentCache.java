@@ -9,10 +9,11 @@
 
 package mondrian.spi;
 
-import mondrian.olap.MondrianProperties;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import mondrian.olap.MondrianProperties;
+import mondrian.spi.SegmentCache.SegmentCacheListener;
 
 /**
  * SPI definition of the segments cache.

@@ -15,8 +15,6 @@ import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
 
-import mondrian.olap.*;
-
 /**
  * Base class for types which represent scalar values.
  *

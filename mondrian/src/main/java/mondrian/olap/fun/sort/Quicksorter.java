@@ -14,10 +14,10 @@
 
 package mondrian.olap.fun.sort;
 
+import java.util.Comparator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Comparator;
 
 /**
  * A functional for {@link Sorter#partialSort}. Sorts or partially sorts an array in ascending order, using a

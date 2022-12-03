@@ -8,12 +8,11 @@
 */
 package mondrian.util;
 
-import mondrian.olap.MondrianProperties;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import mondrian.olap.MondrianProperties;
 
 /**
  * Holder for constants which indicate whether particular issues have been

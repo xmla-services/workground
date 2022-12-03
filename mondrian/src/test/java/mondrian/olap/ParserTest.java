@@ -11,13 +11,19 @@
 
 package mondrian.olap;
 
-import mondrian.mdx.QueryPrintWriter;
-import mondrian.mdx.UnresolvedFunCall;
-import mondrian.olap.fun.BuiltinFunTable;
-import mondrian.parser.JavaccParserValidatorImpl;
-import mondrian.parser.MdxParserValidator;
-import mondrian.server.Statement;
-import mondrian.util.Bug;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,14 +32,13 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Collections;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import mondrian.mdx.QueryPrintWriter;
+import mondrian.mdx.UnresolvedFunCall;
+import mondrian.olap.fun.BuiltinFunTable;
+import mondrian.parser.JavaccParserValidatorImpl;
+import mondrian.parser.MdxParserValidator;
+import mondrian.server.Statement;
+import mondrian.util.Bug;
 
 /**
  * Tests the MDX parser.

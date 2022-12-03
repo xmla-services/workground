@@ -13,11 +13,13 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.rolap.*;
-import mondrian.util.Pair;
+import java.util.List;
+
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 
-import java.util.List;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.StarColumnPredicate;
+import mondrian.util.Pair;
 
 /**
  * Contains the information necessary to generate a SQL statement to

@@ -9,17 +9,31 @@
 
 package mondrian.util;
 
-import org.eigenbase.util.property.*;
-
-import org.w3c.dom.*;
-
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.SortedMap;
+import java.util.SortedSet;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.eigenbase.util.property.BooleanProperty;
+import org.eigenbase.util.property.DoubleProperty;
+import org.eigenbase.util.property.IntegerProperty;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Utilities to generate MondrianProperties.java and mondrian.properties

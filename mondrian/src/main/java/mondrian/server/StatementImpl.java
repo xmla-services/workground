@@ -9,12 +9,14 @@
 
 package mondrian.server;
 
-import mondrian.olap.*;
-import mondrian.rolap.RolapSchema;
-import mondrian.spi.ProfileHandler;
-
 import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicLong;
+
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Query;
+import mondrian.olap.SchemaReader;
+import mondrian.rolap.RolapSchema;
+import mondrian.spi.ProfileHandler;
 
 /**
  * Implementation of {@link Statement}.

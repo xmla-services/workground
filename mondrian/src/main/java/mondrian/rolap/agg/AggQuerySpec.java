@@ -12,18 +12,18 @@
 */
 package mondrian.rolap.agg;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.StarColumnPredicate;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.util.Pair;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * An AggStar's version of the {@link QuerySpec}. <p/>

@@ -11,9 +11,14 @@
 
 package mondrian.olap.fun;
 
-import mondrian.olap.*;
-
 import java.util.List;
+
+import mondrian.olap.Category;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
 
 /**
  * A <code>MultiResolver</code> considers several overloadings of the same

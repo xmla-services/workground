@@ -17,13 +17,13 @@ import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.Schema;
 
 import mondrian.olap.DimensionType;
 import mondrian.olap.Exp;
 import mondrian.olap.Id;
 import mondrian.olap.MatchType;
 import mondrian.olap.Property;
-import org.eclipse.daanse.olap.api.Schema;
 import mondrian.olap.SchemaReader;
 
 /**

@@ -10,7 +10,9 @@
 package mondrian.udf;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
-import mondrian.olap.*;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
 import mondrian.olap.type.NumericType;
 import mondrian.olap.type.Type;
 import mondrian.spi.UserDefinedFunction;

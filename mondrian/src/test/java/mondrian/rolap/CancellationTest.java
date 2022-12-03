@@ -8,15 +8,13 @@
 */
 package mondrian.rolap;
 
-import mondrian.calc.TupleList;
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.fun.CrossJoinFunDef;
-import mondrian.olap.fun.CrossJoinTest;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.test.PropertySaver5;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.opencube.junit5.TestUtil.cubeByName;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.productMembersPotScrubbersPotsAndPans;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,12 +23,21 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.opencube.junit5.TestUtil.cubeByName;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.productMembersPotScrubbersPotsAndPans;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Connection;
+import mondrian.olap.Evaluator;
+import mondrian.olap.FunDef;
+import mondrian.olap.MondrianException;
+import mondrian.olap.Position;
+import mondrian.olap.Result;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.fun.CrossJoinFunDef;
+import mondrian.olap.fun.CrossJoinTest;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.test.PropertySaver5;
 
 public class CancellationTest {
 

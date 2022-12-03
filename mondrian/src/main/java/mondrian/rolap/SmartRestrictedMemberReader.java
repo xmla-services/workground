@@ -9,14 +9,20 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
-import mondrian.rolap.sql.*;
-
-import java.util.*;
-import java.util.concurrent.locks.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.olap.Access;
+import mondrian.olap.Role;
+import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
+import mondrian.rolap.sql.MemberChildrenConstraint;
 
 /**
  * A {@link SmartRestrictedMemberReader} is a subclass of

@@ -10,13 +10,13 @@
 
 package mondrian.xmla.impl;
 
-import mondrian.olap.Util;
-import mondrian.util.ArrayStack;
-import mondrian.xmla.SaxWriter;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Arrays;
+
+import mondrian.olap.Util;
+import mondrian.util.ArrayStack;
+import mondrian.xmla.SaxWriter;
 
 /**
  * Implementation of <code>SaxWriter</code> which, perversely, generates a

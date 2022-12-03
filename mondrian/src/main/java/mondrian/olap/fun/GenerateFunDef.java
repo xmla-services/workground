@@ -11,19 +11,38 @@
 */
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.*;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.type.*;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.util.CancellationChecker;
-
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.IterCalc;
+import mondrian.calc.ListCalc;
+import mondrian.calc.StringCalc;
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleCursor;
+import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractListCalc;
+import mondrian.calc.impl.AbstractStringCalc;
+import mondrian.calc.impl.ConstantCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Validator;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.util.CancellationChecker;
 
 /**
  * Definition of the <code>Generate</code> MDX function.

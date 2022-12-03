@@ -10,8 +10,32 @@
 */
 package mondrian.test;
 
-import mondrian.olap.*;
-import mondrian.rolap.RolapConnectionProperties;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertExprThrows;
+import static org.opencube.junit5.TestUtil.assertParameterizedExprReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.checkThrowable;
+import static org.opencube.junit5.TestUtil.executeExpr;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Member;
 import org.eigenbase.util.property.Property;
@@ -24,14 +48,15 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Connection;
+import mondrian.olap.Id;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Parameter;
+import mondrian.olap.Query;
+import mondrian.olap.Result;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapConnectionProperties;
 
 /**
  * A <code>ParameterTest</code> is a test suite for functionality relating to

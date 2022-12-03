@@ -11,17 +11,21 @@
 
 package mondrian.olap;
 
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.util.Map;
+
+import org.olap4j.impl.UnmodifiableArrayMap;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.ConstantCalc;
 import mondrian.mdx.MdxVisitor;
-import mondrian.olap.type.*;
-
-import org.olap4j.impl.UnmodifiableArrayMap;
-
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.util.Map;
+import mondrian.olap.type.NullType;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.SymbolType;
+import mondrian.olap.type.Type;
 
 /**
  * Represents a constant value, such as a string or number, in a parse tree.

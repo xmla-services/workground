@@ -11,18 +11,36 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.Calc;
-import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.type.*;
-import mondrian.olap.type.DimensionType;
-import mondrian.olap.type.LevelType;
-
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.Cube;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Category;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
+import mondrian.olap.type.BooleanType;
+import mondrian.olap.type.CubeType;
+import mondrian.olap.type.DateTimeType;
+import mondrian.olap.type.DecimalType;
+import mondrian.olap.type.DimensionType;
+import mondrian.olap.type.EmptyType;
+import mondrian.olap.type.HierarchyType;
+import mondrian.olap.type.LevelType;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.ScalarType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.SymbolType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
 
 /**
  * <code>FunDefBase</code> is the default implementation of {@link FunDef}.

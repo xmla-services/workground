@@ -14,7 +14,8 @@ import org.eclipse.daanse.olap.api.Member;
 
 import mondrian.calc.Calc;
 import mondrian.calc.MemberCalc;
-import mondrian.olap.*;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
 import mondrian.olap.type.ScalarType;
 import mondrian.olap.type.Type;
 

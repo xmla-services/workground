@@ -10,6 +10,16 @@
 */
 package mondrian.rolap.aggmatcher;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.sql.DataSource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
@@ -22,16 +32,6 @@ import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapStar;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.sql.DataSource;
-
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * Manages aggregate tables.

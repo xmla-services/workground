@@ -9,14 +9,17 @@
 
 package mondrian.olap4j;
 
-import mondrian.olap.*;
-
 import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.OlapException;
-import org.olap4j.impl.*;
+import org.olap4j.impl.Named;
+import org.olap4j.impl.NamedListImpl;
+import org.olap4j.impl.Olap4jUtil;
 import org.olap4j.metadata.Dimension;
 import org.olap4j.metadata.Hierarchy;
-import org.olap4j.metadata.*;
+import org.olap4j.metadata.NamedList;
+
+import mondrian.olap.DimensionType;
+import mondrian.olap.Util;
 
 /**
  * Implementation of {@link org.olap4j.metadata.Dimension}

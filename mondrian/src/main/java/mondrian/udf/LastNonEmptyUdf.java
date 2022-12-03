@@ -9,17 +9,20 @@
 
 package mondrian.udf;
 
-import mondrian.olap.*;
-import mondrian.olap.type.*;
-import mondrian.rolap.RolapUtil;
-import mondrian.spi.UserDefinedFunction;
-
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.Type;
+import mondrian.rolap.RolapUtil;
+import mondrian.spi.UserDefinedFunction;
 
 /**
  * Definition of the user-defined function "LastNonEmpty".

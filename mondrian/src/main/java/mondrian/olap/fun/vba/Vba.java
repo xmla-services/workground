@@ -10,15 +10,23 @@
 */
 package mondrian.olap.fun.vba;
 
-import mondrian.olap.InvalidArgumentException;
-import mondrian.olap.Util;
-
-import java.text.*;
-import java.util.*;
+import java.text.DateFormat;
+import java.text.DateFormatSymbols;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static mondrian.olap.fun.JavaFunDef.*;
+import mondrian.olap.InvalidArgumentException;
+import mondrian.olap.Util;
+import mondrian.olap.fun.JavaFunDef.Description;
+import mondrian.olap.fun.JavaFunDef.FunctionName;
+import mondrian.olap.fun.JavaFunDef.Signature;
 
 /**
  * Implementations of functions in the Visual Basic for Applications (VBA)

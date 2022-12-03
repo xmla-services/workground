@@ -9,9 +9,10 @@
 
 package mondrian.olap;
 
-import mondrian.util.ArrayStack;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.*;
+import mondrian.util.ArrayStack;
 
 /**
  * Provides hooks for recording timing information of components of Query execution.

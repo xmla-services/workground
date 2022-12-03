@@ -11,12 +11,12 @@
 
 package mondrian.recorder;
 
-import mondrian.resource.MondrianResource;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
+
+import mondrian.resource.MondrianResource;
 
 /**
  * Abstract implemention of the {@link MessageRecorder} interface.

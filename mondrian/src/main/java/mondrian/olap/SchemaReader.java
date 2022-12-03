@@ -11,10 +11,6 @@
 */
 package mondrian.olap;
 
-import mondrian.calc.Calc;
-import mondrian.rolap.RolapHierarchy;
-import mondrian.rolap.RolapSchema;
-
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +24,10 @@ import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.NamedSet;
 import org.eclipse.daanse.olap.api.OlapElement;
+
+import mondrian.calc.Calc;
+import mondrian.rolap.RolapHierarchy;
+import mondrian.rolap.RolapSchema;
 
 /**
  * A <code>SchemaReader</code> queries schema objects ({@link Schema},

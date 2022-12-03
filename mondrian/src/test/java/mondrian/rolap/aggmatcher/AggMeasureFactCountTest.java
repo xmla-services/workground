@@ -11,12 +11,13 @@
 
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.MondrianException;
-import mondrian.olap.Result;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.withSchema;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
-import mondrian.test.loader.CsvDBTestCase;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,11 +27,11 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.MondrianException;
+import mondrian.olap.Result;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
+import mondrian.test.loader.CsvDBTestCase;
 
 public class AggMeasureFactCountTest extends CsvDBTestCase {
 

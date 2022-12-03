@@ -10,10 +10,9 @@
 */
 package mondrian.olap4j;
 
-import mondrian.mdx.LevelExpr;
-import mondrian.mdx.UnresolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.type.TypeUtil;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Level;
 import org.olap4j.Axis;
@@ -21,7 +20,14 @@ import org.olap4j.CellSetAxisMetaData;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Property;
 
-import java.util.*;
+import mondrian.mdx.LevelExpr;
+import mondrian.mdx.UnresolvedFunCall;
+import mondrian.olap.AxisOrdinal;
+import mondrian.olap.Exp;
+import mondrian.olap.Id;
+import mondrian.olap.QueryAxis;
+import mondrian.olap.Util;
+import mondrian.olap.type.TypeUtil;
 
 /**
  * Implementation of {@link org.olap4j.CellSetMetaData}

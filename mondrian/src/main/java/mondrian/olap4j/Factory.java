@@ -9,14 +9,16 @@
 
 package mondrian.olap4j;
 
-import mondrian.rolap.RolapConnection;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Properties;
 
 import org.eclipse.daanse.engine.api.Context;
 import org.olap4j.OlapException;
 
-import java.sql.*;
-import java.util.List;
-import java.util.Properties;
+import mondrian.rolap.RolapConnection;
 
 /**
  * Instantiates classes to implement the olap4j API against the

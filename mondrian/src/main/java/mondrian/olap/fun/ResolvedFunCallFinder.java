@@ -8,12 +8,15 @@
 */
 package mondrian.olap.fun;
 
-import mondrian.mdx.*;
-import mondrian.olap.*;
-
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.mdx.MdxVisitorImpl;
+import mondrian.mdx.MemberExpr;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Exp;
 
 /**
  * Visitor class used to locate a resolved function call within an

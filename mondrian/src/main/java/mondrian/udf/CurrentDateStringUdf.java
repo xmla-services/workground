@@ -9,17 +9,16 @@
 
 package mondrian.udf;
 
+import java.util.Date;
+import java.util.Locale;
+
+import aQute.bnd.annotation.spi.ServiceProvider;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Syntax;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;
 import mondrian.spi.UserDefinedFunction;
 import mondrian.util.Format;
-
-import java.util.Date;
-import java.util.Locale;
-
-import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
  * User-defined function <code>CurrentDateString<code>, which returns the

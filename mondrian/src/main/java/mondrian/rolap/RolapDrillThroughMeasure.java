@@ -13,8 +13,6 @@ package mondrian.rolap;
 import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.OlapElement;
 
-import mondrian.olap.*;
-
 public class RolapDrillThroughMeasure extends RolapDrillThroughColumn {
     private final Member measure;
 

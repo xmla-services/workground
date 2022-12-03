@@ -9,16 +9,23 @@
 
 package mondrian.test;
 
-import mondrian.olap.*;
-import mondrian.olap.fun.sort.Sorter;
-import mondrian.olap.type.NumericType;
-import mondrian.olap.type.Type;
-import mondrian.spi.UserDefinedFunction;
-import mondrian.util.Bug;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.executeAxis;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.hierarchyName;
+import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import org.apache.commons.collections.ComparatorUtils;
 import org.eclipse.daanse.olap.api.Member;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,12 +38,22 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Axis;
+import mondrian.olap.Connection;
+import mondrian.olap.Evaluator;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Position;
+import mondrian.olap.Query;
+import mondrian.olap.Result;
+import mondrian.olap.Syntax;
+import mondrian.olap.fun.sort.Sorter;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.Type;
+import mondrian.spi.UserDefinedFunction;
+import mondrian.util.Bug;
 
 /**
  * Various unit tests concerned with performance.

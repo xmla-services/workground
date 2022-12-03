@@ -14,15 +14,19 @@
 
 package mondrian.olap.fun.sort;
 
-import mondrian.calc.Calc;
-import mondrian.olap.Evaluator;
-import mondrian.olap.Util;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import mondrian.calc.Calc;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Util;
 
 /**
  * Comparator for members.

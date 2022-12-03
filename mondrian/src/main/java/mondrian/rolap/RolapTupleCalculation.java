@@ -9,10 +9,10 @@
 
 package mondrian.rolap;
 
+import java.util.List;
+
 import mondrian.calc.Calc;
 import mondrian.olap.Util;
-
-import java.util.List;
 
 /**
  * Implementation of {@link mondrian.rolap.RolapCalculation}

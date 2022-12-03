@@ -11,13 +11,13 @@
 
 package mondrian.olap;
 
-import mondrian.calc.Calc;
-import mondrian.calc.ExpCompiler;
-import mondrian.mdx.ResolvedFunCall;
-
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.engine.api.Context;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.mdx.ResolvedFunCall;
 
 /**
  * Definition of an MDX function. See also {@link FunTable}.

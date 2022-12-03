@@ -9,18 +9,30 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.IntegerCalc;
+import mondrian.calc.MemberCalc;
+import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.type.*;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.FunDef;
+import mondrian.olap.Validator;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
-
-import java.util.*;
-
-import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Definition of the <code>LastPeriods</code> MDX function.

@@ -11,7 +11,9 @@
 
 package mondrian.rolap.cache;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * An implementation of {@link SmartCache} that uses hard

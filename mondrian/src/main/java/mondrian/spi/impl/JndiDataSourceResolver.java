@@ -9,11 +9,11 @@
 
 package mondrian.spi.impl;
 
-import mondrian.spi.DataSourceResolver;
-
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
+import mondrian.spi.DataSourceResolver;
 
 /**
  * Implementation of {@link mondrian.spi.DataSourceResolver} that looks up

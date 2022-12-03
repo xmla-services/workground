@@ -10,22 +10,37 @@
 
 package mondrian.olap4j;
 
-import mondrian.calc.ResultStyle;
-import mondrian.olap.*;
-import mondrian.rolap.RolapConnection;
-import mondrian.server.*;
-import mondrian.util.Pair;
-
-import org.eclipse.daanse.olap.api.OlapElement;
-import org.olap4j.*;
-import org.olap4j.layout.RectangularCellSetFormatter;
-import org.olap4j.mdx.*;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLWarning;
 import java.util.Collections;
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.OlapElement;
+import org.olap4j.CellSet;
+import org.olap4j.CellSetListener;
+import org.olap4j.OlapConnection;
+import org.olap4j.OlapException;
+import org.olap4j.OlapStatement;
+import org.olap4j.mdx.ParseTreeNode;
+import org.olap4j.mdx.ParseTreeWriter;
+import org.olap4j.mdx.SelectNode;
+
+import mondrian.calc.ResultStyle;
+import mondrian.olap.DrillThrough;
+import mondrian.olap.Explain;
+import mondrian.olap.MondrianException;
+import mondrian.olap.Query;
+import mondrian.olap.QueryCanceledException;
+import mondrian.olap.QueryPart;
+import mondrian.olap.QueryTimeoutException;
+import mondrian.rolap.RolapConnection;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.server.StatementImpl;
+import mondrian.util.Pair;
 
 /**
  * Implementation of {@link org.olap4j.OlapStatement}

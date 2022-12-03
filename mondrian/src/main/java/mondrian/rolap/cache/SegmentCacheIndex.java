@@ -9,17 +9,19 @@
 */
 package mondrian.rolap.cache;
 
-import mondrian.rolap.BitKey;
-import mondrian.rolap.agg.SegmentBuilder;
-import mondrian.server.Execution;
-import mondrian.spi.*;
-import mondrian.util.ByteString;
-
 import java.io.PrintWriter;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
+
+import mondrian.rolap.BitKey;
+import mondrian.rolap.agg.SegmentBuilder;
+import mondrian.server.Execution;
+import mondrian.spi.SegmentBody;
+import mondrian.spi.SegmentColumn;
+import mondrian.spi.SegmentHeader;
+import mondrian.util.ByteString;
 
 /**
  * Data structure that identifies which segments contain cells.

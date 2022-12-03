@@ -11,12 +11,6 @@
 
 package mondrian.rolap.aggmatcher;
 
-import mondrian.recorder.MessageRecorder;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.*;
-import mondrian.rolap.aggmatcher.JdbcSchema.Table.Column;
-import mondrian.util.Pair;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -25,6 +19,14 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
+
+import mondrian.recorder.MessageRecorder;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.HierarchyUsage;
+import mondrian.rolap.RolapLevel;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.aggmatcher.JdbcSchema.Table.Column;
+import mondrian.util.Pair;
 
 /**
  * This is the default Recognizer. It uses the rules found in the file

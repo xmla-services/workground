@@ -9,24 +9,29 @@
 
 package mondrian.xmla.impl;
 
-import mondrian.olap.Util;
-import mondrian.xmla.XmlaHandler;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Properties;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbcp.DelegatingConnection;
-
+import org.olap4j.OlapConnection;
+import org.olap4j.OlapWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapWrapper;
-
-import java.lang.reflect.*;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.*;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
+import mondrian.olap.Util;
+import mondrian.xmla.XmlaHandler;
 
 /**
  * XMLA servlet that gets its connections from an olap4j data source.

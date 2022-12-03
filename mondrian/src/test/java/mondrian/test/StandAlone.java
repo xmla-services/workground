@@ -11,11 +11,14 @@
 
 package mondrian.test;
 
-import mondrian.olap.*;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.StringTokenizer;
 
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Dimension;
@@ -23,6 +26,16 @@ import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.Schema;
+
+import mondrian.olap.Axis;
+import mondrian.olap.Cell;
+import mondrian.olap.Connection;
+import mondrian.olap.DimensionType;
+import mondrian.olap.DriverManager;
+import mondrian.olap.Position;
+import mondrian.olap.Property;
+import mondrian.olap.Query;
+import mondrian.olap.Result;
 
 public class StandAlone {
     private static final String[] indents = new String[]{

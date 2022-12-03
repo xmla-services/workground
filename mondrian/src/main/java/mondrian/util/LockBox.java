@@ -9,7 +9,9 @@
 
 package mondrian.util;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Random;
+import java.util.WeakHashMap;
 
 /**
  * Provides a way to pass objects via a string moniker.

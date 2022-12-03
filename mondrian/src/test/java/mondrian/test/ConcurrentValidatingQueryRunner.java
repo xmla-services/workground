@@ -11,16 +11,19 @@
 
 package mondrian.test;
 
-import mondrian.olap.*;
+import java.io.PrintStream;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Member;
 import org.opencube.junit5.TestUtil;
 
-import java.io.PrintStream;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
+import mondrian.olap.CacheControl;
+import mondrian.olap.Connection;
+import mondrian.olap.Id;
+import mondrian.olap.SchemaReader;
 
 
 

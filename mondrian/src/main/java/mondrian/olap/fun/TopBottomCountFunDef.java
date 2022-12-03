@@ -11,6 +11,14 @@
 
 package mondrian.olap.fun;
 
+import static mondrian.olap.fun.sort.Sorter.partiallySortTuples;
+
+import java.util.AbstractList;
+import java.util.List;
+
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.IntegerCalc;
@@ -28,14 +36,6 @@ import mondrian.olap.FunDef;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.fun.sort.Sorter;
-
-import java.util.AbstractList;
-import java.util.List;
-
-import org.eclipse.daanse.olap.api.Hierarchy;
-import org.eclipse.daanse.olap.api.Member;
-
-import static mondrian.olap.fun.sort.Sorter.partiallySortTuples;
 
 /**
  * Definition of the <code>TopCount</code> and <code>BottomCount</code> MDX builtin functions.

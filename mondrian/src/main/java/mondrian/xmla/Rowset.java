@@ -11,18 +11,24 @@
 
 package mondrian.xmla;
 
-import mondrian.olap.Util;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.olap4j.OlapConnection;
 import org.olap4j.metadata.Catalog;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.sql.SQLException;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import mondrian.olap.Util;
 
 /**
  * Base class for an XML for Analysis schema rowset. A concrete derived class

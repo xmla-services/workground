@@ -8,14 +8,25 @@
 */
 package mondrian.olap.fun;
 
-import mondrian.mdx.*;
-import mondrian.olap.*;
-import mondrian.olap.type.Type;
-
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.mdx.DimensionExpr;
+import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.LevelExpr;
+import mondrian.mdx.MdxVisitorImpl;
+import mondrian.mdx.MemberExpr;
+import mondrian.mdx.ParameterExpr;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Exp;
+import mondrian.olap.Parameter;
+import mondrian.olap.type.Type;
 
 /**
  * Visitor which collects any non-measure base members encountered while

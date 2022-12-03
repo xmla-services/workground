@@ -9,10 +9,18 @@
 
 package mondrian.rolap;
 
-import mondrian.calc.ResultStyle;
-import mondrian.olap.*;
-import mondrian.test.PropertySaver5;
-import mondrian.util.Bug;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.lang.ref.SoftReference;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -26,13 +34,14 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.opencube.junit5.TestUtil.executeQuery;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.calc.ResultStyle;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Position;
+import mondrian.olap.Query;
+import mondrian.olap.Result;
+import mondrian.test.PropertySaver5;
+import mondrian.util.Bug;
 
 /**
  * Unit-test for non cacheable elementos of high dimensions.

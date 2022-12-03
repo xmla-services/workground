@@ -10,16 +10,21 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.rolap.agg.AggregationManager;
-import mondrian.rolap.agg.CellRequest;
-import mondrian.rolap.agg.ValueColumnPredicate;
-import mondrian.rolap.aggmatcher.AggStar;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.server.Statement;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.flushSchemaCache;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Cube;
@@ -37,16 +42,19 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Result;
+import mondrian.olap.Util;
+import mondrian.rolap.agg.AggregationManager;
+import mondrian.rolap.agg.CellRequest;
+import mondrian.rolap.agg.ValueColumnPredicate;
+import mondrian.rolap.aggmatcher.AggStar;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.server.Statement;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
 
 /**
  * Unit test for {@link AggregationManager}.

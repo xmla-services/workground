@@ -9,10 +9,12 @@
 
 package mondrian.spi;
 
-import mondrian.rolap.CellKey;
-
 import java.io.Serializable;
-import java.util.*;
+import java.util.BitSet;
+import java.util.Map;
+import java.util.SortedSet;
+
+import mondrian.rolap.CellKey;
 
 /**
  * SegmentBody is the object which contains the cached data of a

@@ -9,15 +9,15 @@
 
 package mondrian.test;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
+import static org.opencube.junit5.TestUtil.executeQuery;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
-import static org.opencube.junit5.TestUtil.executeQuery;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Those performance tests use the steel wheels schema

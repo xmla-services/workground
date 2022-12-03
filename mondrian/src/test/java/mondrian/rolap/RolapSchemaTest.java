@@ -8,13 +8,26 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapSchema.RolapStarRegistry;
-import mondrian.rolap.agg.AggregationManager;
-import mondrian.rolap.agg.SegmentCacheManager;
-import mondrian.test.PropertySaver5;
-import mondrian.util.ByteString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
+import static org.mockito.ArgumentMatchers.anyList;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
@@ -29,11 +42,20 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import mondrian.olap.Access;
+import mondrian.olap.Category;
+import mondrian.olap.MondrianDef;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianServer;
+import mondrian.olap.Role;
+import mondrian.olap.RoleImpl;
+import mondrian.olap.SchemaReader;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapSchema.RolapStarRegistry;
+import mondrian.rolap.agg.AggregationManager;
+import mondrian.rolap.agg.SegmentCacheManager;
+import mondrian.test.PropertySaver5;
+import mondrian.util.ByteString;
 
 /**
  * @author Andrey Khayrutdinov

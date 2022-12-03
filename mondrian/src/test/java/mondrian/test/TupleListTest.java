@@ -9,12 +9,19 @@
 */
 package mondrian.test;
 
-import mondrian.calc.TupleCollections;
-import mondrian.calc.TupleList;
-import mondrian.calc.impl.*;
-import mondrian.olap.*;
-import mondrian.rolap.RolapConnection;
-import mondrian.server.Locus;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertIterableEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Cube;
 import org.eclipse.daanse.olap.api.Member;
@@ -26,10 +33,16 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.*;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.ArrayTupleList;
+import mondrian.calc.impl.DelegatingTupleList;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.olap.Connection;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapConnection;
+import mondrian.server.Locus;
 
 /**
  * Unit test for {@link TupleList} and common implementations.

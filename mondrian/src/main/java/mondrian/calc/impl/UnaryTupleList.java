@@ -9,12 +9,20 @@
 
 package mondrian.calc.impl;
 
-import mondrian.calc.*;
-import mondrian.olap.Evaluator;
-
-import java.util.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.TupleCursor;
+import mondrian.calc.TupleIterator;
+import mondrian.calc.TupleList;
+import mondrian.olap.Evaluator;
 
 /**
  * Implementation of {@link TupleList} where the tuples are unary (each tuple

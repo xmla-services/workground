@@ -8,10 +8,19 @@
 */
 package mondrian.test;
 
-import mondrian.olap.*;
-import mondrian.rolap.*;
-import mondrian.spi.impl.FilterDynamicSchemaProcessor;
-import mondrian.util.Bug;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.opencube.junit5.TestUtil.assertAxisReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.assertQueryThrows;
+import static org.opencube.junit5.TestUtil.databaseIsValid;
+import static org.opencube.junit5.TestUtil.executeQuery;
+import static org.opencube.junit5.TestUtil.getRawSchema;
+import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.io.InputStream;
+import java.util.Arrays;
 
 import org.eclipse.daanse.olap.api.Schema;
 import org.junit.jupiter.api.AfterEach;
@@ -25,12 +34,16 @@ import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
 
-import java.io.InputStream;
-import java.util.Arrays;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.*;
+import mondrian.olap.Cell;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Result;
+import mondrian.olap.Role;
+import mondrian.olap.RoleImpl;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.spi.impl.FilterDynamicSchemaProcessor;
+import mondrian.util.Bug;
 
 public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
 

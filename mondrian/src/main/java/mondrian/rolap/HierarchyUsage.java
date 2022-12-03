@@ -13,15 +13,17 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.*;
-import mondrian.resource.MondrianResource;
+import java.util.Objects;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
+import mondrian.olap.MondrianDef;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.resource.MondrianResource;
 
 /**
  * A <code>HierarchyUsage</code> is the usage of a hierarchy in the context

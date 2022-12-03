@@ -9,8 +9,6 @@
 
 package mondrian.util;
 
-import mondrian.olap.Util;
-
 import java.util.Iterator;
 import java.util.Objects;
 

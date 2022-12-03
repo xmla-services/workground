@@ -11,14 +11,15 @@
 
 package mondrian.olap.type;
 
-import mondrian.olap.*;
-import mondrian.resource.MondrianResource;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
+
+import mondrian.resource.MondrianResource;
 
 /**
  * Tuple type.

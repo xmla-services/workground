@@ -9,22 +9,27 @@
 */
 package mondrian.xmla;
 
-import mondrian.olap.Connection;
-import mondrian.olap.MondrianServer;
-import mondrian.server.Session;
-import mondrian.olap.Role;
-import mondrian.olap.Util;
-import mondrian.olap.Util.PropertyList;
-import mondrian.olap4j.MondrianOlap4jDriver;
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapConnectionProperties;
-import mondrian.test.DiffRepository;
-import mondrian.tui.MockHttpServletRequest;
-import mondrian.tui.MockHttpServletResponse;
-import mondrian.tui.XmlUtil;
-import mondrian.tui.XmlaSupport;
-import mondrian.util.LockBox;
-import mondrian.xmla.test.XmlaTestContext;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.upgradeActual;
+import static org.opencube.junit5.TestUtil.upgradeQuery;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.regex.Pattern;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.olap4j.driver.xmla.XmlaOlap4jDriver;
 import org.olap4j.metadata.XmlaConstants;
 import org.opencube.junit5.context.TestingContext;
@@ -36,20 +41,22 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xmlunit.assertj3.XmlAssert;
 
-import javax.servlet.Servlet;
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.regex.Pattern;
-
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.upgradeActual;
-import static org.opencube.junit5.TestUtil.upgradeQuery;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianServer;
+import mondrian.olap.Role;
+import mondrian.olap.Util;
+import mondrian.olap.Util.PropertyList;
+import mondrian.olap4j.MondrianOlap4jDriver;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.server.Session;
+import mondrian.test.DiffRepository;
+import mondrian.tui.MockHttpServletRequest;
+import mondrian.tui.MockHttpServletResponse;
+import mondrian.tui.XmlUtil;
+import mondrian.tui.XmlaSupport;
+import mondrian.util.LockBox;
+import mondrian.xmla.test.XmlaTestContext;
 
 /**
  * Extends FoodMartTestCase, adding support for testing XMLA specific

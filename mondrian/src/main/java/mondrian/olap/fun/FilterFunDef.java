@@ -10,18 +10,33 @@
 */
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.*;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.util.CancellationChecker;
-
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.BooleanCalc;
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.IterCalc;
+import mondrian.calc.ListCalc;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleCursor;
+import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractIterCalc;
+import mondrian.calc.impl.AbstractListCalc;
+import mondrian.calc.impl.AbstractTupleCursor;
+import mondrian.calc.impl.AbstractTupleIterable;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.NativeEvaluator;
+import mondrian.olap.ResultStyleException;
+import mondrian.olap.SchemaReader;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.util.CancellationChecker;
 
 /**
  * Definition of the <code>Filter</code> MDX function.

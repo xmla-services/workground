@@ -11,11 +11,19 @@
 
 package mondrian.test.loader;
 
-import org.eclipse.daanse.engine.api.Context;
-
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.Reader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
 import java.util.regex.Pattern;
+
+import org.eclipse.daanse.engine.api.Context;
 
 /**
  * Implementation of {@link DBLoader} which gets its Tables by reading CSV files

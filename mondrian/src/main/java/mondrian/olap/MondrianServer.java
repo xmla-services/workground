@@ -11,18 +11,22 @@
 
 package mondrian.olap;
 
-import mondrian.rolap.RolapConnection;
-import mondrian.rolap.RolapResultShepherd;
-import mondrian.rolap.agg.AggregationManager;
-import mondrian.server.*;
-import mondrian.server.monitor.Monitor;
-import mondrian.spi.CatalogLocator;
-import mondrian.util.LockBox;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 import org.olap4j.OlapConnection;
 
-import java.sql.SQLException;
-import java.util.*;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapResultShepherd;
+import mondrian.rolap.agg.AggregationManager;
+import mondrian.server.MondrianServerRegistry;
+import mondrian.server.RepositoryContentFinder;
+import mondrian.server.Statement;
+import mondrian.server.monitor.Monitor;
+import mondrian.spi.CatalogLocator;
+import mondrian.util.LockBox;
 
 /**
  * Interface by which to control an instance of Mondrian.

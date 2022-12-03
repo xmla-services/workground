@@ -9,9 +9,9 @@
 
 package mondrian.calc;
 
-import mondrian.olap.Evaluator;
-
 import java.util.Date;
+
+import mondrian.olap.Evaluator;
 
 /**
  * Compiled expression whose result is a {@link Date}, representing an MDX

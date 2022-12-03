@@ -9,19 +9,29 @@
 */
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.GenericCalc;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
-import mondrian.olap.type.TypeUtil;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.*;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.MemberCalc;
+import mondrian.calc.TupleCalc;
+import mondrian.calc.impl.GenericCalc;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.type.TypeUtil;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapVirtualCubeMeasure;
 
 /**
  * Definition of the <code>ValidMeasure</code> MDX function.

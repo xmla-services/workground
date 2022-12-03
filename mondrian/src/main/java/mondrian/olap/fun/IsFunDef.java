@@ -11,10 +11,14 @@ package mondrian.olap.fun;
 
 import org.eclipse.daanse.olap.api.Member;
 
-import mondrian.calc.*;
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.TupleCalc;
 import mondrian.calc.impl.AbstractBooleanCalc;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.*;
+import mondrian.olap.Category;
+import mondrian.olap.Evaluator;
+import mondrian.olap.FunDef;
 
 /**
  * Definition of the <code>IS</code> MDX function.

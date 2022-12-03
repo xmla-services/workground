@@ -11,23 +11,29 @@
 
 package mondrian.rolap.aggmatcher;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.recorder.*;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapStar;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.eigenbase.util.property.Property;
-import org.eigenbase.util.property.Trigger;
-import org.eigenbase.xom.*;
-
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
+import org.eigenbase.util.property.Property;
+import org.eigenbase.util.property.Trigger;
+import org.eigenbase.xom.DOMWrapper;
+import org.eigenbase.xom.Parser;
+import org.eigenbase.xom.XOMException;
+import org.eigenbase.xom.XOMUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mondrian.olap.MondrianProperties;
+import mondrian.recorder.ListRecorder;
+import mondrian.recorder.MessageRecorder;
+import mondrian.recorder.RecorderException;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapStar;
 
 /**
  * Container for the default aggregate recognition rules.

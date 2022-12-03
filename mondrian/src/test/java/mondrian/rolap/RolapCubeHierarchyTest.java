@@ -10,10 +10,12 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.MondrianDef;
-import mondrian.olap.MondrianDef.Relation;
-import mondrian.olap.MondrianDef.RelationOrJoin;
-import mondrian.olap.SchemaReader;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.mock;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+
+import javax.sql.DataSource;
 
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
@@ -24,12 +26,10 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import javax.sql.DataSource;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import mondrian.olap.MondrianDef;
+import mondrian.olap.MondrianDef.Relation;
+import mondrian.olap.MondrianDef.RelationOrJoin;
+import mondrian.olap.SchemaReader;
 
 public class RolapCubeHierarchyTest {
 

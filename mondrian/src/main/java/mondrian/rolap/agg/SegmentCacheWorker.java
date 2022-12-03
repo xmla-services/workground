@@ -9,16 +9,19 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.resource.MondrianResource;
-import mondrian.spi.*;
-import mondrian.util.ClassResolver;
-import mondrian.util.ServiceDiscovery;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import mondrian.olap.MondrianProperties;
+import mondrian.resource.MondrianResource;
+import mondrian.spi.SegmentBody;
+import mondrian.spi.SegmentCache;
+import mondrian.spi.SegmentHeader;
+import mondrian.util.ClassResolver;
+import mondrian.util.ServiceDiscovery;
 
 /**
  * Utility class to interact with the {@link SegmentCache}.

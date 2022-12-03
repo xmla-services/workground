@@ -9,7 +9,12 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.IntegerCalc;
+import mondrian.calc.ListCalc;
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleList;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.ConstantCalc;
 import mondrian.mdx.ResolvedFunCall;

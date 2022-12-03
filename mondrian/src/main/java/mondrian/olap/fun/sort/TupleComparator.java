@@ -14,13 +14,13 @@
 
 package mondrian.olap.fun.sort;
 
-import mondrian.calc.Calc;
-import mondrian.olap.Evaluator;
-
 import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.calc.Calc;
+import mondrian.olap.Evaluator;
 
 /**
  * Compares tuples, which are represented as lists of {@link Member}s.

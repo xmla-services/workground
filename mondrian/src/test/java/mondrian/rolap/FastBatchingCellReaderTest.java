@@ -8,20 +8,26 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.Connection;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.MondrianServer;
-import mondrian.rolap.agg.*;
-import mondrian.server.Execution;
-import mondrian.server.Locus;
-import mondrian.server.Statement;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
+
+import java.lang.reflect.Proxy;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Future;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
-import mondrian.util.Bug;
-import mondrian.util.DelegatingInvocationHandler;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,18 +38,21 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.lang.reflect.Proxy;
-import java.util.*;
-import java.util.concurrent.Future;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.MondrianServer;
+import mondrian.rolap.agg.AggregationKey;
+import mondrian.rolap.agg.AggregationManager;
+import mondrian.rolap.agg.Segment;
+import mondrian.rolap.agg.SegmentCacheManager;
+import mondrian.rolap.agg.SegmentWithData;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.server.Statement;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
+import mondrian.util.Bug;
+import mondrian.util.DelegatingInvocationHandler;
 
 /**
  * Test for <code>FastBatchingCellReader</code>.

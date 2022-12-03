@@ -11,16 +11,28 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.olap.*;
-import mondrian.olap.Connection;
-import mondrian.rolap.*;
-import mondrian.server.*;
-import mondrian.server.Statement;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.PrintWriter;
+import java.lang.reflect.Proxy;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
-import mondrian.util.DelegatingInvocationHandler;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -31,16 +43,22 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.io.PrintWriter;
-import java.lang.reflect.Proxy;
-import java.sql.*;
-import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
+import mondrian.rolap.BatchTestCase;
+import mondrian.rolap.BitKey;
+import mondrian.rolap.CellKey;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.SqlStatement;
+import mondrian.rolap.StarPredicate;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.server.Statement;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
+import mondrian.util.DelegatingInvocationHandler;
 
 /**
  * <p>Test for <code>SegmentLoader</code></p>

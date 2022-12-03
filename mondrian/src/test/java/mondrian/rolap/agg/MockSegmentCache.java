@@ -9,12 +9,24 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.olap.Util;
-import mondrian.spi.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.NotSerializableException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.*;
+import mondrian.olap.Util;
+import mondrian.spi.SegmentBody;
+import mondrian.spi.SegmentCache;
+import mondrian.spi.SegmentHeader;
 
 /**
  * Mock implementation of {@link SegmentCache} that is used for automated

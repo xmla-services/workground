@@ -9,15 +9,20 @@
 
 package mondrian.test;
 
-import mondrian.olap.Connection;
-import mondrian.tui.CmdRunner;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.io.*;
+import mondrian.olap.Connection;
+import mondrian.tui.CmdRunner;
 
 /**
  * Unit test for {@link CmdRunner}.

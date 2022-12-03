@@ -13,10 +13,10 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.rolap.CellKey;
-
 import java.util.Iterator;
 import java.util.Map;
+
+import mondrian.rolap.CellKey;
 
 /**
  * A <code>DenseSegmentDataset</code> is a means of storing segment values

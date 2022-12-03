@@ -11,13 +11,15 @@
 
 package mondrian.olap;
 
-import mondrian.mdx.MdxVisitor;
-import mondrian.olap.type.Type;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import org.olap4j.impl.UnmodifiableArrayList;
 
-import java.io.PrintWriter;
-import java.util.*;
+import mondrian.mdx.MdxVisitor;
+import mondrian.olap.type.Type;
 
 /**
  * Multi-part identifier.

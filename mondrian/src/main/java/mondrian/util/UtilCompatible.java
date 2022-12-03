@@ -9,13 +9,13 @@
 
 package mondrian.util;
 
-import mondrian.olap.Util;
-
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.sql.Statement;
 import java.util.Set;
 import java.util.Timer;
+
+import mondrian.olap.Util;
 
 /**
  * Interface containing methods which are implemented differently in different

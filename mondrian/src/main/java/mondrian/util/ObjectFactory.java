@@ -9,10 +9,12 @@
 
 package mondrian.util;
 
-import org.eigenbase.util.property.StringProperty;
-
-import java.lang.reflect.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
 import java.util.Properties;
+
+import org.eigenbase.util.property.StringProperty;
 
 /**
  * Concrete derived classes of the generic <code>ObjectFactory</code> class

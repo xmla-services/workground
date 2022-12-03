@@ -11,13 +11,15 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.Connection;
-import mondrian.olap.MondrianProperties;
-import mondrian.rolap.agg.CellRequest;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.getDialect;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import mondrian.test.PropertySaver5;
-import mondrian.test.SqlPattern;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -27,12 +29,11 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.getDialect;
+import mondrian.olap.Connection;
+import mondrian.olap.MondrianProperties;
+import mondrian.rolap.agg.CellRequest;
+import mondrian.test.PropertySaver5;
+import mondrian.test.SqlPattern;
 
 /**
  * Test support for generating SQL queries with the <code>GROUPING SETS</code>

@@ -12,13 +12,11 @@
 
 package mondrian.olap;
 
-import mondrian.mdx.*;
-import mondrian.olap.type.*;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.RolapCalculatedMember;
-
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
@@ -26,6 +24,16 @@ import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.NamedSet;
 import org.eclipse.daanse.olap.api.OlapElement;
+
+import mondrian.mdx.MdxVisitor;
+import mondrian.mdx.MdxVisitorImpl;
+import mondrian.mdx.MemberExpr;
+import mondrian.olap.type.DecimalType;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapCalculatedMember;
 
 /**
  * A <code>Formula</code> is a clause in an MDX query which defines a Set or a

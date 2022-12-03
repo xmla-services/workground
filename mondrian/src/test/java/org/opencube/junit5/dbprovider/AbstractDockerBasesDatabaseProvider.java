@@ -33,6 +33,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import org.eclipse.daanse.engine.api.Context;
+
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.PullImageResultCallback;
@@ -46,7 +48,6 @@ import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
 
 import mondrian.olap.Util.PropertyList;
 import mondrian.rolap.RolapSchemaPool;
-import org.eclipse.daanse.engine.api.Context;
 
 public abstract class AbstractDockerBasesDatabaseProvider implements DatabaseProvider{
 

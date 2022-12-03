@@ -11,16 +11,23 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.olap.*;
-import mondrian.rolap.*;
-import mondrian.rolap.RolapStar.Column;
-import mondrian.rolap.RolapStar.Measure;
-import mondrian.rolap.sql.SqlQuery;
-import mondrian.util.Pair;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.olap.api.OlapElement;
 
-import java.util.*;
+import mondrian.olap.MondrianDef;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.RolapStar.Column;
+import mondrian.rolap.StarColumnPredicate;
+import mondrian.rolap.StarPredicate;
+import mondrian.rolap.sql.SqlQuery;
+import mondrian.util.Pair;
 
 /**
  * Provides the information necessary to generate SQL for a drill-through

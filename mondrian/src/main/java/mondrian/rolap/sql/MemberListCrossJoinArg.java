@@ -11,12 +11,16 @@
 
 package mondrian.rolap.sql;
 
-import mondrian.olap.MondrianProperties;
-import mondrian.rolap.*;
-import mondrian.rolap.aggmatcher.AggStar;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import mondrian.olap.MondrianProperties;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapEvaluator;
+import mondrian.rolap.RolapLevel;
+import mondrian.rolap.RolapMember;
+import mondrian.rolap.SqlConstraintUtils;
+import mondrian.rolap.aggmatcher.AggStar;
 
 /**
  * Represents an enumeration {member1, member2, ...}.

@@ -18,18 +18,19 @@
  */
 package org.opencube.junit5.dbprovider;
 
-import mondrian.olap.Util.PropertyList;
-import mondrian.rolap.RolapConnectionProperties;
-import org.eclipse.daanse.engine.api.Context;
-import org.opencube.junit5.context.SQLLiteContext;
-import org.sqlite.SQLiteConfig;
-import org.sqlite.SQLiteDataSource;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.AbstractMap;
 import java.util.Map.Entry;
+
+import org.eclipse.daanse.engine.api.Context;
+import org.opencube.junit5.context.SQLLiteContext;
+import org.sqlite.SQLiteConfig;
+import org.sqlite.SQLiteDataSource;
+
+import mondrian.olap.Util.PropertyList;
+import mondrian.rolap.RolapConnectionProperties;
 
 //@ServiceProvider(value = DatabaseProvider.class)
 public class SQLiteDatabaseProvider implements DatabaseProvider {

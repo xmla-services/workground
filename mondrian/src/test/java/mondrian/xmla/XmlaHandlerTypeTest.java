@@ -9,8 +9,16 @@
 
 package mondrian.xmla;
 
-import mondrian.olap.Result;
-import mondrian.rolap.RolapCube;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.opencube.junit5.TestUtil.executeOlap4jQuery;
+import static org.opencube.junit5.TestUtil.executeOlap4jXmlaQuery;
+import static org.opencube.junit5.TestUtil.executeQuery;
+
+import java.math.BigInteger;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.junit.jupiter.api.Test;
@@ -23,15 +31,8 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import java.math.BigInteger;
-import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.opencube.junit5.TestUtil.executeOlap4jQuery;
-import static org.opencube.junit5.TestUtil.executeOlap4jXmlaQuery;
-import static org.opencube.junit5.TestUtil.executeQuery;
+import mondrian.olap.Result;
+import mondrian.rolap.RolapCube;
 
 /**
  * Unit test to validate expected marshalling of Java objects

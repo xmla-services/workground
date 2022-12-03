@@ -12,17 +12,25 @@
 
 package mondrian.xmla.impl;
 
-import mondrian.olap.Util;
-import mondrian.xmla.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.olap4j.metadata.XmlaConstants.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
-import org.w3c.dom.*;
-
-import java.util.*;
-
-import static org.olap4j.metadata.XmlaConstants.Method;
+import mondrian.olap.Util;
+import mondrian.xmla.ServerObject;
+import mondrian.xmla.XmlaConstants;
+import mondrian.xmla.XmlaException;
+import mondrian.xmla.XmlaRequest;
+import mondrian.xmla.XmlaUtil;
 
 /**
  * Default implementation of {@link mondrian.xmla.XmlaRequest} by DOM API.

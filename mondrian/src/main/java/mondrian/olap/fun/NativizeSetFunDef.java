@@ -9,26 +9,66 @@
 
 package mondrian.olap.fun;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.AbstractListCalc;
-import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.mdx.*;
-import mondrian.olap.*;
-import mondrian.olap.type.Type;
-import mondrian.resource.MondrianResource;
+import static mondrian.olap.fun.NativizeSetFunDef.NativeElementType.ENUMERATED_VALUE;
+import static mondrian.olap.fun.NativizeSetFunDef.NativeElementType.LEVEL_MEMBERS;
+import static mondrian.olap.fun.NativizeSetFunDef.NativeElementType.NON_NATIVE;
+import static mondrian.olap.fun.NativizeSetFunDef.NativeElementType.OTHER_NATIVE;
+import static mondrian.olap.fun.NativizeSetFunDef.NativeElementType.SENTINEL;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Set;
+
 import org.eclipse.daanse.olap.api.Dimension;
 import org.eclipse.daanse.olap.api.Hierarchy;
 import org.eclipse.daanse.olap.api.Level;
 import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.impl.Olap4jUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.*;
-
-import static mondrian.olap.fun.NativizeSetFunDef.NativeElementType.*;
+import mondrian.calc.Calc;
+import mondrian.calc.CalcWriter;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.IterCalc;
+import mondrian.calc.ListCalc;
+import mondrian.calc.ResultStyle;
+import mondrian.calc.TupleCollections;
+import mondrian.calc.TupleIterable;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractListCalc;
+import mondrian.calc.impl.DelegatingTupleList;
+import mondrian.mdx.LevelExpr;
+import mondrian.mdx.MdxVisitorImpl;
+import mondrian.mdx.MemberExpr;
+import mondrian.mdx.NamedSetExpr;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.UnresolvedFunCall;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.Formula;
+import mondrian.olap.FunDef;
+import mondrian.olap.Id;
+import mondrian.olap.MemberProperty;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Query;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
+import mondrian.olap.type.Type;
+import mondrian.resource.MondrianResource;
 
 /**
  * Definition of the <code>NativizeSet</code> MDX function.

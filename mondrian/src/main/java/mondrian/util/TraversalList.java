@@ -9,10 +9,13 @@
 
 package mondrian.util;
 
-import mondrian.olap.Util;
-
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+
+import mondrian.olap.Util;
 
 /**
  * Implementation of {@link java.util.List} for transposing an array of

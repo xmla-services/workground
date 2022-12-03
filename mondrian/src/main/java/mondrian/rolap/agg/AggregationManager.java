@@ -12,20 +12,35 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.olap.*;
-import mondrian.rolap.*;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.BitSet;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.olap.api.OlapElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mondrian.olap.CacheControl;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.MondrianServer;
+import mondrian.olap.Util;
+import mondrian.rolap.BitKey;
+import mondrian.rolap.CacheControlImpl;
+import mondrian.rolap.GroupingSetsCollector;
+import mondrian.rolap.RolapAggregationManager;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.StarColumnPredicate;
+import mondrian.rolap.StarPredicate;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.server.Locus;
 import mondrian.util.Pair;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.olap.api.OlapElement;
-
-import java.io.PrintWriter;
-import java.util.*;
-import java.util.concurrent.*;
 
 /**
  * <code>RolapAggregationManager</code> manages all {@link Aggregation}s

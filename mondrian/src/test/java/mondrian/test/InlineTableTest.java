@@ -9,7 +9,10 @@
 
 package mondrian.test;
 
-import mondrian.olap.MondrianProperties;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
+import static org.opencube.junit5.TestUtil.getDialect;
+import static org.opencube.junit5.TestUtil.withSchema;
+
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -19,9 +22,7 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-import static org.opencube.junit5.TestUtil.getDialect;
-import static org.opencube.junit5.TestUtil.withSchema;
+import mondrian.olap.MondrianProperties;
 
 /**
  * Unit test for the InlineTable element, defining tables whose values are held

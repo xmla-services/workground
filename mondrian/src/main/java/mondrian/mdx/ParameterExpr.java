@@ -9,12 +9,22 @@
 
 package mondrian.mdx;
 
-import mondrian.calc.*;
-import mondrian.olap.*;
-import mondrian.olap.type.*;
-
 import java.io.PrintWriter;
 import java.util.List;
+
+import mondrian.calc.Calc;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ParameterCompilable;
+import mondrian.olap.Category;
+import mondrian.olap.Exp;
+import mondrian.olap.ExpBase;
+import mondrian.olap.Parameter;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
 
 /**
  * MDX expression which is a usage of a {@link mondrian.olap.Parameter}.

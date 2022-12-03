@@ -21,6 +21,8 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.engine.api.Context;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,8 +33,6 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.server.StatementImpl;
 import mondrian.server.monitor.Monitor;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.engine.api.Context;
 
 /**
  * @author Andrey Khayrutdinov

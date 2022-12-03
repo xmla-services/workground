@@ -11,18 +11,27 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+
+import mondrian.olap.Access;
+import mondrian.olap.Formula;
+import mondrian.olap.MondrianDef;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Util;
 import mondrian.olap.fun.VisualTotalsFunDef;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
 import mondrian.util.UnsupportedList;
-
-import java.sql.SQLException;
-import java.util.*;
-
-import org.eclipse.daanse.olap.api.Level;
-import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Hierarchy that is associated with a specific Cube.

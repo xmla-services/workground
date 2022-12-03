@@ -9,11 +9,20 @@
 
 package mondrian.rolap.agg;
 
-import mondrian.olap.Util;
-import mondrian.rolap.*;
-import mondrian.rolap.sql.SqlQuery;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
-import java.util.*;
+import mondrian.olap.Util;
+import mondrian.rolap.RolapStar;
+import mondrian.rolap.RolapUtil;
+import mondrian.rolap.StarColumnPredicate;
+import mondrian.rolap.StarPredicate;
+import mondrian.rolap.sql.SqlQuery;
 
 /**
  * Predicate which is the union of a list of predicates, each of which applies

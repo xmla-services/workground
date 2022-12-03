@@ -9,11 +9,13 @@
 
 package mondrian.olap4j;
 
-import mondrian.olap.Property;
-import mondrian.rolap.*;
-
 import org.olap4j.metadata.Datatype;
 import org.olap4j.metadata.Measure;
+
+import mondrian.olap.Property;
+import mondrian.rolap.RolapAggregator;
+import mondrian.rolap.RolapMeasure;
+import mondrian.rolap.RolapStoredMeasure;
 
 /**
  * Implementation of {@link org.olap4j.metadata.Measure}

@@ -11,8 +11,8 @@
 
 package mondrian.rolap;
 
+import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
-import mondrian.olap.*;
 
 /**
  * The 'All' member of a {@link mondrian.rolap.RolapCubeHierarchy}.
