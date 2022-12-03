@@ -21,6 +21,12 @@ import mondrian.server.*;
 import mondrian.server.monitor.SqlStatementEvent;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.Schema;
 import org.slf4j.Logger;
 
 import org.olap4j.AllocationPolicy;

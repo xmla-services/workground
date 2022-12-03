@@ -9,6 +9,8 @@
 
 package mondrian.calc.impl;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+
 import mondrian.calc.Calc;
 import mondrian.olap.*;
 

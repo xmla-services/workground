@@ -22,6 +22,11 @@ import mondrian.rolap.RolapCube;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
+
 /**
  * Utilities for parsing fully-qualified member names, tuples, member lists,
  * and tuple lists.

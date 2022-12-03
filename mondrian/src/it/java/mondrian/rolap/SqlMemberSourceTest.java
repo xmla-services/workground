@@ -27,8 +27,8 @@ import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;
 import org.eigenbase.xom.XOMUtil;
 
-import mondrian.olap.Dimension;
-import mondrian.olap.Level;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Level;
 import mondrian.olap.MondrianDef;
 import mondrian.test.FoodMartTestCase;
 import mondrian.util.ByteString;

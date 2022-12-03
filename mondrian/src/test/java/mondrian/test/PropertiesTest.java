@@ -23,6 +23,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.opencube.junit5.TestUtil.executeQuery;
 import static org.opencube.junit5.TestUtil.withSchema;
 
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Tests intrinsic member and cell properties as specified in OLE DB for OLAP
  * specification.

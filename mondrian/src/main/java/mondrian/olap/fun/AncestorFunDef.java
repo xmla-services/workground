@@ -9,6 +9,9 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+
 import mondrian.calc.*;
 import mondrian.calc.impl.AbstractMemberCalc;
 import mondrian.mdx.ResolvedFunCall;

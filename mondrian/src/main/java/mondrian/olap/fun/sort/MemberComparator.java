@@ -16,9 +16,9 @@ package mondrian.olap.fun.sort;
 
 import mondrian.calc.Calc;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Member;
 import mondrian.olap.Util;
 
+import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

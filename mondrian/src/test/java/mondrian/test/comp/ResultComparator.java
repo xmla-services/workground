@@ -13,6 +13,9 @@ package mondrian.test.comp;
 
 import mondrian.olap.*;
 
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Member;
 import org.junit.jupiter.api.Test;
 import org.opencube.junit5.TestUtil;
 import org.w3c.dom.*;

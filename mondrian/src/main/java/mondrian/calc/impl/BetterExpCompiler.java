@@ -17,6 +17,8 @@ import mondrian.olap.type.*;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Enhanced expression compiler. It can generate code to convert between
  * scalar types.

@@ -19,6 +19,10 @@ import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.Type;
 import mondrian.rolap.*;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.NamedSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

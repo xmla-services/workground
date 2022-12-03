@@ -9,12 +9,13 @@
 
 package mondrian.olap.fun;
 
+import org.eclipse.daanse.olap.api.Dimension;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.impl.ConstantCalc;
 import mondrian.mdx.DimensionExpr;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.Dimension;
 import mondrian.olap.type.DimensionType;
 
 /**

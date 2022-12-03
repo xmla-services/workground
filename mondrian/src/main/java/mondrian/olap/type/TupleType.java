@@ -16,6 +16,10 @@ import mondrian.resource.MondrianResource;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+
 /**
  * Tuple type.
  *

@@ -11,7 +11,7 @@ package mondrian.test;
 
 import mondrian.olap.Axis;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Member;
+import org.eclipse.daanse.olap.api.Member;
 import mondrian.olap.Position;
 import mondrian.olap.Query;
 import mondrian.olap.Result;

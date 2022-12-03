@@ -20,6 +20,8 @@ import mondrian.rolap.RolapHierarchy;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Definition of the <code>LastPeriods</code> MDX function.
  *

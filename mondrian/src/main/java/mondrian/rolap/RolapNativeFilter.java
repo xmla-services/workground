@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Computes a Filter(set, condition) in SQL.

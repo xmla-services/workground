@@ -39,6 +39,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import javax.sql.DataSource;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * A <code>RolapStar</code> is a star schema. It is the means to read cell

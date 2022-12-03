@@ -16,6 +16,8 @@ import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.*;
 import mondrian.olap.type.ScalarType;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
 import org.olap4j.AllocationPolicy;
 import org.olap4j.Scenario;
 

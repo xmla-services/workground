@@ -13,13 +13,14 @@ package mondrian.rolap;
 
 import mondrian.olap.Access;
 import mondrian.olap.Id;
-import mondrian.olap.Member;
 import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
 
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * A <code>DelegatingMemberReader</code> is a {@link MemberReader} which

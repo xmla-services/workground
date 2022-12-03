@@ -24,21 +24,15 @@ import mondrian.mdx.LevelExpr;
 import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Access;
-import mondrian.olap.Annotation;
 import mondrian.olap.Category;
-import mondrian.olap.Dimension;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.ExpBase;
 import mondrian.olap.FunDef;
-import mondrian.olap.Hierarchy;
 import mondrian.olap.Id;
-import mondrian.olap.Level;
 import mondrian.olap.Literal;
 import mondrian.olap.MatchType;
-import mondrian.olap.Member;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.OlapElement;
 import mondrian.olap.Property;
 import mondrian.olap.Query;
 import mondrian.olap.ResultStyleException;
@@ -61,6 +55,12 @@ import mondrian.util.ConcatenableList;
 import mondrian.util.IdentifierParser;
 
 import java.util.*;
+
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
 
 import static mondrian.olap.fun.sort.Sorter.hierarchizeTupleList;
 
@@ -1717,7 +1717,7 @@ public class FunUtil extends Util {
   /**
    * Parses a tuple, of the form '(member, member, ...)'. There must be precisely one member for each hierarchy.
    *
-   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link mondrian.olap.Cube}
+   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.Cube}
    * @param string      String to parse
    * @param i           Position to start parsing in string
    * @param members     Output array of members
@@ -1746,7 +1746,7 @@ public class FunUtil extends Util {
   /**
    * Parses a tuple, such as "([Gender].[M], [Marital Status].[S])".
    *
-   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link mondrian.olap.Cube}
+   * @param evaluator   Evaluator, provides a {@link mondrian.olap.SchemaReader} and {@link org.eclipse.daanse.olap.api.Cube}
    * @param string      String to parse
    * @param hierarchies Hierarchies of the members
    * @return Tuple represented as array of members
@@ -2114,7 +2114,7 @@ public class FunUtil extends Util {
       throw new UnsupportedOperationException();
     }
 
-    public Map<String, Annotation> getAnnotationMap() {
+    public Map<String, Object> getMetadata() {
       throw new UnsupportedOperationException();
     }
 

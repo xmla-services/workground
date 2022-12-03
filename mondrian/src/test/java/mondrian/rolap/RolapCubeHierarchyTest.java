@@ -10,13 +10,13 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Level;
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianDef.Relation;
 import mondrian.olap.MondrianDef.RelationOrJoin;
 import mondrian.olap.SchemaReader;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;

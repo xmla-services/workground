@@ -17,6 +17,9 @@ import mondrian.olap.type.*;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Definition of the <code>Extract</code> MDX function.
  *

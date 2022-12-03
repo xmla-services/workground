@@ -15,6 +15,12 @@ import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.test.PropertySaver5;
 import mondrian.util.ByteString;
+
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;

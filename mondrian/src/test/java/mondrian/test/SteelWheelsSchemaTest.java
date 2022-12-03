@@ -13,6 +13,7 @@ import mondrian.rolap.*;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 import mondrian.util.Bug;
 
+import org.eclipse.daanse.olap.api.Schema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;

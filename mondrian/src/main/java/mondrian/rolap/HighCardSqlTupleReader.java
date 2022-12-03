@@ -13,7 +13,6 @@ package mondrian.rolap;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Member;
 import mondrian.olap.Query;
 import mondrian.olap.Util;
 import mondrian.rolap.sql.TupleConstraint;
@@ -23,6 +22,7 @@ import mondrian.util.Pair;
 import mondrian.util.TraversalList;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Member;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;

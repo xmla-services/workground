@@ -11,10 +11,13 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.*;
-
 import java.util.Collections;
 import java.util.Map;
+
+import mondrian.olap.Exp;
+import mondrian.olap.Formula;
+import mondrian.olap.Property;
+import mondrian.olap.Util;
 
 /**
  * A <code>RolapCalculatedMember</code> is a member based upon a
@@ -28,7 +31,7 @@ import java.util.Map;
  */
 public class RolapCalculatedMember extends RolapMemberBase {
     private final Formula formula;
-    private Map<String, Annotation> annotationMap;
+    private Map<String, Object> metadata;
     // source cube for a virtual member
     private RolapCube baseCube;
 
@@ -50,7 +53,7 @@ public class RolapCalculatedMember extends RolapMemberBase {
         // overrides MEASURE.
         super(parentMember, level, name, null, MemberType.FORMULA);
         this.formula = formula;
-        this.annotationMap = Collections.emptyMap();
+        this.metadata = Collections.emptyMap();
     }
 
     // override RolapMember
@@ -93,13 +96,13 @@ public class RolapCalculatedMember extends RolapMemberBase {
     }
 
     @Override
-    public Map<String, Annotation> getAnnotationMap() {
-        return annotationMap;
+    public Map<String, Object> getMetadata() {
+        return metadata;
     }
 
-    void setAnnotationMap(Map<String, Annotation> annotationMap) {
-        assert annotationMap != null;
-        this.annotationMap = annotationMap;
+    void setMetadata(Map<String, Object> metadata) {
+        assert metadata != null;
+        this.metadata = metadata;
     }
 
     public RolapCube getBaseCube() {

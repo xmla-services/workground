@@ -9,13 +9,13 @@
 package mondrian.rolap;
 
 import mondrian.olap.Access;
-import mondrian.olap.Cube;
-import mondrian.olap.Dimension;
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Level;
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
 import mondrian.olap.Role;
 import mondrian.olap.Role.HierarchyAccess;
-import mondrian.olap.Schema;
+import org.eclipse.daanse.olap.api.Schema;
 import mondrian.rolap.RestrictedMemberReader.MultiCardinalityDefaultMember;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.test.FoodMartTestCase;

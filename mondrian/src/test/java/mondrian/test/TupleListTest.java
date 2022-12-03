@@ -15,6 +15,10 @@ import mondrian.calc.impl.*;
 import mondrian.olap.*;
 import mondrian.rolap.RolapConnection;
 import mondrian.server.Locus;
+
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.Schema;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;

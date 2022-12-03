@@ -14,9 +14,9 @@
 
 package mondrian.olap.fun.sort;
 
-import mondrian.olap.Member;
-
 import java.util.Comparator;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Compares {@link Member}s so as to arrange them in prefix or postfix hierarchical order.

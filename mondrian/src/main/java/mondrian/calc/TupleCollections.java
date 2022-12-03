@@ -14,6 +14,8 @@ import mondrian.olap.*;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
 * Utility methods for tuple collections and iterators.
  *

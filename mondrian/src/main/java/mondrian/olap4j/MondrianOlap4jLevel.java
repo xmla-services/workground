@@ -13,6 +13,7 @@ import mondrian.olap.*;
 import mondrian.rolap.RolapConnection;
 import mondrian.server.Locus;
 
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.OlapException;
 import org.olap4j.impl.ArrayNamedListImpl;
 import org.olap4j.impl.Named;
@@ -37,7 +38,7 @@ class MondrianOlap4jLevel
     implements Level, Named
 {
     final MondrianOlap4jSchema olap4jSchema;
-    final mondrian.olap.Level level;
+    final org.eclipse.daanse.olap.api.Level level;
 
     /**
      * Creates a MondrianOlap4jLevel.
@@ -47,7 +48,7 @@ class MondrianOlap4jLevel
      */
     MondrianOlap4jLevel(
         MondrianOlap4jSchema olap4jSchema,
-        mondrian.olap.Level level)
+        org.eclipse.daanse.olap.api.Level level)
     {
         this.olap4jSchema = olap4jSchema;
         this.level = level;
@@ -166,7 +167,7 @@ class MondrianOlap4jLevel
                 public List<Member> execute() {
                     final mondrian.olap.SchemaReader schemaReader =
                         mondrianConnection.getSchemaReader().withLocus();
-                    final List<mondrian.olap.Member> levelMembers =
+                    final List<org.eclipse.daanse.olap.api.Member> levelMembers =
                         schemaReader.getLevelMembers(level, true);
                     return new AbstractList<Member>() {
                         public Member get(int index) {

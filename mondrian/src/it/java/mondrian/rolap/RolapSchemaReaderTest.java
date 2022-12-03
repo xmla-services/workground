@@ -115,8 +115,8 @@ public class RolapSchemaReaderTest extends FoodMartTestCase {
     }
 
     /**
-     * Test case for {@link SchemaReader#getCubeDimensions(mondrian.olap.Cube)}
-     * and {@link SchemaReader#getDimensionHierarchies(mondrian.olap.Dimension)}
+     * Test case for {@link SchemaReader#getCubeDimensions(org.eclipse.daanse.olap.api.Cube)}
+     * and {@link SchemaReader#getDimensionHierarchies(org.eclipse.daanse.olap.api.Dimension)}
      * methods.
      *
      * <p>Test case for bug

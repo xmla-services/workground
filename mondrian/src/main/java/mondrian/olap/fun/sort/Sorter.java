@@ -30,6 +30,8 @@ import java.util.PriorityQueue;
 
 import org.apache.commons.collections.ComparatorUtils;
 import org.apache.commons.collections.comparators.ComparatorChain;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -39,9 +41,7 @@ import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
-import mondrian.olap.Dimension;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Member;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.MemberOrderKeyFunDef;

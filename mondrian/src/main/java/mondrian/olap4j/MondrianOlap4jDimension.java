@@ -11,6 +11,7 @@ package mondrian.olap4j;
 
 import mondrian.olap.*;
 
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.OlapException;
 import org.olap4j.impl.*;
 import org.olap4j.metadata.Dimension;
@@ -29,11 +30,11 @@ class MondrianOlap4jDimension
     implements Dimension, Named
 {
     private final MondrianOlap4jSchema olap4jSchema;
-    private final mondrian.olap.Dimension dimension;
+    private final org.eclipse.daanse.olap.api.Dimension dimension;
 
     MondrianOlap4jDimension(
         MondrianOlap4jSchema olap4jSchema,
-        mondrian.olap.Dimension dimension)
+        org.eclipse.daanse.olap.api.Dimension dimension)
     {
         this.olap4jSchema = olap4jSchema;
         this.dimension = dimension;
@@ -56,7 +57,7 @@ class MondrianOlap4jDimension
         final mondrian.olap.SchemaReader schemaReader =
             olap4jConnection.getMondrianConnection2().getSchemaReader()
             .withLocus();
-        for (mondrian.olap.Hierarchy hierarchy
+        for (org.eclipse.daanse.olap.api.Hierarchy hierarchy
             : schemaReader.getDimensionHierarchies(dimension))
         {
             list.add(olap4jConnection.toOlap4j(hierarchy));

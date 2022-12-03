@@ -46,7 +46,7 @@ public class RolapBaseCubeMeasure
     private final RolapAggregator aggregator;
 
     private final RolapCube cube;
-    private final Map<String, Annotation> annotationMap;
+    private final Map<String, Object> metadata;
 
     /**
      * Holds the {@link mondrian.rolap.RolapStar.Measure} from which this
@@ -70,7 +70,7 @@ public class RolapBaseCubeMeasure
      * @param expression Expression
      * @param aggregatorName Aggregator
      * @param datatype Data type
-     * @param annotationMap Annotations
+     * @param metadata metadata
      */
     RolapBaseCubeMeasure(
         RolapCube cube,
@@ -83,12 +83,12 @@ public class RolapBaseCubeMeasure
         MondrianDef.Expression expression,
         String aggregatorName,
         String datatype,
-        Map<String, Annotation> annotationMap)
+        Map<String, Object> metadata)
     {
         super(parentMember, level, name, null, MemberType.MEASURE);
-        assert annotationMap != null;
+        assert metadata != null;
         this.cube = cube;
-        this.annotationMap = annotationMap;
+        this.metadata = metadata;
         this.caption = caption;
         this.expression = expression;
         if (description != null) {
@@ -174,8 +174,8 @@ public class RolapBaseCubeMeasure
     }
 
     @Override
-    public Map<String, Annotation> getAnnotationMap() {
-        return annotationMap;
+    public Map<String, Object> getMetadata() {
+        return metadata;
     }
 
     public Datatype getDatatype() {

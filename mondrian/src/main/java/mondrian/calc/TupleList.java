@@ -9,9 +9,9 @@
 
 package mondrian.calc;
 
-import mondrian.olap.Member;
-
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * List of tuples.

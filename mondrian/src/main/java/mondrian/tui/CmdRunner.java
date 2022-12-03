@@ -9,11 +9,9 @@
 
 package mondrian.tui;
 
-import mondrian.olap.Category;
 import mondrian.olap.*;
 import mondrian.olap.Connection;
 import mondrian.olap.DriverManager;
-import mondrian.olap.Hierarchy;
 import mondrian.olap.fun.FunInfo;
 import mondrian.olap.type.TypeUtil;
 import mondrian.rolap.RolapConnectionProperties;
@@ -22,6 +20,11 @@ import mondrian.rolap.RolapCube;
 import org.slf4j.Logger;
 import org.apache.logging.log4j.spi.LoggerContext;
 import org.apache.logging.log4j.spi.LoggerRegistry;
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.slf4j.LoggerFactory;
 import org.apache.logging.log4j.Level;
 
@@ -410,8 +413,8 @@ public class CmdRunner {
         if (element instanceof Member) {
             Member member = (Member) element;
             return new Expr(member, Expr.Type.MEMBER);
-        } else if (element instanceof mondrian.olap.Level) {
-            mondrian.olap.Level level = (mondrian.olap.Level) element;
+        } else if (element instanceof org.eclipse.daanse.olap.api.Level) {
+            org.eclipse.daanse.olap.api.Level level = (org.eclipse.daanse.olap.api.Level) element;
             return new Expr(level, Expr.Type.MEMBER);
         } else if (element instanceof Hierarchy) {
             Hierarchy hier = (Hierarchy) element;

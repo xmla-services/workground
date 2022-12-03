@@ -16,6 +16,8 @@ import mondrian.olap.*;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Definition of the <code>SetToStr</code> MDX function.
  *

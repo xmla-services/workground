@@ -11,6 +11,9 @@ package mondrian.rolap;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.NamedSet;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
@@ -18,9 +21,7 @@ import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Member;
 import mondrian.olap.MondrianProperties;
-import mondrian.olap.NamedSet;
 import mondrian.olap.Util;
 
 /**

@@ -11,15 +11,63 @@
 */
 package mondrian.rolap;
 
-import mondrian.calc.*;
-import mondrian.calc.impl.*;
-import mondrian.mdx.*;
-import mondrian.olap.*;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import mondrian.calc.Calc;
+import mondrian.calc.DummyExp;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ListCalc;
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractListCalc;
+import mondrian.calc.impl.ConstantCalc;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.calc.impl.ValueCalc;
+import mondrian.mdx.HierarchyExpr;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.UnresolvedFunCall;
+import mondrian.olap.Access;
+import mondrian.olap.Category;
 import mondrian.olap.DimensionType;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
+import mondrian.olap.Formula;
+import mondrian.olap.HierarchyBase;
+import mondrian.olap.Id;
 import mondrian.olap.LevelType;
+import mondrian.olap.MatchType;
+import mondrian.olap.MondrianDef;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.Property;
+import mondrian.olap.Role;
 import mondrian.olap.Role.HierarchyAccess;
-import mondrian.olap.fun.*;
-import mondrian.olap.type.*;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Syntax;
+import mondrian.olap.Util;
+import mondrian.olap.Validator;
+import mondrian.olap.fun.AggregateFunDef;
+import mondrian.olap.fun.BuiltinFunTable;
+import mondrian.olap.fun.FunDefBase;
+import mondrian.olap.fun.FunUtil;
+import mondrian.olap.type.NumericType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.Type;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RestrictedMemberReader.MultiCardinalityDefaultMember;
 import mondrian.rolap.format.FormatterCreateContext;
@@ -28,12 +76,6 @@ import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.spi.CellFormatter;
 import mondrian.util.UnionIterator;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.PrintWriter;
-import java.util.*;
 
 /**
  * <code>RolapHierarchy</code> implements {@link Hierarchy} for a ROLAP database.
@@ -82,7 +124,7 @@ public class RolapHierarchy extends HierarchyBase {
      */
     private RolapMemberBase allMember;
     private static final String ALL_LEVEL_CARDINALITY = "1";
-    private final Map<String, Annotation> annotationMap;
+    private final Map<String, Object> metadata;
     final RolapHierarchy closureFor;
 
     protected String displayFolder = null;
@@ -105,11 +147,11 @@ public class RolapHierarchy extends HierarchyBase {
         String displayFolder,
         boolean hasAll,
         RolapHierarchy closureFor,
-        Map<String, Annotation> annotationMap)
+        Map<String, Object> metadata)
     {
         super(dimension, subName, caption, visible, description, hasAll);
         this.displayFolder = displayFolder;
-        this.annotationMap = annotationMap;
+        this.metadata = metadata;
         this.allLevelName = "(All)";
         this.allMemberName =
             subName != null
@@ -142,7 +184,7 @@ public class RolapHierarchy extends HierarchyBase {
                     RolapLevel.HideMemberCondition.Never,
                     LevelType.Regular,
                     "",
-                    Collections.<String, Annotation>emptyMap());
+                    Map.of());
         } else {
             this.levels = new RolapLevel[0];
         }
@@ -171,7 +213,7 @@ public class RolapHierarchy extends HierarchyBase {
                 RolapLevel.HideMemberCondition.Never,
                 LevelType.Null,
                 "",
-                Collections.<String, Annotation>emptyMap());
+                Map.of());
     }
 
     /**
@@ -197,7 +239,7 @@ public class RolapHierarchy extends HierarchyBase {
             xmlHierarchy.displayFolder,
             xmlHierarchy.hasAll,
             null,
-            createAnnotationMap(xmlHierarchy.annotations));
+            createMetadataMap(xmlHierarchy.annotations));
 
         assert !(this instanceof RolapCubeHierarchy);
 
@@ -260,7 +302,7 @@ public class RolapHierarchy extends HierarchyBase {
                 null,
                 RolapLevel.HideMemberCondition.Never,
                 LevelType.Regular, ALL_LEVEL_CARDINALITY,
-                Collections.<String, Annotation>emptyMap());
+                Map.of());
         allLevel.init(xmlCubeDimension);
         this.allMember = new RolapMemberBase(
             null, allLevel, RolapUtil.sqlNullValue,
@@ -330,32 +372,22 @@ public class RolapHierarchy extends HierarchyBase {
         defaultMemberName = xmlHierarchy.defaultMember;
     }
 
-    public static Map<String, Annotation> createAnnotationMap(
+    public static Map<String, Object> createMetadataMap(
         MondrianDef.Annotations annotations)
     {
         if (annotations == null
             || annotations.array == null
             || annotations.array.length == 0)
         {
-            return Collections.emptyMap();
+            return Map.of();
         }
         // Use linked hash map because it retains order.
-        final Map<String, Annotation> map =
-            new LinkedHashMap<String, Annotation>();
+        final Map<String, Object> map =
+            new LinkedHashMap<String, Object>();
         for (MondrianDef.Annotation annotation : annotations.array) {
             final String name = annotation.name;
             final String value = annotation.cdata;
-            map.put(
-                annotation.name,
-                new Annotation() {
-                    public String getName() {
-                        return name;
-                    }
-
-                    public Object getValue() {
-                        return value;
-                    }
-                });
+            map.put(name, value);
         }
         return map;
     }
@@ -454,8 +486,8 @@ public class RolapHierarchy extends HierarchyBase {
         return memberReader;
     }
 
-    public Map<String, Annotation> getAnnotationMap() {
-        return annotationMap;
+    public Map<String, Object> getMetadata() {
+        return metadata;
     }
 
     RolapLevel newMeasuresLevel() {
@@ -481,7 +513,7 @@ public class RolapHierarchy extends HierarchyBase {
                 RolapLevel.HideMemberCondition.Never,
                 LevelType.Regular,
                 "",
-                Collections.<String, Annotation>emptyMap());
+                Map.of());
         this.levels = Util.append(this.levels, level);
         return level;
     }
@@ -1145,7 +1177,7 @@ public class RolapHierarchy extends HierarchyBase {
             "Closure dimension for parent-child hierarchy " + getName(),
             DimensionType.StandardDimension,
             dimension.isHighCardinality(),
-            Collections.<String, Annotation>emptyMap());
+            Map.of());
 
         // Create a peer hierarchy.
         RolapHierarchy peerHier = peerDimension.newHierarchy(null, true, this);
@@ -1181,7 +1213,7 @@ public class RolapHierarchy extends HierarchyBase {
                 src.getHideMemberCondition(),
                 src.getLevelType(),
                 "",
-                Collections.<String, Annotation>emptyMap());
+                Map.of());
         peerHier.levels = Util.append(peerHier.levels, level);
 
         // Create lower level.
@@ -1212,7 +1244,7 @@ public class RolapHierarchy extends HierarchyBase {
             src.getHideMemberCondition(),
             src.getLevelType(),
             "",
-            Collections.<String, Annotation>emptyMap());
+            Map.of());
         peerHier.levels = Util.append(peerHier.levels, sublevel);
 
         return peerDimension;

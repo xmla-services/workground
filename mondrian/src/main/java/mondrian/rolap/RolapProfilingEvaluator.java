@@ -17,6 +17,9 @@ import mondrian.olap.type.Type;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Evaluator that collects profiling information as it evaluates expressions.
  *

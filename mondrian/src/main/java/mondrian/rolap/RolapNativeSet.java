@@ -16,9 +16,6 @@ import mondrian.calc.TupleList;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.olap.Access;
 import mondrian.olap.DelegatingSchemaReader;
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Level;
-import mondrian.olap.Member;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.ResultStyleException;
@@ -41,6 +38,9 @@ import org.apache.commons.collections.Predicate;
 
 import org.slf4j.Logger;
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;

@@ -14,6 +14,12 @@ import mondrian.olap.*;
 import mondrian.olap.Role.HierarchyAccess;
 import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
 
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.Schema;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -2363,7 +2369,7 @@ public class AccessControlTest {
      * <a href="http://jira.pentaho.com/browse/BISERVER-1574">BISERVER-1574,
      * "Cube role rollupPolicy='partial' failure"</a>. The problem was a
      * NullPointerException in
-     * {@link SchemaReader#getMemberParent(mondrian.olap.Member)} when called
+     * {@link SchemaReader#getMemberParent(org.eclipse.daanse.olap.api.Member)} when called
      * on a members returned in a result set. JPivot calls that method but
      * Mondrian normally does not.
      */

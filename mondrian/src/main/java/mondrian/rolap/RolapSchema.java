@@ -40,6 +40,14 @@ import java.util.*;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.OlapElement;
+import org.eclipse.daanse.olap.api.Schema;
 
 /**
  * A <code>RolapSchema</code> is a collection of {@link RolapCube}s and
@@ -150,7 +158,7 @@ public class RolapSchema implements Schema {
      * {@link mondrian.rolap.RolapConnectionProperties#Ignore Ignore}=true.
      */
     private final List<Exception> warningList = new ArrayList<Exception>();
-    private Map<String, Annotation> annotationMap;
+    private Map<String, Object> metadata;
 
     /**
      * Unique schema instance id that will be used
@@ -485,8 +493,8 @@ public class RolapSchema implements Schema {
         return key;
     }
 
-    public Map<String, Annotation> getAnnotationMap() {
-        return annotationMap;
+    public Map<String, Object> getMetadata() {
+        return metadata;
     }
 
     /**
@@ -507,8 +515,8 @@ public class RolapSchema implements Schema {
             throw Util.newError("<Schema> name must be set");
         }
 
-        this.annotationMap =
-            RolapHierarchy.createAnnotationMap(xmlSchema.annotations);
+        this.metadata =
+            RolapHierarchy.createMetadataMap(xmlSchema.annotations);
         // Validate user-defined functions. Must be done before we validate
         // calculated members, because calculated members will need to use the
         // function table.

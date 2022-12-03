@@ -51,11 +51,11 @@ import mondrian.calc.ResultStyle;
 import mondrian.olap.Axis;
 import mondrian.olap.Cell;
 import mondrian.olap.Connection;
-import mondrian.olap.Dimension;
+import org.eclipse.daanse.olap.api.Dimension;
 import mondrian.olap.Evaluator;
-import mondrian.olap.Hierarchy;
+import org.eclipse.daanse.olap.api.Hierarchy;
 import mondrian.olap.Id;
-import mondrian.olap.Member;
+import org.eclipse.daanse.olap.api.Member;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Position;
@@ -653,7 +653,7 @@ public class BasicQueryTest extends FoodMartTestCase {
   }
 
   /**
-   * Unit test for the {@link Cell#getContextMember(mondrian.olap.Hierarchy)} method.
+   * Unit test for the {@link Cell#getContextMember(org.eclipse.daanse.olap.api.Hierarchy)} method.
    */
   public void testGetContext() {
     if ( !MondrianProperties.instance().SsasCompatibleNaming.get() ) {

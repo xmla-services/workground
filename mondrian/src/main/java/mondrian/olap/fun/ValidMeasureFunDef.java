@@ -19,6 +19,10 @@ import mondrian.rolap.*;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Definition of the <code>ValidMeasure</code> MDX function.
  *

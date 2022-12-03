@@ -20,10 +20,10 @@ import static org.mockito.Mockito.verify;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import mondrian.olap.Hierarchy;
 import mondrian.olap.MondrianDef;
 
 public class RolapCubeDimensionTest {

@@ -21,6 +21,11 @@ import mondrian.olap.*;
 import mondrian.olap.fun.*;
 import mondrian.server.Statement;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.NamedSet;
+
 import mondrian.util.*;
 
 import org.slf4j.Logger;
@@ -48,7 +53,7 @@ import java.util.*;
  *
  * <p>
  * The {@code savepoint} method is recommended for most purposes, because the initial checkpoint is extremely cheap.
- * Each call that modifies state (such as {@link mondrian.olap.Evaluator#setContext(mondrian.olap.Member)}) creates, at
+ * Each call that modifies state (such as {@link mondrian.olap.Evaluator#setContext(org.eclipse.daanse.olap.api.Member)}) creates, at
  * a modest cost, an entry on an internal command stack.
  *
  * <p>
@@ -756,7 +761,7 @@ public class RolapEvaluator implements Evaluator {
   }
 
   /**
-   * More specific version of {@link #getContext(mondrian.olap.Hierarchy)}, for internal code.
+   * More specific version of {@link #getContext(org.eclipse.daanse.olap.api.Hierarchy)}, for internal code.
    *
    * @param hierarchy
    *          Hierarchy

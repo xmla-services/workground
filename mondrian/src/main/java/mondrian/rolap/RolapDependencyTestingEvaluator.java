@@ -18,6 +18,10 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Evaluator which checks dependencies of expressions.
  *

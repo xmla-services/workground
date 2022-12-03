@@ -11,6 +11,8 @@ package mondrian.olap;
 import java.io.PrintWriter;
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.OlapElement;
+
 /**
  * Drill through statement.
  *

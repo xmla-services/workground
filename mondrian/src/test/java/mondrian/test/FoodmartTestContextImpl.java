@@ -62,8 +62,6 @@ import mondrian.olap.Connection;
 import mondrian.olap.DriverManager;
 import mondrian.olap.Exp;
 import mondrian.olap.Formula;
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Member;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Position;
 import mondrian.olap.Query;
@@ -77,6 +75,9 @@ import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.RolapUtil;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 //import mondrian.spi.DialectManager;
 import mondrian.spi.DynamicSchemaProcessor;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;

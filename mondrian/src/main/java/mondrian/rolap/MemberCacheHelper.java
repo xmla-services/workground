@@ -11,7 +11,6 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.Level;
 import mondrian.olap.Util;
 import mondrian.rolap.cache.*;
 import mondrian.rolap.sql.MemberChildrenConstraint;
@@ -20,6 +19,7 @@ import mondrian.spi.DataSourceChangeListener;
 import mondrian.util.*;
 
 import org.apache.commons.collections.Predicate;
+import org.eclipse.daanse.olap.api.Level;
 
 import java.util.*;
 import java.util.Map.Entry;

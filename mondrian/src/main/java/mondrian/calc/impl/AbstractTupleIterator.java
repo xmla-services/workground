@@ -10,9 +10,10 @@
 package mondrian.calc.impl;
 
 import mondrian.calc.TupleIterator;
-import mondrian.olap.Member;
 
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
 * Abstract implementation of {@link TupleIterator}.

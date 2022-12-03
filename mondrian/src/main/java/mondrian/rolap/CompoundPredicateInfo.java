@@ -14,7 +14,6 @@ import mondrian.calc.TupleIterable;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Member;
 import mondrian.olap.Util;
 import mondrian.olap.fun.VisualTotalsFunDef;
 import mondrian.olap.type.SetType;
@@ -32,6 +31,8 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Constructs a Pair<BitKey, StarPredicate> based on an tuple list and measure, along with the string representation of

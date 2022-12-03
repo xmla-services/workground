@@ -17,6 +17,11 @@ import mondrian.server.Locus;
 import mondrian.spi.SegmentColumn;
 import mondrian.util.ArraySortedSet;
 
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.Schema;
 import org.eigenbase.util.property.BooleanProperty;
 
 import java.io.PrintWriter;

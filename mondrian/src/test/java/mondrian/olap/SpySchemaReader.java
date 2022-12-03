@@ -25,6 +25,13 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.OlapElement;
 
 import mondrian.calc.Calc;
 import mondrian.olap.Id.NameSegment;

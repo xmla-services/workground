@@ -27,9 +27,6 @@ import mondrian.mdx.UnresolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Level;
-import mondrian.olap.Member;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
@@ -44,6 +41,10 @@ import mondrian.resource.MondrianResource;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
 
 import static mondrian.olap.fun.sort.Sorter.hierarchizeMemberList;
 

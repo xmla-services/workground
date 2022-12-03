@@ -21,6 +21,7 @@ import mondrian.util.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.olap.api.OlapElement;
 
 import java.io.PrintWriter;
 import java.util.*;

@@ -16,6 +16,8 @@ import mondrian.rolap.sql.*;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.api.Level;
+
 /**
  * Creates the right constraint for common tasks.
  *

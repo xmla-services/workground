@@ -21,6 +21,8 @@ import mondrian.olap.type.*;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * <code>TupleFunDef</code> implements the '(...)' operator which builds
  * tuples, as in <code>([Time].CurrentMember,

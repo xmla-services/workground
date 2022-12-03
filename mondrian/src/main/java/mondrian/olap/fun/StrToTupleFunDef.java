@@ -20,6 +20,10 @@ import mondrian.resource.MondrianResource;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Definition of the <code>StrToTuple</code> MDX function.
  *

@@ -21,6 +21,13 @@ import mondrian.rolap.sql.TupleConstraint;
 
 import org.slf4j.Logger;
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.slf4j.LoggerFactory;
 
 import org.eigenbase.util.property.Property;

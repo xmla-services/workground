@@ -158,7 +158,7 @@ public enum RolapConnectionProperties {
    * The "Ignore" property is a boolean value. If true, mondrian ignores
    * warnings and non-fatal errors while loading the schema. The resulting
    * errors can be obtained by calling
-   * {@link mondrian.olap.Schema#getWarnings}.
+   * {@link org.eclipse.daanse.olap.api.Schema#getWarnings}.
    */
   Ignore,
 

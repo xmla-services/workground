@@ -21,7 +21,10 @@ import mondrian.rolap.RolapEvaluator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
 import org.eigenbase.util.property.IntegerProperty;
 
 import java.util.*;

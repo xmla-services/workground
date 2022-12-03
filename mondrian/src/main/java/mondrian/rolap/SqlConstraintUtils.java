@@ -18,12 +18,8 @@ import mondrian.calc.TupleList;
 import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Access;
-import mondrian.olap.Dimension;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Level;
-import mondrian.olap.Member;
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Role;
@@ -48,6 +44,11 @@ import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.CrossJoinArg;
 import mondrian.rolap.sql.SqlQuery;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+
 import mondrian.util.FilteredIterableList;
 
 import org.slf4j.Logger;

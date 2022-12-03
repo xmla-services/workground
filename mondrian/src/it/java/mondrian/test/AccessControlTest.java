@@ -2128,7 +2128,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * <a href="http://jira.pentaho.com/browse/BISERVER-1574">BISERVER-1574,
      * "Cube role rollupPolicy='partial' failure"</a>. The problem was a
      * NullPointerException in
-     * {@link SchemaReader#getMemberParent(mondrian.olap.Member)} when called
+     * {@link SchemaReader#getMemberParent(org.eclipse.daanse.olap.api.Member)} when called
      * on a members returned in a result set. JPivot calls that method but
      * Mondrian normally does not.
      */

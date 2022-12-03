@@ -15,7 +15,7 @@ import mondrian.calc.impl.UnaryTupleList;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
-import mondrian.olap.Member;
+import org.eclipse.daanse.olap.api.Member;
 import mondrian.olap.type.SetType;
 import mondrian.rolap.RolapMemberBase;
 

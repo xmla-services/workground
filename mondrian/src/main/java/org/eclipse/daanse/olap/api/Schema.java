@@ -7,17 +7,22 @@
 * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
 */
 
-package mondrian.olap;
+package org.eclipse.daanse.olap.api;
 
 import java.util.Date;
 import java.util.List;
+
+import mondrian.olap.FunTable;
+import mondrian.olap.Parameter;
+import mondrian.olap.Role;
+import mondrian.olap.SchemaReader;
 
 /**
  * A <code>Schema</code> is a collection of cubes, shared dimensions, and roles.
  *
  * @author jhyde
  */
-public interface Schema extends Annotated {
+public interface Schema extends MetaElement {
 
     /**
      * Returns the name of this schema.

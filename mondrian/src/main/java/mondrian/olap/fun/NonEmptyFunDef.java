@@ -20,6 +20,8 @@ import mondrian.util.CancellationChecker;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

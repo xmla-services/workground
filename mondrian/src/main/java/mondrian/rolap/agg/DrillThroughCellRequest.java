@@ -10,12 +10,13 @@
 */
 package mondrian.rolap.agg;
 
-import mondrian.olap.OlapElement;
 import mondrian.rolap.RolapStar;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.OlapElement;
 
 /**
  * Subclass of {@link CellRequest} that allows to specify

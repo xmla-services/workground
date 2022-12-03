@@ -19,6 +19,8 @@ import mondrian.resource.MondrianResource;
 
 import java.io.PrintWriter;
 
+import org.eclipse.daanse.olap.api.Level;
+
 /**
  * An axis in an MDX query. For example, the typical MDX query has two axes,
  * which appear as the "ON COLUMNS" and "ON ROWS" clauses.

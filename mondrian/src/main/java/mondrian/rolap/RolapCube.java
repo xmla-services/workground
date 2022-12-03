@@ -24,15 +24,22 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;
 import org.eigenbase.xom.XOMUtil;
 import org.olap4j.mdx.IdentifierNode;
 import org.olap4j.mdx.IdentifierSegment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
@@ -40,28 +47,20 @@ import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Access;
-import mondrian.olap.Annotation;
 import mondrian.olap.CacheControl;
 import mondrian.olap.Category;
-import mondrian.olap.Cube;
 import mondrian.olap.CubeBase;
-import mondrian.olap.Dimension;
 import mondrian.olap.DimensionType;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Formula;
-import mondrian.olap.Hierarchy;
 import mondrian.olap.Id;
-import mondrian.olap.Level;
 import mondrian.olap.MatchType;
-import mondrian.olap.Member;
 import mondrian.olap.MemberProperty;
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NameResolver;
-import mondrian.olap.NamedSet;
-import mondrian.olap.OlapElement;
 import mondrian.olap.Parameter;
 import mondrian.olap.Property;
 import mondrian.olap.Query;
@@ -92,7 +91,7 @@ public class RolapCube extends CubeBase {
     private static final Logger LOGGER = LoggerFactory.getLogger(RolapCube.class);
 
     private final RolapSchema schema;
-    private final Map<String, Annotation> annotationMap;
+    private final Map<String, Object> metadata;
     private final RolapHierarchy measuresHierarchy;
 
     /** For SQL generator. Fact table. */
@@ -170,7 +169,7 @@ public class RolapCube extends CubeBase {
      * @param description Description
      * @param fact Definition of fact table
      * @param load Whether cube is being created while loading the schema
-     * @param annotationMap Annotations
+     * @param metadata Annotations
      */
     private RolapCube(
         RolapSchema schema,
@@ -183,7 +182,7 @@ public class RolapCube extends CubeBase {
         MondrianDef.Relation fact,
         MondrianDef.CubeDimension[] dimensions,
         boolean load,
-        Map<String, Annotation> annotationMap,
+        Map<String, Object> metadata,
         Context context)
     {
         super(
@@ -193,9 +192,9 @@ public class RolapCube extends CubeBase {
             description,
             new RolapDimension[dimensions.length + 1]);
 
-        assert annotationMap != null;
+        assert metadata != null;
         this.schema = schema;
-        this.annotationMap = annotationMap;
+        this.metadata = metadata;
         this.caption = caption;
         this.fact = fact;
         this.hierarchyUsages = new ArrayList<HierarchyUsage>();
@@ -229,7 +228,7 @@ public class RolapCube extends CubeBase {
                 null,
                 DimensionType.MeasuresDimension,
                 false,
-                Collections.<String, Annotation>emptyMap());
+                Map.of());
 
         this.dimensions[0] = measuresDimension;
 
@@ -303,7 +302,7 @@ public class RolapCube extends CubeBase {
             xmlCube.fact,
             xmlCube.dimensions,
             load,
-            RolapHierarchy.createAnnotationMap(xmlCube.annotations), context);
+            RolapHierarchy.createMetadataMap(xmlCube.annotations), context);
 
         if (fact == null) {
             throw Util.newError(
@@ -589,7 +588,7 @@ public class RolapCube extends CubeBase {
                 xmlMeasure.caption, xmlMeasure.description,
                 xmlMeasure.formatString, measureExp,
                 aggregator, xmlMeasure.datatype,
-                RolapHierarchy.createAnnotationMap(xmlMeasure.annotations));
+                RolapHierarchy.createMetadataMap(xmlMeasure.annotations));
 
         FormatterCreateContext formatterContext =
                 new FormatterCreateContext.Builder(measure.getUniqueName())
@@ -684,7 +683,7 @@ public class RolapCube extends CubeBase {
             null,
             xmlVirtualCube.dimensions,
             load,
-            RolapHierarchy.createAnnotationMap(xmlVirtualCube.annotations),
+            RolapHierarchy.createMetadataMap(xmlVirtualCube.annotations),
             context);
 
         // Since MondrianDef.Measure and MondrianDef.VirtualCubeMeasure cannot
@@ -766,7 +765,7 @@ public class RolapCube extends CubeBase {
                                 null,
                                 measuresLevel,
                                 (RolapStoredMeasure) cubeMeasure,
-                                RolapHierarchy.createAnnotationMap(
+                                RolapHierarchy.createMetadataMap(
                                     xmlMeasure.annotations));
 
                         // Set member's visibility, default true.
@@ -1015,8 +1014,8 @@ public class RolapCube extends CubeBase {
         return LOGGER;
     }
 
-    public Map<String, Annotation> getAnnotationMap() {
-        return annotationMap;
+    public Map<String, Object> getMetadata() {
+        return metadata;
     }
 
     public boolean hasAggGroup() {
@@ -1132,7 +1131,7 @@ public class RolapCube extends CubeBase {
      *
      * @param xmlCalcMembers XML objects representing members
      * @param xmlNamedSets Array of XML definition of named set
-     * @param memberList Output list of {@link mondrian.olap.Member} objects
+     * @param memberList Output list of {@link org.eclipse.daanse.olap.api.Member} objects
      * @param formulaList Output list of {@link mondrian.olap.Formula} objects
      * @param cube the cube that the calculated members originate from
      * @param errOnDups throws an error if a duplicate member is found
@@ -1250,8 +1249,8 @@ public class RolapCube extends CubeBase {
             namedSet.setDisplayFolder(xmlNamedSet.displayFolder);
         }
 
-        namedSet.setAnnotationMap(
-            RolapHierarchy.createAnnotationMap(xmlNamedSet.annotations));
+        namedSet.setMetadata(
+            RolapHierarchy.createMetadataMap(xmlNamedSet.annotations));
 
         namedSetList.add(formula);
         formulaList.add(formula);
@@ -1319,8 +1318,8 @@ public class RolapCube extends CubeBase {
         }
 
         final RolapMember member1 = RolapUtil.strip(member);
-        ((RolapCalculatedMember) member1).setAnnotationMap(
-            RolapHierarchy.createAnnotationMap(xmlCalcMember.annotations));
+        ((RolapCalculatedMember) member1).setMetadata(
+            RolapHierarchy.createMetadataMap(xmlCalcMember.annotations));
 
         memberList.add(member);
     }
@@ -3480,7 +3479,7 @@ public class RolapCube extends CubeBase {
                         null,
                         measuresLevel,
                         baseMeasure,
-                        Collections.<String, Annotation>emptyMap());
+                        Map.of());
                 if (!measuresFound.contains(virtualCubeMeasure)) {
                     measuresFound.add(virtualCubeMeasure);
                 }

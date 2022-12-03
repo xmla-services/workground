@@ -14,6 +14,9 @@ import mondrian.olap.type.Type;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Visitor which collects any non-measure base members encountered while
  * traversing an expression.

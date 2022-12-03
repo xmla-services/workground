@@ -14,6 +14,10 @@ import mondrian.calc.TupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.*;
 import mondrian.test.PropertySaver5;
+
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;

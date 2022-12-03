@@ -30,13 +30,10 @@ import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ParameterExpr;
 import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.Dimension;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Formula;
 import mondrian.olap.FunDef;
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Member;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.NativeEvaluator;
 import mondrian.olap.Parameter;
@@ -57,6 +54,9 @@ import mondrian.server.Locus;
 import mondrian.util.CancellationChecker;
 import mondrian.util.CartesianProductList;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

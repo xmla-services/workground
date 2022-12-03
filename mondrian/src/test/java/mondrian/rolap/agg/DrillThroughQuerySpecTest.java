@@ -36,12 +36,12 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.OlapElement;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.SqlStatement;
 import mondrian.rolap.StarPredicate;
 import mondrian.rolap.sql.SqlQuery;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.OlapElement;
 
 public class DrillThroughQuerySpecTest {
 

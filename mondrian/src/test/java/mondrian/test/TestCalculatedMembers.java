@@ -14,7 +14,8 @@ package mondrian.test;
 import mondrian.olap.*;
 import mondrian.rolap.BatchTestCase;
 import org.eclipse.daanse.db.dialect.api.Dialect;
-
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Member;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;

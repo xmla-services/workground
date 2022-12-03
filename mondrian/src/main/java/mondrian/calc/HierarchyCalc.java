@@ -9,11 +9,12 @@
 
 package mondrian.calc;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+
 import mondrian.olap.Evaluator;
-import mondrian.olap.Hierarchy;
 
 /**
- * Expression which yields a {@link mondrian.olap.Hierarchy}.
+ * Expression which yields a {@link org.eclipse.daanse.olap.api.Hierarchy}.
  *
  * <p>When implementing this interface, it is convenient to extend
  * {@link mondrian.calc.impl.AbstractHierarchyCalc}, but it is not required.

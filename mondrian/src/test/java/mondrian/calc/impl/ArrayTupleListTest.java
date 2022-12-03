@@ -14,10 +14,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 
+import org.eclipse.daanse.olap.api.Member;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import mondrian.olap.Member;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.ResourceLimitExceededException;
 import mondrian.test.PropertySaver5;

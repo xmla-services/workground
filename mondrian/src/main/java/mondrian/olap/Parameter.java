@@ -9,6 +9,8 @@
 
 package mondrian.olap;
 
+import org.eclipse.daanse.olap.api.Member;
+
 import mondrian.olap.type.Type;
 
 /**
@@ -80,7 +82,7 @@ public interface Parameter {
      * Sets the value of this parameter.
      *
      * @param value Value of the parameter; must be a {@link String},
-     *   a {@link Double}, or a {@link mondrian.olap.Member}
+     *   a {@link Double}, or a {@link org.eclipse.daanse.olap.api.Member}
      */
     void setValue(Object value);
 

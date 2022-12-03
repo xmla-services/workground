@@ -15,6 +15,8 @@ import mondrian.spi.UserDefinedFunction;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Member;
+
 import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**

@@ -13,9 +13,11 @@ package mondrian.olap;
 
 import java.io.PrintWriter;
 import java.util.Locale;
+
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Schema;
 
 /**
  * Connection to a multi-dimensional database.

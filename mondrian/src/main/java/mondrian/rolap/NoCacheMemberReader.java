@@ -19,6 +19,7 @@ import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
 import mondrian.util.ConcatenableList;
 
+import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

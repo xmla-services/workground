@@ -11,6 +11,11 @@
 
 package mondrian.olap;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.OlapElement;
+
 import mondrian.resource.MondrianResource;
 import mondrian.spi.MemberFormatter;
 

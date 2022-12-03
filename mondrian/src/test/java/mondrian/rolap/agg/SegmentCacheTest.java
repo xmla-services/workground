@@ -15,6 +15,7 @@ import mondrian.spi.SegmentCache;
 import mondrian.spi.SegmentHeader;
 import mondrian.test.BasicQueryTest;
 
+import org.eclipse.daanse.olap.api.Cube;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;

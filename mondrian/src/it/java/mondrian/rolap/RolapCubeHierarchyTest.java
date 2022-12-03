@@ -10,8 +10,8 @@
 */
 package mondrian.rolap;
 
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Level;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianDef.Relation;
 import mondrian.olap.MondrianDef.RelationOrJoin;

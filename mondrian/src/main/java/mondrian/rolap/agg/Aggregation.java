@@ -19,6 +19,9 @@ import mondrian.rolap.*;
 import java.util.*;
 import java.util.concurrent.Future;
 
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * A <code>Aggregation</code> is a pre-computed aggregation over a set of
  * columns.

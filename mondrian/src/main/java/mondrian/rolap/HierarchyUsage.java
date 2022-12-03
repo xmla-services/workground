@@ -16,6 +16,8 @@ package mondrian.rolap;
 import mondrian.olap.*;
 import mondrian.resource.MondrianResource;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

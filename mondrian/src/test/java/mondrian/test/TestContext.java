@@ -31,10 +31,10 @@ import mondrian.olap.Axis;
 import mondrian.olap.CacheControl;
 import mondrian.olap.Cell;
 import mondrian.olap.Connection;
-import mondrian.olap.Member;
 import mondrian.olap.Result;
 import mondrian.olap.Util;
 import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * <code>TestContext</code> is a class which contains the information

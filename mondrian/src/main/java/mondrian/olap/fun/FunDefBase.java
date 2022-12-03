@@ -22,6 +22,7 @@ import mondrian.olap.type.LevelType;
 import java.io.PrintWriter;
 
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Cube;
 
 /**
  * <code>FunDefBase</code> is the default implementation of {@link FunDef}.

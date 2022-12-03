@@ -13,6 +13,7 @@ package mondrian.web.taglib;
 
 import mondrian.olap.*;
 
+import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

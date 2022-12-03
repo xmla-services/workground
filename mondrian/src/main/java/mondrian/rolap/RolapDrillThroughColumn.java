@@ -10,7 +10,7 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.OlapElement;
+import org.eclipse.daanse.olap.api.OlapElement;
 
 public abstract class RolapDrillThroughColumn {
     public abstract OlapElement getOlapElement();

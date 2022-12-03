@@ -11,24 +11,60 @@
 */
 package mondrian.olap;
 
-import mondrian.calc.*;
-import mondrian.mdx.*;
-import mondrian.olap.fun.ParameterFunDef;
-import mondrian.olap.type.*;
-import mondrian.resource.MondrianResource;
-import mondrian.rolap.*;
-import mondrian.server.*;
-import mondrian.spi.ProfileHandler;
-import mondrian.util.ArrayStack;
-
-import org.apache.commons.collections.collection.CompositeCollection;
-
-import org.olap4j.impl.*;
-import org.olap4j.mdx.IdentifierSegment;
-
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.collections.collection.CompositeCollection;
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.NamedSet;
+import org.eclipse.daanse.olap.api.OlapElement;
+import org.olap4j.impl.IdentifierParser;
+import org.olap4j.mdx.IdentifierSegment;
+
+import mondrian.calc.Calc;
+import mondrian.calc.CalcWriter;
+import mondrian.calc.ExpCompiler;
+import mondrian.calc.ResultStyle;
+import mondrian.mdx.MdxVisitor;
+import mondrian.mdx.MdxVisitorImpl;
+import mondrian.mdx.MemberExpr;
+import mondrian.mdx.NamedSetExpr;
+import mondrian.mdx.ParameterExpr;
+import mondrian.mdx.ResolvedFunCall;
+import mondrian.mdx.UnresolvedFunCall;
+import mondrian.olap.fun.ParameterFunDef;
+import mondrian.olap.type.MemberType;
+import mondrian.olap.type.SetType;
+import mondrian.olap.type.StringType;
+import mondrian.olap.type.TupleType;
+import mondrian.olap.type.Type;
+import mondrian.olap.type.TypeUtil;
+import mondrian.resource.MondrianResource;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapEvaluator;
+import mondrian.rolap.RolapHierarchy;
+import mondrian.rolap.RolapMember;
+import mondrian.rolap.RolapUtil;
+import mondrian.server.Execution;
+import mondrian.server.Locus;
+import mondrian.server.Statement;
+import mondrian.spi.ProfileHandler;
+import mondrian.util.ArrayStack;
 
 /**
  * <code>Query</code> is an MDX query.
@@ -585,8 +621,8 @@ public class Query extends QueryPart {
 
             for(Hierarchy hierarchy : ((RolapCube) getCube()).getHierarchies()) {
 
-                mondrian.olap.Level[] levels = hierarchy.getLevels();
-                mondrian.olap.Level lastLevel = levels[levels.length - 1];
+                org.eclipse.daanse.olap.api.Level[] levels = hierarchy.getLevels();
+                org.eclipse.daanse.olap.api.Level lastLevel = levels[levels.length - 1];
                 mondrian.mdx.LevelExpr levelExpr = new mondrian.mdx.LevelExpr(lastLevel);
                 Exp levelMembers = new UnresolvedFunCall(
                   "AllMembers",
@@ -2173,8 +2209,8 @@ public class Query extends QueryPart {
             return expr.getType();
         }
 
-        public Map<String, Annotation> getAnnotationMap() {
-            return Collections.emptyMap();
+        public Map<String, Object> getMetadata()  {
+            return Map.of();
         }
 
         public NamedSet validate(Validator validator) {
@@ -2229,6 +2265,7 @@ public class Query extends QueryPart {
         public String getLocalized(LocalizedProperty prop, Locale locale) {
             throw new UnsupportedOperationException();
         }
+
     }
 
     /**

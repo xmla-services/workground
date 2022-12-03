@@ -11,6 +11,11 @@
 
 package mondrian.olap.type;
 
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+
 import mondrian.olap.*;
 
 /**

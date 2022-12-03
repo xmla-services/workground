@@ -21,6 +21,8 @@ import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import mondrian.util.Bug;
 import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
 import org.eigenbase.util.property.BooleanProperty;
 import org.eigenbase.util.property.StringProperty;
 import org.junit.jupiter.api.AfterEach;

@@ -18,7 +18,7 @@ import mondrian.calc.TupleList;
 import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.Id;
-import mondrian.olap.Member;
+import org.eclipse.daanse.olap.api.Member;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Result;
 import mondrian.olap.ResultBase;

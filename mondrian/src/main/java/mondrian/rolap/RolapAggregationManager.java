@@ -18,6 +18,8 @@ import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.*;
 
 import org.apache.commons.collections.*;
+import org.eclipse.daanse.olap.api.Member;
+import org.eclipse.daanse.olap.api.OlapElement;
 
 import java.util.*;
 

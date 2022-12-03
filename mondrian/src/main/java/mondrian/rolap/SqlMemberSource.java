@@ -27,15 +27,15 @@ import org.slf4j.Logger;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Member;
 import org.eigenbase.util.property.StringProperty;
 
 import mondrian.calc.TupleList;
 import mondrian.olap.Access;
-import mondrian.olap.Dimension;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Id;
-import mondrian.olap.Member;
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
@@ -1447,7 +1447,7 @@ RME is this right
 
         /**
          * @return the members's depth
-         * @see mondrian.olap.Member#getDepth()
+         * @see org.eclipse.daanse.olap.api.Member#getDepth()
          */
         public int getDepth() {
             return depth;

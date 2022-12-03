@@ -15,6 +15,8 @@ import mondrian.olap.*;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Schema;
+
 /**
  * RolapCubeDimension wraps a RolapDimension for a specific Cube.
  *
@@ -61,8 +63,8 @@ public class RolapCubeDimension extends RolapDimension {
             null,
             highCardinality,
             cubeDim.annotations != null
-                ? RolapHierarchy.createAnnotationMap(cubeDim.annotations)
-                : rolapDim.getAnnotationMap());
+                ? RolapHierarchy.createMetadataMap(cubeDim.annotations)
+                : rolapDim.getMetadata());
         this.xmlDimension = cubeDim;
         this.rolapDimension = rolapDim;
         this.cubeOrdinal = cubeOrdinal;

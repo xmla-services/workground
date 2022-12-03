@@ -21,6 +21,9 @@ import mondrian.util.UnsupportedList;
 import java.sql.SQLException;
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Hierarchy that is associated with a specific Cube.
  *
@@ -108,7 +111,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             rolapHierarchy.getDisplayFolder(),
             rolapHierarchy.hasAll(),
             null,
-            rolapHierarchy.getAnnotationMap());
+            rolapHierarchy.getMetadata());
         this.ordinal = ordinal;
         final boolean cubeIsVirtual = cubeDimension.getCube().isVirtual();
         if (!cubeIsVirtual) {

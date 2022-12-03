@@ -21,6 +21,7 @@ import java.util.ArrayList;
 
 import mondrian.olap.*;
 import org.apache.logging.log4j.Level;
+import org.eclipse.daanse.olap.api.Cube;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;

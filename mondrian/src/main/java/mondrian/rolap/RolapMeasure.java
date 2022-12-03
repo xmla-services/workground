@@ -11,7 +11,7 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.Member;
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Interface implemented by all measures (both stored and calculated).

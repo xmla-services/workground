@@ -20,6 +20,9 @@ import mondrian.spi.UserDefinedFunction;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Resolver for user-defined functions.
  *

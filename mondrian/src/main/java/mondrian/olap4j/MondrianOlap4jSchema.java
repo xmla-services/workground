@@ -9,10 +9,10 @@
 
 package mondrian.olap4j;
 
-import mondrian.olap.Hierarchy;
-import mondrian.olap.OlapElement;
 import mondrian.olap.Role;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.OlapException;
 import org.olap4j.impl.*;
 import org.olap4j.metadata.*;
@@ -32,7 +32,7 @@ class MondrianOlap4jSchema
 {
     final MondrianOlap4jCatalog olap4jCatalog;
     final String schemaName;
-    final mondrian.olap.Schema schema;
+    final org.eclipse.daanse.olap.api.Schema schema;
 
     /**
      * Creates a MondrianOlap4jSchema.
@@ -49,7 +49,7 @@ class MondrianOlap4jSchema
     MondrianOlap4jSchema(
         MondrianOlap4jCatalog olap4jCatalog,
         String schemaName,
-        mondrian.olap.Schema schema)
+        org.eclipse.daanse.olap.api.Schema schema)
     {
         this.olap4jCatalog = olap4jCatalog;
         this.schemaName = schemaName;
@@ -65,7 +65,7 @@ class MondrianOlap4jSchema
             new NamedListImpl<MondrianOlap4jCube>();
         final MondrianOlap4jConnection olap4jConnection =
             olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
-        for (mondrian.olap.Cube cube
+        for (org.eclipse.daanse.olap.api.Cube cube
             : olap4jConnection.getMondrianConnection()
                 .getSchemaReader().getCubes())
         {

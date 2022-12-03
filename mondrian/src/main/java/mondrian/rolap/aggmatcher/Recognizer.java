@@ -17,6 +17,8 @@ import mondrian.resource.MondrianResource;
 import mondrian.rolap.*;
 import mondrian.rolap.sql.SqlQuery;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

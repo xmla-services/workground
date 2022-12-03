@@ -19,14 +19,15 @@ import mondrian.calc.impl.AbstractListCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.Hierarchy;
-import mondrian.olap.Member;
 import mondrian.olap.Validator;
 import mondrian.olap.type.Type;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Existing keyword limits a set to what exists within the current context, ie

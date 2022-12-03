@@ -15,6 +15,11 @@ import mondrian.olap.fun.FunUtil;
 
 import java.util.Date;
 
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Adapter which computes a scalar or tuple expression and converts it to any
  * required type.

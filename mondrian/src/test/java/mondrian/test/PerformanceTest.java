@@ -16,6 +16,7 @@ import mondrian.olap.type.Type;
 import mondrian.spi.UserDefinedFunction;
 import mondrian.util.Bug;
 import org.apache.commons.collections.ComparatorUtils;
+import org.eclipse.daanse.olap.api.Member;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.junit.jupiter.api.AfterEach;

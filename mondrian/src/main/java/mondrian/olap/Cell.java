@@ -11,6 +11,8 @@
 
 package mondrian.olap;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
 import org.olap4j.AllocationPolicy;
 import org.olap4j.Scenario;
 

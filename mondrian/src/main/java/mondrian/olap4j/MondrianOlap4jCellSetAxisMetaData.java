@@ -15,6 +15,7 @@ import mondrian.mdx.UnresolvedFunCall;
 import mondrian.olap.*;
 import mondrian.olap.type.TypeUtil;
 
+import org.eclipse.daanse.olap.api.Level;
 import org.olap4j.Axis;
 import org.olap4j.CellSetAxisMetaData;
 import org.olap4j.metadata.Hierarchy;
@@ -103,7 +104,7 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
             return Collections.emptyList();
         }
         List<Hierarchy> hierarchyList = new ArrayList<Hierarchy>();
-        for (mondrian.olap.Hierarchy hierarchy
+        for (org.eclipse.daanse.olap.api.Hierarchy hierarchy
             : TypeUtil.getHierarchies(exp.getType()))
         {
             hierarchyList.add(

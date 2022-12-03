@@ -22,6 +22,9 @@ import mondrian.util.CancellationChecker;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Hierarchy;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Definition of the <code>Generate</code> MDX function.
  *

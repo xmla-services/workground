@@ -20,6 +20,11 @@ import mondrian.rolap.sql.*;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Cube;
+import org.eclipse.daanse.olap.api.Dimension;
+import org.eclipse.daanse.olap.api.Level;
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * limits the result of a Member SQL query to the current evaluation context.
  * All Members of the current context are joined against the fact table and only

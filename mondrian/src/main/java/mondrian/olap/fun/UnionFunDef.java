@@ -16,6 +16,8 @@ import mondrian.olap.*;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Definition of the <code>Union</code> MDX function.
  *

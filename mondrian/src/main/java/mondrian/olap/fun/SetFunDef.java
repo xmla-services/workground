@@ -22,6 +22,8 @@ import mondrian.resource.MondrianResource;
 import java.io.PrintWriter;
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * <code>SetFunDef</code> implements the 'set' function (whose syntax is the
  * brace operator, <code>{ ... }</code>).

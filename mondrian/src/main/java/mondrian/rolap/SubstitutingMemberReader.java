@@ -11,12 +11,13 @@ package mondrian.rolap;
 
 import mondrian.olap.Access;
 import mondrian.olap.Id;
-import mondrian.olap.Member;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
 
 import java.sql.SQLException;
 import java.util.*;
+
+import org.eclipse.daanse.olap.api.Member;
 
 /**
  * Implementation of {@link MemberReader} which replaces given members

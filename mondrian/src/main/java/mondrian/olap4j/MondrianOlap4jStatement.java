@@ -16,6 +16,7 @@ import mondrian.rolap.RolapConnection;
 import mondrian.server.*;
 import mondrian.util.Pair;
 
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.*;
 import org.olap4j.layout.RectangularCellSetFormatter;
 import org.olap4j.mdx.*;

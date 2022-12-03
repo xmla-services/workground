@@ -9,27 +9,47 @@
 */
 package mondrian.olap4j;
 
-import mondrian.olap.*;
-import mondrian.olap.Property;
-import mondrian.olap.Util.PropertyList;
-import mondrian.olap.fun.FunInfo;
-import mondrian.rolap.*;
-import mondrian.xmla.RowsetDefinition;
-import mondrian.xmla.XmlaHandler;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.olap4j.*;
+import org.eclipse.daanse.olap.api.MetaElement;
 import org.olap4j.Cell;
-import org.olap4j.metadata.*;
+import org.olap4j.CellSet;
+import org.olap4j.OlapConnection;
+import org.olap4j.OlapException;
+import org.olap4j.OlapStatement;
+import org.olap4j.OlapWrapper;
 import org.olap4j.metadata.Cube;
 import org.olap4j.metadata.Hierarchy;
 import org.olap4j.metadata.Level;
 import org.olap4j.metadata.Member;
+import org.olap4j.metadata.MetadataElement;
 import org.olap4j.metadata.Schema;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.*;
-import java.util.Map.Entry;
+import mondrian.olap.Category;
+import mondrian.olap.FunTable;
+import mondrian.olap.HierarchyBase;
+import mondrian.olap.MondrianServer;
+import mondrian.olap.Property;
+import mondrian.olap.Query;
+import mondrian.olap.Util;
+import mondrian.olap.Util.PropertyList;
+import mondrian.olap.fun.FunInfo;
+import mondrian.rolap.RolapAggregator;
+import mondrian.rolap.RolapConnection;
+import mondrian.rolap.RolapConnectionProperties;
+import mondrian.rolap.RolapCube;
+import mondrian.rolap.RolapLevel;
+import mondrian.rolap.RolapMemberBase;
+import mondrian.rolap.RolapSchema;
+import mondrian.xmla.RowsetDefinition;
+import mondrian.xmla.XmlaHandler;
 
 /**
  * Provides access to internals of mondrian's olap4j driver that are not part
@@ -323,13 +343,13 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
     {
         if (element instanceof OlapWrapper) {
             OlapWrapper wrapper = (OlapWrapper) element;
-            if (wrapper.isWrapperFor(Annotated.class)) {
-                final Annotated annotated = wrapper.unwrap(Annotated.class);
+            if (wrapper.isWrapperFor(MetaElement.class)) {
+                final MetaElement annotated = wrapper.unwrap(MetaElement.class);
                 final Map<String, Object> map = new HashMap<String, Object>();
-                for (Map.Entry<String, Annotation> entry
-                    : annotated.getAnnotationMap().entrySet())
+                for (Map.Entry<String, Object> entry
+                    : annotated.getMetadata().entrySet())
                 {
-                    map.put(entry.getKey(), entry.getValue().getValue());
+                    map.put(entry.getKey(), entry.getValue());
                 }
                 return map;
             }

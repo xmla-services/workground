@@ -16,6 +16,8 @@ import mondrian.rolap.sql.*;
 
 import java.util.*;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Creates a {@link mondrian.olap.NativeEvaluator} that evaluates NON EMPTY
  * CrossJoin in SQL. The generated SQL will join the dimension tables with

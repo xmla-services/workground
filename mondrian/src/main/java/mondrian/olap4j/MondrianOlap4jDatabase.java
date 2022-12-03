@@ -9,8 +9,7 @@
 
 package mondrian.olap4j;
 
-import mondrian.olap.OlapElement;
-
+import org.eclipse.daanse.olap.api.OlapElement;
 import org.olap4j.OlapConnection;
 import org.olap4j.OlapException;
 import org.olap4j.impl.Named;

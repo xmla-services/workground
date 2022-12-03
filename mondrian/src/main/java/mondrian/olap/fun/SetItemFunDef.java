@@ -19,6 +19,8 @@ import mondrian.olap.type.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.api.Member;
+
 /**
  * Definition of the <code>&lt;Set&gt;.Item</code> MDX function.
  *

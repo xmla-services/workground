@@ -16,6 +16,7 @@ import mondrian.spi.CatalogLocator;
 import mondrian.spi.impl.ServletContextCatalogLocator;
 import mondrian.web.taglib.ResultCache;
 
+import org.eclipse.daanse.olap.api.Member;
 import org.eigenbase.xom.StringEscaper;
 
 import java.io.IOException;
