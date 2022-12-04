@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.DimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.View;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -52,6 +51,8 @@ public class CubeImpl implements Cube {
     @XmlElement(name = "DrillThroughAction")
     protected List<DrillThroughActionImpl> drillThroughAction;
     @XmlAttribute(name = "name", required = true)
+    protected List<WritebackTableImpl> writebackTable;
+    @XmlAttribute(name = "writebackTable", required = true)
     protected String name;
     @XmlAttribute(name = "caption")
     protected String caption;
@@ -191,6 +192,14 @@ public class CubeImpl implements Cube {
 
     public void setEnabled(Boolean value) {
         this.enabled = value;
+    }
+
+    @Override
+    public List<WritebackTableImpl> writebackTable() {
+        if (writebackTable == null) {
+            writebackTable = new ArrayList<WritebackTableImpl>();
+        }
+        return this.writebackTable;
     }
 
 }

@@ -29,6 +29,7 @@ public record CubeR(String name,
                     List<CalculatedMemberR> calculatedMember,
                     List<NamedSetR> namedSet,
                     List<DrillThroughActionR> drillThroughAction,
+                    List<WritebackTableR> writebackTable,
                     boolean enabled,
                     boolean cache)
         implements Cube {
