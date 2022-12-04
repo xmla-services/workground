@@ -29,7 +29,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "annotations", "table", "view", "dimensionUsageOrDimension", "measure",
-        "calculatedMember", "namedSet", "drillThroughAction" })
+        "calculatedMember", "namedSet", "drillThroughAction", "writebackTable" })
 public class CubeImpl implements Cube {
 
     @XmlElementWrapper(name = "Annotations")
@@ -50,9 +50,9 @@ public class CubeImpl implements Cube {
     protected List<NamedSetImpl> namedSet;
     @XmlElement(name = "DrillThroughAction")
     protected List<DrillThroughActionImpl> drillThroughAction;
-    @XmlAttribute(name = "name", required = true)
+    @XmlElement(name = "WritebackTable")
     protected List<WritebackTableImpl> writebackTable;
-    @XmlAttribute(name = "writebackTable", required = true)
+    @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "caption")
     protected String caption;
