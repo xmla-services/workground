@@ -2,13 +2,14 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.eclipse.daanse</groupId>
-    <artifactId>org.eclipse.daanse.pom.parent</artifactId>
+    <artifactId>org.eclipse.daanse.olap.rolap</artifactId>
     <version>${revision}</version>
   </parent>
-  <artifactId>org.eclipse.daanse.olap</artifactId>
+  <artifactId>org.eclipse.daanse.olap.rolap.dbmapper</artifactId>
   <packaging>pom</packaging>
   <modules>
     <module>api</module>
-    <module>rolap</module>
+    <module>mondrian</module>
+    <module>record</module>
   </modules>
 </project>
