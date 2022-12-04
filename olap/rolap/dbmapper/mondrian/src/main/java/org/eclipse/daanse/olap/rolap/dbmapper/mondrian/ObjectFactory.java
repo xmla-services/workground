@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2022 Contributors to the Eclipse Foundation.
  *
@@ -20,6 +19,10 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 public class ObjectFactory {
 
     public ObjectFactory() {
+    }
+
+    public WritebackTableImpl createWritebackTable() {
+        return new WritebackTableImpl();
     }
 
     public SchemaImpl createSchema() {

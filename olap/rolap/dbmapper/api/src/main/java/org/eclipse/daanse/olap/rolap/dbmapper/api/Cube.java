@@ -32,6 +32,9 @@ public interface Cube {
     List<? extends NamedSet> namedSet();
 
     List<? extends DrillThroughAction> drillThroughAction();
+    
+    List<? extends WritebackTable> writebackTable();
+
 
     String name();
 
