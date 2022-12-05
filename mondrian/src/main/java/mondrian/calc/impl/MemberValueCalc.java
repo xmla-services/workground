@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc.impl;
 
@@ -71,47 +71,46 @@ public class MemberValueCalc extends GenericCalc {
      *   context
      */
     public static GenericCalc create(
-        Exp exp,
-        MemberCalc[] memberCalcs,
-        boolean nullCheck)
+            Exp exp,
+            MemberCalc[] memberCalcs,
+            boolean nullCheck)
     {
-        switch (memberCalcs.length) {
-        case 0:
-            return new ValueCalc(exp);
-        case 1:
-            return new MemberValueCalc(exp, memberCalcs[0], nullCheck);
-        default:
-            return new MemberArrayValueCalc(exp, memberCalcs, nullCheck);
-        }
+        return switch (memberCalcs.length) {
+        case 0 -> new ValueCalc(exp);
+        case 1 -> new MemberValueCalc(exp, memberCalcs[0], nullCheck);
+        default -> new MemberArrayValueCalc(exp, memberCalcs, nullCheck);
+        };
     }
 
+    @Override
     public Object evaluate(Evaluator evaluator) {
         final int savepoint = evaluator.savepoint();
         try {
             final Member member = memberCalc.evaluateMember(evaluator);
             if (member == null
-                || member.isNull())
+                    || member.isNull())
             {
                 return null;
             }
             evaluator.setContext(member);
             if (nullCheck
-                && evaluator.needToReturnNullForUnrelatedDimension(
-                    new Member[] {member}))
+                    && evaluator.needToReturnNullForUnrelatedDimension(
+                            new Member[] {member}))
             {
                 return null;
             }
-            final Object result = evaluator.evaluateCurrent();
-            return result;
+            return evaluator.evaluateCurrent();
         } finally {
             evaluator.restore(savepoint);
         }
     }
 
+    @Override
     public Calc[] getCalcs() {
         return new MemberCalc[] {memberCalc};
     }
 
+    @Override
     public boolean dependsOn(Hierarchy hierarchy) {
         if (super.dependsOn(hierarchy)) {
             return true;

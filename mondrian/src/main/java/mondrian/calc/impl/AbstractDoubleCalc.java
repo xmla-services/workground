@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc.impl;
 
@@ -27,8 +27,8 @@ import mondrian.olap.type.NumericType;
  * @since Sep 27, 2005
  */
 public abstract class AbstractDoubleCalc
-    extends AbstractCalc
-    implements DoubleCalc
+extends AbstractCalc
+implements DoubleCalc
 {
     /**
      * Creates an AbstractDoubleCalc.
@@ -41,12 +41,13 @@ public abstract class AbstractDoubleCalc
         assert getType() instanceof NumericType;
     }
 
+    @Override
     public Object evaluate(Evaluator evaluator) {
         final double d = evaluateDouble(evaluator);
         if (d == FunUtil.DoubleNull) {
             return null;
         }
-        return new Double(d);
+        return Double.valueOf(d);
     }
 }
 

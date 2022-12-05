@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc.impl;
 
@@ -48,8 +48,8 @@ public class ConstantCalc extends GenericCalc {
     public ConstantCalc(Type type, Object o) {
         super(new DummyExp(type));
         this.o = o;
-        this.i = initializeInteger(o);
-        this.d = initializeDouble(o);
+        i = initializeInteger(o);
+        d = initializeDouble(o);
     }
 
     @Override
@@ -57,22 +57,21 @@ public class ConstantCalc extends GenericCalc {
         return "Literal";
     }
 
+    @Override
     public ResultStyle getResultStyle() {
         return o == null
-            ? ResultStyle.VALUE
-            : ResultStyle.VALUE_NOT_NULL;
+                ? ResultStyle.VALUE
+                        : ResultStyle.VALUE_NOT_NULL;
     }
 
     private double initializeDouble(Object o) {
         double value;
         if (o instanceof Number) {
             value = ((Number) o).doubleValue();
+        } else if (o == null) {
+            value = FunUtil.DoubleNull;
         } else {
-            if (o == null) {
-                value = FunUtil.DoubleNull;
-            } else {
-                value = 0;
-            }
+            value = 0;
         }
         return value;
     }
@@ -81,12 +80,10 @@ public class ConstantCalc extends GenericCalc {
         int value;
         if (o instanceof Number) {
             value = ((Number) o).intValue();
+        } else if (o == null) {
+            value = FunUtil.IntegerNull;
         } else {
-            if (o == null) {
-                value = FunUtil.IntegerNull;
-            } else {
-                value = 0;
-            }
+            value = 0;
         }
         return value;
     }
@@ -97,18 +94,22 @@ public class ConstantCalc extends GenericCalc {
         arguments.put("value", o);
     }
 
+    @Override
     public Object evaluate(Evaluator evaluator) {
         return o;
     }
 
+    @Override
     public int evaluateInteger(Evaluator evaluator) {
         return i;
     }
 
+    @Override
     public double evaluateDouble(Evaluator evaluator) {
         return d;
     }
 
+    @Override
     public boolean dependsOn(Hierarchy hierarchy) {
         // A constant -- including a catalog element -- will evaluate to the
         // same result regardless of the evaluation context. For example, the
@@ -116,6 +117,7 @@ public class ConstantCalc extends GenericCalc {
         return false;
     }
 
+    @Override
     public Calc[] getCalcs() {
         return new Calc[0];
     }
@@ -178,8 +180,8 @@ public class ConstantCalc extends GenericCalc {
      */
     public static Calc constantMember(Member member) {
         return new ConstantCalc(
-            MemberType.forMember(member),
-            member);
+                MemberType.forMember(member),
+                member);
     }
 
     /**
@@ -190,8 +192,8 @@ public class ConstantCalc extends GenericCalc {
      */
     public static Calc constantLevel(Level level) {
         return new ConstantCalc(
-            LevelType.forLevel(level),
-            level);
+                LevelType.forLevel(level),
+                level);
     }
 
     /**
@@ -202,8 +204,8 @@ public class ConstantCalc extends GenericCalc {
      */
     public static Calc constantHierarchy(Hierarchy hierarchy) {
         return new ConstantCalc(
-            HierarchyType.forHierarchy(hierarchy),
-            hierarchy);
+                HierarchyType.forHierarchy(hierarchy),
+                hierarchy);
     }
 
     /**
@@ -214,8 +216,8 @@ public class ConstantCalc extends GenericCalc {
      */
     public static Calc constantDimension(Dimension dimension) {
         return new ConstantCalc(
-            DimensionType.forDimension(dimension),
-            dimension);
+                DimensionType.forDimension(dimension),
+                dimension);
     }
 }
 

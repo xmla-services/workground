@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc.impl;
 
@@ -34,10 +34,10 @@ import mondrian.olap.Evaluator;
  * backing list by calling {@link #slice}(0).
  *
  * @author jhyde
-*/
+ */
 public class UnaryTupleList
-    extends AbstractList<List<Member>>
-    implements TupleList
+extends AbstractList<List<Member>>
+implements TupleList
 {
     final List<Member> list;
 
@@ -57,6 +57,7 @@ public class UnaryTupleList
         this.list = list;
     }
 
+    @Override
     public Member get(int slice, int index) {
         assert slice == 0;
         return list.get(index);
@@ -77,6 +78,7 @@ public class UnaryTupleList
         return list.add(element.get(0));
     }
 
+    @Override
     public TupleList fix() {
         return this;
     }
@@ -85,16 +87,16 @@ public class UnaryTupleList
     public List<Member> set(int index, List<Member> element) {
         final Member member = list.set(index, element.get(0));
         return member == null
-            ? null
-            : Collections.singletonList(member);
+                ? null
+                        : Collections.singletonList(member);
     }
 
     @Override
     public List<Member> remove(int index) {
         final Member member = list.remove(index);
         return member == null
-            ? null
-            : Collections.singletonList(member);
+                ? null
+                        : Collections.singletonList(member);
     }
 
     @Override
@@ -107,33 +109,40 @@ public class UnaryTupleList
         return list.size();
     }
 
+    @Override
     public int getArity() {
         return 1;
     }
 
+    @Override
     public List<Member> slice(int column) {
         return list;
     }
 
+    @Override
     public TupleList cloneList(int capacity) {
         return new UnaryTupleList(
-            capacity < 0
-                ? new ArrayList<Member>(list)
-                : new ArrayList<Member>(capacity));
+                capacity < 0
+                ? new ArrayList<>(list)
+                        : new ArrayList<Member>(capacity));
     }
 
+    @Override
     public TupleCursor tupleCursor() {
         return tupleIterator();
     }
 
+    @Override
     public TupleIterator tupleIterator() {
         return new UnaryIterator();
     }
 
+    @Override
     public final Iterator<List<Member>> iterator() {
         return tupleIterator();
     }
 
+    @Override
     public TupleList project(int[] destIndices) {
         // REVIEW: Is 0-ary valid?
         assert destIndices.length == 1;
@@ -141,11 +150,13 @@ public class UnaryTupleList
         return this;
     }
 
+    @Override
     public void addTuple(Member... members) {
         assert members.length == 1;
         list.add(members[0]);
     }
 
+    @Override
     public void addCurrent(TupleCursor tupleIter) {
         list.add(tupleIter.member(0));
     }
@@ -153,40 +164,46 @@ public class UnaryTupleList
     @Override
     public TupleList subList(int fromIndex, int toIndex) {
         return new ListTupleList(
-            1,
-            list.subList(fromIndex, toIndex));
+                1,
+                list.subList(fromIndex, toIndex));
     }
 
+    @Override
     public TupleList withPositionCallback(
-        final PositionCallback positionCallback)
+            final PositionCallback positionCallback)
     {
         return new UnaryTupleList(
-            new AbstractList<Member>() {
-                public Member get(int index) {
-                    positionCallback.onPosition(index);
-                    return list.get(index);
-                }
+                new AbstractList<Member>() {
+                    @Override
+                    public Member get(int index) {
+                        positionCallback.onPosition(index);
+                        return list.get(index);
+                    }
 
-                public int size() {
-                    return list.size();
-                }
+                    @Override
+                    public int size() {
+                        return list.size();
+                    }
 
-                public Member set(int index, Member element) {
-                    positionCallback.onPosition(index);
-                    return list.set(index, element);
-                }
+                    @Override
+                    public Member set(int index, Member element) {
+                        positionCallback.onPosition(index);
+                        return list.set(index, element);
+                    }
 
-                public void add(int index, Member element) {
-                    positionCallback.onPosition(index);
-                    list.add(index, element);
-                }
+                    @Override
+                    public void add(int index, Member element) {
+                        positionCallback.onPosition(index);
+                        list.add(index, element);
+                    }
 
-                public Member remove(int index) {
-                    positionCallback.onPosition(index);
-                    return list.remove(index);
+                    @Override
+                    public Member remove(int index) {
+                        positionCallback.onPosition(index);
+                        return list.remove(index);
+                    }
                 }
-            }
-        );
+                );
     }
 
     /**
@@ -207,24 +224,28 @@ public class UnaryTupleList
          */
         int lastRet = -1;
 
+        @Override
         public boolean hasNext() {
             return cursor != size();
         }
 
+        @Override
         public List<Member> next() {
             try {
-                List<Member> next = get(cursor);
+                final List<Member> next = get(cursor);
                 lastRet = cursor++;
                 return next;
-            } catch (IndexOutOfBoundsException e) {
+            } catch (final IndexOutOfBoundsException e) {
                 throw new NoSuchElementException();
             }
         }
 
+        @Override
         public void currentToArray(Member[] members, int offset) {
             members[offset] = list.get(lastRet);
         }
 
+        @Override
         public boolean forward() {
             if (cursor == size()) {
                 return false;
@@ -233,14 +254,17 @@ public class UnaryTupleList
             return true;
         }
 
+        @Override
         public List<Member> current() {
             return get(lastRet);
         }
 
+        @Override
         public int getArity() {
             return 1;
         }
 
+        @Override
         public void remove() {
             if (lastRet == -1) {
                 throw new IllegalStateException();
@@ -251,15 +275,17 @@ public class UnaryTupleList
                     cursor--;
                 }
                 lastRet = -1;
-            } catch (IndexOutOfBoundsException e) {
+            } catch (final IndexOutOfBoundsException e) {
                 throw new ConcurrentModificationException();
             }
         }
 
+        @Override
         public void setContext(Evaluator evaluator) {
             evaluator.setContext(list.get(lastRet));
         }
 
+        @Override
         public Member member(int column) {
             assert column == 0;
             return list.get(lastRet);

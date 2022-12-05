@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc.impl;
 
@@ -25,14 +25,15 @@ public abstract class AbstractTupleCursor implements TupleCursor {
     protected final int arity;
 
     public AbstractTupleCursor(int arity) {
-        super();
         this.arity = arity;
     }
 
+    @Override
     public void setContext(Evaluator evaluator) {
         evaluator.setContext(current());
     }
 
+    @Override
     public void currentToArray(Member[] members, int offset) {
         if (offset == 0) {
             current().toArray(members);
@@ -42,10 +43,12 @@ public abstract class AbstractTupleCursor implements TupleCursor {
         }
     }
 
+    @Override
     public int getArity() {
         return arity;
     }
 
+    @Override
     public Member member(int column) {
         return current().get(column);
     }

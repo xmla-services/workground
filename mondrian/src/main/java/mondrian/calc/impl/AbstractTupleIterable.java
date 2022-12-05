@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc.impl;
 
@@ -19,7 +19,7 @@ import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleIterator;
 
 /**
-* Abstract implementation of {@link mondrian.calc.TupleIterable}.
+ * Abstract implementation of {@link mondrian.calc.TupleIterable}.
  *
  * <p>Derived classes need to implement only {@link #tupleCursor()},
  * and this implementation will implement {@link #tupleIterator()} and
@@ -31,7 +31,7 @@ import mondrian.calc.TupleIterator;
  * @author jhyde
  */
 public abstract class AbstractTupleIterable
-    implements TupleIterable
+implements TupleIterable
 {
     protected final int arity;
 
@@ -44,18 +44,22 @@ public abstract class AbstractTupleIterable
         this.arity = arity;
     }
 
+    @Override
     public int getArity() {
         return arity;
     }
 
+    @Override
     public Iterable<Member> slice(int column) {
         return TupleCollections.slice(this, column);
     }
 
+    @Override
     public final Iterator<List<Member>> iterator() {
         return tupleIterator();
     }
 
+    @Override
     public TupleIterator tupleIterator() {
         return TupleCollections.iterator(tupleCursor());
     }
