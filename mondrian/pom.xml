@@ -214,12 +214,12 @@
       <artifactId>sqlite-jdbc</artifactId>
       <version>3.36.0.3</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.awaitility</groupId>
       <artifactId>awaitility</artifactId>
@@ -381,7 +381,7 @@
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.repackage.rhino.engine</artifactId>
       <version>${revision}</version>
-      <scope>runtime</scope>
+      <scope>compile</scope>
     </dependency>
         <dependency>
       <groupId>org.eclipse.daanse</groupId>
