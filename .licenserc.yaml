@@ -53,6 +53,7 @@ header:
     - '**/.editorconfig'
     - '**/.project'
     - '**/RELEASE.txt'
+    - '**/mondrian_org.xsd'
     - 'dist'
     - 'legacy/**'
     - 'license.templates'
