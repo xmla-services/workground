@@ -111,4 +111,3 @@ public class MySqlDialect3Test {
     }
 
 }
-// End MySqlDialectTest.java

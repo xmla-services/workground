@@ -330,4 +330,3 @@ public class RestrictedMemberReaderTest extends FoodMartTestCase {
       Assert.assertTrue(testResult.containsValue(Access.ALL));
   }
 }
-// End RestrictedMemberReaderTest.java

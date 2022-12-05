@@ -1400,4 +1400,3 @@ public class ConcurrentMdxTest {
     }
 
 }
-// End ConcurrentMdxTest.java

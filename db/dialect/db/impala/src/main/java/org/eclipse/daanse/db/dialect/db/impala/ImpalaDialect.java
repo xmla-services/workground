@@ -197,4 +197,3 @@ public class ImpalaDialect extends HiveDialect {
         return true;
     }
 }
-// End ImpalaDialect.java

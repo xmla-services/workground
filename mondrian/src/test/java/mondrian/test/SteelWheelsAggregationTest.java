@@ -226,4 +226,3 @@ public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
         assertQueryReturns(context.createConnection(), QUERY, EXPECTED);
     }
 }
-// End SteelWheelsAggregationTest.java

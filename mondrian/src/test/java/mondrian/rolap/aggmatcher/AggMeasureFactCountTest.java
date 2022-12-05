@@ -530,4 +530,3 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
         propSaver.set(propSaver.properties.ReadAggregates, false);
     }
 }
-// End AggMeasureFactCountTest.java

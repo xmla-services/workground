@@ -209,4 +209,3 @@ public class RolapSchemaPoolTest {
         }
     }
 }
-// End RolapSchemaPoolTest.java

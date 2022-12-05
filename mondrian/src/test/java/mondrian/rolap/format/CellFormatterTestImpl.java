@@ -21,4 +21,3 @@ class CellFormatterTestImpl implements CellFormatter {
         return null;
     }
 }
-// End CellFormatterTestImpl.java

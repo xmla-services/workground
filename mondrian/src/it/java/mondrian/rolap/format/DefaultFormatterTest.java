@@ -85,4 +85,3 @@ public class DefaultFormatterTest extends TestCase {
         }
     }
 }
-// End DefaultFormatterTest.java

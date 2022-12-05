@@ -69,4 +69,3 @@ public class ImpalaDialectTest{
     assertTrue( sql.contains( quotedRegex ),sql);
   }
 }
-// End ImpalaDialectTest.java

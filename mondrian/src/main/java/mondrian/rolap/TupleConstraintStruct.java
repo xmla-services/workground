@@ -65,4 +65,3 @@ public class TupleConstraintStruct {
         return members.toArray(new Member[members.size()]);
     }
 }
-// End TupleConstraintStruct.java

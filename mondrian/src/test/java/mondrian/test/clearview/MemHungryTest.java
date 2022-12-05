@@ -51,4 +51,3 @@ public class MemHungryTest extends ClearViewBase {
         }
     }
 }
-// End MemHungryTest.java

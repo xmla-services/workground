@@ -1375,4 +1375,3 @@ public class ConcurrentMdxTest extends FoodMartTestCase {
         props = MondrianProperties.instance();
     }
 }
-// End ConcurrentMdxTest.java

@@ -42,4 +42,3 @@ public class CancellationChecker {
     }
   }
 }
-// End CancellationChecker.java

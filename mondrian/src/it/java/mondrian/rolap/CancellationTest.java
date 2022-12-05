@@ -111,4 +111,3 @@ public class CancellationTest extends FoodMartTestCase {
         }
     }
 }
-// End CancellationTest.java

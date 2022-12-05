@@ -134,4 +134,3 @@ public class SqlStatementTest {
     assertEquals(dialect, dialectReturn);
   }
 }
-// End SqlStatementTest.java

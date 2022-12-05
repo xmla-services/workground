@@ -320,4 +320,3 @@ public class RestrictedMemberReaderTest {
       assertTrue(testResult.containsValue(Access.ALL));
   }
 }
-// End RestrictedMemberReaderTest.java

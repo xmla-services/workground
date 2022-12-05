@@ -58,4 +58,3 @@ public class RedshiftDialectTest {
         assertEquals("REGEXP_INSTR(table.column,'.*a.*',1,1,0,'c') > 0", sql);
     }
 }
-// End RedshiftDialectTest.java

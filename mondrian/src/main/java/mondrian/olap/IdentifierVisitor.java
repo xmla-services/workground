@@ -25,4 +25,3 @@ public class IdentifierVisitor extends MdxVisitorImpl {
         return null;
     }
 }
-// End IdentifierVisitor.java

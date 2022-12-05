@@ -97,4 +97,3 @@ public class RolapCubeDimensionTest extends TestCase {
     assertEquals(factCube, rcd.lookupFactCube(cubeDim, schema));
   }
 }
-// End RolapCubeDimensionTest.java

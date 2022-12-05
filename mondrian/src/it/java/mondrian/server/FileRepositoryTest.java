@@ -167,4 +167,3 @@ public class FileRepositoryTest extends TestCase {
              .getConnection(cInfo, mockServer, roleName, mockProps);
       }
 }
-// End FileRepositoryTest.java

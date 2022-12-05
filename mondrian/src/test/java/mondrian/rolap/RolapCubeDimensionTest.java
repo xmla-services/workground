@@ -102,4 +102,3 @@ public class RolapCubeDimensionTest {
     assertEquals(factCube, rcd.lookupFactCube(cubeDim, schema));
   }
 }
-// End RolapCubeDimensionTest.java

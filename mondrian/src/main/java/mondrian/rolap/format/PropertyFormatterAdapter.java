@@ -33,4 +33,3 @@ class PropertyFormatterAdapter implements PropertyFormatter {
         return numberFormatter.format(propertyValue);
     }
 }
-// End PropertyFormatterAdapter.java

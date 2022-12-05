@@ -61,4 +61,3 @@ class DefaultRolapMemberFormatter implements MemberFormatter {
         return numberFormatter.format(captionValue);
     }
 }
-// End DefaultRolapMemberFormatter.java

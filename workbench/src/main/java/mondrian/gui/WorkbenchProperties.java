@@ -33,4 +33,3 @@ public class WorkbenchProperties extends Properties {
     return super.getProperty(key);
   }
 }
-// End WorkbenchProperties.java

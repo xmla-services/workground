@@ -89,4 +89,3 @@ public class MicrosoftSqlServerDialectTest {
     }
 
 }
-// End MicrosoftSqlServerDialectTest.java

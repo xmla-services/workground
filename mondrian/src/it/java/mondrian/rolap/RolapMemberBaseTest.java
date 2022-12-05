@@ -179,4 +179,3 @@ public class RolapMemberBaseTest extends TestCase {
         assertEquals(Integer.MIN_VALUE, captionValue);
     }
 }
-// End RolapMemberBaseTest.java

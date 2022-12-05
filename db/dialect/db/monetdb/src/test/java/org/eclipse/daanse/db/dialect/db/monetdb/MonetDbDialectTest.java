@@ -165,4 +165,3 @@ public class MonetDbDialectTest {
     }
 
 }
-// End MonetDbDialectTest.java

@@ -45,4 +45,3 @@ public class MemHungryTest extends ClearViewBase {
         return constructSuite(getDiffReposStatic(), MemHungryTest.class);
     }
 }
-// End MemHungryTest.java

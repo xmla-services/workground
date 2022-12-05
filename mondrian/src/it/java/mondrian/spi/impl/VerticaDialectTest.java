@@ -47,4 +47,3 @@ public class VerticaDialectTest extends TestCase {
     assertEquals( " REGEXP_LIKE ( CAST (table.column AS VARCHAR), '.*a.*')", sql );
   }
 }
-// End VerticaDialectTest.java

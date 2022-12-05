@@ -112,4 +112,3 @@ public class SqlStatementTest extends TestCase {
     assertEquals(dialect, dialectReturn);
   }
 }
-// End SqlStatementTest.java

@@ -432,4 +432,3 @@ public class NonCollapsedAggTest extends AggTableTestCase {
     }
 
 }
-// End NonCollapsedAggTest.java
