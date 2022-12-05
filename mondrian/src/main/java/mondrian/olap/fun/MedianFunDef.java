@@ -67,5 +67,3 @@ class MedianFunDef extends AbstractAggregateFunDef {
         };
     }
 }
-
-// End MedianFunDef.java

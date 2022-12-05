@@ -60,5 +60,3 @@ public class HsqldbDialect extends JdbcDialectImpl {
             " from \"days\" where \"day\" = 1", false);
     }
 }
-
-// End HsqldbDialect.java

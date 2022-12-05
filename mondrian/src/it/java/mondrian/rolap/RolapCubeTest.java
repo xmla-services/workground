@@ -356,5 +356,3 @@ public class RolapCubeTest extends FoodMartTestCase {
     }
 
 }
-
-// End RolapCubeTest.java

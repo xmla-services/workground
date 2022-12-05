@@ -128,5 +128,3 @@ class DrilldownMemberFunDef extends FunDefBase {
         };
     }
 }
-
-// End DrilldownMemberFunDef.java

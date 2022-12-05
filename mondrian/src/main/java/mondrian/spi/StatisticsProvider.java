@@ -88,5 +88,3 @@ public interface StatisticsProvider {
         String column,
         Execution execution);
 }
-
-// End StatisticsProvider.java

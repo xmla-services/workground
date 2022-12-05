@@ -110,5 +110,3 @@ public enum LevelType {
            && ordinal() <= TimeUndefined.ordinal();
     }
 }
-
-// End LevelType.java

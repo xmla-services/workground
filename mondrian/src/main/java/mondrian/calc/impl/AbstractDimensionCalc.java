@@ -45,5 +45,3 @@ implements DimensionCalc
         return evaluateDimension(evaluator);
     }
 }
-
-// End AbstractDimensionCalc.java

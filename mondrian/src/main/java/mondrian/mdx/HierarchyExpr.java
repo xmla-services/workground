@@ -79,5 +79,3 @@ public class HierarchyExpr extends ExpBase implements Exp {
         return visitor.visit(this);
     }
 }
-
-// End HierarchyExpr.java

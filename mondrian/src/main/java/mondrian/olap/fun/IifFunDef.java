@@ -262,5 +262,3 @@ public class IifFunDef extends FunDefBase {
             "Returns one of two set values determined by a logical test.",
             "fxbxx");
 }
-
-// End IifFunDef.java

@@ -322,5 +322,3 @@ public class Segment {
     return this.segmentHeader;
   }
 }
-
-// End Segment.java

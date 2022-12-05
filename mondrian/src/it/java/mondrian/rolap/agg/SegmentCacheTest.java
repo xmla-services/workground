@@ -150,5 +150,3 @@ public class SegmentCacheTest extends BasicQueryTest {
         return null;
     }
 }
-
-// End SegmentCacheTest.java

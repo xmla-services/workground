@@ -355,5 +355,3 @@ public class I18n {
         return "";
     }
 }
-
-// End I18n.java

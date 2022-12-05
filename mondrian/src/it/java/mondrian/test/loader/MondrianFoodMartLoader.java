@@ -3383,5 +3383,3 @@ public class MondrianFoodMartLoader {
         boolean test(T t);
     }
 }
-
-// End MondrianFoodMartLoader.java

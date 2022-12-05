@@ -67,5 +67,3 @@ public interface DataSourceChangeListener {
      */
     public boolean isAggregationChanged(AggregationKey aggregation);
 }
-
-// End DataSourceChangeListener.java

@@ -41,5 +41,3 @@ public enum Access {
         return this.name();
     };
 }
-
-// End Access.java

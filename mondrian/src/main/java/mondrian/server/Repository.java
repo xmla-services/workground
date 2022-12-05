@@ -110,5 +110,3 @@ public interface Repository {
      */
     void shutdown();
 }
-
-// End Repository.java

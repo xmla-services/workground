@@ -45,5 +45,3 @@ implements MemberCalc
         return evaluateMember(evaluator);
     }
 }
-
-// End AbstractMemberCalc.java

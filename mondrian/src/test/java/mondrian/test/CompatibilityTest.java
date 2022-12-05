@@ -707,5 +707,3 @@ public class CompatibilityTest {
             "Mondrian Error:MDX object 'USA.CA' not found in cube 'Sales'");
     }
 }
-
-// End CompatibilityTest.java

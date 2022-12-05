@@ -30,5 +30,3 @@ public interface ListCalc extends IterCalc {
      */
     TupleList evaluateList(Evaluator evaluator);
 }
-
-// End ListCalc.java

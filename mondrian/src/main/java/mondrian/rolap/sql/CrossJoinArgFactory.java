@@ -1026,5 +1026,3 @@ public class CrossJoinArgFactory {
             || (exp instanceof NamedSetExpr);
     }
 }
-
-// End CrossJoinArgFactory.java

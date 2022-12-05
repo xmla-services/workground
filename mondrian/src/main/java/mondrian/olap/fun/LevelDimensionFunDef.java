@@ -47,5 +47,3 @@ class LevelDimensionFunDef extends FunDefBase {
         };
     }
 }
-
-// End LevelDimensionFunDef.java

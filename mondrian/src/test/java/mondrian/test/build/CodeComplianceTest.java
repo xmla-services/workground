@@ -45,5 +45,3 @@ public class CodeComplianceTest
         runAntTest("checkJavadoc");
     }
 }
-
-// End CodeComplianceTest.java

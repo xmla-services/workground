@@ -277,5 +277,3 @@ public class OrPredicate extends ListPredicate {
         return "or";
     }
 }
-
-// End OrPredicate.java

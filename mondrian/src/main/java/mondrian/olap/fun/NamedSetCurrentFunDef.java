@@ -68,5 +68,3 @@ public class NamedSetCurrentFunDef extends FunDefBase {
         }
     }
 }
-
-// End NamedSetCurrentFunDef.java

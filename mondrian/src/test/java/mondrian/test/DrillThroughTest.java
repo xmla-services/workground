@@ -2161,5 +2161,3 @@ public class DrillThroughTest {
         }
     }
 }
-
-// End DrillThroughTest.java

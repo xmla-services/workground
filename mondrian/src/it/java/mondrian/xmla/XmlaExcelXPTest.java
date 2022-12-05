@@ -176,5 +176,3 @@ public class XmlaExcelXPTest extends XmlaBaseTestCase {
         helperTestExpect(true);
     }
 }
-
-// End XmlaExcelXPTest.java

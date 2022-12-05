@@ -184,5 +184,3 @@ public class UtilCompatibleJdk15 implements UtilCompatible {
         return (i < 0) ? (i - start) : (i + start);
     }
 }
-
-// End UtilCompatibleJdk15.java

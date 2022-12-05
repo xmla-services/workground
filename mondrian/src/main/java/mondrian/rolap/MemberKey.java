@@ -68,5 +68,3 @@ class MemberKey {
         return (RolapLevel) level.getChildLevel();
     }
 }
-
-// End MemberKey.java

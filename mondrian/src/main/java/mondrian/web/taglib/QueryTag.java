@@ -87,5 +87,3 @@ public class QueryTag extends BodyTagSupport {
     private String name;
     private boolean resultCache;
 }
-
-// End QueryTag.java

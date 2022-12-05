@@ -342,5 +342,3 @@ public enum Syntax {
         return sb.toString();
     }
 }
-
-// End Syntax.java

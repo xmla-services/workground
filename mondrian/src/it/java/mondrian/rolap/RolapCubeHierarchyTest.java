@@ -236,5 +236,3 @@ public class RolapCubeHierarchyTest extends FoodMartTestCase {
   }
 
 }
-
-// End RolapCubeHierarchyTest.java

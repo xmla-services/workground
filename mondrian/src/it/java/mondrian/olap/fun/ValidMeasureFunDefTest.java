@@ -93,5 +93,3 @@ public class ValidMeasureFunDefTest extends TestCase {
         + "Row #0: \n");
   }
 }
-
-// End ValidMeasureFunDefTest.java

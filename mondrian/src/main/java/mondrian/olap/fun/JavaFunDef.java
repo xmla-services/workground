@@ -401,5 +401,3 @@ public class JavaFunDef extends FunDefBase {
         }
     }
 }
-
-// End JavaFunDef.java

@@ -581,5 +581,3 @@ public final class ScenarioImpl implements Scenario {
         }
     }
 }
-
-// End ScenarioImpl.java

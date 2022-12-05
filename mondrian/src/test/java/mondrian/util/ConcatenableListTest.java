@@ -123,5 +123,3 @@ public class ConcatenableListTest{
             testList.get(0),"testList.get(0) should return NON_EMPTY_MARKER");
     }
 }
-
-// End ConcatenableListTest.java

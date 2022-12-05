@@ -94,5 +94,3 @@ public class MemberKeyConstraint
         return true;
     }
 }
-
-// End MemberKeyConstraint.java

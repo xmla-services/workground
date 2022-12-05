@@ -26,5 +26,3 @@ public interface Visitor<T> {
     T visit(CellCacheSegmentCreateEvent event);
     T visit(CellCacheSegmentDeleteEvent event);
 }
-
-// End Visitor.java

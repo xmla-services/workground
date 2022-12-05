@@ -50,5 +50,3 @@ public class LucidDbDialect extends JdbcDialectImpl {
         return true;
     }
 }
-
-// End LucidDbDialect.java

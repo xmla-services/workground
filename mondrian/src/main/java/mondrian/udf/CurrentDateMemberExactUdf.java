@@ -59,5 +59,3 @@ public class CurrentDateMemberExactUdf extends CurrentDateMemberUdf {
         return null;
     }
 }
-
-// End CurrentDateMemberExactUdf.java

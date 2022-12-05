@@ -40,5 +40,3 @@ public class WorkbenchTreeModelPath implements TreeModelPath {
     }
 
 }
-
-// End WorkbenchTreeModelPath.java

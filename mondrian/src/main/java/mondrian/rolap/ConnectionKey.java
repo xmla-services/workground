@@ -94,5 +94,3 @@ public class ConnectionKey extends StringKey {
         Util.quoteForMdx(buf, value.toString());
     }
 }
-
-// End ConnectionKey.java

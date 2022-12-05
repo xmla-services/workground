@@ -386,5 +386,3 @@ class UnionRoleImpl implements Role {
         }
     }
 }
-
-// End UnionRoleImpl.java

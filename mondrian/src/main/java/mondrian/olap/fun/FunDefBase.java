@@ -429,5 +429,3 @@ public abstract class FunDefBase extends FunUtil implements FunDef {
         getSyntax().unparse(getName(), args, pw);
     }
 }
-
-// End FunDefBase.java

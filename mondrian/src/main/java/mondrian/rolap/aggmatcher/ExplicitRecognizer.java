@@ -483,5 +483,3 @@ class ExplicitRecognizer extends Recognizer {
         return factCountColumnName;
     }
 }
-
-// End ExplicitRecognizer.java

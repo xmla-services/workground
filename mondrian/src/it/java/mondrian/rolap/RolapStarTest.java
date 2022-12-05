@@ -125,5 +125,3 @@ public class RolapStarTest extends FoodMartTestCase {
     return colMock;
    }
 }
-
-// End RolapStarTest.java

@@ -48,5 +48,3 @@ public class GroupingSetsCollector {
         return groupingSets;
     }
 }
-
-// End GroupingSetsCollector.java

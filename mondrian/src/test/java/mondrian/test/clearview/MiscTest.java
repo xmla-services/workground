@@ -49,5 +49,3 @@ public class MiscTest extends ClearViewBase {
     }
 
 }
-
-// End MiscTest.java

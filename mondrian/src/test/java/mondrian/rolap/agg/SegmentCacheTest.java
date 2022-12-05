@@ -162,5 +162,3 @@ public class SegmentCacheTest {
         return null;
     }
 }
-
-// End SegmentCacheTest.java

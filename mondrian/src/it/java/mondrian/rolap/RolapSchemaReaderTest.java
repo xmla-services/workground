@@ -184,5 +184,3 @@ public class RolapSchemaReaderTest extends FoodMartTestCase {
         }
     }
 }
-
-// End RolapSchemaReaderTest.java

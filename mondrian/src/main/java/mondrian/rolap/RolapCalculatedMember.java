@@ -113,5 +113,3 @@ public class RolapCalculatedMember extends RolapMemberBase {
         this.baseCube = baseCube;
     }
 }
-
-// End RolapCalculatedMember.java

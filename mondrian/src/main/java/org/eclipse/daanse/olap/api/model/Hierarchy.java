@@ -82,5 +82,3 @@ public interface Hierarchy extends OlapElement, MetaElement {
 
     String getDisplayFolder();
 }
-
-// End Hierarchy.java

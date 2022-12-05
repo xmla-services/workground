@@ -121,5 +121,3 @@ class DenseDoubleSegmentDataset extends DenseNativeSegmentDataset {
             axes);
     }
 }
-
-// End DenseDoubleSegmentDataset.java

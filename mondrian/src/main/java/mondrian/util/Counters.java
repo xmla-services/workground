@@ -31,5 +31,3 @@ public abstract class Counters {
     public static final Set<Long> SQL_STATEMENT_EXECUTING_IDS =
         Collections.synchronizedSet(new HashSet<Long>());
 }
-
-// End Counters.java

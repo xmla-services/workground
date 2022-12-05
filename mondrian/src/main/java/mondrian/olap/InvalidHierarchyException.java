@@ -25,5 +25,3 @@ public class InvalidHierarchyException extends MondrianException {
         super(message);
     }
 }
-
-// End InvalidHierarchyException.java

@@ -133,5 +133,3 @@ class SumFunDef extends AbstractAggregateFunDef {
     };
   }
 }
-
-// End SumFunDef.java

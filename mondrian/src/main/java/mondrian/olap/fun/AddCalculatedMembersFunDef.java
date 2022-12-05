@@ -145,5 +145,3 @@ class AddCalculatedMembersFunDef extends FunDefBase {
         }
     }
 }
-
-// End AddCalculatedMembersFunDef.java

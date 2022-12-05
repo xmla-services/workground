@@ -1438,5 +1438,3 @@ public class RolapEvaluator implements Evaluator {
     abstract void execute( RolapEvaluator evaluator );
   }
 }
-
-// End RolapEvaluator.java

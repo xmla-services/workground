@@ -23,5 +23,3 @@ public interface ProfileHandler {
      */
     public void explain(String plan, QueryTiming timing);
 }
-
-// End ProfileHandler.java

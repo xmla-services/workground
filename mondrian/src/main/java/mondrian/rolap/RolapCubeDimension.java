@@ -160,5 +160,3 @@ public class RolapCubeDimension extends RolapDimension {
     }
 
 }
-
-// End RolapCubeDimension.java

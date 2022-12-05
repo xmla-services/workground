@@ -328,5 +328,3 @@ class CacheMemberReader implements MemberReader, MemberCache {
         return member.getParentMember();
     }
 }
-
-// End CacheMemberReader.java

@@ -5237,5 +5237,3 @@ public class SchemaTest {
     }
 
 }
-
-// End SchemaTest.java

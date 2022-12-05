@@ -423,5 +423,3 @@ public class RolapSchemaTest {
         assertEquals(expected.getMessage(), actual.getMessage());
     }
 }
-
-// End RolapSchemaTest.java

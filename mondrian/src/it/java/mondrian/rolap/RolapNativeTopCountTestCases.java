@@ -459,5 +459,3 @@ class RolapNativeTopCountTestCases {
         + "Axis #1:\n";
 
 }
-
-// End RolapNativeTopCountTestCases.java

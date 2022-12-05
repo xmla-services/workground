@@ -286,5 +286,3 @@ public class MemberListCrossJoinArg implements CrossJoinArg {
         return true;
     }
 }
-
-// End MemberListCrossJoinArg.java

@@ -49,5 +49,3 @@ public class RolapNativeSqlInjectionTest extends FoodMartTestCase {
         fail("[Store Sales] filtering should not work for non-valid decimals");
     }
 }
-
-// End RolapNativeSqlInjectionTest.java

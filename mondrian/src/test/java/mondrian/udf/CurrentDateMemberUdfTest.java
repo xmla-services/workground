@@ -70,5 +70,3 @@ public class CurrentDateMemberUdfTest {
         TestUtil.assertQueryReturns(connection,query, expected);
     }
 }
-
-// End CurrentDateMemberUdfTest.java

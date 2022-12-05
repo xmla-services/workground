@@ -135,5 +135,3 @@ public class MemorySegmentCache implements SegmentCache {
         }
     }
 }
-
-// End MemorySegmentCache.java

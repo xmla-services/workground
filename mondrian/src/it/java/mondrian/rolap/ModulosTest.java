@@ -185,5 +185,3 @@ public class ModulosTest extends TestCase {
             Collections.<Member>nCopies(size, null));
     }
 }
-
-// End ModulosTest.java

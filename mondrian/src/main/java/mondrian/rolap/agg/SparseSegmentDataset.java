@@ -113,5 +113,3 @@ class SparseSegmentDataset implements SegmentDataset {
             axes);
     }
 }
-
-// End SparseSegmentDataset.java

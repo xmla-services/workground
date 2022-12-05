@@ -159,5 +159,3 @@ public abstract class ResultBase implements Result {
   public void close() {
   }
 }
-
-// End ResultBase.java

@@ -3025,5 +3025,3 @@ public class TestAggregationManager extends BatchTestCase {
     }
 
 }
-
-// End TestAggregationManager.java

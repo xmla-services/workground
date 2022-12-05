@@ -1842,5 +1842,3 @@ class BatchLoader {
     }
 
 }
-
-// End FastBatchingCellReader.java

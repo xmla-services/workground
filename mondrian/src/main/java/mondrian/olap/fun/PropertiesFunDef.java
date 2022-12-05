@@ -185,5 +185,3 @@ class PropertiesFunDef extends FunDefBase {
         }
     }
 }
-
-// End PropertiesFunDef.java

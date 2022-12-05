@@ -131,5 +131,3 @@ public class GlobalFunTable extends FunTableImpl {
         }
     }
 }
-
-// End GlobalFunTable.java

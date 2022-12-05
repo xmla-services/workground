@@ -136,5 +136,3 @@ outer:
 
     protected abstract FunDef createFunDef(Exp[] args, FunDef dummyFunDef);
 }
-
-// End MultiResolver.java

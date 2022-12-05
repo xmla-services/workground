@@ -88,5 +88,3 @@ public class UnionFunDef extends FunDefBase {
         }
     }
 }
-
-// End UnionFunDef.java

@@ -40,5 +40,3 @@ public final class CellRequestQuantumExceededException
     private CellRequestQuantumExceededException() {
     }
 }
-
-// End CellRequestQuantumExceededException.java

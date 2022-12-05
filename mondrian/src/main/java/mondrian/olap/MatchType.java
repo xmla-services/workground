@@ -41,5 +41,3 @@ public enum MatchType {
         return this == EXACT || this == EXACT_SCHEMA;
     }
 }
-
-// End MatchType.java

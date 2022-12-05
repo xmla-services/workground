@@ -224,5 +224,3 @@ public class NativeFilterAgainstAggTableTest extends BatchTestCase {
             patterns, false, true, true);
     }
 }
-
-// End NativeFilterAgainstAggTableTest.java

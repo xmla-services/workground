@@ -69,5 +69,3 @@ public interface TupleIterable extends Iterable<List<Member>> {
      */
     Iterable<Member> slice(int column);
 }
-
-// End TupleIterable.java

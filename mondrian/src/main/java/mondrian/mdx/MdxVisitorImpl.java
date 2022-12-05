@@ -123,5 +123,3 @@ public class MdxVisitorImpl implements MdxVisitor {
         return newArgs;
     }
 }
-
-// End MdxVisitorImpl.java

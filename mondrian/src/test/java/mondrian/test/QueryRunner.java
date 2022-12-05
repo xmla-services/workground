@@ -309,5 +309,3 @@ public class QueryRunner extends Thread {
         }
     }
 }
-
-// End QueryRunner.java

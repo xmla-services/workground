@@ -695,5 +695,3 @@ public class CaptionTest extends TestCase {
         }
     }
 }
-
-// End CaptionTest.java

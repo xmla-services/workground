@@ -1553,5 +1553,3 @@ public class UtilTestCase extends TestCase {
         }
     }
 }
-
-// End UtilTestCase.java

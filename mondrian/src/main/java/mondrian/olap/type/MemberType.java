@@ -232,5 +232,3 @@ public class MemberType implements Type {
         return 1;
     }
 }
-
-// End MemberType.java

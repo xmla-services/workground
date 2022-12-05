@@ -347,5 +347,3 @@ class DefaultRecognizer extends Recognizer {
         return factCountColumnName;
     }
 }
-
-// End DefaultRecognizer.java

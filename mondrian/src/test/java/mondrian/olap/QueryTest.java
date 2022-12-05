@@ -83,5 +83,3 @@ public class QueryTest {
         assertTrue(queryWithoutCellProps.isCellPropertyEmpty());
     }
 }
-
-// End QueryTest.java

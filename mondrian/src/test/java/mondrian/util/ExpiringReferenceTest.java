@@ -93,5 +93,3 @@ public class ExpiringReferenceTest
         assertNotNull(reference.hardRef);
     }
 }
-
-// End ExpiringReferenceTest.java

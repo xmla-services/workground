@@ -1272,5 +1272,3 @@ public class ParserTest {
         }
     }
 }
-
-// End ParserTest.java

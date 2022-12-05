@@ -145,5 +145,3 @@ class MondrianOlap4jProperty implements IMondrianOlap4jProperty, Named {
     }
 
 }
-
-// End MondrianOlap4jProperty.java

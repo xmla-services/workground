@@ -82,5 +82,3 @@ class SetToStrFunDef extends FunDefBase {
         return buf.toString();
     }
 }
-
-// End SetToStrFunDef.java

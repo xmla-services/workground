@@ -57,5 +57,3 @@ public class XmlaDimensionPropertiesTest extends XmlaBaseTestCase {
         throw new UnsupportedOperationException();
     }
 }
-
-// End XmlaDimensionPropertiesTest.java

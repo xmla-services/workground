@@ -844,5 +844,3 @@ public class SqlConstraintUtilsTest {
       e.setSlicerContext( members, membersByHierarchy );
     }
 }
-
-// End SqlConstraintUtilsTest.java

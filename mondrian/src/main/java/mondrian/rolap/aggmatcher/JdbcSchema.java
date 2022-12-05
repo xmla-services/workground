@@ -1414,5 +1414,3 @@ public class JdbcSchema {
         makeFactory();
     }
 }
-
-// End JdbcSchema.java

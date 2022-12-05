@@ -1122,5 +1122,3 @@ public class RolapMemberBase
     }
 
 }
-
-// End RolapMemberBase.java

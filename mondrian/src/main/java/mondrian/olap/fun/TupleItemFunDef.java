@@ -104,5 +104,3 @@ class TupleItemFunDef extends FunDefBase {
         }
     }
 }
-
-// End TupleItemFunDef.java

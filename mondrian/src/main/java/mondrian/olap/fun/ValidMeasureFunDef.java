@@ -221,5 +221,3 @@ public class ValidMeasureFunDef extends FunDefBase
         }
     }
 }
-
-// End ValidMeasureFunDef.java

@@ -73,5 +73,3 @@ public class IteratorIterable<E> implements Iterable<E> {
             recordingIterator);
     }
 }
-
-// End IteratorIterable.java

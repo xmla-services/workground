@@ -336,5 +336,3 @@ public class MySqlDialect extends JdbcDialectImpl {
     }
 
 }
-
-// End MySqlDialect.java

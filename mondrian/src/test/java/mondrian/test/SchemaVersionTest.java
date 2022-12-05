@@ -269,5 +269,3 @@ public class SchemaVersionTest {
         + "\n"
         + "</Schema>";
 }
-
-// End SchemaVersionTest.java

@@ -29,5 +29,3 @@ public interface StringCalc extends Calc {
      */
     String evaluateString(Evaluator evaluator);
 }
-
-// End StringCalc.java

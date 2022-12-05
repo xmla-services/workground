@@ -34,5 +34,3 @@ public class PropertyRestoringTestCase extends TestCase {
         propSaver.reset();
     }
 }
-
-// End PropertyRestoringTestCase.java

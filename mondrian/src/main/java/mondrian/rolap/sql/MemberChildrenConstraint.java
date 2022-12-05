@@ -77,5 +77,3 @@ public interface MemberChildrenConstraint extends SqlConstraint {
         RolapLevel level);
 
 }
-
-// End MemberChildrenConstraint.java

@@ -47,5 +47,3 @@ public class PredicateFilterTest extends ClearViewBase {
     }
 
 }
-
-// End PredicateFilterTest.java

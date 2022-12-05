@@ -44,5 +44,3 @@ public class TestAppender extends AbstractAppender {
     logEvents.clear();
   }
 }
-
-// End TestAppender.java

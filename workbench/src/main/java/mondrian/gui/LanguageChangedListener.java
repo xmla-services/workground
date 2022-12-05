@@ -14,5 +14,3 @@ package mondrian.gui;
 public interface LanguageChangedListener {
     public void languageChanged(LanguageChangedEvent evt);
 }
-
-// End LanguageChangedListener.java

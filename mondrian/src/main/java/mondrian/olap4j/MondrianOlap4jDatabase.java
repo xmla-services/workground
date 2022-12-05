@@ -120,5 +120,3 @@ class MondrianOlap4jDatabase
         return null;
     }
 }
-
-// End MondrianOlap4jDatabase.java

@@ -154,5 +154,3 @@ abstract class AntTestBase extends TestCase
         }
     }
 }
-
-// End AntTestBase.java

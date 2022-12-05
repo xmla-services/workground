@@ -140,5 +140,3 @@ public class DeadlockTest {
         propSaver.reset();
     }
 }
-
-// End DeadlockTest.java

@@ -32,5 +32,3 @@ public class JndiDataSourceResolver implements DataSourceResolver {
         return (DataSource) new InitialContext().lookup(dataSourceName);
     }
 }
-
-// End JndiDataSourceResolver.java

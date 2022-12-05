@@ -185,5 +185,3 @@ public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
         }
     }
 }
-
-// End IdentifierParser.java

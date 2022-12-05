@@ -628,5 +628,3 @@ public abstract class LinReg extends FunDefBase {
         }
     }
 }
-
-// End LinReg.java

@@ -521,5 +521,3 @@ public abstract class XmlaServlet
         }
     }
 }
-
-// End XmlaServlet.java

@@ -99,5 +99,3 @@ public abstract class CsvDBTestCase extends BatchTestCase {
         return null;
     }
 }
-
-// End CsvDBTestCase.java

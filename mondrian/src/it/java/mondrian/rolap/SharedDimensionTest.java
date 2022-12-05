@@ -452,5 +452,3 @@ public class SharedDimensionTest extends FoodMartTestCase {
             null);
     }
 }
-
-// End SharedDimensionTest.java

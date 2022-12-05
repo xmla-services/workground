@@ -268,5 +268,3 @@ class SetItemFunDef extends FunDefBase {
         return member.getName().equals(name);
     }
 }
-
-// End SetItemFunDef.java

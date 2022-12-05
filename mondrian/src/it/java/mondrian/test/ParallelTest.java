@@ -107,5 +107,3 @@ public class ParallelTest extends FoodMartTestCase {
         public abstract void runSafe();
     }
 }
-
-// End ParallelTest.java

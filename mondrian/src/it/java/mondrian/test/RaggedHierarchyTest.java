@@ -558,5 +558,3 @@ public class RaggedHierarchyTest extends FoodMartTestCase {
             + "Row #23: 11,523\n");
     }
 }
-
-// End RaggedHierarchyTest.java

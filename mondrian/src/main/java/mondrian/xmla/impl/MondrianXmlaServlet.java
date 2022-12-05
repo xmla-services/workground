@@ -171,5 +171,3 @@ public class MondrianXmlaServlet extends DefaultXmlaServlet {
         }
     }
 }
-
-// End MondrianXmlaServlet.java

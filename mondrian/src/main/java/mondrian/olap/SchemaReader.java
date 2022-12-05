@@ -563,5 +563,3 @@ public interface SchemaReader {
     
     Context getContext();
 }
-
-// End SchemaReader.java

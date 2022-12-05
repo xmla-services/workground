@@ -98,5 +98,3 @@ public class IndexedValuesTest {
             + "Row #0: 130\n");
     }
 }
-
-// End IndexedValuesTest.java

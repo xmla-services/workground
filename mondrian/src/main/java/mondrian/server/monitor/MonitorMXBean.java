@@ -26,5 +26,3 @@ public interface MonitorMXBean {
 
     List<SqlStatementInfo> getSqlStatements();
 }
-
-// End MonitorMXBean.java

@@ -86,5 +86,3 @@ class ChildByNameConstraint extends DefaultMemberChildrenConstraint {
     }
 
 }
-
-// End ChildByNameConstraint.java

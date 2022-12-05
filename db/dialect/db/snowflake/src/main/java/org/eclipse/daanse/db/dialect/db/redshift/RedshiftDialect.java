@@ -98,5 +98,3 @@ public class RedshiftDialect extends PostgreSqlDialect {
         return sb.toString();
     }
 }
-
-// End RedshiftDialect.java

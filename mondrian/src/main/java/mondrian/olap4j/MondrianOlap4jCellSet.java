@@ -877,5 +877,3 @@ abstract class MondrianOlap4jCellSet
         throw new UnsupportedOperationException();
     }
 }
-
-// End MondrianOlap4jCellSet.java

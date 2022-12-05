@@ -436,5 +436,3 @@ public class AggTableManager {
         }
     }
 }
-
-// End AggTableManager.java

@@ -103,5 +103,3 @@ public class UtilCompatibleJdk16 extends UtilCompatibleJdk15 {
             RolapUtil.ROLAP_COMPARATOR);
     }
 }
-
-// End UtilCompatibleJdk16.java

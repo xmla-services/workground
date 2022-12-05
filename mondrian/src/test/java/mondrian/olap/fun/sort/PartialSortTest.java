@@ -576,5 +576,3 @@ public class PartialSortTest{
     //speedTest(PerformanceTest.LOGGER, 1600 * 1600, 4);
   }
 }
-
-// End PartialSortTest.java

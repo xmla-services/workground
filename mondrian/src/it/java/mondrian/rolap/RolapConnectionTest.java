@@ -553,5 +553,3 @@ public class RolapConnectionTest extends TestCase {
         assertFalse(connectInfo.toString().contains("integratedSecurity"));
     }
 }
-
-// End RolapConnectionTest.java

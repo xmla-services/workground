@@ -142,5 +142,3 @@ class CaseMatchFunDef extends FunDefBase {
         }
     }
 }
-
-// End CaseMatchFunDef.java

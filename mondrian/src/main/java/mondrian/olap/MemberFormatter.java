@@ -23,5 +23,3 @@ package mondrian.olap;
  */
 public interface MemberFormatter extends mondrian.spi.MemberFormatter {
 }
-
-// End MemberFormatter.java

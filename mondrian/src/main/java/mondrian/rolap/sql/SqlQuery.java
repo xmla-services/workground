@@ -1080,5 +1080,3 @@ public class SqlQuery {
         }
     }
 }
-
-// End SqlQuery.java

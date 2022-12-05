@@ -214,5 +214,3 @@ public interface Member extends OlapElement, Comparable, MetaElement {
    */
   boolean isOnSameHierarchyChain( Member otherMember );
 }
-
-// End Member.java

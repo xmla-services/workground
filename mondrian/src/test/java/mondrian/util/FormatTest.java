@@ -949,5 +949,3 @@ public class FormatTest {
       checkFormat(null, new BigDecimal("100000000.5"), format, "0000100000001");
       }
 }
-
-// End FormatTest.java

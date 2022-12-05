@@ -122,5 +122,3 @@ public class RolapNativeTopCountTest extends BatchTestCase {
             NON_EMPTY_IS_NOT_IGNORED_WHEN_TWO_PARAMS_RESULT);
     }
 }
-
-// End RolapNativeTopCountTest.java

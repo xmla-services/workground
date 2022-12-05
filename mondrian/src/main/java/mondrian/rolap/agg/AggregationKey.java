@@ -196,5 +196,3 @@ public class AggregationKey
         return compoundPredicateList;
     }
 }
-
-// End AggregationKey.java

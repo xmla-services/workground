@@ -20,5 +20,3 @@ public interface PropertyFormatter {
     String formatProperty(
         Member member, String propertyName, Object propertyValue);
 }
-
-// End PropertyFormatter.java

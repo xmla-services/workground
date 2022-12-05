@@ -101,5 +101,3 @@ public class Locus {
         T execute();
     }
 }
-
-// End Locus.java

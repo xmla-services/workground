@@ -31,5 +31,3 @@ public interface IntegerCalc extends Calc {
      */
     int evaluateInteger(Evaluator evaluator);
 }
-
-// End IntegerCalc.java

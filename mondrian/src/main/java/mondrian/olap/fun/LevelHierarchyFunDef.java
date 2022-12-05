@@ -53,5 +53,3 @@ public class LevelHierarchyFunDef extends FunDefBase {
         }
     }
 }
-
-// End LevelHierarchyFunDef.java

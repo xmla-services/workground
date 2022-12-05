@@ -464,5 +464,3 @@ public class SegmentHeader implements Serializable {
         return description;
     }
 }
-
-// End SegmentHeader.java

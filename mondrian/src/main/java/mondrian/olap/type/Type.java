@@ -165,5 +165,3 @@ public interface Type {
      */
     int getArity();
 }
-
-// End Type.java

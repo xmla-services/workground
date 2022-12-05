@@ -56,5 +56,3 @@ public class SetFunDefTest {
             + "must have same hierarchy");
     }
 }
-
-// End SetFunDefTest.java

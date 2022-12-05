@@ -26,5 +26,3 @@ public interface XmlaResponse {
      */
     public SaxWriter getWriter();
 }
-
-// End XmlaResponse.java

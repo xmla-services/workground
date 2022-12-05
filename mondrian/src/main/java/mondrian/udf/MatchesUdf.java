@@ -63,5 +63,3 @@ public class MatchesUdf implements UserDefinedFunction {
     }
 
 }
-
-// End MatchesUdf.java

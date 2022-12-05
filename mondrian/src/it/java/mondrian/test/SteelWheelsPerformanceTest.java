@@ -104,5 +104,3 @@ public class SteelWheelsPerformanceTest extends TestCase {
         LOGGER.debug(desc + " took " + duration + " millis");
     }
 }
-
-// End SteelWheelsPerformanceTest.java

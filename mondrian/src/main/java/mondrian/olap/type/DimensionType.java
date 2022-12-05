@@ -140,5 +140,3 @@ public class DimensionType implements Type {
         return 1;
     }
 }
-
-// End DimensionType.java

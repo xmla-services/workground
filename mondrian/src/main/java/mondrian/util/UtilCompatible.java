@@ -110,5 +110,3 @@ public interface UtilCompatible {
      */
     Timer newTimer(String name, boolean isDaemon);
 }
-
-// End UtilCompatible.java

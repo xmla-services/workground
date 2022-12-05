@@ -64,5 +64,3 @@ implements TupleIterable
         return TupleCollections.iterator(tupleCursor());
     }
 }
-
-// End AbstractTupleIterable.java

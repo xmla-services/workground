@@ -30,5 +30,3 @@ public interface TreeModelPath {
      */
     boolean isEmpty();
 }
-
-// End TreeModelPath.java

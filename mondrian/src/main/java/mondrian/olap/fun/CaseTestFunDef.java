@@ -138,5 +138,3 @@ class CaseTestFunDef extends FunDefBase {
         }
     }
 }
-
-// End CaseTestFunDef.java

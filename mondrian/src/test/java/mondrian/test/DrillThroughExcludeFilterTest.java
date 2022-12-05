@@ -98,5 +98,3 @@ public class DrillThroughExcludeFilterTest {
             result.getCell(new int[]{1}).getDrillThroughCount());
     }
 }
-
-// End DrillThroughExcludeFilterTest.java

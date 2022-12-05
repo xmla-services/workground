@@ -127,5 +127,3 @@ public class CombiningGenerator<E> extends AbstractList<List<E>> {
         }
     }
 }
-
-// End CombiningGenerator.java

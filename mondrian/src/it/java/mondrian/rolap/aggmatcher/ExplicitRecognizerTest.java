@@ -689,5 +689,3 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
     }
 
 }
-
-// End ExplicitRecognizerTest.java

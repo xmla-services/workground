@@ -42,5 +42,3 @@ public class StarPredicates {
         return predicate;
     }
 }
-
-// End StarPredicates.java

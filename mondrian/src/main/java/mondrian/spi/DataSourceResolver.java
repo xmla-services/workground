@@ -34,5 +34,3 @@ public interface DataSourceResolver {
     DataSource lookup(String dataSourceName) throws Exception;
 
 }
-
-// End DataSourceResolver.java

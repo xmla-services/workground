@@ -22,5 +22,3 @@ public class IdentityCatalogLocator implements CatalogLocator {
         return catalogPath;
     }
 }
-
-// End IdentityCatalogLocator.java

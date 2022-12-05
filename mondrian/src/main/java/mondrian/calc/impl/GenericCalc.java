@@ -216,5 +216,3 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         MEMBER, LEVEL, HIERARCHY, DIMENSION
     }
 }
-
-// End GenericCalc.java

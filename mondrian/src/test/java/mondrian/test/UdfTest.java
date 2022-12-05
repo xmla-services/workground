@@ -1874,5 +1874,3 @@ public class UdfTest {
         }
     }
 }
-
-// End UdfTest.java

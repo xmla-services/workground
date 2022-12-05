@@ -568,5 +568,3 @@ class ResultComparator {
         return errorAddr.toString();
     }
 }
-
-// End ResultComparator.java

@@ -1787,5 +1787,3 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
   }
   
 }
-
-// End AggregationOnDistinctCountMeasuresTest.java

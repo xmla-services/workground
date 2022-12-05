@@ -39,5 +39,3 @@ public class WorkbenchTreeModel implements TreeModel {
     }
 
 }
-
-// End WorkbenchTreeModel.java

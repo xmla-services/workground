@@ -86,5 +86,3 @@ public class NullMemberRepresentationTest {
     }
 
 }
-
-// End NullMemberRepresentationTest.java

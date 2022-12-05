@@ -1230,5 +1230,3 @@ public abstract class JdbcDialectImpl implements Dialect {
 
 
 }
-
-// End JdbcDialectImpl.java

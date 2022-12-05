@@ -36,5 +36,3 @@ public class ConnectionEndEvent extends ConnectionEvent {
         return visitor.visit(this);
     }
 }
-
-// End ConnectionEndEvent.java

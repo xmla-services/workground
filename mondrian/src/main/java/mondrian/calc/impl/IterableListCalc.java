@@ -56,5 +56,3 @@ public class IterableListCalc extends AbstractListCalc {
         return list;
     }
 }
-
-// End IterableListCalc.java

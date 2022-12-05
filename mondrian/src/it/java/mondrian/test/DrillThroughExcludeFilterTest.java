@@ -87,5 +87,3 @@ public class DrillThroughExcludeFilterTest extends FoodMartTestCase {
             result.getCell(new int[]{1}).getDrillThroughCount());
     }
 }
-
-// End DrillThroughExcludeFilterTest.java

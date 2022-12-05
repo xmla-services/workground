@@ -27,5 +27,3 @@ import org.eclipse.daanse.olap.api.model.Member;
 public interface TupleIterator extends Iterator<List<Member>>, TupleCursor {
 
 }
-
-// End TupleIterator.java

@@ -572,5 +572,3 @@ public class CompatibilityTest extends FoodMartTestCase {
             "Mondrian Error:MDX object 'USA.CA' not found in cube 'Sales'");
     }
 }
-
-// End CompatibilityTest.java

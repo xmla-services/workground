@@ -69,5 +69,3 @@ public class ArrayStack<E> extends ArrayList<E> {
         return get(len - 1);
     }
 }
-
-// End ArrayStack.java

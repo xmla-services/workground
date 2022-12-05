@@ -203,5 +203,3 @@ public class DelegatingRolapMember extends RolapMemberBase {
         return member.isAllMember();
     }
 }
-
-// End DelegatingRolapMember.java

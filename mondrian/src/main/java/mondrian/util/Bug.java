@@ -299,5 +299,3 @@ public class Bug {
                 .isDebugEnabled();
     }
 }
-
-// End Bug.java

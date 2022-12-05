@@ -582,5 +582,3 @@ public class DefaultXmlaRequest
         this.properties = Collections.unmodifiableMap(newProperties);
     }
 }
-
-// End DefaultXmlaRequest.java

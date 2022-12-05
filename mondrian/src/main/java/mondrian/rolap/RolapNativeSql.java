@@ -729,5 +729,3 @@ public class RolapNativeSql {
     }
 
 }
-
-// End RolapNativeSql.java

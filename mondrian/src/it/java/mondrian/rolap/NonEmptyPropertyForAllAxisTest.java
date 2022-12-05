@@ -191,5 +191,3 @@ public class NonEmptyPropertyForAllAxisTest extends FoodMartTestCase {
         TestContext.assertEqualsVerbose(mdxQuery, query.toString());
      }
 }
-
-// End NonEmptyPropertyForAllAxisTest.java

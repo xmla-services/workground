@@ -153,5 +153,3 @@ abstract class AbstractEndToEndTupleList extends AbstractTupleList {
         }
     }
 }
-
-// End AbstractEndToEndTupleList.java

@@ -81,5 +81,3 @@ class PercentileFunDef extends AbstractAggregateFunDef {
         };
     }
 }
-
-// End PercentileFunDef.java

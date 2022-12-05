@@ -31,5 +31,3 @@ public class DateTimeType extends ScalarType {
         return value instanceof java.util.Date;
     }
 }
-
-// End DateTimeType.java

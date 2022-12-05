@@ -1776,5 +1776,3 @@ public class DialectTest extends TestCase {
     assertTrue( query.toString().contains( expected ) );
   }
 }
-
-// End DialectTest.java

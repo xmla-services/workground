@@ -297,5 +297,3 @@ public abstract class MemberBase
     return FunUtil.isAncestorOf( otherMember, this, false ) || FunUtil.isAncestorOf( this, otherMember, false );
   }
 }
-
-// End MemberBase.java

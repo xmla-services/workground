@@ -31,5 +31,3 @@ public class NullType extends ScalarType
         return obj instanceof NullType;
     }
 }
-
-// End NullType.java

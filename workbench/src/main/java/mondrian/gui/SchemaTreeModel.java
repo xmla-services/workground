@@ -354,5 +354,3 @@ public class SchemaTreeModel extends DefaultTreeModel {
     }
 
 }
-
-// End SchemaTreeModel.java

@@ -252,5 +252,3 @@ public class SchemaVersionTest extends FoodMartTestCase {
         + "\n"
         + "</Schema>";
 }
-
-// End SchemaVersionTest.java

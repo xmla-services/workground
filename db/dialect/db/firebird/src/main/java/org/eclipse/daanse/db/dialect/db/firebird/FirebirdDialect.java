@@ -43,5 +43,3 @@ public class FirebirdDialect extends JdbcDialectImpl {
         return generateOrderByNullsAnsi(expr, ascending, collateNullsLast);
     }
 }
-
-// End FirebirdDialect.java

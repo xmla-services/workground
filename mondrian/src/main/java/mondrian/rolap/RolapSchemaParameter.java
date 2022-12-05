@@ -139,5 +139,3 @@ public class RolapSchemaParameter implements Parameter, ParameterCompilable {
         };
     }
 }
-
-// End RolapSchemaParameter.java

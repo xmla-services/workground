@@ -99,5 +99,3 @@ public class InfobrightDialect extends MySqlDialect {
         return false;
     }
 }
-
-// End InfobrightDialect.java

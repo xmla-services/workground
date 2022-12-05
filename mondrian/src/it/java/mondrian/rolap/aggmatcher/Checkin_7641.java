@@ -99,5 +99,3 @@ public class Checkin_7641 extends CsvDBTestCase {
             + "</Cube>";
     }
 }
-
-// End Checkin_7641.java

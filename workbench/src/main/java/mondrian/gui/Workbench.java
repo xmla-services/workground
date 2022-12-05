@@ -2240,5 +2240,3 @@ public class Workbench extends javax.swing.JFrame {
         return viewXmlMenuItem;
     }
 }
-
-// End Workbench.java

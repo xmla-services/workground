@@ -633,5 +633,3 @@ public class RaggedHierarchyTest {
             + "Row #23: 11,523\n");
     }
 }
-
-// End RaggedHierarchyTest.java

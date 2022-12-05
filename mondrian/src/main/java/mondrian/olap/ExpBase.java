@@ -68,5 +68,3 @@ public abstract class ExpBase
         throw new UnsupportedOperationException(this.toString());
     }
 }
-
-// End ExpBase.java

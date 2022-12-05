@@ -498,5 +498,3 @@ public void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     }
   }
 }
-
-// End CrossJoinTest.java

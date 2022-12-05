@@ -187,5 +187,3 @@ public class ValueColumnPredicate
             buf, value, getConstrainedColumn().getDatatype());
     }
 }
-
-// End ValueColumnPredicate.java

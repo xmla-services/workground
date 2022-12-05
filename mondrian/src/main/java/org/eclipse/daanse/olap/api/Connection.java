@@ -155,5 +155,3 @@ public interface Connection {
 
     Context getContext();
 }
-
-// End Connection.java

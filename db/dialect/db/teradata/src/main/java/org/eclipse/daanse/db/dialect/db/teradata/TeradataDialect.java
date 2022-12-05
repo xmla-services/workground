@@ -59,5 +59,3 @@ public class TeradataDialect extends JdbcDialectImpl {
         return true;
     }
 }
-
-// End TeradataDialect.java

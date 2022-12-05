@@ -1837,5 +1837,3 @@ public class TestCalculatedMembers extends BatchTestCase {
             + "at the lowest level in the [Gender] hierarchy.");
     }
 }
-
-// End TestCalculatedMembers.java

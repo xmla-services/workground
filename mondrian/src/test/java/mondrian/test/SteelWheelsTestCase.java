@@ -80,5 +80,3 @@ public class SteelWheelsTestCase {
             //withCube("SteelWheelsSales");
     }
 }
-
-// End SteelWheelsTestCase.java

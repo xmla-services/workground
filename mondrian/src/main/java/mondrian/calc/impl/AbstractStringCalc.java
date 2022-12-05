@@ -43,5 +43,3 @@ implements StringCalc
         return evaluateString(evaluator);
     }
 }
-
-// End AbstractStringCalc.java

@@ -28,5 +28,3 @@ public interface IMondrianOlap4jProperty extends Property {
     Level getLevel();
 
 }
-
-// End IMondrianOlap4jProperty.java

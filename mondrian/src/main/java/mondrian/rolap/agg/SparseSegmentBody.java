@@ -64,5 +64,3 @@ class SparseSegmentBody extends AbstractSegmentBody {
         return map;
     }
 }
-
-// End SparseSegmentBody.java

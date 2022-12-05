@@ -280,5 +280,3 @@ public class XmlaTest extends TestCase {
         }
     }
 }
-
-// End XmlaTest.java

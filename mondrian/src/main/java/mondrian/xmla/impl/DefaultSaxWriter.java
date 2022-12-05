@@ -383,5 +383,3 @@ public class DefaultSaxWriter implements SaxWriter {
         }
     }
 }
-
-// End DefaultSaxWriter.java

@@ -84,5 +84,3 @@ abstract class ArrayMemberSource implements MemberSource {
         }
     }
 }
-
-// End ArrayMemberSource.java

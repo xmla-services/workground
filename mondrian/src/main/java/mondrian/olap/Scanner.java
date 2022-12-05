@@ -848,5 +848,3 @@ public class Scanner {
         inExponent,
     }
 }
-
-// End Scanner.java

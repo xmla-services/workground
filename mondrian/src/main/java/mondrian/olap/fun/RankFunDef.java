@@ -686,5 +686,3 @@ public class RankFunDef extends FunDefBase {
     }
   }
 }
-
-// End RankFunDef.java

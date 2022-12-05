@@ -175,5 +175,3 @@ public class UnionIterator<T> implements Iterator<T> {
         }
     }
 }
-
-// End UnionIterator.java

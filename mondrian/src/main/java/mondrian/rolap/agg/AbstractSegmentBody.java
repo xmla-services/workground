@@ -163,5 +163,3 @@ abstract class AbstractSegmentBody implements SegmentBody {
         }
     }
 }
-
-// End AbstractSegmentBody.java

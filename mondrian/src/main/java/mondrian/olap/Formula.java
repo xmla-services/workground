@@ -646,5 +646,3 @@ public class Formula extends QueryPart {
         }
     }
 }
-
-// End Formula.java

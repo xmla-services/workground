@@ -100,5 +100,3 @@ class RolapTupleCalculation implements RolapCalculation {
         return true;
     }
 }
-
-// End RolapTupleCalculation.java

@@ -179,5 +179,3 @@ import mondrian.test.SqlPattern;
         return this.name;
     }
 }
-
-// End ClearViewBase.java

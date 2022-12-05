@@ -47,5 +47,3 @@ public class SqlStatementExecuteEvent extends SqlStatementEvent {
         return visitor.visit(this);
     }
 }
-
-// End SqlStatementExecuteEvent.java

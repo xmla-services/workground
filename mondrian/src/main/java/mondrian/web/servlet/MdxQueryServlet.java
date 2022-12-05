@@ -267,5 +267,3 @@ public class MdxQueryServlet extends HttpServlet {
     }
 
 }
-
-// End MdxQueryServlet.java

@@ -1621,5 +1621,3 @@ public class RolapHierarchy extends HierarchyBase {
         }
     }
 }
-
-// End RolapHierarchy.java

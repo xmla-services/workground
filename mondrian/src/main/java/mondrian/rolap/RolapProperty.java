@@ -100,5 +100,3 @@ public class RolapProperty extends Property {
         return dependsOnLevelValue;
     }
 }
-
-// End RolapProperty.java

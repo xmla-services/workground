@@ -217,5 +217,3 @@ public class FunInfo implements Comparable<FunInfo> {
         return list;
     }
 }
-
-// End FunInfo.java

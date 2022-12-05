@@ -973,5 +973,3 @@ public class XmlUtil {
     private XmlUtil() {
     }
 }
-
-// End XmlUtil.java

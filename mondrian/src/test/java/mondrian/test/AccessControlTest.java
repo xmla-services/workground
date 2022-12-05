@@ -4133,5 +4133,3 @@ public class AccessControlTest {
     }
 
 }
-
-// End AccessControlTest.java

@@ -114,5 +114,3 @@ class HeadTailFunDef extends FunDefBase {
         return members.subList(0, Math.min(count, members.size()));
     }
 }
-
-// End HeadTailFunDef.java

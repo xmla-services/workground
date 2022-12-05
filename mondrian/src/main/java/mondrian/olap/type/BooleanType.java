@@ -33,5 +33,3 @@ public class BooleanType extends ScalarType {
         return value instanceof Boolean;
     }
 }
-
-// End BooleanType.java

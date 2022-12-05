@@ -1587,5 +1587,3 @@ RME is this right
         }
     }
 }
-
-// End SqlMemberSource.java

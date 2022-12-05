@@ -206,5 +206,3 @@ public class EffectiveMemberCacheTest extends BatchTestCase {
     }
 
 }
-
-// End EffectiveMemberCacheTest.java

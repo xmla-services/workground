@@ -278,5 +278,3 @@ public abstract class AbstractCalc implements Calc {
     }
 
 }
-
-// End AbstractCalc.java

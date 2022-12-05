@@ -77,5 +77,3 @@ class StdevFunDef extends AbstractAggregateFunDef {
         };
     }
 }
-
-// End StdevFunDef.java

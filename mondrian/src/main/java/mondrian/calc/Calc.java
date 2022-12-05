@@ -141,5 +141,3 @@ public interface Calc {
 
     <T> T unwrap(java.lang.Class<T> iface);
 }
-
-// End Calc.java

@@ -52,5 +52,3 @@ public class CellCacheSegmentCreateEvent extends CellCacheEvent {
         return visitor.visit(this);
     }
 }
-
-// End CellCacheSegmentCreateEvent.java

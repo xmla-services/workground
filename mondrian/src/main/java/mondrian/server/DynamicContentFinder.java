@@ -212,5 +212,3 @@ public class DynamicContentFinder
             : catalog.dataSourceInfo;
     }
 }
-
-// End DynamicContentFinder.java

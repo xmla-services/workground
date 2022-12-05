@@ -236,5 +236,3 @@ final class GroupingSetsList {
         }
     }
 }
-
-// End GroupingSetsList.java

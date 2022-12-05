@@ -188,5 +188,3 @@ implements RandomAccess, Cloneable, TupleList
         }
     }
 }
-
-// End AbstractTupleList.java

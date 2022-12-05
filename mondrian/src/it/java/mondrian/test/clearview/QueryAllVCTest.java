@@ -46,5 +46,3 @@ public class QueryAllVCTest extends ClearViewBase {
     }
 
 }
-
-// End QueryAllVCTest.java

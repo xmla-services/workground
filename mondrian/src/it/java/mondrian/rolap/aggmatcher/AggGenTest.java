@@ -98,5 +98,3 @@ public class AggGenTest extends FoodMartTestCase {
     }
 
 }
-
-// End AggGenTest.java

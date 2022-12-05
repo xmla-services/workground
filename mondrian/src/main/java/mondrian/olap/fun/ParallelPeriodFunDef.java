@@ -173,5 +173,3 @@ class ParallelPeriodFunDef extends FunDefBase {
             evaluator.getSchemaReader(), member, inLaw);
     }
 }
-
-// End ParallelPeriodFunDef.java

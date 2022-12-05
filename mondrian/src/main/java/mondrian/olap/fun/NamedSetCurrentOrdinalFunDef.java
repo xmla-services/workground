@@ -57,5 +57,3 @@ public class NamedSetCurrentOrdinalFunDef extends FunDefBase {
         };
     }
 }
-
-// End NamedSetCurrentOrdinalFunDef.java

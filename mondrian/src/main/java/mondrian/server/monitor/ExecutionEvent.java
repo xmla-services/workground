@@ -56,5 +56,3 @@ public abstract class ExecutionEvent extends Event {
         this.executionId = executionId;
     }
 }
-
-// End ExecutionEvent.java

@@ -332,5 +332,3 @@ class MondrianOlap4jCube
         return cube;
     }
 }
-
-// End MondrianOlap4jCube.java

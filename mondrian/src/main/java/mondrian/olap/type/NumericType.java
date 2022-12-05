@@ -40,5 +40,3 @@ public class NumericType extends ScalarType {
             || value instanceof Character;
     }
 }
-
-// End NumericType.java

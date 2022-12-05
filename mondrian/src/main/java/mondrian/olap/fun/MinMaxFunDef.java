@@ -70,5 +70,3 @@ class MinMaxFunDef extends AbstractAggregateFunDef {
     };
   }
 }
-
-// End MinMaxFunDef.java

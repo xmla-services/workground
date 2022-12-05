@@ -221,5 +221,3 @@ class ExtractFunDef extends FunDefBase {
         };
     }
 }
-
-// End ExtractFunDef.java

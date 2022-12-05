@@ -39,5 +39,3 @@ public interface TupleCalc extends Calc {
      */
     Member[] evaluateTuple(Evaluator evaluator);
 }
-
-// End TupleCalc.java

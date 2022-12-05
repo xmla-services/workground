@@ -298,5 +298,3 @@ public class ServerInfo extends Info {
         return cellCoordinateCount;
     }
 }
-
-// End ServerInfo.java

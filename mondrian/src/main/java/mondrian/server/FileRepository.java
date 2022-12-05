@@ -435,5 +435,3 @@ public class FileRepository implements Repository {
         return repositoryContentFinder;
     }
 }
-
-// End FileRepository.java

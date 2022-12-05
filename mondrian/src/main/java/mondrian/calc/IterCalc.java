@@ -28,5 +28,3 @@ public interface IterCalc extends Calc {
      */
     TupleIterable evaluateIterable(Evaluator evaluator);
 }
-
-// End IterCalc.java

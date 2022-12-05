@@ -26,5 +26,3 @@ public class SymbolType extends ScalarType {
         super("SYMBOL");
     }
 }
-
-// End SymbolType.java

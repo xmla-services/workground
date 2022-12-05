@@ -1105,5 +1105,3 @@ public abstract class Excel {
     // data set (array) -- that is, the observed sample mean.
 
 }
-
-// End Excel.java

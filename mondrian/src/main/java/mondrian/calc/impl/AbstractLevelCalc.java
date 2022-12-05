@@ -45,5 +45,3 @@ implements LevelCalc
         return evaluateLevel(evaluator);
     }
 }
-
-// End AbstractLevelCalc.java

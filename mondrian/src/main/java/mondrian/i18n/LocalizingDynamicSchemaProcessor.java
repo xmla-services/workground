@@ -174,5 +174,3 @@ public class LocalizingDynamicSchemaProcessor
         this.locale = locale;
     }
 }
-
-// End LocalizingDynamicSchemaProcessor.java

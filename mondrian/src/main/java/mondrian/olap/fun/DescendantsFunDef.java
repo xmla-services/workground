@@ -439,5 +439,3 @@ class DescendantsFunDef extends FunDefBase {
     }
   }
 }
-
-// End DescendantsFunDef.java

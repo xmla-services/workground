@@ -224,5 +224,3 @@ public class FilteredIterableList<T> extends AbstractSequentialList<T> {
         public boolean accept(final T element);
     }
 }
-
-// End FilteredIterableList.java

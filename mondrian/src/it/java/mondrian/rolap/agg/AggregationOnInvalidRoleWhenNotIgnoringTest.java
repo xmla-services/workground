@@ -64,5 +64,3 @@ public class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
         fail("Schema should not load when restriction is invalid");
     }
 }
-
-// End AggregationOnInvalidRole_IfNotIgnore_Test.java

@@ -77,5 +77,3 @@ class VarFunDef extends AbstractAggregateFunDef {
         };
     }
 }
-
-// End VarFunDef.java

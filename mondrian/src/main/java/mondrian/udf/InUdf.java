@@ -74,5 +74,3 @@ public class InUdf implements UserDefinedFunction {
     }
 
 }
-
-// End InUdf.java

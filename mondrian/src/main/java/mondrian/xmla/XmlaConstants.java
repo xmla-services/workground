@@ -454,5 +454,3 @@ public interface XmlaConstants {
     }
 
 }
-
-// End XmlaConstants.java

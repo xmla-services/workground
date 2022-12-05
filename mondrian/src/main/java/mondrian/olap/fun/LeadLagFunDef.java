@@ -76,5 +76,3 @@ class LeadLagFunDef extends FunDefBase {
         };
     }
 }
-
-// End LeadLagFunDef.java

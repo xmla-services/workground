@@ -126,5 +126,3 @@ public class SqlPattern {
         return triggerSql;
     }
 }
-
-// End SqlPattern.java

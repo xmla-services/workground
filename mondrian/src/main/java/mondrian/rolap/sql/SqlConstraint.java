@@ -30,5 +30,3 @@ public interface SqlConstraint {
     */
     Object getCacheKey();
 }
-
-// End SqlConstraint.java

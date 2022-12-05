@@ -43,5 +43,3 @@ implements DateTimeCalc
         return evaluateDateTime(evaluator);
     }
 }
-
-// End AbstractDateTimeCalc.java

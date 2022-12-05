@@ -255,5 +255,3 @@ public class InlineTableTest extends FoodMartTestCase {
             + "Row #0: \n");
     }
 }
-
-// End InlineTableTest.java

@@ -170,5 +170,3 @@ public class LevelType implements Type {
         return 1;
     }
 }
-
-// End LevelType.java

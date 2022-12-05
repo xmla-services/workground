@@ -394,5 +394,3 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         }
     }
 }
-
-// End ListColumnPredicate.java

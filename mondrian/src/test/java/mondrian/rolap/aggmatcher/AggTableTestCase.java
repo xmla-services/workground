@@ -59,5 +59,3 @@ public abstract class AggTableTestCase extends CsvDBTestCase {
         propSaver.reset();
     }
 }
-
-// End AggTableTestCase.java

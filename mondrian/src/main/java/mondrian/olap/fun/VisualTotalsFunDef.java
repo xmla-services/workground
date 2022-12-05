@@ -402,5 +402,3 @@ public class VisualTotalsFunDef extends FunDefBase {
     }
 
 }
-
-// End VisualTotalsFunDef.java

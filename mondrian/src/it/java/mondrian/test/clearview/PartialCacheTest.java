@@ -45,5 +45,3 @@ public class PartialCacheTest extends ClearViewBase {
         return constructSuite(getDiffReposStatic(), PartialCacheTest.class);
     }
 }
-
-// End PartialCacheTest.java

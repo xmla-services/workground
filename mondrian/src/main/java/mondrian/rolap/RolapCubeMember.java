@@ -248,5 +248,3 @@ public class RolapCubeMember
     }
 
 }
-
-// End RolapCubeMember.java

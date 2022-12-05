@@ -1946,5 +1946,3 @@ public class SqlConstraintUtils {
     return members.toArray( new Member[members.size()] );
   }
 }
-
-// End SqlConstraintUtils.java

@@ -245,5 +245,3 @@ public class SegmentAxis {
         }
     }
 }
-
-// End SegmentAxis.java

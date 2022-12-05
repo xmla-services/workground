@@ -219,5 +219,3 @@ public class SelectNotInGroupByTest extends BatchTestCase {
         return dialect.allowsSelectNotInGroupBy();
     }
 }
-
-// End SelectNotInGroupByTest.java

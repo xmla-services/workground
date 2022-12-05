@@ -85,5 +85,3 @@ public interface XmlaRequest {
      */
     String getSessionId();
 }
-
-// End XmlaRequest.java

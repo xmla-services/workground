@@ -235,5 +235,3 @@ public class Pair <L, R>
         };
     }
 }
-
-// End Pair.java

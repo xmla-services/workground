@@ -69,5 +69,3 @@ public class ExecutionEndEvent extends ExecutionEvent {
     return visitor.visit( this );
   }
 }
-
-// End ExecutionEndEvent.java

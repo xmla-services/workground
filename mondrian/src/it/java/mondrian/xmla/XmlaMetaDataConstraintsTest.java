@@ -168,5 +168,3 @@ public class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
         throw new UnsupportedOperationException();
     }
 }
-
-// End XmlaMetaDataConstraintsTest.java

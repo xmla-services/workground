@@ -133,5 +133,3 @@ class MondrianOlap4jSchema
         return null;
     }
 }
-
-// End MondrianOlap4jSchema.java

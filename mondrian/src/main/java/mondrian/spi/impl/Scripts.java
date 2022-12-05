@@ -274,5 +274,3 @@ public class Scripts {
         }
     }
 }
-
-// End Scripts.java

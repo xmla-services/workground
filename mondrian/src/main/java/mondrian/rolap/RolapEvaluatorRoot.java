@@ -293,5 +293,3 @@ class RolapEvaluatorRoot {
     return queryStartTime;
   }
 }
-
-// End RolapEvaluatorRoot.java

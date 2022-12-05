@@ -81,5 +81,3 @@ class SimpleResolver implements Resolver {
             || (parameterTypes[k] != Category.Set);
     }
 }
-
-// End SimpleResolver.java

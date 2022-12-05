@@ -208,5 +208,3 @@ public class Triple<T0, T1, T2>
         };
     }
 }
-
-// End Triple.java

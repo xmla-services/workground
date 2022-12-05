@@ -4954,5 +4954,3 @@ public class SchemaTest extends FoodMartTestCase {
     }
 
 }
-
-// End SchemaTest.java

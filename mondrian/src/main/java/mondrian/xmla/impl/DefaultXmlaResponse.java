@@ -69,5 +69,3 @@ public class DefaultXmlaResponse implements XmlaResponse  {
         writer.endElement(); // </Error>
     }
 }
-
-// End DefaultXmlaResponse.java

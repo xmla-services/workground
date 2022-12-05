@@ -57,5 +57,3 @@ public class InformixDialect extends JdbcDialectImpl {
         return false;
     }
 }
-
-// End InformixDialect.java

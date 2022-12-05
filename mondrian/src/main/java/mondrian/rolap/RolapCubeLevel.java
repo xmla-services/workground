@@ -615,5 +615,3 @@ public class RolapCubeLevel extends RolapLevel {
     }
 
 }
-
-// End RolapCubeLevel.java

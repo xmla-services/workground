@@ -950,5 +950,3 @@ public class BitKeyTest extends TestCase {
                 new long[] {-2, 4}));
     }
 }
-
-// End BitKeyTest.java

@@ -89,5 +89,3 @@ public class CompletedFuture<V> implements Future<V> {
         return get();
     }
 }
-
-// End CompletedFuture.java

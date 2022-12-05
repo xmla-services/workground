@@ -1462,5 +1462,3 @@ public class Base64
 
 
 }
-
-// End Base64.java

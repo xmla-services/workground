@@ -185,5 +185,3 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
         helperTest(false);
     }
 }
-
-// End XmlaExcel2007Test.java

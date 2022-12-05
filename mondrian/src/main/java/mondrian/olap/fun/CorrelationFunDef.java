@@ -72,5 +72,3 @@ class CorrelationFunDef extends AbstractAggregateFunDef {
         };
     }
 }
-
-// End CorrelationFunDef.java

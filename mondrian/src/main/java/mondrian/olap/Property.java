@@ -920,5 +920,3 @@ public class Property extends EnumeratedValues.BasicValue {
         }
     }
 }
-
-// End Property.java

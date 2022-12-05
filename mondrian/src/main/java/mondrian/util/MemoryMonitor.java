@@ -197,5 +197,3 @@ public interface MemoryMonitor {
         void resetFromTest();
     }
 }
-
-// End MemoryMonitor.java

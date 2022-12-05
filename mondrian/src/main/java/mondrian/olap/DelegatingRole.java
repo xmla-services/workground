@@ -87,5 +87,3 @@ public class DelegatingRole implements Role {
         return role.canAccess(olapElement);
     }
 }
-
-// End DelegatingRole.java

@@ -257,5 +257,3 @@ public interface SegmentCacheIndex {
         List<String> compoundPredicates,
         SegmentBuilder.SegmentConverter converter);
 }
-
-// End SegmentCacheIndex.java

@@ -47,5 +47,3 @@ public class TopBottomTest extends ClearViewBase {
     }
 
 }
-
-// End TopBottomTest.java

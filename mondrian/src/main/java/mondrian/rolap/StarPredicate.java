@@ -115,5 +115,3 @@ public interface StarPredicate {
 
     void toSql(SqlQuery sqlQuery, StringBuilder buf);
 }
-
-// End StarPredicate.java

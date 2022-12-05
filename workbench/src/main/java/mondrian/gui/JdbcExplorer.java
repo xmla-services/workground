@@ -281,5 +281,3 @@ public class JdbcExplorer
 
     private JTreeUpdater updater;
 }
-
-// End JdbcExplorer.java

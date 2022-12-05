@@ -216,5 +216,3 @@ public abstract class HierarchyBase
         return allLevelName;
     }
 }
-
-// End HierarchyBase.java

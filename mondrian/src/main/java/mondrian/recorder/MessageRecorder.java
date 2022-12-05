@@ -212,5 +212,3 @@ public interface MessageRecorder {
      */
     void reportInfo(final String msg, final Object info);
 }
-
-// End MessageRecorder.java

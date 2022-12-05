@@ -114,5 +114,3 @@ public class MondrianServerTest extends TestCase {
         server.shutdown();
     }
 }
-
-// End MondrianServerTest.java

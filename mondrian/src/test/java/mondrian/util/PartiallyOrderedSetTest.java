@@ -432,5 +432,3 @@ public class PartiallyOrderedSetTest {
             new TreeSet<String>(ss).toString());
     }
 }
-
-// End PartiallyOrderedSetTest.java

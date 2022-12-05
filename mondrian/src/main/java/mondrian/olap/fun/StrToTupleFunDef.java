@@ -189,5 +189,3 @@ class StrToTupleFunDef extends FunDefBase {
         }
     }
 }
-
-// End StrToTupleFunDef.java

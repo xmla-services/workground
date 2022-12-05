@@ -1470,5 +1470,3 @@ public class ParentChildHierarchyTest extends FoodMartTestCase {
                     .getParentMember());
     }
 }
-
-// End ParentChildHierarchyTest.java

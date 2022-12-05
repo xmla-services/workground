@@ -108,5 +108,3 @@ class MondrianOlap4jCatalog
         return null;
     }
 }
-
-// End MondrianOlap4jCatalog.java

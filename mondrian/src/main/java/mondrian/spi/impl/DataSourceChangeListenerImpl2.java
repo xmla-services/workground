@@ -69,5 +69,3 @@ public class DataSourceChangeListenerImpl2 implements DataSourceChangeListener {
         }
     }
 }
-
-// End DataSourceChangeListenerImpl2.java

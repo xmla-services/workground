@@ -83,5 +83,3 @@ public abstract class SqlStatementEvent extends Event {
         OTHER
     }
 }
-
-// End SqlStatementEvent.java

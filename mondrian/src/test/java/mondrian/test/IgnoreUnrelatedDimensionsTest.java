@@ -553,5 +553,3 @@ public class IgnoreUnrelatedDimensionsTest {
     }
 
 }
-
-// End IgnoreUnrelatedDimensionsTest.java

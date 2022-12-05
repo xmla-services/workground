@@ -1209,5 +1209,3 @@ public class ParserTest extends FoodMartTestCase {
         }
     }
 }
-
-// End ParserTest.java

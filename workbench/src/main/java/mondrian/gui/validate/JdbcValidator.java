@@ -44,5 +44,3 @@ public interface JdbcValidator {
      */
     boolean isSchemaExists(String schemaName);
 }
-
-// End JdbcValidator.java

@@ -258,5 +258,3 @@ public class RolapProfilingEvaluator extends RolapEvaluator {
         }
     }
 }
-
-// End RolapProfilingEvaluator.java

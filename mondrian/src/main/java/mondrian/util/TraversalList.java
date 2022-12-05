@@ -160,5 +160,3 @@ public class TraversalList<T> extends UnsupportedList<List<T>> {
         }
     }
 }
-
-// End TraversalList.java

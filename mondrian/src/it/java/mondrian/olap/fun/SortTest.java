@@ -515,5 +515,3 @@ public class SortTest extends FoodMartTestCase {
   }
 
 }
-
-// End SortTest.java

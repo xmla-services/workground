@@ -34,5 +34,3 @@ public interface MemberCalc extends Calc {
      */
     Member evaluateMember(Evaluator evaluator);
 }
-
-// End MemberCalc.java

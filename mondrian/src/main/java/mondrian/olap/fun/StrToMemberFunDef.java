@@ -53,5 +53,3 @@ class StrToMemberFunDef extends FunDefBase {
         };
     }
 }
-
-// End StrToMemberFunDef.java

@@ -119,5 +119,3 @@ public interface ClassResolver {
         }
     }
 }
-
-// End ClassResolver.java

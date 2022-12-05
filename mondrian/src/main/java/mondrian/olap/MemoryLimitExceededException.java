@@ -27,5 +27,3 @@ public class MemoryLimitExceededException
         super(message);
     }
 }
-
-// End MemoryLimitExceededException.java

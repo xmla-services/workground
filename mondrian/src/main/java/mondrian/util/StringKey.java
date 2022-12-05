@@ -43,5 +43,3 @@ public abstract class StringKey {
             && value.equals(((StringKey) obj).value);
     }
 }
-
-// End StringKey.java

@@ -30,5 +30,3 @@ public class CachePool {
     private CachePool() {
     }
 }
-
-// End CachePool.java

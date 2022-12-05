@@ -26,5 +26,3 @@ public class ResourceLimitExceededException
         super(message);
     }
 }
-
-// End ResourceLimitExceededException.java

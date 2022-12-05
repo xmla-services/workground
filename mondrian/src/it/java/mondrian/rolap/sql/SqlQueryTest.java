@@ -805,5 +805,3 @@ public class SqlQueryTest extends BatchTestCase {
         assertQuerySql(context, mdx, new SqlPattern[]{mySqlPattern});
     }
 }
-
-// End SqlQueryTest.java

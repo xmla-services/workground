@@ -33,5 +33,3 @@ public interface DimensionCalc extends Calc {
      */
     Dimension evaluateDimension(Evaluator evaluator);
 }
-
-// End DimensionCalc.java

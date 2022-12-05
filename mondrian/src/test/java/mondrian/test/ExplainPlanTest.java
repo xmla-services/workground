@@ -410,5 +410,3 @@ public class ExplainPlanTest {
     return strings;
   }
 }
-
-// End ExplainPlanTest.java

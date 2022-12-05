@@ -34,5 +34,3 @@ public enum DimensionType {
      */
     MeasuresDimension,
 }
-
-// End DimensionType.java

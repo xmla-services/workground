@@ -46,5 +46,3 @@ public class HardSmartCache <K, V> extends SmartCacheImpl<K, V> {
         return cache.entrySet().iterator();
     }
 }
-
-// End HardSmartCache.java

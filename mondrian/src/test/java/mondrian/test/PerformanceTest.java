@@ -934,5 +934,3 @@ public class PerformanceTest {
     }
   }
 }
-
-// End PerformanceTest.java

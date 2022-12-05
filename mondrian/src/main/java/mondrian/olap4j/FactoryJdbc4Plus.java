@@ -875,5 +875,3 @@ class FactoryJdbc4Plus {
         }
     }
 }
-
-// End FactoryJdbc4Plus.java

@@ -24,5 +24,3 @@ public class CatalogLocatorImpl implements CatalogLocator {
         return catalogPath;
     }
 }
-
-// End CatalogLocatorImpl.java

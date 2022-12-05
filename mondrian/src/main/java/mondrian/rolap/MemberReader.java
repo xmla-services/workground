@@ -181,5 +181,3 @@ public interface MemberReader extends MemberSource {
         RolapLevel level,
         List<Comparable> keyValues);
 }
-
-// End MemberReader.java

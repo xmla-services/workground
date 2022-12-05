@@ -63,5 +63,3 @@ public interface Level extends OlapElement, MetaElement {
      */
     int getApproxRowCount();
 }
-
-// End Level.java

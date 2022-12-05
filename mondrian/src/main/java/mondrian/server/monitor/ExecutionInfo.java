@@ -66,5 +66,3 @@ public class ExecutionInfo extends Info {
                   + cellCachePendingCount;
     }
 }
-
-// End ExecutionInfo.java

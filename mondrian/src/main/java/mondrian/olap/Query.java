@@ -2459,5 +2459,3 @@ public class Query extends QueryPart {
         return exp;
     }
 }
-
-// End Query.java

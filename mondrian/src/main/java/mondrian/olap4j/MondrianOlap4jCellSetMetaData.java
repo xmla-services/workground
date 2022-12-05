@@ -194,5 +194,3 @@ class MondrianOlap4jCellSetMetaData implements CellSetMetaData {
     }
 
 }
-
-// End MondrianOlap4jCellSetMetaData.java

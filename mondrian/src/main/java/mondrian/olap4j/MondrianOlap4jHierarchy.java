@@ -152,5 +152,3 @@ public class MondrianOlap4jHierarchy
         return this.hierarchy;
     }
 }
-
-// End MondrianOlap4jHierarchy.java

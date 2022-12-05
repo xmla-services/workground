@@ -593,5 +593,3 @@ System.out.println(buf.toString());
     }
 
 }
-
-// End AggregationManager.java

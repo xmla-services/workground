@@ -300,5 +300,3 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
         return null;
     }
 }
-
-// End XmlaCognosTest.java

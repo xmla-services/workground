@@ -443,5 +443,3 @@ public class HierarchyUsage {
     }
 
 }
-
-// End HierarchyUsage.java

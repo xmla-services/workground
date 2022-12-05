@@ -110,5 +110,3 @@ interface Factory {
         MondrianOlap4jConnection olap4jConnection,
         RolapConnection mondrianConnection);
 }
-
-// End Factory.java

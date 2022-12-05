@@ -220,5 +220,3 @@ public class BUG_1541077 extends AggTableTestCase {
                + "</Cube>";
     }
 }
-
-// End BUG_1541077.java

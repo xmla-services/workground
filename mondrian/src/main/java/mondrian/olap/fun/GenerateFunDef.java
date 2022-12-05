@@ -249,5 +249,3 @@ class GenerateFunDef extends FunDefBase {
         }
     }
 }
-
-// End GenerateFunDef.java

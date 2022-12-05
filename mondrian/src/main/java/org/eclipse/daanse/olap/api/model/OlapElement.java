@@ -102,5 +102,3 @@ public interface OlapElement {
         DESCRIPTION
     }
 }
-
-// End OlapElement.java

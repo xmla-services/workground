@@ -312,5 +312,3 @@ public class MemberTuplePredicate implements StarPredicate {
         throw Util.needToImplement(this);
     }
 }
-
-// End MemberTuplePredicate.java

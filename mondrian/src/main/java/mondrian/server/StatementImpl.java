@@ -151,5 +151,3 @@ public abstract class StatementImpl implements Statement {
         return id;
     }
 }
-
-// End StatementImpl.java

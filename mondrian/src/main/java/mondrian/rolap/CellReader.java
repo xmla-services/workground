@@ -64,5 +64,3 @@ interface CellReader {
      */
     boolean isDirty();
 }
-
-// End CellReader.java

@@ -58,5 +58,3 @@ class ValueFunDef extends FunDefBase {
     }
 
 }
-
-// End ValueFunDef.java

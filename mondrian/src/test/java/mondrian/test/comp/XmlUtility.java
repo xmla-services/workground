@@ -188,5 +188,3 @@ class XmlUtility {
         }
     }
 }
-
-// End XmlUtility.java

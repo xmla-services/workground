@@ -53,5 +53,3 @@ public abstract class AbstractTupleCursor implements TupleCursor {
         return current().get(column);
     }
 }
-
-// End AbstractTupleCursor.java

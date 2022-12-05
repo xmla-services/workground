@@ -392,5 +392,3 @@ public class MultipleHierarchyTest extends BatchTestCase {
         );
     }
 }
-
-// End MultipleHierarchyTest.java

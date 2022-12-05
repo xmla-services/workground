@@ -179,5 +179,3 @@ public class QueryTiming {
     long count;
   }
 }
-
-// End QueryTiming.java

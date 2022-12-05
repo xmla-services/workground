@@ -53,5 +53,3 @@ public class Db2Dialect extends JdbcDialectImpl {
         return true;
     }
 }
-
-// End Db2Dialect.java

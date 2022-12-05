@@ -194,5 +194,3 @@ class AggQuerySpec {
         }
     }
 }
-
-// End AggQuerySpec.java

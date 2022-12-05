@@ -62,5 +62,3 @@ public class ParenthesesFunDef extends FunDefBase {
         return compiler.compile(call.getArg(0));
     }
 }
-
-// End ParenthesesFunDef.java

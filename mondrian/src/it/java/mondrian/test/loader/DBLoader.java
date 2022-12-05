@@ -1511,5 +1511,3 @@ public abstract class DBLoader {
         statement.execute(ddl);
     }
 }
-
-// End DBLoader.java

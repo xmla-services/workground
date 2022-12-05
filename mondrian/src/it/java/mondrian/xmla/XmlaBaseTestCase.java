@@ -888,5 +888,3 @@ System.out.println("Got CONTINUE");
         return str.replaceAll(matchString, "$1\\${mondrianVersion}$2");
     }
 }
-
-// End XmlaBaseTestCase.java

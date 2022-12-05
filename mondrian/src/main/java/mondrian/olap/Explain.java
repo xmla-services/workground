@@ -48,5 +48,3 @@ public class Explain extends QueryPart {
         return query;
     }
 }
-
-// End Explain.java

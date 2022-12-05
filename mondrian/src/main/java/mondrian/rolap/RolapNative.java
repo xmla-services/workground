@@ -101,5 +101,3 @@ public abstract class RolapNative {
      */
     abstract void useHardCache(boolean hard);
 }
-
-// End RolapNative.java

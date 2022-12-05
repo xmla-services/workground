@@ -90,5 +90,3 @@ class DimensionsStringFunDef extends FunDefBase {
         }
     }
 }
-
-// End DimensionsStringFunDef.java

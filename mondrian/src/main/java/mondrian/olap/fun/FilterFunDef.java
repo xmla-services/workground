@@ -413,5 +413,3 @@ class FilterFunDef extends FunDefBase {
         }
     }
 }
-
-// End FilterFunDef.java

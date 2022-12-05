@@ -77,5 +77,3 @@ public abstract class CellCacheEvent extends ExecutionEvent {
         CACHE_CONTROL,
     }
 }
-
-// End CellCacheEvent.java

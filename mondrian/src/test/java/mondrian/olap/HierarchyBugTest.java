@@ -376,5 +376,3 @@ TestUtil.flushSchemaCache(conn);
 
 
 }
-
-// End HierarchyBugTest.java

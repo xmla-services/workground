@@ -1442,5 +1442,3 @@ public class CompoundSlicerTest extends FoodMartTestCase {
                 + "FROM [Sales]", "", getTestContext() );
     }
 }
-
-// End CompoundSlicerTest.java

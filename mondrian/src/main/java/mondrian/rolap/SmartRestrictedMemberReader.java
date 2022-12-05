@@ -120,5 +120,3 @@ class SmartRestrictedMemberReader extends RestrictedMemberReader {
         }
     }
 }
-
-// End SmartRestrictedMemberReader.java

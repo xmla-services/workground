@@ -124,5 +124,3 @@ public interface Cube extends OlapElement, MetaElement {
      */
     Set<Dimension> nonJoiningDimensions(Set<Dimension> otherDims);
 }
-
-// End Cube.java

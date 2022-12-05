@@ -34,5 +34,3 @@ public class StringType extends ScalarType {
         return value instanceof String;
     }
 }
-
-// End StringType.java

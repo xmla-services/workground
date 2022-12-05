@@ -155,5 +155,3 @@ public class MonetDbDialect extends JdbcDialectImpl {
 
 
 }
-
-// End MonetDbDialect.java

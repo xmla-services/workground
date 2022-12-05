@@ -1638,5 +1638,3 @@ public class VbaTest   {
         assertEquals(1d, Vba.tan(Math.PI / 4d), SMALL);
     }
 }
-
-// End VbaTest.java

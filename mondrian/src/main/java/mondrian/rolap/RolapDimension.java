@@ -255,5 +255,3 @@ class RolapDimension extends DimensionBase {
     }
 
 }
-
-// End RolapDimension.java

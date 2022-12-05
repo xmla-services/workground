@@ -1777,5 +1777,3 @@ public class UdfTest extends FoodMartTestCase {
         }
     }
 }
-
-// End UdfTest.java

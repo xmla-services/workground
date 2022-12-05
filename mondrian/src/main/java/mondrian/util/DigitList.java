@@ -387,5 +387,3 @@ final class DigitList {
         }
     }
 }
-
-// End DigitList.java

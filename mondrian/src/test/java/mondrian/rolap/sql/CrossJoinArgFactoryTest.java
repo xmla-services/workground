@@ -58,5 +58,3 @@ public class CrossJoinArgFactoryTest {
         assertQueryReturns(context.createConnection(), query, expected);
     }
 }
-
-// End CrossJoinArgFactoryTest.java

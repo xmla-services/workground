@@ -221,5 +221,3 @@ public class JdbcTreeModel implements javax.swing.tree.TreeModel {
         }
     }
 }
-
-// End JdbcTreeModel.java

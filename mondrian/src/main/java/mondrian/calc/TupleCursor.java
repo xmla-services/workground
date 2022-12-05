@@ -81,5 +81,3 @@ public interface TupleCursor {
      */
     void currentToArray(Member[] members, int offset);
 }
-
-// End TupleCursor.java

@@ -462,5 +462,3 @@ public class DefaultRules {
         return cb.check();
     }
 }
-
-// End DefaultRules.java

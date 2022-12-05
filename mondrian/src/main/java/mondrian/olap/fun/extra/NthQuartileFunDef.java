@@ -86,5 +86,3 @@ public class NthQuartileFunDef extends AbstractAggregateFunDef {
         };
     }
 }
-
-// End NthQuartileFunDef.java

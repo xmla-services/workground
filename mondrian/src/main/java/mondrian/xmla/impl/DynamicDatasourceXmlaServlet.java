@@ -46,5 +46,3 @@ public class DynamicDatasourceXmlaServlet extends MondrianXmlaServlet {
         super.destroy();
     }
 }
-
-// End DynamicDatasourceXmlaServlet.java

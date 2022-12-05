@@ -45,5 +45,3 @@ public class FauxMemoryMonitor implements MemoryMonitor {
         return Runtime.getRuntime().freeMemory();
     }
 }
-
-// End FauxMemoryMonitor.java

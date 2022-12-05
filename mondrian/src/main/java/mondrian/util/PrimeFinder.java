@@ -241,5 +241,3 @@ final class PrimeFinder {
         pw.println("maxDeviation = " + (float)maxDeviation * 100 + " %");
     }
 }
-
-// End PrimeFinder.java

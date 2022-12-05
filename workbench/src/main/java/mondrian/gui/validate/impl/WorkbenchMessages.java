@@ -43,5 +43,3 @@ public class WorkbenchMessages implements Messages {
         return i18n.getString(stringID, defaultValue);
     }
 }
-
-// End WorkbenchMessages.java

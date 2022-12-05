@@ -20,5 +20,3 @@ package mondrian.olap;
  */
 public interface CellFormatter extends mondrian.spi.CellFormatter {
 }
-
-// End CellFormatter.java

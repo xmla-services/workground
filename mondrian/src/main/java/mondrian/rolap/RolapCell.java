@@ -838,5 +838,3 @@ public class RolapCell implements Cell {
         }
     }
 }
-
-// End RolapCell.java

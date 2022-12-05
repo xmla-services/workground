@@ -48,5 +48,3 @@ public class CellPropertyTest{
     }
 
 }
-
-// End CellPropertyTest.java

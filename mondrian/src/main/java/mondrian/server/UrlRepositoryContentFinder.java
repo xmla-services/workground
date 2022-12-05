@@ -52,5 +52,3 @@ public class UrlRepositoryContentFinder
         // nothing to do
     }
 }
-
-// End UrlRepositoryContentFinder.java

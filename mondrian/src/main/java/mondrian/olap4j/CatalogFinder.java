@@ -53,5 +53,3 @@ public interface CatalogFinder {
         RolapConnection connection,
         String catalogName);
 }
-
-// End CatalogFinder.java

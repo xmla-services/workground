@@ -80,5 +80,3 @@ public class NetezzaDialect extends PostgreSqlDialect {
         return super.getType(metaData, columnIndex);
     }
 }
-
-// End NetezzaDialect.java

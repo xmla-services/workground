@@ -130,5 +130,3 @@ public class LastNonEmptyUdf implements UserDefinedFunction {
         return null;
     }
 }
-
-// End LastNonEmptyUdf.java

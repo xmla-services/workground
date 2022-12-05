@@ -4083,5 +4083,3 @@ public class XmlaHandler {
         Map<String, Object> getPreConfiguredDiscoverDatasourcesResponse();
     }
 }
-
-// End XmlaHandler.java

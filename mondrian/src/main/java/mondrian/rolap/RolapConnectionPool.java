@@ -246,5 +246,3 @@ class RolapConnectionPool {
     }
 
 }
-
-// End RolapConnectionPool.java

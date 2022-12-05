@@ -857,5 +857,3 @@ class MonitorImpl implements Monitor, MonitorMXBean {
     }
   }
 }
-
-// End MonitorImpl.java

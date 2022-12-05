@@ -196,5 +196,3 @@ class StrToSetFunDef extends FunDefBase {
         }
     }
 }
-
-// End StrToSetFunDef.java

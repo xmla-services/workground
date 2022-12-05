@@ -321,5 +321,3 @@ public class QueryAxis extends QueryPart {
     }
 
 }
-
-// End QueryAxis.java

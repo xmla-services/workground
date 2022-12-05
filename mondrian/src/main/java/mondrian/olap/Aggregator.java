@@ -77,5 +77,3 @@ public interface Aggregator {
      */
     Object aggregate(List<Object> rawData, Datatype datatype);
 }
-
-// End Aggregator.java

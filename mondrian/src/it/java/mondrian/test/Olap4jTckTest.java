@@ -109,5 +109,3 @@ public class Olap4jTckTest extends TestCase {
         return mondrian.test.TestContext.copySuite(suite, CONDITION);
     }
 }
-
-// End Olap4jTckTest.java

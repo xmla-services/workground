@@ -178,5 +178,3 @@ public class SqlStatisticsProviderNew  {
     }
 
 }
-
-// End SqlStatisticsProvider.java

@@ -197,5 +197,3 @@ public class MemberCacheHelperTest extends TestCase {
         return names;
     }
 }
-
-// End MemberCacheHelperTest.java

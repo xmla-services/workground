@@ -33,5 +33,3 @@ abstract class Info {
         return getClass().getSimpleName() + new BeanMap(this);
     }
 }
-
-// End Info.java

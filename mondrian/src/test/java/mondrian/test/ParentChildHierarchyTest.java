@@ -1561,5 +1561,3 @@ public class ParentChildHierarchyTest {
                     .getParentMember());
     }
 }
-
-// End ParentChildHierarchyTest.java

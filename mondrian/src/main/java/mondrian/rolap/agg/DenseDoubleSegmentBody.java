@@ -103,5 +103,3 @@ class DenseDoubleSegmentBody extends AbstractSegmentBody {
         return sb.toString();
     }
 }
-
-// End DenseDoubleSegmentBody.java

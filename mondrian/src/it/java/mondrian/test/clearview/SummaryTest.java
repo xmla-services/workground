@@ -68,5 +68,3 @@ public class SummaryTest extends ClearViewBase {
         super.runTest();
     }
 }
-
-// End SummaryTest.java

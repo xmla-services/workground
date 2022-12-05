@@ -124,5 +124,3 @@ public enum ResultStyle {
             Arrays.asList(
                     ANY);
 }
-
-// End ResultStyle.java

@@ -50,5 +50,3 @@ public class CrossJoinArgFactoryTest  extends FoodMartTestCase {
         assertQueryReturns(query, expected);
     }
 }
-
-// End CrossJoinArgFactoryTest.java

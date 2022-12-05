@@ -24,5 +24,3 @@ public final class RecorderException extends MondrianException {
         super(msg);
     }
 }
-
-// End RecorderException.java

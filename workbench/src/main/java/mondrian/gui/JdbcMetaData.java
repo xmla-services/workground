@@ -1287,5 +1287,3 @@ public class JdbcMetaData {
         }
     }
 }
-
-// End JdbcMetaData.java

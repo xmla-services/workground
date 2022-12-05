@@ -130,5 +130,3 @@ class MemberExcludeConstraint implements TupleConstraint {
         return true;
     }
 }
-
-// End MemberExcludeConstraint.java

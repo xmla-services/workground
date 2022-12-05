@@ -102,5 +102,3 @@ public abstract class DelegatingInvocationHandler
         return null;
     }
 }
-
-// End DelegatingInvocationHandler.java

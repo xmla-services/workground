@@ -41,5 +41,3 @@ public class DelegatingTestContext extends FoodmartTestContextImpl {
         return context.getWriter();
     }
 }
-
-// End DelegatingTestContext.java

@@ -64,5 +64,3 @@ public class ExecutionPhaseEvent extends ExecutionEvent {
         return visitor.visit(this);
     }
 }
-
-// End ExecutionPhaseEvent.java

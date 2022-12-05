@@ -661,5 +661,3 @@ public class SchemaTreeCellRenderer
         this.jdbcMetaData = jdbcMetaData;
     }
 }
-
-// End SchemaTreeCellRenderer.java

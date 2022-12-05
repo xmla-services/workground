@@ -71,5 +71,3 @@ public class NullMemberRepresentationTest extends FoodMartTestCase {
     }
 
 }
-
-// End NullMemberRepresentationTest.java

@@ -233,5 +233,3 @@ class DrilldownLevelFunDef extends FunDefBase {
         return drilledSet;
     }
 }
-
-// End DrilldownLevelFunDef.java

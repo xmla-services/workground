@@ -124,5 +124,3 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
         return propertyList;
     }
 }
-
-// End MondrianOlap4jCellSetAxisMetaData.java

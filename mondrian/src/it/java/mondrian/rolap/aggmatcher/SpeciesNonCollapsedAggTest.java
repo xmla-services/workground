@@ -116,5 +116,3 @@ public class SpeciesNonCollapsedAggTest extends AggTableTestCase {
             + "Row #2: 479\n");
     }
 }
-
-// End SpeciesNonCollapsedAggTest.java

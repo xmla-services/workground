@@ -61,5 +61,3 @@ abstract class MondrianOlap4jMetadataElement
         return unwrapImpl(iface) != null;
     }
 }
-
-// End MondrianOlap4jMetadataElement.java

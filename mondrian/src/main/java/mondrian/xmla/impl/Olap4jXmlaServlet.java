@@ -431,5 +431,3 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
         );
     }
 }
-
-// End Olap4jXmlaServlet.java

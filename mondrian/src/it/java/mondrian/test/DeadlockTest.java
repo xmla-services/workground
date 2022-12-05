@@ -116,5 +116,3 @@ public class DeadlockTest extends FoodMartTestCase {
         propSaver.reset();
     }
 }
-
-// End DeadlockTest.java

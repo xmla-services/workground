@@ -112,5 +112,3 @@ public abstract class TargetBase {
         return (RolapNativeCrossJoin.NonEmptyCrossJoinConstraint) constraint;
     }
 }
-
-// End TargetBase.java

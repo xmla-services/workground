@@ -70,5 +70,3 @@ public class DefaultTupleConstraint implements TupleConstraint {
         return false;
     }
 }
-
-// End DefaultTupleConstraint.java

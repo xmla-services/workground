@@ -146,5 +146,3 @@ public class XmlaTestServletRequestWrapper extends HttpServletRequestWrapper {
         }
     }
 }
-
-// End XmlaTestServletRequestWrapper.java

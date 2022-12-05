@@ -166,5 +166,3 @@ public class SimpleTestRunner {
         }
     }
 }
-
-// End SimpleTestRunner.java

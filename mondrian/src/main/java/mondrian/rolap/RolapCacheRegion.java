@@ -132,5 +132,3 @@ public class RolapCacheRegion {
         return columnPredicates.values();
     }
 }
-
-// End RolapCacheRegion.java

@@ -1537,5 +1537,3 @@ public class NativizeSetFunDefTest extends BatchTestCase {
         assertEquals(expectedQuery, actualOutput);
     }
 }
-
-// End NativizeSetFunDefTest.java

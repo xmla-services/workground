@@ -974,5 +974,3 @@ public class BitKeyTest {
                 new long[] {-2, 4}));
     }
 }
-
-// End BitKeyTest.java

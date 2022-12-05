@@ -454,5 +454,3 @@ public class StandAlone {
         System.out.print(level.getUniqueName());
     }
 }
-
-// End StandAlone.java

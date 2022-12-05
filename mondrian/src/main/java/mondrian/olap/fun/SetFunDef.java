@@ -518,5 +518,3 @@ public class SetFunDef extends FunDefBase {
         }
     }
 }
-
-// End SetFunDef.java

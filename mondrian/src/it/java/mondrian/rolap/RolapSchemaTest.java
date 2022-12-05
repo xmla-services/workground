@@ -384,5 +384,3 @@ public class RolapSchemaTest extends PropertyRestoringTestCase {
         assertEquals(expected.getMessage(), actual.getMessage());
     }
 }
-
-// End RolapSchemaTest.java

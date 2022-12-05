@@ -115,5 +115,3 @@ public class BetterExpCompiler extends AbstractExpCompiler {
         }
     }
 }
-
-// End BetterExpCompiler.java

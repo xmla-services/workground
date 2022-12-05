@@ -71,5 +71,3 @@ public class ResultStyleException extends MondrianException {
         super(message);
     }
 }
-
-// End ResultStyleException.java

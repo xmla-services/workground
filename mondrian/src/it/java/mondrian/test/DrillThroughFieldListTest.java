@@ -370,5 +370,3 @@ public class DrillThroughFieldListTest extends FoodMartTestCase {
     context.assertSqlEquals(expectedSql, actual, expectedRowsNumber);
   }
 }
-
-// End DrillThroughFieldListTest.java

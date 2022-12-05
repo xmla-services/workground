@@ -146,5 +146,3 @@ public abstract class OlapElementBase
         }
     }
 }
-
-// End OlapElementBase.java

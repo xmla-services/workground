@@ -278,5 +278,3 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
         }
     }
 }
-
-// End DrillThroughQuerySpec.java

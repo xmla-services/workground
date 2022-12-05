@@ -140,5 +140,3 @@ public class HierarchyCurrentMemberFunDef extends FunDefBase {
     }
   }
 }
-
-// End HierarchyCurrentMemberFunDef.java

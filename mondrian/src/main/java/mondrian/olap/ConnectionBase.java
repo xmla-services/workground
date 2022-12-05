@@ -111,5 +111,3 @@ public abstract class ConnectionBase implements Connection {
             : new MdxParserValidatorImpl();
     }
 }
-
-// End ConnectionBase.java

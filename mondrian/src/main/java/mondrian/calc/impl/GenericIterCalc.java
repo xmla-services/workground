@@ -81,5 +81,3 @@ implements ListCalc, IterCalc
         return (TupleIterable) o;
     }
 }
-
-// End GenericIterCalc.java

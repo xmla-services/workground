@@ -154,5 +154,3 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
         }
     }
 }
-
-// End MemberExtractingVisitor.java

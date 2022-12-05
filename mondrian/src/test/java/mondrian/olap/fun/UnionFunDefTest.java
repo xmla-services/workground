@@ -276,5 +276,3 @@ public class UnionFunDefTest {
     }
   }
 }
-
-// End UnionFunDefTest.java

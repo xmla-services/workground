@@ -2232,5 +2232,3 @@ public class BuiltinFunTable extends FunTableImpl {
     }
 
 }
-
-// End BuiltinFunTable.java

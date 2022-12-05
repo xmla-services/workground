@@ -77,5 +77,3 @@ public interface SmartCache <K, V> {
             Iterator<Entry<K, V>> iterator);
     }
 }
-
-// End SmartCache.java

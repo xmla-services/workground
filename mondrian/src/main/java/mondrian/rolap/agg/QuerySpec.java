@@ -49,5 +49,3 @@ public interface QuerySpec {
 
     Pair<String, List<BestFitColumnType>> generateSqlQuery();
 }
-
-// End QuerySpec.java

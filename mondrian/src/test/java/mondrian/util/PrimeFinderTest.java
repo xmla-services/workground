@@ -78,5 +78,3 @@ public class PrimeFinderTest{
         assertStatistics(1000, Integer.MAX_VALUE, "");
     }
 }
-
-// End PrimeFinderTest.java

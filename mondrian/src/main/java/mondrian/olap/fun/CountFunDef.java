@@ -89,5 +89,3 @@ class CountFunDef extends AbstractAggregateFunDef {
     };
   }
 }
-
-// End CountFunDef.java

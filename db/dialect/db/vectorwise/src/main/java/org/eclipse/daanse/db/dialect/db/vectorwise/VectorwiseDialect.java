@@ -59,5 +59,3 @@ public class VectorwiseDialect extends IngresDialect {
         return false;
     }
 }
-
-// End VectorwiseDialect.java

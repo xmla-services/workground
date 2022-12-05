@@ -538,5 +538,3 @@ public class IdBatchResolverTest  {
         }
     }
 }
-
-// End IdBatchResolverTest.java

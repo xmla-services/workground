@@ -141,5 +141,3 @@ public class RolapUtilTest {
     return def;
   }
 }
-
-// End RolapUtilTest.java
