@@ -10,25 +10,15 @@
 */
 package mondrian.rolap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.Mockito.atLeastOnce;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
-import static org.opencube.junit5.TestUtil.assertExprReturns;
-import static org.opencube.junit5.TestUtil.assertQueryReturns;
-
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
+import mondrian.olap.DriverManager;
+import mondrian.olap.MondrianException;
+import mondrian.olap.Util;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextSource;
+import org.opencube.junit5.context.TestingContext;
+import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
+import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -36,24 +26,14 @@ import javax.naming.spi.InitialContextFactory;
 import javax.naming.spi.InitialContextFactoryBuilder;
 import javax.naming.spi.NamingManager;
 import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Hashtable;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.result.Result;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.opencube.junit5.ContextSource;
-import org.opencube.junit5.TestUtil;
-import org.opencube.junit5.context.TestingContext;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
-
-import mondrian.olap.DriverManager;
-import mondrian.olap.MondrianException;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.Query;
-import mondrian.olap.Util;
-import mondrian.util.Pair;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+import static org.opencube.junit5.TestUtil.assertExprReturns;
+import static org.opencube.junit5.TestUtil.assertQueryReturns;
 
 /**
  * Unit test for {@link RolapConnection}.
@@ -315,212 +295,6 @@ public class RolapConnectionTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testJndiConnection(TestingContext context) throws NamingException {
-        // Cannot guarantee that this test will work if they have chosen to
-        // resolve data sources other than by JNDI.
-        if (MondrianProperties.instance().DataSourceResolverClass.isSet()) {
-            return;
-        }
-        // get a regular connection
-        Util.PropertyList properties =
-           baseProperties(context);
-        final StringBuilder buf = new StringBuilder();
-        //TODO Commented by reason context implementation
-        final DataSource dataSource = null;
-        //final DataSource dataSource =
-        //    RolapConnection.createDataSource(null, properties, buf);
-        // Don't know what the connect string is - it differs with database
-        // and with the user's set up - but we know that it contains a JDBC
-        // connect string. Best we can do is check that createDataSource is
-        // setting it to something.
-        final String desc = buf.toString();
-        assertTrue(desc.startsWith("Jdbc="), desc);
-
-        final List<String> lookupCalls = new ArrayList<String>();
-        // mock the JNDI naming manager to provide that datasource
-        THREAD_INITIAL_CONTEXT.set(
-            // Use lazy initialization. Otherwise during initialization of this
-            // initial context JNDI tries to create a default initial context
-            // and bumps into itself coming the other way.
-            new InitialContext(true) {
-                public Object lookup(String str) {
-                    lookupCalls.add("Called");
-                    return dataSource;
-                }
-            }
-       );
-
-        // Use the datasource property to connect to the database.
-        // Remove user and password, because some data sources (those using
-        // pools) don't allow you to override user.
-        Util.PropertyList properties2 =
-           baseProperties(context);
-        properties2.remove(RolapConnectionProperties.Jdbc.name());
-        properties2.remove(RolapConnectionProperties.JdbcUser.name());
-        properties2.remove(RolapConnectionProperties.JdbcPassword.name());
-        properties2.put(
-            RolapConnectionProperties.DataSource.name(), "jnditest");
-        DriverManager.getConnection(properties2, null);
-
-        // if we've made it here with lookupCalls,
-        // we've successfully used JNDI
-        assertTrue(lookupCalls.size() > 0);
-    }
-
-	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDataSourceOverrideUserPass(TestingContext context)
-        throws SQLException, NamingException
-    {
-        // use the datasource property to connect to the database
-        Util.PropertyList properties =
-            spy(baseProperties(context));
-        final Dialect dialect = TestUtil.getDialect(context.createConnection());
-        if (dialect.getDatabaseProduct() == DatabaseProduct.ACCESS) {
-            // Access doesn't accept user/password, so this test is pointless.
-            return;
-        }
-
-        final String jdbcUser =
-            properties.get(RolapConnectionProperties.JdbcUser.name());
-        final String jdbcPassword =
-            properties.get(RolapConnectionProperties.JdbcPassword.name());
-        if (jdbcUser == null || jdbcPassword == null) {
-            // Can only run this test if username and password are explicit.
-            return;
-        }
-
-        // Define a data source with bogus user and password.
-        properties.put(
-            RolapConnectionProperties.JdbcUser.name(),
-            "bogususer");
-        properties.put(
-            RolapConnectionProperties.JdbcPassword.name(),
-            "boguspassword");
-        properties.put(
-            RolapConnectionProperties.PoolNeeded.name(),
-            "false");
-        final StringBuilder buf = new StringBuilder();
-        //TODO Commented by reason context implementation
-        final DataSource dataSource = null;
-        //final DataSource dataSource =
-        //    RolapConnection.createDataSource(null, properties, buf);
-        final String desc = buf.toString();
-        assertTrue(desc.startsWith("Jdbc="), desc);
-        assertTrue(desc.indexOf("JdbcUser=bogususer") >= 0, desc);
-        verify(
-            properties,
-            atLeastOnce()).get(RolapConnectionProperties.JdbcPassword.name());
-        final String jndiName = "jndiDataSource";
-        THREAD_INITIAL_CONTEXT.set(
-            new InitialContext() {
-                public Object lookup(String str) {
-                    return str.equals(jndiName)
-                        ? dataSource
-                        : null;
-                }
-            }
-       );
-
-        // Create a property list that we will use for the actual mondrian
-        // connection. Replace the original JDBC info with the data source we
-        // just created.
-        final Util.PropertyList properties2 = new Util.PropertyList();
-        for (Pair<String, String> entry : properties) {
-            properties2.put(entry.getKey(), entry.getValue());
-        }
-        properties2.remove(RolapConnectionProperties.Jdbc.name());
-        properties2.put(
-            RolapConnectionProperties.DataSource.name(),
-            jndiName);
-
-        // With JdbcUser and JdbcPassword credentials in the mondrian connect
-        // string, the data source's "user" and "password" properties are
-        // overridden and the connection succeeds.
-        properties2.put(
-            RolapConnectionProperties.JdbcUser.name(),
-            jdbcUser);
-        properties2.put(
-            RolapConnectionProperties.JdbcPassword.name(),
-            jdbcPassword);
-        org.eclipse.daanse.olap.api.Connection connection = null;
-        try {
-            connection =
-                DriverManager.getConnection(properties2, null);
-            Query query = connection.parseQuery("select from [Sales]");
-            final Result result = connection.execute(query);
-            assertNotNull(result);
-        } finally {
-            if (connection != null) {
-                connection.close();
-                connection = null;
-            }
-        }
-
-        // If we don't specify JdbcUser and JdbcPassword in the mondrian
-        // connection properties, mondrian uses the data source's
-        // bogus credentials, and the connection fails.
-        properties2.remove(RolapConnectionProperties.JdbcUser.name());
-        properties2.remove(RolapConnectionProperties.JdbcPassword.name());
-        for (String poolNeeded : Arrays.asList("false", "true")) {
-            // Important to test with & without pooling. Connection pools
-            // typically do not let you change user, so it's important that
-            // mondrian handles these right.
-            properties2.put(
-                RolapConnectionProperties.PoolNeeded.name(), poolNeeded);
-            try {
-                connection = DriverManager.getConnection(properties2, null);
-                fail("Expected exception");
-            } catch (MondrianException e) {
-                final String s = TestUtil.getStackTrace(e);
-                assertTrue(
-                    s.indexOf(
-                        "Error while creating SQL connection: "
-                        + "DataSource=jndiDataSource") >= 0,
-                    s);
-                switch (dialect.getDatabaseProduct()) {
-                case DERBY:
-                    assertTrue(
-                        s.indexOf(
-                            "Caused by: java.sql.SQLException: "
-                            + "Schema 'BOGUSUSER' does not exist") >= 0,
-                        s);
-                    break;
-                case ORACLE:
-                    assertTrue(
-                        s.indexOf(
-                            "Caused by: java.sql.SQLException: ORA-01017: "
-                            + "invalid username/password; logon denied") >= 0,
-                        s);
-                    break;
-                case MYSQL:
-                case MARIADB:
-                    assertTrue(
-                        s.indexOf(
-                            "Caused by: java.sql.SQLException: Access denied "
-                            + "for user 'bogususer'") >= 0,
-                        s);
-                    break;
-                case POSTGRESQL:
-                    assertTrue(
-                        s.indexOf(
-                            "Caused by: org.postgresql.util.PSQLException: "
-                            + "FATAL: password authentication failed for "
-                            + "user \"bogususer\"") >= 0,
-                        s);
-                    break;
-                }
-            } finally {
-                if (connection != null) {
-                    connection.close();
-                    connection = null;
-                }
-            }
-        }
-    }
-
-	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testGetJdbcConnectionWhenJdbcIsNull(TestingContext context) {
         final StringBuilder connectInfo = new StringBuilder();
         Util.PropertyList properties =
@@ -537,74 +311,6 @@ public class RolapConnectionTest {
                 s==null||s.length()==0,
                 connectInfo.toString());
         }
-    }
-
-	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testJdbcConnectionString(TestingContext context) {
-        final StringBuilder connectInfo = new StringBuilder();
-        Map<String, String> connectInfoMap = new HashMap<>();
-
-        Util.PropertyList properties =
-           baseProperties(context);
-        properties.put(
-            RolapConnectionProperties.JdbcUser.name(), "sqlserver://localhost");
-        properties.put("databaseName", "databaseTest");
-        properties.put("integratedSecurity", "true");
-
-        //TODO Commented by reason context implementation
-        DataSource dataSource = null;
-        //DataSource dataSource =
-        //    RolapConnection.createDataSource(null, properties, connectInfo);
-        String s=connectInfo.toString();
-        assertFalse(s==null||s.length()==0);
-
-        String[] parseconnectInfo = connectInfo.toString().split(";");
-        for (String parseconnectInfoVals : parseconnectInfo) {
-            String[] parseconnectInfoVal = parseconnectInfoVals.split("=");
-            connectInfoMap.put(parseconnectInfoVal[0], parseconnectInfoVal[1]);
-        }
-
-        assertTrue(true, connectInfoMap.get("databaseName"));
-        assertEquals(connectInfoMap.get("databaseName"), "databaseTest");
-        assertTrue(true, connectInfoMap.get("integratedSecurity"));
-        assertEquals(connectInfoMap.get("integratedSecurity"), "true");
-    }
-
-	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testJdbcConnectionStringWithoutDatabase(TestingContext context) {
-        final StringBuilder connectInfo = new StringBuilder();
-        Util.PropertyList properties =
-           baseProperties(context);
-        properties.put(
-            RolapConnectionProperties.JdbcUser.name(), "sqlserver://localhost");
-        //TODO Commented by reason context implementation
-        DataSource dataSource = null;
-        //DataSource dataSource =
-        //    RolapConnection.createDataSource(null, properties, connectInfo);
-        String s=connectInfo.toString();
-        assertFalse(s==null||s.length()==0);
-        assertFalse(connectInfo.toString().contains("databaseName"));
-    }
-
-	@ParameterizedTest
-	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testJdbcConnectionStringWithoutIntegratedSecurity(TestingContext context) {
-        final StringBuilder connectInfo = new StringBuilder();
-        Util.PropertyList properties =
-           baseProperties(context);
-        properties.put(
-            RolapConnectionProperties.JdbcUser.name(), "sqlserver://localhost");
-
-        //TODO Commented by reason context implementation
-        DataSource dataSource = null;
-        //DataSource dataSource =
-        //    RolapConnection.createDataSource(null, properties, connectInfo);
-
-        String s=connectInfo.toString();
-        assertFalse(s==null||s.length()==0);
-        assertFalse(connectInfo.toString().contains("integratedSecurity"));
     }
 }
 

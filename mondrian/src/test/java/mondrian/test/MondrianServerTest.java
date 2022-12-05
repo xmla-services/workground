@@ -27,6 +27,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.MondrianServer;
 import mondrian.olap.Util;
+import mondrian.olap4j.MondrianOlap4jDriver;
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.server.StringRepositoryContentFinder;
 import mondrian.server.UrlRepositoryContentFinder;
@@ -81,6 +82,7 @@ public class MondrianServerTest {
                 null);
         final int id = server.getId();
         assertNotNull(id);
+        java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(context.getContext()));
         OlapConnection connection =
             server.getConnection("FoodMart", "FoodMart", null);
         final NamedList<Catalog> catalogs =
@@ -119,6 +121,7 @@ public class MondrianServerTest {
                 null);
         final int id = server.getId();
         assertNotNull(id);
+        java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(context.getContext()));
         OlapConnection connection =
             server.getConnection("FoodMart", "FoodMart", null);
         final NamedList<Catalog> catalogs =
