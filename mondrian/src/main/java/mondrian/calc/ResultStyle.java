@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc;
 
@@ -61,68 +61,68 @@ public enum ResultStyle {
     // collections of result styles.
 
     public static final List<ResultStyle> ANY_LIST =
-        Arrays.asList(
-            ANY);
+            Arrays.asList(
+                    ANY);
 
     public static final List<ResultStyle> ITERABLE_ONLY =
-        Arrays.asList(
-            ITERABLE);
+            Arrays.asList(
+                    ITERABLE);
 
     public static final List<ResultStyle> MUTABLELIST_ONLY =
-        Arrays.asList(
-            MUTABLE_LIST);
+            Arrays.asList(
+                    MUTABLE_LIST);
 
     public static final List<ResultStyle> LIST_ONLY =
-        Arrays.asList(
-            LIST);
+            Arrays.asList(
+                    LIST);
 
     public static final List<ResultStyle> ITERABLE_ANY =
-        Arrays.asList(
-            ITERABLE,
-            ANY);
+            Arrays.asList(
+                    ITERABLE,
+                    ANY);
 
     public static final List<ResultStyle> ITERABLE_LIST =
-        Arrays.asList(
-            ITERABLE,
-            LIST);
+            Arrays.asList(
+                    ITERABLE,
+                    LIST);
 
     public static final List<ResultStyle> ITERABLE_MUTABLELIST =
-        Arrays.asList(
-            ITERABLE,
-            MUTABLE_LIST);
+            Arrays.asList(
+                    ITERABLE,
+                    MUTABLE_LIST);
 
     public static final List<ResultStyle> ITERABLE_LIST_MUTABLELIST =
-        Arrays.asList(
-            ITERABLE,
-            LIST,
-            MUTABLE_LIST);
+            Arrays.asList(
+                    ITERABLE,
+                    LIST,
+                    MUTABLE_LIST);
 
     public static final List<ResultStyle> LIST_MUTABLELIST =
-        Arrays.asList(
-            LIST,
-            MUTABLE_LIST);
+            Arrays.asList(
+                    LIST,
+                    MUTABLE_LIST);
 
     public static final List<ResultStyle> MUTABLELIST_LIST =
-        Arrays.asList(
-            MUTABLE_LIST,
-            LIST);
+            Arrays.asList(
+                    MUTABLE_LIST,
+                    LIST);
 
     public static final List<ResultStyle> ITERABLE_LIST_MUTABLELIST_ANY =
-        Arrays.asList(
-            ITERABLE,
-            LIST,
-            MUTABLE_LIST,
-            ANY);
+            Arrays.asList(
+                    ITERABLE,
+                    LIST,
+                    MUTABLE_LIST,
+                    ANY);
 
     public static final List<ResultStyle> ITERABLE_MUTABLELIST_LIST =
-        Arrays.asList(
-            ITERABLE,
-            MUTABLE_LIST,
-            LIST);
+            Arrays.asList(
+                    ITERABLE,
+                    MUTABLE_LIST,
+                    LIST);
 
     public static final List<ResultStyle> ANY_ONLY =
-        Arrays.asList(
-            ANY);
+            Arrays.asList(
+                    ANY);
 }
 
 // End ResultStyle.java

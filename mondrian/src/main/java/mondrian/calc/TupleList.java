@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc;
 
@@ -34,7 +34,7 @@ import org.eclipse.daanse.olap.api.model.Member;
  * @author jhyde
  */
 public interface TupleList
-    extends List<List<Member>>, TupleIterable
+extends List<List<Member>>, TupleIterable
 {
     /**
      * Returns a particular column of a particular row.
@@ -62,6 +62,7 @@ public interface TupleList
      * @return List of members
      * @throws IllegalArgumentException if column is not less than arity
      */
+    @Override
     List<Member> slice(int column);
 
     /**
@@ -84,6 +85,7 @@ public interface TupleList
     void addCurrent(TupleCursor tupleIter);
 
     // override, refining return type
+    @Override
     TupleList subList(int fromIndex, int toIndex);
 
     TupleList withPositionCallback(PositionCallback positionCallback);
