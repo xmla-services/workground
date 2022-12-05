@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc.impl;
 
@@ -33,11 +33,13 @@ public class AbstractVoidCalc extends GenericCalc implements VoidCalc {
         this.calcs = calcs;
     }
 
+    @Override
     public Object evaluate(Evaluator evaluator) {
         evaluateVoid(evaluator);
         return null;
     }
 
+    @Override
     public Calc[] getCalcs() {
         return calcs;
     }

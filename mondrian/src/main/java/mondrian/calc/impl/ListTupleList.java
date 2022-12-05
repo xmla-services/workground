@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc.impl;
 
@@ -57,37 +57,44 @@ public class ListTupleList extends AbstractEndToEndTupleList
         this.list = list;
     }
 
+    @Override
     protected List<Member> backingList() {
         return list;
     }
 
+    @Override
     public Member get(int slice, int index) {
         return list.get(index * arity + slice);
     }
 
+    @Override
     public List<Member> get(int index) {
         final int startIndex = index * arity;
         final List<Member> list1 =
-            new AbstractList<Member>() {
-                public Member get(int index) {
-                    return list.get(startIndex + index);
-                }
+                new AbstractList<>() {
+            @Override
+            public Member get(int index) {
+                return list.get(startIndex + index);
+            }
 
-                public int size() {
-                    return arity;
-                }
-            };
+            @Override
+            public int size() {
+                return arity;
+            }
+        };
         if (mutable) {
             return Util.flatList(list1);
         }
         return list1;
     }
 
+    @Override
     public void add(int index, List<Member> element) {
         assert mutable;
         list.addAll(index * arity, element);
     }
 
+    @Override
     public void addTuple(Member... members) {
         assert mutable;
         list.addAll(Arrays.asList(members));
@@ -114,15 +121,17 @@ public class ListTupleList extends AbstractEndToEndTupleList
         list.subList(fromIndex * arity, toIndex * arity).clear();
     }
 
+    @Override
     public int size() {
         return list.size() / arity;
     }
 
+    @Override
     public List<Member> slice(final int column) {
         if (column < 0 || column >= arity) {
             throw new IllegalArgumentException();
         }
-        return new AbstractList<Member>() {
+        return new AbstractList<>() {
             @Override
             public Member get(int index) {
                 return ListTupleList.this.get(column, index);
@@ -135,14 +144,16 @@ public class ListTupleList extends AbstractEndToEndTupleList
         };
     }
 
+    @Override
     public TupleList cloneList(int capacity) {
         return new ListTupleList(
-            arity,
-            capacity < 0
-                ? new ArrayList<Member>(list)
-                : new ArrayList<Member>(capacity * arity));
+                arity,
+                capacity < 0
+                ? new ArrayList<>(list)
+                        : new ArrayList<Member>(capacity * arity));
     }
 
+    @Override
     public TupleIterator tupleIteratorInternal() {
         return new AbstractTupleListIterator();
     }

@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc.impl;
 
@@ -56,14 +56,15 @@ public class MemberArrayValueCalc extends GenericCalc {
         final Type type = exp.getType();
         assert type instanceof ScalarType : exp;
         this.memberCalcs = memberCalcs;
-        this.members = new Member[memberCalcs.length];
+        members = new Member[memberCalcs.length];
     }
 
+    @Override
     public Object evaluate(Evaluator evaluator) {
         final int savepoint = evaluator.savepoint();
         try {
             for (int i = 0; i < memberCalcs.length; i++) {
-                MemberCalc memberCalc = memberCalcs[i];
+                final MemberCalc memberCalc = memberCalcs[i];
                 final Member member = memberCalc.evaluateMember(evaluator);
                 if (member == null
                         || member.isNull())
@@ -74,26 +75,27 @@ public class MemberArrayValueCalc extends GenericCalc {
                 members[i] = member;
             }
             if (nullCheck
-                && evaluator.needToReturnNullForUnrelatedDimension(members))
+                    && evaluator.needToReturnNullForUnrelatedDimension(members))
             {
                 return null;
             }
-            final Object result = evaluator.evaluateCurrent();
-            return result;
+            return evaluator.evaluateCurrent();
         } finally {
             evaluator.restore(savepoint);
         }
     }
 
+    @Override
     public Calc[] getCalcs() {
         return memberCalcs;
     }
 
+    @Override
     public boolean dependsOn(Hierarchy hierarchy) {
         if (super.dependsOn(hierarchy)) {
             return true;
         }
-        for (MemberCalc memberCalc : memberCalcs) {
+        for (final MemberCalc memberCalc : memberCalcs) {
             // If the expression definitely includes the dimension (in this
             // case, that means it is a member of that dimension) then we
             // do not depend on the dimension. For example, the scalar value of

@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc.impl;
 
@@ -53,14 +53,11 @@ public class TupleValueCalc extends GenericCalc {
         this.nullCheck = nullCheck;
     }
 
+    @Override
     public Object evaluate(Evaluator evaluator) {
         final Member[] members = tupleCalc.evaluateTuple(evaluator);
-        if (members == null) {
-            return null;
-        }
-
-        if (nullCheck
-            && evaluator.needToReturnNullForUnrelatedDimension(members))
+        if ((members == null) || (nullCheck
+                && evaluator.needToReturnNullForUnrelatedDimension(members)))
         {
             return null;
         }
@@ -68,22 +65,23 @@ public class TupleValueCalc extends GenericCalc {
         final int savepoint = evaluator.savepoint();
         try {
             evaluator.setContext(members);
-            Object result = evaluator.evaluateCurrent();
-            return result;
+            return evaluator.evaluateCurrent();
         } finally {
             evaluator.restore(savepoint);
         }
     }
 
+    @Override
     public Calc[] getCalcs() {
         return new Calc[] {tupleCalc};
     }
 
+    @Override
     public boolean dependsOn(Hierarchy hierarchy) {
         if (super.dependsOn(hierarchy)) {
             return true;
         }
-        for (Type type : ((TupleType) tupleCalc.getType()).elementTypes) {
+        for (final Type type : ((TupleType) tupleCalc.getType()).elementTypes) {
             // If the expression definitely includes the dimension (in this
             // case, that means it is a member of that dimension) then we
             // do not depend on the dimension. For example, the scalar value of
@@ -117,12 +115,11 @@ public class TupleValueCalc extends GenericCalc {
      * @return optimized expression
      */
     public Calc optimize() {
-        if (tupleCalc instanceof TupleFunDef.CalcImpl) {
-            TupleFunDef.CalcImpl calc = (TupleFunDef.CalcImpl) tupleCalc;
+        if (tupleCalc instanceof TupleFunDef.CalcImpl calc) {
             return MemberValueCalc.create(
-                new DummyExp(type),
-                calc.getMemberCalcs(),
-                nullCheck);
+                    new DummyExp(type),
+                    calc.getMemberCalcs(),
+                    nullCheck);
         }
         return this;
     }

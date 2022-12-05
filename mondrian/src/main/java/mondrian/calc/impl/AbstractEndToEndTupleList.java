@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc.impl;
 
@@ -30,36 +30,41 @@ import mondrian.calc.TupleList;
  * <p>Concrete subclasses can store the data in various backing lists.
  *
  * @author jhyde
-*/
+ */
 abstract class AbstractEndToEndTupleList extends AbstractTupleList {
 
     AbstractEndToEndTupleList(int arity) {
         super(arity);
     }
 
+    @Override
     public TupleList project(final int[] destIndices) {
         final List<Member> backingList = backingList();
         final int originalArity = getArity();
         return new DelegatingTupleList(
-            destIndices.length,
-            new AbstractList<List<Member>>() {
-                public List<Member> get(int index) {
-                    final int n = index * originalArity;
-                    return new AbstractList<Member>() {
-                        public Member get(int index) {
-                            return backingList.get(n + destIndices[index]);
-                        }
+                destIndices.length,
+                new AbstractList<List<Member>>() {
+                    @Override
+                    public List<Member> get(int index) {
+                        final int n = index * originalArity;
+                        return new AbstractList<>() {
+                            @Override
+                            public Member get(int index) {
+                                return backingList.get(n + destIndices[index]);
+                            }
 
-                        public int size() {
-                            return destIndices.length;
-                        }
-                    };
-                }
+                            @Override
+                            public int size() {
+                                return destIndices.length;
+                            }
+                        };
+                    }
 
-                public int size() {
-                    return backingList.size() / originalArity;
-                }
-            });
+                    @Override
+                    public int size() {
+                        return backingList.size() / originalArity;
+                    }
+                });
     }
 
     protected abstract List<Member> backingList();
@@ -84,8 +89,8 @@ abstract class AbstractEndToEndTupleList extends AbstractTupleList {
         assert mutable;
         if (c instanceof AbstractEndToEndTupleList) {
             return backingList().addAll(
-                i * arity,
-                ((AbstractEndToEndTupleList) c).backingList());
+                    i * arity,
+                    ((AbstractEndToEndTupleList) c).backingList());
         }
         return super.addAll(i, c);
     }
@@ -93,15 +98,16 @@ abstract class AbstractEndToEndTupleList extends AbstractTupleList {
     @Override
     public TupleList subList(int fromIndex, int toIndex) {
         return new ListTupleList(
-            arity,
-            backingList().subList(fromIndex * arity, toIndex * arity));
+                arity,
+                backingList().subList(fromIndex * arity, toIndex * arity));
     }
 
+    @Override
     public TupleList withPositionCallback(
-        final PositionCallback positionCallback)
+            final PositionCallback positionCallback)
     {
         return new ListTupleList(
-            arity, new PositionSensingList(positionCallback));
+                arity, new PositionSensingList(positionCallback));
     }
 
     private class PositionSensingList extends AbstractList<Member> {
@@ -109,7 +115,7 @@ abstract class AbstractEndToEndTupleList extends AbstractTupleList {
         private final List<Member> backingList = backingList();
 
         public PositionSensingList(
-            PositionCallback positionCallback)
+                PositionCallback positionCallback)
         {
             this.positionCallback = positionCallback;
         }

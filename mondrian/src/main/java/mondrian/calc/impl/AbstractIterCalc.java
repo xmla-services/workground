@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc.impl;
 
@@ -30,8 +30,8 @@ import mondrian.olap.type.SetType;
  * @since Oct 24, 2008
  */
 public abstract class AbstractIterCalc
-    extends AbstractCalc
-    implements IterCalc
+extends AbstractCalc
+implements IterCalc
 {
     /**
      * Creates an abstract implementation of a compiled expression which returns
@@ -45,18 +45,22 @@ public abstract class AbstractIterCalc
         super(exp, calcs);
     }
 
+    @Override
     public SetType getType() {
         return (SetType) super.getType();
     }
 
+    @Override
     public final Object evaluate(Evaluator evaluator) {
         return evaluateIterable(evaluator);
     }
 
+    @Override
     public ResultStyle getResultStyle() {
         return ResultStyle.ITERABLE;
     }
 
+    @Override
     public String toString() {
         return "AbstractIterCalc object";
     }

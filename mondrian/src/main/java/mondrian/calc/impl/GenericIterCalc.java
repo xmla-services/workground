@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc.impl;
 
@@ -28,8 +28,8 @@ import mondrian.olap.type.SetType;
  * @since Nov 7, 2008
  */
 public abstract class GenericIterCalc
-    extends AbstractCalc
-    implements ListCalc, IterCalc
+extends AbstractCalc
+implements ListCalc, IterCalc
 {
     /**
      * Creates a GenericIterCalc without specifying child calculated
@@ -53,29 +53,31 @@ public abstract class GenericIterCalc
         super(exp, calcs);
     }
 
+    @Override
     public SetType getType() {
         return (SetType) type;
     }
 
+    @Override
     public TupleList evaluateList(Evaluator evaluator) {
-        Object o = evaluate(evaluator);
+        final Object o = evaluate(evaluator);
         if (o instanceof TupleList) {
             return (TupleList) o;
-        } else {
-            // Iterable
-            final TupleIterable iterable = (TupleIterable) o;
-            TupleList tupleList =
-                TupleCollections.createList(iterable.getArity());
-            TupleCursor cursor = iterable.tupleCursor();
-            while (cursor.forward()) {
-                tupleList.addCurrent(cursor);
-            }
-            return tupleList;
         }
+        // Iterable
+        final TupleIterable iterable = (TupleIterable) o;
+        final TupleList tupleList =
+                TupleCollections.createList(iterable.getArity());
+        final TupleCursor cursor = iterable.tupleCursor();
+        while (cursor.forward()) {
+            tupleList.addCurrent(cursor);
+        }
+        return tupleList;
     }
 
+    @Override
     public TupleIterable evaluateIterable(Evaluator evaluator) {
-        Object o = evaluate(evaluator);
+        final Object o = evaluate(evaluator);
         return (TupleIterable) o;
     }
 }
