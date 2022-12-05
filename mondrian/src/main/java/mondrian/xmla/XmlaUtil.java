@@ -564,5 +564,3 @@ way too noisy
         }
     }
 }
-
-// End XmlaUtil.java

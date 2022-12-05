@@ -72,5 +72,3 @@ class ExceptFunDef extends FunDefBase {
         };
     }
 }
-
-// End ExceptFunDef.java

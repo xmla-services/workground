@@ -255,5 +255,3 @@ public class ConcatenableList<T> extends AbstractList<T> {
         return this.hashCode;
     }
 }
-
-// End ConcatenableList.java

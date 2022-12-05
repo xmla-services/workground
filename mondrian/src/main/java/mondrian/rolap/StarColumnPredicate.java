@@ -112,5 +112,3 @@ public interface StarColumnPredicate extends StarPredicate {
         }
     }
 }
-
-// End StarColumnPredicate.java

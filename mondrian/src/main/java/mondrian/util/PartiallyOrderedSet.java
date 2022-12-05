@@ -851,5 +851,3 @@ public class PartiallyOrderedSet<E> extends AbstractSet<E>
         }
     }
 }
-
-// End PartiallyOrderedSet.java

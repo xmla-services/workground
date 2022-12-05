@@ -178,5 +178,3 @@ public class SqlStatisticsProvider implements StatisticsProvider {
         }
     }
 }
-
-// End SqlStatisticsProvider.java

@@ -115,5 +115,3 @@ public class JavaccParserValidatorImpl implements MdxParserValidator {
         return Util.newError(e, "While parsing " + queryString);
     }
 }
-
-// End JavaccParserValidatorImpl.java

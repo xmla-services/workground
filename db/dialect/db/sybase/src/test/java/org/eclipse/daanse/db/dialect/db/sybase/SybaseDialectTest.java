@@ -51,5 +51,3 @@ public class SybaseDialectTest{
     }
 
 }
-
-// End SybaseDialectTest.java

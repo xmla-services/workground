@@ -813,5 +813,3 @@ abstract class EmptyResultSet implements ResultSet, OlapWrapper {
         return iface.isInstance(this);
     }
 }
-
-// End EmptyResultSet.java

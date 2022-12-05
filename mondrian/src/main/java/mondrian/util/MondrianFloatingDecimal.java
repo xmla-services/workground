@@ -133,5 +133,3 @@ class MondrianFloatingDecimal {
         return chars;
     }
 }
-
-// End MondrianFloatingDecimal.java

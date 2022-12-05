@@ -64,5 +64,3 @@ public class NeoviewDialect extends JdbcDialectImpl {
         return generateInlineForAnsi("t", columnNames, columnTypes, valueList, true);
     }
 }
-
-// End NeoviewDialect.java

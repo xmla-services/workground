@@ -169,5 +169,3 @@ public class SlotFuture<V> implements Future<V> {
         dataGate.countDown();
     }
 }
-
-// End SlotFuture.java

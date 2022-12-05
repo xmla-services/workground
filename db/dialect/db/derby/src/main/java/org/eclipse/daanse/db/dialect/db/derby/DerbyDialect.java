@@ -71,5 +71,3 @@ public class DerbyDialect extends JdbcDialectImpl {
         return false;
     }
 }
-
-// End DerbyDialect.java

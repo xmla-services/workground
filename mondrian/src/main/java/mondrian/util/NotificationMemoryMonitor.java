@@ -150,5 +150,3 @@ public class NotificationMemoryMonitor extends AbstractMemoryMonitor {
         return TENURED_POOL.getUsage().getUsed();
     }
 }
-
-// End NotificationMemoryMonitor.java

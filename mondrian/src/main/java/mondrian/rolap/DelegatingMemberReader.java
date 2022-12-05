@@ -160,5 +160,3 @@ class DelegatingMemberReader implements MemberReader {
         return memberReader.getMemberParent(member);
     }
 }
-
-// End DelegatingMemberReader.java

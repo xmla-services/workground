@@ -101,5 +101,3 @@ public interface AxisOrdinal {
         }
     }
 }
-
-// End AxisOrdinal.java

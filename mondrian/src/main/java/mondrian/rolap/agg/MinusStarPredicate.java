@@ -156,5 +156,3 @@ public class MinusStarPredicate extends AbstractColumnPredicate {
             minus.cloneWithColumn(column));
     }
 }
-
-// End MinusStarPredicate.java

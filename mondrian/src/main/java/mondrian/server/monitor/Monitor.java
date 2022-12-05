@@ -38,5 +38,3 @@ public interface Monitor {
      */
     void sendEvent(Event event);
 }
-
-// End Monitor.java

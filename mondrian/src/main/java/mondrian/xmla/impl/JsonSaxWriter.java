@@ -235,5 +235,3 @@ class JsonSaxWriter implements SaxWriter {
         }
     }
 }
-
-// End JsonSaxWriter.java

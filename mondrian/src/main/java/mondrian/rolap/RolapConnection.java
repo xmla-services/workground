@@ -1141,5 +1141,3 @@ public class RolapConnection extends ConnectionBase {
     throw new UnsupportedOperationException("TODO");
   }
 }
-
-// End RolapConnection.java

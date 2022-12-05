@@ -69,5 +69,3 @@ public class QueryTest extends FoodMartTestCase {
         assertTrue(queryWithoutCellProps.isCellPropertyEmpty());
     }
 }
-
-// End QueryTest.java

@@ -111,5 +111,3 @@ class DenseObjectSegmentDataset extends DenseSegmentDataset {
             axes);
     }
 }
-
-// End DenseObjectSegmentDataset.java

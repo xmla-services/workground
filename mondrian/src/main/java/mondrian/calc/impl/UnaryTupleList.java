@@ -292,5 +292,3 @@ implements TupleList
         }
     }
 }
-
-// End UnaryTupleList.java

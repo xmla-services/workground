@@ -490,5 +490,3 @@ public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
     }
 
 }
-
-// End IgnoreUnrelatedDimensionsTest.java

@@ -1762,5 +1762,3 @@ public class DialectTest {
     assertTrue( query.toString().contains( expected ) );
   }
 }
-
-// End DialectTest.java

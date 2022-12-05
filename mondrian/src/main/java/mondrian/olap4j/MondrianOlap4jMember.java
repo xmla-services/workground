@@ -267,5 +267,3 @@ public class MondrianOlap4jMember
 
 
 }
-
-// End MondrianOlap4jMember.java

@@ -270,5 +270,3 @@ public class Target extends TargetBase {
         return Util.cast(l);
     }
 }
-
-// End Target.java

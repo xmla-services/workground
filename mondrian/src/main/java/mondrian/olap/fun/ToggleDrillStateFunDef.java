@@ -130,5 +130,3 @@ class ToggleDrillStateFunDef extends FunDefBase {
         return result;
     }
 }
-
-// End ToggleDrillStateFunDef.java

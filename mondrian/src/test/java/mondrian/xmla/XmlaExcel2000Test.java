@@ -210,5 +210,3 @@ public class XmlaExcel2000Test extends XmlaBaseTestCase {
         return getSessionId("XmlaExcel2000Test", action);
     }
 }
-
-// End XmlaExcel2000Test.java

@@ -250,5 +250,3 @@ public class RolapNativeFilter extends RolapNativeSet {
     }
   }
 }
-
-// End RolapNativeFilter.java

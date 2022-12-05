@@ -355,5 +355,3 @@ public class DynamicDatasourceXmlaServletTest extends TestCase {
         }
     }
 }
-
-// End DynamicDatasourceXmlaServletTest.java

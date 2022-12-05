@@ -73,5 +73,3 @@ class FormatFunDef extends FunDefBase {
         }
     }
 }
-
-// End FormatFunDef.java

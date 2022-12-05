@@ -1093,5 +1093,3 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         private boolean removeAfterLoad;
     }
 }
-
-// End SegmentCacheIndexImpl.java

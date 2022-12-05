@@ -59,5 +59,3 @@ public class HierarchyDimensionFunDef extends FunDefBase {
         }
     }
 }
-
-// End HierarchyDimensionFunDef.java

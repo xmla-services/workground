@@ -5510,5 +5510,3 @@ public class BasicQueryTest extends FoodMartTestCase {
     testContext.assertQueryReturns( mdx, result );
   }
 }
-
-// End BasicQueryTest.java

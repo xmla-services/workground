@@ -493,5 +493,3 @@ class MondrianServerImpl
         return result;
     }
 }
-
-// End MondrianServerImpl.java

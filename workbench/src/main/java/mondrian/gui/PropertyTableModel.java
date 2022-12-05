@@ -398,5 +398,3 @@ public class PropertyTableModel extends javax.swing.table.AbstractTableModel {
         this.errorMsg = errorMsg;
     }
 }
-
-// End PropertyTableModel.java

@@ -106,5 +106,3 @@ public class JTreeUpdater
         }
     }
 }
-
-// End JTreeUpdater.java

@@ -82,5 +82,3 @@ public class MondrianOlap4jNamedSet
         return namedSet;
     }
 }
-
-// End MondrianOlap4jNamedSet.java

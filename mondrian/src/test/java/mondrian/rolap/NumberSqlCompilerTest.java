@@ -133,5 +133,3 @@ public class NumberSqlCompilerTest {
         fail("Expected to get MondrianEvaluationException for " + value);
     }
 }
-
-// End NumberSqlCompilerTest.java

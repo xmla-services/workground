@@ -53,5 +53,3 @@ public class WorkbenchJdbcValidator implements JdbcValidator {
         return theSchemas != null && theSchemas.contains(schemaName);
     }
 }
-
-// End WorkbenchJdbcValidator.java

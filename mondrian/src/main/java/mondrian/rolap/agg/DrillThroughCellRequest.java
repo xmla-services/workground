@@ -84,5 +84,3 @@ public class DrillThroughCellRequest extends CellRequest {
         return nonApplicableMembers;
     }
 }
-
-// End DrillThroughCellRequest.java

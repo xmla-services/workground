@@ -116,5 +116,3 @@ public class InverseNormalUdf implements UserDefinedFunction {
     }
 
 }
-
-// End InverseNormalUdf.java

@@ -59,5 +59,3 @@ public class ValUdf implements UserDefinedFunction {
     }
 
 }
-
-// End ValUdf.java

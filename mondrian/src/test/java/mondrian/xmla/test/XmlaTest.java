@@ -266,5 +266,3 @@ public class XmlaTest{
         }
     }
 }
-
-// End XmlaTest.java

@@ -94,5 +94,3 @@ public class AccessDialect extends JdbcDialectImpl {
     }
 
 }
-
-// End AccessDialect.java

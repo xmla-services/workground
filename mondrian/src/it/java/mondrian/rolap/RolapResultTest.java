@@ -319,5 +319,3 @@ Axis #2:
             + "Row #2: \n");
     }
 }
-
-// End RolapResultTest.java

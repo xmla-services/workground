@@ -27,5 +27,3 @@ public class QueryCanceledException extends ResultLimitExceededException {
         super(message);
     }
 }
-
-// End QueryCanceledException.java

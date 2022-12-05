@@ -28,5 +28,3 @@ public class QueryPrintWriter extends PrintWriter {
         super(writer);
     }
 }
-
-// End QueryPrintWriter.java

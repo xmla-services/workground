@@ -42,5 +42,3 @@ public abstract class ConnectionEvent extends Event {
         this.connectionId = connectionId;
     }
 }
-
-// End ConnectionEvent.java

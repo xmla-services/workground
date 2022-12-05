@@ -1728,5 +1728,3 @@ public class SqlTupleReader implements TupleReader {
     LAST
   }
 }
-
-// End SqlTupleReader.java

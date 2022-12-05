@@ -98,5 +98,3 @@ public class NullValueTest{
 */
     }
 }
-
-// End NullValueTest.java

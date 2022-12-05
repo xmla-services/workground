@@ -223,5 +223,3 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
     }
 
 }
-
-// End OpeningClosingPeriodFunDef.java

@@ -30,5 +30,3 @@ public class NativeEvaluationUnsupportedException
         super(message);
     }
 }
-
-// End NativeEvaluationUnsupportedException.java

@@ -24,5 +24,3 @@ interface Walkable {
      */
     Object[] getChildren();
 }
-
-// End Walkable.java

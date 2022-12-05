@@ -492,5 +492,3 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         tc, mdx1, new SqlPattern[]{ mysqlPatternMembers }, true, false, false);
   }
 }
-
-// End NativeEvalVirtualCubeTest.java

@@ -1961,5 +1961,3 @@ public class NativeSetEvaluationTest extends BatchTestCase {
       "exceeded limit (400)" );
   }
 }
-
-// End NativeSetEvaluationTest.java

@@ -62,5 +62,3 @@ public class CmdRunnerTest extends FoodMartTestCase {
         }
     }
 }
-
-// End CmdRunnerTest.java

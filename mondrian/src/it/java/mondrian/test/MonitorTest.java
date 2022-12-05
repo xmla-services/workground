@@ -154,5 +154,3 @@ public class MonitorTest extends FoodMartTestCase {
         // (other expensive operations similar to sort?)
     }
 }
-
-// End MonitorTest.java

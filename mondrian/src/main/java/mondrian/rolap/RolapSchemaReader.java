@@ -851,5 +851,3 @@ public class RolapSchemaReader
         return context;
     }
 }
-
-// End RolapSchemaReader.java

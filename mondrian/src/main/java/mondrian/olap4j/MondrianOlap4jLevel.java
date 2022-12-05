@@ -218,5 +218,3 @@ class MondrianOlap4jLevel
         return level;
     }
 }
-
-// End MondrianOlap4jLevel.java

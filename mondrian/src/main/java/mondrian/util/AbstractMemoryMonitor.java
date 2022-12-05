@@ -350,5 +350,3 @@ public abstract class AbstractMemoryMonitor
         notifyNewLowThreshold(lowThreshold);
     }
 }
-
-// End AbstractMemoryMonitor.java

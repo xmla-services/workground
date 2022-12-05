@@ -73,5 +73,3 @@ public class MemberColumnPredicate extends ValueColumnPredicate {
         return new MemberColumnPredicate(column, member);
     }
 }
-
-// End MemberColumnPredicate.java

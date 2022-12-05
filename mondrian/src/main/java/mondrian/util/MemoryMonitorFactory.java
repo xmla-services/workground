@@ -173,5 +173,3 @@ public final class MemoryMonitorFactory
     }
 
 }
-
-// End MemoryMonitorFactory.java

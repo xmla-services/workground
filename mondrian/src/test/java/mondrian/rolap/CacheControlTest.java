@@ -1317,5 +1317,3 @@ public class CacheControlTest {
     // todo: test which tries to constrain on member of parent-child hierarchy
 
 }
-
-// End CacheControlTest.java

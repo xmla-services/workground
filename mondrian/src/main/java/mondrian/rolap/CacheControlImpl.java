@@ -1923,5 +1923,3 @@ public class CacheControlImpl implements CacheControl {
         cellRegionList.add(createMemberRegion(member, false));
     }
 }
-
-// End CacheControlImpl.java

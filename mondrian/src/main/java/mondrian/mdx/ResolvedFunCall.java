@@ -169,5 +169,3 @@ public final class ResolvedFunCall extends ExpBase implements FunCall {
         return o;
     }
 }
-
-// End ResolvedFunCall.java

@@ -46,5 +46,3 @@ public class MultiDimTest extends ClearViewBase {
     }
 
 }
-
-// End MultiDimTest.java

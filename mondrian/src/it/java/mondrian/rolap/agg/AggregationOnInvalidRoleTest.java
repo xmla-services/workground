@@ -139,5 +139,3 @@ public class AggregationOnInvalidRoleTest extends CsvDBTestCase {
         context.assertQueryReturns(queryFromAnalyzer, expected);
     }
 }
-
-// End AggregationOnInvalidRoleTest.java

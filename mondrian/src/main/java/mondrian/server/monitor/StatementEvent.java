@@ -48,5 +48,3 @@ public abstract class StatementEvent extends Event {
         this.statementId = statementId;
     }
 }
-
-// End StatementEvent.java

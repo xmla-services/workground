@@ -831,5 +831,3 @@ public class DiffRepository
         return normalizedParts;
     }
 }
-
-// End DiffRepository.java

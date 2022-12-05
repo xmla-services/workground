@@ -118,5 +118,3 @@ public class ScalarType implements Type {
         return 1;
     }
 }
-
-// End ScalarType.java

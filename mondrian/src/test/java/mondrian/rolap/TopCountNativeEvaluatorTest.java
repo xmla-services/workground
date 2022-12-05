@@ -110,5 +110,3 @@ public class TopCountNativeEvaluatorTest {
         return topCountFunMock;
     }
 }
-
-// End TopCountNativeEvaluatorTest.java

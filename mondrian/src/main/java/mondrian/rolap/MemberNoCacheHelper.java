@@ -106,5 +106,3 @@ public class MemberNoCacheHelper extends MemberCacheHelper {
         return null;
     }
 }
-
-// End MemberNoCacheHelper.java

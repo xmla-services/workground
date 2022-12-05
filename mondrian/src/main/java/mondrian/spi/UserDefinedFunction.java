@@ -149,5 +149,3 @@ public interface UserDefinedFunction {
         Iterable evaluateIterable(Evaluator eval);
     }
 }
-
-// End UserDefinedFunction.java

@@ -42,5 +42,3 @@ class UnorderFunDef extends FunDefBase {
         return compiler.compile(call.getArg(0));
     }
 }
-
-// End UnorderFunDef.java

@@ -250,5 +250,3 @@ public class TupleListTest extends FoodMartTestCase {
             Util.parseIdentifier(memberName), true);
     }
 }
-
-// End TupleListTest.java

@@ -1036,5 +1036,3 @@ public class SegmentBuilderTest extends BatchTestCase {
   }
 
 }
-
-// End SegmentBuilderTest.java

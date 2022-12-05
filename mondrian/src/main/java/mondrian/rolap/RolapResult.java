@@ -2361,5 +2361,3 @@ public class RolapResult extends ResultBase {
     }
   }
 }
-
-// End RolapResult.java

@@ -713,5 +713,3 @@ public class CaptionTest{
         }
     }
 }
-
-// End CaptionTest.java

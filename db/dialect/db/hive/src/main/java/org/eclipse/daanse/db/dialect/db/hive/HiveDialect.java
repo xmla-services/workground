@@ -155,5 +155,3 @@ public class HiveDialect extends JdbcDialectImpl {
         buf.append(" as timestamp )");
     }
 }
-
-// End HiveDialect.java

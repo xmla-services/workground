@@ -485,5 +485,3 @@ public class RolapCubeTest {
                         salesCubeSchemaReader)));
     }
 }
-
-// End RolapCubeTest.java

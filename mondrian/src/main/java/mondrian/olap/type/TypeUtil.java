@@ -602,5 +602,3 @@ public class TypeUtil {
         }
     }
 }
-
-// End TypeUtil.java

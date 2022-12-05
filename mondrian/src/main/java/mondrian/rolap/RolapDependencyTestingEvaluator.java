@@ -435,5 +435,3 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
         }
     }
 }
-
-// End RolapDependencyTestingEvaluator.java

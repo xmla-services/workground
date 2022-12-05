@@ -1303,5 +1303,3 @@ public class XmlaSupport {
     private XmlaSupport() {
     }
 }
-
-// End XmlaSupport.java

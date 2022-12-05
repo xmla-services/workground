@@ -478,5 +478,3 @@ public class SharedDimensionTest  {
         withSchema(context, schema);
     }
 }
-
-// End SharedDimensionTest.java

@@ -44,5 +44,3 @@ public class ValueCalc extends GenericCalc {
         return true;
     }
 }
-
-// End ValueCalc.java

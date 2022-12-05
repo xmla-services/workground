@@ -78,5 +78,3 @@ public class GreenplumDialect extends PostgreSqlDialect {
         }
     }
 }
-
-// End GreenplumDialect.java

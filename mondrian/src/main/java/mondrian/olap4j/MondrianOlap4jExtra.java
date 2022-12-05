@@ -403,5 +403,3 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         return null;
     }
 }
-
-// End MondrianOlap4jExtra.java

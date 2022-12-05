@@ -292,5 +292,3 @@ public class AbstractAggregateFunDef extends FunDefBase {
             tuple.toArray(new Member[tuple.size()]));
     }
 }
-
-// End AbstractAggregateFunDef.java

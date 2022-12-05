@@ -144,5 +144,3 @@ public class SegmentColumn implements Serializable {
         return valueCount;
     }
 }
-
-// End SegmentColumn.java

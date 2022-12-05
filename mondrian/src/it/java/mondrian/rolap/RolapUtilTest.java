@@ -131,5 +131,3 @@ public class RolapUtilTest extends TestCase {
     return def;
   }
 }
-
-// End RolapUtilTest.java

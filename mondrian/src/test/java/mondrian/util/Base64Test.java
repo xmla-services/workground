@@ -108,5 +108,3 @@ public class Base64Test
         }
     }
 }
-
-// End Base64Test.java

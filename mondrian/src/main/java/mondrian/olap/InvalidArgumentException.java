@@ -27,5 +27,3 @@ public class InvalidArgumentException extends MondrianException {
         super(message);
     }
 }
-
-// End InvalidArgumentException.java

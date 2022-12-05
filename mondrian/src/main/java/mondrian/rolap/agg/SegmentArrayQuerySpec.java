@@ -154,5 +154,3 @@ class SegmentArrayQuerySpec extends AbstractQuerySpec {
         return true;
     }
 }
-
-// End SegmentArrayQuerySpec.java

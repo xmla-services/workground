@@ -118,5 +118,3 @@ class PeriodsToDateFunDef extends FunDefBase {
     };
   }
 }
-
-// End PeriodsToDateFunDef.java

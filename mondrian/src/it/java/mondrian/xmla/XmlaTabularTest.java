@@ -74,5 +74,3 @@ public class XmlaTabularTest extends XmlaBaseTestCase {
         return null;
     }
 }
-
-// End XmlaTabularTest.java

@@ -195,5 +195,3 @@ class TopBottomCountFunDef extends FunDefBase {
     };
   }
 }
-
-// End TopBottomCountFunDef.java

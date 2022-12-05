@@ -2084,5 +2084,3 @@ public class RolapStar {
         }
     }
 }
-
-// End RolapStar.java

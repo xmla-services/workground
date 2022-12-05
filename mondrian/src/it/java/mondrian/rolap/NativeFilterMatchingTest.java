@@ -627,5 +627,3 @@ public class NativeFilterMatchingTest extends BatchTestCase {
             + "Row #0: 1,281\n");
     }
 }
-
-// End NativeFilterMatchingTest.java

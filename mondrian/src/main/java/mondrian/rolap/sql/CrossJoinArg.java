@@ -37,5 +37,3 @@ public interface CrossJoinArg {
 
     boolean isPreferInterpreter(boolean joinArg);
 }
-
-// End CrossJoinArg.java

@@ -1050,5 +1050,3 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
         throw new UnsupportedOperationException();
     }
 }
-
-// End XmlaBasicTest.java

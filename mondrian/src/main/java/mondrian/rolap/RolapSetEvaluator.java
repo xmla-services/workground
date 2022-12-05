@@ -194,5 +194,3 @@ class RolapSetEvaluator
         return list.get(0, currentOrdinal);
     }
 }
-
-// End RolapSetEvaluator.java

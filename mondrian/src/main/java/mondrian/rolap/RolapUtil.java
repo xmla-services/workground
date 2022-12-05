@@ -819,5 +819,3 @@ public class RolapUtil {
     }
 
 }
-
-// End RolapUtil.java

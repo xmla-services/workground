@@ -87,5 +87,3 @@ public class ServiceDiscovery<T> {
     }
 
 }
-
-// End ServiceDiscovery.java

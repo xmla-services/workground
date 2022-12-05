@@ -55,5 +55,3 @@ public class SybaseDialectTest extends TestCase {
     }
 
 }
-
-// End SybaseDialectTest.java

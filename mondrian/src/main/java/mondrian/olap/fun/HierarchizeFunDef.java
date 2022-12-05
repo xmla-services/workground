@@ -53,5 +53,3 @@ class HierarchizeFunDef extends FunDefBase {
     };
   }
 }
-
-// End HierarchizeFunDef.java

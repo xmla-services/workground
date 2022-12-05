@@ -96,5 +96,3 @@ public class ImplicitRepository implements Repository {
         // ignore.
     }
 }
-
-// End ImplicitRepository.java

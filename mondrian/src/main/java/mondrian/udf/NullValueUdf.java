@@ -55,5 +55,3 @@ public class NullValueUdf implements UserDefinedFunction {
         return null;
     }
 }
-
-// End NullValueUdf.java

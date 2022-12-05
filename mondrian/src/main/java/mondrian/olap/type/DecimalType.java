@@ -79,5 +79,3 @@ public class DecimalType extends NumericType {
         return false;
     }
 }
-
-// End DecimalType.java

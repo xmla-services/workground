@@ -42,5 +42,3 @@ public class RolapCubeUsages {
         return false;
     }
 }
-
-// End RolapCubeUsages.java

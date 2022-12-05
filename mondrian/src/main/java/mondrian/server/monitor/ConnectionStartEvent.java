@@ -36,5 +36,3 @@ public class ConnectionStartEvent extends ConnectionEvent {
         return visitor.visit(this);
     }
 }
-
-// End ConnectionStartEvent.java

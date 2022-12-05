@@ -895,5 +895,3 @@ class ScheduleUtil {
              + calendar.get(Calendar.MILLISECOND)));
     }
 }
-
-// End Schedule.java

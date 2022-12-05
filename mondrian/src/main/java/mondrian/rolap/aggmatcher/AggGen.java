@@ -933,5 +933,3 @@ public class AggGen {
         pw.println(',');
     }
 }
-
-// End AggGen.java

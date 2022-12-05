@@ -93,5 +93,3 @@ public class DescendantsCrossJoinArg implements CrossJoinArg {
         return c;
     }
 }
-
-// End DescendantsCrossJoinArg.java

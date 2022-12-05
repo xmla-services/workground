@@ -1015,5 +1015,3 @@ System.out.println("expectedFault=" + expectedFault);
         return getSessionId("XmlaExcelXPTest", action);
     }
 }
-
-// End XmlaErrorTest.java

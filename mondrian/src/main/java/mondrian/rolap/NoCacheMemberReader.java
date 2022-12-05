@@ -534,5 +534,3 @@ public class NoCacheMemberReader implements MemberReader, MemberCache {
         }
     }
 }
-
-// End NoCacheMemberReader.java

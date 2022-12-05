@@ -267,5 +267,3 @@ public interface SpatialValueTree2
             boolean[] wasNull);
     }
 }
-
-// End SpatialValueTree2.java

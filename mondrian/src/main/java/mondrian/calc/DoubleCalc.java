@@ -31,5 +31,3 @@ public interface DoubleCalc extends Calc {
      */
     double evaluateDouble(Evaluator evaluator);
 }
-
-// End DoubleCalc.java

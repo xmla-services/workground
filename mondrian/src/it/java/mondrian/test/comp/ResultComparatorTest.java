@@ -192,5 +192,3 @@ public class ResultComparatorTest extends FoodMartTestCase {
         return suite;
     }
 }
-
-// End ResultComparatorTest.java

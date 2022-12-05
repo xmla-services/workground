@@ -29,5 +29,3 @@ public interface RolapMember extends Member, RolapCalculation {
     /** @deprecated will be removed in mondrian-4.0 */
     boolean isAllMember();
 }
-
-// End RolapMember.java

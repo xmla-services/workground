@@ -1286,5 +1286,3 @@ public class FilterTest extends BatchTestCase {
 
 
 }
-
-// End FilterTest.java

@@ -84,5 +84,3 @@ class SubsetFunDef extends FunDefBase {
         };
     }
 }
-
-// End SubsetFunDef.java

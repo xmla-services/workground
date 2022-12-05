@@ -47,5 +47,3 @@ public class CellCacheSegmentDeleteEvent extends CellCacheEvent {
         return visitor.visit(this);
     }
 }
-
-// End CellCacheSegmentDeleteEvent.java

@@ -300,5 +300,3 @@ public abstract class MondrianServer {
     }
 
 }
-
-// End MondrianServer.java

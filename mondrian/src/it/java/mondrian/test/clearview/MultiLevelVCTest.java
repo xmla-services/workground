@@ -46,5 +46,3 @@ public class MultiLevelVCTest extends ClearViewBase {
     }
 
 }
-
-// End MultiLevelVCTest.java

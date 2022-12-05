@@ -126,5 +126,3 @@ public class LiteralStarPredicate extends AbstractColumnPredicate {
         buf.append(value);
     }
 }
-
-// End LiteralStarPredicate.java

@@ -330,5 +330,3 @@ public class PropertiesTest extends FoodMartTestCase {
                 .getDescription());
     }
 }
-
-// End PropertiesTest.java

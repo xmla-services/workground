@@ -70,5 +70,3 @@ public interface SegmentBody extends Serializable {
      */
     boolean[] getNullAxisFlags();
 }
-
-// End SegmentBody.java

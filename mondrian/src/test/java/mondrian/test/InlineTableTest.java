@@ -279,5 +279,3 @@ public class InlineTableTest {
             + "Row #0: \n");
     }
 }
-
-// End InlineTableTest.java

@@ -116,5 +116,3 @@ public class GoogleBigQueryDialect extends JdbcDialectImpl {
         return sb.toString();
     }
 }
-
-// End GoogleBigQueryDialect.java

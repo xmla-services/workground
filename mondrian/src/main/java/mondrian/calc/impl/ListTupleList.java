@@ -158,5 +158,3 @@ public class ListTupleList extends AbstractEndToEndTupleList
         return new AbstractTupleListIterator();
     }
 }
-
-// End ListTupleList.java

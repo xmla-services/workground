@@ -186,5 +186,3 @@ class TopBottomPercentSumFunDef extends FunDefBase {
     }
   }
 }
-
-// End TopBottomPercentSumFunDef.java

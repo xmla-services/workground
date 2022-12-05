@@ -1503,5 +1503,3 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
         "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Education Level].[Partial High School]}\n" + "Row #0: 79,155\n" );
   }
 }
-
-// End FastBatchingCellReaderTest.java

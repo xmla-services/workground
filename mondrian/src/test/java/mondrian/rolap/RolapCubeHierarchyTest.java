@@ -263,5 +263,3 @@ public class RolapCubeHierarchyTest {
   }
 
 }
-
-// End RolapCubeHierarchyTest.java

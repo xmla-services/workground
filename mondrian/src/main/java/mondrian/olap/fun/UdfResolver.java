@@ -434,5 +434,3 @@ public class UdfResolver implements Resolver {
         }
     }
 }
-
-// End UdfResolver.java

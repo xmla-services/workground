@@ -4378,5 +4378,3 @@ public class Util extends XOMUtil {
   }
 
 }
-
-// End Util.java

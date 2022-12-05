@@ -173,5 +173,3 @@ public class SetBase extends OlapElementBase implements NamedSet {
     }
 
 }
-
-// End SetBase.java

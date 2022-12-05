@@ -242,5 +242,3 @@ public class CVConcurrentMdxTest {
         return queryList.toArray(queryArray);
     }
 }
-
-// End CVConcurrentMdxTest.java

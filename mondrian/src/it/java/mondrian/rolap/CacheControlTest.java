@@ -1308,5 +1308,3 @@ public class CacheControlTest extends FoodMartTestCase {
     // todo: test which tries to constrain on member of parent-child hierarchy
 
 }
-
-// End CacheControlTest.java

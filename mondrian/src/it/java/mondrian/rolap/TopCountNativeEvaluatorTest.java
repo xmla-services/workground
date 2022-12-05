@@ -96,5 +96,3 @@ public class TopCountNativeEvaluatorTest extends FoodMartTestCase {
         return topCountFunMock;
     }
 }
-
-// End TopCountNativeEvaluatorTest.java

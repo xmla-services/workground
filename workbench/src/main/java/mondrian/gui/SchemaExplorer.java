@@ -5627,5 +5627,3 @@ public class SchemaExplorer
         return updater;
     }
 }
-
-// End SchemaExplorer.java

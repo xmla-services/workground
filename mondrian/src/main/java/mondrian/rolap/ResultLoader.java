@@ -230,5 +230,3 @@ public class ResultLoader {
     }
 
 }
-
-// End ResultLoader.java

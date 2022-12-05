@@ -197,5 +197,3 @@ public class VisualTotalsTest {
     }
     
 }
-
-// End VisualTotalsTest.java

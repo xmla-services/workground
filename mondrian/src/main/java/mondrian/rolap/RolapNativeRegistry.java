@@ -128,5 +128,3 @@ public class RolapNativeRegistry extends RolapNative {
         }
     }
 }
-
-// End RolapNativeRegistry.java

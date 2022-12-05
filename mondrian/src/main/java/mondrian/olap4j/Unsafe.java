@@ -46,5 +46,3 @@ public final class Unsafe {
         );
     }
 }
-
-// End Unsafe.java

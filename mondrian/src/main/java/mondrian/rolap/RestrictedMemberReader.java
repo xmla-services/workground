@@ -323,5 +323,3 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         return parentMember;
     }
 }
-
-// End RestrictedMemberReader.java

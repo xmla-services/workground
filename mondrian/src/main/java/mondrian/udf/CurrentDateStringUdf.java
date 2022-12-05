@@ -66,5 +66,3 @@ public class CurrentDateStringUdf implements UserDefinedFunction {
     }
 
 }
-
-// End CurrentDateStringUdf.java

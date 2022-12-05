@@ -1130,5 +1130,3 @@ public class SegmentBuilderTest {
   }
 
 }
-
-// End SegmentBuilderTest.java

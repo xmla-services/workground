@@ -169,5 +169,3 @@ public class RangeColumnPredicate extends AbstractColumnPredicate {
         return upperInclusive;
     }
 }
-
-// End RangeColumnPredicate.java

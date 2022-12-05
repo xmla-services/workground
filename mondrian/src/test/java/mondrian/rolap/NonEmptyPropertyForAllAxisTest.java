@@ -239,5 +239,3 @@ public class NonEmptyPropertyForAllAxisTest {
         assertEqualsVerbose(mdxQuery, query.toString());
      }
 }
-
-// End NonEmptyPropertyForAllAxisTest.java

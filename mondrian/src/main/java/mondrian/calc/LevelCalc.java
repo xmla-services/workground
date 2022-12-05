@@ -33,5 +33,3 @@ public interface LevelCalc extends Calc {
      */
     Level evaluateLevel(Evaluator evaluator);
 }
-
-// End LevelCalc.java

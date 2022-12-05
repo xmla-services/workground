@@ -163,5 +163,3 @@ public class VerticaDialect extends JdbcDialectImpl {
         return sb.toString();
     }
 }
-
-// End VerticaDialect.java

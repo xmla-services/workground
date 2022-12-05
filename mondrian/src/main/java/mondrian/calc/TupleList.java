@@ -103,5 +103,3 @@ extends List<List<Member>>, TupleIterable
         void onPosition(int index);
     }
 }
-
-// End TupleList.java

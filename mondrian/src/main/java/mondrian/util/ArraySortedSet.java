@@ -232,5 +232,3 @@ public class ArraySortedSet<E extends Comparable<E>>
             && Util.binarySearch(values, start, end, (E) o) >= 0;
     }
 }
-
-// End ArraySortedSet.java

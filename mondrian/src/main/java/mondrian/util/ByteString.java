@@ -110,5 +110,3 @@ public class ByteString implements Comparable<ByteString>, Serializable {
         return bytes[i];
     }
 }
-
-// End ByteString.java

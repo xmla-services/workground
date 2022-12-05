@@ -32,5 +32,3 @@ public class StringRepositoryContentFinder
         // nothing to do
     }
 }
-
-// End StringRepositoryContentFinder.java

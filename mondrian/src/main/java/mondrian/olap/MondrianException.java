@@ -44,5 +44,3 @@ public class MondrianException extends RuntimeException {
         return "Mondrian Error:" + super.getMessage();
     }
 }
-
-// End MondrianException.java

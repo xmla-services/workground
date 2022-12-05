@@ -257,5 +257,3 @@ public class UnionFunDefTest extends FoodMartTestCase {
     }
   }
 }
-
-// End UnionFunDefTest.java

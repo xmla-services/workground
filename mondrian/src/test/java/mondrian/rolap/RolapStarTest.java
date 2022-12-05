@@ -136,5 +136,3 @@ public class RolapStarTest {
     return colMock;
    }
 }
-
-// End RolapStarTest.java

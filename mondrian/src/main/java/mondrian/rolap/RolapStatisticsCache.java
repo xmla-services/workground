@@ -204,5 +204,3 @@ public class RolapStatisticsCache {
         return -1;
     }
 }
-
-// End RolapStatisticsCache.java

@@ -99,5 +99,3 @@ public class SteelWheelsPerformanceTest {
         LOGGER.debug(desc + " took " + duration + " millis");
     }
 }
-
-// End SteelWheelsPerformanceTest.java

@@ -124,5 +124,3 @@ public class TupleValueCalc extends GenericCalc {
         return this;
     }
 }
-
-// End TupleValueCalc.java

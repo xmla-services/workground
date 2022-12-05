@@ -43,5 +43,3 @@ public class LevelMembersFunDef extends FunDefBase {
         };
     }
 }
-
-// End LevelMembersFunDef.java

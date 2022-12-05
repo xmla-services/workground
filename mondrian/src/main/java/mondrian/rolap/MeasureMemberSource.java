@@ -34,5 +34,3 @@ class MeasureMemberSource extends ArrayMemberSource {
         super(hierarchy, members);
     }
 }
-
-// End MeasureMemberSource.java

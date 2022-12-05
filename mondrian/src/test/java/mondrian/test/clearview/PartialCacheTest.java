@@ -48,5 +48,3 @@ public class PartialCacheTest extends ClearViewBase {
         }
     }
 }
-
-// End PartialCacheTest.java

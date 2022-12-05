@@ -113,5 +113,3 @@ public class PostgreSqlDialect extends JdbcDialectImpl {
     }
 
 }
-
-// End PostgreSqlDialect.java

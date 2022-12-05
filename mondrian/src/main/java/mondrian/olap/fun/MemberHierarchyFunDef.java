@@ -53,5 +53,3 @@ public class MemberHierarchyFunDef extends FunDefBase {
         }
     }
 }
-
-// End MemberHierarchyFunDef.java

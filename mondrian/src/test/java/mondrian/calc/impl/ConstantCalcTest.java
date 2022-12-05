@@ -37,5 +37,3 @@ public class ConstantCalcTest{
         assertEquals(FunUtil.IntegerNull, constantCalc.evaluateInteger(null));
     }
 }
-
-// End ConstantCalcTest.java

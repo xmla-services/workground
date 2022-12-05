@@ -34,5 +34,3 @@ public class EmptyType extends ScalarType
         return obj instanceof EmptyType;
     }
 }
-
-// End EmptyType.java

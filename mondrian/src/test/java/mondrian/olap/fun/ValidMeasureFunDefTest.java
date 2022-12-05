@@ -99,5 +99,3 @@ public class ValidMeasureFunDefTest {
         + "Row #0: \n");
   }
 }
-
-// End ValidMeasureFunDefTest.java

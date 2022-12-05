@@ -141,5 +141,3 @@ class MondrianOlap4jCellSetAxis implements CellSetAxis {
         }
     }
 }
-
-// End MondrianOlap4jCellSetAxis.java

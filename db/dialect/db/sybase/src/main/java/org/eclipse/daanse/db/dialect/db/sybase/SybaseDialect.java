@@ -55,5 +55,3 @@ public class SybaseDialect extends JdbcDialectImpl {
         Util.singleQuoteString(value, buf);
     }
 }
-
-// End SybaseDialect.java

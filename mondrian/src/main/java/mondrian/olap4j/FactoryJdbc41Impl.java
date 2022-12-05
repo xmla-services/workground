@@ -226,5 +226,3 @@ class FactoryJdbc41Impl implements Factory {
         }
     }
 }
-
-// End FactoryJdbc41Impl.java

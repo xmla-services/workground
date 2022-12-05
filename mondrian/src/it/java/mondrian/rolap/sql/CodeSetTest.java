@@ -193,5 +193,3 @@ public class CodeSetTest extends TestCase {
   }
 
 }
-
-// End CodeSetTest.java

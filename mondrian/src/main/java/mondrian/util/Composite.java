@@ -149,5 +149,3 @@ public abstract class Composite {
         }
     }
 }
-
-// End Composite.java

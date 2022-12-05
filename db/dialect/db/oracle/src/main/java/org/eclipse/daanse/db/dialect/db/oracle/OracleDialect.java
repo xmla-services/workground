@@ -161,5 +161,3 @@ public class OracleDialect extends JdbcDialectImpl {
         return type;
     }
 }
-
-// End OracleDialect.java

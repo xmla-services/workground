@@ -382,5 +382,3 @@ public class DomBuilder {
     }
 
 }
-
-// End DomBuilder.java

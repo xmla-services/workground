@@ -109,5 +109,3 @@ public interface SegmentDataset extends Iterable<Map.Entry<CellKey, Object>> {
     SegmentBody createSegmentBody(
         List<Pair<SortedSet<Comparable>, Boolean>> axes);
 }
-
-// End SegmentDataset.java

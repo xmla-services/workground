@@ -940,5 +940,3 @@ public abstract class RolapAggregationManager {
     public interface PinSet {
     }
 }
-
-// End RolapAggregationManager.java

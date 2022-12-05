@@ -216,5 +216,3 @@ public class MondrianTestRunner extends BaseTestRunner {
     }
 
 }
-
-// End MondrianTestRunner.java

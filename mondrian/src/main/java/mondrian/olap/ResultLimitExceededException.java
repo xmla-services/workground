@@ -25,5 +25,3 @@ public abstract class ResultLimitExceededException extends MondrianException {
         super(message);
     }
 }
-
-// End ResultLimitExceededException.java

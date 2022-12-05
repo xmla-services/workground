@@ -428,5 +428,3 @@ public class SchemaPropertyCellRenderer
         }
     }
 }
-
-// End SchemaPropertyCellRenderer.java

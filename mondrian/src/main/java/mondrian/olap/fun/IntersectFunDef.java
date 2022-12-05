@@ -194,5 +194,3 @@ class IntersectFunDef extends FunDefBase
         }
     }
 }
-
-// End IntersectFunDef.java

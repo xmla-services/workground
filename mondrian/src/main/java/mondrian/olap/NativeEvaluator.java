@@ -21,5 +21,3 @@ import mondrian.calc.ResultStyle;
 public interface NativeEvaluator {
     Object execute(ResultStyle resultStyle);
 }
-
-// End NativeEvaluator.java

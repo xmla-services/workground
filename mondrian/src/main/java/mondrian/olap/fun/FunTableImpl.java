@@ -198,5 +198,3 @@ public abstract class FunTableImpl implements FunTable {
         }
     }
 }
-
-// End FunTableImpl.java

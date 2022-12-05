@@ -28,5 +28,3 @@ public interface RolapMeasure extends Member {
      */
     RolapResult.ValueFormatter getFormatter();
 }
-
-// End RolapMeasure.java

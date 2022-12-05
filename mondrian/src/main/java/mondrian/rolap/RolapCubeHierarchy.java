@@ -1209,5 +1209,3 @@ public class RolapCubeHierarchy extends RolapHierarchy {
         }
     }
 }
-
-// End RolapCubeHierarchy.java

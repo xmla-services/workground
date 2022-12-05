@@ -103,5 +103,3 @@ public class CoalesceEmptyFunDef extends FunDefBase {
         }
     }
 }
-
-// End CoalesceEmptyFunDef.java

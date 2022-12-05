@@ -396,5 +396,3 @@ public class DrillThroughFieldListTest {
     assertSqlEquals(connection, expectedSql, actual, expectedRowsNumber);
   }
 }
-
-// End DrillThroughFieldListTest.java

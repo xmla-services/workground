@@ -229,5 +229,3 @@ public abstract class AbstractRecorder implements MessageRecorder {
         Object info,
         MsgType msgType);
 }
-
-// End AbstractRecorder.java

@@ -533,5 +533,3 @@ public class DataSourceChangeListenerTest extends BatchTestCase {
         return cube.getStar();
     }
 }
-
-// End DataSourceChangeListenerTest.java

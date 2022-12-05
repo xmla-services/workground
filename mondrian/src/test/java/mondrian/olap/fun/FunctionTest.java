@@ -14800,5 +14800,3 @@ Intel platforms):
     return allHiersExcept();
   }
 }
-
-// End FunctionTest.java

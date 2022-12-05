@@ -85,5 +85,3 @@ class DescendantsConstraint implements TupleConstraint {
         return true;
     }
 }
-
-// End DescendantsConstraint.java

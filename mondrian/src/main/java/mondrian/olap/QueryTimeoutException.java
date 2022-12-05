@@ -25,5 +25,3 @@ public class QueryTimeoutException extends ResultLimitExceededException {
         super(message);
     }
 }
-
-// End QueryTimeoutException.java

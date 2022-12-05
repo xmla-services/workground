@@ -48,5 +48,3 @@ class MemberDimensionFunDef extends FunDefBase {
         };
     }
 }
-
-// End MemberDimensionFunDef.java

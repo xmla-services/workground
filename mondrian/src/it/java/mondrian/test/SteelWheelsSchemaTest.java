@@ -2737,5 +2737,3 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + "Row #3: \n");
     }
 }
-
-// End SteelWheelsSchemaTest.java

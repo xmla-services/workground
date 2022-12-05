@@ -569,5 +569,3 @@ public class DataSourceChangeListenerTest {
     }
 
 }
-
-// End DataSourceChangeListenerTest.java

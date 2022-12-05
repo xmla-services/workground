@@ -80,5 +80,3 @@ public class ApplResources implements Listener.ApplicationContext {
 
 
 }
-
-// End ApplResources.java

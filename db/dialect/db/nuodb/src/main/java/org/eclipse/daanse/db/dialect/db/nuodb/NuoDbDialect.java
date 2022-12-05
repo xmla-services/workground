@@ -88,5 +88,3 @@ public class NuoDbDialect extends JdbcDialectImpl {
         return identifierQuoteString;
     }
 }
-
-// End NuoDbDialect.java

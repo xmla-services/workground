@@ -162,5 +162,3 @@ abstract class DenseSegmentBodyTestBase<T extends AbstractSegmentBody, V>
     return createSegmentBody(nullValues, values, axes);
   }
 }
-
-// End DenseSegmentBodyTestBase.java

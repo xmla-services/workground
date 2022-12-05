@@ -125,5 +125,3 @@ public class StatementInfo extends Info {
         return cellRequestCount;
     }
 }
-
-// End StatementInfo.java

@@ -204,5 +204,3 @@ public class CVConcurrentMdxTest extends FoodMartTestCase {
         return queryList.toArray(queryArray);
     }
 }
-
-// End CVConcurrentMdxTest.java

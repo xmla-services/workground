@@ -118,5 +118,3 @@ public class NumberSqlCompilerTest extends TestCase {
         fail("Expected to get MondrianEvaluationException for " + value);
     }
 }
-
-// End NumberSqlCompilerTest.java

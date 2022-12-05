@@ -153,5 +153,3 @@ public class ListRecorder extends AbstractRecorder {
         }
     }
 }
-
-// End ListRecorder.java

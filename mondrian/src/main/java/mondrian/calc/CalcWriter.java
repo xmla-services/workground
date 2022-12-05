@@ -123,5 +123,3 @@ public class CalcWriter {
         return profiling;
     }
 }
-
-// End CalcWriter.java

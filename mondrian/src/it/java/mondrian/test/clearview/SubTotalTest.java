@@ -46,5 +46,3 @@ public class SubTotalTest extends ClearViewBase {
     }
 
 }
-
-// End SubTotalTest.java

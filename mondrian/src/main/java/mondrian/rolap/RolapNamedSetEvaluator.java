@@ -186,5 +186,3 @@ class RolapNamedSetEvaluator implements Evaluator.NamedSetEvaluator, TupleList.P
     return list.get( 0, currentOrdinal );
   }
 }
-
-// End RolapNamedSetEvaluator.java

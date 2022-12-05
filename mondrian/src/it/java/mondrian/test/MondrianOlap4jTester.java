@@ -36,5 +36,3 @@ public class MondrianOlap4jTester extends AbstractMondrianOlap4jTester
 
     public static final String DRIVER_URL_PREFIX = "jdbc:mondrian:";
 }
-
-// End MondrianOlap4jTester.java

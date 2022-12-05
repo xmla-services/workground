@@ -50,5 +50,3 @@ implements IntegerCalc
         return i;
     }
 }
-
-// End AbstractIntegerCalc.java

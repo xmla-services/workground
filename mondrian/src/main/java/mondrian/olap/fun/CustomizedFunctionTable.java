@@ -60,5 +60,3 @@ public class CustomizedFunctionTable extends FunTableImpl {
         }
     }
 }
-
-// End CustomizedFunctionTable.java

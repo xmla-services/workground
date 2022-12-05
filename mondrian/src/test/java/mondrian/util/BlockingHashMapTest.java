@@ -106,5 +106,3 @@ public class BlockingHashMapTest{
         }
     }
 }
-
-// End BlockingHashMapTest.java

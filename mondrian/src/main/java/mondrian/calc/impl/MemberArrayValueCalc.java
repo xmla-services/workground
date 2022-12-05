@@ -114,5 +114,3 @@ public class MemberArrayValueCalc extends GenericCalc {
         return true;
     }
 }
-
-// End MemberArrayValueCalc.java

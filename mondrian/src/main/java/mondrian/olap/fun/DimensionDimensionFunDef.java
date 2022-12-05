@@ -44,5 +44,3 @@ class DimensionDimensionFunDef extends FunDefBase {
             dimension);
     }
 }
-
-// End DimensionDimensionFunDef.java

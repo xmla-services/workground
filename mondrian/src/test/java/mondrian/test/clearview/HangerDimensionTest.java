@@ -52,5 +52,3 @@ public class HangerDimensionTest extends ClearViewBase {
     }
 
 }
-
-// End HangerDimensionTest.java

@@ -548,5 +548,3 @@ public class PreferencesDialog extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
 }
-
-// End PreferencesDialog.java

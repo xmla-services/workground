@@ -150,5 +150,3 @@ public class ExcelTest{
         assertEquals(0, Vba.intNative(0));
     }
 }
-
-// End ExcelTest.java

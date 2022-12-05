@@ -76,5 +76,3 @@ class DenseIntSegmentBody extends AbstractSegmentBody {
         return value;
     }
 }
-
-// End DenseIntSegmentBody.java

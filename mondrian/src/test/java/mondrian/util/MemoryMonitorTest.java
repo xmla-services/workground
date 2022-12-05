@@ -353,5 +353,3 @@ Does not work without the notify on add feature.
         }
     }
 }
-
-// End MemoryMonitorTest.java

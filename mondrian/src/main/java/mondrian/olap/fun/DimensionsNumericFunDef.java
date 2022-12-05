@@ -74,5 +74,3 @@ class DimensionsNumericFunDef extends FunDefBase {
         return hierarchies.get(n);
     }
 }
-
-// End DimensionsNumericFunDef.java

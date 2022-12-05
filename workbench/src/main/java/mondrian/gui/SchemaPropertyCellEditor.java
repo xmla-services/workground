@@ -1584,5 +1584,3 @@ public class SchemaPropertyCellEditor
         this.jdbcMetaData = jdbcMetaData;
     }
 }
-
-// End SchemaPropertyCellEditor.java

@@ -33,5 +33,3 @@ public interface HierarchyCalc extends Calc {
      */
     Hierarchy evaluateHierarchy(Evaluator evaluator);
 }
-
-// End HierarchyCalc.java

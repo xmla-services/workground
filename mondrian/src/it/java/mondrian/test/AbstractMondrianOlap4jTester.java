@@ -86,5 +86,3 @@ abstract class AbstractMondrianOlap4jTester implements TestContext.Tester {
     private static final String USER = "sa";
     private static final String PASSWORD = "sa";
 }
-
-// End AbstractMondrianOlap4jTester.java

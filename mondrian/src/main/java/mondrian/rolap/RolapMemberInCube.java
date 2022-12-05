@@ -32,5 +32,3 @@ public interface RolapMemberInCube extends RolapMember {
      */
     RolapCube getCube();
 }
-
-// End RolapMemberInCube.java

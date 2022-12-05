@@ -619,5 +619,3 @@ public class GroupingSetQueryTest extends BatchTestCase {
             + "Row #0: 5,581\n");
     }
 }
-
-// End GroupingSetQueryTest.java

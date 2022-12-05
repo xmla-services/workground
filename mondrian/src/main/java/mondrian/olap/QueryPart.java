@@ -51,5 +51,3 @@ public abstract class QueryPart implements Walkable {
             "explain not implemented for " + this + " (" + getClass() + ")");
     }
 }
-
-// End QueryPart.java

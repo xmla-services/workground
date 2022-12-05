@@ -39,5 +39,3 @@ public class CacheCalc extends GenericCalc {
         return new Calc[] {key.getCalc()};
     }
 }
-
-// End CacheCalc.java

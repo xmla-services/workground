@@ -46,5 +46,3 @@ public class GrandTotalTest extends ClearViewBase {
     }
 
 }
-
-// End GrandTotalTest.java

@@ -423,5 +423,3 @@ public class MultipleHierarchyTest {
         );
     }
 }
-
-// End MultipleHierarchyTest.java

@@ -129,5 +129,3 @@ public class MemberValueCalc extends GenericCalc {
         return !memberCalc.getType().usesHierarchy(hierarchy, true);
     }
 }
-
-// End MemberValueCalc.java

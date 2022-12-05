@@ -118,5 +118,3 @@ public class FilterDynamicSchemaProcessor implements DynamicSchemaProcessor {
         }
     }
 }
-
-// End FilterDynamicSchemaProcessor.java

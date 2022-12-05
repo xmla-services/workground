@@ -141,5 +141,3 @@ public class CurrentDateMemberUdf implements UserDefinedFunction {
         return Syntax.Function;
     }
 }
-
-// End CurrentDateMemberUdf.java

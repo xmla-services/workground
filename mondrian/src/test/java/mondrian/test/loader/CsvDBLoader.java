@@ -983,5 +983,3 @@ if (value0.startsWith("# ")) {
         loader.executeStatements(tables);
     }
 }
-
-// End CsvDBLoader.java

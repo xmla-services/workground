@@ -60,5 +60,3 @@ public class BatchedFillTest extends ClearViewBase {
     }
 
 }
-
-// End BatchedFillTest.java

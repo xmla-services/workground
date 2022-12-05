@@ -73,5 +73,3 @@ class TupleToStrFunDef extends FunDefBase {
     }
 
 }
-
-// End TupleToStrFunDef.java

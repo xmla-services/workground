@@ -357,5 +357,3 @@ public class SegmentWithData extends Segment {
         return data;
     }
 }
-
-// End SegmentWithData.java

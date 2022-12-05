@@ -61,5 +61,3 @@ abstract class DenseNativeSegmentDataset extends DenseSegmentDataset {
         return nullValues.get(offset);
     }
 }
-
-// End DenseNativeSegmentDataset.java

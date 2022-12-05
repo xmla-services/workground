@@ -140,5 +140,3 @@ public class SchemaTreeCellEditor
         return retValue;
     }
 }
-
-// End SchemaTreeCellEditor.java

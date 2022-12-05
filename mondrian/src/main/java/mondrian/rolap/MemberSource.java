@@ -117,5 +117,3 @@ public interface MemberSource {
         List<Id.Segment> uniqueNameParts,
         boolean failIfNotFound);
 }
-
-// End MemberSource.java

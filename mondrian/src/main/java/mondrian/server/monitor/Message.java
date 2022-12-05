@@ -29,5 +29,3 @@ public interface Message {
    */
   void setContextMap();
 }
-
-// End Message.java

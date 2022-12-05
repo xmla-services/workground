@@ -83,5 +83,3 @@ public class MemberExpr extends ExpBase implements Exp {
         return visitor.visit(this);
     }
 }
-
-// End MemberExpr.java

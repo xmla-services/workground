@@ -281,5 +281,3 @@ public class TupleListTest {
             Util.parseIdentifier(memberName), true);
     }
 }
-
-// End TupleListTest.java

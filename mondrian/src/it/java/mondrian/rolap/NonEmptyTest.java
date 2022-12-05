@@ -6695,5 +6695,3 @@ public class NonEmptyTest extends BatchTestCase {
       "", context );
   }
 }
-
-// End NonEmptyTest.java

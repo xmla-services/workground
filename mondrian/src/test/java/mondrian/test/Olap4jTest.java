@@ -766,5 +766,3 @@ public class Olap4jTest {
                         .isVisible());
     }
 }
-
-// End Olap4jTest.java

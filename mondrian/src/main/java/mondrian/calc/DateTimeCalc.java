@@ -32,5 +32,3 @@ public interface DateTimeCalc extends Calc {
      */
     Date evaluateDateTime(Evaluator evaluator);
 }
-
-// End DateTimeCalc.java

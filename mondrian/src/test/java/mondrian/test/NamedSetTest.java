@@ -1394,5 +1394,3 @@ public class NamedSetTest {
         }
     }
 }
-
-// End NamedSetTest.java

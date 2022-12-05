@@ -39,5 +39,3 @@ public interface Messages {
         String defaultValue,
         Object... args);
 }
-
-// End Messages.java

@@ -55,5 +55,3 @@ public class ServletContextCatalogLocator implements CatalogLocator {
         return catalogPath;
     }
 }
-
-// End ServletContextCatalogLocator.java

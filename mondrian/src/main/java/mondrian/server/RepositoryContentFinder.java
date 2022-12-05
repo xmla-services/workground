@@ -22,5 +22,3 @@ public interface RepositoryContentFinder {
 
     void shutdown();
 }
-
-// End RepositoryContentFinder.java

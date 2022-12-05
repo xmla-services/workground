@@ -38,5 +38,3 @@ public enum SolveOrderMode {
      */
     SCOPED
 }
-
-// End SolveOrderMode.java

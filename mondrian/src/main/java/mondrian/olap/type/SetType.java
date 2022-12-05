@@ -146,5 +146,3 @@ public class SetType implements Type {
         return true;
     }
 }
-
-// End SetType.java

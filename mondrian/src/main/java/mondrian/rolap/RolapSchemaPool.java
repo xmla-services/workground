@@ -577,5 +577,3 @@ public class RolapSchemaPool {
         }
     }
 }
-
-// End RolapSchemaPool.java

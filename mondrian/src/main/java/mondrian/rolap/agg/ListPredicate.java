@@ -200,5 +200,3 @@ public abstract class ListPredicate implements StarPredicate {
         return buf.toString();
     }
 }
-
-// End ListPredicate.java

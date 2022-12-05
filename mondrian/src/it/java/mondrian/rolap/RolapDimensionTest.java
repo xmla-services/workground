@@ -75,5 +75,3 @@ public class RolapDimensionTest extends PropertyRestoringTestCase {
   }
 
 }
-
-// End RolapDimensionTest.java

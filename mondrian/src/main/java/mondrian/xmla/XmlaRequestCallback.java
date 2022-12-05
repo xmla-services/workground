@@ -119,5 +119,3 @@ public interface XmlaRequestCallback {
         byte[][] responseSoapParts,
         Map<String, Object> context) throws Exception;
 }
-
-// End XmlaRequestCallback.java

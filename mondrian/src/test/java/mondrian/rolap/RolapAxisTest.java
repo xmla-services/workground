@@ -97,5 +97,3 @@ public class RolapAxisTest {
         return buf.toString();
     }
 }
-
-// End RolapAxisTest.java

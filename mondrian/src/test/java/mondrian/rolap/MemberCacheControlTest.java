@@ -1230,5 +1230,3 @@ public class MemberCacheControlTest {
         }
     }
 }
-
-// End MemberCacheControlTest.java

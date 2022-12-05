@@ -6142,5 +6142,3 @@ public class BasicQueryTest {
     }
   }
 }
-
-// End BasicQueryTest.java

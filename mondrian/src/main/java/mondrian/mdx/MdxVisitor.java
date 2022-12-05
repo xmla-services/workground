@@ -118,5 +118,3 @@ public interface MdxVisitor {
      */
     Object visit(Literal literal);
 }
-
-// End MdxVisitor.java

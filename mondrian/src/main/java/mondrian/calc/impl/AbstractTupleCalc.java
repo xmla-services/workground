@@ -43,5 +43,3 @@ implements TupleCalc
         return evaluateTuple(evaluator);
     }
 }
-
-// End AbstractTupleCalc.java

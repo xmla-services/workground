@@ -61,5 +61,3 @@ class IsNullFunDef extends FunDefBase {
     return !member.isAll() && member.getKey() == RolapUtil.sqlNullValue;
   }
 }
-
-// End IsNullFunDef.java

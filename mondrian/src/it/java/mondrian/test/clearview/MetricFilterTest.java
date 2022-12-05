@@ -58,5 +58,3 @@ public class MetricFilterTest extends ClearViewBase {
         super.runTest();
     }
 }
-
-// End MetricFilterTest.java

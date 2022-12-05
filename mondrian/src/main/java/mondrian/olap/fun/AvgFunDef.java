@@ -63,5 +63,3 @@ class AvgFunDef extends AbstractAggregateFunDef {
     };
   }
 }
-
-// End AvgFunDef.java

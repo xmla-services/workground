@@ -904,5 +904,3 @@ public class SqlQueryTest  extends BatchTestCase {
         }
     }
 }
-
-// End SqlQueryTest.java

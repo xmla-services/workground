@@ -24,5 +24,3 @@ package mondrian.rolap.sql;
 public interface SqlQueryChecker {
     void onGenerate(SqlQuery q);
 }
-
-// End SqlQueryChecker.java

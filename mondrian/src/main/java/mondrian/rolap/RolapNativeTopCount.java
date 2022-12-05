@@ -285,5 +285,3 @@ public class RolapNativeTopCount extends RolapNativeSet {
             evaluator, restrictMemberTypes());
     }
 }
-
-// End RolapNativeTopCount.java

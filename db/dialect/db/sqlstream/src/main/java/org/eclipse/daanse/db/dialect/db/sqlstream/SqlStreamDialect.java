@@ -34,5 +34,3 @@ public class SqlStreamDialect extends LucidDbDialect {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 }
-
-// End SqlStreamDialect.java

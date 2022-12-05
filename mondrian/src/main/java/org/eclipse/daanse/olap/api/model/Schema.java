@@ -112,5 +112,3 @@ public interface Schema extends MetaElement {
      */
     List<Exception> getWarnings();
 }
-
-// End Schema.java

@@ -70,5 +70,3 @@ public interface NamedSet extends OlapElement, MetaElement {
      */
     boolean isDynamic();
 }
-
-// End NamedSet.java

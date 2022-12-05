@@ -56,5 +56,3 @@ class ListRenderer implements ListCellRenderer {
         return c;
     }
 }
-
-// End ListRenderer.java

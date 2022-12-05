@@ -23,5 +23,3 @@ public interface CatalogLocator {
     String locate(String catalogPath);
 
 }
-
-// End CatalogLocator.java

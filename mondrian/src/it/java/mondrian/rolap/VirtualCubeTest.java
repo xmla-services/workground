@@ -1622,5 +1622,3 @@ public class VirtualCubeTest extends BatchTestCase {
             + "Axis #1:\n");
     }
 }
-
-// End VirtualCubeTest.java

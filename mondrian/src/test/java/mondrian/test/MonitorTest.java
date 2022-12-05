@@ -163,5 +163,3 @@ public class MonitorTest {
         // (other expensive operations similar to sort?)
     }
 }
-
-// End MonitorTest.java

@@ -85,5 +85,3 @@ public interface TupleConstraint extends SqlConstraint {
      */
     public boolean supportsAggTables();
 }
-
-// End TupleConstraint.java

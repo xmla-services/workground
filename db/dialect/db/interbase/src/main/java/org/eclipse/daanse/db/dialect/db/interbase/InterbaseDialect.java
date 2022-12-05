@@ -42,5 +42,3 @@ public class InterbaseDialect extends JdbcDialectImpl {
         return false;
     }
 }
-
-// End InterbaseDialect.java

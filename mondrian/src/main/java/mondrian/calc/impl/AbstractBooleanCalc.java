@@ -46,5 +46,3 @@ implements BooleanCalc
         return Boolean.valueOf(evaluateBoolean(evaluator));
     }
 }
-
-// End AbstractBooleanCalc.java

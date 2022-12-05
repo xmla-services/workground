@@ -82,5 +82,3 @@ public class SmartMemberListCache <K, V> {
         this.cache = cache;
     }
 }
-
-// End SmartMemberListCache.java

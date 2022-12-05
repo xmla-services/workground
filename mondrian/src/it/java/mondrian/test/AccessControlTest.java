@@ -3708,5 +3708,3 @@ public class AccessControlTest extends FoodMartTestCase {
     }
 
 }
-
-// End AccessControlTest.java

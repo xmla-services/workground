@@ -41,5 +41,3 @@ public class DelegatingTestContext extends TestContext {
         return context.getWriter();
     }
 }
-
-// End DelegatingTestContext.java

@@ -35,5 +35,3 @@ public class LoggerRecorder extends AbstractRecorder {
         logMessage(context, msg, msgType, logger);
     }
 }
-
-// End LoggerRecorder.java

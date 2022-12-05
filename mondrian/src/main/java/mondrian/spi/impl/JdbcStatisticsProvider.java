@@ -130,5 +130,3 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
         }
     }
 }
-
-// End JdbcStatisticsProvider.java

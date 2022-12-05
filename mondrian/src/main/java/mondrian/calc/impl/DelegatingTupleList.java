@@ -194,5 +194,3 @@ public class DelegatingTupleList extends AbstractTupleList
                 );
     }
 }
-
-// End DelegatingTupleList.java

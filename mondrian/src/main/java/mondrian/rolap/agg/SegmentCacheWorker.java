@@ -228,5 +228,3 @@ public final class SegmentCacheWorker {
             + "the cache manager thread, " + cacheMgrThread;
     }
 }
-
-// End SegmentCacheWorker.java

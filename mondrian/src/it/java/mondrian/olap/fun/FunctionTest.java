@@ -13487,5 +13487,3 @@ Intel platforms):
   }
 
 }
-
-// End FunctionTest.java

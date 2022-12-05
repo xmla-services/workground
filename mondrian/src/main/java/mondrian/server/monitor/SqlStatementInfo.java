@@ -38,5 +38,3 @@ public class SqlStatementInfo extends Info {
     }
 
 }
-
-// End SqlStatementInfo.java

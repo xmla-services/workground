@@ -313,5 +313,3 @@ public class RolapConnectionTest {
         }
     }
 }
-
-// End RolapConnectionTest.java

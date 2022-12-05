@@ -79,5 +79,3 @@ class RolapAllCubeMember
         return uniqueName;
     }
 }
-
-// End RolapAllCubeMember.java

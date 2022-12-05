@@ -2041,5 +2041,3 @@ public class AggregationOnDistinctCountMeasuresTest {
         return new UnaryTupleList(Arrays.asList(members));
     }
 }
-
-// End AggregationOnDistinctCountMeasuresTest.java

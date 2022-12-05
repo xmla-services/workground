@@ -52,5 +52,3 @@ public class SchemaContentKey extends StringKey {
             new ByteString(Util.digestMd5(buf.toString())).toString());
     }
 }
-
-// End SchemaContentKey.java

@@ -51,5 +51,3 @@ public class Db2OldAs400Dialect extends Db2Dialect {
         return false;
     }
 }
-
-// End Db2OldAs400Dialect.java

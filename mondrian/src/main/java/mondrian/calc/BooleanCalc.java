@@ -31,5 +31,3 @@ public interface BooleanCalc extends Calc {
      */
     boolean evaluateBoolean(Evaluator evaluator);
 }
-
-// End BooleanCalc.java

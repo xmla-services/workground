@@ -222,5 +222,3 @@ public class CacheHitTest extends FoodMartTestCase {
         cacheControl.flush(measuresRegion);
     }
 }
-
-// End CacheHitTest.java

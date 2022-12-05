@@ -415,5 +415,3 @@ public class QueryPanel extends javax.swing.JPanel {
     // End of variables declaration
 
 }
-
-// End QueryPanel.java

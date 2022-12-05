@@ -45,5 +45,3 @@ public class SetFunDefTest extends FoodMartTestCase {
             + "must have same hierarchy");
     }
 }
-
-// End SetFunDefTest.java

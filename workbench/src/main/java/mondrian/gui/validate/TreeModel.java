@@ -30,5 +30,3 @@ public interface TreeModel {
      */
     Object getRoot();
 }
-
-// End TreeModel.java

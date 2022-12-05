@@ -875,5 +875,3 @@ public class SolveOrderScopeIsolationTest {
             + "Row #2: 1,175\n");
     }
 }
-
-// End SolveOrderScopeIsolationTest.java

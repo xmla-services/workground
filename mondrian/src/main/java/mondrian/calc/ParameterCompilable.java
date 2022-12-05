@@ -20,5 +20,3 @@ import mondrian.olap.Parameter;
 public interface ParameterCompilable extends Parameter {
     Calc compile(ExpCompiler compiler);
 }
-
-// End ParameterCompilable.java

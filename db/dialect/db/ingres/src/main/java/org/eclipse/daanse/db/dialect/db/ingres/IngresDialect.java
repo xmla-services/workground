@@ -47,5 +47,3 @@ public class IngresDialect extends JdbcDialectImpl {
         return true;
     }
 }
-
-// End IngresDialect.java

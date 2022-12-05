@@ -1149,5 +1149,3 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
             "SET_NAME", wildcard(setNamePattern));
     }
 }
-
-// End MondrianOlap4jDatabaseMetaData.java

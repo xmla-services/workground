@@ -155,5 +155,3 @@ public interface Statement {
      */
     long getId();
 }
-
-// End Statement.java

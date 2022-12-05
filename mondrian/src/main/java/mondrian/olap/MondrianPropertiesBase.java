@@ -281,5 +281,3 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
         }
     }
 }
-
-// End MondrianPropertiesBase.java

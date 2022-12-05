@@ -61,5 +61,3 @@ public class SummaryMetricPercentTest extends ClearViewBase {
         super.runTest();
     }
 }
-
-// End SummaryMetricPercentTest.java

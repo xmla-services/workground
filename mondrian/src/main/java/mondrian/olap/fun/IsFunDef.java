@@ -69,5 +69,3 @@ class IsFunDef extends FunDefBase {
         }
     }
 }
-
-// End IsFunDef.java

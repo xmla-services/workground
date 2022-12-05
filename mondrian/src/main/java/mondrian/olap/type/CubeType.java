@@ -89,5 +89,3 @@ public class CubeType implements Type {
         throw new UnsupportedOperationException();
     }
 }
-
-// End CubeType.java

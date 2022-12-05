@@ -794,5 +794,3 @@ public class SolveOrderScopeIsolationTest extends FoodMartTestCase {
             + "Row #2: 1,175\n");
     }
 }
-
-// End SolveOrderScopeIsolationTest.java

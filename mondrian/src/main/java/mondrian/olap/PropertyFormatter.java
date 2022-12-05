@@ -20,5 +20,3 @@ package mondrian.olap;
  */
 public interface PropertyFormatter extends mondrian.spi.PropertyFormatter {
 }
-
-// End PropertyFormatter.java

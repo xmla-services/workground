@@ -97,5 +97,3 @@ class AncestorsFunDef extends FunDefBase {
         }
     }
 }
-
-// End AncestorsFunDef.java

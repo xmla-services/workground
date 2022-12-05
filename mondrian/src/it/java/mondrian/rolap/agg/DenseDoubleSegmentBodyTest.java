@@ -50,5 +50,3 @@ public class DenseDoubleSegmentBodyTest extends
     return new DenseDoubleSegmentBody(nullValues, values, axes);
   }
 }
-
-// End DenseDoubleSegmentBodyTest.java

@@ -1196,5 +1196,3 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         }
     }
 }
-
-// End MondrianOlap4jConnection.java

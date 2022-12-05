@@ -224,5 +224,3 @@ public abstract class CubeBase extends OlapElementBase implements Cube {
         return getTimeLevel(LevelType.TimeWeeks);
     }
 }
-
-// End CubeBase.java

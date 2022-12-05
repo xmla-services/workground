@@ -366,5 +366,3 @@ public class PropertiesTest {
                 .getDescription());
     }
 }
-
-// End PropertiesTest.java

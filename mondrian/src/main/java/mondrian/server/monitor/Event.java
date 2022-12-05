@@ -63,5 +63,3 @@ public abstract class Event implements Message {
     mdc.setContextMap();
   }
 }
-
-// End Event.java

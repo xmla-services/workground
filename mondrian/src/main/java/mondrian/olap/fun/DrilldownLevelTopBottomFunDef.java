@@ -177,5 +177,3 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
     };
   }
 }
-
-// End DrilldownLevelTopBottomFunDef.java

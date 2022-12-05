@@ -52,5 +52,3 @@ implements TupleIterator
     }
 
 }
-
-// End AbstractTupleIterator.java

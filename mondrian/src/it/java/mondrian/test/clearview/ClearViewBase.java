@@ -188,5 +188,3 @@ public abstract class ClearViewBase extends BatchTestCase {
         return null;
     }
 }
-
-// End ClearViewBase.java

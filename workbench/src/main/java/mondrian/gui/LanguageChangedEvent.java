@@ -37,5 +37,3 @@ public class LanguageChangedEvent {
     }
 
 }
-
-// End LanguageChangedEvent.java

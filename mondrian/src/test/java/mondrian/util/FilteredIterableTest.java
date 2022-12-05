@@ -93,5 +93,3 @@ public class FilteredIterableTest{
         }
     }
 }
-
-// End FilteredIterableTest.java

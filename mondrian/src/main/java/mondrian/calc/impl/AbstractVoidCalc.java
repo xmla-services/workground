@@ -44,5 +44,3 @@ public class AbstractVoidCalc extends GenericCalc implements VoidCalc {
         return calcs;
     }
 }
-
-// End AbstractVoidCalc.java

@@ -87,5 +87,3 @@ class CovarianceFunDef extends FunDefBase {
         };
     }
 }
-
-// End CovarianceFunDef.java

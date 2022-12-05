@@ -581,5 +581,3 @@ abstract class Rowset implements XmlaConstants {
         }
     }
 }
-
-// End Rowset.java

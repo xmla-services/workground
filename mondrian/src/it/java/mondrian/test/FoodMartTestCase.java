@@ -504,5 +504,3 @@ class TestCaseForker {
         }
     }
 }
-
-// End FoodMartTestCase.java

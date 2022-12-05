@@ -121,5 +121,3 @@ public class Enumeration {
     }
 
 }
-
-// End Enumeration.java

@@ -55,5 +55,3 @@ public class ResolvedFunCallFinder
         return null;
     }
 }
-
-// End ResolvedFunCallFinder.java

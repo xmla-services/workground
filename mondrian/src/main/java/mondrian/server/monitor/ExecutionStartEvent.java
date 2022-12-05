@@ -46,5 +46,3 @@ public class ExecutionStartEvent extends ExecutionEvent {
         return visitor.visit(this);
     }
 }
-
-// End ExecutionStartEvent.java

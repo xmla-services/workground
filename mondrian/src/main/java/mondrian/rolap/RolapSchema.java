@@ -1505,5 +1505,3 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
     private interface XmlLocation {
     }
 }
-
-// End RolapSchema.java

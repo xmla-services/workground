@@ -33,5 +33,3 @@ public interface CellFormatter {
      */
     String formatCell(Object value);
 }
-
-// End CellFormatter.java

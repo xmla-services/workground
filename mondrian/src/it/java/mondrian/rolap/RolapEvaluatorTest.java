@@ -72,5 +72,3 @@ public class RolapEvaluatorTest extends FoodMartTestCase {
     }
     
 }
-
-// End RolapEvaluatorTest.java

@@ -149,5 +149,3 @@ public class MondrianServerRegistry {
         return new MondrianServerImpl(this, repository, catalogLocator);
     }
 }
-
-// End MondrianServerRegistry.java

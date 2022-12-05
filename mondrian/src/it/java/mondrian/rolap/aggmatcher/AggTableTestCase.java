@@ -56,5 +56,3 @@ public abstract class AggTableTestCase extends CsvDBTestCase {
     }
 
 }
-
-// End AggTableTestCase.java

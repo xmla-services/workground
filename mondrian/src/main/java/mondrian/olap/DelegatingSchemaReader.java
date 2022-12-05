@@ -323,5 +323,3 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
         return schemaReader.getContext();
     }
 }
-
-// End DelegatingSchemaReader.java

@@ -28,5 +28,3 @@ public class PropertyRestoringTestCase {
         propSaver.reset();
     }
 }
-
-// End PropertyRestoringTestCase.java

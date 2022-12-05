@@ -162,5 +162,3 @@ class LastPeriodsFunDef extends FunDefBase {
         return list;
     }
 }
-
-// End LastPeriodsFunDef.java

@@ -315,5 +315,3 @@ print(ma2);
         }
     }
 }
-
-// End ResultStyleCompiler.java

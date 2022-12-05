@@ -136,5 +136,3 @@ class DenseIntSegmentDataset extends DenseNativeSegmentDataset {
             axes);
     }
 }
-
-// End DenseIntSegmentDataset.java

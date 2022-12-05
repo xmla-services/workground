@@ -272,5 +272,3 @@ public class TestMember implements Member {
     }
   }
 }
-
-// End TestMember.java

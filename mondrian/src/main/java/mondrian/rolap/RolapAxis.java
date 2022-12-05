@@ -113,5 +113,3 @@ public class RolapAxis implements Axis {
         }
     }
 }
-
-// End RolapAxis.java

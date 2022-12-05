@@ -40,5 +40,3 @@ public class CellProperty extends QueryPart {
         return name;
     }
 }
-
-// End CellProperty.java

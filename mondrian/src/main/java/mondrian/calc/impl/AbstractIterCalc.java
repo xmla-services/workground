@@ -65,5 +65,3 @@ implements IterCalc
         return "AbstractIterCalc object";
     }
 }
-
-// End AbstractIterCalc.java

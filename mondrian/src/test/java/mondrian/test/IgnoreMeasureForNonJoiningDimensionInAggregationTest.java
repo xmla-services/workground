@@ -391,5 +391,3 @@ public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
     }
 
 }
-
-// End IgnoreMeasureForNonJoiningDimensionInAggregationTest.java

@@ -608,5 +608,3 @@ public final class TupleCollections {
         }
     }
 }
-
-// End TupleCollections.java

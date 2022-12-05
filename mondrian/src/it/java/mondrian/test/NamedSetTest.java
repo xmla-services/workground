@@ -1309,5 +1309,3 @@ public class NamedSetTest extends FoodMartTestCase {
         }
     }
 }
-
-// End NamedSetTest.java

@@ -209,5 +209,3 @@ public class TupleType implements Type {
         }
     }
 }
-
-// End TupleType.java

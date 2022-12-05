@@ -106,5 +106,3 @@ public interface MdxParserValidator {
                 TransactionCommand.Command c);
     }
 }
-
-// End MdxParserValidator.java

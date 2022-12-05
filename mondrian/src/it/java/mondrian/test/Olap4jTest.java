@@ -691,5 +691,3 @@ public class Olap4jTest extends FoodMartTestCase {
                         .isVisible());
     }
 }
-
-// End Olap4jTest.java

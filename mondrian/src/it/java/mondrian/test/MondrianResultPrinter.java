@@ -155,5 +155,3 @@ public class MondrianResultPrinter implements TestListener {
     }
 
 }
-
-// End MondrianResultPrinter.java

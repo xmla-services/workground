@@ -141,5 +141,3 @@ public interface TupleReader {
     void incrementEmptySets();
 
 }
-
-// End TupleReader.java

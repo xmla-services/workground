@@ -856,5 +856,3 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
       e.setSlicerContext( members, membersByHierarchy );
     }
 }
-
-// End SqlConstraintUtilsTest.java

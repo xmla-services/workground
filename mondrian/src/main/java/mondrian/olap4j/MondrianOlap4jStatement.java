@@ -510,5 +510,3 @@ abstract class MondrianOlap4jStatement
         }
     }
 }
-
-// End MondrianOlap4jStatement.java

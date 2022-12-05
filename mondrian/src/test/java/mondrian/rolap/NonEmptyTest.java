@@ -7022,5 +7022,3 @@ public class NonEmptyTest extends BatchTestCase {
       "", propSaver);
   }
 }
-
-// End NonEmptyTest.java

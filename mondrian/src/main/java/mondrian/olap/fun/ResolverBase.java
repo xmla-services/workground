@@ -67,5 +67,3 @@ abstract class ResolverBase extends FunUtil implements Resolver {
         return emptyStringArray;
     }
 }
-
-// End ResolverBase.java

@@ -30,5 +30,3 @@ public class SchemaKey
         assert connectionKey != null;
     }
 }
-
-// End SchemaKey.java

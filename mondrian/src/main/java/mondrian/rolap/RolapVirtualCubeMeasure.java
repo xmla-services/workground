@@ -77,5 +77,3 @@ public class RolapVirtualCubeMeasure
         return metaData;
     }
 }
-
-// End RolapVirtualCubeMeasure.java

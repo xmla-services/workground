@@ -876,5 +876,3 @@ public class PerformanceTest extends FoodMartTestCase {
     }
   }
 }
-
-// End PerformanceTest.java

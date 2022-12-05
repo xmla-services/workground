@@ -443,5 +443,3 @@ public class ScheduleTest {
         assertEqualsX(2002, 10, 29, "Tue", 10, 33, d);
     }
 }
-
-// End ScheduleTest.java

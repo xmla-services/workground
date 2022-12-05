@@ -151,5 +151,3 @@ public abstract class DimensionBase
         return null;
     }
 }
-
-// End DimensionBase.java

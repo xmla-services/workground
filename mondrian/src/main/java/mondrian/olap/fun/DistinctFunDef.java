@@ -69,5 +69,3 @@ class DistinctFunDef extends FunDefBase {
         }
     }
 }
-
-// End DistinctFunDef.java

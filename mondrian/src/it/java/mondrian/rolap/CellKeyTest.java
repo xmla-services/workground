@@ -368,5 +368,3 @@ public class CellKeyTest extends FoodMartTestCase {
         }
     }
 }
-
-// End CellKeyTest.java

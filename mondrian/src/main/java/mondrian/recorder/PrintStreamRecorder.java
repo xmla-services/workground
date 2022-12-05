@@ -63,5 +63,3 @@ public class PrintStreamRecorder extends AbstractRecorder {
         ps.println(msg);
     }
 }
-
-// End PrintStreamRecorder.java

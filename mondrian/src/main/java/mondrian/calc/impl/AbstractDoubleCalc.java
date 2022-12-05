@@ -50,5 +50,3 @@ implements DoubleCalc
         return Double.valueOf(d);
     }
 }
-
-// End AbstractDoubleCalc.java

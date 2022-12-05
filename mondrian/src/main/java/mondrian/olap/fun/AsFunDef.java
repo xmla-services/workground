@@ -104,5 +104,3 @@ class AsFunDef extends FunDefBase {
         }
     }
 }
-
-// End AsFunDef.java

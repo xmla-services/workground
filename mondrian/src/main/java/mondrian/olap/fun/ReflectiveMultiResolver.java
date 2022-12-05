@@ -79,5 +79,3 @@ public class ReflectiveMultiResolver extends MultiResolver {
         return super.getReservedWords();
     }
 }
-
-// End ReflectiveMultiResolver.java

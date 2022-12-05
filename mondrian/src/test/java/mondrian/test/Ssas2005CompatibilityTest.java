@@ -2058,5 +2058,3 @@ public class Ssas2005CompatibilityTest {
 
     }
 }
-
-// End Ssas2005CompatibilityTest.java

@@ -173,5 +173,3 @@ public class VisualTotalsTest extends TestCase {
     }
     
 }
-
-// End VisualTotalsTest.java

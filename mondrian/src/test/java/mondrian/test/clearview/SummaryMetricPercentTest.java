@@ -58,5 +58,3 @@ public class SummaryMetricPercentTest extends ClearViewBase {
         }
     }
 }
-
-// End SummaryMetricPercentTest.java

@@ -85,5 +85,3 @@ implements ListCalc {
         return "AbstractListCalc object";
     }
 }
-
-// End AbstractListCalc.java

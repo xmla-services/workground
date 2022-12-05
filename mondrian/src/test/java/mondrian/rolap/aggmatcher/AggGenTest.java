@@ -121,5 +121,3 @@ public class AggGenTest {
     }
 
 }
-
-// End AggGenTest.java

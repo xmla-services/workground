@@ -310,5 +310,3 @@ public class ArrayTupleList extends AbstractEndToEndTupleList {
         return 31 * result + Arrays.hashCode( objectData );
     }
 }
-
-// End ArrayTupleList.java

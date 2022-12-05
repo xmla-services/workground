@@ -167,5 +167,3 @@ public class XmlaTestContext {
         return stringList.toArray(new String[stringList.size()][]);
     }
 }
-
-// End XmlaTestContext.java

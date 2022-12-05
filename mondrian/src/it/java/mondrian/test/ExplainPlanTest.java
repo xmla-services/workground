@@ -387,5 +387,3 @@ public class ExplainPlanTest extends FoodMartTestCase {
     return strings;
   }
 }
-
-// End ExplainPlanTest.java

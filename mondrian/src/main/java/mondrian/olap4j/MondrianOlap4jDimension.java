@@ -114,5 +114,3 @@ class MondrianOlap4jDimension
         return dimension;
     }
 }
-
-// End MondrianOlap4jDimension.java

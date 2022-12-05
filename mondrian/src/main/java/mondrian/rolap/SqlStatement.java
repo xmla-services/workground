@@ -637,5 +637,3 @@ public class SqlStatement {
         return context;
   }
 }
-
-// End SqlStatement.java

@@ -1175,5 +1175,3 @@ public class MemberCacheControlTest extends FoodMartTestCase {
         }
     }
 }
-
-// End MemberCacheControlTest.java

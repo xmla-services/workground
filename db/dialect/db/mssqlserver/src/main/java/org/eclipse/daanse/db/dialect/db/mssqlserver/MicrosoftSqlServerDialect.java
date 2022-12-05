@@ -103,5 +103,3 @@ public class MicrosoftSqlServerDialect extends JdbcDialectImpl {
     }
 
 }
-
-// End MicrosoftSqlServerDialect.java

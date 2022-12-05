@@ -77,5 +77,3 @@ import mondrian.test.PropertySaver5;
     }
 
   }
-
-// End CancellationCheckerTest.java

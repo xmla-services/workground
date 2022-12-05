@@ -15,5 +15,3 @@ public interface WorkbenchMenubarPlugin {
     public void addItemsToMenubar(JMenuBar menubar);
     public void setWorkbench(Workbench workbench);
 }
-
-// End WorkbenchMenubarPlugin.java

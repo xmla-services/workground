@@ -33,5 +33,3 @@ public class StringScanner extends Scanner {
             : s.charAt(i++);
     }
 }
-
-// End StringScanner.java

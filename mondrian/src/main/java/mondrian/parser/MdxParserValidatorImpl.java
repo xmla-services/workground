@@ -50,5 +50,3 @@ public class MdxParserValidatorImpl implements MdxParserValidator {
             statement, queryString, debug, funTable);
     }
 }
-
-// End MdxParserValidatorImpl.java

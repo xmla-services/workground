@@ -1202,5 +1202,3 @@ public class RoleImpl implements Role {
         }
     }
 }
-
-// End RoleImpl.java

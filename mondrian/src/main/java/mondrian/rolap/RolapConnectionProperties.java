@@ -234,5 +234,3 @@ public enum RolapConnectionProperties {
   public static final String JdbcPropertyPrefix = "jdbc.";
 
 }
-
-// End RolapConnectionProperties.java

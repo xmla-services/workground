@@ -133,5 +133,3 @@ public class HierarchyType implements Type {
         return 1;
     }
 }
-
-// End HierarchyType.java

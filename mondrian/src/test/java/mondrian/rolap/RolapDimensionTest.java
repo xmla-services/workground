@@ -94,5 +94,3 @@ public class RolapDimensionTest {
   }
 
 }
-
-// End RolapDimensionTest.java

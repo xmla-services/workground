@@ -76,5 +76,3 @@ public class ConnectionInfo extends Info {
         return executeEndCount;
     }
 }
-
-// End ConnectionInfo.java

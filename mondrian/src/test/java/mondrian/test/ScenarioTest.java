@@ -530,5 +530,3 @@ public class ScenarioTest {
     // already empty, (b) cells that were null, (c) cells that are not visible
     // to the caller. I'm not sure that (c) works right now.
 }
-
-// End ScenarioTest.java

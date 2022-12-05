@@ -1054,5 +1054,3 @@ abstract class Recognizer {
         }
     }
 }
-
-// End Recognizer.java

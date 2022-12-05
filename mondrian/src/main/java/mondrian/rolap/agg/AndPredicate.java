@@ -191,5 +191,3 @@ public class AndPredicate extends ListPredicate {
         return "and";
     }
 }
-
-// End AndPredicate.java

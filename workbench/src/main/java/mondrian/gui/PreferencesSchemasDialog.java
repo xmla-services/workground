@@ -212,5 +212,3 @@ public class PreferencesSchemasDialog extends JDialog {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
 }
-
-// End PreferencesSchemasDialog.java

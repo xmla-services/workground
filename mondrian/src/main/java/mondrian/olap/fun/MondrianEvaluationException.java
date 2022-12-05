@@ -23,5 +23,3 @@ public class MondrianEvaluationException extends RuntimeException {
         super(s);
     }
 }
-
-// End MondrianEvaluationException.java

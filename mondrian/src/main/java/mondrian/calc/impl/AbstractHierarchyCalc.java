@@ -45,5 +45,3 @@ implements HierarchyCalc
         return evaluateHierarchy(evaluator);
     }
 }
-
-// End AbstractHierarchyCalc.java

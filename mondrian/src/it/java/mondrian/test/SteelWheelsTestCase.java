@@ -89,5 +89,3 @@ public class SteelWheelsTestCase extends TestCase {
             .withCube("SteelWheelsSales");
     }
 }
-
-// End SteelWheelsTestCase.java

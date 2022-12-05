@@ -90,5 +90,3 @@ public class MondrianInprocProxy
         return "UTF-8";
     }
 }
-
-// End MondrianInprocProxy.java

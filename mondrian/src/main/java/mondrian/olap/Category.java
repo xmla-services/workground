@@ -196,5 +196,3 @@ public class Category extends EnumeratedValues {
         }
     }
 }
-
-// End Category.java

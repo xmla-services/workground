@@ -409,5 +409,3 @@ public class CompoundPredicateInfo {
     return orPredicate;
   }
 }
-
-// End CompoundPredicateInfo.java

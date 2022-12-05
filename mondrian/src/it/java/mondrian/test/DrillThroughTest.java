@@ -2074,5 +2074,3 @@ public class DrillThroughTest extends FoodMartTestCase {
         }
     }
 }
-
-// End DrillThroughTest.java

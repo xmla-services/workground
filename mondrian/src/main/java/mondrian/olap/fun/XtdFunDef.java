@@ -150,5 +150,3 @@ class XtdFunDef extends FunDefBase {
     }
   }
 }
-
-// End XtdFunDef.java

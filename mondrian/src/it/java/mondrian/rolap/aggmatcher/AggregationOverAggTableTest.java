@@ -85,5 +85,3 @@ public class AggregationOverAggTableTest extends AggTableTestCase {
             false, false, true);
     }
 }
-
-// End AggregationOverAggTableTest.java

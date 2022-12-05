@@ -139,5 +139,3 @@ public interface Validator {
      */
     SchemaReader getSchemaReader();
 }
-
-// End Validator.java

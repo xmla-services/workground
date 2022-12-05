@@ -346,5 +346,3 @@ public enum PropertyDefinition {
         return description;
     }
 }
-
-// End PropertyDefinition.java

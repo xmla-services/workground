@@ -1679,5 +1679,3 @@ public class SegmentCacheManager {
     private static final long serialVersionUID = 1L;
   }
 }
-
-// End SegmentCacheManager.java

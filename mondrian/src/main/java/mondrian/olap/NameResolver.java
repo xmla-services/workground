@@ -263,5 +263,3 @@ public final class NameResolver {
             IdentifierSegment segment);
     }
 }
-
-// End NameResolver.java

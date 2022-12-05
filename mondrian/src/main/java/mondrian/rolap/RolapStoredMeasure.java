@@ -49,5 +49,3 @@ public interface RolapStoredMeasure extends RolapMeasure {
      */
     Object getStarMeasure();
 }
-
-// End RolapStoredMeasure.java

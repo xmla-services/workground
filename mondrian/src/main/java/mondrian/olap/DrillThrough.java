@@ -113,5 +113,3 @@ public class DrillThrough extends QueryPart {
 
 
 }
-
-// End DrillThrough.java

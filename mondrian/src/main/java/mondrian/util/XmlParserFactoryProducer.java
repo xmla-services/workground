@@ -97,5 +97,3 @@ public class XmlParserFactoryProducer {
         return reader;
     }
 }
-
-// End XmlParserFactoryProducer.java

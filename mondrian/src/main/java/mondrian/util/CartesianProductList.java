@@ -145,5 +145,3 @@ public class CartesianProductList<T>
         }
     }
 }
-
-// End CartesianProductList.java

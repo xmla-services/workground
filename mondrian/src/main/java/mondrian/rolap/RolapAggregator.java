@@ -414,5 +414,3 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
     throw new UnsupportedOperationException();
   }
 }
-
-// End RolapAggregator.java

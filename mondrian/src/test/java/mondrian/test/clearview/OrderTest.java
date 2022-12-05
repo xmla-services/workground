@@ -51,5 +51,3 @@ public class OrderTest extends ClearViewBase {
         }
     }
 }
-
-// End OrderTest.java

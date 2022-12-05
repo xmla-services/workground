@@ -106,5 +106,3 @@ class RolapMemberCalculation implements RolapCalculation {
         return false;
     }
 }
-
-// End RolapMemberCalculation.java

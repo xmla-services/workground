@@ -60,5 +60,3 @@ public interface Dimension extends OlapElement, MetaElement {
      */
     boolean isHighCardinality();
 }
-
-// End Dimension.java

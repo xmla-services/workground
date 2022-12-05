@@ -220,5 +220,3 @@ public class ConstantCalc extends GenericCalc {
                 dimension);
     }
 }
-
-// End ConstantCalc.java

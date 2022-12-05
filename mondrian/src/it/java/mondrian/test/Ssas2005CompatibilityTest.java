@@ -1831,5 +1831,3 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
         }
     }
 }
-
-// End Ssas2005CompatibilityTest.java

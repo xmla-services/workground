@@ -3605,5 +3605,3 @@ public class RolapCube extends CubeBase {
         return null;
     }
 }
-
-// End RolapCube.java

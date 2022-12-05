@@ -122,5 +122,3 @@ public class BeanMap extends AbstractMap<String, Object> {
         Object value(Object o);
     }
 }
-
-// End BeanMap.java

@@ -1075,5 +1075,3 @@ public class CrossJoinFunDef extends FunDefBase {
     }
   }
 }
-
-// End CrossJoinFunDef.java

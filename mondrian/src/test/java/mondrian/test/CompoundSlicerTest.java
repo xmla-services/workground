@@ -1526,5 +1526,3 @@ public class CompoundSlicerTest {
                 + "FROM [Sales]", "", propSaver);
     }
 }
-
-// End CompoundSlicerTest.java

@@ -122,5 +122,3 @@ public class CacheTest extends FoodMartTestCase {
         return null;
     }
 }
-
-// End CacheTest.java

@@ -200,5 +200,3 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
         }
     }
 }
-
-// End AbstractColumnPredicate.java

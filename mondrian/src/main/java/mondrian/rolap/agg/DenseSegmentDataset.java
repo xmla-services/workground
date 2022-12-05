@@ -164,5 +164,3 @@ outer:
         }
     }
 }
-
-// End DenseSegmentDataset.java

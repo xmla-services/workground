@@ -63,5 +63,3 @@ public class Listener implements ServletContextListener {
         void destroy(ServletContextEvent event);
     }
 }
-
-// End Listener.java

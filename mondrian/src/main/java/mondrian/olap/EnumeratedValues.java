@@ -392,5 +392,3 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
     }
 
 }
-
-// End EnumeratedValues.java

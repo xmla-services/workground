@@ -75,5 +75,3 @@ interface RolapCalculation {
      */
     boolean containsAggregateFunction();
 }
-
-// End RolapCalculation.java

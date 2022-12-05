@@ -188,5 +188,3 @@ public class MondrianOlap4jCell implements Cell {
         cell.setValue(scenario, newValue, allocationPolicy, allocationArgs);
     }
 }
-
-// End MondrianOlap4jCell.java

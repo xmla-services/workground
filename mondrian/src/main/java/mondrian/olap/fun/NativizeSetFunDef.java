@@ -1632,5 +1632,3 @@ public class NativizeSetFunDef extends FunDefBase {
         return tokens[tokens.length - 1];
     }
 }
-
-// End NativizeSetFunDef.java

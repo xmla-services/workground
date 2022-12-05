@@ -221,5 +221,3 @@ public interface Modulos {
      */
     int getCellOrdinal(int[] pos);
 }
-
-// End Modulos.java

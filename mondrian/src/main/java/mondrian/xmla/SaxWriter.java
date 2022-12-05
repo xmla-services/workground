@@ -91,5 +91,3 @@ public interface SaxWriter {
      */
     public void flush();
 }
-
-// End SaxWriter.java

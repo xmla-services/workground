@@ -341,5 +341,3 @@ public class ConcurrentValidatingQueryRunner extends Thread {
         }
     }
 }
-
-// End ConcurrentValidatingQueryRunner.java

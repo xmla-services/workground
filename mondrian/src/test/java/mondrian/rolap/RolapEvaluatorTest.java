@@ -86,5 +86,3 @@ public class RolapEvaluatorTest {
     }
     
 }
-
-// End RolapEvaluatorTest.java

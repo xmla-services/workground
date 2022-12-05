@@ -199,5 +199,3 @@ public class Literal extends ExpBase {
     }
 
 }
-
-// End Literal.java

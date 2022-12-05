@@ -50,5 +50,3 @@ public class DenseIntSegmentBodyTest extends
     return new DenseIntSegmentBody(nullValues, values, axes);
   }
 }
-
-// End DenseIntSegmentBodyTest.java

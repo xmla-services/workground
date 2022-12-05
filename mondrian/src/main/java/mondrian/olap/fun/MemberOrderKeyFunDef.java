@@ -68,5 +68,3 @@ public final class MemberOrderKeyFunDef extends FunDefBase {
     }
   }
 }
-
-// End MemberOrderKeyFunDef.java

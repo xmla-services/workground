@@ -80,5 +80,3 @@ public class DimensionExpr extends ExpBase implements Exp {
     }
 
 }
-
-// End DimensionExpr.java

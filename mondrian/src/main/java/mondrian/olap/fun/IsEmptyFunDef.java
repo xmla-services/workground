@@ -53,5 +53,3 @@ class IsEmptyFunDef extends FunDefBase {
         };
     }
 }
-
-// End IsEmptyFunDef.java

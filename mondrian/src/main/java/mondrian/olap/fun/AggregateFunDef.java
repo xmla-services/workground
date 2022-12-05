@@ -605,5 +605,3 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         }
     }
 }
-
-// End AggregateFunDef.java

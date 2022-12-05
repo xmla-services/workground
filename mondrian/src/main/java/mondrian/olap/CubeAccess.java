@@ -186,5 +186,3 @@ public class CubeAccess {
         return h;
     }
 }
-
-// End CubeAccess.java

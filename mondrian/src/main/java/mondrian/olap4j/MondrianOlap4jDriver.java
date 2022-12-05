@@ -186,5 +186,3 @@ public class MondrianOlap4jDriver implements Driver {
         return false;
     }
 }
-
-// End MondrianOlap4jDriver.java

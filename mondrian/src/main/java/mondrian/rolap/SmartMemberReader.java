@@ -573,5 +573,3 @@ public class SmartMemberReader implements MemberReader {
         return parentMember;
     }
 }
-
-// End SmartMemberReader.java

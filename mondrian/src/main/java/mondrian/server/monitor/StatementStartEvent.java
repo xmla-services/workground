@@ -38,5 +38,3 @@ public class StatementStartEvent extends StatementEvent {
         return visitor.visit(this);
     }
 }
-
-// End StatementStartEvent.java

@@ -203,5 +203,3 @@ public class MemberCacheHelperTest {
         return names;
     }
 }
-
-// End MemberCacheHelperTest.java

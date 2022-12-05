@@ -215,5 +215,3 @@ public class SqlConstraintFactory {
         return new DescendantsConstraint(parentMembers, mcc);
     }
 }
-
-// End SqlConstraintFactory.java

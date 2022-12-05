@@ -412,5 +412,3 @@ public class CellRequest {
         return unsatisfiable;
     }
 }
-
-// End CellRequest.java

@@ -117,5 +117,3 @@ public class ParallelTest {
         public abstract void runSafe();
     }
 }
-
-// End ParallelTest.java

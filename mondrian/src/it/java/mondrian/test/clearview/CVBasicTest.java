@@ -46,5 +46,3 @@ public class CVBasicTest extends ClearViewBase {
     }
 
 }
-
-// End CVBasicTest.java

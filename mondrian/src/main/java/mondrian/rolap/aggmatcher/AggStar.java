@@ -1698,5 +1698,3 @@ public class AggStar {
         aggTable.print(pw, subprefix);
     }
 }
-
-// End AggStar.java

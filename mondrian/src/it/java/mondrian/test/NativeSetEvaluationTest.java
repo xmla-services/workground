@@ -1836,5 +1836,3 @@ public class NativeSetEvaluationTest extends BatchTestCase {
       "read exceeded limit (400)" );
   }
 }
-
-// End NativeSetEvaluationTest.java
