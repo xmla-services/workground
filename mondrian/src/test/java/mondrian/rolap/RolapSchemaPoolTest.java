@@ -186,10 +186,10 @@ public class RolapSchemaPoolTest {
 
     protected URL getFoodmartCatalogUrl() {
         // Works if we are running in root directory of source tree
-        File file = new File(PROJECT_DIR + "demo/FoodMart.xml");
+        File file = new File(PROJECT_DIR + "testfiles/catalogs/FoodMart.xml");
         if (!file.exists()) {
             // Works if we are running in bin directory of runtime env
-            file = new File(PROJECT_DIR + "../demo/FoodMart.xml");
+            file = new File(PROJECT_DIR + "../testfiles/catalogs/FoodMart.xml");
         }
 
         try {

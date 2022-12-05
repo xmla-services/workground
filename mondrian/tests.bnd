@@ -7,3 +7,5 @@ Import-Package: \
 DynamicImport-Package: *
 
 Export-Package: mondrian.*
+
+Test-Cases: mondrian.rolap.RolapSchemaPoolTest
