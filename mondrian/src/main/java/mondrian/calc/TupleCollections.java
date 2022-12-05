@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc;
 
@@ -29,7 +29,7 @@ import mondrian.olap.Evaluator;
 import mondrian.olap.Util;
 
 /**
-* Utility methods for tuple collections and iterators.
+ * Utility methods for tuple collections and iterators.
  *
  * @see TupleList
  * @see TupleIterator
@@ -38,11 +38,11 @@ import mondrian.olap.Util;
  */
 public final class TupleCollections {
     private static final TupleList[] EMPTY_LISTS = {
-        new DelegatingTupleList(0, Collections.<List<Member>>emptyList()),
-        new UnaryTupleList(Collections.<Member>emptyList()),
-        new DelegatingTupleList(2, Collections.<List<Member>>emptyList()),
-        new DelegatingTupleList(3, Collections.<List<Member>>emptyList()),
-        new DelegatingTupleList(4, Collections.<List<Member>>emptyList())
+            new DelegatingTupleList(0, Collections.<List<Member>>emptyList()),
+            new UnaryTupleList(Collections.<Member>emptyList()),
+            new DelegatingTupleList(2, Collections.<List<Member>>emptyList()),
+            new DelegatingTupleList(3, Collections.<List<Member>>emptyList()),
+            new DelegatingTupleList(4, Collections.<List<Member>>emptyList())
     };
 
     // prevent instantiation
@@ -63,14 +63,11 @@ public final class TupleCollections {
      * @return Tuple list
      */
     public static TupleList createList(int arity) {
-        switch (arity) {
-        case 0:
-            return new DelegatingTupleList(0, new ArrayList<List<Member>>());
-        case 1:
-            return new UnaryTupleList();
-        default:
-            return new ArrayTupleList(arity);
-        }
+        return switch (arity) {
+        case 0 -> new DelegatingTupleList(0, new ArrayList<List<Member>>());
+        case 1 -> new UnaryTupleList();
+        default -> new ArrayTupleList(arity);
+        };
     }
 
     /**
@@ -87,15 +84,12 @@ public final class TupleCollections {
      * @return Tuple list
      */
     public static TupleList createList(int arity, int initialCapacity) {
-        switch (arity) {
-        case 0:
-            return new DelegatingTupleList(
-                0, new ArrayList<List<Member>>(initialCapacity));
-        case 1:
-            return new UnaryTupleList(new ArrayList<Member>(initialCapacity));
-        default:
-            return new ArrayTupleList(arity, initialCapacity);
-        }
+        return switch (arity) {
+        case 0 -> new DelegatingTupleList(
+                            0, new ArrayList<List<Member>>(initialCapacity));
+        case 1 -> new UnaryTupleList(new ArrayList<Member>(initialCapacity));
+        default -> new ArrayTupleList(arity, initialCapacity);
+        };
     }
 
     /**
@@ -105,10 +99,10 @@ public final class TupleCollections {
      * @return Empty tuple list
      */
     public static TupleList emptyList(int arity) {
-        return arity < EMPTY_LISTS.length
-            ? EMPTY_LISTS[arity]
-            : new DelegatingTupleList(
-                arity, Collections.<List<Member>>emptyList());
+        return arity < TupleCollections.EMPTY_LISTS.length
+                ? TupleCollections.EMPTY_LISTS[arity]
+                        : new DelegatingTupleList(
+                                arity, Collections.<List<Member>>emptyList());
     }
 
     /**
@@ -121,13 +115,13 @@ public final class TupleCollections {
      */
     public static TupleList unmodifiableList(TupleList list) {
         return list.getArity() == 1
-            ? new UnaryTupleList(
-                Collections.unmodifiableList(
-                    list.slice(0)))
-            : new DelegatingTupleList(
-                list.getArity(),
-                Collections.unmodifiableList(
-                    list));
+                ? new UnaryTupleList(
+                        Collections.unmodifiableList(
+                                list.slice(0)))
+                        : new DelegatingTupleList(
+                                list.getArity(),
+                                Collections.unmodifiableList(
+                                        list));
     }
 
     /**
@@ -155,6 +149,7 @@ public final class TupleCollections {
             private static final int STATE_HASNEXT = 1;
             private static final int STATE_EOD = 2;
 
+            @Override
             public List<Member> current() {
                 return cursor.current();
             }
@@ -198,18 +193,17 @@ public final class TupleCollections {
                 }
             }
 
+            @Override
             public boolean forward() {
-                switch (state) {
-                case STATE_UNKNOWN:
-                    return cursor.forward();
-                case STATE_HASNEXT:
+                return switch (state) {
+                case STATE_UNKNOWN -> cursor.forward();
+                case STATE_HASNEXT -> {
                     state = STATE_UNKNOWN;
-                    return true;
-                case STATE_EOD:
-                    return false;
-                default:
-                    throw new RuntimeException("unpexected state " + state);
+                    yield true;
                 }
+                case STATE_EOD -> false;
+                default -> throw new RuntimeException("unpexected state " + state);
+                };
             }
 
             @Override
@@ -240,33 +234,34 @@ public final class TupleCollections {
      * @return Iterable that returns a given member of each tuple
      */
     public static Iterable<Member> slice(
-        final TupleIterable tupleIterable,
-        final int column)
+            final TupleIterable tupleIterable,
+            final int column)
     {
         if (column < 0 || column >= tupleIterable.getArity()) {
             throw new IllegalArgumentException();
         }
-        return new Iterable<Member>() {
-            public Iterator<Member> iterator() {
-                final TupleIterator tupleIterator =
+        return () -> {
+            final TupleIterator tupleIterator =
                     tupleIterable.tupleIterator();
-                return new Iterator<Member>() {
-                    public boolean hasNext() {
-                        return tupleIterator.hasNext();
-                    }
+            return new Iterator<>() {
+                @Override
+                public boolean hasNext() {
+                    return tupleIterator.hasNext();
+                }
 
-                    public Member next() {
-                        if (!tupleIterator.forward()) {
-                            throw new NoSuchElementException();
-                        }
-                        return tupleIterator.member(column);
+                @Override
+                public Member next() {
+                    if (!tupleIterator.forward()) {
+                        throw new NoSuchElementException();
                     }
+                    return tupleIterator.member(column);
+                }
 
-                    public void remove() {
-                        throw new UnsupportedOperationException();
-                    }
-                };
-            }
+                @Override
+                public void remove() {
+                    throw new UnsupportedOperationException();
+                }
+            };
         };
     }
 
@@ -279,26 +274,25 @@ public final class TupleCollections {
      *   member arrays
      */
     public static Iterable<Member[]> asMemberArrayIterable(
-        final TupleIterable tupleIterable)
+            final TupleIterable tupleIterable)
     {
-        return new Iterable<Member[]>() {
-            public Iterator<Member[]> iterator() {
-                return new Iterator<Member[]>() {
-                    final TupleIterator
-                        tupleIterator = tupleIterable.tupleIterator();
-                    public boolean hasNext() {
-                        return tupleIterator.hasNext();
-                    }
+        return () -> new Iterator<>() {
+            final TupleIterator
+            tupleIterator = tupleIterable.tupleIterator();
+            @Override
+            public boolean hasNext() {
+                return tupleIterator.hasNext();
+            }
 
-                    public Member[] next() {
-                        final List<Member> next = tupleIterator.next();
-                        return next.toArray(new Member[next.size()]);
-                    }
+            @Override
+            public Member[] next() {
+                final List<Member> next = tupleIterator.next();
+                return next.toArray(new Member[next.size()]);
+            }
 
-                    public void remove() {
-                        throw new UnsupportedOperationException();
-                    }
-                };
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
             }
         };
     }
@@ -311,9 +305,9 @@ public final class TupleCollections {
      * @return List of member arrays
      */
     public static List<Member[]> asMemberArrayList(
-        final TupleList tupleList)
+            final TupleList tupleList)
     {
-        return new AbstractList<Member[]>() {
+        return new AbstractList<>() {
             @Override
             public Member[] get(int index) {
                 final List<Member> tuple = tupleList.get(index);
@@ -350,21 +344,22 @@ public final class TupleCollections {
         if (o instanceof Member) {
             final List<Member> memberList = Util.cast(list);
             return new UnaryTupleList(memberList);
-        } else {
-            final List<Member[]> memberArrayList = Util.cast(list);
-            return new DelegatingTupleList(
+        }
+        final List<Member[]> memberArrayList = Util.cast(list);
+        return new DelegatingTupleList(
                 memberArrayList.get(0).length,
                 new AbstractList<List<Member>>() {
+                    @Override
                     public List<Member> get(int index) {
                         return Arrays.asList(memberArrayList.get(index));
                     }
 
+                    @Override
                     public int size() {
                         return memberArrayList.size();
                     }
                 }
-            );
-        }
+                );
     }
 
     /**
@@ -384,22 +379,21 @@ public final class TupleCollections {
      * @return List
      */
     public static TupleList materialize(
-        TupleIterable tupleIterable,
-        boolean eager)
+            TupleIterable tupleIterable,
+            boolean eager)
     {
         if (tupleIterable instanceof TupleList) {
             return (TupleList) tupleIterable;
         }
-        if (eager) {
-            TupleList tupleList = createList(tupleIterable.getArity());
-            TupleCursor tupleCursor = tupleIterable.tupleCursor();
-            while (tupleCursor.forward()) {
-                tupleList.addCurrent(tupleCursor);
-            }
-            return tupleList;
-        } else {
+        if (!eager) {
             return new MaterializingTupleList(tupleIterable);
         }
+        final TupleList tupleList = TupleCollections.createList(tupleIterable.getArity());
+        final TupleCursor tupleCursor = tupleIterable.tupleCursor();
+        while (tupleCursor.forward()) {
+            tupleList.addCurrent(tupleCursor);
+        }
+        return tupleList;
     }
 
     /**
@@ -408,13 +402,13 @@ public final class TupleCollections {
      * time that an method is called that requires a list.
      */
     private static class MaterializingTupleList
-        implements TupleList
+    implements TupleList
     {
         private final TupleIterable tupleIterable;
         TupleList tupleList;
 
         public MaterializingTupleList(
-            TupleIterable tupleIterable)
+                TupleIterable tupleIterable)
         {
             this.tupleIterable = tupleIterable;
         }
@@ -428,34 +422,36 @@ public final class TupleCollections {
 
         // TupleIterable methods
 
+        @Override
         public TupleIterator tupleIterator() {
             if (tupleList == null) {
                 return tupleIterable.tupleIterator();
-            } else {
-                return tupleList.tupleIterator();
             }
+            return tupleList.tupleIterator();
         }
 
+        @Override
         public TupleCursor tupleCursor() {
             if (tupleList == null) {
                 return tupleIterable.tupleCursor();
-            } else {
-                return tupleList.tupleCursor();
             }
+            return tupleList.tupleCursor();
         }
 
+        @Override
         public int getArity() {
             return tupleIterable.getArity();
         }
 
+        @Override
         public Iterator<List<Member>> iterator() {
             if (tupleList == null) {
                 return tupleIterable.iterator();
-            } else {
-                return tupleList.iterator();
             }
+            return tupleList.iterator();
         }
 
+        @Override
         public List<Member> slice(int column) {
             // Note that TupleIterable has 'Iterable<Member> slice(int)'
             // and TupleList has 'List<Member> slice(int)'.
@@ -464,120 +460,149 @@ public final class TupleCollections {
             return materialize().slice(column);
         }
 
+        @Override
         public Member get(int slice, int index) {
             return materialize().get(slice, index);
         }
 
+        @Override
         public TupleList cloneList(int capacity) {
             return materialize().cloneList(capacity);
         }
 
+        @Override
         public void addTuple(Member... members) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public TupleList project(int[] destIndices) {
             return materialize().project(destIndices);
         }
 
+        @Override
         public void addCurrent(TupleCursor tupleIter) {
             materialize().addCurrent(tupleIter);
         }
 
+        @Override
         public TupleList subList(int fromIndex, int toIndex) {
             return materialize().subList(fromIndex, toIndex);
         }
 
+        @Override
         public TupleList withPositionCallback(
-            PositionCallback positionCallback)
+                PositionCallback positionCallback)
         {
             return materialize().withPositionCallback(positionCallback);
         }
 
+        @Override
         public TupleList fix() {
             return materialize().fix();
         }
 
+        @Override
         public int size() {
             return materialize().size();
         }
 
+        @Override
         public boolean isEmpty() {
             return materialize().isEmpty();
         }
 
+        @Override
         public boolean contains(Object o) {
             return materialize().contains(o);
         }
 
+        @Override
         public Object[] toArray() {
             return materialize().toArray();
         }
 
+        @Override
         public <T> T[] toArray(T[] a) {
             return materialize().toArray(a);
         }
 
+        @Override
         public boolean add(List<Member> members) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public boolean remove(Object o) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public boolean containsAll(Collection<?> c) {
             return materialize().containsAll(c);
         }
 
+        @Override
         public boolean addAll(Collection<? extends List<Member>> c) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public boolean addAll(int index, Collection<? extends List<Member>> c) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public boolean removeAll(Collection<?> c) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public boolean retainAll(Collection<?> c) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public void clear() {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public List<Member> get(int index) {
             return materialize().get(index);
         }
 
+        @Override
         public List<Member> set(int index, List<Member> element) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public void add(int index, List<Member> element) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public List<Member> remove(int index) {
             throw new UnsupportedOperationException();
         }
 
+        @Override
         public int indexOf(Object o) {
             return materialize().indexOf(o);
         }
 
+        @Override
         public int lastIndexOf(Object o) {
             return materialize().lastIndexOf(o);
         }
 
+        @Override
         public ListIterator<List<Member>> listIterator() {
             return materialize().listIterator();
         }
 
+        @Override
         public ListIterator<List<Member>> listIterator(int index) {
             return materialize().listIterator(index);
         }

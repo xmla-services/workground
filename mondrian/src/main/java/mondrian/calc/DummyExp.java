@@ -1,11 +1,11 @@
 /*
-* This software is subject to the terms of the Eclipse Public License v1.0
-* Agreement, available at the following URL:
-* http://www.eclipse.org/legal/epl-v10.html.
-* You must accept the terms of that agreement to use this software.
-*
-* Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
-*/
+ * This software is subject to the terms of the Eclipse Public License v1.0
+ * Agreement, available at the following URL:
+ * http://www.eclipse.org/legal/epl-v10.html.
+ * You must accept the terms of that agreement to use this software.
+ *
+ * Copyright (c) 2002-2017 Hitachi Vantara..  All rights reserved.
+ */
 
 package mondrian.calc;
 
@@ -30,30 +30,37 @@ public class DummyExp implements Exp {
         this.type = type;
     }
 
+    @Override
     public DummyExp clone() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public int getCategory() {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Type getType() {
         return type;
     }
 
+    @Override
     public void unparse(PrintWriter pw) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Exp accept(Validator validator) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Calc accept(ExpCompiler compiler) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Object accept(MdxVisitor visitor) {
         throw new UnsupportedOperationException();
     }
