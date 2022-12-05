@@ -7,6 +7,8 @@
 
 -privatepackage.rhino: \
     org.eclipse.daanse.repackage.rhino.engine
+    
+Export-Package: org.eclipse.daanse.repackage.rhino.engine    
 
 Import-Package: *
 

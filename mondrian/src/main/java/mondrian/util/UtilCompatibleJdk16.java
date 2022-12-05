@@ -15,11 +15,9 @@ import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Set;
 
-import javax.script.Invocable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import javax.script.*;
 
+import org.eclipse.daanse.repackage.rhino.engine.QuickFixRhinoScriptEngineFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,8 +46,8 @@ public class UtilCompatibleJdk16 extends UtilCompatibleJdk15 {
         String script,
         String engineName)
     {
-        ScriptEngineManager factory = new ScriptEngineManager();
-        ScriptEngine engine = factory.getEngineByName(engineName);
+        ScriptEngineFactory factory = new QuickFixRhinoScriptEngineFactory();
+        ScriptEngine engine = factory.getScriptEngine();
         try {
             engine.eval(script);
             Invocable inv = (Invocable) engine;

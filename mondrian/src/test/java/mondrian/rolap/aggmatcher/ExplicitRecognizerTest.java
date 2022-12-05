@@ -16,8 +16,10 @@ import static org.opencube.junit5.TestUtil.withSchema;
 import java.sql.SQLException;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.opencube.junit5.ContextArgumentsProvider;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
 import org.opencube.junit5.context.TestingContext;
@@ -26,6 +28,10 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 public class ExplicitRecognizerTest extends AggTableTestCase {
 
+	@BeforeAll
+	public static void beforeAll() {
+	      ContextArgumentsProvider.dockerWasChanged = true;
+	}
 
     @BeforeEach
     public void beforeEach() {
@@ -45,7 +51,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
     protected String getFileName() {
         return "explicit_aggs.csv";
     }
-    
+
     @Override
     protected String getCubeDescription() {
         return "";
@@ -626,7 +632,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `time_by_day`.`the_year` as `c0`,\n"
                 + "    `customer`.`gender` as `c1`,\n"
                 + "    count(distinct `sales_fact_1997`.`customer_id`) as `m0`\n"
-                + "from\n"             
+                + "from\n"
                 + "    `sales_fact_1997` as `sales_fact_1997`,\n"
                 + "    `time_by_day` as `time_by_day`,\n"
                 + "    `customer` as `customer`\n"

@@ -36,6 +36,7 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
+import mondrian.rolap.RolapSchemaPool;
 
 /**
  * Unit tests that check compatibility with Microsoft SQL Server Analysis
@@ -90,6 +91,7 @@ public class Ssas2005CompatibilityTest {
 
     private void runQ(TestingContext context,  String s) {
         prepareContext(context);
+        RolapSchemaPool.instance().clear();
         Result result = TestUtil.executeQuery(context.createConnection(), s);
         Util.discard(TestUtil.toString(result));
     }
@@ -236,7 +238,6 @@ public class Ssas2005CompatibilityTest {
         // If there is a dimension, hierarchy, level with the same name X,
         // then [X].[X] might reasonably resolve to hierarchy or the level.
         // SSAS resolves to hierarchy, old mondrian resolves to level.
-        prepareContext(context);
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // SSAS gives error with the <Level>.Ordinal function:
             //   The ORDINAL function expects a level expression for
@@ -333,6 +334,7 @@ public class Ssas2005CompatibilityTest {
         // [dimension].[hierarchy].[level] is valid on dimension with single
         // hierarchy
         // SSAS2005 succeeds
+        prepareContext(context);
         assertQueryReturns(context.createConnection(), "Warehouse and Sales",
             "select [Store].[Stores].[Store State].MEMBERS on 0\n"
             + "from [Warehouse and Sales]",
@@ -486,6 +488,7 @@ public class Ssas2005CompatibilityTest {
         //   Query (1, 8) The 'Product' dimension contains more than
         //   one hierarchy, therefore the hierarchy must be explicitly
         //   specified.
+        prepareContext(context);
         TestUtil.assertQueryThrows(context.createConnection(),
             "select [Product].Members on 0\n"
             + "from [Warehouse and Sales]",
@@ -599,6 +602,7 @@ public class Ssas2005CompatibilityTest {
         // We use 'Generate' to establish context for Ytd without passing it
         // an explicit argument.
         // SSAS returns [Q1], [Q2], [Q3].
+        prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "select Generate(\n"
             + "  {[Time].[Time2].[1997].[Q3]},\n"
@@ -622,6 +626,7 @@ public class Ssas2005CompatibilityTest {
         }
         // TODO: run this in SSAS
         // Ssas2000 disallowed out-of-order axes. Don't know about Ssas2005.
+        prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "select [Measures].[Unit Sales] on 1,\n"
             + "[Products].Children on 0\n"
@@ -734,6 +739,7 @@ public class Ssas2005CompatibilityTest {
         //   Query (1, 8) The 'Product' dimension contains more than
         //   one hierarchy, therefore the hierarchy must be explicitly
         //   specified.
+        prepareContext(context);
         assertQueryThrows(context.createConnection(),
             "select Ascendants([Product]) on 0\n"
             + "from [Warehouse and Sales]",
@@ -1180,6 +1186,7 @@ public class Ssas2005CompatibilityTest {
         //   select [Products] on 0,
         //     [Products] on 1
         //   from [Warehouse and Sales]
+        prepareContext(context);
         assertQueryThrows(context.createConnection(),
             "select {[Products]} on 0,\n"
             + "  {[Products]} on 1\n"
@@ -1378,6 +1385,7 @@ public class Ssas2005CompatibilityTest {
         }
         // compound key
         // succeeds on SSAS
+        prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "select [Measures].[Unit Sales] on 0,\n"
             + "[Time].[Time2].[Month].&[12]&Q4&[1997] on 1\n"
@@ -1409,6 +1417,7 @@ public class Ssas2005CompatibilityTest {
             return;
         }
         // too few values in key
+        prepareContext(context);
         assertQueryThrows(context.createConnection(),
             "select [Measures].[Unit Sales] on 0,\n"
             + "[Product].[Products].[Brand Name].&[43]&Walrus&Foo on 1\n"
@@ -1442,6 +1451,7 @@ public class Ssas2005CompatibilityTest {
             return;
         }
         // succeeds on SSAS (gives 1 row)
+        prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "select [Measures].[Unit Sales] on 0,\n"
             + "[Store].[Stores].[Store City].&[San Francisco]&CA on 1\n"
@@ -1493,6 +1503,7 @@ public class Ssas2005CompatibilityTest {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
+        prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "select [Measures].[Unit Sales] on 0,\n"
             + "[Store].[Stores].[Store City].&[San Francisco]&CA.[Store 14] on 1\n"
@@ -1544,6 +1555,7 @@ public class Ssas2005CompatibilityTest {
         // Note: [Store Size in SQFT].[#null] is the member whose name is null;
         //   [Store Size in SQFT].&[#null] is the member whose key is null.
         // REVIEW: Does SSAS use the same syntax, '&[#null]', for null key?
+        prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "select [Measures].[Unit Sales] on 0,\n"
             + "[Store Size in SQFT].[Store Size in SQFT].&[#null] on 1\n"
@@ -1553,7 +1565,7 @@ public class Ssas2005CompatibilityTest {
             + "Axis #1:\n"
             + "{[Measures].[Unit Sales]}\n"
             + "Axis #2:\n"
-            + "{[Store Size in SQFT].[#null]}\n"
+            + "{[Store Size in SQFT].[Store Size in SQFT].[#null]}\n"
             + "Row #0: 39,329\n");
     }
 
@@ -1613,6 +1625,7 @@ public class Ssas2005CompatibilityTest {
             return;
         }
         // succeeds on SSAS
+        prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "select [Measures].[Unit Sales] on 1,\n"
             + "[Product].[Products] on 0\n"
@@ -1635,6 +1648,7 @@ public class Ssas2005CompatibilityTest {
         // SSAS gives error:
         //   Query (1, 8) Axis numbers specified in a query must be sequentially
         //   specified, and cannot contain gaps.
+        prepareContext(context);
         assertQueryThrows(context.createConnection(),
             "select [Measures].[Unit Sales] on 1,\n"
             + "[Product].[Products].Children on 2\n"
@@ -1915,6 +1929,7 @@ public class Ssas2005CompatibilityTest {
     {
         // In SSAS, "MacDougal" occurs between "Maccietto" and "Macha". This
         // would not occur if sort was case-sensitive.
+    	prepareContext(context);
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 "  <Dimension name=\"Customer Last Name\" "
@@ -2029,6 +2044,7 @@ public class Ssas2005CompatibilityTest {
 
         @BeforeEach
         public void beforeEach() {
+        	RolapSchemaPool.instance().clear();
             propSaver = new PropertySaver5();
             propSaver.set(
                     MondrianProperties.instance().SsasCompatibleNaming,
