@@ -188,4 +188,3 @@ public class RolapMemberBaseTest {
         assertEquals(Integer.MIN_VALUE, captionValue);
     }
 }
-// End RolapMemberBaseTest.java

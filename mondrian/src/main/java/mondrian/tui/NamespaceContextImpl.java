@@ -58,4 +58,3 @@ public class NamespaceContextImpl implements NamespaceContext {
         return uris.iterator();
     }
 }
-// End NamespaceContextImpl.java

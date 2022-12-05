@@ -22,4 +22,3 @@ class MemberFormatterTestImpl implements MemberFormatter {
         return null;
     }
 }
-// End MemberFormatterTestImpl.java

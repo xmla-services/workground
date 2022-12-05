@@ -44,4 +44,3 @@ class DefaultFormatter {
         return null;
     }
 }
-// End DefaultFormatter.java

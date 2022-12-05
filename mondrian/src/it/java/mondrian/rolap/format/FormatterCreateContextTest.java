@@ -40,4 +40,3 @@ public class FormatterCreateContextTest extends TestCase {
         assertEquals("attributeClassName", context3.getFormatterClassName());
     }
 }
-// End FormatterCreateContextTest.java

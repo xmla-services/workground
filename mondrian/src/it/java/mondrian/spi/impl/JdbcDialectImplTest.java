@@ -93,4 +93,3 @@ public class JdbcDialectImplTest extends TestCase {
   }
 
 }
-// End JdbcDialectImplTest.java

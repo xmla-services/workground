@@ -125,4 +125,3 @@ public class ExpiringReference<T> extends SoftReference<T> {
         return weakRef;
     }
 }
-// End ExpiringReference.java

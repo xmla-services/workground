@@ -128,4 +128,3 @@ public abstract class AuthenticatingXmlaRequestCallback
         return true;
     }
 }
-// End AuthenticatingXmlaRequestCallback.java

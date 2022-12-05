@@ -111,4 +111,3 @@ public class JdbcDialectImplTest{
   }
 
 }
-// End JdbcDialectImplTest.java

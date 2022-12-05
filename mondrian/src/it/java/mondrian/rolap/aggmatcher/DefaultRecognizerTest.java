@@ -153,4 +153,3 @@ public class DefaultRecognizerTest extends BatchTestCase {
     }
 
 }
-// End DefaultRecognizerTest.java

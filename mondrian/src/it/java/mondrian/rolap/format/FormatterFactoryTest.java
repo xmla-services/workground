@@ -162,4 +162,3 @@ public class FormatterFactoryTest extends TestCase {
         assertTrue(memberFormatter instanceof DefaultRolapMemberFormatter);
     }
 }
-// End FormatterFactoryTest.java

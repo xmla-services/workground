@@ -478,4 +478,3 @@ public final class IdBatchResolver {
         }
     }
 }
-// End IdBatchResolver.java

@@ -186,4 +186,3 @@ public interface SpatialValueTree
         E[] getValues(K dimension);
     }
 }
-// End SpatialValueTree.java

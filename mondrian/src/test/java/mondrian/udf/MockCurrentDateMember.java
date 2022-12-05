@@ -29,4 +29,3 @@ public class MockCurrentDateMember extends CurrentDateMemberExactUdf {
         return "MockCurrentDateMember";
     }
 }
-// End MockCurrentDateMember.java

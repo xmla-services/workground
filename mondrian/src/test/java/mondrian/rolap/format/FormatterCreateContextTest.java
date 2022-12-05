@@ -43,4 +43,3 @@ public class FormatterCreateContextTest {
         assertEquals("attributeClassName", context3.getFormatterClassName());
     }
 }
-// End FormatterCreateContextTest.java

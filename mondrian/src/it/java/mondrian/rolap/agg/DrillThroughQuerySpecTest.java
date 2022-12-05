@@ -143,4 +143,3 @@ public class DrillThroughQuerySpecTest extends TestCase {
   }
 
 }
-// End DrillThroughQuerySpecTest.java

@@ -243,4 +243,3 @@ public class EffectiveMemberCacheTest {
         //testContext = getTestContext().withFreshConnection();
     }
 }
-// End EffectiveMemberCacheTest.java

@@ -137,4 +137,3 @@ public class MonetDbDialectTest extends TestCase {
   }
 
 }
-// End MonetDbDialectTest.java

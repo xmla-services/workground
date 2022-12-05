@@ -97,4 +97,3 @@ public class MdcUtilTest extends BatchTestCase {
   }
 
 }
-// End MdcUtilTest.java

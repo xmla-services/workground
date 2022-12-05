@@ -175,4 +175,3 @@ public class FormatterFactoryTest {
         assertTrue(memberFormatter instanceof DefaultRolapMemberFormatter);
     }
 }
-// End FormatterFactoryTest.java

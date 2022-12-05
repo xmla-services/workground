@@ -193,4 +193,3 @@ public class RolapSchemaPoolTest extends FoodMartTestCase {
         }
     }
 }
-// End RolapSchemaPoolTest.java

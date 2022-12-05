@@ -532,4 +532,3 @@ public class OrderByAliasTest extends BatchTestCase {
   }
 
 }
-// End OrderByAliasTest.java

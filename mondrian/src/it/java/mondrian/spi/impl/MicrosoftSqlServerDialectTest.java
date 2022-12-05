@@ -88,4 +88,3 @@ public class MicrosoftSqlServerDialectTest extends TestCase {
   }
 
 }
-// End MicrosoftSqlServerDialectTest.java

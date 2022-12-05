@@ -207,4 +207,3 @@ public class HighCardSqlTupleReader extends SqlTupleReader {
     return query.getBaseCubes();
   }
 }
-// End HighCardSqlTupleReader.java

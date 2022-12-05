@@ -42,4 +42,3 @@ public class PdiDataServiceDialect extends JdbcDialectImpl {
         }
     }
 }
-// End PdiDataServiceDialect.java

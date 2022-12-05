@@ -398,4 +398,3 @@ public class RolapSchemaPoolConcurrencyTest
         }
     }
 }
-// End RolapSchemaPoolConcurrencyTest.java

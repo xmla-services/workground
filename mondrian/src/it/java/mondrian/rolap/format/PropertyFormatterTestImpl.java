@@ -26,4 +26,3 @@ class PropertyFormatterTestImpl implements PropertyFormatter {
         return null;
     }
 }
-// End PropertyFormatterTestImpl.java

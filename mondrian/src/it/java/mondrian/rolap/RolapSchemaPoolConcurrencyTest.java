@@ -372,4 +372,3 @@ public class RolapSchemaPoolConcurrencyTest extends TestCase
         }
     }
 }
-// End RolapSchemaPoolConcurrencyTest.java

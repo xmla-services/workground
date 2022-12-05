@@ -59,4 +59,3 @@ public class ImpalaDialectTest extends TestCase {
     assertTrue( sql, sql.contains( quotedRegex ) );
   }
 }
-// End ImpalaDialectTest.java

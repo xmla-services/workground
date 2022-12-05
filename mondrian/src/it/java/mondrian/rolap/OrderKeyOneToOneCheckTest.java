@@ -103,4 +103,3 @@ public class OrderKeyOneToOneCheckTest extends FoodMartTestCase {
         sqlReaderAppender.getLogEvents().size());
   }
 }
-// End OrderKeyOneToOneCheckTest.java
