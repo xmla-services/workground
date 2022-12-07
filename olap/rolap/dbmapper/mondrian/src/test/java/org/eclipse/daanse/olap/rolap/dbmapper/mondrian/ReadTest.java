@@ -50,11 +50,17 @@ public class ReadTest {
     private static final String NAME = "name";
     private static final String FOREIGN_KEY = "foreignKey";
     private static final String TYPE = "type";
+    private static final String DEFAULT_MEASURE = "defaultMeasure";
     private static final File FILE_STEEL_WHEEL = new File("./src/test/resources/SteelWheels.xml");
     private static final File F_FOOD_MART = new File("./src/test/resources/FoodMart.xml");
-
-    // Hierarchy0
+    private static final String MEASURE = "Measure";
+    private static final String ANNOTATIONS = "annotations";
+    private static final String CONTENT = "content";
+    private static final String DIALECT = "dialect";
+    private static final String MEASURE_EXPRESSION = "MeasureExpression";
+    // steelWheelHierarchy0
     private static final Map<String, Object> steelWheelLevel00 = new HashMap<>();
+
     static {
         steelWheelLevel00.put(NAME, "Territory");
         steelWheelLevel00.put(TABLE, null);
@@ -202,7 +208,7 @@ public class ReadTest {
         steelWheelHierarchy2
     );
 
-    // Hierarchy3
+    // steelWheelHierarchy3
     private static final Map<String, Object> steelWheelLevel30 = new HashMap<>();
     static {
         steelWheelLevel30.put(NAME, "Years");
@@ -256,7 +262,7 @@ public class ReadTest {
         steelWheelHierarchy3
     );
 
-    // Hierarchy4
+    // steelWheelHierarchy4
     private static final Map<String, Object> steelWheelLevel40 = new HashMap<>();
     static {
         steelWheelLevel40.put(NAME, "Type");
@@ -287,7 +293,7 @@ public class ReadTest {
         steelWheelHierarchy4
     );
 
-    // Dimension0
+    // steelWheelDimension0
     private static final Map<String, Object> steelWheelDimension0 = new HashMap<>();
     static {
         steelWheelDimension0.put(TYPE, "Standard");
@@ -296,7 +302,7 @@ public class ReadTest {
         steelWheelDimension0.put(HIERARCHY, steelWheelHierarchyList0);
     }
 
-    // Dimension1
+    // steelWheelDimension1
     private static final Map<String, Object> steelWheelDimension1 = new HashMap<>();
     static {
         steelWheelDimension1.put(TYPE, "Standard");
@@ -305,7 +311,7 @@ public class ReadTest {
         steelWheelDimension1.put(HIERARCHY, steelWheelHierarchyList1);
     }
 
-    // Dimension2
+    // steelWheelDimension2
     private static final Map<String, Object> steelWheelDimension2 = new HashMap<>();
     static {
         steelWheelDimension2.put(TYPE, "Standard");
@@ -314,7 +320,7 @@ public class ReadTest {
         steelWheelDimension2.put(HIERARCHY, steelWheelHierarchyList2);
     }
 
-    // Dimension3
+    // steelWheelDimension3
     private static final Map<String, Object> steelWheelDimension3 = new HashMap<>();
     static {
         steelWheelDimension3.put(TYPE, "TimeDimension");
@@ -323,7 +329,7 @@ public class ReadTest {
         steelWheelDimension3.put(HIERARCHY, steelWheelHierarchyList3);
     }
 
-    // Dimension4
+    // steelWheelDimension4
     private static final Map<String, Object> steelWheelDimension4 = new HashMap<>();
     static {
         steelWheelDimension4.put(TYPE, "Standard");
@@ -354,10 +360,343 @@ public class ReadTest {
         steelWheelMeasure1.put(FORMAT_STRING, "#,###");
         steelWheelMeasure1.put(AGGREGATOR, "sum");
     }
-
     private static final List<Map<String, Object>> steelWheelMeasureList = List.of(
         steelWheelMeasure0,
         steelWheelMeasure1
+    );
+    //****** foodmartCube0
+    private static final Map<String, Object> foodmartMesureCube0_0 = new HashMap<>();
+    static {
+        foodmartMesureCube0_0.put(NAME, "Unit Sales");
+        foodmartMesureCube0_0.put(COLUMN, "unit_sales");
+        foodmartMesureCube0_0.put(FORMAT_STRING, "Standard");
+        foodmartMesureCube0_0.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube0_1 = new HashMap<>();
+    static {
+        foodmartMesureCube0_1.put(NAME, "Store Cost");
+        foodmartMesureCube0_1.put(COLUMN, "store_cost");
+        foodmartMesureCube0_1.put(FORMAT_STRING, "#,###.00");
+        foodmartMesureCube0_1.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube0_2 = new HashMap<>();
+    static {
+        foodmartMesureCube0_2.put(NAME, "Store Sales");
+        foodmartMesureCube0_2.put(COLUMN, "store_sales");
+        foodmartMesureCube0_2.put(FORMAT_STRING, "#,###.00");
+        foodmartMesureCube0_2.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube0_3 = new HashMap<>();
+    static {
+        foodmartMesureCube0_3.put(NAME, "Sales Count");
+        foodmartMesureCube0_3.put(COLUMN, "product_id");
+        foodmartMesureCube0_3.put(FORMAT_STRING, "#,###");
+        foodmartMesureCube0_3.put(AGGREGATOR, "count");
+    }
+    private static final Map<String, Object> foodmartMesureCube0_4 = new HashMap<>();
+    static {
+        foodmartMesureCube0_4.put(NAME, "Customer Count");
+        foodmartMesureCube0_4.put(COLUMN, "customer_id");
+        foodmartMesureCube0_4.put(FORMAT_STRING, "#,###");
+        foodmartMesureCube0_4.put(AGGREGATOR, "distinct-count");
+    }
+    private static final List<Map<String, Object>> foodmartMesureCube0_5MeasureExpression = List.of(
+        Map.of(DIALECT, "access", CONTENT, "Iif(\"sales_fact_1997\".\"promotion_id\" = 0, 0, \"sales_fact_1997\"" +
+            ".\"store_sales\")"),
+        Map.of(DIALECT, "oracle", CONTENT, "(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else " +
+            "\"sales_fact_1997\".\"store_sales\" end)"),
+        Map.of(DIALECT, "hsqldb", CONTENT, "(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else " +
+            "\"sales_fact_1997\".\"store_sales\" end)"),
+        Map.of(DIALECT, "postgres", CONTENT, "(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else " +
+            "\"sales_fact_1997\".\"store_sales\" end)"),
+        Map.of(DIALECT, "mysql", CONTENT,
+            "(case when `sales_fact_1997`.`promotion_id` = 0 then 0 else `sales_fact_1997`.`store_sales` end)"),
+        Map.of(DIALECT, "mariadb", CONTENT,
+            "(case when `sales_fact_1997`.`promotion_id` = 0 then 0 else `sales_fact_1997`.`store_sales` end)"),
+        Map.of(DIALECT, "neoview", CONTENT, "(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else " +
+            "\"sales_fact_1997\".\"store_sales\" end)"),
+        Map.of(DIALECT, "infobright", CONTENT, "`sales_fact_1997`.`store_sales`"),
+        Map.of(DIALECT, "derby", CONTENT, "(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else " +
+            "\"sales_fact_1997\".\"store_sales\" end)"),
+        Map.of(DIALECT, "luciddb", CONTENT, "(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else " +
+            "\"sales_fact_1997\".\"store_sales\" end)"),
+        Map.of(DIALECT, "db2", CONTENT, "(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else " +
+            "\"sales_fact_1997\".\"store_sales\" end)"),
+        Map.of(DIALECT, "nuodb", CONTENT, "(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else " +
+            "\"sales_fact_1997\".\"store_sales\" end)"),
+        Map.of(DIALECT, "snowflake", CONTENT, "(case when \"sales_fact_1997\".\"promotion_id\" = 0 then 0 else " +
+            "\"sales_fact_1997\".\"store_sales\" end)"),
+        Map.of(DIALECT, "generic", CONTENT,
+            "(case when sales_fact_1997.promotion_id = 0 then 0 else sales_fact_1997.store_sales end)")
+    );
+    private static final Map<String, Object> foodmartMesureCube0_5 = new HashMap<>();
+    static {
+        foodmartMesureCube0_5.put(NAME, "Promotion Sales");
+        foodmartMesureCube0_5.put(FORMAT_STRING, "#,###.00");
+        foodmartMesureCube0_5.put(AGGREGATOR, "sum");
+        foodmartMesureCube0_5.put(MEASURE_EXPRESSION, foodmartMesureCube0_5MeasureExpression);
+    }
+
+    private static final List<Map<String, Object>> foodmartMesureListCube0 = List.of(
+        foodmartMesureCube0_0,
+        foodmartMesureCube0_1,
+        foodmartMesureCube0_2,
+        foodmartMesureCube0_3,
+        foodmartMesureCube0_4,
+        foodmartMesureCube0_5
+    );
+    private static final List<Map<String, Object>> annotationsCube0 = List.of(
+        Map.of(NAME, "caption.de_DE", CONTENT, "Verkaufen"),
+        Map.of(NAME, "caption.fr_FR", CONTENT, "Ventes"),
+        Map.of(NAME, "description.fr_FR", CONTENT, "Cube des ventes"),
+        Map.of(NAME, "description.de", CONTENT, "Cube Verkaufen"),
+        Map.of(NAME, "description.de_AT", CONTENT, "Cube den Verkaufen")
+        );
+    private static final Map<String, Object> foodmartCube0 = new HashMap<>();
+    static {
+        foodmartCube0.put(NAME, "Sales");
+        foodmartCube0.put(TABLE, "sales_fact_1997");
+        foodmartCube0.put(DEFAULT_MEASURE, "Unit Sales");
+        foodmartCube0.put(MEASURE, foodmartMesureListCube0);
+        foodmartCube0.put(ANNOTATIONS, annotationsCube0);
+    }
+    //****** foodmartCube1 "Warehouse"
+    private static final Map<String, Object> foodmartMesureCube1_0 = new HashMap<>();
+    static {
+        foodmartMesureCube1_0.put(NAME, "Store Invoice");
+        foodmartMesureCube1_0.put(COLUMN, "store_invoice");
+        foodmartMesureCube1_0.put(FORMAT_STRING, null);
+        foodmartMesureCube1_0.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube1_1 = new HashMap<>();
+    static {
+        foodmartMesureCube1_1.put(NAME, "Supply Time");
+        foodmartMesureCube1_1.put(COLUMN, "supply_time");
+        foodmartMesureCube1_1.put(FORMAT_STRING, null);
+        foodmartMesureCube1_1.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube1_2 = new HashMap<>();
+    static {
+        foodmartMesureCube1_2.put(NAME, "Warehouse Cost");
+        foodmartMesureCube1_2.put(COLUMN, "warehouse_cost");
+        foodmartMesureCube1_2.put(FORMAT_STRING, null);
+        foodmartMesureCube1_2.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube1_3 = new HashMap<>();
+    static {
+        foodmartMesureCube1_3.put(NAME, "Warehouse Sales");
+        foodmartMesureCube1_3.put(COLUMN, "warehouse_sales");
+        foodmartMesureCube1_3.put(FORMAT_STRING, null);
+        foodmartMesureCube1_3.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube1_4 = new HashMap<>();
+    static {
+        foodmartMesureCube1_4.put(NAME, "Units Shipped");
+        foodmartMesureCube1_4.put(COLUMN, "units_shipped");
+        foodmartMesureCube1_4.put(FORMAT_STRING, "#.0");
+        foodmartMesureCube1_4.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube1_5 = new HashMap<>();
+    static {
+        foodmartMesureCube1_5.put(NAME, "Units Ordered");
+        foodmartMesureCube1_5.put(COLUMN, "units_ordered");
+        foodmartMesureCube1_5.put(FORMAT_STRING, "#.0");
+        foodmartMesureCube1_5.put(AGGREGATOR, "sum");
+    }
+
+    private static final List<Map<String, Object>> foodmartMesureCube1_6MeasureExpression = List.of(
+        Map.of(DIALECT, "mysql", CONTENT, "`warehouse_sales` - `inventory_fact_1997`.`warehouse_cost`"),
+        Map.of(DIALECT, "mariadb", CONTENT, "`warehouse_sales` - `inventory_fact_1997`.`warehouse_cost`"),
+        Map.of(DIALECT, "infobright", CONTENT, "`warehouse_sales` - `inventory_fact_1997`.`warehouse_cost`"),
+        Map.of(DIALECT, "generic", CONTENT, "\"warehouse_sales\" - \"inventory_fact_1997\".\"warehouse_cost\"")
+    );
+    private static final Map<String, Object> foodmartMesureCube1_6 = new HashMap<>();
+    static {
+        foodmartMesureCube1_6.put(NAME, "Warehouse Profit");
+        foodmartMesureCube1_6.put(COLUMN, null);
+        foodmartMesureCube1_6.put(FORMAT_STRING, null);
+        foodmartMesureCube1_6.put(AGGREGATOR, "sum");
+        foodmartMesureCube1_6.put(MEASURE_EXPRESSION, foodmartMesureCube1_6MeasureExpression);
+    }
+    private static final List<Map<String, Object>> foodmartMesureListCube1 = List.of(
+        foodmartMesureCube1_0,
+        foodmartMesureCube1_1,
+        foodmartMesureCube1_2,
+        foodmartMesureCube1_3,
+        foodmartMesureCube1_4,
+        foodmartMesureCube1_5,
+        foodmartMesureCube1_6
+    );
+    private static final Map<String, Object> foodmartCube1 = new HashMap<>();
+    static {
+        foodmartCube1.put(NAME, "Warehouse");
+        foodmartCube1.put(TABLE, "inventory_fact_1997");
+        foodmartCube1.put(MEASURE, foodmartMesureListCube1);
+    }
+    //****** foodmartCube2
+    private static final Map<String, Object> foodmartMesureCube2_0 = new HashMap<>();
+    static {
+        foodmartMesureCube2_0.put(NAME, "Store Sqft");
+        foodmartMesureCube2_0.put(COLUMN, "store_sqft");
+        foodmartMesureCube2_0.put(FORMAT_STRING, "#,###");
+        foodmartMesureCube2_0.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube2_1 = new HashMap<>();
+    static {
+        foodmartMesureCube2_1.put(NAME, "Grocery Sqft");
+        foodmartMesureCube2_1.put(COLUMN, "grocery_sqft");
+        foodmartMesureCube2_1.put(FORMAT_STRING, "#,###");
+        foodmartMesureCube2_1.put(AGGREGATOR, "sum");
+    }
+    private static final List<Map<String, Object>> foodmartMesureListCube2 = List.of(
+        foodmartMesureCube2_0,
+        foodmartMesureCube2_1
+    );
+    private static final Map<String, Object> foodmartCube2 = new HashMap<>();
+    static {
+        foodmartCube2.put(NAME, "Store");
+        foodmartCube2.put(TABLE, "store");
+        foodmartCube2.put(MEASURE, foodmartMesureListCube2);
+    }
+    //****** foodmartCube3
+    private static final Map<String, Object> foodmartMesureCube3_0 = new HashMap<>();
+    static {
+        foodmartMesureCube3_0.put(NAME, "Org Salary");
+        foodmartMesureCube3_0.put(COLUMN, "salary_paid");
+        foodmartMesureCube3_0.put(FORMAT_STRING, "Currency");
+        foodmartMesureCube3_0.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube3_1 = new HashMap<>();
+    static {
+        foodmartMesureCube3_1.put(NAME, "Count");
+        foodmartMesureCube3_1.put(COLUMN, "employee_id");
+        foodmartMesureCube3_1.put(FORMAT_STRING, "#,#");
+        foodmartMesureCube3_1.put(AGGREGATOR, "count");
+    }
+    private static final Map<String, Object> foodmartMesureCube3_2 = new HashMap<>();
+    static {
+        foodmartMesureCube3_2.put(NAME, "Number of Employees");
+        foodmartMesureCube3_2.put(COLUMN, "employee_id");
+        foodmartMesureCube3_2.put(FORMAT_STRING, "#,#");
+        foodmartMesureCube3_2.put(AGGREGATOR, "distinct-count");
+    }
+    private static final List<Map<String, Object>> foodmartMesureListCube3 = List.of(
+        foodmartMesureCube3_0,
+        foodmartMesureCube3_1,
+        foodmartMesureCube3_2
+    );
+    private static final Map<String, Object> foodmartCube3 = new HashMap<>();
+    static {
+        foodmartCube3.put(NAME, "HR");
+        foodmartCube3.put(TABLE, "salary");
+        foodmartCube3.put(MEASURE, foodmartMesureListCube3);
+    }
+    //****** foodmartCube4
+    private static final Map<String, Object> foodmartMesureCube4_0 = new HashMap<>();
+    static {
+        foodmartMesureCube4_0.put(NAME, "Unit Sales");
+        foodmartMesureCube4_0.put(COLUMN, "unit_sales");
+        foodmartMesureCube4_0.put(FORMAT_STRING, "Standard");
+        foodmartMesureCube4_0.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube4_1 = new HashMap<>();
+    static {
+        foodmartMesureCube4_1.put(NAME, "Store Cost");
+        foodmartMesureCube4_1.put(COLUMN, "store_cost");
+        foodmartMesureCube4_1.put(FORMAT_STRING, "#,###.00");
+        foodmartMesureCube4_1.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube4_2 = new HashMap<>();
+    static {
+        foodmartMesureCube4_2.put(NAME, "Store Sales");
+        foodmartMesureCube4_2.put(COLUMN, "store_sales");
+        foodmartMesureCube4_2.put(FORMAT_STRING, "#,###.00");
+        foodmartMesureCube4_2.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube4_3 = new HashMap<>();
+    static {
+        foodmartMesureCube4_3.put(NAME, "Sales Count");
+        foodmartMesureCube4_3.put(COLUMN, "product_id");
+        foodmartMesureCube4_3.put(FORMAT_STRING, "#,###");
+        foodmartMesureCube4_3.put(AGGREGATOR, "count");
+    }
+    private static final Map<String, Object> foodmartMesureCube4_4 = new HashMap<>();
+    static {
+        foodmartMesureCube4_4.put(NAME, "Customer Count");
+        foodmartMesureCube4_4.put(COLUMN, "customer_id");
+        foodmartMesureCube4_4.put(FORMAT_STRING, "#,###");
+        foodmartMesureCube4_4.put(AGGREGATOR, "distinct-count");
+    }
+    private static final List<Map<String, Object>> foodmartMesureListCube4 = List.of(
+        foodmartMesureCube4_0,
+        foodmartMesureCube4_1,
+        foodmartMesureCube4_2,
+        foodmartMesureCube4_3,
+        foodmartMesureCube4_4
+    );
+    private static final Map<String, Object> foodmartCube4 = new HashMap<>();
+    static {
+        foodmartCube4.put(NAME, "Sales Ragged");
+        foodmartCube4.put(TABLE, "sales_fact_1997");
+        foodmartCube4.put(MEASURE, foodmartMesureListCube4);
+    }
+    //****** foodmartCube5
+    private static final Map<String, Object> foodmartMesureCube5_0 = new HashMap<>();
+    static {
+        foodmartMesureCube5_0.put(NAME, "Sales Count");
+        foodmartMesureCube5_0.put(COLUMN, "product_id");
+        foodmartMesureCube5_0.put(FORMAT_STRING, "#,###");
+        foodmartMesureCube5_0.put(AGGREGATOR, "count");
+    }
+    private static final Map<String, Object> foodmartMesureCube5_1 = new HashMap<>();
+    static {
+        foodmartMesureCube5_1.put(NAME, "Unit Sales");
+        foodmartMesureCube5_1.put(COLUMN, "unit_sales");
+        foodmartMesureCube5_1.put(FORMAT_STRING, "Standard");
+        foodmartMesureCube5_1.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube5_2 = new HashMap<>();
+    static {
+        foodmartMesureCube5_2.put(NAME, "Store Sales");
+        foodmartMesureCube5_2.put(COLUMN, "store_sales");
+        foodmartMesureCube5_2.put(FORMAT_STRING, "#,###.00");
+        foodmartMesureCube5_2.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube5_3 = new HashMap<>();
+    static {
+        foodmartMesureCube5_3.put(NAME, "Store Cost");
+        foodmartMesureCube5_3.put(COLUMN, "store_cost");
+        foodmartMesureCube5_3.put(FORMAT_STRING, "#,###.00");
+        foodmartMesureCube5_3.put(AGGREGATOR, "sum");
+    }
+    private static final Map<String, Object> foodmartMesureCube5_4 = new HashMap<>();
+    static {
+        foodmartMesureCube5_4.put(NAME, "Customer Count");
+        foodmartMesureCube5_4.put(COLUMN, "customer_id");
+        foodmartMesureCube5_4.put(FORMAT_STRING, "#,###");
+        foodmartMesureCube5_4.put(AGGREGATOR, "distinct-count");
+    }
+    private static final List<Map<String, Object>> foodmartMesureListCube5 = List.of(
+        foodmartMesureCube5_0,
+        foodmartMesureCube5_1,
+        foodmartMesureCube5_2,
+        foodmartMesureCube5_3,
+        foodmartMesureCube5_4
+    );
+    private static final Map<String, Object> foodmartCube5 = new HashMap<>();
+    static {
+        foodmartCube5.put(NAME, "Sales 2");
+        foodmartCube5.put(TABLE, "sales_fact_1997");
+        foodmartCube5.put(MEASURE, foodmartMesureListCube5);
+    }
+
+    private static final List<Map<String, Object>> foodmartCubeList = List.of(
+        foodmartCube0,
+        foodmartCube1,
+        foodmartCube2,
+        foodmartCube3,
+        foodmartCube4,
+        foodmartCube5
     );
 
     @Test
@@ -383,7 +722,7 @@ public class ReadTest {
         assertTrue(cube.cache());
         assertTrue(cube.enabled());
         assertNotNull(cube.measure());
-        checkMeasure(cube.measure(), steelWheelMeasureList);
+        checkMeasure(cube, steelWheelMeasureList);
 
         Table table = cube.table();
         assertThat(table).isNotNull();
@@ -405,7 +744,6 @@ public class ReadTest {
         List<? extends Object> measuries = cube.measure();
         assertThat(measuries).isNotNull();
         assertEquals(measuries.size(), 2);
-
     }
 
     @Test
@@ -413,6 +751,58 @@ public class ReadTest {
 
         Schema schema = extracted(F_FOOD_MART);
         assertThat(schema).isNotNull();
+        assertEquals("FoodMart", schema.name());
+        assertNotNull(schema.dimension());
+        assertEquals(schema.dimension().size(), 6);
+        checkCubes(schema.cube(), foodmartCubeList);
+    }
+
+    private void checkCubes(List<? extends Cube> cubes, List<Map<String, Object>> foodmartCubeList) {
+        assertThat(cubes).isNotNull();
+        assertEquals(cubes.size(), foodmartCubeList.size());
+        for (int i = 0; i < cubes.size(); i++) {
+            checkCubeItem(cubes.get(i), foodmartCubeList.get(i));
+        }
+    }
+
+    private void checkCubeItem(Cube cube, Map<String, Object> map) {
+        assertThat(cube).isNotNull();
+        assertEquals(map.get(NAME), cube.name());
+        checkCubeAnnotations(cube.annotations(), get(ANNOTATIONS, map));
+        assertNotNull(cube.calculatedMember());
+        assertNull(cube.caption());
+        assertEquals(get(DEFAULT_MEASURE, map), cube.defaultMeasure());
+        assertNull(cube.description());
+        assertNotNull(cube.drillThroughAction());
+        assertNotNull(cube.namedSet());
+        assertNull(cube.view());
+        assertNotNull(cube.writebackTable());
+        assertTrue(cube.cache());
+        assertTrue(cube.enabled());
+        assertNotNull(cube.measure());
+        checkMeasure(cube, (List<Map<String, Object>>) map.get(MEASURE));
+
+        Table table = cube.table();
+        assertThat(table).isNotNull();
+        assertEquals(map.get(TABLE), table.name());
+        assertNotNull(table.aggExclude());
+        assertNotNull(table.aggTable());
+        assertNull(table.alias());
+        assertNotNull(table.hint());
+        assertNull(table.schema());
+        assertNull(table.sql());
+
+        List<? extends Object> dimensions = cube.dimensionUsageOrDimension();
+        assertThat(dimensions).isNotNull();
+        //TODO
+        //assertEquals(dimensions.size(), 12);
+        //for (int i = 0; i < dimensions.size(); i++) {
+        //    checkDimension(dimensions.get(i), steelWheelDimensionList.get(i));
+        //}
+    }
+
+    private Object get(String key, Map<String, Object> map) {
+        return map.containsKey(key) ?  map.get(key) : null;
     }
 
     private static Schema extracted(File file) throws JAXBException {
@@ -508,27 +898,62 @@ public class ReadTest {
         assertNull(level.captionColumn());
     }
 
-    private void checkMeasure(List<? extends Measure> measureList, List<Map<String, Object>> list) {
+    private void checkMeasure(Cube cube, List<Map<String, Object>> list) {
+        List<? extends Measure> measureList = cube.measure();
         assertThat(measureList).isNotNull();
-        assertEquals(measureList.size(), list.size());
+        assertEquals(measureList.size(), list.size(), "Wrong measuries size for cube " + cube.name());
         for (int i = 0; i < measureList.size(); i++) {
-            checkMeasureItem(measureList.get(i), list.get(i));
+            checkMeasureItem(cube, measureList.get(i), list.get(i), i);
         }
     }
 
-    private void checkMeasureItem(Measure measure, Map<String, Object> map) {
+    private void checkMeasureItem(Cube cube, Measure measure, Map<String, Object> map, int ixdex) {
         assertNull(measure.annotations());
-        assertNull(measure.measureExpression());
+        checkMeasureExpression(measure.measureExpression(), get(MEASURE_EXPRESSION, map));
         assertNotNull(measure.calculatedMemberProperty());
-        assertEquals(map.get(NAME), measure.name());
-        assertEquals(map.get(COLUMN), measure.column());
+        assertEquals(map.get(NAME), measure.name(), "Wrong measure name " + ixdex + " for cube " + cube.name());
+        assertEquals(map.get(COLUMN), measure.column(), "Wrong measure column " + ixdex + " for cube " + cube.name());
         assertNull(measure.datatype());
-        assertEquals(map.get(FORMAT_STRING), measure.formatString());
-        assertEquals(map.get(AGGREGATOR), measure.aggregator());
+        assertEquals(map.get(FORMAT_STRING), measure.formatString(), "Wrong measure format " + ixdex + " for cube " + cube.name());
+        assertEquals(map.get(AGGREGATOR), measure.aggregator(), "Wrong measure aggregator " + ixdex + " for cube " + cube.name());
         assertNull(measure.formatter());
         assertNull(measure.caption());
         assertNull(measure.description());
         assertTrue(measure.visible());
         assertNull(measure.displayFolder());
+    }
+
+    private void checkMeasureExpression(ExpressionView measureExpression, Object o) {
+        if (o == null) {
+            assertNull(measureExpression);
+        } else {
+            List<Map<String, Object>> list =  (List<Map<String, Object>>) o;
+            assertEquals(measureExpression.sql().size(), list.size());
+            for (int i = 0; i< measureExpression.sql().size(); i++) {
+                checkMeasureExpressionItem(measureExpression.sql().get(i), list.get(i));
+            }
+        }
+    }
+
+    private void checkMeasureExpressionItem(SQL sql, Map<String, Object> map) {
+        assertEquals(sql.content().trim(), get(CONTENT, map));
+        assertEquals(sql.dialect(), get(DIALECT, map));
+    }
+
+    private void checkCubeAnnotations(List<? extends Annotation> annotations, Object o) {
+        if (o == null) {
+            assertNull(annotations);
+        } else {
+            List<Map<String, Object>> list =  (List<Map<String, Object>>) o;
+            assertEquals(annotations.size(), list.size());
+            for (int i = 0; i< annotations.size(); i++) {
+                checkCubeAnnotationItem(annotations.get(i), list.get(i));
+            }
+        }
+    }
+
+    private void checkCubeAnnotationItem(Annotation annotation, Map<String, Object> map) {
+        assertEquals(annotation.content(), get(CONTENT, map));
+        assertEquals(annotation.name(), get(NAME, map));
     }
 }
