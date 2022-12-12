@@ -68,7 +68,7 @@ class DimensionsNumericFunDef extends FunDefBase {
         RolapCube cube = (RolapCube) evaluator.getCube();
         List<RolapHierarchy> hierarchies = cube.getHierarchies();
         if (n >= hierarchies.size() || n < 0) {
-            throw newEvalException(
+            throw FunUtil.newEvalException(
                 this, "Index '" + n + "' out of bounds");
         }
         return hierarchies.get(n);

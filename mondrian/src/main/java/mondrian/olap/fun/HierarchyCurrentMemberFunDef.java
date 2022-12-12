@@ -72,7 +72,7 @@ public class HierarchyCurrentMemberFunDef extends FunDefBase {
 
     public Member evaluateMember( Evaluator evaluator ) {
       Hierarchy hierarchy = hierarchyCalc.evaluateHierarchy( evaluator );
-      validateSlicerMembers( hierarchy, evaluator );
+      HierarchyCurrentMemberFunDef.validateSlicerMembers( hierarchy, evaluator );
       return evaluator.getContext( hierarchy );
     }
 
@@ -100,7 +100,7 @@ public class HierarchyCurrentMemberFunDef extends FunDefBase {
     }
 
     public Member evaluateMember( Evaluator evaluator ) {
-      validateSlicerMembers( hierarchy, evaluator );
+      HierarchyCurrentMemberFunDef.validateSlicerMembers( hierarchy, evaluator );
       return evaluator.getContext( hierarchy );
     }
 
@@ -132,7 +132,7 @@ public class HierarchyCurrentMemberFunDef extends FunDefBase {
             MondrianResource.instance().CurrentMemberWithCompoundSlicer.ex( hierarchy.getUniqueName() );
 
         if ( alertValue.equalsIgnoreCase( org.apache.logging.log4j.Level.WARN.toString() ) ) {
-          LOGGER.warn( exception.getMessage() );
+          HierarchyCurrentMemberFunDef.LOGGER.warn( exception.getMessage() );
         } else if ( alertValue.equalsIgnoreCase( org.apache.logging.log4j.Level.ERROR.toString() ) ) {
           throw MondrianResource.instance().CurrentMemberWithCompoundSlicer.ex( hierarchy.getUniqueName() );
         }

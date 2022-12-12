@@ -66,11 +66,11 @@ class StrToSetFunDef extends FunDefBase {
                 public TupleList evaluateList(Evaluator evaluator) {
                     String string = stringCalc.evaluateString(evaluator);
                     if (string == null) {
-                        throw newEvalException(
+                        throw FunUtil.newEvalException(
                             MondrianResource.instance().NullValue.ex());
                     }
                     return new UnaryTupleList(
-                        parseMemberList(evaluator, string, hierarchy));
+                        FunUtil.parseMemberList(evaluator, string, hierarchy));
                 }
             };
         } else {
@@ -80,10 +80,10 @@ class StrToSetFunDef extends FunDefBase {
                 public TupleList evaluateList(Evaluator evaluator) {
                     String string = stringCalc.evaluateString(evaluator);
                     if (string == null) {
-                        throw newEvalException(
+                        throw FunUtil.newEvalException(
                             MondrianResource.instance().NullValue.ex());
                     }
-                    return parseTupleList(evaluator, string, hierarchyList);
+                    return FunUtil.parseTupleList(evaluator, string, hierarchyList);
                 }
             };
         }

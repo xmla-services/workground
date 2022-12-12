@@ -89,7 +89,7 @@ class ExtractFunDef extends FunDefBase {
             List<Integer> extractedOrdinals = new ArrayList<Integer>();
             final List<Hierarchy> extractedHierarchies =
                 new ArrayList<Hierarchy>();
-            findExtractedHierarchies(
+            ExtractFunDef.findExtractedHierarchies(
                 args, extractedHierarchies, extractedOrdinals);
             int[] parameterTypes = new int[args.length];
             parameterTypes[0] = Category.Set;
@@ -109,7 +109,7 @@ class ExtractFunDef extends FunDefBase {
         final List<Hierarchy> extractedHierarchies =
             new ArrayList<Hierarchy>();
         final List<Integer> extractedOrdinals = new ArrayList<Integer>();
-        findExtractedHierarchies(args, extractedHierarchies, extractedOrdinals);
+        ExtractFunDef.findExtractedHierarchies(args, extractedHierarchies, extractedOrdinals);
         if (extractedHierarchies.size() == 1) {
             return new SetType(
                 MemberType.forHierarchy(
@@ -189,7 +189,7 @@ class ExtractFunDef extends FunDefBase {
     public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         List<Hierarchy> extractedHierarchyList = new ArrayList<Hierarchy>();
         List<Integer> extractedOrdinalList = new ArrayList<Integer>();
-        findExtractedHierarchies(
+        ExtractFunDef.findExtractedHierarchies(
             call.getArgs(),
             extractedHierarchyList,
             extractedOrdinalList);
@@ -205,7 +205,7 @@ class ExtractFunDef extends FunDefBase {
             Util.assertTrue(outArity == 1);
             return new DistinctFunDef.CalcImpl(call, listCalc);
         }
-        final int[] extractedOrdinals = toIntArray(extractedOrdinalList);
+        final int[] extractedOrdinals = ExtractFunDef.toIntArray(extractedOrdinalList);
         return new AbstractListCalc(call, new Calc[]{listCalc}) {
             public TupleList evaluateList(Evaluator evaluator) {
                 TupleList result = TupleCollections.createList(outArity);

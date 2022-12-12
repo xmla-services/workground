@@ -64,6 +64,6 @@ abstract class ResolverBase extends FunUtil implements Resolver {
     }
 
     public String[] getReservedWords() {
-        return emptyStringArray;
+        return FunUtil.emptyStringArray;
     }
 }

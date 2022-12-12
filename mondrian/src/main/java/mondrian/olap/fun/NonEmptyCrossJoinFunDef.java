@@ -99,7 +99,7 @@ public class NonEmptyCrossJoinFunDef extends CrossJoinFunDef {
                         return list1;
                     }
                     final TupleList list2 = listCalc2.evaluateList(evaluator);
-                    TupleList result = mutableCrossJoin(list1, list2);
+                    TupleList result = CrossJoinFunDef.mutableCrossJoin(list1, list2);
 
                     // remove any remaining empty crossings from the result
                     result = nonEmptyList(evaluator, result, call);

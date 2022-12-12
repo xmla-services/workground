@@ -62,9 +62,9 @@ public abstract class MultiResolver extends FunUtil implements Resolver {
         this.description = description;
         this.signatures = signatures;
         Util.assertTrue(signatures.length > 0);
-        this.syntax = decodeSyntacticType(signatures[0]);
+        this.syntax = FunUtil.decodeSyntacticType(signatures[0]);
         for (int i = 1; i < signatures.length; i++) {
-            Util.assertTrue(decodeSyntacticType(signatures[i]) == syntax);
+            Util.assertTrue(FunUtil.decodeSyntacticType(signatures[i]) == syntax);
         }
     }
 
@@ -85,7 +85,7 @@ public abstract class MultiResolver extends FunUtil implements Resolver {
     }
 
     public String[] getReservedWords() {
-        return emptyStringArray;
+        return FunUtil.emptyStringArray;
     }
 
     public String[] getSignatures() {
@@ -103,7 +103,7 @@ public abstract class MultiResolver extends FunUtil implements Resolver {
     {
 outer:
         for (String signature : signatures) {
-            int[] parameterTypes = decodeParameterCategories(signature);
+            int[] parameterTypes = FunUtil.decodeParameterCategories(signature);
             if (parameterTypes.length != args.length) {
                 continue;
             }
@@ -115,8 +115,8 @@ outer:
                     continue outer;
                 }
             }
-            int returnType = decodeReturnCategory(signature);
-            FunDef dummy = createDummyFunDef(this, returnType, args);
+            int returnType = FunUtil.decodeReturnCategory(signature);
+            FunDef dummy = FunUtil.createDummyFunDef(this, returnType, args);
             return createFunDef(args, dummy);
         }
         return null;
@@ -124,7 +124,7 @@ outer:
 
     public boolean requiresExpression(int k) {
         for (String signature : signatures) {
-            int[] parameterTypes = decodeParameterCategories(signature);
+            int[] parameterTypes = FunUtil.decodeParameterCategories(signature);
             if ((k < parameterTypes.length)
                 && parameterTypes[k] == Category.Set)
             {

@@ -58,7 +58,7 @@ class AncestorFunDef extends FunDefBase {
                     Member member = memberCalc.evaluateMember(evaluator);
                     int distance =
                         member.getLevel().getDepth() - level.getDepth();
-                    return ancestor(evaluator, member, distance, level);
+                    return FunUtil.ancestor(evaluator, member, distance, level);
                 }
             };
         } else {
@@ -70,7 +70,7 @@ class AncestorFunDef extends FunDefBase {
                 public Member evaluateMember(Evaluator evaluator) {
                     int distance = distanceCalc.evaluateInteger(evaluator);
                     Member member = memberCalc.evaluateMember(evaluator);
-                    return ancestor(evaluator, member, distance, null);
+                    return FunUtil.ancestor(evaluator, member, distance, null);
                 }
             };
         }

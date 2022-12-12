@@ -66,7 +66,7 @@ public class ParameterFunDef extends FunDefBase {
             funDef.getSyntax(),
             returnCategory,
             funDef.getParameterCategories());
-        assertPrecondition(
+        Util.assertPrecondition(
             getName().equals("Parameter")
             || getName().equals("ParamRef"));
         this.parameterName = parameterName;
@@ -182,7 +182,7 @@ public class ParameterFunDef extends FunDefBase {
                 "Parameter",
                 "Parameter(<Name>, <Type>, <DefaultValue>, <Description>, <Set>)",
                 "Returns default value of parameter.",
-                SIGNATURES);
+                ParameterResolver.SIGNATURES);
         }
 
         public String[] getReservedWords() {
@@ -190,7 +190,7 @@ public class ParameterFunDef extends FunDefBase {
         }
 
         protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
-            String parameterName = getParameterName(args);
+            String parameterName = ParameterFunDef.getParameterName(args);
             Exp typeArg = args[1];
             int category;
             Type type = typeArg.getType();
@@ -199,15 +199,15 @@ public class ParameterFunDef extends FunDefBase {
             case Category.Hierarchy:
             case Category.Level:
                 Dimension dimension = type.getDimension();
-                if (!isConstant(typeArg)) {
-                    throw newEvalException(
+                if (!ParameterFunDef.isConstant(typeArg)) {
+                    throw FunUtil.newEvalException(
                         dummyFunDef,
                         "Invalid parameter '" + parameterName
                         + "'. Type must be a NUMERIC, STRING, or a dimension, "
                         + "hierarchy or level");
                 }
                 if (dimension == null) {
-                    throw newEvalException(
+                    throw FunUtil.newEvalException(
                         dummyFunDef,
                         "Invalid dimension for parameter '"
                         + parameterName + "'");
@@ -236,7 +236,7 @@ public class ParameterFunDef extends FunDefBase {
             default:
                 // Error is internal because the function call has already been
                 // type-checked.
-                throw newEvalException(
+                throw FunUtil.newEvalException(
                     dummyFunDef,
                     "Invalid type for parameter '" + parameterName
                     + "'; expecting NUMERIC, STRING or a hierarchy");
@@ -245,11 +245,11 @@ public class ParameterFunDef extends FunDefBase {
             // Default value
             Exp exp = args[2];
             Validator validator =
-                createSimpleValidator(BuiltinFunTable.instance());
+                Util.createSimpleValidator(BuiltinFunTable.instance());
             final List<Conversion> conversionList = new ArrayList<Conversion>();
             String typeName = Category.instance.getName(category).toUpperCase();
             if (!validator.canConvert(2, exp, category, conversionList)) {
-                throw newEvalException(
+                throw FunUtil.newEvalException(
                     dummyFunDef,
                     "Default value of parameter '" + parameterName
                     + "' is inconsistent with its type, " + typeName);
@@ -266,11 +266,11 @@ public class ParameterFunDef extends FunDefBase {
                 if (expType instanceof SetType) {
                     expType = ((SetType) expType).getElementType();
                 }
-                if (distinctFrom(type.getDimension(), expType.getDimension())
-                    || distinctFrom(type.getHierarchy(), expType.getHierarchy())
-                    || distinctFrom(type.getLevel(), expType.getLevel()))
+                if (ParameterResolver.distinctFrom(type.getDimension(), expType.getDimension())
+                    || ParameterResolver.distinctFrom(type.getHierarchy(), expType.getHierarchy())
+                    || ParameterResolver.distinctFrom(type.getLevel(), expType.getLevel()))
                 {
-                    throw newEvalException(
+                    throw FunUtil.newEvalException(
                         dummyFunDef,
                         "Default value of parameter '" + parameterName
                         + "' is not consistent with the parameter type '"
@@ -286,7 +286,7 @@ public class ParameterFunDef extends FunDefBase {
                     parameterDescription =
                         (String) ((Literal) args[3]).getValue();
                 } else {
-                    throw newEvalException(
+                    throw FunUtil.newEvalException(
                         dummyFunDef,
                         "Description of parameter '" + parameterName
                         + "' must be a string constant");
@@ -318,7 +318,7 @@ public class ParameterFunDef extends FunDefBase {
         }
 
         protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
-            String parameterName = getParameterName(args);
+            String parameterName = ParameterFunDef.getParameterName(args);
             return new ParameterFunDef(
                 dummyFunDef, parameterName, null, Category.Unknown, null,
                 null);

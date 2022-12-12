@@ -41,17 +41,17 @@ public class UnionFunDef extends FunDefBase {
             "Returns the union of two sets, optionally retaining duplicates.",
             new String[] {"fxxx", "fxxxy"},
             UnionFunDef.class,
-            ReservedWords);
+            UnionFunDef.ReservedWords);
 
     public UnionFunDef(FunDef dummyFunDef) {
         super(dummyFunDef);
     }
 
     public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        String allString = getLiteralArg(call, 2, "DISTINCT", ReservedWords);
+        String allString = FunUtil.getLiteralArg(call, 2, "DISTINCT", UnionFunDef.ReservedWords);
         final boolean all = allString.equalsIgnoreCase("ALL");
         // todo: do at validate time
-        checkCompatible(call.getArg(0), call.getArg(1), null);
+        FunUtil.checkCompatible(call.getArg(0), call.getArg(1), null);
         final ListCalc listCalc0 =
             compiler.compileList(call.getArg(0));
         final ListCalc listCalc1 =

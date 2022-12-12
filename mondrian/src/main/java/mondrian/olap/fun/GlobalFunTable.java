@@ -28,11 +28,11 @@ public class GlobalFunTable extends FunTableImpl {
 
     private static GlobalFunTable instance = new GlobalFunTable();
     static {
-        instance.init();
+        GlobalFunTable.instance.init();
     }
 
     public static GlobalFunTable instance() {
-        return instance;
+        return GlobalFunTable.instance;
     }
 
     private GlobalFunTable() {

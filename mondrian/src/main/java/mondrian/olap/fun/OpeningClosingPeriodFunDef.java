@@ -29,6 +29,7 @@ import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
 import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.Type;
@@ -169,7 +170,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
                     return member;
                 }
 
-                return getDescendant(
+                return OpeningClosingPeriodFunDef.getDescendant(
                     evaluator.getSchemaReader(), member,
                     level, opening, evaluator);
             }
@@ -199,7 +200,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
         List<Member> children;
 
         final int targetLevelDepth = targetLevel.getDepth();
-        assertPrecondition(member.getLevel().getDepth() < targetLevelDepth,
+        Util.assertPrecondition(member.getLevel().getDepth() < targetLevelDepth,
                 "member.getLevel().getDepth() < targetLevel.getDepth()");
 
         for (;;) {

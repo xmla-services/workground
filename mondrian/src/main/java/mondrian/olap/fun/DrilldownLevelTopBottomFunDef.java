@@ -27,6 +27,7 @@ import mondrian.calc.LevelCalc;
 import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
@@ -136,7 +137,7 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
           result.add( member );
           if ( level != null && member.getLevel() != level ) {
             if ( level.getDimension() != member.getDimension() ) {
-              throw newEvalException(
+              throw FunUtil.newEvalException(
                 DrilldownLevelTopBottomFunDef.this,
                 "Level '"
                   + level.getUniqueName()
@@ -172,7 +173,7 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
       }
 
       public boolean dependsOn( Hierarchy hierarchy ) {
-        return anyDependsButFirst( getCalcs(), hierarchy );
+        return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
       }
     };
   }

@@ -58,7 +58,7 @@ class DrilldownLevelFunDef extends FunDefBase {
                     "Drills down the members of a set, at a specified level, to one level below. Alternatively, drills down on a specified dimension in the set.",
                     new String[]{"fxx", "fxxl", "fxxen", "fxxeny", "fxxeey"},
                     DrilldownLevelFunDef.class,
-                    new String[]{INCLUDE_CALC_MEMBERS});
+                    new String[]{DrilldownLevelFunDef.INCLUDE_CALC_MEMBERS});
 
     public DrilldownLevelFunDef(FunDef dummyFunDef) {
         super(dummyFunDef);
@@ -84,7 +84,7 @@ class DrilldownLevelFunDef extends FunDefBase {
             call.getArgCount() == 4
                 && call.getArg(3) != null
                 && call.getArg(3) instanceof Literal
-                && INCLUDE_CALC_MEMBERS.equals(((Literal)call.getArg(3)).getValue());
+                && DrilldownLevelFunDef.INCLUDE_CALC_MEMBERS.equals(((Literal)call.getArg(3)).getValue());
         if (indexCalc == null) {
             return new AbstractListCalc(call, new Calc[] {listCalc, levelCalc})
             {

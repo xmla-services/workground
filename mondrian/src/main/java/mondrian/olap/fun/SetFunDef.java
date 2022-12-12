@@ -225,7 +225,7 @@ public class SetFunDef extends FunDefBase {
                         // Don't add null or partially null tuple to result.
                         Member[] members = tupleCalc.evaluateTuple(evaluator);
                         if (members == null
-                            || tupleContainsNullMember(members))
+                            || FunUtil.tupleContainsNullMember(members))
                         {
                             return;
                         }
@@ -251,7 +251,7 @@ public class SetFunDef extends FunDefBase {
     {
         List<Calc> calcs = new ArrayList<Calc>(args.length);
         for (Exp arg : args) {
-            calcs.add(createCalc(arg, compiler, resultStyles));
+            calcs.add(SetFunDef.createCalc(arg, compiler, resultStyles));
         }
         return calcs;
     }
@@ -312,7 +312,7 @@ public class SetFunDef extends FunDefBase {
                 calc.getResultStyle());
         } else if (TypeUtil.couldBeMember(type)) {
             final MemberCalc memberCalc = compiler.compileMember(arg);
-            final ResolvedFunCall call = wrapAsSet(arg);
+            final ResolvedFunCall call = SetFunDef.wrapAsSet(arg);
             return new AbstractIterCalc(call, new Calc[] {memberCalc}) {
                 public TupleIterable evaluateIterable(
                     Evaluator evaluator)
@@ -330,7 +330,7 @@ public class SetFunDef extends FunDefBase {
             };
         } else {
             final TupleCalc tupleCalc = compiler.compileTuple(arg);
-            final ResolvedFunCall call = wrapAsSet(arg);
+            final ResolvedFunCall call = SetFunDef.wrapAsSet(arg);
             return new AbstractIterCalc(call, new Calc[] {tupleCalc}) {
                 public TupleIterable evaluateIterable(
                     Evaluator evaluator)
@@ -374,7 +374,7 @@ public class SetFunDef extends FunDefBase {
             }
         }
         return new ResolvedFunCall(
-            new SetFunDef(Resolver, categories),
+            new SetFunDef(SetFunDef.Resolver, categories),
             args,
             new SetType(type));
     }
@@ -395,7 +395,7 @@ public class SetFunDef extends FunDefBase {
         {
             super(exp, null);
             final List<Calc> calcList =
-                compileSelf(args, compiler, resultStyles);
+                SetFunDef.compileSelf(args, compiler, resultStyles);
             iterCalcs = calcList.toArray(new IterCalc[calcList.size()]);
         }
 

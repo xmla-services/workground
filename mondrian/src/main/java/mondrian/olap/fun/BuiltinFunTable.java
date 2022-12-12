@@ -56,6 +56,7 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
+import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.fun.extra.CachedExistsFunDef;
 import mondrian.olap.fun.extra.CalculatedChildFunDef;
@@ -185,7 +186,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 Level[] levels = hierarchy.getLevels();
 
                 if (n >= levels.length || n < 0) {
-                    throw newEvalException(
+                    throw FunUtil.newEvalException(
                         this, "Index '" + n + "' out of bounds");
                 }
                 return levels[n];
@@ -222,7 +223,7 @@ public class BuiltinFunTable extends FunTableImpl {
                                 return level;
                             }
                         }
-                        throw newEvalException(
+                        throw FunUtil.newEvalException(
                             call.getFunDef(),
                             "Level '" + name + "' not found in hierarchy '"
                                 + hierarchy + "'");
@@ -261,7 +262,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     (s.startsWith("["))
                     ? evaluator.getSchemaReader().lookupCompound(
                         cube,
-                        parseIdentifier(s),
+                        Util.parseIdentifier(s),
                         false,
                         Category.Level)
                     // lookupCompound barfs if "s" doesn't have matching
@@ -271,9 +272,9 @@ public class BuiltinFunTable extends FunTableImpl {
                 if (o instanceof Level) {
                     return (Level) o;
                 } else if (o == null) {
-                    throw newEvalException(this, "Level '" + s + "' not found");
+                    throw FunUtil.newEvalException(this, "Level '" + s + "' not found");
                 } else {
-                    throw newEvalException(
+                    throw FunUtil.newEvalException(
                         this, "Levels('" + s + "') found " + o);
                 }
             }
@@ -312,7 +313,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         Member member = memberCalc.evaluateMember(evaluator);
                         Member ancestorMember =
                             ancestorMemberCalc.evaluateMember(evaluator);
-                        return cousin(
+                        return FunUtil.cousin(
                             evaluator.getSchemaReader(),
                             member,
                             ancestorMember);
@@ -708,7 +709,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractIntegerCalc(call, new Calc[] {listCalc}) {
                     public int evaluateInteger(Evaluator evaluator) {
                         TupleList list = listCalc.evaluateList(evaluator);
-                        return count(evaluator, list, true);
+                        return FunUtil.count(evaluator, list, true);
                     }
                 };
             }
@@ -882,7 +883,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         // hence 'false' above.
                         Member member = memberCalc.evaluateMember(evaluator);
                         return new UnaryTupleList(
-                            getNonEmptyMemberChildren(evaluator, member));
+                            FunUtil.getNonEmptyMemberChildren(evaluator, member));
                     }
                 };
             }
@@ -998,7 +999,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     {
                         Hierarchy hierarchy =
                             hierarchyCalc.evaluateHierarchy(evaluator);
-                        return hierarchyMembers(hierarchy, evaluator, false);
+                        return FunUtil.hierarchyMembers(hierarchy, evaluator, false);
                     }
                 };
             }
@@ -1022,7 +1023,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     {
                         Hierarchy hierarchy =
                             hierarchyCalc.evaluateHierarchy(evaluator);
-                        return hierarchyMembers(hierarchy, evaluator, true);
+                        return FunUtil.hierarchyMembers(hierarchy, evaluator, true);
                     }
                 };
             }
@@ -1047,7 +1048,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     public TupleList evaluateList(Evaluator evaluator)
                     {
                         Level level = levelCalc.evaluateLevel(evaluator);
-                        return levelMembers(level, evaluator, true);
+                        return FunUtil.levelMembers(level, evaluator, true);
                     }
                 };
             }
@@ -1074,7 +1075,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     public TupleList evaluateList(Evaluator evaluator)
                     {
                         TupleList list = listCalc.evaluateList(evaluator);
-                        return removeCalculatedMembers(list);
+                        return FunUtil.removeCalculatedMembers(list);
                     }
                 };
             }
@@ -1514,14 +1515,14 @@ public class BuiltinFunTable extends FunTableImpl {
                     public double evaluateDouble(Evaluator evaluator) {
                         final double v0 = calc0.evaluateDouble(evaluator);
                         final double v1 = calc1.evaluateDouble(evaluator);
-                        if (v0 == DoubleNull) {
-                            if (v1 == DoubleNull) {
-                                return DoubleNull;
+                        if (v0 == FunUtil.DoubleNull) {
+                            if (v1 == FunUtil.DoubleNull) {
+                                return FunUtil.DoubleNull;
                             } else {
                                 return v1;
                             }
                         } else {
-                            if (v1 == DoubleNull) {
+                            if (v1 == FunUtil.DoubleNull) {
                                 return v0;
                             } else {
                                 return v0 + v1;
@@ -1547,14 +1548,14 @@ public class BuiltinFunTable extends FunTableImpl {
                     public double evaluateDouble(Evaluator evaluator) {
                         final double v0 = calc0.evaluateDouble(evaluator);
                         final double v1 = calc1.evaluateDouble(evaluator);
-                        if (v0 == DoubleNull) {
-                            if (v1 == DoubleNull) {
-                                return DoubleNull;
+                        if (v0 == FunUtil.DoubleNull) {
+                            if (v1 == FunUtil.DoubleNull) {
+                                return FunUtil.DoubleNull;
                             } else {
                                 return - v1;
                             }
                         } else {
-                            if (v1 == DoubleNull) {
+                            if (v1 == FunUtil.DoubleNull) {
                                 return v0;
                             } else {
                                 return v0 - v1;
@@ -1582,8 +1583,8 @@ public class BuiltinFunTable extends FunTableImpl {
                         final double v1 = calc1.evaluateDouble(evaluator);
                         // Multiply and divide return null if EITHER arg is
                         // null.
-                        if (v0 == DoubleNull || v1 == DoubleNull) {
-                            return DoubleNull;
+                        if (v0 == FunUtil.DoubleNull || v1 == FunUtil.DoubleNull) {
+                            return FunUtil.DoubleNull;
                         } else {
                             return v0 * v1;
                         }
@@ -1624,9 +1625,9 @@ public class BuiltinFunTable extends FunTableImpl {
                             final double v1 = calc1.evaluateDouble(evaluator);
                             // Null in numerator always returns DoubleNull.
                             //
-                            if (v0 == DoubleNull) {
-                                return DoubleNull;
-                            } else if (v1 == DoubleNull) {
+                            if (v0 == FunUtil.DoubleNull) {
+                                return FunUtil.DoubleNull;
+                            } else if (v1 == FunUtil.DoubleNull) {
                                 // Null only in denominator returns Infinity.
                                 return Double.POSITIVE_INFINITY;
                             } else {
@@ -1643,8 +1644,8 @@ public class BuiltinFunTable extends FunTableImpl {
                             final double v1 = calc1.evaluateDouble(evaluator);
                             // Null in numerator or denominator returns
                             // DoubleNull.
-                            if (v0 == DoubleNull || v1 == DoubleNull) {
-                                return DoubleNull;
+                            if (v0 == FunUtil.DoubleNull || v1 == FunUtil.DoubleNull) {
+                                return FunUtil.DoubleNull;
                             } else {
                                 return v0 / v1;
                             }
@@ -1667,8 +1668,8 @@ public class BuiltinFunTable extends FunTableImpl {
                 return new AbstractDoubleCalc(call, new Calc[] {calc}) {
                     public double evaluateDouble(Evaluator evaluator) {
                         final double v = calc.evaluateDouble(evaluator);
-                        if (v == DoubleNull) {
-                            return DoubleNull;
+                        if (v == FunUtil.DoubleNull) {
+                            return FunUtil.DoubleNull;
                         } else {
                             return - v;
                         }
@@ -1839,7 +1840,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         final String b0 = calc0.evaluateString(evaluator);
                         final String b1 = calc1.evaluateString(evaluator);
                         if (b0 == null || b1 == null) {
-                            return BooleanNull;
+                            return FunUtil.BooleanNull;
                         }
                         return b0.equals(b1);
                     }
@@ -1865,10 +1866,10 @@ public class BuiltinFunTable extends FunTableImpl {
                         final double v1 = calc1.evaluateDouble(evaluator);
                         if (Double.isNaN(v0)
                             || Double.isNaN(v1)
-                            || v0 == DoubleNull
-                            || v1 == DoubleNull)
+                            || v0 == FunUtil.DoubleNull
+                            || v1 == FunUtil.DoubleNull)
                         {
-                            return BooleanNull;
+                            return FunUtil.BooleanNull;
                         }
                         return v0 == v1;
                     }
@@ -1893,7 +1894,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         final String b0 = calc0.evaluateString(evaluator);
                         final String b1 = calc1.evaluateString(evaluator);
                         if (b0 == null || b1 == null) {
-                            return BooleanNull;
+                            return FunUtil.BooleanNull;
                         }
                         return !b0.equals(b1);
                     }
@@ -1919,10 +1920,10 @@ public class BuiltinFunTable extends FunTableImpl {
                         final double v1 = calc1.evaluateDouble(evaluator);
                         if (Double.isNaN(v0)
                             || Double.isNaN(v1)
-                            || v0 == DoubleNull
-                            || v1 == DoubleNull)
+                            || v0 == FunUtil.DoubleNull
+                            || v1 == FunUtil.DoubleNull)
                         {
-                            return BooleanNull;
+                            return FunUtil.BooleanNull;
                         }
                         return v0 != v1;
                     }
@@ -1948,10 +1949,10 @@ public class BuiltinFunTable extends FunTableImpl {
                         final double v1 = calc1.evaluateDouble(evaluator);
                         if (Double.isNaN(v0)
                             || Double.isNaN(v1)
-                            || v0 == DoubleNull
-                            || v1 == DoubleNull)
+                            || v0 == FunUtil.DoubleNull
+                            || v1 == FunUtil.DoubleNull)
                         {
-                            return BooleanNull;
+                            return FunUtil.BooleanNull;
                         }
                         return v0 < v1;
                     }
@@ -1976,7 +1977,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         final String b0 = calc0.evaluateString(evaluator);
                         final String b1 = calc1.evaluateString(evaluator);
                         if (b0 == null || b1 == null) {
-                            return BooleanNull;
+                            return FunUtil.BooleanNull;
                         }
                         return b0.compareTo(b1) < 0;
                     }
@@ -2002,10 +2003,10 @@ public class BuiltinFunTable extends FunTableImpl {
                         final double v1 = calc1.evaluateDouble(evaluator);
                         if (Double.isNaN(v0)
                             || Double.isNaN(v1)
-                            || v0 == DoubleNull
-                            || v1 == DoubleNull)
+                            || v0 == FunUtil.DoubleNull
+                            || v1 == FunUtil.DoubleNull)
                         {
-                            return BooleanNull;
+                            return FunUtil.BooleanNull;
                         }
                         return v0 <= v1;
                     }
@@ -2030,7 +2031,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         final String b0 = calc0.evaluateString(evaluator);
                         final String b1 = calc1.evaluateString(evaluator);
                         if (b0 == null || b1 == null) {
-                            return BooleanNull;
+                            return FunUtil.BooleanNull;
                         }
                         return b0.compareTo(b1) <= 0;
                     }
@@ -2056,10 +2057,10 @@ public class BuiltinFunTable extends FunTableImpl {
                         final double v1 = calc1.evaluateDouble(evaluator);
                         if (Double.isNaN(v0)
                             || Double.isNaN(v1)
-                            || v0 == DoubleNull
-                            || v1 == DoubleNull)
+                            || v0 == FunUtil.DoubleNull
+                            || v1 == FunUtil.DoubleNull)
                         {
-                            return BooleanNull;
+                            return FunUtil.BooleanNull;
                         }
                         return v0 > v1;
                     }
@@ -2084,7 +2085,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         final String b0 = calc0.evaluateString(evaluator);
                         final String b1 = calc1.evaluateString(evaluator);
                         if (b0 == null || b1 == null) {
-                            return BooleanNull;
+                            return FunUtil.BooleanNull;
                         }
                         return b0.compareTo(b1) > 0;
                     }
@@ -2110,10 +2111,10 @@ public class BuiltinFunTable extends FunTableImpl {
                         final double v1 = calc1.evaluateDouble(evaluator);
                         if (Double.isNaN(v0)
                             || Double.isNaN(v1)
-                            || v0 == DoubleNull
-                            || v1 == DoubleNull)
+                            || v0 == FunUtil.DoubleNull
+                            || v1 == FunUtil.DoubleNull)
                         {
-                            return BooleanNull;
+                            return FunUtil.BooleanNull;
                         }
                         return v0 >= v1;
                     }
@@ -2138,7 +2139,7 @@ public class BuiltinFunTable extends FunTableImpl {
                         final String b0 = calc0.evaluateString(evaluator);
                         final String b1 = calc1.evaluateString(evaluator);
                         if (b0 == null || b1 == null) {
-                            return BooleanNull;
+                            return FunUtil.BooleanNull;
                         }
                         return b0.compareTo(b1) >= 0;
                     }
@@ -2172,7 +2173,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 final StringCalc stringCalc =
                     compiler.compileString(call.getArg(0));
                 if (stringCalc.getType().getClass().equals(NullType.class)) {
-                    throw newEvalException(this,
+                    throw FunUtil.newEvalException(this,
                         "No method with the signature UCase(NULL) matches known functions.");
                 }
                 return new AbstractStringCalc(call, new Calc[]{stringCalc}) {
@@ -2224,11 +2225,11 @@ public class BuiltinFunTable extends FunTableImpl {
      * @return the singleton
      */
     public static BuiltinFunTable instance() {
-        if (instance == null) {
-            instance = new BuiltinFunTable();
-            instance.init();
+        if (BuiltinFunTable.instance == null) {
+            BuiltinFunTable.instance = new BuiltinFunTable();
+            BuiltinFunTable.instance.init();
         }
-        return instance;
+        return BuiltinFunTable.instance;
     }
 
 }

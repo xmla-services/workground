@@ -36,6 +36,7 @@ import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.FunDef;
 import mondrian.olap.Syntax;
+import mondrian.olap.Util;
 
 /**
  * MDX function which is implemented by a Java method. When the function is
@@ -50,19 +51,19 @@ public class JavaFunDef extends FunDefBase {
     private static final String className = JavaFunDef.class.getName();
 
     static {
-        mapClazzToCategory.put(String.class, Category.String);
-        mapClazzToCategory.put(Double.class, Category.Numeric);
-        mapClazzToCategory.put(double.class, Category.Numeric);
-        mapClazzToCategory.put(Integer.class, Category.Integer);
-        mapClazzToCategory.put(int.class, Category.Integer);
-        mapClazzToCategory.put(boolean.class, Category.Logical);
-        mapClazzToCategory.put(Object.class, Category.Value);
-        mapClazzToCategory.put(Date.class, Category.DateTime);
-        mapClazzToCategory.put(float.class, Category.Numeric);
-        mapClazzToCategory.put(long.class, Category.Numeric);
-        mapClazzToCategory.put(double[].class, Category.Array);
-        mapClazzToCategory.put(char.class, Category.String);
-        mapClazzToCategory.put(byte.class, Category.Integer);
+        JavaFunDef.mapClazzToCategory.put(String.class, Category.String);
+        JavaFunDef.mapClazzToCategory.put(Double.class, Category.Numeric);
+        JavaFunDef.mapClazzToCategory.put(double.class, Category.Numeric);
+        JavaFunDef.mapClazzToCategory.put(Integer.class, Category.Integer);
+        JavaFunDef.mapClazzToCategory.put(int.class, Category.Integer);
+        JavaFunDef.mapClazzToCategory.put(boolean.class, Category.Logical);
+        JavaFunDef.mapClazzToCategory.put(Object.class, Category.Value);
+        JavaFunDef.mapClazzToCategory.put(Date.class, Category.DateTime);
+        JavaFunDef.mapClazzToCategory.put(float.class, Category.Numeric);
+        JavaFunDef.mapClazzToCategory.put(long.class, Category.Numeric);
+        JavaFunDef.mapClazzToCategory.put(double[].class, Category.Array);
+        JavaFunDef.mapClazzToCategory.put(char.class, Category.String);
+        JavaFunDef.mapClazzToCategory.put(byte.class, Category.Integer);
     }
 
     private final Method method;
@@ -97,42 +98,42 @@ public class JavaFunDef extends FunDefBase {
         final Class<?>[] parameterTypes = method.getParameterTypes();
         for (int i = 0; i < calcs.length;i++) {
             calcs[i] =
-                compileTo(
+                JavaFunDef.compileTo(
                     compiler, call.getArgs()[i], parameterTypes[i]);
         }
         return new JavaMethodCalc(call, calcs, method);
     }
 
     private static int getCategory(Class clazz) {
-        return mapClazzToCategory.get(clazz);
+        return JavaFunDef.mapClazzToCategory.get(clazz);
     }
 
     private static int getReturnCategory(Method m) {
-        return getCategory(m.getReturnType());
+        return JavaFunDef.getCategory(m.getReturnType());
     }
 
     private static int[] getParameterCategories(Method m) {
         int arr[] = new int[m.getParameterTypes().length];
         for (int i = 0; i < m.getParameterTypes().length; i++) {
-            arr[i] = getCategory(m.getParameterTypes()[i]);
+            arr[i] = JavaFunDef.getCategory(m.getParameterTypes()[i]);
         }
         return arr;
     }
 
     private static FunDef generateFunDef(final Method method) {
         String name =
-            getAnnotation(
-                method, className + "$FunctionName", method.getName());
+            Util.getAnnotation(
+                method, JavaFunDef.className + "$FunctionName", method.getName());
         String desc =
-            getAnnotation(
-                method, className + "$Description", "");
+            Util.getAnnotation(
+                method, JavaFunDef.className + "$Description", "");
         Syntax syntax =
-            getAnnotation(
-                method, className + "$SyntaxDef", Syntax.Function);
+            Util.getAnnotation(
+                method, JavaFunDef.className + "$SyntaxDef", Syntax.Function);
 
-        int returnCategory = getReturnCategory(method);
+        int returnCategory = JavaFunDef.getReturnCategory(method);
 
-        int paramCategories[] = getParameterCategories(method);
+        int paramCategories[] = JavaFunDef.getParameterCategories(method);
 
         return new JavaFunDef(
             name, desc, syntax, returnCategory, paramCategories, method);
@@ -152,7 +153,7 @@ public class JavaFunDef extends FunDefBase {
             if (Modifier.isStatic(method.getModifiers())
                 && !method.getName().equals("main"))
             {
-                list.add(generateFunDef(method));
+                list.add(JavaFunDef.generateFunDef(method));
             }
         }
         return list;
@@ -269,7 +270,7 @@ public class JavaFunDef extends FunDefBase {
         } else if (clazz == Object.class) {
             return compiler.compileScalar(exp, false);
         } else {
-            throw newInternal("expected primitive type, got " + clazz);
+            throw Util.newInternal("expected primitive type, got " + clazz);
         }
     }
 
@@ -360,15 +361,15 @@ public class JavaFunDef extends FunDefBase {
             for (int i = 0; i < args.length; i++) {
                 args[i] = calcs[i].evaluate(evaluator);
                 if (args[i] == null) {
-                    return nullValue;
+                    return Util.nullValue;
                 }
             }
             try {
                 return method.invoke(null, args);
             } catch (IllegalAccessException e) {
-                throw newEvalException(e);
+                throw FunUtil.newEvalException(e);
             } catch (InvocationTargetException e) {
-                throw newEvalException(e.getCause());
+                throw FunUtil.newEvalException(e.getCause());
             } catch (IllegalArgumentException e) {
                 if (e.getMessage().equals("argument type mismatch")) {
                     StringBuilder buf =
@@ -393,7 +394,7 @@ public class JavaFunDef extends FunDefBase {
                                 : arg.getClass().getName());
                     }
                     buf.append(")");
-                    throw newInternal(buf.toString());
+                    throw Util.newInternal(buf.toString());
                 } else {
                     throw e;
                 }

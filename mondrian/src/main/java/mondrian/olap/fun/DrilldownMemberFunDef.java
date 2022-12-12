@@ -43,7 +43,7 @@ class DrilldownMemberFunDef extends FunDefBase {
             "Drills down the members in a set that are present in a second specified set.",
             new String[]{"fxxx", "fxxxy"},
             DrilldownMemberFunDef.class,
-            reservedWords);
+            DrilldownMemberFunDef.reservedWords);
 
     public DrilldownMemberFunDef(FunDef funDef) {
         super(funDef);
@@ -52,7 +52,7 @@ class DrilldownMemberFunDef extends FunDefBase {
     public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final ListCalc listCalc1 = compiler.compileList(call.getArg(0));
         final ListCalc listCalc2 = compiler.compileList(call.getArg(1));
-        final String literalArg = getLiteralArg(call, 2, "", reservedWords);
+        final String literalArg = FunUtil.getLiteralArg(call, 2, "", DrilldownMemberFunDef.reservedWords);
         final boolean recursive = literalArg.equals("RECURSIVE");
 
         return new AbstractListCalc(

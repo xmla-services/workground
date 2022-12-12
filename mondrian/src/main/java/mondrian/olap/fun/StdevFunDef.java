@@ -15,6 +15,7 @@ import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -58,12 +59,12 @@ class StdevFunDef extends AbstractAggregateFunDef {
             : new ValueCalc(call);
         return new AbstractDoubleCalc(call, new Calc[] {listCalc, calc}) {
             public double evaluateDouble(Evaluator evaluator) {
-                TupleList memberList = evaluateCurrentList(listCalc, evaluator);
+                TupleList memberList = AbstractAggregateFunDef.evaluateCurrentList(listCalc, evaluator);
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
                     final double stdev =
-                        (Double) stdev(
+                        (Double) FunUtil.stdev(
                             evaluator, memberList, calc, false);
                     return stdev;
                 } finally {
@@ -72,7 +73,7 @@ class StdevFunDef extends AbstractAggregateFunDef {
             }
 
             public boolean dependsOn(Hierarchy hierarchy) {
-                return anyDependsButFirst(getCalcs(), hierarchy);
+                return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
             }
         };
     }

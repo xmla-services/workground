@@ -29,6 +29,7 @@ import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eigenbase.xom.XOMUtil;
 
 import mondrian.calc.Calc;
 import mondrian.calc.DoubleCalc;
@@ -59,6 +60,7 @@ import mondrian.olap.Syntax;
 import mondrian.olap.Util;
 import mondrian.olap.Validator;
 import mondrian.olap.fun.sort.OrderKey;
+import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.ScalarType;
 import mondrian.olap.type.TupleType;
@@ -116,7 +118,7 @@ public class FunUtil extends Util {
   public static RuntimeException newEvalException(
     FunDef funDef,
     String message ) {
-    Util.discard( funDef ); // TODO: use this
+    XOMUtil.discard( funDef ); // TODO: use this
     return new MondrianEvaluationException( message );
   }
 
@@ -181,7 +183,7 @@ public class FunUtil extends Util {
     String[] allowedValues ) {
     if ( i >= call.getArgCount() ) {
       if ( defaultValue == null ) {
-        throw newEvalException(
+        throw FunUtil.newEvalException(
           call.getFunDef(),
           "Required argument is missing" );
       } else {
@@ -191,7 +193,7 @@ public class FunUtil extends Util {
     Exp arg = call.getArg( i );
     if ( !( arg instanceof Literal )
       || arg.getCategory() != Category.Symbol ) {
-      throw newEvalException(
+      throw FunUtil.newEvalException(
         call.getFunDef(),
         "Expected a symbol, found '" + arg + "'" );
     }
@@ -207,7 +209,7 @@ public class FunUtil extends Util {
       }
       sb.append( allowedValue );
     }
-    throw newEvalException(
+    throw FunUtil.newEvalException(
       call.getFunDef(),
       "Allowed values are: {" + sb + "}" );
   }
@@ -223,7 +225,7 @@ public class FunUtil extends Util {
     Class<E> allowedValues ) {
     if ( i >= call.getArgCount() ) {
       if ( defaultValue == null ) {
-        throw newEvalException(
+        throw FunUtil.newEvalException(
           call.getFunDef(),
           "Required argument is missing" );
       } else {
@@ -233,7 +235,7 @@ public class FunUtil extends Util {
     Exp arg = call.getArg( i );
     if ( !( arg instanceof Literal )
       || arg.getCategory() != Category.Symbol ) {
-      throw newEvalException(
+      throw FunUtil.newEvalException(
         call.getFunDef(),
         "Expected a symbol, found '" + arg + "'" );
     }
@@ -251,7 +253,7 @@ public class FunUtil extends Util {
       }
       buf.append( e.name() );
     }
-    throw newEvalException(
+    throw FunUtil.newEvalException(
       call.getFunDef(),
       "Allowed values are: {" + buf + "}" );
   }
@@ -265,7 +267,7 @@ public class FunUtil extends Util {
     final Type leftType = TypeUtil.stripSetType( left.getType() );
     final Type rightType = TypeUtil.stripSetType( right.getType() );
     if ( !TypeUtil.isUnionCompatible( leftType, rightType ) ) {
-      throw newEvalException(
+      throw FunUtil.newEvalException(
         funDef, "Expressions must have the same hierarchy" );
     }
   }
@@ -323,7 +325,7 @@ public class FunUtil extends Util {
     final Evaluator evaluator ) {
     // only add accessible levels
     for ( Level level : schemaReader.getHierarchyLevels( hierarchy ) ) {
-      addMembers( schemaReader, members, level, evaluator );
+      FunUtil.addMembers( schemaReader, members, level, evaluator );
     }
     return members;
   }
@@ -365,7 +367,7 @@ public class FunUtil extends Util {
   static TupleList removeCalculatedMembers( TupleList memberList ) {
     if ( memberList.getArity() == 1 ) {
       return new UnaryTupleList(
-        removeCalculatedMembers(
+        FunUtil.removeCalculatedMembers(
           memberList.slice( 0 ) ) );
     } else {
       final TupleList clone = memberList.cloneList( memberList.size() );
@@ -550,7 +552,7 @@ public class FunUtil extends Util {
       case 'I':
         return Syntax.Internal;
       default:
-        throw newInternal(
+        throw Util.newInternal(
           "unknown syntax code '" + c + "' in string '" + flags + "'" );
     }
   }
@@ -567,9 +569,9 @@ public class FunUtil extends Util {
    * @return An array {@link Category} codes.
    */
   public static int decodeReturnCategory( String flags ) {
-    final int returnCategory = decodeCategory( flags, 1 );
+    final int returnCategory = FunUtil.decodeCategory( flags, 1 );
     if ( ( returnCategory & Category.Mask ) != returnCategory ) {
-      throw newInternal( "bad return code flag in flags '" + flags + "'" );
+      throw Util.newInternal( "bad return code flag in flags '" + flags + "'" );
     }
     return returnCategory;
   }
@@ -656,7 +658,7 @@ public class FunUtil extends Util {
       case 'D':
         return Category.DateTime;
       default:
-        throw newInternal(
+        throw Util.newInternal(
           "unknown type code '" + c + "' in string '" + flags + "'" );
     }
   }
@@ -675,7 +677,7 @@ public class FunUtil extends Util {
   public static int[] decodeParameterCategories( String flags ) {
     int[] parameterCategories = new int[ flags.length() - 2 ];
     for ( int i = 0; i < parameterCategories.length; i++ ) {
-      parameterCategories[ i ] = decodeCategory( flags, i + 2 );
+      parameterCategories[ i ] = FunUtil.decodeCategory( flags, i + 2 );
     }
     return parameterCategories;
   }
@@ -684,7 +686,7 @@ public class FunUtil extends Util {
    * Converts a double (primitive) value to a Double. {@link #DoubleNull} becomes null.
    */
   public static Double box( double d ) {
-    return d == DoubleNull
+    return d == FunUtil.DoubleNull
       ? null
       : d;
   }
@@ -693,7 +695,7 @@ public class FunUtil extends Util {
    * Converts an int (primitive) value to an Integer. {@link #IntegerNull} becomes null.
    */
   public static Integer box( int n ) {
-    return n == IntegerNull
+    return n == FunUtil.IntegerNull
       ? null
       : n;
   }
@@ -703,7 +705,7 @@ public class FunUtil extends Util {
     TupleList members,
     Calc exp,
     double p ) {
-    SetWrapper sw = evaluateSet( evaluator, members, exp );
+    SetWrapper sw = FunUtil.evaluateSet( evaluator, members, exp );
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else if ( sw.v.size() == 0 ) {
@@ -767,18 +769,18 @@ public class FunUtil extends Util {
    * @param range     Quartile (1, 2 or 3)
    * @pre range >= 1 && range <= 3
    */
-  protected static double quartile(
+  public static double quartile(
     Evaluator evaluator,
     TupleList members,
     Calc exp,
     int range ) {
     assert range >= 1 && range <= 3;
 
-    SetWrapper sw = evaluateSet( evaluator, members, exp );
+    SetWrapper sw = FunUtil.evaluateSet( evaluator, members, exp );
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else if ( sw.v.size() == 0 ) {
-      return DoubleNull;
+      return FunUtil.DoubleNull;
     }
 
     double[] asArray = new double[ sw.v.size() ];
@@ -799,7 +801,7 @@ public class FunUtil extends Util {
     Evaluator evaluator,
     TupleList members,
     Calc calc ) {
-    SetWrapper sw = evaluateSet( evaluator, members, calc );
+    SetWrapper sw = FunUtil.evaluateSet( evaluator, members, calc );
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else {
@@ -823,7 +825,7 @@ public class FunUtil extends Util {
     Evaluator evaluator,
     TupleList members,
     Calc exp ) {
-    SetWrapper sw = evaluateSet( evaluator, members, exp );
+    SetWrapper sw = FunUtil.evaluateSet( evaluator, members, exp );
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else {
@@ -848,8 +850,8 @@ public class FunUtil extends Util {
     TupleList members,
     Calc exp,
     boolean biased ) {
-    SetWrapper sw = evaluateSet( evaluator, members, exp );
-    return _var( sw, biased );
+    SetWrapper sw = FunUtil.evaluateSet( evaluator, members, exp );
+    return FunUtil._var( sw, biased );
   }
 
   private static Object _var( SetWrapper sw, boolean biased ) {
@@ -859,7 +861,7 @@ public class FunUtil extends Util {
       return Util.nullValue;
     } else {
       double stdev = 0.0;
-      double avg = _avg( sw );
+      double avg = FunUtil._avg( sw );
       for ( int i = 0; i < sw.v.size(); i++ ) {
         stdev +=
           Math.pow( ( ( (Number) sw.v.get( i ) ).doubleValue() - avg ), 2 );
@@ -877,11 +879,11 @@ public class FunUtil extends Util {
     TupleList memberList,
     Calc exp1,
     Calc exp2 ) {
-    SetWrapper sw1 = evaluateSet( evaluator, memberList, exp1 );
-    SetWrapper sw2 = evaluateSet( evaluator, memberList, exp2 );
-    Object covar = _covariance( sw1, sw2, false );
-    Object var1 = _var( sw1, false ); // this should be false, yes?
-    Object var2 = _var( sw2, false );
+    SetWrapper sw1 = FunUtil.evaluateSet( evaluator, memberList, exp1 );
+    SetWrapper sw2 = FunUtil.evaluateSet( evaluator, memberList, exp2 );
+    Object covar = FunUtil._covariance( sw1, sw2, false );
+    Object var1 = FunUtil._var( sw1, false ); // this should be false, yes?
+    Object var2 = FunUtil._var( sw2, false );
 
     return ( (Number) covar ).doubleValue()
       / Math.sqrt(
@@ -898,19 +900,19 @@ public class FunUtil extends Util {
     final int savepoint = evaluator.savepoint();
     SetWrapper sw1;
     try {
-      sw1 = evaluateSet( evaluator, members, exp1 );
+      sw1 = FunUtil.evaluateSet( evaluator, members, exp1 );
     } finally {
       evaluator.restore( savepoint );
     }
     SetWrapper sw2;
     try {
-      sw2 = evaluateSet( evaluator, members, exp2 );
+      sw2 = FunUtil.evaluateSet( evaluator, members, exp2 );
     } finally {
       evaluator.restore( savepoint );
     }
     // todo: because evaluateSet does not add nulls to the SetWrapper, this
     // solution may lead to mismatched lists and is therefore not robust
-    return _covariance( sw1, sw2, biased );
+    return FunUtil._covariance( sw1, sw2, biased );
   }
 
 
@@ -921,8 +923,8 @@ public class FunUtil extends Util {
     if ( sw1.v.size() != sw2.v.size() ) {
       return Util.nullValue;
     }
-    double avg1 = _avg( sw1 );
-    double avg2 = _avg( sw2 );
+    double avg1 = FunUtil._avg( sw1 );
+    double avg2 = FunUtil._avg( sw2 );
     double covar = 0.0;
     for ( int i = 0; i < sw1.v.size(); i++ ) {
       // all of this casting seems inefficient - can we make SetWrapper
@@ -943,7 +945,7 @@ public class FunUtil extends Util {
     TupleList members,
     Calc exp,
     boolean biased ) {
-    Object o = var( evaluator, members, exp, biased );
+    Object o = FunUtil.var( evaluator, members, exp, biased );
     return ( o instanceof Double )
       ? new Double( Math.sqrt( ( (Number) o ).doubleValue() ) )
       : o;
@@ -953,12 +955,12 @@ public class FunUtil extends Util {
     Evaluator evaluator,
     TupleList members,
     Calc calc ) {
-    SetWrapper sw = evaluateSet( evaluator, members, calc );
+    SetWrapper sw = FunUtil.evaluateSet( evaluator, members, calc );
     return ( sw.errorCount > 0 )
       ? new Double( Double.NaN )
       : ( sw.v.size() == 0 )
       ? Util.nullValue
-      : new Double( _avg( sw ) );
+      : new Double( FunUtil._avg( sw ) );
   }
 
   // TODO: parameterize inclusion of nulls; also, maybe make _avg a method of
@@ -976,19 +978,19 @@ public class FunUtil extends Util {
     Evaluator evaluator,
     TupleList members,
     Calc exp ) {
-    double d = sumDouble( evaluator, members, exp );
-    return d == DoubleNull ? Util.nullValue : new Double( d );
+    double d = FunUtil.sumDouble( evaluator, members, exp );
+    return d == FunUtil.DoubleNull ? Util.nullValue : new Double( d );
   }
 
   public static double sumDouble(
     Evaluator evaluator,
     TupleList members,
     Calc exp ) {
-    SetWrapper sw = evaluateSet( evaluator, members, exp );
+    SetWrapper sw = FunUtil.evaluateSet( evaluator, members, exp );
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else if ( sw.v.size() == 0 ) {
-      return DoubleNull;
+      return FunUtil.DoubleNull;
     } else {
       double sum = 0.0;
       for ( int i = 0; i < sw.v.size(); i++ ) {
@@ -1002,11 +1004,11 @@ public class FunUtil extends Util {
     Evaluator evaluator,
     TupleIterable iterable,
     Calc exp ) {
-    SetWrapper sw = evaluateSet( evaluator, iterable, exp );
+    SetWrapper sw = FunUtil.evaluateSet( evaluator, iterable, exp );
     if ( sw.errorCount > 0 ) {
       return Double.NaN;
     } else if ( sw.v.size() == 0 ) {
-      return DoubleNull;
+      return FunUtil.DoubleNull;
     } else {
       double sum = 0.0;
       for ( int i = 0; i < sw.v.size(); i++ ) {
@@ -1170,7 +1172,7 @@ public class FunUtil extends Util {
     Member startMember,
     Member endMember ) {
     final Level level = startMember.getLevel();
-    assertTrue( level == endMember.getLevel() );
+    Util.assertTrue( level == endMember.getLevel() );
     List<Member> members = new ArrayList<Member>();
     evaluator.getSchemaReader().getMemberRange(
       level, startMember, endMember, members );
@@ -1210,7 +1212,7 @@ public class FunUtil extends Util {
       return member.getHierarchy().getNullMember();
     }
 
-    Member cousin = cousin2( schemaReader, member, ancestorMember );
+    Member cousin = FunUtil.cousin2( schemaReader, member, ancestorMember );
     if ( cousin == null ) {
       cousin = member.getHierarchy().getNullMember();
     }
@@ -1226,7 +1228,7 @@ public class FunUtil extends Util {
       return member2;
     }
     Member uncle =
-      cousin2( schemaReader, member1.getParentMember(), member2 );
+      FunUtil.cousin2( schemaReader, member1.getParentMember(), member2 );
     if ( uncle == null ) {
       return null;
     }
@@ -1337,8 +1339,8 @@ public class FunUtil extends Util {
     // Strip away the LimitedRollupMember wrapper, if it exists. The
     // wrapper does not implement equals and comparisons correctly. This
     // is safe this method has no side-effects: it just returns an int.
-    m1 = unwrapLimitedRollupMember( m1 );
-    m2 = unwrapLimitedRollupMember( m2 );
+    m1 = FunUtil.unwrapLimitedRollupMember( m1 );
+    m2 = FunUtil.unwrapLimitedRollupMember( m2 );
 
     if ( Objects.equals( m1, m2 ) ) {
       return 0;
@@ -1360,10 +1362,10 @@ public class FunUtil extends Util {
       } else {
         Member prev1 = m1;
         Member prev2 = m2;
-        m1 = unwrapLimitedRollupMember( m1.getParentMember() );
-        m2 = unwrapLimitedRollupMember( m2.getParentMember() );
+        m1 = FunUtil.unwrapLimitedRollupMember( m1.getParentMember() );
+        m2 = FunUtil.unwrapLimitedRollupMember( m2.getParentMember() );
         if ( Objects.equals( m1, m2 ) ) {
-          final int c = compareSiblingMembers( prev1, prev2 );
+          final int c = FunUtil.compareSiblingMembers( prev1, prev2 );
           // compareHierarchically needs to impose a total order;
           // cannot return 0 for non-equal members
           assert c != 0
@@ -1452,7 +1454,7 @@ public class FunUtil extends Util {
     Member[] members = new Member[ elementTypes.length ];
     for ( int i = 0; i < elementTypes.length; i++ ) {
       MemberType type = (MemberType) elementTypes[ i ];
-      members[ i ] = makeNullMember( type );
+      members[ i ] = FunUtil.makeNullMember( type );
     }
     return members;
   }
@@ -1460,7 +1462,7 @@ public class FunUtil extends Util {
   static Member makeNullMember( MemberType memberType ) {
     Hierarchy hierarchy = memberType.getHierarchy();
     if ( hierarchy == null ) {
-      return NullMember;
+      return FunUtil.NullMember;
     }
     return hierarchy.getNullMember();
   }
@@ -1489,7 +1491,7 @@ public class FunUtil extends Util {
     if ( funDef == null || validator.alwaysResolveFunDef() ) {
       funDef = validator.getDef( newArgs, name, syntax );
     }
-    checkNativeCompatible( validator, funDef, newArgs );
+    FunUtil.checkNativeCompatible( validator, funDef, newArgs );
     return funDef;
   }
 
@@ -1542,7 +1544,7 @@ public class FunUtil extends Util {
           case Category.Member:
             if ( arg0 instanceof MemberExpr
               && ( (MemberExpr) arg0 ).getMember().isMeasure()
-              && isMemberOrSet( funDef.getReturnCategory() ) ) {
+              && FunUtil.isMemberOrSet( funDef.getReturnCategory() ) ) {
               query.setVirtualCubeNonNativeCrossJoin();
             }
             break;
@@ -1649,7 +1651,7 @@ public class FunUtil extends Util {
     if ( evaluator.isNonEmpty() ) {
       List<Member> members = sr.getLevelMembers( level, evaluator );
       if ( includeCalcMembers ) {
-        return addLevelCalculatedMembers( sr, level, members );
+        return Util.addLevelCalculatedMembers( sr, level, members );
       }
       return members;
     }
@@ -1661,14 +1663,14 @@ public class FunUtil extends Util {
     final Evaluator evaluator,
     final boolean includeCalcMembers ) {
     List<Member> memberList =
-      getNonEmptyLevelMembers( evaluator, level, includeCalcMembers );
+      FunUtil.getNonEmptyLevelMembers( evaluator, level, includeCalcMembers );
     TupleList tupleList;
     if ( !includeCalcMembers ) {
-      memberList = removeCalculatedMembers( memberList );
+      memberList = FunUtil.removeCalculatedMembers( memberList );
     }
     final List<Member> memberListClone = new ArrayList<Member>( memberList );
     tupleList = new UnaryTupleList( memberListClone );
-    return hierarchizeTupleList( tupleList, false );
+    return Sorter.hierarchizeTupleList( tupleList, false );
   }
 
   static TupleList hierarchyMembers(
@@ -1682,12 +1684,12 @@ public class FunUtil extends Util {
       // we're only interested in non-empty members of this level.
       for ( Level level : hierarchy.getLevels() ) {
         List<Member> members =
-          getNonEmptyLevelMembers(
+          FunUtil.getNonEmptyLevelMembers(
             evaluator, level, includeCalcMembers );
         memberList.addAll( members );
       }
     } else {
-      final List<Member> memberList1 = addMembers(
+      final List<Member> memberList1 = FunUtil.addMembers(
         evaluator.getSchemaReader(),
         new ConcatenableList<>(),
         hierarchy,
@@ -1705,7 +1707,7 @@ public class FunUtil extends Util {
         }
       }
     }
-    return hierarchizeTupleList( tupleList, false );
+    return Sorter.hierarchizeTupleList( tupleList, false );
   }
 
 
@@ -1718,7 +1720,7 @@ public class FunUtil extends Util {
         evaluator.getSchemaReader(),
         evaluator.getCube(),
         hierarchies );
-    IdentifierParser.parseTupleList( builder, string );
+    org.olap4j.impl.IdentifierParser.parseTupleList( builder, string );
     return builder.tupleList;
   }
 
@@ -1748,7 +1750,7 @@ public class FunUtil extends Util {
           memberList.toArray( members );
         }
       };
-    return IdentifierParser.parseTuple( builder, string, i );
+    return org.olap4j.impl.IdentifierParser.parseTuple( builder, string, i );
   }
 
   /**
@@ -1764,7 +1766,7 @@ public class FunUtil extends Util {
     String string,
     List<Hierarchy> hierarchies ) {
     final Member[] members = new Member[ hierarchies.size() ];
-    int i = parseTuple( evaluator, string, 0, members, hierarchies );
+    int i = FunUtil.parseTuple( evaluator, string, 0, members, hierarchies );
     // todo: check for garbage at end of string
     if ( FunUtil.tupleContainsNullMember( members ) ) {
       return null;
@@ -1781,7 +1783,7 @@ public class FunUtil extends Util {
         evaluator.getSchemaReader(),
         evaluator.getCube(),
         hierarchy );
-    IdentifierParser.parseMemberList( builder, string );
+    org.olap4j.impl.IdentifierParser.parseMemberList( builder, string );
     return builder.memberList;
   }
 
@@ -1800,13 +1802,13 @@ public class FunUtil extends Util {
           segmentList.clear();
         }
       };
-    return IdentifierParser.parseMember( builder, string, i );
+    return org.olap4j.impl.IdentifierParser.parseMember( builder, string, i );
   }
 
   static Member parseMember(
     Evaluator evaluator, String string, Hierarchy hierarchy ) {
     Member[] members = { null };
-    int i = parseMember( evaluator, string, 0, members, hierarchy );
+    int i = FunUtil.parseMember( evaluator, string, 0, members, hierarchy );
     // todo: check for garbage at end of string
     final Member member = members[ 0 ];
     if ( member == null ) {
@@ -1841,7 +1843,7 @@ public class FunUtil extends Util {
       // A set of literals is not worth caching.
       if ( call.getFunDef() instanceof SetFunDef ) {
         for ( Exp setArg : call.getArgs() ) {
-          if ( worthCaching( setArg ) ) {
+          if ( FunUtil.worthCaching( setArg ) ) {
             return true;
           }
         }
@@ -1870,7 +1872,7 @@ public class FunUtil extends Util {
     List<Member> checkedMembers = new ArrayList<Member>();
 
     for ( Member leftMember : leftTuple ) {
-      Member rightMember = getCorrespondingMember(
+      Member rightMember = FunUtil.getCorrespondingMember(
         leftMember, rightTuple, rightHierarchies, eval );
       checkedMembers.add( rightMember );
       if ( !leftMember.isOnSameHierarchyChain( rightMember ) ) {
@@ -1885,7 +1887,7 @@ public class FunUtil extends Util {
         // already checked in the previous loop
         continue;
       }
-      Member leftMember = getCorrespondingMember(
+      Member leftMember = FunUtil.getCorrespondingMember(
         rightMember, leftTuple, leftHierarchies, eval );
       if ( !leftMember.isOnSameHierarchyChain( rightMember ) ) {
         return false;
@@ -1961,7 +1963,7 @@ public class FunUtil extends Util {
       new DescendingValueComparator();
 
     public int compare( Object o1, Object o2 ) {
-      return -compareValues( o1, o2 );
+      return -FunUtil.compareValues( o1, o2 );
     }
   }
 
