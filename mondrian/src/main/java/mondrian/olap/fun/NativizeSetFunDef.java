@@ -120,11 +120,11 @@ public class NativizeSetFunDef extends FunDefBase {
 
     public NativizeSetFunDef(FunDef dummyFunDef) {
         super(dummyFunDef);
-        LOGGER.debug("---- NativizeSetFunDef constructor");
+        NativizeSetFunDef.LOGGER.debug("---- NativizeSetFunDef constructor");
     }
 
     public Exp createCall(Validator validator, Exp[] args) {
-        LOGGER.debug("NativizeSetFunDef createCall");
+        NativizeSetFunDef.LOGGER.debug("NativizeSetFunDef createCall");
         ResolvedFunCall call =
             (ResolvedFunCall) super.createCall(validator, args);
         call.accept(new FindLevelsVisitor(substitutionMap, dimensions));
@@ -132,7 +132,7 @@ public class NativizeSetFunDef extends FunDefBase {
     }
 
     public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        LOGGER.debug("NativizeSetFunDef compileCall");
+        NativizeSetFunDef.LOGGER.debug("NativizeSetFunDef compileCall");
         Exp funArg = call.getArg(0);
 
         if (MondrianProperties.instance().UseAggregates.get()
@@ -182,8 +182,8 @@ public class NativizeSetFunDef extends FunDefBase {
             final int minThreshold = MondrianProperties.instance()
                 .NativizeMinThreshold.get();
             final boolean isHighCard = cardinality > minThreshold;
-            logHighCardinality(
-                ESTIMATE_MESSAGE, minThreshold, cardinality, isHighCard);
+            NativizeSetFunDef.logHighCardinality(
+                NativizeSetFunDef.ESTIMATE_MESSAGE, minThreshold, cardinality, isHighCard);
             return isHighCard;
         }
         return false;
@@ -204,7 +204,7 @@ public class NativizeSetFunDef extends FunDefBase {
         long estimatedCardinality,
         boolean highCardinality)
     {
-        LOGGER.debug(
+        NativizeSetFunDef.LOGGER.debug(
             String.format(
                 estimateMessage,
                 highCardinality,
@@ -319,7 +319,7 @@ public class NativizeSetFunDef extends FunDefBase {
             Exp originalExp)
         {
             super(call, calcs);
-            LOGGER.debug("---- NativeListCalc constructor");
+            NativizeSetFunDef.LOGGER.debug("---- NativeListCalc constructor");
             this.substitutionMap = substitutionMap;
             this.simpleCalc = (ListCalc) calcs[0];
             this.compiler = compiler;
@@ -348,7 +348,7 @@ public class NativizeSetFunDef extends FunDefBase {
                 evaluator.setNativeEnabled(false);
                 TupleList simplifiedList =
                         simpleCalc.evaluateList(evaluator);
-                dumpListToLog("simplified list", simplifiedList);
+                NativizeSetFunDef.dumpListToLog("simplified list", simplifiedList);
                 return simplifiedList;
             } finally {
                 evaluator.restore(savepoint);
@@ -356,7 +356,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         private TupleList evaluateNonNative(Evaluator evaluator) {
-            LOGGER.debug(
+            NativizeSetFunDef.LOGGER.debug(
                 "Disabling native evaluation. originalExp="
                     + originalExp);
             ListCalc calc =
@@ -387,7 +387,7 @@ public class NativizeSetFunDef extends FunDefBase {
             }
 
             // Force non-empty to true to create the native list.
-            LOGGER.debug(
+            NativizeSetFunDef.LOGGER.debug(
                 "crossjoin reconstituted from simplified list: "
                 + String.format(
                     "%n"
@@ -430,20 +430,20 @@ public class NativizeSetFunDef extends FunDefBase {
 
             for (Member member : tuple) {
                 String memberName = member.getName();
-                if (memberName.startsWith(MEMBER_NAME_PREFIX)) {
+                if (memberName.startsWith(NativizeSetFunDef.MEMBER_NAME_PREFIX)) {
                     Level level = member.getLevel();
                     Dimension dimension = level.getDimension();
                     Hierarchy hierarchy = dimension.getHierarchy();
 
-                    String levelName = getLevelNameFromMemberName(memberName);
+                    String levelName = NativizeSetFunDef.getLevelNameFromMemberName(memberName);
                     Level hierarchyLevel =
                         Util.lookupHierarchyLevel(hierarchy, levelName);
                     long levelCardinality =
                         getLevelCardinality(schema, hierarchyLevel);
                     estimatedCardinality *= levelCardinality;
                     if (estimatedCardinality >= nativizeMinThreshold) {
-                        logHighCardinality(
-                            PARTIAL_ESTIMATE_MESSAGE,
+                        NativizeSetFunDef.logHighCardinality(
+                            NativizeSetFunDef.PARTIAL_ESTIMATE_MESSAGE,
                             nativizeMinThreshold,
                             estimatedCardinality,
                             true);
@@ -455,8 +455,8 @@ public class NativizeSetFunDef extends FunDefBase {
             boolean isHighCardinality =
                 (estimatedCardinality >= nativizeMinThreshold);
 
-            logHighCardinality(
-                ESTIMATE_MESSAGE,
+            NativizeSetFunDef.logHighCardinality(
+                NativizeSetFunDef.ESTIMATE_MESSAGE,
                 nativizeMinThreshold,
                 estimatedCardinality,
                 isHighCardinality);
@@ -502,11 +502,11 @@ public class NativizeSetFunDef extends FunDefBase {
             if (call.getFunDef() instanceof LevelMembersFunDef) {
                 if (call.getArg(0) instanceof LevelExpr) {
                     Level level = ((LevelExpr) call.getArg(0)).getLevel();
-                    substitutionMap.put(createMemberId(level), level);
+                    substitutionMap.put(NativizeSetFunDef.createMemberId(level), level);
                     dimensions.add(level.getDimension());
                 }
             } else if (
-                functionWhitelist.contains(call.getFunDef().getClass()))
+                NativizeSetFunDef.functionWhitelist.contains(call.getFunDef().getClass()))
             {
                 for (Exp arg : call.getArgs()) {
                     arg.accept(this);
@@ -534,7 +534,7 @@ public class NativizeSetFunDef extends FunDefBase {
             SubstitutionMap substitutionMap,
             Set<Dimension> dimensions)
         {
-            LOGGER.debug("---- AddFormulasVisitor constructor");
+            NativizeSetFunDef.LOGGER.debug("---- AddFormulasVisitor constructor");
             this.query = query;
             this.levels = substitutionMap.values();
             this.dimensions = dimensions;
@@ -550,7 +550,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         private void addFormulasToQuery() {
-            LOGGER.debug("FormulaResolvingVisitor addFormulas");
+            NativizeSetFunDef.LOGGER.debug("FormulaResolvingVisitor addFormulas");
             List<Formula> formulas = new ArrayList<Formula>();
 
             for (Level level : levels) {
@@ -568,11 +568,11 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         private Formula createSentinelFormula(Level level) {
-            Id memberId = createSentinelId(level);
+            Id memberId = NativizeSetFunDef.createSentinelId(level);
             Exp memberExpr = query.getConnection()
                 .parseExpression("101010");
 
-            LOGGER.debug(
+            NativizeSetFunDef.LOGGER.debug(
                 "createSentinelFormula memberId="
                 + memberId
                 + " memberExpr="
@@ -581,14 +581,14 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         private Formula createDefaultMemberFormula(Level level) {
-            Id memberId = createMemberId(level);
+            Id memberId = NativizeSetFunDef.createMemberId(level);
             Exp memberExpr =
                 new UnresolvedFunCall(
                     "DEFAULTMEMBER",
                     Syntax.Property,
-                    new Exp[] {hierarchyId(level)});
+                    new Exp[] {NativizeSetFunDef.hierarchyId(level)});
 
-            LOGGER.debug(
+            NativizeSetFunDef.LOGGER.debug(
                 "createLevelMembersFormulas memberId="
                 + memberId
                 + " memberExpr="
@@ -599,14 +599,14 @@ public class NativizeSetFunDef extends FunDefBase {
         private Formula createNamedSetFormula(
             Level level, Formula memberFormula)
         {
-            Id setId = createSetId(level);
+            Id setId = NativizeSetFunDef.createSetId(level);
             Exp setExpr = query.getConnection()
                 .parseExpression(
                     "{"
                     + memberFormula.getIdentifier().toString()
                     + "}");
 
-            LOGGER.debug(
+            NativizeSetFunDef.LOGGER.debug(
                 "createNamedSetFormula setId="
                 + setId
                 + " setExpr="
@@ -619,18 +619,18 @@ public class NativizeSetFunDef extends FunDefBase {
         private final Query query;
 
         public TransformToFormulasVisitor(Query query) {
-            LOGGER.debug("---- TransformToFormulasVisitor constructor");
+            NativizeSetFunDef.LOGGER.debug("---- TransformToFormulasVisitor constructor");
             this.query = query;
         }
 
         @Override
         public Object visit(ResolvedFunCall call) {
-            LOGGER.debug("visit " + call);
+            NativizeSetFunDef.LOGGER.debug("visit " + call);
             Object result = null;
             if (call.getFunDef() instanceof LevelMembersFunDef) {
                 result = replaceLevelMembersReferences(call);
             } else if (
-                functionWhitelist.contains(call.getFunDef().getClass()))
+                NativizeSetFunDef.functionWhitelist.contains(call.getFunDef().getClass()))
             {
                 result = visitCallArguments(call);
             }
@@ -639,9 +639,9 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         private Object replaceLevelMembersReferences(ResolvedFunCall call) {
-            LOGGER.debug("replaceLevelMembersReferences " + call);
+            NativizeSetFunDef.LOGGER.debug("replaceLevelMembersReferences " + call);
             Level level = ((LevelExpr) call.getArg(0)).getLevel();
-            Id setId = createSetId(level);
+            Id setId = NativizeSetFunDef.createSetId(level);
             Formula formula = query.findFormula(setId.toString());
             Exp exp = Util.createExpr(formula.getNamedSet());
             return query.createValidator().validate(exp, false);
@@ -649,7 +649,7 @@ public class NativizeSetFunDef extends FunDefBase {
 
         private Object visitCallArguments(ResolvedFunCall call) {
             Exp[] exps = call.getArgs();
-            LOGGER.debug("visitCallArguments " + call);
+            NativizeSetFunDef.LOGGER.debug("visitCallArguments " + call);
 
             for (int i = 0; i < exps.length; i++) {
                 Exp transformedExp = (Exp) exps[i].accept(this);
@@ -704,7 +704,7 @@ public class NativizeSetFunDef extends FunDefBase {
                     }
                     if (element != null) {
                         Level level = element.getHierarchy().getLevels()[0];
-                        Id memberId = createSentinelId(level);
+                        Id memberId = NativizeSetFunDef.createSentinelId(level);
                         Formula formula =
                             query.findFormula(memberId.toString());
                         args.add(i++, Util.createExpr(formula.getMdxMember()));
@@ -720,14 +720,14 @@ public class NativizeSetFunDef extends FunDefBase {
         private final ExpCompiler compiler;
 
         public TransformFromFormulasVisitor(Query query, ExpCompiler compiler) {
-            LOGGER.debug("---- TransformFromFormulasVisitor constructor");
+            NativizeSetFunDef.LOGGER.debug("---- TransformFromFormulasVisitor constructor");
             this.query = query;
             this.compiler = compiler;
         }
 
         @Override
         public Object visit(ResolvedFunCall call) {
-            LOGGER.debug("visit " + call);
+            NativizeSetFunDef.LOGGER.debug("visit " + call);
             Object result;
             result = visitCallArguments(call);
             turnOffVisitChildren();
@@ -739,9 +739,9 @@ public class NativizeSetFunDef extends FunDefBase {
             String exprName = namedSetExpr.getNamedSet().getName();
             Exp membersExpr;
 
-            if (exprName.contains(SET_NAME_PREFIX)) {
+            if (exprName.contains(NativizeSetFunDef.SET_NAME_PREFIX)) {
                 String levelMembers = exprName.replaceAll(
-                    SET_NAME_PREFIX, "\\[")
+                    NativizeSetFunDef.SET_NAME_PREFIX, "\\[")
                     .replaceAll("_$", "\\]")
                     .replaceAll("_", "\\]\\.\\[")
                     + ".members";
@@ -758,7 +758,7 @@ public class NativizeSetFunDef extends FunDefBase {
 
         private Object visitCallArguments(ResolvedFunCall call) {
             Exp[] exps = call.getArgs();
-            LOGGER.debug("visitCallArguments " + call);
+            NativizeSetFunDef.LOGGER.debug("visitCallArguments " + call);
 
             for (int i = 0; i < exps.length; i++) {
                 Exp transformedExp = (Exp) exps[i].accept(this);
@@ -864,7 +864,7 @@ public class NativizeSetFunDef extends FunDefBase {
                 c =
                     new ReassemblyCommand(
                         substitutionMap.get(mbr), LEVEL_MEMBERS);
-            } else if (mbr.getName().startsWith(SENTINEL_PREFIX)) {
+            } else if (mbr.getName().startsWith(NativizeSetFunDef.SENTINEL_PREFIX)) {
                 c =
                     new ReassemblyCommand(mbr, SENTINEL);
             } else {
@@ -948,7 +948,7 @@ public class NativizeSetFunDef extends FunDefBase {
         private String formatCrossJoin(List<Collection<String>> memberLists) {
             StringBuilder buf = new StringBuilder();
 
-            String left = toCsv(memberLists.get(0));
+            String left = NativizeSetFunDef.toCsv(memberLists.get(0));
             String right =
                 memberLists.size() == 1
                 ? ""
@@ -973,9 +973,9 @@ public class NativizeSetFunDef extends FunDefBase {
             TupleList nativeList =
                 adaptList(nativeValues, arity, nativeIndices);
 
-            dumpListToLog("native list", nativeList);
+            NativizeSetFunDef.dumpListToLog("native list", nativeList);
             mergeCalcMembers(reassemblyGuide, new Range(nativeList), null);
-            dumpListToLog("result list", resultList);
+            NativizeSetFunDef.dumpListToLog("result list", resultList);
             return resultList;
         }
 
@@ -1202,12 +1202,12 @@ public class NativizeSetFunDef extends FunDefBase {
             // created by HighCardSqlTupleReader are implemented using linked
             // lists, leading to pathologically long run times.
             // This presumes that the ResultStyle is LIST
-            if (LOGGER.isDebugEnabled()) {
+            if (NativizeSetFunDef.LOGGER.isDebugEnabled()) {
                 String sourceListType =
                     sourceList.getClass().getSimpleName();
                 String sourceElementType =
                     String.format("Member[%d]", destSize);
-                LOGGER.debug(
+                NativizeSetFunDef.LOGGER.debug(
                     String.format(
                         "returning native %s<%s> without copying to new list.",
                         sourceListType,
@@ -1567,24 +1567,24 @@ public class NativizeSetFunDef extends FunDefBase {
     }
 
     private static Id createSentinelId(Level level) {
-        return hierarchyId(level)
-            .append(q(createMangledName(level, SENTINEL_PREFIX)));
+        return NativizeSetFunDef.hierarchyId(level)
+            .append(NativizeSetFunDef.q(NativizeSetFunDef.createMangledName(level, NativizeSetFunDef.SENTINEL_PREFIX)));
     }
 
     private static Id createMemberId(Level level) {
-        return hierarchyId(level)
-            .append(q(createMangledName(level, MEMBER_NAME_PREFIX)));
+        return NativizeSetFunDef.hierarchyId(level)
+            .append(NativizeSetFunDef.q(NativizeSetFunDef.createMangledName(level, NativizeSetFunDef.MEMBER_NAME_PREFIX)));
     }
 
     private static Id createSetId(Level level) {
         return new Id(
-            q(createMangledName(level, SET_NAME_PREFIX)));
+            NativizeSetFunDef.q(NativizeSetFunDef.createMangledName(level, NativizeSetFunDef.SET_NAME_PREFIX)));
     }
 
     private static Id hierarchyId(Level level) {
-        Id id = new Id(q(level.getDimension().getName()));
+        Id id = new Id(NativizeSetFunDef.q(level.getDimension().getName()));
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
-            id = id.append(q(level.getHierarchy().getName()));
+            id = id.append(NativizeSetFunDef.q(level.getHierarchy().getName()));
         }
         return id;
     }
@@ -1603,8 +1603,8 @@ public class NativizeSetFunDef extends FunDefBase {
     private static void dumpListToLog(
         String heading, TupleList list)
     {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(
+        if (NativizeSetFunDef.LOGGER.isDebugEnabled()) {
+            NativizeSetFunDef.LOGGER.debug(
                 String.format(
                     "%s created with %,d rows.", heading, list.size()));
             StringBuilder buf = new StringBuilder(Util.nl);
@@ -1612,7 +1612,7 @@ public class NativizeSetFunDef extends FunDefBase {
                 buf.append(Util.nl);
                 buf.append(element);
             }
-            LOGGER.debug(buf.toString());
+            NativizeSetFunDef.LOGGER.debug(buf.toString());
         }
     }
 

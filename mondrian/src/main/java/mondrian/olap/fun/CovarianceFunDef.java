@@ -15,6 +15,7 @@ import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -69,7 +70,7 @@ class CovarianceFunDef extends FunDefBase {
                 try {
                     evaluator.setNonEmpty(false);
                     final double covariance =
-                        (Double) covariance(
+                        (Double) FunUtil.covariance(
                             evaluator,
                             memberList,
                             calc1,
@@ -82,7 +83,7 @@ class CovarianceFunDef extends FunDefBase {
             }
 
             public boolean dependsOn(Hierarchy hierarchy) {
-                return anyDependsButFirst(getCalcs(), hierarchy);
+                return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
             }
         };
     }

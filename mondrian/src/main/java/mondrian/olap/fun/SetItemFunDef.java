@@ -91,7 +91,7 @@ class SetItemFunDef extends FunDefBase {
                     "Argument count does not match set's cardinality " + arity);
             }
             final int category = arity == 1 ? Category.Member : Category.Tuple;
-            FunDef dummy = createDummyFunDef(this, category, args);
+            FunDef dummy = FunUtil.createDummyFunDef(this, category, args);
             return new SetItemFunDef(dummy);
         }
     };
@@ -132,7 +132,7 @@ class SetItemFunDef extends FunDefBase {
         Calc[] calcs = calcList.toArray(new Calc[calcList.size()]);
         if (elementType instanceof TupleType) {
             final TupleType tupleType = (TupleType) elementType;
-            final Member[] nullTuple = makeNullTuple(tupleType);
+            final Member[] nullTuple = FunUtil.makeNullTuple(tupleType);
             if (isString) {
                 return new AbstractTupleCalc(call, calcs) {
                     public Member[] evaluateTuple(Evaluator evaluator) {
@@ -156,7 +156,7 @@ class SetItemFunDef extends FunDefBase {
                                 for (int j = 0; j < results.length; j++) {
                                     String result = results[j];
                                     final Member member = members.get(j);
-                                    if (!matchMember(member, result)) {
+                                    if (!SetItemFunDef.matchMember(member, result)) {
                                         continue listLoop;
                                     }
                                 }
@@ -205,7 +205,7 @@ class SetItemFunDef extends FunDefBase {
             }
         } else {
             final MemberType memberType = (MemberType) elementType;
-            final Member nullMember = makeNullMember(memberType);
+            final Member nullMember = FunUtil.makeNullMember(memberType);
             if (isString) {
                 return new AbstractMemberCalc(call, calcs) {
                     public Member evaluateMember(Evaluator evaluator) {
@@ -223,7 +223,7 @@ class SetItemFunDef extends FunDefBase {
                             final String result =
                                 stringCalcs[0].evaluateString(evaluator);
                             for (Member member : list) {
-                                if (matchMember(member, result)) {
+                                if (SetItemFunDef.matchMember(member, result)) {
                                     return member;
                                 }
                             }

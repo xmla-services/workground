@@ -12,6 +12,8 @@ package mondrian.olap.fun;
 import java.io.PrintWriter;
 import java.util.List;
 
+import org.eigenbase.xom.XOMUtil;
+
 import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ResultStyle;
@@ -54,7 +56,7 @@ public class CacheFunDef extends FunDefBase {
         super(
             name, signature, description, syntax,
             category, new int[] {category});
-        Util.discard(type);
+        XOMUtil.discard(type);
     }
 
     public void unparse(Exp[] args, PrintWriter pw) {
@@ -99,7 +101,7 @@ public class CacheFunDef extends FunDefBase {
 
     public static class CacheFunResolver extends ResolverBase {
         CacheFunResolver() {
-            super(NAME, SIGNATURE, DESCRIPTION, SYNTAX);
+            super(CacheFunDef.NAME, CacheFunDef.SIGNATURE, CacheFunDef.DESCRIPTION, CacheFunDef.SYNTAX);
         }
 
         public FunDef resolve(
@@ -114,7 +116,7 @@ public class CacheFunDef extends FunDefBase {
             final int category = exp.getCategory();
             final Type type = exp.getType();
             return new CacheFunDef(
-                NAME, SIGNATURE, DESCRIPTION, SYNTAX,
+                CacheFunDef.NAME, CacheFunDef.SIGNATURE, CacheFunDef.DESCRIPTION, CacheFunDef.SYNTAX,
                 category, type);
         }
 

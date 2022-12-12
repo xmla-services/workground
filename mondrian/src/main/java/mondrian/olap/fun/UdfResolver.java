@@ -133,7 +133,7 @@ public class UdfResolver implements Resolver {
 
     public String[] getReservedWords() {
         final String[] reservedWords = udf.getReservedWords();
-        return reservedWords == null ? emptyStringArray : reservedWords;
+        return reservedWords == null ? UdfResolver.emptyStringArray : reservedWords;
     }
 
     /**
@@ -164,7 +164,7 @@ public class UdfResolver implements Resolver {
                 Exp arg = args[i];
                 final Calc calc = calcs[i] = compiler.compileAs(
                     arg,
-                    castType(arg.getType(), parameterCategories[i]),
+                    FunDefBase.castType(arg.getType(), parameterCategories[i]),
                     ResultStyle.ANY_LIST);
                 calcs[i] = calc;
                 final Calc scalarCalc = compiler.compileScalar(arg, true);

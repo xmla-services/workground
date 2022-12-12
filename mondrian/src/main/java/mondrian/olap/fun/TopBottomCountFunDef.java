@@ -26,6 +26,7 @@ import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.DelegatingTupleList;
 import mondrian.calc.impl.UnaryTupleList;
@@ -166,7 +167,7 @@ class TopBottomCountFunDef extends FunDefBase {
               return new UnaryTupleList( members );
             default:
               final List<List<Member>> tuples =
-                partiallySortTuples(
+                Sorter.partiallySortTuples(
                   evaluator.push(),
                   list,
                   orderCalc, n, top );
@@ -180,7 +181,7 @@ class TopBottomCountFunDef extends FunDefBase {
       }
 
       public boolean dependsOn( Hierarchy hierarchy ) {
-        return anyDependsButFirst( getCalcs(), hierarchy );
+        return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
       }
 
       private boolean hasHighCardDimension( TupleList l ) {

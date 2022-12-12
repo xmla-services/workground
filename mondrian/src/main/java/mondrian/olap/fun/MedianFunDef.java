@@ -15,6 +15,7 @@ import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -51,9 +52,9 @@ class MedianFunDef extends AbstractAggregateFunDef {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
-                    TupleList list = evaluateCurrentList(listCalc, evaluator);
+                    TupleList list = AbstractAggregateFunDef.evaluateCurrentList(listCalc, evaluator);
                     final double percentile =
-                        percentile(
+                        FunUtil.percentile(
                             evaluator, list, calc, 0.5);
                     return percentile;
                 } finally {
@@ -62,7 +63,7 @@ class MedianFunDef extends AbstractAggregateFunDef {
             }
 
             public boolean dependsOn(Hierarchy hierarchy) {
-                return anyDependsButFirst(getCalcs(), hierarchy);
+                return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
             }
         };
     }

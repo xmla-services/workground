@@ -40,6 +40,7 @@ import mondrian.olap.FunDef;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Syntax;
 import mondrian.olap.Util;
+import mondrian.olap.fun.sort.Sorter;
 import mondrian.olap.type.EmptyType;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.NumericType;
@@ -160,9 +161,9 @@ class DescendantsFunDef extends FunDefBase {
           }
           final SchemaReader schemaReader =
             evaluator.getSchemaReader();
-          descendantsLeavesByDepth(
+          DescendantsFunDef.descendantsLeavesByDepth(
             member, result, schemaReader, depth , evaluator);
-          hierarchizeMemberList( result, false );
+          Sorter.hierarchizeMemberList( result, false );
           return new UnaryTupleList( result );
         }
       };
@@ -178,11 +179,11 @@ class DescendantsFunDef extends FunDefBase {
           final int depth = depthCalc.evaluateInteger( evaluator );
           final SchemaReader schemaReader =
             evaluator.getSchemaReader();
-          descendantsByDepth(
+          DescendantsFunDef.descendantsByDepth(
             member, result, schemaReader,
             depth, flag1.before, flag1.self, flag1.after,
             evaluator );
-          hierarchizeMemberList( result, false );
+          Sorter.hierarchizeMemberList( result, false );
           return new UnaryTupleList( result );
         }
       };
@@ -205,11 +206,11 @@ class DescendantsFunDef extends FunDefBase {
             levelCalc != null
               ? levelCalc.evaluateLevel( evaluator )
               : member.getLevel();
-          descendantsByLevel(
+          DescendantsFunDef.descendantsByLevel(
             schemaReader, member, level, result,
             flag2.before, flag2.self,
             flag2.after, flag2.leaves, context );
-          hierarchizeMemberList( result, false );
+          Sorter.hierarchizeMemberList( result, false );
           return new UnaryTupleList( result );
         }
       };

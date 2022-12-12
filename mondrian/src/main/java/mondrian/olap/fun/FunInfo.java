@@ -56,7 +56,7 @@ public class FunInfo implements Comparable<FunInfo> {
         this.sigs = funDef instanceof FunDefBase
             && ((FunDefBase) funDef).signature != null
             ? new String[] {((FunDefBase) funDef).signature}
-            : makeSigs(syntax, name, returnTypes, parameterTypes);
+            : FunInfo.makeSigs(syntax, name, returnTypes, parameterTypes);
         this.description = funDef.getDescription();
     }
 
@@ -75,7 +75,7 @@ public class FunInfo implements Comparable<FunInfo> {
             parameterTypes[i] =
                 FunUtil.decodeParameterCategories(signatures[i]);
         }
-        this.sigs = makeSigs(syntax, name, returnTypes, parameterTypes);
+        this.sigs = FunInfo.makeSigs(syntax, name, returnTypes, parameterTypes);
     }
 
     FunInfo(Resolver resolver) {
@@ -173,9 +173,9 @@ public class FunInfo implements Comparable<FunInfo> {
         if (c != 0) {
             return c;
         }
-        final List<Object> pcList = toList(this.getParameterCategories());
+        final List<Object> pcList = FunInfo.toList(this.getParameterCategories());
         final String pc = pcList.toString();
-        final List otherPcList = toList(fi.getParameterCategories());
+        final List otherPcList = FunInfo.toList(fi.getParameterCategories());
         final String otherPc = otherPcList.toString();
         return pc.compareTo(otherPc);
     }
@@ -186,8 +186,8 @@ public class FunInfo implements Comparable<FunInfo> {
             if (!name.equals(that.name)) {
                 return false;
             }
-            final List<Object> pcList = toList(this.getParameterCategories());
-            final List<Object> pcList2 = toList(that.getParameterCategories());
+            final List<Object> pcList = FunInfo.toList(this.getParameterCategories());
+            final List<Object> pcList2 = FunInfo.toList(that.getParameterCategories());
             return pcList.equals(pcList2);
         } else {
             return false;
@@ -196,7 +196,7 @@ public class FunInfo implements Comparable<FunInfo> {
 
     public int hashCode() {
         int h = name.hashCode();
-        final List<Object> pcList = toList(this.getParameterCategories());
+        final List<Object> pcList = FunInfo.toList(this.getParameterCategories());
         return Util.hash(h, pcList);
     }
 
@@ -209,7 +209,7 @@ public class FunInfo implements Comparable<FunInfo> {
         for (int i = 0; i < length; i++) {
             final Object o = Array.get(a, i);
             if (o.getClass().isArray()) {
-                list.add(toList(o));
+                list.add(FunInfo.toList(o));
             } else {
                 list.add(o);
             }

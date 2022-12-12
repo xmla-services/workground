@@ -72,7 +72,7 @@ class AncestorsFunDef extends FunDefBase {
                     List<Member> ancestors = new ArrayList<Member>();
                     for (int curDist = 1; curDist <= distance; curDist++) {
                         ancestors.add(
-                            ancestor(evaluator, member, curDist, null));
+                            FunUtil.ancestor(evaluator, member, curDist, null));
                     }
                     return TupleCollections.asTupleList(ancestors);
                 }
@@ -89,7 +89,7 @@ class AncestorsFunDef extends FunDefBase {
                     List<Member> ancestors = new ArrayList<Member>();
                     for (int curDist = 1; curDist <= distance; curDist++) {
                         ancestors.add(
-                            ancestor(evaluator, member, curDist, null));
+                            FunUtil.ancestor(evaluator, member, curDist, null));
                     }
                     return TupleCollections.asTupleList(ancestors);
                 }

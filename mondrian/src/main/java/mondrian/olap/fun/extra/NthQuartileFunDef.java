@@ -22,6 +22,7 @@ import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
 import mondrian.olap.fun.AbstractAggregateFunDef;
+import mondrian.olap.fun.FunUtil;
 import mondrian.olap.fun.MultiResolver;
 import mondrian.olap.fun.ReflectiveMultiResolver;
 
@@ -73,7 +74,7 @@ public class NthQuartileFunDef extends AbstractAggregateFunDef {
                     TupleList members =
                         evaluateCurrentList(listCalc, evaluator);
                     return
-                        quartile(
+                        FunUtil.quartile(
                             evaluator, members, doubleCalc, range);
                 } finally {
                     evaluator.restore(savepoint);

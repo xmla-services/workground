@@ -21,6 +21,7 @@ import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -146,7 +147,7 @@ class TopBottomPercentSumFunDef extends FunDefBase {
         evaluator.restore( savepoint );
       }
       if ( percent ) {
-        toPercent( list, mapMemberToValue );
+        FunUtil.toPercent( list, mapMemberToValue );
       }
       double runningTotal = 0;
       int memberCount = list.size();
@@ -182,7 +183,7 @@ class TopBottomPercentSumFunDef extends FunDefBase {
     }
 
     public boolean dependsOn( Hierarchy hierarchy ) {
-      return anyDependsButFirst( getCalcs(), hierarchy );
+      return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
     }
   }
 }

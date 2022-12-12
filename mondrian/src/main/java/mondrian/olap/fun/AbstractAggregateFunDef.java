@@ -99,11 +99,11 @@ public class AbstractAggregateFunDef extends FunDefBase {
         int currLen = tuples.size();
         TupleList dims;
         try {
-            dims = processUnrelatedDimensions(tuples, evaluator);
+            dims = AbstractAggregateFunDef.processUnrelatedDimensions(tuples, evaluator);
         } finally {
             evaluator.restore(savepoint);
         }
-        crossProd(evaluator, currLen);
+        AbstractAggregateFunDef.crossProd(evaluator, currLen);
         return dims;
     }
 
@@ -120,7 +120,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
         } finally {
             evaluator.restore(savepoint);
         }
-        crossProd(evaluator, currLen);
+        AbstractAggregateFunDef.crossProd(evaluator, currLen);
         return iterable;
     }
 
@@ -160,7 +160,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
             return tuplesForAggregation;
         }
 
-        RolapMember measure = getRolapMeasureForUnrelatedDimCheck(
+        RolapMember measure = AbstractAggregateFunDef.getRolapMeasureForUnrelatedDimCheck(
             evaluator, tuplesForAggregation);
 
         if (measure.isCalculated()) {
@@ -176,12 +176,12 @@ public class AbstractAggregateFunDef extends FunDefBase {
             }
             if (virtualCube.shouldIgnoreUnrelatedDimensions(baseCube.getName()))
             {
-                return ignoreUnrelatedDimensions(
+                return AbstractAggregateFunDef.ignoreUnrelatedDimensions(
                     tuplesForAggregation, baseCube);
             } else if (MondrianProperties.instance()
                 .IgnoreMeasureForNonJoiningDimension.get())
             {
-                return ignoreMeasureForNonJoiningDimension(
+                return AbstractAggregateFunDef.ignoreMeasureForNonJoiningDimension(
                     tuplesForAggregation, baseCube);
             }
         }
@@ -233,7 +233,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
         RolapCube baseCube)
     {
         Set<Dimension> nonJoiningDimensions =
-            nonJoiningDimensions(baseCube, tuplesForAggregation);
+            AbstractAggregateFunDef.nonJoiningDimensions(baseCube, tuplesForAggregation);
         if (nonJoiningDimensions.size() > 0) {
             return TupleCollections.emptyList(tuplesForAggregation.getArity());
         }
@@ -254,7 +254,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
         RolapCube baseCube)
     {
         Set<Dimension> nonJoiningDimensions =
-            nonJoiningDimensions(baseCube, tuplesForAggregation);
+            AbstractAggregateFunDef.nonJoiningDimensions(baseCube, tuplesForAggregation);
         final Set<List<Member>> processedTuples =
             new LinkedHashSet<List<Member>>(tuplesForAggregation.size());
         for (List<Member> tuple : tuplesForAggregation) {

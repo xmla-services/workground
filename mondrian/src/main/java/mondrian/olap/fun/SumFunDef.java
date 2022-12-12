@@ -18,6 +18,7 @@ import mondrian.calc.ListCalc;
 import mondrian.calc.ResultStyle;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -95,19 +96,19 @@ class SumFunDef extends AbstractAggregateFunDef {
   protected Calc genIterCalc( final ResolvedFunCall call, final IterCalc iterCalc, final Calc calc ) {
     return new AbstractDoubleCalc( call, new Calc[] { iterCalc, calc } ) {
       public double evaluateDouble( Evaluator evaluator ) {
-        evaluator.getTiming().markStart( TIMING_NAME );
+        evaluator.getTiming().markStart( SumFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {
           TupleIterable iterable = evaluateCurrentIterable( iterCalc, evaluator );
-          return sumDouble( evaluator, iterable, calc );
+          return FunUtil.sumDouble( evaluator, iterable, calc );
         } finally {
           evaluator.restore( savepoint );
-          evaluator.getTiming().markEnd( TIMING_NAME );
+          evaluator.getTiming().markEnd( SumFunDef.TIMING_NAME );
         }
       }
 
       public boolean dependsOn( Hierarchy hierarchy ) {
-        return anyDependsButFirst( getCalcs(), hierarchy );
+        return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
       }
     };
   }
@@ -115,20 +116,20 @@ class SumFunDef extends AbstractAggregateFunDef {
   protected Calc genListCalc( final ResolvedFunCall call, final ListCalc listCalc, final Calc calc ) {
     return new AbstractDoubleCalc( call, new Calc[] { listCalc, calc } ) {
       public double evaluateDouble( Evaluator evaluator ) {
-        evaluator.getTiming().markStart( TIMING_NAME );
+        evaluator.getTiming().markStart( SumFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {
-          TupleList memberList = evaluateCurrentList( listCalc, evaluator );
+          TupleList memberList = AbstractAggregateFunDef.evaluateCurrentList( listCalc, evaluator );
           evaluator.setNonEmpty( false );
-          return sumDouble( evaluator, memberList, calc );
+          return FunUtil.sumDouble( evaluator, memberList, calc );
         } finally {
           evaluator.restore( savepoint );
-          evaluator.getTiming().markEnd( TIMING_NAME );
+          evaluator.getTiming().markEnd( SumFunDef.TIMING_NAME );
         }
       }
 
       public boolean dependsOn( Hierarchy hierarchy ) {
-        return anyDependsButFirst( getCalcs(), hierarchy );
+        return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
       }
     };
   }

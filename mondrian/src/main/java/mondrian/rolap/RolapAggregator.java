@@ -176,13 +176,13 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
     public Aggregator getRollup() {
       return new RolapAggregator( "avg", index, false ) {
         public Object aggregate( Evaluator evaluator, TupleList members, Calc calc ) {
-          return AggregateFunDef.avg( evaluator, members, calc );
+          return FunUtil.avg( evaluator, members, calc );
         }
       };
     }
 
     public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
-      return AggregateFunDef.avg( evaluator, members, exp );
+      return FunUtil.avg( evaluator, members, exp );
     }
   };
 

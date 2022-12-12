@@ -27,6 +27,7 @@ import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.AbstractStringCalc;
 import mondrian.calc.impl.ConstantCalc;
@@ -111,7 +112,7 @@ class GenerateFunDef extends FunDefBase {
         } else {
             final ListCalc listCalc2 =
                 compiler.compileList(call.getArg(1));
-            final String literalArg = getLiteralArg(call, 2, "", ReservedWords);
+            final String literalArg = FunUtil.getLiteralArg(call, 2, "", GenerateFunDef.ReservedWords);
             final boolean all = literalArg.equalsIgnoreCase("ALL");
             final int arityOut = call.getType().getArity();
             return new GenerateListCalcImpl(
@@ -171,7 +172,7 @@ class GenerateFunDef extends FunDefBase {
                         cursor.setContext(evaluator);
                         final TupleList result2 =
                                 listCalc2.evaluateList(evaluator);
-                        addDistinctTuples(result, result2, emitted);
+                        GenerateListCalcImpl.addDistinctTuples(result, result2, emitted);
                     }
                 }
                 return result;
@@ -194,7 +195,7 @@ class GenerateFunDef extends FunDefBase {
         }
 
         public boolean dependsOn(Hierarchy hierarchy) {
-            return anyDependsButFirst(getCalcs(), hierarchy);
+            return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
         }
     }
 
@@ -245,7 +246,7 @@ class GenerateFunDef extends FunDefBase {
         }
 
         public boolean dependsOn(Hierarchy hierarchy) {
-            return anyDependsButFirst(getCalcs(), hierarchy);
+            return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
         }
     }
 }

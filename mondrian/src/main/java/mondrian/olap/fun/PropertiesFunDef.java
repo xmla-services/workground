@@ -59,7 +59,7 @@ class PropertiesFunDef extends FunDefBase {
         final StringCalc stringCalc = compiler.compileString(call.getArg(1));
         return new GenericCalc(call) {
             public Object evaluate(Evaluator evaluator) {
-                return properties(
+                return PropertiesFunDef.properties(
                     memberCalc.evaluateMember(evaluator),
                         stringCalc.evaluateString(evaluator));
             }
@@ -123,13 +123,13 @@ class PropertiesFunDef extends FunDefBase {
             Validator validator,
             List<Conversion> conversions)
         {
-            if (!matches(args, PARAMETER_TYPES, validator, conversions)) {
+            if (!matches(args, ResolverImpl.PARAMETER_TYPES, validator, conversions)) {
                 return null;
             }
             int returnType = deducePropertyCategory(args[0], args[1]);
             return new PropertiesFunDef(
                 getName(), getSignature(), getDescription(), getSyntax(),
-                returnType, PARAMETER_TYPES);
+                returnType, ResolverImpl.PARAMETER_TYPES);
         }
 
         /**
@@ -155,7 +155,7 @@ class PropertiesFunDef extends FunDefBase {
                 return Category.Value;
             }
             Level[] levels = hierarchy.getLevels();
-            Property property = lookupProperty(
+            Property property = Util.lookupProperty(
                 levels[levels.length - 1], propertyName);
             if (property == null) {
                 // we'll likely get a runtime error

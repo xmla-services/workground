@@ -34,7 +34,7 @@ class HierarchizeFunDef extends FunDefBase {
       "Orders the members of a set in a hierarchy.",
       new String[] { "fxx", "fxxy" },
       HierarchizeFunDef.class,
-      prePost );
+      HierarchizeFunDef.prePost );
 
   public HierarchizeFunDef( FunDef dummyFunDef ) {
     super( dummyFunDef );
@@ -43,7 +43,7 @@ class HierarchizeFunDef extends FunDefBase {
   public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final ListCalc listCalc =
       compiler.compileList( call.getArg( 0 ), true );
-    String order = getLiteralArg( call, 1, "PRE", prePost );
+    String order = FunUtil.getLiteralArg( call, 1, "PRE", HierarchizeFunDef.prePost );
     final boolean post = order.equals( "POST" );
     return new AbstractListCalc( call, new Calc[] { listCalc } ) {
       public TupleList evaluateList( Evaluator evaluator ) {

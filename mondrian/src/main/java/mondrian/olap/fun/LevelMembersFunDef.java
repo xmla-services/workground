@@ -38,7 +38,7 @@ public class LevelMembersFunDef extends FunDefBase {
         return new AbstractListCalc(call, new Calc[] {levelCalc}) {
             public TupleList evaluateList(Evaluator evaluator) {
                 Level level = levelCalc.evaluateLevel(evaluator);
-                return levelMembers(level, evaluator, false);
+                return FunUtil.levelMembers(level, evaluator, false);
             }
         };
     }

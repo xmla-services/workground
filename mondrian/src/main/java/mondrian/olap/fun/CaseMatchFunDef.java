@@ -133,7 +133,7 @@ class CaseMatchFunDef extends FunDefBase {
                 return null;
             }
 
-            FunDef dummy = createDummyFunDef(this, returnType, args);
+            FunDef dummy = FunUtil.createDummyFunDef(this, returnType, args);
             return new CaseMatchFunDef(dummy);
         }
 

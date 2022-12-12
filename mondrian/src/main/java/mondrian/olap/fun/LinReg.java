@@ -26,6 +26,7 @@ import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.FunDef;
 import mondrian.olap.Util;
+import mondrian.olap.fun.FunUtil.SetWrapper;
 
 /**
  * Abstract base class for definitions of linear regression functions.
@@ -255,7 +256,7 @@ public abstract class LinReg extends FunDefBase {
      */
     public static class InterceptFunDef extends LinReg {
         public InterceptFunDef(FunDef funDef) {
-            super(funDef, Intercept);
+            super(funDef, LinReg.Intercept);
         }
     }
 
@@ -270,7 +271,7 @@ public abstract class LinReg extends FunDefBase {
      */
     public static class PointFunDef extends LinReg {
         public PointFunDef(FunDef funDef) {
-            super(funDef, Point);
+            super(funDef, LinReg.Point);
         }
 
         public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
@@ -309,7 +310,7 @@ public abstract class LinReg extends FunDefBase {
 
         public double evaluateDouble(Evaluator evaluator) {
             double xPoint = xPointCalc.evaluateDouble(evaluator);
-            Value value = process(evaluator, listCalc, yCalc, xCalc);
+            Value value = LinReg.process(evaluator, listCalc, yCalc, xCalc);
             if (value == null) {
                 return FunUtil.DoubleNull;
             }
@@ -332,7 +333,7 @@ public abstract class LinReg extends FunDefBase {
      */
     public static class SlopeFunDef extends LinReg {
         public SlopeFunDef(FunDef funDef) {
-            super(funDef, Slope);
+            super(funDef, LinReg.Slope);
         }
     }
 
@@ -347,7 +348,7 @@ public abstract class LinReg extends FunDefBase {
      */
     public static class R2FunDef extends LinReg {
         public R2FunDef(FunDef funDef) {
-            super(funDef, R2);
+            super(funDef, LinReg.R2);
         }
     }
 
@@ -362,7 +363,7 @@ public abstract class LinReg extends FunDefBase {
      */
     public static class VarianceFunDef extends LinReg {
         public VarianceFunDef(FunDef funDef) {
-            super(funDef, Variance);
+            super(funDef, LinReg.Variance);
         }
     }
 
@@ -395,7 +396,7 @@ public abstract class LinReg extends FunDefBase {
         SetWrapper[] sws;
         try {
             sws =
-                evaluateSet(
+                FunUtil.evaluateSet(
                     evaluator, members, new DoubleCalc[] {yCalc, xCalc});
         } finally {
             evaluator.restore(savepoint);
@@ -404,14 +405,14 @@ public abstract class LinReg extends FunDefBase {
         SetWrapper swX = sws[1];
 
         if (swY.errorCount > 0) {
-            debug("LinReg.process", "ERROR error(s) count ="  + swY.errorCount);
+            LinReg.debug("LinReg.process", "ERROR error(s) count ="  + swY.errorCount);
             // TODO: throw exception
             return null;
         } else if (swY.v.size() == 0) {
             return null;
         }
 
-        return linearReg(swX.v, swY.v);
+        return LinReg.linearReg(swX.v, swY.v);
     }
 
     public static LinReg.Value accuracy(LinReg.Value value) {
@@ -429,7 +430,7 @@ public abstract class LinReg extends FunDefBase {
         double sumYF = 0.0;
 
         // Obtain the forecast values for this model
-        List yfs = forecast(value);
+        List yfs = LinReg.forecast(value);
 
         // Calculate the Sum of the Absolute Errors
         Iterator ity = value.ys.iterator();
@@ -526,8 +527,8 @@ public abstract class LinReg extends FunDefBase {
         double sumXX = 0.0;
         double sumXY = 0.0;
 
-        debug("LinReg.linearReg", "ylist.size()=" + ylist.size());
-        debug("LinReg.linearReg", "xlist.size()=" + xlist.size());
+        LinReg.debug("LinReg.linearReg", "ylist.size()=" + ylist.size());
+        LinReg.debug("LinReg.linearReg", "xlist.size()=" + xlist.size());
         int n = 0;
         for (int i = 0; i < size; i++) {
             Object yo = ylist.get(i);
@@ -539,7 +540,7 @@ public abstract class LinReg extends FunDefBase {
             double y = ((Double) yo).doubleValue();
             double x = ((Double) xo).doubleValue();
 
-            debug("LinReg.linearReg", " " + i + " (" + x + "," + y + ")");
+            LinReg.debug("LinReg.linearReg", " " + i + " (" + x + "," + y + ")");
             sumX += x;
             sumY += y;
             sumXX += x * x;
@@ -549,8 +550,8 @@ public abstract class LinReg extends FunDefBase {
         double xMean = sumX / n;
         double yMean = sumY / n;
 
-        debug("LinReg.linearReg", "yMean=" + yMean);
-        debug(
+        LinReg.debug("LinReg.linearReg", "yMean=" + yMean);
+        LinReg.debug(
             "LinReg.linearReg",
             "(n*sumXX - sumX*sumX)=" + (n * sumXX - sumX * sumX));
         // The regression line is the line that minimizes the variance of the
@@ -560,7 +561,7 @@ public abstract class LinReg extends FunDefBase {
         double intercept = yMean - slope * xMean;
 
         LinReg.Value value = new LinReg.Value(intercept, slope, xlist, ylist);
-        debug("LinReg.linearReg", "value=" + value);
+        LinReg.debug("LinReg.linearReg", "value=" + value);
 
         return value;
     }
@@ -608,7 +609,7 @@ public abstract class LinReg extends FunDefBase {
         }
 
         public double evaluateDouble(Evaluator evaluator) {
-            Value value = process(evaluator, listCalc, yCalc, xCalc);
+            Value value = LinReg.process(evaluator, listCalc, yCalc, xCalc);
             if (value == null) {
                 return FunUtil.DoubleNull;
             }

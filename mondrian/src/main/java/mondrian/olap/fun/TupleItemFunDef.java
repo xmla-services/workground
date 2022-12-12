@@ -85,7 +85,7 @@ class TupleItemFunDef extends FunDefBase {
                 call, new Calc[] {tupleCalc, indexCalc})
             {
                 final Member[] nullTupleMembers =
-                        makeNullTuple((TupleType) tupleCalc.getType());
+                        FunUtil.makeNullTuple((TupleType) tupleCalc.getType());
                 public Member evaluateMember(Evaluator evaluator) {
                     final Member[] members =
                             tupleCalc.evaluateTuple(evaluator);

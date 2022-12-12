@@ -76,16 +76,16 @@ class DimensionsStringFunDef extends FunDefBase {
         }
         OlapElement o = evaluator.getSchemaReader().lookupCompound(
             evaluator.getCube(),
-            parseIdentifier(name),
+            Util.parseIdentifier(name),
             false,
             Category.Hierarchy);
         if (o instanceof Hierarchy) {
             return (Hierarchy) o;
         } else if (o == null) {
-            throw newEvalException(
+            throw FunUtil.newEvalException(
                 this, "Hierarchy '" + name + "' not found");
         } else {
-            throw newEvalException(
+            throw FunUtil.newEvalException(
                 this, "Hierarchy(" + name + ") found " + o);
         }
     }

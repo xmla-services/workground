@@ -64,10 +64,10 @@ class StrToTupleFunDef extends FunDefBase {
                 public Member evaluateMember(Evaluator evaluator) {
                     String string = stringCalc.evaluateString(evaluator);
                     if (string == null) {
-                        throw newEvalException(
+                        throw FunUtil.newEvalException(
                             MondrianResource.instance().NullValue.ex());
                     }
-                    return parseMember(evaluator, string, hierarchy);
+                    return FunUtil.parseMember(evaluator, string, hierarchy);
                 }
             };
         } else {
@@ -77,10 +77,10 @@ class StrToTupleFunDef extends FunDefBase {
                 public Member[] evaluateTuple(Evaluator evaluator) {
                     String string = stringCalc.evaluateString(evaluator);
                     if (string == null) {
-                        throw newEvalException(
+                        throw FunUtil.newEvalException(
                             MondrianResource.instance().NullValue.ex());
                     }
-                    return parseTuple(evaluator, string, hierarchies);
+                    return FunUtil.parseTuple(evaluator, string, hierarchies);
                 }
             };
         }

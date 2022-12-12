@@ -65,7 +65,7 @@ class TupleToStrFunDef extends FunDefBase {
                         return "";
                     }
                     StringBuilder buf = new StringBuilder();
-                    SetToStrFunDef.appendTuple(buf, members);
+                    FunUtil.appendTuple(buf, members);
                     return buf.toString();
                 }
             };

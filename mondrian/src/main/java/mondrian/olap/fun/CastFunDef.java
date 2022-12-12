@@ -83,7 +83,7 @@ public class CastFunDef extends FunDefBase {
         if (o instanceof Number) {
             return ((Number) o).intValue();
         }
-        throw cannotConvert(o, targetType);
+        throw CastFunDef.cannotConvert(o, targetType);
     }
 
     private static double toDouble(Object o, final Type targetType) {
@@ -96,7 +96,7 @@ public class CastFunDef extends FunDefBase {
         if (o instanceof Number) {
             return ((Number) o).doubleValue();
         }
-        throw cannotConvert(o, targetType);
+        throw CastFunDef.cannotConvert(o, targetType);
     }
 
     public static boolean toBoolean(Object o, final Type targetType) {
@@ -112,7 +112,7 @@ public class CastFunDef extends FunDefBase {
         if (o instanceof Number) {
             return ((Number) o).doubleValue() > 0;
         }
-        throw cannotConvert(o, targetType);
+        throw CastFunDef.cannotConvert(o, targetType);
     }
 
     /**
@@ -150,7 +150,7 @@ public class CastFunDef extends FunDefBase {
                 throw MondrianResource.instance().CastInvalidType.ex(typeName);
             }
             final FunDef dummyFunDef =
-                createDummyFunDef(this, returnCategory, args);
+                FunUtil.createDummyFunDef(this, returnCategory, args);
             return new CastFunDef(dummyFunDef);
         }
     }
@@ -198,17 +198,17 @@ public class CastFunDef extends FunDefBase {
 
         public int evaluateInteger(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
-            return toInt(o, targetType);
+            return CastFunDef.toInt(o, targetType);
         }
 
         public double evaluateDouble(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
-            return toDouble(o, targetType);
+            return CastFunDef.toDouble(o, targetType);
         }
 
         public boolean evaluateBoolean(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
-            return toBoolean(o, targetType);
+            return CastFunDef.toBoolean(o, targetType);
         }
     }
 }
