@@ -163,7 +163,7 @@ public class TupleFunDef extends FunDefBase {
                     }
                 }
                 if(hasSet){
-                    FunDef dummy = createDummyFunDef(this, Category.Set, args);
+                    FunDef dummy = FunUtil.createDummyFunDef(this, Category.Set, args);
                     return new CrossJoinFunDef(dummy);
                 }
                 else {

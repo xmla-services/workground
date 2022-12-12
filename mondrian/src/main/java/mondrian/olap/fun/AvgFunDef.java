@@ -15,6 +15,7 @@ import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -45,20 +46,20 @@ class AvgFunDef extends AbstractAggregateFunDef {
         call.getArgCount() > 1 ? compiler.compileScalar( call.getArg( 1 ), true ) : new ValueCalc( call );
     return new AbstractDoubleCalc( call, new Calc[] { listCalc, calc } ) {
       public double evaluateDouble( Evaluator evaluator ) {
-        evaluator.getTiming().markStart( TIMING_NAME );
+        evaluator.getTiming().markStart( AvgFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {
-          TupleList memberList = evaluateCurrentList( listCalc, evaluator );
+          TupleList memberList = AbstractAggregateFunDef.evaluateCurrentList( listCalc, evaluator );
           evaluator.setNonEmpty( false );
-          return (Double) avg( evaluator, memberList, calc );
+          return (Double) FunUtil.avg( evaluator, memberList, calc );
         } finally {
           evaluator.restore( savepoint );
-          evaluator.getTiming().markEnd( TIMING_NAME );
+          evaluator.getTiming().markEnd( AvgFunDef.TIMING_NAME );
         }
       }
 
       public boolean dependsOn( Hierarchy hierarchy ) {
-        return anyDependsButFirst( getCalcs(), hierarchy );
+        return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
       }
     };
   }

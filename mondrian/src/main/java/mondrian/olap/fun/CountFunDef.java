@@ -36,7 +36,7 @@ class CountFunDef extends AbstractAggregateFunDef {
   static final ReflectiveMultiResolver Resolver =
       new ReflectiveMultiResolver( "Count", "Count(<Set>[, EXCLUDEEMPTY | INCLUDEEMPTY])",
           "Returns the number of tuples in a set, empty cells included unless the optional EXCLUDEEMPTY flag is used.",
-          new String[] { "fnx", "fnxy" }, CountFunDef.class, ReservedWords );
+          new String[] { "fnx", "fnxy" }, CountFunDef.class, CountFunDef.ReservedWords );
   private static final String TIMING_NAME = CountFunDef.class.getSimpleName();
 
   public CountFunDef( FunDef dummyFunDef ) {
@@ -49,7 +49,7 @@ class CountFunDef extends AbstractAggregateFunDef {
         call.getArgCount() < 2 || ( (Literal) call.getArg( 1 ) ).getValue().equals( "INCLUDEEMPTY" );
     return new AbstractIntegerCalc( call, new Calc[] { calc } ) {
       public int evaluateInteger( Evaluator evaluator ) {
-        evaluator.getTiming().markStart( TIMING_NAME );
+        evaluator.getTiming().markStart( CountFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {
           evaluator.setNonEmpty( false );
@@ -57,17 +57,17 @@ class CountFunDef extends AbstractAggregateFunDef {
           if ( calc instanceof IterCalc ) {
             IterCalc iterCalc = (IterCalc) calc;
             TupleIterable iterable = evaluateCurrentIterable( iterCalc, evaluator );
-            count = count( evaluator, iterable, includeEmpty );
+            count = FunUtil.count( evaluator, iterable, includeEmpty );
           } else {
             // must be ListCalc
             ListCalc listCalc = (ListCalc) calc;
-            TupleList list = evaluateCurrentList( listCalc, evaluator );
-            count = count( evaluator, list, includeEmpty );
+            TupleList list = AbstractAggregateFunDef.evaluateCurrentList( listCalc, evaluator );
+            count = FunUtil.count( evaluator, list, includeEmpty );
           }
           return count;
         } finally {
           evaluator.restore( savepoint );
-          evaluator.getTiming().markEnd( TIMING_NAME );
+          evaluator.getTiming().markEnd( CountFunDef.TIMING_NAME );
         }
       }
 

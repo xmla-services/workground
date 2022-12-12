@@ -82,7 +82,7 @@ class PeriodsToDateFunDef extends FunDefBase {
 
     return new AbstractListCalc( call, new Calc[] { levelCalc, memberCalc } ) {
       public TupleList evaluateList( Evaluator evaluator ) {
-        evaluator.getTiming().markStart( TIMING_NAME );
+        evaluator.getTiming().markStart( PeriodsToDateFunDef.TIMING_NAME );
         try {
           final Member member;
           final Level level;
@@ -97,9 +97,9 @@ class PeriodsToDateFunDef extends FunDefBase {
               member = memberCalc.evaluateMember( evaluator );
             }
           }
-          return new UnaryTupleList( periodsToDate( evaluator, level, member ) );
+          return new UnaryTupleList( FunUtil.periodsToDate( evaluator, level, member ) );
         } finally {
-          evaluator.getTiming().markEnd( TIMING_NAME );
+          evaluator.getTiming().markEnd( PeriodsToDateFunDef.TIMING_NAME );
         }
       }
 

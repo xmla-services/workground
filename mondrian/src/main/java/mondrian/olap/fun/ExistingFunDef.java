@@ -67,13 +67,13 @@ public class ExistingFunDef extends FunDefBase {
                     Arrays.asList(evaluator.getMembers());
 
                 List<Hierarchy> argDims = null;
-                List<Hierarchy> contextDims = getHierarchies(contextMembers);
+                List<Hierarchy> contextDims = ExistingFunDef.getHierarchies(contextMembers);
 
                 for (List<Member> tuple : setTuples) {
                     if (argDims == null) {
-                        argDims = getHierarchies(tuple);
+                        argDims = ExistingFunDef.getHierarchies(tuple);
                     }
-                    if (existsInTuple(tuple, contextMembers,
+                    if (FunUtil.existsInTuple(tuple, contextMembers,
                         argDims, contextDims, evaluator))
                     {
                         result.add(tuple);

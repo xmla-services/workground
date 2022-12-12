@@ -52,7 +52,7 @@ class IsFunDef extends FunDefBase {
                 public boolean evaluateBoolean(Evaluator evaluator) {
                     Member[] o0 = tupleCalc0.evaluateTuple(evaluator);
                     Member[] o1 = tupleCalc1.evaluateTuple(evaluator);
-                    return equalTuple(o0, o1);
+                    return FunUtil.equalTuple(o0, o1);
                 }
             };
         default:

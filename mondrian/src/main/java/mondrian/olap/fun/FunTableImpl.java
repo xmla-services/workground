@@ -114,7 +114,7 @@ public abstract class FunTableImpl implements FunTable {
     }
 
     public List<Resolver> getResolvers(String name, Syntax syntax) {
-        Pair<String, Syntax> key = makeResolverKey(name, syntax);
+        Pair<String, Syntax> key = FunTableImpl.makeResolverKey(name, syntax);
         List<Resolver> resolvers = mapNameToResolvers.get(key);
         if (resolvers == null) {
             resolvers = Collections.emptyList();
@@ -171,7 +171,7 @@ public abstract class FunTableImpl implements FunTable {
                 new ArrayList<List<Resolver>>();
             for (Resolver resolver : resolverList) {
                 Pair<String, Syntax> key =
-                    makeResolverKey(
+                    FunTableImpl.makeResolverKey(
                         resolver.getName(),
                         resolver.getSyntax());
                 List<Resolver> list = mapNameToResolvers.get(key);

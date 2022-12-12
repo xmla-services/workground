@@ -18,6 +18,7 @@ import java.util.Map;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eigenbase.xom.XOMUtil;
 
 import mondrian.calc.Calc;
 import mondrian.calc.DummyExp;
@@ -127,7 +128,7 @@ class OrderFunDef extends FunDefBase {
       if ( ( j >= argCount ) || ( call.getArg( j ).getCategory() != Category.Symbol ) ) {
         dir = Flag.ASC;
       } else {
-        dir = getLiteralArg( call, j, Flag.ASC, Flag.class );
+        dir = FunUtil.getLiteralArg( call, j, Flag.ASC, Flag.class );
         j++;
       }
       keySpecList.add( new SortKeySpec( key, dir ) );
@@ -161,12 +162,12 @@ class OrderFunDef extends FunDefBase {
       // REVIEW: If iterable happens to be a list, we'd like to pass it,
       // but we cannot yet guarantee that it is mutable.
       final TupleList list = iterable instanceof ArrayTupleList && false ? (TupleList) iterable : null;
-      Util.discard( iterCalc.getResultStyle() );
+      XOMUtil.discard( iterCalc.getResultStyle() );
       return handleSortWithOneKeySpec( subEvaluator, iterable, list );
     }
 
     public TupleList evaluateList( Evaluator evaluator ) {
-      evaluator.getTiming().markStart( TIMING_NAME );
+      evaluator.getTiming().markStart( OrderFunDef.TIMING_NAME );
       try {
         final TupleIterable iterable = iterCalc.evaluateIterable( evaluator );
         // REVIEW: If iterable happens to be a list, we'd like to pass it,
@@ -197,7 +198,7 @@ class OrderFunDef extends FunDefBase {
           }
         }
       } finally {
-        evaluator.getTiming().markEnd( TIMING_NAME );
+        evaluator.getTiming().markEnd( OrderFunDef.TIMING_NAME );
       }
     }
 
@@ -240,7 +241,7 @@ class OrderFunDef extends FunDefBase {
     }
 
     public boolean dependsOn( Hierarchy hierarchy ) {
-      return anyDependsButFirst( getCalcs(), hierarchy );
+      return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
     }
 
     private void purgeKeySpecList( List<SortKeySpec> keySpecList, TupleList list ) {
@@ -283,7 +284,7 @@ class OrderFunDef extends FunDefBase {
     private final Member[] members; // workspace
 
     protected ContextCalc( MemberCalc[] memberCalcs, CalcWithDual calc ) {
-      super( new DummyExp( calc.getType() ), xx( memberCalcs, calc ) );
+      super( new DummyExp( calc.getType() ), ContextCalc.xx( memberCalcs, calc ) );
       this.memberCalcs = memberCalcs;
       this.calc = calc;
       this.members = new Member[memberCalcs.length];
@@ -308,7 +309,7 @@ class OrderFunDef extends FunDefBase {
     }
 
     public boolean dependsOn( Hierarchy hierarchy ) {
-      if ( anyDepends( memberCalcs, hierarchy ) ) {
+      if ( AbstractCalc.anyDepends( memberCalcs, hierarchy ) ) {
         return true;
       }
       // Member calculations generate members, which mask the actual
@@ -337,7 +338,7 @@ class OrderFunDef extends FunDefBase {
     }
 
     public FunDef resolve( Exp[] args, Validator validator, List<Conversion> conversions ) {
-      argTypes = new int[args.length];
+      ResolverImpl.argTypes = new int[args.length];
 
       if ( args.length < 2 ) {
         return null;
@@ -346,14 +347,14 @@ class OrderFunDef extends FunDefBase {
       if ( !validator.canConvert( 0, args[0], Category.Set, conversions ) ) {
         return null;
       }
-      argTypes[0] = Category.Set;
+      ResolverImpl.argTypes[0] = Category.Set;
       // after fist args, should be: value [, symbol]
       int i = 1;
       while ( i < args.length ) {
         if ( !validator.canConvert( i, args[i], Category.Value, conversions ) ) {
           return null;
         } else {
-          argTypes[i] = Category.Value;
+          ResolverImpl.argTypes[i] = Category.Value;
           i++;
         }
         // if symbol is not specified, skip to the next
@@ -363,12 +364,12 @@ class OrderFunDef extends FunDefBase {
           if ( !validator.canConvert( i, args[i], Category.Symbol, conversions ) ) {
             // continue, will default sort flag for prev arg to ASC
           } else {
-            argTypes[i] = Category.Symbol;
+            ResolverImpl.argTypes[i] = Category.Symbol;
             i++;
           }
         }
       }
-      return new OrderFunDef( this, Category.Set, argTypes );
+      return new OrderFunDef( this, Category.Set, ResolverImpl.argTypes );
     }
 
     public String[] getReservedWords() {

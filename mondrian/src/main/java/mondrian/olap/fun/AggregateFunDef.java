@@ -34,6 +34,7 @@ import mondrian.calc.ListCalc;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterator;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.calc.impl.ValueCalc;
@@ -46,6 +47,7 @@ import mondrian.olap.FunDef;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
 import mondrian.rolap.RolapAggregator;
 
 /**
@@ -85,7 +87,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         }
         // Since the expression is not a base measure, we won't
         // attempt to determine the aggregator and will simply sum.
-        LOGGER.warn(
+        AggregateFunDef.LOGGER.warn(
             "Unable to determine aggregator for non-base measures "
             + "in 2nd parameter of Aggregate(), summing: " + exp.toString());
         return null;
@@ -121,17 +123,17 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         }
 
         public Object evaluate(Evaluator evaluator) {
-            evaluator.getTiming().markStart(TIMING_NAME);
+            evaluator.getTiming().markStart(AggregateFunDef.TIMING_NAME);
             final int savepoint = evaluator.savepoint();
             try {
-                TupleList list = evaluateCurrentList(listCalc, evaluator);
+                TupleList list = AbstractAggregateFunDef.evaluateCurrentList(listCalc, evaluator);
                 if (member != null) {
                     evaluator.setContext(member);
                 }
-                return aggregate(calc, evaluator, list);
+                return AggregateCalc.aggregate(calc, evaluator, list);
             } finally {
                 evaluator.restore(savepoint);
-                evaluator.getTiming().markEnd(TIMING_NAME);
+                evaluator.getTiming().markEnd(AggregateFunDef.TIMING_NAME);
             }
         }
 
@@ -154,13 +156,13 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                 (Aggregator) evaluator.getProperty(
                     Property.AGGREGATION_TYPE.name, null);
             if (aggregator == null) {
-                throw newEvalException(
+                throw FunUtil.newEvalException(
                     null,
                     "Could not find an aggregator in the current evaluation context");
             }
             Aggregator rollup = aggregator.getRollup();
             if (rollup == null) {
-                throw newEvalException(
+                throw FunUtil.newEvalException(
                     null,
                     "Don't know how to rollup aggregator '" + aggregator + "'");
             }
@@ -182,7 +184,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             // All that follows is logic for distinct count. It's not like the
             // other aggregators.
             if (tupleList.size() == 0) {
-                return DoubleNull;
+                return FunUtil.DoubleNull;
             }
 
             // Optimize the list
@@ -215,7 +217,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                 // very slow.  May want to revisit this if someone
                 // improves the algorithm.
             } else {
-                tupleList = optimizeTupleList(evaluator, tupleList, true);
+                tupleList = AggregateCalc.optimizeTupleList(evaluator, tupleList, true);
             }
 
             // Can't aggregate distinct-count values in the same way
@@ -262,7 +264,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         public static TupleList optimizeTupleList(
             Evaluator evaluator, TupleList tupleList, boolean checkSize)
         {
-            if (!canOptimize(evaluator, tupleList)) {
+            if (!AggregateCalc.canOptimize(evaluator, tupleList)) {
                 return tupleList;
             }
 
@@ -274,16 +276,16 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             // The optimization is expensive, so we only want to do it
             // if the DBMS can't execute the query otherwise.
             if (false) {
-                tupleList = removeOverlappingTupleEntries(tupleList);
+                tupleList = AggregateCalc.removeOverlappingTupleEntries(tupleList);
             }
             tupleList =
-                optimizeChildren(
+                AggregateCalc.optimizeChildren(
                     tupleList,
                     evaluator.getSchemaReader(),
                     evaluator.getMeasureCube(),
                     evaluator);
             if (checkSize) {
-                checkIfAggregationSizeIsTooLarge(tupleList);
+                AggregateCalc.checkIfAggregationSizeIsTooLarge(tupleList);
             }
             return tupleList;
         }
@@ -318,10 +320,10 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                     final TupleIterator iterator = trimmedList.tupleIterator();
                     while (iterator.forward()) {
                         iterator.currentToArray(tuple2, 0);
-                        if (isSuperSet(tuple1, tuple2)) {
+                        if (AggregateCalc.isSuperSet(tuple1, tuple2)) {
                             iterator.remove();
-                        } else if (isSuperSet(tuple2, tuple1)
-                            || isEqual(tuple1, tuple2))
+                        } else if (AggregateCalc.isSuperSet(tuple2, tuple1)
+                            || AggregateCalc.isEqual(tuple1, tuple2))
                         {
                             ignore = true;
                             break;
@@ -365,7 +367,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                 MondrianProperties.instance().MaxConstraints;
             final int maxConstraints = property.get();
             if (list.size() > maxConstraints) {
-                throw newEvalException(
+                throw FunUtil.newEvalException(
                     null,
                     "Aggregation is not supported over a list"
                     + " with more than " + maxConstraints + " predicates"
@@ -377,7 +379,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             if (hierarchy.getDimension().isMeasures()) {
                 return true;
             }
-            return anyDependsButFirst(getCalcs(), hierarchy);
+            return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
         }
 
         /**
@@ -414,18 +416,18 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             Evaluator evaluator)
         {
             Map<Member, Integer>[] membersOccurencesInTuple =
-                membersVersusOccurencesInTuple(tuples);
+                AggregateCalc.membersVersusOccurencesInTuple(tuples);
             int tupleLength = tuples.getArity();
 
             //noinspection unchecked
             Set<Member>[] sets = new Set[tupleLength];
             boolean optimized = false;
             for (int i = 0; i < tupleLength; i++) {
-                if (areOccurencesEqual(membersOccurencesInTuple[i].values())) {
+                if (Util.areOccurencesEqual(membersOccurencesInTuple[i].values())) {
                     Set<Member> members = membersOccurencesInTuple[i].keySet();
                     int originalSize = members.size();
                     sets[i] =
-                        optimizeMemberSet(
+                        AggregateCalc.optimizeMemberSet(
                             new LinkedHashSet<Member>(members),
                             reader,
                             baseCubeForMeasure,
@@ -440,7 +442,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                 }
             }
             if (optimized) {
-                return crossProd(sets);
+                return AggregateCalc.crossProd(sets);
             }
             return tuples;
         }
@@ -519,11 +521,11 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                 int childCountOfParent = -1;
                 if (firstParentMember != null) {
                     childCountOfParent =
-                        getChildCount(firstParentMember, reader, evaluator);
+                        AggregateCalc.getChildCount(firstParentMember, reader, evaluator);
                 }
                 if (childCountOfParent != -1
                     && membersToBeOptimized.size() == childCountOfParent
-                    && canOptimize(firstParentMember, baseCubeForMeasure))
+                    && AggregateCalc.canOptimize(firstParentMember, baseCubeForMeasure))
                 {
                     optimizedMembers.add(firstParentMember);
                     didOptimize = true;
@@ -564,7 +566,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             Member parentMember,
             Cube baseCube)
         {
-            return dimensionJoinsToBaseCube(
+            return AggregateCalc.dimensionJoinsToBaseCube(
                 parentMember.getDimension(), baseCube)
                 || !parentMember.isAll();
         }

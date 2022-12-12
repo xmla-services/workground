@@ -43,9 +43,9 @@ class SetToStrFunDef extends FunDefBase {
             public String evaluateString(Evaluator evaluator) {
                 final TupleList list = listCalc.evaluateList(evaluator);
                 if (list.getArity() == 1) {
-                    return memberSetToStr(list.slice(0));
+                    return SetToStrFunDef.memberSetToStr(list.slice(0));
                 } else {
-                    return tupleSetToStr(list);
+                    return SetToStrFunDef.tupleSetToStr(list);
                 }
             }
         };
@@ -76,7 +76,7 @@ class SetToStrFunDef extends FunDefBase {
                 buf.append(", ");
             }
             cursor.currentToArray(members, 0);
-            appendTuple(buf, members);
+            FunUtil.appendTuple(buf, members);
         }
         buf.append("}");
         return buf.toString();

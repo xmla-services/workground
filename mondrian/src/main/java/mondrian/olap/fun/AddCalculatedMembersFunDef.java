@@ -62,7 +62,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
         super(
             "AddCalculatedMembers",
             "Adds calculated members to a set.",
-            FLAG);
+            AddCalculatedMembersFunDef.FLAG);
     }
 
     public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
@@ -90,7 +90,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
             if (hierarchy == null) {
                 hierarchy = member.getHierarchy();
             } else if (hierarchy != member.getHierarchy()) {
-                throw newEvalException(
+                throw FunUtil.newEvalException(
                     this,
                     "Only members from the same hierarchy are allowed in the "
                     + "AddCalculatedMembers set: " + hierarchy
@@ -120,10 +120,10 @@ class AddCalculatedMembersFunDef extends FunDefBase {
     private static class ResolverImpl extends MultiResolver {
         public ResolverImpl() {
             super(
-                instance.getName(),
-                instance.getSignature(),
-                instance.getDescription(),
-                new String[] {FLAG});
+                AddCalculatedMembersFunDef.instance.getName(),
+                AddCalculatedMembersFunDef.instance.getSignature(),
+                AddCalculatedMembersFunDef.instance.getDescription(),
+                new String[] {AddCalculatedMembersFunDef.FLAG});
         }
 
         protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
@@ -133,10 +133,10 @@ class AddCalculatedMembersFunDef extends FunDefBase {
                 if (type1 instanceof SetType) {
                     SetType type = (SetType) type1;
                     if (type.getElementType() instanceof MemberType) {
-                        return instance;
+                        return AddCalculatedMembersFunDef.instance;
                     } else {
-                        throw newEvalException(
-                            instance,
+                        throw FunUtil.newEvalException(
+                            AddCalculatedMembersFunDef.instance,
                             "Only single dimension members allowed in set for AddCalculatedMembers");
                     }
                 }

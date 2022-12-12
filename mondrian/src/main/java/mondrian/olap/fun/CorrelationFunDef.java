@@ -15,6 +15,7 @@ import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.ResolvedFunCall;
@@ -56,9 +57,9 @@ class CorrelationFunDef extends AbstractAggregateFunDef {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
-                    TupleList list = evaluateCurrentList(listCalc, evaluator);
+                    TupleList list = AbstractAggregateFunDef.evaluateCurrentList(listCalc, evaluator);
                     final double correlation =
-                        correlation(
+                        FunUtil.correlation(
                             evaluator, list, calc1, calc2);
                     return correlation;
                 } finally {
@@ -67,7 +68,7 @@ class CorrelationFunDef extends AbstractAggregateFunDef {
             }
 
             public boolean dependsOn(Hierarchy hierarchy) {
-                return anyDependsButFirst(getCalcs(), hierarchy);
+                return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
             }
         };
     }

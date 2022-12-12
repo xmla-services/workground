@@ -129,7 +129,7 @@ class CaseTestFunDef extends FunDefBase {
             if (mismatchingArgs != 0) {
                 return null;
             }
-            FunDef dummy = createDummyFunDef(this, returnType, args);
+            FunDef dummy = FunUtil.createDummyFunDef(this, returnType, args);
             return new CaseTestFunDef(dummy);
         }
 

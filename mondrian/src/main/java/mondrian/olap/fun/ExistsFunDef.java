@@ -62,13 +62,13 @@ class ExistsFunDef extends FunDefBase
                 TupleList result =
                     TupleCollections.createList(leftTuples.getArity());
 
-                List<Hierarchy> leftDims = getHierarchies(leftTuples.get(0));
-                List<Hierarchy> rightDims = getHierarchies(rightTuples.get(0));
+                List<Hierarchy> leftDims = ExistsFunDef.getHierarchies(leftTuples.get(0));
+                List<Hierarchy> rightDims = ExistsFunDef.getHierarchies(rightTuples.get(0));
 
                 leftLoop:
                 for (List<Member> leftTuple : leftTuples) {
                     for (List<Member> rightTuple : rightTuples) {
-                        if (existsInTuple(leftTuple, rightTuple,
+                        if (FunUtil.existsInTuple(leftTuple, rightTuple,
                             leftDims, rightDims, null))
                         {
                             result.add(leftTuple);

@@ -109,11 +109,11 @@ class XtdFunDef extends FunDefBase {
       case 0:
         return new AbstractListCalc( call, new Calc[0] ) {
           public TupleList evaluateList( Evaluator evaluator ) {
-            evaluator.getTiming().markStart( TIMING_NAME );
+            evaluator.getTiming().markStart( XtdFunDef.TIMING_NAME );
             try {
-              return new UnaryTupleList( periodsToDate( evaluator, level, null ) );
+              return new UnaryTupleList( FunUtil.periodsToDate( evaluator, level, null ) );
             } finally {
-              evaluator.getTiming().markEnd( TIMING_NAME );
+              evaluator.getTiming().markEnd( XtdFunDef.TIMING_NAME );
             }
           }
 
@@ -125,11 +125,11 @@ class XtdFunDef extends FunDefBase {
         final MemberCalc memberCalc = compiler.compileMember( call.getArg( 0 ) );
         return new AbstractListCalc( call, new Calc[] { memberCalc } ) {
           public TupleList evaluateList( Evaluator evaluator ) {
-            evaluator.getTiming().markStart( TIMING_NAME );
+            evaluator.getTiming().markStart( XtdFunDef.TIMING_NAME );
             try {
-              return new UnaryTupleList( periodsToDate( evaluator, level, memberCalc.evaluateMember( evaluator ) ) );
+              return new UnaryTupleList( FunUtil.periodsToDate( evaluator, level, memberCalc.evaluateMember( evaluator ) ) );
             } finally {
-              evaluator.getTiming().markEnd( TIMING_NAME );
+              evaluator.getTiming().markEnd( XtdFunDef.TIMING_NAME );
             }
           }
         };

@@ -45,10 +45,10 @@ class StrToMemberFunDef extends FunDefBase {
                 String memberName =
                     memberNameCalc.evaluateString(evaluator);
                 if (memberName == null) {
-                    throw newEvalException(
+                    throw FunUtil.newEvalException(
                         MondrianResource.instance().NullValue.ex());
                 }
-                return parseMember(evaluator, memberName, null);
+                return FunUtil.parseMember(evaluator, memberName, null);
             }
         };
     }

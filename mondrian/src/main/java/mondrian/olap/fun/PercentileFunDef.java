@@ -17,6 +17,7 @@ import mondrian.calc.DoubleCalc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractDoubleCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -62,13 +63,13 @@ class PercentileFunDef extends AbstractAggregateFunDef {
             call, new Calc[] {listCalc, calc, percentCalc})
         {
             public double evaluateDouble(Evaluator evaluator) {
-                TupleList list = evaluateCurrentList(listCalc, evaluator);
+                TupleList list = AbstractAggregateFunDef.evaluateCurrentList(listCalc, evaluator);
                 double percent = percentCalc.evaluateDouble(evaluator) * 0.01;
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
                     final double percentile =
-                        percentile(evaluator, list, calc, percent);
+                        FunUtil.percentile(evaluator, list, calc, percent);
                     return percentile;
                 } finally {
                     evaluator.restore(savepoint);
@@ -76,7 +77,7 @@ class PercentileFunDef extends AbstractAggregateFunDef {
             }
 
             public boolean dependsOn(Hierarchy hierarchy) {
-                return anyDependsButFirst(getCalcs(), hierarchy);
+                return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
             }
         };
     }

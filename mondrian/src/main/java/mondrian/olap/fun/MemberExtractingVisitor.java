@@ -66,7 +66,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
         "PrevMember", "NextMember", "Ancestor", "Ancestors"
     };
     private static final List<String> blacklist = Collections.unmodifiableList(
-        Arrays.asList(unsafeFuncNames));
+        Arrays.asList(MemberExtractingVisitor.unsafeFuncNames));
 
     public MemberExtractingVisitor(
         Set<Member> memberSet, ResolvedFunCall call, boolean mapToAllMember)
@@ -131,7 +131,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
     public Object visit(ResolvedFunCall funCall) {
         if (funCall == call) {
             turnOffVisitChildren();
-        } else if (blacklist.contains(funCall.getFunName())) {
+        } else if (MemberExtractingVisitor.blacklist.contains(funCall.getFunName())) {
             for (Exp arg : funCall.getArgs()) {
                 arg.accept(new MemberExtractingVisitor(memberSet, call, true));
             }

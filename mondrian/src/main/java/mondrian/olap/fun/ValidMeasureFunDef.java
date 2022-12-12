@@ -24,6 +24,7 @@ import mondrian.calc.Calc;
 import mondrian.calc.ExpCompiler;
 import mondrian.calc.MemberCalc;
 import mondrian.calc.TupleCalc;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.GenericCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -217,7 +218,7 @@ public class ValidMeasureFunDef extends FunDefBase
 
         public boolean dependsOn(Hierarchy hierarchy) {
             // depends on all hierarchies
-            return butDepends(getCalcs(), hierarchy);
+            return AbstractCalc.butDepends(getCalcs(), hierarchy);
         }
     }
 }

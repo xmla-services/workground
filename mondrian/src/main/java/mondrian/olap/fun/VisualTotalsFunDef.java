@@ -131,7 +131,7 @@ public class VisualTotalsFunDef extends FunDefBase {
             final String caption;
             if (stringCalc != null) {
                 final String namePattern = stringCalc.evaluateString(evaluator);
-                caption = substitute(namePattern, member.getCaption());
+                caption = VisualTotalsFunDef.substitute(namePattern, member.getCaption());
             } else {
                 caption = member.getCaption();
             }

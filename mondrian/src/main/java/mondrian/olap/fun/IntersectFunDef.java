@@ -46,7 +46,7 @@ class IntersectFunDef extends FunDefBase
             "Returns the intersection of two input sets, optionally retaining duplicates.",
             new String[] {"fxxxy", "fxxx"},
             IntersectFunDef.class,
-            ReservedWords);
+            IntersectFunDef.ReservedWords);
 
     public IntersectFunDef(FunDef dummyFunDef)
     {
@@ -54,7 +54,7 @@ class IntersectFunDef extends FunDefBase
     }
 
     public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
-        final String literalArg = getLiteralArg(call, 2, "", ReservedWords);
+        final String literalArg = FunUtil.getLiteralArg(call, 2, "", IntersectFunDef.ReservedWords);
         final boolean all = literalArg.equalsIgnoreCase("ALL");
         final int arity = call.getType().getArity();
 

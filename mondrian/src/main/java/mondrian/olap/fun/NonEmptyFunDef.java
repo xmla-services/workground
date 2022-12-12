@@ -21,6 +21,7 @@ import mondrian.calc.ExpCompiler;
 import mondrian.calc.ListCalc;
 import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
@@ -118,7 +119,7 @@ class NonEmptyFunDef extends FunDefBase {
         }
 
         public boolean dependsOn(Hierarchy hierarchy) {
-            return anyDependsButFirst(getCalcs(), hierarchy);
+            return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
         }
     }
 }

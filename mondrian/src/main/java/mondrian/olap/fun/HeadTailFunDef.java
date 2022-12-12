@@ -69,7 +69,7 @@ class HeadTailFunDef extends FunDefBase {
                         evaluator.setNonEmpty(false);
                         TupleList list = listCalc.evaluateList(evaluator);
                         int count = integerCalc.evaluateInteger(evaluator);
-                        return head(count, list);
+                        return HeadTailFunDef.head(count, list);
                     } finally {
                         evaluator.restore(savepoint);
                     }
@@ -85,7 +85,7 @@ class HeadTailFunDef extends FunDefBase {
                         evaluator.setNonEmpty(false);
                         TupleList list = listCalc.evaluateList(evaluator);
                         int count = integerCalc.evaluateInteger(evaluator);
-                        return tail(count, list);
+                        return HeadTailFunDef.tail(count, list);
                     } finally {
                         evaluator.restore(savepoint);
                     }

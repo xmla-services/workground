@@ -42,7 +42,7 @@ class ToggleDrillStateFunDef extends FunDefBase {
             "Toggles the drill state of members. This function is a combination of DrillupMember and DrilldownMember.",
             new String[]{"fxxx", "fxxxy"},
             ToggleDrillStateFunDef.class,
-            ReservedWords);
+            ToggleDrillStateFunDef.ReservedWords);
 
     public ToggleDrillStateFunDef(FunDef dummyFunDef) {
         super(dummyFunDef);

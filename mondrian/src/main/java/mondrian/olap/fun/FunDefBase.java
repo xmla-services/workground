@@ -97,7 +97,7 @@ import mondrian.olap.type.TypeUtil;
  * @author jhyde
  * @since 26 February, 2002
  */
-public abstract class FunDefBase extends FunUtil implements FunDef {
+public abstract class FunDefBase implements FunDef {
     protected final int flags;
     private final String name;
     final String signature;
@@ -165,9 +165,9 @@ public abstract class FunDefBase extends FunUtil implements FunDef {
             name,
             null,
             description,
-            decodeSyntacticType(flags),
-            decodeReturnCategory(flags),
-            decodeParameterCategories(flags));
+            FunUtil.decodeSyntacticType(flags),
+            FunUtil.decodeReturnCategory(flags),
+            FunUtil.decodeParameterCategories(flags));
     }
 
     /**
@@ -203,9 +203,9 @@ public abstract class FunDefBase extends FunUtil implements FunDef {
             name,
             signature,
             description,
-            decodeSyntacticType(flags),
-            decodeReturnCategory(flags),
-            decodeParameterCategories(flags));
+            FunUtil.decodeSyntacticType(flags),
+            FunUtil.decodeReturnCategory(flags),
+            FunUtil.decodeParameterCategories(flags));
     }
 
     /**
@@ -404,7 +404,7 @@ public abstract class FunDefBase extends FunUtil implements FunDef {
             args.length > 0
             ? args[0].getType()
             : null;
-        Type type = castType(firstArgType, getReturnCategory());
+        Type type = FunDefBase.castType(firstArgType, getReturnCategory());
         if (type != null) {
             return type;
         }

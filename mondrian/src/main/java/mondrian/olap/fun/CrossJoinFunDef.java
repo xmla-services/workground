@@ -85,7 +85,7 @@ public class CrossJoinFunDef extends FunDefBase {
   private static int counterTag = 0;
 
   // used to tell the difference between crossjoin expressions.
-  private final int ctag = counterTag++;
+  private final int ctag = CrossJoinFunDef.counterTag++;
 
   public CrossJoinFunDef( FunDef dummyFunDef ) {
     super( dummyFunDef );
@@ -97,15 +97,15 @@ public class CrossJoinFunDef extends FunDefBase {
     for ( Exp arg : args ) {
       final Type type = arg.getType();
       if ( type instanceof SetType ) {
-        addTypes( type, list );
+        CrossJoinFunDef.addTypes( type, list );
       } else if ( getName().equals( "*" ) ) {
         // The "*" form of CrossJoin is lenient: args can be either
         // members/tuples or sets.
-        addTypes( type, list );
+        CrossJoinFunDef.addTypes( type, list );
       } else if ( getName().equals( "()" ) ) {
         // The "()" form of CrossJoin is lenient: args can be either
         // members/tuples or sets.
-        addTypes( type, list );
+        CrossJoinFunDef.addTypes( type, list );
       } else {
         throw Util.newInternal( "arg to crossjoin must be a set" );
       }
@@ -127,11 +127,11 @@ public class CrossJoinFunDef extends FunDefBase {
   private static void addTypes( final Type type, List<MemberType> list ) {
     if ( type instanceof SetType ) {
       SetType setType = (SetType) type;
-      addTypes( setType.getElementType(), list );
+      CrossJoinFunDef.addTypes( setType.getElementType(), list );
     } else if ( type instanceof TupleType ) {
       TupleType tupleType = (TupleType) type;
       for ( Type elementType : tupleType.elementTypes ) {
-        addTypes( elementType, list );
+        CrossJoinFunDef.addTypes( elementType, list );
       }
     } else if ( type instanceof MemberType ) {
       list.add( (MemberType) type );
@@ -200,8 +200,8 @@ public class CrossJoinFunDef extends FunDefBase {
     // there are 16 possible combinations - sweet.
 
     // Check returned calc ResultStyles
-    checkIterListResultStyles( calc1 );
-    checkIterListResultStyles( calc2 );
+    FunUtil.checkIterListResultStyles( calc1 );
+    FunUtil.checkIterListResultStyles( calc2 );
 
     return new CrossJoinIterCalc( call, calcs );
   }
@@ -367,8 +367,8 @@ public class CrossJoinFunDef extends FunDefBase {
     // there are 4 possible combinations - even sweeter.
 
     // Check returned calc ResultStyles
-    checkListResultStyles( calc1 );
-    checkListResultStyles( calc2 );
+    FunUtil.checkListResultStyles( calc1 );
+    FunUtil.checkListResultStyles( calc2 );
 
     return new ImmutableListCalc( call, calcs );
   }
@@ -507,8 +507,8 @@ public class CrossJoinFunDef extends FunDefBase {
     // there are 4 possible combinations - even sweeter.
 
     // Check returned calc ResultStyles
-    checkListResultStyles( calc1 );
-    checkListResultStyles( calc2 );
+    FunUtil.checkListResultStyles( calc1 );
+    FunUtil.checkListResultStyles( calc2 );
 
     return new MutableListCalc( call, calcs );
   }
@@ -543,7 +543,7 @@ public class CrossJoinFunDef extends FunDefBase {
         // Cannot optimize high cardinality dimensions
         Dimension dimension = ( (Member) o ).getDimension();
         if ( dimension.isHighCardinality() ) {
-          LOGGER.warn( MondrianResource.instance().HighCardinalityInDimension.str( dimension.getUniqueName() ) );
+          CrossJoinFunDef.LOGGER.warn( MondrianResource.instance().HighCardinalityInDimension.str( dimension.getUniqueName() ) );
           return list;
         }
       }
@@ -581,7 +581,7 @@ public class CrossJoinFunDef extends FunDefBase {
   }
 
   public static TupleList mutableCrossJoin( TupleList list1, TupleList list2 ) {
-    return mutableCrossJoin( Arrays.asList( list1, list2 ) );
+    return CrossJoinFunDef.mutableCrossJoin( Arrays.asList( list1, list2 ) );
   }
 
   public static TupleList mutableCrossJoin( List<TupleList> lists ) {
@@ -611,7 +611,7 @@ public class CrossJoinFunDef extends FunDefBase {
 
     final Member[] partialArray = new Member[arity];
     final List<Member> partial = Arrays.asList( partialArray );
-    cartesianProductRecurse( 0, lists, partial, partialArray, 0, result );
+    CrossJoinFunDef.cartesianProductRecurse( 0, lists, partial, partialArray, 0, result );
     return new ListTupleList( arity, result );
   }
 
@@ -629,7 +629,7 @@ public class CrossJoinFunDef extends FunDefBase {
       if ( i == lists.size() - 1 ) {
         result.addAll( partial );
       } else {
-        cartesianProductRecurse( iNext, lists, partial, partialArray, partialSizeNext, result );
+        CrossJoinFunDef.cartesianProductRecurse( iNext, lists, partial, partialArray, partialSizeNext, result );
       }
     }
   }
@@ -914,7 +914,7 @@ public class CrossJoinFunDef extends FunDefBase {
               }
             }
             if ( !found ) {
-              LOGGER.warn( "CrossJoinFunDef.nonEmptyListNEW: ERROR" );
+              CrossJoinFunDef.LOGGER.warn( "CrossJoinFunDef.nonEmptyListNEW: ERROR" );
             }
           } else {
             // The Hierarchy does NOT have an All member
@@ -957,7 +957,7 @@ public class CrossJoinFunDef extends FunDefBase {
         // Throws an exception in case of timeout is exceeded
         // see MONDRIAN-2425
         CancellationChecker.checkCancelOrTimeout( currentIteration++, execution );
-        if ( tupleContainsCalcs( cursor.current() ) || checkData( nonAllMembers, nonAllMembers.length - 1, measureSet,
+        if ( tupleContainsCalcs( cursor.current() ) || CrossJoinFunDef.checkData( nonAllMembers, nonAllMembers.length - 1, measureSet,
             evaluator ) ) {
           result.addCurrent( cursor );
         }
@@ -1012,7 +1012,7 @@ public class CrossJoinFunDef extends FunDefBase {
       boolean found = false;
       for ( Member m : nonAllMembers[cnt] ) {
         evaluator.setContext( m );
-        if ( checkData( nonAllMembers, cnt - 1, measureSet, evaluator ) ) {
+        if ( CrossJoinFunDef.checkData( nonAllMembers, cnt - 1, measureSet, evaluator ) ) {
           found = true;
         }
       }
@@ -1042,7 +1042,7 @@ public class CrossJoinFunDef extends FunDefBase {
           }
         }
 
-        FunDef dummy = createDummyFunDef(this, mondrian.olap.Category.Set, args);
+        FunDef dummy = FunUtil.createDummyFunDef(this, mondrian.olap.Category.Set, args);
         return new CrossJoinFunDef(dummy);
       }
     }

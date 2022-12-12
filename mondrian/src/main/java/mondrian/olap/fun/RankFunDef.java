@@ -119,16 +119,16 @@ public class RankFunDef extends FunDefBase {
     }
 
     public int evaluateInteger( Evaluator evaluator ) {
-      evaluator.getTiming().markStart( TIMING_NAME );
+      evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
         // Get member or tuple.
         // If the member is null (or the tuple contains a null member)
         // the result is null (even if the list is null).
         final Member[] members = tupleCalc.evaluateTuple( evaluator );
         if ( members == null ) {
-          return IntegerNull;
+          return FunUtil.IntegerNull;
         }
-        assert !tupleContainsNullMember( members );
+        assert !FunUtil.tupleContainsNullMember( members );
 
         // Get the set of members/tuples.
         // If the list is empty, MSAS cannot figure out the type of the
@@ -146,7 +146,7 @@ public class RankFunDef extends FunDefBase {
         // Return 1-based rank. 0 signifies not found.
         return i + 1;
       } finally {
-        evaluator.getTiming().markEnd( TIMING_NAME );
+        evaluator.getTiming().markEnd( RankFunDef.TIMING_NAME );
       }
     }
   }
@@ -162,7 +162,7 @@ public class RankFunDef extends FunDefBase {
     }
 
     public int evaluateInteger( Evaluator evaluator ) {
-      evaluator.getTiming().markStart( TIMING_NAME );
+      evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
 
         // Get member or tuple.
@@ -170,7 +170,7 @@ public class RankFunDef extends FunDefBase {
         // the result is null (even if the list is null).
         final Member member = memberCalc.evaluateMember( evaluator );
         if ( member == null || member.isNull() ) {
-          return IntegerNull;
+          return FunUtil.IntegerNull;
         }
         // Get the set of members/tuples.
         // If the list is empty, MSAS cannot figure out the type of the
@@ -187,7 +187,7 @@ public class RankFunDef extends FunDefBase {
         // Return 1-based rank. 0 signifies not found.
         return i + 1;
       } finally {
-        evaluator.getTiming().markEnd( TIMING_NAME );
+        evaluator.getTiming().markEnd( RankFunDef.TIMING_NAME );
       }
     }
   }
@@ -206,25 +206,25 @@ public class RankFunDef extends FunDefBase {
     }
 
     public int evaluateInteger( Evaluator evaluator ) {
-      evaluator.getTiming().markStart( TIMING_NAME );
+      evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
         Member[] members = tupleCalc.evaluateTuple( evaluator );
         if ( members == null ) {
-          return IntegerNull;
+          return FunUtil.IntegerNull;
         }
-        assert !tupleContainsNullMember( members );
+        assert !FunUtil.tupleContainsNullMember( members );
 
         // Evaluate the list (or retrieve from cache).
         // If there is an exception while calculating the
         // list, propagate it up.
         final SortResult sortResult = (SortResult) evaluator.getCachedResult( cacheDescriptor );
-        if ( debug ) {
+        if ( RankFunDef.debug ) {
           sortResult.print( new PrintWriter( System.out ) );
         }
 
         if ( sortResult.isEmpty() ) {
           // If list is empty, the rank is null.
-          return IntegerNull;
+          return FunUtil.IntegerNull;
         }
 
         // First try to find the member in the cached SortResult
@@ -251,7 +251,7 @@ public class RankFunDef extends FunDefBase {
           evaluator.restore( savepoint );
         }
 
-        if ( valueNotReady( value ) ) {
+        if ( RankFunDef.valueNotReady( value ) ) {
           // The value wasn't ready, so quit now... we'll be back.
           return 0;
         }
@@ -261,7 +261,7 @@ public class RankFunDef extends FunDefBase {
           return sortResult.values.length + 1;
         }
 
-        value = coerceValue( sortResult.values, value );
+        value = RankFunDef.coerceValue( sortResult.values, value );
 
         // Look for the ranked value in the array.
         int j = Arrays.binarySearch( sortResult.values, value, Collections.<Object>reverseOrder() );
@@ -272,7 +272,7 @@ public class RankFunDef extends FunDefBase {
         }
         return j + 1; // 1-based
       } finally {
-        evaluator.getTiming().markEnd( TIMING_NAME );
+        evaluator.getTiming().markEnd( RankFunDef.TIMING_NAME );
       }
     }
   }
@@ -291,23 +291,23 @@ public class RankFunDef extends FunDefBase {
     }
 
     public int evaluateInteger( Evaluator evaluator ) {
-      evaluator.getTiming().markStart( TIMING_NAME );
+      evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
         Member member = memberCalc.evaluateMember( evaluator );
         if ( member == null || member.isNull() ) {
-          return IntegerNull;
+          return FunUtil.IntegerNull;
         }
 
         // Evaluate the list (or retrieve from cache).
         // If there was an exception while calculating the
         // list, propagate it up.
         final MemberSortResult sortResult = (MemberSortResult) evaluator.getCachedResult( cacheDescriptor );
-        if ( debug ) {
+        if ( RankFunDef.debug ) {
           sortResult.print( new PrintWriter( System.out ) );
         }
         if ( sortResult.isEmpty() ) {
           // If list is empty, the rank is null.
-          return IntegerNull;
+          return FunUtil.IntegerNull;
         }
 
         // First try to find the member in the cached SortResult
@@ -326,7 +326,7 @@ public class RankFunDef extends FunDefBase {
           evaluator.restore( savepoint );
         }
 
-        if ( valueNotReady( value ) ) {
+        if ( RankFunDef.valueNotReady( value ) ) {
           // The value wasn't ready, so quit now... we'll be back.
           return 0;
         }
@@ -336,7 +336,7 @@ public class RankFunDef extends FunDefBase {
           return sortResult.values.length + 1;
         }
 
-        value = coerceValue( sortResult.values, value );
+        value = RankFunDef.coerceValue( sortResult.values, value );
 
         // Look for the ranked value in the array.
         int j = Arrays.binarySearch( sortResult.values, value, Collections.<Object>reverseOrder() );
@@ -347,7 +347,7 @@ public class RankFunDef extends FunDefBase {
         }
         return j + 1; // 1-based
       } finally {
-        evaluator.getTiming().markEnd( TIMING_NAME );
+        evaluator.getTiming().markEnd( RankFunDef.TIMING_NAME );
       }
     }
   }
@@ -394,7 +394,7 @@ public class RankFunDef extends FunDefBase {
     }
 
     public boolean dependsOn( Hierarchy hierarchy ) {
-      return anyDependsButFirst( getCalcs(), hierarchy );
+      return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
     }
 
     public Object evaluate( Evaluator evaluator ) {
@@ -435,7 +435,7 @@ public class RankFunDef extends FunDefBase {
               // nothing to do
             } else {
               // Assume it's the first time seeing this keyValue.
-              Integer valueCounter = uniqueValueCounterMap.put( keyValue, ONE );
+              Integer valueCounter = uniqueValueCounterMap.put( keyValue, SortedListCalc.ONE );
               if ( valueCounter != null ) {
                 // Update the counter on how many times this
                 // keyValue has been seen.
@@ -459,7 +459,7 @@ public class RankFunDef extends FunDefBase {
               // nothing to do
             } else {
               // Assume it's the first time seeing this keyValue.
-              Integer valueCounter = uniqueValueCounterMap.put( keyValue, ONE );
+              Integer valueCounter = uniqueValueCounterMap.put( keyValue, SortedListCalc.ONE );
               if ( valueCounter != null ) {
                 // Update the counter on how many times this
                 // keyValue has been seen.

@@ -25,6 +25,7 @@ import mondrian.calc.TupleCollections;
 import mondrian.calc.TupleCursor;
 import mondrian.calc.TupleIterable;
 import mondrian.calc.TupleList;
+import mondrian.calc.impl.AbstractCalc;
 import mondrian.calc.impl.AbstractIterCalc;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.AbstractTupleCursor;
@@ -109,7 +110,7 @@ class FilterFunDef extends FunDefBase {
         Calc[] calcs = new Calc[] {imlcalc, bcalc};
 
         // check returned calc ResultStyles
-        checkIterListResultStyles(imlcalc);
+        FunUtil.checkIterListResultStyles(imlcalc);
 
         if (imlcalc.getResultStyle() == ResultStyle.ITERABLE) {
             return new IterIterCalc(call, calcs);
@@ -126,7 +127,7 @@ class FilterFunDef extends FunDefBase {
         }
 
         public TupleIterable evaluateIterable(Evaluator evaluator) {
-            evaluator.getTiming().markStart(TIMING_NAME);
+            evaluator.getTiming().markStart(FilterFunDef.TIMING_NAME);
             try {
                 ResolvedFunCall call = (ResolvedFunCall) exp;
                 // Use a native evaluator, if more efficient.
@@ -142,14 +143,14 @@ class FilterFunDef extends FunDefBase {
                     return makeIterable(evaluator);
                 }
             } finally {
-                evaluator.getTiming().markEnd(TIMING_NAME);
+                evaluator.getTiming().markEnd(FilterFunDef.TIMING_NAME);
             }
         }
 
         protected abstract TupleIterable makeIterable(Evaluator evaluator);
 
         public boolean dependsOn(Hierarchy hierarchy) {
-            return anyDependsButFirst(getCalcs(), hierarchy);
+            return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
         }
     }
 
@@ -161,7 +162,7 @@ class FilterFunDef extends FunDefBase {
         }
 
         protected TupleIterable makeIterable(Evaluator evaluator) {
-            evaluator.getTiming().markStart(TIMING_NAME);
+            evaluator.getTiming().markStart(FilterFunDef.TIMING_NAME);
             final int savepoint = evaluator.savepoint();
             try {
                 Calc[] calcs = getCalcs();
@@ -190,7 +191,7 @@ class FilterFunDef extends FunDefBase {
                 return result;
             } finally {
                 evaluator.restore(savepoint);
-                evaluator.getTiming().markEnd(TIMING_NAME);
+                evaluator.getTiming().markEnd(FilterFunDef.TIMING_NAME);
             }
         }
     }
@@ -331,7 +332,7 @@ class FilterFunDef extends FunDefBase {
         protected abstract TupleList makeList(Evaluator evaluator);
 
         public boolean dependsOn(Hierarchy hierarchy) {
-            return anyDependsButFirst(getCalcs(), hierarchy);
+            return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
         }
     }
 
@@ -381,7 +382,7 @@ class FilterFunDef extends FunDefBase {
         }
 
         protected TupleList makeList(Evaluator evaluator) {
-            evaluator.getTiming().markStart(TIMING_NAME);
+            evaluator.getTiming().markStart(FilterFunDef.TIMING_NAME);
             final int savepoint = evaluator.savepoint();
             try {
                 Calc[] calcs = getCalcs();
@@ -408,7 +409,7 @@ class FilterFunDef extends FunDefBase {
                 return result;
             } finally {
                 evaluator.restore(savepoint);
-                evaluator.getTiming().markEnd(TIMING_NAME);
+                evaluator.getTiming().markEnd(FilterFunDef.TIMING_NAME);
             }
         }
     }
