@@ -28,7 +28,7 @@ import mondrian.olap.Validator;
  * @author jhyde
  * @since Feb 12, 2003
  */
-public abstract class MultiResolver extends FunUtil implements Resolver {
+public abstract class MultiResolver implements Resolver {
     private final String name;
     private final String signature;
     private final String description;
@@ -92,7 +92,7 @@ public abstract class MultiResolver extends FunUtil implements Resolver {
         return signatures;
     }
 
-    public FunDef getFunDef() {
+    public FunDef getRepresentativeFunDef() {
         return null;
     }
 

@@ -21,7 +21,7 @@ import mondrian.olap.Syntax;
  * @author jhyde
  * @since 3 March, 2002
  */
-abstract class ResolverBase extends FunUtil implements Resolver {
+abstract class ResolverBase implements Resolver {
     private final String name;
     private final String signature;
     private final String description;
@@ -47,7 +47,7 @@ abstract class ResolverBase extends FunUtil implements Resolver {
         return signature;
     }
 
-    public FunDef getFunDef() {
+    public FunDef getRepresentativeFunDef() {
         return null;
     }
 

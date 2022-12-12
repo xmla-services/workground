@@ -93,7 +93,7 @@ public interface Resolver {
      * null if there is no representative function, or if the Resolver has
      * a way to describe itself in more detail.
      */
-    FunDef getFunDef();
+    FunDef getRepresentativeFunDef();
 
     /**
      * Description of an implicit conversion that occurred while resolving an

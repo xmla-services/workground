@@ -184,7 +184,7 @@ class StrToTupleFunDef extends FunDefBase {
             return new StrToTupleFunDef(argTypes);
         }
 
-        public FunDef getFunDef() {
+        public FunDef getRepresentativeFunDef() {
             return new StrToTupleFunDef(new int[] {Category.String});
         }
     }
