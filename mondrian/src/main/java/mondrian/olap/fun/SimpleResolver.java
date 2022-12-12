@@ -32,7 +32,7 @@ class SimpleResolver implements Resolver {
         this.funDef = funDef;
     }
 
-    public FunDef getFunDef() {
+    public FunDef getRepresentativeFunDef() {
         return funDef;
     }
 

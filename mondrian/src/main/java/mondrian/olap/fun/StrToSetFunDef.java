@@ -191,7 +191,7 @@ class StrToSetFunDef extends FunDefBase {
             return new StrToSetFunDef(argTypes);
         }
 
-        public FunDef getFunDef() {
+        public FunDef getRepresentativeFunDef() {
             return new StrToSetFunDef(new int[] {Category.String});
         }
     }

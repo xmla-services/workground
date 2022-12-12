@@ -85,7 +85,7 @@ public class UdfResolver implements Resolver {
         return udf.getSyntax();
     }
 
-    public FunDef getFunDef() {
+    public FunDef getRepresentativeFunDef() {
         Type[] parameterTypes = udf.getParameterTypes();
         int[] parameterCategories = new int[parameterTypes.length];
         for (int i = 0; i < parameterCategories.length; i++) {

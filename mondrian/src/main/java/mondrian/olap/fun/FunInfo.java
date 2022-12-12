@@ -34,7 +34,7 @@ public class FunInfo implements Comparable<FunInfo> {
     private String[] sigs;
 
     static FunInfo make(Resolver resolver) {
-        FunDef funDef = resolver.getFunDef();
+        FunDef funDef = resolver.getRepresentativeFunDef();
         if (funDef != null) {
             return new FunInfo(funDef);
         } else if (resolver instanceof MultiResolver) {
