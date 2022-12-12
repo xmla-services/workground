@@ -2,15 +2,13 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.eclipse.daanse</groupId>
-    <artifactId>org.eclipse.daanse.olap.rolap</artifactId>
+    <artifactId>org.eclipse.daanse.olap.rolap.dbmapper</artifactId>
     <version>${revision}</version>
   </parent>
-  <artifactId>org.eclipse.daanse.olap.rolap.dbmapper</artifactId>
+  <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.verifyer</artifactId>
   <packaging>pom</packaging>
   <modules>
     <module>api</module>
-    <module>mondrian</module>
-    <module>record</module>
-    <module>verifyer</module>
+    <module>jdbc</module>
   </modules>
 </project>
