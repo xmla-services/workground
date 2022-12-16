@@ -18,6 +18,7 @@ import mondrian.olap.MondrianDef;
 import mondrian.olap.Property;
 import mondrian.resource.MondrianResource;
 import mondrian.spi.CellFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 
 /**
  * Measure which is computed from a SQL column (or expression) and which is
@@ -41,7 +42,7 @@ public class RolapBaseCubeMeasure
     /**
      * For SQL generator. Column which holds the value of the measure.
      */
-    private final MondrianDef.Expression expression;
+    private final Expression expression;
 
     /**
      * For SQL generator. Has values "SUM", "COUNT", etc.
@@ -83,7 +84,7 @@ public class RolapBaseCubeMeasure
         String caption,
         String description,
         String formatString,
-        MondrianDef.Expression expression,
+        Expression expression,
         String aggregatorName,
         String datatype,
         Map<String, Object> metadata)
@@ -147,7 +148,7 @@ public class RolapBaseCubeMeasure
         setProperty(Property.DATATYPE.name, datatype);
     }
 
-    public MondrianDef.Expression getMondrianDefExpression() {
+    public Expression getMondrianDefExpression() {
         return expression;
     }
 

@@ -9,23 +9,17 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.AggTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.SQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElements;
-import jakarta.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Table", propOrder = { "sql", "aggExclude", "aggTable", "hint" })
@@ -105,6 +99,11 @@ public class TableImpl implements Table {
 
     public void setAlias(String value) {
         this.alias = value;
+    }
+
+    @Override
+    public Relation find(String tableName) {
+        return null;
     }
 
 }

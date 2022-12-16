@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
@@ -19,4 +19,5 @@ public interface WritebackTable {
 
     String name();
 
+    Iterable<? extends WritebackColumn> columns();
 }

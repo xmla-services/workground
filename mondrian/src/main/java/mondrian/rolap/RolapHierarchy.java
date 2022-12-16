@@ -11,34 +11,7 @@
 */
 package mondrian.rolap;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-
-import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.access.HierarchyAccess;
-import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.access.RollupPolicy;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import mondrian.calc.Calc;
-import mondrian.calc.DummyExp;
-import mondrian.calc.ExpCompiler;
-import mondrian.calc.ListCalc;
-import mondrian.calc.TupleList;
+import mondrian.calc.*;
 import mondrian.calc.impl.AbstractListCalc;
 import mondrian.calc.impl.ConstantCalc;
 import mondrian.calc.impl.UnaryTupleList;
@@ -46,22 +19,8 @@ import mondrian.calc.impl.ValueCalc;
 import mondrian.mdx.HierarchyExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.mdx.UnresolvedFunCall;
-import mondrian.olap.Category;
-import mondrian.olap.DimensionType;
-import mondrian.olap.Evaluator;
-import mondrian.olap.Exp;
-import mondrian.olap.Formula;
-import mondrian.olap.HierarchyBase;
-import mondrian.olap.Id;
-import mondrian.olap.LevelType;
-import mondrian.olap.MatchType;
-import mondrian.olap.MondrianDef;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.SchemaReader;
-import mondrian.olap.Syntax;
-import mondrian.olap.Util;
-import mondrian.olap.Validator;
+import mondrian.olap.*;
 import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.BuiltinFunTable;
 import mondrian.olap.fun.FunDefBase;
@@ -77,6 +36,21 @@ import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.spi.CellFormatter;
 import mondrian.util.UnionIterator;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.HierarchyAccess;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.access.RollupPolicy;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.JoinImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.PrintWriter;
+import java.util.*;
 
 /**
  * <code>RolapHierarchy</code> implements {@link Hierarchy} for a ROLAP database.
@@ -102,9 +76,9 @@ public class RolapHierarchy extends HierarchyBase {
      * {@link #createMemberReader(Role)}.
      */
     private MemberReader memberReader;
-    protected MondrianDef.Hierarchy xmlHierarchy;
+    protected org.eclipse.daanse.olap.rolap.dbmapper.api.Hierarchy xmlHierarchy;
     private String memberReaderClass;
-    protected MondrianDef.RelationOrJoin relation;
+    protected RelationOrJoin relation;
     private Member defaultMember;
     private String defaultMemberName;
     private RolapNullMember nullMember;
@@ -228,33 +202,33 @@ public class RolapHierarchy extends HierarchyBase {
     RolapHierarchy(
         RolapCube cube,
         RolapDimension dimension,
-        MondrianDef.Hierarchy xmlHierarchy,
-        MondrianDef.CubeDimension xmlCubeDimension)
+        org.eclipse.daanse.olap.rolap.dbmapper.api.Hierarchy xmlHierarchy,
+        org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension xmlCubeDimension)
     {
         this(
             dimension,
-            xmlHierarchy.name,
-            xmlHierarchy.caption,
-            xmlHierarchy.visible,
-            xmlHierarchy.description,
-            xmlHierarchy.displayFolder,
-            xmlHierarchy.hasAll,
+            xmlHierarchy.name(),
+            xmlHierarchy.caption(),
+            xmlHierarchy.visible(),
+            xmlHierarchy.description(),
+            xmlHierarchy.displayFolder(),
+            xmlHierarchy.hasAll(),
             null,
-            createMetadataMap(xmlHierarchy.annotations));
+            createMetadataMap(xmlHierarchy.annotations()));
 
         assert !(this instanceof RolapCubeHierarchy);
 
         this.xmlHierarchy = xmlHierarchy;
-        MondrianDef.RelationOrJoin xmlHierarchyRelation = xmlHierarchy.relation;
-        if (xmlHierarchy.relation == null
-            && xmlHierarchy.memberReaderClass == null
+        RelationOrJoin xmlHierarchyRelation = xmlHierarchy.relation();
+        if (xmlHierarchy.relation() == null
+            && xmlHierarchy.memberReaderClass() == null
             && cube != null)
         {
           // if cube is virtual than there is no fact in it,
           // so look for it in source cube
           if(cube.isVirtual()) {
-            String cubeName = ((MondrianDef.VirtualCubeDimension) xmlCubeDimension)
-                    .cubeName;
+            String cubeName = ((VirtualCubeDimension) xmlCubeDimension)
+                    .cubeName();
             RolapCube sourceCube = cube.getSchema().lookupCube(cubeName);
             if(sourceCube != null) {
               xmlHierarchyRelation = sourceCube.getFact();
@@ -265,22 +239,22 @@ public class RolapHierarchy extends HierarchyBase {
         }
 
         this.relation = xmlHierarchyRelation;
-        if (xmlHierarchyRelation instanceof MondrianDef.InlineTable) {
+        if (xmlHierarchyRelation instanceof InlineTable) {
             this.relation =
                 RolapUtil.convertInlineTableToRelation(
-                    (MondrianDef.InlineTable) xmlHierarchyRelation,
+                    (InlineTable) xmlHierarchyRelation,
                     getRolapSchema().getDialect());
         }
-        this.memberReaderClass = xmlHierarchy.memberReaderClass;
-        this.uniqueKeyLevelName = xmlHierarchy.uniqueKeyLevelName;
+        this.memberReaderClass = xmlHierarchy.memberReaderClass();
+        this.uniqueKeyLevelName = xmlHierarchy.uniqueKeyLevelName();
 
         // Create an 'all' level even if the hierarchy does not officially
         // have one.
-        if (xmlHierarchy.allMemberName != null) {
-            this.allMemberName = xmlHierarchy.allMemberName;
+        if (xmlHierarchy.allMemberName() != null) {
+            this.allMemberName = xmlHierarchy.allMemberName();
         }
-        if (xmlHierarchy.allLevelName != null) {
-            this.allLevelName = xmlHierarchy.allLevelName;
+        if (xmlHierarchy.allLevelName() != null) {
+            this.allLevelName = xmlHierarchy.allLevelName();
         }
         RolapLevel allLevel =
             new RolapLevel(
@@ -309,51 +283,51 @@ public class RolapHierarchy extends HierarchyBase {
             null, allLevel, RolapUtil.sqlNullValue,
             allMemberName, Member.MemberType.ALL);
         // assign "all member" caption
-        if (xmlHierarchy.allMemberCaption != null
-            && xmlHierarchy.allMemberCaption.length() > 0)
+        if (xmlHierarchy.allMemberCaption() != null
+            && xmlHierarchy.allMemberCaption().length() > 0)
         {
-            this.allMember.setCaption(xmlHierarchy.allMemberCaption);
+            this.allMember.setCaption(xmlHierarchy.allMemberCaption());
         }
         this.allMember.setOrdinal(0);
 
-        if (xmlHierarchy.levels.length == 0) {
+        if (xmlHierarchy.level().size() == 0) {
             throw MondrianResource.instance().HierarchyHasNoLevels.ex(
                 getUniqueName());
         }
 
         Set<String> levelNameSet = new HashSet<String>();
-        for (MondrianDef.Level level : xmlHierarchy.levels) {
-            if (!levelNameSet.add(level.name)) {
+        for (org.eclipse.daanse.olap.rolap.dbmapper.api.Level level : xmlHierarchy.level()) {
+            if (!levelNameSet.add(level.name())) {
                 throw MondrianResource.instance().HierarchyLevelNamesNotUnique
                     .ex(
-                        getUniqueName(), level.name);
+                        getUniqueName(), level.name());
             }
         }
 
         // If the hierarchy has an 'all' member, the 'all' level is level 0.
         if (hasAll) {
-            this.levels = new RolapLevel[xmlHierarchy.levels.length + 1];
+            this.levels = new RolapLevel[xmlHierarchy.level().size() + 1];
             this.levels[0] = allLevel;
-            for (int i = 0; i < xmlHierarchy.levels.length; i++) {
-                final MondrianDef.Level xmlLevel = xmlHierarchy.levels[i];
-                if (xmlLevel.getKeyExp() == null
-                    && xmlHierarchy.memberReaderClass == null)
+            for (int i = 0; i < xmlHierarchy.level().size(); i++) {
+                final org.eclipse.daanse.olap.rolap.dbmapper.api.Level xmlLevel = xmlHierarchy.level().get(i);
+                if (xmlLevel.keyExpression() == null
+                    && xmlHierarchy.memberReaderClass() == null)
                 {
                     throw MondrianResource.instance()
-                        .LevelMustHaveNameExpression.ex(xmlLevel.name);
+                        .LevelMustHaveNameExpression.ex(xmlLevel.name());
                 }
                 levels[i + 1] = new RolapLevel(this, i + 1, xmlLevel);
             }
         } else {
-            this.levels = new RolapLevel[xmlHierarchy.levels.length];
-            for (int i = 0; i < xmlHierarchy.levels.length; i++) {
-                levels[i] = new RolapLevel(this, i, xmlHierarchy.levels[i]);
+            this.levels = new RolapLevel[xmlHierarchy.level().size()];
+            for (int i = 0; i < xmlHierarchy.level().size(); i++) {
+                levels[i] = new RolapLevel(this, i, xmlHierarchy.level().get(i));
             }
         }
 
-        if (xmlCubeDimension instanceof MondrianDef.DimensionUsage) {
+        if (xmlCubeDimension instanceof DimensionUsage) {
             String sharedDimensionName =
-                ((MondrianDef.DimensionUsage) xmlCubeDimension).source;
+                ((DimensionUsage) xmlCubeDimension).source();
             this.sharedHierarchyName = sharedDimensionName;
             if (subName != null) {
                 this.sharedHierarchyName += "." + subName; // e.g. "Time.Weekly"
@@ -362,32 +336,31 @@ public class RolapHierarchy extends HierarchyBase {
             this.sharedHierarchyName = null;
         }
         if (xmlHierarchyRelation != null
-            && xmlHierarchy.memberReaderClass != null)
+            && xmlHierarchy.memberReaderClass() != null)
         {
             throw MondrianResource.instance()
                 .HierarchyMustNotHaveMoreThanOneSource.ex(getUniqueName());
         }
-        if (!Util.isEmpty(xmlHierarchy.caption)) {
-            setCaption(xmlHierarchy.caption);
+        if (!Util.isEmpty(xmlHierarchy.caption())) {
+            setCaption(xmlHierarchy.caption());
         }
-        defaultMemberName = xmlHierarchy.defaultMember;
+        defaultMemberName = xmlHierarchy.defaultMember();
     }
 
     public static Map<String, Object> createMetadataMap(
-        MondrianDef.Annotations annotations)
+        List<? extends Annotation> annotations)
     {
         if (annotations == null
-            || annotations.array == null
-            || annotations.array.length == 0)
+            || annotations.size() == 0)
         {
             return Map.of();
         }
         // Use linked hash map because it retains order.
         final Map<String, Object> map =
             new LinkedHashMap<String, Object>();
-        for (MondrianDef.Annotation annotation : annotations.array) {
-            final String name = annotation.name;
-            final String value = annotation.cdata;
+        for (Annotation annotation : annotations) {
+            final String name = annotation.name();
+            final String value = annotation.content();
             map.put(name, value);
         }
         return map;
@@ -428,7 +401,7 @@ public class RolapHierarchy extends HierarchyBase {
     /**
      * Initializes a hierarchy within the context of a cube.
      */
-    void init(MondrianDef.CubeDimension xmlDimension) {
+    void init(CubeDimension xmlDimension) {
         // first create memberReader
         if (this.memberReader == null) {
             this.memberReader = getRolapSchema().createMemberReader(
@@ -524,10 +497,10 @@ public class RolapHierarchy extends HierarchyBase {
      * if this hierarchy has no table, return the cube's fact-table;
      * otherwise, returns null.
      */
-    public MondrianDef.Relation getUniqueTable() {
-        if (relation instanceof MondrianDef.Relation) {
-            return (MondrianDef.Relation) relation;
-        } else if (relation instanceof MondrianDef.Join) {
+    public Relation getUniqueTable() {
+        if (relation instanceof Relation) {
+            return (Relation) relation;
+        } else if (relation instanceof Join) {
             return null;
         } else {
             throw Util.newInternal(
@@ -539,29 +512,29 @@ public class RolapHierarchy extends HierarchyBase {
         return (relation != null) && getTable(tableName, relation) != null;
     }
 
-    MondrianDef.Relation getTable(String tableName) {
+    Relation getTable(String tableName) {
         return relation == null ? null : getTable(tableName, relation);
     }
 
-    private static MondrianDef.Relation getTable(
+    private static Relation getTable(
         String tableName,
-        MondrianDef.RelationOrJoin relationOrJoin)
+        RelationOrJoin relationOrJoin)
     {
-        if (relationOrJoin instanceof MondrianDef.Relation) {
-            MondrianDef.Relation relation =
-                (MondrianDef.Relation) relationOrJoin;
-            if (relation.getAlias().equals(tableName)) {
+        if (relationOrJoin instanceof Relation) {
+            Relation relation =
+                (Relation) relationOrJoin;
+            if (relation.alias().equals(tableName)) {
                 return relation;
             } else {
                 return null;
             }
         } else {
-            MondrianDef.Join join = (MondrianDef.Join) relationOrJoin;
-            MondrianDef.Relation rel = getTable(tableName, join.left);
+            Join join = (Join) relationOrJoin;
+            Relation rel = getTable(tableName, join.left());
             if (rel != null) {
                 return rel;
             }
-            return getTable(tableName, join.right);
+            return getTable(tableName, join.right());
         }
     }
 
@@ -569,11 +542,11 @@ public class RolapHierarchy extends HierarchyBase {
         return (RolapSchema) dimension.getSchema();
     }
 
-    public MondrianDef.RelationOrJoin getRelation() {
+    public RelationOrJoin getRelation() {
         return relation;
     }
 
-    public MondrianDef.Hierarchy getXmlHierarchy() {
+    public org.eclipse.daanse.olap.rolap.dbmapper.api.Hierarchy getXmlHierarchy() {
         return xmlHierarchy;
     }
 
@@ -626,7 +599,7 @@ public class RolapHierarchy extends HierarchyBase {
         Member parent,
         Level level,
         String name,
-        Formula formula)
+        mondrian.olap.Formula formula)
     {
         if (formula == null) {
             return new RolapMemberBase(
@@ -676,18 +649,18 @@ public class RolapHierarchy extends HierarchyBase {
      *    topmost ('all') expression, which may require more columns and more
      *    joins
      */
-    void addToFromInverse(SqlQuery query, MondrianDef.Expression expression) {
+    void addToFromInverse(SqlQuery query, Expression expression) {
         if (relation == null) {
             throw Util.newError(
                 "cannot add hierarchy " + getUniqueName()
                 + " to query: it does not have a <Table>, <View> or <Join>");
         }
         final boolean failIfExists = false;
-        MondrianDef.RelationOrJoin subRelation = relation;
-        if (relation instanceof MondrianDef.Join) {
+        RelationOrJoin subRelation = relation;
+        if (relation instanceof Join) {
             if (expression != null) {
                 subRelation =
-                    relationSubsetInverse(relation, expression.getTableAlias());
+                    relationSubsetInverse(relation, expression.tableAlias());
             }
         }
         query.addFrom(subRelation, null, failIfExists);
@@ -706,7 +679,7 @@ public class RolapHierarchy extends HierarchyBase {
      *    topmost ('all') expression, which may require more columns and more
      *    joins
      */
-    void addToFrom(SqlQuery query, MondrianDef.Expression expression) {
+    void addToFrom(SqlQuery query, Expression expression) {
         if (getRelation() == null) {
             throw Util.newError(
                 "cannot add hierarchy " + getUniqueName()
@@ -714,8 +687,8 @@ public class RolapHierarchy extends HierarchyBase {
         }
         query.registerRootRelation(getRelation());
         final boolean failIfExists = false;
-        MondrianDef.RelationOrJoin subRelation = getRelation();
-        if (getRelation() instanceof MondrianDef.Join) {
+        RelationOrJoin subRelation = getRelation();
+        if (getRelation() instanceof Join) {
             if (expression != null) {
                 // Suppose relation is
                 //   (((A join B) join C) join D)
@@ -726,7 +699,7 @@ public class RolapHierarchy extends HierarchyBase {
                 // Search for the smallest subset of the relation which
                 // uses C.
                 subRelation =
-                    relationSubset(getRelation(), expression.getTableAlias());
+                    relationSubset(getRelation(), expression.tableAlias());
                 if (subRelation == null) {
                     subRelation = getRelation();
                 }
@@ -734,7 +707,7 @@ public class RolapHierarchy extends HierarchyBase {
         }
         query.addFrom(
             subRelation,
-            expression == null ? null : expression.getTableAlias(),
+            expression == null ? null : expression.tableAlias(),
             failIfExists);
     }
 
@@ -756,7 +729,7 @@ public class RolapHierarchy extends HierarchyBase {
                 + " to query: it does not have a <Table>, <View> or <Join>");
         }
         final boolean failIfExists = false;
-        MondrianDef.RelationOrJoin subRelation = null;
+        RelationOrJoin subRelation = null;
         if (table != null) {
             // Suppose relation is
             //   (((A join B) join C) join D)
@@ -801,23 +774,23 @@ public class RolapHierarchy extends HierarchyBase {
      * @return the smallest containing relation or null if no matching table
      * is found in <code>relation</code>
      */
-    private static MondrianDef.RelationOrJoin relationSubsetInverse(
-        MondrianDef.RelationOrJoin relation,
+    private static RelationOrJoin relationSubsetInverse(
+        RelationOrJoin relation,
         String alias)
     {
-        if (relation instanceof MondrianDef.Relation) {
-            MondrianDef.Relation table =
-                (MondrianDef.Relation) relation;
-            return table.getAlias().equals(alias)
+        if (relation instanceof Relation) {
+            Relation table =
+                (Relation) relation;
+            return table.alias().equals(alias)
                 ? relation
                 : null;
 
-        } else if (relation instanceof MondrianDef.Join) {
-            MondrianDef.Join join = (MondrianDef.Join) relation;
-            MondrianDef.RelationOrJoin leftRelation =
-                relationSubsetInverse(join.left, alias);
+        } else if (relation instanceof Join) {
+            Join join = (Join) relation;
+            RelationOrJoin leftRelation =
+                relationSubsetInverse(join.left(), alias);
             return (leftRelation == null)
-                ? relationSubsetInverse(join.right, alias)
+                ? relationSubsetInverse(join.right(), alias)
                 : join;
 
         } else {
@@ -834,23 +807,23 @@ public class RolapHierarchy extends HierarchyBase {
      * @return the smallest containing relation or null if no matching table
      * is found in <code>relation</code>
      */
-    private static MondrianDef.RelationOrJoin relationSubset(
-        MondrianDef.RelationOrJoin relation,
+    private static RelationOrJoin relationSubset(
+        RelationOrJoin relation,
         String alias)
     {
-        if (relation instanceof MondrianDef.Relation) {
-            MondrianDef.Relation table =
-                (MondrianDef.Relation) relation;
-            return table.getAlias().equals(alias)
+        if (relation instanceof Relation) {
+            Relation table =
+                (Relation) relation;
+            return table.alias().equals(alias)
                 ? relation
                 : null;
 
-        } else if (relation instanceof MondrianDef.Join) {
-            MondrianDef.Join join = (MondrianDef.Join) relation;
-            MondrianDef.RelationOrJoin rightRelation =
-                relationSubset(join.right, alias);
+        } else if (relation instanceof Join) {
+            Join join = (Join) relation;
+            RelationOrJoin rightRelation =
+                relationSubset(join.right(), alias);
             return (rightRelation == null)
-                ? relationSubset(join.left, alias)
+                ? relationSubset(join.left(), alias)
                 : MondrianProperties.instance()
                     .FilterChildlessSnowflakeMembers.get()
                 ? join
@@ -870,28 +843,28 @@ public class RolapHierarchy extends HierarchyBase {
      * @return the smallest containing relation or null if no matching table
      * is found in <code>relation</code>
      */
-    private static MondrianDef.RelationOrJoin lookupRelationSubset(
-        MondrianDef.RelationOrJoin relation,
+    private static RelationOrJoin lookupRelationSubset(
+        RelationOrJoin relation,
         RolapStar.Table targetTable)
     {
-        if (relation instanceof MondrianDef.Table) {
-            MondrianDef.Table table = (MondrianDef.Table) relation;
-            if (table.name.equals(targetTable.getTableName())) {
+        if (relation instanceof Table) {
+            Table table = (Table) relation;
+            if (table.name().equals(targetTable.getTableName())) {
                 return relation;
             } else {
                 // Not the same table if table names are different
                 return null;
             }
-        } else if (relation instanceof MondrianDef.Join) {
+        } else if (relation instanceof Join) {
             // Search inside relation, starting from the rightmost table,
             // and move left along the join chain.
-            MondrianDef.Join join = (MondrianDef.Join) relation;
-            MondrianDef.RelationOrJoin rightRelation =
-                lookupRelationSubset(join.right, targetTable);
+            Join join = (Join) relation;
+            RelationOrJoin rightRelation =
+                lookupRelationSubset(join.right(), targetTable);
             if (rightRelation == null) {
                 // Keep searching left.
                 return lookupRelationSubset(
-                    join.left, targetTable);
+                    join.left(), targetTable);
             } else {
                 // Found a match.
                 return join;
@@ -1104,7 +1077,7 @@ public class RolapHierarchy extends HierarchyBase {
      * closure of the relationship for this parent-child level.
      *
      * <p>This method is triggered by the
-     * {@link mondrian.olap.MondrianDef.Closure} element
+     * {@link mondrian.olap.Closure} element
      * in a schema, and is only meaningful for a parent-child hierarchy.
      *
      * <p>When a Schema contains a parent-child Hierarchy that has an
@@ -1164,8 +1137,8 @@ public class RolapHierarchy extends HierarchyBase {
      */
     RolapDimension createClosedPeerDimension(
         RolapLevel src,
-        MondrianDef.Closure clos,
-        MondrianDef.CubeDimension xmlDimension)
+        Closure clos,
+        CubeDimension xmlDimension)
     {
         // REVIEW (mb): What about attribute primaryKeyTable?
 
@@ -1186,20 +1159,20 @@ public class RolapHierarchy extends HierarchyBase {
         peerHier.allMember = (RolapMemberBase) getAllMember();
         peerHier.allLevelName = getAllLevelName();
         peerHier.sharedHierarchyName = getSharedHierarchyName();
-        MondrianDef.Join join = new MondrianDef.Join();
+        JoinImpl join = new JoinImpl();
         peerHier.relation = join;
-        join.left = clos.table;         // the closure table
-        join.leftKey = clos.parentColumn;
-        join.right = relation;     // the unclosed base table
-        join.rightKey = clos.childColumn;
+        join.setLeft( clos.table() );         // the closure table
+        join.setLeftKey( clos.parentColumn() );
+        join.setRight( relation );     // the unclosed base table
+        join.setRightKey( clos.childColumn() );
 
         // Create the upper level.
         // This represents all groups of descendants. For example, in the
         // Employee closure hierarchy, this level has a row for every employee.
         int index = peerHier.levels.length;
         int flags = src.getFlags() &~ RolapLevel.FLAG_UNIQUE;
-        MondrianDef.Expression keyExp =
-            new MondrianDef.Column(clos.table.name, clos.parentColumn);
+        Expression keyExp =
+            new ColumnR(clos.table().name(), clos.parentColumn());
 
         RolapLevel level =
             new RolapLevel(
@@ -1223,7 +1196,7 @@ public class RolapHierarchy extends HierarchyBase {
         // indirect report of every employee (which is more than the number
         // of employees).
         flags = src.getFlags() | RolapLevel.FLAG_UNIQUE;
-        keyExp = new MondrianDef.Column(clos.table.name, clos.childColumn);
+        keyExp = new ColumnR(clos.table().name(), clos.childColumn());
         RolapLevel sublevel = new RolapLevel(
             peerHier,
             "Item",
@@ -1330,7 +1303,7 @@ public class RolapHierarchy extends HierarchyBase {
         private RolapResult.ValueFormatter cellFormatter;
 
         public RolapCalculatedMeasure(
-            RolapMember parent, RolapLevel level, String name, Formula formula)
+            RolapMember parent, RolapLevel level, String name, mondrian.olap.Formula formula)
         {
             super(parent, level, name, formula);
         }

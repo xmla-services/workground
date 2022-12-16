@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
@@ -34,7 +34,7 @@ public interface Level {
 
     List<? extends Property> property();
 
-    BigInteger approxRowCount();
+    String approxRowCount();
 
     String name();
 
@@ -66,4 +66,11 @@ public interface Level {
 
     String captionColumn();
 
+    boolean visible();
+
+    String internalType();
+
+    ElementFormatter memberFormatter();
+
+    Expression getPropertyExp(int i);
 }

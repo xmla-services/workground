@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
@@ -22,7 +22,8 @@ public record SharedDimensionR(String name,
                                String caption,
                                String description,
                                List<AnnotationR> annotations,
-                               List<HierarchyR> hierarchy)
+                               List<HierarchyR> hierarchy,
+                               String foreignKey)
         implements SharedDimension {
 
 }

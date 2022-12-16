@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
@@ -23,13 +23,14 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.MemberGrant;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "memberGrant" })
 public class HierarchyGrantImpl implements HierarchyGrant {
 
-    @XmlElement(name = "MemberGrant")
-    protected List<MemberGrantImpl> memberGrant;
+    @XmlElement(name = "MemberGrant", type = MemberGrantImpl.class)
+    protected List<MemberGrant> memberGrant;
     @XmlAttribute(name = "hierarchy", required = true)
     protected String hierarchy;
     @XmlAttribute(name = "access", required = true)
@@ -42,9 +43,9 @@ public class HierarchyGrantImpl implements HierarchyGrant {
     protected String rollupPolicy;
 
     @Override
-    public List<MemberGrantImpl> memberGrant() {
+    public List<MemberGrant> memberGrant() {
         if (memberGrant == null) {
-            memberGrant = new ArrayList<MemberGrantImpl>();
+            memberGrant = new ArrayList<>();
         }
         return this.memberGrant;
     }
@@ -96,6 +97,10 @@ public class HierarchyGrantImpl implements HierarchyGrant {
 
     public void setRollupPolicy(String value) {
         this.rollupPolicy = value;
+    }
+
+    public void setMemberGrant(List<MemberGrant> memberGrant) {
+        this.memberGrant = memberGrant;
     }
 
 }

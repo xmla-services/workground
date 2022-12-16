@@ -10,20 +10,16 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import jakarta.xml.bind.annotation.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.View;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlType;
+import java.util.ArrayList;
+import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "View", propOrder = { "sql" })
@@ -37,9 +33,20 @@ public class ViewImpl implements View {
     @Override
     public List<SQLImpl> sqls() {
         if (sql == null) {
-            sql = new ArrayList<SQLImpl>();
+            sql = new ArrayList<>();
         }
         return this.sql;
+    }
+
+    @Override
+    public void addCode(String dialect, String code) {
+        if (sql == null) {
+            sql = new ArrayList<>();
+        }
+        SQLImpl sqlImpl = new SQLImpl();
+        sqlImpl.setDialect(dialect);
+        sqlImpl.setContent(code);
+        sql.add(sqlImpl);
     }
 
     @Override
@@ -51,4 +58,12 @@ public class ViewImpl implements View {
         this.alias = value;
     }
 
+    @Override
+    public Relation find(String seekAlias) {
+        if (seekAlias.equals(alias)) {
+            return this;
+        } else {
+            return null;
+        }
+    }
 }

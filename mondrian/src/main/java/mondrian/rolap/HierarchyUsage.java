@@ -17,6 +17,8 @@ import java.util.Objects;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +60,7 @@ public class HierarchyUsage {
      * identifies the usage, and determines which join conditions need to be
      * used.
      */
-    protected final MondrianDef.Relation fact;
+    protected final Relation fact;
 
     /**
      * This matches the hierarchy - may not be unique.
@@ -111,13 +113,13 @@ public class HierarchyUsage {
      * Dimension table which contains the primary key for the hierarchy.
      * (Usually the table of the lowest level of the hierarchy.)
      */
-    private MondrianDef.Relation joinTable;
+    private Relation joinTable;
 
     /**
-     * The expression (usually a {@link mondrian.olap.MondrianDef.Column}) by
+     * The expression (usually a {@link mondrian.olap.Column}) by
      * which the hierarchy which is joined to the fact table.
      */
-    private MondrianDef.Expression joinExp;
+    private Expression joinExp;
 
     private final Kind kind;
 
@@ -131,7 +133,7 @@ public class HierarchyUsage {
     HierarchyUsage(
         RolapCube cube,
         RolapHierarchy hierarchy,
-        MondrianDef.CubeDimension cubeDim)
+        CubeDimension cubeDim)
     {
         assert cubeDim != null : "precondition: cubeDim != null";
 
@@ -140,24 +142,24 @@ public class HierarchyUsage {
         // Attributes common to all Hierarchy kinds
         // name
         // foreignKey
-        this.name = cubeDim.name;
-        this.foreignKey = cubeDim.foreignKey;
+        this.name = cubeDim.name();
+        this.foreignKey = cubeDim.foreignKey();
 
-        if (cubeDim instanceof MondrianDef.DimensionUsage) {
+        if (cubeDim instanceof DimensionUsage) {
             this.kind = Kind.SHARED;
 
 
             // Shared Hierarchy attributes
             // source
             // level
-            MondrianDef.DimensionUsage du =
-                (MondrianDef.DimensionUsage) cubeDim;
+            DimensionUsage du =
+                (DimensionUsage) cubeDim;
 
             this.hierarchyName = deriveHierarchyName(hierarchy);
             int index = this.hierarchyName.indexOf('.');
             if (index == -1) {
                 this.fullName = this.name;
-                this.source = du.source;
+                this.source = du.source();
             } else {
                 String hname = this.hierarchyName.substring(
                     index + 1, this.hierarchyName.length());
@@ -169,42 +171,42 @@ public class HierarchyUsage {
                 this.fullName = buf.toString();
 
                 buf.setLength(0);
-                buf.append(du.source);
+                buf.append(du.source());
                 buf.append('.');
                 buf.append(hname);
                 this.source = buf.toString();
             }
 
-            this.level = du.level;
-            this.usagePrefix = du.usagePrefix;
+            this.level = du.level();
+            this.usagePrefix = du.usagePrefix();
 
             init(cube, hierarchy, du);
 
-        } else if (cubeDim instanceof MondrianDef.Dimension) {
+        } else if (cubeDim instanceof PrivateDimension) {
             this.kind = Kind.PRIVATE;
 
             // Private Hierarchy attributes
             // type
             // caption
-            MondrianDef.Dimension d = (MondrianDef.Dimension) cubeDim;
+            PrivateDimension d = (PrivateDimension) cubeDim;
 
             this.hierarchyName = deriveHierarchyName(hierarchy);
             this.fullName = this.name;
 
             this.source = null;
-            this.usagePrefix = d.usagePrefix;
+            this.usagePrefix = d.usagePrefix();
             this.level = null;
 
             init(cube, hierarchy, null);
 
-        } else if (cubeDim instanceof MondrianDef.VirtualCubeDimension) {
+        } else if (cubeDim instanceof VirtualCubeDimension) {
             this.kind = Kind.VIRTUAL;
 
             // Virtual Hierarchy attributes
-            MondrianDef.VirtualCubeDimension vd =
-                (MondrianDef.VirtualCubeDimension) cubeDim;
+            VirtualCubeDimension vd =
+                (VirtualCubeDimension) cubeDim;
 
-            this.hierarchyName = cubeDim.name;
+            this.hierarchyName = cubeDim.name();
             this.fullName = this.name;
 
             this.source = null;
@@ -220,7 +222,7 @@ public class HierarchyUsage {
 
             this.kind = Kind.UNKNOWN;
 
-            this.hierarchyName = cubeDim.name;
+            this.hierarchyName = cubeDim.name();
             this.fullName = this.name;
 
             this.source = null;
@@ -280,11 +282,11 @@ public class HierarchyUsage {
         return this.usagePrefix;
     }
 
-    public MondrianDef.Relation getJoinTable() {
+    public Relation getJoinTable() {
         return this.joinTable;
     }
 
-    public MondrianDef.Expression getJoinExp() {
+    public Expression getJoinExp() {
         return this.joinExp;
     }
 
@@ -348,25 +350,25 @@ public class HierarchyUsage {
     void init(
         RolapCube cube,
         RolapHierarchy hierarchy,
-        MondrianDef.DimensionUsage cubeDim)
+        DimensionUsage cubeDim)
     {
         // Three ways that a hierarchy can be joined to the fact table.
-        if (cubeDim != null && cubeDim.level != null) {
+        if (cubeDim != null && cubeDim.level() != null) {
             // 1. Specify an explicit 'level' attribute in a <DimensionUsage>.
             RolapLevel joinLevel = (RolapLevel)
-                    Util.lookupHierarchyLevel(hierarchy, cubeDim.level);
+                    Util.lookupHierarchyLevel(hierarchy, cubeDim.level());
             if (joinLevel == null) {
                 throw MondrianResource.instance()
                     .DimensionUsageHasUnknownLevel.ex(
                         hierarchy.getUniqueName(),
                         cube.getName(),
-                        cubeDim.level);
+                        cubeDim.level());
             }
             this.joinTable =
-                findJoinTable(hierarchy, joinLevel.getKeyExp().getTableAlias());
+                findJoinTable(hierarchy, joinLevel.getKeyExp().tableAlias());
             this.joinExp = joinLevel.getKeyExp();
         } else if (hierarchy.getXmlHierarchy() != null
-            && hierarchy.getXmlHierarchy().primaryKey != null)
+            && hierarchy.getXmlHierarchy().primaryKey() != null)
         {
             // 2. Specify a "primaryKey" attribute of in <Hierarchy>. You must
             //    also specify the "primaryKeyTable" attribute if the hierarchy
@@ -374,11 +376,11 @@ public class HierarchyUsage {
             this.joinTable =
                 findJoinTable(
                     hierarchy,
-                    hierarchy.getXmlHierarchy().primaryKeyTable);
+                    hierarchy.getXmlHierarchy().primaryKeyTable());
             this.joinExp =
-                new MondrianDef.Column(
-                    this.joinTable.getAlias(),
-                    hierarchy.getXmlHierarchy().primaryKey);
+                new ColumnR(
+                    this.joinTable.alias(),
+                    hierarchy.getXmlHierarchy().primaryKey());
         } else {
             // 3. If neither of the above, the join is assumed to be to key of
             //    the last level.
@@ -387,7 +389,7 @@ public class HierarchyUsage {
             this.joinTable =
                 findJoinTable(
                     hierarchy,
-                    joinLevel.getKeyExp().getTableAlias());
+                    joinLevel.getKeyExp().tableAlias());
             this.joinExp = joinLevel.getKeyExp();
         }
 
@@ -418,11 +420,11 @@ public class HierarchyUsage {
      *   has only one table
      * @return A table, never null
      */
-    private MondrianDef.Relation findJoinTable(
+    private Relation findJoinTable(
         RolapHierarchy hierarchy,
         String tableName)
     {
-        final MondrianDef.Relation table;
+        final Relation table;
         if (tableName == null) {
             table = hierarchy.getUniqueTable();
             if (table == null) {

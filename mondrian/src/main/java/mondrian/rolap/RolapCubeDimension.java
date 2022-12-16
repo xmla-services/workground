@@ -18,6 +18,7 @@ import org.eclipse.daanse.olap.api.model.Schema;
 import mondrian.olap.DimensionType;
 import mondrian.olap.HierarchyBase;
 import mondrian.olap.MondrianDef;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
 
 /**
  * RolapCubeDimension wraps a RolapDimension for a specific Cube.
@@ -30,7 +31,7 @@ public class RolapCubeDimension extends RolapDimension {
 
     RolapDimension rolapDimension;
     int cubeOrdinal;
-    MondrianDef.CubeDimension xmlDimension;
+    CubeDimension xmlDimension;
 
     /**
      * Creates a RolapCubeDimension.
@@ -46,7 +47,7 @@ public class RolapCubeDimension extends RolapDimension {
     public RolapCubeDimension(
         RolapCube cube,
         RolapDimension rolapDim,
-        MondrianDef.CubeDimension cubeDim,
+        CubeDimension cubeDim,
         String name,
         int cubeOrdinal,
         List<RolapHierarchy> hierarchyList,
@@ -55,23 +56,23 @@ public class RolapCubeDimension extends RolapDimension {
         super(
             null,
             name,
-            cubeDim.caption != null
-                ? cubeDim.caption
+            cubeDim.caption() != null
+                ? cubeDim.caption()
                 : rolapDim.getCaption(),
-            cubeDim.visible,
-            cubeDim.description != null
-                ? cubeDim.description
+            cubeDim.visible(),
+            cubeDim.description() != null
+                ? cubeDim.description()
                 : rolapDim.getDescription(),
             null,
             highCardinality,
-            cubeDim.annotations != null
-                ? RolapHierarchy.createMetadataMap(cubeDim.annotations)
+            cubeDim.annotations() != null
+                ? RolapHierarchy.createMetadataMap(cubeDim.annotations())
                 : rolapDim.getMetadata());
         this.xmlDimension = cubeDim;
         this.rolapDimension = rolapDim;
         this.cubeOrdinal = cubeOrdinal;
         this.cube = cube;
-        this.caption = cubeDim.caption;
+        this.caption = cubeDim.caption();
 
         // create new hierarchies
         hierarchies = new RolapCubeHierarchy[rolapDim.getHierarchies().length];
@@ -95,7 +96,7 @@ public class RolapCubeDimension extends RolapDimension {
     }
 
     RolapCube lookupFactCube(
-        MondrianDef.CubeDimension cubeDim, RolapSchema schema)
+        CubeDimension cubeDim, RolapSchema schema)
     {
       if (cubeDim instanceof MondrianDef.VirtualCubeDimension) {
         final MondrianDef.VirtualCubeDimension virtualCubeDim =

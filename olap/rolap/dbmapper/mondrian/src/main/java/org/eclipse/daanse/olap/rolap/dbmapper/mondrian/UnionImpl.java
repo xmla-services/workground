@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
@@ -36,6 +36,10 @@ public class UnionImpl implements Union {
             roleUsage = new ArrayList<RoleUsageImpl>();
         }
         return this.roleUsage;
+    }
+
+    public void setRoleUsage(List<RoleUsageImpl> roleUsage) {
+        this.roleUsage = roleUsage;
     }
 
 }

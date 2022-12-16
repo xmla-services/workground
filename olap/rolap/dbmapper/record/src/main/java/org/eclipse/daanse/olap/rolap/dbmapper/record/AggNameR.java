@@ -9,12 +9,13 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.AggMeasureFactCount;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.AggName;
 
 public record AggNameR(String name,
@@ -23,6 +24,9 @@ public record AggNameR(String name,
                        List<AggColumnNameR> aggIgnoreColumn,
                        List<AggForeignKeyR> aggForeignKey,
                        List<AggLevelR> aggLevel,
-                       boolean ignorecase)
+                       boolean ignorecase,
+                       List<? extends AggMeasureFactCount> measuresFactCount,
+                       String approxRowCount)
         implements AggName {
+
 }

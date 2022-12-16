@@ -13,11 +13,19 @@
 
 package mondrian.xmla;
 
-import static mondrian.olap.Util.filter;
-import static mondrian.xmla.XmlaConstants.NS_XMLA_ROWSET;
-import static mondrian.xmla.XmlaConstants.NS_XSD;
-import static mondrian.xmla.XmlaConstants.NS_XSI;
-import static mondrian.xmla.XmlaHandler.getExtra;
+import mondrian.olap.*;
+import mondrian.rolap.RolapHierarchy;
+import mondrian.util.Composite;
+import org.olap4j.OlapConnection;
+import org.olap4j.OlapException;
+import org.olap4j.impl.ArrayNamedListImpl;
+import org.olap4j.impl.Olap4jUtil;
+import org.olap4j.mdx.IdentifierNode;
+import org.olap4j.mdx.IdentifierSegment;
+import org.olap4j.metadata.*;
+import org.olap4j.metadata.Property;
+import org.olap4j.metadata.XmlaConstants;
+import org.olap4j.metadata.Member.TreeOp;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -26,54 +34,16 @@ import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.text.Format;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.olap4j.OlapConnection;
-import org.olap4j.OlapException;
-import org.olap4j.impl.ArrayNamedListImpl;
-import org.olap4j.impl.Olap4jUtil;
-import org.olap4j.mdx.IdentifierNode;
-import org.olap4j.mdx.IdentifierSegment;
-import org.olap4j.metadata.Catalog;
-import org.olap4j.metadata.Cube;
-import org.olap4j.metadata.Dimension;
-import org.olap4j.metadata.Hierarchy;
-import org.olap4j.metadata.Level;
-import org.olap4j.metadata.Measure;
-import org.olap4j.metadata.Member;
-import org.olap4j.metadata.Member.TreeOp;
-import org.olap4j.metadata.MetadataElement;
-import org.olap4j.metadata.NamedList;
-import org.olap4j.metadata.NamedSet;
-import org.olap4j.metadata.Property;
-import org.olap4j.metadata.Schema;
-import org.olap4j.metadata.XmlaConstant;
-import org.olap4j.metadata.XmlaConstants;
-
-import mondrian.olap.Category;
-import mondrian.olap.MondrianDef;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.MondrianServer;
-import mondrian.olap.SetBase;
-import mondrian.olap.Util;
-import mondrian.rolap.RolapHierarchy;
-import mondrian.util.Composite;
+import static mondrian.olap.Util.filter;
+import static mondrian.xmla.XmlaConstants.NS_XMLA_ROWSET;
+import static mondrian.xmla.XmlaConstants.NS_XSD;
+import static mondrian.xmla.XmlaConstants.NS_XSI;
+import static mondrian.xmla.XmlaHandler.getExtra;
 
 /**
  * <code>RowsetDefinition</code> defines a rowset, including the columns it
@@ -5290,9 +5260,9 @@ TODO: see above
             }
             else {
                 RolapHierarchy rolapHierarchy = (RolapHierarchy)mondrianOlap4jHierarchy.getHierarchy();
-                MondrianDef.Hierarchy xmlHierarchy = rolapHierarchy.getXmlHierarchy();
+                org.eclipse.daanse.olap.rolap.dbmapper.api.Hierarchy xmlHierarchy = rolapHierarchy.getXmlHierarchy();
                 try {
-                    hierarchyOrigin = Integer.parseInt(xmlHierarchy.origin);
+                    hierarchyOrigin = Integer.parseInt(xmlHierarchy.origin());
                 }
                 catch (NumberFormatException e) {
                     hierarchyOrigin =  1;

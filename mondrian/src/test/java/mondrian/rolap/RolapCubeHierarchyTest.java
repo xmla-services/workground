@@ -19,6 +19,9 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -26,15 +29,12 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-import mondrian.olap.MondrianDef;
-import mondrian.olap.MondrianDef.Relation;
-import mondrian.olap.MondrianDef.RelationOrJoin;
 import mondrian.olap.SchemaReader;
 
 public class RolapCubeHierarchyTest {
 
   @ParameterizedTest
-  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)	
+  @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testMONDRIAN2535(TestingContext context) {
     assertQueryReturns(context.createConnection(),
         "Select\n"
@@ -70,7 +70,7 @@ public class RolapCubeHierarchyTest {
     DataSource cubeDimension_schema_connection_DS = mock(DataSource.class);
     SchemaReader schemaReader = mock(SchemaReader.class);
 
-    MondrianDef.CubeDimension cubeDim = null;
+    CubeDimension cubeDim = null;
 
     RolapHierarchy rolapHierarchy = mock(RolapHierarchy.class);
     Hierarchy rolapHierarchy_hierarchy = null;
@@ -118,7 +118,7 @@ public class RolapCubeHierarchyTest {
     DataSource cubeDimension_schema_connection_DS = mock(DataSource.class);
     SchemaReader schemaReader = mock(SchemaReader.class);
 
-    MondrianDef.CubeDimension cubeDim = null;
+    CubeDimension cubeDim = null;
 
     RolapHierarchy rolapHierarchy = mock(RolapHierarchy.class);
     Hierarchy rolapHierarchy_hierarchy = null;
@@ -163,7 +163,7 @@ public class RolapCubeHierarchyTest {
         mock(RolapConnection.class);
     DataSource cubeDimension_schema_connection_DS = mock(DataSource.class);
 
-    MondrianDef.CubeDimension cubeDim = null;
+    CubeDimension cubeDim = null;
 
     RolapHierarchy rolapHierarchy = mock(RolapHierarchy.class);
     Hierarchy rolapHierarchy_hierarchy = null;
@@ -192,7 +192,7 @@ public class RolapCubeHierarchyTest {
     doReturn(cubeDimension_schema_connection).when(cubeDimension_schema)
       .getInternalConnection();
     doReturn(schemaReader).when(cubeDimension_schema)
-    .getSchemaReader();    
+    .getSchemaReader();
     doReturn(cubeDimension_schema_connection_DS)
       .when(cubeDimension_schema_connection).getDataSource();
     doReturn(cubeDimension_uniqueName).when(cubeDimension).getUniqueName();
@@ -219,7 +219,7 @@ public class RolapCubeHierarchyTest {
     DataSource cubeDimension_schema_connection_DS = mock(DataSource.class);
     SchemaReader schemaReader = mock(SchemaReader.class);
 
-    MondrianDef.CubeDimension cubeDim = null;
+    CubeDimension cubeDim = null;
 
     RolapHierarchy rolapHierarchy = mock(RolapHierarchy.class);
     Hierarchy rolapHierarchy_hierarchy = null;

@@ -9,16 +9,32 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.ColumnDef;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.InlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Row;
 
-public record InlineTableR(List<ColumnDefR> columnDefs,
-                           List<RowR> rows)
+public record InlineTableR(List<ColumnDef> columnDefs,
+                           List<Row> rows, String alias)
         implements InlineTable {
 
+    public InlineTableR(InlineTable inlineTable) {
+        this(new ArrayList<>(inlineTable.columnDefs()), new ArrayList<>(inlineTable.rows()), inlineTable.alias());
+    }
+
+    public InlineTableR(InlineTable inlineTable, String alias) {
+        this(new ArrayList<>(inlineTable.columnDefs()), new ArrayList<>(inlineTable.rows()), alias);
+    }
+
+    @Override
+    public Relation find(String tableName) {
+        return null;
+    }
 }

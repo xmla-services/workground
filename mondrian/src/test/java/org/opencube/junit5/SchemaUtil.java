@@ -18,6 +18,12 @@
  */
 package org.opencube.junit5;
 
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
+
+import java.io.StringReader;
+
 public class SchemaUtil {
 
 
@@ -265,7 +271,16 @@ public class SchemaUtil {
 	    return s;
 	  }
 
-
-
+    public static <T> T parse(String xml, Class<T> tClass) {
+        try {
+            JAXBContext jaxbContext;
+            jaxbContext = JAXBContext.newInstance(tClass);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            return (T) jaxbUnmarshaller.unmarshal(new StringReader(xml));
+        }
+        catch (JAXBException e){
+            throw new RuntimeException("parsing error");
+        }
+    }
 
 }

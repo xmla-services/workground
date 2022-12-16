@@ -10,7 +10,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
@@ -25,6 +25,7 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PrivateDimension", propOrder = { "annotations", "hierarchy" })
@@ -47,6 +48,11 @@ public class PrivateDimensionImpl implements PrivateDimension {
     protected String foreignKey;
     @XmlAttribute(name = "highCardinality")
     protected Boolean highCardinality;
+
+    @XmlAttribute(name = "visible")
+    private Boolean visible = true;
+    @XmlAttribute(name = "usagePrefix")
+    private String usagePrefix;
 
     @Override
     public List<AnnotationImpl> annotations() {
@@ -126,4 +132,27 @@ public class PrivateDimensionImpl implements PrivateDimension {
         this.highCardinality = value;
     }
 
+    @Override
+    public boolean visible() {
+        return visible;
+    }
+
+    @Override
+    public String usagePrefix() {
+        return usagePrefix;
+    }
+
+    @Override
+    public PrivateDimension getDimension(Schema xmlSchema) {
+        //TODO
+        return null;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
+
+    public void setHierarchy(List<HierarchyImpl> hierarchy) {
+        this.hierarchy = hierarchy;
+    }
 }

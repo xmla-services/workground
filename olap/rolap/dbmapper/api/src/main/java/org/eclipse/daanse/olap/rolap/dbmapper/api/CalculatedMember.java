@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
@@ -19,31 +19,28 @@ public interface CalculatedMember {
 
     List<? extends Annotation> annotations();
 
-  
-    Object formula();
 
-  
+    String formula();
+
     List<? extends CalculatedMemberProperty> calculatedMemberProperty();
 
- 
     String name();
 
-  
     String formatString();
 
-  
     String caption();
 
- 
     String description();
 
-  
     String dimension();
 
-  
     boolean visible();
 
- 
     String displayFolder();
 
+    String hierarchy();
+
+    String parent();
+
+    CellFormatter cellFormatter();
 }

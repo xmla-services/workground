@@ -9,19 +9,22 @@
 
 package mondrian.rolap;
 
+import mondrian.rolap.sql.SqlQuery;
+import mondrian.server.Execution;
+import mondrian.spi.impl.SqlStatisticsProviderNew;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Column;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
+
+import javax.sql.DataSource;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.sql.DataSource;
-
-import org.eclipse.daanse.db.dialect.api.Dialect;
-
-import mondrian.olap.MondrianDef;
-import mondrian.rolap.sql.SqlQuery;
-import mondrian.server.Execution;
-import mondrian.spi.impl.SqlStatisticsProviderNew;
+import static mondrian.rolap.ExpressionUtil.getExpression;
 
 /**
  * Provides and caches statistics.
@@ -41,17 +44,17 @@ public class RolapStatisticsCache {
     }
 
     public long getRelationCardinality(
-        MondrianDef.Relation relation,
+        Relation relation,
         String alias,
         long approxRowCount)
     {
         if (approxRowCount >= 0) {
             return approxRowCount;
         }
-        if (relation instanceof MondrianDef.Table) {
-            final MondrianDef.Table table = (MondrianDef.Table) relation;
+        if (relation instanceof Table) {
+            final Table table = (Table) relation;
             return getTableCardinality(
-                null, table.schema, table.name);
+                null, table.schema(), table.name());
         } else {
             final SqlQuery sqlQuery = star.getSqlQuery();
             sqlQuery.addSelect("*", null);
@@ -127,27 +130,27 @@ public class RolapStatisticsCache {
     }
 
     public long getColumnCardinality(
-        MondrianDef.Relation relation,
-        MondrianDef.Expression expression,
+        Relation relation,
+        Expression expression,
         long approxCardinality)
     {
         if (approxCardinality >= 0) {
             return approxCardinality;
         }
-        if (relation instanceof MondrianDef.Table
-            && expression instanceof MondrianDef.Column)
+        if (relation instanceof Table
+            && expression instanceof Column)
         {
-            final MondrianDef.Table table = (MondrianDef.Table) relation;
-            final MondrianDef.Column column = (MondrianDef.Column) expression;
+            final Table table = (Table) relation;
+            final Column column = (Column) expression;
             return getColumnCardinality(
                 null,
-                table.schema,
-                table.name,
-                column.name);
+                table.schema(),
+                table.name(),
+                column.name());
         } else {
             final SqlQuery sqlQuery = star.getSqlQuery();
             sqlQuery.setDistinct(true);
-            sqlQuery.addSelect(expression.getExpression(sqlQuery), null);
+            sqlQuery.addSelect(getExpression( expression, sqlQuery), null);
             sqlQuery.addFrom(relation, null, true);
             return getQueryCardinality(sqlQuery.toString());
         }

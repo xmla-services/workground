@@ -389,6 +389,30 @@
       <version>${revision}</version>
       <scope>compile</scope>
     </dependency>
+      <dependency>
+          <groupId>org.eclipse.daanse</groupId>
+          <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.api</artifactId>
+          <version>${revision}</version>
+          <scope>compile</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.daanse</groupId>
+          <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.record</artifactId>
+          <version>${revision}</version>
+          <scope>compile</scope>
+      </dependency>
+      <dependency>
+          <groupId>org.eclipse.daanse</groupId>
+          <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.mondrian</artifactId>
+          <version>0.0.1-SNAPSHOT</version>
+          <scope>compile</scope>
+      </dependency>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.mondrian</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
   <build>
   <!--

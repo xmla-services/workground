@@ -9,16 +9,15 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
 import java.util.List;
 
-public interface View {
+public interface View extends Relation {
 
     List<? extends SQL> sqls();
 
-    String alias();
-
+    void addCode(String generic, String generateInline);
 }

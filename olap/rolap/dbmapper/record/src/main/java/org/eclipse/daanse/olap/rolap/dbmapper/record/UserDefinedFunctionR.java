@@ -9,15 +9,16 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Script;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.UserDefinedFunction;
 
 @Deprecated
 public record UserDefinedFunctionR(String name,
-                                   String className)
+                                   String className, Script script)
         implements UserDefinedFunction {
 
 }

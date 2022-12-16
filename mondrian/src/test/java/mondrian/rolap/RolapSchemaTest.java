@@ -8,47 +8,9 @@
 */
 package mondrian.rolap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyBoolean;
-import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.lang.reflect.Field;
-import java.util.List;
-
-import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.access.RollupPolicy;
-import org.eclipse.daanse.olap.api.model.Dimension;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.api.model.OlapElement;
-import org.eigenbase.xom.DOMWrapper;
-import org.eigenbase.xom.Parser;
-import org.eigenbase.xom.XOMException;
-import org.eigenbase.xom.XOMUtil;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import mondrian.olap.Category;
-import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianServer;
-import mondrian.olap.RoleImpl;
 import mondrian.olap.SchemaReader;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapSchema.RolapStarRegistry;
@@ -56,6 +18,30 @@ import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.SegmentCacheManager;
 import mondrian.test.PropertySaver5;
 import mondrian.util.ByteString;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.RollupPolicy;
+import org.eclipse.daanse.olap.api.model.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.HierarchyGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.MemberGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.record.MemberGrantR;
+import org.eigenbase.xom.DOMWrapper;
+import org.eigenbase.xom.Parser;
+import org.eigenbase.xom.XOMException;
+import org.eigenbase.xom.XOMUtil;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.opencube.junit5.SchemaUtil;
+
+import java.lang.reflect.Field;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 /**
  * @author Andrey Khayrutdinov
@@ -111,10 +97,10 @@ public class RolapSchemaTest {
 
     @Test
     public void testCreateUnionRole_ThrowsException_WhenSchemaGrantsExist() {
-        MondrianDef.Role role = new MondrianDef.Role();
-        role.schemaGrants =
-            new MondrianDef.SchemaGrant[] {new MondrianDef.SchemaGrant()};
-        role.union = new MondrianDef.Union();
+        RoleImpl role = new RoleImpl();
+        role.setSchemaGrant(
+            List.of(new SchemaGrantImpl()));
+        role.setUnion(new UnionImpl());
 
         try {
             createSchema().createUnionRole(role);
@@ -129,12 +115,13 @@ public class RolapSchemaTest {
     @Test
     public void testCreateUnionRole_ThrowsException_WhenRoleNameIsUnknown() {
         final String roleName = "non-existing role name";
-        MondrianDef.RoleUsage usage = new MondrianDef.RoleUsage();
-        usage.roleName = roleName;
+        RoleUsageImpl usage = new RoleUsageImpl();
+        usage.setRoleName(roleName);
 
-        MondrianDef.Role role = new MondrianDef.Role();
-        role.union = new MondrianDef.Union();
-        role.union.roleUsages = new MondrianDef.RoleUsage[] {usage};
+        RoleImpl role = new RoleImpl();
+        UnionImpl unionImpl = new UnionImpl();
+        unionImpl.setRoleUsage(List.of(usage));
+        role.setUnion(new UnionImpl());
 
         try {
             createSchema().createUnionRole(role);
@@ -153,19 +140,18 @@ public class RolapSchemaTest {
         schema = spy(schema);
         doNothing().when(schema)
             .handleCubeGrant(
-                any(RoleImpl.class), any(MondrianDef.CubeGrant.class));
+                any(mondrian.olap.RoleImpl.class), any(CubeGrant.class));
 
-        MondrianDef.SchemaGrant grant = new MondrianDef.SchemaGrant();
-        grant.access = Access.CUSTOM.toString();
-        grant.cubeGrants =  new MondrianDef.CubeGrant[] {
-            new MondrianDef.CubeGrant(), new MondrianDef.CubeGrant()};
+        SchemaGrantImpl grant = new SchemaGrantImpl();
+        grant.setAccess(Access.CUSTOM.toString());
+        grant.setCubeGrant(List.of(new CubeGrantImpl(), new CubeGrantImpl()));
 
-        RoleImpl role = new RoleImpl();
+        mondrian.olap.RoleImpl role = new mondrian.olap.RoleImpl();
 
         schema.handleSchemaGrant(role, grant);
         assertEquals(Access.CUSTOM, role.getAccess(schema));
         verify(schema, times(2))
-            .handleCubeGrant(eq(role), any(MondrianDef.CubeGrant.class));
+            .handleCubeGrant(eq(role), any(CubeGrant.class));
     }
 
 
@@ -175,14 +161,14 @@ public class RolapSchemaTest {
         schema = spy(schema);
         doReturn(null).when(schema).lookupCube(anyString());
 
-        MondrianDef.CubeGrant grant = new MondrianDef.CubeGrant();
-        grant.cube = "cube";
+        CubeGrantImpl grant = new CubeGrantImpl();
+        grant.setCube("cube");
 
         try {
-            schema.handleCubeGrant(new RoleImpl(), grant);
+            schema.handleCubeGrant(new mondrian.olap.RoleImpl(), grant);
         } catch (MondrianException e) {
             String message = e.getMessage();
-            assertTrue(message.contains(grant.cube), message);
+            assertTrue(message.contains(grant.cube()), message);
             return;
         }
         fail("Should fail if cube is unknown");
@@ -194,33 +180,30 @@ public class RolapSchemaTest {
         schema = spy(schema);
         doNothing().when(schema)
             .handleHierarchyGrant(
-                any(RoleImpl.class),
+                any(mondrian.olap.RoleImpl.class),
                 any(RolapCube.class),
                 any(SchemaReader.class),
-                any(MondrianDef.HierarchyGrant.class));
+                any(HierarchyGrant.class));
 
         final Dimension dimension = mock(Dimension.class);
-        SchemaReader reader = mockSchemaReader(Category.Dimension, dimension);
+        SchemaReader reader = mockSchemaReader(mondrian.olap.Category.Dimension, dimension);
 
         RolapCube cube = mockCube(schema);
-        when(cube.getSchemaReader(any())).thenReturn(reader);               
+        when(cube.getSchemaReader(any())).thenReturn(reader);
         doReturn(cube).when(schema).lookupCube("cube");
 
-        MondrianDef.DimensionGrant dimensionGrant =
-            new MondrianDef.DimensionGrant();
-        dimensionGrant.dimension = "dimension";
-        dimensionGrant.access = Access.NONE.toString();
+        DimensionGrantImpl dimensionGrant =
+            new DimensionGrantImpl();
+        dimensionGrant.setDimension("dimension");
+        dimensionGrant.setAccess(Access.NONE.toString());
 
-        MondrianDef.CubeGrant grant = new MondrianDef.CubeGrant();
-        grant.cube = "cube";
-        grant.access = Access.CUSTOM.toString();
-        grant.dimensionGrants =
-            new MondrianDef.DimensionGrant[] {dimensionGrant};
-        grant.hierarchyGrants =
-            new MondrianDef.HierarchyGrant[] {
-                new MondrianDef.HierarchyGrant()};
+        CubeGrantImpl grant = new CubeGrantImpl();
+        grant.setCube("cube");
+        grant.setAccess(Access.CUSTOM.toString());
+        grant.setDimensionGrant(List.of(dimensionGrant));
+        grant.setHierarchyGrant(List.of(new HierarchyGrantImpl()));
 
-        RoleImpl role = new RoleImpl();
+        mondrian.olap.RoleImpl role = new mondrian.olap.RoleImpl();
 
         schema.handleCubeGrant(role, grant);
 
@@ -231,7 +214,7 @@ public class RolapSchemaTest {
                 eq(role),
                 eq(cube),
                 eq(reader),
-                any(MondrianDef.HierarchyGrant.class));
+                any(HierarchyGrant.class));
     }
 
     @Test
@@ -257,9 +240,8 @@ public class RolapSchemaTest {
     public void testGetOrCreateStar_StarCreatedAndUsed()
         throws Exception {
       //Create the test fact
-      MondrianDef.Relation fact =
-          new MondrianDef.Table(
-              wrapStrSources(getFactTableWithSQLFilter()));
+      Relation fact =
+          SchemaUtil.parse(getFactTableWithSQLFilter(), TableImpl.class);
       List<String> rolapStarKey = RolapUtil.makeRolapStarKey(fact);
       //Expected result star
       RolapStar expectedStar = rlStarMock;
@@ -285,8 +267,8 @@ public class RolapSchemaTest {
     @Test
     public void testGetStarFromRegistryByStarKey() throws Exception {
       //Create the test fact
-      MondrianDef.Relation fact =
-          new MondrianDef.Table(wrapStrSources(getFactTableWithSQLFilter()));
+      Relation fact =
+          SchemaUtil.parse(getFactTableWithSQLFilter(), TableImpl.class);
       List<String> rolapStarKey = RolapUtil.makeRolapStarKey(fact);
       //Expected result star
       RolapStarRegistry rolapStarRegistry =
@@ -301,20 +283,20 @@ public class RolapSchemaTest {
     @Test
     public void testGetStarFromRegistryByFactTableName() throws Exception {
       //Create the test fact
-      MondrianDef.Relation fact =
-          new MondrianDef.Table(wrapStrSources(getFactTable()));
+      Relation fact =
+          SchemaUtil.parse(getFactTableWithSQLFilter(), TableImpl.class);
       //Expected result star
       RolapStarRegistry rolapStarRegistry =
           getStarRegistryLinkedToRolapSchemaSpy(schemaSpy, fact);
       //Put rolap star to the registry
       rolapStarRegistry.getOrCreateStar(fact);
 
-      RolapStar actualStar = schemaSpy.getStar(fact.getAlias());
+      RolapStar actualStar = schemaSpy.getStar(fact.alias());
       assertSame(rlStarMock, actualStar);
     }
 
     private static RolapStarRegistry getStarRegistryLinkedToRolapSchemaSpy(
-        RolapSchema schemaSpy, MondrianDef.Relation fact) throws Exception
+        RolapSchema schemaSpy, Relation fact) throws Exception
     {
       //the rolap star registry is linked to the origin rolap schema,
       //not to the schemaSpy
@@ -378,17 +360,15 @@ public class RolapSchemaTest {
 
         RolapSchema schema = createSchema();
         RolapCube cube = mockCube(schema);
-        RoleImpl role = new RoleImpl();
+        mondrian.olap.RoleImpl role = new mondrian.olap.RoleImpl();
 
-        MondrianDef.MemberGrant memberGrant = new MondrianDef.MemberGrant();
-        memberGrant.access = Access.ALL.toString();
-        memberGrant.member = "member";
+        MemberGrant memberGrant = new MemberGrantR(Access.ALL.toString(), "member");
 
-        MondrianDef.HierarchyGrant grant = new MondrianDef.HierarchyGrant();
-        grant.access = Access.CUSTOM.toString();
-        grant.rollupPolicy = RollupPolicy.FULL.toString();
-        grant.hierarchy = "hierarchy";
-        grant.memberGrants = new MondrianDef.MemberGrant[] {memberGrant};
+        HierarchyGrantImpl grant = new HierarchyGrantImpl();
+        grant.setAccess(Access.CUSTOM.toString());
+        grant.setRollupPolicy(RollupPolicy.FULL.toString());
+        grant.setHierarchy("hierarchy");
+        grant.setMemberGrant(List.of(memberGrant));
 
         Level level = mock(Level.class);
         Hierarchy hierarchy = mock(Hierarchy.class);

@@ -311,7 +311,7 @@ class DefaultRecognizer extends Recognizer {
                     pair.right,
                     hierarchy,
                     hierarchyUsage,
-                    pair.right.column.name,
+                    pair.right.column.name(),
                     getColumnName(pair.left.getKeyExp()),
                     pair.left.getName(),
                     collapsed,

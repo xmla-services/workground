@@ -11,46 +11,36 @@
 
 package mondrian.rolap.aggmatcher;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.BitSet;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.Datatype;
-import org.eclipse.daanse.engine.api.Context;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import mondrian.olap.Aggregator;
-import mondrian.olap.MondrianDef;
-import mondrian.olap.MondrianDef.AggLevel;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.recorder.MessageRecorder;
 import mondrian.resource.MondrianResource;
-import mondrian.rolap.BitKey;
-import mondrian.rolap.RolapAggregator;
+import mondrian.rolap.*;
 import mondrian.rolap.RolapAggregator.BaseAggor;
-import mondrian.rolap.RolapLevel;
-import mondrian.rolap.RolapStar;
-import mondrian.rolap.RolapUtil;
-import mondrian.rolap.SqlStatement;
 import mondrian.rolap.aggmatcher.JdbcSchema.Table.Column.Usage;
 import mondrian.rolap.aggmatcher.JdbcSchema.UsageType;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Column;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
+
+import static mondrian.rolap.ExpressionUtil.getExpression;
 
 /**
  * Aggregate table version of a RolapStar for a fact table.
@@ -146,12 +136,12 @@ public class AggStar {
         //    which it is OK to roll up
         for (FactTable.Measure measure : aggStarFactTable.measures) {
             if (measure.aggregator.isDistinct()
-                && measure.argument instanceof MondrianDef.Column)
+                && measure.argument instanceof Column)
             {
                 setLevelBits(
                     measure.rollableLevelBitKey,
                     aggStarFactTable,
-                    (MondrianDef.Column) measure.argument,
+                    (Column) measure.argument,
                     star.getFactTable());
             }
         }
@@ -177,7 +167,7 @@ public class AggStar {
     private static void setLevelBits(
         final BitKey bitKey,
         Table aggTable,
-        MondrianDef.Column column,
+        Column column,
         RolapStar.Table table)
     {
         final Set<RolapStar.Column> columns = new HashSet<RolapStar.Column>();
@@ -196,7 +186,7 @@ public class AggStar {
     private static void collectLevels(
         List<Table.Level> levelList,
         Table table,
-        MondrianDef.Column joinColumn)
+        Column joinColumn)
     {
         if (joinColumn == null) {
             levelList.addAll(table.levels);
@@ -496,15 +486,15 @@ public class AggStar {
          * table that owns the join condition).
          */
         public class JoinCondition {
-            // I think this is always a MondrianDef.Column
-            private final MondrianDef.Expression left;
-            private final MondrianDef.Expression right;
+            // I think this is always a Column
+            private final Expression left;
+            private final Expression right;
 
             private JoinCondition(
-                final MondrianDef.Expression left,
-                final MondrianDef.Expression right)
+                final Expression left,
+                final Expression right)
             {
-                if (!(left instanceof MondrianDef.Column)) {
+                if (!(left instanceof Column)) {
                     JOIN_CONDITION_LOGGER.debug(
                         "JoinCondition.left NOT Column: "
                         + left.getClass().getName());
@@ -523,7 +513,7 @@ public class AggStar {
             /**
              * Return the left join expression.
              */
-            public MondrianDef.Expression getLeft() {
+            public Expression getLeft() {
                 return this.left;
             }
 
@@ -531,13 +521,13 @@ public class AggStar {
              * Return the left join expression as string.
              */
             public String getLeft(final SqlQuery query) {
-                return this.left.getExpression(query);
+                return getExpression(this.left, query);
             }
 
             /**
              * Return the right join expression.
              */
-            public MondrianDef.Expression getRight() {
+            public Expression getRight() {
                 return this.right;
             }
 
@@ -546,9 +536,9 @@ public class AggStar {
              */
             String toString(final SqlQuery query) {
                 StringBuilder buf = new StringBuilder(64);
-                buf.append(left.getExpression(query));
+                buf.append(getExpression(left, query));
                 buf.append(" = ");
-                buf.append(right.getExpression(query));
+                buf.append(getExpression(right, query));
                 return buf.toString();
             }
             public String toString() {
@@ -570,8 +560,8 @@ public class AggStar {
 
                 pw.print(subprefix);
                 pw.print("left=");
-                if (left instanceof MondrianDef.Column) {
-                    MondrianDef.Column c = (MondrianDef.Column) left;
+                if (left instanceof Column) {
+                    Column c = (Column) left;
                     mondrian.rolap.RolapStar.Column col =
                         getTable().getAggStar().getStar().getFactTable()
                         .lookupColumn(c.name);
@@ -581,11 +571,11 @@ public class AggStar {
                         pw.print(") ");
                     }
                 }
-                pw.println(left.getExpression(sqlQueuy));
+                pw.println(getExpression(left, sqlQueuy));
 
                 pw.print(subprefix);
                 pw.print("right=");
-                pw.println(right.getExpression(sqlQueuy));
+                pw.println(getExpression(right, sqlQueuy));
             }
         }
 
@@ -596,7 +586,7 @@ public class AggStar {
         public class Column {
 
             private final String name;
-            private final MondrianDef.Expression expression;
+            private final Expression expression;
             private final Datatype datatype;
             /**
              * This is only used in RolapAggregationManager and adds
@@ -610,7 +600,7 @@ public class AggStar {
 
             protected Column(
                 final String name,
-                final MondrianDef.Expression expression,
+                final Expression expression,
                 final Datatype datatype,
                 final int bitPosition)
             {
@@ -661,7 +651,7 @@ public class AggStar {
                 return getTable().getAggStar().getSqlQuery();
             }
 
-            public MondrianDef.Expression getExpression() {
+            public Expression getExpression() {
                 return expression;
             }
 
@@ -674,15 +664,15 @@ public class AggStar {
                 String exprString;
 
                 if (usagePrefix == null) {
-                    exprString = getExpression().getExpression(query);
+                    exprString = ExpressionUtil.getExpression(getExpression(), query);
                 } else {
-                    MondrianDef.Expression expression = getExpression();
-                    assert expression instanceof MondrianDef.Column;
-                    MondrianDef.Column columnExpr =
-                        (MondrianDef.Column)expression;
+                    Expression expression = getExpression();
+                    assert expression instanceof Column;
+                    org.eclipse.daanse.olap.rolap.dbmapper.api.Column columnExpr =
+                        (org.eclipse.daanse.olap.rolap.dbmapper.api.Column)expression;
                     String prefixedName = usagePrefix
-                        + columnExpr.getColumnName();
-                    String tableName = columnExpr.getTableAlias();
+                        + columnExpr.name();
+                    String tableName = columnExpr.tableAlias();
                     exprString = query.getDialect().quoteIdentifier(
                         tableName, prefixedName);
                 }
@@ -729,7 +719,7 @@ public class AggStar {
 
             private ForeignKey(
                 final String name,
-                final MondrianDef.Expression expression,
+                final Expression expression,
                 final Datatype datatype,
                 final int bitPosition)
             {
@@ -744,14 +734,14 @@ public class AggStar {
          */
         public final class Level extends Column {
             private final RolapStar.Column starColumn;
-            private final MondrianDef.Expression ordinalExp;
-            private final MondrianDef.Expression captionExp;
+            private final Expression ordinalExp;
+            private final Expression captionExp;
             private final boolean collapsed;
-            private final Map<String, MondrianDef.Expression> properties;
+            private final Map<String, Expression> properties;
 
             private Level(
                 final String name,
-                final MondrianDef.Expression expression,
+                final Expression expression,
                 final int bitPosition,
                 RolapStar.Column starColumn,
                 boolean collapsed)
@@ -763,13 +753,13 @@ public class AggStar {
 
             private Level(
                 final String name,
-                final MondrianDef.Expression expression,
+                final Expression expression,
                 final int bitPosition,
                 RolapStar.Column starColumn,
                 boolean collapsed,
-                MondrianDef.Expression ordinalExp,
-                MondrianDef.Expression captionExp,
-                Map<String, MondrianDef.Expression> props)
+                Expression ordinalExp,
+                Expression captionExp,
+                Map<String, Expression> props)
             {
                 super(name, expression, starColumn.getDatatype(), bitPosition);
                 this.starColumn = starColumn;
@@ -789,28 +779,28 @@ public class AggStar {
                 return collapsed;
             }
 
-            public MondrianDef.Expression getOrdinalExp() {
+            public Expression getOrdinalExp() {
                 return ordinalExp;
             }
 
-            public MondrianDef.Expression getCaptionExp() {
+            public Expression getCaptionExp() {
                 return captionExp;
             }
 
-            public Map<String, MondrianDef.Expression> getProperties() {
+            public Map<String, Expression> getProperties() {
                 return properties == null
-                    ? Collections.<String, MondrianDef.Expression>emptyMap()
+                    ? Collections.<String, Expression>emptyMap()
                     : properties;
             }
         }
 
         /** The name of the table in the database. */
         private final String name;
-        private final MondrianDef.Relation relation;
+        private final Relation relation;
         protected final List<Level> levels = new ArrayList<Level>();
         protected List<DimTable> children;
 
-        Table(final String name, final MondrianDef.Relation relation) {
+        Table(final String name, final Relation relation) {
             this.name = name;
             this.relation = relation;
             this.children = Collections.emptyList();
@@ -841,7 +831,7 @@ public class AggStar {
         public abstract boolean hasJoinCondition();
         public abstract Table.JoinCondition getJoinCondition();
 
-        public MondrianDef.Relation getRelation() {
+        public Relation getRelation() {
             return relation;
         }
 
@@ -937,10 +927,10 @@ public class AggStar {
             final Usage usage)
         {
             String tableName = rTable.getAlias();
-            MondrianDef.Relation relation = rTable.getRelation();
+            Relation relation = rTable.getRelation();
             RolapStar.Condition rjoinCondition = rTable.getJoinCondition();
-            MondrianDef.Expression rleft = rjoinCondition.getLeft();
-            final MondrianDef.Expression rright;
+            Expression rleft = rjoinCondition.getLeft();
+            final Expression rright;
             if (usage == null
                 || usage.getUsageType() != UsageType.LEVEL)
             {
@@ -949,17 +939,17 @@ public class AggStar {
                 rright = usage.level.getKeyExp();
             }
 
-            MondrianDef.Column left = null;
+            org.eclipse.daanse.olap.rolap.dbmapper.api.Column left = null;
             if (usage != null
                 && usage.rightJoinConditionColumnName != null)
             {
-                left = new MondrianDef.Column(
+                left = new ColumnR(
                     getName(),
                     usage.rightJoinConditionColumnName);
             } else {
-                if (rleft instanceof MondrianDef.Column) {
-                    MondrianDef.Column lcolumn = (MondrianDef.Column) rleft;
-                    left = new MondrianDef.Column(getName(), lcolumn.name);
+                if (rleft instanceof Column) {
+                    Column lcolumn = (Column) rleft;
+                    left = new ColumnR(getName(), lcolumn.name);
                 } else {
                     throw Util.newInternal("not implemented: rleft=" + rleft);
 /*
@@ -976,7 +966,7 @@ public class AggStar {
             // based upon a foreign key (see AggregationManager findAgg
             // method).
             mondrian.rolap.RolapStar.Column col =
-                getAggStar().getStar().getFactTable().lookupColumn(left.name);
+                getAggStar().getStar().getFactTable().lookupColumn(left.name());
             if (col != null) {
                 getAggStar().setForeignKey(col.getBitPosition());
             }
@@ -1008,7 +998,7 @@ public class AggStar {
             // add level columns
             for (RolapStar.Column column : rTable.getColumns()) {
                 String name = column.getName();
-                MondrianDef.Expression expression = column.getExpression();
+                Expression expression = column.getExpression();
                 int bitPosition = column.getBitPosition();
 
                 Level level = new Level(
@@ -1077,7 +1067,7 @@ public class AggStar {
             /**
              * The fact table column which is being aggregated.
              */
-            private final MondrianDef.Expression argument;
+            private final Expression argument;
             /**
              * For distinct-count measures, contains a bitKey of levels which
              * it is OK to roll up. For regular measures, this is empty, since
@@ -1087,11 +1077,11 @@ public class AggStar {
 
             private Measure(
                 final String name,
-                final MondrianDef.Expression expression,
+                final Expression expression,
                 final Datatype datatype,
                 final int bitPosition,
                 final RolapAggregator aggregator,
-                final MondrianDef.Expression argument)
+                final Expression argument)
             {
                 super(name, expression, datatype, bitPosition);
                 this.aggregator = aggregator;
@@ -1187,7 +1177,7 @@ public class AggStar {
 
         FactTable(
             final String name,
-            final MondrianDef.Relation relation,
+            final Relation relation,
             final int totalColumnSize,
             final long numberOfRows)
         {
@@ -1294,8 +1284,8 @@ public class AggStar {
                     symbolicName = name;
                 }
 
-                MondrianDef.Expression expression =
-                    new MondrianDef.Column(getName(), name);
+                Expression expression =
+                    new ColumnR(getName(), name);
                 Datatype datatype = column.getDatatype();
                 RolapStar.Column rColumn = usage.rColumn;
                 if (rColumn == null) {
@@ -1326,16 +1316,16 @@ public class AggStar {
             Datatype datatype = column.getDatatype();
             RolapAggregator aggregator = usage.getAggregator();
 
-            MondrianDef.Expression expression;
+            Expression expression;
             if (column.hasUsage(JdbcSchema.UsageType.FOREIGN_KEY)
                 && !aggregator.isDistinct())
             {
                 expression = factCountColumn.getExpression();
             } else {
-                expression = new MondrianDef.Column(getName(), name);
+                expression = new ColumnR(getName(), name);
             }
 
-            MondrianDef.Expression argument;
+            Expression argument;
             if (aggregator.isDistinct()) {
                 argument = usage.rMeasure.getExpression();
             } else {
@@ -1370,8 +1360,8 @@ public class AggStar {
                 symbolicName = name;
             }
 
-            MondrianDef.Expression expression =
-                new MondrianDef.Column(getName(), name);
+            Expression expression =
+                new ColumnR(getName(), name);
             Datatype datatype = usage.getColumn().getDatatype();
             int bitPosition = -1;
 
@@ -1396,8 +1386,8 @@ public class AggStar {
                 symbolicName = name;
             }
 
-            MondrianDef.Expression expression =
-                    new MondrianDef.Column(getName(), name);
+            Expression expression =
+                    new ColumnR(getName(), name);
             Datatype datatype = usage.getColumn().getDatatype();
             int bitPosition = -1;
 
@@ -1416,8 +1406,8 @@ public class AggStar {
          */
         private void loadLevel(final JdbcSchema.Table.Column.Usage usage) {
             String name = usage.getSymbolicName();
-            MondrianDef.Expression expression =
-                new MondrianDef.Column(getName(), usage.levelColumnName);
+            Expression expression =
+                new ColumnR(getName(), usage.levelColumnName);
 
             int bitPosition = usage.rColumn.getBitPosition();
             Level level =
@@ -1448,10 +1438,10 @@ public class AggStar {
                     // will do that for us later on.
                     final BitKey bk = AggStar.this.star.getBitKey(
                         new String[] {
-                            parentLevel.getKeyExp().getTableAlias()},
+                            parentLevel.getKeyExp().tableAlias()},
                         new String[] {
-                            ((MondrianDef.Column)parentLevel.getKeyExp())
-                                .getColumnName()});
+                            parentLevel.getKeyExp()
+                                .name()});
                     final int bitPos = bk.nextSetBit(0);
                     if (bitPos == -1) {
                         throw new MondrianException(
@@ -1477,8 +1467,8 @@ public class AggStar {
                     levelColumnsToJoin.put(
                         bitPos,
                         new Column(
-                            ((MondrianDef.Column)parentLevel.getKeyExp())
-                                .getColumnName(),
+                            ((org.eclipse.daanse.olap.rolap.dbmapper.api.Column)parentLevel.getKeyExp())
+                                .name(),
                             parentLevel.getKeyExp(),
                             AggStar.this.star.getColumn(bitPos).getDatatype(),
                             bitPos)
@@ -1589,7 +1579,7 @@ public class AggStar {
         DimTable(
             final Table parent,
             final String name,
-            final MondrianDef.Relation relation,
+            final Relation relation,
             final JoinCondition joinCondition)
         {
             super(name, relation);

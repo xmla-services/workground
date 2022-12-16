@@ -9,13 +9,15 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
-import java.util.List;
-
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Cube;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+
+import java.util.List;
 
 public record CubeR(String name,
                     String caption,
@@ -24,14 +26,18 @@ public record CubeR(String name,
                     List<AnnotationR> annotations,
                     TableR table,
                     ViewR view,
-                    List<Object> dimensionUsageOrDimension,
+                    List<CubeDimension> dimensionUsageOrDimension,
                     List<MeasureR> measure,
                     List<CalculatedMemberR> calculatedMember,
                     List<NamedSetR> namedSet,
                     List<DrillThroughActionR> drillThroughAction,
                     List<WritebackTableR> writebackTable,
                     boolean enabled,
-                    boolean cache)
+                    boolean cache,
+                    boolean visible,
+                    Relation fact,
+                    List<ActionR> action
+                    )
         implements Cube {
 
 }

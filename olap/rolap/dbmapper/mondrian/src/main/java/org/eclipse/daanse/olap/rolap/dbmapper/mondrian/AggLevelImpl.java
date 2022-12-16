@@ -9,25 +9,34 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
+import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.AggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.AggLevelProperty;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlType;
+import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "AggLevel")
+@XmlType(name = "AggLevel", propOrder = { "properties" })
 public class AggLevelImpl implements AggLevel {
 
     @XmlAttribute(name = "column", required = true)
     protected String column;
     @XmlAttribute(name = "name", required = true)
     protected String name;
+    @XmlAttribute(name = "ordinalColumn", required = true)
+    protected String ordinalColumn;
+    @XmlAttribute(name = "captionColumn", required = true)
+    protected String captionColumn;
+    @XmlAttribute(name = "nameColumn", required = true)
+    protected String nameColumn;
+    @XmlAttribute(name = "nameColumn", required = true)
+    protected Boolean collapsed = true;
+    @XmlElement(name = "AggLevelProperty", type = AggLevelPropertyImpl.class)
+    List<AggLevelProperty> properties;
 
     @Override
     public String column() {
@@ -41,6 +50,31 @@ public class AggLevelImpl implements AggLevel {
     @Override
     public String name() {
         return name;
+    }
+
+    @Override
+    public String ordinalColumn() {
+        return ordinalColumn;
+    }
+
+    @Override
+    public String captionColumn() {
+        return captionColumn;
+    }
+
+    @Override
+    public String nameColumn() {
+        return nameColumn;
+    }
+
+    @Override
+    public Boolean collapsed() {
+        return collapsed;
+    }
+
+    @Override
+    public List<AggLevelProperty> properties() {
+        return properties;
     }
 
     public void setName(String value) {

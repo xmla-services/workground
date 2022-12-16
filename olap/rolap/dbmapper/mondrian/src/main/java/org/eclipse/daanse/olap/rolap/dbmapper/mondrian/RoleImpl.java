@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
@@ -74,4 +74,7 @@ public class RoleImpl implements Role {
         this.name = value;
     }
 
+    public void setSchemaGrant(List<SchemaGrantImpl> schemaGrant) {
+        this.schemaGrant = schemaGrant;
+    }
 }

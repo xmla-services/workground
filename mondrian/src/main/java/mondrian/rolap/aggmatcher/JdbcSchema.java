@@ -32,6 +32,9 @@ import java.util.TreeMap;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
 import org.olap4j.impl.Olap4jUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -375,8 +378,8 @@ public class JdbcSchema {
                 public RolapStar.Measure rMeasure;
 
                 // hierarchy stuff
-                public MondrianDef.Relation relation;
-                public MondrianDef.Expression joinExp;
+                public org.eclipse.daanse.olap.rolap.dbmapper.api.Relation relation;
+                public org.eclipse.daanse.olap.rolap.dbmapper.api.Expression joinExp;
                 public String levelColumnName;
 
                 // level stuff
@@ -442,29 +445,29 @@ public class JdbcSchema {
                     return symbolicName;
                 }
 
-                public MondrianDef.Expression getOrdinalExp() {
-                    MondrianDef.Expression ordinalExp = null;
+                public org.eclipse.daanse.olap.rolap.dbmapper.api.Expression getOrdinalExp() {
+                    org.eclipse.daanse.olap.rolap.dbmapper.api.Expression ordinalExp = null;
                     if (ordinalColumn != null) {
                         ordinalExp =
-                            new MondrianDef.Column(
+                            new ColumnR(
                                 getTable().getName(), ordinalColumn.getName());
                     }
                     return ordinalExp;
                 }
 
-                public MondrianDef.Expression getCaptionExp() {
-                    MondrianDef.Expression captionExp = null;
+                public org.eclipse.daanse.olap.rolap.dbmapper.api.Expression getCaptionExp() {
+                    org.eclipse.daanse.olap.rolap.dbmapper.api.Expression captionExp = null;
                     if (captionColumn != null) {
                         captionExp =
-                            new MondrianDef.Column(
+                            new ColumnR(
                                 getTable().getName(), captionColumn.getName());
                     }
                     return captionExp;
                 }
 
-                public Map<String, MondrianDef.Expression> getProperties() {
-                    Map<String, MondrianDef.Expression> map =
-                        new HashMap<String, MondrianDef.Expression>();
+                public Map<String, org.eclipse.daanse.olap.rolap.dbmapper.api.Expression> getProperties() {
+                    Map<String, org.eclipse.daanse.olap.rolap.dbmapper.api.Expression> map =
+                        new HashMap<String, org.eclipse.daanse.olap.rolap.dbmapper.api.Expression>();
                     if (properties == null) {
                         return map;
                     }
@@ -473,7 +476,7 @@ public class JdbcSchema {
                     {
                         map.put(
                             entry.getKey(),
-                            new MondrianDef.Column(
+                            new ColumnR(
                                 getTable().getName(),
                                 entry.getValue().getName()));
                     }
@@ -547,7 +550,7 @@ public class JdbcSchema {
              */
             private boolean isNullable;
 
-            public final MondrianDef.Column column;
+            public final org.eclipse.daanse.olap.rolap.dbmapper.api.Column column;
 
             private final List<JdbcSchema.Table.Column.Usage> usages;
 
@@ -560,7 +563,7 @@ public class JdbcSchema {
             private Column(final String name) {
                 this.name = name;
                 this.column =
-                    new MondrianDef.Column(
+                    new ColumnR(
                         JdbcSchema.Table.this.getName(),
                         name);
                 this.usages = new ArrayList<JdbcSchema.Table.Column.Usage>();
@@ -882,7 +885,7 @@ public class JdbcSchema {
         private final String tableType;
 
         // mondriandef stuff
-        public MondrianDef.Table table;
+        public org.eclipse.daanse.olap.rolap.dbmapper.api.Table table;
 
         private boolean allColumnsLoaded;
 

@@ -11,7 +11,9 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.MondrianDef;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeUsage;
+
+import java.util.List;
 
 /**
  * Provides the base cubes that a virtual cube uses and
@@ -22,19 +24,19 @@ import mondrian.olap.MondrianDef;
  * @since Nov 22 2007
  */
 public class RolapCubeUsages {
-    private MondrianDef.CubeUsages cubeUsages;
+    private List<? extends CubeUsage> cubeUsages;
 
-    public RolapCubeUsages(MondrianDef.CubeUsages cubeUsage) {
+    public RolapCubeUsages(List<? extends CubeUsage> cubeUsage) {
         this.cubeUsages = cubeUsage;
     }
 
     public boolean shouldIgnoreUnrelatedDimensions(String baseCubeName) {
-        if (cubeUsages == null || cubeUsages.cubeUsages == null) {
+        if (cubeUsages == null) {
             return false;
         }
-        for (MondrianDef.CubeUsage usage : cubeUsages.cubeUsages) {
-            if (usage.cubeName.equals(baseCubeName)
-                && Boolean.TRUE.equals(usage.ignoreUnrelatedDimensions))
+        for (CubeUsage usage : cubeUsages) {
+            if (usage.cubeName().equals(baseCubeName)
+                && Boolean.TRUE.equals(usage.ignoreUnrelatedDimensions()))
             {
                 return true;
             }

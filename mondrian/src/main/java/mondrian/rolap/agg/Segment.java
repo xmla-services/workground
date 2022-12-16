@@ -185,7 +185,7 @@ public class Segment {
 
     for ( int i = 0; i < columns.length; i++ ) {
       buf.append( sep );
-      buf.append( columns[i].getExpression().getGenericExpression() );
+      buf.append( columns[i].getExpression().genericExpression() );
       describeAxes( buf, i, values );
     }
     if ( !excludedRegions.isEmpty() ) {
@@ -215,7 +215,7 @@ public class Segment {
     buf.append( sep );
     buf.append( "measure=" );
     buf.append( measure.getExpression() == null ? measure.getAggregator().getExpression( "*" ) : measure
-        .getAggregator().getExpression( measure.getExpression().getGenericExpression() ) );
+        .getAggregator().getExpression( measure.getExpression().genericExpression() ) );
     return buf.toString();
   }
 

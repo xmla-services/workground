@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
@@ -17,20 +17,7 @@ import java.util.List;
 
 public non-sealed interface AggPattern extends AggTable {
 
-    AggColumnName aggFactCount();
-
-    List<? extends AggColumnName> aggIgnoreColumn();
-
-    List<? extends AggForeignKey> aggForeignKey();
-
-    List<? extends AggMeasure> aggMeasure();
-
-    List<? extends AggLevel> aggLevel();
-
     List<? extends AggExclude> aggExclude();
 
     String pattern();
-
-    boolean ignorecase();
-
 }

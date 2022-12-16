@@ -9,13 +9,15 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import java.math.BigInteger;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Level;
 
 public record LevelR(String name,
@@ -26,7 +28,7 @@ public record LevelR(String name,
                      String parentColumn,
                      String nullParentValue,
                      String type,
-                     BigInteger approxRowCount,
+                     String approxRowCount,
                      boolean uniqueMembers,
                      String levelType,
                      String hideMemberIf,
@@ -41,7 +43,15 @@ public record LevelR(String name,
                      ExpressionViewR ordinalExpression,
                      ExpressionViewR parentExpression,
                      ClosureR closure,
-                     List<PropertyR> property)
+                     List<PropertyR> property,
+                     boolean visible,
+                     String internalType,
+                     ElementFormatter memberFormatter
+                     )
         implements Level {
 
+    @Override
+    public Expression getPropertyExp(int i) {
+        return new ColumnR(table, property.get(i).column());
+    }
 }

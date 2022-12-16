@@ -9,16 +9,15 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
+import jakarta.xml.bind.annotation.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.WritebackColumn;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.WritebackTable;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlType;
+import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "WritebackTable")
@@ -28,10 +27,18 @@ public class WritebackTableImpl implements WritebackTable {
     protected String name;
     @XmlAttribute(name = "schema")
     protected String schema;
+    @XmlElements({ @XmlElement(name = "WritebackAttribute", type = WritebackAttributeImpl.class),
+        @XmlElement(name = "WritebackMeasure", type = WritebackMeasureImpl.class) })
+    private List<WritebackColumn> columns;
 
     @Override
     public String name() {
         return name;
+    }
+
+    @Override
+    public List<WritebackColumn> columns() {
+        return columns;
     }
 
     public void setName(String value) {

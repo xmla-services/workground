@@ -9,10 +9,11 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
+import java.io.PrintWriter;
 import java.util.List;
 
 /**
@@ -47,4 +48,5 @@ public interface Schema {
 
     String defaultRole();
 
+    void display(PrintWriter pw, int i);
 }

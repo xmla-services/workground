@@ -26,6 +26,9 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.LevelImpl;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;
@@ -35,8 +38,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
-import mondrian.olap.MondrianDef;
 import mondrian.util.ByteString;
+import org.opencube.junit5.SchemaUtil;
 
 public class SqlMemberSourceTest {
   private static final String STORE_TABLE = "store";
@@ -96,14 +99,14 @@ public class SqlMemberSourceTest {
   }
 
   private static RolapLevel getCountryLevelMock() throws Exception {
-    MondrianDef.Level level = new MondrianDef.Level( wrapStrSources( getStoreCountry() ) );
+    LevelImpl level = SchemaUtil.parse(getStoreCountry(), LevelImpl.class);
     RolapLevel rlLevel = new RolapLevel( storeHierarchyMock, 0, level );
     RolapLevel rlLevelSpy = spy( rlLevel );
     return rlLevelSpy;
   }
 
   private static RolapLevel getStateLevelMock() throws Exception {
-    MondrianDef.Level level = new MondrianDef.Level( wrapStrSources( getStoreState() ) );
+    LevelImpl level = SchemaUtil.parse(getStoreState(), LevelImpl.class);
     RolapLevel rlLevel = new RolapLevel( storeHierarchyMock, 0, level );
     RolapLevel rlLevelSpy = spy( rlLevel );
     return rlLevelSpy;
@@ -111,7 +114,7 @@ public class SqlMemberSourceTest {
 
   // Below there are mocked levels in Store hierarchy of Store dimension according to the default test foodmart schema
   private static RolapLevel getCityLevelMock() throws Exception {
-    MondrianDef.Level level = new MondrianDef.Level( wrapStrSources( getStoreCity() ) );
+    LevelImpl level = SchemaUtil.parse(getStoreCity(), LevelImpl.class);
     RolapLevel rlLevel = new RolapLevel( storeHierarchyMock, 0, level );
     RolapLevel rlLevelSpy = spy( rlLevel );
     return rlLevelSpy;
@@ -119,8 +122,8 @@ public class SqlMemberSourceTest {
 
   // Mock for the Store hierarchy
   private RolapHierarchy getStoreHierarchyMock() {
-    MondrianDef.Relation relationMock = mock( MondrianDef.Table.class );
-    when( relationMock.getAlias() ).thenReturn( STORE_TABLE );
+    Relation relationMock = mock( Table.class );
+    when( relationMock.alias() ).thenReturn( STORE_TABLE );
     Dimension dimMock = mock( Dimension.class );
     when( dimMock.getDimensionType() ).thenReturn( null );
 

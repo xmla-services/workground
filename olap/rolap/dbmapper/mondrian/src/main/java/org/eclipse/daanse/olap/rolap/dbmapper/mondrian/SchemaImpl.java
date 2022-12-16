@@ -10,10 +10,11 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -164,6 +165,11 @@ public class SchemaImpl implements Schema {
     @Override
     public String defaultRole() {
         return defaultRole;
+    }
+
+    @Override
+    public void display(PrintWriter pw, int i) {
+        //TODO
     }
 
     public void setDefaultRole(String value) {

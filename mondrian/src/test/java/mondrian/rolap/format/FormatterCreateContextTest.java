@@ -11,6 +11,8 @@ package mondrian.rolap.format;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.ElementFormatterImpl;
 import org.junit.jupiter.api.Test;
 
 import mondrian.olap.MondrianDef;
@@ -19,9 +21,9 @@ public class FormatterCreateContextTest {
 
 	@Test
     public void testElementDataShouldSupersedeAttributeData() {
-        MondrianDef.ElementFormatter elementData =
-            new MondrianDef.PropertyFormatter();
-        elementData.className = "elementClassName";
+        ElementFormatterImpl elementData =
+            new ElementFormatterImpl();
+        elementData.setClassName("elementClassName");
 
         FormatterCreateContext context1 =
             new FormatterCreateContext.Builder("elementName")

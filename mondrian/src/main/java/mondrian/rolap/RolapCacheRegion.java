@@ -65,7 +65,7 @@ public class RolapCacheRegion {
         bitKey.set(bitPosition);
         columnPredicates.put(bitPosition, predicate);
         columnPredicatesByName.put(
-            column.getExpression().getGenericExpression(),
+            column.getExpression().genericExpression(),
             predicate);
     }
 

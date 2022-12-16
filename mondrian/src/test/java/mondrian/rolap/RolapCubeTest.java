@@ -10,25 +10,18 @@
 */
 package mondrian.rolap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.opencube.junit5.TestUtil.cubeByName;
-import static org.opencube.junit5.TestUtil.getDimensionWithName;
-import static org.opencube.junit5.TestUtil.withRole;
-import static org.opencube.junit5.TestUtil.withSchema;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
+import mondrian.calc.TupleList;
+import mondrian.calc.impl.UnaryTupleList;
+import mondrian.olap.Id;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.Util;
+import mondrian.test.PropertySaver5;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.CalculatedMemberImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -39,14 +32,16 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
-import mondrian.calc.TupleList;
-import mondrian.calc.impl.UnaryTupleList;
-import mondrian.olap.Id;
-import mondrian.olap.MondrianDef;
-import mondrian.olap.MondrianProperties;
-import mondrian.olap.SchemaReader;
-import mondrian.olap.Util;
-import mondrian.test.PropertySaver5;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.opencube.junit5.TestUtil.cubeByName;
+import static org.opencube.junit5.TestUtil.getDimensionWithName;
+import static org.opencube.junit5.TestUtil.withRole;
+import static org.opencube.junit5.TestUtil.withSchema;
 
 /**
  * Unit test for {@link RolapCube}.
@@ -77,7 +72,7 @@ public class RolapCubeTest {
             (RolapCube) context.createConnection().getSchema().lookupCube("Sales", false);
         StringBuilder builder = new StringBuilder();
         cube.processFormatStringAttribute(
-            new MondrianDef.CalculatedMember(), builder);
+            new CalculatedMemberImpl(), builder);
         assertEquals(0, builder.length());
     }
 
@@ -87,10 +82,10 @@ public class RolapCubeTest {
         RolapCube cube =
             (RolapCube) context.createConnection().getSchema().lookupCube("Sales", false);
         StringBuilder builder = new StringBuilder();
-        MondrianDef.CalculatedMember xmlCalcMember =
-            new MondrianDef.CalculatedMember();
+        CalculatedMemberImpl xmlCalcMember =
+            new CalculatedMemberImpl();
         String format = "FORMAT";
-        xmlCalcMember.formatString = format;
+        xmlCalcMember.setFormatString(format);
         cube.processFormatStringAttribute(xmlCalcMember, builder);
         assertEquals(
             "," + Util.nl + "FORMAT_STRING = \"" + format + "\"",
@@ -197,7 +192,7 @@ public class RolapCubeTest {
         //TestContext testContext =
         //    createTestContextWithAdditionalMembersAndARole();
         createTestContextWithAdditionalMembersAndARole(context);
-        Connection connection = context.createConnection();        
+        Connection connection = context.createConnection();
 
         try {
             Cube salesCube = cubeByName(connection, "Sales");

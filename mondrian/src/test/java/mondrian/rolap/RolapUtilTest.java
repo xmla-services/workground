@@ -19,6 +19,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.TableImpl;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;
@@ -26,6 +28,7 @@ import org.eigenbase.xom.XOMUtil;
 import org.junit.jupiter.api.Test;
 
 import mondrian.olap.MondrianDef;
+import org.opencube.junit5.SchemaUtil;
 
 public class RolapUtilTest {
 
@@ -35,13 +38,12 @@ public class RolapUtilTest {
   private static final String TABLE_ALIAS = "TableAlias";
   private static final String RELATION_ALIAS = "RelationAlias";
   private static final String FACT_NAME = "order_fact";
-  private MondrianDef.Relation fact;
+  private Relation fact;
 
   @Test
   public void testMakeRolapStarKeyUnmodifiable() throws Exception {
     try {
-      fact = new MondrianDef.Table(
-          wrapStrSources(getFactTableWithSQLFilter()));
+      fact = SchemaUtil.parse(getFactTableWithSQLFilter(), TableImpl.class);
       List<String> polapStarKey = RolapUtil.makeRolapStarKey(FACT_NAME);
       assertNotNull(polapStarKey);
       polapStarKey.add("OneMore");
@@ -55,7 +57,7 @@ public class RolapUtilTest {
 
   @Test
   public void testMakeRolapStarKey_ByFactTableName() throws Exception {
-    fact = new MondrianDef.Table(wrapStrSources(getFactTableWithSQLFilter()));
+    fact = SchemaUtil.parse(getFactTableWithSQLFilter(), TableImpl.class);
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(FACT_NAME);
     assertNotNull(polapStarKey);
     assertEquals(1, polapStarKey.size());
@@ -64,7 +66,7 @@ public class RolapUtilTest {
 
   @Test
   public void testMakeRolapStarKey_FactTableWithSQLFilter() throws Exception {
-    fact = new MondrianDef.Table(wrapStrSources(getFactTableWithSQLFilter()));
+    fact = SchemaUtil.parse(getFactTableWithSQLFilter(), TableImpl.class);
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(fact);
     assertNotNull(polapStarKey);
     assertEquals(3, polapStarKey.size());
@@ -76,8 +78,7 @@ public class RolapUtilTest {
   @Test
   public void testMakeRolapStarKey_FactTableWithEmptyFilter()
       throws Exception {
-    fact = new MondrianDef.Table(wrapStrSources(
-        getFactTableWithEmptySQLFilter()));
+    fact = SchemaUtil.parse(getFactTableWithEmptySQLFilter(), TableImpl.class);
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(fact);
     assertNotNull(polapStarKey);
     assertEquals(1, polapStarKey.size());
@@ -87,8 +88,7 @@ public class RolapUtilTest {
   @Test
   public void testMakeRolapStarKey_FactTableWithoutSQLFilter()
       throws Exception {
-    fact = new MondrianDef.Table(wrapStrSources(
-        getFactTableWithoutSQLFilter()));
+    fact = SchemaUtil.parse(getFactTableWithoutSQLFilter(), TableImpl.class);
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(fact);
     assertNotNull(polapStarKey);
     assertEquals(1, polapStarKey.size());
@@ -129,9 +129,9 @@ public class RolapUtilTest {
     return fact;
   }
 
-  private static MondrianDef.Relation getFactRelationMock() throws Exception {
-    MondrianDef.Relation factMock = mock(MondrianDef.Relation.class);
-    when(factMock.getAlias()).thenReturn(RELATION_ALIAS);
+  private static Relation getFactRelationMock() throws Exception {
+    Relation factMock = mock(Relation.class);
+    when(factMock.alias()).thenReturn(RELATION_ALIAS);
     return factMock;
   }
 

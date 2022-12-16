@@ -9,10 +9,11 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Property;
 
 public record PropertyR(String name,
@@ -21,7 +22,8 @@ public record PropertyR(String name,
                         String formatter,
                         String caption,
                         String description,
-                        boolean dependsOnLevelValue)
+                        boolean dependsOnLevelValue,
+                        ElementFormatter propertyFormatter)
         implements Property {
 
 }

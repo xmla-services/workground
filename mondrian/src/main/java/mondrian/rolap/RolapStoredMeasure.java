@@ -13,7 +13,7 @@
 
 package mondrian.rolap;
 
-import mondrian.olap.MondrianDef;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 
 /**
  * A measure which is implemented by a SQL column or SQL expression (as opposed
@@ -34,7 +34,7 @@ public interface RolapStoredMeasure extends RolapMeasure {
     /**
      * Returns the column which holds the value of the measure.
      */
-    MondrianDef.Expression getMondrianDefExpression();
+    Expression getMondrianDefExpression();
 
     /**
      * Returns the aggregation function which rolls up this measure: "SUM",

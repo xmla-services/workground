@@ -9,13 +9,14 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.CellFormatter;
 
 public record CalculatedMemberR(String name,
                                 String formatString,
@@ -25,8 +26,11 @@ public record CalculatedMemberR(String name,
                                 boolean visible,
                                 String displayFolder,
                                 List<AnnotationR> annotations,
-                                Object formula,
-                                List<CalculatedMemberPropertyR> calculatedMemberProperty)
+                                String formula,
+                                List<CalculatedMemberPropertyR> calculatedMemberProperty,
+                                String hierarchy,
+                                String parent,
+                                CellFormatterR cellFormatter)
         implements CalculatedMember {
 
 }

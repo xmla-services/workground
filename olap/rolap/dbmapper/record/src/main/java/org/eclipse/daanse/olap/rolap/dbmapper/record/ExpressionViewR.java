@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
@@ -17,6 +17,19 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.ExpressionView;
 
-public record ExpressionViewR(List<SQLR> sql) implements ExpressionView {
+public record ExpressionViewR(List<SQLR> sql,
+                              String gnericExpression,
+                              String table,
+                              String name,
+                              String tableAlias) implements ExpressionView {
 
+    @Override
+    public String genericExpression() {
+        for (int i = 0; i < sql.size(); i++) {
+            if (sql.get(i).dialect().equals("generic")) {
+                return sql.get(i).content();
+            }
+        }
+        return sql.get(0).content();
+    }
 }

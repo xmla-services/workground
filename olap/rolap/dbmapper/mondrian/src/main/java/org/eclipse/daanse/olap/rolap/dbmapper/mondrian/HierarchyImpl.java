@@ -10,28 +10,19 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.InlineTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
-
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
-import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Hierarchy", propOrder = { "annotations", "table", "view", "join", "inlineTable", "level",
-        "memberReaderParameter" })
+        "memberReaderParameter", "relation" })
 public class HierarchyImpl implements Hierarchy {
 
     @XmlElement(name = "Annotation")
@@ -73,6 +64,16 @@ public class HierarchyImpl implements Hierarchy {
     protected String description;
     @XmlAttribute(name = "uniqueKeyLevelName")
     protected String uniqueKeyLevelName;
+    @XmlAttribute(name = "visible")
+    private boolean visible = true;
+    @XmlAttribute(name = "displayFolder")
+    private String displayFolder;
+    @XmlAttribute(name = "origin")
+    private String origin;
+    @XmlElements({ @XmlElement(name = "Table", type = TableImpl.class),
+        @XmlElement(name = "View", type = ViewImpl.class), @XmlElement(name = "Join", type = JoinImpl.class),
+        @XmlElement(name = "InlineTable", type = InlineTableImpl.class) })
+    protected RelationOrJoin relation;
 
     @Override
     public List<AnnotationImpl> annotations() {
@@ -239,8 +240,43 @@ public class HierarchyImpl implements Hierarchy {
         return uniqueKeyLevelName;
     }
 
+    @Override
+    public boolean visible() {
+        return visible;
+    }
+
+    @Override
+    public String displayFolder() {
+        return displayFolder;
+    }
+
+    @Override
+    public RelationOrJoin relation() {
+        return relation;
+    }
+
+    @Override
+    public String origin() {
+        return origin;
+    }
+
+    public void setVisible(boolean visible) {
+        this.visible = visible;
+    }
+
+    public void setDisplayFolder(String displayFolder) {
+        this.displayFolder = displayFolder;
+    }
+
     public void setUniqueKeyLevelName(String value) {
         this.uniqueKeyLevelName = value;
     }
 
+    public void setLevel(List<LevelImpl> level) {
+        this.level = level;
+    }
+
+    public void setRelation(RelationOrJoin relation) {
+        this.relation = relation;
+    }
 }

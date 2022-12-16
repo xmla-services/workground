@@ -9,26 +9,15 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
-import java.util.List;
-
-public interface DimensionUsage {
-
-    List<? extends Annotation> annotations();
-
-    String name();
+public interface DimensionUsage extends CubeDimension {
 
     String source();
 
     String level();
 
     String usagePrefix();
-
-    String foreignKey();
-
-    boolean highCardinality();
-
 }
