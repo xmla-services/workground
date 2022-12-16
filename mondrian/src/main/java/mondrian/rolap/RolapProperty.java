@@ -11,12 +11,11 @@
 
 package mondrian.rolap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import mondrian.olap.MondrianDef;
 import mondrian.olap.Property;
 import mondrian.spi.PropertyFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * <code>RolapProperty</code> is the definition of a member property.
@@ -35,7 +34,7 @@ public class RolapProperty extends Property {
     private final boolean dependsOnLevelValue;
 
     /** The column or expression which yields the property's value. */
-    private final MondrianDef.Expression exp;
+    private final Expression exp;
 
 
     /**
@@ -53,7 +52,7 @@ public class RolapProperty extends Property {
     RolapProperty(
         String name,
         Datatype type,
-        MondrianDef.Expression exp,
+        Expression exp,
         PropertyFormatter formatter,
         String caption,
         Boolean dependsOnLevelValue,
@@ -68,7 +67,7 @@ public class RolapProperty extends Property {
             dependsOnLevelValue != null && dependsOnLevelValue;
     }
 
-    public MondrianDef.Expression getExp() {
+    public Expression getExp() {
         return exp;
     }
 

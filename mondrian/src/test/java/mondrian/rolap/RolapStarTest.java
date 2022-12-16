@@ -17,6 +17,11 @@ import static org.mockito.Mockito.when;
 
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.Connection;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.SQLImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.TableImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -25,7 +30,6 @@ import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.MondrianDef;
-import mondrian.olap.MondrianDef.SQL;
 import mondrian.rolap.RolapStar.Column;
 
 /**
@@ -39,13 +43,13 @@ public class RolapStarTest {
         public RolapStarForTests(
             final RolapSchema schema,
             final Context context,
-            final MondrianDef.Relation fact)
+            final Relation fact)
         {
             super(schema, context, fact);
         }
 
-        public MondrianDef.RelationOrJoin cloneRelationForTests(
-            MondrianDef.Relation rel,
+        public RelationOrJoin cloneRelationForTests(
+            Relation rel,
             String possibleName)
         {
             return cloneRelation(rel, possibleName);
@@ -68,29 +72,29 @@ public class RolapStarTest {
     }
 
     /**
-     * Tests that given a {@link MondrianDef.Table}, cloneRelation
+     * Tests that given a {@link Table}, cloneRelation
      * respects the existing filters.
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testCloneRelationWithFilteredTable(TestingContext context) {
       RolapStarForTests rs = getStar(context.createConnection(), "sales");
-      MondrianDef.Table original = new MondrianDef.Table();
-      original.name = "TestTable";
-      original.alias = "Alias";
-      original.schema = "Sechema";
-      original.filter = new SQL();
-      original.filter.dialect = "generic";
-      original.filter.cdata = "Alias.clicked = 'true'";
+      TableImpl original = new TableImpl();
+      original.setName("TestTable");
+      original.setAlias("Alias");
+      original.setSchema("Sechema");
+      original.setSql(new SQLImpl());
+      original.sql().setDialect("generic");
+      original.sql().setContent("Alias.clicked = 'true'");
 
-      MondrianDef.Table cloned = (MondrianDef.Table)rs.cloneRelationForTests(
+      Table cloned = (Table)rs.cloneRelationForTests(
           original,
           "NewAlias");
 
-      assertEquals("NewAlias", cloned.alias);
-      assertEquals("TestTable", cloned.name);
-      assertNotNull(cloned.filter);
-      assertEquals("NewAlias.clicked = 'true'", cloned.filter.cdata);
+      assertEquals("NewAlias", cloned.alias());
+      assertEquals("TestTable", cloned.name());
+      assertNotNull(cloned.sql());
+      assertEquals("NewAlias.clicked = 'true'", cloned.sql().content());
   }
 
    //Below there are tests for mondrian.rolap.RolapStar.ColumnComparator

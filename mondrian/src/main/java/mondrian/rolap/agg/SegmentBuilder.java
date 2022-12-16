@@ -753,7 +753,7 @@ public class SegmentBuilder {
     {
         return new SegmentColumn(
             predicate.getConstrainedColumn()
-                .getExpression().getGenericExpression(),
+                .getExpression().genericExpression(),
             predicate.getConstrainedColumn().getCardinality(),
             set);
     }

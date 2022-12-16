@@ -17,6 +17,10 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Hint;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.record.TableR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -223,7 +227,7 @@ public class AggTableManager {
                     // are measure or foreign key columns
 
                     bindToStar(dbFactTable, star, msgRecorder);
-                    String schema = dbFactTable.table.schema;
+                    String schema = dbFactTable.table.schema();
 
                     // Now look at all tables in the database and per table,
                     // first see if it is a match for an aggregate table for
@@ -280,7 +284,7 @@ public class AggTableManager {
                         if (makeAggStar) {
                             dbTable.setTableUsageType(
                                 JdbcSchema.TableUsageType.AGG);
-                            dbTable.table = new MondrianDef.Table(
+                            dbTable.table = new TableR(
                                 schema,
                                 name,
                                 null, // null alias
@@ -360,17 +364,17 @@ public class AggTableManager {
 
             dbFactTable.setTableUsageType(JdbcSchema.TableUsageType.FACT);
 
-            MondrianDef.RelationOrJoin relation =
+            RelationOrJoin relation =
                 star.getFactTable().getRelation();
             String schema = null;
-            MondrianDef.Hint[] tableHints = null;
-            if (relation instanceof MondrianDef.Table) {
-                schema = ((MondrianDef.Table) relation).schema;
-                tableHints = ((MondrianDef.Table) relation).tableHints;
+            List<? extends Hint> tableHints = null;
+            if (relation instanceof Table) {
+                schema = ((Table) relation).schema();
+                tableHints = ((Table) relation).hint();
             }
             String tableName = dbFactTable.getName();
             String alias = null;
-            dbFactTable.table = new MondrianDef.Table(
+            dbFactTable.table = new TableR(
                 schema,
                 tableName,
                 alias,

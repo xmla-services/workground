@@ -9,14 +9,18 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.WritebackColumn;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.WritebackTable;
 
+import java.util.List;
+
 public record WritebackTableR(String schema,
-                              String name)
+                              String name,
+                              List<? extends WritebackColumn> columns)
         implements WritebackTable {
 
 }

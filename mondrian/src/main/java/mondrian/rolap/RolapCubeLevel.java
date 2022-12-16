@@ -12,14 +12,11 @@
 package mondrian.rolap;
 
 import mondrian.olap.LevelType;
-import mondrian.olap.MondrianDef;
 import mondrian.olap.Util;
-import mondrian.rolap.agg.CellRequest;
-import mondrian.rolap.agg.MemberColumnPredicate;
-import mondrian.rolap.agg.MemberTuplePredicate;
-import mondrian.rolap.agg.RangeColumnPredicate;
-import mondrian.rolap.agg.ValueColumnPredicate;
+import mondrian.rolap.agg.*;
 import mondrian.spi.MemberFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
 
 /**
  * RolapCubeLevel wraps a RolapLevel for a specific Cube.
@@ -74,7 +71,7 @@ public class RolapCubeLevel extends RolapLevel {
         if (parentCubeLevel != null) {
             parentCubeLevel.childCubeLevel = this;
         }
-        MondrianDef.RelationOrJoin hierarchyRel = cubeHierarchy.getRelation();
+        RelationOrJoin hierarchyRel = cubeHierarchy.getRelation();
         keyExp = convertExpression(level.getKeyExp(), hierarchyRel);
         nameExp = convertExpression(level.getNameExp(), hierarchyRel);
         captionExp = convertExpression(level.getCaptionExp(), hierarchyRel);
@@ -83,7 +80,7 @@ public class RolapCubeLevel extends RolapLevel {
         properties = convertProperties(level.getProperties(), hierarchyRel);
     }
 
-    void init(MondrianDef.CubeDimension xmlDimension) {
+    void init(CubeDimension xmlDimension) {
         if (isAll()) {
             this.levelReader = new AllLevelReaderImpl();
         } else if (getLevelType() == LevelType.Null) {
@@ -129,7 +126,7 @@ public class RolapCubeLevel extends RolapLevel {
 
     private RolapProperty[] convertProperties(
         RolapProperty[] properties,
-        MondrianDef.RelationOrJoin rel)
+        RelationOrJoin rel)
     {
         if (properties == null) {
             return null;
@@ -160,31 +157,31 @@ public class RolapCubeLevel extends RolapLevel {
      * @param rel the parent relation
      * @return returns the converted expression
      */
-    private MondrianDef.Expression convertExpression(
-        MondrianDef.Expression exp,
-        MondrianDef.RelationOrJoin rel)
+    private Expression convertExpression(
+        Expression exp,
+        RelationOrJoin rel)
     {
         if (getHierarchy().isUsingCubeFact()) {
             // no conversion necessary
             return exp;
         } else if (exp == null || rel == null) {
             return null;
-        } else if (exp instanceof MondrianDef.Column) {
-            MondrianDef.Column col = (MondrianDef.Column)exp;
-            if (rel instanceof MondrianDef.Table) {
-                return new MondrianDef.Column(
-                    ((MondrianDef.Table) rel).getAlias(),
-                    col.getColumnName());
-            } else if (rel instanceof MondrianDef.Join
-                || rel instanceof MondrianDef.Relation)
+        } else if (exp instanceof Column) {
+            Column col = (Column)exp;
+            if (rel instanceof Table) {
+                return new ColumnR(
+                    ((Table) rel).alias(),
+                    col.name());
+            } else if (rel instanceof Join
+                || rel instanceof Relation)
             {
                 // need to determine correct name of alias for this level.
                 // this may be defined in level
                 // col.table
-                String alias = getHierarchy().lookupAlias(col.getTableAlias());
-                return new MondrianDef.Column(alias, col.getColumnName());
+                String alias = getHierarchy().lookupAlias(col.tableAlias());
+                return new ColumnR(alias, col.name());
             }
-        } else if (exp instanceof MondrianDef.ExpressionView) {
+        } else if (exp instanceof ExpressionView) {
             // this is a limitation, in the future, we may need
             // to replace the table name in the sql provided
             // with the new aliased name

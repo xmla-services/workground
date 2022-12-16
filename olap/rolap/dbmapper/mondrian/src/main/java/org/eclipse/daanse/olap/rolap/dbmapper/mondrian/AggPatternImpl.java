@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.AggColumnName;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.AggMeasureFactCount;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.AggPattern;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -27,7 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "aggFactCount", "aggIgnoreColumn", "aggForeignKey", "aggMeasure", "aggLevel",
-        "aggExclude" })
+        "aggExclude", "measuresFactCount" })
 public class AggPatternImpl implements AggPattern {
 
     @XmlElement(name = "AggFactCount", required = true)
@@ -46,6 +47,8 @@ public class AggPatternImpl implements AggPattern {
     protected String pattern;
     @XmlAttribute(name = "ignorecase")
     protected Boolean ignorecase;
+    @XmlElement(name = "AggMeasureFactCount")
+    protected List<AggMeasureFactCountImpl> measuresFactCount;
 
     @Override
     public AggColumnName aggFactCount() {
@@ -112,6 +115,11 @@ public class AggPatternImpl implements AggPattern {
         } else {
             return ignorecase;
         }
+    }
+
+    @Override
+    public List<? extends AggMeasureFactCount> measuresFactCount() {
+        return measuresFactCount;
     }
 
     public void setIgnorecase(Boolean value) {

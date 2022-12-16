@@ -9,13 +9,13 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
 import java.util.List;
 
-public interface Join {
+public interface Join extends RelationOrJoin {
 
     List<Object> relation();
 
@@ -27,4 +27,19 @@ public interface Join {
 
     String rightKey();
 
+    RelationOrJoin left();
+
+    RelationOrJoin right();
+
+    void setLeftAlias(String rightAlias);
+
+    void setLeftKey(String rightKey);
+
+    void setLeft(RelationOrJoin right);
+
+    void setRightAlias(String leftAlias);
+
+    void setRightKey(String leftKey);
+
+    void setRight(RelationOrJoin left);
 }

@@ -505,7 +505,7 @@ public class CacheControlImpl implements CacheControl {
                             }
                             final String ccName =
                                 ((RolapLevel) member.getLevel()).getKeyExp()
-                                    .getGenericExpression();
+                                    .genericExpression();
                             if (!levels.containsKey(ccName)) {
                                 levels.put(
                                     ccName, new HashSet<Comparable>());
@@ -548,7 +548,7 @@ public class CacheControlImpl implements CacheControl {
                     // into an actual list of values for ConstrainedColumn
                     list.add(
                         new SegmentColumn(
-                            region.level.getKeyExp().getGenericExpression(),
+                            region.level.getKeyExp().genericExpression(),
                             -1,
                             null));
                 }

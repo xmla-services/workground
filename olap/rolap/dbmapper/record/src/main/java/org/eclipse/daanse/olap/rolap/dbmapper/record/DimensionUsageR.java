@@ -9,13 +9,16 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.DimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
 
 public record DimensionUsageR(String name,
                               String source,
@@ -23,7 +26,14 @@ public record DimensionUsageR(String name,
                               String usagePrefix,
                               String foreignKey,
                               boolean highCardinality,
-                              List<AnnotationR> annotations)
+                              List<AnnotationR> annotations,
+                              String caption,
+                              boolean visible,
+                              String description)
         implements DimensionUsage {
 
+    @Override
+    public PrivateDimension getDimension(Schema xmlSchema) {
+        return null;
+    }
 }

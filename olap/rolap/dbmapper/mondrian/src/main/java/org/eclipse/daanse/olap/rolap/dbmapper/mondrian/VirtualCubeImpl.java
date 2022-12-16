@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
@@ -54,6 +54,8 @@ public class VirtualCubeImpl implements VirtualCube {
     protected String caption;
     @XmlAttribute(name = "description")
     protected String description;
+    @XmlAttribute(name = "enabled")
+    protected Boolean visible = true;
 
     @Override
     public List<AnnotationImpl> annotations() {
@@ -148,6 +150,11 @@ public class VirtualCubeImpl implements VirtualCube {
     @Override
     public String description() {
         return description;
+    }
+
+    @Override
+    public boolean visible() {
+        return visible;
     }
 
     public void setDescription(String value) {

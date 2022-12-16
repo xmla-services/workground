@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
@@ -19,7 +19,7 @@ public interface NamedSet {
 
     List<? extends Annotation> annotations();
 
-    Object formula();
+    String formula();
 
     String name();
 
@@ -27,4 +27,7 @@ public interface NamedSet {
 
     String description();
 
+    String displayFolder();
+
+    Formula formulaElement();
 }

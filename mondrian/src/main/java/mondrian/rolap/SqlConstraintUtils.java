@@ -33,6 +33,7 @@ import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,6 +67,8 @@ import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.CrossJoinArg;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.util.FilteredIterableList;
+
+import static mondrian.rolap.ExpressionUtil.getExpression;
 
 /**
  * Utility class used by implementations of {@link mondrian.rolap.sql.SqlConstraint}, used to generate constraints into
@@ -163,8 +166,8 @@ public class SqlConstraintUtils {
       }
     }
 
-    Map<MondrianDef.Expression, Set<RolapMember>> mapOfSlicerMembers = null;
-    HashMap<MondrianDef.Expression, Boolean> done = new HashMap<MondrianDef.Expression, Boolean>();
+    Map<Expression, Set<RolapMember>> mapOfSlicerMembers = null;
+    HashMap<Expression, Boolean> done = new HashMap<Expression, Boolean>();
 
     for ( int i = 0; i < columns.length; i++ ) {
       final RolapStar.Column column = columns[i];
@@ -177,7 +180,7 @@ public class SqlConstraintUtils {
         mapOfSlicerMembers = getSlicerMemberMap( evaluator );
       }
 
-      final MondrianDef.Expression keyForSlicerMap = column.getExpression();
+      final Expression keyForSlicerMap = column.getExpression();
 
       if ( mapOfSlicerMembers.containsKey( keyForSlicerMap ) ) {
         if ( !done.containsKey( keyForSlicerMap ) ) {
@@ -551,14 +554,14 @@ public class SqlConstraintUtils {
   }
 
   /**
-   * Gets a map of MondrianDef.Expression to the set of sliced members associated with each expression.
+   * Gets a map of Expression to the set of sliced members associated with each expression.
    *
    * This map is used by addContextConstraint() to get the set of slicer members associated with each column in the cell
    * request's constrained columns array, {@link CellRequest#getConstrainedColumns}
    */
-  private static Map<MondrianDef.Expression, Set<RolapMember>> getSlicerMemberMap( Evaluator evaluator ) {
-    Map<MondrianDef.Expression, Set<RolapMember>> mapOfSlicerMembers =
-        new HashMap<MondrianDef.Expression, Set<RolapMember>>();
+  private static Map<Expression, Set<RolapMember>> getSlicerMemberMap( Evaluator evaluator ) {
+    Map<Expression, Set<RolapMember>> mapOfSlicerMembers =
+        new HashMap<Expression, Set<RolapMember>>();
     List<Member> slicerMembers = ( (RolapEvaluator) evaluator ).getSlicerMembers();
     List<Member> expandedSlicers =
         evaluator.isEvalAxes() ? expandSupportedCalculatedMembers( slicerMembers, evaluator.push() ).getMembers()
@@ -580,13 +583,13 @@ public class SqlConstraintUtils {
    * Expression.
    *
    */
-  private static void addSlicedMemberToMap( Map<MondrianDef.Expression, Set<RolapMember>> mapOfSlicerMembers,
+  private static void addSlicedMemberToMap( Map<Expression, Set<RolapMember>> mapOfSlicerMembers,
       Member slicerMember ) {
     if ( slicerMember == null || slicerMember.isAll() || slicerMember.isNull() ) {
       return;
     }
     assert slicerMember instanceof RolapMember;
-    MondrianDef.Expression expression = ( (RolapLevel) slicerMember.getLevel() ).getKeyExp();
+    Expression expression = ( (RolapLevel) slicerMember.getLevel() ).getKeyExp();
     if ( !mapOfSlicerMembers.containsKey( expression ) ) {
       mapOfSlicerMembers.put( expression, new LinkedHashSet<RolapMember>() );
     }
@@ -1380,7 +1383,7 @@ public class SqlConstraintUtils {
       }
     } else {
       assert ( aggStar == null );
-      MondrianDef.Expression exp = level.getNameExp();
+      Expression exp = level.getNameExp();
       if ( exp == null ) {
         exp = level.getKeyExp();
         datatype = level.getDatatype();
@@ -1389,7 +1392,7 @@ public class SqlConstraintUtils {
         // but we presume that it is a string.
         datatype = Datatype.String;
       }
-      columnString = exp.getExpression( query );
+      columnString = getExpression( exp, query );
     }
 
     String constraint;
@@ -1481,9 +1484,9 @@ public class SqlConstraintUtils {
    *
    * @return generated string corresponding to the expression
    */
-  public static String constrainLevel2( SqlQuery query, MondrianDef.Expression exp, Datatype datatype,
-      Comparable columnValue ) {
-    String columnString = exp.getExpression( query );
+  public static String constrainLevel2(SqlQuery query, Expression exp, Datatype datatype,
+                                       Comparable columnValue ) {
+    String columnString = getExpression( exp, query );
     if ( columnValue == RolapUtil.sqlNullValue ) {
       return columnString + " is " + RolapUtil.sqlNullLiteral;
     } else {
@@ -1664,11 +1667,11 @@ public class SqlConstraintUtils {
       assert ( aggStar == null );
       hierarchy.addToFrom( sqlQuery, level.getKeyExp() );
 
-      MondrianDef.Expression nameExp = level.getNameExp();
+      Expression nameExp = level.getNameExp();
       if ( nameExp == null ) {
         nameExp = level.getKeyExp();
       }
-      columnString = nameExp.getExpression( sqlQuery );
+      columnString = getExpression( nameExp, sqlQuery );
     }
     return columnString;
   }
@@ -1809,7 +1812,7 @@ public class SqlConstraintUtils {
       } else {
         assert ( aggStar == null );
         hierarchy.addToFrom( sqlQuery, level.getKeyExp() );
-        q = level.getKeyExp().getExpression( sqlQuery );
+        q = getExpression( level.getKeyExp(), sqlQuery );
       }
 
       StarColumnPredicate cc = getColumnPredicates( column, c );

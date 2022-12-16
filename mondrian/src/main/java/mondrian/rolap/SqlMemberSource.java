@@ -28,6 +28,7 @@ import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,8 @@ import mondrian.util.CancellationChecker;
 import mondrian.util.CreationException;
 import mondrian.util.ObjectFactory;
 import mondrian.util.Pair;
+
+import static mondrian.rolap.ExpressionUtil.getExpression;
 
 /**
  * A <code>SqlMemberSource</code> reads members from a SQL database.
@@ -124,10 +127,10 @@ class SqlMemberSource
             return null;
         }
         List<Datatype> datatypeList = new ArrayList<Datatype>();
-        List<MondrianDef.Expression> columnList =
-            new ArrayList<MondrianDef.Expression>();
+        List<Expression> columnList =
+            new ArrayList<Expression>();
         for (RolapLevel x = level;; x = (RolapLevel) x.getParentLevel()) {
-            columnList.add(x.getKeyExp());
+            columnList.add(x.keyExp);
             datatypeList.add(x.getDatatype());
             if (x.isUnique()) {
                 break;
@@ -272,7 +275,7 @@ class SqlMemberSource
                 }
                 hierarchy.addToFrom(sqlQuery, level2.getKeyExp());
 
-                String keyExp = level2.getKeyExp().getExpression(sqlQuery);
+                String keyExp = getExpression(level2.getKeyExp(), sqlQuery);
                 columnList.add(keyExp);
 
                 if (level2.isUnique()) {
@@ -311,9 +314,9 @@ class SqlMemberSource
                 if (level2.isAll()) {
                     continue;
                 }
-                MondrianDef.Expression keyExp = level2.getKeyExp();
+                Expression keyExp = level2.getKeyExp();
                 hierarchy.addToFrom(sqlQuery, keyExp);
-                sqlQuery.addSelect(keyExp.getExpression(sqlQuery), null);
+                sqlQuery.addSelect(getExpression(keyExp, sqlQuery), null);
                 if (level2.isUnique()) {
                     break; // no further qualification needed
                 }
@@ -485,21 +488,21 @@ RME is this right
             if (level.isAll()) {
                 continue;
             }
-            final MondrianDef.Expression keyExp = level.getKeyExp();
+            final Expression keyExp = level.getKeyExp();
             hierarchy.addToFrom(sqlQuery, keyExp);
             final String expString =
-                keyExp.getExpression(sqlQuery);
+                getExpression(keyExp, sqlQuery);
             final String keyAlias =
                 sqlQuery.addSelectGroupBy(expString, null);
 
             if (!keyExp.equals(level.getOrdinalExp())) {
                 // Ordering comes from a separate expression
-                final MondrianDef.Expression ordinalExp =
+                final Expression ordinalExp =
                     level.getOrdinalExp();
                 // Make sure the table is selected.
                 hierarchy.addToFrom(sqlQuery, ordinalExp);
                 final String ordinalExpString =
-                    ordinalExp.getExpression(sqlQuery);
+                    getExpression(ordinalExp, sqlQuery);
                 final String orderAlias =
                     sqlQuery.addSelectGroupBy(ordinalExpString, null);
                 sqlQuery.addOrderBy(
@@ -516,10 +519,10 @@ RME is this right
 
             RolapProperty[] properties = level.getProperties();
             for (RolapProperty property : properties) {
-                final MondrianDef.Expression propExpr = property.getExp();
+                final Expression propExpr = property.getExp();
                 hierarchy.addToFrom(sqlQuery, propExpr);
                 final String propStringExpr =
-                    propExpr.getExpression(sqlQuery);
+                    getExpression(propExpr, sqlQuery);
                 final String propAlias =
                     sqlQuery.addSelect(propStringExpr, null);
                 // Some dialects allow us to eliminate properties from the
@@ -652,7 +655,7 @@ RME is this right
         }
 
         hierarchy.addToFrom(sqlQuery, level.getKeyExp());
-        String q = level.getKeyExp().getExpression(sqlQuery);
+        String q = getExpression(level.getKeyExp(), sqlQuery);
         String idAlias = sqlQuery.addSelect(q, level.getInternalType());
         if(needsGroupBy) {
             sqlQuery.addGroupBy(q, idAlias);
@@ -693,11 +696,11 @@ RME is this right
         }
 
         if (level.hasCaptionColumn()) {
-            MondrianDef.Expression captionExp = level.getCaptionExp();
+            Expression captionExp = level.getCaptionExp();
             if (!levelCollapsed) {
                 hierarchy.addToFrom(sqlQuery, captionExp);
             }
-            String captionSql = captionExp.getExpression(sqlQuery);
+            String captionSql = getExpression(captionExp, sqlQuery);
             String gbAlias = sqlQuery.addSelect(captionSql, null);
             if(needsGroupBy) {
                 sqlQuery.addGroupBy(captionSql, gbAlias);
@@ -707,7 +710,7 @@ RME is this right
             hierarchy.addToFrom(sqlQuery, level.getOrdinalExp());
         }
 
-        final String orderBy = level.getOrdinalExp().getExpression(sqlQuery);
+        final String orderBy = getExpression(level.getOrdinalExp(), sqlQuery);
         if (!orderBy.equals(q)) {
             String orderAlias = sqlQuery.addSelect(orderBy, null);
             if(needsGroupBy) {
@@ -722,11 +725,11 @@ RME is this right
 
         RolapProperty[] properties = level.getProperties();
         for (RolapProperty property : properties) {
-            final MondrianDef.Expression exp = property.getExp();
+            final Expression exp = property.getExp();
             if (!levelCollapsed) {
                 hierarchy.addToFrom(sqlQuery, exp);
             }
-            final String s = exp.getExpression(sqlQuery);
+            final String s = getExpression(exp, sqlQuery);
             String alias = sqlQuery.addSelect(s, property.getType().getInternalType());
             if(needsGroupBy) {
                 // Some dialects allow us to eliminate properties from the
@@ -831,9 +834,9 @@ RME is this right
         if (level.isAll()) {
             return false;
         }
-        MondrianDef.Expression keyExp = level.getKeyExp();
-        MondrianDef.Expression ordinalExp = level.getOrdinalExp();
-        MondrianDef.Expression captionExp = level.getCaptionExp();
+        Expression keyExp = level.getKeyExp();
+        Expression ordinalExp = level.getOrdinalExp();
+        Expression captionExp = level.getCaptionExp();
 
         if (!keyExp.equals(ordinalExp)) {
             return true;
@@ -1232,7 +1235,7 @@ RME is this right
                 + level + "' must be unique");
 
         hierarchy.addToFrom(sqlQuery, level.getParentExp());
-        String parentId = level.getParentExp().getExpression(sqlQuery);
+        String parentId = getExpression(level.getParentExp(), sqlQuery);
         StringBuilder condition = new StringBuilder(64);
         condition.append(parentId);
         if (level.getNullParentValue() == null
@@ -1262,22 +1265,22 @@ RME is this right
         RolapLevel level,
         boolean group)
     {
-        final MondrianDef.Expression key = level.getKeyExp();
-        final MondrianDef.Expression order = level.getOrdinalExp();
+        final Expression key = level.getKeyExp();
+        final Expression order = level.getOrdinalExp();
 
         // Make sure the tables are in the query.
         hierarchy.addToFrom(sqlQuery, key);
         hierarchy.addToFrom(sqlQuery, order);
 
         // First deal with the key column.
-        final String keySql = key.getExpression(sqlQuery);
+        final String keySql = getExpression(key, sqlQuery);
         final String keyAlias =
             group
                 ? sqlQuery.addSelectGroupBy(keySql, level.getInternalType())
                 : sqlQuery.addSelect(keySql, level.getInternalType());
 
         // Now deal with the ordering column.
-        final String orderSql = order.getExpression(sqlQuery);
+        final String orderSql = getExpression(order, sqlQuery);
         if (!orderSql.equals(keySql)) {
             final String orderAlias =
                 group
@@ -1297,9 +1300,9 @@ RME is this right
 
         final RolapProperty[] properties = level.getProperties();
         for (RolapProperty property : properties) {
-            final MondrianDef.Expression exp = property.getExp();
+            final Expression exp = property.getExp();
             hierarchy.addToFrom(sqlQuery, exp);
-            final String s = exp.getExpression(sqlQuery);
+            final String s = getExpression(exp, sqlQuery);
             // REVIEW: Maybe use property.getType?
             String alias = sqlQuery.addSelect(s, null);
             // Some dialects allow us to eliminate properties from the group by
@@ -1341,18 +1344,18 @@ RME is this right
             "parent-child level '" + level + "' must be "  + "unique");
 
         hierarchy.addToFrom(sqlQuery, level.getParentExp());
-        String parentId = level.getParentExp().getExpression(sqlQuery);
+        String parentId = getExpression(level.getParentExp(), sqlQuery);
 
         StringBuilder buf = new StringBuilder();
         sqlQuery.getDialect().quote(buf, member.getKey(), level.getDatatype());
         sqlQuery.addWhere(parentId, " = ", buf.toString());
 
         hierarchy.addToFrom(sqlQuery, level.getKeyExp());
-        String childId = level.getKeyExp().getExpression(sqlQuery);
+        String childId = getExpression(level.getKeyExp(), sqlQuery);
         String idAlias =
             sqlQuery.addSelectGroupBy(childId, level.getInternalType());
         hierarchy.addToFrom(sqlQuery, level.getOrdinalExp());
-        final String orderBy = level.getOrdinalExp().getExpression(sqlQuery);
+        final String orderBy = getExpression(level.getOrdinalExp(), sqlQuery);
         if (!orderBy.equals(childId)) {
             String orderAlias = sqlQuery.addSelectGroupBy(orderBy, null);
             sqlQuery.addOrderBy(
@@ -1364,9 +1367,9 @@ RME is this right
 
         RolapProperty[] properties = level.getProperties();
         for (RolapProperty property : properties) {
-            final MondrianDef.Expression exp = property.getExp();
+            final Expression exp = property.getExp();
             hierarchy.addToFrom(sqlQuery, exp);
-            final String s = exp.getExpression(sqlQuery);
+            final String s = getExpression(exp, sqlQuery);
             String alias = sqlQuery.addSelect(s, null);
             // Some dialects allow us to eliminate properties from the group by
             // that are functionally dependent on the level value

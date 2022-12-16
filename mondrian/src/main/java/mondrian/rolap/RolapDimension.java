@@ -19,6 +19,7 @@ import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,18 +101,18 @@ class RolapDimension extends DimensionBase {
     RolapDimension(
         RolapSchema schema,
         RolapCube cube,
-        MondrianDef.Dimension xmlDimension,
-        MondrianDef.CubeDimension xmlCubeDimension)
+        org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension xmlDimension,
+        org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension xmlCubeDimension)
     {
         this(
             schema,
-            xmlDimension.name,
-            xmlDimension.caption,
-            xmlDimension.visible,
-            xmlDimension.description,
-            xmlDimension.getDimensionType(),
-            xmlDimension.highCardinality,
-            RolapHierarchy.createMetadataMap(xmlDimension.annotations));
+            xmlDimension.name(),
+            xmlDimension.caption(),
+            xmlDimension.visible(),
+            xmlDimension.description(),
+            xmlDimension.type() == null ? null : DimensionType.valueOf(xmlDimension.type()),
+            xmlDimension.highCardinality(),
+            RolapHierarchy.createMetadataMap(xmlDimension.annotations()));
 
         Util.assertPrecondition(schema != null);
 
@@ -119,13 +120,13 @@ class RolapDimension extends DimensionBase {
             Util.assertTrue(cube.getSchema() == schema);
         }
 
-        if (!Util.isEmpty(xmlDimension.caption)) {
-            setCaption(xmlDimension.caption);
+        if (!Util.isEmpty(xmlDimension.caption())) {
+            setCaption(xmlDimension.caption());
         }
-        this.hierarchies = new RolapHierarchy[xmlDimension.hierarchies.length];
-        for (int i = 0; i < xmlDimension.hierarchies.length; i++) {
+        this.hierarchies = new RolapHierarchy[xmlDimension.hierarchy().size()];
+        for (int i = 0; i < xmlDimension.hierarchy().size(); i++) {
             RolapHierarchy hierarchy = new RolapHierarchy(
-                cube, this, xmlDimension.hierarchies[i], xmlCubeDimension);
+                cube, this, xmlDimension.hierarchy().get(i), xmlCubeDimension);
             hierarchies[i] = hierarchy;
         }
 
@@ -178,7 +179,7 @@ class RolapDimension extends DimensionBase {
     /**
      * Initializes a dimension within the context of a cube.
      */
-    void init(MondrianDef.CubeDimension xmlDimension) {
+    void init(CubeDimension xmlDimension) {
         for (int i = 0; i < hierarchies.length; i++) {
             if (hierarchies[i] != null) {
                 ((RolapHierarchy) hierarchies[i]).init(xmlDimension);

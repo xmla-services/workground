@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
@@ -24,9 +24,12 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElements;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "relation" })
+@XmlType(name = "", propOrder = { "relation", "left", "right" })
 public class JoinImpl implements Join {
 
     @XmlElements({ @XmlElement(name = "Table", type = TableImpl.class),
@@ -41,6 +44,16 @@ public class JoinImpl implements Join {
     protected String rightAlias;
     @XmlAttribute(name = "rightKey")
     protected String rightKey;
+    @XmlElements({ @XmlElement(name = "InlineTable", type = InlineTableImpl.class),
+        @XmlElement(name = "Table", type = TableImpl.class),
+        @XmlElement(name = "Join", type = JoinImpl.class),
+        @XmlElement(name = "View", type = ViewImpl.class)})
+    private RelationOrJoin left;
+    @XmlElements({ @XmlElement(name = "InlineTable", type = InlineTableImpl.class),
+        @XmlElement(name = "Table", type = TableImpl.class),
+        @XmlElement(name = "Join", type = JoinImpl.class),
+        @XmlElement(name = "View", type = ViewImpl.class)})
+    private RelationOrJoin right;
 
     @Override
     public List<Object> relation() {
@@ -82,8 +95,30 @@ public class JoinImpl implements Join {
         return rightKey;
     }
 
+    @Override
+    public RelationOrJoin left() {
+        return left;
+    }
+
+    @Override
+    public RelationOrJoin right() {
+        return right;
+    }
+
     public void setRightKey(String value) {
         this.rightKey = value;
     }
 
+    public void setLeft(RelationOrJoin left) {
+        this.left = left;
+    }
+
+    public void setRight(RelationOrJoin right) {
+        this.right = right;
+    }
+
+    @Override
+    public Relation find(String tableName) {
+        return null;
+    }
 }

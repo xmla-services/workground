@@ -37,6 +37,8 @@ import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.ViewImpl;
 import org.eigenbase.util.property.StringProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -533,30 +535,30 @@ public class RolapUtil {
         return bestMatch;
     }
 
-    public static MondrianDef.Relation convertInlineTableToRelation(
-        MondrianDef.InlineTable inlineTable,
+    public static Relation convertInlineTableToRelation(
+        InlineTable inlineTable,
         final Dialect dialect)
     {
-        MondrianDef.View view = new MondrianDef.View();
-        view.alias = inlineTable.alias;
+        ViewImpl view = new ViewImpl();
+        view.setAlias(inlineTable.alias());
 
-        final int columnCount = inlineTable.columnDefs.array.length;
+        final int columnCount = inlineTable.columnDefs().size();
         List<String> columnNames = new ArrayList<String>();
         List<String> columnTypes = new ArrayList<String>();
         for (int i = 0; i < columnCount; i++) {
-            columnNames.add(inlineTable.columnDefs.array[i].name);
-            columnTypes.add(inlineTable.columnDefs.array[i].type);
+            columnNames.add(inlineTable.columnDefs().get(i).name());
+            columnTypes.add(inlineTable.columnDefs().get(i).type());
         }
         List<String[]> valueList = new ArrayList<String[]>();
-        for (MondrianDef.Row row : inlineTable.rows.array) {
+        for (Row row : inlineTable.rows()) {
             String[] values = new String[columnCount];
-            for (MondrianDef.Value value : row.values) {
-                final int columnOrdinal = columnNames.indexOf(value.column);
+            for (Value value : row.values()) {
+                final int columnOrdinal = columnNames.indexOf(value.column());
                 if (columnOrdinal < 0) {
                     throw Util.newError(
-                        "Unknown column '" + value.column + "'");
+                        "Unknown column '" + value.column() + "'");
                 }
-                values[columnOrdinal] = value.cdata;
+                values[columnOrdinal] = value.content();
             }
             valueList.add(values);
         }
@@ -732,20 +734,20 @@ public class RolapUtil {
      * @return the rolap star key
      */
     public static List<String> makeRolapStarKey(
-        final MondrianDef.Relation fact)
+        final Relation fact)
     {
       List<String> rlStarKey = new ArrayList<String>();
-      MondrianDef.Table table = null;
-      rlStarKey.add(fact.getAlias());
-      if (fact instanceof MondrianDef.Table) {
-        table = (MondrianDef.Table) fact;
+      Table table = null;
+      rlStarKey.add(fact.alias());
+      if (fact instanceof Table) {
+        table = (Table) fact;
       }
       // Add SQL filter to the key
-      if (!Util.isNull(table) && !Util.isNull(table.filter)
-          && !Util.isBlank(table.filter.cdata))
+      if (!Util.isNull(table) && !Util.isNull(table.sql())
+          && !Util.isBlank(table.sql().content()))
       {
-        rlStarKey.add(table.filter.dialect);
-        rlStarKey.add(table.filter.cdata);
+        rlStarKey.add(table.sql().dialect());
+        rlStarKey.add(table.sql().content());
       }
       return Collections.unmodifiableList(rlStarKey);
     }

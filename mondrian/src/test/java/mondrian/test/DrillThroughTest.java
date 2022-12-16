@@ -12,6 +12,7 @@
 */
 package mondrian.test;
 
+import static mondrian.rolap.ExpressionUtil.getExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -44,6 +45,7 @@ import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Result;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -400,8 +402,8 @@ public class DrillThroughTest {
         }
         for (Level l : h.getLevels()) {
             if (l.getName().equals(levelName)) {
-                MondrianDef.Expression exp = ((RolapLevel) l).getNameExp();
-                String nameExpStr = exp.getExpression(star.getSqlQuery());
+                Expression exp = ((RolapLevel) l).getNameExp();
+                String nameExpStr = getExpression(exp, star.getSqlQuery());
                 nameExpStr = nameExpStr.replace('"', '`') ;
                 return nameExpStr;
             }

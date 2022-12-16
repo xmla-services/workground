@@ -20,6 +20,7 @@ import mondrian.rolap.RolapMember;
 import mondrian.rolap.SqlConstraintUtils;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.util.Pair;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 
 /**
  * Restricts the SQL result set to members where particular columns have
@@ -30,13 +31,13 @@ import mondrian.util.Pair;
 public class MemberKeyConstraint
     implements TupleConstraint
 {
-    private final Pair<List<MondrianDef.Expression>, List<Comparable>> cacheKey;
-    private final List<MondrianDef.Expression> columnList;
+    private final Pair<List<Expression>, List<Comparable>> cacheKey;
+    private final List<Expression> columnList;
     private final List<Datatype> datatypeList;
     private final List<Comparable> valueList;
 
     public MemberKeyConstraint(
-        List<MondrianDef.Expression> columnList,
+        List<Expression> columnList,
         List<Datatype> datatypeList,
         List<Comparable> valueList)
     {
@@ -50,7 +51,7 @@ public class MemberKeyConstraint
         SqlQuery sqlQuery, RolapCube baseCube, AggStar aggStar)
     {
         for (int i = 0; i < columnList.size(); i++) {
-            MondrianDef.Expression expression = columnList.get(i);
+            Expression expression = columnList.get(i);
             final Comparable value = valueList.get(i);
             final Datatype datatype = datatypeList.get(i);
             sqlQuery.addWhere(

@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
@@ -71,4 +71,11 @@ public class CubeGrantImpl implements CubeGrant {
         this.access = value;
     }
 
+    public void setDimensionGrant(List<DimensionGrantImpl> dimensionGrant) {
+        this.dimensionGrant = dimensionGrant;
+    }
+
+    public void setHierarchyGrant(List<HierarchyGrantImpl> hierarchyGrant) {
+        this.hierarchyGrant = hierarchyGrant;
+    }
 }

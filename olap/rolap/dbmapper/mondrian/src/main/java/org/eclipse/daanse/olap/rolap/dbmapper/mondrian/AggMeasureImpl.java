@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
@@ -28,6 +28,8 @@ public class AggMeasureImpl implements AggMeasure {
     protected String column;
     @XmlAttribute(name = "name", required = true)
     protected String name;
+    @XmlAttribute(name = "rollupType")
+    protected String rollupType;
 
     @Override
     public String column() {
@@ -41,6 +43,11 @@ public class AggMeasureImpl implements AggMeasure {
     @Override
     public String name() {
         return name;
+    }
+
+    @Override
+    public String rollupType() {
+        return rollupType;
     }
 
     public void setName(String value) {

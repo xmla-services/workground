@@ -9,12 +9,14 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Measure;
 
 public record MeasureR(String name,
@@ -29,7 +31,11 @@ public record MeasureR(String name,
                        String displayFolder,
                        List<AnnotationR> annotations,
                        ExpressionViewR measureExpression,
-                       List<CalculatedMemberPropertyR> calculatedMemberProperty)
+                       List<CalculatedMemberPropertyR> calculatedMemberProperty,
+                       ElementFormatter cellFormatter,
+                       String backColor,
+                       List<? extends CalculatedMemberProperty> memberProperties
+                       )
         implements Measure {
 
 }

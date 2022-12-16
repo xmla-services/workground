@@ -9,13 +9,13 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
 import java.util.List;
 
-public interface ExpressionView {
+public interface ExpressionView extends Expression {
 
     List<? extends SQL> sql();
 

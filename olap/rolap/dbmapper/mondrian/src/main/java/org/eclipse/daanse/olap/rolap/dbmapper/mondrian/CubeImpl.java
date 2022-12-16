@@ -9,15 +9,14 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Cube;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.View;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -29,7 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "annotations", "table", "view", "dimensionUsageOrDimension", "measure",
-        "calculatedMember", "namedSet", "drillThroughAction", "writebackTable" })
+        "calculatedMember", "namedSet", "drillThroughAction", "writebackTable", "fact", "action"})
 public class CubeImpl implements Cube {
 
     @XmlElementWrapper(name = "Annotations")
@@ -41,7 +40,7 @@ public class CubeImpl implements Cube {
     protected ViewImpl view;
     @XmlElements({ @XmlElement(name = "DimensionUsage", type = DimensionUsageImpl.class),
             @XmlElement(name = "Dimension", type = PrivateDimensionImpl.class) })
-    protected List<Object> dimensionUsageOrDimension;
+    protected List<CubeDimension> dimensionUsageOrDimension;
     @XmlElement(name = "Measure", required = true)
     protected List<MeasureImpl> measure;
     @XmlElement(name = "CalculatedMember")
@@ -64,6 +63,13 @@ public class CubeImpl implements Cube {
     protected Boolean cache;
     @XmlAttribute(name = "enabled")
     protected Boolean enabled;
+    @XmlAttribute(name = "visible")
+    protected boolean visible = true;
+    @XmlElements({ @XmlElement(name = "InlineTable", type = InlineTableImpl.class),
+        @XmlElement(name = "Table", type = TableImpl.class), @XmlElement(name = "View", type = ViewImpl.class)})
+    protected Relation fact;
+    @XmlElement(name = "Action")
+    protected List<ActionImpl> action;
 
     @Override
     public List<AnnotationImpl> annotations() {
@@ -93,9 +99,9 @@ public class CubeImpl implements Cube {
     }
 
     @Override
-    public List<Object> dimensionUsageOrDimension() {
+    public List<CubeDimension> dimensionUsageOrDimension() {
         if (dimensionUsageOrDimension == null) {
-            dimensionUsageOrDimension = new ArrayList<Object>();
+            dimensionUsageOrDimension = new ArrayList<CubeDimension>();
         }
         return this.dimensionUsageOrDimension;
     }
@@ -202,4 +208,25 @@ public class CubeImpl implements Cube {
         return this.writebackTable;
     }
 
+    @Override
+    public boolean visible() {
+        return visible;
+    }
+
+    @Override
+    public Relation fact() {
+        return fact;
+    }
+
+    public void setFact(Relation fact) {
+        this.fact = fact;
+    }
+
+    @Override
+    public List<? extends Action> action() {
+        if (action == null) {
+            action = new ArrayList<ActionImpl>();
+        }
+        return action;
+    }
 }

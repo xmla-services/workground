@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
@@ -23,7 +23,7 @@ public interface Cube {
 
     View view();
 
-    List<? extends Object> dimensionUsageOrDimension();
+    List<? extends CubeDimension> dimensionUsageOrDimension();
 
     List<? extends Measure> measure();
 
@@ -32,7 +32,7 @@ public interface Cube {
     List<? extends NamedSet> namedSet();
 
     List<? extends DrillThroughAction> drillThroughAction();
-    
+
     List<? extends WritebackTable> writebackTable();
 
 
@@ -48,4 +48,9 @@ public interface Cube {
 
     boolean enabled();
 
+    boolean visible();
+
+    Relation fact();
+
+    Iterable<? extends Action> action();
 }

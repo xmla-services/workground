@@ -9,11 +9,11 @@
 
 package mondrian.spi.impl;
 
-import mondrian.olap.MondrianDef;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.agg.AggregationKey;
 import mondrian.spi.DataSourceChangeListener;
-
+import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
 
 /**
  * Default implementation of a data source change listener
@@ -60,10 +60,10 @@ public class DataSourceChangeListenerImpl3 implements DataSourceChangeListener {
     }
 
     public String getTableName(RolapHierarchy hierarchy) {
-        MondrianDef.RelationOrJoin relation = hierarchy.getRelation();
-        if (relation instanceof MondrianDef.Table) {
-            MondrianDef.Table tableRelation = (MondrianDef.Table)relation;
-            return tableRelation.name;
+        RelationOrJoin relation = hierarchy.getRelation();
+        if (relation instanceof Table) {
+            Table tableRelation = (Table)relation;
+            return tableRelation.name();
         } else {
             return null;
         }

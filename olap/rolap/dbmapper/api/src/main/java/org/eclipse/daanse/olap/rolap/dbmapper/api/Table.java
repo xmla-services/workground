@@ -9,13 +9,13 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
 import java.util.List;
 
-public interface Table {
+public interface Table extends Relation {
 
     SQL sql();
 
@@ -28,7 +28,5 @@ public interface Table {
     String name();
 
     String schema();
-
-    String alias();
 
 }

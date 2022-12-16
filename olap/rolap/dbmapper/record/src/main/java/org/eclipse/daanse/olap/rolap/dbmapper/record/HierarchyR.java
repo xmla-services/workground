@@ -9,13 +9,14 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Hierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
 
 public record HierarchyR(String name,
                          String caption,
@@ -35,7 +36,12 @@ public record HierarchyR(String name,
                          String primaryKeyTable,
                          String defaultMember,
                          String memberReaderClass,
-                         String uniqueKeyLevelName)
+                         String uniqueKeyLevelName,
+                         boolean visible,
+                         String displayFolder,
+                         RelationOrJoin relation,
+                         String origin
+                         )
         implements Hierarchy {
 
 }

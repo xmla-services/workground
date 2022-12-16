@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
@@ -17,9 +17,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Closure;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.ExpressionView;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -30,7 +28,7 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "annotations", "keyExpression", "nameExpression", "captionExpression",
-        "ordinalExpression", "parentExpression", "closure", "property" })
+        "ordinalExpression", "parentExpression", "closure", "property", "memberFormatter" })
 public class LevelImpl implements Level {
 
     @XmlElement(name = "Annotation")
@@ -51,7 +49,7 @@ public class LevelImpl implements Level {
     @XmlElement(name = "Property")
     protected List<PropertyImpl> property;
     @XmlAttribute(name = "approxRowCount")
-    protected BigInteger approxRowCount;
+    protected String approxRowCount;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "table")
@@ -82,6 +80,12 @@ public class LevelImpl implements Level {
     protected String description;
     @XmlAttribute(name = "captionColumn")
     protected String captionColumn;
+    @XmlAttribute(name = "visible")
+    protected Boolean visible = true;
+    @XmlAttribute(name = "internalType") //{"int", "long", "Object", "String"}
+    protected String internalType;
+    @XmlElement(name = "MemberFormatter")
+    ElementFormatterImpl memberFormatter;
 
     @Override
     public List<AnnotationImpl> annotations() {
@@ -155,11 +159,11 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public BigInteger approxRowCount() {
+    public String approxRowCount() {
         return approxRowCount;
     }
 
-    public void setApproxRowCount(BigInteger value) {
+    public void setApproxRowCount(String value) {
         this.approxRowCount = value;
     }
 
@@ -306,8 +310,35 @@ public class LevelImpl implements Level {
         return captionColumn;
     }
 
+    @Override
+    public boolean visible() {
+        return visible;
+    }
+
+    @Override
+    public String internalType() {
+        return internalType;
+    }
+
+    @Override
+    public ElementFormatter memberFormatter() {
+        return memberFormatter;
+    }
+
+    @Override
+    public Expression getPropertyExp(int i) {
+        return new ColumnImpl(table, property.get(i).column());
+    }
+
     public void setCaptionColumn(String value) {
         this.captionColumn = value;
     }
 
+    public void setProperty(List<PropertyImpl> property) {
+        this.property = property;
+    }
+
+    public void setVisible(Boolean visible) {
+        this.visible = visible;
+    }
 }

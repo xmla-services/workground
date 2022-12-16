@@ -10,6 +10,14 @@
 */
 package mondrian.rolap;
 
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.PrivateDimensionImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.VirtualCubeDimensionImpl;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -17,14 +25,6 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-
-import java.util.List;
-
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import mondrian.olap.MondrianDef;
 
 public class RolapCubeDimensionTest {
 
@@ -36,10 +36,10 @@ public class RolapCubeDimensionTest {
     Hierarchy[] rolapDim_hierarchies = new Hierarchy[]{};
     doReturn(rolapDim_hierarchies).when(rolapDim).getHierarchies();
 
-    MondrianDef.CubeDimension cubeDim = new MondrianDef.Dimension();
-    cubeDim.caption = "StubCubeDimCaption";
-    cubeDim.description = "StubCubeDimDescription";
-    cubeDim.visible = true;
+    PrivateDimensionImpl cubeDim = new PrivateDimensionImpl();
+    cubeDim.setCaption("StubCubeDimCaption");
+    cubeDim.setDescription("StubCubeDimDescription");
+    cubeDim.setVisible(true);
     String name = "StubCubeName";
     int cubeOrdinal = 0;
     List<RolapHierarchy> hierarchyList = null;
@@ -61,11 +61,11 @@ public class RolapCubeDimensionTest {
 
     assertEquals(null, rcd.lookupFactCube(null, null));
   }
-  
+
   @Test
   public void testLookupCube_notVirtual() {
     RolapCubeDimension rcd = stubRolapCubeDimension(false);
-    MondrianDef.CubeDimension cubeDim = new MondrianDef.Dimension();
+    PrivateDimensionImpl cubeDim = new PrivateDimensionImpl();
     RolapSchema schema = mock(RolapSchema.class);
 
     assertEquals(null, rcd.lookupFactCube(cubeDim, schema));
@@ -76,11 +76,11 @@ public class RolapCubeDimensionTest {
   @Test
   public void testLookupCube_noSuchCube() {
     RolapCubeDimension rcd = stubRolapCubeDimension(false);
-    MondrianDef.VirtualCubeDimension cubeDim =
-        new MondrianDef.VirtualCubeDimension();
+    VirtualCubeDimensionImpl cubeDim =
+        new VirtualCubeDimensionImpl();
     RolapSchema schema = mock(RolapSchema.class);
     final String cubeName = "TheCubeName";
-    cubeDim.cubeName = cubeName;
+    cubeDim.setCubeName(cubeName);
     // explicit doReturn - just to make it evident
     doReturn(null).when(schema).lookupCube(anyString());
 
@@ -91,12 +91,12 @@ public class RolapCubeDimensionTest {
   @Test
   public void testLookupCube_found() {
     RolapCubeDimension rcd = stubRolapCubeDimension(false);
-    MondrianDef.VirtualCubeDimension cubeDim =
-        mock(MondrianDef.VirtualCubeDimension.class);
+    VirtualCubeDimensionImpl cubeDim =
+        mock(VirtualCubeDimensionImpl.class);
     RolapSchema schema = mock(RolapSchema.class);
     RolapCube factCube = mock(RolapCube.class);
     final String cubeName = "TheCubeName";
-    cubeDim.cubeName = cubeName;
+    cubeDim.setCubeName(cubeName);
     doReturn(factCube).when(schema).lookupCube(cubeName);
 
     assertEquals(factCube, rcd.lookupFactCube(cubeDim, schema));

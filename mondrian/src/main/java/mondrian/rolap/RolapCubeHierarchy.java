@@ -32,6 +32,7 @@ import mondrian.rolap.TupleReader.MemberBuilder;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.TupleConstraint;
 import mondrian.util.UnsupportedList;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
 /**
  * Hierarchy that is associated with a specific Cube.
@@ -47,7 +48,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
     private final RolapCubeLevel currentNullLevel;
     private RolapCubeMember currentNullMember;
     private RolapCubeMember currentAllMember;
-    private final MondrianDef.RelationOrJoin currentRelation;
+    private final RelationOrJoin currentRelation;
     private final RolapCubeHierarchyMemberReader reader;
     private HierarchyUsage usage;
     private final Map<String, String> aliases = new HashMap<String, String>();
@@ -80,7 +81,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
      */
     public RolapCubeHierarchy(
         RolapCubeDimension cubeDimension,
-        MondrianDef.CubeDimension cubeDim,
+        CubeDimension cubeDim,
         RolapHierarchy rolapHierarchy,
         String subName,
         int ordinal)
@@ -105,7 +106,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
      */
     public RolapCubeHierarchy(
         RolapCubeDimension cubeDimension,
-        MondrianDef.CubeDimension cubeDim,
+        CubeDimension cubeDim,
         RolapHierarchy rolapHierarchy,
         String subName,
         int ordinal,
@@ -150,13 +151,13 @@ public class RolapCubeHierarchy extends RolapHierarchy {
         // re-alias names if necessary
         if (!cubeIsVirtual && !usingCubeFact) {
             // join expressions are columns only
-            assert (usage.getJoinExp() instanceof MondrianDef.Column);
+            assert (usage.getJoinExp() instanceof Column);
             currentRelation =
                 this.cubeDimension.getCube().getStar().getUniqueRelation(
                     rolapHierarchy.getRelation(),
                     usage.getForeignKey(),
-                    ((MondrianDef.Column)usage.getJoinExp()).getColumnName(),
-                    usage.getJoinTable().getAlias());
+                    ((Column)usage.getJoinExp()).name(),
+                    usage.getJoinTable().alias());
         } else {
             currentRelation = rolapHierarchy.getRelation();
         }
@@ -231,15 +232,15 @@ public class RolapCubeHierarchy extends RolapHierarchy {
      * @return Caption or description, possibly prefixed by dimension role name
      */
     private static String applyPrefix(
-        MondrianDef.CubeDimension cubeDim,
+        CubeDimension cubeDim,
         String caption)
     {
         if (caption == null) {
             return null;
         }
-//        if (cubeDim instanceof MondrianDef.DimensionUsage) {
-//            final MondrianDef.DimensionUsage dimensionUsage =
-//                (MondrianDef.DimensionUsage) cubeDim;
+//        if (cubeDim instanceof DimensionUsage) {
+//            final DimensionUsage dimensionUsage =
+//                (DimensionUsage) cubeDim;
 //            if (dimensionUsage.name != null
 //                && !dimensionUsage.name.equals(dimensionUsage.source))
 //            {
@@ -297,24 +298,24 @@ public class RolapCubeHierarchy extends RolapHierarchy {
      * shared between all cubes with similar structure
      */
     protected void extractNewAliases(
-        MondrianDef.RelationOrJoin oldrel,
-        MondrianDef.RelationOrJoin newrel)
+        RelationOrJoin oldrel,
+        RelationOrJoin newrel)
     {
         if (oldrel == null && newrel == null) {
             return;
-        } else if (oldrel instanceof MondrianDef.Relation
-            && newrel instanceof MondrianDef.Relation)
+        } else if (oldrel instanceof Relation
+            && newrel instanceof Relation)
         {
             aliases.put(
-                ((MondrianDef.Relation) oldrel).getAlias(),
-                ((MondrianDef.Relation) newrel).getAlias());
-        } else if (oldrel instanceof MondrianDef.Join
-            && newrel instanceof MondrianDef.Join)
+                ((Relation) oldrel).alias(),
+                ((Relation) newrel).alias());
+        } else if (oldrel instanceof Join
+            && newrel instanceof Join)
         {
-            MondrianDef.Join oldjoin = (MondrianDef.Join)oldrel;
-            MondrianDef.Join newjoin = (MondrianDef.Join)newrel;
-            extractNewAliases(oldjoin.left, newjoin.left);
-            extractNewAliases(oldjoin.right, newjoin.right);
+            Join oldjoin = (Join)oldrel;
+            Join newjoin = (Join)newrel;
+            extractNewAliases(oldjoin.left(), newjoin.left());
+            extractNewAliases(oldjoin.right(), newjoin.right());
         } else {
             throw new UnsupportedOperationException();
         }
@@ -383,7 +384,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
      *
      * @return rolap cube hierarchy relation
      */
-    public MondrianDef.RelationOrJoin getRelation() {
+    public RelationOrJoin getRelation() {
         return currentRelation;
     }
 
@@ -459,7 +460,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                 level);
     }
 
-    void init(MondrianDef.CubeDimension xmlDimension) {
+    void init(CubeDimension xmlDimension) {
         // first init shared hierarchy
         rolapHierarchy.init(xmlDimension);
         // second init cube hierarchy

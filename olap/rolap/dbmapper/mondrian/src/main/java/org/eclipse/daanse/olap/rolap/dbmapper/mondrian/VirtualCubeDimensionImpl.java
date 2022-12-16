@@ -9,25 +9,38 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
+import jakarta.xml.bind.annotation.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Annotation;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.VirtualCubeDimension;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlType;
+import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "")
+@XmlType(name = "", propOrder = { "annotations" })
 public class VirtualCubeDimensionImpl implements VirtualCubeDimension {
 
     @XmlAttribute(name = "cubeName")
     protected String cubeName;
     @XmlAttribute(name = "name")
     protected String name;
+    @XmlElement(name = "Annotation")
+    protected List<? extends AnnotationImpl> annotations;
+    @XmlAttribute(name = "foreignKey")
+    protected String foreignKey;
+    @XmlAttribute(name = "highCardinality")
+    protected Boolean highCardinality = false;
+    @XmlAttribute(name = "caption")
+    protected String caption;
+    @XmlAttribute(name = "visible")
+    protected Boolean visible = true;
+    @XmlAttribute(name = "description")
+    protected String description;
 
     @Override
     public String cubeName() {
@@ -39,8 +52,44 @@ public class VirtualCubeDimensionImpl implements VirtualCubeDimension {
     }
 
     @Override
+    public List<? extends Annotation> annotations() {
+        return annotations;
+    }
+
+    @Override
     public String name() {
         return name;
+    }
+
+    @Override
+    public String foreignKey() {
+        return foreignKey;
+    }
+
+    @Override
+    public boolean highCardinality() {
+        return highCardinality;
+    }
+
+    @Override
+    public String caption() {
+        return caption;
+    }
+
+    @Override
+    public boolean visible() {
+        return visible;
+    }
+
+    @Override
+    public String description() {
+        return description;
+    }
+
+    @Override
+    public PrivateDimension getDimension(Schema xmlSchema) {
+        //TODO
+        return null;
     }
 
     public void setName(String value) {

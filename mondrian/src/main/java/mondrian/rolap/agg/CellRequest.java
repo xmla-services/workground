@@ -395,7 +395,7 @@ public class CellRequest {
             RolapStar.Column column = columns[i];
             final Object o = values[i];
             map.put(
-                column.getExpression().getGenericExpression(),
+                column.getExpression().genericExpression(),
                 (Comparable) o);
         }
         return map;

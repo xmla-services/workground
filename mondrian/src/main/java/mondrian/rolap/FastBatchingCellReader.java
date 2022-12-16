@@ -327,7 +327,7 @@ public class FastBatchingCellReader implements CellReader {
                 final Set<String> keepColumns = new HashSet<String>();
                 for (RolapStar.Column column : rollup.constrainedColumns) {
                     keepColumns.add(
-                        column.getExpression().getGenericExpression());
+                        column.getExpression().genericExpression());
                 }
                 Pair<SegmentHeader, SegmentBody> rollupHeaderBody =
                     SegmentBuilder.rollup(
@@ -1360,13 +1360,13 @@ class BatchLoader {
                     break;
                 }
                 final String expr =
-                    distinctMeasure.getExpression().getGenericExpression();
+                    distinctMeasure.getExpression().genericExpression();
                 final List<RolapStar.Measure> distinctMeasuresList =
                     new ArrayList<RolapStar.Measure>();
                 for (int i = 0; i < measuresList.size();) {
                     final RolapStar.Measure measure = measuresList.get(i);
                     if (measure.getAggregator().isDistinct()
-                        && measure.getExpression().getGenericExpression()
+                        && measure.getExpression().genericExpression()
                         .equals(expr))
                     {
                         measuresList.remove(i);

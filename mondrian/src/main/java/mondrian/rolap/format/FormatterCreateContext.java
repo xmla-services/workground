@@ -11,6 +11,8 @@ package mondrian.rolap.format;
 
 import mondrian.olap.MondrianDef;
 import mondrian.olap.Util;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Script;
 
 /**
  * Context data to create a formatter for the element.
@@ -71,14 +73,14 @@ public class FormatterCreateContext {
          * Data from Mondrian xml schema file to create
          * a custom implementation of a requested formatter.
          */
-        public Builder formatterDef(MondrianDef.ElementFormatter formatterDef) {
+        public Builder formatterDef(ElementFormatter formatterDef) {
             if (formatterDef != null) {
                 checkIfFormatterSpecifiedCorrectly(
-                    formatterDef.className,
-                    formatterDef.script);
+                    formatterDef.className(),
+                    formatterDef.script());
                 formatterAsElement = true;
-                formatterClassName = formatterDef.className;
-                return script(formatterDef.script);
+                formatterClassName = formatterDef.className();
+                return script(formatterDef.script());
             }
             return this;
         }
@@ -111,10 +113,10 @@ public class FormatterCreateContext {
          * A script data used to create
          * a script based implementation of a requested formatter.
          */
-        public Builder script(MondrianDef.Script script) {
+        public Builder script(Script script) {
             if (script != null) {
-                scriptText = script.cdata;
-                scriptLanguage = script.language;
+                scriptText = script.cdata();
+                scriptLanguage = script.language();
             }
             return this;
         }
@@ -125,7 +127,7 @@ public class FormatterCreateContext {
 
         private static void checkIfFormatterSpecifiedCorrectly(
             String className,
-            MondrianDef.Script script)
+            Script script)
         {
             if (className == null && script == null) {
                 throw Util.newError(

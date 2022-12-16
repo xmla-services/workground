@@ -10,31 +10,23 @@
 */
 package mondrian.rolap;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.api.model.Member;
-
-import mondrian.mdx.DimensionExpr;
-import mondrian.mdx.HierarchyExpr;
-import mondrian.mdx.LevelExpr;
-import mondrian.mdx.MemberExpr;
-import mondrian.mdx.ResolvedFunCall;
-import mondrian.olap.Category;
-import mondrian.olap.Evaluator;
-import mondrian.olap.Exp;
-import mondrian.olap.ExpCacheDescriptor;
-import mondrian.olap.FunCall;
-import mondrian.olap.Literal;
-import mondrian.olap.MondrianDef;
+import mondrian.mdx.*;
+import mondrian.olap.*;
 import mondrian.olap.fun.MondrianEvaluationException;
 import mondrian.olap.type.MemberType;
 import mondrian.olap.type.StringType;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.SqlQuery;
+import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import static mondrian.rolap.ExpressionUtil.getExpression;
 
 /**
  * Creates SQL from parse tree nodes. Currently it creates the SQL that
@@ -221,10 +213,10 @@ public class RolapNativeSql {
                         .getRollup();
                 }
             } else {
-                MondrianDef.Expression defExp =
+                Expression defExp =
                     measure.getMondrianDefExpression();
                 exprInner = (defExp == null)
-                    ? "*" : defExp.getExpression(sqlQuery);
+                    ? "*" : getExpression(defExp, sqlQuery);
             }
 
             String expr = aggregator.getExpression(exprInner);
@@ -324,7 +316,7 @@ public class RolapNativeSql {
                 // We must use, in order of priority,
                 //  - caption requested: caption->name->key
                 //  - name requested: name->key
-                MondrianDef.Expression expression = useCaption
+                Expression expression = useCaption
                 ? rolapLevel.captionExp == null
                         ? rolapLevel.nameExp == null
                             ? rolapLevel.keyExp
@@ -356,14 +348,14 @@ public class RolapNativeSql {
                         rolapLevel.getHierarchy().addToFrom(
                             sqlQuery,
                             expression);
-                        sourceExp = expression.getExpression(sqlQuery);
+                        sourceExp = getExpression(expression, sqlQuery);
                     }
                 } else if (aggStar != null) {
                     // Make sure the level table is part of the query.
                     rolapLevel.getHierarchy().addToFrom(sqlQuery, expression);
-                    sourceExp = expression.getExpression(sqlQuery);
+                    sourceExp = getExpression(expression, sqlQuery);
                 } else {
-                    sourceExp = expression.getExpression(sqlQuery);
+                    sourceExp = getExpression(expression, sqlQuery);
                 }
 
                 // The dialect might require the use of the alias rather

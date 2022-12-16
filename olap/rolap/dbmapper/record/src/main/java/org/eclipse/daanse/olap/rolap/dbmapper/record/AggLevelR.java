@@ -9,14 +9,22 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.AggLevel;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.AggLevelProperty;
+
+import java.util.List;
 
 public record AggLevelR(String column,
-                        String name)
+                        String name,
+                        String ordinalColumn,
+                        String nameColumn,
+                        String captionColumn,
+                        Boolean collapsed,
+                        List<AggLevelProperty> properties)
         implements AggLevel {
 
 }

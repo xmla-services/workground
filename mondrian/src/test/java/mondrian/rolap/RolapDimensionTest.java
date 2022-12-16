@@ -8,27 +8,32 @@
 */
 package mondrian.rolap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-
+import mondrian.test.PropertySaver5;
 import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.HierarchyImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.LevelImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.PrivateDimensionImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import mondrian.olap.MondrianDef;
-import mondrian.test.PropertySaver5;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class RolapDimensionTest {
 
   private RolapSchema schema;
   private RolapCube cube;
-  private MondrianDef.Dimension xmlDimension;
-  private MondrianDef.CubeDimension xmlCubeDimension;
-  private MondrianDef.Hierarchy hierarchy;
+  private PrivateDimensionImpl xmlDimension;
+  private CubeDimension xmlCubeDimension;
+  private HierarchyImpl hierarchy;
 
   private PropertySaver5 propSaver;
   @BeforeEach
@@ -36,32 +41,32 @@ public class RolapDimensionTest {
     propSaver = new PropertySaver5();
     schema = Mockito.mock(RolapSchema.class);
     cube = Mockito.mock(RolapCube.class);
-    MondrianDef.Relation fact = Mockito.mock(MondrianDef.Relation.class);
+    Relation fact = Mockito.mock(Relation.class);
 
     Mockito.when(cube.getSchema()).thenReturn(schema);
     Mockito.when(cube.getFact()).thenReturn(fact);
 
-    xmlDimension = new MondrianDef.Dimension();
-    hierarchy = new MondrianDef.Hierarchy();
-    MondrianDef.Level level = new MondrianDef.Level();
-    xmlCubeDimension = new MondrianDef.Dimension();
+    xmlDimension = new PrivateDimensionImpl();
+    hierarchy = new HierarchyImpl();
+    LevelImpl level = new LevelImpl();
+    xmlCubeDimension = new PrivateDimensionImpl();
 
-    xmlDimension.name = "dimensionName";
-    xmlDimension.visible = true;
-    xmlDimension.highCardinality = true;
-    xmlDimension.hierarchies = new MondrianDef.Hierarchy[] {hierarchy};
+    xmlDimension.setName("dimensionName");
+    xmlDimension.setVisible(true);
+    xmlDimension.setHighCardinality(true);
+    xmlDimension.setHierarchy(List.of(hierarchy));
 
 
-    hierarchy.visible = true;
-    hierarchy.hasAll = false;
-    hierarchy.levels = new MondrianDef.Level[]{level};
+    hierarchy.setVisible(true);
+    hierarchy.setHasAll(false);
+    hierarchy.setLevel(List.of(level));
 
-    level.visible = true;
-    level.properties = new MondrianDef.Property[0];
-    level.uniqueMembers = true;
-    level.type = Datatype.String.name();
-    level.hideMemberIf = "Never";
-    level.levelType = "Regular";
+    level.setVisible(true);
+    level.setProperty(List.of());
+    level.setUniqueMembers(true);
+    level.setType(Datatype.String.name());
+    level.setHideMemberIf("Never");
+    level.setLevelType("Regular");
   }
 
   @AfterEach
@@ -72,13 +77,13 @@ public class RolapDimensionTest {
   @Disabled //disabled for CI build
   @Test
   public void testHierarchyRelation() {
-    MondrianDef.Relation hierarchyTable = Mockito
-            .mock(MondrianDef.Relation.class);
-    hierarchy.relation = hierarchyTable;
+    Relation hierarchyTable = Mockito
+            .mock(Relation.class);
+    hierarchy.setRelation(hierarchyTable);
 
     new RolapDimension(schema, cube, xmlDimension, xmlCubeDimension);
     assertNotNull(hierarchy);
-    assertEquals(hierarchyTable, hierarchy.relation);
+    assertEquals(hierarchyTable, hierarchy.relation());
   }
 
   /**
@@ -90,7 +95,7 @@ public class RolapDimensionTest {
     new RolapDimension(schema, cube, xmlDimension, xmlCubeDimension);
 
     assertNotNull(hierarchy);
-    assertNull(hierarchy.relation);
+    assertNull(hierarchy.relation());
   }
 
 }

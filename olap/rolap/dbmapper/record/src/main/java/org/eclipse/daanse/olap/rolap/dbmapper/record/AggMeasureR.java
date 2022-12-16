@@ -9,14 +9,15 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.AggMeasure;
 
 public record AggMeasureR(String column,
-                          String name)
+                          String name,
+                          String rollupType)
         implements AggMeasure {
 
 }

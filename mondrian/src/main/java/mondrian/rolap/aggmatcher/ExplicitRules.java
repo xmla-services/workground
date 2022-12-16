@@ -10,37 +10,26 @@
 */
 package mondrian.rolap.aggmatcher;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.regex.Pattern;
-
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Member;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import mondrian.olap.Category;
-import mondrian.olap.Id;
-import mondrian.olap.MondrianDef;
-import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
-import mondrian.olap.SchemaReader;
-import mondrian.olap.Util;
+import mondrian.olap.*;
 import mondrian.recorder.MessageRecorder;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapAggregator;
 import mondrian.rolap.RolapCube;
 import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapStar;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.record.AggLevelPropertyR;
+import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.*;
+import java.util.regex.Pattern;
 
 /**
  * A class containing a RolapCube's Aggregate tables exclude/include
@@ -100,26 +89,26 @@ public class ExplicitRules {
          */
         public static ExplicitRules.Group make(
             final RolapCube cube,
-            final MondrianDef.Cube xmlCube)
+            final org.eclipse.daanse.olap.rolap.dbmapper.api.Cube xmlCube)
         {
             Group group = new Group(cube);
 
-            MondrianDef.Relation relation = xmlCube.fact;
+            Relation relation = xmlCube.fact();
 
-            if (relation instanceof MondrianDef.Table) {
-                MondrianDef.AggExclude[] aggExcludes =
-                    ((MondrianDef.Table) relation).getAggExcludes();
+            if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Table) {
+                List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.AggExclude> aggExcludes =
+                    ((org.eclipse.daanse.olap.rolap.dbmapper.api.Table) relation).aggExclude();
                 if (aggExcludes != null) {
-                    for (MondrianDef.AggExclude aggExclude : aggExcludes) {
+                    for (org.eclipse.daanse.olap.rolap.dbmapper.api.AggExclude aggExclude : aggExcludes) {
                         Exclude exclude =
                             ExplicitRules.make(aggExclude);
                         group.addExclude(exclude);
                     }
                 }
-                MondrianDef.AggTable[] aggTables =
-                    ((MondrianDef.Table) relation).getAggTables();
+                List<? extends AggTable> aggTables =
+                    ((Table) relation).aggTable();
                 if (aggTables != null) {
-                    for (MondrianDef.AggTable aggTable : aggTables) {
+                    for (AggTable aggTable : aggTables) {
                         TableDef tableDef = TableDef.make(aggTable, group);
                         group.addTableDef(tableDef);
                     }
@@ -242,8 +231,8 @@ public class ExplicitRules {
          */
         public String getTableName() {
             RolapStar.Table table = getStar().getFactTable();
-            MondrianDef.Relation relation = table.getRelation();
-            return relation.getAlias();
+            Relation relation = table.getRelation();
+            return relation.alias();
         }
 
         /**
@@ -254,11 +243,11 @@ public class ExplicitRules {
             String schema = null;
 
             RolapStar.Table table = getStar().getFactTable();
-            MondrianDef.Relation relation = table.getRelation();
+            Relation relation = table.getRelation();
 
-            if (relation instanceof MondrianDef.Table) {
-                MondrianDef.Table mtable = (MondrianDef.Table) relation;
-                schema = mtable.schema;
+            if (relation instanceof Table) {
+                Table mtable = (Table) relation;
+                schema = mtable.schema();
             }
             return schema;
         }
@@ -313,14 +302,14 @@ public class ExplicitRules {
         }
     }
 
-    private static Exclude make(final MondrianDef.AggExclude aggExclude) {
-        return (aggExclude.getNameAttribute() != null)
+    private static Exclude make(final org.eclipse.daanse.olap.rolap.dbmapper.api.AggExclude aggExclude) {
+        return (aggExclude.name() != null)
             ? new ExcludeName(
-                aggExclude.getNameAttribute(),
-                aggExclude.isIgnoreCase())
+                aggExclude.name(),
+                aggExclude.ignorecase())
             : (Exclude) new ExcludePattern(
-                aggExclude.getPattern(),
-                aggExclude.isIgnoreCase());
+                aggExclude.pattern(),
+                aggExclude.ignorecase());
     }
 
     /**
@@ -498,73 +487,79 @@ public class ExplicitRules {
     public static abstract class TableDef {
 
         /**
-         * Given a MondrianDef.AggTable instance create a TableDef instance
+         * Given a AggTable instance create a TableDef instance
          * which is either a NameTableDef or PatternTableDef.
          */
         static ExplicitRules.TableDef make(
-            final MondrianDef.AggTable aggTable,
+            final AggTable aggTable,
             final ExplicitRules.Group group)
         {
-            return (aggTable instanceof MondrianDef.AggName)
+            return (aggTable instanceof AggName)
                 ? ExplicitRules.NameTableDef.make(
-                    (MondrianDef.AggName) aggTable, group)
+                    (AggName) aggTable, group)
                 : (ExplicitRules.TableDef)
                 ExplicitRules.PatternTableDef.make(
-                    (MondrianDef.AggPattern) aggTable, group);
+                    (AggPattern) aggTable, group);
         }
 
         /**
-         * This method extracts information from the MondrianDef.AggTable and
+         * This method extracts information from the AggTable and
          * places it in the ExplicitRules.TableDef. This code is used for both
          * the NameTableDef and PatternTableDef subclasses of TableDef (it
          * extracts information common to both).
          */
         private static void add(
             final ExplicitRules.TableDef tableDef,
-            final MondrianDef.AggTable aggTable)
+            final org.eclipse.daanse.olap.rolap.dbmapper.api.AggTable aggTable)
         {
-            if (aggTable.getAggFactCount() != null) {
+
+            if (aggTable instanceof AggName) {
                 tableDef.setFactCountName(
-                    aggTable.getAggFactCount().getColumnName());
+                    ((AggName)aggTable).aggFactCount().column());
+            }
+            if (aggTable instanceof AggPattern) {
+                tableDef.setFactCountName(
+                    ((AggPattern)aggTable).aggFactCount().column());
             }
 
-            if (aggTable.getMeasuresFactCount() != null) {
+
+            if (aggTable.measuresFactCount() != null) {
                 Map<String, String> measuresFactCount =
                         tableDef.getMeasuresFactCount();
-                for (MondrianDef.AggMeasureFactCount measureFact
-                        : aggTable.getMeasuresFactCount())
+                for (AggMeasureFactCount measureFact
+                        : aggTable.measuresFactCount())
                 {
                     measuresFactCount.put
-                            (measureFact.getFactColumn(),
-                                    measureFact.getColumnName());
+                            (measureFact.factColumn(),
+                                    measureFact.column());
                 }
             }
 
-            MondrianDef.AggIgnoreColumn[] ignores =
-                aggTable.getAggIgnoreColumns();
+            List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.AggColumnName> ignores =
+                aggTable.aggIgnoreColumn();
 
             if (ignores != null) {
-                for (MondrianDef.AggIgnoreColumn ignore : ignores) {
-                    tableDef.addIgnoreColumnName(ignore.getColumnName());
+                for (org.eclipse.daanse.olap.rolap.dbmapper.api.AggColumnName ignore : ignores) {
+                    tableDef.addIgnoreColumnName(ignore.column());
                 }
             }
 
-            MondrianDef.AggForeignKey[] fks = aggTable.getAggForeignKeys();
+            List<? extends AggForeignKey> fks = aggTable.aggForeignKey();
             if (fks != null) {
-                for (MondrianDef.AggForeignKey fk : fks) {
+                for (AggForeignKey fk : fks) {
                     tableDef.addFK(fk);
                 }
             }
-            MondrianDef.AggMeasure[] measures = aggTable.getAggMeasures();
+            List<? extends AggMeasure> measures = aggTable.aggMeasure();
             if (measures != null) {
-                for (MondrianDef.AggMeasure measure : measures) {
+                for (AggMeasure measure : measures) {
                     addTo(tableDef, measure);
                 }
             }
 
-            MondrianDef.AggLevel[] levels = aggTable.getAggLevels();
+            List<? extends AggLevel> levels = aggTable.aggLevel();
             if (levels != null) {
-                for (MondrianDef.AggLevel level : levels) {
+                for (AggLevel level : levels) {
                     addTo(tableDef, level);
                 }
             }
@@ -572,44 +567,39 @@ public class ExplicitRules {
 
         private static void addTo(
             final ExplicitRules.TableDef tableDef,
-            final MondrianDef.AggLevel aggLevel)
+            final AggLevel aggLevel)
         {
-            if (aggLevel.nameColumn != null) {
+            if (aggLevel.column() != null) {
                 handleNameColumn(aggLevel);
             }
             addLevelTo(
                 tableDef,
-                aggLevel.getNameAttribute(),
-                aggLevel.getColumnName(),
-                aggLevel.isCollapsed(),
-                aggLevel.ordinalColumn,
-                aggLevel.captionColumn,
-                aggLevel.properties);
+                aggLevel.name(),
+                aggLevel.column(),
+                aggLevel.collapsed(),
+                aggLevel.ordinalColumn(),
+                aggLevel.captionColumn(),
+                aggLevel.properties());
         }
 
         /**
          * nameColumn is mapped to the internal property $name
          */
-        private static void handleNameColumn(MondrianDef.AggLevel aggLevel) {
-            int length = aggLevel.properties.length;
-            aggLevel.properties = Arrays.copyOf(
-                aggLevel.properties, length + 1);
-            MondrianDef.AggLevelProperty nameProp =
-                new MondrianDef.AggLevelProperty();
-            nameProp.name = Property.NAME.getName();
-            nameProp.column = aggLevel.nameColumn;
-            aggLevel.properties[length] = nameProp;
+        private static void handleNameColumn(AggLevel aggLevel) {
+            AggLevelProperty nameProp =
+                new AggLevelPropertyR(Property.NAME.getName(), aggLevel.nameColumn());
+            aggLevel.properties().add(nameProp);
         }
 
         private static void addTo(
             final ExplicitRules.TableDef tableDef,
-            final MondrianDef.AggMeasure aggMeasure)
+            final AggMeasure aggMeasure)
         {
             addMeasureTo(
                 tableDef,
-                aggMeasure.getNameAttribute(),
-                aggMeasure.getColumn(),
-                aggMeasure.getRollupType());
+                aggMeasure.name(),
+                aggMeasure.column(),
+                aggMeasure.rollupType());
         }
 
         public static void addLevelTo(
@@ -619,7 +609,7 @@ public class ExplicitRules {
             final boolean collapsed,
             String ordinalColumn,
             String captionColumn,
-            MondrianDef.AggLevelProperty[] properties)
+            List<? extends AggLevelProperty> properties)
         {
             Level level = tableDef.new Level(
                 name, columnName, collapsed, ordinalColumn, captionColumn,
@@ -656,7 +646,7 @@ public class ExplicitRules {
                 final boolean collapsed,
                 String ordinalColumn,
                 String captionColumn,
-                MondrianDef.AggLevelProperty[] properties)
+                List<? extends AggLevelProperty> properties)
             {
                 this.name = name;
                 this.columnName = columnName;
@@ -667,11 +657,11 @@ public class ExplicitRules {
             }
 
             private Map<String, String> makePropertyMap(
-                MondrianDef.AggLevelProperty[] properties)
+                List<? extends AggLevelProperty> properties)
             {
                 Map<String, String> map = new HashMap<String, String>();
-                for (MondrianDef.AggLevelProperty prop : properties) {
-                    map.put(prop.name, prop.column);
+                for (AggLevelProperty prop : properties) {
+                    map.put(prop.name(), prop.column());
                 }
                 return Collections.unmodifiableMap(map);
             }
@@ -705,7 +695,7 @@ public class ExplicitRules {
                 return rlevel;
             }
 
-            public MondrianDef.Expression getRolapFieldName() {
+            public Expression getRolapFieldName() {
                 return rlevel.getKeyExp();
             }
 
@@ -1195,13 +1185,13 @@ public class ExplicitRules {
          * Add foreign key mapping entry (maps from fact table foreign key
          * column name to aggregate table foreign key column name).
          */
-        protected void addFK(final MondrianDef.AggForeignKey fk) {
+        protected void addFK(final AggForeignKey fk) {
             if (this.foreignKeyMap == Collections.EMPTY_MAP) {
                 this.foreignKeyMap = new HashMap<String, String>();
             }
             this.foreignKeyMap.put(
-                fk.getFactFKColumnName(),
-                fk.getAggregateFKColumnName());
+                fk.factColumn(),
+                fk.aggColumn());
         }
 
         /**
@@ -1352,8 +1342,8 @@ public class ExplicitRules {
                         columnsToObjects.put(aggFKName, baseFKName);
                     }
 
-                    MondrianDef.Column c =
-                        new MondrianDef.Column(tableName, baseFKName);
+                    Column c =
+                        new ColumnR(tableName, baseFKName);
                     if (factTable.findTableWithLeftCondition(c) == null) {
                         msgRecorder.reportError(
                             mres.UnknownLeftJoinCondition.str(
@@ -1410,14 +1400,14 @@ public class ExplicitRules {
          * Makes a NameTableDef from the catalog schema.
          */
         static ExplicitRules.NameTableDef make(
-            final MondrianDef.AggName aggName,
+            final org.eclipse.daanse.olap.rolap.dbmapper.api.AggName aggName,
             final ExplicitRules.Group group)
         {
             ExplicitRules.NameTableDef name =
                 new ExplicitRules.NameTableDef(
-                    aggName.getNameAttribute(),
-                    aggName.getApproxRowCountAttribute(),
-                    aggName.isIgnoreCase(),
+                    aggName.name(),
+                    aggName.approxRowCount(),
+                    aggName.ignorecase(),
                     group);
 
             ExplicitRules.TableDef.add(name, aggName);
@@ -1496,18 +1486,18 @@ public class ExplicitRules {
          * Make a PatternTableDef from the catalog schema.
          */
         static ExplicitRules.PatternTableDef make(
-            final MondrianDef.AggPattern aggPattern,
+            final org.eclipse.daanse.olap.rolap.dbmapper.api.AggPattern aggPattern,
             final ExplicitRules.Group group)
         {
             ExplicitRules.PatternTableDef pattern =
                 new ExplicitRules.PatternTableDef(
-                    aggPattern.getPattern(),
-                    aggPattern.isIgnoreCase(),
+                    aggPattern.pattern(),
+                    aggPattern.ignorecase(),
                     group);
 
-            MondrianDef.AggExclude[] excludes = aggPattern.getAggExcludes();
+            List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.AggExclude> excludes = aggPattern.aggExclude();
             if (excludes != null) {
-                for (MondrianDef.AggExclude exclude1 : excludes) {
+                for (org.eclipse.daanse.olap.rolap.dbmapper.api.AggExclude exclude1 : excludes) {
                     Exclude exclude = ExplicitRules.make(exclude1);
                     pattern.add(exclude);
                 }

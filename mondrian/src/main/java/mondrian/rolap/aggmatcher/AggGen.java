@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Column;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -118,10 +120,10 @@ public class AggGen {
     }
 
     protected String getRolapStarColumnName(RolapStar.Column rColumn) {
-        MondrianDef.Expression expr = rColumn.getExpression();
-        if (expr instanceof MondrianDef.Column) {
-            MondrianDef.Column cx = (MondrianDef.Column) expr;
-            return cx.getColumnName();
+        Expression expr = rColumn.getExpression();
+        if (expr instanceof Column) {
+            Column cx = (Column) expr;
+            return cx.name();
         }
         return null;
     }
@@ -220,10 +222,10 @@ public class AggGen {
                 }
 
 
-                MondrianDef.Expression expr = column.getExpression();
-                if (expr instanceof MondrianDef.Column) {
-                    MondrianDef.Column exprColumn = (MondrianDef.Column) expr;
-                    String name = exprColumn.getColumnName();
+                Expression expr = column.getExpression();
+                if (expr instanceof Column) {
+                    Column exprColumn = (Column) expr;
+                    String name = exprColumn.name();
                     JdbcSchema.Table.Column c = getColumn(factTable, name);
                     if (c == null) {
                         getLogger().warn(
@@ -254,10 +256,10 @@ public class AggGen {
                 if (getLogger().isDebugEnabled()) {
                     getLogger().debug("  RolapStar.Condition: cond=" + cond);
                 }
-                MondrianDef.Expression left = cond.getLeft();
-                if (left instanceof MondrianDef.Column) {
-                    MondrianDef.Column leftColumn = (MondrianDef.Column) left;
-                    String name = leftColumn.getColumnName();
+                Expression left = cond.getLeft();
+                if (left instanceof Column) {
+                    Column leftColumn = (Column) left;
+                    String name = leftColumn.name();
                     JdbcSchema.Table.Column c = getColumn(factTable, name);
                     if (c == null) {
                         getLogger().warn(

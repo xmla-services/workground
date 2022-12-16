@@ -10,12 +10,13 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Formula;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -26,26 +27,30 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "NamedSet", propOrder = { "annotations", "formula" })
+@XmlType(name = "NamedSet", propOrder = { "annotations", "formulaElement" })
 public class NamedSetImpl implements NamedSet {
 
     @XmlElement(name = "Annotation")
     @XmlElementWrapper(name = "Annotations")
     protected List<AnnotationImpl> annotations;
-    @XmlElement(name = "Formula")
-    protected Object formula;
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "caption")
     protected String caption;
     @XmlAttribute(name = "description")
     protected String description;
+    @XmlAttribute(name = "displayFolder")
+    private String displayFolder;
+    @XmlAttribute(name = "formula")
+    protected String formula;
+    @XmlElement(name = "Formula")
+    protected FormulaImpl formulaElement;
 
     /**
      * Gets the value of the annotations property.
-     * 
+     *
      * @return possible object is {@link Annotations }
-     * 
+     *
      */
     @Override
     public List<AnnotationImpl> annotations() {
@@ -57,11 +62,11 @@ public class NamedSetImpl implements NamedSet {
     }
 
     @Override
-    public Object formula() {
+    public String formula() {
         return formula;
     }
 
-    public void setFormula(Object value) {
+    public void setFormula(String value) {
         this.formula = value;
     }
 
@@ -86,6 +91,16 @@ public class NamedSetImpl implements NamedSet {
     @Override
     public String description() {
         return description;
+    }
+
+    @Override
+    public String displayFolder() {
+        return displayFolder;
+    }
+
+    @Override
+    public Formula formulaElement() {
+        return formulaElement;
     }
 
     public void setDescription(String value) {

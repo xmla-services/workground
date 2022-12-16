@@ -9,19 +9,22 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Formula;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet;
 
 public record NamedSetR(String name,
                         String caption,
                         String description,
-                        Object formula,
-                        List<AnnotationR> annotations)
+                        String formula,
+                        List<AnnotationR> annotations,
+                        String displayFolder,
+                        Formula formulaElement)
         implements NamedSet {
 
 }

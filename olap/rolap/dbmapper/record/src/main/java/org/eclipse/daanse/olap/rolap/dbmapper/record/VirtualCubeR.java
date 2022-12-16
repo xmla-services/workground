@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
@@ -27,7 +27,8 @@ public record VirtualCubeR(String name,
                            List<VirtualCubeDimensionR> virtualCubeDimension,
                            List<VirtualCubeMeasureR> virtualCubeMeasure,
                            List<CalculatedMemberR> calculatedMember,
-                           List<NamedSetR> namedSet
+                           List<NamedSetR> namedSet,
+                           boolean visible
 ) implements VirtualCube {
 
 }

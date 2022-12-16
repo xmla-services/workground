@@ -9,19 +9,15 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
 import java.util.List;
 
+import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.InlineTable;
-
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
-import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "columnDefs", "rows" })
@@ -33,6 +29,8 @@ public class InlineTableImpl implements InlineTable {
     @XmlElementWrapper(name = "Rows", required = true)
     @XmlElement(name = "Row", required = true)
     protected List<RowImpl> rows;
+    @XmlAttribute(name = "alias")
+    private String alias;
 
     @Override
     public List<ColumnDefImpl> columnDefs() {
@@ -52,4 +50,16 @@ public class InlineTableImpl implements InlineTable {
         this.rows = value;
     }
 
+    @Override
+    public String alias() {
+        return alias;
+    }
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    @Override
+    public Relation find(String tableName) {
+        return null;
+    }
 }

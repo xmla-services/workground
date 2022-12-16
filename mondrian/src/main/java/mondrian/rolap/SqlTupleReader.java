@@ -13,6 +13,7 @@
 package mondrian.rolap;
 
 import static mondrian.olap.fun.sort.Sorter.hierarchizeTupleList;
+import static mondrian.rolap.ExpressionUtil.getExpression;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -33,6 +34,8 @@ import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Column;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1179,7 +1182,7 @@ public class SqlTupleReader implements TupleReader {
   /**
    * Generates the SQL string corresponding to the levels referenced.
    *
-   * @param dataSource  jdbc connection that they query will execute against
+   * @param context  Ccontext
    * @param baseCube    this is the cube object for regular cubes, and the underlying base cube for virtual cubes
    * @param whichSelect Position of this select statement in a union
    * @param targetGroup the set of targets for which to generate a select
@@ -1297,15 +1300,15 @@ public class SqlTupleReader implements TupleReader {
         continue;
       }
 
-      Map<MondrianDef.Expression, MondrianDef.Expression>
+      Map<Expression, Expression>
         targetExp = getLevelTargetExpMap( currLevel, aggStar );
-      MondrianDef.Expression keyExp =
+      Expression keyExp =
         targetExp.get( currLevel.getKeyExp() );
-      MondrianDef.Expression ordinalExp =
+      Expression ordinalExp =
         targetExp.get( currLevel.getOrdinalExp() );
-      MondrianDef.Expression captionExp =
+      Expression captionExp =
         targetExp.get( currLevel.getCaptionExp() );
-      MondrianDef.Expression parentExp = currLevel.getParentExp();
+      Expression parentExp = currLevel.getParentExp();
 
       if ( parentExp != null ) {
         if ( !levelCollapsed ) {
@@ -1314,7 +1317,7 @@ public class SqlTupleReader implements TupleReader {
         if ( whichSelect == WhichSelect.LAST
           || whichSelect == WhichSelect.ONLY ) {
           final String parentSql =
-            parentExp.getExpression( sqlQuery );
+            getExpression(parentExp, sqlQuery );
           final String parentAlias =
             sqlQuery.addSelectGroupBy(
               parentSql, currLevel.getInternalType() );
@@ -1322,7 +1325,7 @@ public class SqlTupleReader implements TupleReader {
             parentSql, parentAlias, true, false, true, false );
         }
       }
-      String keySql = keyExp.getExpression( sqlQuery );
+      String keySql = getExpression( keyExp, sqlQuery );
 
       if ( !levelCollapsed ) {
         hierarchy.addToFrom( sqlQuery, keyExp );
@@ -1330,7 +1333,7 @@ public class SqlTupleReader implements TupleReader {
       }
       String captionSql = null;
       if ( captionExp != null ) {
-        captionSql = captionExp.getExpression( sqlQuery );
+        captionSql = getExpression( captionExp, sqlQuery );
         if ( !levelCollapsed ) {
           hierarchy.addToFrom( sqlQuery, captionExp );
         }
@@ -1356,7 +1359,7 @@ public class SqlTupleReader implements TupleReader {
       // Figure out the order-by part
       final String orderByAlias;
       if ( !currLevel.getKeyExp().equals( currLevel.getOrdinalExp() ) ) {
-        String ordinalSql = ordinalExp.getExpression( sqlQuery );
+        String ordinalSql = getExpression( ordinalExp, sqlQuery );
         orderByAlias = sqlQuery.addSelect( ordinalSql, null );
         if ( needsGroupBy ) {
           sqlQuery.addGroupBy( ordinalSql, orderByAlias );
@@ -1403,20 +1406,20 @@ public class SqlTupleReader implements TupleReader {
 
       RolapProperty[] properties = currLevel.getProperties();
       for ( RolapProperty property : properties ) {
-        final MondrianDef.Expression propExp =
+        final Expression propExp =
           targetExp.get( property.getExp() );
         final String propSql;
-        if ( propExp instanceof MondrianDef.Column ) {
+        if ( propExp instanceof Column ) {
           // When dealing with a column, we must use the same table
           // alias as the one used by the level. We also assume that
           // the property lives in the same table as the level.
           propSql =
             sqlQuery.getDialect().quoteIdentifier(
-              propExp.getTableAlias(),
+              propExp.tableAlias(),
 
-              ( (MondrianDef.Column) propExp ).name );
+              ( (Column) propExp ).name() );
         } else {
-          propSql = property.getExp().getExpression( sqlQuery );
+          propSql = getExpression( property.getExp(), sqlQuery );
         }
         final String propAlias = sqlQuery.addSelect(
           propSql,
@@ -1439,8 +1442,8 @@ public class SqlTupleReader implements TupleReader {
    * (like ordinal). If the targetExp map has any targets not on the agg table then we need to join.
    */
   private boolean requiresJoinToDim(
-    Map<MondrianDef.Expression, MondrianDef.Expression> targetExp ) {
-    for ( Map.Entry<MondrianDef.Expression, MondrianDef.Expression> entry
+    Map<Expression, Expression> targetExp ) {
+    for ( Map.Entry<Expression, Expression> entry
       : targetExp.entrySet() ) {
       if ( entry.getKey() != null
         && entry.getKey().equals( entry.getValue() ) ) {
@@ -1457,9 +1460,9 @@ public class SqlTupleReader implements TupleReader {
    * corresponding target expression to be used.  If there's no aggStar available then we'll just return an identity
    * map. If an AggStar is present the target Expression may be on the aggregate table.
    */
-  private Map<MondrianDef.Expression, MondrianDef.Expression> getLevelTargetExpMap( RolapLevel level,
+  private Map<Expression, Expression> getLevelTargetExpMap( RolapLevel level,
                                                                                     AggStar aggStar ) {
-    Map<MondrianDef.Expression, MondrianDef.Expression> map =
+    Map<Expression, Expression> map =
       initializeIdentityMap( level );
     if ( aggStar == null ) {
       return Collections.unmodifiableMap( map );
@@ -1497,8 +1500,8 @@ public class SqlTupleReader implements TupleReader {
    * Creates a map of the expressions from a RolapLevel to themselves.  This is the starting assumption of what the
    * target expression is.
    */
-  private Map<MondrianDef.Expression, MondrianDef.Expression> initializeIdentityMap( RolapLevel level ) {
-    Map<MondrianDef.Expression, MondrianDef.Expression> map = new HashMap<>();
+  private Map<Expression, Expression> initializeIdentityMap( RolapLevel level ) {
+    Map<Expression, Expression> map = new HashMap<>();
     map.put( level.getKeyExp(), level.getKeyExp() );
     map.put( level.getOrdinalExp(), level.getOrdinalExp() );
     map.put( level.getCaptionExp(), level.getCaptionExp() );

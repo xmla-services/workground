@@ -10,7 +10,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
@@ -25,6 +25,8 @@ import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DimensionUsage", propOrder = { "annotations" })
@@ -45,6 +47,12 @@ public class DimensionUsageImpl implements DimensionUsage {
     protected String foreignKey;
     @XmlAttribute(name = "highCardinality")
     protected Boolean highCardinality;
+    @XmlAttribute(name = "caption")
+    protected String caption;
+    @XmlAttribute(name = "visible")
+    protected Boolean visible = true;
+    @XmlAttribute(name = "description")
+    protected  String description;
 
     @Override
     public List<AnnotationImpl> annotations() {
@@ -106,6 +114,27 @@ public class DimensionUsageImpl implements DimensionUsage {
         } else {
             return highCardinality;
         }
+    }
+
+    @Override
+    public String caption() {
+        return caption;
+    }
+
+    @Override
+    public boolean visible() {
+        return visible;
+    }
+
+    @Override
+    public String description() {
+        return description;
+    }
+
+    @Override
+    public PrivateDimension getDimension(Schema xmlSchema) {
+        //TODO
+        return null;
     }
 
     public void setHighCardinality(Boolean value) {

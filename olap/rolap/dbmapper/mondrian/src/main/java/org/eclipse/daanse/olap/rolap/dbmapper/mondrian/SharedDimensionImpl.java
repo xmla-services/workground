@@ -10,7 +10,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
@@ -43,6 +43,8 @@ public class SharedDimensionImpl implements SharedDimension {
     protected String caption;
     @XmlAttribute(name = "description")
     protected String description;
+    @XmlAttribute(name = "foreignKey")
+    private String foreignKey;
 
     @Override
     public List<AnnotationImpl> annotations() {
@@ -96,8 +98,16 @@ public class SharedDimensionImpl implements SharedDimension {
         return description;
     }
 
+    @Override
+    public String foreignKey() {
+        return foreignKey;
+    }
+
+    public void setForeignKey(String foreignKey) {
+        this.foreignKey = foreignKey;
+    }
+
     public void setDescription(String value) {
         this.description = value;
     }
-
 }

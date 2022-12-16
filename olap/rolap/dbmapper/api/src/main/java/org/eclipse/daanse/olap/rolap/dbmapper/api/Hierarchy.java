@@ -9,7 +9,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
@@ -55,4 +55,11 @@ public interface Hierarchy {
 
     String uniqueKeyLevelName();
 
+    boolean visible();
+
+    String displayFolder();
+
+    RelationOrJoin relation();
+
+    String origin();
 }

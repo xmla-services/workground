@@ -9,13 +9,14 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.AggMeasureFactCount;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.AggName;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -25,7 +26,7 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "aggFactCount", "aggIgnoreColumn", "aggForeignKey", "aggMeasure", "aggLevel" })
+@XmlType(name = "", propOrder = { "aggFactCount", "aggIgnoreColumn", "aggForeignKey", "aggMeasure", "aggLevel", "measuresFactCount" })
 public class AggNameImpl implements AggName {
 
     @XmlElement(name = "AggFactCount", required = true)
@@ -42,6 +43,10 @@ public class AggNameImpl implements AggName {
     protected String name;
     @XmlAttribute(name = "ignorecase")
     protected Boolean ignorecase;
+    @XmlAttribute(name = "approxRowCount")
+    protected String approxRowCount;
+    @XmlElement(name = "AggMeasureFactCount")
+    private List<AggMeasureFactCountImpl> measuresFactCount;
 
     @Override
     public AggColumnNameImpl aggFactCount() {
@@ -89,6 +94,11 @@ public class AggNameImpl implements AggName {
         return name;
     }
 
+    @Override
+    public String approxRowCount() {
+        return null;
+    }
+
     public void setName(String value) {
         this.name = value;
     }
@@ -100,6 +110,11 @@ public class AggNameImpl implements AggName {
         } else {
             return ignorecase;
         }
+    }
+
+    @Override
+    public List<? extends AggMeasureFactCount> measuresFactCount() {
+        return measuresFactCount;
     }
 
     public void setIgnorecase(Boolean value) {

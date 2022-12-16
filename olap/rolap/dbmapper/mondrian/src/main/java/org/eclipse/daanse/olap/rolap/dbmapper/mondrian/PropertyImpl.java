@@ -9,19 +9,16 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
+import jakarta.xml.bind.annotation.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Property;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlType;
-
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "")
+@XmlType(name = "", propOrder = { "propertyFormatter" })
 public class PropertyImpl implements Property {
 
     @XmlAttribute(name = "name", required = true)
@@ -38,6 +35,8 @@ public class PropertyImpl implements Property {
     protected String description;
     @XmlAttribute(name = "dependsOnLevelValue")
     protected Boolean dependsOnLevelValue;
+    @XmlElement(name = "PropertyFormatter")
+    protected ElementFormatterImpl propertyFormatter;
 
     @Override
     public String name() {
@@ -104,6 +103,11 @@ public class PropertyImpl implements Property {
         } else {
             return dependsOnLevelValue;
         }
+    }
+
+    @Override
+    public ElementFormatter propertyFormatter() {
+        return propertyFormatter;
     }
 
     public void setDependsOnLevelValue(Boolean value) {
