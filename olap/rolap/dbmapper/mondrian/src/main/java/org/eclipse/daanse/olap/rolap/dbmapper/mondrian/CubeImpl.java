@@ -27,15 +27,13 @@ import jakarta.xml.bind.annotation.XmlElements;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "annotations", "table", "view", "dimensionUsageOrDimension", "measure",
+@XmlType(name = "", propOrder = { "annotations", "view", "dimensionUsageOrDimension", "measure",
         "calculatedMember", "namedSet", "drillThroughAction", "writebackTable", "fact", "action"})
 public class CubeImpl implements Cube {
 
     @XmlElementWrapper(name = "Annotations")
     @XmlElement(name = "Annotation")
     protected List<AnnotationImpl> annotations;
-    @XmlElement(name = "Table")
-    protected TableImpl table;
     @XmlElement(name = "View")
     protected ViewImpl view;
     @XmlElements({ @XmlElement(name = "DimensionUsage", type = DimensionUsageImpl.class),
@@ -78,15 +76,6 @@ public class CubeImpl implements Cube {
 
     public void setAnnotations(List<AnnotationImpl> value) {
         this.annotations = value;
-    }
-
-    @Override
-    public TableImpl table() {
-        return table;
-    }
-
-    public void setTable(TableImpl value) {
-        this.table = value;
     }
 
     @Override

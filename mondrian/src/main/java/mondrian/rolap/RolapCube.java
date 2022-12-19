@@ -29,6 +29,7 @@ import mondrian.rolap.aggmatcher.ExplicitRules;
 import mondrian.rolap.cache.SoftSmartCache;
 import mondrian.rolap.format.FormatterCreateContext;
 import mondrian.rolap.format.FormatterFactory;
+import mondrian.rolap.util.NamedSetUtil;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.spi.CellFormatter;
@@ -55,6 +56,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.StringReader;
 import java.util.*;
+
+import static mondrian.rolap.util.CalculatedMemberUtil.getFormula;
+import static mondrian.rolap.util.JoinUtil.*;
 
 /**
  * <code>RolapCube</code> implements {@link Cube} for a ROLAP database.
@@ -331,7 +335,8 @@ public class RolapCube extends CubeBase {
             annotations.add(internalUsage);
             final MeasureImpl xmlMeasure = new MeasureImpl();
             xmlMeasure.setName("Fact Count");
-            xmlMeasure.setFormatString("count");
+            xmlMeasure.setAggregator("count");
+            xmlMeasure.setVisible(false);
             xmlMeasure.setAnnotations(annotations);
             factCountMeasure =
                 createMeasure(
@@ -1035,7 +1040,7 @@ public class RolapCube extends CubeBase {
 
         if (dimension == null) {
             PrivateDimension xmlDimension =
-                xmlCubeDimension.getDimension(xmlSchema);
+                DimensionUtil.getDimension(xmlSchema, xmlCubeDimension);
             dimension =
                 new RolapDimension(
                     schema, this, xmlDimension, xmlCubeDimension);
@@ -1242,7 +1247,7 @@ public class RolapCube extends CubeBase {
             .append(Util.makeFqName(xmlNamedSet.name()))
             .append(Util.nl)
             .append(" AS ");
-        Util.singleQuoteString(xmlNamedSet.formula(), buf);
+        Util.singleQuoteString(NamedSetUtil.getFormula(xmlNamedSet), buf);
         buf.append(Util.nl);
     }
 
@@ -1419,7 +1424,7 @@ public class RolapCube extends CubeBase {
             .append(fqName)
             .append(Util.nl)
             .append("  AS ");
-        Util.singleQuoteString(xmlCalcMember.formula(), buf);
+        Util.singleQuoteString(getFormula(xmlCalcMember), buf);
 
         if (xmlCalcMember.cellFormatter() != null) {
             if (xmlCalcMember.cellFormatter().className() != null) {
@@ -2069,30 +2074,23 @@ public class RolapCube extends CubeBase {
                             && hierarchy.getXmlHierarchy()
                             .primaryKeyTable() != null
                             && relation instanceof Join
-                            && ((Join) relation)
-                            .right() instanceof Table
+                            && right(((Join) relation)) instanceof Table
                             && ((Table)
-                            ((Join) relation).right())
+                            right(((Join) relation)))
                             .alias() != null
                             && ((Table)
-                            ((Join) relation).right())
+                            right(((Join) relation)))
                             .alias()
                             .equals(
                                 hierarchy.getXmlHierarchy()
                               .primaryKeyTable()))
                     {
-                        Join newRelation = new JoinR();
-                        newRelation.setLeft(((Join) relation).right());
-                        newRelation.setRight(((Join) relation).left());
-                        newRelation.setLeftAlias(((Join)
-                                relation).rightAlias());
-                        newRelation.setRightAlias(((Join)
-                                relation).leftAlias());
-                        newRelation.setLeftKey(((Join)
-                                relation).rightKey());
-                        newRelation.setRightKey(((Join)
-                                relation).leftKey());
-
+                        Join newRelation = new JoinR(
+                        List.of(right(((Join) relation)), left(((Join) relation))),
+                        getRightAlias((Join) relation),
+                        ((Join) relation).rightKey(),
+                        getLeftAlias(((Join) relation)),
+                        ((Join) relation).leftKey());
                         relation = newRelation;
                     }
 
@@ -2229,17 +2227,17 @@ public class RolapCube extends CubeBase {
 
             buf.append(indent);
             //buf.append(join.leftAlias);
-            buf.append(join.leftAlias());
+            buf.append(getLeftAlias(join));
             buf.append('.');
             buf.append(join.leftKey());
             buf.append('=');
-            buf.append(join.rightAlias());
+            buf.append(getRightAlias(join));
             //buf.append(join.rightAlias);
             buf.append('.');
             buf.append(join.rightKey());
             buf.append(Util.nl);
-            format(join.left(), buf, subindent);
-            format(join.right(), buf, indent);
+            format(left(join), buf, subindent);
+            format(right(join), buf, indent);
         }
     }
 
@@ -2486,8 +2484,8 @@ public class RolapCube extends CubeBase {
         } else if (relation instanceof Join) {
             Join join = (Join) relation;
 
-            return validateNodes(join.left(), map)
-                && validateNodes(join.right(), map);
+            return validateNodes(left(join), map)
+                && validateNodes(right(join), map);
 
         } else {
             throw Util.newInternal("bad relation type " + relation);
@@ -2519,21 +2517,20 @@ public class RolapCube extends CubeBase {
 
         } else if (relation instanceof Join) {
             Join join = (Join) relation;
-            int leftDepth = leftToRight(join.left(), map);
-            int rightDepth = leftToRight(join.right(), map);
+            int leftDepth = leftToRight(left(join), map);
+            int rightDepth = leftToRight(right(join), map);
 
             // we want the right side to be less than the left
             if (rightDepth > leftDepth) {
                 // switch
-                String leftAlias = join.leftAlias();
+                String leftAlias = getLeftAlias(join);
                 String leftKey = join.leftKey();
-                RelationOrJoin left = join.left();
-                join.setLeftAlias(join.rightAlias());
+                RelationOrJoin left = left(join);
+                join.setLeftAlias(getRightAlias(join));
                 join.setLeftKey(join.rightKey());
-                join.setLeft(join.right());
+                changeLeftRight(join, right(join), left);
                 join.setRightAlias(leftAlias);
                 join.setRightKey(leftKey);
-                join.setRight(left);
             }
             // Does not currently matter which is returned because currently we
             // only support structures where the left and right depth values
@@ -2560,23 +2557,18 @@ public class RolapCube extends CubeBase {
         } else if (relation instanceof Join) {
             Join join = (Join) relation;
 
-            while (join.left() instanceof Join) {
-                Join jleft = (Join) join.left();
-
-                join.setRight(
-                    new JoinR(
-                        join.leftAlias(),
-                        join.leftKey(),
-                        jleft.right(),
-                        join.rightAlias(),
-                        join.rightKey(),
-                        join.right()));
-
-                join.setLeft(jleft.left());
-
-                join.setRightAlias(jleft.rightAlias());
+            while (left(join) instanceof Join) {
+                Join jleft = (Join) left(join);
+                changeLeftRight(join, left(jleft), new JoinR(
+                    List.of(right(jleft), right(join)),
+                    getLeftAlias(join),
+                    join.leftKey(),
+                    getRightAlias(join),
+                    join.rightKey()
+                    ));
+                join.setRightAlias(getRightAlias(jleft));
                 join.setRightKey(jleft.rightKey());
-                join.setLeftAlias(jleft.leftAlias());
+                join.setLeftAlias(getLeftAlias(jleft));
                 join.setLeftKey(jleft.leftKey());
             }
         }
@@ -2601,12 +2593,13 @@ public class RolapCube extends CubeBase {
         } else if (relation instanceof Join) {
             Join join = (Join) relation;
 
-            RelationOrJoin left = copy(join.left());
-            RelationOrJoin right = copy(join.right());
+            RelationOrJoin left = copy(left(join));
+            RelationOrJoin right = copy(right(join));
 
             return new JoinR(
-                join.leftAlias(), join.leftKey(), left,
-                join.rightAlias(), join.rightKey(), right);
+                List.of(left, right),
+                getLeftAlias(join), join.leftKey(),
+                getRightAlias(join), join.rightKey());
 
         } else {
             throw Util.newInternal("bad relation type " + relation);
@@ -2636,26 +2629,26 @@ public class RolapCube extends CubeBase {
             Join join = (Join) relation;
 
             // snip left
-            RelationOrJoin left = snip(join.left(), tableName);
+            RelationOrJoin left = snip(left(join), tableName);
             if (left == null) {
                 // left got snipped so return the right
                 // (the join is no longer a join).
-                return join.right();
+                return right(join);
 
             } else {
                 // whatever happened on the left, save it
-                join.setLeft(left);
+                changeLeftRight(join, left, right(join));
 
                 // snip right
-                RelationOrJoin right = snip(join.right(), tableName);
+                RelationOrJoin right = snip(right(join), tableName);
                 if (right == null) {
                     // right got snipped so return the left.
-                    return join.left();
+                    return left(join);
 
                 } else {
                     // save the right, join still has right and left children
                     // so return it.
-                    join.setRight(right);
+                    changeLeftRight(join, left(join), right);
                     return join;
                 }
             }

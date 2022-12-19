@@ -32,10 +32,4 @@ public record PrivateDimensionR(String name,
                                 String usagePrefix
                                 )
         implements PrivateDimension {
-
-    @Override
-    public PrivateDimension getDimension(Schema xmlSchema) {
-        return null;
-    }
-
 }

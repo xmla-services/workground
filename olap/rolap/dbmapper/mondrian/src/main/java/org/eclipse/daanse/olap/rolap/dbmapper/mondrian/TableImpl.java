@@ -15,11 +15,11 @@ package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
 import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.AggTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Table", propOrder = { "sql", "aggExclude", "aggTable", "hint" })
@@ -94,16 +94,22 @@ public class TableImpl implements Table {
 
     @Override
     public String alias() {
-        return alias;
+        return (alias != null) ? alias : name;
     }
 
     public void setAlias(String value) {
         this.alias = value;
     }
 
-    @Override
-    public Relation find(String tableName) {
-        return null;
+    public boolean equals(Object o) {
+        if (o instanceof Table) {
+            Table that = (Table) o;
+            return this.name.equals(that.name()) &&
+                Objects.equals(this.alias, that.alias()) &&
+                Objects.equals(this.schema, that.schema());
+        } else {
+            return false;
+        }
     }
 
 }

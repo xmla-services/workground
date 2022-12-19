@@ -31,9 +31,4 @@ public record ViewR(String alias,
     public void addCode(String generic, String generateInline) {
 
     }
-
-    @Override
-    public Relation find(String tableName) {
-        return null;
-    }
 }

@@ -28,13 +28,13 @@ public class HierarchyImpl implements Hierarchy {
     @XmlElement(name = "Annotation")
     @XmlElementWrapper(name = "Annotations")
     protected List<AnnotationImpl> annotations;
-    @XmlElement(name = "Table")
+    //@XmlElement(name = "Table")
     protected TableImpl table;
-    @XmlElement(name = "View")
+    //@XmlElement(name = "View")
     protected ViewImpl view;
-    @XmlElement(name = "Join")
+    //@XmlElement(name = "Join")
     protected JoinImpl join;
-    @XmlElement(name = "InlineTable")
+    //@XmlElement(name = "InlineTable")
     protected InlineTableImpl inlineTable;
     @XmlElement(name = "Level", required = true)
     protected List<LevelImpl> level;

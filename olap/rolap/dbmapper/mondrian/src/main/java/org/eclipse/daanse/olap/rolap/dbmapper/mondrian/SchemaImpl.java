@@ -14,19 +14,12 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
+import jakarta.xml.bind.annotation.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
+
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
-
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
-import jakarta.xml.bind.annotation.XmlRootElement;
-import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * A schema is a collection of cubes and virtual cubes. It can also contain
@@ -48,7 +41,7 @@ public class SchemaImpl implements Schema {
     @XmlElement(name = "Parameter")
     protected List<ParameterImpl> parameter;
     @XmlElement(name = "Dimension")
-    protected List<SharedDimensionImpl> dimension;
+    protected List<PrivateDimensionImpl> dimension;
     @XmlElement(name = "Cube", required = true)
     protected List<CubeImpl> cube;
     @XmlElement(name = "VirtualCube")
@@ -87,9 +80,9 @@ public class SchemaImpl implements Schema {
     }
 
     @Override
-    public List<SharedDimensionImpl> dimension() {
+    public List<PrivateDimensionImpl> dimension() {
         if (dimension == null) {
-            dimension = new ArrayList<SharedDimensionImpl>();
+            dimension = new ArrayList<PrivateDimensionImpl>();
         }
         return this.dimension;
     }
@@ -175,5 +168,4 @@ public class SchemaImpl implements Schema {
     public void setDefaultRole(String value) {
         this.defaultRole = value;
     }
-
 }

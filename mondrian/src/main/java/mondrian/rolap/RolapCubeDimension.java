@@ -19,6 +19,7 @@ import mondrian.olap.DimensionType;
 import mondrian.olap.HierarchyBase;
 import mondrian.olap.MondrianDef;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.VirtualCubeDimension;
 
 /**
  * RolapCubeDimension wraps a RolapDimension for a specific Cube.
@@ -98,11 +99,11 @@ public class RolapCubeDimension extends RolapDimension {
     RolapCube lookupFactCube(
         CubeDimension cubeDim, RolapSchema schema)
     {
-      if (cubeDim instanceof MondrianDef.VirtualCubeDimension) {
-        final MondrianDef.VirtualCubeDimension virtualCubeDim =
-            (MondrianDef.VirtualCubeDimension)cubeDim;
-        if (virtualCubeDim.cubeName != null) {
-          return schema.lookupCube(virtualCubeDim.cubeName);
+      if (cubeDim instanceof VirtualCubeDimension) {
+        final VirtualCubeDimension virtualCubeDim =
+            (VirtualCubeDimension)cubeDim;
+        if (virtualCubeDim.cubeName() != null) {
+          return schema.lookupCube(virtualCubeDim.cubeName());
         }
       }
       return null;

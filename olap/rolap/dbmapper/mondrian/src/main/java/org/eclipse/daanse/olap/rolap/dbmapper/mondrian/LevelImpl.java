@@ -16,6 +16,7 @@ package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
@@ -34,12 +35,12 @@ public class LevelImpl implements Level {
     @XmlElement(name = "Annotation")
     @XmlElementWrapper(name = "Annotations")
     protected List<AnnotationImpl> annotations;
-    @XmlElement(name = "KeyExpression")
-    protected ExpressionViewImpl keyExpression;
-    @XmlElement(name = "NameExpression")
-    protected ExpressionViewImpl nameExpression;
-    @XmlElement(name = "CaptionExpression")
-    protected ExpressionViewImpl captionExpression;
+    @XmlElement(name = "KeyExpression", type = ExpressionViewImpl.class)
+    protected ExpressionView keyExpression;
+    @XmlElement(name = "NameExpression", type = ExpressionViewImpl.class)
+    protected ExpressionView nameExpression;
+    @XmlElement(name = "CaptionExpression", type = ExpressionViewImpl.class)
+    protected ExpressionView captionExpression;
     @XmlElement(name = "OrdinalExpression")
     protected ExpressionViewImpl ordinalExpression;
     @XmlElement(name = "ParentExpression")
@@ -97,8 +98,15 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public ExpressionView keyExpression() {
-        return keyExpression;
+    public Expression keyExpression() {
+        if (keyExpression != null) {
+            return keyExpression;
+        } else if (column != null) {
+            return new ColumnImpl(table, column);
+        } else {
+            return null;
+        }
+
     }
 
     public void setKeyExpression(ExpressionViewImpl value) {
@@ -106,8 +114,15 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public ExpressionViewImpl nameExpression() {
-        return nameExpression;
+    public Expression nameExpression() {
+        if (nameExpression != null) {
+            return nameExpression;
+        } else if (nameColumn != null && !Objects.equals(nameColumn, column)) {
+            return new ColumnImpl(table, nameColumn);
+        } else {
+            return null;
+        }
+
     }
 
     public void setNameExpression(ExpressionViewImpl value) {
@@ -115,8 +130,15 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public ExpressionView captionExpression() {
-        return captionExpression;
+    public Expression captionExpression() {
+        if (captionExpression != null) {
+            return captionExpression;
+        } else if (captionColumn != null) {
+            return new ColumnImpl(table, captionColumn);
+        } else {
+            return null;
+        }
+
     }
 
     public void setCaptionExpression(ExpressionViewImpl value) {
@@ -124,8 +146,15 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public ExpressionView ordinalExpression() {
-        return ordinalExpression;
+    public Expression ordinalExpression() {
+        if (ordinalExpression != null) {
+            return ordinalExpression;
+        } else if (ordinalColumn != null) {
+            return new ColumnImpl(table, ordinalColumn);
+        } else {
+            return null;
+        }
+
     }
 
     public void setOrdinalExpression(ExpressionViewImpl value) {
@@ -133,8 +162,15 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public ExpressionViewImpl parentExpression() {
-        return parentExpression;
+    public Expression parentExpression() {
+        if (parentExpression != null) {
+            return parentExpression;
+        } else if (parentColumn != null) {
+            return new ColumnImpl(table, parentColumn);
+        } else {
+            return null;
+        }
+
     }
 
     public void setParentExpression(ExpressionViewImpl value) {
@@ -232,7 +268,7 @@ public class LevelImpl implements Level {
 
     @Override
     public String type() {
-        return type;
+        return type != null ? type : "String";
     }
 
     public void setType(String value) {

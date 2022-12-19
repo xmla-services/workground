@@ -58,12 +58,4 @@ public class ViewImpl implements View {
         this.alias = value;
     }
 
-    @Override
-    public Relation find(String seekAlias) {
-        if (seekAlias.equals(alias)) {
-            return this;
-        } else {
-            return null;
-        }
-    }
 }
