@@ -26,9 +26,10 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.CellFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Formula;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "CalculatedMember", propOrder = { "annotations", "calculatedMemberProperty", "cellFormatter" })
+@XmlType(name = "CalculatedMember", propOrder = { "annotations", "calculatedMemberProperty", "cellFormatter", "formulaElement" })
 public class CalculatedMemberImpl implements CalculatedMember {
 
     @XmlElement(name = "Annotation")
@@ -58,6 +59,9 @@ public class CalculatedMemberImpl implements CalculatedMember {
     protected String parent;
     @XmlElement(name = "CellFormatter")
     protected CellFormatterImpl cellFormatter;
+    @XmlElement(name = "Formula")
+    protected FormulaImpl formulaElement;
+
 
 
     @Override
@@ -297,4 +301,8 @@ public class CalculatedMemberImpl implements CalculatedMember {
         this.displayFolder = value;
     }
 
+    @Override
+    public Formula formulaElement() {
+        return formulaElement;
+    }
 }

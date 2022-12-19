@@ -33,8 +33,4 @@ public record InlineTableR(List<ColumnDef> columnDefs,
         this(new ArrayList<>(inlineTable.columnDefs()), new ArrayList<>(inlineTable.rows()), alias);
     }
 
-    @Override
-    public Relation find(String tableName) {
-        return null;
-    }
 }

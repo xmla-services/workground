@@ -29,13 +29,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "relation", "left", "right" })
+@XmlType(name = "", propOrder = { "relation" })
 public class JoinImpl implements Join {
 
     @XmlElements({ @XmlElement(name = "Table", type = TableImpl.class),
             @XmlElement(name = "View", type = ViewImpl.class), @XmlElement(name = "Join", type = JoinImpl.class),
             @XmlElement(name = "InlineTable", type = InlineTableImpl.class) })
-    protected List<Object> relation;
+    protected List<RelationOrJoin> relation;
     @XmlAttribute(name = "leftAlias")
     protected String leftAlias;
     @XmlAttribute(name = "leftKey")
@@ -44,21 +44,11 @@ public class JoinImpl implements Join {
     protected String rightAlias;
     @XmlAttribute(name = "rightKey")
     protected String rightKey;
-    @XmlElements({ @XmlElement(name = "InlineTable", type = InlineTableImpl.class),
-        @XmlElement(name = "Table", type = TableImpl.class),
-        @XmlElement(name = "Join", type = JoinImpl.class),
-        @XmlElement(name = "View", type = ViewImpl.class)})
-    private RelationOrJoin left;
-    @XmlElements({ @XmlElement(name = "InlineTable", type = InlineTableImpl.class),
-        @XmlElement(name = "Table", type = TableImpl.class),
-        @XmlElement(name = "Join", type = JoinImpl.class),
-        @XmlElement(name = "View", type = ViewImpl.class)})
-    private RelationOrJoin right;
 
     @Override
-    public List<Object> relation() {
+    public List<RelationOrJoin> relation() {
         if (relation == null) {
-            relation = new ArrayList<Object>();
+            relation = new ArrayList<>();
         }
         return this.relation;
     }
@@ -95,30 +85,8 @@ public class JoinImpl implements Join {
         return rightKey;
     }
 
-    @Override
-    public RelationOrJoin left() {
-        return left;
-    }
-
-    @Override
-    public RelationOrJoin right() {
-        return right;
-    }
-
     public void setRightKey(String value) {
         this.rightKey = value;
     }
 
-    public void setLeft(RelationOrJoin left) {
-        this.left = left;
-    }
-
-    public void setRight(RelationOrJoin right) {
-        this.right = right;
-    }
-
-    @Override
-    public Relation find(String tableName) {
-        return null;
-    }
 }

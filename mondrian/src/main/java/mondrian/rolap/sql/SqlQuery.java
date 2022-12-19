@@ -28,10 +28,14 @@ import mondrian.olap.Util;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.RolapUtil;
 import mondrian.util.Pair;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.InlineTable;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
+
+import static mondrian.rolap.util.JoinUtil.getLeftAlias;
+import static mondrian.rolap.util.JoinUtil.getRightAlias;
+import static mondrian.rolap.util.JoinUtil.left;
+import static mondrian.rolap.util.JoinUtil.right;
+import static mondrian.rolap.util.TableUtil.getHintMap;
+import static mondrian.rolap.util.ViewUtil.getCodeSet;
 
 /**
  * <code>SqlQuery</code> allows us to build a <code>select</code>
@@ -365,13 +369,13 @@ public class SqlQuery {
             }
         }
 
-        if (relation instanceof MondrianDef.View) {
-            final MondrianDef.View view = (MondrianDef.View) relation;
+        if (relation instanceof View) {
+            final View view = (View) relation;
             final String viewAlias =
                 (alias == null)
-                ? view.getAlias()
+                ? view.alias()
                 : alias;
-            final String sqlString = view.getCodeSet().chooseQuery(dialect);
+            final String sqlString = getCodeSet(view).chooseQuery(dialect);
             return addFromQuery(sqlString, viewAlias, false);
 
         } else if (relation instanceof InlineTable) {
@@ -380,28 +384,28 @@ public class SqlQuery {
                     (InlineTable) relation, dialect);
             return addFrom(relation1, alias, failIfExists);
 
-        } else if (relation instanceof MondrianDef.Table) {
-            final MondrianDef.Table table = (MondrianDef.Table) relation;
+        } else if (relation instanceof Table) {
+            final Table table = (Table) relation;
             final String tableAlias =
                 (alias == null)
-                ? table.getAlias()
+                ? table.alias()
                 : alias;
             return addFromTable(
-                table.schema,
-                table.name,
+                table.schema(),
+                table.name(),
                 tableAlias,
-                table.getFilter(),
-                table.getHintMap(),
+                table.sql() == null ? null : table.sql().content(),
+                getHintMap(table),
                 failIfExists);
 
         } else if (relation instanceof Join) {
             final Join join = (Join) relation;
             return addJoin(
-                join.left(),
-                join.leftAlias(),
+                left(join),
+                getLeftAlias(join),
                 join.leftKey(),
-                join.right(),
-                join.rightAlias(),
+                right(join),
+                getRightAlias(join),
                 join.rightKey(),
                 failIfExists);
         } else {
@@ -787,10 +791,10 @@ public class SqlQuery {
         if (root instanceof Join) {
             Join join = (Join) root;
             flatten(
-                relations, join.left(), join.leftKey(), join.leftAlias(),
-                join.rightKey(), join.leftAlias());
+                relations, left(join), join.leftKey(), getLeftAlias(join),
+                join.rightKey(), getLeftAlias(join));
             flatten(
-                relations, join.right(), leftKey, leftAlias, rightKey,
+                relations, right(join), leftKey, leftAlias, rightKey,
                 rightAlias);
         } else {
             relations.add(

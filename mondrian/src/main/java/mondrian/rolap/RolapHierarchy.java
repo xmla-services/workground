@@ -52,6 +52,10 @@ import org.slf4j.LoggerFactory;
 import java.io.PrintWriter;
 import java.util.*;
 
+import static mondrian.rolap.util.JoinUtil.changeLeftRight;
+import static mondrian.rolap.util.JoinUtil.left;
+import static mondrian.rolap.util.JoinUtil.right;
+
 /**
  * <code>RolapHierarchy</code> implements {@link Hierarchy} for a ROLAP database.
  *
@@ -530,11 +534,11 @@ public class RolapHierarchy extends HierarchyBase {
             }
         } else {
             Join join = (Join) relationOrJoin;
-            Relation rel = getTable(tableName, join.left());
+            Relation rel = getTable(tableName, left(join));
             if (rel != null) {
                 return rel;
             }
-            return getTable(tableName, join.right());
+            return getTable(tableName, right(join));
         }
     }
 
@@ -788,9 +792,9 @@ public class RolapHierarchy extends HierarchyBase {
         } else if (relation instanceof Join) {
             Join join = (Join) relation;
             RelationOrJoin leftRelation =
-                relationSubsetInverse(join.left(), alias);
+                relationSubsetInverse(left(join), alias);
             return (leftRelation == null)
-                ? relationSubsetInverse(join.right(), alias)
+                ? relationSubsetInverse(right(join), alias)
                 : join;
 
         } else {
@@ -821,9 +825,9 @@ public class RolapHierarchy extends HierarchyBase {
         } else if (relation instanceof Join) {
             Join join = (Join) relation;
             RelationOrJoin rightRelation =
-                relationSubset(join.right(), alias);
+                relationSubset(right(join), alias);
             return (rightRelation == null)
-                ? relationSubset(join.left(), alias)
+                ? relationSubset(left(join), alias)
                 : MondrianProperties.instance()
                     .FilterChildlessSnowflakeMembers.get()
                 ? join
@@ -860,11 +864,11 @@ public class RolapHierarchy extends HierarchyBase {
             // and move left along the join chain.
             Join join = (Join) relation;
             RelationOrJoin rightRelation =
-                lookupRelationSubset(join.right(), targetTable);
+                lookupRelationSubset(right(join), targetTable);
             if (rightRelation == null) {
                 // Keep searching left.
                 return lookupRelationSubset(
-                    join.left(), targetTable);
+                    left(join), targetTable);
             } else {
                 // Found a match.
                 return join;
@@ -1161,9 +1165,8 @@ public class RolapHierarchy extends HierarchyBase {
         peerHier.sharedHierarchyName = getSharedHierarchyName();
         JoinImpl join = new JoinImpl();
         peerHier.relation = join;
-        join.setLeft( clos.table() );         // the closure table
+        changeLeftRight(join, clos.table(), relation);         // the closure table as left and the unclosed base table as right
         join.setLeftKey( clos.parentColumn() );
-        join.setRight( relation );     // the unclosed base table
         join.setRightKey( clos.childColumn() );
 
         // Create the upper level.

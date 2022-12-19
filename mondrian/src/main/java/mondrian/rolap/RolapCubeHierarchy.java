@@ -34,6 +34,9 @@ import mondrian.rolap.sql.TupleConstraint;
 import mondrian.util.UnsupportedList;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
+import static mondrian.rolap.util.JoinUtil.left;
+import static mondrian.rolap.util.JoinUtil.right;
+
 /**
  * Hierarchy that is associated with a specific Cube.
  *
@@ -314,8 +317,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
         {
             Join oldjoin = (Join)oldrel;
             Join newjoin = (Join)newrel;
-            extractNewAliases(oldjoin.left(), newjoin.left());
-            extractNewAliases(oldjoin.right(), newjoin.right());
+            extractNewAliases(left(oldjoin), left(newjoin));
+            extractNewAliases(right(oldjoin), right(newjoin));
         } else {
             throw new UnsupportedOperationException();
         }

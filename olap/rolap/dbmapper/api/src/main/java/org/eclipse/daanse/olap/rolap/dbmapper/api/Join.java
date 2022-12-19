@@ -17,7 +17,7 @@ import java.util.List;
 
 public interface Join extends RelationOrJoin {
 
-    List<Object> relation();
+    List<RelationOrJoin> relation();
 
     String leftAlias();
 
@@ -27,19 +27,11 @@ public interface Join extends RelationOrJoin {
 
     String rightKey();
 
-    RelationOrJoin left();
-
-    RelationOrJoin right();
-
     void setLeftAlias(String rightAlias);
 
     void setLeftKey(String rightKey);
 
-    void setLeft(RelationOrJoin right);
-
     void setRightAlias(String leftAlias);
 
     void setRightKey(String leftKey);
-
-    void setRight(RelationOrJoin left);
 }

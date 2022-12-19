@@ -31,9 +31,4 @@ public record DimensionUsageR(String name,
                               boolean visible,
                               String description)
         implements DimensionUsage {
-
-    @Override
-    public PrivateDimension getDimension(Schema xmlSchema) {
-        return null;
-    }
 }

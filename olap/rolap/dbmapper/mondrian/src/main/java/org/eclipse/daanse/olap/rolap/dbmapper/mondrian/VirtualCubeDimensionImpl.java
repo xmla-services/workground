@@ -14,10 +14,7 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
 import jakarta.xml.bind.annotation.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Annotation;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.VirtualCubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
 import java.util.List;
 
@@ -84,12 +81,6 @@ public class VirtualCubeDimensionImpl implements VirtualCubeDimension {
     @Override
     public String description() {
         return description;
-    }
-
-    @Override
-    public PrivateDimension getDimension(Schema xmlSchema) {
-        //TODO
-        return null;
     }
 
     public void setName(String value) {

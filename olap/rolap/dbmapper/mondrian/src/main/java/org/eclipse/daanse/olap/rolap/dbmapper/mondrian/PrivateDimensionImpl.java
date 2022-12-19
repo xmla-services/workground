@@ -82,7 +82,7 @@ public class PrivateDimensionImpl implements PrivateDimension {
     @Override
     public String type() {
         if (type == null) {
-            return "Standard";
+            return "StandardDimension";
         } else {
             return type;
         }
@@ -140,12 +140,6 @@ public class PrivateDimensionImpl implements PrivateDimension {
     @Override
     public String usagePrefix() {
         return usagePrefix;
-    }
-
-    @Override
-    public PrivateDimension getDimension(Schema xmlSchema) {
-        //TODO
-        return null;
     }
 
     public void setVisible(Boolean visible) {

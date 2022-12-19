@@ -41,6 +41,11 @@ import java.sql.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static mondrian.rolap.util.JoinUtil.getLeftAlias;
+import static mondrian.rolap.util.JoinUtil.getRightAlias;
+import static mondrian.rolap.util.JoinUtil.left;
+import static mondrian.rolap.util.JoinUtil.right;
+
 /**
  * A <code>RolapStar</code> is a star schema. It is the means to read cell
  * values.
@@ -353,54 +358,52 @@ public class RolapStar {
         } else if (relOrJoin instanceof Join) {
             // determine if the join starts from the left or right side
             Join join = (Join)relOrJoin;
-            if (join.left() instanceof Join) {
+            if (left(join) instanceof Join) {
                 throw MondrianResource.instance().IllegalLeftDeepJoin.ex();
             }
             final RelationOrJoin left;
             final RelationOrJoin right;
-            if (join.leftAlias().equals(joinKeyTable)) {
+            if (getLeftAlias(join).equals(joinKeyTable)) {
                 // first manage left then right
                 left =
                     getUniqueRelation(
-                        parent, join.left(), foreignKey,
+                        parent, left(join), foreignKey,
                         joinKey, joinKeyTable);
                 parent = nodeLookup.get(
                     ((Relation) left).alias());
                 right =
                     getUniqueRelation(
-                        parent, join.right(), join.leftKey(),
-                        join.rightKey(), join.rightAlias());
-            } else if (join.rightAlias().equals(joinKeyTable)) {
+                        parent, right(join), join.leftKey(),
+                        join.rightKey(), getRightAlias(join));
+            } else if (getRightAlias(join).equals(joinKeyTable)) {
                 // right side must equal
                 right =
                     getUniqueRelation(
-                        parent, join.right(), foreignKey,
+                        parent, right(join), foreignKey,
                         joinKey, joinKeyTable);
                 parent = nodeLookup.get(
                     ((Relation) right).alias());
                 left =
                     getUniqueRelation(
-                        parent, join.left(), join.rightKey(),
-                        join.leftKey(), join.leftAlias());
+                        parent, left(join), join.rightKey(),
+                        join.leftKey(), getLeftAlias(join));
             } else {
                 throw new MondrianException(
                     "failed to match primary key table to join tables");
             }
 
-            if (join.left() != left || join.right() != right) {
+            if (left(join) != left || right(join) != right) {
                 join =
                     new JoinR(
-                        null,
+                        List.of(left, right),
                         left instanceof Relation
                             ? ((Relation) left).alias()
                             : null,
                         join.leftKey(),
-                        left,
                         right instanceof Relation
                             ? ((Relation) right).alias()
                             : null,
-                        join.rightKey(),
-                        right);
+                        join.rightKey());
             }
             return join;
         }
@@ -1638,11 +1641,11 @@ public class RolapStar {
             } else if (relationOrJoin instanceof Join) {
                 Join join = (Join) relationOrJoin;
                 RolapStar.Table leftTable =
-                    addJoin(cube, join.left(), joinCondition);
-                String leftAlias = join.leftAlias();
+                    addJoin(cube, left(join), joinCondition);
+                String leftAlias = getLeftAlias(join);
                 if (leftAlias == null) {
                     // REVIEW: is cast to Relation valid?
-                    leftAlias = ((Relation) join.left()).alias();
+                    leftAlias = ((Relation) left(join)).alias();
                     if (leftAlias == null) {
                         throw Util.newError(
                             "missing leftKeyAlias in " + relationOrJoin);
@@ -1652,22 +1655,22 @@ public class RolapStar {
                 // switch to uniquified alias
                 leftAlias = leftTable.getAlias();
 
-                String rightAlias = join.rightAlias();
+                String rightAlias = getRightAlias(join);
                 if (rightAlias == null) {
                     // the right relation of a join may be a join
                     // if so, we need to use the right relation join's
                     // left relation's alias.
-                    if (join.right() instanceof Join) {
+                    if (right(join) instanceof Join) {
                         Join joinright =
-                            (Join) join.right();
+                            (Join) right(join);
                         // REVIEW: is cast to Relation valid?
                         rightAlias =
-                            ((Relation) joinright.left())
+                            ((Relation) left(joinright))
                                 .alias();
                     } else {
                         // REVIEW: is cast to Relation valid?
                         rightAlias =
-                            ((Relation) join.right())
+                            ((Relation) right(join))
                                 .alias();
                     }
                     if (rightAlias == null) {
@@ -1679,7 +1682,7 @@ public class RolapStar {
                     new ColumnR(leftAlias, join.leftKey()),
                     new ColumnR(rightAlias, join.rightKey()));
                 RolapStar.Table rightTable = leftTable.addJoin(
-                    cube, join.right(), joinCondition);
+                    cube, right(join), joinCondition);
                 return rightTable;
 
             } else {
@@ -2038,7 +2041,7 @@ public class RolapStar {
             if (newAlias.equals(oldAlias)) {
                 return expression;
             }
-            if (expression instanceof Column) {
+            if (expression instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Column) {
                 org.eclipse.daanse.olap.rolap.dbmapper.api.Column column = (org.eclipse.daanse.olap.rolap.dbmapper.api.Column) expression;
                 return new ColumnR(visit(column.table()), column.name());
             } else {

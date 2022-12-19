@@ -85,7 +85,7 @@ public class ExplicitRules {
 
         /**
          * Make an ExplicitRules.Group for a given RolapCube given the
-         * MondrianDef.Cube associated with that cube.
+         * Cube associated with that cube.
          */
         public static ExplicitRules.Group make(
             final RolapCube cube,

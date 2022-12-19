@@ -16,7 +16,9 @@ package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.AggLevel;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.AggLevelProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -74,6 +76,9 @@ public class AggLevelImpl implements AggLevel {
 
     @Override
     public List<AggLevelProperty> properties() {
+        if (properties == null) {
+            properties = new ArrayList<AggLevelProperty>();
+        }
         return properties;
     }
 

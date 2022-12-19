@@ -74,7 +74,7 @@ public class SharedDimensionImpl implements SharedDimension {
     @Override
     public String type() {
         if (type == null) {
-            return "Standard";
+            return "StandardDimension";
         } else {
             return type;
         }

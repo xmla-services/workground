@@ -21,53 +21,27 @@ import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
 
 public class JoinR implements Join {
 
-    private List<Object> relation;
+    private List<RelationOrJoin> relation;
     private String leftAlias;
     private String leftKey;
-    private RelationOrJoin left;
     private String rightAlias;
     private String rightKey;
-    private RelationOrJoin right;
 
-    public JoinR(List<Object> relation,
+    public JoinR(List<RelationOrJoin> relation,
                     String leftAlias,
                     String leftKey,
-                    RelationOrJoin left,
                     String rightAlias,
-                    String rightKey,
-                    RelationOrJoin right)
+                    String rightKey)
     {
         this.relation = relation;
         this.leftAlias = leftAlias;
         this.leftKey = leftKey;
-        this.left = left;
         this.rightAlias = rightAlias;
         this.rightKey = rightKey;
-        this.right = right;
-    }
-
-    public JoinR(String leftAlias,
-                 String leftKey,
-                 RelationOrJoin left,
-                 String rightAlias,
-                 String rightKey,
-                 RelationOrJoin right)
-    {
-        this.relation = List.of();
-        this.leftAlias = leftAlias;
-        this.leftKey = leftKey;
-        this.left = left;
-        this.rightAlias = rightAlias;
-        this.rightKey = rightKey;
-        this.right = right;
-    }
-
-    public JoinR() {
-
     }
 
     @Override
-    public List<Object> relation() {
+    public List<RelationOrJoin> relation() {
         return relation;
     }
 
@@ -92,16 +66,6 @@ public class JoinR implements Join {
     }
 
     @Override
-    public RelationOrJoin left() {
-        return left;
-    }
-
-    @Override
-    public RelationOrJoin right() {
-        return right;
-    }
-
-    @Override
     public void setLeftAlias(String rightAlias) {
         this.rightAlias = rightAlias;
     }
@@ -109,11 +73,6 @@ public class JoinR implements Join {
     @Override
     public void setLeftKey(String rightKey) {
         this.rightKey = rightKey;
-    }
-
-    @Override
-    public void setLeft(RelationOrJoin right) {
-        this.right = right;
     }
 
     @Override
@@ -126,13 +85,4 @@ public class JoinR implements Join {
         this.leftKey = leftKey;
     }
 
-    @Override
-    public void setRight(RelationOrJoin left) {
-        this.left = left;
-    }
-
-    @Override
-    public Relation find(String tableName) {
-        return null;
-    }
 }

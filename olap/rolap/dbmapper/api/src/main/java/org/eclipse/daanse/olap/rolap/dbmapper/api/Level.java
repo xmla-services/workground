@@ -20,15 +20,15 @@ public interface Level {
 
     List<? extends Annotation> annotations();
 
-    ExpressionView keyExpression();
+    Expression keyExpression();
 
-    ExpressionView nameExpression();
+    Expression nameExpression();
 
-    ExpressionView captionExpression();
+    Expression captionExpression();
 
-    ExpressionView ordinalExpression();
+    Expression ordinalExpression();
 
-    ExpressionView parentExpression();
+    Expression parentExpression();
 
     Closure closure();
 

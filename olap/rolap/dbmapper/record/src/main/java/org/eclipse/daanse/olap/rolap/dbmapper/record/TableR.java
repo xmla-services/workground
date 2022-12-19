@@ -52,12 +52,6 @@ public class TableR implements Table {
     }
 
     @Override
-    public Relation find(String tableName) {
-        //TODO
-        return null;
-    }
-
-    @Override
     public String alias() {
         return alias;
     }

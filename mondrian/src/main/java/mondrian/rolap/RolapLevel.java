@@ -383,7 +383,7 @@ public class RolapLevel extends LevelBase {
     private static RolapProperty[] createProperties(org.eclipse.daanse.olap.rolap.dbmapper.api.Level xmlLevel)
     {
         List<RolapProperty> list = new ArrayList<RolapProperty>();
-        final ExpressionView nameExp = xmlLevel.nameExpression();
+        final Expression nameExp = xmlLevel.nameExpression();
 
         if (nameExp != null) {
             list.add(

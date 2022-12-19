@@ -131,12 +131,6 @@ public class DimensionUsageImpl implements DimensionUsage {
         return description;
     }
 
-    @Override
-    public PrivateDimension getDimension(Schema xmlSchema) {
-        //TODO
-        return null;
-    }
-
     public void setHighCardinality(Boolean value) {
         this.highCardinality = value;
     }

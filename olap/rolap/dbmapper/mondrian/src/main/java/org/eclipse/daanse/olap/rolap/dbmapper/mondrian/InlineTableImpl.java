@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.api.InlineTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "columnDefs", "rows" })
+@XmlType(name = "InlineTable", propOrder = { "columnDefs", "rows" })
 public class InlineTableImpl implements InlineTable {
 
     @XmlElementWrapper(name = "ColumnDefs")
@@ -56,10 +56,5 @@ public class InlineTableImpl implements InlineTable {
     }
     public void setAlias(String alias) {
         this.alias = alias;
-    }
-
-    @Override
-    public Relation find(String tableName) {
-        return null;
     }
 }

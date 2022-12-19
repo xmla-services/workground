@@ -19,7 +19,7 @@ public interface Cube {
 
     List<? extends Annotation> annotations();
 
-    Table table();
+    //Table table();
 
     View view();
 

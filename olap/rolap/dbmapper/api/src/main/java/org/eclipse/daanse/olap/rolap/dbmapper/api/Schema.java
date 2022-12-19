@@ -28,7 +28,7 @@ public interface Schema {
 
     List<? extends Parameter> parameter();
 
-    List<? extends SharedDimension> dimension();
+    List<? extends PrivateDimension> dimension();
 
     List<? extends Cube> cube();
 

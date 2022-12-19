@@ -27,6 +27,8 @@ import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 
+import static mondrian.rolap.util.RlationUtil.find;
+
 /**
  * A <code>HierarchyUsage</code> is the usage of a hierarchy in the context
  * of a cube. Private hierarchies can only be used in their own
@@ -433,7 +435,7 @@ public class HierarchyUsage {
                         hierarchy.getUniqueName());
             }
         } else {
-            table = hierarchy.getRelation().find(tableName);
+            table = find(hierarchy.getRelation(), tableName);
             if (table == null) {
                 // todo: i18n msg
                 throw Util.newError(

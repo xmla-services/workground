@@ -43,4 +43,5 @@ public interface CalculatedMember {
     String parent();
 
     CellFormatter cellFormatter();
+    Formula formulaElement();
 }

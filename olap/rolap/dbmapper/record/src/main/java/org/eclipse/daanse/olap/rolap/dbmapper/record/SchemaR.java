@@ -13,10 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
+
 import java.io.PrintWriter;
 import java.util.List;
-
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
 
 public record SchemaR(String name,
                       String description,
@@ -24,7 +24,7 @@ public record SchemaR(String name,
                       String defaultRole,
                       List<AnnotationR> annotations,
                       List<ParameterR> parameter,
-                      List<SharedDimensionR> dimension,
+                      List<PrivateDimensionR> dimension,
                       List<CubeR> cube,
                       List<VirtualCubeR> virtualCube,
                       List<NamedSetR> namedSet,

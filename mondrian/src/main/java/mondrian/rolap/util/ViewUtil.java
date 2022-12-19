@@ -11,23 +11,16 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-package org.eclipse.daanse.olap.rolap.dbmapper.api;
+package mondrian.rolap.util;
 
-import java.util.List;
+import mondrian.rolap.sql.SqlQuery;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.View;
 
-public interface CubeDimension {
+import static mondrian.rolap.util.SQLUtil.toCodeSet;
 
-    List<? extends Annotation> annotations();
+public class ViewUtil {
+    public static SqlQuery.CodeSet getCodeSet(View view) {
+        return toCodeSet(view.sqls());
+    }
 
-    String name();
-
-    String foreignKey();
-
-    boolean highCardinality();
-
-    String caption();
-
-    boolean visible();
-
-    String description();
 }
