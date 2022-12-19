@@ -17,7 +17,8 @@ import java.util.Dictionary;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.sql.ConnectionPoolDataSource;
+import javax.sql.DataSource;
+import javax.sql.XADataSource;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -25,15 +26,16 @@ import org.osgi.service.cm.ConfigurationException;
 import org.osgi.service.cm.ManagedServiceFactory;
 import org.osgi.service.component.annotations.Component;
 
-import com.mysql.cj.jdbc.MysqlConnectionPoolDataSource;
+import com.mysql.cj.jdbc.MysqlDataSource;
+import com.mysql.cj.jdbc.MysqlXADataSource;
 
-@Component(service = ManagedServiceFactory.class, property = {Constants.SERVICE_PID+"=org.eclipse.daanse.db.pooldatasource.mysql"})
-public class ConnectionPoolDataSourceService extends MysqlMetaTypeProviderService implements ManagedServiceFactory {
+@Component(service = ManagedServiceFactory.class, property = {Constants.SERVICE_PID+"=org.eclipse.daanse.db.xadatasource.mysql"})
+public class XaDataSourceService extends MysqlMetaTypeProviderService implements ManagedServiceFactory {
 
 	private Map<String, MysqlDataSourceRegistration<?>> registrations = new ConcurrentHashMap<>();
 	private BundleContext bundleContext;
 
-	public ConnectionPoolDataSourceService(BundleContext bundleContext) {
+	public XaDataSourceService(BundleContext bundleContext) {
 		this.bundleContext = bundleContext;
 	}
 
@@ -45,7 +47,7 @@ public class ConnectionPoolDataSourceService extends MysqlMetaTypeProviderServic
 	@Override
 	public void updated(String pid, Dictionary<String, ?> properties) throws ConfigurationException {
 		MysqlDataSourceRegistration<?> registration = registrations.computeIfAbsent(pid,
-				nil -> new MysqlDataSourceRegistration<MysqlConnectionPoolDataSource>(new MysqlConnectionPoolDataSource(), ConnectionPoolDataSource.class));
+				nil -> new MysqlDataSourceRegistration<MysqlXADataSource>(new MysqlXADataSource(), XADataSource.class));
 		registration.update(properties, bundleContext);
 	}
 
