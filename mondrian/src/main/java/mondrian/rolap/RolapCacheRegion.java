@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+
 /**
  * A <code>RolapCacheRegion</code> represents a region of multidimensional space
  * in the cache.
@@ -65,7 +67,7 @@ public class RolapCacheRegion {
         bitKey.set(bitPosition);
         columnPredicates.put(bitPosition, predicate);
         columnPredicatesByName.put(
-            column.getExpression().genericExpression(),
+            genericExpression(column.getExpression()),
             predicate);
     }
 

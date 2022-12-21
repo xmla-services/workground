@@ -14,6 +14,8 @@ package mondrian.rolap;
 import mondrian.olap.LevelType;
 import mondrian.olap.Util;
 import mondrian.rolap.agg.*;
+import mondrian.rolap.util.ExpressionUtil;
+import mondrian.rolap.util.RelationUtil;
 import mondrian.spi.MemberFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
@@ -170,7 +172,7 @@ public class RolapCubeLevel extends RolapLevel {
             Column col = (Column)exp;
             if (rel instanceof Table) {
                 return new ColumnR(
-                    ((Table) rel).alias(),
+                    RelationUtil.getAlias(((Table) rel)),
                     col.name());
             } else if (rel instanceof Join
                 || rel instanceof Relation)
@@ -178,7 +180,7 @@ public class RolapCubeLevel extends RolapLevel {
                 // need to determine correct name of alias for this level.
                 // this may be defined in level
                 // col.table
-                String alias = getHierarchy().lookupAlias(col.tableAlias());
+                String alias = getHierarchy().lookupAlias(ExpressionUtil.getTableAlias(col));
                 return new ColumnR(alias, col.name());
             }
         } else if (exp instanceof ExpressionView) {

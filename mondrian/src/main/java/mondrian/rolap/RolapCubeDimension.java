@@ -17,7 +17,6 @@ import org.eclipse.daanse.olap.api.model.Schema;
 
 import mondrian.olap.DimensionType;
 import mondrian.olap.HierarchyBase;
-import mondrian.olap.MondrianDef;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.VirtualCubeDimension;
 
@@ -66,7 +65,7 @@ public class RolapCubeDimension extends RolapDimension {
                 : rolapDim.getDescription(),
             null,
             highCardinality,
-            cubeDim.annotations() != null
+            (cubeDim.annotations() != null && cubeDim.annotations().size() > 0)
                 ? RolapHierarchy.createMetadataMap(cubeDim.annotations())
                 : rolapDim.getMetadata());
         this.xmlDimension = cubeDim;

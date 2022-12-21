@@ -29,13 +29,13 @@ public class AggLevelImpl implements AggLevel {
     protected String column;
     @XmlAttribute(name = "name", required = true)
     protected String name;
-    @XmlAttribute(name = "ordinalColumn", required = true)
+    @XmlAttribute(name = "ordinalColumn")
     protected String ordinalColumn;
-    @XmlAttribute(name = "captionColumn", required = true)
+    @XmlAttribute(name = "captionColumn")
     protected String captionColumn;
-    @XmlAttribute(name = "nameColumn", required = true)
+    @XmlAttribute(name = "nameColumn")
     protected String nameColumn;
-    @XmlAttribute(name = "nameColumn", required = true)
+    @XmlAttribute(name = "collapsed")
     protected Boolean collapsed = true;
     @XmlElement(name = "AggLevelProperty", type = AggLevelPropertyImpl.class)
     List<AggLevelProperty> properties;

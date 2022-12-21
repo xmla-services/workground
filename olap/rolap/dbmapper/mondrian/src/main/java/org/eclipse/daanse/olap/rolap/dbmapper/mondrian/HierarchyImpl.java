@@ -21,21 +21,13 @@ import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Hierarchy", propOrder = { "annotations", "table", "view", "join", "inlineTable", "level",
+@XmlType(name = "Hierarchy", propOrder = { "annotations", "level",
         "memberReaderParameter", "relation" })
 public class HierarchyImpl implements Hierarchy {
 
     @XmlElement(name = "Annotation")
     @XmlElementWrapper(name = "Annotations")
     protected List<AnnotationImpl> annotations;
-    //@XmlElement(name = "Table")
-    protected TableImpl table;
-    //@XmlElement(name = "View")
-    protected ViewImpl view;
-    //@XmlElement(name = "Join")
-    protected JoinImpl join;
-    //@XmlElement(name = "InlineTable")
-    protected InlineTableImpl inlineTable;
     @XmlElement(name = "Level", required = true)
     protected List<LevelImpl> level;
     @XmlElement(name = "MemberReaderParameter")
@@ -82,42 +74,6 @@ public class HierarchyImpl implements Hierarchy {
 
     public void setAnnotations(List<AnnotationImpl> value) {
         this.annotations = value;
-    }
-
-    @Override
-    public Table table() {
-        return table;
-    }
-
-    public void setTable(TableImpl value) {
-        this.table = value;
-    }
-
-    @Override
-    public ViewImpl view() {
-        return view;
-    }
-
-    public void setView(ViewImpl value) {
-        this.view = value;
-    }
-
-    @Override
-    public Join join() {
-        return join;
-    }
-
-    public void setJoin(JoinImpl value) {
-        this.join = value;
-    }
-
-    @Override
-    public InlineTable inlineTable() {
-        return inlineTable;
-    }
-
-    public void setInlineTable(InlineTableImpl value) {
-        this.inlineTable = value;
     }
 
     @Override

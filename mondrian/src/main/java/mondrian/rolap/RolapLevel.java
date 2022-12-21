@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.rolap.util.ExpressionUtil;
+import mondrian.rolap.util.LevelUtil;
+import mondrian.rolap.util.RelationUtil;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -38,6 +41,9 @@ import mondrian.resource.MondrianResource;
 import mondrian.rolap.format.FormatterCreateContext;
 import mondrian.rolap.format.FormatterFactory;
 import mondrian.spi.PropertyFormatter;
+
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+import static mondrian.rolap.util.LevelUtil.getPropertyExp;
 
 /**
  * <code>RolapLevel</code> implements {@link Level} for a ROLAP database.
@@ -262,7 +268,7 @@ public class RolapLevel extends LevelBase {
         Expression expr = getKeyExp();
         if (expr instanceof Column) {
             Column mc = (Column) expr;
-            tableName = mc.tableAlias();
+            tableName = ExpressionUtil.getTableAlias(mc);
         }
         return tableName;
     }
@@ -346,11 +352,11 @@ public class RolapLevel extends LevelBase {
             xmlLevel.visible(),
             xmlLevel.description(),
             depth,
-            xmlLevel.keyExpression(),
-            xmlLevel.nameExpression(),
-            xmlLevel.captionExpression(),
-            xmlLevel.ordinalExpression(),
-            xmlLevel.parentExpression(),
+            LevelUtil.getKeyExp(xmlLevel),
+            LevelUtil.getNameExp(xmlLevel),
+            LevelUtil.getCaptionExp(xmlLevel),
+            LevelUtil.getOrdinalExp(xmlLevel),
+            LevelUtil.getParentExp(xmlLevel),
             xmlLevel.nullParentValue(),
             xmlLevel.closure(),
             createProperties(xmlLevel),
@@ -383,7 +389,7 @@ public class RolapLevel extends LevelBase {
     private static RolapProperty[] createProperties(org.eclipse.daanse.olap.rolap.dbmapper.api.Level xmlLevel)
     {
         List<RolapProperty> list = new ArrayList<RolapProperty>();
-        final Expression nameExp = xmlLevel.nameExpression();
+        final Expression nameExp = LevelUtil.getNameExp(xmlLevel);
 
         if (nameExp != null) {
             list.add(
@@ -408,7 +414,7 @@ public class RolapLevel extends LevelBase {
                 new RolapProperty(
                     xmlProperty.name(),
                     convertPropertyTypeNameToCode(xmlProperty.type()),
-                    xmlLevel.getPropertyExp(i),
+                    getPropertyExp(xmlLevel, i),
                     formatter,
                     xmlProperty.caption(),
                     xmlLevel.property().get(i).dependsOnLevelValue(),
@@ -451,7 +457,7 @@ public class RolapLevel extends LevelBase {
                     "must specify a table for level " + getUniqueName()
                     + " because hierarchy has more than one table");
             }
-            nameColumn.setTable(table.alias());
+            nameColumn.setTable(RelationUtil.getAlias(table));
         } else {
             if (!rolapHierarchy.tableExists(nameColumn.table())) {
                 throw Util.newError(
@@ -478,7 +484,7 @@ public class RolapLevel extends LevelBase {
     }
 
     public String getTableAlias() {
-        return keyExp.tableAlias();
+        return ExpressionUtil.getTableAlias(keyExp);
     }
 
     public RolapProperty[] getProperties() {
@@ -559,7 +565,7 @@ public class RolapLevel extends LevelBase {
                     + " columns "
                     + new AbstractList<String>() {
                         public String get(int index) {
-                            return keyExps.get(index).genericExpression();
+                            return genericExpression(keyExps.get(index));
                         }
 
                         public int size() {

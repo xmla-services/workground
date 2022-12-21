@@ -34,6 +34,7 @@ import mondrian.rolap.format.FormatterCreateContext;
 import mondrian.rolap.format.FormatterFactory;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 import mondrian.rolap.sql.SqlQuery;
+import mondrian.rolap.util.RelationUtil;
 import mondrian.spi.CellFormatter;
 import mondrian.util.UnionIterator;
 import org.eclipse.daanse.olap.api.access.Access;
@@ -52,9 +53,11 @@ import org.slf4j.LoggerFactory;
 import java.io.PrintWriter;
 import java.util.*;
 
+import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
 import static mondrian.rolap.util.JoinUtil.changeLeftRight;
 import static mondrian.rolap.util.JoinUtil.left;
 import static mondrian.rolap.util.JoinUtil.right;
+import static mondrian.rolap.util.LevelUtil.getKeyExp;
 
 /**
  * <code>RolapHierarchy</code> implements {@link Hierarchy} for a ROLAP database.
@@ -314,7 +317,7 @@ public class RolapHierarchy extends HierarchyBase {
             this.levels[0] = allLevel;
             for (int i = 0; i < xmlHierarchy.level().size(); i++) {
                 final org.eclipse.daanse.olap.rolap.dbmapper.api.Level xmlLevel = xmlHierarchy.level().get(i);
-                if (xmlLevel.keyExpression() == null
+                if (getKeyExp(xmlLevel) == null
                     && xmlHierarchy.memberReaderClass() == null)
                 {
                     throw MondrianResource.instance()
@@ -527,7 +530,7 @@ public class RolapHierarchy extends HierarchyBase {
         if (relationOrJoin instanceof Relation) {
             Relation relation =
                 (Relation) relationOrJoin;
-            if (relation.alias().equals(tableName)) {
+            if (RelationUtil.getAlias(relation).equals(tableName)) {
                 return relation;
             } else {
                 return null;
@@ -664,7 +667,7 @@ public class RolapHierarchy extends HierarchyBase {
         if (relation instanceof Join) {
             if (expression != null) {
                 subRelation =
-                    relationSubsetInverse(relation, expression.tableAlias());
+                    relationSubsetInverse(relation, getTableAlias(expression));
             }
         }
         query.addFrom(subRelation, null, failIfExists);
@@ -703,7 +706,7 @@ public class RolapHierarchy extends HierarchyBase {
                 // Search for the smallest subset of the relation which
                 // uses C.
                 subRelation =
-                    relationSubset(getRelation(), expression.tableAlias());
+                    relationSubset(getRelation(), getTableAlias(expression));
                 if (subRelation == null) {
                     subRelation = getRelation();
                 }
@@ -711,7 +714,7 @@ public class RolapHierarchy extends HierarchyBase {
         }
         query.addFrom(
             subRelation,
-            expression == null ? null : expression.tableAlias(),
+            expression == null ? null : getTableAlias(expression),
             failIfExists);
     }
 
@@ -785,7 +788,7 @@ public class RolapHierarchy extends HierarchyBase {
         if (relation instanceof Relation) {
             Relation table =
                 (Relation) relation;
-            return table.alias().equals(alias)
+            return RelationUtil.getAlias(table).equals(alias)
                 ? relation
                 : null;
 
@@ -818,7 +821,7 @@ public class RolapHierarchy extends HierarchyBase {
         if (relation instanceof Relation) {
             Relation table =
                 (Relation) relation;
-            return table.alias().equals(alias)
+            return RelationUtil.getAlias(table).equals(alias)
                 ? relation
                 : null;
 

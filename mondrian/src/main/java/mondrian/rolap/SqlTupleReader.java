@@ -13,7 +13,7 @@
 package mondrian.rolap;
 
 import static mondrian.olap.fun.sort.Sorter.hierarchizeTupleList;
-import static mondrian.rolap.ExpressionUtil.getExpression;
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,6 +30,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
+import mondrian.rolap.util.ExpressionUtil;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.model.Level;
@@ -45,7 +46,6 @@ import mondrian.calc.impl.ArrayTupleList;
 import mondrian.calc.impl.ListTupleList;
 import mondrian.calc.impl.UnaryTupleList;
 import mondrian.olap.Evaluator;
-import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Query;
 import mondrian.olap.Util;
@@ -1415,7 +1415,7 @@ public class SqlTupleReader implements TupleReader {
           // the property lives in the same table as the level.
           propSql =
             sqlQuery.getDialect().quoteIdentifier(
-              propExp.tableAlias(),
+                ExpressionUtil.getTableAlias(propExp),
 
               ( (Column) propExp ).name() );
         } else {

@@ -17,19 +17,15 @@ package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMember;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
-import jakarta.xml.bind.annotation.XmlType;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.CellFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Formula;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "CalculatedMember", propOrder = { "annotations", "calculatedMemberProperty", "cellFormatter", "formulaElement" })
+@XmlRootElement(name = "CalculatedMember")
 public class CalculatedMemberImpl implements CalculatedMember {
 
     @XmlElement(name = "Annotation")

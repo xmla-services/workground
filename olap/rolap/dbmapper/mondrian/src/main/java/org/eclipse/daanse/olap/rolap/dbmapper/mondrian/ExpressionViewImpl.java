@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.xml.bind.annotation.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.ExpressionView;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -39,15 +40,6 @@ public class ExpressionViewImpl implements ExpressionView {
         return this.sql;
     }
 
-    public String genericExpression() {
-        for (int i = 0; i < sql.size(); i++) {
-            if (sql.get(i).dialect().equals("generic")) {
-                return sql.get(i).content();
-            }
-        }
-        return sql.get(0).content();
-    }
-
     @Override
     public String table() {
         return table;
@@ -58,8 +50,27 @@ public class ExpressionViewImpl implements ExpressionView {
         return name;
     }
 
-    @Override
-    public String tableAlias() {
-        return null;
+    public int hashCode(Expression expression) {
+            int h = 17;
+            for (int i = 0; i < ((ExpressionView) expression).sql().size(); i++) {
+                h = 37 * h + ((ExpressionView) expression).sql().get(i).dialect().hashCode();
+            }
+            return h;
+    }
+
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ExpressionView)) {
+            return false;
+        }
+        ExpressionView that = (ExpressionView) obj;
+        if (sql().size() != that.sql().size()) {
+            return false;
+        }
+        for (int i = 0; i < sql().size(); i++) {
+            if (! sql().get(i).equals(that.sql().get(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 }

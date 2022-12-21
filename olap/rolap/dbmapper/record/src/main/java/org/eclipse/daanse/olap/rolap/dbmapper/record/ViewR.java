@@ -14,8 +14,8 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import java.util.List;
+import java.util.Objects;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.SQL;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.View;
 
@@ -30,5 +30,27 @@ public record ViewR(String alias,
     @Override
     public void addCode(String generic, String generateInline) {
 
+    }
+
+    public boolean equals(Object o) {
+        if (o instanceof View) {
+            View that = (View) o;
+            if (!Objects.equals(alias(), that.alias())) {
+                return false;
+            }
+            if (sqls() == null || that.sqls() == null || sqls().size() != that.sqls().size()) {
+                return false;
+            }
+            for (int i = 0; i < sqls().size(); i++) {
+                if (!Objects.equals(sqls().get(i).dialect(), that.sqls().get(i).dialect())
+                    || !Objects.equals(sqls().get(i).content(), that.sqls().get(i).content()))
+                {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }

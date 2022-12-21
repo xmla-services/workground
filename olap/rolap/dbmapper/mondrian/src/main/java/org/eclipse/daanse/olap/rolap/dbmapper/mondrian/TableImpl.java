@@ -23,6 +23,7 @@ import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Table", propOrder = { "sql", "aggExclude", "aggTable", "hint" })
+@XmlRootElement(name = "Table")
 public class TableImpl implements Table {
 
     @XmlElement(name = "SQL")
@@ -94,7 +95,7 @@ public class TableImpl implements Table {
 
     @Override
     public String alias() {
-        return (alias != null) ? alias : name;
+        return alias;
     }
 
     public void setAlias(String value) {
@@ -112,4 +113,12 @@ public class TableImpl implements Table {
         }
     }
 
+    public String toString() {
+        return (schema == null) ?
+            name :
+            schema + "." + name;
+    }
+    public int hashCode() {
+        return toString().hashCode();
+    }
 }

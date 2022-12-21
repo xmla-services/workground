@@ -19,6 +19,7 @@ import mondrian.resource.MondrianResource;
 import mondrian.rolap.agg.*;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.SqlQuery;
+import mondrian.rolap.util.RelationUtil;
 import mondrian.server.Locus;
 import mondrian.spi.DataSourceChangeListener;
 import mondrian.util.Bug;
@@ -41,6 +42,7 @@ import java.sql.*;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
 import static mondrian.rolap.util.JoinUtil.getLeftAlias;
 import static mondrian.rolap.util.JoinUtil.getRightAlias;
 import static mondrian.rolap.util.JoinUtil.left;
@@ -335,7 +337,7 @@ public class RolapStar {
             Relation rel =
                 (Relation) relOrJoin;
             String newAlias =
-                joinKeyTable != null ? joinKeyTable : rel.alias();
+                joinKeyTable != null ? joinKeyTable : RelationUtil.getAlias(rel);
             while (true) {
                 StarNetworkNode node = nodeLookup.get(newAlias);
                 if (node == null) {
@@ -353,7 +355,7 @@ public class RolapStar {
                 {
                     return node.origRel;
                 }
-                newAlias = rel.alias() + "_" + (++val);
+                newAlias = RelationUtil.getAlias(rel) + "_" + (++val);
             }
         } else if (relOrJoin instanceof Join) {
             // determine if the join starts from the left or right side
@@ -370,7 +372,7 @@ public class RolapStar {
                         parent, left(join), foreignKey,
                         joinKey, joinKeyTable);
                 parent = nodeLookup.get(
-                    ((Relation) left).alias());
+                    RelationUtil.getAlias(((Relation) left)));
                 right =
                     getUniqueRelation(
                         parent, right(join), join.leftKey(),
@@ -382,7 +384,7 @@ public class RolapStar {
                         parent, right(join), foreignKey,
                         joinKey, joinKeyTable);
                 parent = nodeLookup.get(
-                    ((Relation) right).alias());
+                    RelationUtil.getAlias(((Relation) right)));
                 left =
                     getUniqueRelation(
                         parent, left(join), join.rightKey(),
@@ -397,11 +399,11 @@ public class RolapStar {
                     new JoinR(
                         List.of(left, right),
                         left instanceof Relation
-                            ? ((Relation) left).alias()
+                            ? RelationUtil.getAlias(((Relation) left))
                             : null,
                         join.leftKey(),
                         right instanceof Relation
-                            ? ((Relation) right).alias()
+                            ? RelationUtil.getAlias(((Relation) right))
                             : null,
                         join.rightKey());
             }
@@ -785,7 +787,7 @@ public class RolapStar {
         final SqlQuery query = new SqlQuery(context.getDialect(), true);
         query.addFrom(
             factTable.relation,
-            factTable.relation.alias(),
+            RelationUtil.getAlias(factTable.relation),
             false);
         int k = -1;
         for (Column column : columnList) {
@@ -934,7 +936,7 @@ public class RolapStar {
             this.table = table;
             this.expression = expression;
             assert expression == null
-                || expression.genericExpression() != null;
+                || genericExpression(expression) != null;
             this.datatype = datatype;
             this.internalType = internalType;
             this.bitPosition = bitPosition;
@@ -1292,7 +1294,7 @@ public class RolapStar {
             this.alias = chooseAlias();
             this.parent = parent;
             final AliasReplacer aliasReplacer =
-                    new AliasReplacer(relation.alias(), this.alias);
+                    new AliasReplacer(RelationUtil.getAlias(relation), this.alias);
             this.joinCondition = aliasReplacer.visit(joinCondition);
             if (this.joinCondition != null) {
                 this.joinCondition.table = this;
@@ -1347,10 +1349,10 @@ public class RolapStar {
         public Column[] lookupColumns(String columnName) {
             List<Column> l = new ArrayList<Column>();
             for (Column column : getColumns()) {
-                if (column.getExpression() instanceof Column) {
-                    Column columnExpr =
-                        (Column) column.getExpression();
-                    if (columnExpr.name.equals(columnName)) {
+                if (column.getExpression() instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Column) {
+                    org.eclipse.daanse.olap.rolap.dbmapper.api.Column columnExpr =
+                        (org.eclipse.daanse.olap.rolap.dbmapper.api.Column) column.getExpression();
+                    if (columnExpr.name().equals(columnName)) {
                         l.add(column);
                     }
                 } else if (column.getExpression()
@@ -1368,14 +1370,14 @@ public class RolapStar {
 
         public Column lookupColumn(String columnName) {
             for (Column column : getColumns()) {
-                if (column.getExpression() instanceof Column) {
-                    Column columnExpr =
-                        (Column) column.getExpression();
-                    if (columnExpr.name.equals(columnName)) {
+                if (column.getExpression() instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Column) {
+                    org.eclipse.daanse.olap.rolap.dbmapper.api.Column columnExpr =
+                        (org.eclipse.daanse.olap.rolap.dbmapper.api.Column) column.getExpression();
+                    if (columnExpr.name().equals(columnName)) {
                         return column;
                     }
                 } else if (column.getExpression()
-                        instanceof ExpressionView)
+                        instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.ExpressionView)
                 {
                     ExpressionView columnExpr =
                         (ExpressionView) column.getExpression();
@@ -1441,7 +1443,7 @@ public class RolapStar {
         private String chooseAlias() {
             List<String> aliasList = star.getAliasList();
             for (int i = 0;; ++i) {
-                String candidateAlias = relation.alias();
+                String candidateAlias = RelationUtil.getAlias(relation);
                 if (i > 0) {
                     candidateAlias += "_" + i;
                 }
@@ -1460,7 +1462,7 @@ public class RolapStar {
          * been given an alias.
          */
         public String getTableName() {
-            if (relation instanceof Table) {
+            if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Table) {
                 org.eclipse.daanse.olap.rolap.dbmapper.api.Table t = (org.eclipse.daanse.olap.rolap.dbmapper.api.Table) relation;
                 return t.name();
             } else {
@@ -1645,7 +1647,7 @@ public class RolapStar {
                 String leftAlias = getLeftAlias(join);
                 if (leftAlias == null) {
                     // REVIEW: is cast to Relation valid?
-                    leftAlias = ((Relation) left(join)).alias();
+                    leftAlias = RelationUtil.getAlias(((Relation) left(join)));
                     if (leftAlias == null) {
                         throw Util.newError(
                             "missing leftKeyAlias in " + relationOrJoin);
@@ -1665,13 +1667,11 @@ public class RolapStar {
                             (Join) right(join);
                         // REVIEW: is cast to Relation valid?
                         rightAlias =
-                            ((Relation) left(joinright))
-                                .alias();
+                            RelationUtil.getAlias(((Relation) left(joinright)));
                     } else {
                         // REVIEW: is cast to Relation valid?
                         rightAlias =
-                            ((Relation) right(join))
-                                .alias();
+                            RelationUtil.getAlias(((Relation) right(join)));
                     }
                     if (rightAlias == null) {
                         throw Util.newError(
@@ -1701,12 +1701,12 @@ public class RolapStar {
             for (Table child : getChildren()) {
                 if (child.relation.equals(relation)) {
                     Condition condition = joinCondition;
-                    if (!Util.equalName(relation.alias(), child.alias)) {
+                    if (!Util.equalName(RelationUtil.getAlias(relation), child.alias)) {
                         // Make the two conditions comparable, by replacing
                         // occurrence of this table's alias with occurrences
                         // of the child's alias.
                         AliasReplacer aliasReplacer = new AliasReplacer(
-                            relation.alias(), child.alias);
+                            RelationUtil.getAlias(relation), child.alias);
                         condition = aliasReplacer.visit(joinCondition);
                     }
                     if (child.joinCondition.equals(condition)) {
@@ -1738,7 +1738,7 @@ public class RolapStar {
          */
         public Table findAncestor(String tableName) {
             for (Table t = this; t != null; t = t.parent) {
-                if (t.relation.alias().equals(tableName)) {
+                if (RelationUtil.getAlias(t.relation).equals(tableName)) {
                     return t;
                 }
             }
@@ -1746,7 +1746,7 @@ public class RolapStar {
         }
 
         public boolean equalsTableName(String tableName) {
-            if (this.relation instanceof Table) {
+            if (this.relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Table) {
                 org.eclipse.daanse.olap.rolap.dbmapper.api.Table mt = (org.eclipse.daanse.olap.rolap.dbmapper.api.Table) this.relation;
                 if (mt.name().equals(tableName)) {
                     return true;
@@ -1807,10 +1807,10 @@ public class RolapStar {
             for (Table child : getChildren()) {
                 Condition condition = child.joinCondition;
                 if (condition != null) {
-                    if (condition.left instanceof Column) {
-                        Column mcolumn =
-                            (Column) condition.left;
-                        if (mcolumn.name.equals(columnName)) {
+                    if (condition.left instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Column) {
+                        org.eclipse.daanse.olap.rolap.dbmapper.api.Column mcolumn =
+                            (org.eclipse.daanse.olap.rolap.dbmapper.api.Column) condition.left;
+                        if (mcolumn.name().equals(columnName)) {
                             return child;
                         }
                     }
@@ -1830,9 +1830,9 @@ public class RolapStar {
             for (Table child : getChildren()) {
                 Condition condition = child.joinCondition;
                 if (condition != null) {
-                    if (condition.left instanceof Column) {
-                        Column mcolumn =
-                            (Column) condition.left;
+                    if (condition.left instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Column) {
+                    	org.eclipse.daanse.olap.rolap.dbmapper.api.Column mcolumn =
+                            (org.eclipse.daanse.olap.rolap.dbmapper.api.Column) condition.left;
                         if (mcolumn.equals(left)) {
                             return child;
                         }
@@ -1909,7 +1909,7 @@ public class RolapStar {
         public boolean containsColumn(String columnName) {
             if (relation instanceof Relation) {
                 return star.containsColumn(
-                    ((Relation) relation).alias(),
+                    RelationUtil.getAlias(((Relation) relation)),
                     columnName);
             } else {
                 // todo: Deal with join.
@@ -1933,7 +1933,7 @@ public class RolapStar {
             assert left != null;
             assert right != null;
 
-            if (!(left instanceof Column)) {
+            if (!(left instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Column)) {
                 // TODO: Will this ever print?? if not then left should be
                 // of type Column.
                 LOGGER.debug(
@@ -1992,9 +1992,9 @@ public class RolapStar {
             pw.print(subprefix);
             pw.print("left=");
             // print the foreign key bit position if we can figure it out
-            if (left instanceof Column) {
-                Column c = (Column) left;
-                Column col = table.star.getFactTable().lookupColumn(c.name);
+            if (left instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Column) {
+                org.eclipse.daanse.olap.rolap.dbmapper.api.Column c = (org.eclipse.daanse.olap.rolap.dbmapper.api.Column) left;
+                Column col = table.star.getFactTable().lookupColumn(c.name());
                 if (col != null) {
                     pw.print(" (");
                     pw.print(col.getBitPosition());

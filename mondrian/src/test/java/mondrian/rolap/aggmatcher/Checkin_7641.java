@@ -84,7 +84,7 @@ public class Checkin_7641 extends CsvDBTestCase {
             "<Cube name='ImplicitMember'>\n"
             + "<Table name='checkin7641'/>\n"
             + "<Dimension name='Geography' foreignKey='cust_loc_id'>\n"
-            + "    <Hierarchy hasAll='true' allMemberName='All Regions' defaultMember='' primaryKey='cust_loc_id'>\n"
+            + "    <Hierarchy hasAll='true' allMemberName='All Regions' primaryKey='cust_loc_id'>\n"
             + "    <Table name='geography7641'/>\n"
             + "    <Level column='state_cd' name='State' type='String' uniqueMembers='true'/>\n"
             + "    <Level column='city_nm' name='City' type='String' uniqueMembers='true'/>\n"

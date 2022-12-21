@@ -1,10 +1,23 @@
-package mondrian.rolap;
+/*
+ * Copyright (c) 2022 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena, Stefan Bischof - initial
+ *
+ */
+package mondrian.rolap.util;
 
-import mondrian.olap.MondrianDef;
 import mondrian.olap.Util;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
 public class DimensionUtil {
+
     public static PrivateDimension getDimension(Schema schema, CubeDimension dimension) {
         if (dimension instanceof DimensionUsage) {
             Util.assertPrecondition(schema != null, "schema != null");
@@ -53,9 +66,9 @@ public class DimensionUtil {
     }
 
     private static PrivateDimension getDimension(Cube cube, Schema schema, String dimensionName) {
-        for (int i = 0; i < schema.dimension().size(); i++) {
-            if (schema.dimension().get(i).name().equals(dimensionName)) {
-                return getDimension(schema, schema.dimension().get(i));
+        for (int i = 0; i < cube.dimensionUsageOrDimension().size(); i++) {
+            if (cube.dimensionUsageOrDimension().get(i).name().equals(dimensionName)) {
+                return getDimension(schema, cube.dimensionUsageOrDimension().get(i));
             }
         }
         throw Util.newInternal(

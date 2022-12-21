@@ -29,6 +29,7 @@ import mondrian.rolap.aggmatcher.ExplicitRules;
 import mondrian.rolap.cache.SoftSmartCache;
 import mondrian.rolap.format.FormatterCreateContext;
 import mondrian.rolap.format.FormatterFactory;
+import mondrian.rolap.util.DimensionUtil;
 import mondrian.rolap.util.NamedSetUtil;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
@@ -57,8 +58,10 @@ import org.slf4j.LoggerFactory;
 import java.io.StringReader;
 import java.util.*;
 
+import static mondrian.rolap.util.CalculatedMemberUtil.getFormatString;
 import static mondrian.rolap.util.CalculatedMemberUtil.getFormula;
 import static mondrian.rolap.util.JoinUtil.*;
+import static mondrian.rolap.util.RelationUtil.getAlias;
 
 /**
  * <code>RolapCube</code> implements {@link Cube} for a ROLAP database.
@@ -289,7 +292,7 @@ public class RolapCube extends CubeBase {
                 "Must specify fact table of cube '" + getName() + "'");
         }
 
-        if (fact.alias() == null) {
+        if (getAlias(fact) == null) {
             throw Util.newError(
                 "Must specify alias for fact table of cube '" + getName()
                 + "'");
@@ -542,7 +545,7 @@ public class RolapCube extends CubeBase {
                     xmlCube.name(), xmlMeasure.name());
             }
             measureExp = new ColumnR(
-                fact.alias(), xmlMeasure.column());
+                getAlias(fact), xmlMeasure.column());
         } else if (xmlMeasure.measureExpression() != null) {
             measureExp = xmlMeasure.measureExpression();
         } else if (xmlMeasure.aggregator().equals("count")) {
@@ -1287,11 +1290,11 @@ public class RolapCube extends CubeBase {
                 Property.DESCRIPTION.name, xmlCalcMember.description());
         }
 
-        if (xmlCalcMember.formatString() != null
-            && xmlCalcMember.formatString().length() > 0)
+        if (getFormatString(xmlCalcMember) != null
+            && getFormatString(xmlCalcMember).length() > 0)
         {
             member.setProperty(
-                Property.FORMAT_STRING.name, xmlCalcMember.formatString());
+                Property.FORMAT_STRING.name, getFormatString(xmlCalcMember));
         }
 
         final RolapMember member1 = RolapUtil.strip(member);
@@ -1496,12 +1499,12 @@ public class RolapCube extends CubeBase {
         CalculatedMember xmlCalcMember,
         StringBuilder buf)
     {
-        if (xmlCalcMember.formatString() != null) {
+        if (getFormatString(xmlCalcMember) != null) {
             buf.append(",")
                 .append(Util.nl)
                 .append(Property.FORMAT_STRING.name)
                 .append(" = ")
-                .append(Util.quoteForMdx(xmlCalcMember.formatString()));
+                .append(Util.quoteForMdx(getFormatString(xmlCalcMember)));
         }
     }
 
@@ -2075,12 +2078,10 @@ public class RolapCube extends CubeBase {
                             .primaryKeyTable() != null
                             && relation instanceof Join
                             && right(((Join) relation)) instanceof Table
-                            && ((Table)
-                            right(((Join) relation)))
-                            .alias() != null
-                            && ((Table)
-                            right(((Join) relation)))
-                            .alias()
+                            && getAlias(((Table)
+                            right(((Join) relation)))) != null
+                            && getAlias(((Table)
+                            right(((Join) relation))))
                             .equals(
                                 hierarchy.getXmlHierarchy()
                               .primaryKeyTable()))
@@ -2297,7 +2298,7 @@ public class RolapCube extends CubeBase {
                     return relNode;
                 }
             }
-            return map.get(table.alias());
+            return map.get(getAlias(table));
         }
 
         private int depth;

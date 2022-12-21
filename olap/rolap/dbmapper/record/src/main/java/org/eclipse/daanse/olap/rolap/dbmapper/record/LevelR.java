@@ -50,8 +50,4 @@ public record LevelR(String name,
                      )
         implements Level {
 
-    @Override
-    public Expression getPropertyExp(int i) {
-        return new ColumnR(table, property.get(i).column());
-    }
 }

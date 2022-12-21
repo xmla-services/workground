@@ -19,14 +19,6 @@ public interface Hierarchy {
 
     List<? extends Annotation> annotations();
 
-    Table table();
-
-    View view();
-
-    Join join();
-
-    InlineTable inlineTable();
-
     List<? extends Level> level();
 
     List<? extends MemberReaderParameter> memberReaderParameter();

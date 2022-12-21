@@ -26,6 +26,8 @@ import mondrian.rolap.StarColumnPredicate;
 import mondrian.rolap.StarPredicate;
 import mondrian.spi.SegmentHeader;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+
 /**
  * A <code>Segment</code> is a collection of cell values parameterized by a measure, and a set of (column, value) pairs.
  * An example of a segment is
@@ -185,7 +187,7 @@ public class Segment {
 
     for ( int i = 0; i < columns.length; i++ ) {
       buf.append( sep );
-      buf.append( columns[i].getExpression().genericExpression() );
+      buf.append( genericExpression(columns[i].getExpression()) );
       describeAxes( buf, i, values );
     }
     if ( !excludedRegions.isEmpty() ) {
@@ -215,7 +217,7 @@ public class Segment {
     buf.append( sep );
     buf.append( "measure=" );
     buf.append( measure.getExpression() == null ? measure.getAggregator().getExpression( "*" ) : measure
-        .getAggregator().getExpression( measure.getExpression().genericExpression() ) );
+        .getAggregator().getExpression( genericExpression(measure.getExpression())) );
     return buf.toString();
   }
 

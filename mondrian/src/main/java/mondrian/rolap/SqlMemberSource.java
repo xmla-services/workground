@@ -37,7 +37,6 @@ import mondrian.calc.TupleList;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
 import mondrian.olap.Id;
-import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Property;
 import mondrian.olap.Util;
@@ -57,7 +56,7 @@ import mondrian.util.CreationException;
 import mondrian.util.ObjectFactory;
 import mondrian.util.Pair;
 
-import static mondrian.rolap.ExpressionUtil.getExpression;
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
 
 /**
  * A <code>SqlMemberSource</code> reads members from a SQL database.

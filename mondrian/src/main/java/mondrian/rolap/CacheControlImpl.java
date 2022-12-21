@@ -47,6 +47,8 @@ import mondrian.server.Locus;
 import mondrian.spi.SegmentColumn;
 import mondrian.util.ArraySortedSet;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+
 /**
  * Implementation of {@link CacheControl} API.
  *
@@ -504,8 +506,7 @@ public class CacheControlImpl implements CacheControl {
                                 break;
                             }
                             final String ccName =
-                                ((RolapLevel) member.getLevel()).getKeyExp()
-                                    .genericExpression();
+                                genericExpression(((RolapLevel) member.getLevel()).getKeyExp());
                             if (!levels.containsKey(ccName)) {
                                 levels.put(
                                     ccName, new HashSet<Comparable>());
@@ -548,7 +549,7 @@ public class CacheControlImpl implements CacheControl {
                     // into an actual list of values for ConstrainedColumn
                     list.add(
                         new SegmentColumn(
-                            region.level.getKeyExp().genericExpression(),
+                            genericExpression(region.level.getKeyExp()),
                             -1,
                             null));
                 }

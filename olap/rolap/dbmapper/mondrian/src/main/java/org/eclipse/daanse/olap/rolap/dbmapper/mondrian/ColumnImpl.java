@@ -16,6 +16,8 @@ package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Column;
 
+import java.util.Objects;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 public class ColumnImpl implements Column {
@@ -24,6 +26,7 @@ public class ColumnImpl implements Column {
     protected String table;
     @XmlAttribute(name = "name", required = true)
     protected String name;
+    private String genericExpression;
 
     public ColumnImpl() {
     }
@@ -31,11 +34,7 @@ public class ColumnImpl implements Column {
     public ColumnImpl(String table, String name) {
         this.table = table;
         this.name = name;
-    }
-
-    @Override
-    public String genericExpression() {
-        return table == null ? name : (table + "." + name);
+        this.genericExpression = table == null ? name : (table + "." + name);
     }
 
     @Override
@@ -56,8 +55,21 @@ public class ColumnImpl implements Column {
         this.name = name;
     }
 
+    public int hashCode() {
+        return name().hashCode() ^ (table()==null ? 0 : table().hashCode());
+    }
+
+    public boolean equals(Object obj) {
+            if (!(obj instanceof Column)) {
+                return false;
+            }
+            Column that = (Column) obj;
+            return name().equals(that.name()) &&
+                Objects.equals(table(), that.table());
+    }
+
     @Override
-    public String tableAlias() {
-        return table;
+    public String genericExpression() {
+        return genericExpression;
     }
 }

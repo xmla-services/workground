@@ -17,6 +17,7 @@ import mondrian.rolap.sql.SqlQuery;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.SQL;
 
 import java.util.List;
+import java.util.Objects;
 
 public class SQLUtil {
     /**
@@ -29,5 +30,18 @@ public class SQLUtil {
             codeSet.put(sql.dialect(), sql.content());
         }
         return codeSet;
+    }
+
+    public static int hashCode(SQL sql) {
+        return sql.dialect().hashCode();
+    }
+
+    public boolean equals(SQL sql, Object obj) {
+        if (!(obj instanceof SQL)) {
+            return false;
+        }
+        SQL that = (SQL) obj;
+        return sql.dialect().equals(that.dialect()) &&
+            Objects.equals(sql.content(), that.content());
     }
 }

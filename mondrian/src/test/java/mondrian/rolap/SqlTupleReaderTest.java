@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Column;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
@@ -48,7 +49,7 @@ public class SqlTupleReaderTest {
     SqlQuery sqlQuery = mock( SqlQuery.class, Answers.RETURNS_MOCKS );
     RolapCube baseCube = mock( RolapCube.class );
     RolapLevel targetLevel = mock( RolapLevel.class );
-    Expression expression =  mock(Expression.class);
+    Expression expression =  mock(Column.class);
     RolapCubeLevel levelIter = mock( RolapCubeLevel.class, Answers.RETURNS_MOCKS );
     RolapProperty rolapProperty = mock( TestPublicRolapProperty.class, Answers.RETURNS_MOCKS );
     String propertyName = "property_1";
@@ -57,8 +58,8 @@ public class SqlTupleReaderTest {
     when(rolapProperty.getExp()).thenReturn(expression);
     RolapProperty[] properties = { rolapProperty };
     when( levelIter.getProperties() ).thenReturn( properties );
-    when( levelIter.getKeyExp() ).thenReturn( mock( Expression.class ) );
-    when( levelIter.getOrdinalExp() ).thenReturn( mock( Expression.class ) );
+    when( levelIter.getKeyExp() ).thenReturn( mock( Column.class ) );
+    when( levelIter.getOrdinalExp() ).thenReturn( mock( Column.class ) );
     when( levelIter.getParentExp() ).thenReturn( null );
     RolapHierarchy hierarchy = mock( RolapHierarchy.class, Answers.RETURNS_MOCKS );
     when( targetLevel.getHierarchy() ).thenReturn( hierarchy );
@@ -80,14 +81,14 @@ public class SqlTupleReaderTest {
         new Object[] { aggStar, dbTable }, AggStar.FactTable.class.getClassLoader() );
     factTable = spy( factTable );
     Map<String, Expression> propertiesAgg = new HashMap<>();
-    propertiesAgg.put( propertyName, mock( Expression.class ) );
+    propertiesAgg.put( propertyName, mock( Column.class ) );
     Class[] constructorArgsClasses =
       { mondrian.rolap.aggmatcher.AggStar.Table.class, String.class, Expression.class, int.class,
         RolapStar.Column.class, boolean.class,
         Expression.class, Expression.class, Map.class };
     Object[] constructorArgs =
-      { factTable, "name", mock( Expression.class ), 0, starColumn, true,
-        mock( Expression.class ), null,
+      { factTable, "name", mock( Column.class ), 0, starColumn, true,
+        mock( Column.class ), null,
         propertiesAgg };
     AggStar.Table.Level aggStarLevel =
       (AggStar.Table.Level) createInstance( "mondrian.rolap.aggmatcher.AggStar$Table$Level", constructorArgsClasses,

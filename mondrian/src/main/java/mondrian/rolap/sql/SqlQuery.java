@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mondrian.rolap.util.RelationUtil;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
@@ -30,6 +31,7 @@ import mondrian.rolap.RolapUtil;
 import mondrian.util.Pair;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
+import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
 import static mondrian.rolap.util.JoinUtil.getLeftAlias;
 import static mondrian.rolap.util.JoinUtil.getRightAlias;
 import static mondrian.rolap.util.JoinUtil.left;
@@ -373,7 +375,7 @@ public class SqlQuery {
             final View view = (View) relation;
             final String viewAlias =
                 (alias == null)
-                ? view.alias()
+                ? RelationUtil.getAlias(view)
                 : alias;
             final String sqlString = getCodeSet(view).chooseQuery(dialect);
             return addFromQuery(sqlString, viewAlias, false);
@@ -388,7 +390,7 @@ public class SqlQuery {
             final Table table = (Table) relation;
             final String tableAlias =
                 (alias == null)
-                ? table.alias()
+                ? RelationUtil.getAlias(table)
                 : alias;
             return addFromTable(
                 table.schema(),
@@ -462,12 +464,12 @@ public class SqlQuery {
                     relInfo.relation,
                     relInfo.leftAlias != null
                         ? relInfo.leftAlias
-                        : relInfo.relation.alias(),
+                        : RelationUtil.getAlias(relInfo.relation),
                     relInfo.leftKey,
                     relations.get(i + 1).relation,
                     relInfo.rightAlias != null
                         ? relInfo.rightAlias
-                        : relations.get(i + 1).relation.alias(),
+                        : RelationUtil.getAlias(relations.get(i + 1).relation),
                     relInfo.rightKey,
                     false);
         }
@@ -573,8 +575,8 @@ public class SqlQuery {
     }
 
     public void addWhere(RolapStar.Condition joinCondition) {
-        String left = joinCondition.getLeft().tableAlias();
-        String right = joinCondition.getRight().tableAlias();
+        String left = getTableAlias(joinCondition.getLeft());
+        String right = getTableAlias(joinCondition.getRight());
         if (fromAliases.contains(left) && fromAliases.contains(right)) {
             addWhere(
                 joinCondition.getLeft(this),

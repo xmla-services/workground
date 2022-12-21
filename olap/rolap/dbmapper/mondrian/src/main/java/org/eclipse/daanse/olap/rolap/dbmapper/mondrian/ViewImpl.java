@@ -15,11 +15,11 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
 import jakarta.xml.bind.annotation.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.View;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "View", propOrder = { "sql" })
@@ -58,4 +58,29 @@ public class ViewImpl implements View {
         this.alias = value;
     }
 
+    public boolean equals(Object o) {
+        if (o instanceof View) {
+            View that = (View) o;
+            if (!Objects.equals(alias(), that.alias())) {
+                return false;
+            }
+            if (sqls() == null || that.sqls() == null || sqls().size() != that.sqls().size()) {
+                return false;
+            }
+            for (int i = 0; i < sqls().size(); i++) {
+                if (!Objects.equals(sqls().get(i).dialect(), that.sqls().get(i).dialect())
+                    || !Objects.equals(sqls().get(i).content(), that.sqls().get(i).content()))
+                {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String toString() {
+        return sql.get(0).content;
+    }
 }

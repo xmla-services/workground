@@ -56,6 +56,8 @@ import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentHeader;
 import mondrian.util.Pair;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+
 /**
  * A <code>FastBatchingCellReader</code> doesn't really Read cells: when asked
  * to look up the values of stored measures, it lies, and records the fact
@@ -330,7 +332,7 @@ public class FastBatchingCellReader implements CellReader {
                 final Set<String> keepColumns = new HashSet<String>();
                 for (RolapStar.Column column : rollup.constrainedColumns) {
                     keepColumns.add(
-                        column.getExpression().genericExpression());
+                        genericExpression(column.getExpression()));
                 }
                 Pair<SegmentHeader, SegmentBody> rollupHeaderBody =
                     SegmentBuilder.rollup(
@@ -1363,13 +1365,13 @@ class BatchLoader {
                     break;
                 }
                 final String expr =
-                    distinctMeasure.getExpression().genericExpression();
+                    genericExpression(distinctMeasure.getExpression());
                 final List<RolapStar.Measure> distinctMeasuresList =
                     new ArrayList<RolapStar.Measure>();
                 for (int i = 0; i < measuresList.size();) {
                     final RolapStar.Measure measure = measuresList.get(i);
                     if (measure.getAggregator().isDistinct()
-                        && measure.getExpression().genericExpression()
+                        && genericExpression(measure.getExpression())
                         .equals(expr))
                     {
                         measuresList.remove(i);

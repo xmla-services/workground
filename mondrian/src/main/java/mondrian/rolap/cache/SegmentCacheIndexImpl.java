@@ -263,7 +263,9 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
             + newHeader.toString());
         final HeaderInfo headerInfo = headerMap.get(oldHeader);
         headerMap.remove(oldHeader);
-        headerMap.put(newHeader, headerInfo);
+        if(headerInfo != null) {
+            headerMap.put(newHeader, headerInfo);
+        }
 
         final List oldBitkeyKey = makeBitkeyKey(oldHeader);
         List<SegmentHeader> headerList = bitkeyMap.get(oldBitkeyKey);
@@ -454,7 +456,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         }
         for (SegmentHeader header : factInfo.headerList) {
             // Don't return stale segments.
-            if (headerMap.get(header).removeAfterLoad) {
+            if (headerMap.get(header) != null && headerMap.get(header).removeAfterLoad) {
                 continue;
             }
             if (intersects(header, region)) {

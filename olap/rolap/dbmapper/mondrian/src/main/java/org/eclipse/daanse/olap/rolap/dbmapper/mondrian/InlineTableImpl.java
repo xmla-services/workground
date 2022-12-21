@@ -14,10 +14,12 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.InlineTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InlineTable", propOrder = { "columnDefs", "rows" })
@@ -56,5 +58,22 @@ public class InlineTableImpl implements InlineTable {
     }
     public void setAlias(String alias) {
         this.alias = alias;
+    }
+
+    public boolean equals(Object o) {
+        if (o instanceof InlineTable) {
+            InlineTable that = (InlineTable) o;
+            return alias().equals(that.alias());
+        } else {
+            return false;
+        }
+    }
+
+    public String toString() {
+        return "<inline data>";
+    }
+
+    public int hashCode() {
+        return toString().hashCode();
     }
 }

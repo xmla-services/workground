@@ -14,6 +14,7 @@ package mondrian.rolap;
 
 import java.util.Map;
 
+import mondrian.rolap.util.DimensionTypeUtil;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -25,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import mondrian.olap.DimensionBase;
 import mondrian.olap.DimensionType;
-import mondrian.olap.MondrianDef;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 
@@ -110,7 +110,7 @@ class RolapDimension extends DimensionBase {
             xmlDimension.caption(),
             xmlDimension.visible(),
             xmlDimension.description(),
-            xmlDimension.type() == null ? null : DimensionType.valueOf(xmlDimension.type()),
+            DimensionTypeUtil.getDimensionType(xmlDimension),
             xmlDimension.highCardinality(),
             RolapHierarchy.createMetadataMap(xmlDimension.annotations()));
 

@@ -19,12 +19,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import mondrian.rolap.util.RelationUtil;
 import org.eclipse.daanse.olap.api.access.Access;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 
 import mondrian.olap.Formula;
-import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.olap.fun.VisualTotalsFunDef;
@@ -160,7 +160,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                     rolapHierarchy.getRelation(),
                     usage.getForeignKey(),
                     ((Column)usage.getJoinExp()).name(),
-                    usage.getJoinTable().alias());
+                    RelationUtil.getAlias(usage.getJoinTable()));
         } else {
             currentRelation = rolapHierarchy.getRelation();
         }
@@ -310,8 +310,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             && newrel instanceof Relation)
         {
             aliases.put(
-                ((Relation) oldrel).alias(),
-                ((Relation) newrel).alias());
+                RelationUtil.getAlias(((Relation) oldrel)),
+                RelationUtil.getAlias(((Relation) newrel)));
         } else if (oldrel instanceof Join
             && newrel instanceof Join)
         {

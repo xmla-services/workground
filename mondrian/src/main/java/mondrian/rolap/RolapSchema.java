@@ -40,6 +40,8 @@ import org.eclipse.daanse.olap.api.model.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Script;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.DimensionUsageImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.PrivateDimensionImpl;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;
@@ -390,11 +392,9 @@ public class RolapSchema implements Schema {
             // throw error if we have an incompatible schema
             checkSchemaVersion(def);
             //TODO remove def
-            try (InputStream in = Util.readVirtualFile(catalogUrl)){
-                JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.mondrian.SchemaImpl.class);
-                Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                xmlSchema = (org.eclipse.daanse.olap.rolap.dbmapper.api.Schema) jaxbUnmarshaller.unmarshal(in);
-            }
+            JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.mondrian.SchemaImpl.class);
+            Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+            xmlSchema = (org.eclipse.daanse.olap.rolap.dbmapper.api.Schema) jaxbUnmarshaller.unmarshal(new StringReader(catalogStr));
 
             if (getLogger().isDebugEnabled()) {
                 StringWriter sw = new StringWriter(4096);
@@ -889,11 +889,11 @@ public class RolapSchema implements Schema {
             final DOMWrapper def = xmlParser.parse(xml);
             final String tagName = def.getTagName();
             if (tagName.equals("Dimension")) {
-                JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.mondrian.PrivateDimensionImpl.class);
+                JAXBContext jaxbContext = JAXBContext.newInstance(PrivateDimensionImpl.class);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                 xmlDimension = (org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension) jaxbUnmarshaller.unmarshal(new StringReader(xml));
             } else if (tagName.equals("DimensionUsage")) {
-                JAXBContext jaxbContext = JAXBContext.newInstance(org.eclipse.daanse.olap.rolap.dbmapper.api.DimensionUsage.class);
+                JAXBContext jaxbContext = JAXBContext.newInstance(DimensionUsageImpl.class);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
                 xmlDimension = (org.eclipse.daanse.olap.rolap.dbmapper.api.DimensionUsage) jaxbUnmarshaller.unmarshal(new StringReader(xml));
             } else {
