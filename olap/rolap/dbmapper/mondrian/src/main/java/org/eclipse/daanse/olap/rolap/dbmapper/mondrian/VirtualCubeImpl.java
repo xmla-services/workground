@@ -54,7 +54,7 @@ public class VirtualCubeImpl implements VirtualCube {
     protected String caption;
     @XmlAttribute(name = "description")
     protected String description;
-    @XmlAttribute(name = "enabled")
+    @XmlAttribute(name = "visible")
     protected Boolean visible = true;
 
     @Override

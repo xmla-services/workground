@@ -366,7 +366,6 @@ public class ReadTest {
     private static final Map<String, Object> steelWheelDimension0 = new HashMap<>();
 
     static {
-        steelWheelDimension0.put(TYPE, "Standard");
         steelWheelDimension0.put(FOREIGN_KEY, "CUSTOMERNUMBER");
         steelWheelDimension0.put(NAME, "Markets");
         steelWheelDimension0.put(HIERARCHY, steelWheelHierarchyList0);
@@ -376,7 +375,6 @@ public class ReadTest {
     private static final Map<String, Object> steelWheelDimension1 = new HashMap<>();
 
     static {
-        steelWheelDimension1.put(TYPE, "Standard");
         steelWheelDimension1.put(FOREIGN_KEY, "CUSTOMERNUMBER");
         steelWheelDimension1.put(NAME, "Customers");
         steelWheelDimension1.put(HIERARCHY, steelWheelHierarchyList1);
@@ -386,7 +384,6 @@ public class ReadTest {
     private static final Map<String, Object> steelWheelDimension2 = new HashMap<>();
 
     static {
-        steelWheelDimension2.put(TYPE, "Standard");
         steelWheelDimension2.put(FOREIGN_KEY, "PRODUCTCODE");
         steelWheelDimension2.put(NAME, "Product");
         steelWheelDimension2.put(HIERARCHY, steelWheelHierarchyList2);
@@ -406,7 +403,6 @@ public class ReadTest {
     private static final Map<String, Object> steelWheelDimension4 = new HashMap<>();
 
     static {
-        steelWheelDimension4.put(TYPE, "Standard");
         steelWheelDimension4.put(FOREIGN_KEY, "STATUS");
         steelWheelDimension4.put(NAME, "Order Status");
         steelWheelDimension4.put(HIERARCHY, steelWheelHierarchyList4);
@@ -1478,22 +1474,12 @@ public class ReadTest {
         assertNull(cube.description());
         assertNotNull(cube.drillThroughAction());
         assertNotNull(cube.namedSet());
-        assertNull(cube.view());
+        //assertNull(cube.view());
         assertNotNull(cube.writebackTable());
         assertTrue(cube.cache());
         assertTrue(cube.enabled());
         assertNotNull(cube.measure());
         checkMeasure(cube, steelWheelMeasureList);
-
-        //Table table = cube.table();
-        //assertThat(table).isNotNull();
-        //assertEquals("orderfact", table.name());
-        //assertNotNull(table.aggExclude());
-        //assertNotNull(table.aggTable());
-        //assertNull(table.alias());
-        //assertNotNull(table.hint());
-        //assertNull(table.schema());
-        //assertNull(table.sql());
 
         List<? extends Object> dimensions = cube.dimensionUsageOrDimension();
         assertThat(dimensions).isNotNull();
@@ -1647,7 +1633,7 @@ public class ReadTest {
     private void checkVirtualCubeCalculatedMemberItem(CalculatedMember calculatedMember, Map<String, Object> map) {
         assertNull(calculatedMember.annotations());
         //TODO formula
-        assertNotNull(calculatedMember.formula());
+        assertNull(calculatedMember.formula());
         assertNotNull(calculatedMember.calculatedMemberProperty());
         assertEquals(calculatedMember.name(), get(NAME, map));
         assertNull(calculatedMember.formatString());
@@ -1716,7 +1702,7 @@ public class ReadTest {
         assertNotNull(sharedDimension.annotations());
         checkHierarchy(sharedDimension.hierarchy(), (List) map.get(HIERARCHY));
         assertEquals(sharedDimension.name(), get(NAME, map));
-        assertEquals(sharedDimension.type(), get(TYPE, map) == null ? "Standard" : get(TYPE, map));
+        assertEquals(sharedDimension.type(), get(TYPE, map));
         assertEquals(sharedDimension.caption(), get(CAPTION, map));
         assertEquals(sharedDimension.description(), get("description", map));
     }
@@ -1739,22 +1725,12 @@ public class ReadTest {
         assertNull(cube.description());
         assertNotNull(cube.drillThroughAction());
         assertNotNull(cube.namedSet());
-        assertNull(cube.view());
+        //assertNull(cube.view());
         assertNotNull(cube.writebackTable());
         assertTrue(cube.cache());
         assertTrue(cube.enabled());
         assertNotNull(cube.measure());
         checkMeasure(cube, (List<Map<String, Object>>) map.get(MEASURE));
-
-        //Table table = cube.table();
-        //assertThat(table).isNotNull();
-        //assertEquals(map.get(TABLE), table.name());
-        //assertNotNull(table.aggExclude());
-        //assertNotNull(table.aggTable());
-        //assertNull(table.alias());
-        //assertNotNull(table.hint());
-        //assertNull(table.schema());
-        //assertNull(table.sql());
 
         List<? extends Object> dimensions = cube.dimensionUsageOrDimension();
         assertThat(dimensions).isNotNull();
@@ -1784,7 +1760,7 @@ public class ReadTest {
             PrivateDimension dimension = (PrivateDimension) object;
             assertEquals(map.get(NAME), dimension.name());
             assertEquals(map.get(FOREIGN_KEY), dimension.foreignKey());
-            assertEquals(get(TYPE, map) == null ? "Standard" : get(TYPE, map), dimension.type());
+            assertEquals(get(TYPE, map) == null ? null : get(TYPE, map), dimension.type());
             assertNotNull(dimension.annotations());
             assertNull(dimension.caption());
             assertNull(dimension.description());
@@ -1813,10 +1789,6 @@ public class ReadTest {
 
     private void checkHierarchyItem(Hierarchy hierarchy, Map<String, Object> map) {
         assertNull(hierarchy.annotations());
-        assertEquals(get(TABLE, map), hierarchy.table() == null ? null : hierarchy.table().name());
-        assertNull(hierarchy.view());
-        checkHierarchyJoin(hierarchy.join(), get(JOIN, map));
-        assertNull(hierarchy.inlineTable());
         assertNotNull(hierarchy.level());
         checkLevel(hierarchy.level(), (List) map.get(LEVEL));
         assertNotNull(hierarchy.memberReaderParameter());
@@ -1885,7 +1857,7 @@ public class ReadTest {
         assertNull(level.parentExpression());
         checkClosure(level.closure(), get(CLOSURE, map));
         assertNotNull(level.property());
-        assertEquals(get(APPROX_ROW_COUNT, map) == null ? null : new BigInteger((String) get(APPROX_ROW_COUNT, map)),
+        assertEquals(get(APPROX_ROW_COUNT, map) == null ? null : ((String) get(APPROX_ROW_COUNT, map)),
             level.approxRowCount());
         assertEquals(map.get(NAME), level.name());
         assertEquals(map.get(TABLE), level.table());
@@ -1894,7 +1866,7 @@ public class ReadTest {
         assertEquals(map.get(ORDINAL_COLUMN), level.ordinalColumn());
         assertEquals(level.parentColumn(), get(PARENT_COLUMN, map));
         assertEquals(level.nullParentValue(), get(NULL_PARENT_VALUE, map));
-        assertEquals(map.get(TYPE), level.type());
+        assertEquals(map.get(TYPE) == null ? "String" : map.get(TYPE) , level.type());
         assertEquals(Boolean.valueOf((String) map.get(UNIQUE_MEMBERS)), level.uniqueMembers());
         assertEquals(get(LEVEL_TYPE, map) == null ? "Regular" : get(LEVEL_TYPE, map), level.levelType());
         assertEquals(get(HIDE_MEMBER_IF, map) == null ? "Never" : get(HIDE_MEMBER_IF, map), level.hideMemberIf());

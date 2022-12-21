@@ -22,6 +22,8 @@ import mondrian.rolap.StarColumnPredicate;
 import mondrian.rolap.StarPredicate;
 import mondrian.rolap.sql.SqlQuery;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+
 /**
  * A <code>AbstractColumnPredicate</code> is an abstract implementation for
  * {@link mondrian.rolap.StarColumnPredicate}.
@@ -41,7 +43,7 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
 
     public String toString() {
         final StringBuilder buf = new StringBuilder();
-        buf.append(constrainedColumn.getExpression().genericExpression());
+        buf.append(genericExpression(constrainedColumn.getExpression()));
         describe(buf);
         return buf.toString();
     }

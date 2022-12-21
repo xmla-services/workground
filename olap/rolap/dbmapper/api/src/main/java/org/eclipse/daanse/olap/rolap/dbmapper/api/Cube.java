@@ -19,10 +19,6 @@ public interface Cube {
 
     List<? extends Annotation> annotations();
 
-    //Table table();
-
-    View view();
-
     List<? extends CubeDimension> dimensionUsageOrDimension();
 
     List<? extends Measure> measure();

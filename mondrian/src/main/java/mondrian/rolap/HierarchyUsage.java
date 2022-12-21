@@ -22,12 +22,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 
-import static mondrian.rolap.util.RlationUtil.find;
+import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
+import static mondrian.rolap.util.RelationUtil.find;
+import static mondrian.rolap.util.RelationUtil.getAlias;
 
 /**
  * A <code>HierarchyUsage</code> is the usage of a hierarchy in the context
@@ -367,7 +368,7 @@ public class HierarchyUsage {
                         cubeDim.level());
             }
             this.joinTable =
-                findJoinTable(hierarchy, joinLevel.getKeyExp().tableAlias());
+                findJoinTable(hierarchy, getTableAlias(joinLevel.getKeyExp()));
             this.joinExp = joinLevel.getKeyExp();
         } else if (hierarchy.getXmlHierarchy() != null
             && hierarchy.getXmlHierarchy().primaryKey() != null)
@@ -381,7 +382,7 @@ public class HierarchyUsage {
                     hierarchy.getXmlHierarchy().primaryKeyTable());
             this.joinExp =
                 new ColumnR(
-                    this.joinTable.alias(),
+                    getAlias(this.joinTable),
                     hierarchy.getXmlHierarchy().primaryKey());
         } else {
             // 3. If neither of the above, the join is assumed to be to key of
@@ -391,7 +392,7 @@ public class HierarchyUsage {
             this.joinTable =
                 findJoinTable(
                     hierarchy,
-                    joinLevel.getKeyExp().tableAlias());
+                    getTableAlias(joinLevel.getKeyExp()));
             this.joinExp = joinLevel.getKeyExp();
         }
 

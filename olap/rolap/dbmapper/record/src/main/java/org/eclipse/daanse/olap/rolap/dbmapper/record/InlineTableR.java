@@ -33,4 +33,20 @@ public record InlineTableR(List<ColumnDef> columnDefs,
         this(new ArrayList<>(inlineTable.columnDefs()), new ArrayList<>(inlineTable.rows()), alias);
     }
 
+    public boolean equals(Object o) {
+        if (o instanceof InlineTable) {
+            InlineTable that = (InlineTable) o;
+            return alias().equals(that.alias());
+        } else {
+            return false;
+        }
+    }
+
+    public String toString() {
+        return "<inline data>";
+    }
+
+    public int hashCode() {
+        return toString().hashCode();
+    }
 }

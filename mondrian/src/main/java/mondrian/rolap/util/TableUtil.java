@@ -28,6 +28,9 @@ public class TableUtil {
             }
         }
         return h;
+    }
 
+    public static String getFilter(Table table) {
+        return (table.sql() == null) ? null : table.sql().content();
     }
 }

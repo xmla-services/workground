@@ -22,6 +22,7 @@ import mondrian.rolap.RolapAggregator.BaseAggor;
 import mondrian.rolap.aggmatcher.JdbcSchema.Table.Column.Usage;
 import mondrian.rolap.aggmatcher.JdbcSchema.UsageType;
 import mondrian.rolap.sql.SqlQuery;
+import mondrian.rolap.util.ExpressionUtil;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
@@ -40,7 +41,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
-import static mondrian.rolap.ExpressionUtil.getExpression;
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
+import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
 
 /**
  * Aggregate table version of a RolapStar for a fact table.
@@ -136,12 +138,12 @@ public class AggStar {
         //    which it is OK to roll up
         for (FactTable.Measure measure : aggStarFactTable.measures) {
             if (measure.aggregator.isDistinct()
-                && measure.argument instanceof Column)
+                && measure.argument instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Column)
             {
                 setLevelBits(
                     measure.rollableLevelBitKey,
                     aggStarFactTable,
-                    (Column) measure.argument,
+                    (org.eclipse.daanse.olap.rolap.dbmapper.api.Column) measure.argument,
                     star.getFactTable());
             }
         }
@@ -167,7 +169,7 @@ public class AggStar {
     private static void setLevelBits(
         final BitKey bitKey,
         Table aggTable,
-        Column column,
+        org.eclipse.daanse.olap.rolap.dbmapper.api.Column column,
         RolapStar.Table table)
     {
         final Set<RolapStar.Column> columns = new HashSet<RolapStar.Column>();
@@ -186,7 +188,7 @@ public class AggStar {
     private static void collectLevels(
         List<Table.Level> levelList,
         Table table,
-        Column joinColumn)
+        org.eclipse.daanse.olap.rolap.dbmapper.api.Column joinColumn)
     {
         if (joinColumn == null) {
             levelList.addAll(table.levels);
@@ -494,7 +496,7 @@ public class AggStar {
                 final Expression left,
                 final Expression right)
             {
-                if (!(left instanceof Column)) {
+                if (!(left instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Column)) {
                     JOIN_CONDITION_LOGGER.debug(
                         "JoinCondition.left NOT Column: "
                         + left.getClass().getName());
@@ -560,11 +562,11 @@ public class AggStar {
 
                 pw.print(subprefix);
                 pw.print("left=");
-                if (left instanceof Column) {
-                    Column c = (Column) left;
+                if (left instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Column) {
+                    org.eclipse.daanse.olap.rolap.dbmapper.api.Column c = (org.eclipse.daanse.olap.rolap.dbmapper.api.Column) left;
                     mondrian.rolap.RolapStar.Column col =
                         getTable().getAggStar().getStar().getFactTable()
-                        .lookupColumn(c.name);
+                        .lookupColumn(c.name());
                     if (col != null) {
                         pw.print(" (");
                         pw.print(col.getBitPosition());
@@ -667,12 +669,12 @@ public class AggStar {
                     exprString = ExpressionUtil.getExpression(getExpression(), query);
                 } else {
                     Expression expression = getExpression();
-                    assert expression instanceof Column;
+                    assert expression instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Column;
                     org.eclipse.daanse.olap.rolap.dbmapper.api.Column columnExpr =
                         (org.eclipse.daanse.olap.rolap.dbmapper.api.Column)expression;
                     String prefixedName = usagePrefix
                         + columnExpr.name();
-                    String tableName = columnExpr.tableAlias();
+                    String tableName = getTableAlias(columnExpr);
                     exprString = query.getDialect().quoteIdentifier(
                         tableName, prefixedName);
                 }
@@ -947,9 +949,9 @@ public class AggStar {
                     getName(),
                     usage.rightJoinConditionColumnName);
             } else {
-                if (rleft instanceof Column) {
-                    Column lcolumn = (Column) rleft;
-                    left = new ColumnR(getName(), lcolumn.name);
+                if (rleft instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Column) {
+                	org.eclipse.daanse.olap.rolap.dbmapper.api.Column lcolumn = (org.eclipse.daanse.olap.rolap.dbmapper.api.Column) rleft;
+                    left = new ColumnR(getName(), lcolumn.name());
                 } else {
                     throw Util.newInternal("not implemented: rleft=" + rleft);
 /*
@@ -1438,7 +1440,7 @@ public class AggStar {
                     // will do that for us later on.
                     final BitKey bk = AggStar.this.star.getBitKey(
                         new String[] {
-                            parentLevel.getKeyExp().tableAlias()},
+                            getTableAlias(parentLevel.getKeyExp())},
                         new String[] {
                             parentLevel.getKeyExp()
                                 .name()});

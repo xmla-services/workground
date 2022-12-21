@@ -46,6 +46,8 @@ import mondrian.spi.SegmentHeader;
 import mondrian.util.ArraySortedSet;
 import mondrian.util.Pair;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+
 /**
  * Helper class that contains methods to convert between
  * {@link Segment} and {@link SegmentHeader}, and also
@@ -752,8 +754,8 @@ public class SegmentBuilder {
         StarColumnPredicate predicate, SortedSet<Comparable> set)
     {
         return new SegmentColumn(
-            predicate.getConstrainedColumn()
-                .getExpression().genericExpression(),
+            genericExpression(predicate.getConstrainedColumn()
+                .getExpression()),
             predicate.getConstrainedColumn().getCardinality(),
             set);
     }

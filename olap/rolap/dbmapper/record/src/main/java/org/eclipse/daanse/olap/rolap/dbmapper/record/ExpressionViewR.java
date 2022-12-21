@@ -20,16 +20,21 @@ import org.eclipse.daanse.olap.rolap.dbmapper.api.ExpressionView;
 public record ExpressionViewR(List<SQLR> sql,
                               String gnericExpression,
                               String table,
-                              String name,
-                              String tableAlias) implements ExpressionView {
+                              String name) implements ExpressionView {
 
-    @Override
-    public String genericExpression() {
-        for (int i = 0; i < sql.size(); i++) {
-            if (sql.get(i).dialect().equals("generic")) {
-                return sql.get(i).content();
+    public boolean equals(Object obj) {
+        if (!(obj instanceof ExpressionView)) {
+            return false;
+        }
+        ExpressionView that = (ExpressionView) obj;
+        if (sql().size() != that.sql().size()) {
+            return false;
+        }
+        for (int i = 0; i < sql().size(); i++) {
+            if (! sql().get(i).equals(that.sql().get(i))) {
+                return false;
             }
         }
-        return sql.get(0).content();
+        return true;
     }
 }

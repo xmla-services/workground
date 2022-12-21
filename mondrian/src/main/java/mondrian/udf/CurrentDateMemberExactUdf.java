@@ -10,11 +10,11 @@
 package mondrian.udf;
 
 import aQute.bnd.annotation.spi.ServiceProvider;
-import mondrian.olap.MondrianDef.UserDefinedFunction;
 import mondrian.olap.type.HierarchyType;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;
 import mondrian.util.Format;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.UserDefinedFunction;
 
 /**
  * User-defined function <code>CurrentDateMember</code>.  Arguments to the

@@ -31,6 +31,8 @@ import java.io.StringWriter;
 import java.util.*;
 import java.util.regex.Pattern;
 
+import static mondrian.rolap.util.RelationUtil.getAlias;
+
 /**
  * A class containing a RolapCube's Aggregate tables exclude/include
  * criteria.
@@ -232,7 +234,7 @@ public class ExplicitRules {
         public String getTableName() {
             RolapStar.Table table = getStar().getFactTable();
             Relation relation = table.getRelation();
-            return relation.alias();
+            return getAlias(relation);
         }
 
         /**
@@ -569,7 +571,7 @@ public class ExplicitRules {
             final ExplicitRules.TableDef tableDef,
             final AggLevel aggLevel)
         {
-            if (aggLevel.column() != null) {
+            if (aggLevel.nameColumn() != null) {
                 handleNameColumn(aggLevel);
             }
             addLevelTo(

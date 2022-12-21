@@ -26,6 +26,8 @@ import mondrian.rolap.RolapStar;
 import mondrian.rolap.StarColumnPredicate;
 import mondrian.rolap.StarPredicate;
 
+import static mondrian.rolap.util.ExpressionUtil.genericExpression;
+
 /**
  * A <code>CellRequest</code> contains the context necessary to get a cell
  * value from a star.
@@ -395,7 +397,7 @@ public class CellRequest {
             RolapStar.Column column = columns[i];
             final Object o = values[i];
             map.put(
-                column.getExpression().genericExpression(),
+                genericExpression(column.getExpression()),
                 (Comparable) o);
         }
         return map;

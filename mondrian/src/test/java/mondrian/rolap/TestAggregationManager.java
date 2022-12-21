@@ -1875,7 +1875,7 @@ public class TestAggregationManager extends BatchTestCase {
         propSaver.set(MondrianProperties.instance().UseAggregates, true);
         propSaver.set(MondrianProperties.instance().ReadAggregates, true);
         withSchema(context,
-                "<schema name=\"FooSchema\"><Cube name=\"Sales_Foo\" defaultMeasure=\"Unit Sales\">\n"
+                "<Schema name=\"FooSchema\"><Cube name=\"Sales_Foo\" defaultMeasure=\"Unit Sales\">\n"
                 + "  <Table name=\"sales_fact_1997\">\n"
                 + " <AggName name=\"agg_pl_01_sales_fact_1997\" approxRowCount=\"86000\">\n"
                 + "     <AggFactCount column=\"FACT_COUNT\"/>\n"
@@ -2021,7 +2021,7 @@ public class TestAggregationManager extends BatchTestCase {
                 + "      formatString=\"#,###\"/>\n"
                 + "  <Measure name=\"Customer Count\" column=\"customer_id\"\n"
                 + "      aggregator=\"distinct-count\" formatString=\"#,###\"/>\n"
-                + "</Cube></schema>\n");
+                + "</Cube></Schema>\n");
         final String mdxQuery =
             "select {[Measures].[Unit Sales]} on columns, "
             + "non empty CrossJoin({[Time.Weekly].[1997].[1].[15]},CrossJoin({[Customers].[USA].[CA].[Lincoln Acres].[William Smith]}, {[Product].[Drink].[Beverages].[Carbonated Beverages].[Soda].[Washington].[Washington Diet Cola]})) on rows "

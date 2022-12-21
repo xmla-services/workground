@@ -12,7 +12,7 @@
 */
 package mondrian.test;
 
-import static mondrian.rolap.ExpressionUtil.getExpression;
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -58,7 +58,6 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.olap.Id;
-import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianException;
 import mondrian.olap.MondrianProperties;
 import mondrian.rolap.RolapCube;

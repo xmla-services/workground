@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import static mondrian.rolap.ExpressionUtil.getExpression;
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
 
 /**
  * Creates SQL from parse tree nodes. Currently it creates the SQL that

@@ -44,7 +44,6 @@ import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCall;
 import mondrian.olap.Evaluator;
 import mondrian.olap.Exp;
-import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;
 import mondrian.olap.SchemaReader;
 import mondrian.olap.Util;
@@ -68,7 +67,7 @@ import mondrian.rolap.sql.CrossJoinArg;
 import mondrian.rolap.sql.SqlQuery;
 import mondrian.util.FilteredIterableList;
 
-import static mondrian.rolap.ExpressionUtil.getExpression;
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
 
 /**
  * Utility class used by implementations of {@link mondrian.rolap.sql.SqlConstraint}, used to generate constraints into

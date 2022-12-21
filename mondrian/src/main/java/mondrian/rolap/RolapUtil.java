@@ -61,6 +61,8 @@ import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.util.ClassResolver;
 
+import static mondrian.rolap.util.RelationUtil.getAlias;
+
 /**
  * Utility methods for classes in the <code>mondrian.rolap</code> package.
  *
@@ -540,7 +542,7 @@ public class RolapUtil {
         final Dialect dialect)
     {
         ViewImpl view = new ViewImpl();
-        view.setAlias(inlineTable.alias());
+        view.setAlias(getAlias(inlineTable));
 
         final int columnCount = inlineTable.columnDefs().size();
         List<String> columnNames = new ArrayList<String>();
@@ -738,7 +740,7 @@ public class RolapUtil {
     {
       List<String> rlStarKey = new ArrayList<String>();
       Table table = null;
-      rlStarKey.add(fact.alias());
+      rlStarKey.add(getAlias(fact));
       if (fact instanceof Table) {
         table = (Table) fact;
       }

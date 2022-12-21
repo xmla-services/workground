@@ -50,7 +50,7 @@ public class JoinUtil {
         }
         RelationOrJoin left = left(join);
         if (left instanceof Relation) {
-            return ((Relation) left).alias();
+            return RelationUtil.getAlias((Relation) left);
         }
         throw Util.newInternal(
             "alias is required because " + left + " is not a table");
@@ -66,7 +66,7 @@ public class JoinUtil {
         }
         RelationOrJoin right = right(join);
         if (right instanceof Relation) {
-            return ((Relation) right).alias();
+            return RelationUtil.getAlias(((Relation) right));
         }
         if (right instanceof Join) {
             return getRightAlias(((Join) right));

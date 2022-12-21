@@ -16,26 +16,18 @@ package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
-import jakarta.xml.bind.annotation.XmlElements;
-import jakarta.xml.bind.annotation.XmlType;
-
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "annotations", "view", "dimensionUsageOrDimension", "measure",
+@XmlType(name = "Cube", propOrder = { "annotations", "dimensionUsageOrDimension", "measure",
         "calculatedMember", "namedSet", "drillThroughAction", "writebackTable", "fact", "action"})
+@XmlRootElement(name = "Cube")
 public class CubeImpl implements Cube {
 
     @XmlElementWrapper(name = "Annotations")
     @XmlElement(name = "Annotation")
     protected List<AnnotationImpl> annotations;
-    @XmlElement(name = "View")
-    protected ViewImpl view;
     @XmlElements({ @XmlElement(name = "DimensionUsage", type = DimensionUsageImpl.class),
             @XmlElement(name = "Dimension", type = PrivateDimensionImpl.class) })
     protected List<CubeDimension> dimensionUsageOrDimension;
@@ -76,15 +68,6 @@ public class CubeImpl implements Cube {
 
     public void setAnnotations(List<AnnotationImpl> value) {
         this.annotations = value;
-    }
-
-    @Override
-    public View view() {
-        return view;
-    }
-
-    public void setView(ViewImpl value) {
-        this.view = value;
     }
 
     @Override

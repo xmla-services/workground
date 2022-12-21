@@ -10,7 +10,7 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
@@ -33,7 +33,7 @@ public class SQLImpl implements SQL {
 
     @Override
     public String content() {
-        return content;
+        return content != null ? content.trim() : content;
     }
 
     public void setContent(String value) {
@@ -42,7 +42,7 @@ public class SQLImpl implements SQL {
 
     @Override
     public String dialect() {
-        return dialect;
+        return dialect != null ? dialect : "generic";
     }
 
     public void setDialect(String value) {

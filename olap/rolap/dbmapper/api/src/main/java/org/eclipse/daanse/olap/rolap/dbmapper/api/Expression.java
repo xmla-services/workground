@@ -14,11 +14,9 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
 public interface Expression {
-    String genericExpression();
 
     String table();
 
     String name();
 
-    String tableAlias();
 }

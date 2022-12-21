@@ -15,19 +15,18 @@ package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Column;
 
+import java.util.Objects;
+
 public class ColumnR implements Column {
 
     private String table;
     private String name;
+    private String genericExpression;
 
     public ColumnR(String table, String name) {
         this.table = table;
         this.name = name;
-    }
-
-    @Override
-    public String genericExpression() {
-        return table == null ? name : (table + "." + name);
+        this.genericExpression = table == null ? name : (table + "." + name);
     }
 
     @Override
@@ -41,12 +40,21 @@ public class ColumnR implements Column {
     }
 
     @Override
-    public String tableAlias() {
-        return table;
+    public void setTable(String table) {
+        this.table = table;
     }
 
     @Override
-    public void setTable(String table) {
-        this.table = table;
+    public String genericExpression() {
+        return genericExpression;
+    }
+
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Column)) {
+            return false;
+        }
+        Column that = (Column) obj;
+        return name().equals(that.name()) &&
+            Objects.equals(table(), that.table());
     }
 }

@@ -13,7 +13,6 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
-import java.math.BigInteger;
 import java.util.List;
 
 public interface Level {
@@ -71,6 +70,4 @@ public interface Level {
     String internalType();
 
     ElementFormatter memberFormatter();
-
-    Expression getPropertyExp(int i);
 }

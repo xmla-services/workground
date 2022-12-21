@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import mondrian.rolap.util.RelationUtil;
 import org.eclipse.daanse.engine.api.Context;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
@@ -91,7 +92,7 @@ public class RolapStarTest {
           original,
           "NewAlias");
 
-      assertEquals("NewAlias", cloned.alias());
+      assertEquals("NewAlias", RelationUtil.getAlias(cloned));
       assertEquals("TestTable", cloned.name());
       assertNotNull(cloned.sql());
       assertEquals("NewAlias.clicked = 'true'", cloned.sql().content());

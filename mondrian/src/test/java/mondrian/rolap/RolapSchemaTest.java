@@ -16,6 +16,7 @@ import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapSchema.RolapStarRegistry;
 import mondrian.rolap.agg.AggregationManager;
 import mondrian.rolap.agg.SegmentCacheManager;
+import mondrian.rolap.util.RelationUtil;
 import mondrian.test.PropertySaver5;
 import mondrian.util.ByteString;
 import org.eclipse.daanse.olap.api.access.Access;
@@ -121,7 +122,7 @@ public class RolapSchemaTest {
         RoleImpl role = new RoleImpl();
         UnionImpl unionImpl = new UnionImpl();
         unionImpl.setRoleUsage(List.of(usage));
-        role.setUnion(new UnionImpl());
+        role.setUnion(unionImpl);
 
         try {
             createSchema().createUnionRole(role);
@@ -284,14 +285,14 @@ public class RolapSchemaTest {
     public void testGetStarFromRegistryByFactTableName() throws Exception {
       //Create the test fact
       Relation fact =
-          SchemaUtil.parse(getFactTableWithSQLFilter(), TableImpl.class);
+          SchemaUtil.parse(getFactTable(), TableImpl.class);
       //Expected result star
       RolapStarRegistry rolapStarRegistry =
           getStarRegistryLinkedToRolapSchemaSpy(schemaSpy, fact);
       //Put rolap star to the registry
       rolapStarRegistry.getOrCreateStar(fact);
 
-      RolapStar actualStar = schemaSpy.getStar(fact.alias());
+      RolapStar actualStar = schemaSpy.getStar(RelationUtil.getAlias(fact));
       assertSame(rlStarMock, actualStar);
     }
 
@@ -362,7 +363,7 @@ public class RolapSchemaTest {
         RolapCube cube = mockCube(schema);
         mondrian.olap.RoleImpl role = new mondrian.olap.RoleImpl();
 
-        MemberGrant memberGrant = new MemberGrantR(Access.ALL.toString(), "member");
+        MemberGrant memberGrant = new MemberGrantR("member", Access.ALL.toString());
 
         HierarchyGrantImpl grant = new HierarchyGrantImpl();
         grant.setAccess(Access.CUSTOM.toString());

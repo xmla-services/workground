@@ -17,18 +17,14 @@ package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
 
-import jakarta.xml.bind.annotation.XmlAccessType;
-import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlAttribute;
-import jakarta.xml.bind.annotation.XmlElement;
-import jakarta.xml.bind.annotation.XmlElementWrapper;
-import jakarta.xml.bind.annotation.XmlType;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PrivateDimension", propOrder = { "annotations", "hierarchy" })
+@XmlRootElement(name = "Dimension")
 public class PrivateDimensionImpl implements PrivateDimension {
 
     @XmlElement(name = "Annotation")
@@ -81,11 +77,7 @@ public class PrivateDimensionImpl implements PrivateDimension {
 
     @Override
     public String type() {
-        if (type == null) {
-            return "StandardDimension";
-        } else {
-            return type;
-        }
+        return type;
     }
 
     public void setType(String value) {

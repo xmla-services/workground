@@ -3,7 +3,7 @@
 		<Table name="orderfact">
 		</Table>
 		<Dimension foreignKey="CUSTOMERNUMBER" name="Markets">
-			<Hierarchy hasAll="true" allMemberName="All Markets" primaryKey="CUSTOMERNUMBER" primaryKeyTable="">
+			<Hierarchy hasAll="true" allMemberName="All Markets" primaryKey="CUSTOMERNUMBER">
 				<Table name="customer_w_ter">
 				</Table>
 				<Level name="Territory" column="TERRITORY" type="String" uniqueMembers="true" levelType="Regular" hideMemberIf="Never">

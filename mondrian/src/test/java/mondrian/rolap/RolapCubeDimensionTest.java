@@ -91,8 +91,7 @@ public class RolapCubeDimensionTest {
   @Test
   public void testLookupCube_found() {
     RolapCubeDimension rcd = stubRolapCubeDimension(false);
-    VirtualCubeDimensionImpl cubeDim =
-        mock(VirtualCubeDimensionImpl.class);
+    VirtualCubeDimensionImpl cubeDim = new VirtualCubeDimensionImpl();
     RolapSchema schema = mock(RolapSchema.class);
     RolapCube factCube = mock(RolapCube.class);
     final String cubeName = "TheCubeName";

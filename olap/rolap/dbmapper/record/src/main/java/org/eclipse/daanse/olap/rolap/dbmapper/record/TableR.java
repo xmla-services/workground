@@ -14,6 +14,7 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
@@ -84,5 +85,26 @@ public class TableR implements Table {
     @Override
     public String schema() {
         return schema;
+    }
+
+    public boolean equals(Object o) {
+        if (o instanceof Table) {
+            Table that = (Table) o;
+            return this.name.equals(that.name()) &&
+                Objects.equals(this.alias, that.alias()) &&
+                Objects.equals(this.schema, that.schema());
+        } else {
+            return false;
+        }
+    }
+
+    public String toString() {
+        return (schema == null) ?
+            name :
+            schema + "." + name;
+    }
+
+    public int hashCode() {
+        return toString().hashCode();
     }
 }

@@ -31,7 +31,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianException;
 import mondrian.recorder.MessageRecorder;
 import mondrian.resource.MondrianResource;
@@ -43,7 +42,8 @@ import mondrian.rolap.RolapSchema;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.sql.SqlQuery;
 
-import static mondrian.rolap.ExpressionUtil.getExpression;
+import static mondrian.rolap.util.ExpressionUtil.getExpression;
+import static mondrian.rolap.util.RelationUtil.getAlias;
 
 /**
  * Abstract Recognizer class used to determine if a candidate aggregate table
@@ -691,7 +691,7 @@ abstract class Recognizer {
                         (Column) aggUsage.joinExp;
                     tableAlias = mcolumn.table();
                 } else {
-                    tableAlias = aggUsage.relation.alias();
+                    tableAlias = getAlias(aggUsage.relation);
                 }
 
 

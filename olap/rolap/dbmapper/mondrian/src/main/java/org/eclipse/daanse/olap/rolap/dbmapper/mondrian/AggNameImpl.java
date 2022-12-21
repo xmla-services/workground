@@ -96,7 +96,7 @@ public class AggNameImpl implements AggName {
 
     @Override
     public String approxRowCount() {
-        return null;
+        return approxRowCount;
     }
 
     public void setName(String value) {
