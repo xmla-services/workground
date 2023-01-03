@@ -14,8 +14,11 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
 import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Measure;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.MeasureDataTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.MeasureDataTypeAdaptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +39,8 @@ public class MeasureImpl implements Measure {
     @XmlAttribute(name = "column")
     protected String column;
     @XmlAttribute(name = "datatype")
-    protected String datatype;
+    @XmlJavaTypeAdapter(MeasureDataTypeAdaptor.class)
+    protected MeasureDataTypeEnum datatype;
     @XmlAttribute(name = "formatString")
     protected String formatString;
     @XmlAttribute(name = "aggregator", required = true)
@@ -101,11 +105,11 @@ public class MeasureImpl implements Measure {
     }
 
     @Override
-    public String datatype() {
+    public MeasureDataTypeEnum datatype() {
         return datatype;
     }
 
-    public void setDatatype(String value) {
+    public void setDatatype(MeasureDataTypeEnum value) {
         this.datatype = value;
     }
 

@@ -1536,7 +1536,7 @@ public class ReadTest {
 
     private void checkGrantItem(SchemaGrant schemaGrant, Map<String, Object> map) {
         checkCubeGrant(schemaGrant.cubeGrant(), get(CUBE_GRANT, map));
-        assertEquals(schemaGrant.access(), get(ACCESS, map) == null ? "none" : get(ACCESS, map));
+        assertEquals(schemaGrant.access() == null ? null : schemaGrant.access().getValue(), get(ACCESS, map) == null ? "none" : get(ACCESS, map));
     }
 
     private void checkCubeGrant(List<? extends CubeGrant> cubeGrant, Object o) {
@@ -1573,7 +1573,7 @@ public class ReadTest {
     private void checkhierarchyGrantItem(HierarchyGrant hierarchyGrant, Map<String, Object> map) {
         checkMemberGrant(hierarchyGrant.memberGrant(), get(MEMBER_GRANT, map));
         assertEquals(hierarchyGrant.hierarchy(), get(HIERARCHY, map));
-        assertEquals(hierarchyGrant.access(), get(ACCESS, map));
+        assertEquals(hierarchyGrant.access() == null ?  null : hierarchyGrant.access().getValue(), get(ACCESS, map));
         assertEquals(hierarchyGrant.topLevel(), get(TOP_LEVEL, map));
         assertEquals(hierarchyGrant.bottomLevel(), get(BOTTOM_LEVEL, map));
         assertEquals(hierarchyGrant.rollupPolicy(), get(ROLLUP_POLICY, map) == null ? "full" : get(ROLLUP_POLICY, map));
@@ -1593,7 +1593,7 @@ public class ReadTest {
 
     private void checkMemberGrantItem(MemberGrant memberGrant, Map<String, Object> map) {
         assertEquals(memberGrant.member(), get(MEMBER, map));
-        assertEquals(memberGrant.access(), get(ACCESS, map));
+        assertEquals(memberGrant.access() == null ? null : memberGrant.access().getValue(), get(ACCESS, map));
     }
 
     private void checkVirtualCubes(List<? extends VirtualCube> virtualCubes, List vrtualCubeList) {
@@ -1702,7 +1702,7 @@ public class ReadTest {
         assertNotNull(sharedDimension.annotations());
         checkHierarchy(sharedDimension.hierarchy(), (List) map.get(HIERARCHY));
         assertEquals(sharedDimension.name(), get(NAME, map));
-        assertEquals(sharedDimension.type(), get(TYPE, map));
+        assertEquals(sharedDimension.type() == null ? null : sharedDimension.type().getValue(), get(TYPE, map));
         assertEquals(sharedDimension.caption(), get(CAPTION, map));
         assertEquals(sharedDimension.description(), get("description", map));
     }
@@ -1760,7 +1760,7 @@ public class ReadTest {
             PrivateDimension dimension = (PrivateDimension) object;
             assertEquals(map.get(NAME), dimension.name());
             assertEquals(map.get(FOREIGN_KEY), dimension.foreignKey());
-            assertEquals(get(TYPE, map) == null ? null : get(TYPE, map), dimension.type());
+            assertEquals(get(TYPE, map), dimension.type() == null ? null : dimension.type().getValue());
             assertNotNull(dimension.annotations());
             assertNull(dimension.caption());
             assertNull(dimension.description());
@@ -1866,10 +1866,10 @@ public class ReadTest {
         assertEquals(map.get(ORDINAL_COLUMN), level.ordinalColumn());
         assertEquals(level.parentColumn(), get(PARENT_COLUMN, map));
         assertEquals(level.nullParentValue(), get(NULL_PARENT_VALUE, map));
-        assertEquals(map.get(TYPE) == null ? "String" : map.get(TYPE) , level.type());
+        assertEquals(map.get(TYPE) == null ? "String" : map.get(TYPE) , level.type() == null ? null : level.type().getValue());
         assertEquals(Boolean.valueOf((String) map.get(UNIQUE_MEMBERS)), level.uniqueMembers());
-        assertEquals(get(LEVEL_TYPE, map) == null ? "Regular" : get(LEVEL_TYPE, map), level.levelType());
-        assertEquals(get(HIDE_MEMBER_IF, map) == null ? "Never" : get(HIDE_MEMBER_IF, map), level.hideMemberIf());
+        assertEquals(get(LEVEL_TYPE, map) == null ? "Regular" : get(LEVEL_TYPE, map), level.levelType() == null ? null : level.levelType().getValue());
+        assertEquals(get(HIDE_MEMBER_IF, map) == null ? "Never" : get(HIDE_MEMBER_IF, map), level.hideMemberIf() == null ? null : level.hideMemberIf().getValue());
         assertNull(level.formatter());
         assertNull(level.caption());
         assertNull(level.description());

@@ -9,16 +9,19 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.MemberGrant;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.MemberGrantAccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.MemberGrantAccessAdaptor;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
@@ -27,7 +30,8 @@ public class MemberGrantImpl implements MemberGrant {
     @XmlAttribute(name = "member")
     protected String member;
     @XmlAttribute(name = "access", required = true)
-    protected String access;
+    @XmlJavaTypeAdapter(MemberGrantAccessAdaptor.class)
+    protected MemberGrantAccessEnum access;
 
     @Override
     public String member() {
@@ -39,11 +43,11 @@ public class MemberGrantImpl implements MemberGrant {
     }
 
     @Override
-    public String access() {
+    public MemberGrantAccessEnum access() {
         return access;
     }
 
-    public void setAccess(String value) {
+    public void setAccess(MemberGrantAccessEnum value) {
         this.access = value;
     }
 

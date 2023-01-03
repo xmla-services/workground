@@ -40,6 +40,7 @@ import org.eclipse.daanse.olap.api.model.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Script;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.ParameterTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.DimensionUsageImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.PrivateDimensionImpl;
 import org.eigenbase.xom.DOMWrapper;
@@ -565,9 +566,9 @@ public class RolapSchema implements Schema {
                     name);
             }
             Type type;
-            if (xmlParameter.type().equals("String")) {
+            if (ParameterTypeEnum.STRING.equals(xmlParameter.type())) {
                 type = new StringType();
-            } else if (xmlParameter.type().equals("Numeric")) {
+            } else if (ParameterTypeEnum.NUMERIC.equals(xmlParameter.type())) {
                 type = new NumericType();
             } else {
                 type = new MemberType(null, null, null, null);
@@ -729,7 +730,7 @@ public class RolapSchema implements Schema {
 
     // package-local visibility for testing purposes
     void handleSchemaGrant(RoleImpl role, org.eclipse.daanse.olap.rolap.dbmapper.api.SchemaGrant schemaGrant) {
-        role.grant(this, getAccess(schemaGrant.access(), schemaAllowed));
+        role.grant(this, getAccess(schemaGrant.access().name(), schemaAllowed));
         for (org.eclipse.daanse.olap.rolap.dbmapper.api.CubeGrant cubeGrant : schemaGrant.cubeGrant()) {
             handleCubeGrant(role, cubeGrant);
         }
@@ -751,7 +752,7 @@ public class RolapSchema implements Schema {
                 lookup(cube, reader, Category.Dimension, grant.dimension());
             role.grant(
                 dimension,
-                getAccess(grant.access(), dimensionAllowed));
+                getAccess(grant.access().name(), dimensionAllowed));
         }
 
         for (org.eclipse.daanse.olap.rolap.dbmapper.api.HierarchyGrant hierarchyGrant
@@ -771,7 +772,7 @@ public class RolapSchema implements Schema {
         Hierarchy hierarchy =
             lookup(cube, reader, Category.Hierarchy, grant.hierarchy());
         final Access hierarchyAccess =
-            getAccess(grant.access(), hierarchyAllowed);
+            getAccess(grant.access().getValue(), hierarchyAllowed);
         Level topLevel = findLevelForHierarchyGrant(
             cube, reader, hierarchyAccess, grant.topLevel(), "topLevel");
         Level bottomLevel = findLevelForHierarchyGrant(
@@ -828,7 +829,7 @@ public class RolapSchema implements Schema {
                 }
                 role.grant(
                     member,
-                    getAccess(memberGrant.access(), memberAllowed));
+                    getAccess(memberGrant.access().getValue(), memberAllowed));
             }
         }
 

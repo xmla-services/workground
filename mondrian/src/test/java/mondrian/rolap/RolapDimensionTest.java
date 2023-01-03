@@ -9,9 +9,11 @@
 package mondrian.rolap;
 
 import mondrian.test.PropertySaver5;
-import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.HideMemberIfEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.HierarchyImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.LevelImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.PrivateDimensionImpl;
@@ -64,9 +66,9 @@ public class RolapDimensionTest {
     level.setVisible(true);
     level.setProperty(List.of());
     level.setUniqueMembers(true);
-    level.setType(Datatype.String.name());
-    level.setHideMemberIf("Never");
-    level.setLevelType("Regular");
+    level.setType(TypeEnum.STRING);
+    level.setHideMemberIf(HideMemberIfEnum.NEVER);
+    level.setLevelType(LevelTypeEnum.REGULAR);
   }
 
   @AfterEach

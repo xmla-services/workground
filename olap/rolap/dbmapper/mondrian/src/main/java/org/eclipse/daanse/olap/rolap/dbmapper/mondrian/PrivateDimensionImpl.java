@@ -1,4 +1,3 @@
-
 /*
  * Copyright (c) 2022 Contributors to the Eclipse Foundation.
  *
@@ -18,9 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.DimensionTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.DimensionTypeAdaptor;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PrivateDimension", propOrder = { "annotations", "hierarchy" })
@@ -35,7 +36,8 @@ public class PrivateDimensionImpl implements PrivateDimension {
     @XmlAttribute(name = "name", required = true)
     protected String name;
     @XmlAttribute(name = "type")
-    protected String type;
+    @XmlJavaTypeAdapter(DimensionTypeAdaptor.class)
+    protected DimensionTypeEnum type;
     @XmlAttribute(name = "caption")
     protected String caption;
     @XmlAttribute(name = "description")
@@ -76,11 +78,11 @@ public class PrivateDimensionImpl implements PrivateDimension {
     }
 
     @Override
-    public String type() {
+    public DimensionTypeEnum type() {
         return type;
     }
 
-    public void setType(String value) {
+    public void setType(DimensionTypeEnum value) {
         this.type = value;
     }
 

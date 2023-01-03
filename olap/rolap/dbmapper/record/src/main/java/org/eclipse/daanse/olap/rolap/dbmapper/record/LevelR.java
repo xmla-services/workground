@@ -13,12 +13,14 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
-import java.math.BigInteger;
-import java.util.List;
-
 import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.HideMemberIfEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.InternalTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.TypeEnum;
+
+import java.util.List;
 
 public record LevelR(String name,
                      String table,
@@ -27,11 +29,11 @@ public record LevelR(String name,
                      String ordinalColumn,
                      String parentColumn,
                      String nullParentValue,
-                     String type,
+                     TypeEnum type,
                      String approxRowCount,
                      boolean uniqueMembers,
-                     String levelType,
-                     String hideMemberIf,
+                     LevelTypeEnum levelType,
+                     HideMemberIfEnum hideMemberIf,
                      String formatter,
                      String caption,
                      String description,
@@ -45,7 +47,7 @@ public record LevelR(String name,
                      ClosureR closure,
                      List<PropertyR> property,
                      boolean visible,
-                     String internalType,
+                     InternalTypeEnum internalType,
                      ElementFormatter memberFormatter
                      )
         implements Level {

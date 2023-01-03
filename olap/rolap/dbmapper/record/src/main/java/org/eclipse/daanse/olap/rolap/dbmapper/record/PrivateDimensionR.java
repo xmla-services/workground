@@ -17,10 +17,10 @@ import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Annotation;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.DimensionTypeEnum;
 
 public record PrivateDimensionR(String name,
-                                String type,
+                                DimensionTypeEnum type,
                                 String caption,
                                 String description,
                                 String foreignKey,

@@ -9,9 +9,11 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.ParameterTypeEnum;
 
 public interface Parameter {
 
@@ -19,7 +21,7 @@ public interface Parameter {
 
     String description();
 
-    String type();
+    ParameterTypeEnum type();
 
     boolean modifiable();
 

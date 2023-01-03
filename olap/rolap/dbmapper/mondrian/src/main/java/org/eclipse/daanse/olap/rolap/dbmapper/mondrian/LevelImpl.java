@@ -14,7 +14,16 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
 import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.HideMemberIfEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.InternalTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.HideMemberIfAdaptor;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.InternalTypeAdaptor;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.LevelTypeAdaptor;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.TypeAdaptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,13 +67,16 @@ public class LevelImpl implements Level {
     @XmlAttribute(name = "nullParentValue")
     protected String nullParentValue;
     @XmlAttribute(name = "type")
-    protected String type;
+    @XmlJavaTypeAdapter(TypeAdaptor.class)
+    protected TypeEnum type;
     @XmlAttribute(name = "uniqueMembers")
     protected Boolean uniqueMembers;
     @XmlAttribute(name = "levelType")
-    protected String levelType;
+    @XmlJavaTypeAdapter(LevelTypeAdaptor.class)
+    protected LevelTypeEnum levelType;
     @XmlAttribute(name = "hideMemberIf")
-    protected String hideMemberIf;
+    @XmlJavaTypeAdapter(HideMemberIfAdaptor.class)
+    protected HideMemberIfEnum hideMemberIf;
     @XmlAttribute(name = "formatter")
     protected String formatter;
     @XmlAttribute(name = "caption")
@@ -76,7 +88,8 @@ public class LevelImpl implements Level {
     @XmlAttribute(name = "visible")
     protected Boolean visible = true;
     @XmlAttribute(name = "internalType") //{"int", "long", "Object", "String"}
-    protected String internalType;
+    @XmlJavaTypeAdapter(InternalTypeAdaptor.class)
+    protected InternalTypeEnum internalType;
     @XmlElement(name = "MemberFormatter")
     ElementFormatterImpl memberFormatter;
 
@@ -224,12 +237,12 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public String type() {
-        return type != null ? type : "String";
+    public TypeEnum type() {
+        return type != null ? type : TypeEnum.STRING;
     }
 
-    public void setType(String value) {
-        this.type = value;
+    public void setType(TypeEnum type) {
+        this.type = type;
     }
 
     @Override
@@ -246,28 +259,28 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public String levelType() {
+    public LevelTypeEnum levelType() {
         if (levelType == null) {
-            return "Regular";
+            return LevelTypeEnum.REGULAR;
         } else {
             return levelType;
         }
     }
 
-    public void setLevelType(String value) {
+    public void setLevelType(LevelTypeEnum value) {
         this.levelType = value;
     }
 
     @Override
-    public String hideMemberIf() {
+    public HideMemberIfEnum hideMemberIf() {
         if (hideMemberIf == null) {
-            return "Never";
+            return HideMemberIfEnum.NEVER;
         } else {
             return hideMemberIf;
         }
     }
 
-    public void setHideMemberIf(String value) {
+    public void setHideMemberIf(HideMemberIfEnum value) {
         this.hideMemberIf = value;
     }
 
@@ -309,7 +322,7 @@ public class LevelImpl implements Level {
     }
 
     @Override
-    public String internalType() {
+    public InternalTypeEnum internalType() {
         return internalType;
     }
 

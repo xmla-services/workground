@@ -11,19 +11,19 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-package org.eclipse.daanse.olap.rolap.dbmapper.api;
+package org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.DimensionTypeEnum;
 
-import java.util.List;
+public class DimensionTypeAdaptor  extends Adaptor<DimensionTypeEnum> {
 
-public interface PrivateDimension extends CubeDimension {
+    protected DimensionTypeAdaptor() {
+        super(DimensionTypeEnum.class);
+    }
 
-    List<? extends Hierarchy> hierarchy();
+    @Override
+    public Enum<DimensionTypeEnum> unmarshal(String v) {
+        return DimensionTypeEnum.fromValue(v);
+    }
 
-    DimensionTypeEnum type();
-
-    String description();
-
-    String usagePrefix();
 }

@@ -11,15 +11,19 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-package org.eclipse.daanse.olap.rolap.dbmapper.record;
+package org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter;
 
-import java.util.List;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.TypeEnum;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.SchemaGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.AccessEnum;
+public class TypeAdaptor extends Adaptor<TypeEnum> {
 
-public record SchemaGrantR(List<CubeGrantR> cubeGrant,
-                           AccessEnum access)
-        implements SchemaGrant {
+    protected TypeAdaptor() {
+        super(TypeEnum.class);
+    }
+
+    @Override
+    public Enum<TypeEnum> unmarshal(String v) {
+        return TypeEnum.fromValue(v);
+    }
 
 }

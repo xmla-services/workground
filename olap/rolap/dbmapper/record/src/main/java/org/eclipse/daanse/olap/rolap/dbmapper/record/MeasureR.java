@@ -18,10 +18,11 @@ import java.util.List;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMemberProperty;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Measure;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.MeasureDataTypeEnum;
 
 public record MeasureR(String name,
                        String column,
-                       String datatype,
+                       MeasureDataTypeEnum datatype,
                        String formatString,
                        String aggregator,
                        String formatter,

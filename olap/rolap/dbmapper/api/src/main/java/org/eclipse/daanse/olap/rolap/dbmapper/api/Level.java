@@ -13,6 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.HideMemberIfEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.InternalTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.TypeEnum;
+
 import java.util.List;
 
 public interface Level {
@@ -49,13 +54,13 @@ public interface Level {
 
     String nullParentValue();
 
-    String type();
+    TypeEnum type();
 
     boolean uniqueMembers();
 
-    String levelType();
+    LevelTypeEnum levelType();
 
-    String hideMemberIf();
+    HideMemberIfEnum hideMemberIf();
 
     String formatter();
 
@@ -67,7 +72,7 @@ public interface Level {
 
     boolean visible();
 
-    String internalType();
+    InternalTypeEnum internalType();
 
     ElementFormatter memberFormatter();
 }

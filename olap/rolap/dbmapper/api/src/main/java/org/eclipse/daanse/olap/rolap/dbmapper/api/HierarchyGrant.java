@@ -9,9 +9,11 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.AccessEnum;
 
 import java.util.List;
 
@@ -21,7 +23,7 @@ public interface HierarchyGrant {
 
     String hierarchy();
 
-    String access();
+    AccessEnum access();
 
     String topLevel();
 

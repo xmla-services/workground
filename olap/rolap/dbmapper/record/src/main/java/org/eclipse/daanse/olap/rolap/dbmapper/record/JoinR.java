@@ -13,11 +13,10 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
-import java.util.List;
-
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
+
+import java.util.List;
 
 public class JoinR implements Join {
 
