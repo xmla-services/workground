@@ -11,25 +11,19 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-package org.eclipse.daanse.olap.rolap.dbmapper.api;
+package org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.PropertyTypeEnum;
 
-public interface Property {
+public class PropertyTypeAdaptor extends Adaptor<PropertyTypeEnum> {
 
-    String name();
+    protected PropertyTypeAdaptor() {
+        super(PropertyTypeEnum.class);
+    }
 
-    String column();
+    @Override
+    public Enum<PropertyTypeEnum> unmarshal(String v) {
+        return PropertyTypeEnum.fromValue(v);
+    }
 
-    PropertyTypeEnum type();
-
-    String formatter();
-
-    String caption();
-
-    String description();
-
-    boolean dependsOnLevelValue();
-
-    ElementFormatter propertyFormatter();
 }

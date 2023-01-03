@@ -8,17 +8,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   SmartCity Jena, Stefan Bischof - initial
- *
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.olap.rolap.dbmapper.api;
-
-import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.AccessEnum;
-
-public interface DimensionGrant {
-
-    AccessEnum access();
-
-    String dimension();
-
-}
+@org.osgi.annotation.bundle.Export
+@org.osgi.annotation.versioning.Version("0.0.1")
+package org.eclipse.daanse.olap.rolap.dbmapper.api.enums;

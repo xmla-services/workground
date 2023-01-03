@@ -23,7 +23,7 @@ public class DimensionTypeUtil {
         if (dimension.type() == null) {
             return null; //DimensionType.StandardDimension;
         } else {
-            return DimensionType.valueOf(dimension.type());
+            return DimensionType.valueOf(dimension.type().getValue());
         }
     }
 

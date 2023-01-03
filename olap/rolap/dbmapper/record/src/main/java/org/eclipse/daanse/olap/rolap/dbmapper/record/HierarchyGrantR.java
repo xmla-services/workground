@@ -9,17 +9,18 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.HierarchyGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.AccessEnum;
 
 public record HierarchyGrantR(
                               String hierarchy,
-                              String access,
+                              AccessEnum access,
                               String topLevel,
                               String bottomLevel,
                               String rollupPolicy,

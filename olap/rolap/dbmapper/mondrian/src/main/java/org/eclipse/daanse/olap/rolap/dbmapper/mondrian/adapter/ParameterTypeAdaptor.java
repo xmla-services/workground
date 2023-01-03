@@ -11,16 +11,19 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-package org.eclipse.daanse.olap.rolap.dbmapper.record;
+package org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Parameter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.ParameterTypeEnum;
 
-public record ParameterR(String name,
-                         String description,
-                         ParameterTypeEnum type,
-                         boolean modifiable,
-                         String defaultValue)
-        implements Parameter {
+public class ParameterTypeAdaptor  extends Adaptor<ParameterTypeEnum> {
+
+    protected ParameterTypeAdaptor() {
+        super(ParameterTypeEnum.class);
+    }
+
+    @Override
+    public Enum<ParameterTypeEnum> unmarshal(String v) {
+        return ParameterTypeEnum.fromValue(v);
+    }
 
 }

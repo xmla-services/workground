@@ -15,10 +15,11 @@ package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Property;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.PropertyTypeEnum;
 
 public record PropertyR(String name,
                         String column,
-                        String type,
+                        PropertyTypeEnum type,
                         String formatter,
                         String caption,
                         String description,

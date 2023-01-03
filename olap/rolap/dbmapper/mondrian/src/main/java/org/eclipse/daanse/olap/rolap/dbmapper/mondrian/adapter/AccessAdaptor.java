@@ -11,15 +11,19 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-package org.eclipse.daanse.olap.rolap.dbmapper.record;
+package org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter;
 
-import java.util.List;
-
-import org.eclipse.daanse.olap.rolap.dbmapper.api.SchemaGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.AccessEnum;
 
-public record SchemaGrantR(List<CubeGrantR> cubeGrant,
-                           AccessEnum access)
-        implements SchemaGrant {
+public class AccessAdaptor extends Adaptor<AccessEnum> {
+
+    protected AccessAdaptor() {
+        super(AccessEnum.class);
+    }
+
+    @Override
+    public Enum<AccessEnum> unmarshal(String v) {
+        return AccessEnum.fromValue(v);
+    }
 
 }

@@ -19,6 +19,7 @@ import mondrian.olap.Property;
 import mondrian.resource.MondrianResource;
 import mondrian.spi.CellFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.MeasureDataTypeEnum;
 
 /**
  * Measure which is computed from a SQL column (or expression) and which is
@@ -86,7 +87,7 @@ public class RolapBaseCubeMeasure
         String formatString,
         Expression expression,
         String aggregatorName,
-        String datatype,
+        MeasureDataTypeEnum datatype,
         Map<String, Object> metadata)
     {
         super(parentMember, level, name, null, MemberType.MEASURE);
@@ -137,15 +138,15 @@ public class RolapBaseCubeMeasure
             if (aggregator == RolapAggregator.Count
                 || aggregator == RolapAggregator.DistinctCount)
             {
-                datatype = "Integer";
+                datatype = MeasureDataTypeEnum.INTEGER;
             } else {
-                datatype = "Numeric";
+                datatype = MeasureDataTypeEnum.NUMERIC;
             }
         }
-        if (RolapBaseCubeMeasure.DataType.valueOf(datatype) == null) {
-            throw MondrianResource.instance().CastInvalidType.ex(datatype);
+        if (RolapBaseCubeMeasure.DataType.valueOf(datatype.getValue()) == null) {
+            throw MondrianResource.instance().CastInvalidType.ex(datatype.getValue());
         }
-        setProperty(Property.DATATYPE.name, datatype);
+        setProperty(Property.DATATYPE.name, datatype.getValue());
     }
 
     public Expression getMondrianDefExpression() {

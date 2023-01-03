@@ -25,6 +25,9 @@ import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.InternalTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.PropertyTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.TypeEnum;
 import org.olap4j.impl.UnmodifiableArrayMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -361,13 +364,13 @@ public class RolapLevel extends LevelBase {
             xmlLevel.closure(),
             createProperties(xmlLevel),
             (xmlLevel.uniqueMembers() ? FLAG_UNIQUE : 0),
-            org.eclipse.daanse.db.dialect.api.Datatype.valueOf(xmlLevel.type()),
+            org.eclipse.daanse.db.dialect.api.Datatype.valueOf(xmlLevel.type().getValue()),
             toInternalType(xmlLevel.internalType()),
-            HideMemberCondition.valueOf(xmlLevel.hideMemberIf()),
+            HideMemberCondition.valueOf(xmlLevel.hideMemberIf().getValue()),
             LevelType.valueOf(
-                xmlLevel.levelType().equals("TimeHalfYear")
+                xmlLevel.levelType().getValue().equals("TimeHalfYear")
                     ? "TimeHalfYears"
-                    : xmlLevel.levelType()),
+                    : xmlLevel.levelType().getValue()),
             xmlLevel.approxRowCount(),
             RolapHierarchy.createMetadataMap(xmlLevel.annotations()));
 
@@ -425,23 +428,23 @@ public class RolapLevel extends LevelBase {
     }
 
     private static Property.Datatype convertPropertyTypeNameToCode(
-        String type)
+        PropertyTypeEnum type)
     {
-        if (type.equals("String")) {
+        if (type.equals(PropertyTypeEnum.STRING)) {
             return Property.Datatype.TYPE_STRING;
-        } else if (type.equals("Numeric")) {
+        } else if (type.equals(PropertyTypeEnum.NUMERIC)) {
             return Property.Datatype.TYPE_NUMERIC;
-        } else if (type.equals("Integer")) {
+        } else if (type.equals(PropertyTypeEnum.INTEGER)) {
             return Property.Datatype.TYPE_INTEGER;
-        } else if (type.equals("Long")) {
+        } else if (type.equals(PropertyTypeEnum.LONG)) {
             return Property.Datatype.TYPE_LONG;
-        } else if (type.equals("Boolean")) {
+        } else if (type.equals(PropertyTypeEnum.BOOLEAN)) {
             return Property.Datatype.TYPE_BOOLEAN;
-        } else if (type.equals("Timestamp")) {
+        } else if (type.equals(PropertyTypeEnum.TIMESTAMP)) {
             return Property.Datatype.TYPE_TIMESTAMP;
-        } else if (type.equals("Time")) {
+        } else if (type.equals(PropertyTypeEnum.TIME)) {
             return Property.Datatype.TYPE_TIME;
-        } else if (type.equals("Date")) {
+        } else if (type.equals(PropertyTypeEnum.DATE)) {
             return Property.Datatype.TYPE_DATE;
         } else {
             throw Util.newError("Unknown property type '" + type + "'");
@@ -507,11 +510,11 @@ public class RolapLevel extends LevelBase {
             "String", BestFitColumnType.STRING,
             "long", BestFitColumnType.LONG);
 
-    private static BestFitColumnType toInternalType(String internalTypeName) {
-        BestFitColumnType type = VALUES.get(internalTypeName);
-        if (type == null && internalTypeName != null) {
+    private static BestFitColumnType toInternalType(InternalTypeEnum internalType) {
+        BestFitColumnType type = VALUES.get(internalType == null ? null : internalType.getValue());
+        if (type == null && internalType != null) {
             throw Util.newError(
-                "Invalid value '" + internalTypeName
+                "Invalid value '" + internalType.getValue()
                 + "' for attribute 'internalType' of element 'Level'. "
                 + "Valid values are: "
                 + VALUES.keySet());

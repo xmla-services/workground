@@ -14,8 +14,11 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
 import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Property;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.PropertyTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.PropertyTypeAdaptor;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "propertyFormatter" })
@@ -26,7 +29,8 @@ public class PropertyImpl implements Property {
     @XmlAttribute(name = "column", required = true)
     protected String column;
     @XmlAttribute(name = "type")
-    protected String type;
+    @XmlJavaTypeAdapter(PropertyTypeAdaptor.class)
+    protected PropertyTypeEnum type;
     @XmlAttribute(name = "formatter")
     protected String formatter;
     @XmlAttribute(name = "caption")
@@ -57,16 +61,16 @@ public class PropertyImpl implements Property {
     }
 
     @Override
-    public String type() {
+    public PropertyTypeEnum type() {
         if (type == null) {
-            return "String";
+            return PropertyTypeEnum.STRING;
         } else {
             return type;
         }
     }
 
-    public void setType(String value) {
-        this.type = value;
+    public void setType(PropertyTypeEnum type) {
+        this.type = type;
     }
 
     @Override

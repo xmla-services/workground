@@ -9,14 +9,16 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.TypeEnum;
 
 public interface ColumnDef {
 
     String name();
 
-    String type();
+    TypeEnum type();
 
 }

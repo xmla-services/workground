@@ -9,16 +9,19 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Parameter;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.ParameterTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.ParameterTypeAdaptor;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
@@ -29,7 +32,8 @@ public class ParameterImpl implements Parameter {
     @XmlAttribute(name = "description")
     protected String description;
     @XmlAttribute(name = "type", required = true)
-    protected String type;
+    @XmlJavaTypeAdapter(ParameterTypeAdaptor.class)
+    protected ParameterTypeEnum type;
     @XmlAttribute(name = "modifiable")
     protected Boolean modifiable;
     @XmlAttribute(name = "defaultValue")
@@ -54,11 +58,11 @@ public class ParameterImpl implements Parameter {
     }
 
     @Override
-    public String type() {
+    public ParameterTypeEnum type() {
         return type;
     }
 
-    public void setType(String value) {
+    public void setType(ParameterTypeEnum value) {
         this.type = value;
     }
 

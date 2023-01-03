@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.MeasureDataTypeEnum;
+
 import java.util.List;
 
 public interface Measure {
@@ -27,7 +29,7 @@ public interface Measure {
 
     String column();
 
-    String datatype();
+    MeasureDataTypeEnum datatype();
 
     String formatString();
 

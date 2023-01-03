@@ -9,13 +9,14 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.DimensionGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.AccessEnum;
 
-public record DimensionGrantR(String access,
+public record DimensionGrantR(AccessEnum access,
                               String dimension)
         implements DimensionGrant {
 

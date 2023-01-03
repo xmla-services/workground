@@ -9,14 +9,15 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.record;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.ColumnDef;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.TypeEnum;
 
 public record ColumnDefR(String name,
-                         String type)
+                         TypeEnum type)
         implements ColumnDef {
 
 }

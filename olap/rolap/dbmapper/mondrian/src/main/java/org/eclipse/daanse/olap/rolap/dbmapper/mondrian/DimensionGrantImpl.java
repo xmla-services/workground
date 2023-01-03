@@ -9,16 +9,19 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.DimensionGrant;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.AccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.AccessAdaptor;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
@@ -27,7 +30,8 @@ public class DimensionGrantImpl implements DimensionGrant {
     @XmlAttribute(name = "dimension", required = true)
     protected String dimension;
     @XmlAttribute(name = "access", required = true)
-    protected String access;
+    @XmlJavaTypeAdapter(AccessAdaptor.class)
+    protected AccessEnum access;
 
     @Override
     public String dimension() {
@@ -39,11 +43,11 @@ public class DimensionGrantImpl implements DimensionGrant {
     }
 
     @Override
-    public String access() {
+    public AccessEnum access() {
         return access;
     }
 
-    public void setAccess(String value) {
+    public void setAccess(AccessEnum value) {
         this.access = value;
     }
 

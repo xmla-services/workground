@@ -9,14 +9,16 @@
  *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - initial
- *   
+ *
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.api;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.MemberGrantAccessEnum;
 
 public interface MemberGrant {
 
     String member();
 
-    String access();
+    MemberGrantAccessEnum access();
 
 }

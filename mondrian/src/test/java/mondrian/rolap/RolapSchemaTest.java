@@ -26,6 +26,8 @@ import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.HierarchyGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.MemberGrant;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.AccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.MemberGrantAccessEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.*;
 import org.eclipse.daanse.olap.rolap.dbmapper.record.MemberGrantR;
 import org.eigenbase.xom.DOMWrapper;
@@ -144,7 +146,7 @@ public class RolapSchemaTest {
                 any(mondrian.olap.RoleImpl.class), any(CubeGrant.class));
 
         SchemaGrantImpl grant = new SchemaGrantImpl();
-        grant.setAccess(Access.CUSTOM.toString());
+        grant.setAccess(AccessEnum.CUSTOM);
         grant.setCubeGrant(List.of(new CubeGrantImpl(), new CubeGrantImpl()));
 
         mondrian.olap.RoleImpl role = new mondrian.olap.RoleImpl();
@@ -196,7 +198,7 @@ public class RolapSchemaTest {
         DimensionGrantImpl dimensionGrant =
             new DimensionGrantImpl();
         dimensionGrant.setDimension("dimension");
-        dimensionGrant.setAccess(Access.NONE.toString());
+        dimensionGrant.setAccess(AccessEnum.NONE);
 
         CubeGrantImpl grant = new CubeGrantImpl();
         grant.setCube("cube");
@@ -363,10 +365,10 @@ public class RolapSchemaTest {
         RolapCube cube = mockCube(schema);
         mondrian.olap.RoleImpl role = new mondrian.olap.RoleImpl();
 
-        MemberGrant memberGrant = new MemberGrantR("member", Access.ALL.toString());
+        MemberGrant memberGrant = new MemberGrantR("member", MemberGrantAccessEnum.ALL);
 
         HierarchyGrantImpl grant = new HierarchyGrantImpl();
-        grant.setAccess(Access.CUSTOM.toString());
+        grant.setAccess(AccessEnum.CUSTOM);
         grant.setRollupPolicy(RollupPolicy.FULL.toString());
         grant.setHierarchy("hierarchy");
         grant.setMemberGrant(List.of(memberGrant));
