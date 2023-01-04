@@ -449,9 +449,11 @@ public class Sorter {
   private static void logTuples( TupleList tupleList, String description ) {
     if ( LOGGER.isDebugEnabled() ) {
       StringBuilder sb = new StringBuilder( description + ": " );
-      for ( List<Member> tuple : tupleList ) {
-        sb.append( "\n" );
-        sb.append( tuple.toString() );
+      if (tupleList != null) {
+    	  for ( List<Member> tuple : tupleList ) {
+    		  sb.append( "\n" );
+    		  sb.append( tuple.toString() );
+    	  }
       }
       LOGGER.debug( sb.toString() );
     }
