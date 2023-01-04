@@ -126,7 +126,7 @@ public class RolapSchemaPool {
                 + ", connectionKey=" + connectionKey
                 + ", jdbcUser=" + jdbcUser
                 + ", dataSourceStr=" + dataSourceStr
-                + ", dataSource=" + context.getDataSource()
+                + ", dataSource=" + context == null ? "" : context.getDataSource()
                 + ", jdbcConnectionUuid=" + connectionUuidStr
                 + ", useSchemaPool=" + useSchemaPool
                 + ", useContentChecksum=" + useContentChecksum

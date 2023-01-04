@@ -72,8 +72,8 @@
     <maven.compiler.target>${java.version}</maven.compiler.target>
 
     <slf4j.version>2.0.4</slf4j.version>
-    <asm.version>9.3</asm.version>
-    <spifly.version>1.3.5</spifly.version>
+    <asm.version>9.4</asm.version>
+    <spifly.version>1.3.6</spifly.version>
     <bnd.version>6.3.1</bnd.version>
 
     <junit-jupiter.version>5.9.1</junit-jupiter.version>
@@ -792,7 +792,7 @@
         <artifactId>jaxb-api</artifactId>
         <version>2.3.1</version>
       </dependency>
-<!-- 
+<!--
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-all</artifactId>
@@ -958,7 +958,7 @@
     <module>workbench</module>
     <module>olap</module>
   </modules>
-  
+
   <profiles>
     <profile>
       <id>eclipse-licenses-check</id>
