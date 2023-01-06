@@ -90,7 +90,9 @@ abstract class ValidatorImpl implements Validator {
                 Util.assertTrue(resolved != null);
                 resolvedNodes.put((QueryPart) exp, (QueryPart) resolved);
             } finally {
-                stack.pop();
+            	if (stack.size() > 0) {
+            		stack.pop();
+            	}
             }
         }
 

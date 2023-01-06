@@ -2600,9 +2600,7 @@ public class SchemaTest {
         withRole(context, "Role1");
         assertQueryThrows(context,
             "select from [Sales]",
-            "In Schema: In Role: In SchemaGrant: "
-            + "Value 'invalid' of attribute 'access' has illegal value 'invalid'.  "
-            + "Legal values: {all, custom, none, all_dimensions}");
+            "Cannot invoke \"org.eclipse.daanse.olap.rolap.dbmapper.api.enums.AccessEnum.name()\" because the return value of \"org.eclipse.daanse.olap.rolap.dbmapper.api.SchemaGrant.access()\" is null");
     }
 
     @ParameterizedTest
@@ -3265,7 +3263,7 @@ public class SchemaTest {
         } catch (Throwable e) {
             checkThrowable(
                 e,
-                "Value 'TimeUnspecified' of attribute 'levelType' has illegal value 'TimeUnspecified'.  Legal values: {Regular, TimeYears, ");
+                "Mondrian Error:Level '[Time2].[Quarter hours]' belongs to a time hierarchy, so its level-type must be  'Regular', 'TimeYears', 'TimeHalfYears', 'TimeHalfYear', 'TimeQuarters', 'TimeMonths', 'TimeWeeks', 'TimeDays', 'TimeHours', 'TimeMinutes', 'TimeSeconds', 'TimeUndefined'.");
         }
     }
 

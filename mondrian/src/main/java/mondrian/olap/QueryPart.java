@@ -22,7 +22,7 @@ public abstract class QueryPart implements Walkable {
     /**
      * Creates a QueryPart.
      */
-    QueryPart() {
+    public QueryPart() {
     }
 
     /**

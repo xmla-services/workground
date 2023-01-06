@@ -29,10 +29,7 @@ import mondrian.calc.ResultStyle;
 import mondrian.calc.StringCalc;
 import mondrian.calc.TupleCalc;
 import mondrian.mdx.MdxVisitor;
-import mondrian.olap.Evaluator;
-import mondrian.olap.Exp;
-import mondrian.olap.Parameter;
-import mondrian.olap.Validator;
+import mondrian.olap.*;
 import mondrian.olap.type.Type;
 
 /**
@@ -203,7 +200,7 @@ public class DelegatingExpCompiler implements ExpCompiler {
     /**
      * See {@link mondrian.calc.impl.DelegatingExpCompiler#wrap}.
      */
-    private static class WrapExp implements Exp {
+    private static class WrapExp extends QueryPart implements Exp{
         private final Exp e;
         private final ExpCompiler wrappingCompiler;
 
@@ -248,6 +245,14 @@ public class DelegatingExpCompiler implements ExpCompiler {
         @Override
         public Object accept(MdxVisitor visitor) {
             return e.accept(visitor);
+        }
+
+        public void explain(PrintWriter pw) {
+            if (e instanceof QueryPart) {
+                ((QueryPart) e).explain(pw);
+            } else {
+                super.explain(pw);
+            }
         }
     }
 }
