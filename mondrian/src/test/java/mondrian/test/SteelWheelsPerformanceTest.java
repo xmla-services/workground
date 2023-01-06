@@ -14,8 +14,8 @@ import static org.opencube.junit5.TestUtil.executeQuery;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
-import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
-import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
+import org.opencube.junit5.dataloader.SteelWheelsDataLoader;
+import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
  * They must be deactivated by default.
  * @author LBoudreau
  */
-public class SteelWheelsPerformanceTest {
+public class SteelWheelsPerformanceTest extends SteelWheelsTestCase {
     /**
      * Certain tests are enabled only if logging is enabled.
      */
@@ -38,11 +38,12 @@ public class SteelWheelsPerformanceTest {
      * of some bug fixes before/after.
      */
     @ParameterizedTest
-    @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+    @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
     public void testComplexFilters(TestingContext context) throws Exception {
         if (!LOGGER.isDebugEnabled()) {
             return;
         }
+        getTestContext(context);
         final String query =
             "with set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Product], NonEmptyCrossJoin([*BASE_MEMBERS_Markets], NonEmptyCrossJoin([*BASE_MEMBERS_Customers], NonEmptyCrossJoin([*BASE_MEMBERS_Time], [*BASE_MEMBERS_Order Status]))))'\n"
             + "  set [*METRIC_CJ_SET] as 'Filter(Filter([*NATIVE_CJ_SET], (([Measures].[*Sales_SEL~AGG] > 0.0) AND ([Measures].[*Quantity_SEL~AGG] > 0.0))), (NOT IsEmpty([Measures].[Quantity])))'\n"

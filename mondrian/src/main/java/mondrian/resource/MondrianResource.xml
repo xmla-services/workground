@@ -315,7 +315,7 @@
 <!-- Catalog errors -->
 
 <exception id="400020" name="NonTimeLevelInTimeHierarchy">
-    <text>Level ''{0}'' belongs to a time hierarchy, so its level-type must be  ''Years'', ''Quarters'', ''Months'', ''Weeks'' or ''Days''.</text>
+    <text>Level ''{0}'' belongs to a time hierarchy, so its level-type must be  ''Regular'', ''TimeYears'', ''TimeHalfYears'', ''TimeHalfYear'', ''TimeQuarters'', ''TimeMonths'', ''TimeWeeks'', ''TimeDays'', ''TimeHours'', ''TimeMinutes'', ''TimeSeconds'', ''TimeUndefined''.</text>
 </exception>
 
 <exception id="400030" name="TimeLevelInNonTimeHierarchy">
