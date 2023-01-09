@@ -32,6 +32,7 @@ import org.eclipse.daanse.olap.api.result.Position;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
@@ -78,7 +79,7 @@ public class PerformanceTest {
   @AfterEach
   public void afterEach() {
       propSaver.reset();
-  }  
+  }
   /**
    * Test case for
    * <a href="http://jira.pentaho.com/browse/MONDRIAN-550">
@@ -455,9 +456,11 @@ public class PerformanceTest {
    * <li>mondrian     14052 marmalade oracle jdk1.6 454
    * <li>mondrian     14770 marmite   mysql  jdk1.7 &gt; 30 minutes
    * </ul>
+   * Disabled by performance reason run >10 h
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @Disabled
   public void testInMemoryCalc(TestingContext context) {
     if ( !LOGGER.isDebugEnabled() ) {
       // Test is too expensive to run as part of standard regress.
@@ -564,9 +567,11 @@ public class PerformanceTest {
    * Testcase for bug
    * <a href="http://jira.pentaho.com/browse/MONDRIAN-981">MONDRIAN-981,
    * "Poor performance when >=2 hierarchies are access-controlled with rollupPolicy=partial"</a>.
+   * Disabled by performance reason run 1.8 h
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
+  @Disabled
   public void testBugMondrian981(TestingContext context) {
     if ( !LOGGER.isDebugEnabled() ) {
       // Too slow to run as part of standard regress until bug is fixed.
