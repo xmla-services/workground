@@ -65,23 +65,23 @@ public class JoinR implements Join {
     }
 
     @Override
-    public void setLeftAlias(String rightAlias) {
-        this.rightAlias = rightAlias;
-    }
-
-    @Override
-    public void setLeftKey(String rightKey) {
-        this.rightKey = rightKey;
-    }
-
-    @Override
-    public void setRightAlias(String leftAlias) {
+    public void setLeftAlias(String leftAlias) {
         this.leftAlias = leftAlias;
     }
 
     @Override
-    public void setRightKey(String leftKey) {
+    public void setLeftKey(String leftKey) {
         this.leftKey = leftKey;
+    }
+
+    @Override
+    public void setRightAlias(String rightAlias) {
+        this.rightAlias = rightAlias;
+    }
+
+    @Override
+    public void setRightKey(String rightKey) {
+        this.rightKey = rightKey;
     }
 
 }
