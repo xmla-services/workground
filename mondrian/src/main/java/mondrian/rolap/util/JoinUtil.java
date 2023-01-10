@@ -69,7 +69,7 @@ public class JoinUtil {
             return RelationUtil.getAlias(((Relation) right));
         }
         if (right instanceof Join) {
-            return getRightAlias(((Join) right));
+            return getLeftAlias(((Join) right));
         }
         throw Util.newInternal(
             new StringBuilder("alias is required because ").append(right).append(" is not a table").toString());
