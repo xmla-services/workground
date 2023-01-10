@@ -114,6 +114,9 @@ public class AggNameImpl implements AggName {
 
     @Override
     public List<? extends AggMeasureFactCount> measuresFactCount() {
+        if (measuresFactCount == null) {
+            measuresFactCount = new ArrayList<AggMeasureFactCountImpl>();
+        }
         return measuresFactCount;
     }
 

@@ -1744,7 +1744,7 @@ public class ReadTest {
         return map.containsKey(key) ? map.get(key) : null;
     }
 
-    private static Schema extracted(File file) throws JAXBException {
+    public static Schema extracted(File file) throws JAXBException {
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(SchemaImpl.class);
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
