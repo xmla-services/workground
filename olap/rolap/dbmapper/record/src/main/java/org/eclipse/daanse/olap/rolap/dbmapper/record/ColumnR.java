@@ -57,4 +57,8 @@ public class ColumnR implements Column {
         return name().equals(that.name()) &&
             Objects.equals(table(), that.table());
     }
+
+    public int hashCode() {
+        return name().hashCode() ^ (table()==null ? 0 : table().hashCode());
+    }
 }
