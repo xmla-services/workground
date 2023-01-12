@@ -182,7 +182,7 @@ public class Segment {
   }
 
   private void describe( StringBuilder buf, boolean values ) {
-    final String sep = Util.nl + "    ";
+    final String sep = new StringBuilder(Util.nl).append("    ").toString();
     buf.append( printSegmentHeaderInfo( sep ) );
 
     for ( int i = 0; i < columns.length; i++ ) {

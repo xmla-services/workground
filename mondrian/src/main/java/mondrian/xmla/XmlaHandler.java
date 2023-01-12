@@ -211,8 +211,8 @@ public class XmlaHandler {
             sessionId = "<no_session>";
         }
         LOGGER.debug(
-            "Creating new connection for user [" + request.getUsername()
-            + "] and session [" + sessionId + "]");
+            new StringBuilder("Creating new connection for user [").append(request.getUsername())
+            .append("] and session [").append(sessionId).append("]").toString());
 
         Properties props = new Properties();
         props.put("sessionId", sessionId);
@@ -793,8 +793,7 @@ public class XmlaHandler {
                     HSB_DRILL_THROUGH_FORMAT_CODE,
                     HSB_DRILL_THROUGH_FORMAT_FAULT_FS,
                     new UnsupportedOperationException(
-                        "<Format>: only 'Tabular' allowed when drilling "
-                        + "through"));
+                        "<Format>: only 'Tabular' allowed when drilling through"));
             }
         } else {
             final String formatName =
@@ -807,8 +806,7 @@ public class XmlaHandler {
                 {
                     //Galaktika: Support for Native format
                     throw new UnsupportedOperationException(
-                        "<Format>: only 'Multidimensional', 'Tabular' and 'Native' "
-                        + "currently supported");
+                        "<Format>: only 'Multidimensional', 'Tabular' and 'Native' currently supported");
                 }
             }
             final String axisFormatName =
@@ -1059,11 +1057,11 @@ public class XmlaHandler {
                         String tupleString = sw.toString();
 
                         PreparedOlapStatement pstmt = connection.prepareOlapStatement(
-                                "SELECT "
-                                        + tupleString
-                                        + " ON 0 FROM "
-                                        + update.getCubeName()
-                                        + " CELL PROPERTIES CELL_ORDINAL"
+                                new StringBuilder("SELECT ")
+                                        .append(tupleString)
+                                        .append(" ON 0 FROM ")
+                                        .append(update.getCubeName())
+                                        .append(" CELL PROPERTIES CELL_ORDINAL").toString()
                         );
                         CellSet cellSet = pstmt.executeQuery();
                         CellSetAxis axis = cellSet.getAxes().get(0);
@@ -1081,11 +1079,11 @@ public class XmlaHandler {
                         String valueString = sw.toString();
 
                         pstmt = connection.prepareOlapStatement(
-                                "WITH MEMBER [Measures].[m1] AS "
-                                        + valueString
-                                        + " SELECT [Measures].[m1] ON 0 FROM "
-                                        + update.getCubeName()
-                                        + " CELL PROPERTIES VALUE"
+                                new StringBuilder("WITH MEMBER [Measures].[m1] AS ")
+                                        .append(valueString)
+                                        .append(" SELECT [Measures].[m1] ON 0 FROM ")
+                                        .append(update.getCubeName())
+                                        .append(" CELL PROPERTIES VALUE").toString()
                         );
                         cellSet = pstmt.executeQuery();
                         Cell cell = cellSet.getCell(Arrays.asList(0));
@@ -1883,7 +1881,7 @@ public class XmlaHandler {
                 for (String fieldName : fieldNames) {
                     columns.add(
                         new Column(
-                            tableName + "." + fieldName,
+                            new StringBuilder(tableName).append(".").append(fieldName).toString(),
                             Types.VARCHAR, // don't know the real type
                             0));
                 }
@@ -2066,7 +2064,7 @@ public class XmlaHandler {
         final String mdx = request.getStatement();
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("mdx: \"" + mdx + "\"");
+            LOGGER.debug(new StringBuilder("mdx: \"").append(mdx).append("\"").toString());
         }
 
         if ((mdx == null) || (mdx.length() == 0)) {
@@ -2530,9 +2528,9 @@ public class XmlaHandler {
             List<Object> values = new ArrayList<Object>();
             values.add("name");
             values.add(
-                hierarchy.getUniqueName()
-                + "."
-                + Util.quoteMdxIdentifier(longProp.getName()));
+                new StringBuilder(hierarchy.getUniqueName())
+                .append(".")
+                .append(Util.quoteMdxIdentifier(longProp.getName())).toString());
             if (!(longProp instanceof IMondrianOlap4jProperty)) {
                 values.add("type");
                 values.add(getXsdType(longProp));
@@ -2670,9 +2668,8 @@ public class XmlaHandler {
                         }
                     } else {
                         LOGGER.warn(
-                            "Can not create SlicerAxis: "
-                            + "null default member for Hierarchy "
-                            + hierarchy.getUniqueName());
+                            "Can not create SlicerAxis: null default member for Hierarchy {}",
+                            hierarchy.getUniqueName());
                     }
                 }
                 writer.endSequence(); // Tuple
@@ -3111,8 +3108,8 @@ public class XmlaHandler {
             Property property, Level level, int memberOrdinal)
         {
             super(
-                level.getUniqueName() + "."
-                + Util.quoteMdxIdentifier(property.getName()));
+                new StringBuilder(level.getUniqueName()).append(".")
+                .append(Util.quoteMdxIdentifier(property.getName())).toString());
             this.property = property;
             this.level = level;
             this.memberOrdinal = memberOrdinal;
@@ -3249,7 +3246,7 @@ public class XmlaHandler {
                         if (j == 0) {
                             name = member.getUniqueName();
                         } else {
-                            name = name + "." + member.getUniqueName();
+                            name = new StringBuilder(name).append(".").append(member.getUniqueName()).toString();
                         }
                         j++;
                     }
@@ -3570,8 +3567,7 @@ public class XmlaHandler {
                 HSB_DISCOVER_FORMAT_CODE,
                 HSB_DISCOVER_FORMAT_FAULT_FS,
                 new UnsupportedOperationException(
-                    "<Format>: only 'Tabular' allowed in Discover method "
-                    + "type"));
+                    "<Format>: only 'Tabular' allowed in Discover method type"));
         }
         final Content content = getContent(request);
 
@@ -3847,7 +3843,7 @@ public class XmlaHandler {
 
         /**
          * Returns the data type of the level's key.
-         * 
+         *
          * @param level
          * @return String|Numeric|Integer|Boolean|Date|Time|Timestamp
          */

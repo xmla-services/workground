@@ -167,7 +167,7 @@ class TopBottomPercentSumFunDef extends FunDefBase {
           // ignore the error
         } else {
           throw Util.newInternal(
-            "got " + o + " when expecting Number" );
+            new StringBuilder("got ").append(o).append(" when expecting Number").toString() );
         }
       }
 

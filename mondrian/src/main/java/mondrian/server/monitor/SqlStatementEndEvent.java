@@ -48,7 +48,7 @@ public class SqlStatementEndEvent extends SqlStatementEvent {
     }
 
     public String toString() {
-        return "SqlStatementEndEvent(" + sqlStatementId + ")";
+        return new StringBuilder("SqlStatementEndEvent(").append(sqlStatementId).append(")").toString();
     }
 
     public <T> T accept(Visitor<T> visitor) {

@@ -76,19 +76,19 @@ abstract class Rowset implements XmlaConstants {
         {
             String restrictedColumn = restrictionEntry.getKey();
             LOGGER.debug(
-                "Rowset<init>: restrictedColumn=\"" + restrictedColumn + "\"");
+                "Rowset<init>: restrictedColumn=\"{}\"", restrictedColumn);
             final RowsetDefinition.Column column = definition.lookupColumn(
                 restrictedColumn);
             if (column == null) {
                 throw Util.newError(
-                    "Rowset '" + definition.name()
-                    + "' does not contain column '" + restrictedColumn + "'");
+                    new StringBuilder("Rowset '").append(definition.name())
+                    .append("' does not contain column '").append(restrictedColumn).append("'").toString());
             }
             if (!column.restriction) {
                 throw Util.newError(
-                    "Rowset '" + definition.name()
-                    + "' column '" + restrictedColumn
-                    + "' does not allow restrictions");
+                    new StringBuilder("Rowset '").append(definition.name())
+                    .append("' column '").append(restrictedColumn)
+                    .append("' does not allow restrictions").toString());
             }
             // Check that the value is of the right type.
             final Object restriction = restrictionEntry.getValue();
@@ -103,9 +103,9 @@ abstract class Rowset implements XmlaConstants {
                     break; // OK
                 default:
                     throw Util.newError(
-                        "Rowset '" + definition.name()
-                        + "' column '" + restrictedColumn
-                        + "' can only be restricted on one value at a time");
+                        new StringBuilder("Rowset '").append(definition.name())
+                        .append("' column '").append(restrictedColumn)
+                        .append("' can only be restricted on one value at a time").toString());
                 }
             }
             list.add(column);
@@ -118,8 +118,8 @@ abstract class Rowset implements XmlaConstants {
                 Util.lookup(PropertyDefinition.class, propertyName);
             if (propertyDef == null) {
                 throw Util.newError(
-                    "Rowset '" + definition.name()
-                    + "' does not support property '" + propertyName + "'");
+                    new StringBuilder("Rowset '").append(definition.name())
+                    .append("' does not support property '").append(propertyName).append("'").toString());
             }
             final String propertyValue = propertyEntry.getValue();
             setProperty(propertyDef, propertyValue);
@@ -161,9 +161,8 @@ abstract class Rowset implements XmlaConstants {
             return;
         default:
             LOGGER.warn(
-                "Warning: Rowset '" + rowsetDefinition.name()
-                + "' does not support property '" + propertyDef.name()
-                + "' (value is '" + value + "')");
+                "Warning: Rowset '{}' does not support property '{}' (value is '{}')",
+                rowsetDefinition.name(), propertyDef.name(), value);
         }
     }
 
@@ -272,10 +271,10 @@ abstract class Rowset implements XmlaConstants {
                         HSB_BAD_NON_NULLABLE_COLUMN_CODE,
                         HSB_BAD_NON_NULLABLE_COLUMN_FAULT_FS,
                         Util.newInternal(
-                            "Value required for column "
-                            + column.name
-                            + " of rowset "
-                            + rowsetDefinition.name()));
+                            new StringBuilder("Value required for column ")
+                            .append(column.name)
+                            .append(" of rowset ")
+                            .append(rowsetDefinition.name()).toString()));
                 }
             } else if (value instanceof XmlElement[]) {
                 XmlElement[] elements = (XmlElement[]) value;
@@ -469,8 +468,7 @@ abstract class Rowset implements XmlaConstants {
                     return Integer.parseInt(rval.get(0));
                 } catch (NumberFormatException ex) {
                     LOGGER.info(
-                        "Rowset.getRestrictionValue: "
-                        + "bad integer restriction \"" + rval + "\"");
+                        "Rowset.getRestrictionValue: bad integer restriction \"{}\"", rval);
                     return -1;
                 }
             }

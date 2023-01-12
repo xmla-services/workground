@@ -131,17 +131,17 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace(
-                "SegmentCacheIndexImpl("
-                + System.identityHashCode(this)
-                + ")locate:"
-                + "\nschemaName:" + schemaName
-                + "\nschemaChecksum:" + schemaChecksum
-                + "\ncubeName:" + cubeName
-                + "\nmeasureName:" + measureName
-                + "\nrolapStarFactTableName:" + rolapStarFactTableName
-                + "\nconstrainedColsBitKey:" + constrainedColsBitKey
-                + "\ncoordinates:" + coordinates
-                + "\ncompoundPredicates:" + compoundPredicates);
+                new StringBuilder("SegmentCacheIndexImpl(")
+                    .append(System.identityHashCode(this))
+                    .append(")locate:")
+                    .append("\nschemaName:").append(schemaName)
+                    .append("\nschemaChecksum:").append(schemaChecksum)
+                    .append("\ncubeName:").append(cubeName)
+                    .append("\nmeasureName:").append(measureName)
+                    .append("\nrolapStarFactTableName:").append(rolapStarFactTableName)
+                    .append("\nconstrainedColsBitKey:").append(constrainedColsBitKey)
+                    .append("\ncoordinates:").append(coordinates)
+                    .append("\ncompoundPredicates:").append(compoundPredicates).toString());
         }
 
         List<SegmentHeader> list = Collections.emptyList();
@@ -157,9 +157,9 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         final List<SegmentHeader> headerList = bitkeyMap.get(starKey);
         if (headerList == null) {
             LOGGER.trace(
-                "SegmentCacheIndexImpl("
-                + System.identityHashCode(this)
-                + ").locate:NOMATCH");
+                new StringBuilder("SegmentCacheIndexImpl(")
+                    .append(System.identityHashCode(this))
+                    .append(").locate:NOMATCH").toString());
             return Collections.emptyList();
         }
         for (SegmentHeader header : headerList) {
@@ -175,9 +175,9 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         if (LOGGER.isTraceEnabled()) {
             final StringBuilder sb =
                 new StringBuilder(
-                    "SegmentCacheIndexImpl("
-                    + System.identityHashCode(this)
-                    + ").locate:MATCH");
+                    new StringBuffer("SegmentCacheIndexImpl(")
+                        .append(System.identityHashCode(this))
+                        .append(").locate:MATCH").toString());
             for (SegmentHeader header : list) {
                 sb.append("\n");
                 sb.append(header.toString());
@@ -195,10 +195,10 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         checkThread();
 
         LOGGER.debug(
-            "SegmentCacheIndexImpl("
-            + System.identityHashCode(this)
-            + ").add:\n"
-            + header.toString());
+            new StringBuilder("SegmentCacheIndexImpl(")
+                .append(System.identityHashCode(this))
+                .append(").add:\n")
+                .append(header.toString()).toString());
 
         HeaderInfo headerInfo = headerMap.get(header);
         if (headerInfo == null) {
@@ -257,10 +257,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         checkThread();
 
         LOGGER.trace(
-            "SegmentCacheIndexImpl.update: Updating header from:\n"
-            + oldHeader.toString()
-            + "\n\nto\n\n"
-            + newHeader.toString());
+            "SegmentCacheIndexImpl.update: Updating header from:\n{}\n\nto\n\n{}",
+            oldHeader.toString(), newHeader.toString());
         final HeaderInfo headerInfo = headerMap.get(oldHeader);
         headerMap.remove(oldHeader);
         if(headerInfo != null) {
@@ -290,9 +288,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
 
         if (headerInfo == null) {
             LOGGER.trace(
-                "loadSucceeded: Discarding data for header "
-                + header.getUniqueID()
-                + ". Data arrived late.");
+                "loadSucceeded: Discarding data for header {}. Data arrived late.",
+                header.getUniqueID());
             return;
         }
 
@@ -316,7 +313,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
             return;
         }
         assert headerInfo.slot != null
-            : "segment header " + header.getUniqueID() + " is not loading";
+            : new StringBuilder("segment header ").append(header.getUniqueID()).append(" is not loading").toString();
         headerInfo.slot.fail(throwable);
         remove(header);
         // Cleanup the HeaderInfo
@@ -329,10 +326,10 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
 
         if (LOGGER.isTraceEnabled()) {
             LOGGER.trace(
-                "SegmentCacheIndexImpl("
-                + System.identityHashCode(this)
-                + ").remove:\n"
-                + header.toString(),
+                new StringBuilder("SegmentCacheIndexImpl(")
+                    .append(System.identityHashCode(this))
+                    .append(").remove:\n")
+                    .append(header.toString()).toString(),
                 new Throwable("Removal."));
         } else {
             LOGGER.debug(
@@ -343,18 +340,18 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         final HeaderInfo headerInfo = headerMap.get(header);
         if (headerInfo == null) {
             LOGGER.debug(
-                "SegmentCacheIndexImpl("
-                + System.identityHashCode(this)
-                + ").remove:UNKNOWN HEADER");
+                new StringBuilder("SegmentCacheIndexImpl(")
+                    .append(System.identityHashCode(this))
+                    .append(").remove:UNKNOWN HEADER").toString());
             return;
         }
         if (headerInfo.slot != null && !headerInfo.slot.isDone()) {
             // Cannot remove while load is pending; flag for removal after load
             headerInfo.removeAfterLoad = true;
             LOGGER.debug(
-                "SegmentCacheIndexImpl("
-                + System.identityHashCode(this)
-                + ").remove:DEFFERED");
+                new StringBuilder("SegmentCacheIndexImpl(")
+                    .append(System.identityHashCode(this))
+                    .append(").remove:DEFFERED").toString());
             return;
         }
 
@@ -389,7 +386,9 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
 
     private void checkThread() {
         assert thread == Thread.currentThread()
-            : "expected " + thread + ", but was " + Thread.currentThread();
+            : new StringBuilder("expected ").append(thread).append(", but was ")
+            .append(Thread.currentThread())
+            .toString();
     }
 
     public static boolean matches(

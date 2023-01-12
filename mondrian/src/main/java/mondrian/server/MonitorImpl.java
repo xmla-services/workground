@@ -391,8 +391,10 @@ class MonitorImpl implements Monitor, MonitorMXBean {
           protected boolean removeEldestEntry( Map.Entry<Integer, MutableConnectionInfo> e ) {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-                RolapUtil.MONITOR_LOGGER.trace( "ConnectionInfo(" + e.getKey() + ") evicted. Stack is:" + Util.nl + e
-                    .getValue().stack );
+                RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("ConnectionInfo(").append(e.getKey())
+                    .append(") evicted. Stack is:").append(Util.nl)
+                    .append(e.getValue().stack).toString()
+                );
               }
               return true;
             }
@@ -409,8 +411,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
           protected boolean removeEldestEntry( Map.Entry<Long, MutableSqlStatementInfo> e ) {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-                RolapUtil.MONITOR_LOGGER.trace( "StatementInfo(" + e.getKey() + ") evicted. Stack is:" + Util.nl + e
-                    .getValue().stack );
+                RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("StatementInfo(").append(e.getKey())
+                    .append(") evicted. Stack is:").append(Util.nl).append(e.getValue().stack).toString() );
               }
               return true;
             }
@@ -427,8 +429,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
           protected boolean removeEldestEntry( Map.Entry<Long, MutableStatementInfo> e ) {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-                RolapUtil.MONITOR_LOGGER.trace( "StatementInfo(" + e.getKey() + ") evicted. Stack is:" + Util.nl + e
-                    .getValue().stack );
+                RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("StatementInfo(").append(e.getKey())
+                    .append(") evicted. Stack is:").append(Util.nl).append(e.getValue().stack).toString() );
               }
               return true;
             }
@@ -445,8 +447,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
           protected boolean removeEldestEntry( Map.Entry<Long, MutableExecutionInfo> e ) {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-                RolapUtil.MONITOR_LOGGER.trace( "ExecutionInfo(" + e.getKey() + ") evicted. Stack is:" + Util.nl + e
-                    .getValue().stack );
+                RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("ExecutionInfo(").append(e.getKey())
+                    .append(") evicted. Stack is:").append(Util.nl).append(e.getValue().stack).toString() );
               }
               return true;
             }
@@ -467,8 +469,9 @@ class MonitorImpl implements Monitor, MonitorMXBean {
           protected boolean removeEldestEntry( Map.Entry<Long, MutableExecutionInfo> e ) {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-                RolapUtil.MONITOR_LOGGER.trace( "Retired ExecutionInfo(" + e.getKey() + ") evicted. Stack is:"
-                    + Util.nl + e.getValue().stack );
+                RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("Retired ExecutionInfo(").append(e.getKey())
+                    .append(") evicted. Stack is:")
+                    .append(Util.nl).append(e.getValue().stack).toString() );
               }
               return true;
             }
@@ -494,8 +497,9 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       foo( conn, event );
       foo( server.aggConn, event );
       if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-        RolapUtil.MONITOR_LOGGER.trace( "Connection(" + event.connectionId + ") created. stack is:" + Util.nl
-            + event.stack );
+        RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("Connection(").append(event.connectionId)
+            .append(") created. stack is:").append(Util.nl)
+            .append(event.stack).toString() );
       }
       return null;
     }
@@ -533,8 +537,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       foo( conn.aggStmt, event );
       foo( server.aggStmt, event );
       if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-        RolapUtil.MONITOR_LOGGER.trace( "Statement(" + event.statementId + ") created. stack is:" + Util.nl
-            + event.stack );
+        RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("Statement(").append(event.statementId)
+            .append(") created. stack is:").append(Util.nl).append(event.stack).toString() );
       }
       return null;
     }
@@ -575,8 +579,9 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       foo( stmt.conn.aggExec, event );
       foo( server.aggExec, event );
       if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-        RolapUtil.MONITOR_LOGGER.trace( "Execution(" + event.executionId + ") created. stack is:" + Util.nl
-            + event.stack );
+        RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("Execution(").append(event.executionId)
+            .append(") created. stack is:").append(Util.nl)
+            .append(event.stack).toString() );
       }
       return null;
     }
@@ -715,8 +720,9 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       foo( sql.stmt.aggSql, event );
       foo( server.aggSql, event );
       if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
-        RolapUtil.MONITOR_LOGGER.trace( "SqlStatement(" + event.sqlStatementId + ") created. stack is:" + Util.nl
-            + event.stack );
+        RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("SqlStatement(").append(event.sqlStatementId)
+            .append(") created. stack is:").append(Util.nl)
+            .append(event.stack).toString() );
       }
       return null;
     }

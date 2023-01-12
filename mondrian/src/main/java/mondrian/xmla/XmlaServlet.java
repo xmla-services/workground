@@ -85,7 +85,8 @@ public abstract class XmlaServlet
     }
 
     public XmlaServlet() {
-        LOGGER.info("Application working directory: \"" + new java.io.File(".").getAbsolutePath() + "\"");
+        LOGGER.info("Application working directory: \"{}\"",
+            new java.io.File(".").getAbsolutePath());
     }
 
 
@@ -173,9 +174,8 @@ public abstract class XmlaServlet
                 } catch (UnsupportedEncodingException uee) {
                     charEncoding = null;
                     LOGGER.warn(
-                        "Unsupported character encoding '" + charEncoding
-                        + "': Use default character encoding from HTTP client "
-                        + "for now");
+                        "Unsupported character encoding '{}': Use default character encoding from HTTP client for now",
+                        charEncoding);
                 }
             }
 
@@ -233,8 +233,8 @@ public abstract class XmlaServlet
                     || !contentType.contains("text/xml"))
                 {
                     throw new IllegalArgumentException(
-                        "Only accepts content type 'text/xml', not '"
-                        + contentType + "'");
+                        new StringBuilder("Only accepts content type 'text/xml', not '")
+                        .append(contentType).append("'").toString());
                 }
 
                 // are they asking for a JSON response?
@@ -243,9 +243,9 @@ public abstract class XmlaServlet
                     mimeType = XmlaUtil.chooseResponseMimeType(accept);
                     if (mimeType == null) {
                         throw new IllegalArgumentException(
-                            "Accept header '" + accept + "' is not a supported"
-                            + " response content type. Allowed values:"
-                            + " text/xml, application/xml, application/json.");
+                            new StringBuilder("Accept header '").append(accept).append("' is not a supported")
+                            .append(" response content type. Allowed values:")
+                            .append(" text/xml, application/xml, application/json.").toString());
                     }
                     if (mimeType != Enumeration.ResponseMimeType.SOAP) {
                         response.setContentType(mimeType.getMimeType());
@@ -484,8 +484,8 @@ public abstract class XmlaServlet
                             callback.init(servletConfig);
                         } catch (Exception e) {
                             LOGGER.warn(
-                                "Failed to initialize callback '"
-                                + className + "'",
+                                new StringBuilder("Failed to initialize callback '")
+                                .append(className).append("'").toString(),
                                 e);
                             continue nextCallback;
                         }
@@ -495,29 +495,29 @@ public abstract class XmlaServlet
 
                         if (LOGGER.isDebugEnabled()) {
                             LOGGER.debug(
-                                "Register callback '" + className + "'");
+                                "Register callback '{}'", className);
                         }
                     } else {
                         LOGGER.warn(
-                            "'" + className + "' is not an implementation of '"
-                            + XmlaRequestCallback.class + "'");
+                            "'{}' is not an implementation of '{}'", className, XmlaRequestCallback.class);
                     }
                 } catch (ClassNotFoundException cnfe) {
                     LOGGER.warn(
-                        "Callback class '" + className + "' not found",
+                        new StringBuilder("Callback class '").append(className).append("' not found").toString(),
                         cnfe);
                 } catch (InstantiationException ie) {
                     LOGGER.warn(
-                        "Can't instantiate class '" + className + "'",
+                        new StringBuilder("Can't instantiate class '").append(className).append("'").toString(),
                         ie);
                 } catch (IllegalAccessException iae) {
                     LOGGER.warn(
-                        "Can't instantiate class '" + className + "'",
+                        new StringBuilder("Can't instantiate class '").append(className).append("'").toString(),
                         iae);
                 }
             }
             LOGGER.debug(
-                "Registered " + count + " callback" + (count > 1 ? "s" : ""));
+                new StringBuilder("Registered ").append(count).append(" callback")
+                    .append((count > 1 ? "s" : "")).toString());
         }
     }
 }

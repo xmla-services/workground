@@ -29,6 +29,8 @@ import mondrian.olap.Util;
  * milliseconds.
  */
 public class ExpiringReference<T> extends SoftReference<T> {
+
+    public static final String MIN_VALUE_MS = Long.MIN_VALUE + "ms";
     T hardRef;
     long expiry = Long.MIN_VALUE;
 
@@ -110,7 +112,7 @@ public class ExpiringReference<T> extends SoftReference<T> {
     }
 
     public synchronized T get() {
-        return get(Long.MIN_VALUE + "ms");
+        return get(MIN_VALUE_MS);
     }
 
     public synchronized T get(String timeout) {

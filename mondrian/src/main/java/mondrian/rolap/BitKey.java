@@ -195,7 +195,7 @@ public interface BitKey
          */
         public static BitKey makeBitKey(int size, boolean init) {
             if (size < 0) {
-                String msg = "Negative size \"" + size + "\" not allowed";
+                String msg = new StringBuilder("Negative size \"").append(size).append("\" not allowed").toString();
                 throw new IllegalArgumentException(msg);
             }
             final BitKey bk;
@@ -460,7 +460,7 @@ public interface BitKey
                 bits |= bit(pos);
             } else {
                 throw new IllegalArgumentException(
-                    "pos " + pos + " exceeds capacity 64");
+                    new StringBuilder("pos ").append(pos).append(" exceeds capacity 64").toString());
             }
         }
 
@@ -822,7 +822,7 @@ public interface BitKey
                 bits1 |= bit(pos);
             } else {
                 throw new IllegalArgumentException(
-                    "pos " + pos + " exceeds capacity 128");
+                    new StringBuilder("pos ").append(pos).append(" exceeds capacity 128").toString());
             }
         }
 
@@ -843,7 +843,7 @@ public interface BitKey
                 bits1 &= ~bit(pos);
             } else {
                 throw new IndexOutOfBoundsException(
-                    "pos " + pos + " exceeds size " + 128);
+                    new StringBuilder("pos ").append(pos).append(" exceeds size ").append(128).toString());
             }
         }
 

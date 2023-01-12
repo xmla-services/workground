@@ -183,11 +183,11 @@ public class RolapLevel extends LevelBase {
         if (parentExp != null) {
             Util.assertTrue(
                 !isAll(),
-                "'All' level '" + this + "' must not be parent-child");
+                new StringBuilder("'All' level '").append(this).append("' must not be parent-child").toString());
             Util.assertTrue(
                 isUnique(),
-                "Parent-child level '" + this
-                + "' must have uniqueMembers=\"true\"");
+                new StringBuilder("Parent-child level '").append(this)
+                .append("' must have uniqueMembers=\"true\"").toString());
         }
         this.nullParentValue = nullParentValue;
         Util.assertPrecondition(
@@ -214,9 +214,9 @@ public class RolapLevel extends LevelBase {
                     != levelProperty.getType())
                 {
                     throw Util.newError(
-                        "Property " + this.getName() + "."
-                        + levelProperty.getName() + " overrides a "
-                        + "property with the same name but different type");
+                        new StringBuilder("Property ").append(this.getName()).append(".")
+                        .append(levelProperty.getName()).append(" overrides a ")
+                        .append("property with the same name but different type").toString());
                 }
             }
         }
@@ -447,7 +447,8 @@ public class RolapLevel extends LevelBase {
         } else if (type.equals(PropertyTypeEnum.DATE)) {
             return Property.Datatype.TYPE_DATE;
         } else {
-            throw Util.newError("Unknown property type '" + type + "'");
+            throw Util.newError(new StringBuilder("Unknown property type '")
+                .append(type).append("'").toString());
         }
     }
 
@@ -457,14 +458,15 @@ public class RolapLevel extends LevelBase {
             final Relation table = rolapHierarchy.getUniqueTable();
             if (table == null) {
                 throw Util.newError(
-                    "must specify a table for level " + getUniqueName()
-                    + " because hierarchy has more than one table");
+                    new StringBuilder("must specify a table for level ").append(getUniqueName())
+                    .append(" because hierarchy has more than one table").toString());
             }
             nameColumn.setTable(RelationUtil.getAlias(table));
         } else {
             if (!rolapHierarchy.tableExists(nameColumn.table())) {
                 throw Util.newError(
-                    "Table '" + nameColumn.table() + "' not found");
+                    new StringBuilder("Table '").append(nameColumn.table())
+                        .append("' not found").toString());
             }
         }
     }
@@ -514,10 +516,10 @@ public class RolapLevel extends LevelBase {
         BestFitColumnType type = VALUES.get(internalType == null ? null : internalType.getValue());
         if (type == null && internalType != null) {
             throw Util.newError(
-                "Invalid value '" + internalType.getValue()
-                + "' for attribute 'internalType' of element 'Level'. "
-                + "Valid values are: "
-                + VALUES.keySet());
+                new StringBuilder("Invalid value '").append(internalType.getValue())
+                    .append("' for attribute 'internalType' of element 'Level'. ")
+                    .append("Valid values are: ")
+                    .append(VALUES.keySet()).toString());
         }
         return type;
     }
@@ -562,20 +564,18 @@ public class RolapLevel extends LevelBase {
             final List<Expression> keyExps = getInheritedKeyExps();
             if (keyExps.size() != keyValues.size()) {
                 throw Util.newError(
-                    "Wrong number of values in member key; "
-                    + keySegment + " has " + keyValues.size()
-                    + " values, whereas level's key has " + keyExps.size()
-                    + " columns "
-                    + new AbstractList<String>() {
-                        public String get(int index) {
-                            return genericExpression(keyExps.get(index));
-                        }
-
-                        public int size() {
+                    new StringBuilder("Wrong number of values in member key; ")
+                        .append(keySegment).append(" has ").append(keyValues.size())
+                        .append(" values, whereas level's key has ").append(keyExps.size())
+                        .append(" columns ")
+                        .append(new AbstractList<String>() {
+                            public String get(int index) {
+                                return genericExpression(keyExps.get(index));
+                            }
+                            public int size() {
                             return keyExps.size();
-                        }
-                    }
-                    + ".");
+                        }})
+                        .append(".").toString());
             }
             return getHierarchy().getMemberReader().getMemberByKey(
                 this, keyValues);

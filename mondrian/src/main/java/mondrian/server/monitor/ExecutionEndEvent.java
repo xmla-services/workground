@@ -62,7 +62,7 @@ public class ExecutionEndEvent extends ExecutionEvent {
 
   @Override
   public String toString() {
-    return "ExecutionEndEvent(" + executionId + ")";
+    return new StringBuilder("ExecutionEndEvent(").append(executionId).append(")").toString();
   }
 
   public <T> T accept( Visitor<T> visitor ) {

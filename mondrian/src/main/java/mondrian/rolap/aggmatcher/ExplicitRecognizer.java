@@ -386,13 +386,13 @@ class ExplicitRecognizer extends Recognizer {
                         levelMatches.indexOf(pair) - 1).left.getDepth())
             {
                 msgRecorder.reportError(
-                    "The aggregate table "
-                    + aggTable.getName()
-                    + " contains the column "
-                    + pair.right.getName()
-                    + " which maps to the level "
-                    + pair.left.getUniqueName()
-                    + " but its parent level is not part of that aggregation.");
+                    new StringBuilder("The aggregate table ")
+                        .append(aggTable.getName())
+                        .append(" contains the column ")
+                        .append(pair.right.getName())
+                        .append(" which maps to the level ")
+                        .append(pair.left.getUniqueName())
+                        .append(" but its parent level is not part of that aggregation.").toString());
             }
             // Warn if this level is marked as non-collapsed but the level
             // above it is present in this agg table.
@@ -401,11 +401,12 @@ class ExplicitRecognizer extends Recognizer {
             {
                 forceCollapse = true;
                 msgRecorder.reportWarning(
-                    "The aggregate table " + aggTable.getName()
-                    + " contains the column " + pair.right.getName()
-                    + " which maps to the level "
-                    + pair.left.getUniqueName()
-                    + " and is marked as non-collapsed, but its parent column is already present.");
+                    new StringBuilder("The aggregate table ").append(aggTable.getName())
+                        .append(" contains the column ").append(pair.right.getName())
+                        .append(" which maps to the level ")
+                        .append(pair.left.getUniqueName())
+                        .append(" and is marked as non-collapsed, but its parent column is already present.")
+                        .toString());
             }
             // Fail if the level is the first, it isn't at the top,
             // but it is marked as collapsed.
@@ -414,13 +415,14 @@ class ExplicitRecognizer extends Recognizer {
                 && aggLevels.get(levelMatches.indexOf(pair)).isCollapsed())
             {
                 msgRecorder.reportError(
-                    "The aggregate table "
-                    + aggTable.getName()
-                    + " contains the column "
-                    + pair.right.getName()
-                    + " which maps to the level "
-                    + pair.left.getUniqueName()
-                    + " but its parent level is not part of that aggregation and this level is marked as collapsed.");
+                    new StringBuilder("The aggregate table ")
+                        .append(aggTable.getName())
+                        .append(" contains the column ")
+                        .append(pair.right.getName())
+                        .append(" which maps to the level ")
+                        .append(pair.left.getUniqueName())
+                        .append(" but its parent level is not part of that aggregation and this level is marked as collapsed.")
+                        .toString());
             }
             // Fail if the level is non-collapsed but its members
             // are not unique.
@@ -429,13 +431,14 @@ class ExplicitRecognizer extends Recognizer {
                         && !pair.left.isUnique())
             {
                 msgRecorder.reportError(
-                    "The aggregate table "
-                    + aggTable.getName()
-                    + " contains the column "
-                    + pair.right.getName()
-                    + " which maps to the level "
-                    + pair.left.getUniqueName()
-                    + " but that level doesn't have unique members and this level is marked as non collapsed.");
+                    new StringBuilder("The aggregate table ")
+                        .append(aggTable.getName())
+                        .append(" contains the column ")
+                        .append(pair.right.getName())
+                        .append(" which maps to the level ")
+                        .append(pair.left.getUniqueName())
+                        .append(" but that level doesn't have unique members and this level is marked as non collapsed.")
+                        .toString());
             }
         }
         return forceCollapse;

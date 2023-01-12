@@ -340,12 +340,12 @@ public class DefaultXmlaRequest
                             }
                             if (LOGGER.isDebugEnabled()) {
                                 LOGGER.debug(
-                                        "DefaultXmlaRequest.initRestrictions: "
-                                                + " key=\""
-                                                + key
-                                                + "\", value=\""
-                                                + value
-                                                + "\"");
+                                        new StringBuilder("DefaultXmlaRequest.initRestrictions: ")
+                                            .append(" key=\"")
+                                            .append(key)
+                                            .append("\", value=\"")
+                                            .append(value)
+                                            .append("\"").toString());
                             }
 
                             values.add(value);
@@ -380,12 +380,12 @@ public class DefaultXmlaRequest
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
-                    "DefaultXmlaRequest.initRestrictions: "
-                    + " key=\""
-                    + key
-                    + "\", value=\""
-                    + this.properties.get(key)
-                    + "\"");
+                    new StringBuilder("DefaultXmlaRequest.initRestrictions: ")
+                        .append(" key=\"")
+                        .append(key)
+                        .append("\", value=\"")
+                        .append(this.properties.get(key))
+                        .append("\"").toString());
             }
         }
 
@@ -411,12 +411,12 @@ public class DefaultXmlaRequest
 
                         if (LOGGER.isDebugEnabled()) {
                             LOGGER.debug(
-                                "DefaultXmlaRequest.initProperties: "
-                                + " key=\""
-                                + key
-                                + "\", value=\""
-                                + value
-                                + "\"");
+                                new StringBuilder("DefaultXmlaRequest.initProperties: ")
+                                    .append(" key=\"")
+                                    .append(key)
+                                    .append("\", value=\"")
+                                    .append(value)
+                                    .append("\"").toString());
                         }
 
                         properties.put(key, value);

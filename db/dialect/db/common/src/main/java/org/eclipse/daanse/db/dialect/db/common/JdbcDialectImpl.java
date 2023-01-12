@@ -144,7 +144,7 @@ public abstract class JdbcDialectImpl implements Dialect {
         DatabaseMetaData metaData;
         try {
             metaData = connection.getMetaData();
-            
+
             //init
             this.quoteIdentifierString = deduceIdentifierQuoteString(metaData);
             this.productName = deduceProductName(metaData);
@@ -154,12 +154,12 @@ public abstract class JdbcDialectImpl implements Dialect {
             this.maxColumnNameLength = deduceMaxColumnNameLength(metaData);
             this.databaseProduct = getProduct(this.productName, this.productVersion);
             this.permitsSelectNotInGroupBy = deduceSupportsSelectNotInGroupBy(connection);
-       
+
             //check
             return isSupportedProduct(productName, productVersion);
 
-            
-            
+
+
         } catch (SQLException e) {
             LOGGER.info("initialize failed", e);
             return false;
@@ -299,13 +299,14 @@ public abstract class JdbcDialectImpl implements Dialect {
 
     @Override
     public String toUpper(String expr) {
-        return "UPPER(" + expr + ")";
+        return new StringBuilder("UPPER(").append(expr).append(")").toString();
     }
 
     @Override
     public String caseWhenElse(String cond, String thenExpr, String elseExpr) {
-        return "CASE WHEN " + cond + " THEN " + thenExpr + " ELSE " + elseExpr
-            + " END";
+        return new StringBuilder("CASE WHEN ").append(cond)
+            .append(" THEN ").append(thenExpr).append(" ELSE ")
+            .append(elseExpr).append(" END").toString();
     }
 
     @Override
@@ -755,7 +756,7 @@ public abstract class JdbcDialectImpl implements Dialect {
                 }
                 maxLen = Math.max(maxLen, value.length());
             }
-            return "VARCHAR(" + maxLen + ")";
+            return new StringBuilder("VARCHAR(").append(maxLen).append(")").toString();
         } else {
             return "INTEGER";
         }
@@ -777,9 +778,9 @@ public abstract class JdbcDialectImpl implements Dialect {
             return generateOrderByNulls(expr, ascending, collateNullsLast);
         } else {
             if (ascending) {
-                return expr + " ASC";
+                return new StringBuilder(expr).append(" ASC").toString();
             } else {
-                return expr + " DESC";
+                return new StringBuilder(expr).append(" DESC").toString();
             }
         }
     }
@@ -817,24 +818,24 @@ public abstract class JdbcDialectImpl implements Dialect {
         boolean collateNullsLast)
     {
         if (collateNullsLast) {
+            StringBuilder sb = new StringBuilder("CASE WHEN ")
+                .append(expr).append(" IS NULL THEN 1 ELSE 0 END, ").append(expr);
             if (ascending) {
                 return
-                    "CASE WHEN " + expr + " IS NULL THEN 1 ELSE 0 END, " + expr
-                        + " ASC";
+                    sb.append(" ASC").toString();
             } else {
                 return
-                    "CASE WHEN " + expr + " IS NULL THEN 1 ELSE 0 END, " + expr
-                        + " DESC";
+                    sb.append(" DESC").toString();
             }
         } else {
+            StringBuilder sb = new StringBuilder("CASE WHEN ")
+                .append(expr).append(" IS NULL THEN 0 ELSE 1 END, ").append(expr);
             if (ascending) {
                 return
-                    "CASE WHEN " + expr + " IS NULL THEN 0 ELSE 1 END, " + expr
-                        + " ASC";
+                    sb.append(" ASC").toString();
             } else {
                 return
-                    "CASE WHEN " + expr + " IS NULL THEN 0 ELSE 1 END, " + expr
-                        + " DESC";
+                    sb.append(" DESC").toString();
             }
         }
     }
@@ -855,9 +856,9 @@ public abstract class JdbcDialectImpl implements Dialect {
         boolean collateNullsLast)
     {
         if (collateNullsLast) {
-            return expr + (ascending ? " ASC" : " DESC") + " NULLS LAST";
+            return new StringBuilder(expr).append(ascending ? " ASC" : " DESC").append(" NULLS LAST").toString();
         } else {
-            return expr + (ascending ? " ASC" : " DESC") + " NULLS FIRST";
+            return new StringBuilder(expr).append(ascending ? " ASC" : " DESC").append(" NULLS FIRST").toString();
         }
     }
 
@@ -999,16 +1000,16 @@ public abstract class JdbcDialectImpl implements Dialect {
             final int scale = metaData.getScale(columnIndex + 1);
             final String columnName = metaData.getColumnName(columnIndex + 1);
             LOGGER.debug(
-                "JdbcDialectImpl.getType "
-                    + "Dialect- MySQL" + this.getDatabaseProduct()
-                    + ", Column-"
-                    + columnName
-                    + " is of internal type "
-                    + internalType
-                    + ". JDBC type was "
-                    + columnType
-                    + ".  Column precision=" + precision
-                    + ".  Column scale=" + scale);
+                new StringBuilder("JdbcDialectImpl.getType ")
+                    .append("Dialect- MySQL").append(this.getDatabaseProduct())
+                    .append(", Column-")
+                    .append(columnName)
+                    .append(" is of internal type ")
+                    .append(internalType)
+                    .append(". JDBC type was ")
+                    .append(columnType)
+                    .append(".  Column precision=").append(precision)
+                    .append(".  Column scale=").append(scale).toString());
         }
     }
 
@@ -1191,7 +1192,7 @@ public abstract class JdbcDialectImpl implements Dialect {
             if (connection.getMetaData().getDatabaseProductName()
                 .toLowerCase().contains(dbProduct))
             {
-                LOGGER.debug("Using " + databaseProduct.name() + " dialect");
+                LOGGER.debug("Using {} dialect", databaseProduct.name());
                 return true;
             }
 
@@ -1204,19 +1205,19 @@ public abstract class JdbcDialectImpl implements Dialect {
                 if (version != null) {
                     if (version.toLowerCase().contains(dbProduct)) {
                         LOGGER.info(
-                            "Using " + databaseProduct.name() + " dialect");
+                            "Using {} dialect", databaseProduct.name());
                         return true;
                     }
                 }
             }
-            LOGGER.debug("NOT Using " + databaseProduct.name() + " dialect");
+            LOGGER.debug("NOT Using {} dialect",  databaseProduct.name());
             return false;
         } catch (SQLException e) {
             // this exception can be hit by any db types that don't support
             // 'select version()'
             // no need to log exception, this is an "expected" error as we
             // loop through all dialects looking for one that matches.
-            LOGGER.debug("NOT Using " + databaseProduct.name() + " dialect.");
+            LOGGER.debug("NOT Using {} dialect.", databaseProduct.name());
             return false;
         } finally {
             Util.close(resultSet, statement, null);

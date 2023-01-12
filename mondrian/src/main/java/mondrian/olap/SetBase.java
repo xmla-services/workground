@@ -69,7 +69,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
         this.description = description;
         this.exp = exp;
         this.validated = validated;
-        this.uniqueName = "[" + name + "]";
+        this.uniqueName = new StringBuilder("[").append(name).append( "]").toString();
     }
 
     public Map<String, Object> getMetadata()  {
@@ -77,7 +77,7 @@ public class SetBase extends OlapElementBase implements NamedSet {
     }
 
     public String getNameUniqueWithinQuery() {
-        return System.identityHashCode(this) + "";
+        return new StringBuilder().append(System.identityHashCode(this)).append("").toString();
     }
 
     public boolean isDynamic() {

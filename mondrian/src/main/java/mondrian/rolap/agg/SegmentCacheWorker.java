@@ -224,7 +224,7 @@ public final class SegmentCacheWorker {
 
     private void checkThread() {
         assert cacheMgrThread != Thread.currentThread()
-            : "this method is potentially slow; you should not call it from "
-            + "the cache manager thread, " + cacheMgrThread;
+            : new StringBuilder("this method is potentially slow; you should not call it from ")
+            .append("the cache manager thread, ").append(cacheMgrThread);
     }
 }

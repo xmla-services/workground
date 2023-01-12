@@ -83,14 +83,14 @@ class RolapSetEvaluator
             if (list == DUMMY_LIST) {
                 throw rrer.result.slicerEvaluator.newEvalException(
                     null,
-                    "Illegal attempt to reference value of a set '"
-                    + getExpression() + "' while evaluating itself");
+                    new StringBuilder("Illegal attempt to reference value of a set '")
+                    .append(getExpression()).append("' while evaluating itself").toString());
             }
             return;
         }
         if (RolapResult.LOGGER.isDebugEnabled()) {
             RolapResult.LOGGER.debug(
-                "Set " + exp + ": starting evaluation");
+                "Set {}: starting evaluation", exp);
         }
         list = DUMMY_LIST; // recursion detection
         try {

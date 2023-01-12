@@ -86,7 +86,7 @@ public class DockerJavaContainerRuntimeTest {
 
         dc.startContainerCmd(containerId)
         .exec();
-        
+
         dc.stopContainerCmd(containerId)
         .exec();
 

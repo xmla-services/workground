@@ -46,7 +46,7 @@ public class Db2Dialect extends JdbcDialectImpl {
     }
 
     public String toUpper(String expr) {
-        return "UCASE(" + expr + ")";
+        return new StringBuilder("UCASE(").append(expr).append(")").toString();
     }
 
     public boolean supportsGroupingSets() {

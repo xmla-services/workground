@@ -237,7 +237,7 @@ public class SqlQuery {
         if (fromAliases.contains(alias)) {
             if (failIfExists) {
                 throw Util.newInternal(
-                    "query already contains alias '" + alias + "'");
+                    new StringBuilder("query already contains alias '").append(alias).append("'").toString());
             } else {
                 return false;
             }
@@ -286,7 +286,7 @@ public class SqlQuery {
         if (fromAliases.contains(alias)) {
             if (failIfExists) {
                 throw Util.newInternal(
-                    "query already contains alias '" + alias + "'");
+                    new StringBuilder("query already contains alias '").append(alias).append("'").toString());
             } else {
                 return false;
             }
@@ -756,9 +756,9 @@ public class SqlQuery {
 
     public Pair<String, List<BestFitColumnType>> toSqlAndTypes() {
         assert types.size() == select.size() + groupingFunctions.size()
-            : types.size() + " types, "
-              + (select.size() + groupingFunctions.size())
-              + " select items in query " + this;
+            : new StringBuilder(types.size()).append(" types, ")
+            .append((select.size() + groupingFunctions.size()))
+            .append(" select items in query ").append(this).toString();
         return Pair.of(toString(), types);
     }
 

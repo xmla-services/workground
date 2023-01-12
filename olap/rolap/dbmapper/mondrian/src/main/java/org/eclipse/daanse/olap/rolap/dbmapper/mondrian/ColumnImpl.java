@@ -34,7 +34,7 @@ public class ColumnImpl implements Column {
     public ColumnImpl(String table, String name) {
         this.table = table;
         this.name = name;
-        this.genericExpression = table == null ? name : (table + "." + name);
+        this.genericExpression = table == null ? name : new StringBuilder(table).append(".").append(name).toString();
     }
 
     @Override

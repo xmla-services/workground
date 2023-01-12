@@ -37,15 +37,17 @@ import org.eclipse.daanse.olap.rolap.dbmapper.api.UserDefinedFunction;
  */
 @ServiceProvider(value = UserDefinedFunction.class)
 public class CurrentDateMemberExactUdf extends CurrentDateMemberUdf {
+    private final static String CURRENT_DATE_MEMBER_EXACT_UDF_DESCRIPTION =
+        "Returns the exact member within the specified dimension "
+        + "corresponding to the current date, in the format specified by "
+        + "the format parameter. "
+        + "If there is no such date, returns the NULL member. "
+        + "Format strings are the same as used by the MDX Format function, "
+        + "namely the Visual Basic format strings. "
+        + "See http://www.apostate.com/programming/vb-format.html.";
 
     public String getDescription() {
-        return "Returns the exact member within the specified dimension "
-            + "corresponding to the current date, in the format specified by "
-            + "the format parameter. "
-            + "If there is no such date, returns the NULL member. "
-            + "Format strings are the same as used by the MDX Format function, "
-            + "namely the Visual Basic format strings. "
-            + "See http://www.apostate.com/programming/vb-format.html.";
+        return CURRENT_DATE_MEMBER_EXACT_UDF_DESCRIPTION;
     }
 
     public Type[] getParameterTypes() {

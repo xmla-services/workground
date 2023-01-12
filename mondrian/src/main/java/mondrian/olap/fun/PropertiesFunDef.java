@@ -76,8 +76,8 @@ class PropertiesFunDef extends FunDefBase {
         if (o == null) {
             if (!Util.isValidProperty(s, member.getLevel())) {
                 throw new MondrianEvaluationException(
-                    "Property '" + s
-                    + "' is not valid for member '" + member + "'");
+                    new StringBuilder("Property '").append(s)
+                    .append("' is not valid for member '").append(member).append("'").toString());
             }
         }
         return o;

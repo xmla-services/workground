@@ -90,7 +90,7 @@ public class Pair <L, R>
     }
 
     public String toString() {
-        return "<" + left + ", " + right + ">";
+        return new StringBuilder("<").append(left).append(", ").append(right).append(">").toString();
     }
 
     // implement Map.Entry

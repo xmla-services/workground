@@ -29,7 +29,7 @@ public class ConnectionEndEvent extends ConnectionEvent {
     }
 
     public String toString() {
-        return "ConnectionEndEvent(" + connectionId + ")";
+        return new StringBuilder("ConnectionEndEvent(").append(connectionId).append(")").toString();
     }
 
     public <T> T accept(Visitor<T> visitor) {

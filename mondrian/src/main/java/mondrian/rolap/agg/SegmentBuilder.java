@@ -56,6 +56,17 @@ import static mondrian.rolap.util.ExpressionUtil.genericExpression;
  * @author LBoudreau
  */
 public class SegmentBuilder {
+
+    private static final String LOG_FORMAT_STRING =
+        "column.columnExpression=%s\n"
+            + "column.valueCount=%s\n"
+            + "column.values=%s\n"
+            + "requestedValues=%s\n"
+            + "valueSet=%s\n"
+            + "values=%s\n"
+            + "hasNull=%b\n"
+            + "src=%d\n"
+            + "lostPredicate=%b\n";
     private static final Logger LOGGER =
         LoggerFactory.getLogger(SegmentBuilder.class);
     /**
@@ -116,7 +127,7 @@ public class SegmentBuilder {
             dataSet = new SparseSegmentDataset(body.getValueMap());
         } else {
             throw Util.newInternal(
-                "Unknown segment body type: " + body.getClass() + ": " + body);
+                new StringBuilder("Unknown segment body type: ").append(body.getClass()).append(": ").append(body).toString());
         }
         return dataSet;
     }
@@ -554,11 +565,11 @@ public class SegmentBuilder {
         if (LOGGER.isDebugEnabled()) {
             StringBuilder builder = new StringBuilder();
             builder.append("SegmentBuilder.rollup: done rolling up segments with parameters: \n");
-            builder.append("keepColumns=" + keepColumns + "\n");
-            builder.append("aggregator=" + rollupAggregator + "\n");
-            builder.append("datatype=" + datatype + "\n");
+            builder.append("keepColumns=").append(keepColumns).append("\n");
+            builder.append("aggregator=").append(rollupAggregator).append("\n");
+            builder.append("datatype=").append(datatype).append("\n");
             for (Map.Entry<SegmentHeader, SegmentBody > segment : segments) {
-                builder.append(segment.getKey() + "\n");
+                builder.append(segment.getKey()).append("\n");
             }
             if (LOGGER.isTraceEnabled()) {
               builder.append("AxisInfos constructed:");
@@ -566,15 +577,7 @@ public class SegmentBuilder {
                   SortedSet<Comparable> colVals = axis.column.getValues();
                   builder.append(
                       String.format(
-                          "column.columnExpression=%s\n"
-                          + "column.valueCount=%s\n"
-                          + "column.values=%s\n"
-                          + "requestedValues=%s\n"
-                          + "valueSet=%s\n"
-                          + "values=%s\n"
-                          + "hasNull=%b\n"
-                          + "src=%d\n"
-                          + "lostPredicate=%b\n",
+                          LOG_FORMAT_STRING,
                           axis.column.columnExpression,
                           axis.column.getValueCount(),
                           Arrays.toString(
@@ -593,7 +596,7 @@ public class SegmentBuilder {
             if (LOGGER.isTraceEnabled()) {
               builder.append(body.toString());
             }
-            builder.append(", " + (System.currentTimeMillis() - startTime) + " ms \n");
+            builder.append(", ").append(System.currentTimeMillis() - startTime).append(" ms \n");
             LOGGER.debug(builder.toString());
         }
         return Pair.of(header, body);

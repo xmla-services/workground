@@ -74,8 +74,8 @@ public class ListRecorder extends AbstractRecorder {
         default:
             e = new Entry(
                 context,
-                "Unknown message type enum \"" + msgType
-                + "\" for message: " + msg,
+                new StringBuilder("Unknown message type enum \"").append(msgType)
+                .append("\" for message: ").append(msg).toString(),
                 MsgType.WARN,
                 info);
             warnList.add(e);

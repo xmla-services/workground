@@ -93,7 +93,7 @@ public abstract class StatementImpl implements Statement {
             || execution != this.execution)
         {
             throw new IllegalArgumentException(
-                execution + " != " + this.execution);
+                new StringBuilder().append(execution).append(" != ").append(this.execution).toString());
         }
         this.execution = null;
         execution.end();

@@ -95,14 +95,15 @@ public final class ScenarioImpl implements Scenario {
         case EQUAL_INCREMENT:
             if (allocationArgs.length != 0) {
                 throw Util.newError(
-                    "Allocation policy " + allocationPolicy
-                    + " takes 0 arguments; " + allocationArgs.length
-                    + " were supplied");
+                    new StringBuilder("Allocation policy ").append(allocationPolicy)
+                        .append(" takes 0 arguments; ").append(allocationArgs.length)
+                        .append(" were supplied").toString());
             }
             break;
         default:
             throw Util.newError(
-                "Allocation policy " + allocationPolicy + " is not supported");
+                new StringBuilder("Allocation policy ")
+                    .append(allocationPolicy).append(" is not supported").toString());
         }
 
         // Compute the set of columns which are constrained by the cell's
@@ -210,7 +211,7 @@ public final class ScenarioImpl implements Scenario {
                     member =
                         cube.createCalculatedMember(
                             hierarchy,
-                            getId() + "",
+                            new StringBuilder(getId()).toString(),
                             new ScenarioCalc(this));
                     assert member != null;
                 }

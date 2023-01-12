@@ -2158,7 +2158,7 @@ public enum RowsetDefinition {
                 null,
                 Column.NOT_RESTRICTION,
                 Column.OPTIONAL,
-                "The value of the element.\n" + "Example: 01");
+                "The value of the element.\nExample: 01");
 
         public void populateImpl(
             XmlaResponse response, OlapConnection connection, List<Row> rows)
@@ -2754,7 +2754,7 @@ public enum RowsetDefinition {
                 Row row = new Row();
                 row.set(TableCatalog.name, schemaName);
                 row.set(TableName.name, cubeName);
-                row.set(ColumnName.name, hierarchyName + ":(All)!NAME");
+                row.set(ColumnName.name, new StringBuilder(hierarchyName).append(":(All)!NAME").toString());
                 row.set(OrdinalPosition.name, ordinalPosition++);
                 row.set(ColumnHasDefault.name, false);
                 row.set(ColumnFlags.name, 0);
@@ -2768,7 +2768,7 @@ public enum RowsetDefinition {
                 row = new Row();
                 row.set(TableCatalog.name, schemaName);
                 row.set(TableName.name, cubeName);
-                row.set(ColumnName.name, hierarchyName + ":(All)!UNIQUE_NAME");
+                row.set(ColumnName.name, new StringBuilder(hierarchyName).append(":(All)!UNIQUE_NAME").toString());
                 row.set(OrdinalPosition.name, ordinalPosition++);
                 row.set(ColumnHasDefault.name, false);
                 row.set(ColumnFlags.name, 0);
@@ -2785,7 +2785,7 @@ public enum RowsetDefinition {
                     row = new Row();
                     row.set(TableCatalog.name, schemaName);
                     row.set(TableName.name, cubeName);
-                    row.set(ColumnName.name, hierarchyName + ":(All)!KEY");
+                    row.set(ColumnName.name, new StringBuilder(hierarchyName).append(":(All)!KEY").toString());
                     row.set(OrdinalPosition.name, ordinalPosition++);
                     row.set(ColumnHasDefault.name, false);
                     row.set(ColumnFlags.name, 0);
@@ -2824,7 +2824,7 @@ public enum RowsetDefinition {
             row.set(TableName.name, cubeName);
             row.set(
                 ColumnName.name,
-                hierarchyName + ':' + levelName + "!NAME");
+                new StringBuilder(hierarchyName).append(':').append(levelName).append("!NAME").toString());
             row.set(OrdinalPosition.name, ordinalPosition++);
             row.set(ColumnHasDefault.name, false);
             row.set(ColumnFlags.name, 0);
@@ -2840,7 +2840,8 @@ public enum RowsetDefinition {
             row.set(TableName.name, cubeName);
             row.set(
                 ColumnName.name,
-                hierarchyName + ':' + levelName + "!UNIQUE_NAME");
+                new StringBuilder(hierarchyName).append(':')
+                    .append(levelName).append("!UNIQUE_NAME").toString());
             row.set(OrdinalPosition.name, ordinalPosition++);
             row.set(ColumnHasDefault.name, false);
             row.set(ColumnFlags.name, 0);
@@ -3382,8 +3383,8 @@ TODO: see above
                     if (desc == null) {
                         //TODO: currently this is always null
                         desc =
-                            catalog.getName() + " - "
-                            + cube.getName() + " Cube";
+                            new StringBuilder(catalog.getName()).append(" - ")
+                                .append(cube.getName()).append(" Cube").toString();
                     }
 
                     if (tableTypeCond.test("TABLE")) {
@@ -3473,10 +3474,10 @@ TODO: see above
             if (desc == null) {
                 //TODO: currently this is always null
                 desc =
-                    schemaName + " - "
-                    + cubeName + " Cube - "
-                    + hierarchyName + " Hierarchy - "
-                    + levelName + " Level";
+                    new StringBuilder(schemaName).append(" - ")
+                        .append(cubeName).append(" Cube - ")
+                        .append(hierarchyName).append(" Hierarchy - ")
+                        .append(levelName).append(" Level").toString();
             }
 
             Row row = new Row();

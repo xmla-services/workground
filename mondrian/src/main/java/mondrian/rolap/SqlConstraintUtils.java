@@ -1121,7 +1121,8 @@ public class SqlConstraintUtils {
       for ( RolapMember m : members ) {
         if ( m.isCalculated() ) {
           if ( restrictMemberTypes ) {
-            throw Util.newInternal( "addMemberConstraint: cannot " + "restrict SQL to calculated member :" + m );
+            throw Util.newInternal( new StringBuilder("addMemberConstraint: cannot restrict SQL to calculated member :")
+                .append(m).toString() );
           }
           continue;
         }
@@ -1439,9 +1440,9 @@ public class SqlConstraintUtils {
 
     if ( values.size() == 1 ) {
       if ( containsNull ) {
-        constraint = columnString + " IS " + RolapUtil.sqlNullLiteral;
+        constraint = new StringBuilder(columnString).append(" IS ").append(RolapUtil.sqlNullLiteral).toString();
       } else {
-        constraint = columnString + " = " + values.get( 0 );
+        constraint = new StringBuilder(columnString).append(" = ").append(values.get( 0 )).toString();
       }
     } else {
       StringBuilder builder = new StringBuilder();
@@ -1487,7 +1488,7 @@ public class SqlConstraintUtils {
                                        Comparable columnValue ) {
     String columnString = getExpression( exp, query );
     if ( columnValue == RolapUtil.sqlNullValue ) {
-      return columnString + " is " + RolapUtil.sqlNullLiteral;
+      return new StringBuilder(columnString).append(" is ").append(RolapUtil.sqlNullLiteral).toString();
     } else {
       final StringBuilder buf = new StringBuilder();
       buf.append( columnString );
@@ -1554,7 +1555,8 @@ public class SqlConstraintUtils {
     for ( RolapMember m : members ) {
       if ( m.isCalculated() ) {
         if ( restrictMemberTypes ) {
-          throw Util.newInternal( "addMemberConstraint: cannot " + "restrict SQL to calculated member :" + m );
+          throw Util.newInternal( new StringBuilder("addMemberConstraint: cannot restrict SQL to calculated member :")
+              .append(m).toString() );
         }
         continue;
       }
@@ -1753,7 +1755,7 @@ public class SqlConstraintUtils {
     int maxConstraints = MondrianProperties.instance().MaxConstraints.get();
     Dialect dialect = sqlQuery.getDialect();
 
-    String condition = "";
+    StringBuilder condition = new StringBuilder();
     boolean firstLevel = true;
     for ( Collection<RolapMember> c = members; !c.isEmpty(); c = getUniqueParentMembers( c ) ) {
       RolapMember m = c.iterator().next();
@@ -1765,7 +1767,8 @@ public class SqlConstraintUtils {
       }
       if ( m.isCalculated() && !m.isParentChildLeaf() ) {
         if ( restrictMemberTypes ) {
-          throw Util.newInternal( "addMemberConstraint: cannot " + "restrict SQL to calculated member :" + m );
+          throw Util.newInternal( new StringBuilder("addMemberConstraint: cannot restrict SQL to calculated member :")
+              .append(m).toString() );
         }
         continue;
       }
@@ -1797,8 +1800,9 @@ public class SqlConstraintUtils {
           int bitPos = column.getBitPosition();
           AggStar.Table.Column aggColumn = aggStar.lookupColumn( bitPos );
           if ( aggColumn == null ) {
-            throw Util.newInternal( "AggStar " + aggStar + " has no column for " + column + " (bitPos " + bitPos
-                + ")" );
+            throw Util.newInternal( new StringBuilder("AggStar ").append(aggStar).append(" has no column for ")
+                .append(column).append(" (bitPos ").append(bitPos)
+                .append(")").toString() );
           }
           AggStar.Table table = aggColumn.getTable();
           table.addToFrom( sqlQuery, false, true );
@@ -1829,15 +1833,15 @@ public class SqlConstraintUtils {
         if ( !where.equals( "true" ) ) {
           if ( !firstLevel ) {
             if ( exclude ) {
-              condition += " or ";
+              condition.append(" or ");
             } else {
-              condition += " and ";
+              condition.append(" and ");
             }
           } else {
             firstLevel = false;
           }
           if ( exclude ) {
-            where = "not (" + where + ")";
+            where = new StringBuilder("not (").append(where).append(")").toString();
             if ( !containsNullKey ) {
               // Null key fails all filters so should add it here
               // if not already excluded. E.g., if the original
@@ -1850,10 +1854,10 @@ public class SqlConstraintUtils {
               //
               // (not(year = '1997') or year is null) or
               // (not(quarter in ('Q1','Q3')) or quarter is null)
-              where = "(" + where + " or " + "(" + q + " is null))";
+              where = new StringBuilder("(").append(where).append(" or ").append("(").append(q).append(" is null))").toString();
             }
           }
-          condition += where;
+          condition.append(where);
         }
       }
 
@@ -1862,7 +1866,7 @@ public class SqlConstraintUtils {
       }
     }
 
-    return condition;
+    return condition.toString();
   }
 
   /**

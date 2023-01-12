@@ -260,10 +260,8 @@ public class SqlTupleReader implements TupleReader {
             if ( prevValue != null
               && !Objects.equals( prevValue, ordinal ) ) {
               LOGGER.error(
-                "Column expression for "
-                  + member.getUniqueName()
-                  + " is inconsistent with ordinal or caption expression."
-                  + " It should have 1:1 relationship" );
+                "Column expression for {} is inconsistent with ordinal or caption expression. It should have 1:1 relationship",
+                  member.getUniqueName() );
             }
           }
           column += childLevel.getProperties().length;
@@ -736,7 +734,7 @@ public class SqlTupleReader implements TupleReader {
       }
     }
     throw MondrianResource.instance().Internal.ex(
-      "Couldn't find level " + level.getName() + " in tuple." );
+      new StringBuilder("Couldn't find level ").append(level.getName()).append(" in tuple.").toString() );
   }
 
 
@@ -1033,8 +1031,8 @@ public class SqlTupleReader implements TupleReader {
           types = pair.right;
           prependString =
             MondrianProperties.instance().GenerateFormattedSql.get()
-              ? Util.nl + UNION + Util.nl
-              : " " + UNION + " ";
+              ? new StringBuilder(Util.nl).append(UNION).append(Util.nl).toString()
+              : new StringBuilder(" ").append(UNION).append(" ").toString();
         }
       } finally {
         // Restore the original measure member
@@ -1060,7 +1058,7 @@ public class SqlTupleReader implements TupleReader {
         if ( fullyJoiningBaseCubes.size() > 1 ) {
           for ( int i = 0; i < types.size(); i++ ) {
             unionQuery.addOrderBy(
-              i + 1 + "",
+              new StringBuilder().append(i + 1).toString(),
               null,
               true,
               false,

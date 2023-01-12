@@ -30,6 +30,8 @@ import mondrian.spi.UserDefinedFunction;
 @ServiceProvider(value = UserDefinedFunction.class)
 public class InUdf implements UserDefinedFunction {
 
+    public static final String IN_UDF_DESCRIPTION = "Returns true if the member argument is contained in the set argument.";
+
     public Object execute(Evaluator evaluator, Argument[] arguments) {
         Object arg0 = arguments[0].evaluate(evaluator);
         List arg1 = (List) arguments[1].evaluate(evaluator);
@@ -45,8 +47,7 @@ public class InUdf implements UserDefinedFunction {
     }
 
     public String getDescription() {
-        return "Returns true if the member argument is contained in the set "
-            + "argument.";
+        return IN_UDF_DESCRIPTION;
     }
 
     public String getName() {

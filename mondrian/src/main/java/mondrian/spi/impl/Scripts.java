@@ -25,6 +25,32 @@ import mondrian.spi.UserDefinedFunction;
  */
 public class Scripts {
 
+    private final static String SCRIPT_LEFT =
+        "var mondrian = Packages.mondrian;\n"
+        + "function getName() {\n"
+        + "  return ";
+
+    private final static String SCRIPT_RIGHT = ";\n"
+        + "}\n"
+        + "function getDescription() {\n"
+        + "  return this.getName();\n"
+        + "}\n"
+        + "function getSyntax() {\n"
+        + "  return mondrian.olap.Syntax.Function;\n"
+        + "}\n"
+        + "function getParameterTypes() {\n"
+        + "  return new Array();\n"
+        + "}\n"
+        + "function getReturnType(parameterTypes) {\n"
+        + "  return new mondrian.olap.type.ScalarType();\n"
+        + "}\n"
+        + "function getReservedWords() {\n"
+        + "  return null;\n"
+        + "}\n"
+        + "function execute(evaluator, arguments) {\n"
+        + "  return null;\n"
+        + "}\n";
+
     /**
      * Creates an implementation of the {@link PropertyFormatter} SPI based on
      * a script.
@@ -96,12 +122,12 @@ public class Scripts {
         switch (script.language) {
         case JAVASCRIPT:
             code =
-                "function isHierarchyChanged(hierarchy) {\n"
-                + "  return false;\n"
-                + "}\n"
-                + "function isAggregationChanged(aggregation) {\n"
-                + "  return false;\n"
-                + "}\n";
+                new StringBuilder("function isHierarchyChanged(hierarchy) {\n")
+                    .append("  return false;\n")
+                    .append("}\n")
+                    .append("function isAggregationChanged(aggregation) {\n")
+                    .append("  return false;\n")
+                    .append("}\n").toString();
             break;
         default:
             throw Util.unexpected(script.language);
@@ -164,29 +190,10 @@ public class Scripts {
         switch (script.language) {
         case JAVASCRIPT:
             code =
-                "var mondrian = Packages.mondrian;\n"
-                + "function getName() {\n"
-                + "  return " + Util.quoteJavaString(name) + ";\n"
-                + "}\n"
-                + "function getDescription() {\n"
-                + "  return this.getName();\n"
-                + "}\n"
-                + "function getSyntax() {\n"
-                + "  return mondrian.olap.Syntax.Function;\n"
-                + "}\n"
-                + "function getParameterTypes() {\n"
-                + "  return new Array();\n"
-                + "}\n"
-                + "function getReturnType(parameterTypes) {\n"
-                + "  return new mondrian.olap.type.ScalarType();\n"
-                + "}\n"
-                + "function getReservedWords() {\n"
-                + "  return null;\n"
-                + "}\n"
-                + "function execute(evaluator, arguments) {\n"
-                + "  return null;\n"
-                + "}\n"
-                + script.script;
+                new StringBuilder(SCRIPT_LEFT)
+                    .append(Util.quoteJavaString(name))
+                    .append(SCRIPT_RIGHT)
+                    .append(script.script).toString();
             break;
         default:
             throw Util.unexpected(script.language);
@@ -205,7 +212,7 @@ public class Scripts {
             Scripts.ScriptLanguage.lookup(language);
         if (scriptLanguage == null) {
             throw Util.newError(
-                "Invalid script language '" + language + "'");
+                new StringBuilder("Invalid script language '").append(language).append("'").toString());
         }
         return new Scripts.ScriptDefinition(script, scriptLanguage);
     }
@@ -233,7 +240,8 @@ public class Scripts {
     private static String simple(ScriptDefinition script, String decl) {
         switch (script.language) {
         case JAVASCRIPT:
-            return "function " + decl + " { " + script.script + " }";
+            return new StringBuilder("function ").append(decl).append(" { ")
+                .append(script.script).append(" }").toString();
         default:
             throw Util.unexpected(script.language);
         }

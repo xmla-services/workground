@@ -76,7 +76,7 @@ public interface AxisOrdinal {
             if (ordinal + 2 > SECTIONS.ordinal()) {
                 return new AxisOrdinal() {
                     public String name() {
-                        return "AXIS(" + ordinal + ")";
+                        return new StringBuilder("AXIS(").append(ordinal).append(")").toString();
                     }
 
                     public int logicalOrdinal() {

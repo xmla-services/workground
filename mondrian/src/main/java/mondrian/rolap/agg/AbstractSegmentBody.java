@@ -77,8 +77,7 @@ abstract class AbstractSegmentBody implements SegmentBody {
 
     public BitSet getNullValueIndicators() {
         throw new UnsupportedOperationException(
-            "This method is only supported for dense segments "
-            + "of native values");
+            "This method is only supported for dense segments of native values");
     }
 
     /**

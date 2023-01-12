@@ -66,7 +66,10 @@ public class GreenplumDialect extends PostgreSqlDialect {
     }
 
     public String generateCountExpression(String exp) {
-        return caseWhenElse(exp + " ISNULL", "'0'", "TEXT(" + exp + ")");
+        return caseWhenElse(
+            new StringBuilder(exp).append(" ISNULL").toString(),
+            "'0'",
+            new StringBuilder("TEXT(").append(exp).append(")").toString());
     }
 
     public boolean allowsRegularExpressionInWhereClause() {

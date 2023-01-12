@@ -66,8 +66,9 @@ public class Session
             throw new mondrian.xmla.XmlaException(
                     "XMLAnalysisError",
                     "0xc10c000a",
-                    "Session with id \"" + sessionId + "\" already exists.",
-                    new OlapException("Session with id \"" + sessionId + "\" already exists.")
+                    new StringBuilder("Session with id \"").append(sessionId).append("\" already exists.").toString(),
+                    new OlapException(new StringBuilder("Session with id \"").append(sessionId)
+                        .append("\" already exists.").toString())
             );
         }
 
@@ -90,8 +91,9 @@ public class Session
             throw new mondrian.xmla.XmlaException(
                     "XMLAnalysisError",
                     "0xc10c000a",
-                    "Session with id \"" + sessionId + "\" does not exists.",
-                    new OlapException("Session with id \"" + sessionId + "\" does not exist")
+                    new StringBuilder("Session with id \"").append(sessionId).append("\" does not exists.").toString(),
+                    new OlapException(new StringBuilder("Session with id \"")
+                        .append(sessionId).append("\" does not exist").toString())
             );
         }
         return sessions.get(sessionId);

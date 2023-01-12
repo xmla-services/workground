@@ -558,7 +558,7 @@ public class AggStar {
                 SqlQuery sqlQueuy = getTable().getSqlQuery();
                 pw.print(prefix);
                 pw.println("JoinCondition:");
-                String subprefix = prefix + "  ";
+                String subprefix = new StringBuilder(prefix).append("  ").toString();
 
                 pw.print(subprefix);
                 pw.print("left=");
@@ -1292,9 +1292,9 @@ public class AggStar {
                 RolapStar.Column rColumn = usage.rColumn;
                 if (rColumn == null) {
                     getLogger().warn(
-                        "loadForeignKey: for column "
-                        + name
-                        + ", rColumn == null");
+                        new StringBuilder("loadForeignKey: for column ")
+                        .append(name)
+                        .append(", rColumn == null").toString());
                 } else {
                     int bitPosition = rColumn.getBitPosition();
                     ForeignKey c =
@@ -1488,8 +1488,8 @@ public class AggStar {
         public void print(final PrintWriter pw, final String prefix) {
             pw.print(prefix);
             pw.println("Table:");
-            String subprefix = prefix + "  ";
-            String subsubprefix = subprefix + "  ";
+            String subprefix = new StringBuilder(prefix).append("  ").toString();
+            String subsubprefix = new StringBuilder(subprefix).append("  ").toString();
 
             pw.print(subprefix);
             pw.print("name=");
@@ -1619,8 +1619,8 @@ public class AggStar {
         public void print(final PrintWriter pw, final String prefix) {
             pw.print(prefix);
             pw.println("Table:");
-            String subprefix = prefix + "  ";
-            String subsubprefix = subprefix + "  ";
+            String subprefix = new StringBuilder(prefix).append("  ").toString();
+            String subsubprefix = new StringBuilder(subprefix).append("  ").toString();
 
             pw.print(subprefix);
             pw.print("name=");
@@ -1662,7 +1662,7 @@ public class AggStar {
     public void print(final PrintWriter pw, final String prefix) {
         pw.print(prefix);
         pw.println("AggStar:" + getFactTable().getName());
-        String subprefix = prefix + "  ";
+        String subprefix = new StringBuilder(prefix).append("  ").toString();
 
         pw.print(subprefix);
         pw.print(" bk=");

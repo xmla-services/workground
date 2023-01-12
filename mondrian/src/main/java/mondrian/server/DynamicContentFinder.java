@@ -110,7 +110,7 @@ public class DynamicContentFinder
         } catch (Exception e) {
             throw Util.newError(
                 e,
-                "Failed to parse data sources config '" + url + "'");
+                new StringBuilder("Failed to parse data sources config '").append(url).append("'").toString());
         }
     }
 

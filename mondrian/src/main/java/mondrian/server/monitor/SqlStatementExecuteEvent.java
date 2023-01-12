@@ -40,7 +40,7 @@ public class SqlStatementExecuteEvent extends SqlStatementEvent {
     }
 
     public String toString() {
-        return "SqlStatementExecuteEvent(" + sqlStatementId + ")";
+        return new StringBuilder("SqlStatementExecuteEvent(").append(sqlStatementId).append(")").toString();
     }
 
     public <T> T accept(Visitor<T> visitor) {

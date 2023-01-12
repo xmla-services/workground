@@ -289,13 +289,13 @@ public class RolapCube extends CubeBase {
 
         if (fact == null) {
             throw Util.newError(
-                "Must specify fact table of cube '" + getName() + "'");
+                new StringBuilder("Must specify fact table of cube '").append(getName()).append("'").toString());
         }
 
         if (getAlias(fact) == null) {
             throw Util.newError(
-                "Must specify alias for fact table of cube '" + getName()
-                + "'");
+                new StringBuilder("Must specify alias for fact table of cube '").append(getName())
+                .append("'").toString());
         }
 
         // since Measure and VirtualCubeMeasure
@@ -384,8 +384,8 @@ public class RolapCube extends CubeBase {
                         }
                         if(dimension == null) {
                             throw Util.newError(
-                                    "Error while creating DrillThrough  action. Dimension '"
-                                            + drillThroughAttribute.dimension() + "' not found");
+                                    new StringBuilder("Error while creating DrillThrough  action. Dimension '")
+                                        .append(drillThroughAttribute.dimension()).append("' not found").toString());
                         }
                         else {
                             if(drillThroughAttribute.hierarchy() != null && !drillThroughAttribute.hierarchy().equals("")) {
@@ -397,8 +397,9 @@ public class RolapCube extends CubeBase {
                                 }
                                 if(hierarchy == null) {
                                     throw Util.newError(
-                                            "Error while creating DrillThrough  action. Hierarchy '"
-                                                    + drillThroughAttribute.hierarchy() + "' not found");
+                                            new StringBuilder("Error while creating DrillThrough  action. Hierarchy '")
+                                                .append(drillThroughAttribute.hierarchy())
+                                                .append("' not found").toString());
                                 }
                                 else {
                                     if(drillThroughAttribute.level() != null && !drillThroughAttribute.level().equals("")) {
@@ -410,8 +411,9 @@ public class RolapCube extends CubeBase {
                                         }
                                         if(level == null) {
                                             throw Util.newError(
-                                                    "Error while creating DrillThrough  action. Level '"
-                                                            + drillThroughAttribute.level() + "' not found");
+                                                    new StringBuilder("Error while creating DrillThrough  action. Level '")
+                                                        .append(drillThroughAttribute.level())
+                                                        .append("' not found").toString());
                                         }
                                     }
 
@@ -441,8 +443,8 @@ public class RolapCube extends CubeBase {
                         }
                         if(measure == null) {
                             throw Util.newError(
-                                    "Error while creating DrillThrough  action. Measure '"
-                                            + drillThroughMeasure.name() + "' not found");
+                                    new StringBuilder("Error while creating DrillThrough  action. Measure '")
+                                            .append(drillThroughMeasure.name()).append("' not found").toString());
                         }
                         columns.add(
                                 new RolapDrillThroughMeasure(measure)
@@ -478,8 +480,8 @@ public class RolapCube extends CubeBase {
                     }
                     if(dimension == null) {
                         throw Util.newError(
-                                "Error while creating `WritebackTable`. Dimension '"
-                                        + writebackAttribute.dimension() + "' not found");
+                            new StringBuilder("Error while creating `WritebackTable`. Dimension '")
+                                        .append(writebackAttribute.dimension()).append("' not found").toString());
                     }
 
                     columns.add(
@@ -503,8 +505,8 @@ public class RolapCube extends CubeBase {
                     }
                     if(measure == null) {
                         throw Util.newError(
-                                "Error while creating DrillThrough  action. Measure '"
-                                        + writebackMeasure.name() + "' not found");
+                            new StringBuilder("Error while creating DrillThrough  action. Measure '")
+                                        .append(writebackMeasure.name()).append("' not found").toString());
                     }
                     columns.add(
                             new RolapWritebackMeasure(
@@ -697,7 +699,7 @@ public class RolapCube extends CubeBase {
             RolapCube cube = schema.lookupCube(xmlMeasure.cubeName());
             if (cube == null) {
                 throw Util.newError(
-                    "Cube '" + xmlMeasure.cubeName() + "' not found");
+                    new StringBuilder("Cube '").append(xmlMeasure.cubeName()).append("' not found").toString());
             }
             List<Member> cubeMeasures = cube.getMeasures();
             boolean found = false;
@@ -723,9 +725,9 @@ public class RolapCube extends CubeBase {
                                 xmlMeasure.name(), xmlMeasure.cubeName());
                         if (calcMember == null) {
                             throw Util.newInternal(
-                                "Could not find XML Calculated Member '"
-                                + xmlMeasure.name() + "' in XML cube '"
-                                + xmlMeasure.cubeName() + "'");
+                                new StringBuilder("Could not find XML Calculated Member '")
+                                .append(xmlMeasure.name()).append("' in XML cube '")
+                                .append(xmlMeasure.cubeName()).append("'").toString());
                         }
                         List<CalculatedMember> memberList =
                             calculatedMembersMap.get(cube);
@@ -772,8 +774,8 @@ public class RolapCube extends CubeBase {
             }
             if (!found) {
                 throw Util.newInternal(
-                    "could not find measure '" + xmlMeasure.name()
-                    + "' in cube '" + xmlMeasure.cubeName() + "'");
+                    new StringBuilder("could not find measure '").append(xmlMeasure.name())
+                    .append("' in cube '").append(xmlMeasure.cubeName()).append("'").toString());
             }
         }
 
@@ -1754,15 +1756,13 @@ public class RolapCube extends CubeBase {
         HierarchyUsage usage = new HierarchyUsage(this, hierarchy, cubeDim);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                "RolapCube.createUsage: "
-                + "cube=" + getName()
-                + ", hierarchy=" + hierarchy.getName()
-                + ", usage=" + usage);
+                "RolapCube.createUsage: cube={}, hierarchy={}, usage={}",
+                getName(), hierarchy.getName(), usage);
         }
         for (HierarchyUsage hierUsage : hierarchyUsages) {
             if (hierUsage.equals(usage)) {
                 getLogger().warn(
-                    "RolapCube.createUsage: duplicate " + hierUsage);
+                    new StringBuilder("RolapCube.createUsage: duplicate ").append(hierUsage).toString());
                 return;
             }
         }
@@ -1795,7 +1795,7 @@ public class RolapCube extends CubeBase {
         if (!name.equals(hierarchy.getDimension().getName())
             && MondrianProperties.instance().SsasCompatibleNaming.get())
         {
-            name = hierarchy.getDimension().getName() + "." + name;
+            name = new StringBuilder(hierarchy.getDimension().getName()).append(".").append(name).toString();
         }
         if (getLogger().isDebugEnabled()) {
             getLogger().debug("RolapCube.getUsages: name=" + name);
@@ -1809,8 +1809,8 @@ public class RolapCube extends CubeBase {
                 if (list != null) {
                     if (getLogger().isDebugEnabled()) {
                         getLogger().debug(
-                            "RolapCube.getUsages: "
-                            + "add list HierarchyUsage.name=" + hu.getName());
+                            new StringBuilder("RolapCube.getUsages: ")
+                            .append("add list HierarchyUsage.name=").append(hu.getName()).toString());
                     }
                     list.add(hu);
                 } else if (hierUsage == null) {
@@ -1819,11 +1819,11 @@ public class RolapCube extends CubeBase {
                     list = new ArrayList<HierarchyUsage>();
                     if (getLogger().isDebugEnabled()) {
                         getLogger().debug(
-                            "RolapCube.getUsages: "
-                            + "add list hierUsage.name="
-                            + hierUsage.getName()
-                            + ", hu.name="
-                            + hu.getName());
+                            new StringBuilder("RolapCube.getUsages: ")
+                            .append("add list hierUsage.name=")
+                                .append(hierUsage.getName())
+                                .append(", hu.name=")
+                                .append(hu.getName()).toString());
                     }
                     list.add(hierUsage);
                     list.add(hu);
@@ -1879,9 +1879,9 @@ public class RolapCube extends CubeBase {
                 if (list != null) {
                     if (getLogger().isDebugEnabled()) {
                         getLogger().debug(
-                            "RolapCube.getUsagesBySource: "
-                            + "add list HierarchyUsage.name="
-                            + hu.getName());
+                            new StringBuilder("RolapCube.getUsagesBySource: ")
+                                .append("add list HierarchyUsage.name=")
+                                .append(hu.getName()).toString());
                     }
                     list.add(hu);
                 } else if (hierUsage == null) {
@@ -1890,11 +1890,11 @@ public class RolapCube extends CubeBase {
                     list = new ArrayList<HierarchyUsage>();
                     if (getLogger().isDebugEnabled()) {
                         getLogger().debug(
-                            "RolapCube.getUsagesBySource: "
-                            + "add list hierUsage.name="
-                            + hierUsage.getName()
-                            + ", hu.name="
-                            + hu.getName());
+                            new StringBuilder("RolapCube.getUsagesBySource: ")
+                                .append("add list hierUsage.name=")
+                                .append(hierUsage.getName())
+                                .append(", hu.name=")
+                                .append(hu.getName()).toString());
                     }
                     list.add(hierUsage);
                     list.add(hu);
@@ -2168,14 +2168,14 @@ public class RolapCube extends CubeBase {
                 } else {
                     // Issue warning and keep going.
                     getLogger().warn(
-                        "RolapCube.makeColumns: for cube \""
-                        + getName()
-                        + "\" the Level \""
-                        + level.getName()
-                        + "\" has a table name attribute \""
-                        + tableName
-                        + "\" but the associated RolapStar does not"
-                        + " have a table with that name.");
+                        new StringBuilder("RolapCube.makeColumns: for cube \"")
+                            .append(getName())
+                            .append("\" the Level \"")
+                            .append(level.getName())
+                            .append("\" has a table name attribute \"")
+                            .append(tableName)
+                            .append("\" but the associated RolapStar does not")
+                            .append(" have a table with that name.").toString());
 
                     parentColumn = table.makeColumns(
                         this, level, parentColumn, usagePrefix);
@@ -2224,7 +2224,7 @@ public class RolapCube extends CubeBase {
             buf.append(Util.nl);
         } else {
             Join join = (Join) relation;
-            String subindent = indent + "  ";
+            String subindent = new StringBuilder(indent).append("  ").toString();
 
             buf.append(indent);
             //buf.append(join.leftAlias);
@@ -2994,13 +2994,13 @@ public class RolapCube extends CubeBase {
 
             } else {
                 throw new XOMException(
-                    "Got <" + tagName + "> when expecting <NamedSet>");
+                    new StringBuilder("Got <").append(tagName).append("> when expecting <NamedSet>").toString());
             }
         } catch (XOMException | JAXBException e) {
             throw Util.newError(
                 e,
-                "Error while creating named set from XML ["
-                + xml + "]");
+                new StringBuilder("Error while creating named set from XML [")
+                .append(xml).append("]").toString());
         }
 
         try {
@@ -3033,13 +3033,13 @@ public class RolapCube extends CubeBase {
 
             } else {
                 throw new XOMException(
-                    "Got <" + tagName + "> when expecting <CalculatedMember>");
+                    new StringBuilder("Got <").append(tagName).append("> when expecting <CalculatedMember>").toString());
             }
         } catch (XOMException | JAXBException e) {
             throw Util.newError(
                 e,
-                "Error while creating calculated member from XML ["
-                + xml + "]");
+                new StringBuilder("Error while creating calculated member from XML [")
+                .append(xml).append("]").toString());
         }
 
         try {
@@ -3273,7 +3273,7 @@ public class RolapCube extends CubeBase {
 
         public SchemaReader withoutAccessControl() {
             assert getClass() == RolapCubeSchemaReader.class
-                : "Derived class " + getClass() + " must override method";
+                : new StringBuilder("Derived class ").append(getClass()).append(" must override method").toString();
             return RolapCube.this.getSchemaReader();
         }
 

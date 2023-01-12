@@ -6,7 +6,7 @@
 *
 * Copyright (C) 2012-2017 Hitachi Vantara and others
 * All Rights Reserved.
-* 
+*
 * Contributors:
 *   SmartCity Jena, Stefan Bischof - make OSGi Component
 */
@@ -87,8 +87,9 @@ public class MySqlDialect extends JdbcDialectImpl {
             if (productVersion.compareTo("5.1") >= 0) {
                 statement = databaseMetaData.getConnection()
                         .createStatement();
-                final ResultSet resultSet = statement.executeQuery("select * from INFORMATION_SCHEMA.engines "
-                        + "where ENGINE in ( 'BRIGHTHOUSE', 'INFOBRIGHT' )");
+                final ResultSet resultSet = statement.executeQuery(
+                    new StringBuilder("select * from INFORMATION_SCHEMA.engines ")
+                        .append("where ENGINE in ( 'BRIGHTHOUSE', 'INFOBRIGHT' )").toString());
                 if (resultSet.next()) {
                     return true;
                 }
@@ -152,7 +153,7 @@ public class MySqlDialect extends JdbcDialectImpl {
         ResultSet rs = null;
         try {
             s = connection.createStatement();
-            if (s.execute("SELECT @@" + scope + ".sql_mode")) {
+            if (s.execute(new StringBuilder("SELECT @@").append(scope).append(".sql_mode").toString())) {
                 rs = s.getResultSet();
                 if (rs.next()) {
                     sqlmode = rs.getString(1);
@@ -235,15 +236,16 @@ public class MySqlDialect extends JdbcDialectImpl {
         // In MYSQL, Null values are worth negative infinity.
         if (collateNullsLast) {
             if (ascending) {
-                return "ISNULL(" + expr + ") ASC, " + expr + " ASC";
+                return new StringBuilder("ISNULL(").append(expr)
+                    .append(") ASC, ").append(expr).append(" ASC").toString();
             } else {
-                return expr + " DESC";
+                return new StringBuilder(expr).append(" DESC").toString();
             }
         } else {
             if (ascending) {
-                return expr + " ASC";
+                return new StringBuilder(expr).append(" ASC").toString();
             } else {
-                return "ISNULL(" + expr + ") DESC, " + expr + " DESC";
+                return new StringBuilder("ISNULL(").append(expr).append(") DESC, ").append(expr).append(" DESC").toString();
             }
         }
     }

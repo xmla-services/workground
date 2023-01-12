@@ -239,7 +239,7 @@ public abstract class FunDefBase implements FunDef {
 
     @Override
     public void init(Context context) {
-        this.context=context;        
+        this.context=context;
     }
     public String getName() {
         return name;
@@ -409,13 +409,14 @@ public abstract class FunDefBase implements FunDef {
             return type;
         }
         throw Util.newInternal(
-            "Cannot deduce type of call to function '" + this.name + "'");
+            new StringBuilder("Cannot deduce type of call to function '")
+                .append(this.name).append("'").toString());
     }
 
     public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         throw Util.newInternal(
-            "function '" + getSignature()
-            + "' has not been implemented");
+            new StringBuilder("function '").append( getSignature())
+                .append("' has not been implemented").toString());
     }
 
     public String getSignature() {

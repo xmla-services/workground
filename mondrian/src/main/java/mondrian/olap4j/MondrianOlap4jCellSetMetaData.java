@@ -186,7 +186,7 @@ class MondrianOlap4jCellSetMetaData implements CellSetMetaData {
             return iface.cast(this);
         }
         throw this.olap4jStatement.olap4jConnection.helper.createException(
-            "does not implement '" + iface + "'");
+            new StringBuilder("does not implement '").append(iface).append("'").toString());
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {

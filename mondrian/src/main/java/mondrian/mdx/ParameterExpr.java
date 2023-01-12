@@ -116,7 +116,7 @@ public class ParameterExpr extends ExpBase {
         final Type type = parameter.getType();
         final int category = TypeUtil.typeToCategory(type);
         if (def) {
-            pw.print("Parameter(" + Util.quoteForMdx(name) + ", ");
+            pw.print(new StringBuilder("Parameter(").append(Util.quoteForMdx(name)).append(", ").toString());
             switch (category) {
             case Category.String:
             case Category.Numeric:
@@ -160,7 +160,7 @@ public class ParameterExpr extends ExpBase {
             }
             pw.print(")");
         } else {
-            pw.print("ParamRef(" + Util.quoteForMdx(name) + ")");
+            pw.print(new StringBuilder("ParamRef(").append(Util.quoteForMdx(name)).append(")").toString());
         }
     }
 

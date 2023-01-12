@@ -220,7 +220,7 @@ public class MdxQueryServlet extends HttpServlet {
                     "query.toggleDrillState(member) has been de-supported");
             }
         } else {
-            throw Util.newInternal("unkown operation '" + operation + "'");
+            throw Util.newInternal(new StringBuilder("unkown operation '").append(operation).append("'").toString());
         }
         rc.setQuery(query);
         String redirect = request.getParameter("redirect");
@@ -262,8 +262,7 @@ public class MdxQueryServlet extends HttpServlet {
      * Returns a short description of the servlet.
      */
     public String getServletInfo() {
-        return "Process an MDX query and return the result formatted as an "
-            + "HTML table";
+        return "Process an MDX query and return the result formatted as an HTML table";
     }
 
 }

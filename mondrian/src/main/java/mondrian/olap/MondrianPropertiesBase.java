@@ -125,7 +125,7 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
             } catch (FileNotFoundException e) {
                 throw Util.newInternal(
                     e,
-                    "Error while opening properties file '" + file + "'");
+                    new StringBuilder("Error while opening properties file '").append(file).append("'").toString());
             }
         }
 
@@ -135,8 +135,8 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
         }
 
         public String getDescription() {
-            return "file=" + file.getAbsolutePath()
-                   + " (exists=" + file.exists() + ")";
+            return new StringBuilder("file=").append(file.getAbsolutePath())
+                   .append(" (exists=").append(file.exists()).append(")").toString();
         }
     }
 
@@ -158,7 +158,7 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
             } catch (IOException e) {
                 throw Util.newInternal(
                     e,
-                    "Error while opening properties file '" + url + "'");
+                    new StringBuilder("Error while opening properties file '").append(url).append("'").toString());
             }
         }
 
@@ -170,7 +170,7 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
             } catch (IOException e) {
                 throw Util.newInternal(
                     e,
-                    "Error while opening properties file '" + url + "'");
+                    new StringBuilder("Error while opening properties file '").append(url).append("'").toString());
             }
         }
 
@@ -203,9 +203,9 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
                 url = file.toURI().toURL();
             } catch (MalformedURLException e) {
                 LOGGER.warn(
-                    "Mondrian: file '"
-                    + file.getAbsolutePath()
-                    + "' could not be loaded", e);
+                    new StringBuilder("Mondrian: file '")
+                    .append(file.getAbsolutePath())
+                    .append("' could not be loaded").toString(), e);
             }
         } else {
             // Then try load it from classloader
@@ -218,8 +218,8 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
             load(new UrlPropertySource(url));
         } else {
             LOGGER.warn(
-                "mondrian.properties can't be found under '"
-                + new File(".").getAbsolutePath() + "' or classloader");
+                "mondrian.properties can't be found under '{}' or classloader",
+                new File(".").getAbsolutePath());
         }
 
         // copy in all system properties which start with "mondrian."
@@ -233,14 +233,14 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
                 // NOTE: the super allows us to bybase calling triggers
                 // Is this the correct behavior?
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("populate: key=" + key + ", value=" + value);
+                    LOGGER.debug("populate: key={}, value={}", key, value);
                 }
                 super.setProperty(key, value);
                 count++;
             }
         }
         LOGGER.info(
-            "Mondrian: loaded " + count + " system properties");
+            "Mondrian: loaded {} system properties", count);
     }
 
     /**
@@ -270,14 +270,11 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
             load(source.openStream());
             if (populateCount == 0) {
                 LOGGER.info(
-                    "Mondrian: properties loaded from '"
-                    + source.getDescription()
-                    + "'");
+                    "Mondrian: properties loaded from '{}'", source.getDescription());
             }
         } catch (IOException e) {
             LOGGER.error(
-                "Mondrian: error while loading properties "
-                + "from '" + source.getDescription() + "' (" + e + ")");
+                "Mondrian: error while loading properties from '{}' ({})", source.getDescription(), e);
         }
     }
 }

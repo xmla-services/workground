@@ -33,7 +33,9 @@ public class Refresh extends QueryPart {
 
     @Override
     public void unparse(PrintWriter pw) {
-        pw.print("REFRESH CUBE [" + cubeName + "]");
+        pw.print("REFRESH CUBE [");
+        pw.print(cubeName);
+        pw.print("]");
     }
 
     @Override

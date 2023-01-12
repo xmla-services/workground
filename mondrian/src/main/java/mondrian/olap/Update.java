@@ -35,7 +35,7 @@ public class Update extends QueryPart {
 
     @Override
     public void unparse(PrintWriter pw) {
-        pw.print("UPDATE CUBE [" + cubeName + "]");
+        pw.print(new StringBuilder("UPDATE CUBE [").append(cubeName).append("]").toString());
     }
 
     @Override

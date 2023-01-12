@@ -65,9 +65,9 @@ public class CastFunDef extends FunDefBase {
         final Type targetType)
     {
         return Util.newInternal(
-            "cannot convert value '" + o
-            + "' to targetType '" + targetType
-            + "'");
+            new StringBuilder("cannot convert value '").append(o)
+            .append("' to targetType '").append(targetType)
+            .append("'").toString());
     }
 
     public static int toInt(

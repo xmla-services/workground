@@ -458,13 +458,13 @@ public class FastBatchingCellReader implements CellReader {
                 && iteration > 10)
             {
                 throw Util.newError(
-                    "Cache round-trip did not resolve any cell requests. "
-                    + "Iteration #" + iteration
-                    + "; request count " + cellRequests1.size()
-                    + "; requested headers: " + response.cacheSegments.size()
-                    + "; requested rollups: " + response.rollups.size()
-                    + "; requested SQL: "
-                    + response.sqlSegmentMapFutures.size());
+                    new StringBuilder("Cache round-trip did not resolve any cell requests. ")
+                        .append("Iteration #").append(iteration)
+                        .append("; request count ").append(cellRequests1.size())
+                        .append("; requested headers: ").append(response.cacheSegments.size())
+                        .append("; requested rollups: ").append(response.rollups.size())
+                        .append("; requested SQL: ")
+                        .append(response.sqlSegmentMapFutures.size()).toString());
             }
 
             // Continue loop; form and execute a new request with the smaller

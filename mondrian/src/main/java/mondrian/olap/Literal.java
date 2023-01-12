@@ -194,7 +194,7 @@ public class Literal extends ExpBase {
         if (o instanceof Number) {
             return ((Number) o).intValue();
         } else {
-            throw Util.newInternal("cannot convert " + o + " to int");
+            throw Util.newInternal(new StringBuilder("cannot convert ").append(o).append(" to int").toString());
         }
     }
 

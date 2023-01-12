@@ -29,7 +29,7 @@ public class ConnectionStartEvent extends ConnectionEvent {
     }
 
     public String toString() {
-        return "ConnectionStartEvent(" + connectionId + ")";
+        return new StringBuilder("ConnectionStartEvent(").append(connectionId).append(")").toString();
     }
 
     public <T> T accept(Visitor<T> visitor) {

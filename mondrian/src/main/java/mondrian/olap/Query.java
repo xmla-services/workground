@@ -794,7 +794,7 @@ public class Query extends QueryPart {
         int i = -1;
         for (QueryAxis axis : axes) {
             ++i;
-            pw.println("Axis (" + axis.getAxisName() + "):");
+            pw.println(new StringBuilder("Axis (").append(axis.getAxisName()).append("):").toString());
             axisCalcs[i].accept(calcWriter);
             pw.println();
         }
@@ -1007,14 +1007,14 @@ public class Query extends QueryPart {
             if (value instanceof String) {
                 String s = (String) value;
                 try {
-                    return new Integer(s);
+                    return Integer.parseInt(s);
                 } catch (NumberFormatException e) {
-                    return new Double(s);
+                    return Double.parseDouble(s);
                 }
             }
             throw Util.newInternal(
-                "Invalid value '" + value + "' for parameter '" + parameterName
-                + "', type " + type);
+                new StringBuilder("Invalid value '").append(value).append("' for parameter '").append(parameterName)
+                    .append("', type ").append(type).toString());
         case Category.String:
             if (value == null) {
                 return null;
@@ -1026,8 +1026,8 @@ public class Query extends QueryPart {
             }
             if (!(value instanceof List)) {
                 throw Util.newInternal(
-                    "Invalid value '" + value + "' for parameter '"
-                    + parameterName + "', type " + type);
+                    new StringBuilder("Invalid value '").append(value).append("' for parameter '")
+                        .append(parameterName).append("', type ").append(type).toString());
             }
             List<Member> expList = new ArrayList<Member>();
             final List list = (List) value;
@@ -1086,8 +1086,8 @@ public class Query extends QueryPart {
                 }
             }
             throw Util.newInternal(
-                "Invalid value '" + value + "' for parameter '"
-                + parameterName + "', type " + type);
+                new StringBuilder("Invalid value '").append(value).append("' for parameter '")
+                    .append(parameterName).append("', type ").append(type).toString());
         default:
             throw Category.instance.badValue(category);
         }
@@ -2191,7 +2191,7 @@ public class Query extends QueryPart {
         }
 
         public String getNameUniqueWithinQuery() {
-            return System.identityHashCode(this) + "";
+            return new StringBuilder().append(System.identityHashCode(this)).toString();
         }
 
         public boolean isDynamic() {

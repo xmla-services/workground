@@ -146,8 +146,7 @@ abstract class MondrianOlap4jStatement
                     Collections.<Object>singletonList(plan)));
         } else {
             throw olap4jConnection.helper.createException(
-                "Query does not have relational result. Use a DRILLTHROUGH "
-                + "query, or execute using the executeOlapQuery method.");
+                "Query does not have relational result. Use a DRILLTHROUGH query, or execute using the executeOlapQuery method.");
         }
     }
 
@@ -362,7 +361,7 @@ abstract class MondrianOlap4jStatement
             return iface.cast(this);
         }
         throw olap4jConnection.helper.createException(
-            "does not implement '" + iface + "'");
+            new StringBuilder("does not implement '").append(iface).append("'").toString());
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {

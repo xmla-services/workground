@@ -52,6 +52,14 @@ import mondrian.util.Format;
  */
 @ServiceProvider(value = UserDefinedFunction.class)
 public class CurrentDateMemberUdf implements UserDefinedFunction {
+    private final static String CURRENT_DATE_MEMBER_UDF_DESCRIPTION =
+        "Returns the closest or exact member within the specified "
+        + "dimension corresponding to the current date, in the format "
+        + "specified by the format parameter. "
+        + "Format strings are the same as used by the MDX Format function, "
+        + "namely the Visual Basic format strings. "
+        + "See http://www.apostate.com/programming/vb-format.html.";
+
     private Object resultDateMember = null;
 
     public Object execute(Evaluator evaluator, Argument[] arguments) {
@@ -103,12 +111,7 @@ public class CurrentDateMemberUdf implements UserDefinedFunction {
     }
 
     public String getDescription() {
-        return "Returns the closest or exact member within the specified "
-            + "dimension corresponding to the current date, in the format "
-            + "specified by the format parameter. "
-            + "Format strings are the same as used by the MDX Format function, "
-            + "namely the Visual Basic format strings. "
-            + "See http://www.apostate.com/programming/vb-format.html.";
+        return CURRENT_DATE_MEMBER_UDF_DESCRIPTION;
     }
 
     public String getName() {

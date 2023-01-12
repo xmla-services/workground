@@ -139,8 +139,8 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
         Value old = valuesByName.put(name, value);
         if (old != null) {
             throw Util.newInternal(
-                "Enumeration already contained a value '" + old.getName()
-                + "'");
+                new StringBuilder("Enumeration already contained a value '").append(old.getName())
+                    .append("'").toString());
         }
         final int ordinal = value.getOrdinal();
         min = Math.min(min, ordinal);
@@ -293,9 +293,9 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
      */
     public RuntimeException badValue(int ordinal) {
         return Util.newInternal(
-            "bad value " + ordinal + "("
-            + getName(ordinal) + ") for enumeration '"
-            + getClass().getName() + "'");
+            new StringBuilder("bad value ").append(ordinal).append("(")
+                .append(getName(ordinal)).append(") for enumeration '")
+                .append(getClass().getName()).append("'").toString());
     }
 
     /**
@@ -304,9 +304,9 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
      */
     public RuntimeException unexpected(V value) {
         return Util.newInternal(
-            "Was not expecting value '" + value
-            + "' for enumeration '" + getClass().getName()
-            + "' in this context");
+            new StringBuilder("Was not expecting value '").append(value)
+                .append("' for enumeration '").append(getClass().getName())
+                .append("' in this context").toString());
     }
 
     /**
@@ -386,8 +386,8 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
          */
         public RuntimeException unexpected() {
             return Util.newInternal(
-                "Value " + name + " of class "
-                + getClass() + " unexpected here");
+                new StringBuilder("Value ").append(name).append(" of class ")
+                    .append(getClass()).append(" unexpected here").toString());
         }
     }
 

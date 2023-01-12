@@ -55,7 +55,8 @@ public class UtilCompatibleJdk16 extends UtilCompatibleJdk15 {
         } catch (ScriptException e) {
             throw Util.newError(
                 e,
-                "Error while compiling script to implement " + iface + " SPI");
+                new StringBuilder("Error while compiling script to implement ").append(iface)
+                    .append(" SPI").toString());
         }
     }
 

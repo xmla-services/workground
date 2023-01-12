@@ -87,9 +87,7 @@ class UnionRoleImpl implements Role {
             }
         }
         LOGGER.debug(
-            "Access level " + access
-            + " granted to schema " + schema.getName()
-            + " because of a union of roles.");
+            "Access level {} granted to schema {} because of a union of roles.", access, schema.getName());
         return access;
     }
 
@@ -118,9 +116,8 @@ class UnionRoleImpl implements Role {
             }
         }
         LOGGER.debug(
-            "Access level " + access
-            + " granted to cube " + cube.getName()
-            + " because of a union of roles.");
+            "Access level {} granted to cube {} because of a union of roles.",
+            access, cube.getName());
         return access;
     }
 
@@ -133,9 +130,7 @@ class UnionRoleImpl implements Role {
             }
         }
         LOGGER.debug(
-            "Access level " + access
-            + " granted to dimension " + dimension.getUniqueName()
-            + " because of a union of roles.");
+            "Access level {} granted to dimension {} because of a union of roles.", access, dimension.getUniqueName());
         return access;
     }
 
@@ -148,9 +143,8 @@ class UnionRoleImpl implements Role {
             }
         }
         LOGGER.debug(
-            "Access level " + access
-            + " granted to hierarchy " + hierarchy.getUniqueName()
-            + " because of a union of roles.");
+            "Access level {} granted to hierarchy {} because of a union of roles.",
+            access, hierarchy.getUniqueName());
         return access;
     }
 
@@ -185,9 +179,8 @@ class UnionRoleImpl implements Role {
             }
         }
         LOGGER.debug(
-            "Access level " + access
-            + " granted to level " + level.getUniqueName()
-            + " because of a union of roles.");
+            "Access level {} granted to level {} because of a union of roles.",
+            access, level.getUniqueName());
         return access;
     }
 
@@ -200,9 +193,8 @@ class UnionRoleImpl implements Role {
         }
         final Access access = getAccess(member.getDimension());
         LOGGER.debug(
-            "Access level " + access
-            + " granted to member " + member.getUniqueName()
-            + " because of a union of roles.");
+            "Access level {} granted to member {} because of a union of roles.",
+            access, member.getUniqueName());
         return access;
     }
 
@@ -215,9 +207,8 @@ class UnionRoleImpl implements Role {
             }
         }
         LOGGER.debug(
-            "Access level " + access
-            + " granted to set " + set.getUniqueName()
-            + " because of a union of roles.");
+            "Access level {} granted to set {} because of a union of roles.",
+            access, set.getUniqueName());
         return access;
     }
 
@@ -264,9 +255,7 @@ class UnionRoleImpl implements Role {
                 }
             }
             LOGGER.debug(
-                "Access level " + access
-                + " granted to member " + member.getUniqueName()
-                + " because of a union of roles.");
+                "Access level {} granted to member {} because of a union of roles.", access, member.getUniqueName());
             return access;
         }
 

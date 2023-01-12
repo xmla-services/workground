@@ -941,7 +941,7 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
             return iface.cast(this);
         }
         throw olap4jConnection.helper.createException(
-            "does not implement '" + iface + "'");
+            new StringBuilder("does not implement '").append(iface).append("'").toString());
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {

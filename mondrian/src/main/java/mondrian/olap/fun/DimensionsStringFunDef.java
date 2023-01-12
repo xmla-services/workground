@@ -83,10 +83,10 @@ class DimensionsStringFunDef extends FunDefBase {
             return (Hierarchy) o;
         } else if (o == null) {
             throw FunUtil.newEvalException(
-                this, "Hierarchy '" + name + "' not found");
+                this, new StringBuilder("Hierarchy '").append(name).append("' not found").toString());
         } else {
             throw FunUtil.newEvalException(
-                this, "Hierarchy(" + name + ") found " + o);
+                this, new StringBuilder("Hierarchy(").append(name).append(") found ").append(o).toString());
         }
     }
 }

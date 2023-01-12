@@ -35,7 +35,9 @@ public class CalculatedFormula extends QueryPart {
     @Override
     public void unparse(PrintWriter pw) {
         pw.print("CREATE SESSION MEMBER ");
-        pw.print("[" + cubeName + "]");
+        pw.print("[");
+        pw.print(cubeName);
+        pw.print("]");
         pw.print(".");
         if(e != null) {
             pw.print(e.getIdentifier());

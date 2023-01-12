@@ -88,8 +88,8 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         // Since the expression is not a base measure, we won't
         // attempt to determine the aggregator and will simply sum.
         AggregateFunDef.LOGGER.warn(
-            "Unable to determine aggregator for non-base measures "
-            + "in 2nd parameter of Aggregate(), summing: " + exp.toString());
+            "Unable to determine aggregator for non-base measures in 2nd parameter of Aggregate(), summing: {}",
+            exp.toString());
         return null;
     }
 
@@ -164,7 +164,10 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             if (rollup == null) {
                 throw FunUtil.newEvalException(
                     null,
-                    "Don't know how to rollup aggregator '" + aggregator + "'");
+                    new StringBuilder("Don't know how to rollup aggregator '")
+                        .append(aggregator)
+                        .append("'")
+                        .toString());
             }
             if (aggregator != RolapAggregator.DistinctCount
                 && aggregator != RolapAggregator.Avg)
@@ -199,9 +202,9 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             // Similar optimization can also be done for list of members.
 
             boolean unlimitedIn  = false;
-            
+
             //TODO: reactivate
-            //TODO: Functions should know their context , (dialext and configProps) 
+            //TODO: Functions should know their context , (dialext and configProps)
 //            if (evaluator instanceof RolapEvaluator) {
 //                unlimitedIn =
 //                    ((RolapEvaluator) evaluator).getDialect()
@@ -369,9 +372,9 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             if (list.size() > maxConstraints) {
                 throw FunUtil.newEvalException(
                     null,
-                    "Aggregation is not supported over a list"
-                    + " with more than " + maxConstraints + " predicates"
-                    + " (see property " + property.getPath() + ")");
+                    new StringBuilder("Aggregation is not supported over a list").
+                    append(" with more than ").append(maxConstraints).append(" predicates").
+                    append(" (see property ").append(property.getPath()).append(")").toString());
             }
         }
 

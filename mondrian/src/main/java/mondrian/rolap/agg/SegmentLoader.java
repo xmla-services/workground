@@ -790,14 +790,14 @@ public class SegmentLoader {
     }
     boolean sparse = ( possibleCount - countThreshold ) * densityThreshold > actualCount;
     if ( possibleCount < countThreshold ) {
-      assert !sparse : "Should never use sparse if count is less " + "than threshold, possibleCount=" + possibleCount
-          + ", actualCount=" + actualCount + ", countThreshold=" + countThreshold + ", densityThreshold="
-          + densityThreshold;
+      assert !sparse : new StringBuilder("Should never use sparse if count is less than threshold, possibleCount=")
+          .append(possibleCount).append(", actualCount=").append(actualCount).append(", countThreshold=")
+          .append(countThreshold).append(", densityThreshold=").append(densityThreshold).toString();
     }
     if ( possibleCount == actualCount ) {
-      assert !sparse : "Should never use sparse if result is 100% dense: " + "possibleCount=" + possibleCount
-          + ", actualCount=" + actualCount + ", countThreshold=" + countThreshold + ", densityThreshold="
-          + densityThreshold;
+      assert !sparse : new StringBuilder("Should never use sparse if result is 100% dense: possibleCount=")
+          .append(possibleCount).append(", actualCount=").append(actualCount).append(", countThreshold=")
+          .append(countThreshold).append(", densityThreshold=").append(densityThreshold).toString();
     }
     return sparse;
   }

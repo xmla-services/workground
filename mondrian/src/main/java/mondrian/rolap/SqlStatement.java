@@ -229,7 +229,7 @@ public class SqlStatement {
       final long executeNanos = timeNanos - startTimeNanos;
       final long executeMillis = executeNanos / 1000000;
       Util.addDatabaseTime( executeMillis );
-      status = ", exec " + executeMillis + " ms";
+      status = new StringBuilder(", exec ").append(executeMillis).append(" ms").toString();
 
       locus.getServer().getMonitor().sendEvent(
         new SqlStatementExecuteEvent(
@@ -251,7 +251,7 @@ public class SqlStatement {
         accessors.add( createAccessor( accessors.size(), type ) );
       }
     } catch ( Throwable e ) {
-      status = ", failed (" + e + ")";
+      status = new StringBuilder(", failed (").append(e).append(")").toString();
 
       // This statement was leaked to us. It is our responsibility
       // to dispose of it.
@@ -260,11 +260,13 @@ public class SqlStatement {
       // Now handle this exception.
       throw handle( e );
     } finally {
-      RolapUtil.SQL_LOGGER.debug( id + ": " + status );
+      RolapUtil.SQL_LOGGER.debug( new StringBuilder().append(id)
+          .append(": ").append(status).toString() );
 
       if ( RolapUtil.LOGGER.isDebugEnabled() ) {
         RolapUtil.LOGGER.debug(
-          locus.component + ": executing sql [" + sql + "]" + status );
+            new StringBuilder(locus.component).append(": executing sql [")
+                .append(sql).append("]").append(status).toString() );
       }
     }
   }
@@ -300,7 +302,7 @@ public class SqlStatement {
     if ( ex != null ) {
       throw Util.newError(
         ex,
-        locus.message + "; sql=[" + sql + "]" );
+          new StringBuilder(locus.message).append("; sql=[").append(sql).append("]").toString() );
     }
 
     long endTime = System.currentTimeMillis();
@@ -316,18 +318,18 @@ public class SqlStatement {
     locus.execution.getQueryTiming().markFull(
       TIMING_NAME + locus.component, totalMs );
 
-    RolapUtil.SQL_LOGGER.debug( id + ": " + status );
+    RolapUtil.SQL_LOGGER.debug( new StringBuilder().append(id).append(": ").append(status).toString() );
 
     Counters.SQL_STATEMENT_CLOSE_COUNT.incrementAndGet();
     boolean remove = Counters.SQL_STATEMENT_EXECUTING_IDS.remove( id );
-    status += ", ex=" + Counters.SQL_STATEMENT_EXECUTE_COUNT.get()
-      + ", close=" + Counters.SQL_STATEMENT_CLOSE_COUNT.get()
-      + ", open=" + Counters.SQL_STATEMENT_EXECUTING_IDS;
+    status =new StringBuilder(status).append(", ex=").append(Counters.SQL_STATEMENT_EXECUTE_COUNT.get())
+      .append(", close=").append(Counters.SQL_STATEMENT_CLOSE_COUNT.get())
+      .append(", open=").append(Counters.SQL_STATEMENT_EXECUTING_IDS).toString();
 
     if ( RolapUtil.LOGGER.isDebugEnabled() ) {
       RolapUtil.LOGGER.debug(
-        locus.component + ": done executing sql [" + sql + "]"
-          + status );
+          new StringBuilder(locus.component).append(": done executing sql [").append(sql).append("]")
+          .append(status).toString() );
     }
 
     if ( !remove ) {
@@ -348,7 +350,8 @@ public class SqlStatement {
   }
 
   public String formatTimingStatus( long totalMs, int rowCount ) {
-    return ", exec+fetch " + totalMs + " ms, " + rowCount + " rows";
+    return new StringBuilder(", exec+fetch ").append(totalMs).append(" ms, ")
+        .append(rowCount).append(" rows").toString();
   }
 
   public ResultSet getResultSet() {
@@ -364,7 +367,7 @@ public class SqlStatement {
    */
   public RuntimeException handle( Throwable e ) {
     RuntimeException runtimeException =
-      Util.newError( e, locus.message + "; sql=[" + sql + "]" );
+      Util.newError( e, new StringBuilder(locus.message).append("; sql=[").append(sql).append("]").toString() );
     try {
       close();
     } catch ( Throwable t ) {

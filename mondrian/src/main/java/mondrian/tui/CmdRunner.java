@@ -326,7 +326,7 @@ public class CmdRunner {
         int category = TypeUtil.typeToCategory(param.getType());
         String name = param.getName();
         String value = CmdRunner.paraNameValues.get(name);
-        debug("loadParameter: name=" + name + ", value=" + value);
+        debug(new StringBuilder("loadParameter: name=").append(name).append(", value=").append(value).toString());
         if (value == null) {
             return;
         }
@@ -340,36 +340,36 @@ public class CmdRunner {
         case Category.Numeric:
             if (type != Expr.Type.NUMERIC) {
                 String msg =
-                    "For parameter named \""
-                    + name
-                    + "\" of Catetory.Numeric, "
-                    + "the value was type \""
-                    + type
-                    + "\"";
+                    new StringBuilder("For parameter named \"")
+                        .append(name)
+                        .append("\" of Catetory.Numeric, ")
+                        .append("the value was type \"")
+                        .append(type)
+                        .append("\"").toString();
                 throw new IllegalArgumentException(msg);
             }
             break;
         case Category.String:
             if (type != Expr.Type.STRING) {
                 String msg =
-                    "For parameter named \""
-                    + name
-                    + "\" of Catetory.String, "
-                    + "the value was type \""
-                    + type
-                    + "\"";
+                    new StringBuilder("For parameter named \"")
+                        .append(name)
+                        .append("\" of Catetory.String, ")
+                        .append("the value was type \"")
+                        .append(type)
+                        .append("\"").toString();
                 throw new IllegalArgumentException(msg);
             }
             break;
 
         case Category.Member:
             if (type != Expr.Type.MEMBER) {
-                String msg = "For parameter named \""
-                        + name
-                        + "\" of Catetory.Member, "
-                        + "the value was type \""
-                        + type
-                        + "\"";
+                String msg = new StringBuilder("For parameter named \"")
+                    .append(name)
+                    .append("\" of Catetory.Member, ")
+                    .append("the value was type \"")
+                    .append(type)
+                    .append("\"").toString();
                 throw new IllegalArgumentException(msg);
             }
             break;
@@ -992,7 +992,7 @@ public class CmdRunner {
                 // CANCEL_CHAR and simply empty buffer.
                 if ((line == null) || (line.charAt(0) == EXECUTE_CHAR)) {
                     String mdxCmd = buf.toString().trim();
-                    debug("mdxCmd=\"" + mdxCmd + "\"");
+                    debug(new StringBuilder("mdxCmd=\"").append(mdxCmd).append("\"").toString());
                     resultString = executeMdxCmd(mdxCmd);
                 }
 
@@ -1006,7 +1006,7 @@ public class CmdRunner {
                     // Remove the ';' character.
                     buf.append(line.substring(0, line.length() - 1));
                     String mdxCmd = buf.toString().trim();
-                    debug("mdxCmd=\"" + mdxCmd + "\"");
+                    debug(new StringBuilder("mdxCmd=\"").append(mdxCmd).append("\"").toString());
                     resultString = executeMdxCmd(mdxCmd);
                     inMdxCmd = false;
                 } else {
@@ -1956,8 +1956,7 @@ public class CmdRunner {
         buf.append(nl);
         appendIndent(buf, 3);
         buf.append(
-            " If value is null, then unsets the parameter associated with "
-            + "value");
+            " If value is null, then unsets the parameter associated with value");
     }
     protected String executeParam(String mdxCmd) {
         StringBuilder buf = new StringBuilder(200);
@@ -2021,8 +2020,7 @@ public class CmdRunner {
         buf.append(nl);
         appendIndent(buf, 2);
         buf.append(
-            "With \"cubename name=value\" sets the readwrite attribute with "
-            + "name to value.");
+            "With \"cubename name=value\" sets the readwrite attribute with name to value.");
         buf.append(nl);
         appendIndent(buf, 2);
         buf.append("With \"cubename command\" executes the commands:");
@@ -2355,52 +2353,51 @@ public class CmdRunner {
             buf.append(msg);
             buf.append(nl);
         }
-        buf.append(
-            "Usage: mondrian.tui.CmdRunner args"
-            + nl
-            + "  args:"
-            + nl
-            + "  -h               : print this usage text"
-            + nl
-            + "  -H               : ready to print out high cardinality"
-            + nl
-            + "                     dimensions"
-            + nl
-            + "  -d               : enable local debugging"
-            + nl
-            + "  -t               : time each mdx query"
-            + nl
-            + "  -nocache         : turn off in-memory aggregate caching"
-            + nl
-            + "                     for all cubes regardless of setting"
-            + nl
-            + "                     in schema"
-            + nl
-            + "  -rc              : do NOT reload connections each query"
-            + nl
-            + "                     (default is to reload connections)"
-            + nl
-            + "  -p propertyfile  : load mondrian properties"
-            + nl
-            + "  -r role_name     : set the connections role name"
-            + nl
-            + "  -f mdx_filename+ : execute mdx in one or more files"
-            + nl
-            + "  -x xmla_filename+: execute XMLA in one or more files"
-            + "                     the XMLA request has no SOAP wrapper"
-            + nl
-            + "  -xs soap_xmla_filename+ "
-            + "                   : execute Soap XMLA in one or more files"
-            + "                     the XMLA request has a SOAP wrapper"
-            + nl
-            + "  -vt              : validate xmla response using transforms"
-            + "                     only used with -x or -xs flags"
-            + nl
-            + "  -vx              : validate xmla response using xpaths"
-            + "                     only used with -x or -xs flags"
-            + nl
-            + "  mdx_cmd          : execute mdx_cmd"
-            + nl);
+        buf.append("Usage: mondrian.tui.CmdRunner args")
+            .append(nl)
+            .append("  args:")
+            .append(nl)
+            .append("  -h               : print this usage text")
+            .append(nl)
+            .append("  -H               : ready to print out high cardinality")
+            .append(nl)
+            .append("                     dimensions")
+            .append(nl)
+            .append("  -d               : enable local debugging")
+            .append(nl)
+            .append("  -t               : time each mdx query")
+            .append(nl)
+            .append("  -nocache         : turn off in-memory aggregate caching")
+            .append(nl)
+            .append("                     for all cubes regardless of setting")
+            .append(nl)
+            .append("                     in schema")
+            .append(nl)
+            .append("  -rc              : do NOT reload connections each query")
+            .append(nl)
+            .append("                     (default is to reload connections)")
+            .append(nl)
+            .append("  -p propertyfile  : load mondrian properties")
+            .append(nl)
+            .append("  -r role_name     : set the connections role name")
+            .append(nl)
+            .append("  -f mdx_filename+ : execute mdx in one or more files")
+            .append(nl)
+            .append("  -x xmla_filename+: execute XMLA in one or more files")
+            .append("                     the XMLA request has no SOAP wrapper")
+            .append(nl)
+            .append("  -xs soap_xmla_filename+ ")
+            .append("                   : execute Soap XMLA in one or more files")
+            .append("                     the XMLA request has a SOAP wrapper")
+            .append(nl)
+            .append("  -vt              : validate xmla response using transforms")
+            .append("                     only used with -x or -xs flags")
+            .append(nl)
+            .append("  -vx              : validate xmla response using xpaths")
+            .append("                     only used with -x or -xs flags")
+            .append(nl)
+            .append("  mdx_cmd          : execute mdx_cmd")
+            .append(nl).toString();
 
         out.println(buf.toString());
     }
@@ -2521,7 +2518,7 @@ public class CmdRunner {
         if (options.timeQueries) {
             // only print if different
             if (totalQueryTime != queryTime) {
-                out.println("total[" + totalQueryTime + "ms]");
+                out.println(new StringBuilder("total[").append(totalQueryTime).append("ms]").toString());
             }
         }
         out.flush();

@@ -7,10 +7,10 @@
  * Copyright (C) 2001-2005 Julian Hyde
  * Copyright (C) 2005-2021 Hitachi Vantara and others
  * All Rights Reserved.
- * 
+ *
  * Contributors:
  *   SmartCity Jena, Stefan Bischof - removements- use plain jdk8++ java
- * 
+ *
  */
 package mondrian.olap;
 
@@ -151,12 +151,12 @@ public class Util extends XOMUtil {
     /**
      * Placeholder which indicates a value NULL.
      */
-    public static final Object nullValue = new Double(FunUtil.DoubleNull);
+    public static final Object nullValue = Double.valueOf(FunUtil.DoubleNull);
 
     /**
      * Placeholder which indicates an EMPTY value.
      */
-    public static final Object EmptyValue = new Double(FunUtil.DoubleEmpty);
+    public static final Object EmptyValue = Double.valueOf(FunUtil.DoubleEmpty);
 
     /**
      * Cumulative time spent accessing the database.
@@ -436,10 +436,10 @@ public class Util extends XOMUtil {
     public static String quoteJavaString(String s) {
         return s == null
             ? "null"
-            : "\""
-              + s.replaceAll("\\\\", "\\\\\\\\")
-                .replaceAll("\\\"", "\\\\\"")
-              + "\"";
+            : new StringBuilder("\"")
+            .append(s.replaceAll("\\\\", "\\\\\\\\")
+                .replaceAll("\\\"", "\\\\\""))
+            .append("\"").toString();
     }
 
     /**
@@ -743,11 +743,8 @@ public class Util extends XOMUtil {
             if (child == null) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug(
-                        "Util.lookupCompound: "
-                        + "parent.name="
-                        + parent.getName()
-                        + " has no child with name="
-                        + name);
+                        "Util.lookupCompound: parent.name={} has no child with name={}",
+                        parent.getName(), name);
                 }
 
                 if (!failIfNotFound) {
@@ -767,11 +764,8 @@ public class Util extends XOMUtil {
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                "Util.lookupCompound: "
-                + "found child.name="
-                + parent.getName()
-                + ", child.class="
-                + parent.getClass().getName());
+                "Util.lookupCompound: found child.name={}, child.class={}",
+                parent.getName(), parent.getClass().getName());
         }
 
         switch (category) {
@@ -782,7 +776,7 @@ public class Util extends XOMUtil {
                 return parent.getDimension();
             } else if (failIfNotFound) {
                 throw Util.newError(
-                    "Can not find dimension '" + implode(names) + "'");
+                    new StringBuilder("Can not find dimension '").append(implode(names)).append("'").toString());
             } else {
                 return null;
             }
@@ -793,7 +787,7 @@ public class Util extends XOMUtil {
                 return parent.getHierarchy();
             } else if (failIfNotFound) {
                 throw Util.newError(
-                    "Can not find hierarchy '" + implode(names) + "'");
+                    new StringBuilder("Can not find hierarchy '").append(implode(names)).append("'").toString());
             } else {
                 return null;
             }
@@ -802,7 +796,7 @@ public class Util extends XOMUtil {
                 return parent;
             } else if (failIfNotFound) {
                 throw Util.newError(
-                    "Can not find level '" + implode(names) + "'");
+                    new StringBuilder("Can not find level '").append(implode(names)).append("'").toString());
             } else {
                 return null;
             }
@@ -1159,7 +1153,7 @@ public class Util extends XOMUtil {
             }
         }
         throw Util.newInternal(
-            "could not find member " + member + " amongst its siblings");
+            new StringBuilder("could not find member ").append(member).append(" amongst its siblings").toString());
     }
 
     /**
@@ -1344,9 +1338,9 @@ public class Util extends XOMUtil {
         Enum<T> anEnum)
     {
         return Util.newInternal(
-            "Was not expecting value '" + anEnum
-            + "' for enumeration '" + anEnum.getDeclaringClass().getName()
-            + "' in this context");
+            new StringBuilder("Was not expecting value '").append(anEnum)
+                .append("' for enumeration '").append(anEnum.getDeclaringClass().getName())
+                .append("' in this context").toString());
     }
 
     /**
@@ -1470,7 +1464,7 @@ public class Util extends XOMUtil {
                 } else {
                     names.set(
                         count - 2,
-                        names.get(count - 2) + "," + string);
+                        new StringBuilder(names.get(count - 2)).append(",").append(string).toString());
                     names.remove(count - 1);
                 }
             } else {
@@ -1700,7 +1694,7 @@ public class Util extends XOMUtil {
             return new Locale(strings[0], strings[1], strings[2]);
         default:
             throw newInternal(
-                "bad locale string '" + localeString + "'");
+                new StringBuilder("bad locale string '").append(localeString).append("'").toString());
         }
     }
 
@@ -1754,16 +1748,16 @@ public class Util extends XOMUtil {
         }
         if (unit == null) {
             throw new NumberFormatException(
-                "Invalid time interval '" + original + "'. Does not contain a "
-                + "time unit. (Suffix may be ns (nanoseconds), "
-                + "us (microseconds), ms (milliseconds), s (seconds), "
-                + "h (hours), d (days). For example, '20s' means 20 seconds.)");
+                new StringBuilder("Invalid time interval '").append(original).append("'. Does not contain a ")
+                    .append("time unit. (Suffix may be ns (nanoseconds), ")
+                    .append("us (microseconds), ms (milliseconds), s (seconds), ")
+                    .append("h (hours), d (days). For example, '20s' means 20 seconds.)").toString());
         }
         try {
             return Pair.of(new BigDecimal(s).longValue(), unit);
         } catch (NumberFormatException e) {
             throw new NumberFormatException(
-                "Invalid time interval '" + original + "'");
+                new StringBuilder("Invalid time interval '").append(original).append("'").toString());
         }
     }
 
@@ -2010,7 +2004,7 @@ public class Util extends XOMUtil {
         default:
             type = Category.instance().getDescription(category);
         }
-        return newError(type + " '" + identifierNode + "' not found");
+        return newError(new StringBuilder(type).append(" '").append(identifierNode).append("' not found").toString());
     }
 
     /**
@@ -2331,9 +2325,9 @@ public class Util extends XOMUtil {
      */
     public static RuntimeException unexpected(Enum value) {
         return Util.newInternal(
-            "Was not expecting value '" + value
-            + "' for enumeration '" + value.getClass().getName()
-            + "' in this context");
+            new StringBuilder("Was not expecting value '").append(value)
+                .append("' for enumeration '").append(value.getClass().getName())
+                .append("' in this context").toString());
     }
 
     /**
@@ -2434,7 +2428,7 @@ public class Util extends XOMUtil {
             return sw.toString();
         } else {
             return (prependClassName)
-                ? err.getClass().getName() + ": " + errMsg
+                ? new StringBuilder(err.getClass().getName()).append(": ").append(errMsg).toString()
                 : errMsg;
         }
     }
@@ -2743,8 +2737,8 @@ public class Util extends XOMUtil {
                     return value;
                 } else {
                     throw new RuntimeException(
-                        "quoted value ended too soon, at position " + i
-                        + " in '" + s + "'");
+                        new StringBuilder("quoted value ended too soon, at position ").append(i)
+                            .append(" in '").append(s).append("'").toString());
                 }
             } else {
                 String value;
@@ -2788,9 +2782,9 @@ public class Util extends XOMUtil {
                 }
             }
             throw new RuntimeException(
-                "Connect string '" + s
-                + "' contains unterminated quoted value '" + valueBuf.toString()
-                + "'");
+                new StringBuilder("Connect string '").append(s)
+                    .append("' contains unterminated quoted value '").append(valueBuf.toString())
+                    .append("'").toString());
         }
     }
 
@@ -3915,7 +3909,7 @@ public class Util extends XOMUtil {
         }
 
         public String toString() {
-            return "[" + t0 + ", " + t1 + "]";
+            return new StringBuilder("[").append(t0).append(", ").append(t1).append("]").toString();
         }
 
         public T get(int index) {
@@ -4011,7 +4005,7 @@ public class Util extends XOMUtil {
         }
 
         public String toString() {
-            return "[" + t0 + ", " + t1 + ", " + t2 + "]";
+            return new StringBuilder("[").append(t0).append(", ").append(t1).append(", ").append(t2).append("]").toString();
         }
 
         public T get(int index) {

@@ -149,8 +149,8 @@ class SqlMemberSource
             return list.get(0);
         default:
             throw Util.newError(
-                "More than one member in level " + level + " with key "
-                + keyValues);
+                new StringBuilder("More than one member in level ").append(level).append(" with key ")
+                .append(keyValues).toString());
         }
     }
 
@@ -302,7 +302,7 @@ class SqlMemberSource
                             .generateCountExpression(colDef));
                 }
                 sqlQuery.addSelect(
-                    "count(DISTINCT " + sb.toString() + ")", null);
+                    new StringBuilder("count(DISTINCT ").append(sb.toString()).append(")").toString(), null);
             }
             return sqlQuery.toString();
 
@@ -1080,10 +1080,8 @@ RME is this right
                     Object prevValue = rolapToOrdinalMap.put(member, ordinal);
                     if (prevValue != null && !Objects.equals(prevValue, ordinal)) {
                         LOGGER.error(
-                            "Column expression for "
-                            + member.getUniqueName()
-                            + " is inconsistent with ordinal or caption expression."
-                            + " It should have 1:1 relationship");
+                            "Column expression for {} is inconsistent with ordinal or caption expression. It should have 1:1 relationship",
+                            member.getUniqueName());
                     }
                 }
             }
@@ -1219,19 +1217,18 @@ RME is this right
         SqlQuery sqlQuery =
             SqlQuery.newQuery(
                 context,
-                "while generating query to retrieve children of parent/child "
-                + "hierarchy member " + member);
+                new StringBuilder("while generating query to retrieve children of parent/child ")
+                .append("hierarchy member ").append(member).toString());
         Util.assertTrue(
             member.isAll(),
-            "In the current implementation, parent/child hierarchies must "
-            + "have only one level (plus the 'All' level).");
+            "In the current implementation, parent/child hierarchies must have only one level (plus the 'All' level).");
 
         RolapLevel level = (RolapLevel) member.getLevel().getChildLevel();
 
         Util.assertTrue(!level.isAll(), "all level cannot be parent-child");
         Util.assertTrue(
-            level.isUnique(), "parent-child level '"
-                + level + "' must be unique");
+            level.isUnique(), new StringBuilder("parent-child level '")
+                .append(level).append("' must be unique").toString());
 
         hierarchy.addToFrom(sqlQuery, level.getParentExp());
         String parentId = getExpression(level.getParentExp(), sqlQuery);
@@ -1333,14 +1330,14 @@ RME is this right
         SqlQuery sqlQuery =
             SqlQuery.newQuery(
                 context,
-                "while generating query to retrieve children of "
-                + "parent/child hierarchy member " + member);
+                new StringBuilder("while generating query to retrieve children of ")
+                .append("parent/child hierarchy member ").append(member).toString());
         RolapLevel level = member.getLevel();
 
         Util.assertTrue(!level.isAll(), "all level cannot be parent-child");
         Util.assertTrue(
             level.isUnique(),
-            "parent-child level '" + level + "' must be "  + "unique");
+            new StringBuilder("parent-child level '").append(level).append("' must be ").append("unique").toString());
 
         hierarchy.addToFrom(sqlQuery, level.getParentExp());
         String parentId = getExpression(level.getParentExp(), sqlQuery);

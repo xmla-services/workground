@@ -176,14 +176,14 @@ public class FileRepository implements Repository {
         }
 
         if (datasourceInfo == null) {
-            throw Util.newError("Unknown database '" + databaseName + "'");
+            throw Util.newError(new StringBuilder("Unknown database '").append(databaseName).append("'").toString());
         }
 
         if (catalogName == null) {
             if (datasourceInfo.catalogMap.size() == 0) {
                 throw new OlapException(
-                    "No catalogs in the database named "
-                    + datasourceInfo.name);
+                    new StringBuilder("No catalogs in the database named ")
+                        .append(datasourceInfo.name).toString());
             }
             for (CatalogInfo catalogInfo : datasourceInfo.catalogMap.values()) {
               try {
@@ -196,7 +196,7 @@ public class FileRepository implements Repository {
           CatalogInfo namedCatalogInfo =
                 datasourceInfo.catalogMap.get(catalogName);
           if (namedCatalogInfo == null) {
-            throw Util.newError("Unknown catalog '" + catalogName + "'");
+            throw Util.newError(new StringBuilder("Unknown catalog '").append(catalogName).append("'").toString());
           }
           return getConnection(namedCatalogInfo, server, roleName, props);
         }
@@ -229,8 +229,8 @@ public class FileRepository implements Repository {
       properties.putAll(props);
       // Make sure we load the Mondrian driver into
       // the ClassLoader.
-      
-      
+
+
 //maybe java 5
 //      try {
 //        ClassResolver.INSTANCE.forName(
@@ -293,8 +293,8 @@ public class FileRepository implements Repository {
                 {
                     if (databaseInfo.catalogMap.containsKey(xmlCatalog.name)) {
                         throw Util.newError(
-                            "more than one DataSource object has name '"
-                            + xmlCatalog.name + "'");
+                            new StringBuilder("more than one DataSource object has name '")
+                                .append(xmlCatalog.name).append("'").toString());
                     }
                     String connectString =
                         xmlCatalog.dataSourceInfo != null
@@ -307,11 +307,11 @@ public class FileRepository implements Repository {
                     if (connectProperties
                         .get(RolapConnectionProperties.Catalog.name()) == null)
                     {
-                        connectString +=
-                            ";"
-                            + RolapConnectionProperties.Catalog.name()
-                            + "="
-                            + xmlCatalog.definition;
+                        connectString =
+                            new StringBuilder(connectString).append(";")
+                                .append(RolapConnectionProperties.Catalog.name())
+                                .append("=")
+                                .append(xmlCatalog.definition).toString();
                     }
                     final CatalogInfo catalogInfo =
                         new CatalogInfo(

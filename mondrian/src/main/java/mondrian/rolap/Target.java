@@ -169,8 +169,8 @@ public class Target extends TargetBase {
                     // Cannot send NoSuchElementException since its intercepted
                     // by AbstractSequentialList to identify out of bounds.
                     throw new RuntimeException(
-                        "Element " + idx
-                        + " has been forgotten");
+                        new StringBuilder("Element ").append(idx)
+                        .append(" has been forgotten").toString());
                 }
 
                 while (index >= getList().size() && this.moreRows) {

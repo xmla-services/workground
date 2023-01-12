@@ -109,8 +109,9 @@ public class HiveDialect extends JdbcDialectImpl {
     }
 
     public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
-        return "select * from (" + generateInlineGeneric(columnNames, columnTypes, valueList, " from dual", false)
-                + ") x limit " + valueList.size();
+        return new StringBuilder("select * from (")
+            .append(generateInlineGeneric(columnNames, columnTypes, valueList, " from dual", false))
+            .append(") x limit ").append(valueList.size()).toString();
     }
 
     protected void quoteDateLiteral(StringBuilder buf, String value, Date date) {
@@ -123,15 +124,17 @@ public class HiveDialect extends JdbcDialectImpl {
         // In Hive, Null values are worth negative infinity.
         if (collateNullsLast) {
             if (ascending) {
-                return "ISNULL(" + expr + ") ASC, " + expr + " ASC";
+                return new StringBuilder("ISNULL(").append(expr)
+                    .append(") ASC, ").append(expr).append(" ASC").toString();
             } else {
-                return expr + " DESC";
+                return new StringBuilder(expr).append(" DESC").toString();
             }
         } else {
             if (ascending) {
-                return expr + " ASC";
+                return new StringBuilder(expr).append(" ASC").toString();
             } else {
-                return "ISNULL(" + expr + ") DESC, " + expr + " DESC";
+                return new StringBuilder("ISNULL(").append(expr)
+                    .append(") DESC, ").append(expr).append(" DESC").toString();
             }
         }
     }

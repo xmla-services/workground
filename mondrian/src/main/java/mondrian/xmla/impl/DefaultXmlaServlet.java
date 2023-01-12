@@ -69,6 +69,14 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
      */
     private static final String REQUIRE_AUTHENTICATED_SESSIONS =
         "requireAuthenticatedSessions";
+    public static final String INVALID_SOAP_MESSAGE_MORE_THAN_ONE_HEADER_ELEMENTS = "Invalid SOAP message: More than " +
+        "one Header elements";
+    public static final String INVALID_SOAP_MESSAGE_DOES_NOT_HAVE_ONE_BODY_ELEMENT = "Invalid SOAP message: Does not " +
+        "have one Body element";
+    public static final String INVALID_SOAP_MESSAGE_ENVELOPE_ELEMENT_NOT_IN_SOAP_NAMESPACE = "Invalid SOAP message: " +
+        "Envelope element not in SOAP namespace";
+    public static final String INVALID_SOAP_MESSAGE_TOP_ELEMENT_NOT_ENVELOPE = "Invalid SOAP message: Top element not" +
+        " Envelope";
 
     private DocumentBuilderFactory domFactory = null;
 
@@ -174,8 +182,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                         USM_DOM_PARSE_CODE,
                         USM_DOM_PARSE_FAULT_FS,
                         new SAXException(
-                            "Invalid SOAP message: "
-                            + "Envelope element not in SOAP namespace"));
+                            INVALID_SOAP_MESSAGE_ENVELOPE_ELEMENT_NOT_IN_SOAP_NAMESPACE));
                 }
             } else {
                 throw new XmlaException(
@@ -183,8 +190,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                     USM_DOM_PARSE_CODE,
                     USM_DOM_PARSE_FAULT_FS,
                     new SAXException(
-                        "Invalid SOAP message: "
-                        + "Top element not Envelope"));
+                        INVALID_SOAP_MESSAGE_TOP_ELEMENT_NOT_ENVELOPE));
             }
 
             Element[] childs =
@@ -196,8 +202,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                     USM_DOM_PARSE_CODE,
                     USM_DOM_PARSE_FAULT_FS,
                     new SAXException(
-                        "Invalid SOAP message: "
-                        + "More than one Header elements"));
+                        INVALID_SOAP_MESSAGE_MORE_THAN_ONE_HEADER_ELEMENTS));
             }
             requestSoapParts[0] = childs.length == 1 ? childs[0] : null;
 
@@ -209,8 +214,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                     USM_DOM_PARSE_CODE,
                     USM_DOM_PARSE_FAULT_FS,
                     new SAXException(
-                        "Invalid SOAP message: "
-                        + "Does not have one Body element"));
+                        INVALID_SOAP_MESSAGE_DOES_NOT_HAVE_ONE_BODY_ELEMENT));
             }
             requestSoapParts[1] = childs[0];
         } catch (XmlaException xex) {
@@ -308,8 +312,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
 
                         if ("".equals(passwordStr) || null == passwordStr) {
                             LOGGER.warn(
-                                    "Security header for user [" + userNameStr
-                                            + "] provided without password");
+                                    "Security header for user [{}] provided without password", userNameStr);
                         }
                         authenticatedSession = true;
                         continue;
@@ -382,10 +385,10 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                     } else {
                         // error
                         String msg =
-                            "Invalid XML/A message: Unknown "
-                            + "\"mustUnderstand\" XMLA Header element \""
-                            + localName
-                            + "\"";
+                            new StringBuilder("Invalid XML/A message: Unknown ")
+                                .append("\"mustUnderstand\" XMLA Header element \"")
+                                .append(localName)
+                                .append("\"").toString();
                         throw new XmlaException(
                             MUST_UNDERSTAND_FAULT_FC,
                             HSH_MUST_UNDERSTAND_CODE,
@@ -415,9 +418,8 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                                 (String) context.get(CONTEXT_XMLA_SESSION_ID);
 
                         LOGGER.debug(
-                                "New authenticated session; storing credentials ["
-                                        + username + "/********] for session id ["
-                                        + sessionId + "]");
+                                "New authenticated session; storing credentials [{}/********] for session id [{}]",
+                            username, sessionId);
 
                         saveSessionInfo(
                                 username,
@@ -484,21 +486,21 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         Attr attr = e.getAttributeNode(XMLA_SESSION_ID);
         if (attr == null) {
             throw new SAXException(
-                "Invalid XML/A message: "
-                + XMLA_SESSION
-                + " Header element with no "
-                + XMLA_SESSION_ID
-                + " attribute");
+                new StringBuilder("Invalid XML/A message: ")
+                    .append(XMLA_SESSION)
+                    .append(" Header element with no ")
+                    .append(XMLA_SESSION_ID)
+                    .append(" attribute").toString());
         }
 
         String sessionId = attr.getValue();
         if (sessionId == null) {
             throw new SAXException(
-                "Invalid XML/A message: "
-                + XMLA_SESSION
-                + " Header element with "
-                + XMLA_SESSION_ID
-                + " attribute but no attribute value");
+                new StringBuilder("Invalid XML/A message: ")
+                    .append(XMLA_SESSION)
+                    .append(" Header element with ")
+                    .append(XMLA_SESSION_ID)
+                    .append(" attribute but no attribute value").toString());
         }
         return sessionId;
     }
@@ -524,9 +526,9 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                     HSB_BAD_SOAP_BODY_CODE,
                     HSB_BAD_SOAP_BODY_FAULT_FS,
                     new RuntimeException(
-                        "Invalid XML/A message: Body has "
-                        + dreqs.length + " Discover Requests and "
-                        + ereqs.length + " Execute Requests"));
+                        new StringBuilder("Invalid XML/A message: Body has ")
+                            .append(dreqs.length).append(" Discover Requests and ")
+                            .append(ereqs.length).append(" Execute Requests").toString()));
             }
 
             Element xmlaReqElem = (dreqs.length == 0 ? ereqs[0] : dreqs[0]);
@@ -638,18 +640,18 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
                 case SOAP:
                 default:
                     String s0 =
-                        "<?xml version=\"1.0\" encoding=\"" + encoding
-                        + "\"?>\n<" + SOAP_PREFIX + ":Envelope xmlns:"
-                        + SOAP_PREFIX + "=\"" + NS_SOAP_ENV_1_1 + "\" "
-                        + SOAP_PREFIX + ":encodingStyle=\""
-                        + NS_SOAP_ENC_1_1 + "\" >" + "\n<" + SOAP_PREFIX
-                        + ":Header>\n";
+                        new StringBuilder("<?xml version=\"1.0\" encoding=\"").append(encoding)
+                            .append("\"?>\n<" + SOAP_PREFIX).append(":Envelope xmlns:")
+                            .append(SOAP_PREFIX).append("=\"").append(NS_SOAP_ENV_1_1).append("\" ")
+                            .append(SOAP_PREFIX).append(":encodingStyle=\"")
+                            .append(NS_SOAP_ENC_1_1).append("\" >").append("\n<" + SOAP_PREFIX)
+                            .append(":Header>\n").toString();
                     String s2 =
-                        "</" + SOAP_PREFIX + ":Header>\n<" + SOAP_PREFIX
-                        + ":Body>\n";
+                        new StringBuilder("</").append(SOAP_PREFIX).append(":Header>\n<").append(SOAP_PREFIX)
+                            .append(":Body>\n").toString();
                     String s4 =
-                        "\n</" + SOAP_PREFIX + ":Body>\n</" + SOAP_PREFIX
-                        + ":Envelope>\n";
+                        new StringBuilder("\n</").append(SOAP_PREFIX).append(":Body>\n</").append(SOAP_PREFIX)
+                            .append(":Envelope>\n").toString();
 
                     byteChunks = new Object[] {
                         s0.getBytes(encoding),
@@ -771,7 +773,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         if (t instanceof XmlaException) {
             XmlaException xex = (XmlaException) t;
             code = xex.getCode();
-            faultString = xex.getFaultString() + " " + xex.getDetail();
+            faultString = new StringBuilder(xex.getFaultString()).append(" ").append(xex.getDetail()).toString();
             faultCode = XmlaException.formatFaultCode(xex);
             detail = XmlaException.formatDetail(xex.getDetail());
 
@@ -779,7 +781,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
             // some unexpected Throwable
             t = XmlaException.getRootCause(t);
             code = UNKNOWN_ERROR_CODE;
-            faultString = UNKNOWN_ERROR_FAULT_FS + " " + t.getMessage();
+            faultString = new StringBuilder(UNKNOWN_ERROR_FAULT_FS).append(" ").append(t.getMessage()).toString();
             faultCode = XmlaException.formatFaultCode(
                 SERVER_FAULT_FC, code);
             detail = XmlaException.formatDetail(t.getMessage());
@@ -791,7 +793,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         try {
             SaxWriter writer = new DefaultSaxWriter(osBuf, encoding);
             writer.startDocument();
-            writer.startElement(SOAP_PREFIX + ":Fault");
+            writer.startElement(new StringBuilder(SOAP_PREFIX).append(":Fault").toString());
 
             // The faultcode element is intended for use by software to provide
             // an algorithmic mechanism for identifying the fault. The faultcode
@@ -903,14 +905,10 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
 
         if (sessionInfo == null) {
             LOGGER.error(
-                "No login credentials for found for session ["+
-                sessionId + "]");
+                "No login credentials for found for session [{}]", sessionId);
         } else {
             LOGGER.debug(
-                "Found credentials for session id ["
-                + sessionId
-                + "], username=[" + sessionInfo.user
-                + "] in servlet cache");
+                "Found credentials for session id [{}], username=[{}] in servlet cache", sessionId, sessionInfo.user);
         }
         return sessionInfo;
     }
