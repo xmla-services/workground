@@ -76,9 +76,9 @@ public class LocalizingDynamicSchemaProcessor
                 getClass().getClassLoader());
         } catch (Exception e) {
             LOGGER.warn(
-                "Mondrian: Warning: no suitable locale file found for locale '"
-                    + locale
-                    + "'",
+                new StringBuilder("Mondrian: Warning: no suitable locale file found for locale '")
+                    .append(locale)
+                    .append("'").toString(),
                 e);
         }
     }
@@ -133,11 +133,11 @@ public class LocalizingDynamicSchemaProcessor
                     match.appendReplacement(intlSchema, intlProperty);
                 }
             } catch (MissingResourceException e) {
-                LOGGER.error("Missing resource for key [" + key + "]", e);
+                LOGGER.error(new StringBuilder("Missing resource for key [").append(key).append("]").toString(), e);
             } catch (NullPointerException e) {
                 LOGGER.error(
-                    "missing resource key at substring(" + start + "," + end
-                    + ")",
+                    new StringBuilder("missing resource key at substring(").append(start).append(",").append(end)
+                    .append( ")").toString(),
                     e);
             }
         }

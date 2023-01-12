@@ -129,9 +129,9 @@ public class SlotFuture<V> implements Future<V> {
         try {
             if (done) {
                 final String message =
-                    "Future is already done (cancelled=" + cancelled
-                    + ", value=" + this.value
-                    + ", throwable=" + throwable + ")";
+                    new StringBuilder("Future is already done (cancelled=").append(cancelled)
+                    .append(", value=").append(this.value)
+                    .append(", throwable=").append(throwable).append(")").toString();
                 LOG.error(message);
                 throw new IllegalArgumentException(
                     message);
@@ -157,9 +157,9 @@ public class SlotFuture<V> implements Future<V> {
         try {
             if (done) {
                 throw new IllegalArgumentException(
-                    "Future is already done (cancelled=" + cancelled
-                    + ", value=" + value
-                    + ", throwable=" + this.throwable + ")");
+                    new StringBuilder("Future is already done (cancelled=").append(cancelled)
+                    .append(", value=").append(value)
+                    .append(", throwable=").append(this.throwable).append(")").toString());
             }
             this.throwable = throwable;
             this.done = true;

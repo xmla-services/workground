@@ -76,7 +76,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
           }
           return sumDouble == Double.MIN_VALUE ? null : sumDouble;
         default:
-          throw new MondrianException( "Aggregator " + this.name + " does not support datatype" + datatype.name() );
+          throw new MondrianException( new StringBuilder("Aggregator ").append(this.name)
+              .append(" does not support datatype").append(datatype.name()).toString() );
       }
     }
   };
@@ -126,7 +127,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
           }
           return minDouble == Double.MAX_VALUE ? null : minDouble;
         default:
-          throw new MondrianException( "Aggregator " + this.name + " does not support datatype" + datatype.name() );
+          throw new MondrianException( new StringBuilder("Aggregator ").append(this.name)
+              .append(" does not support datatype").append(datatype.name()).toString() );
       }
     }
   };
@@ -167,7 +169,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
 
           return maxDouble == Double.NEGATIVE_INFINITY ? null : maxDouble;
         default:
-          throw new MondrianException( "Aggregator " + this.name + " does not support datatype" + datatype.name() );
+          throw new MondrianException( new StringBuilder("Aggregator ").append(this.name)
+              .append(" does not support datatype").append(datatype.name()).toString() );
       }
     }
   };
@@ -202,7 +205,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
     }
 
     public String getExpression( String operand ) {
-      return "count(distinct " + operand + ")";
+      return new StringBuilder("count(distinct ").append(operand).append(")").toString();
     }
 
     @Override
@@ -319,8 +322,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
 
     @Override
     public String getScalarExpression( String operand ) {
-      throw new UnsupportedOperationException( "This method should not be invoked "
-          + "if alwaysRequiresFactColumn() is false" );
+      throw new UnsupportedOperationException( "This method should not be invoked if alwaysRequiresFactColumn() is false" );
     }
   }
 

@@ -481,7 +481,7 @@ public class TypeUtil {
             return false;
         default:
             throw Util.newInternal(
-                "unknown category " + from + " for type " + fromType);
+                new StringBuilder("unknown category ").append(from).append(" for type ").append(fromType).toString());
         }
     }
 
@@ -594,11 +594,11 @@ public class TypeUtil {
 
         // for debug
         public String toString() {
-            return "Conversion(from=" + Category.instance().getName(from)
-                + ", to=" + Category.instance().getName(to)
-                + ", ordinal="
-                + ordinal + ", cost="
-                + cost + ", e=" + e + ")";
+            return new StringBuilder("Conversion(from=").append(Category.instance().getName(from))
+                .append(", to=").append(Category.instance().getName(to))
+                .append(", ordinal=")
+                .append(ordinal).append(", cost=")
+                .append(cost).append(", e=").append(e).append(")").toString();
         }
     }
 }

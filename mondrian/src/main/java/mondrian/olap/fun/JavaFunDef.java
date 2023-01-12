@@ -123,13 +123,13 @@ public class JavaFunDef extends FunDefBase {
     private static FunDef generateFunDef(final Method method) {
         String name =
             Util.getAnnotation(
-                method, JavaFunDef.className + "$FunctionName", method.getName());
+                method, new StringBuilder(JavaFunDef.className).append("$FunctionName").toString(), method.getName());
         String desc =
             Util.getAnnotation(
-                method, JavaFunDef.className + "$Description", "");
+                method, new StringBuilder(JavaFunDef.className).append("$Description").toString(), "");
         Syntax syntax =
             Util.getAnnotation(
-                method, JavaFunDef.className + "$SyntaxDef", Syntax.Function);
+                method, new StringBuilder(JavaFunDef.className).append("$SyntaxDef").toString(), Syntax.Function);
 
         int returnCategory = JavaFunDef.getReturnCategory(method);
 

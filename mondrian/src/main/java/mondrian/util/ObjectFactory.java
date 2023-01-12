@@ -444,8 +444,8 @@ public abstract class ObjectFactory<V> {
             }
         } catch (Exception exc) {
             throw new CreationException(
-                "Error creating object of type \""
-                    + this.interfaceClass.getName() + "\"",
+                new StringBuilder("Error creating object of type \"")
+                    .append(this.interfaceClass.getName()).append("\"").toString(),
                 exc);
         }
     }

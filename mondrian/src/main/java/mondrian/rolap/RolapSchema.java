@@ -440,9 +440,9 @@ public class RolapSchema implements Schema {
 
         if (serverSchemaVersion.compareTo(schemaMajor) < 0) {
             String errorMsg =
-                "Schema version '" + schemaVersion
-                + "' is later than schema version "
-                + "'3.x' supported by this version of Mondrian";
+                new StringBuilder("Schema version '").append(schemaVersion)
+                    .append("' is later than schema version ")
+                    .append("'3.x' supported by this version of Mondrian").toString();
             throw Util.newError(errorMsg);
         }
     }
@@ -615,7 +615,7 @@ public class RolapSchema implements Schema {
             Role role = lookupRole(xmlSchema.defaultRole());
             if (role == null) {
                 error(
-                    "Role '" + xmlSchema.defaultRole() + "' not found",
+                    new StringBuilder("Role '").append(xmlSchema.defaultRole()).append("' not found").toString(),
                     locate(xmlSchema, "defaultRole"));
             } else {
                 // At this stage, the only roles in mapNameToRole are
@@ -633,7 +633,7 @@ public class RolapSchema implements Schema {
             Scripts.ScriptLanguage.lookup(script.language());
         if (language == null) {
             throw Util.newError(
-                "Invalid script language '" + script.language() + "'");
+                new StringBuilder("Invalid script language '").append(script.language()).append("'").toString());
         }
         return new Scripts.ScriptDefinition(script.cdata(), language);
     }
@@ -740,7 +740,7 @@ public class RolapSchema implements Schema {
     public void handleCubeGrant(RoleImpl role, org.eclipse.daanse.olap.rolap.dbmapper.api.CubeGrant cubeGrant) {
         RolapCube cube = lookupCube(cubeGrant.cube());
         if (cube == null) {
-            throw Util.newError("Unknown cube '" + cubeGrant.cube() + "'");
+            throw Util.newError(new StringBuilder("Unknown cube '").append(cubeGrant.cube()).append("'").toString());
         }
         role.grant(cube, getAccess(cubeGrant.access(), cubeAllowed));
 
@@ -786,9 +786,9 @@ public class RolapSchema implements Schema {
                         grant.rollupPolicy().toUpperCase());
             } catch (IllegalArgumentException e) {
                 throw Util.newError(
-                    "Illegal rollupPolicy value '"
-                        + grant.rollupPolicy()
-                        + "'");
+                    new StringBuilder("Illegal rollupPolicy value '")
+                        .append(grant.rollupPolicy())
+                        .append("'").toString());
             }
         } else {
             rollupPolicy = RollupPolicy.FULL;
@@ -803,8 +803,7 @@ public class RolapSchema implements Schema {
         if (grant.memberGrant().size() > 0) {
             if (hierarchyAccess != Access.CUSTOM) {
                 throw Util.newError(
-                    "You may only specify <MemberGrant> if "
-                    + "<Hierarchy> has access='custom'");
+                    "You may only specify <MemberGrant> if <Hierarchy> has access='custom'");
             }
 
             for (org.eclipse.daanse.olap.rolap.dbmapper.api.MemberGrant memberGrant
@@ -824,8 +823,8 @@ public class RolapSchema implements Schema {
                 }
                 if (member.getHierarchy() != hierarchy) {
                     throw Util.newError(
-                        "Member '" + member
-                        + "' is not in hierarchy '" + hierarchy + "'");
+                        new StringBuilder("Member '").append(member)
+                        .append("' is not in hierarchy '").append(hierarchy).append("'").toString());
                 }
                 role.grant(
                     member,
@@ -838,10 +837,8 @@ public class RolapSchema implements Schema {
         {
             if (LOGGER.isTraceEnabled()) {
                 LOGGER.trace(
-                    "Rolling back grants of Hierarchy '"
-                    + hierarchy.getUniqueName()
-                    + "' to NONE, because it contains no "
-                    + "valid restricted members");
+                    "Rolling back grants of Hierarchy '{}' to NONE, because it contains no valid restricted members",
+                    hierarchy.getUniqueName());
             }
             role.grant(hierarchy, Access.NONE, null, null, rollupPolicy);
         }
@@ -870,7 +867,7 @@ public class RolapSchema implements Schema {
 
         if (hierarchyAccess != Access.CUSTOM) {
             throw Util.newError(
-                "You may only specify '" + desc + "' if access='custom'");
+                new StringBuilder("You may only specify '").append(desc).append("' if access='custom'").toString());
         }
         return lookup(cube, schemaReader, Category.Level, name);
     }
@@ -880,7 +877,7 @@ public class RolapSchema implements Schema {
         if (allowed.contains(access)) {
             return access; // value is ok
         }
-        throw Util.newError("Bad value access='" + accessString + "'");
+        throw Util.newError(new StringBuilder("Bad value access='").append(accessString).append("'").toString());
     }
 
     public Dimension createDimension(Cube cube, String xml) {
@@ -899,14 +896,14 @@ public class RolapSchema implements Schema {
                 xmlDimension = (org.eclipse.daanse.olap.rolap.dbmapper.api.DimensionUsage) jaxbUnmarshaller.unmarshal(new StringReader(xml));
             } else {
                 throw new XOMException(
-                    "Got <" + tagName
-                    + "> when expecting <Dimension> or <DimensionUsage>");
+                    new StringBuilder("Got <").append(tagName)
+                    .append("> when expecting <Dimension> or <DimensionUsage>").toString());
             }
         } catch (XOMException | JAXBException e) {
             throw Util.newError(
                 e,
-                "Error while adding dimension to cube '" + cube
-                + "' from XML [" + xml + "]");
+                new StringBuilder("Error while adding dimension to cube '").append(cube)
+                .append("' from XML [").append(xml).append("]").toString());
         }
         return ((RolapCube) cube).createDimension(xmlDimension, xmlSchema);
     }
@@ -934,12 +931,12 @@ public class RolapSchema implements Schema {
                 cube = new RolapCube(this, xmlSchema, xmlDimension, false, context);
             } else {
                 throw new XOMException(
-                    "Got <" + tagName + "> when expecting <Cube>");
+                    new StringBuilder("Got <").append(tagName).append("> when expecting <Cube>").toString());
             }
         } catch (XOMException | JAXBException e) {
             throw Util.newError(
                 e,
-                "Error while creating cube from XML [" + xml + "]");
+                new StringBuilder("Error while creating cube from XML [").append(xml).append("]").toString());
         }
         return cube;
     }
@@ -1156,8 +1153,8 @@ public class RolapSchema implements Schema {
         final String udfName = udf.getName();
         if (udfName == null || udfName.equals("")) {
             throw Util.newInternal(
-                "User-defined function defined by class '"
-                + udf.getClass() + "' has empty name");
+                new StringBuilder("User-defined function defined by class '")
+                .append(udf.getClass()).append("' has empty name").toString());
         }
         // It's OK for the description to be null.
         final String description = udf.getDescription();
@@ -1167,8 +1164,8 @@ public class RolapSchema implements Schema {
             Type parameterType = parameterTypes[i];
             if (parameterType == null) {
                 throw Util.newInternal(
-                    "Invalid user-defined function '"
-                    + udfName + "': parameter type #" + i + " is null");
+                    new StringBuilder("Invalid user-defined function '")
+                    .append(udfName).append("': parameter type #").append(i).append(" is null").toString());
             }
         }
         // It's OK for the reserved words to be null or empty.
@@ -1180,14 +1177,14 @@ public class RolapSchema implements Schema {
         final Type returnType = udf.getReturnType(parameterTypes);
         if (returnType == null) {
             throw Util.newInternal(
-                "Invalid user-defined function '"
-                + udfName + "': return type is null");
+                new StringBuilder("Invalid user-defined function '")
+                .append(udfName).append("': return type is null").toString());
         }
         final Syntax syntax = udf.getSyntax();
         if (syntax == null) {
             throw Util.newInternal(
-                "Invalid user-defined function '"
-                + udfName + "': syntax is null");
+                new StringBuilder("Invalid user-defined function '")
+                .append(udfName).append("': syntax is null").toString());
         }
     }
 
@@ -1273,8 +1270,8 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
                     return new CacheMemberReader((MemberSource) o);
                 } else {
                     throw Util.newInternal(
-                        "member reader class " + clazz
-                        + " does not implement " + MemberSource.class);
+                        new StringBuilder("member reader class ").append(clazz)
+                        .append(" does not implement ").append(MemberSource.class).toString());
                 }
             } catch (ClassNotFoundException e) {
                 e2 = e;
@@ -1349,9 +1346,8 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
-                    "RolapSchema.createDataSourceChangeListener: "
-                    + "create datasource change listener \""
-                    + dataSourceChangeListenerStr);
+                    "RolapSchema.createDataSourceChangeListener: create datasource change listener {}\"",
+                    dataSourceChangeListenerStr);
             }
         }
         return changeListener;

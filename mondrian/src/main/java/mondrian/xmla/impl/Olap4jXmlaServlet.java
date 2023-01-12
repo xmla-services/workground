@@ -170,10 +170,10 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
                 ddhcRes);
         } catch (Exception ex) {
             String msg =
-                "Exception [" + ex + "] while trying to create "
-                + "olap4j connection to ["
-                + olap4jDriverConnectionString + "] using driver "
-                + "[" + olap4jDriverClassName + "]";
+                new StringBuilder("Exception [").append(ex).append("] while trying to create ")
+                    .append("olap4j connection to [")
+                    .append(olap4jDriverConnectionString).append("] using driver ")
+                    .append("[").append(olap4jDriverClassName).append("]").toString();
             LOGGER.error(msg, ex);
             throw new ServletException(msg, ex);
         }
@@ -267,7 +267,7 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
 
             // note: this works also for un-authenticated connections; they will
             // simply all be created by the same BasicDataSource object
-            final String dataSourceKey = user + "_" + pwd;
+            final String dataSourceKey = new StringBuilder(user).append("_").append(pwd).toString();
 
             BasicDataSource bds;
             synchronized (datasourcesPool) {
@@ -306,9 +306,9 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
-                    "Obtained connection object [" + olapConnection
-                    + "] (ext pool wrapper " + connection + ") for key "
-                    + dataSourceKey);
+                    new StringBuilder("Obtained connection object [").append(olapConnection)
+                    .append("] (ext pool wrapper ").append(connection).append(") for key ")
+                    .append(dataSourceKey).toString());
             }
             if (catalog != null) {
                 olapConnection.setCatalog(catalog);

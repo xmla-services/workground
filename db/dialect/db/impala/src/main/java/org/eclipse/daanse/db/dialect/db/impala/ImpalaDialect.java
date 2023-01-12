@@ -62,30 +62,31 @@ public class ImpalaDialect extends HiveDialect {
 
     @Override
     protected String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
+        StringBuilder sb = new StringBuilder(expr);
         if (ascending) {
-            return expr + " ASC";
+            return sb.append(" ASC").toString();
         } else {
-            return expr + " DESC";
+            return sb.append(" DESC").toString();
         }
     }
 
     @Override
     public String generateOrderItem(String expr, boolean nullable, boolean ascending, boolean collateNullsLast) {
-        String ret = null;
+        StringBuilder ret = new StringBuilder();
 
         if (nullable && collateNullsLast) {
-            ret = "CASE WHEN " + expr + " IS NULL THEN 1 ELSE 0 END, ";
+            ret.append("CASE WHEN ").append(expr).append(" IS NULL THEN 1 ELSE 0 END, ");
         } else {
-            ret = "CASE WHEN " + expr + " IS NULL THEN 0 ELSE 1 END, ";
+            ret.append("CASE WHEN ").append(expr).append(" IS NULL THEN 0 ELSE 1 END, ");
         }
 
         if (ascending) {
-            ret += expr + " ASC";
+            ret.append(expr).append(" ASC");
         } else {
-            ret += expr + " DESC";
+            ret.append(expr).append(" DESC");
         }
 
-        return ret;
+        return ret.toString();
     }
 
     @Override
@@ -172,16 +173,17 @@ public class ImpalaDialect extends HiveDialect {
             javaRegex = javaRegex.replace(escapeMatcher.group(1), escapeMatcher.group(2));
         }
 
-        source = "cast(" + source + " as string)";
         final StringBuilder sb = new StringBuilder();
         // Now build the string.
+        sb.append("cast(");
         sb.append(source);
+        sb.append(" as string)");
         sb.append(" IS NOT NULL AND ");
         if (caseSensitive) {
-            sb.append(source);
+            sb.append("cast(").append(source).append(" as string)");
         } else {
             sb.append("UPPER(");
-            sb.append(source);
+            sb.append("cast(").append(source).append(" as string)");
             sb.append(")");
         }
         sb.append(" REGEXP ");

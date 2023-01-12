@@ -163,15 +163,15 @@ class ExtractFunDef extends FunDefBase {
             int ordinal = hierarchies.indexOf(extractedHierarchy);
             if (ordinal == -1) {
                 throw new RuntimeException(
-                    "hierarchy "
-                    + extractedHierarchy.getUniqueName()
-                    + " is not a hierarchy of the expression " + args[0]);
+                    new StringBuilder("hierarchy ")
+                    .append(extractedHierarchy.getUniqueName())
+                    .append(" is not a hierarchy of the expression ").append(args[0]).toString());
             }
             if (extractedOrdinals.indexOf(ordinal) >= 0) {
                 throw new RuntimeException(
-                    "hierarchy "
-                    + extractedHierarchy.getUniqueName()
-                    + " is extracted more than once");
+                    new StringBuilder("hierarchy ")
+                    .append(extractedHierarchy.getUniqueName())
+                    .append(" is extracted more than once").toString());
             }
             extractedOrdinals.add(ordinal);
             extractedHierarchies.add(extractedHierarchy);

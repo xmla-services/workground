@@ -105,15 +105,15 @@ public abstract class OlapElementBase
         if (this instanceof MetaElement) {
             MetaElement metaElement = (MetaElement) this;
             final Map<String, Object> metaMap = metaElement.getMetadata();
-            
-           final String seek = prop.name().toLowerCase() + "." + locale;
+
+           final String seek = new StringBuilder(prop.name().toLowerCase()).append(".").append(locale).toString();
 
             Optional<Entry<String, Object>> o = metaMap.entrySet()
                     .stream()
                     .filter(k -> k.getKey()
                             .startsWith(seek))
                     .findFirst();
-            
+
             if (o.isPresent()){
                 return o.get().getValue().toString();
             }

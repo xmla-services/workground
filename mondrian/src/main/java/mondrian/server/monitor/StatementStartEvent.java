@@ -31,7 +31,7 @@ public class StatementStartEvent extends StatementEvent {
     }
 
     public String toString() {
-        return "StatementStartEvent(" + statementId + ")";
+        return new StringBuilder("StatementStartEvent(").append(statementId).append(")").toString();
     }
 
     public <T> T accept(Visitor<T> visitor) {

@@ -27,7 +27,8 @@ public class DimensionUtil {
                 }
             }
             throw Util.newInternal(
-                "Cannot find shared dimension '" + ((DimensionUsage) dimension).source() + "'");
+                new StringBuilder("Cannot find shared dimension '")
+                    .append(((DimensionUsage) dimension).source()).append("'").toString());
         }
         if (dimension instanceof PrivateDimension) {
             Util.assertPrecondition(schema != null, "schema != null");
@@ -52,7 +53,7 @@ public class DimensionUtil {
             }
         }
         throw Util.newInternal(
-            "Cannot find public dimension '" + dimensionName + "'");
+            new StringBuilder("Cannot find public dimension '").append(dimensionName).append("'").toString());
     }
 
 
@@ -62,7 +63,7 @@ public class DimensionUtil {
                 return schema.cube().get(i);
             }
         }
-        throw Util.newInternal("Cannot find cube '" + cubeName + "'");
+        throw Util.newInternal(new StringBuilder("Cannot find cube '").append(cubeName).append("'").toString());
     }
 
     private static PrivateDimension getDimension(Cube cube, Schema schema, String dimensionName) {
@@ -72,8 +73,8 @@ public class DimensionUtil {
             }
         }
         throw Util.newInternal(
-            "Cannot find dimension '" + dimensionName + "' in cube '" +
-                cube.name() + "'");
+            new StringBuilder("Cannot find dimension '").append(dimensionName).append("' in cube '")
+                .append(cube.name()).append("'").toString());
 
     }
 }

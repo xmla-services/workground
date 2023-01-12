@@ -222,13 +222,13 @@ public class Formula extends QueryPart {
                         level = parentMember.getLevel().getChildLevel();
                         if (level == null) {
                             throw Util.newError(
-                                "The '"
-                                + segment
-                                + "' calculated member cannot be created "
-                                + "because its parent is at the lowest level "
-                                + "in the "
-                                + parentMember.getHierarchy().getUniqueName()
-                                + " hierarchy.");
+                                new StringBuilder("The '")
+                                    .append(segment)
+                                    .append("' calculated member cannot be created ")
+                                    .append("because its parent is at the lowest level ")
+                                    .append("in the ")
+                                    .append(parentMember.getHierarchy().getUniqueName())
+                                    .append(" hierarchy.").toString());
                         }
                     } else {
                         final Hierarchy hierarchy;
@@ -255,10 +255,10 @@ public class Formula extends QueryPart {
                         && parentMember.isCalculated())
                     {
                         throw Util.newError(
-                            "The '"
-                            + parent
-                            + "' calculated member cannot be used as a parent"
-                            + " of another calculated member.");
+                            new StringBuilder("The '")
+                                .append(parent)
+                                .append("' calculated member cannot be used as a parent")
+                                .append(" of another calculated member.").toString());
                     }
                     Member mdxMember =
                         level.getHierarchy().createMember(
@@ -502,9 +502,9 @@ public class Formula extends QueryPart {
             int scale = ((DecimalType) type).getScale();
             String formatString = "#,##0";
             if (scale > 0) {
-                formatString = formatString + ".";
+                formatString = new StringBuilder(formatString).append(".").toString();
                 while (scale-- > 0) {
-                    formatString = formatString + "0";
+                    formatString = new StringBuilder(formatString).append("0").toString();
                 }
             }
             return Literal.createString(formatString);

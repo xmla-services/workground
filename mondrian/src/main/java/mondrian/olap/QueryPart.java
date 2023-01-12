@@ -48,6 +48,6 @@ public abstract class QueryPart implements Walkable {
      */
     public void explain(PrintWriter pw) {
         throw new UnsupportedOperationException(
-            "explain not implemented for " + this + " (" + getClass() + ")");
+            new StringBuilder("explain not implemented for ").append(this).append(" (").append(getClass()).append(")").toString());
     }
 }

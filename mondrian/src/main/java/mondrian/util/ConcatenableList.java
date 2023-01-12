@@ -97,7 +97,7 @@ public class ConcatenableList<T> extends AbstractList<T> {
                     this.getIterator = null;
                     this.previousIndex = -200;
                     throw new IndexOutOfBoundsException(
-                        "Index " + index + " out of concatenable list range");
+                        new StringBuilder("Index ").append(index).append(" out of concatenable list range").toString());
                 }
             } else if (this.previousIndex + 1 == index
                 && this.getIterator != null)
@@ -111,7 +111,8 @@ public class ConcatenableList<T> extends AbstractList<T> {
                     this.getIterator = null;
                     this.previousIndex = -200;
                     throw new IndexOutOfBoundsException(
-                        "Index " + index + " out of concatenable list range");
+                        new StringBuilder("Index ").append(index)
+                            .append(" out of concatenable list range").toString());
                 }
             } else if (this.previousIndex == index) {
                 return this.previousElement;
@@ -123,13 +124,13 @@ public class ConcatenableList<T> extends AbstractList<T> {
                 final Iterator<T> it = this.iterator();
                 if (!it.hasNext()) {
                     throw new IndexOutOfBoundsException(
-                        "Index " + index + " out of concatenable list range");
+                        new StringBuilder("Index ").append(index).append(" out of concatenable list range").toString());
                 }
                 for (int i = 0; i < index; i++) {
                     if (!it.hasNext()) {
                         throw new IndexOutOfBoundsException(
-                            "Index " + index
-                            + " out of concatenable list range");
+                            new StringBuilder("Index ").append(index)
+                            .append(" out of concatenable list range").toString());
                     }
                     this.prePreviousElement = it.next();
                 }

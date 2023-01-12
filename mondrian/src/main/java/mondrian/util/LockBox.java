@@ -229,7 +229,7 @@ public class LockBox {
             final Object value = lockBox.map.get(this);
             if (value == null) {
                 throw new RuntimeException(
-                    "LockBox has no entry with moniker [" + moniker + "]");
+                    new StringBuilder("LockBox has no entry with moniker [").append(moniker).append("]").toString());
             }
             return unwrap(value);
         }

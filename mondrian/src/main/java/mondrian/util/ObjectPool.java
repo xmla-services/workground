@@ -270,8 +270,8 @@ public class ObjectPool<T> {
         }
         if (minLoadFactor >= maxLoadFactor) {
             throw new IllegalArgumentException(
-                "Illegal minLoadFactor: " + minLoadFactor
-                + " and maxLoadFactor: " + maxLoadFactor);
+                new StringBuilder("Illegal minLoadFactor: ").append(minLoadFactor)
+                .append(" and maxLoadFactor: ").append(maxLoadFactor).toString());
         }
         capacity = nextPrime(capacity);
 

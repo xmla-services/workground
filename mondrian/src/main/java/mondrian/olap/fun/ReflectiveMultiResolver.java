@@ -52,7 +52,7 @@ public class ReflectiveMultiResolver extends MultiResolver {
             this.constructor = clazz.getConstructor(new Class[] {FunDef.class});
         } catch (NoSuchMethodException e) {
             throw Util.newInternal(
-                e, "Error while registering resolver class " + clazz);
+                e, new StringBuilder("Error while registering resolver class ").append(clazz).toString());
         }
         this.reservedWords = reservedWords;
     }
@@ -62,13 +62,13 @@ public class ReflectiveMultiResolver extends MultiResolver {
             return (FunDef) constructor.newInstance(new Object[] {dummyFunDef});
         } catch (InstantiationException e) {
             throw Util.newInternal(
-                e, "Error while instantiating FunDef '" + getSignature() + "'");
+                e, new StringBuilder("Error while instantiating FunDef '").append(getSignature()).append("'").toString());
         } catch (IllegalAccessException e) {
             throw Util.newInternal(
-                e, "Error while instantiating FunDef '" + getSignature() + "'");
+                e, new StringBuilder("Error while instantiating FunDef '").append(getSignature()).append("'").toString());
         } catch (InvocationTargetException e) {
             throw Util.newInternal(
-                e, "Error while instantiating FunDef '" + getSignature() + "'");
+                e, new StringBuilder("Error while instantiating FunDef '").append(getSignature()).append("'").toString());
         }
     }
 

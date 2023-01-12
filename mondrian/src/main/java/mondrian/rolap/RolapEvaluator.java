@@ -897,8 +897,10 @@ public class RolapEvaluator implements Evaluator {
           case SET_EXPANDING:
             expanding = (RolapMember) eval.commands[c - 2];
             if ( Arrays.equals( members, eval.currentMembers ) && expanding == eval.expandingMember ) {
-              throw FunUtil.newEvalException( null, "Infinite loop while evaluating calculated member '"
-                  + eval.expandingMember + "'; context stack is " + eval.getContextString() );
+              throw FunUtil.newEvalException( null,
+                  new StringBuilder("Infinite loop while evaluating calculated member '")
+                      .append(eval.expandingMember).append("'; context stack is ")
+                      .append(eval.getContextString()).toString() );
             }
         }
         c -= command.width;
@@ -962,7 +964,8 @@ public class RolapEvaluator implements Evaluator {
       // more than one usage
       if ( member == null ) {
         if ( getLogger().isDebugEnabled() ) {
-          getLogger().debug( "RolapEvaluator.getProperty: member == null " + " , count=" + i );
+          getLogger().debug( new StringBuilder("RolapEvaluator.getProperty: member == null  , count=")
+              .append(i).toString() );
         }
         continue;
       }
@@ -1297,7 +1300,8 @@ public class RolapEvaluator implements Evaluator {
         return;
       }
     }
-    throw new AssertionError( "calculation " + calculation + " not on stack" );
+    throw new AssertionError( new StringBuilder("calculation ")
+        .append(calculation).append(" not on stack").toString() );
   }
 
   public final int getIterationLength() {
@@ -1338,9 +1342,9 @@ public class RolapEvaluator implements Evaluator {
             + ( evalAxes ? 0x40 : 0x80 );
     if ( false ) {
       // Enable this code block to debug checksum mismatches.
-      System.err.println( "h=" + h + ": " + Arrays.asList( Arrays.asList( currentMembers ),
+      System.err.println( new StringBuilder("h=").append(h).append(": ").append(Arrays.asList( Arrays.asList( currentMembers ),
           new HashSet<RolapCalculation>( Arrays.asList( calculations ).subList( 0, calculationCount ) ),
-          expandingMember, aggregationLists, nonEmpty, nativeEnabled, firstExpanding, evalAxes ) );
+          expandingMember, aggregationLists, nonEmpty, nativeEnabled, firstExpanding, evalAxes )).toString() );
     }
     return h;
   }
@@ -1405,7 +1409,8 @@ public class RolapEvaluator implements Evaluator {
       void execute( RolapEvaluator evaluator ) {
         final int value = (Integer) evaluator.commands[--evaluator.commandCount];
         final int currentState = evaluator.checksumState();
-        assert value == currentState : "Current checksum " + currentState + " != previous checksum " + value;
+        assert value == currentState : new StringBuilder("Current checksum ").append(currentState)
+            .append(" != previous checksum ").append(value).toString();
       }
     },
     ADD_CALCULATION( 1 ) {

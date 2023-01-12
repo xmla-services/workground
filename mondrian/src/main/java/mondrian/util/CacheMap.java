@@ -164,8 +164,8 @@ public class CacheMap<S, T> implements Map<S, T> {
     }
 
     public String toString() {
-        return "Ordered keys: " + head.toString() + "\n"
-                + "Map:" + map.toString();
+        return new StringBuilder("Ordered keys: ").append(head.toString()).append("\n")
+                .append("Map:").append(map.toString()).toString();
     }
 
     public boolean equals(Object o) {
@@ -231,9 +231,9 @@ public class CacheMap<S, T> implements Map<S, T> {
         public String toString() {
             if (this.next != null) {
                 if (key != null) {
-                    return key.toString() + ", " + this.next.toString();
+                    return new StringBuilder(key.toString()).append(", ").append(this.next.toString()).toString();
                 } else {
-                    return "<null>, " + this.next.toString();
+                    return new StringBuilder("<null>, ").append(this.next.toString()).toString();
                 }
             } else {
                 if (key != null) {

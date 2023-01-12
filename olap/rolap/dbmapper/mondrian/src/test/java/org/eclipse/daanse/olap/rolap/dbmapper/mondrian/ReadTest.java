@@ -1900,13 +1900,19 @@ public class ReadTest {
         assertNull(measure.annotations());
         checkExpression(measure.measureExpression(), get(MEASURE_EXPRESSION, map));
         assertNotNull(measure.calculatedMemberProperty());
-        assertEquals(map.get(NAME), measure.name(), "Wrong measure name " + ixdex + " for cube " + cube.name());
-        assertEquals(map.get(COLUMN), measure.column(), "Wrong measure column " + ixdex + " for cube " + cube.name());
+        assertEquals(map.get(NAME), measure.name(),
+            new StringBuilder("Wrong measure name ")
+                .append(ixdex).append(" for cube ").append(cube.name()).toString());
+        assertEquals(map.get(COLUMN), measure.column(),
+            new StringBuilder("Wrong measure column ")
+                .append(ixdex).append(" for cube ").append(cube.name()).toString());
         assertNull(measure.datatype());
         assertEquals(map.get(FORMAT_STRING), measure.formatString(),
-            "Wrong measure format " + ixdex + " for cube " + cube.name());
+            new StringBuilder("Wrong measure format ")
+                .append(ixdex).append(" for cube ").append(cube.name()).toString());
         assertEquals(map.get(AGGREGATOR), measure.aggregator(),
-            "Wrong measure aggregator " + ixdex + " for cube " + cube.name());
+            new StringBuilder("Wrong measure aggregator ")
+                .append(ixdex).append(" for cube ").append(cube.name()).toString());
         assertNull(measure.formatter());
         assertNull(measure.caption());
         assertNull(measure.description());

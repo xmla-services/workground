@@ -57,7 +57,7 @@ public class MemberProperty extends QueryPart {
     }
 
     public void unparse(PrintWriter pw) {
-        pw.print(name + " = ");
+        pw.print(new StringBuilder(name).append(" = ").toString());
         exp.unparse(pw);
     }
 

@@ -71,8 +71,8 @@ class JsonSaxWriter implements SaxWriter {
         }
         if (stack.peek().name != null) {
             assert name.equals(stack.peek().name)
-                : "In sequence [" + stack.peek() + "], element name ["
-                  + name + "]";
+                : new StringBuilder("In sequence [").append(stack.peek()).append("], element name [")
+                  .append(name).append("]").toString();
             buf.append("[");
         } else {
             Util.quoteForMdx(buf, name);
@@ -99,8 +99,8 @@ class JsonSaxWriter implements SaxWriter {
         buf.append(indentString);
         if (stack.peek().name != null) {
             assert name.equals(stack.peek().name)
-                : "In sequence [" + stack.peek() + "], element name ["
-                  + name + "]";
+                : new StringBuilder("In sequence [").append(stack.peek()).append("], element name [")
+                  .append(name).append("]").toString();
             buf.append("{");
         } else {
             Util.quoteForMdx(buf, name);
@@ -133,7 +133,7 @@ class JsonSaxWriter implements SaxWriter {
     public void endElement() {
         Frame prev = stack.pop();
         assert prev.name == null
-            : "Ended an element, but in sequence " + prev.name;
+            : new StringBuilder("Ended an element, but in sequence ").append(prev.name).toString();
         buf.append("\n");
         outdent();
         buf.append(indentString);

@@ -86,7 +86,7 @@ public class SqlStatisticsProvider implements StatisticsProvider {
                 new Locus(
                     execution,
                     "SqlStatisticsProvider.getQueryCardinality",
-                    "Reading row count from query [" + sql + "]"));
+                    new StringBuilder("Reading row count from query [").append(sql).append("]").toString()));
         try {
             ResultSet resultSet = stmt.getResultSet();
             if (resultSet.next()) {

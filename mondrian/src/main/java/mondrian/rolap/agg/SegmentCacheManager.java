@@ -681,9 +681,8 @@ public class SegmentCacheManager {
         event.cacheMgr.indexRegistry.getIndex( event.header );
       if ( index == null ) {
         LOGGER.debug(
-          "SegmentCacheManager.Handler.visitExternalCreated:"
-            + "No index found for external SegmentHeader:"
-            + event.header );
+          "SegmentCacheManager.Handler.visitExternalCreated:No index found for external SegmentHeader:{}",
+            event.header );
         return;
       }
       final RolapStar star = getStar( event.header );
@@ -718,9 +717,8 @@ public class SegmentCacheManager {
         event.cacheMgr.indexRegistry.getIndex( event.header );
       if ( index == null ) {
         LOGGER.debug(
-          "SegmentCacheManager.Handler.visitExternalDeleted:"
-            + "No index found for external SegmentHeader:"
-            + event.header );
+          "SegmentCacheManager.Handler.visitExternalDeleted:No index found for external SegmentHeader:",
+            event.header );
         return;
       }
       index.remove( event.header );
@@ -1055,7 +1053,7 @@ public class SegmentCacheManager {
               RolapUtil.MONITOR_LOGGER.debug( message.toString() );
               //TODO: here had log4j Logger been used to broadcast the full message.
               //if necessary we should use eventadmin or something to broadcast events
-              
+
             }
           } catch ( Exception e ) {
             LOGGER.error( e.getMessage(), e );
@@ -1620,17 +1618,15 @@ public class SegmentCacheManager {
         final SegmentCacheIndexImpl index =
           new SegmentCacheIndexImpl( thread );
         LOGGER.trace(
-          "SegmentCacheManager.SegmentCacheIndexRegistry.getIndex:"
-            + "Creating New Index "
+          "SegmentCacheManager.SegmentCacheIndexRegistry.getIndex:Creating New Index {}"
             + System.identityHashCode( index ) );
         indexes.put( star.getSchema().getKey(), index );
       }
       final SegmentCacheIndex index =
         indexes.get( star.getSchema().getKey() );
       LOGGER.trace(
-        "SegmentCacheManager.SegmentCacheIndexRegistry.getIndex:"
-          + "Returning Index "
-          + System.identityHashCode( index ) );
+        "SegmentCacheManager.SegmentCacheIndexRegistry.getIndex:Returning Index {}",
+          System.identityHashCode( index ) );
       return index;
     }
 

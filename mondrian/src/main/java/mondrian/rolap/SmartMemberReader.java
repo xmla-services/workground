@@ -69,11 +69,11 @@ public class SmartMemberReader implements MemberReader {
         this.cacheHelper = new MemberCacheHelper(source.getHierarchy());
         if (cacheWriteback && !source.setCache(cacheHelper)) {
             throw Util.newInternal(
-                "MemberSource ("
-                + source
-                + ", "
-                + source.getClass()
-                + ") does not support cache-writeback");
+                new StringBuilder("MemberSource (")
+                    .append(source)
+                    .append(", ")
+                    .append(source.getClass())
+                    .append(") does not support cache-writeback").toString());
         }
     }
     // implement MemberReader
@@ -382,8 +382,8 @@ public class SmartMemberReader implements MemberReader {
             }
         }
         throw Util.newInternal(
-            "sibling iterator did not hit end point, start="
-            + startMember + ", end=" + endMember);
+            new StringBuilder("sibling iterator did not hit end point, start=")
+            .append(startMember).append(", end=").append(endMember).toString());
     }
 
     public int getMemberCount() {
@@ -416,10 +416,12 @@ public class SmartMemberReader implements MemberReader {
                     }
                 }
                 if (pos1 == -1) {
-                    throw Util.newInternal(m1 + " not found among siblings");
+                    throw Util.newInternal(new StringBuilder().append(m1)
+                        .append(" not found among siblings").toString());
                 }
                 if (pos2 == -1) {
-                    throw Util.newInternal(m2 + " not found among siblings");
+                    throw Util.newInternal(new StringBuilder().append(m2)
+                        .append(" not found among siblings").toString());
                 }
                 Util.assertTrue(pos1 != pos2);
                 return pos1 < pos2 ? -1 : 1;
@@ -437,10 +439,12 @@ public class SmartMemberReader implements MemberReader {
                     }
                 }
                 if (pos1 == -1) {
-                    throw Util.newInternal(m1 + " not found among siblings");
+                    throw Util.newInternal(new StringBuilder().append(m1)
+                        .append(" not found among siblings").toString());
                 }
                 if (pos2 == -1) {
-                    throw Util.newInternal(m2 + " not found among siblings");
+                    throw Util.newInternal(new StringBuilder().append(m2)
+                        .append(" not found among siblings").toString());
                 }
                 Util.assertTrue(pos1 != pos2);
                 return pos1 < pos2 ? -1 : 1;
@@ -495,7 +499,8 @@ public class SmartMemberReader implements MemberReader {
             }
             if (this.position == -1) {
                 throw Util.newInternal(
-                    "member " + member + " not found among its siblings");
+                    new StringBuilder("member ").append(member)
+                        .append(" not found among its siblings").toString());
             }
         }
 

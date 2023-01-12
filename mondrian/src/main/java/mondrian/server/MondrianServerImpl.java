@@ -338,10 +338,8 @@ class MondrianServerImpl
     synchronized public void addConnection(RolapConnection connection) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                "addConnection "
-                + ", id=" + id
-                + ", statements=" + statementMap.size()
-                + ", connections=" + connectionMap.size());
+                "addConnection , id={}, statements={}, connections=",
+                id, statementMap.size(), connectionMap.size());
         }
         if (shutdown) {
             throw new MondrianException("Server already shutdown.");
@@ -360,10 +358,8 @@ class MondrianServerImpl
     synchronized public void removeConnection(RolapConnection connection) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                "removeConnection "
-                + ", id=" + id
-                + ", statements=" + statementMap.size()
-                + ", connections=" + connectionMap.size());
+                "removeConnection , id={}, statements={}, connections={}",
+                id, statementMap.size(), connectionMap.size());
         }
         if (shutdown) {
             throw new MondrianException("Server already shutdown.");
@@ -391,10 +387,8 @@ class MondrianServerImpl
         }
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                "addStatement "
-                + ", id=" + id
-                + ", statements=" + statementMap.size()
-                + ", connections=" + connectionMap.size());
+                "addStatement , id={}, statements={}, connections={}",
+                id, statementMap.size(), connectionMap.size());
         }
         statementMap.put(
             statement.getId(),
@@ -413,10 +407,8 @@ class MondrianServerImpl
     synchronized public void removeStatement(Statement statement) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                "removeStatement "
-                + ", id=" + id
-                + ", statements=" + statementMap.size()
-                + ", connections=" + connectionMap.size());
+                "removeStatement , id={}, statements={}, connections={}",
+                id, statementMap.size(), connectionMap.size());
         }
         if (shutdown) {
             throw new MondrianException("Server already shutdown.");

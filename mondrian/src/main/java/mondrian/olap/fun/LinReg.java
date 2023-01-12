@@ -234,14 +234,14 @@ public abstract class LinReg extends FunDefBase {
         }
 
         public String toString() {
-            return "LinReg.Value: slope of "
-                + slope
-                + " and an intercept of " + intercept
-                + ". That is, y="
-                + intercept
-                + (slope > 0.0 ? " +" : " ")
-                + slope
-                + " * x.";
+            return new StringBuilder("LinReg.Value: slope of ")
+                .append(slope)
+                .append(" and an intercept of ").append(intercept)
+                .append(". That is, y=")
+                .append(intercept)
+                .append((slope > 0.0 ? " +" : " "))
+                .append(slope)
+                .append(" * x.").toString();
         }
     }
 
@@ -540,7 +540,8 @@ public abstract class LinReg extends FunDefBase {
             double y = ((Double) yo).doubleValue();
             double x = ((Double) xo).doubleValue();
 
-            LinReg.debug("LinReg.linearReg", " " + i + " (" + x + "," + y + ")");
+            LinReg.debug("LinReg.linearReg", new StringBuilder(" ").append(i).append(" (")
+                .append(x).append(",").append(y).append(")").toString());
             sumX += x;
             sumY += y;
             sumXX += x * x;

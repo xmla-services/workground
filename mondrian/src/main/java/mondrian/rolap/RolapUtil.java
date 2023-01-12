@@ -393,8 +393,8 @@ public class RolapUtil {
     {
         // No i18n for log message, but yes for excn
         String alertMsg =
-            "Unable to use native SQL evaluation for '" + functionName
-            + "'; reason:  " + reason;
+            new StringBuilder("Unable to use native SQL evaluation for '").append(functionName)
+            .append("'; reason:  ").append(reason).toString();
 
         StringProperty alertProperty =
             MondrianProperties.instance().AlertNativeEvaluationUnsupported;
@@ -428,12 +428,10 @@ public class RolapUtil {
                 try {
                     ClassResolver.INSTANCE.forName(jdbcDriver, true);
                     LOGGER.info(
-                        "Mondrian: JDBC driver "
-                        + jdbcDriver + " loaded successfully");
+                        "Mondrian: JDBC driver {} loaded successfully", jdbcDriver);
                 } catch (ClassNotFoundException e) {
                     LOGGER.warn(
-                        "Mondrian: Warning: JDBC driver "
-                        + jdbcDriver + " not found");
+                        "Mondrian: Warning: JDBC driver {} not found", jdbcDriver);
                 }
             }
         }
@@ -558,7 +556,7 @@ public class RolapUtil {
                 final int columnOrdinal = columnNames.indexOf(value.column());
                 if (columnOrdinal < 0) {
                     throw Util.newError(
-                        "Unknown column '" + value.column() + "'");
+                        new StringBuilder("Unknown column '").append(value.column()).append("'").toString());
                 }
                 values[columnOrdinal] = value.content();
             }

@@ -133,8 +133,8 @@ class RolapConnectionPool {
         } catch (Throwable e) {
             throw Util.newInternal(
                 e,
-                "Error while creating connection pool (with URI "
-                + jdbcConnectString + ")");
+                new StringBuilder("Error while creating connection pool (with URI ")
+                .append(jdbcConnectString).append(")").toString());
         }
         dataSourceMap.put(key, dataSource);
         return dataSource;
@@ -176,8 +176,8 @@ class RolapConnectionPool {
         } catch (Exception e) {
             throw Util.newInternal(
                 e,
-                "Error while creating connection pool (with URI "
-                + dataSourceName + ")");
+                new StringBuilder("Error while creating connection pool (with URI ")
+                .append(dataSourceName).append(")").toString());
         }
         dataSourceMap.put(key, pooledDataSource);
         return dataSource;

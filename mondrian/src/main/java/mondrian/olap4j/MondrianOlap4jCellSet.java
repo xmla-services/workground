@@ -168,9 +168,9 @@ abstract class MondrianOlap4jCellSet
         }
         if (ordinal < 0 || ordinal >= modulo) {
             throw new IndexOutOfBoundsException(
-                "Cell ordinal " + ordinal
-                + ") lies outside CellSet bounds ("
-                + getBoundsAsString() + ")");
+                new StringBuilder("Cell ordinal ").append(ordinal)
+                .append(") lies outside CellSet bounds (")
+                .append(getBoundsAsString()).append(")").toString());
         }
         return pos;
     }
@@ -194,9 +194,9 @@ abstract class MondrianOlap4jCellSet
                     dimensions[i] = axisList.get(i).getPositions().size();
                 }
                 throw new IndexOutOfBoundsException(
-                    "Cell coordinates (" + getCoordsAsString(pos)
-                        + ") fall outside CellSet bounds ("
-                        + getCoordsAsString(dimensions) + ")");
+                    new StringBuilder("Cell coordinates (").append(getCoordsAsString(pos))
+                        .append(") fall outside CellSet bounds (")
+                        .append(getCoordsAsString(dimensions)).append(")").toString());
             } else if (e.getMessage().indexOf(
                     "coordinates should have dimension") >= 0)
             {
@@ -247,8 +247,8 @@ abstract class MondrianOlap4jCellSet
         List<CellSetAxis> axes = getAxes();
         if (coordinates.size() != axes.size()) {
             throw new IllegalArgumentException(
-                "Coordinates have different dimension " + coordinates.size()
-                    + " than axes " + axes.size());
+                new StringBuilder("Coordinates have different dimension ").append(coordinates.size())
+                    .append(" than axes ").append(axes.size()).toString());
         }
         int modulo = 1;
         int ordinal = 0;
@@ -257,10 +257,10 @@ abstract class MondrianOlap4jCellSet
             final Integer coordinate = coordinates.get(k++);
             if (coordinate < 0 || coordinate >= axis.getPositionCount()) {
                 throw new IndexOutOfBoundsException(
-                    "Coordinate " + coordinate
-                    + " of axis " + k
-                    + " is out of range ("
-                    + getBoundsAsString() + ")");
+                    new StringBuilder("Coordinate ").append(coordinate)
+                    .append(" of axis ").append(k)
+                    .append(" is out of range (")
+                    .append(getBoundsAsString()).append(")").toString());
             }
             ordinal += coordinate * modulo;
             modulo *= axis.getPositionCount();

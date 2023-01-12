@@ -78,14 +78,16 @@ class RolapNamedSetEvaluator implements Evaluator.NamedSetEvaluator, TupleList.P
       if ( list == DUMMY_LIST ) {
         recursionCount++;
         if ( RECURSION_TOLERANCE > 0 && recursionCount > RECURSION_TOLERANCE ) {
-          throw rrer.result.slicerEvaluator.newEvalException( null, "Illegal attempt to reference value of named set '"
-              + namedSet.getName() + "' while evaluating itself" );
+          throw rrer.result.slicerEvaluator.newEvalException( null,
+              new StringBuilder("Illegal attempt to reference value of named set '")
+              .append(namedSet.getName()).append("' while evaluating itself").toString() );
         }
       }
       return;
     }
     if ( RolapResult.LOGGER.isDebugEnabled() ) {
-      RolapResult.LOGGER.debug( "Named set " + namedSet.getName() + ": starting evaluation" );
+      RolapResult.LOGGER.debug( new StringBuilder("Named set ")
+          .append(namedSet.getName()).append(": starting evaluation").toString() );
     }
     list = DUMMY_LIST; // recursion detection
     try {
@@ -113,9 +115,11 @@ class RolapNamedSetEvaluator implements Evaluator.NamedSetEvaluator, TupleList.P
       // way NamedSet evaluation was implemented in Mondrian, they could...
       // So as a result, the nameset calc has to be profiled at the time of use instead
       // of on close of the statement.
-      Util.explain( rrer.statement.getProfileHandler(), "NamedSet (" + namedSet.getName() + "):", calc, evaluator
+      Util.explain( rrer.statement.getProfileHandler(),
+          new StringBuilder("NamedSet (").append(namedSet.getName()).append("):").toString(),
+          calc, evaluator
           .getTiming() );
-      
+
       // Wrap list so that currentOrdinal is updated whenever the list
       // is accessed. The list is immutable, because we don't override
       // AbstractList.set(int, Object).

@@ -322,7 +322,7 @@ public class CacheControlImpl implements CacheControl {
             RolapSchemaPool.instance().remove((RolapSchema)schema);
         } else {
             throw new UnsupportedOperationException(
-                schema.getClass().getName() + " cannot be flushed");
+                new StringBuilder(schema.getClass().getName()).append(" cannot be flushed").toString());
         }
     }
 
@@ -823,8 +823,8 @@ public class CacheControlImpl implements CacheControl {
             MondrianProperties.instance().EnableRolapCubeMemberCache;
         if (prop.get()) {
             throw new IllegalArgumentException(
-                "Member cache control operations are not allowed unless "
-                + "property " + prop.getPath() + " is false");
+                new StringBuilder("Member cache control operations are not allowed unless ")
+                .append("property ").append(prop.getPath()).append(" is false").toString());
         }
         synchronized (MEMBER_CACHE_LOCK) {
             // Make sure that a Locus is in the Execution stack,
@@ -887,8 +887,7 @@ public class CacheControlImpl implements CacheControl {
                                                 ite.getTargetException();
                                         if (me.getMessage()
                                             .matches(
-                                                "^Mondrian Error:Member "
-                                                + "'\\[.*\\]' not found$"))
+                                                "^Mondrian Error:Member '\\[.*\\]' not found$"))
                                         {
                                             continue;
                                         }
@@ -898,8 +897,7 @@ public class CacheControlImpl implements CacheControl {
                             } catch (MondrianException e) {
                                 if (e.getMessage()
                                     .matches(
-                                        "^Mondrian Error:Member "
-                                        + "'\\[.*\\]' not found$"))
+                                        "^Mondrian Error:Member '\\[.*\\]' not found$"))
                                 {
                                     continue;
                                 }
@@ -1607,7 +1605,7 @@ public class CacheControlImpl implements CacheControl {
         }
 
         public String toString() {
-            return "DeleteMemberCommand(" + set + ")";
+            return new StringBuilder("DeleteMemberCommand(").append(set).append(")").toString();
         }
 
         public void execute(final List<CellRegion> cellRegionList) {
@@ -1644,7 +1642,7 @@ public class CacheControlImpl implements CacheControl {
         }
 
         public String toString() {
-            return "AddMemberCommand(" + member + ")";
+            return new StringBuilder("AddMemberCommand(").append(member).append(")").toString();
         }
 
         public void execute(List<CellRegion> cellRegionList) {
@@ -1676,7 +1674,8 @@ public class CacheControlImpl implements CacheControl {
         }
 
         public String toString() {
-            return "MoveMemberCommand(" + member + ", " + newParent + ")";
+            return new StringBuilder("MoveMemberCommand(").append(member).append(", ")
+                .append(newParent).append(")").toString();
         }
 
         public void execute(final List<CellRegion> cellRegionList) {
@@ -1719,8 +1718,8 @@ public class CacheControlImpl implements CacheControl {
         }
 
         public String toString() {
-            return "CreateMemberPropsCommand(" + memberSet
-                + ", " + propertyValues + ")";
+            return new StringBuilder("CreateMemberPropsCommand(").append(memberSet)
+                .append(", ").append(propertyValues).append(")").toString();
         }
 
         public void execute(List<CellRegion> cellRegionList) {

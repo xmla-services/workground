@@ -666,18 +666,18 @@ public abstract class Excel {
         double iFirst;
         if (!(first instanceof Number)) {
             throw new InvalidArgumentException(
-                "Invalid parameter. "
-                + "first parameter " + first
-                + " of Mod function must be of type number");
+                new StringBuilder("Invalid parameter. ")
+                .append("first parameter ").append(first)
+                .append(" of Mod function must be of type number").toString());
         } else {
             iFirst = ((Number) first).doubleValue();
         }
         double iSecond;
         if (!(second instanceof Number)) {
             throw new InvalidArgumentException(
-                "Invalid parameter. "
-                + "second parameter " + second
-                + " of Mod function must be of type number");
+                new StringBuilder("Invalid parameter. ")
+                .append("second parameter ").append(second)
+                .append(" of Mod function must be of type number").toString());
         } else {
             iSecond = ((Number) second).doubleValue();
         }

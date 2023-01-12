@@ -122,16 +122,16 @@ public class RolapSchemaPool {
                 "sessionId");
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                "get: catalog=" + catalogUrl
-                + ", connectionKey=" + connectionKey
-                + ", jdbcUser=" + jdbcUser
-                + ", dataSourceStr=" + dataSourceStr
-                + ", dataSource=" + (context == null ? "" : context.getDataSource())
-                + ", jdbcConnectionUuid=" + connectionUuidStr
-                + ", useSchemaPool=" + useSchemaPool
-                + ", useContentChecksum=" + useContentChecksum
-                + ", map-size=" + mapKeyToSchema.size()
-                + ", md5-map-size=" + mapMd5ToSchema.size());
+                new StringBuilder("get: catalog=").append(catalogUrl)
+                    .append(", connectionKey=").append(connectionKey)
+                    .append(", jdbcUser=").append(jdbcUser)
+                    .append(", dataSourceStr=").append(dataSourceStr)
+                    .append(", dataSource=").append((context == null ? "" : context.getDataSource()))
+                    .append(", jdbcConnectionUuid=").append(connectionUuidStr)
+                    .append(", useSchemaPool=").append(useSchemaPool)
+                    .append(", useContentChecksum=").append(useContentChecksum)
+                    .append(", map-size=").append(mapKeyToSchema.size())
+                    .append(", md5-map-size=").append(mapMd5ToSchema.size()).toString());
         }
         final ConnectionKey connectionKey1 =
             ConnectionKey.create(
@@ -157,9 +157,8 @@ public class RolapSchemaPool {
                 catalogUrl, context, connectInfo, catalogStr, key, null);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
-                    "create (no pool): schema-name=" + schema.getName()
-                    + ", schema-id="
-                    + Integer.toHexString(System.identityHashCode(schema)));
+                    "create (no pool): schema-name={}, schema-id={}",
+                    schema.getName(), Integer.toHexString(System.identityHashCode(schema)));
             }
             return schema;
         }
@@ -187,7 +186,7 @@ public class RolapSchemaPool {
         try {
             ExpiringReference<RolapSchema> ref = map.get(key);
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("get(key=" + key + ") returned " + toString(ref));
+                LOGGER.debug("get(key={}) returned {}", key, toString(ref));
             }
 
             if (ref != null) {
@@ -282,8 +281,8 @@ public class RolapSchemaPool {
                 key, md5Bytes);
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug(
-                    "create: schema-name=" + schema.getName()
-                    + ", schema-id=" + System.identityHashCode(schema));
+                    "create: schema-name={}, schema-id={}",
+                    schema.getName(), System.identityHashCode(schema));
             }
             putSchema(schema, md5Bytes, pinSchemaTimeout);
             return schema;
@@ -334,11 +333,12 @@ public class RolapSchemaPool {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                "put: schema=" + schema
-                + ", key=" + schema.key
-                + ", checksum=" + md5Bytes
-                + ", map-size=" + mapKeyToSchema.size()
-                + ", md5-map-size=" + mapMd5ToSchema.size());
+                "put: schema={}, key={}, checksum={}, map-size={}, md5-map-size={}",
+                schema,
+                schema.key,
+                md5Bytes,
+                mapKeyToSchema.size(),
+                mapMd5ToSchema.size());
         }
     }
 
@@ -392,8 +392,8 @@ public class RolapSchemaPool {
     {
         if (RolapSchema.LOGGER.isDebugEnabled()) {
             RolapSchema.LOGGER.debug(
-                "Pool.get: create schema \"" + catalogUrl
-                + "\" using dynamic processor");
+                new StringBuilder("Pool.get: create schema \"").append(catalogUrl)
+                .append("\" using dynamic processor").toString());
         }
         try {
             final DynamicSchemaProcessor dynProc =
@@ -439,8 +439,8 @@ public class RolapSchemaPool {
             new SchemaKey(schemaContentKey, connectionUuid);
         if (RolapSchema.LOGGER.isDebugEnabled()) {
             RolapSchema.LOGGER.debug(
-                "Pool.remove: schema \"" + catalogUrl
-                + "\" and datasource string \"" + dataSourceStr + "\"");
+                new StringBuilder("Pool.remove: schema \"").append(catalogUrl)
+                .append("\" and datasource string \"").append(dataSourceStr).append("\"").toString());
         }
         remove(key);
     }
@@ -466,8 +466,8 @@ public class RolapSchemaPool {
             new SchemaKey(schemaContentKey, connectionKey);
         if (RolapSchema.LOGGER.isDebugEnabled()) {
             RolapSchema.LOGGER.debug(
-                "Pool.remove: schema \"" + catalogUrl
-                + "\" and datasource object");
+                new StringBuilder("Pool.remove: schema \"").append(catalogUrl)
+                .append("\" and datasource object").toString());
         }
         remove(key);
     }
@@ -476,8 +476,8 @@ public class RolapSchemaPool {
         if (schema != null) {
             if (RolapSchema.LOGGER.isDebugEnabled()) {
                 RolapSchema.LOGGER.debug(
-                    "Pool.remove: schema \"" + schema.getName()
-                    + "\" and datasource object");
+                    new StringBuilder("Pool.remove: schema \"").append(schema.getName())
+                    .append("\" and datasource object").toString());
             }
             remove(schema.key);
         }
@@ -570,9 +570,9 @@ public class RolapSchemaPool {
             if (t == null) {
                 return "ref(null)";
             } else {
-                return "ref(" + t
-                    + ", id=" + Integer.toHexString(System.identityHashCode(t))
-                    + ")";
+                return new StringBuilder("ref(").append(t)
+                    .append(", id=").append(Integer.toHexString(System.identityHashCode(t)))
+                    .append(")").toString();
             }
         }
     }

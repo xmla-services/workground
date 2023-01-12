@@ -161,12 +161,13 @@ public class AggregationKey
 
     public String toString() {
         return
-            star.getFactTable().getTableName()
-            + " " + constrainedColumnsBitKey.toString()
-            + "\n"
-            + (compoundPredicateList == null
-                ? "{}"
-                : compoundPredicateList.toString());
+            new StringBuilder(star.getFactTable().getTableName())
+                .append(" ")
+                .append(constrainedColumnsBitKey.toString())
+                .append("\n")
+                .append(
+                    (compoundPredicateList == null ? "{}" : compoundPredicateList.toString())
+                ).toString();
     }
 
     /**

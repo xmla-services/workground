@@ -138,9 +138,9 @@ public class RolapHierarchy extends HierarchyBase {
         this.allMemberName =
             subName != null
             && (MondrianProperties.instance().SsasCompatibleNaming.get()
-                || name.equals(subName + "." + subName))
-                ? "All " + subName + "s"
-                : "All " + name + "s";
+                || name.equals(new StringBuilder(subName).append(".").append(subName).toString()))
+                ? new StringBuilder("All ").append(subName).append("s").toString()
+                : new StringBuilder("All ").append(name).append("s").toString();
         this.closureFor = closureFor;
         if (hasAll) {
             this.levels = new RolapLevel[1];
@@ -452,9 +452,9 @@ public class RolapHierarchy extends HierarchyBase {
             }
             if (defaultMember == null) {
                 throw Util.newInternal(
-                    "Can not find Default Member with name \""
-                    + defaultMemberName + "\" in Hierarchy \""
-                    + getName() + "\"");
+                    new StringBuilder("Can not find Default Member with name \"")
+                        .append(defaultMemberName).append("\" in Hierarchy \"")
+                        .append(getName()).append("\"").toString());
             }
         }
     }
@@ -659,8 +659,8 @@ public class RolapHierarchy extends HierarchyBase {
     void addToFromInverse(SqlQuery query, Expression expression) {
         if (relation == null) {
             throw Util.newError(
-                "cannot add hierarchy " + getUniqueName()
-                + " to query: it does not have a <Table>, <View> or <Join>");
+                new StringBuilder("cannot add hierarchy ").append(getUniqueName())
+                    .append(" to query: it does not have a <Table>, <View> or <Join>").toString());
         }
         final boolean failIfExists = false;
         RelationOrJoin subRelation = relation;
@@ -689,8 +689,8 @@ public class RolapHierarchy extends HierarchyBase {
     void addToFrom(SqlQuery query, Expression expression) {
         if (getRelation() == null) {
             throw Util.newError(
-                "cannot add hierarchy " + getUniqueName()
-                + " to query: it does not have a <Table>, <View> or <Join>");
+                new StringBuilder("cannot add hierarchy ").append(getUniqueName())
+                    .append(" to query: it does not have a <Table>, <View> or <Join>").toString());
         }
         query.registerRootRelation(getRelation());
         final boolean failIfExists = false;
@@ -732,8 +732,8 @@ public class RolapHierarchy extends HierarchyBase {
     void addToFrom(SqlQuery query, RolapStar.Table table) {
         if (getRelation() == null) {
             throw Util.newError(
-                "cannot add hierarchy " + getUniqueName()
-                + " to query: it does not have a <Table>, <View> or <Join>");
+                new StringBuilder("cannot add hierarchy ").append(getUniqueName())
+                    .append(" to query: it does not have a <Table>, <View> or <Join>").toString());
         }
         final boolean failIfExists = false;
         RelationOrJoin subRelation = null;
@@ -1152,7 +1152,7 @@ public class RolapHierarchy extends HierarchyBase {
         // Create a peer dimension.
         RolapDimension peerDimension = new RolapDimension(
             dimension.getSchema(),
-            dimension.getName() + "$Closure",
+            new StringBuilder(dimension.getName()).append("$Closure").toString(),
             null,
             true,
             "Closure dimension for parent-child hierarchy " + getName(),
@@ -1568,7 +1568,7 @@ public class RolapHierarchy extends HierarchyBase {
             if (!MondrianProperties.instance().SsasCompatibleNaming.get()
                 && Util.equalName(
                     nameSegment.name,
-                    dimension.getName() + "." + subName))
+                new StringBuilder(dimension.getName()).append(".").append(subName).toString()))
             {
                 return RolapHierarchy.this;
             }

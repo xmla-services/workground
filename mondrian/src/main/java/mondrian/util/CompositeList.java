@@ -56,7 +56,7 @@ public class CompositeList<T> extends AbstractList<T> {
             n = next;
         }
         throw new IndexOutOfBoundsException(
-            "index" + index + " out of bounds in list of size " + n);
+            new StringBuilder("index").append(index).append(" out of bounds in list of size ").append(n).toString());
     }
 
     public int size() {

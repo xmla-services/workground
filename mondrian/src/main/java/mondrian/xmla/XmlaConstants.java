@@ -146,8 +146,7 @@ public interface XmlaConstants {
 
     public static final String USM_DOM_FACTORY_CODE = "00USMB01";
     public static final String USM_DOM_FACTORY_FAULT_FS =
-        "DocumentBuilder cannot be created which satisfies the configuration "
-        + "requested";
+        "DocumentBuilder cannot be created which satisfies the configuration requested";
 
     public static final String USM_DOM_PARSE_IO_CODE = "00USMC01";
     public static final String USM_DOM_PARSE_IO_FAULT_FS =

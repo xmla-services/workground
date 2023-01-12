@@ -227,7 +227,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             // This is not a URL we can handle.
             // DriverManager should not have invoked us.
             throw new AssertionError(
-                "does not start with '" + CONNECT_STRING_PREFIX + "'");
+                new StringBuilder("does not start with '").append(CONNECT_STRING_PREFIX).append("'").toString());
         }
         Util.PropertyList list = Util.parseConnectString(x);
         final Map<String, String> map = Util.toMap(info);
@@ -299,9 +299,9 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
                       catalogName);
             } catch (Exception e) {
                 LOGGER.warn(
-                    "Can't get Rolap Schemas for catalog:"
-                    + catalogName
-                    + ". Skipping...",
+                    new StringBuilder("Can't get Rolap Schemas for catalog:")
+                    .append(catalogName)
+                    .append(". Skipping...").toString(),
                     e);
                continue;
             }
@@ -564,7 +564,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         if (iface == XmlaHandler.XmlaExtra.class) {
             return iface.cast(MondrianOlap4jExtra.INSTANCE);
         }
-        throw helper.createException("does not implement '" + iface + "'");
+        throw helper.createException(new StringBuilder("does not implement '").append(iface).append("'").toString());
     }
 
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
@@ -797,7 +797,8 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             }
             final Role role = connection1.getSchema().lookupRole(roleName);
             if (role == null) {
-                throw helper.createException("Unknown role '" + roleName + "'");
+                throw helper.createException(new StringBuilder("Unknown role '")
+                    .append(roleName).append("'").toString());
             }
             roleList.add(role);
         }

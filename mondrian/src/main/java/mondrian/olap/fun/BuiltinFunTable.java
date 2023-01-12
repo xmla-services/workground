@@ -187,7 +187,7 @@ public class BuiltinFunTable extends FunTableImpl {
 
                 if (n >= levels.length || n < 0) {
                     throw FunUtil.newEvalException(
-                        this, "Index '" + n + "' out of bounds");
+                        this, new StringBuilder("Index '").append(n).append("' out of bounds").toString());
                 }
                 return levels[n];
             }
@@ -225,8 +225,8 @@ public class BuiltinFunTable extends FunTableImpl {
                         }
                         throw FunUtil.newEvalException(
                             call.getFunDef(),
-                            "Level '" + name + "' not found in hierarchy '"
-                                + hierarchy + "'");
+                            new StringBuilder("Level '").append(name).append("' not found in hierarchy '")
+                                .append(hierarchy).append("'").toString());
                     }
                 };
             }
@@ -272,10 +272,10 @@ public class BuiltinFunTable extends FunTableImpl {
                 if (o instanceof Level) {
                     return (Level) o;
                 } else if (o == null) {
-                    throw FunUtil.newEvalException(this, "Level '" + s + "' not found");
+                    throw FunUtil.newEvalException(this, new StringBuilder("Level '").append(s).append("' not found").toString());
                 } else {
                     throw FunUtil.newEvalException(
-                        this, "Levels('" + s + "') found " + o);
+                        this, new StringBuilder("Levels('").append(s).append("') found ").append(o).toString());
                 }
             }
         });
@@ -664,15 +664,15 @@ public class BuiltinFunTable extends FunTableImpl {
                         if (aggregator == null) {
                             throw FunUtil.newEvalException(
                                 null,
-                                "Could not find an aggregator in the current "
-                                + "evaluation context");
+                                new StringBuilder("Could not find an aggregator in the current ")
+                                .append("evaluation context").toString());
                         }
                         Aggregator rollup = aggregator.getRollup();
                         if (rollup == null) {
                             throw FunUtil.newEvalException(
                                 null,
-                                "Don't know how to rollup aggregator '"
-                                + aggregator + "'");
+                                new StringBuilder("Don't know how to rollup aggregator '")
+                                .append(aggregator).append("'").toString());
                         }
                         final int savepoint = evaluator.savepoint();
                         try {
@@ -2154,7 +2154,7 @@ public class BuiltinFunTable extends FunTableImpl {
         builder.define(NthQuartileFunDef.ThirdQResolver);
 
         builder.define(CalculatedChildFunDef.instance);
-        
+
         builder.define(CachedExistsFunDef.instance);
 
         builder.define(CastFunDef.Resolver);

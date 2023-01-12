@@ -167,7 +167,8 @@ public class MondrianXmlaServlet extends DefaultXmlaServlet {
                 return dataSourcesConfigUrl.toString();
             }
         } catch (MalformedURLException mue) {
-            throw Util.newError(mue, "invalid URL path '" + paramValue + "'");
+            throw Util.newError(mue, new StringBuilder("invalid URL path '")
+                .append(paramValue).append("'").toString());
         }
     }
 }

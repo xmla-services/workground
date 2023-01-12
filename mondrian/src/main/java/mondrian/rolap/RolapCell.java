@@ -536,7 +536,7 @@ public class RolapCell implements Cell {
         final Statement statement =
             result.getExecution().getMondrianStatement();
         final Execution execution = new Execution(statement, 0);
-        
+
         final Connection connection = statement.getMondrianConnection();
         int resultSetType = ResultSet.TYPE_SCROLL_INSENSITIVE;
         int resultSetConcurrency = ResultSet.CONCUR_READ_ONLY;
@@ -683,9 +683,9 @@ public class RolapCell implements Cell {
                 members[i] = (RolapMember) member.getHierarchy().getAllMember();
             } else if (member.isCalculated()) {
                 throw Util.newError(
-                    "Cannot write to cell: one of the coordinates ("
-                    + member.getUniqueName()
-                    + ") is a calculated member");
+                    new StringBuilder("Cannot write to cell: one of the coordinates (")
+                    .append(member.getUniqueName())
+                    .append(") is a calculated member").toString());
             }
         }
         if (scenario == null) {

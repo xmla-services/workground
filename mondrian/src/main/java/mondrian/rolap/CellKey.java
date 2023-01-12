@@ -300,7 +300,7 @@ public interface CellKey extends Serializable {
         }
 
         public String toString() {
-            return "(" + ordinal0 + ")";
+            return new StringBuilder("(").append(ordinal0).append(")").toString();
         }
 
         public int hashCode() {
@@ -325,7 +325,7 @@ public interface CellKey extends Serializable {
         }
 
         public String toString() {
-            return "(" + ordinal0 + ", " + ordinal1 + ")";
+            return new StringBuilder("(").append(ordinal0).append(", ").append(ordinal1).append(")").toString();
         }
 
         public Two copy() {
@@ -413,7 +413,8 @@ public interface CellKey extends Serializable {
         }
 
         public String toString() {
-            return "(" + ordinal0 + ", " + ordinal1 + ", " + ordinal2 + ")";
+            return new StringBuilder("(").append(ordinal0).append(", ")
+                .append(ordinal1).append(", ").append(ordinal2).append(")").toString();
         }
 
         public Three copy() {
@@ -515,8 +516,8 @@ public interface CellKey extends Serializable {
 
         public String toString() {
             return
-                "(" + ordinal0 + ", " + ordinal1
-                + ", " + ordinal2 + ", " + ordinal3 + ")";
+                new StringBuilder("(").append(ordinal0).append(", ").append(ordinal1)
+                .append(", ").append(ordinal2).append(", ").append(ordinal3).append(")").toString();
         }
 
         public Four copy() {

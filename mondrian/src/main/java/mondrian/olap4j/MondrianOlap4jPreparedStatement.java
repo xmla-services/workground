@@ -294,7 +294,7 @@ abstract class MondrianOlap4jPreparedStatement
             //noinspection ThrowableResultOfMethodCallIgnored
             throw this.olap4jConnection.helper.toOlapException(
                 this.olap4jConnection.helper.createException(
-                    "parameter ordinal " + param + " out of range"));
+                    new StringBuilder("parameter ordinal ").append(param).append(" out of range").toString()));
         }
         return parameters[param - 1];
     }

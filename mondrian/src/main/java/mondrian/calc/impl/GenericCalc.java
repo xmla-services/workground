@@ -75,8 +75,8 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
 
     private String msg(TypeEnum expectedType, Object o) {
         final TypeEnum actualType = GenericCalc.actualType(o);
-        return "Expected value of type " + expectedType + "; got value '" + o
-                + "' (" + (actualType == null ? o.getClass() : actualType) + ")";
+        return new StringBuilder("Expected value of type ").append(expectedType).append("; got value '").append(o)
+                .append("' (").append((actualType == null ? o.getClass() : actualType)).append(")").toString();
     }
 
     private static TypeEnum actualType(Object o) {

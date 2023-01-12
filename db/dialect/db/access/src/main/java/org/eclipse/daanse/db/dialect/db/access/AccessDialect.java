@@ -6,7 +6,7 @@
 *
 * Copyright (C) 2012-2017 Hitachi Vantara and others
 * All Rights Reserved.
-* 
+*
 * Contributors:
 *   SmartCity Jena, Stefan Bischof - make OSGi Component
 */
@@ -42,11 +42,12 @@ public class AccessDialect extends JdbcDialectImpl {
     }
 
     public String toUpper(String expr) {
-        return "UCASE(" + expr + ")";
+        return new StringBuilder("UCASE(").append(expr).append(")").toString();
     }
 
     public String caseWhenElse(String cond, String thenExpr, String elseExpr) {
-        return "IIF(" + cond + "," + thenExpr + "," + elseExpr + ")";
+        return new StringBuilder("IIF(").append(cond)
+            .append(",").append(thenExpr).append(",").append(elseExpr).append(")").toString();
     }
 
     protected void quoteDateLiteral(StringBuilder buf, String value, Date date) {
@@ -66,15 +67,19 @@ public class AccessDialect extends JdbcDialectImpl {
     protected String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
         if (collateNullsLast) {
             if (ascending) {
-                return "Iif(" + expr + " IS NULL, 1, 0), " + expr + " ASC";
+                return new StringBuilder("Iif(").append(expr)
+                    .append(" IS NULL, 1, 0), ").append(expr).append(" ASC").toString();
             } else {
-                return "Iif(" + expr + " IS NULL, 1, 0), " + expr + " DESC";
+                return new StringBuilder("Iif(").append(expr)
+                    .append(" IS NULL, 1, 0), ").append(expr).append(" DESC").toString();
             }
         } else {
             if (ascending) {
-                return "Iif(" + expr + " IS NULL, 0, 1), " + expr + " ASC";
+                return new StringBuilder("Iif(").append(expr)
+                    .append(" IS NULL, 0, 1), ").append(expr).append(" ASC").toString();
             } else {
-                return "Iif(" + expr + " IS NULL, 0, 1), " + expr + " DESC";
+                return new StringBuilder("Iif(").append(expr)
+                    .append(" IS NULL, 0, 1), ").append(expr).append(" DESC").toString();
             }
         }
     }

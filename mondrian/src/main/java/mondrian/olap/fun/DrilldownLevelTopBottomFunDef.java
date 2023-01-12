@@ -139,11 +139,11 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
             if ( level.getDimension() != member.getDimension() ) {
               throw FunUtil.newEvalException(
                 DrilldownLevelTopBottomFunDef.this,
-                "Level '"
-                  + level.getUniqueName()
-                  + "' not compatible with member '"
-                  + member.getUniqueName()
-                  + "'" );
+                new StringBuilder("Level '")
+                  .append(level.getUniqueName())
+                  .append("' not compatible with member '")
+                  .append(member.getUniqueName())
+                  .append("'").toString() );
             }
             continue;
           }

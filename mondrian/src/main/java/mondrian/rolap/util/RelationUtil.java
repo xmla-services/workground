@@ -117,12 +117,12 @@ public class RelationUtil {
         if (relation instanceof Table) {
             return (((Table) relation).schema() == null) ?
                 ((Table) relation).name() :
-                ((Table) relation).schema() + "." + ((Table) relation).name();
+                new StringBuilder(((Table) relation).schema()).append(".").append(((Table) relation).name()).toString();
         }
         if (relation instanceof Join) {
-            return "(" + left((Join) relation) + ") join (" + right((Join) relation) + ") on " +
-                ((Join) relation).leftAlias() + "." + ((Join) relation).leftKey() + " = " +
-                ((Join) relation).rightAlias() + "." + ((Join) relation).rightKey();
+            return new StringBuilder("(").append(left((Join) relation)).append(") join (").append(right((Join) relation)).append(") on ")
+                .append(((Join) relation).leftAlias()).append(".").append(((Join) relation).leftKey()).append(" = ")
+                .append(((Join) relation).rightAlias()).append(".").append(((Join) relation).rightKey()).toString();
         }
         if (relation instanceof InlineTable) {
             return "<inline data>";

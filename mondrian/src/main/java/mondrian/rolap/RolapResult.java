@@ -599,7 +599,10 @@ public class RolapResult extends ResultBase {
               }
 
               if ( !redo ) {
-                Util.explain( evaluator.root.statement.getProfileHandler(), "Axis (" + axis.getAxisName() + "):", calc,
+                Util.explain(
+                    evaluator.root.statement.getProfileHandler(),
+                    new StringBuilder("Axis (").append(axis.getAxisName()).append("):").toString(),
+                    calc,
                     evaluator.getTiming() );
               }
 
@@ -871,8 +874,8 @@ public class RolapResult extends ResultBase {
       }
 
       if ( attempt++ > maxEvalDepth ) {
-        throw Util.newInternal( "Failed to load all aggregations after " + maxEvalDepth
-            + " passes; there's probably a cycle" );
+        throw Util.newInternal( new StringBuilder("Failed to load all aggregations after ")
+            .append(maxEvalDepth).append(" passes; there's probably a cycle").toString() );
       }
     }
   }
@@ -1095,10 +1098,12 @@ public class RolapResult extends ResultBase {
           // the first N times, then run it disabled.
           ( (RolapDependencyTestingEvaluator.DteRoot) evaluator.root ).disabled = true;
           if ( count > maxEvalDepth * 2 ) {
-            throw Util.newInternal( "Query required more than " + count + " iterations" );
+            throw Util.newInternal( new StringBuilder("Query required more than ")
+                .append(count).append(" iterations").toString() );
           }
         } else {
-          throw Util.newInternal( "Query required more than " + count + " iterations" );
+          throw Util.newInternal( new StringBuilder("Query required more than ").append(count)
+              .append(" iterations").toString() );
         }
       }
 
@@ -1161,8 +1166,9 @@ public class RolapResult extends ResultBase {
         }
 
         if ( attempt++ > maxEvalDepth ) {
-          throw Util.newInternal( "Failed to load all aggregations after " + maxEvalDepth
-              + "passes; there's probably a cycle" );
+          throw Util.newInternal( new StringBuilder("Failed to load all aggregations after ")
+              .append(maxEvalDepth)
+              .append("passes; there's probably a cycle").toString() );
         }
       }
 
@@ -1370,7 +1376,7 @@ public class RolapResult extends ResultBase {
    * Example. For MDX query:
    *
    * <blockquote>
-   * 
+   *
    * <pre>
    * WITH SET [XL_Row_Dim_0] AS
    *         VisualTotals(
@@ -1386,24 +1392,24 @@ public class RolapResult extends ResultBase {
    *        from [HR]
    *        where [Measures].[Number of Employees]
    * </pre>
-   * 
+   *
    * </blockquote>
    *
    * <p>
    * For member [Store].[All Stores], we replace aggregate expression
    *
    * <blockquote>
-   * 
+   *
    * <pre>
    * Aggregate({[Store].[All Stores].[USA]})
    * </pre>
-   * 
+   *
    * </blockquote>
    * <p>
    * with
    *
    * <blockquote>
-   * 
+   *
    * <pre>
    * Aggregate({[Store].[All Stores].[USA].[CA].[Alameda].[HQ],
    *               [Store].[All Stores].[USA].[CA].[Beverly Hills].[Store 6],
@@ -1412,17 +1418,17 @@ public class RolapResult extends ResultBase {
    *               [Store].[All Stores].[USA].[CA].[San Francisco].[Store 14]
    *              })
    * </pre>
-   * 
+   *
    * </blockquote>
    *
    * <p>
    * TODO: Can be optimized. For that particular query we don't need to go to the lowest level. We can simply replace it
    * with:
-   * 
+   *
    * <pre>
    * Aggregate({[Store].[All Stores].[USA].[CA]})
    * </pre>
-   * 
+   *
    * Because all children of [Store].[All Stores].[USA].[CA] are included.
    * </p>
    */

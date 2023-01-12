@@ -174,10 +174,10 @@ public class AggGen {
         JdbcSchema.Table factTable = getTable(db, getFactTableName());
         if (factTable == null) {
             getLogger().warn(
-                "Init: "
-                + "No fact table with name \""
-                + getFactTableName()
-                + "\"");
+                new StringBuilder("Init: ")
+                    .append("No fact table with name \"")
+                    .append(getFactTableName())
+                    .append("\"").toString());
             return;
         }
         try {
@@ -189,23 +189,23 @@ public class AggGen {
 
         if (getLogger().isDebugEnabled()) {
             getLogger().debug(
-                "Init: "
-                + "RolapStar:"
-                + Util.nl
-                + getFactTable()
-                + Util.nl
-                + "FactTable:"
-                + Util.nl
-                + factTable);
+                new StringBuilder("Init: ")
+                    .append("RolapStar:")
+                    .append(Util.nl)
+                    .append(getFactTable())
+                    .append(Util.nl)
+                    .append("FactTable:")
+                    .append(Util.nl)
+                    .append(factTable).toString());
         }
 
         // do foreign keys
         for (RolapStar.Column column : columns) {
             if (getLogger().isDebugEnabled()) {
                 getLogger().debug(
-                    "Init: "
-                    + "Column: "
-                    + column);
+                    new StringBuilder("Init: ")
+                        .append("Column: ")
+                        .append(column).toString());
             }
             RolapStar.Table table = column.getTable();
 
@@ -229,13 +229,13 @@ public class AggGen {
                     JdbcSchema.Table.Column c = getColumn(factTable, name);
                     if (c == null) {
                         getLogger().warn(
-                            "Init: "
-                            + "FactTable:"
-                            + getFactTableName()
-                            + Util.nl
-                            + "No Column with name \""
-                            + name
-                            + "\"");
+                            new StringBuilder("Init: ")
+                                .append("FactTable:")
+                                .append(getFactTableName())
+                                .append(Util.nl)
+                                .append("No Column with name \"")
+                                .append(name)
+                                .append("\"").toString());
                         return;
                     }
                     if (getLogger().isDebugEnabled()) {
@@ -263,13 +263,13 @@ public class AggGen {
                     JdbcSchema.Table.Column c = getColumn(factTable, name);
                     if (c == null) {
                         getLogger().warn(
-                            "Init: "
-                            + "FactTable:"
-                            + getFactTableName()
-                            + Util.nl
-                            + "No Column with name \""
-                            + name
-                            + "\"");
+                            new StringBuilder("Init: ")
+                                .append("FactTable:")
+                                .append(getFactTableName())
+                                .append(Util.nl)
+                                .append("No Column with name \"")
+                                .append(name)
+                                .append("\"").toString());
                         return;
                     }
                     if (getLogger().isDebugEnabled()) {
@@ -285,11 +285,11 @@ public class AggGen {
             String name = getRolapStarColumnName(rColumn);
             if (name == null) {
                 getLogger().warn(
-                    "Init: "
-                    + "For fact table \""
-                    + getFactTableName()
-                    + "\", could not get column name for RolapStar.Column: "
-                    + rColumn);
+                    new StringBuilder("Init: ")
+                        .append("For fact table \"")
+                        .append(getFactTableName())
+                        .append("\", could not get column name for RolapStar.Column: ")
+                        .append(rColumn).toString());
                 return;
             }
             if (!(rColumn instanceof RolapStar.Measure)) {
@@ -306,15 +306,15 @@ public class AggGen {
             JdbcSchema.Table.Column c = getColumn(factTable, name);
             if (c == null) {
                 getLogger().warn(
-                    "For RolapStar: \""
-                    + getFactTable().getAlias()
-                    + "\" measure with name, "
-                    + name
-                    + ", is not a column name. "
-                    + "The measure's column name may be an expression"
-                    + " and currently AggGen does not handle expressions."
-                    + " You will have to add this measure to the"
-                    + " aggregate table definition by hand.");
+                    new StringBuilder("For RolapStar: \"")
+                        .append(getFactTable().getAlias())
+                        .append("\" measure with name, ")
+                        .append(name)
+                        .append(", is not a column name. ")
+                        .append("The measure's column name may be an expression")
+                        .append(" and currently AggGen does not handle expressions.")
+                        .append(" You will have to add this measure to the")
+                        .append(" aggregate table definition by hand.").toString());
                 continue;
             }
             if (getLogger().isDebugEnabled()) {
@@ -355,11 +355,11 @@ public class AggGen {
         String rname = getRolapStarColumnName(rColumn);
         if (rname == null) {
             getLogger().warn(
-                "Adding Special Collapsed Column: "
-                + "For fact table \""
-                + getFactTableName()
-                + "\", could not get column name for RolapStar.Column: "
-                + rColumn);
+                new StringBuilder("Adding Special Collapsed Column: ")
+                    .append("For fact table \"")
+                    .append(getFactTableName())
+                    .append("\", could not get column name for RolapStar.Column: ")
+                    .append(rColumn).toString());
             return false;
         }
         // this is in fact the fact table.
@@ -368,13 +368,13 @@ public class AggGen {
         JdbcSchema.Table jt = getTable(db, rt);
         if (jt == null) {
             getLogger().warn(
-                "Adding Special Collapsed Column: "
-                + "For fact table \""
-                + getFactTableName()
-                + "\", could not get jdbc schema table "
-                + "for RolapStar.Table with alias \""
-                + rt.getAlias()
-                + "\"");
+                new StringBuilder("Adding Special Collapsed Column: ")
+                    .append("For fact table \"")
+                    .append(getFactTableName())
+                    .append("\", could not get jdbc schema table ")
+                    .append("for RolapStar.Table with alias \"")
+                    .append(rt.getAlias())
+                    .append("\"").toString());
             return false;
         }
         try {
@@ -394,15 +394,15 @@ public class AggGen {
         JdbcSchema.Table.Column c = getColumn(jt, rname);
         if (c == null) {
             getLogger().warn(
-                "Adding Special Collapsed Column: "
-                + "For fact table \""
-                + getFactTableName()
-                + "\", could not get jdbc schema column "
-                + "for RolapStar.Table with alias \""
-                + rt.getAlias()
-                + "\" and column name \""
-                + rname
-                + "\"");
+                new StringBuilder("Adding Special Collapsed Column: ")
+                    .append("For fact table \"")
+                    .append(getFactTableName())
+                    .append("\", could not get jdbc schema column ")
+                    .append("for RolapStar.Table with alias \"")
+                    .append(rt.getAlias())
+                    .append("\" and column name \"")
+                    .append(rname)
+                    .append("\"").toString());
             return false;
         }
         // NOTE: this creates a new usage for the fact table
@@ -416,15 +416,15 @@ public class AggGen {
             rname = getRolapStarColumnName(prColumn);
             if (rname == null) {
                 getLogger().warn(
-                    "Adding Special Collapsed Column: "
-                    + "For fact table \""
-                    + getFactTableName()
-                    + "\", could not get parent column name"
-                    + "for RolapStar.Column \""
-                    + prColumn
-                    + "\" for RolapStar.Table with alias \""
-                    + rt.getAlias()
-                    + "\"");
+                    new StringBuilder("Adding Special Collapsed Column: ")
+                        .append("For fact table \"")
+                        .append(getFactTableName())
+                        .append("\", could not get parent column name")
+                        .append("for RolapStar.Column \"")
+                        .append(prColumn)
+                        .append("\" for RolapStar.Table with alias \"")
+                        .append(rt.getAlias())
+                        .append("\"").toString());
                 return false;
             }
             c = getColumn(jt, rname);
@@ -449,11 +449,11 @@ public class AggGen {
         String rname = getRolapStarColumnName(rColumn);
         if (rname == null) {
             getLogger().warn(
-                "Adding Collapsed Column: "
-                + "For fact table \""
-                + getFactTableName()
-                + "\", could not get column name for RolapStar.Column: "
-                + rColumn);
+                new StringBuilder("Adding Collapsed Column: ")
+                    .append("For fact table \"")
+                    .append(getFactTableName())
+                    .append("\", could not get column name for RolapStar.Column: ")
+                    .append(rColumn).toString());
             return false;
         }
 
@@ -462,10 +462,10 @@ public class AggGen {
         JdbcSchema.Table jt = getTable(db, rt);
         if (jt == null) {
             getLogger().warn(
-                "Adding Collapsed Column: "
-                + "For fact table \"" + getFactTableName()
-                + "\", could not get jdbc schema table "
-                + "for RolapStar.Table with alias \"" + rt.getAlias() + "\"");
+                new StringBuilder("Adding Collapsed Column: ")
+                    .append("For fact table \"").append(getFactTableName())
+                    .append("\", could not get jdbc schema table ")
+                    .append("for RolapStar.Table with alias \"").append(rt.getAlias()).append("\"").toString());
             return false;
         }
         try {
@@ -495,20 +495,20 @@ public class AggGen {
             String name = getRolapStarColumnName(rc);
             if (name == null) {
                 getLogger().warn(
-                    "Adding Collapsed Column: "
-                    + "For fact table \""
-                    + getFactTableName()
-                    + "\", could not get column name"
-                    + " for RolapStar.Column \""
-                    + rc
-                    + "\" for RolapStar.Table with alias \""
-                    + rt.getAlias()
-                    + "\"");
+                    new StringBuilder("Adding Collapsed Column: ")
+                        .append("For fact table \"")
+                        .append(getFactTableName())
+                        .append("\", could not get column name")
+                        .append(" for RolapStar.Column \"")
+                        .append(rc)
+                        .append("\" for RolapStar.Table with alias \"")
+                        .append(rt.getAlias())
+                        .append("\"").toString());
                 return false;
             }
             JdbcSchema.Table.Column c = getColumn(jt, name);
             if (c == null) {
-                getLogger().warn("Can not find column: " + name);
+                getLogger().warn(new StringBuilder("Can not find column: ").append(name).toString());
                 break;
             }
 

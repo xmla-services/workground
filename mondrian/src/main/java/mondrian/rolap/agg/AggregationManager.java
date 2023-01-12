@@ -68,8 +68,7 @@ public class AggregationManager extends RolapAggregationManager {
         this.server = server;
         if (properties.EnableCacheHitCounters.get()) {
             LOGGER.error(
-                "Property " + properties.EnableCacheHitCounters.getPath()
-                + " is obsolete; ignored.");
+                "Property {} is obsolete; ignored.", properties.EnableCacheHitCounters.getPath());
         }
         this.cacheMgr = new SegmentCacheManager(server);
     }
@@ -407,10 +406,8 @@ public class AggregationManager extends RolapAggregationManager {
                 // we cannot safely pull a distinct count from an agg
                 // table if ignored columns are present since granularity
                 // may not be at the level of the dc measure
-                LOGGER.info(
-                    aggStar.getFactTable().getName()
-                    + " cannot be used for distinct-count measures since it has"
-                    + " unused or ignored columns.");
+                LOGGER.info("{} cannot be used for distinct-count measures since it has unused or ignored columns.",
+                    aggStar.getFactTable().getName());
                 continue;
             }
 

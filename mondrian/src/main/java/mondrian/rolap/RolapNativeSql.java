@@ -148,7 +148,7 @@ public class RolapNativeSql {
             if (dialect.getDatabaseProduct().getFamily()
                 == DatabaseProduct.DB2)
             {
-                expr = "FLOAT(" + expr + ")";
+                expr = new StringBuilder("FLOAT(").append(expr).append(")").toString();
             }
             return expr;
         }
@@ -223,7 +223,7 @@ public class RolapNativeSql {
             if (dialect.getDatabaseProduct().getFamily()
                 == DatabaseProduct.DB2)
             {
-                expr = "FLOAT(" + expr + ")";
+                expr = new StringBuilder("FLOAT(").append(expr).append(")").toString();
             }
             return expr;
         }
@@ -501,7 +501,7 @@ public class RolapNativeSql {
         }
 
         public String toString() {
-            return "FunCallSqlCompiler[" + mdx + "]";
+            return new StringBuilder("FunCallSqlCompiler[").append(mdx).append("]").toString();
         }
     }
 
@@ -559,11 +559,11 @@ public class RolapNativeSql {
             if (args == null) {
                 return null;
             }
-            return "(" + args[0] + " " + sql + " " + args[1] + ")";
+            return new StringBuilder("(").append(args[0]).append(" ").append(sql).append(" ").append(args[1]).append(")").toString();
         }
 
         public String toString() {
-            return "InfixSqlCompiler[" + mdx + "]";
+            return new StringBuilder("InfixSqlCompiler[").append(mdx).append("]").toString();
         }
     }
 
@@ -587,11 +587,11 @@ public class RolapNativeSql {
             if (args == null) {
                 return null;
             }
-            return "(" + args[0] + " is null" + ")";
+            return new StringBuilder("(").append(args[0]).append(" is null").append(")").toString();
         }
 
         public String toString() {
-            return "IsEmptySqlCompiler[" + mdx + "]";
+            return new StringBuilder("IsEmptySqlCompiler[").append(mdx).append("]").toString();
         }
     }
 

@@ -573,10 +573,8 @@ public class NativizeSetFunDef extends FunDefBase {
                 .parseExpression("101010");
 
             NativizeSetFunDef.LOGGER.debug(
-                "createSentinelFormula memberId="
-                + memberId
-                + " memberExpr="
-                + memberExpr);
+                "createSentinelFormula memberId={} memberExpr={}"
+                , memberId, memberExpr);
             return new Formula(memberId, memberExpr, new MemberProperty[0]);
         }
 
@@ -589,10 +587,8 @@ public class NativizeSetFunDef extends FunDefBase {
                     new Exp[] {NativizeSetFunDef.hierarchyId(level)});
 
             NativizeSetFunDef.LOGGER.debug(
-                "createLevelMembersFormulas memberId="
-                + memberId
-                + " memberExpr="
-                + memberExpr);
+                "createLevelMembersFormulas memberId={} memberExpr={}",
+                memberId, memberExpr);
             return new Formula(memberId, memberExpr, new MemberProperty[0]);
         }
 
@@ -602,15 +598,13 @@ public class NativizeSetFunDef extends FunDefBase {
             Id setId = NativizeSetFunDef.createSetId(level);
             Exp setExpr = query.getConnection()
                 .parseExpression(
-                    "{"
-                    + memberFormula.getIdentifier().toString()
-                    + "}");
+                    new StringBuilder("{")
+                    .append(memberFormula.getIdentifier().toString())
+                    .append("}").toString());
 
             NativizeSetFunDef.LOGGER.debug(
-                "createNamedSetFormula setId="
-                + setId
-                + " setExpr="
-                + setExpr);
+                "createNamedSetFormula setId={} setExpr={}",
+                setId, setExpr);
             return new Formula(setId, setExpr);
         }
     }
@@ -740,11 +734,11 @@ public class NativizeSetFunDef extends FunDefBase {
             Exp membersExpr;
 
             if (exprName.contains(NativizeSetFunDef.SET_NAME_PREFIX)) {
-                String levelMembers = exprName.replaceAll(
+                String levelMembers = new StringBuilder(exprName.replaceAll(
                     NativizeSetFunDef.SET_NAME_PREFIX, "\\[")
                     .replaceAll("_$", "\\]")
-                    .replaceAll("_", "\\]\\.\\[")
-                    + ".members";
+                    .replaceAll("_", "\\]\\.\\["))
+                    .append(".members").toString();
                 membersExpr =
                     query.getConnection().parseExpression(levelMembers);
                 membersExpr =
@@ -1272,7 +1266,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         public String toString() {
-            return "[" + from + " : " + to + "]";
+            return new StringBuilder("[").append(from).append(" : ").append(to).append("]").toString();
         }
 
         private Range subRange(int fromRow, int toRow) {
@@ -1468,8 +1462,9 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         public String toString() {
-            return "" + index + ":" + commands.toString()
-                    .replaceAll("=null", "").replaceAll("=", " ") + " ";
+            return new StringBuilder().append(index).append(":")
+                .append(commands.toString().replaceAll("=null", "").replaceAll("=", " "))
+                    .append(" ").toString();
         }
     }
 
@@ -1494,7 +1489,7 @@ public class NativizeSetFunDef extends FunDefBase {
         {
             this.element = level;
             this.memberType = memberType;
-            this.elementName = level.toString() + ".members";
+            this.elementName = new StringBuilder(level.toString()).append(".members").toString();
         }
 
         public OlapElement getElement() {
@@ -1545,7 +1540,7 @@ public class NativizeSetFunDef extends FunDefBase {
 
         @Override
         public String toString() {
-            return memberType.toString() + ": " + getElementName();
+            return new StringBuilder(memberType.toString()).append(": ").append(getElementName()).toString();
         }
     }
 
@@ -1594,10 +1589,10 @@ public class NativizeSetFunDef extends FunDefBase {
     }
 
     private static String createMangledName(Level level, String prefix) {
-        return prefix
-            + level.getUniqueName().replaceAll("[\\[\\]]", "")
-            .replaceAll("\\.", "_")
-            + "_";
+        return new StringBuilder(prefix)
+            .append(level.getUniqueName().replaceAll("[\\[\\]]", "")
+            .replaceAll("\\.", "_"))
+            .append("_").toString();
     }
 
     private static void dumpListToLog(

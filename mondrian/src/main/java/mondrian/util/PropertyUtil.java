@@ -55,21 +55,21 @@ public class PropertyUtil {
             org.eigenbase.util.property.Property o =
                 (org.eigenbase.util.property.Property) field.get(properties1);
             System.out.println("    <PropertyDefinition>");
-            System.out.println("        <Name>" + field.getName() + "</Name>");
-            System.out.println("        <Path>" + o.getPath() + "</Path>");
+            System.out.println(new StringBuilder("        <Name>").append(field.getName()).append("</Name>").toString());
+            System.out.println(new StringBuilder("        <Path>").append(o.getPath()).append("</Path>").toString());
             System.out.println(
-                "        <Description>" + o.getPath() + "</Description>");
+                new StringBuilder("        <Description>").append(o.getPath()).append("</Description>").toString());
             System.out.println(
-                "        <Type>"
-                + (o instanceof BooleanProperty ? "boolean"
+                new StringBuilder("        <Type>")
+                .append((o instanceof BooleanProperty ? "boolean"
                     : o instanceof IntegerProperty ? "int"
                         : o instanceof DoubleProperty ? "double"
-                            : "String")
-                + "</Type>");
+                            : "String"))
+                .append("</Type>").toString());
             if (o.getDefaultValue() != null) {
                 System.out.println(
-                    "        <Default>"
-                    + o.getDefaultValue() + "</Default"  + ">");
+                    new StringBuilder("        <Default>")
+                    .append(o.getDefaultValue()).append("</Default").append(">").toString());
             }
             System.out.println("    </PropertyDefinition>");
         }
@@ -226,13 +226,13 @@ public class PropertyUtil {
 
                 printJavadoc(
                     out, "",
-                    "Configuration properties that determine the\n"
-                    + "behavior of a mondrian instance.\n"
-                    + "\n"
-                    + "<p>There is a method for property valid in a\n"
-                    + "<code>mondrian.properties</code> file. Although it is possible to retrieve\n"
-                    + "properties using the inherited {@link java.util.Properties#getProperty(String)}\n"
-                    + "method, we recommend that you use methods in this class.</p>\n");
+                    new StringBuilder("Configuration properties that determine the\n")
+                        .append("behavior of a mondrian instance.\n")
+                        .append("\n")
+                        .append("<p>There is a method for property valid in a\n")
+                        .append("<code>mondrian.properties</code> file. Although it is possible to retrieve\n")
+                        .append("properties using the inherited {@link java.util.Properties#getProperty(String)}\n")
+                        .append("method, we recommend that you use methods in this class.</p>\n").toString());
                 String[] lines = {
                     "public class MondrianProperties extends MondrianPropertiesBase {",
                     "    /**",
@@ -270,13 +270,13 @@ public class PropertyUtil {
                     }
                     printJavadoc(out, "    ", def.description);
                     out.println(
-                        "    public transient final "
-                        + def.propertyType.className + " " + def.name + " =");
+                        new StringBuilder("    public transient final ")
+                            .append(def.propertyType.className).append(" ").append(def.name).append(" =").toString());
                     out.println(
-                        "        new " + def.propertyType.className + "(");
+                        new StringBuilder("        new ").append(def.propertyType.className).append("(").toString());
                     out.println(
-                        "            this, \"" + def.path + "\", "
-                        + "" + def.defaultJava() + ");");
+                        new StringBuilder("            this, \"").append(def.path).append("\", ")
+                        .append("").append(def.defaultJava()).append(");").toString());
                     out.println();
                 }
                 out.println("}");
@@ -307,8 +307,8 @@ public class PropertyUtil {
                 for (String category : categories) {
                     out.println("    <tr>");
                     out.println(
-                        "      <td colspan='4'><b><br>" + category + "</b"
-                        + "></td>");
+                        new StringBuilder("      <td colspan='4'><b><br>").append(category).append("</b")
+                        .append("></td>").toString());
                     out.println("    </tr>");
                     for (PropertyDef def : propertyDefinitionMap.values()) {
                         if (!def.category.equals(category)) {
@@ -316,16 +316,16 @@ public class PropertyUtil {
                         }
                         out.println("    <tr>");
                         out.println(
-                            "<td><code><a href='api/mondrian/olap/MondrianProperties.html#"
-                            + def.name + "'>" + split(def.path)
-                            + "</a></code></td>");
+                            new StringBuilder("<td><code><a href='api/mondrian/olap/MondrianProperties.html#")
+                            .append(def.name).append("'>").append(split(def.path))
+                            .append("</a></code></td>").toString());
                         out.println(
-                            "<td>" + def.propertyType.name() .toLowerCase()
-                            + "</td>");
+                            new StringBuilder("<td>").append(def.propertyType.name().toLowerCase())
+                            .append("</td>").toString());
                         out.println(
-                            "<td>" + split(def.defaultHtml()) + "</td>");
+                            new StringBuilder("<td>").append(split(def.defaultHtml())).append("</td>").toString());
                         out.println(
-                            "<td>" + split(def.description) + "</td>");
+                            new StringBuilder("<td>").append(split(def.description)).append("</td>").toString());
                         out.println("    </tr>");
                     }
                 }
@@ -371,7 +371,7 @@ public class PropertyUtil {
                         out, "", "#", wrapText(stripHtml(def.description)));
                     out.println("#");
                     out.println(
-                        "#" + def.path + "="
+                        new StringBuilder("#").append(def.path).append("=").toString()
                         + (def.defaultValue == null ? "" : def.defaultValue));
                     out.println();
                 }
@@ -389,9 +389,9 @@ public class PropertyUtil {
     private static void printJavadoc(
         PrintWriter out, String prefix, String content)
     {
-        out.println(prefix + "/**");
+        out.println(new StringBuilder(prefix).append("/**").toString());
         printComments(out, prefix, " *", wrapText(content));
-        out.println(prefix + " */");
+        out.println(new StringBuilder(prefix).append(" */").toString());
     }
 
     private static void printComments(
@@ -402,7 +402,7 @@ public class PropertyUtil {
     {
         for (String line : strings) {
             if (line.length() > 0) {
-                out.println(offset + prefix + " " + line);
+                out.println(new StringBuilder(offset).append(prefix).append(" ").append(line).toString());
             } else {
                 out.println(offset + prefix);
             }
@@ -513,7 +513,8 @@ public class PropertyUtil {
                 if (defaultValue == null) {
                     return "null";
                 } else {
-                    return "\"" + defaultValue.replaceAll("\"", "\\\"") + "\"";
+                    return new StringBuilder("\"").append(defaultValue.replaceAll("\"", "\\\""))
+                        .append("\"").toString();
                 }
             default:
                 return defaultValue;

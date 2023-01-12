@@ -39,7 +39,8 @@ public class ExecutionStartEvent extends ExecutionEvent {
 
     @Override
     public String toString() {
-        return "ExecutionStartEvent(" + executionId + ")";
+        return new StringBuilder("ExecutionStartEvent(").append(executionId)
+            .append(")").toString();
     }
 
     public <T> T accept(Visitor<T> visitor) {

@@ -52,8 +52,8 @@ class DefaultRolapMemberFormatter implements MemberFormatter {
             return doFormatMember(rolapMember);
         }
         throw new IllegalArgumentException(
-            "Rolap formatter must only be used "
-            + "for RolapMemberBase formatting");
+            new StringBuilder("Rolap formatter must only be used ")
+            .append("for RolapMemberBase formatting").toString());
     }
 
     private String doFormatMember(RolapMemberBase rolapMember) {

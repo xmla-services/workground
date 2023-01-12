@@ -38,12 +38,12 @@ import mondrian.rolap.RolapHierarchy;
  */
 class DimensionsNumericFunDef extends FunDefBase {
     public static final FunDefBase INSTANCE = new DimensionsNumericFunDef();
+    public static final String DIMENSIONS_NUMERIC_FUN_DESCRIPTION = "Returns the hierarchy whose zero-based position within the cube is specified by a numeric expression.";
 
     private DimensionsNumericFunDef() {
         super(
             "Dimensions",
-            "Returns the hierarchy whose zero-based position within the cube "
-            + "is specified by a numeric expression.",
+            DIMENSIONS_NUMERIC_FUN_DESCRIPTION,
             "fhn");
     }
 
@@ -69,7 +69,7 @@ class DimensionsNumericFunDef extends FunDefBase {
         List<RolapHierarchy> hierarchies = cube.getHierarchies();
         if (n >= hierarchies.size() || n < 0) {
             throw FunUtil.newEvalException(
-                this, "Index '" + n + "' out of bounds");
+                this, new StringBuilder("Index '").append(n).append("' out of bounds").toString());
         }
         return hierarchies.get(n);
     }

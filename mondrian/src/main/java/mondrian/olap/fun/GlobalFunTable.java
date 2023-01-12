@@ -95,8 +95,8 @@ public class GlobalFunTable extends FunTableImpl {
         final String udfName = udf.getName();
         if (udfName == null || udfName.equals("")) {
             throw Util.newInternal(
-                "User-defined function defined by class '"
-                + udf.getClass() + "' has empty name");
+                new StringBuilder("User-defined function defined by class '")
+                .append(udf.getClass()).append("' has empty name").toString());
         }
         // It's OK for the description to be null.
         //final String description = udf.getDescription();
@@ -106,8 +106,8 @@ public class GlobalFunTable extends FunTableImpl {
             Type parameterType = parameterTypes[i];
             if (parameterType == null) {
                 throw Util.newInternal(
-                    "Invalid user-defined function '" + udfName
-                    + "': parameter type #" + i + " is null");
+                    new StringBuilder("Invalid user-defined function '").append(udfName)
+                    .append("': parameter type #").append(i).append(" is null").toString());
             }
         }
 
@@ -120,14 +120,14 @@ public class GlobalFunTable extends FunTableImpl {
         final Type returnType = udf.getReturnType(parameterTypes);
         if (returnType == null) {
             throw Util.newInternal(
-                "Invalid user-defined function '" + udfName
-                + "': return type is null");
+                new StringBuilder("Invalid user-defined function '").append(udfName)
+                .append("': return type is null").toString());
         }
         final Syntax syntax = udf.getSyntax();
         if (syntax == null) {
             throw Util.newInternal(
-                "Invalid user-defined function '" + udfName
-                + "': syntax is null");
+                new StringBuilder("Invalid user-defined function '").append(udfName)
+                .append("': syntax is null").toString());
         }
     }
 }

@@ -53,10 +53,10 @@ class Quicksorter<T> {
   }
 
   private void traceStats( String prefix ) {
-    String sb = prefix + ": "
-      + partitions + " partitions, "
-      + comparisons + " comparisons, "
-      + exchanges + " exchanges.";
+    String sb = new StringBuilder(prefix).append(": ")
+      .append(partitions).append(" partitions, ")
+      .append(comparisons).append(" comparisons, ")
+      .append(exchanges).append(" exchanges.").toString();
     LOGGER.debug( sb );
   }
 
@@ -211,7 +211,7 @@ class Quicksorter<T> {
     int n = vec.length - 1;
     sort( 0, n );
     if ( traced ) {
-      traceStats( "quicksort on " + n + "items" );
+      traceStats( new StringBuilder("quicksort on ").append(n).append("items").toString() );
     }
   }
 
@@ -222,7 +222,8 @@ class Quicksorter<T> {
     int n = vec.length - 1;
     select( limit, 0, n );
     if ( traced ) {
-      traceStats( "quickselect for " + limit + " from" + n + "items" );
+      traceStats( new StringBuilder("quickselect for ").append(limit)
+          .append(" from").append(n).append("items").toString() );
     }
   }
 

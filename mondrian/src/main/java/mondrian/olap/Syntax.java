@@ -26,7 +26,7 @@ public enum Syntax {
      */
     Function {
         public void unparse(String fun, Exp[] args, PrintWriter pw) {
-            ExpBase.unparseList(pw, args, fun + "(", ", ", ")");
+            ExpBase.unparseList(pw, args, new StringBuilder(fun).append("(").toString(), ", ", ")");
         }
     },
 
@@ -45,7 +45,7 @@ public enum Syntax {
             String name, int returnType, int[] argTypes)
         {
             // e.g. "<Set>.Current"
-            return getTypeDescription(argTypes[0]) + "." + name;
+            return new StringBuilder(getTypeDescription(argTypes[0])).append(".").append(name).toString();
         }
     },
 
@@ -73,12 +73,12 @@ public enum Syntax {
         public String getSignature(String name, int returnType, int[] argTypes)
         {
             // e.g. "<Member>.Lead(<Numeric Expression>)"
-            return (returnType == Category.Unknown
+            return new StringBuilder(returnType == Category.Unknown
                     ? ""
-                    : getTypeDescription(returnType) + " ")
-                + getTypeDescription(argTypes[0]) + "."
-                + name + "(" + getTypeDescriptionCommaList(argTypes, 1)
-                + ")";
+                    : new StringBuilder(getTypeDescription(returnType)).append(" ").toString())
+                .append(getTypeDescription(argTypes[0])).append(".")
+                .append(name).append("(").append(getTypeDescriptionCommaList(argTypes, 1))
+                .append(")").toString();
         }
     },
 
@@ -89,17 +89,17 @@ public enum Syntax {
     Infix {
         public void unparse(String fun, Exp[] args, PrintWriter pw) {
             if (needParen(args)) {
-                ExpBase.unparseList(pw, args, "(", " " + fun + " ", ")");
+                ExpBase.unparseList(pw, args, "(", new StringBuilder(" ").append(fun).append(" ").toString(), ")");
             } else {
-                ExpBase.unparseList(pw, args, "", " " + fun + " ", "");
+                ExpBase.unparseList(pw, args, "", new StringBuilder(" ").append(fun).append(" ").toString(), "");
             }
         }
 
         public String getSignature(String name, int returnType, int[] argTypes)
         {
             // e.g. "<Numeric Expression> / <Numeric Expression>"
-            return getTypeDescription(argTypes[0]) + " " + name + " "
-                + getTypeDescription(argTypes[1]);
+            return new StringBuilder(getTypeDescription(argTypes[0])).append(" ").append(name).append(" ")
+                .append(getTypeDescription(argTypes[1])).toString();
         }
     },
 
@@ -110,16 +110,16 @@ public enum Syntax {
     Prefix {
         public void unparse(String fun, Exp[] args, PrintWriter pw) {
             if (needParen(args)) {
-                ExpBase.unparseList(pw, args, "(" + fun + " ", null, ")");
+                ExpBase.unparseList(pw, args, new StringBuilder("(").append(fun).append(" ").toString(), null, ")");
             } else {
-                ExpBase.unparseList(pw, args, fun + " ", null, "");
+                ExpBase.unparseList(pw, args, new StringBuilder(fun).append(" ").toString(), null, "");
             }
         }
 
         public String getSignature(String name, int returnType, int[] argTypes)
         {
             // e.g. "- <Numeric Expression>"
-            return name + " " + getTypeDescription(argTypes[0]);
+            return new StringBuilder(name).append(" ").append(getTypeDescription(argTypes[0])).toString();
         }
     },
 
@@ -130,7 +130,7 @@ public enum Syntax {
     Postfix {
         public void unparse(String fun, Exp[] args, PrintWriter pw) {
             if (needParen(args)) {
-                ExpBase.unparseList(pw, args, "(", null, " " + fun + ")");
+                ExpBase.unparseList(pw, args, "(", null, new StringBuilder(" ").append(fun).append(")").toString());
             } else {
                 ExpBase.unparseList(pw, args, "", null, " " + fun);
             }
@@ -139,7 +139,7 @@ public enum Syntax {
         public String getSignature(String name, int returnType, int[] argTypes)
         {
             // e.g. "<Expression> IS NULL"
-            return getTypeDescription(argTypes[0]) + " " + name;
+            return new StringBuilder(getTypeDescription(argTypes[0])).append(" ").append(name).toString();
         }
     },
 
@@ -151,7 +151,7 @@ public enum Syntax {
     Braces {
         public String getSignature(String name, int returnType, int[] argTypes)
         {
-            return "{" + getTypeDescriptionCommaList(argTypes, 0) + "}";
+            return new StringBuilder("{").append(getTypeDescriptionCommaList(argTypes, 0)).append("}").toString();
         }
 
         public void unparse(String fun, Exp[] args, PrintWriter pw) {
@@ -167,7 +167,7 @@ public enum Syntax {
     Parentheses {
         public String getSignature(String name, int returnType, int[] argTypes)
         {
-            return "(" + getTypeDescriptionCommaList(argTypes, 0) + ")";
+            return new StringBuilder("(").append(getTypeDescriptionCommaList(argTypes, 0)).append(")").toString();
         }
 
         public void unparse(String fun, Exp[] args, PrintWriter pw) {
@@ -222,10 +222,10 @@ public enum Syntax {
         {
             String s = getTypeDescription(argTypes[0]);
             if (argTypes[0] == Category.Logical) {
-                return "CASE WHEN " + s + " THEN <Expression> ... END";
+                return new StringBuilder("CASE WHEN ").append(s).append(" THEN <Expression> ... END").toString();
             } else {
-                return "CASE " + s + " WHEN " + s
-                    + " THEN <Expression> ... END";
+                return new StringBuilder("CASE ").append(s).append(" WHEN ").append(s)
+                    .append(" THEN <Expression> ... END").toString();
             }
         }
     },
@@ -308,11 +308,11 @@ public enum Syntax {
      */
     public String getSignature(String name, int returnType, int[] argTypes) {
         // e.g. "StripCalculatedMembers(<Set>)"
-        return (returnType == Category.Unknown
+        return new StringBuilder((returnType == Category.Unknown
                 ? ""
-                : getTypeDescription(returnType) + " ")
-            + name + "(" + getTypeDescriptionCommaList(argTypes, 0)
-            + ")";
+                : new StringBuilder(getTypeDescription(returnType)).append(" ").toString()))
+            .append(name).append("(").append(getTypeDescriptionCommaList(argTypes, 0))
+            .append(")").toString();
     }
 
     private static boolean needParen(Exp[] args) {
@@ -322,8 +322,8 @@ public enum Syntax {
     }
 
     private static String getTypeDescription(int type) {
-        return "<" + Category.instance.getDescription(type & Category.Mask)
-            + ">";
+        return new StringBuilder("<").append(Category.instance.getDescription(type & Category.Mask))
+            .append(">").toString();
     }
 
     private static String getTypeDescriptionCommaList(int[] types, int start) {

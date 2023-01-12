@@ -215,10 +215,8 @@ public final class IdBatchResolver {
             return exp;
         } catch (Exception exception) {
             LOGGER.info(
-                String.format(
-                    "Failed to resolve '%s' during batch ID "
-                    + "resolution.",
-                    parent));
+                    "Failed to resolve '{}' during batch ID resolution.",
+                    parent);
         }
         return null;
     }
@@ -259,8 +257,7 @@ public final class IdBatchResolver {
         } catch (Exception e) {
             LOGGER.info(
                 String.format(
-                    "Failure while looking up children of '%s' during  "
-                    + "batch member resolution.  Child member refs:  %s",
+                    "Failure while looking up children of '%s' during  batch member resolution.  Child member refs:  %s",
                     parentMember,
                     Arrays.toString(childNameSegments.toArray())), e);
         }

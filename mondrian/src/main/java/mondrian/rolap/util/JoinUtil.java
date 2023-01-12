@@ -53,7 +53,7 @@ public class JoinUtil {
             return RelationUtil.getAlias((Relation) left);
         }
         throw Util.newInternal(
-            "alias is required because " + left + " is not a table");
+            new StringBuilder("alias is required because ").append(left).append(" is not a table").toString());
     }
 
     /**
@@ -72,7 +72,7 @@ public class JoinUtil {
             return getRightAlias(((Join) right));
         }
         throw Util.newInternal(
-            "alias is required because " + right + " is not a table");
+            new StringBuilder("alias is required because ").append(right).append(" is not a table").toString());
     }
 
 }

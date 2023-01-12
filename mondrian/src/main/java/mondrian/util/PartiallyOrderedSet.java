@@ -361,30 +361,30 @@ public class PartiallyOrderedSet<E> extends AbstractSet<E>
                 != (node.parentList.isEmpty()))
             {
                 assert !fail
-                    : "only top node should have no parents " + node
-                      + ", parents " + node.parentList;
+                    : new StringBuilder("only top node should have no parents ").append(node)
+                      .append(", parents ").append(node.parentList).toString();
                 return false;
             }
             if ((node == bottomNode)
                 != (node.childList.isEmpty()))
             {
                 assert !fail
-                    : "only bottom node should have no children " + node
-                      + ", children " + node.childList;
+                    : new StringBuilder("only bottom node should have no children ").append(node)
+                      .append(", children ").append(node.childList).toString();
                 return false;
             }
             for (int i = 0; i < node.childList.size(); i++) {
                 Node<E> child = node.childList.get(i);
                 if (!child.parentList.contains(node)) {
                     assert !fail
-                        : "child " + child + " of " + node
-                        + " does not know its parent";
+                        : new StringBuilder("child ").append(child).append(" of ").append(node)
+                        .append(" does not know its parent").toString();
                     return false;
                 }
                 if (child.e != null && !ordering.lessThan(child.e, node.e)) {
                     assert !fail
-                        : "child " + child.e + " not less than parent "
-                        + node.e;
+                        : new StringBuilder("child ").append(child.e).append(" not less than parent ")
+                        .append(node.e).toString();
                     return false;
                 }
                 for (int i2 = 0; i2 < node.childList.size(); i2++) {
@@ -393,7 +393,8 @@ public class PartiallyOrderedSet<E> extends AbstractSet<E>
                         && i != i2)
                     {
                         assert !fail
-                            : "duplicate child " + child + " of parent " + node;
+                            : new StringBuilder("duplicate child ").append(child)
+                            .append(" of parent ").append(node).toString();
                         return false;
                     }
                     if (child.e != null
@@ -402,8 +403,8 @@ public class PartiallyOrderedSet<E> extends AbstractSet<E>
                         && ordering.lessThan(child.e, child2.e))
                     {
                         assert !fail
-                            : "relation between children " + child.e
-                              + " and " + child2.e + " of node " + node.e;
+                            : new StringBuilder("relation between children ").append(child.e)
+                              .append(" and ").append(child2.e).append(" of node ").append(node.e).toString();
                         return false;
                     }
                 }
@@ -420,7 +421,7 @@ public class PartiallyOrderedSet<E> extends AbstractSet<E>
         distanceRecurse(distanceToRoot, topNode, 0);
         for (Node<E> node : map.values()) {
             if (!distanceToRoot.containsKey(node)) {
-                assert !fail : "node " + node + " is not reachable";
+                assert !fail : new StringBuilder("node ").append(node).append(" is not reachable").toString();
                 return false;
             }
         }
@@ -450,41 +451,45 @@ public class PartiallyOrderedSet<E> extends AbstractSet<E>
                 if (lt12 && lt21) {
                     if (!(node1 == node2)) {
                         assert !fail
-                            : "node " + node1.e + " and node " + node2.e
-                              + " are less than each other but are not the same"
-                              + " value";
+                            : new StringBuilder("node ").append(node1.e).append(" and node ").append(node2.e)
+                              .append(" are less than each other but are not the same")
+                              .append(" value").toString();
                         return false;
                     }
                 }
                 if (lt12 && !lt21) {
                     if (!nodeAncestors.get(node1).contains(node2.e)) {
                         assert !fail
-                            : node1.e + " is less than " + node2.e + " but "
-                              + node2.e + " is not in the ancestor set of "
-                              + node1.e;
+                            : new StringBuilder().append(node1.e).append(" is less than ").append(node2.e)
+                            .append(" but ")
+                            .append(node2.e).append(" is not in the ancestor set of ")
+                            .append(node1.e).toString();
                         return false;
                     }
                     if (!nodeDescendants.get(node2).contains(node1.e)) {
                         assert !fail
-                            : node1.e + " is less than " + node2.e + " but "
-                              + node1.e + " is not in the descendant set of "
-                              + node2.e;
+                            : new StringBuilder().append(node1.e).append(" is less than ").append(node2.e)
+                            .append(" but ")
+                            .append(node1.e).append(" is not in the descendant set of ")
+                              .append(node2.e).toString();
                         return false;
                     }
                 }
                 if (lt21 && !lt12) {
                     if (!nodeAncestors.get(node2).contains(node1.e)) {
                         assert !fail
-                            : node2.e + " is less than " + node1.e + " but "
-                              + node1.e + " is not in the ancestor set of "
-                              + node2.e;
+                            : new StringBuilder().append(node2.e).append(" is less than ").append(node1.e)
+                            .append(" but ")
+                            .append(node1.e).append(" is not in the ancestor set of ")
+                            .append(node2.e).toString();
                         return false;
                     }
                     if (!nodeDescendants.get(node1).contains(node2.e)) {
                         assert !fail
-                            : node2.e + " is less than " + node1.e + " but "
-                              + node2.e + " is not in the descendant set of "
-                              + node1.e;
+                            : new StringBuilder().append(node2.e).append(" is less than ").append(node1.e)
+                            .append(" but ")
+                            .append(node2.e).append(" is not in the descendant set of ")
+                            .append(node1.e).toString();
                         return false;
                     }
                 }

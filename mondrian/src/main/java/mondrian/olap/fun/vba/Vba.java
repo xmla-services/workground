@@ -105,10 +105,10 @@ public class Vba {
                         return DateFormat.getDateInstance().parse(str);
                     } catch (ParseException ex2) {
                         throw new InvalidArgumentException(
-                            "Invalid parameter. "
-                            + "expression parameter of CDate function must be "
-                            + "formatted correctly ("
-                            + String.valueOf(expression) + ")");
+                            new StringBuilder("Invalid parameter. ")
+                            .append("expression parameter of CDate function must be ")
+                            .append("formatted correctly (")
+                            .append(String.valueOf(expression)).append(")").toString());
                     }
                 }
             }
@@ -189,9 +189,9 @@ public class Vba {
             return v;
         } else {
             throw new InvalidArgumentException(
-                "Invalid parameter. "
-                + "number parameter " + number
-                + " of Int function must be " + "of type number");
+                new StringBuilder("Invalid parameter. ")
+                    .append("number parameter ").append(number)
+                    .append(" of Int function must be of type number").toString());
         }
     }
 
@@ -205,9 +205,9 @@ public class Vba {
                     .toUpperCase();
         } else {
             throw new InvalidArgumentException(
-                "Invalid parameter. "
-                + "number parameter " + number
-                + " of Hex function must be " + "of type number");
+                new StringBuilder("Invalid parameter. ")
+                    .append("number parameter ").append(number)
+                    .append(" of Hex function must be of type number").toString());
         }
     }
 
@@ -226,9 +226,9 @@ public class Vba {
             return v;
         } else {
             throw new InvalidArgumentException(
-                "Invalid parameter. "
-                + "number parameter " + number
-                + " of Int function must be " + "of type number");
+                new StringBuilder("Invalid parameter. ")
+                    .append("number parameter ").append(number)
+                    .append(" of Int function must be of type number").toString());
         }
     }
 
@@ -258,9 +258,9 @@ public class Vba {
             return Integer.toOctalString(((Number) number).intValue());
         } else {
             throw new InvalidArgumentException(
-                "Invalid parameter. "
-                + "number parameter " + number
-                + " of Oct function must be " + "of type number");
+                new StringBuilder("Invalid parameter. ")
+                    .append("number parameter ").append(number)
+                    .append(" of Oct function must be of type number").toString());
         }
     }
 
@@ -291,9 +291,10 @@ public class Vba {
             }
         } else {
             throw new InvalidArgumentException(
-                "Invalid parameter. "
-                + "number parameter " + number
-                + " of Str function must be " + "of type number");
+                new StringBuilder("Invalid parameter. ")
+                    .append("number parameter ").append(number)
+                    .append(" of Str function must be ")
+                    .append("of type number").toString());
         }
     }
 

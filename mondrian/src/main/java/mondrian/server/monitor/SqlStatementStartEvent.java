@@ -40,7 +40,7 @@ public class SqlStatementStartEvent extends SqlStatementEvent {
     }
 
     public String toString() {
-        return "SqlStatementStartEvent(" + sqlStatementId + ")";
+        return new StringBuilder("SqlStatementStartEvent(").append(sqlStatementId).append(")").toString();
     }
 
     public <T> T accept(Visitor<T> visitor) {

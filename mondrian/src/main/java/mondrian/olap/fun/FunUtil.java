@@ -130,7 +130,7 @@ public class FunUtil extends Util {
    */
   public static RuntimeException newEvalException( Throwable throwable ) {
     return new MondrianEvaluationException(
-      throwable.getClass().getName() + ": " + throwable.getMessage() );
+      new StringBuilder(throwable.getClass().getName()).append(": ").append(throwable.getMessage()).toString() );
   }
 
   /**
@@ -144,8 +144,8 @@ public class FunUtil extends Util {
     String message,
     Throwable throwable ) {
     return new MondrianEvaluationException(
-      message
-        + ": " + Util.getErrorMessage( throwable ) );
+      new StringBuilder(message)
+        .append(": ").append(Util.getErrorMessage( throwable )).toString() );
   }
 
   public static void checkIterListResultStyles( Calc calc ) {
@@ -195,7 +195,7 @@ public class FunUtil extends Util {
       || arg.getCategory() != Category.Symbol ) {
       throw FunUtil.newEvalException(
         call.getFunDef(),
-        "Expected a symbol, found '" + arg + "'" );
+        new StringBuilder("Expected a symbol, found '").append(arg).append("'").toString() );
     }
     String s = (String) ( (Literal) arg ).getValue();
     StringBuilder sb = new StringBuilder( 64 );
@@ -211,7 +211,7 @@ public class FunUtil extends Util {
     }
     throw FunUtil.newEvalException(
       call.getFunDef(),
-      "Allowed values are: {" + sb + "}" );
+      new StringBuilder("Allowed values are: {").append(sb).append("}").toString() );
   }
 
   /**
@@ -237,7 +237,7 @@ public class FunUtil extends Util {
       || arg.getCategory() != Category.Symbol ) {
       throw FunUtil.newEvalException(
         call.getFunDef(),
-        "Expected a symbol, found '" + arg + "'" );
+        new StringBuilder("Expected a symbol, found '").append(arg).append("'").toString() );
     }
     String s = (String) ( (Literal) arg ).getValue();
     for ( E e : allowedValues.getEnumConstants() ) {
@@ -255,7 +255,7 @@ public class FunUtil extends Util {
     }
     throw FunUtil.newEvalException(
       call.getFunDef(),
-      "Allowed values are: {" + buf + "}" );
+      new StringBuilder("Allowed values are: {").append(buf).append("}").toString() );
   }
 
   /**
@@ -553,7 +553,8 @@ public class FunUtil extends Util {
         return Syntax.Internal;
       default:
         throw Util.newInternal(
-          "unknown syntax code '" + c + "' in string '" + flags + "'" );
+          new StringBuilder("unknown syntax code '").append(c).append("' in string '")
+              .append(flags).append("'").toString() );
     }
   }
 
@@ -571,7 +572,8 @@ public class FunUtil extends Util {
   public static int decodeReturnCategory( String flags ) {
     final int returnCategory = FunUtil.decodeCategory( flags, 1 );
     if ( ( returnCategory & Category.Mask ) != returnCategory ) {
-      throw Util.newInternal( "bad return code flag in flags '" + flags + "'" );
+      throw Util.newInternal( new StringBuilder("bad return code flag in flags '")
+          .append(flags).append("'").toString() );
     }
     return returnCategory;
   }
@@ -659,7 +661,8 @@ public class FunUtil extends Util {
         return Category.DateTime;
       default:
         throw Util.newInternal(
-          "unknown type code '" + c + "' in string '" + flags + "'" );
+          new StringBuilder("unknown type code '").append(c)
+              .append("' in string '").append(flags).append("'").toString() );
     }
   }
 
@@ -1369,8 +1372,8 @@ public class FunUtil extends Util {
           // compareHierarchically needs to impose a total order;
           // cannot return 0 for non-equal members
           assert c != 0
-            : "Members " + prev1 + ", " + prev2
-            + " are not equal, but compare returned 0.";
+            : new StringBuilder("Members ").append(prev1).append(", ").append(prev2)
+            .append(" are not equal, but compare returned 0.").toString();
           return c;
         }
       }

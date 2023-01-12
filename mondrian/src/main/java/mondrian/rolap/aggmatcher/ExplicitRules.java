@@ -287,8 +287,8 @@ public class ExplicitRules {
         public void print(final PrintWriter pw, final String prefix) {
             pw.print(prefix);
             pw.println("ExplicitRules.Group:");
-            String subprefix = prefix + "  ";
-            String subsubprefix = subprefix + "  ";
+            String subprefix = new StringBuilder(prefix).append("  ").toString();
+            String subsubprefix = new StringBuilder(subprefix).append("  ").toString();
 
             pw.print(subprefix);
             pw.print("name=");
@@ -417,7 +417,7 @@ public class ExplicitRules {
             pw.print(prefix);
             pw.println("ExplicitRules.PatternTableDef.ExcludeName:");
 
-            String subprefix = prefix + "  ";
+            String subprefix = new StringBuilder(prefix).append("  ").toString();
 
             pw.print(subprefix);
             pw.print("name=");
@@ -470,7 +470,7 @@ public class ExplicitRules {
             pw.print(prefix);
             pw.println("ExplicitRules.PatternTableDef.ExcludePattern:");
 
-            String subprefix = prefix + "  ";
+            String subprefix = new StringBuilder(prefix).append("  ").toString();
 
             pw.print(subprefix);
             pw.print("pattern=");
@@ -777,7 +777,7 @@ public class ExplicitRules {
             public void print(final PrintWriter pw, final String prefix) {
                 pw.print(prefix);
                 pw.println("Level:");
-                String subprefix = prefix + "  ";
+                String subprefix = new StringBuilder(prefix).append("  ").toString();
 
                 pw.print(subprefix);
                 pw.print("name=");
@@ -986,7 +986,7 @@ public class ExplicitRules {
             public void print(final PrintWriter pw, final String prefix) {
                 pw.print(prefix);
                 pw.println("Measure:");
-                String subprefix = prefix + "  ";
+                String subprefix = new StringBuilder(prefix).append("  ").toString();
 
                 pw.print(subprefix);
                 pw.print("name=");
@@ -1368,8 +1368,8 @@ public class ExplicitRules {
         }
 
         public void print(final PrintWriter pw, final String prefix) {
-            String subprefix = prefix + "  ";
-            String subsubprefix = subprefix + "  ";
+            String subprefix = new StringBuilder(prefix).append("  ").toString();
+            String subsubprefix = new StringBuilder(subprefix).append("  ").toString();
 
             pw.print(subprefix);
             pw.print("id=");
@@ -1471,7 +1471,7 @@ public class ExplicitRules {
             pw.println("ExplicitRules.NameTableDef:");
             super.print(pw, prefix);
 
-            String subprefix = prefix + "  ";
+            String subprefix = new StringBuilder(prefix).append("  ").toString();
 
             pw.print(subprefix);
             pw.print("name=");
@@ -1588,8 +1588,8 @@ public class ExplicitRules {
             pw.println("ExplicitRules.PatternTableDef:");
             super.print(pw, prefix);
 
-            String subprefix = prefix + "  ";
-            String subsubprefix = subprefix + "  ";
+            String subprefix = new StringBuilder(prefix).append("  ").toString();
+            String subsubprefix = new StringBuilder(subprefix).append("  ").toString();
 
             pw.print(subprefix);
             pw.print("pattern=");

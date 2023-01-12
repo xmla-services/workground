@@ -38,7 +38,7 @@ public class TransactionCommand extends QueryPart {
 
     @Override
     public void unparse(PrintWriter pw) {
-        pw.print( this.command.name() + "TRANSACTION");
+        pw.print( new StringBuilder(this.command.name()).append("TRANSACTION").toString());
     }
 
     @Override

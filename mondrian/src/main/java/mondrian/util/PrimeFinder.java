@@ -213,8 +213,8 @@ final class PrimeFinder {
         for (int i = 0; i < primeCapacities.length - 1; i++) {
             if (primeCapacities[i] >= primeCapacities[i + 1]) {
                 throw new RuntimeException(
-                    "primes are unsorted or contain duplicates; detected at "
-                    + i + "@" + primeCapacities[i]);
+                    new StringBuilder("primes are unsorted or contain duplicates; detected at ")
+                    .append(i).append("@").append(primeCapacities[i]).toString());
             }
         }
 
@@ -228,7 +228,7 @@ final class PrimeFinder {
 
             if (deviation > maxDeviation) {
                 maxDeviation = deviation;
-                pw.println("new maxdev @" + i + "@dev=" + maxDeviation);
+                pw.println(new StringBuilder("new maxdev @").append(i).append("@dev=").append(maxDeviation).toString());
             }
 
             accDeviation += deviation;
@@ -236,8 +236,9 @@ final class PrimeFinder {
         long width = 1 + (long)to - (long)from;
 
         double meanDeviation = accDeviation / width;
-        pw.println("Statistics for [" + from + "," + to + "] are as follows");
-        pw.println("meanDeviation = " + (float)meanDeviation * 100 + " %");
-        pw.println("maxDeviation = " + (float)maxDeviation * 100 + " %");
+        pw.println(new StringBuilder("Statistics for [").append(from).append(",")
+            .append(to).append("] are as follows").toString());
+        pw.println(new StringBuilder("meanDeviation = ").append((float)meanDeviation * 100).append(" %").toString());
+        pw.println(new StringBuilder("maxDeviation = ").append((float)maxDeviation * 100).append(" %").toString());
     }
 }

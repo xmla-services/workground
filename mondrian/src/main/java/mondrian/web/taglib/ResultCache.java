@@ -80,7 +80,7 @@ public class ResultCache implements HttpSessionBindingListener {
             result = connection.execute(query);
             long t2 = System.currentTimeMillis();
             LOGGER.debug(
-                "Execute query took " + (t2 - t1) + " millisec");
+                "Execute query took {} millisec", (t2 - t1));
         }
         return result;
     }

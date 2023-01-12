@@ -236,9 +236,9 @@ public class HierarchyUsage {
         }
         if (getLogger().isDebugEnabled()) {
             getLogger().debug(
-                toString()
-                + ", cubeDim="
-                + cubeDim.getClass().getName());
+                new StringBuilder(toString())
+                .append(", cubeDim=")
+                .append(cubeDim.getClass().getName()).toString());
         }
     }
 
@@ -440,8 +440,8 @@ public class HierarchyUsage {
             if (table == null) {
                 // todo: i18n msg
                 throw Util.newError(
-                    "no table '" + tableName
-                    + "' found in hierarchy " + hierarchy.getUniqueName());
+                    new StringBuilder("no table '").append(tableName)
+                    .append("' found in hierarchy ").append(hierarchy.getUniqueName()).toString());
             }
         }
         return table;

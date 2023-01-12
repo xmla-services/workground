@@ -628,10 +628,10 @@ public class Base64
 
             return 3;
             }catch( Exception e){
-                System.out.println(""+source[srcOffset]+ ": " + ( DECODABET[ source[ srcOffset     ] ]  ) );
-                System.out.println(""+source[srcOffset+1]+  ": " + ( DECODABET[ source[ srcOffset + 1 ] ]  ) );
-                System.out.println(""+source[srcOffset+2]+  ": " + ( DECODABET[ source[ srcOffset + 2 ] ]  ) );
-                System.out.println(""+source[srcOffset+3]+  ": " + ( DECODABET[ source[ srcOffset + 3 ] ]  ) );
+                System.out.println(new StringBuilder().append(source[srcOffset]).append(": ").append(DECODABET[source[srcOffset]]).toString());
+                System.out.println(new StringBuilder().append(source[srcOffset+1]).append(": ").append(DECODABET[ source[ srcOffset + 1 ] ]).toString());
+                System.out.println(new StringBuilder().append(source[srcOffset+2]).append(": ").append(DECODABET[ source[ srcOffset + 2 ] ]).toString());
+                System.out.println(new StringBuilder().append(+source[srcOffset+3]).append(": ").append(DECODABET[ source[ srcOffset + 3 ] ]).toString());
                 return -1;
             }   //e nd catch
         }
@@ -687,7 +687,8 @@ public class Base64
             }   // end if: white space, equals sign or better
             else
             {
-                System.err.println( "Bad Base64 input character at " + i + ": " + source[i] + "(decimal)" );
+                System.err.println( new StringBuilder("Bad Base64 input character at ").append(i)
+                    .append(": ").append(source[i]).append("(decimal)").toString() );
                 return null;
             }   // end else:
         }   // each input character
@@ -912,7 +913,8 @@ public class Base64
             // Check for size of file
             if( file.length() > Integer.MAX_VALUE )
             {
-                System.err.println( "File is too big for this convenience method (" + file.length() + " bytes)." );
+                System.err.println( new StringBuilder("File is too big for this convenience method (")
+                    .append(file.length()).append(" bytes).").toString() );
                 return null;
             }   // end if: file too big for int index
             buffer = new byte[ (int)file.length() ];

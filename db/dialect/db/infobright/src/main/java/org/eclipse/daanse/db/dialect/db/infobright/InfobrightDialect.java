@@ -66,9 +66,9 @@ public class InfobrightDialect extends MySqlDialect {
         // correct the NULL ordering, as we do for MySQL, because Infobright
         // does not support this function.
         if (ascending) {
-            return expr + " ASC";
+            return new StringBuilder(expr).append(" ASC").toString();
         } else {
-            return expr + " DESC";
+            return new StringBuilder(expr).append(" DESC").toString();
         }
     }
 

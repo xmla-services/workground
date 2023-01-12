@@ -448,7 +448,7 @@ public class Sorter {
 
   private static void logTuples( TupleList tupleList, String description ) {
     if ( LOGGER.isDebugEnabled() ) {
-      StringBuilder sb = new StringBuilder( description + ": " );
+      StringBuilder sb = new StringBuilder(description).append(": ");
       if (tupleList != null) {
     	  for ( List<Member> tuple : tupleList ) {
     		  sb.append( "\n" );
@@ -703,8 +703,8 @@ public class Sorter {
           // compareHierarchically needs to impose a total order
           // cannot return 0 for non-equal members
           assert c != 0
-            : "Members " + prev1 + ", " + prev2
-            + " are not equal, but compare returned 0.";
+            : new StringBuilder("Members ").append(prev1).append(", ").append(prev2)
+            .append(" are not equal, but compare returned 0.").toString();
           return c;
         }
       }
@@ -989,7 +989,7 @@ public class Sorter {
     }
 
     public String toString() {
-      return "<" + t + ", " + i + ">";
+      return new StringBuilder("<").append(t).append(", ").append(i).append(">").toString();
     }
   }
 }

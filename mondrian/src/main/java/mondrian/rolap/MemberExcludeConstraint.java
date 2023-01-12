@@ -93,7 +93,7 @@ class MemberExcludeConstraint implements TupleConstraint {
     }
 
     public String toString() {
-        return "MemberExcludeConstraint(" + excludes + ")";
+        return new StringBuilder("MemberExcludeConstraint(").append(excludes).append(")").toString();
     }
 
     @Override

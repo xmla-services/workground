@@ -77,10 +77,8 @@ abstract class MemberComparator implements Comparator<Member> {
         final int c = comparator.compare( m1, m2 );
         // here guaranteed that eval(m) finds a memorized value
         LOGGER.debug(
-          "compare "
-            + m1.getUniqueName() + "(" + eval( m1 ) + "), "
-            + m2.getUniqueName() + "(" + eval( m2 ) + ")"
-            + " yields " + c );
+          "compare {}({}), {}({}) yields {}",
+            m1.getUniqueName(), eval( m1 ), m2.getUniqueName(), eval( m2 ), c );
         return c;
       };
     } else {

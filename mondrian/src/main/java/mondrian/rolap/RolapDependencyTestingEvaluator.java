@@ -136,10 +136,10 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
         final Object otherResult = calc.evaluate(this);
         if (false) {
             System.out.println(
-                "original=" + saveMember.getUniqueName()
-                + ", member=" + otherMember.getUniqueName()
-                + ", originalResult=" + result
-                + ", result=" + otherResult);
+                new StringBuilder("original=").append(saveMember.getUniqueName())
+                .append(", member=").append(otherMember.getUniqueName())
+                .append(", originalResult=").append(result)
+                .append(", result=").append(otherResult).toString());
         }
         if (!equals(otherResult, result)) {
             final Member[] members = getMembers();
@@ -151,12 +151,12 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
                 buf.append(members[j].getUniqueName());
             }
             throw Util.newInternal(
-                "Expression '" + mdxString
-                + "' claims to be independent of dimension "
-                + saveMember.getDimension() + " but is not; context is {"
-                + buf.toString() + "}; First result: "
-                + toString(result) + ", Second result: "
-                + toString(otherResult));
+                new StringBuilder("Expression '").append(mdxString)
+                .append("' claims to be independent of dimension ")
+                .append(saveMember.getDimension()).append(" but is not; context is {")
+                .append(buf.toString()).append("}; First result: ")
+                .append(toString(result)).append(", Second result: ")
+                .append(toString(otherResult)).toString());
         }
         // Restore context.
         setContext(saveMember);

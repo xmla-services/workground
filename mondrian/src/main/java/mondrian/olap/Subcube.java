@@ -70,7 +70,7 @@ public class Subcube extends QueryPart {
             pw.println(")");
         }
         else {
-            pw.println("[" + this.cubeName + "]");
+            pw.println(new StringBuilder("[").append(this.cubeName).append("]").toString());
         }
 //        pw.print("CREATE SESSION MEMBER ");
 //        pw.print("[" + cubeName + "]");

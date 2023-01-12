@@ -84,7 +84,7 @@ public class Triple<T0, T1, T2>
     }
 
     public String toString() {
-        return "<" + v0 + ", " + v1 + ", " + v2 + ">";
+        return new StringBuilder("<").append(v0).append(", ").append(v1).append(", ").append(v2).append(">").toString();
     }
 
     /**

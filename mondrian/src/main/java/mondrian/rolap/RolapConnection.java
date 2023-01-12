@@ -226,7 +226,7 @@ public class RolapConnection extends ConnectionBase {
           }
           if ( role1 == null ) {
             throw Util.newError(
-              "Role '" + roleName + "' not found" );
+              new StringBuilder("Role '").append(roleName).append("' not found").toString() );
           }
           roleList.add( role1 );
         }
@@ -351,10 +351,10 @@ public class RolapConnection extends ConnectionBase {
       } catch ( ClassCastException e ) {
         throw Util.newInternal(
           e,
-          "Plugin class specified by property "
-            + property.getPath()
-            + " must implement "
-            + DataSourceResolver.class.getName() );
+          new StringBuilder("Plugin class specified by property ")
+              .append(property.getPath())
+              .append(" must implement ")
+              .append(DataSourceResolver.class.getName()).toString() );
       }
     }
     return dataSourceResolver;
@@ -513,12 +513,13 @@ public class RolapConnection extends ConnectionBase {
     final MemoryMonitor.Listener listener = new MemoryMonitor.Listener() {
       public void memoryUsageNotification( long used, long max ) {
         execution.setOutOfMemory(
-          "OutOfMemory used="
-            + used
-            + ", max="
-            + max
-            + " for query: "
-            + query.toString()
+          new StringBuilder("OutOfMemory used=")
+              .append(used)
+              .append(", max=")
+              .append(max)
+              .append(" for query: ")
+              .append(query.toString())
+              .toString()
             // connection string can contain user name and password
             //+ " for connection: "
             //+ getConnectString()
@@ -537,7 +538,8 @@ public class RolapConnection extends ConnectionBase {
       }
 
       if ( RolapUtil.MDX_LOGGER.isDebugEnabled() ) {
-        RolapUtil.MDX_LOGGER.debug( currId + ": " + Util.unparse( query ) );
+        RolapUtil.MDX_LOGGER.debug( new StringBuilder().append(currId)
+            .append(": ").append(Util.unparse( query )).toString() );
       }
 
       final Locus locus = new Locus( execution, null, "Loading cells" );
@@ -583,13 +585,13 @@ public class RolapConnection extends ConnectionBase {
       }
       throw Util.newError(
         e,
-        "Error while executing query [" + queryString + "]" );
+        new StringBuilder("Error while executing query [").append(queryString).append("]").toString() );
     } finally {
       mm.removeListener( listener );
       if ( RolapUtil.MDX_LOGGER.isDebugEnabled() ) {
         final long elapsed = execution.getElapsedMillis();
         RolapUtil.MDX_LOGGER.debug(
-          currId + ": exec: " + elapsed + " ms" );
+          new StringBuilder().append(currId).append(": exec: ").append(elapsed).append(" ms").toString() );
       }
     }
   }

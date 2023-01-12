@@ -74,7 +74,7 @@ class ChildByNameConstraint extends DefaultMemberChildrenConstraint {
     }
 
     public String toString() {
-        return "ChildByNameConstraint(" + Arrays.toString(childNames) + ")";
+        return new StringBuilder("ChildByNameConstraint(").append(Arrays.toString(childNames)).append(")").toString();
     }
 
     public Object getCacheKey() {

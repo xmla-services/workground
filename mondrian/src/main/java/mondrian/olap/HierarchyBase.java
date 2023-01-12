@@ -94,7 +94,7 @@ public abstract class HierarchyBase
             this.subName = subName;
             if (this.subName != null) {
                 // e.g. "Time.Weekly"
-                this.name = name + "." + subName;
+                this.name = new StringBuilder(name).append(".").append(subName).toString();
                 if (this.subName.equals(name)) {
                     this.uniqueName = dimension.getUniqueName();
                 } else {

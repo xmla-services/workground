@@ -36,17 +36,18 @@ public class Listener implements ServletContextListener {
             clazz = Class.forName("mondrian.web.taglib.ApplResources");
         } catch (ClassNotFoundException e) {
             throw new Error(
-                "Received [" + e.toString() + "] while initializing servlet");
+                new StringBuilder("Received [").append(e.toString()).append("] while initializing servlet").toString());
         }
         Object o = null;
         try {
             o = clazz.newInstance();
         } catch (InstantiationException e) {
             throw new Error(
-                "Received [" + e.toString() + "] while initializing servlet");
+                new StringBuilder("Received [").append(e.toString())
+                    .append("] while initializing servlet").toString());
         } catch (IllegalAccessException e) {
             throw new Error(
-                "Received [" + e.toString() + "] while initializing servlet");
+                new StringBuilder("Received [").append(e.toString()).append("] while initializing servlet").toString());
         }
         applicationContext = (ApplicationContext) o;
         applicationContext.init(event);

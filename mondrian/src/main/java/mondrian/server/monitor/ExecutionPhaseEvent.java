@@ -57,7 +57,8 @@ public class ExecutionPhaseEvent extends ExecutionEvent {
 
     @Override
     public String toString() {
-        return "ExecutionPhaseEvent(" + executionId + ", " + phase + ")";
+        return new StringBuilder("ExecutionPhaseEvent(").append(executionId).append(", ")
+            .append(phase).append(")").toString();
     }
 
     public <T> T accept(Visitor<T> visitor) {

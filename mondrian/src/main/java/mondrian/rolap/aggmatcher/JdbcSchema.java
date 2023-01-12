@@ -1040,8 +1040,8 @@ public class JdbcSchema {
         public void print(final PrintWriter pw, final String prefix) {
             pw.print(prefix);
             pw.println("Table:");
-            String subprefix = prefix + "  ";
-            String subsubprefix = subprefix + "  ";
+            String subprefix = new StringBuilder(prefix).append("  ").toString();
+            String subsubprefix = new StringBuilder(subprefix).append("  ").toString();
 
             pw.print(subprefix);
             pw.print("name=");
@@ -1266,8 +1266,8 @@ public class JdbcSchema {
     public void print(final PrintWriter pw, final String prefix) {
         pw.print(prefix);
         pw.println("JdbcSchema:");
-        String subprefix = prefix + "  ";
-        String subsubprefix = subprefix + "  ";
+        String subprefix = new StringBuilder(prefix).append("  ").toString();
+        String subsubprefix = new StringBuilder(subprefix).append("  ").toString();
 
         pw.print(subprefix);
         pw.println("Tables: [");
@@ -1370,9 +1370,9 @@ public class JdbcSchema {
         ResultSet rs = null;
         try {
             getLogger().debug(
-                "Getting list of tables from catalog "
-                + scanCatalogProp + " schema "
-                + scanSchemaProp + " table " + tableName);
+                new StringBuilder("Getting list of tables from catalog ")
+                .append(scanCatalogProp).append(" schema ")
+                .append(scanSchemaProp).append(" table ").append(tableName).toString());
             rs = databaseMetaData.getTables(
                 scanCatalogProp,
                 scanSchemaProp,

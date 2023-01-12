@@ -68,7 +68,7 @@ public abstract class ResultBase implements Result {
     // implement Result
     public void print(PrintWriter pw) {
         for (int i = -1; i < axes.length; i++) {
-            pw.println("Axis #" + (i + 1) + ":");
+            pw.println(new StringBuilder("Axis #").append(i + 1).append(":").toString());
             printAxis(pw, i < 0 ? slicerAxis : axes[i]);
         }
         // Usually there are 3 axes: {slicer, columns, rows}. Position is a
@@ -91,7 +91,7 @@ public abstract class ResultBase implements Result {
                         axis + 1 < pos.length
                             ? pos[axis + 1]
                             : 0;
-                    pw.print("Row #" + row + ": ");
+                    pw.print(new StringBuilder("Row #").append(row).append(": ").toString());
                 }
                 printRows(pw, axis - 1, pos);
                 if (axis == 0) {
@@ -151,7 +151,7 @@ public abstract class ResultBase implements Result {
         }
         return hierarchy.getHierarchy().getDefaultMember();
     }
-    
+
   public Execution getExecution() {
     return execution;
   }

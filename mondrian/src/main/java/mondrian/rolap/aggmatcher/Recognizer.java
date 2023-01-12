@@ -793,10 +793,10 @@ abstract class Recognizer {
                 aggColumnName.substring(0, usagePrefix.length())))
         {
             throw new MondrianException(
-                "usagePrefix attribute "
-                + usagePrefix
-                + " was specified for " + hierarchyUsage.getHierarchyName()
-                + ", but found agg column without prefix:  " + aggColumnName);
+                new StringBuilder("usagePrefix attribute ")
+                    .append(usagePrefix)
+                    .append(" was specified for ").append(hierarchyUsage.getHierarchyName())
+                    .append(", but found agg column without prefix:  ").append(aggColumnName).toString());
         }
         String aggColumnWithoutPrefix = aggColumnName.substring(
             usagePrefix.length());
@@ -966,7 +966,7 @@ abstract class Recognizer {
                 JdbcSchema.Table.Column.Usage usage = it.next();
                 JdbcSchema.Table.Column measureColumn = usage.getColumn();
                 allowedMeasureFactColumnNames.add
-                        (factColumn.getName() + "_" + measureColumn.getName());
+                        (new StringBuilder(factColumn.getName()).append("_").append(measureColumn.getName()).toString());
             }
 
             for (JdbcSchema.Table.Column aggColumn : aggTable.getColumns()) {

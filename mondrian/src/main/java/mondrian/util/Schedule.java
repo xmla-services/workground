@@ -572,8 +572,8 @@ class MonthlyByDayDateSchedule implements DateSchedule {
             }
         }
         throw ScheduleUtil.newInternal(
-            "monthly-by-day date schedule is looping -- maybe "
-            + "the bitmap is empty: " + daysOfMonthBitmap);
+            new StringBuilder("monthly-by-day date schedule is looping -- maybe ")
+            .append("the bitmap is empty: ").append(daysOfMonthBitmap).toString());
     }
 
     private static int monthOrdinal(Calendar earliest) {
@@ -695,11 +695,11 @@ class ScheduleUtil {
     }
 
     public static Error newInternal(Throwable e, String s) {
-        return new Error("internal error '" + e + "': " + s);
+        return new Error(new StringBuilder("internal error '").append(e).append("': ").append(s).toString());
     }
 
     public static Error newInternal(String s) {
-        return new Error("internal error: " + s);
+        return new Error(new StringBuilder("internal error: ").append(s).toString());
     }
 
     public static boolean lessThan(Time t1, Time t2, boolean strict) {

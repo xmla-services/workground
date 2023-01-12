@@ -355,7 +355,7 @@ public class RolapStar {
                 {
                     return node.origRel;
                 }
-                newAlias = RelationUtil.getAlias(rel) + "_" + (++val);
+                newAlias = new StringBuilder(RelationUtil.getAlias(rel)).append("_").append(++val).toString();
             }
         } else if (relOrJoin instanceof Join) {
             // determine if the join starts from the left or right side
@@ -735,8 +735,8 @@ public class RolapStar {
             return columns.next();
         } catch (SQLException e) {
             throw Util.newInternal(
-                "Error while retrieving metadata for table '" + tableName
-                + "', column '" + columnName + "'");
+                new StringBuilder("Error while retrieving metadata for table '").append(tableName)
+                .append("', column '").append(columnName).append("'").toString());
         } finally {
             try {
                 jdbcConnection.close();
@@ -827,7 +827,7 @@ public class RolapStar {
         if (structure) {
             pw.print(prefix);
             pw.println("RolapStar:");
-            String subprefix = prefix + "  ";
+            String subprefix = new StringBuilder(prefix).append("  ").toString();
             factTable.print(pw, subprefix);
 
             for (AggStar aggStar : getAggStars()) {
@@ -1164,9 +1164,10 @@ public class RolapStar {
                 if (precision == 0) {
                     typeString = type;
                 } else if (scale == 0) {
-                    typeString = type + "(" + precision + ")";
+                    typeString = new StringBuilder(type).append("(").append(precision).append(")").toString();
                 } else {
-                    typeString = type + "(" + precision + ", " + scale + ")";
+                    typeString = new StringBuilder(type).append("(")
+                        .append(precision).append(", ").append(scale).append(")").toString();
                 }
                 pstmt.close();
                 jdbcConnection.close();
@@ -1526,7 +1527,7 @@ public class RolapStar {
             // "named" column, above, has been created.
             String name = (level.getNameExp() == null)
                 ? level.getName()
-                : level.getName() + " (Key)";
+                : new StringBuilder(level.getName()).append(" (Key)").toString();
 
             // If the nameColumn is not null, then it is associated with this
             // column.
@@ -1568,15 +1569,15 @@ public class RolapStar {
                 table = findAncestor(tableName);
                 if (table == null) {
                     throw Util.newError(
-                        "Level '" + level.getUniqueName()
-                        + "' of cube '"
-                        + this
-                        + "' is invalid: table '" + tableName
-                        + "' is not found in current scope"
-                        + Util.nl
-                        + ", star:"
-                        + Util.nl
-                        + getStar());
+                        new StringBuilder("Level '").append(level.getUniqueName())
+                            .append("' of cube '")
+                            .append(this)
+                            .append("' is invalid: table '").append(tableName)
+                            .append("' is not found in current scope")
+                            .append(Util.nl)
+                            .append(", star:")
+                            .append(Util.nl)
+                            .append(getStar()).toString());
                 }
                 RolapStar.AliasReplacer aliasReplacer =
                     new RolapStar.AliasReplacer(tableName, table.getAlias());
@@ -1874,7 +1875,7 @@ public class RolapStar {
         public void print(PrintWriter pw, String prefix) {
             pw.print(prefix);
             pw.println("Table:");
-            String subprefix = prefix + "  ";
+            String subprefix = new StringBuilder(prefix).append("  ").toString();
 
             pw.print(subprefix);
             pw.print("alias=");
@@ -1888,7 +1889,7 @@ public class RolapStar {
 
             pw.print(subprefix);
             pw.println("Columns:");
-            String subsubprefix = subprefix + "  ";
+            String subsubprefix = new StringBuilder(subprefix).append("  ").toString();
 
             for (Column column : getColumns()) {
                 column.print(pw, subsubprefix);
@@ -1956,8 +1957,8 @@ public class RolapStar {
             return RolapStar.generateExprString(this.right, query);
         }
         public String toString(SqlQuery query) {
-            return RolapStar.generateExprString(left, query) + " = "
-                + RolapStar.generateExprString(right, query);
+            return new StringBuilder(RolapStar.generateExprString(left, query)).append(" = ")
+                .append(RolapStar.generateExprString(right, query)).toString();
         }
         public int hashCode() {
             return left.hashCode() ^ right.hashCode();
@@ -1987,7 +1988,7 @@ public class RolapStar {
             SqlQuery sqlQueuy = table.getSqlQuery();
             pw.print(prefix);
             pw.println("Condition:");
-            String subprefix = prefix + "  ";
+            String subprefix = new StringBuilder(prefix).append("  ").toString();
 
             pw.print(subprefix);
             pw.print("left=");

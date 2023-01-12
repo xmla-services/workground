@@ -862,10 +862,8 @@ public class RolapMemberBase
         } else {
             // TODO
             LOGGER.warn(
-                "RolapMember.setAllChildren: NOT RolapMember "
-                + "member.name=" + member.getName()
-                + ", member.class=" + member.getClass().getName()
-                + ", ordinal=" + ordinal);
+                "RolapMember.setAllChildren: NOT RolapMember member.name={}, member.class={}, ordinal={}",
+                member.getName(), member.getClass().getName(), ordinal);
             ordinal++;
         }
         return ordinal;

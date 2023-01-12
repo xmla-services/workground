@@ -212,9 +212,11 @@ public class Scanner {
             }
 
             LOGGER.error(
-                "Scanner returns #" + s.sym
-                + (name == null ? "" : ":" + name)
-                + (s.value == null ? "" : "(" + s.value.toString() + ")"));
+                new StringBuilder("Scanner returns #").append(s.sym)
+                .append((name == null ? "" : new StringBuilder(":").append(name).toString()))
+                .append(
+                    (s.value == null ? "" : new StringBuilder("(").append(s.value.toString()).append(")").toString())
+                ).toString());
         }
         return s;
     }
@@ -827,7 +829,7 @@ public class Scanner {
                 } else {
                     // everything else is an error
                     throw new RuntimeException(
-                        "Unexpected character '" + (char) nextChar + "'");
+                        new StringBuilder("Unexpected character '").append((char) nextChar).append("'").toString());
                 }
 
             case ' ':

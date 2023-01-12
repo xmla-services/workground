@@ -51,8 +51,8 @@ public abstract class AbstractRecorder implements MessageRecorder {
             break;
         default:
             logger.warn(
-                "Unknown message type enum \""
-                + msgType + "\" for message: " + buf.toString());
+                new StringBuilder("Unknown message type enum \"")
+                .append(msgType).append("\" for message: ").append(buf.toString()).toString());
         }
     }
 

@@ -95,7 +95,7 @@ public class RolapCubeLevel extends RolapLevel {
             RolapCubeDimension cubeDimension =
                 new RolapCubeDimension(
                     getCube(), dimension, xmlDimension,
-                    getDimension().getName() + "$Closure",
+                    new StringBuilder(getDimension().getName()).append("$Closure").toString(),
                     -1,
                     getCube().hierarchyList,
                     getDimension().isHighCardinality());
@@ -190,8 +190,8 @@ public class RolapCubeLevel extends RolapLevel {
             return exp;
         }
         throw new RuntimeException(
-            "conversion of Class " + exp.getClass()
-            + " unsupported at this time");
+            new StringBuilder("conversion of Class ").append(exp.getClass())
+            .append(" unsupported at this time").toString());
     }
 
     public void setStarKeyColumn(RolapStar.Column column) {

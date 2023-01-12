@@ -271,13 +271,13 @@ class DefaultRecognizer extends Recognizer {
                             levelMatches.indexOf(pair) - 1).left.getDepth())
                 {
                     msgRecorder.reportError(
-                        "The aggregate table "
-                        + aggTable.getName()
-                        + " contains the column "
-                        + pair.right.getName()
-                        + " which maps to the level "
-                        + pair.left.getUniqueName()
-                        + " but its parent level is not part of that aggregation.");
+                        new StringBuilder("The aggregate table ")
+                            .append(aggTable.getName())
+                            .append(" contains the column ")
+                            .append(pair.right.getName())
+                            .append(" which maps to the level ")
+                            .append(pair.left.getUniqueName())
+                            .append(" but its parent level is not part of that aggregation.").toString());
                 }
                 // Fail if the level is non-collapsed but its members
                 // are not unique.
@@ -285,13 +285,14 @@ class DefaultRecognizer extends Recognizer {
                     && !pair.left.isUnique())
                 {
                     msgRecorder.reportError(
-                        "The aggregate table "
-                        + aggTable.getName()
-                        + " contains the column "
-                        + pair.right.getName()
-                        + " which maps to the level "
-                        + pair.left.getUniqueName()
-                        + " but that level doesn't have unique members and this level is marked as non collapsed.");
+                        new StringBuilder("The aggregate table ")
+                            .append(aggTable.getName())
+                            .append(" contains the column ")
+                            .append(pair.right.getName())
+                            .append(" which maps to the level ")
+                            .append(pair.left.getUniqueName())
+                            .append(" but that level doesn't have unique members and this level is marked as non collapsed.")
+                            .toString());
                 }
             }
             if (msgRecorder.hasErrors()) {
@@ -331,8 +332,8 @@ class DefaultRecognizer extends Recognizer {
         String factCountColumnName = getFactCountColumnName();
 
         // check if there is a fact column for specific measure
-        String measureFactColumnName =  aggUsage.getColumn().getName()
-                + "_" + factCountColumnName;
+        String measureFactColumnName =  new StringBuilder(aggUsage.getColumn().getName())
+                .append("_").append(factCountColumnName).toString();
         for (Iterator<JdbcSchema.Table.Column.Usage> iter =
              aggTable.getColumnUsages(JdbcSchema.UsageType.MEASURE_FACT_COUNT);
              iter.hasNext();)

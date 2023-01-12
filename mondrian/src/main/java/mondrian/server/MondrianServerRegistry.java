@@ -61,7 +61,7 @@ public class MondrianServerRegistry {
             final LockBox.Entry entry = lockBox.get(instanceId);
             if (entry == null) {
                 throw Util.newError(
-                    "No server instance has id '" + instanceId + "'");
+                    new StringBuilder("No server instance has id '").append(instanceId).append("'").toString());
             }
             return (MondrianServer) entry.getValue();
         } else {

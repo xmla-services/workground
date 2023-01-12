@@ -92,9 +92,12 @@ class AddCalculatedMembersFunDef extends FunDefBase {
             } else if (hierarchy != member.getHierarchy()) {
                 throw FunUtil.newEvalException(
                     this,
-                    "Only members from the same hierarchy are allowed in the "
-                    + "AddCalculatedMembers set: " + hierarchy
-                    + " vs " + member.getHierarchy());
+                    new StringBuilder("Only members from the same hierarchy are allowed in the ")
+                        .append("AddCalculatedMembers set: ")
+                        .append(hierarchy)
+                        .append(" vs ")
+                        .append(member.getHierarchy())
+                        .toString());
             }
             levels.add(member.getLevel());
         }

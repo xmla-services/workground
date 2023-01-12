@@ -202,15 +202,15 @@ public class ParameterFunDef extends FunDefBase {
                 if (!ParameterFunDef.isConstant(typeArg)) {
                     throw FunUtil.newEvalException(
                         dummyFunDef,
-                        "Invalid parameter '" + parameterName
-                        + "'. Type must be a NUMERIC, STRING, or a dimension, "
-                        + "hierarchy or level");
+                        new StringBuilder("Invalid parameter '").append(parameterName)
+                        .append("'. Type must be a NUMERIC, STRING, or a dimension, ")
+                        .append("hierarchy or level").toString());
                 }
                 if (dimension == null) {
                     throw FunUtil.newEvalException(
                         dummyFunDef,
-                        "Invalid dimension for parameter '"
-                        + parameterName + "'");
+                        new StringBuilder("Invalid dimension for parameter '")
+                        .append(parameterName).append("'").toString());
                 }
                 type =
                     new MemberType(
@@ -238,8 +238,8 @@ public class ParameterFunDef extends FunDefBase {
                 // type-checked.
                 throw FunUtil.newEvalException(
                     dummyFunDef,
-                    "Invalid type for parameter '" + parameterName
-                    + "'; expecting NUMERIC, STRING or a hierarchy");
+                    new StringBuilder("Invalid type for parameter '").append(parameterName)
+                    .append("'; expecting NUMERIC, STRING or a hierarchy").toString());
             }
 
             // Default value
@@ -251,8 +251,8 @@ public class ParameterFunDef extends FunDefBase {
             if (!validator.canConvert(2, exp, category, conversionList)) {
                 throw FunUtil.newEvalException(
                     dummyFunDef,
-                    "Default value of parameter '" + parameterName
-                    + "' is inconsistent with its type, " + typeName);
+                    new StringBuilder("Default value of parameter '").append(parameterName)
+                    .append("' is inconsistent with its type, ").append(typeName).toString());
             }
             if (exp.getCategory() == Category.Set
                 && category == Category.Member)
@@ -272,9 +272,9 @@ public class ParameterFunDef extends FunDefBase {
                 {
                     throw FunUtil.newEvalException(
                         dummyFunDef,
-                        "Default value of parameter '" + parameterName
-                        + "' is not consistent with the parameter type '"
-                        + type);
+                        new StringBuilder("Default value of parameter '").append(parameterName)
+                        .append("' is not consistent with the parameter type '")
+                        .append(type).toString());
                 }
             }
 
@@ -288,8 +288,8 @@ public class ParameterFunDef extends FunDefBase {
                 } else {
                     throw FunUtil.newEvalException(
                         dummyFunDef,
-                        "Description of parameter '" + parameterName
-                        + "' must be a string constant");
+                        new StringBuilder("Description of parameter '").append(parameterName)
+                        .append("' must be a string constant").toString());
                 }
             }
 

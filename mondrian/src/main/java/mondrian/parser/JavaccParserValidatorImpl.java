@@ -102,13 +102,13 @@ public class JavaccParserValidatorImpl implements MdxParserValidator {
         Exception e;
         if (pe.getMessage().startsWith("Encountered ")) {
             e = new MondrianException(
-                "Syntax error at line "
-                + pe.currentToken.next.beginLine
-                + ", column "
-                + pe.currentToken.next.beginColumn
-                + ", token '"
-                + pe.currentToken.next.image
-                + "'");
+                new StringBuilder("Syntax error at line ")
+                .append(pe.currentToken.next.beginLine)
+                .append(", column ")
+                .append(pe.currentToken.next.beginColumn)
+                .append(", token '")
+                .append(pe.currentToken.next.image)
+                .append("'").toString());
         } else {
             e = pe;
         }

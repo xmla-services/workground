@@ -397,7 +397,7 @@ public class RolapSchemaReader
 
     public SchemaReader withoutAccessControl() {
         assert this.getClass() == RolapSchemaReader.class
-            : "Subclass " + getClass() + " must override";
+            : new StringBuilder("Subclass ").append(getClass()).append(" must override").toString();
         if (role == schema.getDefaultRole()) {
             return this;
         }
@@ -514,7 +514,7 @@ public class RolapSchemaReader
     {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(
-                "looking for child \"" + childName + "\" of " + parent);
+                new StringBuilder("looking for child \"").append(childName).append("\" of ").append(parent).toString());
         }
         assert !(parent instanceof RolapHierarchy.LimitedRollupMember);
         try {
@@ -550,10 +550,8 @@ public class RolapSchemaReader
             //
             // @see RolapCube#lookupChild()
             LOGGER.debug(
-                "NumberFormatException in lookupMemberChildByName "
-                + "for parent = \"" + parent
-                + "\", childName=\"" + childName
-                + "\", exception: " + e.getMessage());
+                "NumberFormatException in lookupMemberChildByName for parent = \"{}\", childName=\"{}\", exception: {}",
+                parent, childName, e.getMessage());
         }
         return null;
     }
@@ -810,7 +808,7 @@ public class RolapSchemaReader
             super(
                 name,
                 Literal.nullValue,
-                "System property '" + name + "'",
+                new StringBuilder("System property '").append(name).append("'").toString(),
                 new StringType());
             this.system = system;
             this.propertyDefinition =

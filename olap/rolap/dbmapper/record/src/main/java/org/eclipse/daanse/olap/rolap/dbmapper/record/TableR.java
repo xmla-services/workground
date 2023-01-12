@@ -101,7 +101,7 @@ public class TableR implements Table {
     public String toString() {
         return (schema == null) ?
             name :
-            schema + "." + name;
+            new StringBuilder(schema).append(".").append(name).toString();
     }
 
     public int hashCode() {
