@@ -39,7 +39,7 @@ public interface Dialect {
      *
      */
     boolean initialize(Connection connection);
-    
+
     /**
      * Converts an expression to upper case.
      *
@@ -51,7 +51,7 @@ public interface Dialect {
      * @return SQL syntax that converts <code>expr</code>
      * into upper case.
      */
-    String toUpper(String expr);
+    StringBuilder toUpper(CharSequence expr);
 
     /**
      * Generates a conditional statement in this dialect's syntax.
@@ -65,10 +65,10 @@ public interface Dialect {
      * @param elseExpr Expression if condition is false
      * @return Conditional expression
      */
-    String caseWhenElse(
-        String cond,
-        String thenExpr,
-        String elseExpr);
+    StringBuilder caseWhenElse(
+        CharSequence cond,
+        CharSequence thenExpr,
+        CharSequence elseExpr);
 
     /**
      * Encloses an identifier in quotation marks appropriate for this

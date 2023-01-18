@@ -1395,17 +1395,14 @@ public class SqlConstraintUtils {
       columnString = getExpression( exp, query );
     }
 
-    String constraint;
-
-    constraint = getColumnValueConstraint( query, columnValue, caseSensitive, columnString, datatype );
-
-    return constraint;
+    return getColumnValueConstraint( query, columnValue, caseSensitive, columnString, datatype );
   }
 
   private static String getColumnValueConstraint( SqlQuery query, String[] columnValues, boolean caseSensitive,
       String columnString, Datatype datatype ) {
-    String constraint;
-    List<String> values = new ArrayList<String>();
+      StringBuilder columnStringBuilder = new StringBuilder(columnString);
+      StringBuilder constraintStringBuilder;
+      List<CharSequence> values = new ArrayList();
     boolean containsNull = false;
 
     for ( String columnValue : columnValues ) {
@@ -1419,7 +1416,7 @@ public class SqlConstraintUtils {
         }
         final StringBuilder buf = new StringBuilder();
         query.getDialect().quote( buf, columnValue, datatype );
-        String value = buf.toString();
+        CharSequence value = buf;
         if ( caseSensitive && datatype == Datatype.String ) {
           // Some databases (like DB2) compare case-sensitive.
           // We convert
@@ -1427,7 +1424,7 @@ public class SqlConstraintUtils {
           // rather than in Java (e.g. 'FOO') in case the DBMS is
           // running a different locale.
           if ( !MondrianProperties.instance().CaseSensitive.get() ) {
-            value = query.getDialect().toUpper( value );
+            value = query.getDialect().toUpper( buf );
           }
         }
         values.add( value );
@@ -1435,39 +1432,38 @@ public class SqlConstraintUtils {
     }
 
     if ( caseSensitive && datatype == Datatype.String && !MondrianProperties.instance().CaseSensitive.get() ) {
-      columnString = query.getDialect().toUpper( columnString );
+        columnStringBuilder = query.getDialect().toUpper( columnStringBuilder );
     }
 
     if ( values.size() == 1 ) {
       if ( containsNull ) {
-        constraint = new StringBuilder(columnString).append(" IS ").append(RolapUtil.sqlNullLiteral).toString();
+          constraintStringBuilder = columnStringBuilder.append(" IS ").append(RolapUtil.sqlNullLiteral);
       } else {
-        constraint = new StringBuilder(columnString).append(" = ").append(values.get( 0 )).toString();
+          constraintStringBuilder = columnStringBuilder.append(" = ").append(values.get( 0 ));
       }
     } else {
-      StringBuilder builder = new StringBuilder();
-      builder.append( "( " );
-      if ( !values.isEmpty() ) {
-        builder.append( columnString ).append( " IN (" );
-        for ( int i = 0; i < values.size(); i++ ) {
-          String value = values.get( i );
-          builder.append( value );
-          if ( i < values.size() - 1 ) {
-            builder.append( "," );
-          }
-        }
-        builder.append( ")" );
-      }
-      if ( containsNull ) {
+        constraintStringBuilder = new StringBuilder();
+        constraintStringBuilder.append( "( " );
         if ( !values.isEmpty() ) {
-          builder.append( " OR " );
+            constraintStringBuilder.append( columnStringBuilder ).append( " IN (" );
+            for ( int i = 0; i < values.size(); i++ ) {
+                CharSequence value = values.get( i );
+                constraintStringBuilder.append( value );
+                if ( i < values.size() - 1 ) {
+                    constraintStringBuilder.append( "," );
+                }
+            }
+            constraintStringBuilder.append( ")" );
         }
-        builder.append( columnString ).append( " IS NULL " );
-      }
-      builder.append( ")" );
-      constraint = builder.toString();
+        if ( containsNull ) {
+            if ( !values.isEmpty() ) {
+                constraintStringBuilder.append( " OR " );
+            }
+            constraintStringBuilder.append( columnStringBuilder ).append( " IS NULL " );
+        }
+        constraintStringBuilder.append( ")" );
     }
-    return constraint;
+    return constraintStringBuilder.toString();
   }
 
   /**
