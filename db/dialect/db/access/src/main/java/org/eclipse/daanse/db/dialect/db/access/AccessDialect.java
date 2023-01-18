@@ -24,7 +24,7 @@ import org.osgi.service.component.annotations.ServiceScope;
 import aQute.bnd.annotation.spi.ServiceProvider;
 
 /**
- * Implementation of {@link mondrian.spi.Dialect} for the Microsoft Access
+ * Implementation of {@link Dialect} for the Microsoft Access
  * database (also called the JET Engine).
  *
  * @author jhyde
@@ -41,15 +41,18 @@ public class AccessDialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
-    public String toUpper(String expr) {
-        return new StringBuilder("UCASE(").append(expr).append(")").toString();
+    @Override
+    public StringBuilder toUpper(CharSequence expr) {
+        return new StringBuilder("UCASE(").append(expr).append(")");
     }
 
-    public String caseWhenElse(String cond, String thenExpr, String elseExpr) {
+    @Override
+    public StringBuilder caseWhenElse(CharSequence cond, CharSequence thenExpr, CharSequence elseExpr) {
         return new StringBuilder("IIF(").append(cond)
-            .append(",").append(thenExpr).append(",").append(elseExpr).append(")").toString();
+            .append(",").append(thenExpr).append(",").append(elseExpr).append(")");
     }
 
+    @Override
     protected void quoteDateLiteral(StringBuilder buf, String value, Date date) {
         // Access accepts #01/23/2008# but not SQL:2003 format.
         buf.append("#");
@@ -84,14 +87,17 @@ public class AccessDialect extends JdbcDialectImpl {
         }
     }
 
+    @Override
     public boolean requiresUnionOrderByExprToBeInSelectClause() {
         return true;
     }
 
+    @Override
     public boolean allowsCountDistinct() {
         return false;
     }
 
+    @Override
     public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         // Fall back to using the FoodMart 'days' table, because
         // Access SQL has no way to generate values not from a table.

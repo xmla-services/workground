@@ -298,15 +298,15 @@ public abstract class JdbcDialectImpl implements Dialect {
     }
 
     @Override
-    public String toUpper(String expr) {
-        return new StringBuilder("UPPER(").append(expr).append(")").toString();
+    public StringBuilder toUpper(CharSequence expr) {
+        return new StringBuilder("UPPER(").append(expr).append(")");
     }
 
     @Override
-    public String caseWhenElse(String cond, String thenExpr, String elseExpr) {
+    public StringBuilder caseWhenElse(CharSequence cond, CharSequence thenExpr, CharSequence elseExpr) {
         return new StringBuilder("CASE WHEN ").append(cond)
             .append(" THEN ").append(thenExpr).append(" ELSE ")
-            .append(elseExpr).append(" END").toString();
+            .append(elseExpr).append(" END");
     }
 
     @Override

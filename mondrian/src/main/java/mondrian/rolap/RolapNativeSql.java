@@ -619,7 +619,7 @@ public class RolapNativeSql {
             if (cond == null || val1 == null || val2 == null) {
                 return null;
             }
-            return sqlQuery.getDialect().caseWhenElse(cond, val1, val2);
+            return sqlQuery.getDialect().caseWhenElse(cond, val1, val2).toString();
         }
     }
 
