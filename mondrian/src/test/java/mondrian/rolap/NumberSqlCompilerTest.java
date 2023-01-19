@@ -89,7 +89,7 @@ public class NumberSqlCompilerTest {
 
     private void checkAcceptsString(String value) {
         Exp exp = Literal.createString(value);
-        assertNotNull(value, compiler.compile(exp));
+        assertNotNull(value, compiler.compile(exp).toString());
     }
 
 

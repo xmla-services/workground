@@ -1118,8 +1118,7 @@ public class AggStar {
                 String expr = super.generateExprString(query);
                 RolapAggregator rollup = getRollupAggregator();
 
-                String s = rollup.getExpression(expr);
-                return s;
+                return rollup.getExpression(expr).toString();
             }
 
             private RolapAggregator getRollupAggregator() {

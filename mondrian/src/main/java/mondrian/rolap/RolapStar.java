@@ -796,7 +796,7 @@ public class RolapStar {
             String columnExpr = column.generateExprString(query);
             if (column instanceof Measure) {
                 Measure measure = (Measure) column;
-                columnExpr = measure.getAggregator().getExpression(columnExpr);
+                columnExpr = measure.getAggregator().getExpression(columnExpr).toString();
             }
             final String columnName = columnNameList.get(k);
             String alias = query.addSelect(columnExpr, null, columnName);

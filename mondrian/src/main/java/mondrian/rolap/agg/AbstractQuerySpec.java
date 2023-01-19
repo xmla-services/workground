@@ -82,7 +82,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
             measure.getExpression() == null
                 ? "*"
                 : measure.generateExprString(sqlQuery);
-        String exprOuter = measure.getAggregator().getExpression(exprInner);
+        String exprOuter = measure.getAggregator().getExpression(exprInner).toString();
         sqlQuery.addSelect(
             exprOuter,
             measure.getInternalType(),
@@ -352,7 +352,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
             }
             outerSqlQuery.addSelect(
                 measure.getAggregator().getNonDistinctAggregator()
-                    .getExpression(dialect.quoteIdentifier(alias)),
+                    .getExpression(dialect.quoteIdentifier(alias)).toString(),
                 measure.getInternalType());
         }
         outerSqlQuery.addFrom(innerSqlQuery, "dummyname", true);

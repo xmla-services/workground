@@ -20,7 +20,6 @@ import mondrian.olap.Aggregator;
 import mondrian.olap.EnumeratedValues;
 import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianException;
-import mondrian.olap.fun.AggregateFunDef;
 import mondrian.olap.fun.FunUtil;
 
 /**
@@ -204,8 +203,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       throw new UnsupportedOperationException();
     }
 
-    public String getExpression( String operand ) {
-      return new StringBuilder("count(distinct ").append(operand).append(")").toString();
+    public StringBuilder getExpression( String operand ) {
+      return new StringBuilder("count(distinct ").append(operand).append(")");
     }
 
     @Override
@@ -263,14 +262,14 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       super( "AvgFromSum", factCountExpr );
     }
 
-    public String getExpression( String operand ) {
+    public StringBuilder getExpression( String operand ) {
       StringBuilder buf = new StringBuilder( 64 );
       buf.append( "sum(" );
       buf.append( operand );
       buf.append( ") / sum(" );
       buf.append( factCountExpr );
       buf.append( ')' );
-      return buf.toString();
+      return buf;
     }
 
     @Override
@@ -303,7 +302,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       super( "AvgFromAvg", factCountExpr );
     }
 
-    public String getExpression( String operand ) {
+    public StringBuilder getExpression( String operand ) {
       StringBuilder buf = new StringBuilder( 64 );
       buf.append( "sum(" );
       buf.append( operand );
@@ -312,7 +311,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       buf.append( ") / sum(" );
       buf.append( factCountExpr );
       buf.append( ')' );
-      return buf.toString();
+      return buf;
     }
 
     @Override
@@ -342,14 +341,14 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       super( "SumFromAvg", factCountExpr );
     }
 
-    public String getExpression( String operand ) {
+    public StringBuilder getExpression( String operand ) {
       StringBuilder buf = new StringBuilder( 64 );
       buf.append( "sum(" );
       buf.append( operand );
       buf.append( " * " );
       buf.append( factCountExpr );
       buf.append( ')' );
-      return buf.toString();
+      return buf;
     }
 
     @Override
@@ -379,7 +378,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
    * Returns the expression to apply this aggregator to an operand. For example, <code>getExpression("emp.sal")</code>
    * returns <code>"sum(emp.sal)"</code>.
    */
-  public String getExpression( String operand ) {
+  public StringBuilder getExpression( String operand ) {
     StringBuilder buf = new StringBuilder( 64 );
     buf.append( name );
     buf.append( '(' );
@@ -388,7 +387,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
     }
     buf.append( operand );
     buf.append( ')' );
-    return buf.toString();
+    return buf;
   }
 
   /**
