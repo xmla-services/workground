@@ -98,7 +98,7 @@ public class RolapNativeSql {
          * @param exp Expression
          * @return SQL, or null if cannot be converted into SQL
          */
-        String compile(Exp exp);
+        StringBuilder compile(Exp exp);
     }
 
     /**
@@ -112,9 +112,9 @@ public class RolapNativeSql {
             compilers.add(compiler);
         }
 
-        public String compile(Exp exp) {
+        public StringBuilder compile(Exp exp) {
             for (SqlCompiler compiler : compilers) {
-                String s = compiler.compile(exp);
+                StringBuilder s = compiler.compile(exp);
                 if (s != null) {
                     return s;
                 }
@@ -131,7 +131,7 @@ public class RolapNativeSql {
      * Compiles a numeric literal to SQL.
      */
     class NumberSqlCompiler implements SqlCompiler {
-        public String compile(Exp exp) {
+        public StringBuilder compile(Exp exp) {
             if (!(exp instanceof Literal)) {
                 return null;
             }
@@ -139,7 +139,7 @@ public class RolapNativeSql {
                 return null;
             }
             Literal literal = (Literal) exp;
-            String expr = String.valueOf(literal.getValue());
+            StringBuilder expr = new StringBuilder(String.valueOf(literal.getValue()));
             if (!DECIMAL.matcher(expr).matches()) {
                 throw new MondrianEvaluationException(
                     "Expected to get decimal, but got " + expr);
@@ -148,7 +148,7 @@ public class RolapNativeSql {
             if (dialect.getDatabaseProduct().getFamily()
                 == DatabaseProduct.DB2)
             {
-                expr = new StringBuilder("FLOAT(").append(expr).append(")").toString();
+                expr = new StringBuilder("FLOAT(").append(expr).append(")");
             }
             return expr;
         }
@@ -173,7 +173,7 @@ public class RolapNativeSql {
      */
     class StoredMeasureSqlCompiler extends MemberSqlCompiler {
 
-        public String compile(Exp exp) {
+        public StringBuilder compile(Exp exp) {
             exp = unwind(exp);
             if (!(exp instanceof MemberExpr)) {
                 return null;
@@ -219,11 +219,11 @@ public class RolapNativeSql {
                     ? "*" : getExpression(defExp, sqlQuery);
             }
 
-            String expr = aggregator.getExpression(exprInner);
+            StringBuilder expr = aggregator.getExpression(exprInner);
             if (dialect.getDatabaseProduct().getFamily()
                 == DatabaseProduct.DB2)
             {
-                expr = new StringBuilder("FLOAT(").append(expr).append(")").toString();
+                expr = new StringBuilder("FLOAT(").append(expr).append(")");
             }
             return expr;
         }
@@ -244,7 +244,7 @@ public class RolapNativeSql {
             super(Category.Logical, "MATCHES", 2);
         }
 
-        public String compile(Exp exp) {
+        public StringBuilder compile(Exp exp) {
             if (!match(exp)) {
                 return null;
             }
@@ -364,11 +364,11 @@ public class RolapNativeSql {
                     sourceExp = sqlQuery.getAlias(sourceExp);
                 }
                 return
-                    dialect.generateRegularExpression(
+                    new StringBuilder(dialect.generateRegularExpression(
                         sourceExp,
                         String.valueOf(
                             evaluator.getCachedResult(
-                                new ExpCacheDescriptor(arg1, evaluator))));
+                                new ExpCacheDescriptor(arg1, evaluator)))));
             } else {
                 return null;
             }
@@ -388,7 +388,7 @@ public class RolapNativeSql {
             this.compiler = argumentCompiler;
         }
 
-        public String compile(Exp exp) {
+        public StringBuilder compile(Exp exp) {
             exp = unwind(exp);
             if (!(exp instanceof MemberExpr)) {
                 return null;
@@ -450,12 +450,12 @@ public class RolapNativeSql {
          * @return array of expressions or null if either exp does not match or
          * any argument could not be compiled.
          */
-        protected String[] compileArgs(Exp exp, SqlCompiler compiler) {
+        protected StringBuilder[] compileArgs(Exp exp, SqlCompiler compiler) {
             if (!match(exp)) {
                 return null;
             }
             Exp[] args = ((FunCall) exp).getArgs();
-            String[] sqls = new String[args.length];
+            StringBuilder[] sqls = new StringBuilder[args.length];
             for (int i = 0; i < args.length; i++) {
                 sqls[i] = compiler.compile(args[i]);
                 if (sqls[i] == null) {
@@ -482,8 +482,8 @@ public class RolapNativeSql {
             this.compiler = argumentCompiler;
         }
 
-        public String compile(Exp exp) {
-            String[] args = compileArgs(exp, compiler);
+        public StringBuilder compile(Exp exp) {
+            StringBuilder[] args = compileArgs(exp, compiler);
             if (args == null) {
                 return null;
             }
@@ -497,7 +497,7 @@ public class RolapNativeSql {
                 buf.append(args[i]);
             }
             buf.append(") ");
-            return buf.toString();
+            return buf;
         }
 
         public String toString() {
@@ -554,12 +554,12 @@ public class RolapNativeSql {
             this.compiler = argumentCompiler;
         }
 
-        public String compile(Exp exp) {
-            String[] args = compileArgs(exp, compiler);
+        public StringBuilder compile(Exp exp) {
+            StringBuilder[] args = compileArgs(exp, compiler);
             if (args == null) {
                 return null;
             }
-            return new StringBuilder("(").append(args[0]).append(" ").append(sql).append(" ").append(args[1]).append(")").toString();
+            return new StringBuilder("(").append(args[0]).append(" ").append(sql).append(" ").append(args[1]).append(")");
         }
 
         public String toString() {
@@ -582,12 +582,12 @@ public class RolapNativeSql {
             this.compiler = argumentCompiler;
         }
 
-        public String compile(Exp exp) {
-            String[] args = compileArgs(exp, compiler);
+        public StringBuilder compile(Exp exp) {
+            StringBuilder[] args = compileArgs(exp, compiler);
             if (args == null) {
                 return null;
             }
-            return new StringBuilder("(").append(args[0]).append(" is null").append(")").toString();
+            return new StringBuilder("(").append(args[0]).append(" is null").append(")");
         }
 
         public String toString() {
@@ -608,18 +608,18 @@ public class RolapNativeSql {
             this.valueCompiler = valueCompiler;
         }
 
-        public String compile(Exp exp) {
+        public StringBuilder compile(Exp exp) {
             if (!match(exp)) {
                 return null;
             }
             Exp[] args = ((FunCall) exp).getArgs();
-            String cond = booleanCompiler.compile(args[0]);
-            String val1 = valueCompiler.compile(args[1]);
-            String val2 = valueCompiler.compile(args[2]);
+            StringBuilder cond = booleanCompiler.compile(args[0]);
+            StringBuilder val1 = valueCompiler.compile(args[1]);
+            StringBuilder val2 = valueCompiler.compile(args[2]);
             if (cond == null || val1 == null || val2 == null) {
                 return null;
             }
-            return sqlQuery.getDialect().caseWhenElse(cond, val1, val2).toString();
+            return sqlQuery.getDialect().caseWhenElse(cond, val1, val2);
         }
     }
 
@@ -709,11 +709,13 @@ public class RolapNativeSql {
      * order by clause.
      */
     public String generateTopCountOrderBy(Exp exp) {
-        return numericCompiler.compile(exp);
+        StringBuilder sb = numericCompiler.compile(exp);
+        return sb == null ? null : sb.toString();
     }
 
     public String generateFilterCondition(Exp exp) {
-        return booleanCompiler.compile(exp);
+    	StringBuilder sb = booleanCompiler.compile(exp);
+        return sb == null ? null : sb.toString();
     }
 
     public RolapStoredMeasure getStoredMeasure() {
