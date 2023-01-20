@@ -794,7 +794,7 @@ public class SqlQuery {
             Join join = (Join) root;
             flatten(
                 relations, left(join), join.leftKey(), getLeftAlias(join),
-                join.rightKey(), getLeftAlias(join));
+                join.rightKey(), getRightAlias(join));
             flatten(
                 relations, right(join), leftKey, leftAlias, rightKey,
                 rightAlias);
