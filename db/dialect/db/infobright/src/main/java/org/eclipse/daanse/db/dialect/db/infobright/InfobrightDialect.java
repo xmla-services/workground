@@ -60,30 +60,34 @@ public class InfobrightDialect extends MySqlDialect {
     }
 
     @Override
-    public String generateOrderItem(String expr, boolean nullable, boolean ascending, boolean collateNullsLast) {
+    public StringBuilder generateOrderItem(CharSequence expr, boolean nullable, boolean ascending, boolean collateNullsLast) {
         // Like MySQL, Infobright collates NULL values as negative-infinity
         // (first in ASC, last in DESC). But we can't generate ISNULL to
         // correct the NULL ordering, as we do for MySQL, because Infobright
         // does not support this function.
         if (ascending) {
-            return new StringBuilder(expr).append(" ASC").toString();
+            return new StringBuilder(expr).append(" ASC");
         } else {
-            return new StringBuilder(expr).append(" DESC").toString();
+            return new StringBuilder(expr).append(" DESC");
         }
     }
 
+    @Override
     public boolean supportsGroupByExpressions() {
         return false;
     }
 
+    @Override
     public boolean requiresGroupByAlias() {
         return true;
     }
 
+    @Override
     public boolean allowsOrderByAlias() {
         return false;
     }
 
+    @Override
     public boolean requiresOrderByAlias() {
         // Actually, Infobright doesn't ALLOW aliases to be used in the ORDER BY
         // clause, let alone REQUIRE them. Infobright doesn't allow expressions
@@ -91,6 +95,7 @@ public class InfobrightDialect extends MySqlDialect {
         return true;
     }
 
+    @Override
     public boolean supportsMultiValueInExpr() {
         // Infobright supports multi-value IN by falling through to MySQL,
         // which is very slow (see for example

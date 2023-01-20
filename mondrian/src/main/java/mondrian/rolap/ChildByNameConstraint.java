@@ -70,7 +70,7 @@ class ChildByNameConstraint extends DefaultMemberChildrenConstraint {
         super.addLevelConstraint(query, baseCube, aggStar, level);
         query.addWhere(
             SqlConstraintUtils.constrainLevel(
-                level, query, baseCube, aggStar, childNames, true));
+                level, query, baseCube, aggStar, childNames, true).toString());
     }
 
     public String toString() {

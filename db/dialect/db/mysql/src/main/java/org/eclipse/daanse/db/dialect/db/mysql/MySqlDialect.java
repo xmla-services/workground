@@ -232,20 +232,20 @@ public class MySqlDialect extends JdbcDialectImpl {
     }
 
     @Override
-    protected String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
+    protected StringBuilder generateOrderByNulls(CharSequence expr, boolean ascending, boolean collateNullsLast) {
         // In MYSQL, Null values are worth negative infinity.
         if (collateNullsLast) {
             if (ascending) {
                 return new StringBuilder("ISNULL(").append(expr)
-                    .append(") ASC, ").append(expr).append(" ASC").toString();
+                    .append(") ASC, ").append(expr).append(" ASC");
             } else {
-                return new StringBuilder(expr).append(" DESC").toString();
+                return new StringBuilder(expr).append(" DESC");
             }
         } else {
             if (ascending) {
-                return new StringBuilder(expr).append(" ASC").toString();
+                return new StringBuilder(expr).append(" ASC");
             } else {
-                return new StringBuilder("ISNULL(").append(expr).append(") DESC, ").append(expr).append(" DESC").toString();
+                return new StringBuilder("ISNULL(").append(expr).append(") DESC, ").append(expr).append(" DESC");
             }
         }
     }

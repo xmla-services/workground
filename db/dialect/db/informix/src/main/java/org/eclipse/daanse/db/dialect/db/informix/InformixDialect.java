@@ -37,15 +37,14 @@ public class InformixDialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
-
-
+    @Override
     public boolean allowsFromQuery() {
         return false;
     }
 
     @Override
-    public String generateOrderByNulls(
-        String expr,
+    public StringBuilder generateOrderByNulls(
+        CharSequence expr,
         boolean ascending,
         boolean collateNullsLast)
     {

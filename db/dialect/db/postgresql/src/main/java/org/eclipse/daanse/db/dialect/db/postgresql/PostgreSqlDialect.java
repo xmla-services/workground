@@ -56,7 +56,7 @@ public class PostgreSqlDialect extends JdbcDialectImpl {
     }
 
     @Override
-    protected String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
+    protected StringBuilder generateOrderByNulls(CharSequence expr, boolean ascending, boolean collateNullsLast) {
         // Support for "ORDER BY ... NULLS LAST" was introduced in Postgres 8.3.
         if (productVersion.compareTo("8.3") >= 0) {
             return generateOrderByNullsAnsi(expr, ascending, collateNullsLast);
@@ -65,6 +65,7 @@ public class PostgreSqlDialect extends JdbcDialectImpl {
         }
     }
 
+    @Override
     public DatabaseProduct getDatabaseProduct() {
         return DatabaseProduct.POSTGRESQL;
     }

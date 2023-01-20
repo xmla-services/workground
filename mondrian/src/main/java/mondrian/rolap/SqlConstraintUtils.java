@@ -1321,7 +1321,7 @@ public class SqlConstraintUtils {
     }
   }
 
-  public static String constrainLevel( RolapLevel level, SqlQuery query, RolapCube baseCube, AggStar aggStar,
+  public static StringBuilder constrainLevel( RolapLevel level, SqlQuery query, RolapCube baseCube, AggStar aggStar,
       String columnValue, boolean caseSensitive ) {
     return constrainLevel( level, query, baseCube, aggStar, new String[] { columnValue }, caseSensitive );
   }
@@ -1344,7 +1344,7 @@ public class SqlConstraintUtils {
    *
    * @return generated string corresponding to the expression
    */
-  public static String constrainLevel( RolapLevel level, SqlQuery query, RolapCube baseCube, AggStar aggStar,
+  public static StringBuilder constrainLevel( RolapLevel level, SqlQuery query, RolapCube baseCube, AggStar aggStar,
       String[] columnValue, boolean caseSensitive ) {
     // this method can be called within the context of shared members,
     // outside of the normal rolap star, therefore we need to
@@ -1374,7 +1374,7 @@ public class SqlConstraintUtils {
 
         if ( aggColumn == null ) {
           LOG.warn( mres.AggTableNoConstraintGenerated.str( aggStar.getFactTable().getName() ) );
-          return "";
+          return new StringBuilder();
         }
 
         columnString = aggColumn.generateExprString( query );
@@ -1398,7 +1398,7 @@ public class SqlConstraintUtils {
     return getColumnValueConstraint( query, columnValue, caseSensitive, columnString, datatype );
   }
 
-  private static String getColumnValueConstraint( SqlQuery query, String[] columnValues, boolean caseSensitive,
+  private static StringBuilder getColumnValueConstraint( SqlQuery query, String[] columnValues, boolean caseSensitive,
       String columnString, Datatype datatype ) {
       StringBuilder columnStringBuilder = new StringBuilder(columnString);
       StringBuilder constraintStringBuilder;
@@ -1463,7 +1463,7 @@ public class SqlConstraintUtils {
         }
         constraintStringBuilder.append( ")" );
     }
-    return constraintStringBuilder.toString();
+    return constraintStringBuilder;
   }
 
   /**

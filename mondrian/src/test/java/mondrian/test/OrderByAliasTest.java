@@ -59,7 +59,7 @@ public class OrderByAliasTest extends BatchTestCase {
     {
       return; // For MySQL 5.7+ only!
     }
-    final String colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.createConnection())
         .quoteIdentifier("promotion_name");
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
@@ -100,7 +100,7 @@ public class OrderByAliasTest extends BatchTestCase {
     {
       return; // For MySQL 5.7+ only!
     }
-    final String colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.createConnection())
         .quoteIdentifier("promotion_name");
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
@@ -144,7 +144,7 @@ public class OrderByAliasTest extends BatchTestCase {
     {
       return; // For MySQL 5.7+ only!
     }
-    final String colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.createConnection())
         .quoteIdentifier("promotion_name");
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
@@ -188,7 +188,7 @@ public class OrderByAliasTest extends BatchTestCase {
     {
       return; // For MySQL 5.7+ only!
     }
-    final String colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.createConnection())
         .quoteIdentifier("promotion_name");
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
@@ -232,7 +232,7 @@ public class OrderByAliasTest extends BatchTestCase {
     {
       return; // For MySQL 5.7+ only!
     }
-    final String colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.createConnection())
         .quoteIdentifier("supervisor_id");
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "HR",
@@ -299,7 +299,7 @@ public class OrderByAliasTest extends BatchTestCase {
     {
       return; // For MySQL 5.7+ only!
     }
-    final String colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.createConnection())
         .quoteIdentifier("promotion_name");
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
@@ -341,7 +341,7 @@ public class OrderByAliasTest extends BatchTestCase {
     {
       return; // For MySQL 5.7+ only!
     }
-    final String colName = getDialect(context.createConnection())
+    final StringBuilder colName = getDialect(context.createConnection())
         .quoteIdentifier("promotion_name");
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",

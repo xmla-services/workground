@@ -993,7 +993,7 @@ public class MondrianFoodMartLoaderX {
 
         for (String tableName : tableMetadataToLoad.keySet()) {
             insertSb = insertSchema(
-                insertSb, quoteId(tableName), false, false);
+                insertSb, quoteId(tableName).toString(), false, false);
         }
 
         LOGGER.debug(insertSb.toString());
@@ -1011,7 +1011,7 @@ public class MondrianFoodMartLoaderX {
         if (pos < 0) {
             if (mandatory) {
                 throw new RuntimeException(
-                    "insert.sql error: No insert clause in " + sb.toString());
+                    new StringBuilder("insert.sql error: No insert clause in ").append(sb).toString());
             } else {
                 return sb;
             }
@@ -2887,14 +2887,14 @@ public class MondrianFoodMartLoaderX {
     /**
      * Quote the given SQL identifier suitable for the output DBMS.
      */
-    private String quoteId(String name) {
+    private StringBuilder quoteId(String name) {
         return quoteId(dialect, name);
     }
 
     /**
      * Quote the given SQL identifier suitable for the given DBMS type.
      */
-    private String quoteId(Dialect dialect, String name) {
+    private StringBuilder quoteId(Dialect dialect, String name) {
         return dialect.quoteIdentifier(name);
     }
 
@@ -3294,7 +3294,7 @@ public class MondrianFoodMartLoaderX {
      *
      * Specific databases will represent this with their own particular physical
      * type, for example "TINYINT(1)", "BOOLEAN" or "BIT";
-     * see {@link #toPhysical(mondrian.spi.Dialect)}.
+     * see {@link #toPhysical(Dialect)}.
      */
     private static class Type {
         /**

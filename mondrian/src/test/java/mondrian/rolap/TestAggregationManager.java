@@ -1720,7 +1720,7 @@ public class TestAggregationManager extends BatchTestCase {
             + "from [Sales] "
             + "where {[Measures].[Unit Sales]}";
         // Provoke an error in the key resolution to prove it uses it.
-        final String colName =
+        final StringBuilder colName =
             getDialect(connection)
                 .quoteIdentifier("promotion_name");
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(

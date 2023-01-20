@@ -71,11 +71,11 @@ public class GreenplumDialect extends PostgreSqlDialect {
     }
 
     @Override
-    public String generateCountExpression(String exp) {
+    public StringBuilder generateCountExpression(String exp) {
         return caseWhenElse(
             new StringBuilder(exp).append(" ISNULL"),
             "'0'",
-            new StringBuilder("TEXT(").append(exp).append(")")).toString();
+            new StringBuilder("TEXT(").append(exp).append(")"));
     }
 
     @Override

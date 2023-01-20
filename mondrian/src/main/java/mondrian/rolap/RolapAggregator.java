@@ -203,7 +203,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       throw new UnsupportedOperationException();
     }
 
-    public StringBuilder getExpression( String operand ) {
+    @Override
+    public StringBuilder getExpression( CharSequence operand ) {
       return new StringBuilder("count(distinct ").append(operand).append(")");
     }
 
@@ -262,7 +263,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       super( "AvgFromSum", factCountExpr );
     }
 
-    public StringBuilder getExpression( String operand ) {
+    @Override
+    public StringBuilder getExpression( CharSequence operand ) {
       StringBuilder buf = new StringBuilder( 64 );
       buf.append( "sum(" );
       buf.append( operand );
@@ -302,7 +304,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       super( "AvgFromAvg", factCountExpr );
     }
 
-    public StringBuilder getExpression( String operand ) {
+    @Override
+    public StringBuilder getExpression( CharSequence operand ) {
       StringBuilder buf = new StringBuilder( 64 );
       buf.append( "sum(" );
       buf.append( operand );
@@ -341,7 +344,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       super( "SumFromAvg", factCountExpr );
     }
 
-    public StringBuilder getExpression( String operand ) {
+    @Override
+    public StringBuilder getExpression( CharSequence operand ) {
       StringBuilder buf = new StringBuilder( 64 );
       buf.append( "sum(" );
       buf.append( operand );
@@ -378,7 +382,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
    * Returns the expression to apply this aggregator to an operand. For example, <code>getExpression("emp.sal")</code>
    * returns <code>"sum(emp.sal)"</code>.
    */
-  public StringBuilder getExpression( String operand ) {
+  public StringBuilder getExpression( CharSequence operand ) {
     StringBuilder buf = new StringBuilder( 64 );
     buf.append( name );
     buf.append( '(' );
@@ -400,6 +404,7 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
   /**
    * Returns the aggregator used to roll up. By default, aggregators roll up themselves.
    */
+  @Override
   public Aggregator getRollup() {
     return this;
   }
@@ -407,10 +412,12 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
   /**
    * By default, fast rollup is not supported for all classes.
    */
+  @Override
   public boolean supportsFastAggregates( Datatype dataType ) {
     return false;
   }
 
+  @Override
   public Object aggregate( List<Object> rawData, Datatype datatype ) {
     throw new UnsupportedOperationException();
   }

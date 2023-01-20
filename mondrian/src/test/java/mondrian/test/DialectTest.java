@@ -952,11 +952,11 @@ public class DialectTest {
     checkForceNullCollation(context, false, false );
   }
 
-  private String dialectizeTableName(TestingContext context,  String name ) {
+  private StringBuilder dialectizeTableName(TestingContext context,  StringBuilder name ) {
     // GBQ needs the schema name, not others.
     switch ( getDialect(context).getDatabaseProduct() ) {
       case GOOGLEBIGQUERY:
-        return dialect.quoteIdentifier( "foodmart" ) + "." + name;
+        return new StringBuilder(dialect.quoteIdentifier( "foodmart" )).append(".").append(name);
       default:
         return name;
     }

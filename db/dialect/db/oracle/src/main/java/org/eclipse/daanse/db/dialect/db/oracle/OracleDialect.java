@@ -58,7 +58,7 @@ public class OracleDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
+    public StringBuilder generateOrderByNulls(CharSequence expr, boolean ascending, boolean collateNullsLast) {
         return generateOrderByNullsAnsi(expr, ascending, collateNullsLast);
     }
 

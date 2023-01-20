@@ -82,7 +82,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
             measure.getExpression() == null
                 ? "*"
                 : measure.generateExprString(sqlQuery);
-        String exprOuter = measure.getAggregator().getExpression(exprInner).toString();
+        StringBuilder exprOuter = measure.getAggregator().getExpression(exprInner);
         sqlQuery.addSelect(
             exprOuter,
             measure.getInternalType(),
@@ -322,13 +322,13 @@ public abstract class AbstractQuerySpec implements QuerySpec {
             if (databaseProduct == DatabaseProduct.GREENPLUM) {
                 innerSqlQuery.addGroupBy(expr, alias);
             }
-            final String quotedAlias = dialect.quoteIdentifier(alias);
-            outerSqlQuery.addSelectGroupBy(quotedAlias, null);
+            final StringBuilder quotedAlias = dialect.quoteIdentifier(alias);
+            outerSqlQuery.addSelectGroupBy(quotedAlias.toString(), null);
             // Add this alias to the map of grouping sets aliases
             groupingSetsAliases.put(
                 expr,
                 dialect.quoteIdentifier(
-                    "dummyname." + alias));
+                    new StringBuilder("dummyname.").append(alias).toString()).toString());
         }
 
         // add predicates not associated with columns
@@ -352,7 +352,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
             }
             outerSqlQuery.addSelect(
                 measure.getAggregator().getNonDistinctAggregator()
-                    .getExpression(dialect.quoteIdentifier(alias)).toString(),
+                    .getExpression(dialect.quoteIdentifier(alias)),
                 measure.getInternalType());
         }
         outerSqlQuery.addFrom(innerSqlQuery, "dummyname", true);

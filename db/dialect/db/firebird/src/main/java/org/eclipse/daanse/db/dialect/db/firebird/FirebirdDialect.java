@@ -34,12 +34,13 @@ public class FirebirdDialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
+    @Override
     public boolean allowsAs() {
         return false;
     }
 
     @Override
-    public String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
+    public StringBuilder generateOrderByNulls(CharSequence expr, boolean ascending, boolean collateNullsLast) {
         return generateOrderByNullsAnsi(expr, ascending, collateNullsLast);
     }
 }

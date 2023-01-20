@@ -284,7 +284,7 @@ class SqlMemberSource
             }
             if (mustCount[0]) {
                 for (String colDef : columnList) {
-                    final String exp =
+                    final StringBuilder exp =
                         sqlQuery.getDialect().generateCountExpression(colDef);
                     sqlQuery.addSelect(exp, null);
                     sqlQuery.addOrderBy(exp, true, false, true);

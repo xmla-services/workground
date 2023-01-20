@@ -139,18 +139,18 @@ public class RolapNativeSql {
                 return null;
             }
             Literal literal = (Literal) exp;
-            StringBuilder expr = new StringBuilder(String.valueOf(literal.getValue()));
+            String expr = String.valueOf(literal.getValue());
             if (!DECIMAL.matcher(expr).matches()) {
                 throw new MondrianEvaluationException(
-                    "Expected to get decimal, but got " + expr);
+                    new StringBuilder("Expected to get decimal, but got ").append(expr).toString());
             }
-
+            StringBuilder result = new StringBuilder(expr);
             if (dialect.getDatabaseProduct().getFamily()
                 == DatabaseProduct.DB2)
             {
-                expr = new StringBuilder("FLOAT(").append(expr).append(")");
+                result = new StringBuilder("FLOAT(").append(expr).append(")");
             }
-            return expr;
+            return result;
         }
 
         public String toString() {
@@ -708,14 +708,12 @@ public class RolapNativeSql {
      * TopCount. The returned expr will be added to the select list and to the
      * order by clause.
      */
-    public String generateTopCountOrderBy(Exp exp) {
-        StringBuilder sb = numericCompiler.compile(exp);
-        return sb == null ? null : sb.toString();
+    public StringBuilder generateTopCountOrderBy(Exp exp) {
+        return numericCompiler.compile(exp);
     }
 
-    public String generateFilterCondition(Exp exp) {
-    	StringBuilder sb = booleanCompiler.compile(exp);
-        return sb == null ? null : sb.toString();
+    public StringBuilder generateFilterCondition(Exp exp) {
+    	return booleanCompiler.compile(exp);
     }
 
     public RolapStoredMeasure getStoredMeasure() {
