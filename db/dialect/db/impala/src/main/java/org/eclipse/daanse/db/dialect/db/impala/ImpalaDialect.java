@@ -61,17 +61,17 @@ public class ImpalaDialect extends HiveDialect {
     }
 
     @Override
-    protected String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
+    protected StringBuilder generateOrderByNulls(CharSequence expr, boolean ascending, boolean collateNullsLast) {
         StringBuilder sb = new StringBuilder(expr);
         if (ascending) {
-            return sb.append(" ASC").toString();
+            return sb.append(" ASC");
         } else {
-            return sb.append(" DESC").toString();
+            return sb.append(" DESC");
         }
     }
 
     @Override
-    public String generateOrderItem(String expr, boolean nullable, boolean ascending, boolean collateNullsLast) {
+    public StringBuilder generateOrderItem(CharSequence expr, boolean nullable, boolean ascending, boolean collateNullsLast) {
         StringBuilder ret = new StringBuilder();
 
         if (nullable && collateNullsLast) {
@@ -86,7 +86,7 @@ public class ImpalaDialect extends HiveDialect {
             ret.append(expr).append(" DESC");
         }
 
-        return ret.toString();
+        return ret;
     }
 
     @Override
@@ -124,6 +124,7 @@ public class ImpalaDialect extends HiveDialect {
         return generateInlineGeneric(columnNames, columnTypes, valueList, null, false);
     }
 
+    @Override
     public boolean allowsJoinOn() {
         return false;
     }
@@ -147,10 +148,12 @@ public class ImpalaDialect extends HiveDialect {
         buf.append(quote);
     }
 
+    @Override
     public boolean allowsRegularExpressionInWhereClause() {
         return true;
     }
 
+    @Override
     public String generateRegularExpression(String source, String javaRegex) {
         try {
             Pattern.compile(javaRegex);
@@ -195,6 +198,7 @@ public class ImpalaDialect extends HiveDialect {
         return sb.toString();
     }
 
+    @Override
     public boolean allowsDdl() {
         return true;
     }

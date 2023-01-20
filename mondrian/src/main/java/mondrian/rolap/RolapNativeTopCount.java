@@ -105,7 +105,7 @@ public class RolapNativeTopCount extends RolapNativeSet {
                 RolapNativeSql sql =
                     new RolapNativeSql(
                         sqlQuery, aggStar, getEvaluator(), null);
-                final String orderBySql =
+                final StringBuilder orderBySql =
                     sql.generateTopCountOrderBy(orderByExpr);
                 boolean nullable =
                     deduceNullability(orderByExpr);
@@ -230,7 +230,7 @@ public class RolapNativeTopCount extends RolapNativeSet {
         Exp orderByExpr = null;
         if (args.length == 3) {
             orderByExpr = args[2];
-            String orderBySQL = sql.generateTopCountOrderBy(args[2]);
+            StringBuilder orderBySQL = sql.generateTopCountOrderBy(args[2]);
             if (orderBySQL == null) {
                 alertNonNativeTopCount(
                     "Cannot convert order by expression to SQL.");

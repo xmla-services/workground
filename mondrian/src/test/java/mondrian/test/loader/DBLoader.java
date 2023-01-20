@@ -785,10 +785,10 @@ public abstract class DBLoader {
             return;
         }
         String tableName = table.getName();
-        String quotedTableName = quoteId(tableName);
+        StringBuilder quotedTableName = quoteId(tableName);
         for (int i = 0; i < dropIndexList.size(); i++) {
             String indexName = dropIndexList.get(i);
-            String quotedIndexName = quoteId(indexName);
+            StringBuilder quotedIndexName = quoteId(indexName);
             String dropIndexStmt =
                 "DROP INDEX " + quotedIndexName + " ON " + quotedTableName;
             dropIndexList.set(i, dropIndexStmt);
@@ -845,17 +845,17 @@ public abstract class DBLoader {
             return;
         }
         String tableName = table.getName();
-        String quotedTableName = quoteId(tableName);
+        StringBuilder quotedTableName = quoteId(tableName);
         for (int i = 0; i < createIndexList.size(); i++) {
             String indexAndColumnName = createIndexList.get(i);
             int index = indexAndColumnName.indexOf(' ');
             String indexName = indexAndColumnName.substring(0, index);
             String columnName = indexAndColumnName.substring(index + 1);
-            String quotedIndexName = quoteId(indexName.trim());
-            String quotedColumnName = quoteId(columnName.trim());
+            StringBuilder quotedIndexName = quoteId(indexName.trim());
+            StringBuilder quotedColumnName = quoteId(columnName.trim());
             String createIndexStmt =
-                "CREATE INDEX " + quotedIndexName + " ON "
-                + quotedTableName + " ( " + quotedColumnName + " )";
+                new StringBuilder("CREATE INDEX ").append(quotedIndexName).append(" ON ")
+                .append(quotedTableName).append(" ( ").append(quotedColumnName).append(" )").toString();
             createIndexList.set(i, createIndexStmt);
         }
     }
@@ -1205,7 +1205,7 @@ public abstract class DBLoader {
      * @param name Identifier
      * @return Quoted identifier
      */
-    protected String quoteId(String name) {
+    protected StringBuilder quoteId(String name) {
         return this.dialect.quoteIdentifier(name);
     }
 

@@ -84,9 +84,9 @@ public class RolapNativeFilter extends RolapNativeSet {
     public void addConstraint( SqlQuery sqlQuery, RolapCube baseCube, AggStar aggStar ) {
       // Use aggregate table to generate filter condition
       RolapNativeSql sql = new RolapNativeSql( sqlQuery, aggStar, getEvaluator(), args[0].getLevel() );
-      String filterSql = sql.generateFilterCondition( filterExpr );
+      StringBuilder filterSql = sql.generateFilterCondition( filterExpr );
       if ( filterSql != null ) {
-        sqlQuery.addHaving( filterSql );
+        sqlQuery.addHaving( filterSql.toString() );
       }
 
       if ( getEvaluator().isNonEmpty() || isJoinRequired() ) {
@@ -198,7 +198,7 @@ public class RolapNativeFilter extends RolapNativeSet {
     SqlQuery sqlQuery = SqlQuery.newQuery( context, "NativeFilter" );
     RolapNativeSql sql = new RolapNativeSql( sqlQuery, null, evaluator, cjArgs[0].getLevel() );
     final Exp filterExpr = args[1];
-    String filterExprStr = sql.generateFilterCondition( filterExpr );
+    StringBuilder filterExprStr = sql.generateFilterCondition( filterExpr );
     if ( filterExprStr == null ) {
       return null;
     }

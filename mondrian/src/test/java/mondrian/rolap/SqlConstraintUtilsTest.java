@@ -832,8 +832,8 @@ public class SqlConstraintUtilsTest {
         String[] columnValue = new String[1];
         columnValue[0] = "dummyValue";
 
-        String levelStr = SqlConstraintUtils.constrainLevel(level, query, baseCube, aggStar, columnValue, false);
-        assertEquals("dummyName = 'dummyValue'",  levelStr);
+        StringBuilder levelStrBuilder = SqlConstraintUtils.constrainLevel(level, query, baseCube, aggStar, columnValue, false);
+        assertEquals("dummyName = 'dummyValue'",  levelStrBuilder.toString());
     }
 
     private void setSlicerContext(RolapEvaluator e, Member m) {

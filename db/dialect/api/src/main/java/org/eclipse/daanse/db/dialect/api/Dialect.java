@@ -83,7 +83,7 @@ public interface Dialect {
      *
      * @return Quoted identifier
      */
-    String quoteIdentifier(String val);
+    StringBuilder quoteIdentifier(CharSequence val);
 
     /**
      * Appends to a buffer an identifier, quoted appropriately for this
@@ -385,8 +385,8 @@ public interface Dialect {
      *
      * @return Expression modified so that NULL values collate last
      */
-    String generateOrderItem(
-        String expr,
+    StringBuilder generateOrderItem(
+        CharSequence expr,
         boolean nullable,
         boolean ascending,
         boolean collateNullsLast);
@@ -679,7 +679,7 @@ public interface Dialect {
      * @param exp The expression to wrap.
      * @return A valid expression to use for a count operation.
      */
-    String generateCountExpression(String exp);
+    StringBuilder generateCountExpression(String exp);
 
     /**
      * Must generate a String representing a regular expression match

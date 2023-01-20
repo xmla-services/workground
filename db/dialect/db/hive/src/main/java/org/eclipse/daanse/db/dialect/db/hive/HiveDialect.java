@@ -100,53 +100,60 @@ public class HiveDialect extends JdbcDialectImpl {
         return false;
     }
 
+    @Override
     public boolean requiresUnionOrderByExprToBeInSelectClause() {
         return false;
     }
 
+    @Override
     public boolean requiresUnionOrderByOrdinal() {
         return false;
     }
 
+    @Override
     public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         return new StringBuilder("select * from (")
             .append(generateInlineGeneric(columnNames, columnTypes, valueList, " from dual", false))
             .append(") x limit ").append(valueList.size()).toString();
     }
 
+    @Override
     protected void quoteDateLiteral(StringBuilder buf, String value, Date date) {
         // Hive doesn't support Date type; treat date as a string '2008-01-23'
         Util.singleQuoteString(value, buf);
     }
 
     @Override
-    protected String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
+    protected StringBuilder generateOrderByNulls(CharSequence expr, boolean ascending, boolean collateNullsLast) {
         // In Hive, Null values are worth negative infinity.
         if (collateNullsLast) {
             if (ascending) {
                 return new StringBuilder("ISNULL(").append(expr)
-                    .append(") ASC, ").append(expr).append(" ASC").toString();
+                    .append(") ASC, ").append(expr).append(" ASC");
             } else {
-                return new StringBuilder(expr).append(" DESC").toString();
+                return new StringBuilder(expr).append(" DESC");
             }
         } else {
             if (ascending) {
-                return new StringBuilder(expr).append(" ASC").toString();
+                return new StringBuilder(expr).append(" ASC");
             } else {
                 return new StringBuilder("ISNULL(").append(expr)
-                    .append(") DESC, ").append(expr).append(" DESC").toString();
+                    .append(") DESC, ").append(expr).append(" DESC");
             }
         }
     }
 
+    @Override
     public boolean allowsAs() {
         return false;
     }
 
+    @Override
     public boolean allowsJoinOn() {
         return false;
     }
 
+    @Override
     public void quoteTimestampLiteral(StringBuilder buf, String value) {
         try {
             Timestamp.valueOf(value);

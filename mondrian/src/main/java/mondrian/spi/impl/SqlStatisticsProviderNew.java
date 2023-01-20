@@ -144,11 +144,11 @@ public class SqlStatisticsProviderNew  {
         String column)
     {
         final StringBuilder buf = new StringBuilder();
-        String exprString = dialect.quoteIdentifier(column);
+        StringBuilder exprStringBuilder = dialect.quoteIdentifier(column);
         if (dialect.allowsCountDistinct()) {
             // e.g. "select count(distinct product_id) from product"
             buf.append("select count(distinct ")
-                .append(exprString)
+                .append(exprStringBuilder)
                 .append(") from ");
             dialect.quoteIdentifier(buf, schema, table);
             return buf.toString();
@@ -157,7 +157,7 @@ public class SqlStatisticsProviderNew  {
             // so use, e.g., "select count(*) from (select distinct
             // product_id from product)"
             buf.append("select count(*) from (select distinct ")
-                .append(exprString)
+                .append(exprStringBuilder)
                 .append(" from ");
             dialect.quoteIdentifier(buf, schema, table);
             buf.append(")");

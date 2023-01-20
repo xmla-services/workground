@@ -67,22 +67,22 @@ public class AccessDialect extends JdbcDialectImpl {
     }
 
     @Override
-    protected String generateOrderByNulls(String expr, boolean ascending, boolean collateNullsLast) {
+    protected StringBuilder generateOrderByNulls(CharSequence expr, boolean ascending, boolean collateNullsLast) {
         if (collateNullsLast) {
             if (ascending) {
                 return new StringBuilder("Iif(").append(expr)
-                    .append(" IS NULL, 1, 0), ").append(expr).append(" ASC").toString();
+                    .append(" IS NULL, 1, 0), ").append(expr).append(" ASC");
             } else {
                 return new StringBuilder("Iif(").append(expr)
-                    .append(" IS NULL, 1, 0), ").append(expr).append(" DESC").toString();
+                    .append(" IS NULL, 1, 0), ").append(expr).append(" DESC");
             }
         } else {
             if (ascending) {
                 return new StringBuilder("Iif(").append(expr)
-                    .append(" IS NULL, 0, 1), ").append(expr).append(" ASC").toString();
+                    .append(" IS NULL, 0, 1), ").append(expr).append(" ASC");
             } else {
                 return new StringBuilder("Iif(").append(expr)
-                    .append(" IS NULL, 0, 1), ").append(expr).append(" DESC").toString();
+                    .append(" IS NULL, 0, 1), ").append(expr).append(" DESC");
             }
         }
     }

@@ -990,7 +990,7 @@ public class MondrianFoodMartLoader {
 
         for (String tableName : tableMetadataToLoad.keySet()) {
             insertSb = insertSchema(
-                insertSb, quoteId(tableName), false, false);
+                insertSb, quoteId(tableName).toString(), false, false);
         }
 
         LOGGER.debug(insertSb.toString());
@@ -1008,7 +1008,7 @@ public class MondrianFoodMartLoader {
         if (pos < 0) {
             if (mandatory) {
                 throw new RuntimeException(
-                    "insert.sql error: No insert clause in " + sb.toString());
+                    new StringBuilder("insert.sql error: No insert clause in ").append(sb).toString());
             } else {
                 return sb;
             }
@@ -2884,14 +2884,14 @@ public class MondrianFoodMartLoader {
     /**
      * Quote the given SQL identifier suitable for the output DBMS.
      */
-    private String quoteId(String name) {
+    private StringBuilder quoteId(String name) {
         return quoteId(dialect, name);
     }
 
     /**
      * Quote the given SQL identifier suitable for the given DBMS type.
      */
-    private String quoteId(Dialect dialect, String name) {
+    private StringBuilder quoteId(Dialect dialect, String name) {
         return dialect.quoteIdentifier(name);
     }
 

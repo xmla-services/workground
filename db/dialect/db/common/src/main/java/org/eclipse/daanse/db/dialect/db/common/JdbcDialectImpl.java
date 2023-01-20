@@ -310,13 +310,13 @@ public abstract class JdbcDialectImpl implements Dialect {
     }
 
     @Override
-    public String quoteIdentifier(final String val) {
+    public StringBuilder quoteIdentifier(final CharSequence val) {
         int size = val.length() + SINGLE_QUOTE_SIZE;
         StringBuilder buf = new StringBuilder(size);
 
-        quoteIdentifier(val, buf);
+        quoteIdentifier(val.toString(), buf);
 
-        return buf.toString();
+        return buf;
     }
 
     @Override
@@ -768,8 +768,8 @@ public abstract class JdbcDialectImpl implements Dialect {
     }
 
     @Override
-    public String generateOrderItem(
-        String expr,
+    public StringBuilder generateOrderItem(
+        CharSequence expr,
         boolean nullable,
         boolean ascending,
         boolean collateNullsLast)
@@ -778,9 +778,9 @@ public abstract class JdbcDialectImpl implements Dialect {
             return generateOrderByNulls(expr, ascending, collateNullsLast);
         } else {
             if (ascending) {
-                return new StringBuilder(expr).append(" ASC").toString();
+                return new StringBuilder(expr).append(" ASC");
             } else {
-                return new StringBuilder(expr).append(" DESC").toString();
+                return new StringBuilder(expr).append(" DESC");
             }
         }
     }
@@ -812,8 +812,8 @@ public abstract class JdbcDialectImpl implements Dialect {
      * @param collateNullsLast Whether nulls should appear first or last.
      * @return Expression to force null values to collate last or first.
      */
-    protected String generateOrderByNulls(
-        String expr,
+    protected StringBuilder generateOrderByNulls(
+        CharSequence expr,
         boolean ascending,
         boolean collateNullsLast)
     {
@@ -822,20 +822,20 @@ public abstract class JdbcDialectImpl implements Dialect {
                 .append(expr).append(" IS NULL THEN 1 ELSE 0 END, ").append(expr);
             if (ascending) {
                 return
-                    sb.append(" ASC").toString();
+                    sb.append(" ASC");
             } else {
                 return
-                    sb.append(" DESC").toString();
+                    sb.append(" DESC");
             }
         } else {
             StringBuilder sb = new StringBuilder("CASE WHEN ")
                 .append(expr).append(" IS NULL THEN 0 ELSE 1 END, ").append(expr);
             if (ascending) {
                 return
-                    sb.append(" ASC").toString();
+                    sb.append(" ASC");
             } else {
                 return
-                    sb.append(" DESC").toString();
+                    sb.append(" DESC");
             }
         }
     }
@@ -850,15 +850,15 @@ public abstract class JdbcDialectImpl implements Dialect {
      * @param collateNullsLast Whether nulls should appear first or last.
      * @return Expression "expr direction NULLS LAST"
      */
-    protected final String generateOrderByNullsAnsi(
-        String expr,
+    protected final StringBuilder generateOrderByNullsAnsi(
+        CharSequence expr,
         boolean ascending,
         boolean collateNullsLast)
     {
         if (collateNullsLast) {
-            return new StringBuilder(expr).append(ascending ? " ASC" : " DESC").append(" NULLS LAST").toString();
+            return new StringBuilder(expr).append(ascending ? " ASC" : " DESC").append(" NULLS LAST");
         } else {
-            return new StringBuilder(expr).append(ascending ? " ASC" : " DESC").append(" NULLS FIRST").toString();
+            return new StringBuilder(expr).append(ascending ? " ASC" : " DESC").append(" NULLS FIRST");
         }
     }
 
@@ -947,8 +947,8 @@ public abstract class JdbcDialectImpl implements Dialect {
     }
 
     @Override
-    public String generateCountExpression(String exp) {
-        return exp;
+    public StringBuilder generateCountExpression(String exp) {
+        return new StringBuilder(exp);
     }
 
     @Override

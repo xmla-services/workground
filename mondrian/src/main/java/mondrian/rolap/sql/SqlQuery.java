@@ -489,7 +489,7 @@ public class SqlQuery {
      * Adds an expression to the select clause, automatically creating a
      * column alias.
      */
-    public String addSelect(final String expression, BestFitColumnType type) {
+    public String addSelect(final CharSequence expression, BestFitColumnType type) {
         // Some DB2 versions (AS/400) throw an error if a column alias is
         //  *not* used in a subsequent order by (Group by).
         // Derby fails on 'SELECT... HAVING' if column has alias.
@@ -537,7 +537,7 @@ public class SqlQuery {
      * @return Column alias
      */
     public String addSelect(
-        final String expression,
+        final CharSequence expression,
         final BestFitColumnType type,
         String alias)
     {
@@ -551,7 +551,7 @@ public class SqlQuery {
 
         select.add(buf.toString());
         addType(type);
-        columnAliases.put(expression, alias);
+        columnAliases.put(expression.toString(), alias);
         return alias;
     }
 
@@ -599,7 +599,7 @@ public class SqlQuery {
 
     public void addGroupBy(final String expression, final String alias) {
         if (dialect.requiresGroupByAlias()) {
-            addGroupBy(dialect.quoteIdentifier(alias));
+            addGroupBy(dialect.quoteIdentifier(alias).toString());
         } else {
             addGroupBy(expression);
         }
@@ -620,7 +620,7 @@ public class SqlQuery {
      * @param nullable whether the expression might be null
      */
     public void addOrderBy(
-        String expr,
+        CharSequence expr,
         boolean ascending,
         boolean prepend,
         boolean nullable)
@@ -639,8 +639,8 @@ public class SqlQuery {
      * @param collateNullsLast whether null values should appear first or last.
      */
     public void addOrderBy(
-        String expr,
-        String alias,
+        CharSequence expr,
+        CharSequence alias,
         boolean ascending,
         boolean prepend,
         boolean nullable,
@@ -653,7 +653,7 @@ public class SqlQuery {
                     : expr,
                 nullable,
                 ascending,
-                collateNullsLast);
+                collateNullsLast).toString();
         if (prepend) {
             orderBy.add(0, orderExpr);
         } else {

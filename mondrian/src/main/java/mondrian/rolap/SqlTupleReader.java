@@ -1058,7 +1058,7 @@ public class SqlTupleReader implements TupleReader {
         if ( fullyJoiningBaseCubes.size() > 1 ) {
           for ( int i = 0; i < types.size(); i++ ) {
             unionQuery.addOrderBy(
-              new StringBuilder().append(i + 1).toString(),
+              new StringBuilder().append(i + 1),
               null,
               true,
               false,
