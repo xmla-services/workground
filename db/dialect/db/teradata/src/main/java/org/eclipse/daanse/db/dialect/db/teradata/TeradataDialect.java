@@ -36,11 +36,13 @@ public class TeradataDialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
+    @Override
     public boolean requiresAliasForFromQuery() {
         return true;
     }
 
-    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+    @Override
+    public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         String fromClause = null;
         if (valueList.size() > 1) {
             // In Teradata, "SELECT 1,2" is valid but "SELECT 1,2 UNION
@@ -51,10 +53,12 @@ public class TeradataDialect extends JdbcDialectImpl {
         return generateInlineGeneric(columnNames, columnTypes, valueList, fromClause, true);
     }
 
+    @Override
     public boolean supportsGroupingSets() {
         return true;
     }
 
+    @Override
     public boolean requiresUnionOrderByOrdinal() {
         return true;
     }

@@ -1037,7 +1037,7 @@ public class DialectTest {
             getDialect(context).generateInline(
                     nameList,
                     typeList,
-                    Arrays.asList( valueList ) );
+                    Arrays.asList( valueList ) ).toString();
     Statement stmt = null;
     try {
       stmt = getConnection(context).createStatement();
@@ -1519,7 +1519,7 @@ public class DialectTest {
    */
   private boolean checkRegex(TestingContext context, String regex ) throws SQLException {
     Dialect dialect = getDialect(context);
-    final String sqlRegex =
+    final StringBuilder sqlRegex =
             dialect.generateRegularExpression(
                     dialect.quoteIdentifier( "customer", "fname" ),
                     regex );

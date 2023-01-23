@@ -51,6 +51,7 @@ public class ImpalaDialect extends HiveDialect {
         return super.initialize(connection) && isDatabase(DatabaseProduct.IMPALA, connection);
     }
 
+    @Override
     protected String deduceIdentifierQuoteString(DatabaseMetaData databaseMetaData) {
         return "`";
     }
@@ -120,7 +121,7 @@ public class ImpalaDialect extends HiveDialect {
     }
 
     @Override
-    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+    public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         return generateInlineGeneric(columnNames, columnTypes, valueList, null, false);
     }
 
@@ -154,7 +155,7 @@ public class ImpalaDialect extends HiveDialect {
     }
 
     @Override
-    public String generateRegularExpression(String source, String javaRegex) {
+    public StringBuilder generateRegularExpression(String source, String javaRegex) {
         try {
             Pattern.compile(javaRegex);
         } catch (PatternSyntaxException e) {
@@ -195,7 +196,7 @@ public class ImpalaDialect extends HiveDialect {
         } else {
             quoteStringLiteral(sb, javaRegex.toUpperCase());
         }
-        return sb.toString();
+        return sb;
     }
 
     @Override

@@ -51,15 +51,18 @@ public class HiveDialect extends JdbcDialectImpl {
         return super.initialize(connection) && !isDatabase(DatabaseProduct.IMPALA, connection);
     }
 
+    @Override
     protected String deduceIdentifierQuoteString(DatabaseMetaData databaseMetaData) {
         return null;
     }
 
+    @Override
     protected Set<List<Integer>> deduceSupportedResultSetStyles(DatabaseMetaData databaseMetaData) {
         // Hive don't support this, so just return an empty set.
         return Collections.emptySet();
     }
 
+    @Override
     protected boolean deduceReadOnly(DatabaseMetaData databaseMetaData) {
         try {
             return databaseMetaData.isReadOnly();
@@ -69,6 +72,7 @@ public class HiveDialect extends JdbcDialectImpl {
         }
     }
 
+    @Override
     protected int deduceMaxColumnNameLength(DatabaseMetaData databaseMetaData) {
         try {
             return databaseMetaData.getMaxColumnNameLength();
@@ -77,10 +81,12 @@ public class HiveDialect extends JdbcDialectImpl {
         }
     }
 
+    @Override
     public boolean allowsCompoundCountDistinct() {
         return true;
     }
 
+    @Override
     public boolean requiresAliasForFromQuery() {
         return true;
     }
@@ -111,16 +117,16 @@ public class HiveDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+    public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         return new StringBuilder("select * from (")
             .append(generateInlineGeneric(columnNames, columnTypes, valueList, " from dual", false))
-            .append(") x limit ").append(valueList.size()).toString();
+            .append(") x limit ").append(valueList.size());
     }
 
     @Override
-    protected void quoteDateLiteral(StringBuilder buf, String value, Date date) {
+    protected void quoteDateLiteral(StringBuilder buf, Date date) {
         // Hive doesn't support Date type; treat date as a string '2008-01-23'
-        Util.singleQuoteString(value, buf);
+        Util.singleQuoteString(date.toString(), buf);
     }
 
     @Override

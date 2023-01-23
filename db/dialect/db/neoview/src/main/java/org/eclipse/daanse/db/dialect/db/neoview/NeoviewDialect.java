@@ -39,14 +39,17 @@ public class NeoviewDialect extends JdbcDialectImpl {
         return true;
     }
 
+    @Override
     public boolean requiresOrderByAlias() {
         return true;
     }
 
+    @Override
     public boolean requiresAliasForFromQuery() {
         return true;
     }
 
+    @Override
     public boolean allowsDdl() {
         // We get the following error in the test environment. It might be a bit
         // pessimistic to say DDL is never allowed.
@@ -56,11 +59,13 @@ public class NeoviewDialect extends JdbcDialectImpl {
         return false;
     }
 
+    @Override
     public boolean supportsGroupByExpressions() {
         return false;
     }
 
-    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+    @Override
+    public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         return generateInlineForAnsi("t", columnNames, columnTypes, valueList, true);
     }
 }

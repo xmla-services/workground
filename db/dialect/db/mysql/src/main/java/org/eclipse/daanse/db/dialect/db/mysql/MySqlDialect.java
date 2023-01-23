@@ -227,7 +227,7 @@ public class MySqlDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+    public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         return generateInlineGeneric(columnNames, columnTypes, valueList, null, false);
     }
 
@@ -270,7 +270,7 @@ public class MySqlDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateRegularExpression(String source, String javaRegex) {
+    public StringBuilder generateRegularExpression(String source, String javaRegex) {
         try {
             Pattern.compile(javaRegex);
         } catch (PatternSyntaxException e) {
@@ -310,7 +310,7 @@ public class MySqlDialect extends JdbcDialectImpl {
         } else {
             quoteStringLiteral(sb, javaRegex.toUpperCase());
         }
-        return sb.toString();
+        return sb;
     }
 
     /**

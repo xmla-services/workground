@@ -43,7 +43,7 @@ public class SnowflakeDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+    public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         return generateInlineGeneric(columnNames, columnTypes, valueList, null, false);
     }
 
@@ -80,7 +80,7 @@ public class SnowflakeDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateRegularExpression(String source, String javaRegex) {
+    public StringBuilder generateRegularExpression(String source, String javaRegex) {
         try {
             Pattern.compile(javaRegex);
         } catch (PatternSyntaxException e) {
@@ -108,6 +108,6 @@ public class SnowflakeDialect extends JdbcDialectImpl {
             quoteStringLiteral(sb, mappedFlags.toString());
         }
         sb.append(")");
-        return sb.toString();
+        return sb;
     }
 }

@@ -144,13 +144,8 @@ public class RolapNativeSql {
                 throw new MondrianEvaluationException(
                     new StringBuilder("Expected to get decimal, but got ").append(expr).toString());
             }
-            StringBuilder result = new StringBuilder(expr);
-            if (dialect.getDatabaseProduct().getFamily()
-                == DatabaseProduct.DB2)
-            {
-                result = new StringBuilder("FLOAT(").append(expr).append(")");
-            }
-            return result;
+
+            return dialect.quoteDecimalLiteral(expr);
         }
 
         public String toString() {
@@ -220,12 +215,7 @@ public class RolapNativeSql {
             }
 
             StringBuilder expr = aggregator.getExpression(exprInner);
-            if (dialect.getDatabaseProduct().getFamily()
-                == DatabaseProduct.DB2)
-            {
-                expr = new StringBuilder("FLOAT(").append(expr).append(")");
-            }
-            return expr;
+            return dialect.quoteDecimalLiteral(expr);
         }
 
         public String toString() {
@@ -364,11 +354,11 @@ public class RolapNativeSql {
                     sourceExp = sqlQuery.getAlias(sourceExp);
                 }
                 return
-                    new StringBuilder(dialect.generateRegularExpression(
+                    dialect.generateRegularExpression(
                         sourceExp,
                         String.valueOf(
                             evaluator.getCachedResult(
-                                new ExpCacheDescriptor(arg1, evaluator)))));
+                                new ExpCacheDescriptor(arg1, evaluator))));
             } else {
                 return null;
             }

@@ -34,18 +34,22 @@ public class LucidDbDialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
+    @Override
     public boolean allowsMultipleDistinctSqlMeasures() {
         return false;
     }
 
+    @Override
     public boolean needsExponent(Object value, String valueString) {
         return value instanceof Double && !valueString.contains("E");
     }
 
+    @Override
     public boolean supportsUnlimitedValueList() {
         return true;
     }
 
+    @Override
     public boolean supportsMultiValueInExpr() {
         return true;
     }

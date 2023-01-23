@@ -567,7 +567,7 @@ public class RolapUtil {
             dialect.generateInline(
                 columnNames,
                 columnTypes,
-                valueList));
+                valueList).toString());
         return view;
     }
 

@@ -48,13 +48,13 @@ public class RedshiftDialectTest {
 
     @Test
     public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
-        String sql = dialect.generateRegularExpression("table.column", "(?is)|(?u).*a.*");
+        String sql = dialect.generateRegularExpression("table.column", "(?is)|(?u).*a.*").toString();
         assertEquals("REGEXP_INSTR(table.column,'.*a.*',1,1,0,'i') > 0", sql);
     }
 
     @Test
     public void testGenerateRegularExpression_CaseSensitive() throws Exception {
-        String sql = dialect.generateRegularExpression("table.column", ".*a.*");
+        String sql = dialect.generateRegularExpression("table.column", ".*a.*").toString();
         assertEquals("REGEXP_INSTR(table.column,'.*a.*',1,1,0,'c') > 0", sql);
     }
 }

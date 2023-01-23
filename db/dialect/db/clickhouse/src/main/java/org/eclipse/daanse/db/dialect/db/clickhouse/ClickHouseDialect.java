@@ -43,6 +43,7 @@ public class ClickHouseDialect extends JdbcDialectImpl {
         return true;
     }
 
+    @Override
     public void quoteStringLiteral(
         StringBuilder buf,
         String s)

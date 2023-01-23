@@ -6,7 +6,7 @@
 *
 * Copyright (C) 2012-2017 Hitachi Vantara and others
 * All Rights Reserved.
-* 
+*
 * Contributors:
 *   SmartCity Jena, Stefan Bischof - make OSGi Component
 */
@@ -48,7 +48,8 @@ public class MicrosoftSqlServerDialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
-    public String generateInline(
+    @Override
+    public StringBuilder generateInline(
         List<String> columnNames,
         List<String> columnTypes,
         List<String[]> valueList)
@@ -57,10 +58,12 @@ public class MicrosoftSqlServerDialect extends JdbcDialectImpl {
             columnNames, columnTypes, valueList, null, false);
     }
 
+    @Override
     public boolean requiresAliasForFromQuery() {
         return true;
     }
 
+    @Override
     public boolean requiresUnionOrderByOrdinal() {
         return false;
     }
@@ -81,7 +84,8 @@ public class MicrosoftSqlServerDialect extends JdbcDialectImpl {
       buf.append(Util.singleQuoteString(value));
     }
 
-    protected void quoteDateLiteral(StringBuilder buf, String value, Date date)
+    @Override
+    protected void quoteDateLiteral(StringBuilder buf, Date date)
     {
         buf.append("CONVERT(DATE, '");
         buf.append(df.format(date));
@@ -90,6 +94,7 @@ public class MicrosoftSqlServerDialect extends JdbcDialectImpl {
         buf.append("', 112)");
     }
 
+    @Override
     protected void quoteTimestampLiteral(
         StringBuilder buf,
         String value,

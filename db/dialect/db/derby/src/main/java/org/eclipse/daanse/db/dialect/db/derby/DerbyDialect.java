@@ -47,26 +47,31 @@ public class DerbyDialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
-    protected void quoteDateLiteral(StringBuilder buf, String value, Date date) {
+    @Override
+    protected void quoteDateLiteral(StringBuilder buf, Date date) {
         // Derby accepts DATE('2008-01-23') but not SQL:2003 format.
         buf.append("DATE(");
-        Util.singleQuoteString(value, buf);
+        Util.singleQuoteString(date.toString(), buf);
         buf.append(")");
     }
 
+    @Override
     public boolean requiresAliasForFromQuery() {
         return true;
     }
 
+    @Override
     public boolean allowsMultipleCountDistinct() {
         // Derby allows at most one distinct-count per query.
         return false;
     }
 
-    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+    @Override
+    public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         return generateInlineForAnsi("t", columnNames, columnTypes, valueList, true);
     }
 
+    @Override
     public boolean supportsGroupByExpressions() {
         return false;
     }

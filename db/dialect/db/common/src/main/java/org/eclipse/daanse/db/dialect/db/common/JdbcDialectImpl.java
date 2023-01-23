@@ -395,6 +395,13 @@ public abstract class JdbcDialectImpl implements Dialect {
     }
 
     @Override
+    public StringBuilder quoteDecimalLiteral(
+        CharSequence value)
+    {
+        return new StringBuilder(value);
+    }
+
+    @Override
     public void quoteBooleanLiteral(StringBuilder buf, String value) {
         // NOTE jvs 1-Jan-2007:  See quoteDateLiteral for explanation.
         // In addition, note that we leave out UNKNOWN (even though
@@ -428,24 +435,22 @@ public abstract class JdbcDialectImpl implements Dialect {
                     "Illegal DATE literal:  " + value);
             }
         }
-        quoteDateLiteral(buf, date.toString(), date);
+        quoteDateLiteral(buf, date);
     }
 
     /**
      * Helper method for {@link #quoteDateLiteral(StringBuilder, String)}.
      *
      * @param buf Buffer to append to
-     * @param value Value as string
      * @param date Value as date
      */
     protected void quoteDateLiteral(
         StringBuilder buf,
-        String value,
         Date date)
     {
         // SQL:2003 date format: DATE '2008-01-23'.
         buf.append("DATE ");
-        Util.singleQuoteString(value, buf);
+        Util.singleQuoteString(date.toString(), buf);
     }
 
     @Override
@@ -527,7 +532,7 @@ public abstract class JdbcDialectImpl implements Dialect {
     }
 
     @Override
-    public String generateInline(
+    public StringBuilder generateInline(
         List<String> columnNames,
         List<String> columnTypes,
         List<String[]> valueList)
@@ -548,7 +553,7 @@ public abstract class JdbcDialectImpl implements Dialect {
      * @param cast Whether to cast the values in the first row
      * @return Expression that returns the given values
      */
-    protected String generateInlineGeneric(
+    protected StringBuilder generateInlineGeneric(
         List<String> columnNames,
         List<String> columnTypes,
         List<String[]> valueList,
@@ -616,7 +621,7 @@ public abstract class JdbcDialectImpl implements Dialect {
                 buf.append(fromClause);
             }
         }
-        return buf.toString();
+        return buf;
     }
 
     /**
@@ -643,7 +648,7 @@ public abstract class JdbcDialectImpl implements Dialect {
      * @param cast Whether to generate casts
      * @return Expression that returns the given values
      */
-    public String generateInlineForAnsi(
+    public StringBuilder generateInlineForAnsi(
         String alias,
         List<String> columnNames,
         List<String> columnTypes,
@@ -708,7 +713,7 @@ public abstract class JdbcDialectImpl implements Dialect {
             quoteIdentifier(columnName, buf);
         }
         buf.append(")");
-        return buf.toString();
+        return buf;
     }
 
     @Override
@@ -947,12 +952,12 @@ public abstract class JdbcDialectImpl implements Dialect {
     }
 
     @Override
-    public StringBuilder generateCountExpression(String exp) {
+    public StringBuilder generateCountExpression(CharSequence exp) {
         return new StringBuilder(exp);
     }
 
     @Override
-    public String generateRegularExpression(
+    public StringBuilder generateRegularExpression(
         String source,
         String javaRegExp)
     {

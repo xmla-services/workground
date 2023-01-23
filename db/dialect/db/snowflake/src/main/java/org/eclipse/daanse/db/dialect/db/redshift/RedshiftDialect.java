@@ -44,12 +44,13 @@ public class RedshiftDialect extends PostgreSqlDialect {
         return super.initialize(connection) && isDatabase(DatabaseProduct.REDSHIFT, connection);
     }
 
+    @Override
     public DatabaseProduct getDatabaseProduct() {
         return DatabaseProduct.REDSHIFT;
     }
 
     @Override
-    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+    public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         return generateInlineGeneric(columnNames, columnTypes, valueList, null, false);
     }
 
@@ -65,7 +66,7 @@ public class RedshiftDialect extends PostgreSqlDialect {
     }
 
     @Override
-    public String generateRegularExpression(String source, String javaRegex) {
+    public StringBuilder generateRegularExpression(String source, String javaRegex) {
         try {
             Pattern.compile(javaRegex);
         } catch (PatternSyntaxException e) {
@@ -95,6 +96,6 @@ public class RedshiftDialect extends PostgreSqlDialect {
         sb.append(caseSensitive ? "'c'" : "'i'");
         sb.append(") > 0");
 
-        return sb.toString();
+        return sb;
     }
 }

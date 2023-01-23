@@ -53,7 +53,7 @@ public class AccessDialect extends JdbcDialectImpl {
     }
 
     @Override
-    protected void quoteDateLiteral(StringBuilder buf, String value, Date date) {
+    protected void quoteDateLiteral(StringBuilder buf, Date date) {
         // Access accepts #01/23/2008# but not SQL:2003 format.
         buf.append("#");
         Calendar calendar = Calendar.getInstance();
@@ -98,7 +98,7 @@ public class AccessDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+    public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         // Fall back to using the FoodMart 'days' table, because
         // Access SQL has no way to generate values not from a table.
         return generateInlineGeneric(columnNames, columnTypes, valueList, " from `days` where `day` = 1", false);

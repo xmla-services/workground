@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
  * @author Yury Bakhmutski
  */
 public class SybaseDialectTest{
-    
+
     SybaseDialect sybaseDialectMock=mock(SybaseDialect.class);
 
 
@@ -38,7 +38,7 @@ public class SybaseDialectTest{
         String input = "1997-01-03 00:00:00.0";
 
         doCallRealMethod().when(sybaseDialectMock).quoteDateLiteral(
-            any(StringBuilder.class), anyString(), any(Date.class));
+            any(StringBuilder.class), any(Date.class));
 
         doCallRealMethod().when(sybaseDialectMock).quoteDateLiteral(
             any(StringBuilder.class), anyString());

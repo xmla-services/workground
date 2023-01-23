@@ -46,13 +46,13 @@ public class VerticaDialectTest{
 
   @Test
   public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
-    String sql = dialect.generateRegularExpression( "table.column", "(?is)|(?u).*a.*" );
+    String sql = dialect.generateRegularExpression( "table.column", "(?is)|(?u).*a.*" ).toString();
     assertEquals( " REGEXP_LIKE ( CAST (table.column AS VARCHAR), '.*a.*', 'in')", sql );
   }
 
   @Test
   public void testGenerateRegularExpression_CaseSensitive() throws Exception {
-    String sql = dialect.generateRegularExpression( "table.column", ".*a.*" );
+    String sql = dialect.generateRegularExpression( "table.column", ".*a.*" ).toString();
     assertEquals( " REGEXP_LIKE ( CAST (table.column AS VARCHAR), '.*a.*')", sql );
   }
 }
