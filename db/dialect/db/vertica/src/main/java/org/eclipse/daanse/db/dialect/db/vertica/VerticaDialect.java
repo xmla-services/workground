@@ -46,10 +46,12 @@ public class VerticaDialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
+    @Override
     public boolean requiresAliasForFromQuery() {
         return true;
     }
 
+    @Override
     public boolean allowsFromQuery() {
         return true;
     }
@@ -74,7 +76,8 @@ public class VerticaDialect extends JdbcDialectImpl {
         return false;
     }
 
-    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+    @Override
+    public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         return generateInlineGeneric(columnNames, columnTypes, valueList, null, false);
     }
 
@@ -132,7 +135,7 @@ public class VerticaDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateRegularExpression(String source, String javaRegex) {
+    public StringBuilder generateRegularExpression(String source, String javaRegex) {
         try {
             Pattern.compile(javaRegex);
         } catch (PatternSyntaxException e) {
@@ -160,6 +163,6 @@ public class VerticaDialect extends JdbcDialectImpl {
             quoteStringLiteral(sb, mappedFlags.toString());
         }
         sb.append(")");
-        return sb.toString();
+        return sb;
     }
 }

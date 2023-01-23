@@ -61,7 +61,7 @@ public class NetezzaDialect extends PostgreSqlDialect {
     }
 
     @Override
-    public String generateRegularExpression(String source, String javaRegex) {
+    public StringBuilder generateRegularExpression(String source, String javaRegex) {
         throw new UnsupportedOperationException();
     }
 

@@ -51,6 +51,7 @@ public class InfobrightDialect extends MySqlDialect {
         return false;
     }
 
+    @Override
     public DatabaseProduct getDatabaseProduct() {
         return DatabaseProduct.INFOBRIGHT;
     }

@@ -45,11 +45,20 @@ public class Db2Dialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
-    public String toUpper(String expr) {
-        return new StringBuilder("UCASE(").append(expr).append(")").toString();
+    @Override
+    public StringBuilder toUpper(CharSequence expr) {
+        return new StringBuilder("UCASE(").append(expr).append(")");
     }
 
+    @Override
     public boolean supportsGroupingSets() {
         return true;
+    }
+
+    @Override
+    public StringBuilder quoteDecimalLiteral(
+        CharSequence value)
+    {
+        return new StringBuilder("FLOAT(").append(value).append(")");
     }
 }

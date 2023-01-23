@@ -61,13 +61,13 @@ public class MySqlDialect3Test {
 
     @Test
     public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
-        String sql = dialect.generateRegularExpression("table.column", "(?i)|(?u).*a.*");
+        String sql = dialect.generateRegularExpression("table.column", "(?i)|(?u).*a.*").toString();
         assertEquals("table.column IS NOT NULL AND UPPER(table.column) REGEXP '.*A.*'", sql);
     }
 
     @Test
     public void testGenerateRegularExpression_CaseSensitive() throws Exception {
-        String sql = dialect.generateRegularExpression("table.column", ".*a.*");
+        String sql = dialect.generateRegularExpression("table.column", ".*a.*").toString();
         assertEquals("table.column IS NOT NULL AND table.column REGEXP '.*a.*'", sql);
     }
 

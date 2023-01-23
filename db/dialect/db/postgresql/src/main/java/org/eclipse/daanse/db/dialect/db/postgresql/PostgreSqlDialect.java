@@ -51,6 +51,7 @@ public class PostgreSqlDialect extends JdbcDialectImpl {
                 && !isDatabase(DatabaseProduct.REDSHIFT, connection);
     }
 
+    @Override
     public boolean requiresAliasForFromQuery() {
         return true;
     }
@@ -75,7 +76,7 @@ public class PostgreSqlDialect extends JdbcDialectImpl {
         return true;
     }
 
-    public String generateRegularExpression(String source, String javaRegex) {
+    public StringBuilder generateRegularExpression(String source, String javaRegex) {
         try {
             Pattern.compile(javaRegex);
         } catch (PatternSyntaxException e) {
@@ -93,7 +94,7 @@ public class PostgreSqlDialect extends JdbcDialectImpl {
         sb.append(source);
         sb.append(" as text) ~ ");
         quoteStringLiteral(sb, javaRegex);
-        return sb.toString();
+        return sb;
     }
 
     @Override

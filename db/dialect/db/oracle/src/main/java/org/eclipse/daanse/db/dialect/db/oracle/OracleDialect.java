@@ -45,14 +45,17 @@ public class OracleDialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
+    @Override
     public boolean allowsAs() {
         return false;
     }
 
-    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+    @Override
+    public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         return generateInlineGeneric(columnNames, columnTypes, valueList, " from dual", false);
     }
 
+    @Override
     public boolean supportsGroupingSets() {
         return true;
     }
@@ -73,7 +76,7 @@ public class OracleDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateRegularExpression(String source, String javaRegex) {
+    public StringBuilder generateRegularExpression(String source, String javaRegex) {
         try {
             Pattern.compile(javaRegex);
         } catch (PatternSyntaxException e) {
@@ -99,7 +102,7 @@ public class OracleDialect extends JdbcDialectImpl {
         sb.append(", ");
         quoteStringLiteral(sb, mappedFlags.toString());
         sb.append(")");
-        return sb.toString();
+        return sb;
     }
 
     /**

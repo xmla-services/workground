@@ -23,7 +23,7 @@ import aQute.bnd.annotation.spi.ServiceProvider;
 /**
  * This is the Mondrian dialect for Google BigQuery. It was tested against
  * google-api-services-bigquery-v2-rev355-1.22.0 in Q1 2018.
- * 
+ *
  * @author lucboudreau
  */
 @ServiceProvider(value = Dialect.class, attribute = { "database.dialect.type:String='GOOGLEBIGQUERY'",
@@ -61,7 +61,7 @@ public class GoogleBigQueryDialect extends JdbcDialectImpl {
     }
 
     @Override
-    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+    public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         return generateInlineGeneric(columnNames, columnTypes, valueList, null, false);
     }
 
@@ -94,7 +94,8 @@ public class GoogleBigQueryDialect extends JdbcDialectImpl {
         return true;
     }
 
-    public String generateRegularExpression(String source, String javaRegex) {
+    @Override
+    public StringBuilder generateRegularExpression(String source, String javaRegex) {
         try {
             Pattern.compile(javaRegex);
         } catch (PatternSyntaxException e) {
@@ -113,6 +114,6 @@ public class GoogleBigQueryDialect extends JdbcDialectImpl {
         sb.append(" as string), r");
         quoteStringLiteral(sb, javaRegex);
         sb.append(")");
-        return sb.toString();
+        return sb;
     }
 }

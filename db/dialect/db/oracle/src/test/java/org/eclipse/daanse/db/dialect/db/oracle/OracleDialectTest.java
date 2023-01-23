@@ -49,13 +49,13 @@ public class OracleDialectTest {
 
     @Test
     public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
-        String sql = dialect.generateRegularExpression("table.column", "(?i)|(?u).*a.*");
+        String sql = dialect.generateRegularExpression("table.column", "(?i)|(?u).*a.*").toString();
         assertEquals("table.column IS NOT NULL AND REGEXP_LIKE(table.column, '.*a.*', 'i')", sql);
     }
 
     @Test
     public void testGenerateRegularExpression_CaseSensitive() throws Exception {
-        String sql = dialect.generateRegularExpression("table.column", ".*a.*");
+        String sql = dialect.generateRegularExpression("table.column", ".*a.*").toString();
         assertEquals("table.column IS NOT NULL AND REGEXP_LIKE(table.column, '.*a.*', '')", sql);
     }
 }

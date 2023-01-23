@@ -213,6 +213,19 @@ public interface Dialect {
         String value);
 
     /**
+     * Appends to a buffer a decimal literal.
+     *
+     * <p>For example, in the default dialect,
+     * <code>quoteDecimalLiteral(buf, "12.58")</code>
+     * appends <code>FLOAT('12.58') for DB2</code>.
+     *
+     * @param value Literal
+     */
+
+    StringBuilder quoteDecimalLiteral(
+        CharSequence value);
+
+    /**
      * Returns whether this Dialect requires subqueries in the FROM clause
      * to have an alias.
      *
@@ -329,7 +342,7 @@ public interface Dialect {
      * @param valueList List of rows values
      * @return SQL string
      */
-    String generateInline(
+    StringBuilder generateInline(
         List<String> columnNames,
         List<String> columnTypes,
         List<String[]> valueList);
@@ -679,7 +692,7 @@ public interface Dialect {
      * @param exp The expression to wrap.
      * @return A valid expression to use for a count operation.
      */
-    StringBuilder generateCountExpression(String exp);
+    StringBuilder generateCountExpression(CharSequence exp);
 
     /**
      * Must generate a String representing a regular expression match
@@ -711,7 +724,7 @@ public interface Dialect {
      * dialect cannot convert that particular regular expression into
      * something that the database would support.
      */
-    String generateRegularExpression(
+    StringBuilder generateRegularExpression(
         String source,
         String javaRegExp);
 

@@ -328,7 +328,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
             groupingSetsAliases.put(
                 expr,
                 dialect.quoteIdentifier(
-                    new StringBuilder("dummyname.").append(alias).toString()).toString());
+                    new StringBuilder("dummyname.").append(alias)).toString());
         }
 
         // add predicates not associated with columns

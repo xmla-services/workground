@@ -37,21 +37,24 @@ public class SybaseDialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
+    @Override
     public boolean allowsAs() {
         return false;
     }
 
+    @Override
     public boolean allowsFromQuery() {
         return false;
     }
 
+    @Override
     public boolean requiresAliasForFromQuery() {
         return true;
     }
 
     @Override
-    protected void quoteDateLiteral(StringBuilder buf, String value, Date date)
+    protected void quoteDateLiteral(StringBuilder buf, Date date)
     {
-        Util.singleQuoteString(value, buf);
+        Util.singleQuoteString(date.toString(), buf);
     }
 }

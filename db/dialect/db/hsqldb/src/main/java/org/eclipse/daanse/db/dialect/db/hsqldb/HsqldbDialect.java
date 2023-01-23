@@ -38,16 +38,17 @@ public class HsqldbDialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
+    @Override
     protected void quoteDateLiteral(
         StringBuilder buf,
-        String value,
         Date date)
     {
         // Hsqldb accepts '2008-01-23' but not SQL:2003 format.
-        Util.singleQuoteString(value, buf);
+        Util.singleQuoteString(date.toString(), buf);
     }
 
-    public String generateInline(
+    @Override
+    public StringBuilder generateInline(
         List<String> columnNames,
         List<String> columnTypes,
         List<String[]> valueList)

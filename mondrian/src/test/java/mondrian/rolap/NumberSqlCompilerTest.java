@@ -43,6 +43,18 @@ public class NumberSqlCompilerTest {
         when(dialect.getDatabaseProduct())
             .thenReturn(DatabaseProduct.MYSQL);
 
+        when(dialect.quoteDecimalLiteral("1"))
+            .thenReturn(new StringBuilder("1"));
+        
+        when(dialect.quoteDecimalLiteral("+1.01"))
+        .thenReturn(new StringBuilder("+1.01"));
+
+        when(dialect.quoteDecimalLiteral("-.00001"))
+        .thenReturn(new StringBuilder("-.00001"));
+
+        when(dialect.quoteDecimalLiteral("-1"))
+        .thenReturn(new StringBuilder("-1"));        
+        
         SqlQuery query = mock(SqlQuery.class);
         when(query.getDialect()).thenReturn(dialect);
 

@@ -34,10 +34,12 @@ public class InterbaseDialect extends JdbcDialectImpl {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
+    @Override
     public boolean allowsAs() {
         return false;
     }
 
+    @Override
     public boolean allowsFromQuery() {
         return false;
     }

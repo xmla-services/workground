@@ -49,7 +49,7 @@ public class NuoDbDialect extends JdbcDialectImpl {
      * @return the generated SQL statement for an inline dataset
      */
     @Override
-    public String generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
+    public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         return generateInlineGeneric(columnNames, columnTypes, valueList, " FROM DUAL", false);
     }
 
@@ -58,13 +58,12 @@ public class NuoDbDialect extends JdbcDialectImpl {
      * dates using a function.
      *
      * @param buf   Buffer to append to
-     * @param value Value as string
      * @param date  Value as date
      */
     @Override
-    protected void quoteDateLiteral(StringBuilder buf, String value, Date date) {
+    protected void quoteDateLiteral(StringBuilder buf, Date date) {
         buf.append("DATE(");
-        Util.singleQuoteString(value, buf);
+        Util.singleQuoteString(date.toString(), buf);
         buf.append(")");
     }
 
