@@ -15,8 +15,11 @@ package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.HashMap;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -29,9 +32,26 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xmlunit.assertj3.XmlAssert;
+
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
 
 public class XMLUtil {
 
+    public static XmlAssert createAssert(SOAPMessage response) throws SOAPException, IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        response.writeTo(baos);
+        String result = new String(baos.toByteArray());
+        XmlAssert xmlAssert = XmlAssert.assertThat(result);
+        System.out.println(result);
+        HashMap<String, String> nsMap = new HashMap<>();
+        nsMap.put("SOAP", "http://schemas.xmlsoap.org/soap/envelope/");
+        nsMap.put("msxmla", "urn:schemas-microsoft-com:xml-analysis");
+        nsMap.put("rowset", "urn:schemas-microsoft-com:xml-analysis:rowset");
+        xmlAssert = xmlAssert.withNamespaceContext(nsMap);
+        return xmlAssert;
+    }
     public static String pretty(String xmlData) throws Exception {
         return pretty(xmlData, 2);
     }
