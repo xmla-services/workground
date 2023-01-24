@@ -52,6 +52,7 @@ public class XMLUtil {
         xmlAssert = xmlAssert.withNamespaceContext(nsMap);
         return xmlAssert;
     }
+
     public static String pretty(String xmlData) throws Exception {
         return pretty(xmlData, 2);
     }

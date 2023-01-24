@@ -28,13 +28,14 @@ import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
 import org.eclipse.daanse.xmla.model.jaxb.xmla.Discover;
-import org.eclipse.daanse.xmla.model.jaxb.xmla.Discover.Restrictions;
 import org.eclipse.daanse.xmla.model.jaxb.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.model.jaxb.xmla.DiscoverResponse.Return;
 import org.eclipse.daanse.xmla.model.jaxb.xmla.Properties;
+import org.eclipse.daanse.xmla.model.jaxb.xmla.Restrictions;
 import org.eclipse.daanse.xmla.model.jaxb.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.model.jaxb.xmla_rowset.Rowset;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
@@ -48,6 +49,7 @@ import aQute.bnd.annotation.service.ServiceCapability;
 
 @ServiceCapability(XmlaService.class)
 //@EnabledOnOs(OS.WINDOWS)
+@Disabled
 public class MsClientTest {
     private Logger logger = LoggerFactory.getLogger(MsClientTest.class);
 

@@ -52,7 +52,7 @@ public class DiscoverResponseTest {
 
     public static final String REQUEST_DISCOVER_DUMMY = """
             <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
-               <RequestType>DUMMY</RequestType>
+              <RequestType>DUMMY</RequestType>
             </Discover>
             """;
 

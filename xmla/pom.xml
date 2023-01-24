@@ -20,7 +20,6 @@
   <artifactId>org.eclipse.daanse.xmla</artifactId>
   <packaging>pom</packaging>
   <modules>
-      <module>api</module>
       <module>ws</module>
       <module>model.jaxb</module>
   </modules>
