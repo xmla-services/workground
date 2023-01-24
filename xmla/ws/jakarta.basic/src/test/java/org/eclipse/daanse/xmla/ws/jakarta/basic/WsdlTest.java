@@ -66,7 +66,6 @@ public class WsdlTest {
         bc.registerService(XmlaService.class, xmlaService, FrameworkUtil
                 .asDictionary(Map.of(Constants.XMLASERVICE_FILTER_KEY, Constants.XMLASERVICE_FILTER_VALUE)));
 
-        // TODO: register matching MsXmlAnalysisSoap
     }
 
     @Test

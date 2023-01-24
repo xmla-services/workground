@@ -84,6 +84,7 @@ public class SOAPUtil {
         return new String(baos.toByteArray());
 
     }
+
     public static Consumer<SOAPMessage> envelop(String xmlString) throws SOAPException {
 
         return plainSoapMessage -> {

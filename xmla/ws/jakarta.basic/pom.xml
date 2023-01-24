@@ -40,11 +40,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>jakarta.xml.ws</groupId>
-      <artifactId>jakarta.xml.ws-api</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
       <groupId>com.sun.xml.ws</groupId>
       <artifactId>jaxws-rt</artifactId>
       <scope>test</scope>
@@ -62,10 +57,6 @@
     <dependency>
       <groupId>jakarta.xml.ws</groupId>
       <artifactId>jakarta.xml.ws-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.xml.ws</groupId>
-      <artifactId>jaxws-rt</artifactId>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>

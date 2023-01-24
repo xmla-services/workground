@@ -64,12 +64,10 @@ public class AuthRequestTest {
         XmlaService xmlaService = mock(XmlaService.class);
         bc.registerService(XmlaService.class, xmlaService, FrameworkUtil
                 .asDictionary(Map.of(Constants.XMLASERVICE_FILTER_KEY, Constants.XMLASERVICE_FILTER_VALUE)));
-
-        // TODO: register matching MsXmlAnalysisSoap
     }
 
     @Test()
-    void testRequest_AUTH(@InjectService XmlaService xmlaService) throws Exception {
+    void test_AUTH(@InjectService XmlaService xmlaService) throws Exception {
 
         AuthenticateResponse ar = new AuthenticateResponse();
         ReturnValue rv = new ReturnValue();

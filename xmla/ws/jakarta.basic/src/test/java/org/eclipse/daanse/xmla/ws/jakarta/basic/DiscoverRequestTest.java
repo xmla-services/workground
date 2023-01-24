@@ -50,30 +50,6 @@ import aQute.bnd.annotation.service.ServiceCapability;
 public class DiscoverRequestTest {
     private Logger logger = LoggerFactory.getLogger(DiscoverRequestTest.class);
 
-    public static final String REQUEST_DISCOVER_MDSCHEMACUBES_CONTENT = """
-            <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
-            <RequestType>MDSCHEMA_CUBES</RequestType>
-            <Restrictions></Restrictions>
-            <Properties>
-            <PropertyList>
-            <Content>Data</Content>
-            </PropertyList>
-            </Properties>
-            </Discover>
-            """;
-
-    public static final String REQUEST_DISCOVER_PROPERTIES_LocaleIdentifier = """
-            <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
-               <RequestType>DISCOVER_PROPERTIES</RequestType>
-                <Restrictions/>
-                <Properties>
-                  <PropertyList>
-                    <LocaleIdentifier>1033</LocaleIdentifier>
-                  </PropertyList>
-                </Properties>
-            </Discover>
-            """;
-
     @InjectBundleContext
     BundleContext bc;
 
@@ -92,10 +68,22 @@ public class DiscoverRequestTest {
     }
 
     @Test
-    void testRequest_DISCOVER_PROPERTIES_LocaleIdentifier(@InjectService XmlaService xmlaService) throws Exception {
+    void test_DISCOVER_PROPERTIES_LocaleIdentifier(@InjectService XmlaService xmlaService) throws Exception {
+
+        final String request = """
+                <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
+                  <RequestType>DISCOVER_PROPERTIES</RequestType>
+                  <Restrictions/>
+                  <Properties>
+                    <PropertyList>
+                      <LocaleIdentifier>1033</LocaleIdentifier>
+                    </PropertyList>
+                  </Properties>
+                </Discover>
+                """;
 
         SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
-                SOAPUtil.envelop(REQUEST_DISCOVER_PROPERTIES_LocaleIdentifier));
+                SOAPUtil.envelop(request));
 
         verify(xmlaService, (times(1))).discover(dicoverCaptor.capture(), Mockito.any(), Mockito.any(), Mockito.any());
 
@@ -113,19 +101,29 @@ public class DiscoverRequestTest {
                     assertThat(d.getProperties()).isNotNull()
                             .satisfies(r -> {
                                 assertThat(r.getPropertyList()).isNotNull()
-                                        .satisfies(pl -> pl.getLocaleIdentifier()
-                                                .equals(new BigInteger("1033")));
+                                        .satisfies(pl -> {
+                                            assertThat(pl.getLocaleIdentifier()).isEqualTo(new BigInteger("1033"));
+                                        });
                             });
-
                 });
-
     }
 
     @Test
-    void testRequest_MDSCHEMA_CUBES_Content_Data(@InjectService XmlaService xmlaService) throws Exception {
+    void test_MDSCHEMA_CUBES_Content_Data(@InjectService XmlaService xmlaService) throws Exception {
 
+        final String request = """
+                <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
+                  <RequestType>MDSCHEMA_CUBES</RequestType>
+                  <Restrictions></Restrictions>
+                  <Properties>
+                    <PropertyList>
+                      <Content>Data</Content>
+                    </PropertyList>
+                  </Properties>
+                </Discover>
+                """;
         SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
-                SOAPUtil.envelop(REQUEST_DISCOVER_MDSCHEMACUBES_CONTENT));
+                SOAPUtil.envelop(request));
 
         verify(xmlaService, (times(1))).discover(dicoverCaptor.capture(), Mockito.any(), Mockito.any(), Mockito.any());
 
@@ -143,8 +141,326 @@ public class DiscoverRequestTest {
                     assertThat(d.getProperties()).isNotNull()
                             .satisfies(r -> {
                                 assertThat(r.getPropertyList()).isNotNull()
-                                        .satisfies(pl -> pl.getContent()
-                                                .equals("Data"));
+                                        .satisfies(pl -> {
+                                            assertThat(pl.getContent()).isEqualTo("Data");
+
+                                        });
+
+                            });
+                });
+
+    }
+
+    @Test
+    void test_DBSCHEMA_CATALOGS(@InjectService XmlaService xmlaService) throws Exception {
+
+        final String request = """
+                <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
+                  <RequestType>DBSCHEMA_CATALOGS</RequestType>
+                  <Restrictions>
+                    <RestrictionList/>
+                  </Restrictions>
+                  <Properties>
+                    <PropertyList>
+                      <DataSourceInfo>${datasource}</DataSourceInfo>
+                      <Catalog>${catalog}</Catalog>
+                      <Format>Tabular</Format>
+                    </PropertyList>
+                  </Properties>
+                </Discover>
+                """;
+        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+                SOAPUtil.envelop(request));
+
+        verify(xmlaService, (times(1))).discover(dicoverCaptor.capture(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        assertThat(dicoverCaptor.getValue()).isNotNull()
+                .satisfies(d -> {
+                    // getRequestType
+                    assertThat(d.getRequestType()).isNotNull()
+                            .isEqualTo("DBSCHEMA_CATALOGS");
+                    // getRestrictions
+                    assertThat(d.getRestrictions()).isNotNull()
+                            .satisfies(r -> {
+                                assertThat(r.getRestrictionList()).isNotNull()
+                                        .isEmpty();
+                            });
+                    // getProperties
+                    assertThat(d.getProperties()).isNotNull()
+                            .satisfies(r -> {
+                                assertThat(r.getPropertyList()).isNotNull()
+                                        .satisfies(pl -> {
+                                            assertThat(pl.getDataSourceInfo()).isEqualTo("${datasource}");
+                                            assertThat(pl.getCatalog()).isEqualTo("${catalog}");
+                                            assertThat(pl.getFormat()).isEqualTo("Tabular");
+                                        });
+                            });
+
+                });
+
+    }
+
+    @Test
+    void test_DBSCHEMA_SCHEMATA(@InjectService XmlaService xmlaService) throws Exception {
+
+        final String request = """
+                <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
+                  <RequestType>DBSCHEMA_SCHEMATA</RequestType>
+                  <Restrictions>
+                    <RestrictionList/>
+                  </Restrictions>
+                  <Properties>
+                    <PropertyList>
+                      <DataSourceInfo>${datasource}</DataSourceInfo>
+                      <Catalog>${catalog}</Catalog>
+                      <Format>Tabular</Format>
+                    </PropertyList>
+                  </Properties>
+                </Discover>
+                """;
+        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+                SOAPUtil.envelop(request));
+
+        verify(xmlaService, (times(1))).discover(dicoverCaptor.capture(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        assertThat(dicoverCaptor.getValue()).isNotNull()
+                .satisfies(d -> {
+                    // getRequestType
+                    assertThat(d.getRequestType()).isNotNull()
+                            .isEqualTo("DBSCHEMA_SCHEMATA");
+                    // getRestrictions
+                    assertThat(d.getRestrictions()).isNotNull()
+                            .satisfies(r -> {
+                                assertThat(r.getRestrictionList()).isNotNull()
+                                        .isEmpty();
+                            });
+                    // getProperties
+                    assertThat(d.getProperties()).isNotNull()
+                            .satisfies(r -> {
+                                assertThat(r.getPropertyList()).isNotNull()
+                                        .satisfies(pl -> {
+                                            assertThat(pl.getDataSourceInfo()).isEqualTo("${datasource}");
+                                            assertThat(pl.getCatalog()).isEqualTo("${catalog}");
+                                            assertThat(pl.getFormat()).isEqualTo("Tabular");
+                                        });
+                            });
+
+                });
+
+    }
+
+    @Test
+    void test_DISCOVER_DATASOURCES(@InjectService XmlaService xmlaService) throws Exception {
+
+        final String request = """
+                <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
+                  <RequestType>DISCOVER_DATASOURCES</RequestType>
+                  <Restrictions>
+                    <RestrictionList/>
+                  </Restrictions>
+                  <Properties>
+                    <PropertyList>
+                      <Format>Tabular</Format>
+                    </PropertyList>
+                  </Properties>
+                </Discover>""";
+        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+                SOAPUtil.envelop(request));
+
+        verify(xmlaService, (times(1))).discover(dicoverCaptor.capture(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        assertThat(dicoverCaptor.getValue()).isNotNull()
+                .satisfies(d -> {
+                    // getRequestType
+                    assertThat(d.getRequestType()).isNotNull()
+                            .isEqualTo("DISCOVER_DATASOURCES");
+                    // getRestrictions
+                    assertThat(d.getRestrictions()).isNotNull()
+                            .satisfies(r -> {
+                                assertThat(r.getRestrictionList()).isNotNull()
+                                        .isEmpty();
+                            });
+                    // getProperties
+                    assertThat(d.getProperties()).isNotNull()
+                            .satisfies(r -> {
+                                assertThat(r.getPropertyList()).isNotNull()
+                                        .satisfies(pl -> {
+                                            assertThat(pl.getFormat()).isEqualTo("Tabular");
+                                        });
+                            });
+
+                });
+
+    }
+
+    @Test
+    void test_MDSCHEMA_CUBES_mdschemaCubesRestrictions(@InjectService XmlaService xmlaService) throws Exception {
+
+        final String request = """
+                <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
+                  <RequestType>MDSCHEMA_CUBES</RequestType>
+                  <Restrictions>
+                    <RestrictionList>
+                      <CATALOG_NAME>${catalog}</CATALOG_NAME>
+                      <CUBE_NAME>Sales</CUBE_NAME>
+                    </RestrictionList>
+                  </Restrictions>
+                  <Properties>
+                    <PropertyList>
+                      <DataSourceInfo>${datasource}</DataSourceInfo>
+                      <Catalog>${catalog}</Catalog>
+                      <Format>Tabular</Format>
+                    </PropertyList>
+                  </Properties>
+                </Discover>
+                """;
+        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+                SOAPUtil.envelop(request));
+
+        verify(xmlaService, (times(1))).discover(dicoverCaptor.capture(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        Discover discover = dicoverCaptor.getValue();
+        assertThat(discover).isNotNull()
+                .satisfies(d -> {
+                    // getRequestType
+                    assertThat(d.getRequestType()).isNotNull()
+                            .isEqualTo("MDSCHEMA_CUBES");
+                    // getRestrictions
+                    assertThat(d.getRestrictions()).isNotNull()
+                            .satisfies(r -> {
+                                assertThat(r.getRestrictionMap()).isNotNull()
+                                        .hasSize(2)
+                                        .containsEntry("CATALOG_NAME", "${catalog}")
+                                        .containsEntry("CUBE_NAME", "Sales");
+                            });
+                    // getProperties
+                    assertThat(d.getProperties()).isNotNull()
+                            .satisfies(r -> {
+                                assertThat(r.getPropertyList()).isNotNull()
+                                        .satisfies(pl -> {
+                                            assertThat(pl.getDataSourceInfo()).isEqualTo("${datasource}");
+                                            assertThat(pl.getCatalog()).isEqualTo("${catalog}");
+                                            assertThat(pl.getFormat()).isEqualTo("Tabular");
+                                        });
+
+                            });
+
+                });
+
+    }
+
+    @Test
+    void test_MDSCHEMA_DIMENSIONS_Restrictions(@InjectService XmlaService xmlaService) throws Exception {
+
+        final String request = """
+                             <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
+                  <RequestType>MDSCHEMA_DIMENSIONS</RequestType>
+                  <Restrictions>
+                    <RestrictionList>
+                      <CATALOG_NAME>${catalog}</CATALOG_NAME>
+                      <CUBE_NAME>Sales</CUBE_NAME>
+                      <DIMENSION_NAME>Time</DIMENSION_NAME>
+                    </RestrictionList>
+                  </Restrictions>
+                  <Properties>
+                    <PropertyList>
+                      <DataSourceInfo>${datasource}</DataSourceInfo>
+                      <Catalog>${catalog}</Catalog>
+                      <Format>Tabular</Format>
+                    </PropertyList>
+                  </Properties>
+                </Discover>
+                """;
+        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+                SOAPUtil.envelop(request));
+
+        verify(xmlaService, (times(1))).discover(dicoverCaptor.capture(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        Discover discover = dicoverCaptor.getValue();
+        assertThat(discover).isNotNull()
+                .satisfies(d -> {
+                    // getRequestType
+                    assertThat(d.getRequestType()).isNotNull()
+                            .isEqualTo("MDSCHEMA_DIMENSIONS");
+                    // getRestrictions
+                    assertThat(d.getRestrictions()).isNotNull()
+                            .satisfies(r -> {
+
+                                assertThat(r.getRestrictionMap()).isNotNull()
+                                        .hasSize(3)
+                                        .containsEntry("CATALOG_NAME", "${catalog}")
+                                        .containsEntry("CUBE_NAME", "Sales")
+                                        .containsEntry("DIMENSION_NAME", "Time");
+
+                            });
+                    // getProperties
+                    assertThat(d.getProperties()).isNotNull()
+                            .satisfies(r -> {
+                                assertThat(r.getPropertyList()).isNotNull()
+                                        .satisfies(pl -> {
+                                            assertThat(pl.getDataSourceInfo()).isEqualTo("${datasource}");
+                                            assertThat(pl.getCatalog()).isEqualTo("${catalog}");
+                                            assertThat(pl.getFormat()).isEqualTo("Tabular");
+                                        });
+
+                            });
+
+                });
+
+    }
+
+    @Test
+    void test_MDSCHEMA_HIERARCHIES_Restrictions(@InjectService XmlaService xmlaService) throws Exception {
+
+        final String request = """
+                <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
+                  <RequestType>MDSCHEMA_HIERARCHIES</RequestType>
+                  <Restrictions>
+                    <RestrictionList>
+                      <CATALOG_NAME>${catalog}</CATALOG_NAME>
+                      <CUBE_NAME>Sales</CUBE_NAME>
+                      <DIMENSION_UNIQUE_NAME>[Time]</DIMENSION_UNIQUE_NAME>
+                    </RestrictionList>
+                  </Restrictions>
+                  <Properties>
+                    <PropertyList>
+                      <DataSourceInfo>${datasource}</DataSourceInfo>
+                      <Catalog>${catalog}</Catalog>
+                      <Format>Tabular</Format>
+                    </PropertyList>
+                  </Properties>
+                </Discover>
+                """;
+        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+                SOAPUtil.envelop(request));
+
+        verify(xmlaService, (times(1))).discover(dicoverCaptor.capture(), Mockito.any(), Mockito.any(), Mockito.any());
+
+        Discover discover = dicoverCaptor.getValue();
+        assertThat(discover).isNotNull()
+                .satisfies(d -> {
+                    // getRequestType
+                    assertThat(d.getRequestType()).isNotNull()
+                            .isEqualTo("MDSCHEMA_HIERARCHIES");
+                    // getRestrictions
+                    assertThat(d.getRestrictions()).isNotNull()
+                            .satisfies(r -> {
+                                assertThat(r.getRestrictionMap()).isNotNull()
+                                        .hasSize(3)
+                                        .containsEntry("CATALOG_NAME", "${catalog}")
+                                        .containsEntry("CUBE_NAME", "Sales")
+                                        .containsEntry("DIMENSION_UNIQUE_NAME", "[Time]");
+                            });
+                    // getProperties
+                    assertThat(d.getProperties()).isNotNull()
+                            .satisfies(r -> {
+                                assertThat(r.getPropertyList()).isNotNull()
+                                        .satisfies(pl -> {
+                                            assertThat(pl.getDataSourceInfo()).isEqualTo("${datasource}");
+                                            assertThat(pl.getCatalog()).isEqualTo("${catalog}");
+                                            assertThat(pl.getFormat()).isEqualTo("Tabular");
+                                        });
+
                             });
 
                 });

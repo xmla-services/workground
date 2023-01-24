@@ -53,7 +53,6 @@ public class ObjectFactory {
   private final static QName _AndOrTypeGreaterOrEqual_QNAME = new QName("", "GreaterOrEqual");
   private final static QName _AndOrTypeLike_QNAME = new QName("", "Like");
   private final static QName _AndOrTypeNotLike_QNAME = new QName("", "NotLike");
-  private final static QName _DiscoverRestrictionsRestrictionList_QNAME = new QName("", "RestrictionList");
 
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema
@@ -884,8 +883,8 @@ public class ObjectFactory {
    * Create an instance of {@link Discover.Restrictions }
    * 
    */
-  public Discover.Restrictions createDiscoverRestrictions() {
-    return new Discover.Restrictions();
+  public Restrictions createDiscoverRestrictions() {
+    return new Restrictions();
   }
 
   /**
@@ -3388,13 +3387,7 @@ public class ObjectFactory {
     return new DataSourceView.Annotations();
   }
 
-  /**
-   * Create an instance of {@link Discover.Restrictions.RestrictionList }
-   * 
-   */
-  public Discover.Restrictions.RestrictionList createDiscoverRestrictionsRestrictionList() {
-    return new Discover.Restrictions.RestrictionList();
-  }
+
 
   /**
    * Create an instance of {@link JAXBElement }{@code <}{@link String }{@code >}
@@ -3613,19 +3606,5 @@ public class ObjectFactory {
     return new JAXBElement<BoolBinop>(_AndOrTypeNotLike_QNAME, BoolBinop.class, AndOrType.class, value);
   }
 
-  /**
-   * Create an instance of {@link JAXBElement
-   * }{@code <}{@link Discover.Restrictions.RestrictionList }{@code >}
-   * 
-   * @param value Java instance representing xml element's value.
-   * @return the new instance of {@link JAXBElement
-   *         }{@code <}{@link Discover.Restrictions.RestrictionList }{@code >}
-   */
-  @XmlElementDecl(namespace = "", name = "RestrictionList", scope = Discover.Restrictions.class)
-  public JAXBElement<Discover.Restrictions.RestrictionList> createDiscoverRestrictionsRestrictionList(
-      Discover.Restrictions.RestrictionList value) {
-    return new JAXBElement<Discover.Restrictions.RestrictionList>(_DiscoverRestrictionsRestrictionList_QNAME,
-        Discover.Restrictions.RestrictionList.class, Discover.Restrictions.class, value);
-  }
 
 }
