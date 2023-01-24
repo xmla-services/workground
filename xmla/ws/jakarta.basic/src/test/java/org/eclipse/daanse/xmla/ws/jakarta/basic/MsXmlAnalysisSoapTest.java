@@ -14,7 +14,6 @@
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -30,7 +29,6 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.function.Consumer;
 
 import javax.xml.namespace.QName;
 
@@ -41,6 +39,7 @@ import org.eclipse.daanse.xmla.model.jaxb.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.model.jaxb.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.model.jaxb.xmla_rowset.Rowset;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -59,22 +58,19 @@ import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xmlunit.assertj3.XmlAssert;
 
 import aQute.bnd.annotation.service.ServiceCapability;
-import jakarta.xml.soap.SOAPBody;
-import jakarta.xml.soap.SOAPEnvelope;
-import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
-import jakarta.xml.soap.SOAPPart;
 
 @ServiceCapability(XmlaService.class)
 @ExtendWith(ConfigurationExtension.class)
-@WithFactoryConfiguration(factoryPid = MinTest.PID_MS_SOAP, name = "test-ms-config", location = "?", properties = {
-        @Property(key = "xmlaService.target", value = "(" + MinTest.XMLASERVICE_FILTER_KEY + "="
-                + MinTest.XMLASERVICE_FILTER_VALUE + ")"),
-        @Property(key = "osgi.soap.endpoint.contextpath", value = MinTest.WS_PATH) })
-public class MinTest {
-    private Logger logger = LoggerFactory.getLogger(MinTest.class);
+@WithFactoryConfiguration(factoryPid = MsXmlAnalysisSoapTest.PID_MS_SOAP, name = "test-ms-config", location = "?", properties = {
+        @Property(key = "xmlaService.target", value = "(" + MsXmlAnalysisSoapTest.XMLASERVICE_FILTER_KEY + "="
+                + MsXmlAnalysisSoapTest.XMLASERVICE_FILTER_VALUE + ")"),
+        @Property(key = "osgi.soap.endpoint.contextpath", value = MsXmlAnalysisSoapTest.WS_PATH) })
+public class MsXmlAnalysisSoapTest {
+    private Logger logger = LoggerFactory.getLogger(MsXmlAnalysisSoapTest.class);
     protected static final String XMLASERVICE_FILTER_KEY = "type";
     protected static final String XMLASERVICE_FILTER_VALUE = "mock";
     protected static final String WS_PATH = "/xmla";
@@ -148,135 +144,154 @@ public class MinTest {
         // TODO: register matching MsXmlAnalysisSoap
     }
 
-    @Test
-    void testRequestwsdl(@InjectService XmlaService xmlaService) throws Exception {
-        printScrInfo();
-        try (InputStream stream = new URL("http://localhost:" + SERVER_PORT_WHITEBOARD + WS_PATH + "?wsdl")
-                .openStream()) {
-            ByteArrayOutputStream out = new ByteArrayOutputStream();
-            stream.transferTo(out);
-            String wsdl = new String(out.toByteArray(), StandardCharsets.UTF_8).replaceAll("\\s", " ")
-                    .replaceAll("\\s+", " ");
-            System.out.println("We got the WSDL: " + wsdl);
-            assertThat(wsdl).matches(".*<definitions.*name=\"MsXmlAnalysisService\".*>.*")
-                    .contains("<service name=\"MsXmlAnalysisService\">");
-        }
+    @Nested
+    class WsdlTest {
+        @Test
+        void testRequestwsdl(@InjectService XmlaService xmlaService) throws Exception {
+            printScrInfo();
+            String sUrl = "http://localhost:" + SERVER_PORT_WHITEBOARD + WS_PATH + "?wsdl";
+            try (InputStream stream = new URL(sUrl).openStream()) {
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                stream.transferTo(out);
+                String wsdl = new String(out.toByteArray(), StandardCharsets.UTF_8).replaceAll("\\s", " ")
+                        .replaceAll("\\s+", " ");
+                System.out.println("We got the WSDL: " + wsdl);
+                assertThat(wsdl).matches(".*<definitions.*name=\"MsXmlAnalysisService\".*>.*")
+                        .contains("<service name=\"MsXmlAnalysisService\">");
+            }
 
+        }
     }
 
-    @Test()
-    void testRequest_AUTH(@InjectService XmlaService xmlaService) throws Exception {
+    @Nested
+    class RequestTest {
 
-        AuthenticateResponse ar = new AuthenticateResponse();
-        ReturnValue rv = new ReturnValue();
-        rv.setSspiHandshake("22".getBytes());
-        ar.setReturn(rv);
-        when(xmlaService.authenticate(Mockito.any())).thenReturn(ar);
+        @Nested
+        class AuthTest {
+            @Test()
+            void testRequest_AUTH(@InjectService XmlaService xmlaService) throws Exception {
 
-        SOAPUtil.callSoapWebService(soapEndpointUrl, Optional.empty(), envelop(REQUEST_AUTHENTICATE_1));
+                AuthenticateResponse ar = new AuthenticateResponse();
+                ReturnValue rv = new ReturnValue();
+                rv.setSspiHandshake("22".getBytes());
+                ar.setReturn(rv);
+                when(xmlaService.authenticate(Mockito.any())).thenReturn(ar);
+
+                SOAPUtil.callSoapWebService(soapEndpointUrl, Optional.empty(),
+                        SOAPUtil.envelop(REQUEST_AUTHENTICATE_1));
 
 //        verify(xmlaService, (times(1))).authenticate(Mockito.any());
-    }
-
-    @Test
-    void testRequest_DISCOVER_PROPERTIES_LocaleIdentifier(@InjectService XmlaService xmlaService) throws Exception {
-
-        SOAPUtil.callSoapWebService(soapEndpointUrl, Optional.of(SOAP_ACTION_DISCOVER),
-                envelop(REQUEST_DISCOVER_PROPERTIES_LocaleIdentifier));
-
-        verify(xmlaService, (times(1))).discover(dicoverCaptor.capture(), Mockito.any(), Mockito.any(), Mockito.any());
-
-        assertThat(dicoverCaptor.getValue()).isNotNull()
-                .satisfies(d -> {
-                    // getRequestType
-                    assertThat(d.getRequestType()).isNotNull()
-                            .isEqualTo("DISCOVER_PROPERTIES");
-                    // getRestrictions
-                    assertThat(d.getRestrictions()).isNotNull()
-                            .satisfies(r -> {
-                                assertThat(r.getRestrictionList()).isNull();
-                            });
-                    // getProperties
-                    assertThat(d.getProperties()).isNotNull()
-                            .satisfies(r -> {
-                                assertThat(r.getPropertyList()).isNotNull()
-                                        .satisfies(pl -> pl.getLocaleIdentifier()
-                                                .equals(new BigInteger("1033")));
-                            });
-
-                });
-
-    }
-
-    @Test
-    void testRequest_MDSCHEMA_CUBES_Content_Data(@InjectService XmlaService xmlaService) throws Exception {
-
-        SOAPUtil.callSoapWebService(soapEndpointUrl, Optional.of(SOAP_ACTION_DISCOVER),
-                envelop(REQUEST_DISCOVER_MDSCHEMACUBES_CONTENT));
-
-        verify(xmlaService, (times(1))).discover(dicoverCaptor.capture(), Mockito.any(), Mockito.any(), Mockito.any());
-
-        assertThat(dicoverCaptor.getValue()).isNotNull()
-                .satisfies(d -> {
-                    // getRequestType
-                    assertThat(d.getRequestType()).isNotNull()
-                            .isEqualTo("MDSCHEMA_CUBES");
-                    // getRestrictions
-                    assertThat(d.getRestrictions()).isNotNull()
-                            .satisfies(r -> {
-                                assertThat(r.getRestrictionList()).isNull();
-                            });
-                    // getProperties
-                    assertThat(d.getProperties()).isNotNull()
-                            .satisfies(r -> {
-                                assertThat(r.getPropertyList()).isNotNull()
-                                        .satisfies(pl -> pl.getContent()
-                                                .equals("Data"));
-                            });
-
-                });
-
-    }
-
-    @Test
-    void testResponse(@InjectService XmlaService xmlaService) throws Exception {
-
-        DiscoverResponse discoverResponse = new DiscoverResponse();
-
-        org.eclipse.daanse.xmla.model.jaxb.xmla.DiscoverResponse.Return r = new DiscoverResponse.Return();
-        Rowset rs = new Rowset();
-        Row row = new Row();
-        rs.getRow()
-                .add(row);
-
-        r.setRoot(rs);
-        discoverResponse.setReturn(r);
-
-        when(xmlaService.discover(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
-                .thenReturn(discoverResponse);
-
-        SOAPMessage response = SOAPUtil.callSoapWebService(soapEndpointUrl, Optional.of(SOAP_ACTION_DISCOVER),
-                envelop(""));
-        System.out.println(response);
-
-    }
-
-    private static Consumer<SOAPMessage> envelop(String xmlString) throws SOAPException {
-
-        return plainSoapMessage -> {
-
-            try {
-                SOAPPart soapPart = plainSoapMessage.getSOAPPart();
-                plainSoapMessage.setProperty(SOAPMessage.WRITE_XML_DECLARATION, "false");
-                SOAPEnvelope envelope = soapPart.getEnvelope();
-                // SOAP Body
-                SOAPBody soapBody = envelope.getBody();
-                soapBody.addDocument(XMLUtil.stringToDocument(xmlString));
-
-            } catch (SOAPException e) {
-                fail(e);
             }
-        };
+        }
+
+        @Nested
+        class DiscoverTest {
+            @Test
+            void testRequest_DISCOVER_PROPERTIES_LocaleIdentifier(@InjectService XmlaService xmlaService)
+                    throws Exception {
+
+                SOAPUtil.callSoapWebService(soapEndpointUrl, Optional.of(SOAP_ACTION_DISCOVER),
+                        SOAPUtil.envelop(REQUEST_DISCOVER_PROPERTIES_LocaleIdentifier));
+
+                verify(xmlaService, (times(1))).discover(dicoverCaptor.capture(), Mockito.any(), Mockito.any(),
+                        Mockito.any());
+
+                assertThat(dicoverCaptor.getValue()).isNotNull()
+                        .satisfies(d -> {
+                            // getRequestType
+                            assertThat(d.getRequestType()).isNotNull()
+                                    .isEqualTo("DISCOVER_PROPERTIES");
+                            // getRestrictions
+                            assertThat(d.getRestrictions()).isNotNull()
+                                    .satisfies(r -> {
+                                        assertThat(r.getRestrictionList()).isNull();
+                                    });
+                            // getProperties
+                            assertThat(d.getProperties()).isNotNull()
+                                    .satisfies(r -> {
+                                        assertThat(r.getPropertyList()).isNotNull()
+                                                .satisfies(pl -> pl.getLocaleIdentifier()
+                                                        .equals(new BigInteger("1033")));
+                                    });
+
+                        });
+
+            }
+
+            @Test
+            void testRequest_MDSCHEMA_CUBES_Content_Data(@InjectService XmlaService xmlaService) throws Exception {
+
+                SOAPUtil.callSoapWebService(soapEndpointUrl, Optional.of(SOAP_ACTION_DISCOVER),
+                        SOAPUtil.envelop(REQUEST_DISCOVER_MDSCHEMACUBES_CONTENT));
+
+                verify(xmlaService, (times(1))).discover(dicoverCaptor.capture(), Mockito.any(), Mockito.any(),
+                        Mockito.any());
+
+                assertThat(dicoverCaptor.getValue()).isNotNull()
+                        .satisfies(d -> {
+                            // getRequestType
+                            assertThat(d.getRequestType()).isNotNull()
+                                    .isEqualTo("MDSCHEMA_CUBES");
+                            // getRestrictions
+                            assertThat(d.getRestrictions()).isNotNull()
+                                    .satisfies(r -> {
+                                        assertThat(r.getRestrictionList()).isNull();
+                                    });
+                            // getProperties
+                            assertThat(d.getProperties()).isNotNull()
+                                    .satisfies(r -> {
+                                        assertThat(r.getPropertyList()).isNotNull()
+                                                .satisfies(pl -> pl.getContent()
+                                                        .equals("Data"));
+                                    });
+
+                        });
+
+            }
+        }
+
+        @Nested
+        class ExecuteTest {
+
+        }
+    }
+
+    @Nested
+    class ResponseTest {
+
+        @Nested
+        class DiscoverTest {
+            @Test
+            void testResponse(@InjectService XmlaService xmlaService) throws Exception {
+
+                DiscoverResponse discoverResponse = new DiscoverResponse();
+
+                org.eclipse.daanse.xmla.model.jaxb.xmla.DiscoverResponse.Return r = new DiscoverResponse.Return();
+                Rowset rs = new Rowset();
+                Row row = new Row();
+                rs.getRow()
+                        .add(row);
+
+                r.setRoot(rs);
+                discoverResponse.setReturn(r);
+
+                when(xmlaService.discover(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
+                        .thenReturn(discoverResponse);
+
+                SOAPMessage response = SOAPUtil.callSoapWebService(soapEndpointUrl, Optional.of(SOAP_ACTION_DISCOVER),
+                        SOAPUtil.envelop(REQUEST_DISCOVER_PROPERTIES_LocaleIdentifier));
+
+                XmlAssert xmlAssert = XMLUtil.createAssert(response);
+                xmlAssert.hasXPath("/SOAP:Envelope");
+                xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/msxmla:return/rowset:root")
+                        .exist();
+
+            }
+        }
+        @Nested
+        class ExecuteTest {
+            
+        }
     }
 
     void printScrInfo() {

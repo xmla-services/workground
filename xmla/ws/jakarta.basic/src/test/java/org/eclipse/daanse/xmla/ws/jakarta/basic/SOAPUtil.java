@@ -26,10 +26,13 @@ import org.slf4j.LoggerFactory;
 
 import jakarta.xml.soap.MessageFactory;
 import jakarta.xml.soap.MimeHeaders;
+import jakarta.xml.soap.SOAPBody;
 import jakarta.xml.soap.SOAPConnection;
 import jakarta.xml.soap.SOAPConnectionFactory;
+import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import jakarta.xml.soap.SOAPPart;
 
 public class SOAPUtil {
     public static Logger logger = LoggerFactory.getLogger(SOAPUtil.class);
@@ -80,5 +83,22 @@ public class SOAPUtil {
         soapMessage.writeTo(baos);
         return new String(baos.toByteArray());
 
+    }
+    public static Consumer<SOAPMessage> envelop(String xmlString) throws SOAPException {
+
+        return plainSoapMessage -> {
+
+            try {
+                SOAPPart soapPart = plainSoapMessage.getSOAPPart();
+                plainSoapMessage.setProperty(SOAPMessage.WRITE_XML_DECLARATION, "false");
+                SOAPEnvelope envelope = soapPart.getEnvelope();
+                // SOAP Body
+                SOAPBody soapBody = envelope.getBody();
+                soapBody.addDocument(XMLUtil.stringToDocument(xmlString));
+
+            } catch (SOAPException e) {
+                fail(e);
+            }
+        };
     }
 }
