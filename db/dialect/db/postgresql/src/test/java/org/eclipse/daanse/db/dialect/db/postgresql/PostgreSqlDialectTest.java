@@ -19,7 +19,6 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Statement;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +30,7 @@ public class PostgreSqlDialectTest {
 
     @BeforeEach
     protected void setUp() throws Exception {
-        when(metaData.getDatabaseProductName()).thenReturn(DatabaseProduct.POSTGRESQL.name());
+        when(metaData.getDatabaseProductName()).thenReturn("POSTGRESQL");
         when(connection.getMetaData()).thenReturn(metaData);
         dialect = new PostgreSqlDialect();
         dialect.initialize(connection);

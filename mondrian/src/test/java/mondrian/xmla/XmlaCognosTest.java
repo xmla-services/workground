@@ -8,9 +8,10 @@
 */
 package mondrian.xmla;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.getDialect;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
@@ -46,7 +47,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
             && filename.equals("response"))
         {
             Dialect dialect = getDialect(connection);
-            switch (dialect.getDatabaseProduct()) {
+            switch (getDatabaseProduct(dialect.getDialectName())) {
             case DERBY:
             case VERTICA:
                 content = content.replace(
@@ -56,7 +57,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
             }
         } else if ("testCognosMDXSuiteHR_001".equals(testCaseName)
             && filename.equals("response")
-            && getDialect(connection).getDatabaseProduct()
+            && getDatabaseProduct(getDialect(connection).getDialectName())
                 .equals(DatabaseProduct.VERTICA))
         {
             content = content.replaceAll(
@@ -64,7 +65,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
                 + "<Value xsi:type=\\\"xsd):double", "$1:int");
         } else if ("testCognosMDXSuiteHR_002".equals(testCaseName)
             && filename.equals("response")
-            && getDialect(connection).getDatabaseProduct()
+            && getDatabaseProduct(getDialect(connection).getDialectName())
                 .equals(DatabaseProduct.VERTICA))
         {
             content = content.replaceAll(
@@ -82,7 +83,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
         java.sql.DriverManager.registerDriver(new MondrianOlap4jDriver(context.getContext()));// finy out why this dies not happend automatically
 
         Dialect dialect = getDialect(context.createConnection());
-        switch (dialect.getDatabaseProduct()) {
+        switch (getDatabaseProduct(dialect.getDialectName())) {
         case DERBY:
             // Derby gives right answer, but many cells have wrong xsi:type.
             return;
@@ -92,7 +93,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
 
 //    public void testCognosMDXSuiteHR_002() throws Exception {
 //        Dialect dialect = TestContext.instance().getDialect();
-//        switch (dialect.getDatabaseProduct()) {
+//        switch (getDatabaseProduct(dialect.getDialectName())) {
 //        case DERBY:
 //            // Derby gives right answer, but many cells have wrong xsi:type.
 //            return;

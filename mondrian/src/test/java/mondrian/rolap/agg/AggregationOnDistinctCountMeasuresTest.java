@@ -8,6 +8,7 @@
 */
 package mondrian.rolap.agg;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,7 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -503,7 +504,7 @@ public class AggregationOnDistinctCountMeasuresTest {
 
         // LucidDB has no limit on the size of IN list
         final boolean isLuciddb =
-            getDialect(context.createConnection()).getDatabaseProduct()
+            getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
             == DatabaseProduct.LUCIDDB;
 
       assertQueryReturns(context.createConnection(),

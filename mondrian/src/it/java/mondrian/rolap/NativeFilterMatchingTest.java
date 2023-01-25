@@ -46,7 +46,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
                 sqlMysql,
                 sqlMysql.length()),
             new SqlPattern(
-                Dialect.DatabaseProduct.POSTGRESQL,
+                Dialect.DatabaseProduct.POSTGRES,
                 sqlPgsql,
                 sqlPgsql.length())
         };
@@ -126,7 +126,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
                 sqlMysql,
                 sqlMysql.length()),
             new SqlPattern(
-                Dialect.DatabaseProduct.POSTGRESQL,
+                Dialect.DatabaseProduct.POSTGRES,
                 sqlPgsql,
                 sqlPgsql.length())
         };

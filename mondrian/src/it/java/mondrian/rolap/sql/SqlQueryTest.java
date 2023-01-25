@@ -21,7 +21,7 @@ import java.sql.SQLException;
 import java.util.*;
 
 import static mondrian.spi.Dialect.DatabaseProduct.MYSQL;
-import static mondrian.spi.Dialect.DatabaseProduct.POSTGRESQL;
+import static mondrian.spi.Dialect.DatabaseProduct.POSTGRES;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 

@@ -9,6 +9,7 @@
 
 package mondrian.test;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.withSchemaProcessor;
@@ -116,7 +117,7 @@ public class CaptionTest{
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testLevelCaptionExpression(TestingContext context) {
 
-        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
+        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
             case ACCESS:
             case ORACLE:
             case MARIADB:

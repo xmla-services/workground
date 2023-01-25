@@ -13,7 +13,6 @@ package org.eclipse.daanse.db.dialect.db.greenplum;
 
 import java.sql.Connection;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.postgresql.PostgreSqlDialect;
 import org.osgi.service.component.annotations.Component;
@@ -37,7 +36,7 @@ public class GreenplumDialect extends PostgreSqlDialect {
     @Override
     public boolean initialize(Connection connection) {
 
-        return super.initialize(connection) && isDatabase(DatabaseProduct.GREENPLUM, connection);
+        return super.initialize(connection) && isDatabase(SUPPORTED_PRODUCT_NAME, connection);
     }
 
     @Override
@@ -63,11 +62,6 @@ public class GreenplumDialect extends PostgreSqlDialect {
     @Override
     public boolean allowsCountDistinct() {
         return true;
-    }
-
-    @Override
-    public DatabaseProduct getDatabaseProduct() {
-        return DatabaseProduct.GREENPLUM;
     }
 
     @Override

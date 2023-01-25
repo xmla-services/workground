@@ -8,6 +8,7 @@
 */
 package mondrian.rolap;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -25,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
@@ -199,7 +200,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
         return dialect;
       }
     };
-    switch ( dialect.getDatabaseProduct() ) {
+    switch ( getDatabaseProduct(dialect.getDialectName()) ) {
       case ORACLE:
       case TERADATA:
       case DB2:
@@ -793,7 +794,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     prepareContext(context);
     Connection connection = context.createConnection();
     final Dialect dialect = getDialect(connection);
-    final DatabaseProduct product = dialect.getDatabaseProduct();
+    final DatabaseProduct product = getDatabaseProduct(dialect.getDialectName());
     switch ( product ) {
       case TERADATA:
       case INFOBRIGHT:
@@ -922,7 +923,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     // count(distinct).
     Connection connection = context.createConnection();
     final Dialect dialect = getDialect(connection);
-    switch ( dialect.getDatabaseProduct() ) {
+    switch ( getDatabaseProduct(dialect.getDialectName()) ) {
       case ORACLE:
         // Oracle gives 'feature not supported' in Express 10.2
       case ACCESS:
@@ -966,7 +967,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             + "   <Measure name=\"Store Count\" column=\"stores_id\" aggregator=\"count\" formatString=\"#,###\"/>"
             + "</Cube>";
     cube = cube.replaceAll( "`", dialect.getQuoteIdentifierString() );
-    if ( dialect.getDatabaseProduct() == DatabaseProduct.ORACLE ) {
+    if ( getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.ORACLE ) {
       cube = cube.replaceAll( " AS ", " " );
     }
 

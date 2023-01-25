@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
@@ -46,9 +45,9 @@ public class PostgreSqlDialect extends JdbcDialectImpl {
 
     @Override
     public boolean initialize(Connection connection) {
-        return super.initialize(connection) && !isDatabase(DatabaseProduct.GREENPLUM, connection)
-                && !isDatabase(DatabaseProduct.NETEZZA, connection)
-                && !isDatabase(DatabaseProduct.REDSHIFT, connection);
+        return super.initialize(connection) && !isDatabase("GREENPLUM", connection)
+                && !isDatabase("NETEZZA", connection)
+                && !isDatabase("REDSHIFT", connection);
     }
 
     @Override
@@ -64,11 +63,6 @@ public class PostgreSqlDialect extends JdbcDialectImpl {
         } else {
             return super.generateOrderByNulls(expr, ascending, collateNullsLast);
         }
-    }
-
-    @Override
-    public DatabaseProduct getDatabaseProduct() {
-        return DatabaseProduct.POSTGRESQL;
     }
 
     @Override

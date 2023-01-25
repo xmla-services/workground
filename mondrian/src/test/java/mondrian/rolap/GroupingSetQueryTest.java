@@ -11,6 +11,7 @@
 
 package mondrian.rolap;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
 
@@ -18,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
@@ -76,10 +77,10 @@ public class GroupingSetQueryTest extends BatchTestCase{
         // ORACLE
         final Dialect dialect = getDialect(context.createConnection());
         if (prop.WarnIfNoPatternForDialect.get().equals("ANY")
-                || dialect.getDatabaseProduct() == DatabaseProduct.ACCESS
-                || dialect.getDatabaseProduct() == DatabaseProduct.ORACLE)
+                || getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.ACCESS
+                || getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.ORACLE)
         {
-            propSaver.set(prop.WarnIfNoPatternForDialect, dialect.getDatabaseProduct().toString());
+            propSaver.set(prop.WarnIfNoPatternForDialect, getDatabaseProduct(dialect.getDialectName()).toString());
         } else {
             // Do not warn unless the dialect is "ACCESS" or "ORACLE", or
             // if the test chooses to warn regardless of the dialect.

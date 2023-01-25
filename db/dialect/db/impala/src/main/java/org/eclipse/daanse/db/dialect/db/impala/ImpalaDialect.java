@@ -16,7 +16,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.hive.HiveDialect;
@@ -48,17 +47,12 @@ public class ImpalaDialect extends HiveDialect {
     @Override
     public boolean initialize(Connection connection) {
         // TODO Auto-generated method stub
-        return super.initialize(connection) && isDatabase(DatabaseProduct.IMPALA, connection);
+        return super.initialize(connection) && isDatabase(SUPPORTED_PRODUCT_NAME, connection);
     }
 
     @Override
     protected String deduceIdentifierQuoteString(DatabaseMetaData databaseMetaData) {
         return "`";
-    }
-
-    @Override
-    public DatabaseProduct getDatabaseProduct() {
-        return DatabaseProduct.IMPALA;
     }
 
     @Override

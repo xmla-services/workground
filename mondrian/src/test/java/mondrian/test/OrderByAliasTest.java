@@ -8,10 +8,11 @@
 */
 package mondrian.test;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.withSchema;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -53,7 +54,7 @@ public class OrderByAliasTest extends BatchTestCase {
   @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testSqlInKeyExpression(TestingContext context) {
-    if (getDialect(context.createConnection()).getDatabaseProduct()
+    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
         != DatabaseProduct.MYSQL
         || !getDialect(context.createConnection()).requiresOrderByAlias())
     {
@@ -94,7 +95,7 @@ public class OrderByAliasTest extends BatchTestCase {
      @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testSqlInNameExpression(TestingContext context) {
-    if (getDialect(context.createConnection()).getDatabaseProduct()
+    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
         != DatabaseProduct.MYSQL
         || !getDialect(context.createConnection()).requiresOrderByAlias())
     {
@@ -138,7 +139,7 @@ public class OrderByAliasTest extends BatchTestCase {
      @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testSqlInCaptionExpression(TestingContext context) {
-    if (getDialect(context.createConnection()).getDatabaseProduct()
+    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
         != DatabaseProduct.MYSQL
         || !getDialect(context.createConnection()).requiresOrderByAlias())
     {
@@ -182,7 +183,7 @@ public class OrderByAliasTest extends BatchTestCase {
      @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testSqlInOrdinalExpression(TestingContext context) {
-    if (getDialect(context.createConnection()).getDatabaseProduct()
+    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
         != DatabaseProduct.MYSQL
         || !getDialect(context.createConnection()).requiresOrderByAlias())
     {
@@ -226,7 +227,7 @@ public class OrderByAliasTest extends BatchTestCase {
      @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testSqlInParentExpression(TestingContext context) {
-    if (getDialect(context.createConnection()).getDatabaseProduct()
+    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
         != DatabaseProduct.MYSQL
         || !getDialect(context.createConnection()).requiresOrderByAlias())
     {
@@ -293,7 +294,7 @@ public class OrderByAliasTest extends BatchTestCase {
      @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testSqlInPropertyExpression(TestingContext context) {
-    if (getDialect(context.createConnection()).getDatabaseProduct()
+    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
         != DatabaseProduct.MYSQL
         || !getDialect(context.createConnection()).requiresOrderByAlias())
     {
@@ -335,7 +336,7 @@ public class OrderByAliasTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testSqlInMeasureExpression(TestingContext context) {
-    if (getDialect(context.createConnection()).getDatabaseProduct()
+    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
         != DatabaseProduct.MYSQL
         || !getDialect(context.createConnection()).requiresOrderByAlias())
     {
@@ -377,7 +378,7 @@ public class OrderByAliasTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testNonEmptyCrossJoin(TestingContext context) {
-    if (getDialect(context.createConnection()).getDatabaseProduct()
+    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
         != DatabaseProduct.MYSQL
         || !getDialect(context.createConnection()).requiresOrderByAlias())
     {
@@ -459,7 +460,7 @@ public class OrderByAliasTest extends BatchTestCase {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testVirtualCube(TestingContext context) {
-    if (getDialect(context.createConnection()).getDatabaseProduct()
+    if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
         != DatabaseProduct.MYSQL
         || !getDialect(context.createConnection()).requiresOrderByAlias())
     {

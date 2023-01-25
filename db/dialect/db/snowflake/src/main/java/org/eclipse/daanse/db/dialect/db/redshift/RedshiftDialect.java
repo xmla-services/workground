@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.DialectUtil;
 import org.eclipse.daanse.db.dialect.db.common.Util;
@@ -41,12 +40,7 @@ public class RedshiftDialect extends PostgreSqlDialect {
 
     @Override
     public boolean initialize(Connection connection) {
-        return super.initialize(connection) && isDatabase(DatabaseProduct.REDSHIFT, connection);
-    }
-
-    @Override
-    public DatabaseProduct getDatabaseProduct() {
-        return DatabaseProduct.REDSHIFT;
+        return super.initialize(connection) && isDatabase(SUPPORTED_PRODUCT_NAME, connection);
     }
 
     @Override

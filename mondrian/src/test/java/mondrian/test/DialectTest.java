@@ -8,6 +8,7 @@
 */
 package mondrian.test;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -35,7 +36,7 @@ import java.util.Set;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -122,7 +123,7 @@ public class DialectTest {
 //  public void testDialectVsDatabaseProduct(Context context) throws SQLException {
 //    final Dialect dialect = getDialect(context);
 //    final DatabaseProduct databaseProduct =
-//            dialect.getDatabaseProduct();
+//            getDatabaseProduct(dialect.getDialectName());
 //    final DatabaseMetaData databaseMetaData = getConnection(context).getMetaData();
 //    switch ( databaseProduct ) {
 //      case MARIADB:
@@ -469,7 +470,7 @@ public class DialectTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testRequiresUnionOrderByOrdinal(TestingContext context) {
     final String sql;
-    switch ( getDialect(context).getDatabaseProduct() ) {
+    switch ( getDatabaseProduct(getDialect(context).getDialectName()) ) {
       default:
         sql =
                 dialectize(context,
@@ -709,7 +710,7 @@ public class DialectTest {
     jdbcDialect.quoteDateLiteral( buf, "2007-01-15 00:00:00.0" );
     assertEquals( "DATE '2007-01-15'", buf.toString() );
 
-    if ( getDialect(context).getDatabaseProduct()
+    if ( getDatabaseProduct(getDialect(context).getDialectName())
             != DatabaseProduct.ORACLE ) {
       // the following test is specifically for Oracle.
       return;
@@ -752,7 +753,7 @@ public class DialectTest {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testBigInt(TestingContext context) {
-    if ( getDialect(context).getDatabaseProduct()
+    if ( getDatabaseProduct(getDialect(context).getDialectName())
             != DatabaseProduct.VERTICA ) {
       // currently only checks VERTICA
       // Once MONDRIAN-1890 is fixed this test should minimally cover
@@ -959,7 +960,7 @@ public class DialectTest {
 
   private StringBuilder dialectizeTableName(TestingContext context,  StringBuilder name ) {
     // GBQ needs the schema name, not others.
-    switch ( getDialect(context).getDatabaseProduct() ) {
+    switch ( getDatabaseProduct(getDialect(context).getDialectName()) ) {
       case GOOGLEBIGQUERY:
         return new StringBuilder(dialect.quoteIdentifier( "foodmart" )).append(".").append(name);
       default:
@@ -994,7 +995,7 @@ public class DialectTest {
       }
     } else {
       // Largest value comes first, null comes last.
-      switch ( dialect.getDatabaseProduct() ) {
+      switch ( getDatabaseProduct(dialect.getDialectName()) ) {
         case GREENPLUM:
           // Current version cannot force null order, introduced in
           // Postgres 8.3
@@ -1095,7 +1096,7 @@ public class DialectTest {
       dialect = getDialect(context);
     }
     final DatabaseProduct databaseProduct =
-            dialect.getDatabaseProduct();
+            getDatabaseProduct(dialect.getDialectName());
 
     // Some DBs require the schema to be a prfix of the table
     switch ( databaseProduct ) {
@@ -1415,14 +1416,14 @@ public class DialectTest {
     } catch ( SQLException e ) {
       throwable = e;
     }
-    switch ( getDialect(context).getDatabaseProduct() ) {
+    switch ( getDatabaseProduct(getDialect(context).getDialectName()) ) {
       case MYSQL:
       case MARIADB:
         assertTrue( couldTranslate );
         assertNull( throwable );
         break;
       case GREENPLUM:
-      case POSTGRESQL:
+      case POSTGRES:
         assertNotNull( throwable );
         assertTrue( couldTranslate );
         assertTrue(
@@ -1464,7 +1465,7 @@ public class DialectTest {
     } catch ( SQLException e ) {
       throwable = e;
     }
-    switch ( getDialect(context).getDatabaseProduct() ) {
+    switch ( getDatabaseProduct(getDialect(context).getDialectName()) ) {
       case MYSQL:
         assertNull( throwable );
         assertTrue( couldTranslate );
@@ -1478,7 +1479,7 @@ public class DialectTest {
                                 + "regexp" ) );
         break;
       case GREENPLUM:
-      case POSTGRESQL:
+      case POSTGRES:
         assertNotNull( throwable );
         assertTrue( couldTranslate );
         assertTrue(

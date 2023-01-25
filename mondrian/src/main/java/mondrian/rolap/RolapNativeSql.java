@@ -17,7 +17,6 @@ import mondrian.olap.type.MemberType;
 import mondrian.olap.type.StringType;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.sql.SqlQuery;
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;

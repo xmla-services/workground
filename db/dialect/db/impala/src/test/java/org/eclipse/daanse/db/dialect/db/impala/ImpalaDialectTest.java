@@ -19,7 +19,6 @@ import static org.mockito.Mockito.when;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -33,7 +32,7 @@ public class ImpalaDialectTest{
 
   @BeforeEach
   protected void setUp() throws Exception {
-    when( metaData.getDatabaseProductName() ).thenReturn( DatabaseProduct.IMPALA.name() );
+    when( metaData.getDatabaseProductName() ).thenReturn( "IMPALA" );
     when( connection.getMetaData() ).thenReturn( metaData );
     impalaDialect = new ImpalaDialect(  );
     impalaDialect.initialize(connection);

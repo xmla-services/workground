@@ -9,6 +9,7 @@
 
 package mondrian.xmla;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.opencube.junit5.TestUtil.executeOlap4jQuery;
 import static org.opencube.junit5.TestUtil.executeOlap4jXmlaQuery;
@@ -19,7 +20,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.Test;
@@ -115,9 +116,9 @@ public class XmlaHandlerTypeTest  {
                     .getQuery().getCube();
         Dialect dialect = cube.getStar().getSqlQueryDialect();
 
-        if (!dialect.getDatabaseProduct()
+        if (!getDatabaseProduct(dialect.getDialectName())
             .equals(DatabaseProduct.MYSQL)
-            && !dialect.getDatabaseProduct()
+            && !getDatabaseProduct(dialect.getDialectName())
                 .equals(DatabaseProduct.ORACLE))
         {
             return;

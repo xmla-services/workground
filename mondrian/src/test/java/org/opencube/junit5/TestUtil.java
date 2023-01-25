@@ -19,6 +19,7 @@
 package org.opencube.junit5;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
@@ -42,7 +43,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -456,7 +457,7 @@ public class TestUtil {
 		final String search = "fname \\+ ' ' \\+ lname";
 		final Dialect dialect = getDialect(connection);
 		final DatabaseProduct databaseProduct =
-				dialect.getDatabaseProduct();
+				getDatabaseProduct(dialect.getDialectName());
 		switch ( databaseProduct ) {
 			case MYSQL:
 			case MARIADB:
@@ -465,7 +466,7 @@ public class TestUtil {
 						search,
 						"CONCAT(`customer`.`fname`, ' ', `customer`.`lname`)" );
 				break;
-			case POSTGRESQL:
+			case POSTGRES:
 			case ORACLE:
 			case LUCIDDB:
 			case TERADATA:
@@ -492,7 +493,7 @@ public class TestUtil {
 				break;
 		}
 
-		if ( dialect.getDatabaseProduct() == DatabaseProduct.ORACLE ) {
+		if ( getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.ORACLE ) {
 			// " + tableQualifier + "
 			sql = sql.replaceAll( " =as= ", " " );
 		} else {
@@ -597,7 +598,7 @@ public class TestUtil {
         //TODO Commented by reason context implementation
 		//final Dialect dialect = DialectManager.createDialect( null, connection );
         final Dialect dialect = null;
-        assert dialect.getDatabaseProduct() == product;
+        assert getDatabaseProduct(dialect.getDialectName()) == product;
 		return dialect;
 	}
 
@@ -1680,7 +1681,7 @@ public class TestUtil {
 		// (We could optimize and run it once, collecting multiple queries, and
 		// comparing all queries at the end.)
 		Dialect dialect = getDialect(connection);
-		DatabaseProduct d = dialect.getDatabaseProduct();
+		DatabaseProduct d = getDatabaseProduct(dialect.getDialectName());
 		boolean patternFound = false;
 		for (SqlPattern sqlPattern : patterns) {
 			if (!sqlPattern.hasDatabaseProduct(d)) {
@@ -1788,7 +1789,7 @@ public class TestUtil {
 			case ORACLE:
 				return sql.replaceAll(" =as= ", " ");
 			case GREENPLUM:
-			case POSTGRESQL:
+			case POSTGRES:
 			case TERADATA:
 				return sql.replaceAll(" =as= ", " as ");
 			case DERBY:

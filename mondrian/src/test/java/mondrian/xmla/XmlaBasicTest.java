@@ -10,6 +10,7 @@
 */
 package mondrian.xmla;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.getDialect;
 import static org.opencube.junit5.TestUtil.upgradeQuery;
 import static org.opencube.junit5.TestUtil.withRole;
@@ -680,7 +681,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
             // results in slightly different inferred xml schema for the drill-
             // through result.
             Dialect dialect = getDialect(connection);
-            switch (dialect.getDatabaseProduct()) {
+            switch (getDatabaseProduct(dialect.getDialectName())) {
             case ORACLE:
                 content = content.replace(
                     " type=\"xsd:double\"",
@@ -689,7 +690,7 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
                     " type=\"xsd:integer\"",
                     " type=\"xsd:decimal\"");
                 break;
-            case POSTGRESQL:
+            case POSTGRES:
                 content = content.replace(
                     " sql:field=\"Store Sqft\" type=\"xsd:double\"",
                     " sql:field=\"Store Sqft\" type=\"xsd:integer\"");

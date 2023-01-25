@@ -19,7 +19,6 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Statement;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.db.common.Util;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +39,7 @@ public class MicrosoftSqlServerDialectTest {
 
     @BeforeEach
     protected void setUp() throws Exception {
-        when(metaData.getDatabaseProductName()).thenReturn(DatabaseProduct.MSSQL.name());
+        when(metaData.getDatabaseProductName()).thenReturn("MSSQL");
         when(statmentMock.execute(any())).thenReturn(false);
         when(connection.getMetaData()).thenReturn(metaData);
         when(connection.createStatement()).thenReturn(statmentMock);

@@ -9,6 +9,7 @@
 */
 package mondrian.rolap;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -17,7 +18,7 @@ import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -40,12 +41,12 @@ public class NumberSqlCompilerTest {
     @BeforeAll
     public static void beforeAll() throws Exception {
         Dialect dialect = mock(Dialect.class);
-        when(dialect.getDatabaseProduct())
-            .thenReturn(DatabaseProduct.MYSQL);
+        when(dialect.getDialectName())
+            .thenReturn("mysql");
 
         when(dialect.quoteDecimalLiteral("1"))
             .thenReturn(new StringBuilder("1"));
-        
+
         when(dialect.quoteDecimalLiteral("+1.01"))
         .thenReturn(new StringBuilder("+1.01"));
 
@@ -53,8 +54,8 @@ public class NumberSqlCompilerTest {
         .thenReturn(new StringBuilder("-.00001"));
 
         when(dialect.quoteDecimalLiteral("-1"))
-        .thenReturn(new StringBuilder("-1"));        
-        
+        .thenReturn(new StringBuilder("-1"));
+
         SqlQuery query = mock(SqlQuery.class);
         when(query.getDialect()).thenReturn(dialect);
 

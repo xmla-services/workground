@@ -8,7 +8,6 @@
 */
 package org.eclipse.daanse.db.dialect.db.vectorwise;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.ingres.IngresDialect;
 import org.osgi.service.component.annotations.Component;
@@ -32,11 +31,6 @@ public class VectorwiseDialect extends IngresDialect {
     @Override
     protected boolean isSupportedProduct(String productName, String productVersion) {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
-    }
-
-    @Override
-    public DatabaseProduct getDatabaseProduct() {
-        return DatabaseProduct.VECTORWISE;
     }
 
     @Override

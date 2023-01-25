@@ -18,7 +18,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
 import org.eclipse.daanse.db.dialect.db.common.Util;
@@ -48,7 +47,7 @@ public class HiveDialect extends JdbcDialectImpl {
 
     @Override
     public boolean initialize(Connection connection) {
-        return super.initialize(connection) && !isDatabase(DatabaseProduct.IMPALA, connection);
+        return super.initialize(connection) && !isDatabase("HIVE", connection);
     }
 
     @Override

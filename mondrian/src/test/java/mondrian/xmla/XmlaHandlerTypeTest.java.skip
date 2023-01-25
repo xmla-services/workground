@@ -109,9 +109,9 @@ public class XmlaHandlerTypeTest {
                 .getQuery().getCube();
         Dialect dialect = cube.getStar().getSqlQueryDialect();
 
-        if (!dialect.getDatabaseProduct()
+        if (!getDatabaseProduct(dialect.getDialectName())
             .equals(DatabaseProduct.MYSQL)
-            && !dialect.getDatabaseProduct()
+            && !getDatabaseProduct(dialect.getDialectName())
                 .equals(DatabaseProduct.ORACLE))
         {
             return;

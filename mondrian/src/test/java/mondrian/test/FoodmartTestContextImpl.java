@@ -11,6 +11,7 @@
 package mondrian.test;
 
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -41,7 +42,7 @@ import java.util.regex.Pattern;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
@@ -1492,7 +1493,7 @@ public synchronized Dialect getDialect() {
     //TODO Commented by reason context implementation
     final Dialect dialect = null;
     //final Dialect dialect = DialectManager.createDialect( null, connection );
-    assert dialect.getDatabaseProduct() == product;
+    assert getDatabaseProduct(dialect.getDialectName()) == product;
     return dialect;
   }
 
@@ -1537,7 +1538,7 @@ public void assertSqlEquals(
     final String search = "fname \\+ ' ' \\+ lname";
     final Dialect dialect = getDialect();
     final DatabaseProduct databaseProduct =
-      dialect.getDatabaseProduct();
+      getDatabaseProduct(dialect.getDialectName());
     switch ( databaseProduct ) {
       case MYSQL:
       case MARIADB:
@@ -1546,7 +1547,7 @@ public void assertSqlEquals(
           search,
           "CONCAT(`customer`.`fname`, ' ', `customer`.`lname`)" );
         break;
-      case POSTGRESQL:
+      case POSTGRES:
       case ORACLE:
       case LUCIDDB:
       case TERADATA:
@@ -1573,7 +1574,7 @@ public void assertSqlEquals(
         break;
     }
 
-    if ( dialect.getDatabaseProduct() == DatabaseProduct.ORACLE ) {
+    if ( getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.ORACLE ) {
       // " + tableQualifier + "
       sql = sql.replaceAll( " =as= ", " " );
     } else {

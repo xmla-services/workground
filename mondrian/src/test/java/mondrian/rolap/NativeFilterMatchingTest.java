@@ -15,7 +15,7 @@ import static org.opencube.junit5.TestUtil.verifySameNativeAndNot;
 import static org.opencube.junit5.TestUtil.withRole;
 import static org.opencube.junit5.TestUtil.withSchema;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
@@ -79,7 +79,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
                 sqlMysql,
                 sqlMysql.length()),
             new SqlPattern(
-                DatabaseProduct.POSTGRESQL,
+                DatabaseProduct.POSTGRES,
                 sqlPgsql,
                 sqlPgsql.length())
         };
@@ -162,7 +162,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
                 sqlMysql,
                 sqlMysql.length()),
             new SqlPattern(
-                DatabaseProduct.POSTGRESQL,
+                DatabaseProduct.POSTGRES,
                 sqlPgsql,
                 sqlPgsql.length())
         };

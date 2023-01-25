@@ -13,6 +13,7 @@
 package mondrian.test;
 
 import static mondrian.olap.Util.assertTrue;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.assertAxisReturns;
@@ -57,7 +58,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.regex.Pattern;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Dimension;
@@ -390,7 +391,7 @@ public class BasicQueryTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testSample8(TestingContext context) {
     Connection connection = context.createConnection();
-    if (TestUtil.getDialect(connection).getDatabaseProduct() == DatabaseProduct.INFOBRIGHT ) {
+    if (getDatabaseProduct(TestUtil.getDialect(connection).getDialectName()) == DatabaseProduct.INFOBRIGHT ) {
       // Skip this test on Infobright, because [Promotion Sales] is
       // defined wrong.
       return;
@@ -3806,7 +3807,7 @@ public class BasicQueryTest {
 
     String tableQualifier = "as ";
     final Dialect dialect = getDialect(connection);
-    if ( dialect.getDatabaseProduct() == DatabaseProduct.ORACLE ) {
+    if ( getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.ORACLE ) {
       // " + tableQualifier + "
       tableQualifier = "";
     }
@@ -5433,7 +5434,7 @@ public class BasicQueryTest {
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testStatistics(TestingContext context) {
     Connection connection = context.createConnection();
-    final String product = getDialect(connection).getDatabaseProduct().name();
+    final String product = getDialect(connection).getDialectName();
     final String dialectClassName = getDialect(connection).getClass().getName();
 
     propSaver.set( new StringProperty( MondrianProperties.instance(), MondrianProperties.instance().StatisticsProviders
@@ -5671,7 +5672,7 @@ public class BasicQueryTest {
   }
 
   private void runMondrian1506(TestingContext context, Mondrian1506Lambda lambda ) throws Exception {
-    if ( getDialect(context.createConnection()).getDatabaseProduct() != DatabaseProduct.MYSQL ) {
+    if ( getDatabaseProduct(getDialect(context.createConnection()).getDialectName()) != DatabaseProduct.MYSQL ) {
       // This only works on MySQL because of Sleep()
       return;
     }
@@ -5746,7 +5747,7 @@ public class BasicQueryTest {
         + "from [Sales] " + " \n" );
     // Some DBs return 0 when we ask for null. Like Oracle.
     final String returnedValue;
-    switch ( getDialect(connection).getDatabaseProduct() ) {
+    switch ( getDatabaseProduct(getDialect(connection).getDialectName()) ) {
       case ORACLE:
         returnedValue = "0";
         break;
