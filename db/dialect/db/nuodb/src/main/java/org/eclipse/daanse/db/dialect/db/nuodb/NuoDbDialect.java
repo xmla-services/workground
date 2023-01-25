@@ -86,4 +86,9 @@ public class NuoDbDialect extends JdbcDialectImpl {
         }
         return identifierQuoteString;
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

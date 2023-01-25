@@ -41,4 +41,9 @@ public class PdiDataServiceDialect extends JdbcDialectImpl {
             return super.getType(metaData, columnIndex);
         }
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

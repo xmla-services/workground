@@ -68,4 +68,9 @@ public class NeoviewDialect extends JdbcDialectImpl {
     public StringBuilder generateInline(List<String> columnNames, List<String> columnTypes, List<String[]> valueList) {
         return generateInlineForAnsi("t", columnNames, columnTypes, valueList, true);
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

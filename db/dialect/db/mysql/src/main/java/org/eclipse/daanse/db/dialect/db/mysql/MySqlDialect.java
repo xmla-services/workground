@@ -337,4 +337,8 @@ public class MySqlDialect extends JdbcDialectImpl {
         return productVersion.compareTo("5.7") >= 0;
     }
 
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

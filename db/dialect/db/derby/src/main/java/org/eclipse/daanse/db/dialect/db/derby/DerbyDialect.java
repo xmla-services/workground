@@ -75,4 +75,13 @@ public class DerbyDialect extends JdbcDialectImpl {
     public boolean supportsGroupByExpressions() {
         return false;
     }
+
+    public boolean allowsFieldAs() {
+        return false;
+    }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

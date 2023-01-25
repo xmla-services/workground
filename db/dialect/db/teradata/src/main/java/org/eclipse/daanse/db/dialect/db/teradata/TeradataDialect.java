@@ -62,4 +62,9 @@ public class TeradataDialect extends JdbcDialectImpl {
     public boolean requiresUnionOrderByOrdinal() {
         return true;
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

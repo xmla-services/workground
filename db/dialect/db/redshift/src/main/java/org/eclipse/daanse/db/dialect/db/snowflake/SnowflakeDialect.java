@@ -110,4 +110,9 @@ public class SnowflakeDialect extends JdbcDialectImpl {
         sb.append(")");
         return sb;
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

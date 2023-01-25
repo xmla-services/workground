@@ -98,4 +98,9 @@ public class RedshiftDialect extends PostgreSqlDialect {
 
         return sb;
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

@@ -749,4 +749,23 @@ public interface Dialect {
     boolean requiresDrillthroughMaxRowsInLimit();
 
     DatabaseProduct getDatabaseProduct();
+
+    /**
+     * Returns whether the SQL dialect allows "AS" in the 'field' clause.
+     * If so, "SELECT field1.table1 AS alias FROM t" is a valid query.
+     *
+     * @return whether dialect allows 'AS alias' in field clause
+     */
+    boolean allowsFieldAs();
+
+    /**
+     * Returns whether the SQL dialect allows 'distinct' in inner queries clause.
+     * If so, "select count(m0) from (select distinct f.z as m0 from f, dim1, dim2 where dim1.k = f.k1 and dim2.k = f.k2) as dummyname"
+     * is a valid query.
+     *
+     * @return whether dialect allows 'distinct' in inner queries
+     */
+    boolean allowsInnerDistinct();
+
+    String getDialectName();
 }

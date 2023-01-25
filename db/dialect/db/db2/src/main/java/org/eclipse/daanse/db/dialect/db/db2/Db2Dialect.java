@@ -61,4 +61,10 @@ public class Db2Dialect extends JdbcDialectImpl {
     {
         return new StringBuilder("FLOAT(").append(value).append(")");
     }
+
+    @Override
+    public String getDialectName() {
+        return "db2";
+    }
+
 }

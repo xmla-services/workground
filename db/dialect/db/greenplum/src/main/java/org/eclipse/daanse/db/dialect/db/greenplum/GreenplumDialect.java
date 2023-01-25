@@ -87,4 +87,15 @@ public class GreenplumDialect extends PostgreSqlDialect {
             return false;
         }
     }
+
+    @Override
+    public boolean allowsInnerDistinct() {
+        return false;
+    }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
+
 }

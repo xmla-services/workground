@@ -170,4 +170,10 @@ public class HiveDialect extends JdbcDialectImpl {
         Util.singleQuoteString(value, buf);
         buf.append(" as timestamp )");
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
+
 }

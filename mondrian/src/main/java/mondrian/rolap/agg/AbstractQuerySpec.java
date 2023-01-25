@@ -133,17 +133,8 @@ public abstract class AbstractQuerySpec implements QuerySpec {
             // some DB2 (AS400) versions throw an error, if a column alias is
             // there and *not* used in a subsequent order by/group by
             final Dialect dialect = sqlQuery.getDialect();
-            final String alias;
-            final DatabaseProduct databaseProduct =
-                dialect.getDatabaseProduct();
-            if (databaseProduct == DatabaseProduct.DB2_AS400) {
-                alias =
-                    sqlQuery.addSelect(expr, column.getInternalType(), null);
-            } else {
-                alias =
-                    sqlQuery.addSelect(
-                        expr, column.getInternalType(), getColumnAlias(i));
-            }
+            final String alias =
+                    sqlQuery.addSelect(expr, column.getInternalType(), dialect.allowsFieldAs() ? getColumnAlias(i) : null);
 
             if (isAggregate()) {
                 sqlQuery.addGroupBy(expr, alias);
@@ -264,8 +255,6 @@ public abstract class AbstractQuerySpec implements QuerySpec {
         boolean countOnly)
     {
         final Dialect dialect = outerSqlQuery.getDialect();
-        final DatabaseProduct databaseProduct =
-            dialect.getDatabaseProduct();
         final Map<String, String> groupingSetsAliases =
             new HashMap<String, String>();
         // Generate something like
@@ -287,12 +276,10 @@ public abstract class AbstractQuerySpec implements QuerySpec {
         //    where dim1.k = f.k1
         //    and dim2.k = f.k2) as dummyname
 
+        // GREENPLUM not support InnerDistinct
         final SqlQuery innerSqlQuery = newSqlQuery();
-        if (databaseProduct == DatabaseProduct.GREENPLUM) {
-            innerSqlQuery.setDistinct(false);
-        } else {
-            innerSqlQuery.setDistinct(true);
-        }
+        innerSqlQuery.setDistinct(dialect.allowsInnerDistinct());
+
         // add constraining dimensions
         RolapStar.Column[] columns = getColumns();
         int arity = columns.length;
@@ -319,7 +306,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
             }
             String alias = "d" + i;
             alias = innerSqlQuery.addSelect(expr, null, alias);
-            if (databaseProduct == DatabaseProduct.GREENPLUM) {
+            if (!dialect.allowsInnerDistinct()) {
                 innerSqlQuery.addGroupBy(expr, alias);
             }
             final StringBuilder quotedAlias = dialect.quoteIdentifier(alias);
@@ -347,7 +334,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
                 expr,
                 measure.getInternalType(),
                 alias);
-            if (databaseProduct == DatabaseProduct.GREENPLUM) {
+            if (!dialect.allowsInnerDistinct()) {
                 innerSqlQuery.addGroupBy(expr, alias);
             }
             outerSqlQuery.addSelect(

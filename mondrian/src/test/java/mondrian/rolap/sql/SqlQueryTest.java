@@ -902,5 +902,10 @@ public class SqlQueryTest  extends BatchTestCase {
         protected boolean isSupportedProduct(String productName, String productVersion) {
             return true;
         }
+
+        @Override
+        public String getDialectName() {
+            return null;
+        }
     }
 }

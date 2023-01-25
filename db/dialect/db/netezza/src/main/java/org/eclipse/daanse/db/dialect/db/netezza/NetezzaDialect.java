@@ -79,4 +79,9 @@ public class NetezzaDialect extends PostgreSqlDialect {
         }
         return super.getType(metaData, columnIndex);
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

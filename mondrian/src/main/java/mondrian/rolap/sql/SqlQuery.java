@@ -493,13 +493,7 @@ public class SqlQuery {
         // Some DB2 versions (AS/400) throw an error if a column alias is
         //  *not* used in a subsequent order by (Group by).
         // Derby fails on 'SELECT... HAVING' if column has alias.
-        switch (dialect.getDatabaseProduct()) {
-        case DB2_AS400:
-        case DERBY:
-            return addSelect(expression, type, null);
-        default:
-            return addSelect(expression, type, nextColumnAlias());
-        }
+        return addSelect(expression, type, dialect.allowsFieldAs() ? nextColumnAlias() : null);
     }
 
     /**
@@ -1032,7 +1026,7 @@ public class SqlQuery {
          * Chooses the code variant which best matches the given Dialect.
          */
         public String chooseQuery(Dialect dialect) {
-            String best = getBestName(dialect);
+            String best = dialect.getDialectName();
             String bestCode = dialectCodes.get(best);
             if (bestCode != null) {
                 return bestCode;
@@ -1042,23 +1036,6 @@ public class SqlQuery {
                 throw Util.newError("View has no 'generic' variant");
             }
             return genericCode;
-        }
-
-        private static String getBestName(Dialect dialect) {
-          final String dialectName = dialect.getDatabaseProduct().getFamily()
-              .name().toLowerCase();
-          if (dialectName.equals("postgresql")) {
-              // Luc Boudreau's comment
-              // Special case for the discrepancy between the value used
-              // in schemas and the actual name of the dialect. The former is
-              // 'postgresql' while the later is 'postgres'.
-              // We can't change the schemas or we will break compatibility,
-              // so we have to switch it here.
-              // This needs to be fixed post 4.0.
-              return "postgres";
-           } else {
-             return dialectName;
-           }
         }
     }
 

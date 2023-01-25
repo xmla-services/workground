@@ -1006,7 +1006,7 @@ public abstract class JdbcDialectImpl implements Dialect {
             final String columnName = metaData.getColumnName(columnIndex + 1);
             LOGGER.debug(
                 new StringBuilder("JdbcDialectImpl.getType ")
-                    .append("Dialect- MySQL").append(this.getDatabaseProduct())
+                    .append("Dialect- ").append(this.getDialectName())
                     .append(", Column-")
                     .append(columnName)
                     .append(" is of internal type ")
@@ -1234,5 +1234,14 @@ public abstract class JdbcDialectImpl implements Dialect {
         return false;
     }
 
+    @Override
+    public boolean allowsFieldAs() {
+        return true;
+    }
+
+    @Override
+    public boolean allowsInnerDistinct() {
+            return true;
+    }
 
 }

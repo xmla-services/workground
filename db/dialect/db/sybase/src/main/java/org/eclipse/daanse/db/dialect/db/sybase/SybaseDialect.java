@@ -57,4 +57,9 @@ public class SybaseDialect extends JdbcDialectImpl {
     {
         Util.singleQuoteString(date.toString(), buf);
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

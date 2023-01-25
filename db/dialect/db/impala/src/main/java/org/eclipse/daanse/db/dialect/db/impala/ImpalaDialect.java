@@ -203,4 +203,9 @@ public class ImpalaDialect extends HiveDialect {
     public boolean allowsDdl() {
         return true;
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

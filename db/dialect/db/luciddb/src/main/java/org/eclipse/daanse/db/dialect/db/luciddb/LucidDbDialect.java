@@ -53,4 +53,9 @@ public class LucidDbDialect extends JdbcDialectImpl {
     public boolean supportsMultiValueInExpr() {
         return true;
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

@@ -114,4 +114,9 @@ public class PostgreSqlDialect extends JdbcDialectImpl {
         return super.getType(metaData, columnIndex);
     }
 
+    @Override
+    public String getDialectName() {
+        return "postgres";
+    }
+
 }

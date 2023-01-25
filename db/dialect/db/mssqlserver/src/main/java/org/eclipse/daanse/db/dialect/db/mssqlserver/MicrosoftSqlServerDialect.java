@@ -107,4 +107,8 @@ public class MicrosoftSqlServerDialect extends JdbcDialectImpl {
         buf.append("', 120)");
     }
 
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }
