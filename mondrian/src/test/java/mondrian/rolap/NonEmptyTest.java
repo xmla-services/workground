@@ -11,6 +11,7 @@
 package mondrian.rolap;
 
 import static mondrian.test.FoodmartTestContextImpl.levelName;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -27,7 +28,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -1467,7 +1468,7 @@ public class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testNativeTopCount(TestingContext context) {
-    switch ( getDialect(context.createConnection()).getDatabaseProduct() ) {
+    switch ( getDatabaseProduct(getDialect(context.createConnection()).getDialectName()) ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
         return;
@@ -1496,7 +1497,7 @@ public class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testCmNativeTopCount(TestingContext context) {
-    switch ( getDialect(context.createConnection()).getDatabaseProduct() ) {
+    switch ( getDatabaseProduct(getDialect(context.createConnection()).getDialectName()) ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
         return;
@@ -3055,7 +3056,7 @@ public class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testNotNativeVirtualCubeCrossJoin1(TestingContext context)  {
-    switch ( getDialect(context.createConnection()).getDatabaseProduct() ) {
+    switch ( getDatabaseProduct(getDialect(context.createConnection()).getDialectName()) ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
         return;
@@ -3092,7 +3093,7 @@ public class NonEmptyTest extends BatchTestCase {
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testNotNativeVirtualCubeCrossJoinUnsupported(TestingContext context)  {
-    switch ( getDialect(context.createConnection()).getDatabaseProduct() ) {
+    switch ( getDatabaseProduct(getDialect(context.createConnection()).getDialectName()) ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
         return;

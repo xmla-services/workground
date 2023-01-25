@@ -10,8 +10,9 @@
 */
 package mondrian.rolap.sql;
 
-import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.MYSQL;
-import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.POSTGRESQL;
+import static mondrian.enums.DatabaseProduct.MYSQL;
+import static mondrian.enums.DatabaseProduct.POSTGRES;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -25,10 +26,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.common.JdbcDialectImpl;
-import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -70,10 +70,10 @@ public class SqlQueryTest  extends BatchTestCase {
         // This test warns of missing sql patterns for MYSQL.
         final Dialect dialect = getDialect(connection);
         if (prop.WarnIfNoPatternForDialect.get().equals("ANY")
-                || dialect.getDatabaseProduct() == MYSQL)
+                || getDatabaseProduct(dialect.getDialectName()) == MYSQL)
         {
         	propSaver.set(prop.WarnIfNoPatternForDialect,
-                    dialect.getDatabaseProduct().toString());
+                    getDatabaseProduct(dialect.getDialectName()).toString());
         } else {
             // Do not warn unless the dialect is "MYSQL", or
             // if the test chooses to warn regardless of the dialect.
@@ -130,9 +130,9 @@ public class SqlQueryTest  extends BatchTestCase {
                     + "    (gs1, gs2, gs3))";
             }
             assertEquals(
-                dialectize(dialect.getDatabaseProduct(), expected),
+                dialectize(getDatabaseProduct(dialect.getDialectName()), expected),
                 dialectize(
-                    sqlQuery.getDialect().getDatabaseProduct(),
+                    getDatabaseProduct(sqlQuery.getDialect().getDialectName()),
                     sqlQuery.toString()));
         }
     }
@@ -248,7 +248,7 @@ public class SqlQueryTest  extends BatchTestCase {
         SqlPattern[] patterns)
     {
         Dialect dialect = getDialect(connection);
-        DatabaseProduct d = dialect.getDatabaseProduct();
+        DatabaseProduct d = getDatabaseProduct(dialect.getDialectName());
         boolean patternFound = false;
         for (SqlPattern sqlPattern : patterns) {
             if (!sqlPattern.hasDatabaseProduct(d)) {
@@ -265,9 +265,9 @@ public class SqlQueryTest  extends BatchTestCase {
             trigger = dialectize(d, trigger);
 
             assertEquals(
-                dialectize(dialect.getDatabaseProduct(), trigger),
+                dialectize(getDatabaseProduct(dialect.getDialectName()), trigger),
                 dialectize(
-                    query.getDialect().getDatabaseProduct(),
+                    getDatabaseProduct(query.getDialect().getDialectName()),
                     query.toString()));
         }
 
@@ -527,9 +527,9 @@ public class SqlQueryTest  extends BatchTestCase {
                     + "group by grouping sets ((), (gs1, gs2, gs3))";
             }
             assertEquals(
-                dialectize(dialect.getDatabaseProduct(), expected),
+                dialectize(getDatabaseProduct(dialect.getDialectName()), expected),
                 dialectize(
-                    sqlQuery.getDialect().getDatabaseProduct(),
+                    getDatabaseProduct(sqlQuery.getDialect().getDialectName()),
                     sqlQuery.toString()));
         }
     }
@@ -589,9 +589,9 @@ public class SqlQueryTest  extends BatchTestCase {
                     + "group by grouping sets ((c0, c1, c2), (c1, c2))";
             }
             assertEquals(
-                dialectize(dialect.getDatabaseProduct(), expected),
+                dialectize(getDatabaseProduct(dialect.getDialectName()), expected),
                 dialectize(
-                    sqlQuery.getDialect().getDatabaseProduct(),
+                    getDatabaseProduct(sqlQuery.getDialect().getDialectName()),
                     sqlQuery.toString()));
         }
     }
@@ -609,7 +609,7 @@ public class SqlQueryTest  extends BatchTestCase {
         Connection connection = context.createConnection();
         prepareContext(connection);
         final Dialect dialect = getDialect(context.createConnection());
-        if (dialect.getDatabaseProduct() != DatabaseProduct.LUCIDDB) {
+        if (getDatabaseProduct(dialect.getDialectName()) != DatabaseProduct.LUCIDDB) {
             return;
         }
 
@@ -826,7 +826,7 @@ public class SqlQueryTest  extends BatchTestCase {
             + "order by \"store\".\"store_country\" ASC NULLS LAST,"
             + " \"store\".\"store_state\" ASC NULLS LAST";
         SqlPattern pgPattern =
-            new SqlPattern(POSTGRESQL, pgSql, pgSql.length());
+            new SqlPattern(POSTGRES, pgSql, pgSql.length());
         String mySql =
             "select `store`.`store_country` as `c0`,"
             + " `store`.`store_state` as `c1`"

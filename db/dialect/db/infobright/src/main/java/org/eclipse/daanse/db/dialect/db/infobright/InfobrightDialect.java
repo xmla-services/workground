@@ -12,7 +12,6 @@ package org.eclipse.daanse.db.dialect.db.infobright;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.db.mysql.MySqlDialect;
 import org.osgi.service.component.annotations.Component;
@@ -49,11 +48,6 @@ public class InfobrightDialect extends MySqlDialect {
             LOGGER.warn("", e);
         }
         return false;
-    }
-
-    @Override
-    public DatabaseProduct getDatabaseProduct() {
-        return DatabaseProduct.INFOBRIGHT;
     }
 
     public boolean allowsCompoundCountDistinct() {

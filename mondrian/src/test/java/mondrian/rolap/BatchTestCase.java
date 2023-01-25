@@ -10,6 +10,7 @@
 */
 package mondrian.rolap;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.opencube.junit5.TestUtil.assertEqualsVerbose;
@@ -24,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Future;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -276,7 +277,7 @@ public class BatchTestCase{
         final String cubeName = requests[0].getMeasure().getCubeName();
         final RolapCube cube = lookupCube(connection, cubeName);
         final Dialect sqlDialect = star.getSqlQueryDialect();
-        DatabaseProduct d = sqlDialect.getDatabaseProduct();
+        DatabaseProduct d = getDatabaseProduct(sqlDialect.getDialectName());
         SqlPattern sqlPattern = SqlPattern.getPattern(d, patterns);
         if (d == DatabaseProduct.UNKNOWN) {
             // If the dialect is not one in the pattern set, do not run the
@@ -468,7 +469,7 @@ public class BatchTestCase{
         // (We could optimize and run it once, collecting multiple queries, and
         // comparing all queries at the end.)
         Dialect dialect = getDialect(connection);
-        DatabaseProduct d = dialect.getDatabaseProduct();
+        DatabaseProduct d = getDatabaseProduct(dialect.getDialectName());
         boolean patternFound = false;
         for (SqlPattern sqlPattern : patterns) {
             if (!sqlPattern.hasDatabaseProduct(d)) {
@@ -563,7 +564,7 @@ public class BatchTestCase{
         case ORACLE:
             return sql.replaceAll(" =as= ", " ");
         case GREENPLUM:
-        case POSTGRESQL:
+        case POSTGRES:
         case TERADATA:
             return sql.replaceAll(" =as= ", " as ");
         case DERBY:

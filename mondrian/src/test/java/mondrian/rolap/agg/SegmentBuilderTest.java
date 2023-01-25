@@ -12,6 +12,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singleton;
 import static java.util.Collections.singletonMap;
 import static mondrian.util.Pair.of;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -34,7 +35,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.result.Result;
@@ -848,7 +849,7 @@ public class SegmentBuilderTest {
 
     private void doTestSegmentCreationForBoolean(Connection connection, boolean value) {
         DatabaseProduct db =
-            getDialect(connection).getDatabaseProduct();
+            getDatabaseProduct(getDialect(connection).getDialectName());
         if (db == DatabaseProduct.ORACLE) {
             // Oracle does not support boolean type
             return;

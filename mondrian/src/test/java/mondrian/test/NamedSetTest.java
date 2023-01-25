@@ -12,6 +12,7 @@
 */
 package mondrian.test;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.assertQueryThrows;
 import static org.opencube.junit5.TestUtil.assertSetExprDependsOn;
@@ -49,7 +50,7 @@ import mondrian.spi.impl.FilterDynamicSchemaProcessor;
  * @since April 30, 2005
  */
 public class NamedSetTest {
-	
+
 	private PropertySaver5 propSaver;
 
     @BeforeEach
@@ -116,7 +117,7 @@ public class NamedSetTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testNamedSetOnMember(TestingContext context) {
-        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
+        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case INFOBRIGHT:
             // Mondrian generates 'select ... sum(warehouse_sales) -
             // sum(warehouse_cost) as c ... order by c4', correctly, but
@@ -1263,7 +1264,7 @@ public class NamedSetTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testMondrian2424(TestingContext context) {
         propSaver.set(
-                MondrianProperties.instance().SsasCompatibleNaming, false);    	
+                MondrianProperties.instance().SsasCompatibleNaming, false);
         assertQueryReturns(context.createConnection(),
                 "WITH SET Gender as '[Gender].[Gender].members' \n" +
                         "select {Gender} ON 0 from [Sales]",

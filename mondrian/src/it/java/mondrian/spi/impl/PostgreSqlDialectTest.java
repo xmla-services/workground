@@ -28,7 +28,7 @@ public class PostgreSqlDialectTest extends TestCase {
 
   @Override
   protected void setUp() throws Exception {
-    when( metaData.getDatabaseProductName() ).thenReturn( Dialect.DatabaseProduct.POSTGRESQL.name() );
+    when( metaData.getDatabaseProductName() ).thenReturn( Dialect.DatabaseProduct.POSTGRES.name() );
     when( connection.getMetaData() ).thenReturn( metaData );
     dialect = new PostgreSqlDialect( connection );
   }

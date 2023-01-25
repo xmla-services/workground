@@ -13,9 +13,10 @@
 
 package mondrian.test.clearview;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.getDialect;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
@@ -158,7 +159,7 @@ import mondrian.test.SqlPattern;
     private SqlPattern[] buildSqlPatternArray(Connection connection) {
         DiffRepository diffRepos = getDiffRepos();
         Dialect d = getDialect(connection);
-        DatabaseProduct dialect = d.getDatabaseProduct();
+        DatabaseProduct dialect = getDatabaseProduct(d.getDialectName());
         String testCaseName = getName();
         String sql = diffRepos.get(
             testCaseName, "expectedSql", dialect.name());

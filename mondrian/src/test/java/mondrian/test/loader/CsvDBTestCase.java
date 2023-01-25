@@ -10,12 +10,13 @@
 */
 package mondrian.test.loader;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.getDialect;
 
 import java.io.File;
 
 import mondrian.rolap.RolapSchemaPool;
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.opencube.junit5.Constants;
@@ -68,7 +69,7 @@ public abstract class CsvDBTestCase extends BatchTestCase {
     protected final boolean isApplicable(Connection connection) {
         final Dialect dialect = getDialect(connection);
         return dialect.allowsDdl()
-                && dialect.getDatabaseProduct()
+                && getDatabaseProduct(dialect.getDialectName())
                 != DatabaseProduct.INFOBRIGHT;
     }
 

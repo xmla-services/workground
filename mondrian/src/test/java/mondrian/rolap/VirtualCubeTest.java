@@ -10,6 +10,7 @@
 */
 package mondrian.rolap;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.opencube.junit5.TestUtil.assertQueriesReturnSimilarResults;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
@@ -19,7 +20,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
 
 import java.util.List;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Member;
@@ -958,7 +959,7 @@ public class VirtualCubeTest extends BatchTestCase {
         // Only need to run this against one db to verify caching
         // behavior is correct.
         final Dialect dialect = getDialect(context.createConnection());
-        if (dialect.getDatabaseProduct() != DatabaseProduct.DERBY) {
+        if (getDatabaseProduct(dialect.getDialectName()) != DatabaseProduct.DERBY) {
             return;
         }
 

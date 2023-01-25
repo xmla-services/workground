@@ -11,6 +11,7 @@
 */
 package mondrian.test;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.opencube.junit5.TestUtil.assertSqlEquals;
 import static org.opencube.junit5.TestUtil.executeQuery;
@@ -78,7 +79,7 @@ public class DrillThroughFieldListTest {
 
     String expectedSql;
     Connection connection = context.createConnection();
-    switch (getDialect(connection).getDatabaseProduct()) {
+    switch (getDatabaseProduct(getDialect(connection).getDialectName())) {
     case MARIADB:
     case MYSQL:
         expectedSql =
@@ -87,7 +88,7 @@ public class DrillThroughFieldListTest {
             + "    sales_fact_1997.unit_sales as Unit Sales\n"
             + "from\n"
             + "    sales_fact_1997 as sales_fact_1997,\n"
-            + "    time_by_day as time_by_day\n"         
+            + "    time_by_day as time_by_day\n"
             + "where\n"
             + "    sales_fact_1997.time_id = time_by_day.time_id\n"
             + "and\n"
@@ -151,7 +152,7 @@ public class DrillThroughFieldListTest {
         .asList(unitSalesAttribute, storeCostAttribute, quarterAttribute);
 
     String expectedSql;
-    switch (getDialect(connection).getDatabaseProduct()) {
+    switch (getDatabaseProduct(getDialect(connection).getDialectName())) {
     case MARIADB:
     case MYSQL:
         expectedSql =
@@ -227,7 +228,7 @@ public class DrillThroughFieldListTest {
         .asList(unitSalesAttribute, storeCostAttribute, quarterAttribute);
 
     String expectedSql;
-    switch (getDialect(connection).getDatabaseProduct()) {
+    switch (getDatabaseProduct(getDialect(connection).getDialectName())) {
     case MARIADB:
     case MYSQL:
         expectedSql = "select\n"
@@ -305,7 +306,7 @@ public class DrillThroughFieldListTest {
         .asList(StoreSqftAttribute);
 
     String expectedSql;
-    switch (getDialect(connection).getDatabaseProduct()) {
+    switch (getDatabaseProduct(getDialect(connection).getDialectName())) {
     case MARIADB:
     case MYSQL:
         expectedSql =
@@ -352,7 +353,7 @@ public class DrillThroughFieldListTest {
         .asList(StoreSqftAttribute);
 
     String expectedSql;
-    switch (getDialect(connection).getDatabaseProduct()) {
+    switch (getDatabaseProduct(getDialect(connection).getDialectName())) {
     case MARIADB:
     case MYSQL:
         expectedSql = "select\n"

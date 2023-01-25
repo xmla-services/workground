@@ -8,6 +8,7 @@
 */
 package mondrian.xmla;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
 
@@ -58,7 +59,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
             && filename.equals("response"))
         {
             Dialect dialect = getDialect(connection);
-            switch (dialect.getDatabaseProduct()) {
+            switch (getDatabaseProduct(dialect.getDialectName())) {
             case MYSQL:
             case MARIADB:
             case VERTICA:

@@ -10,6 +10,7 @@
 */
 package mondrian.rolap;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -25,7 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -508,7 +509,7 @@ public class TestAggregationManager extends BatchTestCase {
         // For now, only run it for derby.
         Connection connection = context.createConnection();
         final Dialect dialect = getDialect(connection);
-        if (dialect.getDatabaseProduct() != DatabaseProduct.DERBY) {
+        if (getDatabaseProduct(dialect.getDialectName()) != DatabaseProduct.DERBY) {
             return;
         }
         String mdxQuery =
@@ -1702,8 +1703,8 @@ public class TestAggregationManager extends BatchTestCase {
         prepareContext(context);
         Connection connection = context.createConnection();
         final boolean p;
-        switch (getDialect(connection).getDatabaseProduct()) {
-        case POSTGRESQL:
+        switch (getDatabaseProduct(getDialect(connection).getDialectName())) {
+        case POSTGRES:
             // Results are slightly different order on Postgres. It collates
             // "Sale Winners" before "Sales Days", because " " < "A".
             p = true;

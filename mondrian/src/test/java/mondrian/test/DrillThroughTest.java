@@ -13,6 +13,7 @@
 package mondrian.test;
 
 import static mondrian.rolap.util.ExpressionUtil.getExpression;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -37,7 +38,7 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
@@ -842,7 +843,7 @@ public class DrillThroughTest {
         final String caseStmt =
             " \\(case when `sales_fact_1997`.`promotion_id` = 0 then 0"
             + " else `sales_fact_1997`.`store_sales` end\\)";
-        switch (dialect.getDatabaseProduct()) {
+        switch (getDatabaseProduct(dialect.getDialectName())) {
         case ACCESS:
             expectedSql = expectedSql.replaceAll(
                 caseStmt,
@@ -923,7 +924,7 @@ public class DrillThroughTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void  testDrillThroughDupKeysAndMeasure(TestingContext context) throws Exception {
-        if (!getDialect(context.createConnection()).getDatabaseProduct()
+        if (!getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
             .equals(DatabaseProduct.MYSQL))
         {
             // This test only works on MySQL because we
@@ -1127,7 +1128,7 @@ public class DrillThroughTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void  testBug1438285(TestingContext context) {
         final Dialect dialect = getDialect(context.createConnection());
-        if (dialect.getDatabaseProduct() == DatabaseProduct.TERADATA) {
+        if (getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.TERADATA) {
             // On default Teradata express instance there isn't enough spool
             // space to run this query.
             return;
@@ -1305,7 +1306,7 @@ public class DrillThroughTest {
             final ResultSet resultSet = statement.executeQuery(sql);
             final int columnCount = resultSet.getMetaData().getColumnCount();
             final Dialect dialect = getDialect(context.createConnection());
-            if (dialect.getDatabaseProduct() == DatabaseProduct.DERBY) {
+            if (getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.DERBY) {
                 // derby counts ORDER BY columns as columns. insane!
                 assertEquals(11, columnCount);
             } else {
@@ -1559,7 +1560,7 @@ public class DrillThroughTest {
         assertTrue(cell.canDrillThrough());
         String sql = cell.getDrillThroughSQL(false);
         String expectedSql;
-        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
+        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1608,7 +1609,7 @@ public class DrillThroughTest {
 
         // Note that gender and marital status get their own predicates,
         // independent of the time portion of the slicer
-        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
+        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1685,7 +1686,7 @@ public class DrillThroughTest {
 
         // Note that gender and marital status get their own predicates,
         // independent of the time portion of the slicer
-        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
+        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1742,7 +1743,7 @@ public class DrillThroughTest {
 
         // With overlapping slicer members, the first slicer predicate is
         // redundant, but does not affect the query's results
-        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
+        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1790,7 +1791,7 @@ public class DrillThroughTest {
         cell = result.getCell(new int[]{0, 0});
         assertTrue(cell.canDrillThrough());
         sql = cell.getDrillThroughSQL(false);
-        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
+        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case MARIADB:
         case MYSQL:
             expectedSql =
@@ -1889,7 +1890,7 @@ public class DrillThroughTest {
         Cell cell = result.getCell(new int[]{0, 0});
         String sql = cell.getDrillThroughSQL(true);
         String expectedSql;
-        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
+        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case VECTORWISE:
             expectedSql =
                 "select \"store\".\"store_country\" as \"Store Country\","
@@ -1986,7 +1987,7 @@ public class DrillThroughTest {
             assertEquals(
                 5, rs.getMetaData().getColumnCount());
             Object expectedYear;
-            switch (getDialect(context.createConnection()).getDatabaseProduct()) {
+            switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
             case MARIADB:
             case MYSQL:
                 expectedYear = new Integer(1997);

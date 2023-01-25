@@ -12,6 +12,7 @@
 package mondrian.olap.fun;
 
 import static mondrian.olap.Util.assertTrue;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -1694,7 +1695,7 @@ public class FunctionTest {//extends FoodMartTestCase {
 
     // <Dimension>.members applied to a query with calc measures
     // Again, no calc measures are returned
-    switch (TestUtil.getDialect(connection).getDatabaseProduct()) {
+    switch (getDatabaseProduct(TestUtil.getDialect(connection).getDialectName())) {
       case INFOBRIGHT:
         // Skip this test on Infobright, because [Promotion Sales] is
         // defined wrong.
@@ -1722,7 +1723,7 @@ public class FunctionTest {//extends FoodMartTestCase {
 
     // <Level>.members applied to a query with calc measures
     // Again, no calc measures are returned
-    switch (TestUtil.getDialect(connection).getDatabaseProduct()) {
+    switch (getDatabaseProduct(TestUtil.getDialect(connection).getDialectName())) {
       case INFOBRIGHT:
         // Skip this test on Infobright, because [Promotion Sales] is
         // defined wrong.
@@ -1818,7 +1819,7 @@ public class FunctionTest {//extends FoodMartTestCase {
 
     // <Dimension>.allmembers applied to a query with calc measures
     // Calc measures are returned
-    switch (TestUtil.getDialect(connection).getDatabaseProduct()) {
+    switch (getDatabaseProduct(TestUtil.getDialect(connection).getDialectName())) {
       case INFOBRIGHT:
         // Skip this test on Infobright, because [Promotion Sales] is
         // defined wrong.
@@ -1853,7 +1854,7 @@ public class FunctionTest {//extends FoodMartTestCase {
     }
 
     // Calc measure members from schema and from query
-    switch (TestUtil.getDialect(connection).getDatabaseProduct()) {
+    switch (getDatabaseProduct(TestUtil.getDialect(connection).getDialectName())) {
       case INFOBRIGHT:
         // Skip this test on Infobright, because [Promotion Sales] is
         // defined wrong.
@@ -1916,7 +1917,7 @@ public class FunctionTest {//extends FoodMartTestCase {
     }
 
     // Calc member in query and schema not seen
-    switch (TestUtil.getDialect(connection).getDatabaseProduct()) {
+    switch (getDatabaseProduct(TestUtil.getDialect(connection).getDialectName())) {
       case INFOBRIGHT:
         // Skip this test on Infobright, because [Promotion Sales] is
         // defined wrong.
@@ -1979,7 +1980,7 @@ public class FunctionTest {//extends FoodMartTestCase {
     }
 
     // Calc member in query and schema not seen
-    switch (TestUtil.getDialect(connection).getDatabaseProduct()) {
+    switch (getDatabaseProduct(TestUtil.getDialect(connection).getDialectName())) {
       case INFOBRIGHT:
         // Skip this test on Infobright, because [Promotion Sales] is
         // defined wrong.
@@ -12659,7 +12660,7 @@ Intel platforms):
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void testComplexOrExpr(TestingContext context) {
     Connection connection = context.createConnection();
-    switch (TestUtil.getDialect(connection).getDatabaseProduct()) {
+    switch (getDatabaseProduct(TestUtil.getDialect(connection).getDialectName())) {
       case INFOBRIGHT:
         // Skip this test on Infobright, because [Promotion Sales] is
         // defined wrong.

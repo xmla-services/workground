@@ -748,7 +748,6 @@ public interface Dialect {
 
     boolean requiresDrillthroughMaxRowsInLimit();
 
-    DatabaseProduct getDatabaseProduct();
 
     /**
      * Returns whether the SQL dialect allows "AS" in the 'field' clause.

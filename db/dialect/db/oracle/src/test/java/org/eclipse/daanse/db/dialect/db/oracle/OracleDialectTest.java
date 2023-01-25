@@ -19,7 +19,6 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Statement;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -31,7 +30,7 @@ public class OracleDialectTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        when(metaData.getDatabaseProductName()).thenReturn(DatabaseProduct.ORACLE.name());
+        when(metaData.getDatabaseProductName()).thenReturn("ORACLE");
         when(connection.getMetaData()).thenReturn(metaData);
         dialect = new OracleDialect();
         dialect.initialize(connection);

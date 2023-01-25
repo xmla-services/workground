@@ -44,6 +44,8 @@ import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
+
 /**
  * This is an abstract base class for the creation and load of one or more
  * database tables with data. Optionally, if a table already exists it can be
@@ -562,8 +564,8 @@ public abstract class DBLoader {
                 return name;
             }
             if (this == Boolean) {
-                switch (dialect.getDatabaseProduct()) {
-                case POSTGRESQL:
+                switch (getDatabaseProduct(dialect.getDialectName())) {
+                case POSTGRES:
                     return name;
                 case MARIADB:
                 case MYSQL:
@@ -575,7 +577,7 @@ public abstract class DBLoader {
                 }
             }
             if (this == Bigint) {
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case ORACLE:
                 case FIREBIRD:
                     return "DECIMAL(15,0)";
@@ -584,7 +586,7 @@ public abstract class DBLoader {
                 }
             }
             if (this == Date) {
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case MSSQL:
                     return "DATETIME";
                 default:
@@ -592,7 +594,7 @@ public abstract class DBLoader {
                 }
             }
             if (this == Timestamp) {
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case MSSQL:
                 case MARIADB:
                 case MYSQL:
@@ -605,7 +607,7 @@ public abstract class DBLoader {
             }
             // for extra types
             if (name.startsWith("DECIMAL(")) {
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case ACCESS:
                     return "CURRENCY";
                 }
@@ -1291,7 +1293,7 @@ public abstract class DBLoader {
         } else if (type == Type.Timestamp) {
             if (value instanceof String) {
                 Timestamp ts = Timestamp.valueOf((String) value);
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case ORACLE:
                 case LUCIDDB:
                     return "TIMESTAMP '" + ts + "'";
@@ -1300,7 +1302,7 @@ public abstract class DBLoader {
                 }
             } else if (value instanceof Timestamp) {
                 Timestamp ts = (Timestamp) value;
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case ORACLE:
                 case LUCIDDB:
                     return "TIMESTAMP '" + ts + "'";
@@ -1315,7 +1317,7 @@ public abstract class DBLoader {
         } else if (type == Type.Date) {
             if (value instanceof String) {
                 Date dt = Date.valueOf((String) value);
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case ORACLE:
                 case LUCIDDB:
                     return "DATE '" + dateFormatter.format(dt) + "'";
@@ -1324,7 +1326,7 @@ public abstract class DBLoader {
                 }
             } else if (value instanceof Date) {
                 Date dt = (Date) value;
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case ORACLE:
                 case LUCIDDB:
                     return "DATE '" + dateFormatter.format(dt) + "'";
@@ -1373,7 +1375,7 @@ public abstract class DBLoader {
         } else if (type == Type.Boolean) {
             if (value instanceof String) {
                 String trimmedValue = ((String) value).trim();
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case MARIADB:
                 case MYSQL:
                 case ORACLE:

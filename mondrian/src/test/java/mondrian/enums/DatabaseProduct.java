@@ -16,10 +16,13 @@
  *   Hitachi Vantara.
  *   SmartCity Jena - initial  Java 8, Junit5
  */
-package org.eclipse.daanse.db.dialect.api;
+package mondrian.enums;
 
 
 // To be removed
+
+import org.eclipse.daanse.db.dialect.api.Dialect;
+
 /**
  * Enumeration of common database types.
  *
@@ -35,7 +38,6 @@ package org.eclipse.daanse.db.dialect.api;
  * for {@link #DB2_AS400} and {@link #DB2_OLD_AS400} returns {@link #DB2}.
  */
 
-@Deprecated
 public enum DatabaseProduct {
     ACCESS,
     UNKNOWN,
@@ -60,7 +62,7 @@ public enum DatabaseProduct {
     NEOVIEW,
     NUODB,
     ORACLE,
-    POSTGRESQL,
+    POSTGRES,
     REDSHIFT,
     MYSQL,
     SQLSTREAM,

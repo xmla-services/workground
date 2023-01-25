@@ -34,13 +34,15 @@ import java.util.stream.Stream;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 
 import com.univocity.parsers.csv.Csv;
 import com.univocity.parsers.csv.CsvParserSettings;
 
 import mondrian.olap.Util;
+
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 
 public class DataLoaderUtil {
 
@@ -65,7 +67,7 @@ public class DataLoaderUtil {
 
 			buf.append(constraint.unique ? "CREATE UNIQUE INDEX " : "CREATE INDEX ")
 					.append(dialect.quoteIdentifier(constraint.name));
-			if (dialect.getDatabaseProduct() != DatabaseProduct.TERADATA) {
+			if (getDatabaseProduct(dialect.getDialectName()) != DatabaseProduct.TERADATA) {
 				buf.append(" ON ").append(dialect.quoteIdentifier(table.schemaName, table.tableName));
 			}
 			buf.append(" (");
@@ -81,7 +83,7 @@ public class DataLoaderUtil {
 				buf.append(dialect.quoteIdentifier(columnName));
 			}
 			buf.append(")");
-			if (dialect.getDatabaseProduct() == DatabaseProduct.TERADATA) {
+			if (getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.TERADATA) {
 				buf.append(" ON ").append(dialect.quoteIdentifier(table.schemaName, table.tableName));
 			}
 			final String createDDL = buf.toString();
@@ -156,7 +158,7 @@ public class DataLoaderUtil {
 //            }
 
 		buf.append(")");
-		switch (dialect.getDatabaseProduct()) {
+		switch (getDatabaseProduct(dialect.getDialectName())) {
 		case NEOVIEW:
 			// no unique keys defined
 			buf.append(" NO PARTITION");
@@ -247,8 +249,8 @@ public class DataLoaderUtil {
 				return name;
 			}
 			if (this == Boolean) {
-				switch (dialect.getDatabaseProduct()) {
-				case POSTGRESQL:
+				switch (getDatabaseProduct(dialect.getDialectName())) {
+				case POSTGRES:
 				case GREENPLUM:
 				case LUCIDDB:
 				case NETEZZA:
@@ -266,7 +268,7 @@ public class DataLoaderUtil {
 				}
 			}
 			if (this == Bigint) {
-				switch (dialect.getDatabaseProduct()) {
+				switch (getDatabaseProduct(dialect.getDialectName())) {
 				case ORACLE:
 				case FIREBIRD:
 					return "DECIMAL(15,0)";
@@ -275,7 +277,7 @@ public class DataLoaderUtil {
 				}
 			}
 			if (this == Date) {
-				switch (dialect.getDatabaseProduct()) {
+				switch (getDatabaseProduct(dialect.getDialectName())) {
 				case MSSQL:
 					return "DATETIME";
 				case INGRES:
@@ -285,7 +287,7 @@ public class DataLoaderUtil {
 				}
 			}
 			if (this == Timestamp) {
-				switch (dialect.getDatabaseProduct()) {
+				switch (getDatabaseProduct(dialect.getDialectName())) {
 				case MSSQL:
 				case MARIADB:
 				case MYSQL:

@@ -44,7 +44,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 //import mondrian.spi.DialectManager;
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +52,8 @@ import org.slf4j.LoggerFactory;
 import mondrian.olap.Util;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapUtil;
+
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 
 /**
  * Utility to load the FoodMart dataset into an arbitrary JDBC database.
@@ -398,9 +400,9 @@ public class MondrianFoodMartLoaderX {
 
         LOGGER.info(
             "Mondrian Dialect is " + dialect
-            + ", detected database product: " + dialect.getDatabaseProduct());
+            + ", detected database product: " + getDatabaseProduct(dialect.getDialectName()));
 
-        if (dialect.getDatabaseProduct() == DatabaseProduct.INFOBRIGHT
+        if (getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.INFOBRIGHT
             && indexes)
         {
             System.out.println("Infobright engine detected: ignoring indexes");
@@ -410,7 +412,7 @@ public class MondrianFoodMartLoaderX {
         if (outputBatchSize == -1) {
             // No explicit batch size was set by user, so assign a good
             // default now
-            if (dialect.getDatabaseProduct()
+            if (getDatabaseProduct(dialect.getDialectName())
                 == DatabaseProduct.LUCIDDB)
             {
                 // LucidDB column-store writes perform better with large batches
@@ -420,7 +422,7 @@ public class MondrianFoodMartLoaderX {
             }
         }
 
-        if (dialect.getDatabaseProduct() == DatabaseProduct.LUCIDDB) {
+        if (getDatabaseProduct(dialect.getDialectName()) == DatabaseProduct.LUCIDDB) {
             // LucidDB doesn't support CREATE UNIQUE INDEX, but it
             // does support standard UNIQUE constraints
             generateUniqueConstraints = true;
@@ -543,7 +545,7 @@ public class MondrianFoodMartLoaderX {
             throw new Exception("No data file to process");
         }
 
-        if (dialect.getDatabaseProduct()
+        if (getDatabaseProduct(dialect.getDialectName())
             == DatabaseProduct.INFOBRIGHT)
         {
             infobrightLoad = true;
@@ -1188,7 +1190,7 @@ public class MondrianFoodMartLoaderX {
             return sqls.size();
         }
 
-        if (dialect.getDatabaseProduct()
+        if (getDatabaseProduct(dialect.getDialectName())
             == DatabaseProduct.INFOBRIGHT)
         {
             for (String sql : sqls) {
@@ -1202,7 +1204,7 @@ public class MondrianFoodMartLoaderX {
             }
         } else {
             final boolean useTxn;
-            if (dialect.getDatabaseProduct()
+            if (getDatabaseProduct(dialect.getDialectName())
                 == DatabaseProduct.NEOVIEW)
             {
                 // setAutoCommit can not changed to true again, throws
@@ -1221,7 +1223,7 @@ public class MondrianFoodMartLoaderX {
                 connection.setAutoCommit(false);
             }
 
-            switch (dialect.getDatabaseProduct()) {
+            switch (getDatabaseProduct(dialect.getDialectName())) {
             case LUCIDDB:
             case NEOVIEW:
                 // LucidDB doesn't perform well with single-row inserts,
@@ -2181,7 +2183,7 @@ public class MondrianFoodMartLoaderX {
                 try {
                     buf.append("DROP INDEX ")
                         .append(quoteId(schema, indexName));
-                    switch (dialect.getDatabaseProduct()) {
+                    switch (getDatabaseProduct(dialect.getDialectName())) {
                     case MARIADB:
                     case MYSQL:
                     case INFOBRIGHT:
@@ -2202,7 +2204,7 @@ public class MondrianFoodMartLoaderX {
             buf.setLength(0);
             buf.append(isUnique ? "CREATE UNIQUE INDEX " : "CREATE INDEX ")
                 .append(quoteId(indexName));
-            if (dialect.getDatabaseProduct()
+            if (getDatabaseProduct(dialect.getDialectName())
                 != DatabaseProduct.TERADATA)
             {
                 buf.append(" ON ").append(quoteId(schema, tableName));
@@ -2216,7 +2218,7 @@ public class MondrianFoodMartLoaderX {
                 buf.append(quoteId(columnName));
             }
             buf.append(")");
-            if (dialect.getDatabaseProduct()
+            if (getDatabaseProduct(dialect.getDialectName())
                 == DatabaseProduct.TERADATA)
             {
                 buf.append(" ON ").append(quoteId(schema, tableName));
@@ -2815,7 +2817,7 @@ public class MondrianFoodMartLoaderX {
             }
 
             buf.append(")");
-            switch (dialect.getDatabaseProduct()) {
+            switch (getDatabaseProduct(dialect.getDialectName())) {
             case NEOVIEW:
                 // no unique keys defined
                 buf.append(" NO PARTITION");
@@ -2829,7 +2831,7 @@ public class MondrianFoodMartLoaderX {
     }
 
     private void analyzeTables() throws SQLException {
-        switch (dialect.getDatabaseProduct()) {
+        switch (getDatabaseProduct(dialect.getDialectName())) {
         case LUCIDDB:
             Statement statement = null;
             try {
@@ -3024,7 +3026,7 @@ public class MondrianFoodMartLoaderX {
                 // REVIEW jvs 26-Nov-2006:  Is it safe to replace
                 // these with dialect.quoteTimestampLiteral, etc?
 
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case ORACLE:
                 case LUCIDDB:
                 case NEOVIEW:
@@ -3039,7 +3041,7 @@ public class MondrianFoodMartLoaderX {
              */
             } else if (columnType.startsWith("DATE")) {
                 Date dt = (Date) obj;
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case ORACLE:
                 case LUCIDDB:
                 case NEOVIEW:
@@ -3121,7 +3123,7 @@ public class MondrianFoodMartLoaderX {
         String columnType = column.typeName;
 
         if (columnValue == null) {
-            switch (dialect.getDatabaseProduct()) {
+            switch (getDatabaseProduct(dialect.getDialectName())) {
             // Sybase only accepts nulls as 0x00.
             case SYBASE:
                 return "0x00";
@@ -3133,7 +3135,7 @@ public class MondrianFoodMartLoaderX {
         /*
          * Output for a TIMESTAMP
          */
-        final DatabaseProduct product = dialect.getDatabaseProduct();
+        final DatabaseProduct product = getDatabaseProduct(dialect.getDialectName());
         if (columnType.startsWith("TIMESTAMP")) {
             switch (product) {
             case ORACLE:
@@ -3334,8 +3336,8 @@ public class MondrianFoodMartLoaderX {
                 return name;
             }
             if (this == Boolean) {
-                switch (dialect.getDatabaseProduct()) {
-                case POSTGRESQL:
+                switch (getDatabaseProduct(dialect.getDialectName())) {
+                case POSTGRES:
                 case GREENPLUM:
                 case LUCIDDB:
                 case NETEZZA:
@@ -3353,7 +3355,7 @@ public class MondrianFoodMartLoaderX {
                 }
             }
             if (this == Bigint) {
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case ORACLE:
                 case FIREBIRD:
                     return "DECIMAL(15,0)";
@@ -3362,7 +3364,7 @@ public class MondrianFoodMartLoaderX {
                 }
             }
             if (this == Date) {
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case MSSQL:
                     return "DATETIME";
                 case INGRES:
@@ -3372,7 +3374,7 @@ public class MondrianFoodMartLoaderX {
                 }
             }
             if (this == Timestamp) {
-                switch (dialect.getDatabaseProduct()) {
+                switch (getDatabaseProduct(dialect.getDialectName())) {
                 case MSSQL:
                 case MARIADB:
                 case MYSQL:

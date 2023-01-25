@@ -13,7 +13,7 @@ package mondrian.test;
 
 import java.util.Set;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.olap4j.impl.Olap4jUtil;
 

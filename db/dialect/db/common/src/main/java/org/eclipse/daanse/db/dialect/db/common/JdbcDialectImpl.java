@@ -32,7 +32,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
 import org.eclipse.daanse.db.dialect.api.Datatype;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.slf4j.Logger;
@@ -93,12 +92,6 @@ public abstract class JdbcDialectImpl implements Dialect {
      */
     protected boolean permitsSelectNotInGroupBy =true;
 
-    /**
-     * Major database product (or null if product is not a common one)
-     */
-    protected DatabaseProduct databaseProduct=null;
-
-
     private static final int[] RESULT_SET_TYPE_VALUES = {
         ResultSet.TYPE_FORWARD_ONLY,
         ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -152,7 +145,6 @@ public abstract class JdbcDialectImpl implements Dialect {
             this.supportedResultSetTypes = deduceSupportedResultSetStyles(metaData);
             this.readOnly = deduceReadOnly(metaData);
             this.maxColumnNameLength = deduceMaxColumnNameLength(metaData);
-            this.databaseProduct = getProduct(this.productName, this.productVersion);
             this.permitsSelectNotInGroupBy = deduceSupportsSelectNotInGroupBy(connection);
 
             //check
@@ -166,12 +158,6 @@ public abstract class JdbcDialectImpl implements Dialect {
         }
     }
     protected abstract boolean isSupportedProduct(String productName, String productVersion);
-
-
-    @Override
-    public DatabaseProduct getDatabaseProduct() {
-        return databaseProduct;
-    }
 
     @Override
     public void appendHintsAfterFromClause(
@@ -1018,111 +1004,6 @@ public abstract class JdbcDialectImpl implements Dialect {
         }
     }
 
-    /**
-     * Converts a product name and version (per the JDBC driver) into a product
-     * enumeration.
-     *
-     * @param productName Product name
-     * @param productVersion Product version
-     * @return database product
-     */
-    public static DatabaseProduct getProduct(
-        String productName,
-        String productVersion)
-    {
-        final String upperProductName = productName.toUpperCase();
-        if (productName.equals("ACCESS")) {
-            return DatabaseProduct.ACCESS;
-        } else if (upperProductName.trim().equals("APACHE DERBY")) {
-            return DatabaseProduct.DERBY;
-        } else if (upperProductName.indexOf("CLICKHOUSE") >= 0) {
-            return DatabaseProduct.CLICKHOUSE;
-        } else if (upperProductName.trim().equals("DBMS:CLOUDSCAPE")) {
-            return DatabaseProduct.DERBY;
-        } else if (productName.startsWith("DB2")) {
-            if (productName.startsWith("DB2 UDB for AS/400")) {
-                // TB "04.03.0000 V4R3m0"
-                // this version cannot handle subqueries and is considered "old"
-                // DEUKA "05.01.0000 V5R1m0" is ok
-                String[] version_release = productVersion.split("\\.", 3);
-/*
-                if (version_release.length > 2 &&
-                    "04".compareTo(version_release[0]) > 0 ||
-                    ("04".compareTo(version_release[0]) == 0
-                    && "03".compareTo(version_release[1]) >= 0))
-                    return true;
-*/
-                // assume, that version <= 04 is "old"
-                if ("04".compareTo(version_release[0]) >= 0) {
-                    return DatabaseProduct.DB2_OLD_AS400;
-                } else {
-                    return DatabaseProduct.DB2_AS400;
-                }
-            } else {
-                // DB2 on NT returns "DB2/NT"
-                return DatabaseProduct.DB2;
-            }
-        } else if (upperProductName.indexOf("FIREBIRD") >= 0) {
-            return DatabaseProduct.FIREBIRD;
-        } else if (upperProductName.equals("HIVE")
-            || upperProductName.equals("APACHE HIVE"))
-        {
-            return DatabaseProduct.HIVE;
-        } else if (productName.startsWith("Informix")) {
-            return DatabaseProduct.INFORMIX;
-        } else if (upperProductName.equals("INGRES")) {
-            return DatabaseProduct.INGRES;
-        } else if (productName.equals("Interbase")) {
-            return DatabaseProduct.INTERBASE;
-        } else if (upperProductName.equals("LUCIDDB")
-            || upperProductName.equals("OPTIQ"))
-        {
-            return DatabaseProduct.LUCIDDB;
-        } else if (upperProductName.indexOf("SQL SERVER") >= 0) {
-            return DatabaseProduct.MSSQL;
-        } else if (productName.equals("Oracle")) {
-            return DatabaseProduct.ORACLE;
-        } else if (upperProductName.indexOf("POSTGRE") >= 0) {
-            return DatabaseProduct.POSTGRESQL;
-        } else if (upperProductName.indexOf("NETEZZA") >= 0) {
-            return DatabaseProduct.NETEZZA;
-        } else if (upperProductName.equals("MYSQL (INFOBRIGHT)")) {
-            return DatabaseProduct.INFOBRIGHT;
-        } else if (upperProductName.equals("MYSQL")) {
-            return DatabaseProduct.MYSQL;
-        } else if (upperProductName.equals("MONETDB")) {
-            return DatabaseProduct.MONETDB;
-        } else if (upperProductName.equals("VERTICA")
-            || upperProductName.equals("VERTICA DATABASE"))
-        {
-            return DatabaseProduct.VERTICA;
-        } else if (upperProductName.equals("VECTORWISE")) {
-            return DatabaseProduct.VECTORWISE;
-        } else if (productName.startsWith("HP Neoview")) {
-            return DatabaseProduct.NEOVIEW;
-        } else if (upperProductName.indexOf("SYBASE") >= 0
-            || upperProductName.indexOf("ADAPTIVE SERVER") >= 0
-            || upperProductName.indexOf("SQL ANYWHERE") >= 0 ) {
-            // Sysbase Adaptive Server Enterprise 15.5 via jConnect 6.05 returns
-            // "Adaptive Server Enterprise" as a product name.
-            // Also fixes Sybase SQL ANYWHERE 17 which returns "SQL ANYWHERE"
-            return DatabaseProduct.SYBASE;
-        } else if (upperProductName.indexOf("TERADATA") >= 0) {
-            return DatabaseProduct.TERADATA;
-        } else if (upperProductName.indexOf("HSQL") >= 0) {
-            return DatabaseProduct.HSQLDB;
-        } else if (upperProductName.indexOf("VERTICA") >= 0) {
-            return DatabaseProduct.VERTICA;
-        } else if (upperProductName.indexOf("VECTORWISE") >= 0) {
-            return DatabaseProduct.VECTORWISE;
-        } else if (upperProductName.startsWith("PDI")) {
-            return DatabaseProduct.PDI;
-        } else if (upperProductName.startsWith("GOOGLE BIGQUERY")) {
-            return DatabaseProduct.GOOGLEBIGQUERY;
-        } else {
-            return DatabaseProduct.getDatabaseProduct(upperProductName);
-        }
-    }
 
 
     /**
@@ -1184,20 +1065,20 @@ public abstract class JdbcDialectImpl implements Dialect {
      * @return true if a match was found. false otherwise.
      */
     protected static boolean isDatabase(
-        DatabaseProduct databaseProduct,
+        String databaseProduct,
         Connection connection)
     {
         Statement statement = null;
         ResultSet resultSet = null;
 
-        String dbProduct = databaseProduct.name().toLowerCase();
+        String dbProduct = databaseProduct.toLowerCase();
 
         try {
             // Quick and dirty check first.
             if (connection.getMetaData().getDatabaseProductName()
                 .toLowerCase().contains(dbProduct))
             {
-                LOGGER.debug("Using {} dialect", databaseProduct.name());
+                LOGGER.debug("Using {} dialect", databaseProduct);
                 return true;
             }
 
@@ -1210,19 +1091,19 @@ public abstract class JdbcDialectImpl implements Dialect {
                 if (version != null) {
                     if (version.toLowerCase().contains(dbProduct)) {
                         LOGGER.info(
-                            "Using {} dialect", databaseProduct.name());
+                            "Using {} dialect", databaseProduct);
                         return true;
                     }
                 }
             }
-            LOGGER.debug("NOT Using {} dialect",  databaseProduct.name());
+            LOGGER.debug("NOT Using {} dialect",  databaseProduct);
             return false;
         } catch (SQLException e) {
             // this exception can be hit by any db types that don't support
             // 'select version()'
             // no need to log exception, this is an "expected" error as we
             // loop through all dialects looking for one that matches.
-            LOGGER.debug("NOT Using {} dialect.", databaseProduct.name());
+            LOGGER.debug("NOT Using {} dialect.", databaseProduct);
             return false;
         } finally {
             Util.close(resultSet, statement, null);

@@ -8,7 +8,8 @@
 */
 package mondrian.test;
 
-import static org.eclipse.daanse.db.dialect.api.DatabaseProduct.MYSQL;
+import static mondrian.enums.DatabaseProduct.MYSQL;
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -2836,7 +2837,7 @@ public class SchemaTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testBinaryLevelKey(TestingContext context) {
-        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
+        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case DERBY:
         case MARIADB:
         case MYSQL:
@@ -3118,7 +3119,7 @@ public class SchemaTest {
         // until bug MONDRIAN-495, "Table filter concept does not support
         // dialects." is fixed, this test case only works on MySQL
         if (!Bug.BugMondrian495Fixed
-            && getDialect(context.createConnection()).getDatabaseProduct()
+            && getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
             != MYSQL)
         {
             return;
@@ -3621,8 +3622,8 @@ public class SchemaTest {
             + "      </Level>\n"
             + "    </Hierarchy>\n"
             + "  </Dimension>"));
-        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
-        case POSTGRESQL:
+        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
+        case POSTGRES:
             // Postgres fails with:
             //   Internal error: while building member cache; sql=[select
             //     "customer"."gender" as "c0", 'foobar' as "c1" from "customer"
@@ -3670,7 +3671,7 @@ public class SchemaTest {
         // Test case requires a pecular inline view, and it works on dialects
         // that scalar subqery, viz oracle. I believe that the mondrian code
         // being works in all dialects.
-        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
+        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case ORACLE:
             break;
         default:
@@ -4803,7 +4804,7 @@ public class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testBugMondrian1047(TestingContext context) {
         // Test case only works under MySQL, due to how columns are quoted.
-        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
+        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case MARIADB:
         case MYSQL:
             break;
@@ -4850,7 +4851,7 @@ public class SchemaTest {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testBugMondrian1065(TestingContext context) {
         // Test case only works under Oracle
-        switch (getDialect(context.createConnection()).getDatabaseProduct()) {
+        switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case ORACLE:
             break;
         default:

@@ -10,11 +10,12 @@
 */
 package mondrian.test;
 
+import static mondrian.enums.DatabaseProduct.getDatabaseProduct;
 import static org.opencube.junit5.TestUtil.assertAxisReturns;
 import static org.opencube.junit5.TestUtil.assertQueryReturns;
 import static org.opencube.junit5.TestUtil.getDialect;
 
-import org.eclipse.daanse.db.dialect.api.DatabaseProduct;
+import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.olap.api.Connection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -470,7 +471,7 @@ public class RaggedHierarchyTest {
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testHideIfBlankHidesWhitespace(TestingContext context) {
-        if (getDialect(context.createConnection()).getDatabaseProduct()
+        if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
             != DatabaseProduct.ORACLE)
         {
             return;
