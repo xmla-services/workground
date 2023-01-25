@@ -50,4 +50,13 @@ public class Db2OldAs400Dialect extends Db2Dialect {
         // subqueries in the FROM clause.
         return false;
     }
+
+    public boolean allowsFieldAs() {
+        return false;
+    }
+
+    @Override
+    public String getDialectName() {
+        return "db2";
+    }
 }

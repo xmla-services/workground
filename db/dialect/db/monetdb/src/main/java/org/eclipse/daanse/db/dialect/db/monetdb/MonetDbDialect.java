@@ -6,7 +6,7 @@
 *
 * Copyright (C) 2012-2017 Hitachi Vantara and others
 * All Rights Reserved.
-* 
+*
 * Contributors:
 *   SmartCity Jena, Stefan Bischof - make OSGi Component
 */
@@ -152,6 +152,9 @@ public class MonetDbDialect extends JdbcDialectImpl {
         return result;
     }
 
-
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 
 }

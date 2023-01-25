@@ -693,6 +693,11 @@ public class DialectTest {
     // http://jira.pentaho.com/browse/MONDRIAN-2038
     Dialect jdbcDialect = new JdbcDialectImpl(){
         @Override
+        public String getDialectName() {
+            return null;
+        }
+
+        @Override
         protected boolean isSupportedProduct(String productName, String productVersion) {
             return true;
         }
@@ -1622,6 +1627,11 @@ public class DialectTest {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect postgresDialect = new JdbcDialectImpl(){
         @Override
+        public String getDialectName() {
+            return null;
+        }
+
+        @Override
         protected boolean isSupportedProduct(String productName, String productVersion) {
             return true;
         }
@@ -1751,6 +1761,11 @@ public class DialectTest {
         @Override
         public boolean requiresUnionOrderByOrdinal() {
             return false;
+        }
+
+        @Override
+        public String getDialectName() {
+            return null;
         }
     };
 

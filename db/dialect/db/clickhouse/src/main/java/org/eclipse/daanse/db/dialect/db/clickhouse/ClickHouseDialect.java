@@ -56,4 +56,9 @@ public class ClickHouseDialect extends JdbcDialectImpl {
 
         buf.append('\'');
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

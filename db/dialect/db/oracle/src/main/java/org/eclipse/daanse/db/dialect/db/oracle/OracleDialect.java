@@ -163,4 +163,9 @@ public class OracleDialect extends JdbcDialectImpl {
         logTypeInfo(metaData, columnIndex, type);
         return type;
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

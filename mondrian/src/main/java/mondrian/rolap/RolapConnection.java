@@ -256,8 +256,8 @@ public class RolapConnection extends ConnectionBase {
       try {
         conn = this.context.getDataSource().getConnection();
         Dialect dialect =context.getDialect();
-          if ( dialect.getDatabaseProduct()
-          == DatabaseProduct.DERBY ) {
+          if ( dialect.getDialectName().equals("derby")) {
+          // TODO replace that crutch
           // Derby requires a little extra prodding to do the
           // validation to detect an error.
           statement = conn.createStatement();

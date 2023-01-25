@@ -48,4 +48,9 @@ public class IngresDialect extends JdbcDialectImpl {
     public boolean requiresOrderByAlias() {
         return true;
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

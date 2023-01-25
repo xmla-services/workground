@@ -29,10 +29,16 @@ public class JdbcDialectImplTest{
 
   private JdbcDialectImpl jdbcDialect = new JdbcDialectImpl() {
 
-    @Override
-    protected boolean isSupportedProduct(String productName, String productVersion) {
-        return true;
-    } };
+      @Override
+      public String getDialectName() {
+          return null;
+      }
+
+      @Override
+      protected boolean isSupportedProduct(String productName, String productVersion) {
+          return true;
+      }
+  };
   private static StringBuilder buf;
 
   @BeforeEach

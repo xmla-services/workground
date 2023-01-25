@@ -43,4 +43,9 @@ public class FirebirdDialect extends JdbcDialectImpl {
     public StringBuilder generateOrderByNulls(CharSequence expr, boolean ascending, boolean collateNullsLast) {
         return generateOrderByNullsAnsi(expr, ascending, collateNullsLast);
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

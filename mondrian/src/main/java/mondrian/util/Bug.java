@@ -269,7 +269,7 @@ public class Bug {
      * @return Whether to avoid a test
      */
     public static boolean avoidMemoryOverflow(Dialect dialect) {
-        return dialect.getDatabaseProduct() == DatabaseProduct.ACCESS
+        return dialect.getDialectName().equals("access")
             && MondrianProperties.instance().MemoryMonitor.get();
     }
 
@@ -294,7 +294,7 @@ public class Bug {
     public static boolean avoidSlowTestOnLucidDB(Dialect dialect) {
         return
             !BugMondrian759Fixed
-            && dialect.getDatabaseProduct() == DatabaseProduct.LUCIDDB
+            && dialect.getDialectName().equals("luciddb")
             && !LoggerFactory.getLogger("mondrian.test.PerformanceTest")
                 .isDebugEnabled();
     }

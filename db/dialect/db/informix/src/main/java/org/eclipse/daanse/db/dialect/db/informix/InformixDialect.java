@@ -55,4 +55,9 @@ public class InformixDialect extends JdbcDialectImpl {
     public boolean supportsGroupByExpressions() {
         return false;
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

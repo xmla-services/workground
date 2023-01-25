@@ -42,4 +42,8 @@ public class MariaDBDialect extends MySqlDialect {
         return productName;
     }
 
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

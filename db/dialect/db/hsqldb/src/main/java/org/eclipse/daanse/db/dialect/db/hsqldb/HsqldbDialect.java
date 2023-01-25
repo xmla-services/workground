@@ -60,4 +60,9 @@ public class HsqldbDialect extends JdbcDialectImpl {
             columnNames, columnTypes, valueList,
             " from \"days\" where \"day\" = 1", false);
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }

@@ -43,4 +43,9 @@ public class InterbaseDialect extends JdbcDialectImpl {
     public boolean allowsFromQuery() {
         return false;
     }
+
+    @Override
+    public String getDialectName() {
+        return SUPPORTED_PRODUCT_NAME.toLowerCase();
+    }
 }
