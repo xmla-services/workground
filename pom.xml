@@ -1000,6 +1000,7 @@
     <module>mondrian</module>
     <module>workbench</module>
     <module>olap</module>
+    <module>org.eclipse.daanse.lcid</module>
   </modules>
 
   <profiles>

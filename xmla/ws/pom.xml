@@ -21,5 +21,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>jakarta.basic</module>
+    <module>jakarta.model</module>
   </modules>
 </project>
