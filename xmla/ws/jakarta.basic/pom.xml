@@ -8,8 +8,17 @@
   </parent>
   <artifactId>org.eclipse.daanse.xmla.ws.jakarta.basic</artifactId>
 
-
   <dependencies>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.xmla.api</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.xmla.model.record</artifactId>
+      <version>${revision}</version>
+    </dependency>
     <dependency>
       <groupId>jakarta.annotation</groupId>
       <artifactId>jakarta.annotation-api</artifactId>
@@ -25,7 +34,7 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.xmla.model.jaxb</artifactId>
+      <artifactId>org.eclipse.daanse.xmla.ws.jakarta.model</artifactId>
       <version>${revision}</version>
     </dependency>
     <dependency>

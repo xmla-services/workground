@@ -27,13 +27,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
-import org.eclipse.daanse.xmla.model.jaxb.xmla.Discover;
-import org.eclipse.daanse.xmla.model.jaxb.xmla.DiscoverResponse;
-import org.eclipse.daanse.xmla.model.jaxb.xmla.DiscoverResponse.Return;
-import org.eclipse.daanse.xmla.model.jaxb.xmla.Properties;
-import org.eclipse.daanse.xmla.model.jaxb.xmla.Restrictions;
-import org.eclipse.daanse.xmla.model.jaxb.xmla_rowset.Row;
-import org.eclipse.daanse.xmla.model.jaxb.xmla_rowset.Rowset;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Properties;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Restrictions;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse.Return;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Row;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Rowset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 
 import aQute.bnd.annotation.service.ServiceCapability;
 
-@ServiceCapability(XmlaService.class)
+@ServiceCapability(WsAdapter.class)
 //@EnabledOnOs(OS.WINDOWS)
 @Disabled
 public class MsClientTest {
@@ -60,13 +60,13 @@ public class MsClientTest {
 
     @BeforeEach
     void beforaEach() {
-        XmlaService xmlaService = mock(XmlaService.class);
+        WsAdapter xmlaService = mock(WsAdapter.class);
         dicoverCaptor = ArgumentCaptor.forClass(Discover.class);
-        bc.registerService(XmlaService.class, xmlaService, new Hashtable<>());
+        bc.registerService(WsAdapter.class, xmlaService, new Hashtable<>());
     }
 
     @Test
-    void testRequest_1(@InjectService XmlaService xmlaService) throws Exception {
+    void testRequest_1(@InjectService WsAdapter xmlaService) throws Exception {
 
         Thread.sleep(6000);
         // prepare response
