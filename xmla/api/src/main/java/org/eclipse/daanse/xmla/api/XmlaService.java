@@ -19,8 +19,12 @@ import org.eclipse.daanse.xmla.api.discover.DiscoverDbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.DiscoverDbSchemaCatalogsResponse;
 import org.eclipse.daanse.xmla.api.discover.DiscoverPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.DiscoverPropertiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
+import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 
 public interface XmlaService {
+
+    List<DiscoverSchemaRowsetsResponseRow> discoverSchemaRowsets(DiscoverSchemaRowsetsRequest request);
 
     List<DiscoverPropertiesResponseRow> discoverProperties(DiscoverPropertiesRequest request);
 
