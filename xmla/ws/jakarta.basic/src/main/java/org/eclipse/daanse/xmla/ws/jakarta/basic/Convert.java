@@ -61,6 +61,7 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschemaactions.DiscoverMdS
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.PropertyList;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.DiscoverPropertiesResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Rowset;
 
@@ -136,24 +137,39 @@ public class Convert {
 
     public static DiscoverResponse toDiscoverProperties(List<DiscoverPropertiesResponseRow> responseApi) {
 
+        List<Row> rows = responseApi.stream()
+                .map(Convert::convertDiscoverPropertiesResponseRow)
+                .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
 
         org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse.Return r = new DiscoverResponse.Return();
         Rowset rs = new Rowset();
-
-        for (DiscoverPropertiesResponseRow apiRow : responseApi) {
-            Row row = new Row();
-//TODO:
-            row.getAny()
-                    .add(responseWs);
-            rs.getRow()
-                    .add(row);
-        }
-
+        rs.setRow(rows);
         r.setRoot(rs);
         responseWs.setReturn(r);
 
         return responseWs;
+    }
+
+    private static Row convertDiscoverPropertiesResponseRow(DiscoverPropertiesResponseRow apiRow) {
+        DiscoverPropertiesResponseRowXml row = new DiscoverPropertiesResponseRowXml();
+
+        // Mandatory
+        row.setPropertyAccessType(apiRow.propertyName());
+        row.setPropertyAccessType(apiRow.propertyAccessType());
+
+        // Optional
+        apiRow.propertyDescription()
+                .ifPresent(row::setPropertyDescription);
+        apiRow.propertyType()
+                .ifPresent(row::setPropertyType);
+        apiRow.required()
+                .ifPresent(row::setRequired);
+        apiRow.value()
+                .ifPresent(row::setValue);
+        
+        return row;
     }
 
     public static DiscoverDbSchemaCatalogsRequest fromDiscoverDbSchemaCatalogs(Discover requestWs) {

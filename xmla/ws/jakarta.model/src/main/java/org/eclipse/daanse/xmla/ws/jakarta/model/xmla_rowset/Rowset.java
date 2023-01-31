@@ -14,7 +14,6 @@
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_exception.Exception;
@@ -54,48 +53,22 @@ import jakarta.xml.bind.annotation.XmlType;
 public class Rowset implements Serializable {
 
   private final static long serialVersionUID = 1L;
+//  @XmlElement(name = "Row")
   protected List<Row> row;
   @XmlElement(name = "Exception")
   protected Exception exception;
   @XmlElement(name = "Messages")
   protected Messages messages;
 
-  /**
-   * Gets the value of the row property.
-   * 
-   * <p>
-   * This accessor method returns a reference to the live list, not a snapshot.
-   * Therefore any modification you make to the returned list will be present
-   * inside the Jakarta XML Binding object. This is why there is not a
-   * <CODE>set</CODE> method for the row property.
-   * 
-   * <p>
-   * For example, to add a new item, do as follows:
-   * 
-   * <pre>
-   * getRow().add(newItem);
-   * </pre>
-   * 
-   * 
-   * <p>
-   * Objects of the following type(s) are allowed in the list {@link Row }
-   * 
-   * 
-   */
+
   public List<Row> getRow() {
-    if (row == null) {
-      row = new ArrayList<Row>();
-    }
-    return this.row;
+      return row;
   }
 
-  public boolean isSetRow() {
-    return ((this.row != null) && (!this.row.isEmpty()));
+  public void setRow(List<Row> row) {
+      this.row = row;
   }
 
-  public void unsetRow() {
-    this.row = null;
-  }
 
   /**
    * Gets the value of the exception property.

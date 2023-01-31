@@ -52,11 +52,20 @@ public class ObjectFactory {
   }
 
   /**
-   * Create an instance of {@link Row }
+   * Create an instance of {@link DiscoverPropertiesResponseRowXml }
    * 
    */
-  public Row createRow() {
-    return new Row();
+
+  public DiscoverPropertiesResponseRowXml createRowA() {
+      return new DiscoverPropertiesResponseRowXml();
+  }
+
+  /**
+   * Create an instance of {@link DiscoverPropertiesResponseRowXml }
+   * 
+   */
+  public RowB createRowB() {
+      return new RowB();
   }
 
   /**

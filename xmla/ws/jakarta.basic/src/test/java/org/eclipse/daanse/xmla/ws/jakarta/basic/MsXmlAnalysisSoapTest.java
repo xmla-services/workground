@@ -1,3 +1,16 @@
+/*
+* Copyright (c) 2023 Contributors to the Eclipse Foundation.
+*
+* This program and the accompanying materials are made
+* available under the terms of the Eclipse Public License 2.0
+* which is available at https://www.eclipse.org/legal/epl-2.0/
+*
+* SPDX-License-Identifier: EPL-2.0
+*
+* Contributors:
+*   SmartCity Jena - initial
+*   Stefan Bischof (bipolis.org) - initial
+*/
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -6,11 +19,12 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import java.math.BigInteger;
+import java.util.List;
 import java.util.Optional;
 
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.DiscoverPropertiesResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Rowset;
 import org.junit.jupiter.api.BeforeEach;
@@ -104,6 +118,14 @@ public class MsXmlAnalysisSoapTest {
     public static final String REQUEST_DISCOVER_DUMMY = """
             <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
               <RequestType>DUMMY</RequestType>
+              <Restrictions>
+                <RestrictionList>
+                </RestrictionList>
+              </Restrictions>
+              <Properties>
+                <PropertyList>
+                </PropertyList>
+              </Properties>
             </Discover>
             """;
 
@@ -114,9 +136,8 @@ public class MsXmlAnalysisSoapTest {
 
         org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse.Return r = new DiscoverResponse.Return();
         Rowset rs = new Rowset();
-        Row row = new Row();
-        rs.getRow()
-                .add(row);
+        Row row = new DiscoverPropertiesResponseRowXml();
+        rs.setRow(List.of(row));
 
         r.setRoot(rs);
         discoverResponse.setReturn(r);

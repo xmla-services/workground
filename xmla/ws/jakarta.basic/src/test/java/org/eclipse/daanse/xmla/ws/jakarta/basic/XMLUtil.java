@@ -39,12 +39,12 @@ import jakarta.xml.soap.SOAPMessage;
 
 public class XMLUtil {
 
-    public static XmlAssert createAssert(SOAPMessage response) throws SOAPException, IOException {
+    public static XmlAssert createAssert(SOAPMessage response) throws Exception {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         response.writeTo(baos);
         String result = new String(baos.toByteArray());
         XmlAssert xmlAssert = XmlAssert.assertThat(result);
-        System.out.println(result);
+        System.out.println(XMLUtil.pretty(result));
         HashMap<String, String> nsMap = new HashMap<>();
         nsMap.put("SOAP", "http://schemas.xmlsoap.org/soap/envelope/");
         nsMap.put("msxmla", "urn:schemas-microsoft-com:xml-analysis");
