@@ -13,10 +13,10 @@
 */
 package org.eclipse.daanse.xmla.model.record.discover.literals;
 
-import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsRestrictions;
-
 import java.util.Optional;
 
-public record DiscoverLiteralsRestrictionsR(Optional<String> keyword) implements DiscoverKeywordsRestrictions {
+import org.eclipse.daanse.xmla.api.discover.literals.DiscoverLiteralsRestrictions;
+
+public record DiscoverLiteralsRestrictionsR(Optional<String> literalName) implements DiscoverLiteralsRestrictions {
 
 }

@@ -29,9 +29,10 @@ import java.util.stream.Stream;
 import org.assertj.core.api.Assertions;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse.Return;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Properties;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Restrictions;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse.Return;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.DiscoverPropertiesResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Rowset;
 import org.junit.jupiter.api.BeforeEach;
@@ -74,7 +75,7 @@ public class MsClientTest {
 
         Return r = new Return();
         Rowset rs = new Rowset();
-        Row row = new Row();
+        Row row = new DiscoverPropertiesResponseRowXml();
 
         rs.getRow()
                 .add(row);

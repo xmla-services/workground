@@ -68,7 +68,7 @@ public interface DiscoverMdSchemaActionsRestrictions {
      * The COORDINATE MUST resolve to the object specified in
      * COORDINATE_TYPE.
      */
-    String coordinate();
+    Optional<String> coordinate();
 
     /**
      * @return An enumeration that specifies how the COORDINATE restriction
