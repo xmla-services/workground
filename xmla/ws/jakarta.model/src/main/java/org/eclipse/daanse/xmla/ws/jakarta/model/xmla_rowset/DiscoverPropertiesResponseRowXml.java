@@ -28,7 +28,7 @@ public class DiscoverPropertiesResponseRowXml extends Row implements Serializabl
     @XmlTransient
     private final static long serialVersionUID = 1L;
 
-    @XmlElement(name = "PropertyName")
+    @XmlElement(name = "PropertyName", required = true)
     String propertyName;
 
     @XmlElement(name = "PropertyDescription", required = false)
@@ -37,8 +37,7 @@ public class DiscoverPropertiesResponseRowXml extends Row implements Serializabl
     @XmlElement(name = "PropertyType", required = false)
     String propertyType;
 
-    @XmlElement(name = "PropertyAccessType")
-
+    @XmlElement(name = "PropertyAccessType", required = true)
     String propertyAccessType;
 
     @XmlElement(name = "IsRequired", required = false)
