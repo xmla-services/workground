@@ -24,6 +24,12 @@ import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCat
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRestrictions;
+import org.eclipse.daanse.xmla.api.discover.enumerators.DiscoverEnumeratorsRequest;
+import org.eclipse.daanse.xmla.api.discover.enumerators.DiscoverEnumeratorsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.enumerators.DiscoverEnumeratorsRestrictions;
+import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsRequest;
+import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRestrictions;
@@ -33,6 +39,10 @@ import org.eclipse.daanse.xmla.model.record.discover.discoverproperties.Discover
 import org.eclipse.daanse.xmla.model.record.discover.discoverproperties.DiscoverPropertiesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.discoverschemarowsets.DiscoverSchemaRowsetsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.discoverschemarowsets.DiscoverSchemaRowsetsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.enumerators.DiscoverEnumeratorsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.enumerators.DiscoverEnumeratorsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.keywords.DiscoverKeywordsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.keywords.DiscoverKeywordsRestrictionsR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.PropertyList;
@@ -122,8 +132,6 @@ public class Convert {
         return responseWs;
     }
 
-
-
     public static DiscoverResponse toDiscoverSchemaRowsets(List<DiscoverSchemaRowsetsResponseRow> responseApi) {
 
         DiscoverResponse responseWs = new DiscoverResponse();
@@ -147,4 +155,44 @@ public class Convert {
 
     }
 
+    public static DiscoverEnumeratorsRequest fromDiscoverEnumerators(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DiscoverEnumeratorsRestrictionsR restrictions = discoverEnumeratorsRestrictions(requestWs);
+        return new DiscoverEnumeratorsRequestR(properties, restrictions);
+
+    }
+
+    private static DiscoverEnumeratorsRestrictionsR discoverEnumeratorsRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String enumName = map.get(DiscoverEnumeratorsRestrictions.RESTRICTIONS_ENUM_NAME);
+
+        return new DiscoverEnumeratorsRestrictionsR(Optional.ofNullable(enumName));
+    }
+
+    public static DiscoverResponse toDiscoverEnumerators(List<DiscoverEnumeratorsResponseRow> responseApi) {
+        //TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static DiscoverKeywordsRequest fromDiscoverKeywords(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DiscoverKeywordsRestrictionsR restrictions = discoverKeywordsRestrictions(requestWs);
+        return new DiscoverKeywordsRequestR(properties, restrictions);
+    }
+
+    private static DiscoverKeywordsRestrictionsR discoverKeywordsRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String keyword = map.get(DiscoverKeywordsRestrictions.RESTRICTIONS_KEYWORD);
+
+        return new DiscoverKeywordsRestrictionsR(Optional.ofNullable(keyword));
+    }
+
+    public static DiscoverResponse toDiscoverKeywords(List<DiscoverKeywordsResponseRow> responseApi) {
+        //TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
 }

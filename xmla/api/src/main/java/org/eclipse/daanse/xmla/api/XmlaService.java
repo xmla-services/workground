@@ -19,6 +19,10 @@ import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCat
 import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCatalogsResponse;
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.enumerators.DiscoverEnumeratorsRequest;
+import org.eclipse.daanse.xmla.api.discover.enumerators.DiscoverEnumeratorsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsRequest;
+import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 
@@ -30,4 +34,7 @@ public interface XmlaService {
 
     DiscoverDbSchemaCatalogsResponse dbSchemaCatalogs(DiscoverDbSchemaCatalogsRequest requestApi);
 
+    List<DiscoverEnumeratorsResponseRow> discoverEnumerators(DiscoverEnumeratorsRequest capture);
+
+    List<DiscoverKeywordsResponseRow> discoverKeywords(DiscoverKeywordsRequest capture);
 }

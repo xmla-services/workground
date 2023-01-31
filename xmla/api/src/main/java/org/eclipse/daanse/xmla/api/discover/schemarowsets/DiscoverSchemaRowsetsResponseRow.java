@@ -15,18 +15,36 @@ package org.eclipse.daanse.xmla.api.discover.schemarowsets;
 
 import java.util.Optional;
 
+/**
+ * This schema rowset returns the names, restrictions, description, and other information for all
+ * Discover requests.
+ */
 public interface DiscoverSchemaRowsetsResponseRow {
 
-    String propertyName();
+    /**
+     * @return The name of the Discover request.
+     */
+    String schemaName();
 
-    Optional<String> propertyDescription();
+    /**
+     * @return The GUID of the Discover request.
+     */
+    Optional<String> schemaGuid();
 
-    Optional<String> propertyType();
+    /**
+     * @return  The restrictions supported by the Discover request.
+     */
+    Optional<String> restrictions();
 
-    String propertyAccessType();
+    /**
+     * @return The description of the Discover request.
+     */
+    Optional<String> description();
 
-    Optional<Boolean> required();
-
-    Optional<String> value();
+    /**
+     * @return The lowest N bits set to 1, where N is the number of
+     * restrictions.
+     */
+    Optional<Long> restrictionsMask();
 
 }
