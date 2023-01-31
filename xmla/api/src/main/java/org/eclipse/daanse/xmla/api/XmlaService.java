@@ -17,12 +17,18 @@ import java.util.List;
 
 import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCatalogsResponse;
+import org.eclipse.daanse.xmla.api.discover.dbschematables.DiscoverDbSchemaTablesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschematables.DiscoverDbSchemaTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.enumerators.DiscoverEnumeratorsRequest;
 import org.eclipse.daanse.xmla.api.discover.enumerators.DiscoverEnumeratorsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsRequest;
 import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.literals.DiscoverLiteralsRequest;
+import org.eclipse.daanse.xmla.api.discover.literals.DiscoverLiteralsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschemaactions.DiscoverMdSchemaActionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemaactions.DiscoverMdSchemaActionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 
@@ -37,4 +43,10 @@ public interface XmlaService {
     List<DiscoverEnumeratorsResponseRow> discoverEnumerators(DiscoverEnumeratorsRequest capture);
 
     List<DiscoverKeywordsResponseRow> discoverKeywords(DiscoverKeywordsRequest capture);
+
+    List<DiscoverLiteralsResponseRow> discoverLiterals(DiscoverLiteralsRequest capture);
+
+    List<DiscoverDbSchemaTablesResponseRow> discoverDbSchemaTables(DiscoverDbSchemaTablesRequest capture);
+
+    List<DiscoverMdSchemaActionsResponseRow> discoverMdSchemaActions(DiscoverMdSchemaActionsRequest requestApi);
 }

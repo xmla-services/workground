@@ -21,6 +21,9 @@ import org.eclipse.daanse.xmla.api.common.properties.Content;
 import org.eclipse.daanse.xmla.api.common.properties.Format;
 import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCatalogsResponse;
+import org.eclipse.daanse.xmla.api.discover.dbschematables.DiscoverDbSchemaTablesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschematables.DiscoverDbSchemaTablesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschematables.DiscoverDbSchemaTablesRestrictions;
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRestrictions;
@@ -30,11 +33,19 @@ import org.eclipse.daanse.xmla.api.discover.enumerators.DiscoverEnumeratorsRestr
 import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsRequest;
 import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsRestrictions;
+import org.eclipse.daanse.xmla.api.discover.literals.DiscoverLiteralsRequest;
+import org.eclipse.daanse.xmla.api.discover.literals.DiscoverLiteralsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.literals.DiscoverLiteralsRestrictions;
+import org.eclipse.daanse.xmla.api.discover.mdschemaactions.DiscoverMdSchemaActionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemaactions.DiscoverMdSchemaActionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschemaactions.DiscoverMdSchemaActionsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRestrictions;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschemacatalogs.DbSchemaCatalogsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschematables.DiscoverDbSchemaTablesRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschematables.DiscoverDbSchemaTablesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.discoverproperties.DiscoverPropertiesRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.discoverproperties.DiscoverPropertiesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.discoverschemarowsets.DiscoverSchemaRowsetsRequestR;
@@ -43,6 +54,10 @@ import org.eclipse.daanse.xmla.model.record.discover.enumerators.DiscoverEnumera
 import org.eclipse.daanse.xmla.model.record.discover.enumerators.DiscoverEnumeratorsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.keywords.DiscoverKeywordsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.keywords.DiscoverKeywordsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.literals.DiscoverLiteralsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.literals.DiscoverLiteralsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschemaactions.DiscoverMdSchemaActionsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschemaactions.DiscoverMdSchemaActionsRestrictionsR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.PropertyList;
@@ -210,6 +225,82 @@ public class Convert {
 
     public static DiscoverResponse toDiscoverKeywords(List<DiscoverKeywordsResponseRow> responseApi) {
         // TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static DiscoverLiteralsRequest fromDiscoverLiterals(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DiscoverLiteralsRestrictionsR restrictions = discoverLiteralsRestrictions(requestWs);
+        return new DiscoverLiteralsRequestR(properties, restrictions);
+    }
+
+    private static DiscoverLiteralsRestrictionsR discoverLiteralsRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String keyword = map.get(DiscoverLiteralsRestrictions.RESTRICTIONS_LITERAL_NAME);
+
+        return new DiscoverLiteralsRestrictionsR(Optional.ofNullable(keyword));
+    }
+
+    public static DiscoverResponse toDiscoverLiterals(List<DiscoverLiteralsResponseRow> responseApi) {
+        //TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static DiscoverDbSchemaTablesRequest fromDiscoverDbSchemaTables(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DiscoverDbSchemaTablesRestrictionsR restrictions = discoverDbSchemaTablesRestrictions(requestWs);
+        return new DiscoverDbSchemaTablesRequestR(properties, restrictions);
+    }
+
+    private static DiscoverDbSchemaTablesRestrictionsR discoverDbSchemaTablesRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String tableCatalog = map.get(DiscoverDbSchemaTablesRestrictions.RESTRICTIONS_TABLE_CATALOG);
+        String tableSchema = map.get(DiscoverDbSchemaTablesRestrictions.RESTRICTIONS_TABLE_SCHEMA);
+        String tableName = map.get(DiscoverDbSchemaTablesRestrictions.RESTRICTIONS_TABLE_NAME);
+        String tableType = map.get(DiscoverDbSchemaTablesRestrictions.RESTRICTIONS_TABLE_TYPE);
+
+        return new DiscoverDbSchemaTablesRestrictionsR(Optional.ofNullable(tableCatalog),
+            Optional.ofNullable(tableSchema), Optional.ofNullable(tableName), Optional.ofNullable(tableType));
+    }
+
+    public static DiscoverResponse toDiscoverDbSchemaTables(List<DiscoverDbSchemaTablesResponseRow> responseApi) {
+        //TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static DiscoverMdSchemaActionsRequest fromDiscoverMdSchemaActions(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DiscoverMdSchemaActionsRestrictionsR restrictions = discoverMdSchemaActionsRestrictions(requestWs);
+        return new DiscoverMdSchemaActionsRequestR(properties, restrictions);
+
+    }
+
+    private static DiscoverMdSchemaActionsRestrictionsR discoverMdSchemaActionsRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String catalogName = map.get(DiscoverMdSchemaActionsRestrictions.RESTRICTIONS_CATALOG_NAME);
+        String schemaName = map.get(DiscoverMdSchemaActionsRestrictions.RESTRICTIONS_SCHEMA_NAME);
+        String cubeName = map.get(DiscoverMdSchemaActionsRestrictions.RESTRICTIONS_CUBE_NAME);
+        String actionName = map.get(DiscoverMdSchemaActionsRestrictions.RESTRICTIONS_ACTION_NAME);
+        String actionType = map.get(DiscoverMdSchemaActionsRestrictions.RESTRICTIONS_ACTION_TYPE);
+        String coordinate = map.get(DiscoverMdSchemaActionsRestrictions.RESTRICTIONS_COORDINATE);
+        String coordinateType = map.get(DiscoverMdSchemaActionsRestrictions.RESTRICTIONS_COORDINATE_TYPE);
+        String invocation = map.get(DiscoverMdSchemaActionsRestrictions.RESTRICTIONS_INVOCATION);
+
+        return new DiscoverMdSchemaActionsRestrictionsR(Optional.ofNullable(catalogName),
+            Optional.ofNullable(schemaName), cubeName, Optional.ofNullable(actionName),
+            Optional.ofNullable(Integer.valueOf(actionType)), Optional.ofNullable(coordinate),
+            Integer.valueOf(coordinateType),
+            Integer.valueOf(invocation));
+    }
+
+    public static DiscoverResponse toDiscoverMdSchemaActions(List<DiscoverMdSchemaActionsResponseRow> responseApi) {
+        //TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;
     }
