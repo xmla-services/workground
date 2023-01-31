@@ -11,21 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.api.discover;
 
-import java.util.Optional;
-
-public interface DiscoverPropertiesResponseRow {
-    String propertyName();
-
-    Optional<String> propertyDescription();
-
-    Optional<String> propertyType();
-
-    String propertyAccessType();
-
-    Optional<Boolean> required();
-
-    Optional<String> value();
-
-}
+@org.osgi.annotation.bundle.Export
+@org.osgi.annotation.versioning.Version("0.0.1")
+package org.eclipse.daanse.xmla.model.record.discover.dbschemacatalogs;

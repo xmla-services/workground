@@ -11,11 +11,12 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.model.record;
+package org.eclipse.daanse.xmla.model.record.discover.discoverproperties;
 
-import org.eclipse.daanse.xmla.api.discover.DiscoverPropertiesRequest;
+import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRequest;
+import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 
-public record DiscoverPropertiesRequestR(DiscoverPropertiesR properties,
+public record DiscoverPropertiesRequestR(PropertiesR properties,
                                          DiscoverPropertiesRestrictionsR restrictions)
         implements DiscoverPropertiesRequest {
 

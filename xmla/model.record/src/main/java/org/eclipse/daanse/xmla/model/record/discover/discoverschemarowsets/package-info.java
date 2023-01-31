@@ -11,10 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.model.record;
 
-import org.eclipse.daanse.xmla.api.discover.DiscoverDbSchemaCatalogsResponse;
-
-public record DiscoverDbSchemaCatalogsResponseR() implements DiscoverDbSchemaCatalogsResponse {
-
-}
+@org.osgi.annotation.bundle.Export
+@org.osgi.annotation.versioning.Version("0.0.1")
+package org.eclipse.daanse.xmla.model.record.discover.discoverschemarowsets;

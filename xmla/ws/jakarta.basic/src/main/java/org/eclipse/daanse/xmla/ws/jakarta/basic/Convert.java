@@ -19,17 +19,20 @@ import java.util.Optional;
 
 import org.eclipse.daanse.xmla.api.common.properties.Content;
 import org.eclipse.daanse.xmla.api.common.properties.Format;
-import org.eclipse.daanse.xmla.api.discover.*;
+import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCatalogsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCatalogsResponse;
+import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRequest;
+import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRestrictions;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRestrictions;
-import org.eclipse.daanse.xmla.model.record.DiscoverDbSchemaCatalogsRequestR;
-import org.eclipse.daanse.xmla.model.record.DiscoverPropertiesR;
-import org.eclipse.daanse.xmla.model.record.DiscoverPropertiesRequestR;
-import org.eclipse.daanse.xmla.model.record.DiscoverPropertiesRestrictionsR;
-import org.eclipse.daanse.xmla.model.record.schemarowsets.DiscoverSchemaRowsetsPropertiesR;
-import org.eclipse.daanse.xmla.model.record.schemarowsets.DiscoverSchemaRowsetsRequestR;
-import org.eclipse.daanse.xmla.model.record.schemarowsets.DiscoverSchemaRowsetsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschemacatalogs.DbSchemaCatalogsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.discoverproperties.DiscoverPropertiesRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.discoverproperties.DiscoverPropertiesRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.discoverschemarowsets.DiscoverSchemaRowsetsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.discoverschemarowsets.DiscoverSchemaRowsetsRestrictionsR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.PropertyList;
@@ -76,13 +79,14 @@ public class Convert {
                 .getRestrictionMap();
     }
 
-    private static DiscoverPropertiesR discoverProperties(Discover requestWs) {
+    private static PropertiesR discoverProperties(Discover requestWs) {
         Optional<Integer> localeIdentifier = localeIdentifier(requestWs);
         Optional<Content> content = content(requestWs);
         Optional<Format> format = format(requestWs);
         Optional<String> dataSourceInfo = dataSourceInfo(requestWs);
+        Optional<String> catalog = catalog(requestWs);
 
-        return new DiscoverPropertiesR(localeIdentifier, dataSourceInfo, content, format);
+        return new PropertiesR(localeIdentifier, dataSourceInfo, content, format,catalog);
     }
 
     private static DiscoverPropertiesRestrictionsR discoverPropertiesRestrictions(Discover requestWs) {
@@ -96,7 +100,7 @@ public class Convert {
     public static DiscoverPropertiesRequest fromDiscoverProperties(Discover requestWs) {
 
         System.out.println(requestWs);
-        DiscoverPropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(requestWs);
         DiscoverPropertiesRestrictionsR restrictions = discoverPropertiesRestrictions(requestWs);
 
         return new DiscoverPropertiesRequestR(properties, restrictions);
@@ -110,7 +114,7 @@ public class Convert {
     }
 
     public static DiscoverDbSchemaCatalogsRequest fromDiscoverDbSchemaCatalogs(Discover requestWs) {
-        return new DiscoverDbSchemaCatalogsRequestR();
+        return new DbSchemaCatalogsRequestR();
     }
 
     public static DiscoverResponse toDiscoverDbSchemaCatalogs(DiscoverDbSchemaCatalogsResponse responseApi) {
@@ -118,14 +122,7 @@ public class Convert {
         return responseWs;
     }
 
-    private static DiscoverSchemaRowsetsPropertiesR discoverSchemaRowsetsProperties(Discover requestWs) {
-        Optional<Integer> localeIdentifier = localeIdentifier(requestWs);
-        Optional<Content> content = content(requestWs);
-        Optional<Format> format = format(requestWs);
-        Optional<String> dataSourceInfo = dataSourceInfo(requestWs);
 
-        return new DiscoverSchemaRowsetsPropertiesR(localeIdentifier, dataSourceInfo, content, format);
-    }
 
     public static DiscoverResponse toDiscoverSchemaRowsets(List<DiscoverSchemaRowsetsResponseRow> responseApi) {
 
@@ -143,7 +140,7 @@ public class Convert {
 
     public static DiscoverSchemaRowsetsRequest fromDiscoverSchemaRowsets(Discover requestWs) {
 
-        DiscoverSchemaRowsetsPropertiesR properties = discoverSchemaRowsetsProperties(requestWs);
+        PropertiesR properties = discoverProperties(requestWs);
         DiscoverSchemaRowsetsRestrictionsR restrictions = discoverSchemaRowsetsRestrictions(requestWs);
 
         return new DiscoverSchemaRowsetsRequestR(properties, restrictions);

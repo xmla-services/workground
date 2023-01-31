@@ -11,14 +11,10 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.api.discover.schemarowsets;
+package org.eclipse.daanse.xmla.model.record.discover.dbschemacatalogs;
 
-import org.eclipse.daanse.xmla.api.discover.Properties;
+import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCatalogsResponse;
 
-public interface DiscoverSchemaRowsetsRequest {
-
-    Properties properties();
-
-    DiscoverSchemaRowsetsRestrictions restrictions();
+public record DbSchemaCatalogsResponseR() implements DiscoverDbSchemaCatalogsResponse {
 
 }

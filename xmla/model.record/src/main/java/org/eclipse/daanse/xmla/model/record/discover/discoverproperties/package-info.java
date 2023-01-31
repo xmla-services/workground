@@ -11,12 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.api.discover;
 
-import java.util.Optional;
-
-public interface DiscoverPropertiesRestrictions {
-    public static final String RESTRICTIONS_PROPERTY_NAME = "PropertyName";
-
-    Optional<String> propertyName();
-}
+@org.osgi.annotation.bundle.Export
+@org.osgi.annotation.versioning.Version("0.0.1")
+package org.eclipse.daanse.xmla.model.record.discover.discoverproperties;

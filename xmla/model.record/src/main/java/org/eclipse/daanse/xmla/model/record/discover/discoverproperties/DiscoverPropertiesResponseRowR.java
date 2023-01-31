@@ -11,11 +11,11 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.model.record;
+package org.eclipse.daanse.xmla.model.record.discover.discoverproperties;
 
 import java.util.Optional;
 
-import org.eclipse.daanse.xmla.api.discover.DiscoverPropertiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
 
 public record DiscoverPropertiesResponseRowR(String propertyName,
                                              Optional<String> propertyDescription,
