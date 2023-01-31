@@ -46,6 +46,8 @@ import org.eclipse.daanse.xmla.model.record.discover.keywords.DiscoverKeywordsRe
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.PropertyList;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Row;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Rowset;
 
 public class Convert {
     private static Optional<Integer> localeIdentifier(Discover requestWs) {
@@ -96,7 +98,7 @@ public class Convert {
         Optional<String> dataSourceInfo = dataSourceInfo(requestWs);
         Optional<String> catalog = catalog(requestWs);
 
-        return new PropertiesR(localeIdentifier, dataSourceInfo, content, format,catalog);
+        return new PropertiesR(localeIdentifier, dataSourceInfo, content, format, catalog);
     }
 
     private static DiscoverPropertiesRestrictionsR discoverPropertiesRestrictions(Discover requestWs) {
@@ -120,6 +122,22 @@ public class Convert {
     public static DiscoverResponse toDiscoverProperties(List<DiscoverPropertiesResponseRow> responseApi) {
 
         DiscoverResponse responseWs = new DiscoverResponse();
+
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse.Return r = new DiscoverResponse.Return();
+        Rowset rs = new Rowset();
+
+        for (DiscoverPropertiesResponseRow apiRow : responseApi) {
+            Row row = new Row();
+//TODO:
+            row.getAny()
+                    .add(responseWs);
+            rs.getRow()
+                    .add(row);
+        }
+
+        r.setRoot(rs);
+        responseWs.setReturn(r);
+
         return responseWs;
     }
 
@@ -171,7 +189,7 @@ public class Convert {
     }
 
     public static DiscoverResponse toDiscoverEnumerators(List<DiscoverEnumeratorsResponseRow> responseApi) {
-        //TODO
+        // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;
     }
@@ -191,7 +209,7 @@ public class Convert {
     }
 
     public static DiscoverResponse toDiscoverKeywords(List<DiscoverKeywordsResponseRow> responseApi) {
-        //TODO
+        // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;
     }

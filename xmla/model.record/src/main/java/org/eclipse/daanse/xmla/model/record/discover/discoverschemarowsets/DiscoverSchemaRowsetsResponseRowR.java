@@ -17,7 +17,7 @@ import java.util.Optional;
 
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
 
-public record DiscoverPropertiesResponseRowR(String propertyName,
+public record DiscoverSchemaRowsetsResponseRowR(String propertyName,
                                              Optional<String> propertyDescription,
                                              Optional<String> propertyType,
                                              String propertyAccessType,

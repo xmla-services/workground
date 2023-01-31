@@ -13,10 +13,10 @@
 */
 package org.eclipse.daanse.xmla.model.record.discover.enumerators;
 
-import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRestrictions;
-
 import java.util.Optional;
 
-public record DiscoverEnumeratorsRestrictionsR(Optional<String> schemaName) implements DiscoverSchemaRowsetsRestrictions {
+import org.eclipse.daanse.xmla.api.discover.enumerators.DiscoverEnumeratorsRestrictions;
+
+public record DiscoverEnumeratorsRestrictionsR(Optional<String> enumName) implements DiscoverEnumeratorsRestrictions {
 
 }
