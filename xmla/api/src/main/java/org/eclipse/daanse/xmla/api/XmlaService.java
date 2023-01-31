@@ -15,10 +15,10 @@ package org.eclipse.daanse.xmla.api;
 
 import java.util.List;
 
-import org.eclipse.daanse.xmla.api.discover.DiscoverDbSchemaCatalogsRequest;
-import org.eclipse.daanse.xmla.api.discover.DiscoverDbSchemaCatalogsResponse;
-import org.eclipse.daanse.xmla.api.discover.DiscoverPropertiesRequest;
-import org.eclipse.daanse.xmla.api.discover.DiscoverPropertiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCatalogsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCatalogsResponse;
+import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRequest;
+import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 
@@ -28,6 +28,6 @@ public interface XmlaService {
 
     List<DiscoverPropertiesResponseRow> discoverProperties(DiscoverPropertiesRequest request);
 
-    DiscoverDbSchemaCatalogsResponse discoverDbSchemaCatalogs(DiscoverDbSchemaCatalogsRequest requestApi);
+    DiscoverDbSchemaCatalogsResponse dbSchemaCatalogs(DiscoverDbSchemaCatalogsRequest requestApi);
 
 }

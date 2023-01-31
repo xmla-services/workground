@@ -13,8 +13,19 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.daanse.xmla.api.common.properties.Format.Tabular;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
 import org.eclipse.daanse.xmla.api.XmlaService;
-import org.eclipse.daanse.xmla.api.discover.DiscoverPropertiesRequest;
+import org.eclipse.daanse.xmla.api.common.properties.Content;
+import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,17 +41,6 @@ import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.xmla.api.common.properties.Content.SchemaData;
-import static org.eclipse.daanse.xmla.api.common.properties.Format.Tabular;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(ConfigurationExtension.class)
 @WithFactoryConfiguration(factoryPid = Constants.PID_MS_SOAP, name = "test-ms-config", location = "?", properties = {
@@ -151,7 +151,7 @@ public class DiscoverRequestTest {
                                         .contains("FoodMart");
                                 assertThat(p.content()).isNotNull()
                                         .isPresent()
-                                        .contains(SchemaData);
+                                        .contains(Content.SchemaData);
                                 assertThat(p.format()).isNotNull()
                                         .isPresent()
                                         .contains(Tabular);
@@ -167,55 +167,59 @@ public class DiscoverRequestTest {
 
     @Test
     void test_DISCOVER_SCHEMA_ROWSETS(@InjectService XmlaService xmlaService) throws Exception {
-        ArgumentCaptor<DiscoverSchemaRowsetsRequest> captor = ArgumentCaptor.forClass(DiscoverSchemaRowsetsRequest.class);
+        ArgumentCaptor<DiscoverSchemaRowsetsRequest> captor = ArgumentCaptor
+                .forClass(DiscoverSchemaRowsetsRequest.class);
         final String sRequest = """
-            <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
-              <RequestType>DISCOVER_SCHEMA_ROWSETS</RequestType>
-              <Restrictions />
-              <SchemaName>FoodMart</SchemaName>
-              <Properties>
-                <PropertyList>
-                  <LocaleIdentifier>1033</LocaleIdentifier>
-                  <DataSourceInfo>FoodMart</DataSourceInfo>
-                  <Catalog>FoodMart</Catalog>
-                  <Format>Tabular</Format>
-                </PropertyList>
-              </Properties>
-            </Discover>
-            """;
+                <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
+                  <RequestType>DISCOVER_SCHEMA_ROWSETS</RequestType>
+                  <Restrictions>
+                    <RestrictionList>
+                      <SchemaName>FoodMart</SchemaName>
+                    </RestrictionList>
+                  </Restrictions>
+                  <Properties>
+                    <PropertyList>
+                      <LocaleIdentifier>1033</LocaleIdentifier>
+                      <DataSourceInfo>FoodMart</DataSourceInfo>
+                      <Catalog>FoodMart</Catalog>
+                      <Format>Tabular</Format>
+                    </PropertyList>
+                  </Properties>
+                </Discover>
+                """;
         SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
-            SOAPUtil.envelop(sRequest));
+                SOAPUtil.envelop(sRequest));
 
         verify(xmlaService, (times(1))).discoverSchemaRowsets(captor.capture());
 
         DiscoverSchemaRowsetsRequest request = captor.getValue();
         assertThat(request).isNotNull()
-            .satisfies(d -> {
-                // getRestrictions
-                assertThat(d.restrictions()).isNotNull()
-                    .satisfies(r -> {
-                        assertThat(r.schemaName()).isNotNull()
-                            .isPresent()
-                            .contains("FoodMart");
-                    });
-                // getProperties
-                assertThat(d.properties()).isNotNull()
-                    .satisfies(p -> {
-                        assertThat(p.localeIdentifier()).isNotNull()
-                            .isPresent()
-                            .contains(1033);
-                        assertThat(p.dataSourceInfo()).isNotNull()
-                            .isPresent()
-                            .contains("FoodMart");
-                        assertThat(p.format()).isNotNull()
-                            .isPresent()
-                            .contains(Tabular);
-                        assertThat(p.catalog()).isNotNull()
-                            .isPresent()
-                            .contains("FoodMart");
-                    });
+                .satisfies(d -> {
+                    // getRestrictions
+                    assertThat(d.restrictions()).isNotNull()
+                            .satisfies(r -> {
+                                assertThat(r.schemaName()).isNotNull()
+                                        .isPresent()
+                                        .contains("FoodMart");
+                            });
+                    // getProperties
+                    assertThat(d.properties()).isNotNull()
+                            .satisfies(p -> {
+                                assertThat(p.localeIdentifier()).isNotNull()
+                                        .isPresent()
+                                        .contains(1033);
+                                assertThat(p.dataSourceInfo()).isNotNull()
+                                        .isPresent()
+                                        .contains("FoodMart");
+                                assertThat(p.format()).isNotNull()
+                                        .isPresent()
+                                        .contains(Tabular);
+                                assertThat(p.catalog()).isNotNull()
+                                        .isPresent()
+                                        .contains("FoodMart");
+                            });
 
-            });
+                });
     }
     // TODO: All Discover-Requests with tests
 }

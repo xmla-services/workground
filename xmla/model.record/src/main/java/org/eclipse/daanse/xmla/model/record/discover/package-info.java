@@ -11,14 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.api.discover.schemarowsets;
 
-import org.eclipse.daanse.xmla.api.discover.Properties;
-
-public interface DiscoverSchemaRowsetsRequest {
-
-    Properties properties();
-
-    DiscoverSchemaRowsetsRestrictions restrictions();
-
-}
+@org.osgi.annotation.bundle.Export
+@org.osgi.annotation.versioning.Version("0.0.1")
+package org.eclipse.daanse.xmla.model.record.discover;

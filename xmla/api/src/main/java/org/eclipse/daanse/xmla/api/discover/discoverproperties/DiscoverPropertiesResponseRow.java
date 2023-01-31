@@ -11,12 +11,21 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.api.discover;
+package org.eclipse.daanse.xmla.api.discover.discoverproperties;
 
-public interface DiscoverPropertiesRequest {
+import java.util.Optional;
 
-    DiscoverProperties properties();
+public interface DiscoverPropertiesResponseRow {
+    String propertyName();
 
-    DiscoverPropertiesRestrictions restrictions();
+    Optional<String> propertyDescription();
+
+    Optional<String> propertyType();
+
+    String propertyAccessType();
+
+    Optional<Boolean> required();
+
+    Optional<String> value();
 
 }

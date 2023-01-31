@@ -16,7 +16,10 @@ package org.eclipse.daanse.xmla.ws.jakarta.basic;
 import java.util.List;
 
 import org.eclipse.daanse.xmla.api.XmlaService;
-import org.eclipse.daanse.xmla.api.discover.*;
+import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCatalogsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCatalogsResponse;
+import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRequest;
+import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 import org.eclipse.daanse.xmla.ws.jakarta.model.ext.Authenticate;
@@ -59,7 +62,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         switch (discover.getRequestType()) {
         case DISCOVER_SCHEMA_ROWSETS -> discoverResponse = handleDiscoverSchemaRowsets(discover);
         case DISCOVER_PROPERTIES -> discoverResponse = handleDiscoverProperties(discover);
-        case DBSCHEMA_CATALOGS -> discoverResponse = handleDiscoverDbSchemaCatalogs(discover);
+        case DBSCHEMA_CATALOGS -> discoverResponse = handleDbSchemaCatalogs(discover);
         default -> throw new IllegalArgumentException("Unexpected value: " + discover.getRequestType());
         }
 
@@ -72,9 +75,9 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         return null;
     }
 
-    private DiscoverResponse handleDiscoverDbSchemaCatalogs(Discover requestWs) {
+    private DiscoverResponse handleDbSchemaCatalogs(Discover requestWs) {
         DiscoverDbSchemaCatalogsRequest requestApi = Convert.fromDiscoverDbSchemaCatalogs(requestWs);
-        DiscoverDbSchemaCatalogsResponse responseApi = xmlaService.discoverDbSchemaCatalogs(requestApi);
+        DiscoverDbSchemaCatalogsResponse responseApi = xmlaService.dbSchemaCatalogs(requestApi);
         DiscoverResponse responseWs = Convert.toDiscoverDbSchemaCatalogs(responseApi);
 
         return responseWs;
