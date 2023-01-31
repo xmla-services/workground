@@ -16,10 +16,9 @@ package org.eclipse.daanse.xmla.ws.jakarta.basic;
 import java.util.List;
 
 import org.eclipse.daanse.xmla.api.XmlaService;
-import org.eclipse.daanse.xmla.api.discover.DiscoverDbSchemaCatalogsRequest;
-import org.eclipse.daanse.xmla.api.discover.DiscoverDbSchemaCatalogsResponse;
-import org.eclipse.daanse.xmla.api.discover.DiscoverPropertiesRequest;
-import org.eclipse.daanse.xmla.api.discover.DiscoverPropertiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.*;
+import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
+import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 import org.eclipse.daanse.xmla.ws.jakarta.model.ext.Authenticate;
 import org.eclipse.daanse.xmla.ws.jakarta.model.ext.AuthenticateResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.BeginSession;
@@ -40,6 +39,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         this.xmlaService = xmlaService;
     }
 
+    private static final String DISCOVER_SCHEMA_ROWSETS = "DISCOVER_SCHEMA_ROWSETS";
     private static final String DISCOVER_PROPERTIES = "DISCOVER_PROPERTIES";
     private static final String DBSCHEMA_CATALOGS = "DBSCHEMA_CATALOGS";
 
@@ -57,6 +57,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         }
         DiscoverResponse discoverResponse = null;
         switch (discover.getRequestType()) {
+        case DISCOVER_SCHEMA_ROWSETS -> discoverResponse = handleDiscoverSchemaRowsets(discover);
         case DISCOVER_PROPERTIES -> discoverResponse = handleDiscoverProperties(discover);
         case DBSCHEMA_CATALOGS -> discoverResponse = handleDiscoverDbSchemaCatalogs(discover);
         default -> throw new IllegalArgumentException("Unexpected value: " + discover.getRequestType());
@@ -84,6 +85,15 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         DiscoverPropertiesRequest requestApi = Convert.fromDiscoverProperties(requestWs);
         List<DiscoverPropertiesResponseRow> responseApi = xmlaService.discoverProperties(requestApi);
         DiscoverResponse responseWs = Convert.toDiscoverProperties(responseApi);
+
+        return responseWs;
+    }
+
+    private DiscoverResponse handleDiscoverSchemaRowsets(Discover requestWs) {
+
+        DiscoverSchemaRowsetsRequest requestApi = Convert.fromDiscoverSchemaRowsets(requestWs);
+        List<DiscoverSchemaRowsetsResponseRow> responseApi = xmlaService.discoverSchemaRowsets(requestApi);
+        DiscoverResponse responseWs = Convert.toDiscoverSchemaRowsets(responseApi);
 
         return responseWs;
     }
