@@ -20,6 +20,10 @@ import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCat
 import org.eclipse.daanse.xmla.api.discover.dbschemacatalogs.DiscoverDbSchemaCatalogsResponse;
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.enumerators.DiscoverEnumeratorsRequest;
+import org.eclipse.daanse.xmla.api.discover.enumerators.DiscoverEnumeratorsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsRequest;
+import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 import org.eclipse.daanse.xmla.ws.jakarta.model.ext.Authenticate;
@@ -42,6 +46,8 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         this.xmlaService = xmlaService;
     }
 
+    private static final String DISCOVER_KEYWORDS = "DISCOVER_KEYWORDS";
+    private static final String DISCOVER_ENUMERATORS = "DISCOVER_ENUMERATORS";
     private static final String DISCOVER_SCHEMA_ROWSETS = "DISCOVER_SCHEMA_ROWSETS";
     private static final String DISCOVER_PROPERTIES = "DISCOVER_PROPERTIES";
     private static final String DBSCHEMA_CATALOGS = "DBSCHEMA_CATALOGS";
@@ -60,6 +66,8 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         }
         DiscoverResponse discoverResponse = null;
         switch (discover.getRequestType()) {
+        case DISCOVER_KEYWORDS -> discoverResponse = handleDiscoverKeywords(discover);
+        case DISCOVER_ENUMERATORS -> discoverResponse = handleDiscoverEnumerators(discover);
         case DISCOVER_SCHEMA_ROWSETS -> discoverResponse = handleDiscoverSchemaRowsets(discover);
         case DISCOVER_PROPERTIES -> discoverResponse = handleDiscoverProperties(discover);
         case DBSCHEMA_CATALOGS -> discoverResponse = handleDbSchemaCatalogs(discover);
@@ -101,4 +109,21 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         return responseWs;
     }
 
+    private DiscoverResponse handleDiscoverEnumerators(Discover requestWs) {
+
+        DiscoverEnumeratorsRequest requestApi = Convert.fromDiscoverEnumerators(requestWs);
+        List<DiscoverEnumeratorsResponseRow> responseApi = xmlaService.discoverEnumerators(requestApi);
+        DiscoverResponse responseWs = Convert.toDiscoverEnumerators(responseApi);
+
+        return responseWs;
+    }
+
+    private DiscoverResponse handleDiscoverKeywords(Discover requestWs) {
+
+        DiscoverKeywordsRequest requestApi = Convert.fromDiscoverKeywords(requestWs);
+        List<DiscoverKeywordsResponseRow> responseApi = xmlaService.discoverKeywords(requestApi);
+        DiscoverResponse responseWs = Convert.toDiscoverKeywords(responseApi);
+
+        return responseWs;
+    }
 }
