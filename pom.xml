@@ -1002,6 +1002,8 @@
     <module>workbench</module>
     <module>olap</module>
     <module>lcid</module>
+    <module>ws</module>
+    <module>xmla</module>
   </modules>
 
   <profiles>
