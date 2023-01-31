@@ -44,6 +44,7 @@ public class XMLUtil {
         response.writeTo(baos);
         String result = new String(baos.toByteArray());
         XmlAssert xmlAssert = XmlAssert.assertThat(result);
+        System.out.println(result);
         System.out.println(XMLUtil.pretty(result));
         HashMap<String, String> nsMap = new HashMap<>();
         nsMap.put("SOAP", "http://schemas.xmlsoap.org/soap/envelope/");

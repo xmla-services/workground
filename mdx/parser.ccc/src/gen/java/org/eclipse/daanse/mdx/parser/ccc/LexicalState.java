@@ -10,16 +10,14 @@
 *
 * Contributors: see .ccc file
 
-* Generated Code for ASTparseSelectQueryAsteriskClause AST Node type
-* by the ASTNode.java.ftl template
+* Generated Code for LexicalState
+* by the LexicalState.java.ftl template
 */
-package org.eclipse.daanse.mdx.parser.ccc.tree;
-
-import org.eclipse.daanse.mdx.parser.ccc.*;
-import static org.eclipse.daanse.mdx.parser.ccc.TokenType.*;
+package org.eclipse.daanse.mdx.parser.ccc;
 
 
-public class ASTparseSelectQueryAsteriskClause extends BaseNode {
+public enum LexicalState {
+    DEFAULT, IN_SINGLE_LINE_COMMENT, IN_FORMAL_COMMENT, IN_MULTI_LINE_COMMENT
 }
 
 
