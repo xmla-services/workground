@@ -48,6 +48,8 @@ import jakarta.xml.soap.SOAPMessage;
         @Property(key = "xmlaService.target", value = "(" + Constants.XMLASERVICE_FILTER_KEY + "="
                 + Constants.XMLASERVICE_FILTER_VALUE + ")"),
         @Property(key = "osgi.soap.endpoint.contextpath", value = Constants.WS_PATH) })
+@WithFactoryConfiguration(factoryPid = "org.eclipse.daanse.ws.handler.SOAPLoggingHandler", name = "test-ms-config", location = "?", properties = {
+        @Property(key = "osgi.soap.endpoint.selector", value = "(service.pid=*)") })
 @RequireServiceComponentRuntime
 public class DiscoverResponseTest {
     private Logger logger = LoggerFactory.getLogger(DiscoverResponseTest.class);
@@ -81,25 +83,23 @@ public class DiscoverResponseTest {
     void test_DISCOVER_PROPERTIES_XXX(@InjectService XmlaService xmlaService) throws Exception {
 
         List<DiscoverPropertiesResponseRow> result = new ArrayList<>();
-        result.add(new DiscoverPropertiesResponseRowR("MyPopertyName1", Optional.of("MyPopertyDescription"),
-                Optional.empty(), "", Optional.empty(), Optional.empty()));
-        result.add(new DiscoverPropertiesResponseRowR("MyPopertyName2", Optional.of("MyPopertyDescription1"),
-                Optional.empty(), "", Optional.empty(), Optional.empty()));
+        result.add(new DiscoverPropertiesResponseRowR("MyPopertyName1", Optional.empty(), Optional.empty(), "Read",
+                Optional.empty(), Optional.empty()));
+//        result.add(new DiscoverPropertiesResponseRowR("MyPopertyName2", Optional.of("MyPopertyDescription1"),
+//                Optional.of("string"), "Read", Optional.of(false), Optional.of("v")));
 
         when(xmlaService.discoverProperties(Mockito.any())).thenReturn(result);
 
         SOAPMessage response = SOAPUtil.callSoapWebService(Constants.soapEndpointUrl,
                 Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(REQUEST_DISCOVER_DISCOVER_PROPERTIES));
 
-
         XmlAssert xmlAssert = XMLUtil.createAssert(response);
         xmlAssert.hasXPath("/SOAP:Envelope");
         xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/msxmla:return/rowset:root")
-        .exist();
+                .exist();
         xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/msxmla:return/rowset:root/row")
-        .exist();
-        
-        
+                .exist();
+
         System.out.println(1);
 
     };

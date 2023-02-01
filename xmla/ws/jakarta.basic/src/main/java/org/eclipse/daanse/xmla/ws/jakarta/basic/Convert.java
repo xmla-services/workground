@@ -171,7 +171,7 @@ public class Convert {
         DiscoverPropertiesResponseRowXml row = new DiscoverPropertiesResponseRowXml();
 
         // Mandatory
-        row.setPropertyAccessType(apiRow.propertyName());
+        row.setPropertyName(apiRow.propertyName());
         row.setPropertyAccessType(apiRow.propertyAccessType());
 
         // Optional
