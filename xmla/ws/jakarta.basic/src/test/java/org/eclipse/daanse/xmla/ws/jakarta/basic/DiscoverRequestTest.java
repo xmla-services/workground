@@ -259,16 +259,16 @@ public class DiscoverRequestTest {
                 assertThat(d.restrictions()).isNotNull()
                     .satisfies(r -> {
                         assertThat(r.enumName()).isNotNull()
-                            .isNotPresent();
+                            .contains("FoodMart");
                     });
                 // getProperties
                 assertThat(d.properties()).isNotNull()
                     .satisfies(p -> {
-                        assertThat(p.localeIdentifier()).isNull();
+                        assertThat(p.localeIdentifier()).isNotNull().isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull()
                             .isPresent()
                             .contains("FoodMart");
-                        assertThat(p.format()).isNull();
+                        assertThat(p.format()).isNotNull().isNotPresent();
                         assertThat(p.content()).isNotNull()
                             .isPresent()
                             .contains(SchemaData);
@@ -284,9 +284,7 @@ public class DiscoverRequestTest {
                 <RequestType>DISCOVER_KEYWORDS</RequestType>
                 <Restrictions>
                   <RestrictionList>
-                    <RestrictionList>
-                        <Keyword>Keyword1</Keyword>
-                    </RestrictionList>
+        		      <Keyword>Keyword1</Keyword>
                   </RestrictionList>
                 </Restrictions>
                 <Properties>
@@ -315,9 +313,9 @@ public class DiscoverRequestTest {
                 // getProperties
                 assertThat(d.properties()).isNotNull()
                     .satisfies(p -> {
-                        assertThat(p.localeIdentifier()).isNull();
+                        assertThat(p.localeIdentifier()).isNotNull().isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull().contains("FoodMart");
-                        assertThat(p.format()).isNull();
+                        assertThat(p.format()).isNotNull().isNotPresent();
                         assertThat(p.content()).isNotNull()
                             .isPresent()
                             .contains(SchemaData);
@@ -362,9 +360,9 @@ public class DiscoverRequestTest {
                 // getProperties
                 assertThat(d.properties()).isNotNull()
                     .satisfies(p -> {
-                        assertThat(p.localeIdentifier()).isNull();
+                        assertThat(p.localeIdentifier()).isNotNull().isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull().contains("FoodMart");
-                        assertThat(p.format()).isNull();
+                        assertThat(p.format()).isNotNull().isNotPresent();
                         assertThat(p.content()).isNotNull()
                             .isPresent()
                             .contains(SchemaData);
@@ -417,9 +415,9 @@ public class DiscoverRequestTest {
                 // getProperties
                 assertThat(d.properties()).isNotNull()
                     .satisfies(p -> {
-                        assertThat(p.localeIdentifier()).isNull();
+                        assertThat(p.localeIdentifier()).isNotNull().isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull().contains("FoodMart");
-                        assertThat(p.format()).isNull();
+                        assertThat(p.format()).isNotNull().isNotPresent();
                         assertThat(p.content()).isNotNull()
                             .isPresent()
                             .contains(SchemaData);
@@ -436,14 +434,14 @@ public class DiscoverRequestTest {
                 <RequestType>MDSCHEMA_ACTIONS</RequestType>
                 <Restrictions>
                   <RestrictionList>
-                    <CATALOG_NAME>catalogName<CATALOG_NAME>
-                    <SCHEMA_NAME>schemaName<SCHEMA_NAME>
-                    <CUBE_NAME>cubeName<CUBE_NAME>
-                    <ACTION_NAME>actionName<ACTION_NAME>
-                    <ACTION_TYPE>0x01<ACTION_TYPE>
-                    <COORDINATE>coordinate<COORDINATE>
-                    <COORDINATE_TYPE>1<COORDINATE_TYPE>
-                    <INVOCATION>invocation<INVOCATION>
+                    <CATALOG_NAME>catalogName</CATALOG_NAME>
+                    <SCHEMA_NAME>schemaName</SCHEMA_NAME>
+                    <CUBE_NAME>cubeName</CUBE_NAME>
+                    <ACTION_NAME>actionName</ACTION_NAME>
+                    <ACTION_TYPE>0x01</ACTION_TYPE>
+                    <COORDINATE>coordinate</COORDINATE>
+                    <COORDINATE_TYPE>1</COORDINATE_TYPE>
+                    <INVOCATION>1</INVOCATION>
                   </RestrictionList>
                 </Restrictions>
                 <Properties>
@@ -476,8 +474,8 @@ public class DiscoverRequestTest {
                             .isPresent().contains("actionName");
                         assertThat(r.actionType()).isNotNull()
                             .isPresent().contains(0x01);
-                        assertThat(r.coordinate()).isNotNull()
-                            .isEqualTo("coordinate");
+                        assertThat(r.coordinate()).isNotNull().isPresent()
+                            .contains("coordinate");
                         assertThat(r.coordinateType()).isNotNull()
                             .isEqualTo(1);
                         assertThat(r.invocation()).isNotNull().isEqualTo(1);
@@ -485,7 +483,7 @@ public class DiscoverRequestTest {
                 // getProperties
                 assertThat(d.properties()).isNotNull()
                     .satisfies(p -> {
-                        assertThat(p.localeIdentifier()).isNull();
+                        assertThat(p.localeIdentifier()).isNotNull().isNotPresent();
                         assertThat(p.dataSourceInfo()).isNotNull().contains("FoodMart");
                         assertThat(p.catalog()).isNotNull().contains("FoodMart");
                         assertThat(p.format()).isNotNull().contains(Tabular);

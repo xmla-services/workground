@@ -168,7 +168,7 @@ public class Convert {
                 .ifPresent(row::setRequired);
         apiRow.value()
                 .ifPresent(row::setValue);
-        
+
         return row;
     }
 
@@ -310,7 +310,7 @@ public class Convert {
 
         return new DiscoverMdSchemaActionsRestrictionsR(Optional.ofNullable(catalogName),
             Optional.ofNullable(schemaName), cubeName, Optional.ofNullable(actionName),
-            Optional.ofNullable(Integer.valueOf(actionType)), Optional.ofNullable(coordinate),
+            Optional.ofNullable(Integer.decode(actionType)), Optional.ofNullable(coordinate),
             Integer.valueOf(coordinateType),
             Integer.valueOf(invocation));
     }
