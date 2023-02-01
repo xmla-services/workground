@@ -30,6 +30,12 @@ import org.eclipse.daanse.xmla.api.discover.literals.DiscoverLiteralsRequest;
 import org.eclipse.daanse.xmla.api.discover.literals.DiscoverLiteralsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschemaactions.DiscoverMdSchemaActionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschemaactions.DiscoverMdSchemaActionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschemacubes.DiscoverMdSchemaCubesRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemacubes.DiscoverMdSchemaCubesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschemademensions.DiscoverMdSchemaDimensionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemademensions.DiscoverMdSchemaDimensionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschemafunctions.DiscoverMdSchemaFunctionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemafunctions.DiscoverMdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 import org.eclipse.daanse.xmla.ws.jakarta.model.ext.Authenticate;
@@ -52,6 +58,9 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         this.xmlaService = xmlaService;
     }
 
+    private static final String MDSCHEMA_FUNCTIONS = "MDSCHEMA_FUNCTIONS";
+    private static final String MDSCHEMA_DIMENSIONS = "MDSCHEMA_DIMENSIONS";
+    private static final String MDSCHEMA_CUBES = "MDSCHEMA_CUBES";
     private static final String MDSCHEMA_ACTIONS = "MDSCHEMA_ACTIONS";
     private static final String DBSCHEMA_TABLES = "DBSCHEMA_TABLES";
     private static final String DISCOVER_LITERALS = "DISCOVER_LITERALS";
@@ -75,6 +84,9 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         }
         DiscoverResponse discoverResponse = null;
         switch (discover.getRequestType()) {
+        case MDSCHEMA_FUNCTIONS -> discoverResponse = handleDiscoverMdSchemaFunctions(discover);
+        case MDSCHEMA_DIMENSIONS -> discoverResponse = handleDiscoverMdSchemaDimensions(discover);
+        case MDSCHEMA_CUBES -> discoverResponse = handleDiscoverMdSchemaCubes(discover);
         case MDSCHEMA_ACTIONS -> discoverResponse = handleDiscoverMdSchemaActions(discover);
         case DBSCHEMA_TABLES -> discoverResponse = handleDiscoverDbSchemaTables(discover);
         case DISCOVER_LITERALS -> discoverResponse = handleDiscoverLiterals(discover);
@@ -162,6 +174,33 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         DiscoverMdSchemaActionsRequest requestApi = Convert.fromDiscoverMdSchemaActions(requestWs);
         List<DiscoverMdSchemaActionsResponseRow> responseApi = xmlaService.discoverMdSchemaActions(requestApi);
         DiscoverResponse responseWs = Convert.toDiscoverMdSchemaActions(responseApi);
+
+        return responseWs;
+    }
+
+    private DiscoverResponse handleDiscoverMdSchemaCubes(Discover requestWs) {
+
+        DiscoverMdSchemaCubesRequest requestApi = Convert.fromDiscoverMdSchemaCubes(requestWs);
+        List<DiscoverMdSchemaCubesResponseRow> responseApi = xmlaService.discoverMdSchemaCubes(requestApi);
+        DiscoverResponse responseWs = Convert.toDiscoverMdSchemaCubes(responseApi);
+
+        return responseWs;
+    }
+
+    private DiscoverResponse handleDiscoverMdSchemaDimensions(Discover requestWs) {
+
+        DiscoverMdSchemaDimensionsRequest requestApi = Convert.fromDiscoverMdSchemaDimensions(requestWs);
+        List<DiscoverMdSchemaDimensionsResponseRow> responseApi = xmlaService.discoverMdSchemaDimensions(requestApi);
+        DiscoverResponse responseWs = Convert.toDiscoverMdSchemaDimensions(responseApi);
+
+        return responseWs;
+    }
+
+    private DiscoverResponse handleDiscoverMdSchemaFunctions(Discover requestWs) {
+
+        DiscoverMdSchemaFunctionsRequest requestApi = Convert.fromDiscoverMdSchemaFunctions(requestWs);
+        List<DiscoverMdSchemaFunctionsResponseRow> responseApi = xmlaService.discoverMdSchemaFunctions(requestApi);
+        DiscoverResponse responseWs = Convert.toDiscoverMdSchemaFunctions(responseApi);
 
         return responseWs;
     }

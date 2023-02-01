@@ -29,6 +29,12 @@ import org.eclipse.daanse.xmla.api.discover.literals.DiscoverLiteralsRequest;
 import org.eclipse.daanse.xmla.api.discover.literals.DiscoverLiteralsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschemaactions.DiscoverMdSchemaActionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschemaactions.DiscoverMdSchemaActionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschemacubes.DiscoverMdSchemaCubesRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemacubes.DiscoverMdSchemaCubesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschemademensions.DiscoverMdSchemaDimensionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemademensions.DiscoverMdSchemaDimensionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschemafunctions.DiscoverMdSchemaFunctionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemafunctions.DiscoverMdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 
@@ -49,4 +55,10 @@ public interface XmlaService {
     List<DiscoverDbSchemaTablesResponseRow> discoverDbSchemaTables(DiscoverDbSchemaTablesRequest capture);
 
     List<DiscoverMdSchemaActionsResponseRow> discoverMdSchemaActions(DiscoverMdSchemaActionsRequest requestApi);
+
+    List<DiscoverMdSchemaCubesResponseRow> discoverMdSchemaCubes(DiscoverMdSchemaCubesRequest capture);
+
+    List<DiscoverMdSchemaDimensionsResponseRow> discoverMdSchemaDimensions(DiscoverMdSchemaDimensionsRequest capture);
+
+    List<DiscoverMdSchemaFunctionsResponseRow> discoverMdSchemaFunctions(DiscoverMdSchemaFunctionsRequest capture);
 }

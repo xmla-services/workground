@@ -20,6 +20,9 @@ import org.eclipse.daanse.xmla.api.discover.enumerators.DiscoverEnumeratorsReque
 import org.eclipse.daanse.xmla.api.discover.keywords.DiscoverKeywordsRequest;
 import org.eclipse.daanse.xmla.api.discover.literals.DiscoverLiteralsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschemaactions.DiscoverMdSchemaActionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemacubes.DiscoverMdSchemaCubesRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemademensions.DiscoverMdSchemaDimensionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemafunctions.DiscoverMdSchemaFunctionsRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -487,6 +490,179 @@ public class DiscoverRequestTest {
                         assertThat(p.dataSourceInfo()).isNotNull().contains("FoodMart");
                         assertThat(p.catalog()).isNotNull().contains("FoodMart");
                         assertThat(p.format()).isNotNull().contains(Tabular);
+                        assertThat(p.content()).isNotNull()
+                            .isPresent()
+                            .contains(SchemaData);
+                    });
+            });
+    }
+
+    @Test
+    void test_MDSCHEMA_CUBES(@InjectService XmlaService xmlaService) throws Exception {
+
+        ArgumentCaptor<DiscoverMdSchemaCubesRequest> captor = ArgumentCaptor.forClass(DiscoverMdSchemaCubesRequest.class);
+        final String sRequest = """
+                <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
+                    <RequestType>MDSCHEMA_CUBES</RequestType>
+                    <Restrictions>
+                      <RestrictionList>
+                        <SCHEMA_NAME>schemaName</SCHEMA_NAME>
+                        <CUBE_NAME>cubeName</CUBE_NAME>
+                        <BASE_CUBE_NAME>baseCubeName</BASE_CUBE_NAME>
+                        <CUBE_SOURCE>0x01</CUBE_SOURCE>
+                      </RestrictionList>
+                    </Restrictions>
+                    <Properties>
+                      <PropertyList>
+                        <DataSourceInfo>FoodMart</DataSourceInfo>
+                        <Catalog>FoodMart</Catalog>
+                        <Format>Tabular</Format>
+                        <Content>SchemaData</Content>
+                      </PropertyList>
+                    </Properties>
+                </Discover>
+            """;
+
+        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+            SOAPUtil.envelop(sRequest));
+
+        verify(xmlaService, (times(1))).discoverMdSchemaCubes(captor.capture());
+
+        DiscoverMdSchemaCubesRequest request = captor.getValue();
+        assertThat(request).isNotNull()
+            .satisfies(d -> {
+                // getRestrictions
+                assertThat(d.restrictions()).isNotNull()
+                    .satisfies(r -> {
+                        assertThat(r.schemaName()).isNotNull()
+                            .isPresent().contains("schemaName");
+                        assertThat(r.cubeName()).isNotNull()
+                            .isPresent().contains("cubeName");;
+                        assertThat(r.baseCubeName()).isNotNull()
+                            .isPresent().contains("baseCubeName");;
+                        assertThat(r.cubeSource()).isNotNull()
+                            .isPresent().contains(0x01);
+                    });
+                // getProperties
+                assertThat(d.properties()).isNotNull()
+                    .satisfies(p -> {
+                        assertThat(p.localeIdentifier()).isNull();
+                        assertThat(p.dataSourceInfo()).isNotNull().contains("FoodMart");
+                        assertThat(p.catalog()).isNotNull().contains("FoodMart");
+                        assertThat(p.format()).isNotNull().contains(Tabular);
+                        assertThat(p.content()).isNotNull()
+                            .isPresent()
+                            .contains(SchemaData);
+                    });
+            });
+    }
+
+    @Test
+    void test_MDSCHEMA_DIMENSIONS(@InjectService XmlaService xmlaService) throws Exception {
+
+        ArgumentCaptor<DiscoverMdSchemaDimensionsRequest> captor = ArgumentCaptor.forClass(DiscoverMdSchemaDimensionsRequest.class);
+        final String sRequest = """
+                <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
+                <RequestType>MDSCHEMA_DIMENSIONS</RequestType>
+                <Restrictions>
+                  <RestrictionList>
+                    <CATALOG_NAME>catalogName</CATALOG_NAME>
+                    <SCHEMA_NAME>schemaName</SCHEMA_NAME>
+                    <CUBE_NAME>cubeName</CUBE_NAME>
+                    <DIMENSION_NAME>dimensionName</DIMENSION_NAME>
+                    <DIMENSION_UNIQUE_NAME>dimensionUniqueName</DIMENSION_UNIQUE_NAME>
+                  </RestrictionList>
+                </Restrictions>
+                <Properties>
+                  <PropertyList>
+                    <DataSourceInfo>FoodMart</DataSourceInfo>
+                    <Catalog>FoodMart</Catalog>
+                    <Format>Tabular</Format>
+                    <Content>SchemaData</Content>
+                  </PropertyList>
+                </Properties>
+                </Discover>
+            """;
+
+        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+            SOAPUtil.envelop(sRequest));
+
+        verify(xmlaService, (times(1))).discoverMdSchemaDimensions(captor.capture());
+
+        DiscoverMdSchemaDimensionsRequest request = captor.getValue();
+        assertThat(request).isNotNull()
+            .satisfies(d -> {
+                // getRestrictions
+                assertThat(d.restrictions()).isNotNull()
+                    .satisfies(r -> {
+                        assertThat(r.catalogName()).isNotNull()
+                            .isPresent().contains("catalogName");
+                        assertThat(r.schemaName()).isNotNull()
+                            .isPresent().contains("schemaName");
+                        assertThat(r.cubeName()).isNotNull()
+                            .isPresent().contains("cubeName");
+                        assertThat(r.dimensionName()).isNotNull()
+                            .isPresent().contains("dimensionName");
+                        assertThat(r.dimensionUniqueName()).isNotNull()
+                            .isPresent().contains("dimensionUniqueName");
+                    });
+                // getProperties
+                assertThat(d.properties()).isNotNull()
+                    .satisfies(p -> {
+                        assertThat(p.localeIdentifier()).isNull();
+                        assertThat(p.dataSourceInfo()).isNotNull().contains("FoodMart");
+                        assertThat(p.catalog()).isNotNull().contains("FoodMart");
+                        assertThat(p.format()).isNotNull().contains(Tabular);
+                        assertThat(p.content()).isNotNull()
+                            .isPresent()
+                            .contains(SchemaData);
+                    });
+            });
+    }
+
+    @Test
+    void test_MDSCHEMA_FUNCTIONS(@InjectService XmlaService xmlaService) throws Exception {
+
+        ArgumentCaptor<DiscoverMdSchemaFunctionsRequest> captor = ArgumentCaptor.forClass(DiscoverMdSchemaFunctionsRequest.class);
+        final String sRequest = """
+                <Discover xmlns="urn:schemas-microsoft-com:xml-analysis">
+                <RequestType>MDSCHEMA_FUNCTIONS</RequestType>
+                <Restrictions>
+                  <RestrictionList>
+                    <FUNCTION_NAME>Item</FUNCTION_NAME>
+                  </RestrictionList>
+                </Restrictions>
+                <Properties>
+                  <PropertyList>
+                    <DataSourceInfo>FoodMart</DataSourceInfo>
+                    <Content>SchemaData</Content>
+                  </PropertyList>
+                </Properties>
+                </Discover>
+            """;
+
+        SOAPUtil.callSoapWebService(Constants.soapEndpointUrl, Optional.of(Constants.SOAP_ACTION_DISCOVER),
+            SOAPUtil.envelop(sRequest));
+
+        verify(xmlaService, (times(1))).discoverMdSchemaFunctions(captor.capture());
+
+        DiscoverMdSchemaFunctionsRequest request = captor.getValue();
+        assertThat(request).isNotNull()
+
+            .satisfies(d -> {
+                // getRestrictions
+                assertThat(d.restrictions()).isNotNull()
+                    .satisfies(r -> {
+                        assertThat(r.origin()).isNotNull()
+                            .isNotPresent();
+                    });
+                // getProperties
+                assertThat(d.properties()).isNotNull()
+                    .satisfies(p -> {
+                        assertThat(p.localeIdentifier()).isNull();
+                        assertThat(p.dataSourceInfo()).isNotNull().contains("FoodMart");
+                        assertThat(p.catalog()).isNull();
+                        assertThat(p.format()).isNull();
                         assertThat(p.content()).isNotNull()
                             .isPresent()
                             .contains(SchemaData);

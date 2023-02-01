@@ -39,6 +39,15 @@ import org.eclipse.daanse.xmla.api.discover.literals.DiscoverLiteralsRestriction
 import org.eclipse.daanse.xmla.api.discover.mdschemaactions.DiscoverMdSchemaActionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschemaactions.DiscoverMdSchemaActionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschemaactions.DiscoverMdSchemaActionsRestrictions;
+import org.eclipse.daanse.xmla.api.discover.mdschemacubes.DiscoverMdSchemaCubesRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemacubes.DiscoverMdSchemaCubesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschemacubes.DiscoverMdSchemaCubesRestrictions;
+import org.eclipse.daanse.xmla.api.discover.mdschemademensions.DiscoverMdSchemaDimensionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemademensions.DiscoverMdSchemaDimensionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschemademensions.DiscoverMdSchemaDimensionsRestrictions;
+import org.eclipse.daanse.xmla.api.discover.mdschemafunctions.DiscoverMdSchemaFunctionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschemafunctions.DiscoverMdSchemaFunctionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschemafunctions.DiscoverMdSchemaFunctionsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRestrictions;
@@ -58,6 +67,12 @@ import org.eclipse.daanse.xmla.model.record.discover.literals.DiscoverLiteralsRe
 import org.eclipse.daanse.xmla.model.record.discover.literals.DiscoverLiteralsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschemaactions.DiscoverMdSchemaActionsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschemaactions.DiscoverMdSchemaActionsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschemacubes.DiscoverMdSchemaCubesRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschemacubes.DiscoverMdSchemaCubesRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschemademensions.DiscoverMdSchemaDimensionsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschemademensions.DiscoverMdSchemaDimensionsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschemafunctions.DiscoverMdSchemaFunctionsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschemafunctions.DiscoverMdSchemaFunctionsRestrictionsR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.PropertyList;
@@ -293,7 +308,6 @@ public class Convert {
         PropertiesR properties = discoverProperties(requestWs);
         DiscoverMdSchemaActionsRestrictionsR restrictions = discoverMdSchemaActionsRestrictions(requestWs);
         return new DiscoverMdSchemaActionsRequestR(properties, restrictions);
-
     }
 
     private static DiscoverMdSchemaActionsRestrictionsR discoverMdSchemaActionsRestrictions(Discover requestWs) {
@@ -316,6 +330,82 @@ public class Convert {
     }
 
     public static DiscoverResponse toDiscoverMdSchemaActions(List<DiscoverMdSchemaActionsResponseRow> responseApi) {
+        //TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static DiscoverMdSchemaCubesRequest fromDiscoverMdSchemaCubes(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DiscoverMdSchemaCubesRestrictionsR restrictions = discoverMdSchemaCubesRestrictions(requestWs);
+        return new DiscoverMdSchemaCubesRequestR(properties, restrictions);
+    }
+
+    private static DiscoverMdSchemaCubesRestrictionsR discoverMdSchemaCubesRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String schemaName = map.get(DiscoverMdSchemaCubesRestrictions.RESTRICTIONS_SCHEMA_NAME);
+        String cubeName = map.get(DiscoverMdSchemaCubesRestrictions.RESTRICTIONS_CUBE_NAME);
+        String baseCubeName = map.get(DiscoverMdSchemaCubesRestrictions.RESTRICTIONS_BASE_CUBE_NAME);
+        String cubeSource = map.get(DiscoverMdSchemaCubesRestrictions.RESTRICTIONS_CUBE_SOURCE);
+
+        return new DiscoverMdSchemaCubesRestrictionsR(Optional.ofNullable(schemaName),
+            Optional.ofNullable(cubeName), Optional.ofNullable(baseCubeName),
+            Optional.ofNullable(Integer.decode(cubeSource)));
+    }
+
+    public static DiscoverResponse toDiscoverMdSchemaCubes(List<DiscoverMdSchemaCubesResponseRow> responseApi) {
+        //TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static DiscoverMdSchemaDimensionsRequest fromDiscoverMdSchemaDimensions(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DiscoverMdSchemaDimensionsRestrictionsR restrictions = discoverMdSchemaDimensionsRestrictions(requestWs);
+        return new DiscoverMdSchemaDimensionsRequestR(properties, restrictions);
+    }
+
+    private static DiscoverMdSchemaDimensionsRestrictionsR discoverMdSchemaDimensionsRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String catalogName = map.get(DiscoverMdSchemaDimensionsRestrictions.RESTRICTIONS_CATALOG_NAME);
+        String schemaName = map.get(DiscoverMdSchemaDimensionsRestrictions.RESTRICTIONS_SCHEMA_NAME);
+        String cubeName = map.get(DiscoverMdSchemaDimensionsRestrictions.RESTRICTIONS_CUBE_NAME);
+        String dimensionName = map.get(DiscoverMdSchemaDimensionsRestrictions.RESTRICTIONS_DIMENSION_NAME);
+        String dimensionUniqueName = map.get(DiscoverMdSchemaDimensionsRestrictions.RESTRICTIONS_DIMENSION_UNIQUE_NAME);
+
+        return new DiscoverMdSchemaDimensionsRestrictionsR(Optional.ofNullable(catalogName),
+            Optional.ofNullable(schemaName),
+            Optional.ofNullable(cubeName), Optional.ofNullable(dimensionName),
+            Optional.ofNullable(dimensionUniqueName));
+    }
+
+    public static DiscoverResponse toDiscoverMdSchemaDimensions(List<DiscoverMdSchemaDimensionsResponseRow> responseApi) {
+        //TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static DiscoverMdSchemaFunctionsRequest fromDiscoverMdSchemaFunctions(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DiscoverMdSchemaFunctionsRestrictionsR restrictions = discoverMdSchemaFunctionsRestrictions(requestWs);
+        return new DiscoverMdSchemaFunctionsRequestR(properties, restrictions);
+    }
+
+    private static DiscoverMdSchemaFunctionsRestrictionsR discoverMdSchemaFunctionsRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String origin = map.get(DiscoverMdSchemaFunctionsRestrictions.RESTRICTIONS_ORIGIN);
+        String interfaceName = map.get(DiscoverMdSchemaFunctionsRestrictions.RESTRICTIONS_INTERFACE_NAME);
+        String libraryName = map.get(DiscoverMdSchemaFunctionsRestrictions.RESTRICTIONS_LIBRARY_NAME);
+
+        return new DiscoverMdSchemaFunctionsRestrictionsR(Optional.ofNullable(Integer.valueOf(origin)),
+            Optional.ofNullable(interfaceName),
+            Optional.ofNullable(libraryName));
+    }
+
+    public static DiscoverResponse toDiscoverMdSchemaFunctions(List<DiscoverMdSchemaFunctionsResponseRow> responseApi) {
         //TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;
