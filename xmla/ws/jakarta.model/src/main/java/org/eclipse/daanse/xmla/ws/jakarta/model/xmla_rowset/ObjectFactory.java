@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset;
 
 import javax.xml.namespace.QName;
+
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.annotation.XmlElementDecl;
 import jakarta.xml.bind.annotation.XmlRegistry;
@@ -33,7 +34,8 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 @XmlRegistry
 public class ObjectFactory {
 
-  private final static QName _Root_QNAME = new QName("urn:schemas-microsoft-com:xml-analysis:rowset", "root");
+    private final static QName _Root_QNAME = new QName("urn:schemas-microsoft-com:xml-analysis:rowset", "root");
+    private final static QName _Row_QNAME = new QName("urn:schemas-microsoft-com:xml-analysis:rowset", "row");
 
   /**
    * Create a new ObjectFactory that can be used to create new instances of schema
@@ -56,7 +58,7 @@ public class ObjectFactory {
    * 
    */
 
-  public DiscoverPropertiesResponseRowXml createRowA() {
+  public DiscoverPropertiesResponseRowXml createDiscoverPropertiesResponseRowXml() {
       return new DiscoverPropertiesResponseRowXml();
   }
 
@@ -78,6 +80,11 @@ public class ObjectFactory {
   @XmlElementDecl(namespace = "urn:schemas-microsoft-com:xml-analysis:rowset", name = "root")
   public JAXBElement<Rowset> createRoot(Rowset value) {
     return new JAXBElement<Rowset>(_Root_QNAME, Rowset.class, null, value);
+  }
+  
+  @XmlElementDecl(namespace = "urn:schemas-microsoft-com:xml-analysis:rowset", name = "row")
+  public JAXBElement<Row> createRoot(Row value) {
+    return new JAXBElement<Row>(_Row_QNAME, Row.class, null, value);
   }
 
 }

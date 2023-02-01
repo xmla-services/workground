@@ -103,6 +103,7 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             message.writeTo(baos);
+            System.out.println(new String(baos.toByteArray()));
             logger.error(new String(baos.toByteArray()));
         } catch (Exception e) {
             logger.error("Exception in handler: " + e);

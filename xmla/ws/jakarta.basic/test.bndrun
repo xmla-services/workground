@@ -22,7 +22,8 @@ port                              :   17290
 	bnd.identity;id='org.eclipse.daanse.xmla.ws.jakarta.basic-tests',\
 	bnd.identity;id='com.osgifx.console.agent',\
 	bnd.identity;id='org.apache.felix.http.jetty',\
-	bnd.identity;id='org.eclipse.daanse.ws.runtime.httpwhiteboard'
+	bnd.identity;id='org.eclipse.daanse.ws.runtime.httpwhiteboard',\
+	bnd.identity;id='org.eclipse.daanse.ws.handler'
 	
 
 	
@@ -68,6 +69,7 @@ port                              :   17290
 	org.apache.felix.http.jetty;version='[5.0.0,5.0.1)',\
 	org.apache.felix.http.servlet-api;version='[2.1.0,2.1.1)',\
 	org.apache.felix.scr;version='[2.2.4,2.2.5)',\
+	org.eclipse.daanse.ws.handler;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.ws.runtime.httpwhiteboard;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.ws.runtime.registrar;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.api;version='[0.0.1,0.0.2)',\
