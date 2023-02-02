@@ -16,17 +16,20 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset;
 import java.io.Serializable;
 import java.util.List;
 
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Content;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_exception.Exception;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_exception.Messages;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "rowset", propOrder = { "row", "exception", "messages" })
-public class Rowset implements Serializable {
+@XmlRootElement(name = "root")
+public class Rowset extends Content implements Serializable {
 
     private final static long serialVersionUID = 1L;
     protected List<Row> row;
