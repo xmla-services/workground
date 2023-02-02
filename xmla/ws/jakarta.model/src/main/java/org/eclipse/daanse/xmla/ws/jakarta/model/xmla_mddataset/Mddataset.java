@@ -13,7 +13,6 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla_mddataset;
 
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Content;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_exception.Exception;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_exception.Messages;
 
@@ -52,7 +51,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "root")
 @XmlType(name = "mddataset", propOrder = { "olapInfo", "axes", "cellData", "exception", "messages" })
-public class Mddataset  extends Content{
+public class Mddataset {
 
   @XmlElement(name = "OlapInfo")
   protected OlapInfo olapInfo;

@@ -185,7 +185,7 @@ public class Convert {
         apiRow.value()
                 .ifPresent(row::setValue);
 
-        return row;
+        return new Row();
     }
 
     public static DiscoverDbSchemaCatalogsRequest fromDiscoverDbSchemaCatalogs(Discover requestWs) {

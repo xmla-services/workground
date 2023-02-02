@@ -18,12 +18,15 @@ import java.io.Serializable;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DiscoverPropertiesResponseRowXml")
-public class DiscoverPropertiesResponseRowXml extends Row implements Serializable {
+@XmlType(name = "row")
+@XmlRootElement(name = "row")
+
+public class DiscoverPropertiesResponseRowXml implements Serializable {
 
     @XmlTransient
     private final static long serialVersionUID = 1L;

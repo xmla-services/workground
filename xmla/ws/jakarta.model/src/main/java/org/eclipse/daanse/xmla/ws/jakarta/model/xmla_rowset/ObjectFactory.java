@@ -29,8 +29,4 @@ public class ObjectFactory {
         return new DiscoverPropertiesResponseRowXml();
     }
 
-    public RowB createRowB() {
-        return new RowB();
-    }
-
 }
