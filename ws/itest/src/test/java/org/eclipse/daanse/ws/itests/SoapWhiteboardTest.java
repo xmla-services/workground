@@ -20,8 +20,15 @@ import static org.junit.jupiter.api.Assertions.fail;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URL;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+import java.net.http.HttpResponse.BodyHandlers;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Comparator;
@@ -97,6 +104,31 @@ public class SoapWhiteboardTest {
 		performEchoTest(String.format("http://localhost:%s/echo?wsdl", SERVER_PORT_WHITEBOARD));
 		assertThat(locicalHandler.handledMessages.get()).isEqualTo(4);
 		assertThat(soapHandler.handledMessages.get()).isEqualTo(4);
+	}
+
+	@Test
+	@WithFactoryConfiguration(factoryPid = PID_EMBEDDED, name = "embedded-publisher", location = "?", properties = {
+			@Property(key = "port", value = SERVER_PORT_EMBEDDED_SERVER_PORT, scalar = Scalar.Integer) })
+	void testProvider(@InjectBundleContext BundleContext bundleContext) throws Exception {
+		ProviderWebService webService = new ProviderWebService();
+		bundleContext.registerService(ProviderWebService.class, webService,
+				FrameworkUtil.asDictionary(Map.of(SoapWhiteboardConstants.SOAP_ENDPOINT_IMPLEMENTOR, true,
+						SoapWhiteboardConstants.SOAP_ENDPOINT_PATH, "/provider")));
+		System.out.println("Endpoint registered!");
+		TimeUnit.SECONDS.sleep(1); // let it all settle a bit...
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create(String.format("http://localhost:%s/provider", SERVER_PORT_EMBEDDED_SERVER_PORT)))
+				.POST(BodyPublishers
+						.ofString("<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">"
+								+ "   <soapenv:Header/>" + "   <soapenv:Body>" + "   </soapenv:Body>"
+								+ "</soapenv:Envelope>", StandardCharsets.UTF_8))
+				.build();
+		System.out.println("Sending request...");
+		HttpResponse<String> response = client.send(request, BodyHandlers.ofString(StandardCharsets.UTF_8));
+		assertThat(response.statusCode()).isEqualTo(HttpURLConnection.HTTP_OK);
+		System.out.println("Service response: " + response.body());
+		assertThat(response.body()).contains("Hello Test");
 	}
 
 	private void performEchoTest(String echoEndpointUrl) throws IOException, MalformedURLException, SOAPException {

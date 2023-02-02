@@ -51,7 +51,7 @@ public class EmbeddedPublisher {
 
 	@Reference(cardinality = ReferenceCardinality.AT_LEAST_ONE, policy = ReferencePolicy.DYNAMIC)
 	public void publishEndpoint(Endpoint endpoint, Map<String, ?> properties) {
-		Object path = Objects.requireNonNullElse(properties.get(SoapWhiteboardConstants.SOAP_ENDPOINT_PATH), "");
+		Object path = Objects.requireNonNullElse(properties.get(SoapWhiteboardConstants.SOAP_ENDPOINT_PATH), "/");
 		String epAddress = config.protocol() + "://" + config.host() + ":" + config.port() + path;
 		logger.info("Registering {} with embedded server and address {}", endpoint, epAddress);
 		System.out.println(">>> PUBLISH EP @ " + epAddress + " properties=" + properties);
