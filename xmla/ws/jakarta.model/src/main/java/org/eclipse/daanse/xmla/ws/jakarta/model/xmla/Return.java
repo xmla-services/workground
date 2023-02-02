@@ -28,19 +28,17 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "return", propOrder = { "value" })
 public class Return {
 
-//    @XmlElementRefs({ @XmlElementRef(name = "root", type = Mddataset.class,namespace = "" ,required = false),
-//            @XmlElementRef(name = "root", type = Rowset.class,namespace = "", required = false),
-//            @XmlElementRef(name = "root", type = Emptyresult.class,namespace = "", required = false),
-//            @XmlElementRef(name = "results", type = Results.class,namespace = "", required = false) })
-    @XmlElementRef
+    @XmlElementRefs({ @XmlElementRef(name = "root", type = Mddataset.class,namespace = "" ,required = false),
+            @XmlElementRef(name = "root", type = Rowset.class,namespace = "", required = false),
+            @XmlElementRef(name = "root", type = Emptyresult.class,namespace = "", required = false),
+            @XmlElementRef(name = "results", type = Results.class,namespace = "", required = false) })
+    protected java.lang.Object value;
 
-    protected Content value;
-
-    public Content getValue() {
+    public java.lang.Object getValue() {
         return value;
     }
 
-    public void setValue(Content value) {
+    public void setValue(java.lang.Object value) {
         this.value = value;
     }
 

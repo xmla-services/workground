@@ -15,7 +15,6 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla_empty;
 
 import java.io.Serializable;
 
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Content;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_exception.Exception;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_exception.Messages;
 
@@ -51,7 +50,7 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "emptyresult", propOrder = { "exception", "messages" })
 @XmlRootElement(name = "root")
-public class Emptyresult extends Content implements Serializable{
+public class Emptyresult implements Serializable{
 
   private final static long serialVersionUID = 1L;
   @XmlElement(name = "Exception")
