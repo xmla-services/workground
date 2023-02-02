@@ -11,16 +11,15 @@
 **********************************************************************/
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.eclipse.daanse</groupId>
-    <artifactId>org.eclipse.daanse.xmla.ws</artifactId>
-    <version>${revision}</version>
-    <relativePath>../pom.xml</relativePath>
-  </parent>
-  <artifactId>org.eclipse.daanse.xmla.ws.jakarta.model</artifactId>
-  	<dependencies>
-
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.eclipse.daanse</groupId>
+		<artifactId>org.eclipse.daanse.xmla.ws</artifactId>
+		<version>${revision}</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+	<artifactId>org.eclipse.daanse.xmla.ws.jakarta.model</artifactId>
+	<dependencies>
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>osgi.annotation</artifactId>
@@ -29,5 +28,39 @@
 			<groupId>jakarta.xml.bind</groupId>
 			<artifactId>jakarta.xml.bind-api</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.sun.xml.bind</groupId>
+			<artifactId>jaxb-impl</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
+	<build>
+		<resources>
+			<resource>
+				<directory>src/main/xsd</directory>
+				<targetPath>META-INF/JAXB/xsd/</targetPath>
+			</resource>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>jaxb2-maven-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>xsd-to-java</id>
+						<goals>
+							<goal>xjc</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<xsdPathWithinArtifact>META-INF/JAXB/xsd</xsdPathWithinArtifact>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 </project>
