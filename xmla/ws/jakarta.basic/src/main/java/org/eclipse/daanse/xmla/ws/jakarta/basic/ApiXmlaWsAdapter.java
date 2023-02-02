@@ -83,6 +83,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
             return null;
         }
         DiscoverResponse discoverResponse = null;
+
         switch (discover.getRequestType()) {
         case MDSCHEMA_FUNCTIONS -> discoverResponse = handleDiscoverMdSchemaFunctions(discover);
         case MDSCHEMA_DIMENSIONS -> discoverResponse = handleDiscoverMdSchemaDimensions(discover);
@@ -96,8 +97,8 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         case DISCOVER_PROPERTIES -> discoverResponse = handleDiscoverProperties(discover);
         case DBSCHEMA_CATALOGS -> discoverResponse = handleDbSchemaCatalogs(discover);
         default -> throw new IllegalArgumentException("Unexpected value: " + discover.getRequestType());
-        }
 
+        }
         return discoverResponse;
     }
 

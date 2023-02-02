@@ -76,6 +76,7 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschemafunctions.DiscoverM
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.PropertyList;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Return;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.DiscoverPropertiesResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Rowset;
@@ -158,10 +159,10 @@ public class Convert {
 
         DiscoverResponse responseWs = new DiscoverResponse();
 
-        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse.Return r = new DiscoverResponse.Return();
+        Return r = new Return();
         Rowset rs = new Rowset();
         rs.setRow(rows);
-        r.setRoot(rs);
+        r.setValue(rs);
         responseWs.setReturn(r);
 
         return responseWs;

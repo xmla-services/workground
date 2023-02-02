@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Content;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_empty.Emptyresult;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
@@ -48,9 +49,9 @@ import jakarta.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "root" })
+@XmlType(name = "results", propOrder = { "root" })
 @XmlRootElement(name = "results")
-public class Results implements Serializable {
+public class Results extends Content implements Serializable {
 
   private final static long serialVersionUID = 1L;
   @XmlElement(namespace = "urn:schemas-microsoft-com:xml-analysis:empty")

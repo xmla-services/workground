@@ -40,6 +40,7 @@ import jakarta.jws.soap.SOAPBinding;
 import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.ws.Holder;
 import jakarta.xml.ws.WebServiceContext;
+import jakarta.xml.ws.Provider;
 
 @WebService(name = "MsXmlAnalysisSoapPortType", portName = "MsXmlAnalysisSoapPort", serviceName = "MsXmlAnalysisService") // ,
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)

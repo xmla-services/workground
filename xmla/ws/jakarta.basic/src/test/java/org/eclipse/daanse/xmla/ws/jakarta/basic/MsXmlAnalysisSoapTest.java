@@ -24,6 +24,7 @@ import java.util.Optional;
 
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Return;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.DiscoverPropertiesResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Rowset;
@@ -134,12 +135,13 @@ public class MsXmlAnalysisSoapTest {
 
         DiscoverResponse discoverResponse = new DiscoverResponse();
 
-        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse.Return r = new DiscoverResponse.Return();
+        Return r = new Return();
         Rowset rs = new Rowset();
         Row row = new DiscoverPropertiesResponseRowXml();
         rs.setRow(List.of(row));
 
-        r.setRoot(rs);
+        r.setValue(rs);
+
         discoverResponse.setReturn(r);
 
         doReturn(discoverResponse).when(xmlaWs)

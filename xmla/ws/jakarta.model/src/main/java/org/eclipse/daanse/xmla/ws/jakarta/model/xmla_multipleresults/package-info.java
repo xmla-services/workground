@@ -12,5 +12,5 @@
 *   Stefan Bischof (bipolis.org) - initial
 */
 @org.osgi.annotation.bundle.Export
-@jakarta.xml.bind.annotation.XmlSchema(namespace = "http://schemas.microsoft.com/analysisservices/2003/xmla-multipleresults", elementFormDefault = jakarta.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@jakarta.xml.bind.annotation.XmlSchema(namespace = "http://schemas.microsoft.com/analysisservices/2003/xmla-multipleresults")
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla_multipleresults;

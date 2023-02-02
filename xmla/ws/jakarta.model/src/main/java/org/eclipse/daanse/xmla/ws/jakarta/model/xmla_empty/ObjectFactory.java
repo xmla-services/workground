@@ -14,8 +14,7 @@
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla_empty;
 
 import javax.xml.namespace.QName;
-import jakarta.xml.bind.JAXBElement;
-import jakarta.xml.bind.annotation.XmlElementDecl;
+
 import jakarta.xml.bind.annotation.XmlRegistry;
 
 /**
@@ -32,13 +31,8 @@ import jakarta.xml.bind.annotation.XmlRegistry;
 @XmlRegistry
 public class ObjectFactory {
 
-  private final static QName _Root_QNAME = new QName("urn:schemas-microsoft-com:xml-analysis:empty", "root");
 
-  /**
-   * Create a new ObjectFactory that can be used to create new instances of schema
-   * derived classes for package: org.eclipse.daanse.xmla.ws.xmla_e
-   * 
-   */
+
   public ObjectFactory() {
   }
 
@@ -50,17 +44,5 @@ public class ObjectFactory {
     return new Emptyresult();
   }
 
-  /**
-   * Create an instance of {@link JAXBElement }{@code <}{@link Emptyresult
-   * }{@code >}
-   * 
-   * @param value Java instance representing xml element's value.
-   * @return the new instance of {@link JAXBElement }{@code <}{@link Emptyresult
-   *         }{@code >}
-   */
-  @XmlElementDecl(namespace = "urn:schemas-microsoft-com:xml-analysis:empty", name = "root")
-  public JAXBElement<Emptyresult> createRoot(Emptyresult value) {
-    return new JAXBElement<Emptyresult>(_Root_QNAME, Emptyresult.class, null, value);
-  }
 
 }
