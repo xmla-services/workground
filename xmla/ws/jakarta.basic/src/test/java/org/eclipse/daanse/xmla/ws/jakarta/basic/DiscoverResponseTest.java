@@ -16,7 +16,6 @@ package org.eclipse.daanse.xmla.ws.jakarta.basic;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -82,26 +81,70 @@ public class DiscoverResponseTest {
     @Test
     void test_DISCOVER_PROPERTIES_XXX(@InjectService XmlaService xmlaService) throws Exception {
 
-        List<DiscoverPropertiesResponseRow> result = new ArrayList<>();
-        result.add(new DiscoverPropertiesResponseRowR("MyPopertyName1", Optional.empty(), Optional.empty(), "Read",
-                Optional.empty(), Optional.empty()));
-//        result.add(new DiscoverPropertiesResponseRowR("MyPopertyName2", Optional.of("MyPopertyDescription1"),
-//                Optional.of("string"), "Read", Optional.of(false), Optional.of("v")));
+        DiscoverPropertiesResponseRowR row = new DiscoverPropertiesResponseRowR("DbpropMsmdSubqueries",
+                Optional.of("An enumeration value that determines the behavior of subqueries."), Optional.of("Integer"),
+                "ReadWrite", Optional.of(false), Optional.of("1"));
 
-        when(xmlaService.discoverProperties(Mockito.any())).thenReturn(result);
+        when(xmlaService.discoverProperties(Mockito.any())).thenReturn(List.of(row));
 
         SOAPMessage response = SOAPUtil.callSoapWebService(Constants.soapEndpointUrl,
                 Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(REQUEST_DISCOVER_DISCOVER_PROPERTIES));
 
         XmlAssert xmlAssert = XMLUtil.createAssert(response);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/msxmla:return/rowset:root")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root")
                 .exist();
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/msxmla:return/rowset:root/row")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root/rowset:row")
                 .exist();
 
         System.out.println(1);
 
     };
+
+    DiscoverPropertiesResponseRowR rowCatalog = new DiscoverPropertiesResponseRowR("Catalog", Optional.of("Catalog"),
+            Optional.of("string"), "ReadWrite", Optional.of(false), Optional.of("AdventureWorks_SSAS"));
+
+    DiscoverPropertiesResponseRowR rowTimeout = new DiscoverPropertiesResponseRowR("Timeout", Optional.of("Timeout"),
+            Optional.of("int"), "ReadWrite", Optional.of(false), Optional.empty());
+
+    DiscoverPropertiesResponseRowR rowContent = new DiscoverPropertiesResponseRowR("Content", Optional.of("Content"),
+            Optional.of("string"), "Write", Optional.of(false), Optional.of("SchemaData"));
+
+    DiscoverPropertiesResponseRowR rowFormat = new DiscoverPropertiesResponseRowR("Format", Optional.of("Format"),
+            Optional.of("string"), "Write", Optional.of(false), Optional.of("Native"));
+
+    DiscoverPropertiesResponseRowR rowAxisFormat = new DiscoverPropertiesResponseRowR("AxisFormat",
+            Optional.of("AxisFormat"), Optional.of("string"), "Write", Optional.of(false), Optional.of("TupleFormat"));
+
+    DiscoverPropertiesResponseRowR rowBeginRange = new DiscoverPropertiesResponseRowR("BeginRange",
+            Optional.of("BeginRange"), Optional.of("int"), "Write", Optional.of(false), Optional.of("-1"));
+
+    DiscoverPropertiesResponseRowR rowEndRange = new DiscoverPropertiesResponseRowR("EndRange", Optional.of("EndRange"),
+            Optional.of("int"), "Write", Optional.of(false), Optional.of("-1"));
+
+    DiscoverPropertiesResponseRowR rowShowHiddenCubes = new DiscoverPropertiesResponseRowR("ShowHiddenCubes",
+            Optional.of("ShowHiddenCubes"), Optional.of("boolean"), "ReadWrite", Optional.of(false),
+            Optional.of("false"));
+
+    DiscoverPropertiesResponseRowR rowMaximumRows = new DiscoverPropertiesResponseRowR("MaximumRows",
+            Optional.of("MaximumRows"), Optional.of("int"), "Write", Optional.of(false), Optional.empty());
+
+    DiscoverPropertiesResponseRowR rowVisualMode = new DiscoverPropertiesResponseRowR("VisualMode",
+            Optional.of("VisualMode"), Optional.of("int"), "Write", Optional.of(false), Optional.of("0"));
+
+    DiscoverPropertiesResponseRowR rowDbpropMsmdCachePolicy = new DiscoverPropertiesResponseRowR(
+            "DbpropMsmdCachePolicy", Optional.of("DbpropMsmdCachePolicy"), Optional.of("int"), "ReadWrite",
+            Optional.of(false), Optional.empty());
+
+    DiscoverPropertiesResponseRowR rowDbpropMsmdCacheRatio = new DiscoverPropertiesResponseRowR("DbpropMsmdCacheRatio",
+            Optional.of("DbpropMsmdCacheRatio"), Optional.of("double"), "ReadWrite", Optional.of(false),
+            Optional.empty());
+
+    DiscoverPropertiesResponseRowR rowDbpropMsmdCacheMode = new DiscoverPropertiesResponseRowR("DbpropMsmdCacheMode",
+            Optional.of("DbpropMsmdCacheMode"), Optional.of("int"), "ReadWrite", Optional.of(false), Optional.empty());
+
+    List<DiscoverPropertiesResponseRow> resultSpec = List.of(rowCatalog, rowTimeout, rowContent, rowFormat,
+            rowAxisFormat, rowBeginRange, rowEndRange, rowShowHiddenCubes, rowMaximumRows, rowVisualMode,
+            rowDbpropMsmdCachePolicy, rowDbpropMsmdCacheRatio, rowDbpropMsmdCacheMode);
 
 }
