@@ -1,14 +1,15 @@
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset;
 
-import java.util.List;
-
-import jakarta.xml.bind.annotation.XmlAnyElement;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlSeeAlso;
 import jakarta.xml.bind.annotation.XmlType;
 
-@XmlType()
-public class Row {
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "row")
+@XmlSeeAlso({DiscoverPropertiesResponseRowXml.class})
+public abstract class Row {
     
-    @XmlAnyElement
-    List<Object> value;
+
 
 }
