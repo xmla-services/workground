@@ -13,15 +13,15 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
-import org.eclipse.daanse.xmla.ws.jakarta.model.ext.Authenticate;
-import org.eclipse.daanse.xmla.ws.jakarta.model.ext.AuthenticateResponse;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.BeginSession;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.EndSession;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Execute;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ExecuteResponse;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Session;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ext.Authenticate;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ext.AuthenticateResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.BeginSession;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.EndSession;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Execute;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ExecuteResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Session;
 
 import jakarta.xml.ws.Holder;
 

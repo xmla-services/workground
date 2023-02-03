@@ -16,15 +16,15 @@ package org.eclipse.daanse.xmla.ws.jakarta.basic;
 import org.eclipse.daanse.ws.api.whiteboard.annotations.RequireSoapWhiteboard;
 import org.eclipse.daanse.ws.api.whiteboard.prototypes.SOAPWhiteboardEndpoint;
 import org.eclipse.daanse.xmla.api.XmlaService;
-import org.eclipse.daanse.xmla.ws.jakarta.model.ext.Authenticate;
-import org.eclipse.daanse.xmla.ws.jakarta.model.ext.AuthenticateResponse;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.BeginSession;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.EndSession;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Execute;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ExecuteResponse;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Session;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ext.Authenticate;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ext.AuthenticateResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.BeginSession;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.EndSession;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Execute;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ExecuteResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Session;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -43,25 +43,25 @@ import jakarta.xml.ws.WebServiceContext;
 
 @WebService(name = "MsXmlAnalysisSoapPortType", portName = "MsXmlAnalysisSoapPort", serviceName = "MsXmlAnalysisService") // ,
 @SOAPBinding(parameterStyle = SOAPBinding.ParameterStyle.BARE)
-@XmlSeeAlso({ org.eclipse.daanse.xmla.ws.jakarta.model.msxmla.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.ext.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.engine300_300.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.xmla_exception.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.xmla_mddataset.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.engine.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.engine100.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.engine2.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.engine200.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.engine300.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.engine400.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.engine600.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.engine800.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.xmla_empty.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.xmla_multipleresults.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.engine100_100.ObjectFactory.class,
-        org.eclipse.daanse.xmla.ws.jakarta.model.engine200_200.ObjectFactory.class })
+@XmlSeeAlso({ org.eclipse.daanse.xmla.ws.jakarta.model.xmla.msxmla.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ext.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_exception.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_mddataset.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine100.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine2.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine200.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine400.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine600.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine800.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_empty.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_multipleresults.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine100_100.ObjectFactory.class,
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine200_200.ObjectFactory.class })
 @Component(service = MsXmlAnalysisSoap.class, name = "org.eclipse.daanse.msxmlanalysisservice")
 @RequireSoapWhiteboard
 @Designate(factory = true, ocd = MsXmlAnalysisSoap.Config.class)
