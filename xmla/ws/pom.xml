@@ -20,7 +20,8 @@
   <artifactId>org.eclipse.daanse.xmla.ws</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>jakarta.basic</module>
     <module>jakarta.model</module>
+    <module>jakarta.basic</module>
+    <module>jakarta.provider.soapmessage</module>
   </modules>
 </project>
