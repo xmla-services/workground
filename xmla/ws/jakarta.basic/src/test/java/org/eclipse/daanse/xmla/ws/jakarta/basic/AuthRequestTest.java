@@ -14,18 +14,13 @@
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 import java.util.Map;
-import java.util.Optional;
 
 import org.eclipse.daanse.xmla.api.XmlaService;
-import org.eclipse.daanse.xmla.ws.jakarta.model.ext.AuthenticateResponse;
-import org.eclipse.daanse.xmla.ws.jakarta.model.ext.ReturnValue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.service.component.runtime.ServiceComponentRuntime;

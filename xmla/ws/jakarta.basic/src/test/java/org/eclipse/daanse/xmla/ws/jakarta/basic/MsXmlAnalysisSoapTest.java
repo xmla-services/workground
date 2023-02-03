@@ -152,7 +152,7 @@ public class MsXmlAnalysisSoapTest {
 
         XmlAssert xmlAssert = XMLUtil.createAssert(response);
         xmlAssert.hasXPath("/SOAP:Envelope");
-        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/msxmla:return/rowset:root")
+        xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:DiscoverResponse/return/rowset:root")
                 .exist();
 
     }

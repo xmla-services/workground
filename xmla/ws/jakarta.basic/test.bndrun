@@ -76,7 +76,8 @@ port                              :   17290
 	org.eclipse.daanse.xmla.model.record;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.ws.jakarta.basic;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.ws.jakarta.basic-tests;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.xmla.ws.jakarta.model;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.xmla.ws.jakarta.model.xmla;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.xmla.ws.jakarta.model.xsd;version='[0.0.1,0.0.2)',\
 	org.glassfish.external.management-api;version='[3.2.3,3.2.4)',\
 	org.glassfish.gmbal.gmbal-api-only;version='[4.0.3,4.0.4)',\
 	org.glassfish.ha.ha-api;version='[3.1.13,3.1.14)',\

@@ -16,7 +16,6 @@ package org.eclipse.daanse.xmla.ws.jakarta.basic;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.HashMap;
@@ -34,7 +33,6 @@ import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xmlunit.assertj3.XmlAssert;
 
-import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 
 public class XMLUtil {

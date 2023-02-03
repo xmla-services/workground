@@ -20,6 +20,12 @@
       <version>${revision}</version>
     </dependency>
     <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.xmla.ws.jakarta.model.xsd</artifactId>
+      <version>${revision}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
       <groupId>jakarta.annotation</groupId>
       <artifactId>jakarta.annotation-api</artifactId>
     </dependency>
@@ -34,13 +40,15 @@
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.xmla.ws.jakarta.model</artifactId>
+      <artifactId>org.eclipse.daanse.xmla.ws.jakarta.model.xmla</artifactId>
       <version>${revision}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.ws.api</artifactId>
       <version>${revision}</version>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>

@@ -20,12 +20,9 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "schema", "returnValue" })
+@XmlType(name = "", propOrder = { "returnValue" })
 @XmlRootElement(name = "DiscoverResponse")
 public class DiscoverResponse {
-	
-	@XmlElement(name = "schema", required = false, namespace = "http://www.w3.org/2001/XMLSchema")
-	protected org.w3._2001.xmlschema.Schema schema;
 
     @XmlElement(name = "return", required = true, namespace = "")
     protected Return returnValue;
@@ -37,10 +34,5 @@ public class DiscoverResponse {
     public void setReturn(Return value) {
         this.returnValue = value;
     }
-    
-    public void setSchema(org.w3._2001.xmlschema.Schema schema) {
-    	this.schema = schema;
-	}
-    
 
 }
