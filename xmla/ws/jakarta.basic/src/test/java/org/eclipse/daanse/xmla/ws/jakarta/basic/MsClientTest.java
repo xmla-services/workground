@@ -81,7 +81,7 @@ public class MsClientTest {
 
         // call test
 
-        Process process = callByMsClient("schema", "MDSCHEMA_PROPERTIES");
+        Process process = callByMsClient("schema", "DISCOVER_PROPERTIES");
 //        Process process = callByMsClient("schema", "MDSCHEMA_CUBES");
 
         byte[] errors = process.getErrorStream()
