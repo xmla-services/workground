@@ -159,6 +159,11 @@ public class Convert {
 
         DiscoverResponse responseWs = new DiscoverResponse();
 
+        try {
+            Schemautil.getSchema(DiscoverPropertiesResponseRowXml.class);
+        } catch (Exception e) {
+
+        }
         Return r = new Return();
         Rowset rs = new Rowset();
         rs.setRow(rows);
