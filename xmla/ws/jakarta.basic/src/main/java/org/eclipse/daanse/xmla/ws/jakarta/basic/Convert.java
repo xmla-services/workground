@@ -13,6 +13,7 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -80,6 +81,9 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Return;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.DiscoverPropertiesResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Rowset;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xsd.Schema;
+
+import jakarta.xml.bind.JAXBException;
 
 public class Convert {
     private static Optional<Integer> localeIdentifier(Discover requestWs) {
@@ -151,7 +155,8 @@ public class Convert {
 
     }
 
-    public static DiscoverResponse toDiscoverProperties(List<DiscoverPropertiesResponseRow> responseApi) {
+    public static DiscoverResponse toDiscoverProperties(List<DiscoverPropertiesResponseRow> responseApi)
+            throws JAXBException, IOException {
 
         List<Row> rows = responseApi.stream()
                 .map(Convert::convertDiscoverPropertiesResponseRow)
@@ -159,13 +164,13 @@ public class Convert {
 
         DiscoverResponse responseWs = new DiscoverResponse();
 
-        try {
-            Schemautil.getSchema(DiscoverPropertiesResponseRowXml.class);
-        } catch (Exception e) {
+        Schema schema = SchemaUtil.generateSchema("urn:schemas-microsoft-com:xml-analysis:rowset",
+                DiscoverPropertiesResponseRowXml.class);
 
-        }
         Return r = new Return();
+
         Rowset rs = new Rowset();
+        rs.setSchema(schema);
         rs.setRow(rows);
         r.setValue(rs);
         responseWs.setReturn(r);

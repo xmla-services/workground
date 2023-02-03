@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_exception.Exception;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_exception.Messages;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xsd.Schema;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
@@ -26,17 +27,25 @@ import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "rowset", propOrder = { "row", "exception", "messages" })
+@XmlType(name = "rowset", propOrder = { "schema", "row", "exception", "messages" })
 @XmlRootElement(name = "root")
 public class Rowset implements Serializable {
 
     private final static long serialVersionUID = 1L;
+    @XmlElement(name = "schema", required = false, namespace = "http://www.w3.org/2001/XMLSchema")
+    protected Schema schema;
+    
 
+    
     protected List<Row> row;
     @XmlElement(name = "Exception")
     protected Exception exception;
     @XmlElement(name = "Messages")
     protected Messages messages;
+
+    public void setSchema(Schema schema) {
+        this.schema = schema;
+    }
 
     public List<Row> getRow() {
         return row;

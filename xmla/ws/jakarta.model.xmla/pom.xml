@@ -18,7 +18,7 @@
 		<version>${revision}</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<artifactId>org.eclipse.daanse.xmla.ws.jakarta.model</artifactId>
+	<artifactId>org.eclipse.daanse.xmla.ws.jakarta.model.xmla</artifactId>
 	<dependencies>
 		<dependency>
 			<groupId>org.osgi</groupId>
@@ -30,8 +30,9 @@
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.daanse</groupId>
-			<artifactId>org.eclipse.daanse.xmla.model.xsd</artifactId>
+			<artifactId>org.eclipse.daanse.xmla.ws.jakarta.model.xsd</artifactId>
 			<version>${revision}</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.xml.bind</groupId>

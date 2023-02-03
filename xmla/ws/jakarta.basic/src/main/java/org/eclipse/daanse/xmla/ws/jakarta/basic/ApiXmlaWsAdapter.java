@@ -13,6 +13,7 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.eclipse.daanse.xmla.api.XmlaService;
@@ -48,6 +49,7 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Execute;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ExecuteResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Session;
 
+import jakarta.xml.bind.JAXBException;
 import jakarta.xml.ws.Holder;
 
 public class ApiXmlaWsAdapter implements WsAdapter {
@@ -84,20 +86,25 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         }
         DiscoverResponse discoverResponse = null;
 
-        switch (discover.getRequestType()) {
-        case MDSCHEMA_FUNCTIONS -> discoverResponse = handleDiscoverMdSchemaFunctions(discover);
-        case MDSCHEMA_DIMENSIONS -> discoverResponse = handleDiscoverMdSchemaDimensions(discover);
-        case MDSCHEMA_CUBES -> discoverResponse = handleDiscoverMdSchemaCubes(discover);
-        case MDSCHEMA_ACTIONS -> discoverResponse = handleDiscoverMdSchemaActions(discover);
-        case DBSCHEMA_TABLES -> discoverResponse = handleDiscoverDbSchemaTables(discover);
-        case DISCOVER_LITERALS -> discoverResponse = handleDiscoverLiterals(discover);
-        case DISCOVER_KEYWORDS -> discoverResponse = handleDiscoverKeywords(discover);
-        case DISCOVER_ENUMERATORS -> discoverResponse = handleDiscoverEnumerators(discover);
-        case DISCOVER_SCHEMA_ROWSETS -> discoverResponse = handleDiscoverSchemaRowsets(discover);
-        case DISCOVER_PROPERTIES -> discoverResponse = handleDiscoverProperties(discover);
-        case DBSCHEMA_CATALOGS -> discoverResponse = handleDbSchemaCatalogs(discover);
-        default -> throw new IllegalArgumentException("Unexpected value: " + discover.getRequestType());
+        try {
 
+            switch (discover.getRequestType()) {
+            case MDSCHEMA_FUNCTIONS -> discoverResponse = handleDiscoverMdSchemaFunctions(discover);
+            case MDSCHEMA_DIMENSIONS -> discoverResponse = handleDiscoverMdSchemaDimensions(discover);
+            case MDSCHEMA_CUBES -> discoverResponse = handleDiscoverMdSchemaCubes(discover);
+            case MDSCHEMA_ACTIONS -> discoverResponse = handleDiscoverMdSchemaActions(discover);
+            case DBSCHEMA_TABLES -> discoverResponse = handleDiscoverDbSchemaTables(discover);
+            case DISCOVER_LITERALS -> discoverResponse = handleDiscoverLiterals(discover);
+            case DISCOVER_KEYWORDS -> discoverResponse = handleDiscoverKeywords(discover);
+            case DISCOVER_ENUMERATORS -> discoverResponse = handleDiscoverEnumerators(discover);
+            case DISCOVER_SCHEMA_ROWSETS -> discoverResponse = handleDiscoverSchemaRowsets(discover);
+            case DISCOVER_PROPERTIES -> discoverResponse = handleDiscoverProperties(discover);
+            case DBSCHEMA_CATALOGS -> discoverResponse = handleDbSchemaCatalogs(discover);
+            default -> throw new IllegalArgumentException("Unexpected value: " + discover.getRequestType());
+
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return discoverResponse;
     }
@@ -116,7 +123,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         return responseWs;
     }
 
-    private DiscoverResponse handleDiscoverProperties(Discover requestWs) {
+    private DiscoverResponse handleDiscoverProperties(Discover requestWs) throws JAXBException, IOException {
 
         DiscoverPropertiesRequest requestApi = Convert.fromDiscoverProperties(requestWs);
         List<DiscoverPropertiesResponseRow> responseApi = xmlaService.discoverProperties(requestApi);

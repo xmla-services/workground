@@ -13,6 +13,17 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.daanse.xmla.api.common.properties.Content.SchemaData;
+import static org.eclipse.daanse.xmla.api.common.properties.Format.Tabular;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.TimeUnit;
+
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.discover.dbschematables.DiscoverDbSchemaTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRequest;
@@ -38,17 +49,6 @@ import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.xmla.api.common.properties.Content.SchemaData;
-import static org.eclipse.daanse.xmla.api.common.properties.Format.Tabular;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(ConfigurationExtension.class)
 @WithFactoryConfiguration(factoryPid = Constants.PID_MS_SOAP, name = "test-ms-config", location = "?", properties = {
