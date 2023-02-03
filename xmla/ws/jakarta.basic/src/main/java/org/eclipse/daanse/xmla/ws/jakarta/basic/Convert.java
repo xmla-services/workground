@@ -74,13 +74,13 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschemademensions.Discover
 import org.eclipse.daanse.xmla.model.record.discover.mdschemademensions.DiscoverMdSchemaDimensionsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschemafunctions.DiscoverMdSchemaFunctionsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschemafunctions.DiscoverMdSchemaFunctionsRestrictionsR;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.PropertyList;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Return;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.DiscoverPropertiesResponseRowXml;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Row;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Rowset;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PropertyList;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Return;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.DiscoverPropertiesResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Rowset;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xsd.Schema;
 
 import jakarta.xml.bind.JAXBException;

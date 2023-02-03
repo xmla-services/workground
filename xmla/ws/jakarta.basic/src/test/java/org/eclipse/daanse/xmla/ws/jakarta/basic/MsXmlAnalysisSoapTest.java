@@ -22,12 +22,12 @@ import static org.mockito.Mockito.verify;
 import java.util.List;
 import java.util.Optional;
 
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Return;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.DiscoverPropertiesResponseRowXml;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Row;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla_rowset.Rowset;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Return;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.DiscoverPropertiesResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Rowset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

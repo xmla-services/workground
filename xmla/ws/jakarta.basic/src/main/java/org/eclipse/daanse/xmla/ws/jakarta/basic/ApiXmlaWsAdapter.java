@@ -39,15 +39,15 @@ import org.eclipse.daanse.xmla.api.discover.mdschemafunctions.DiscoverMdSchemaFu
 import org.eclipse.daanse.xmla.api.discover.mdschemafunctions.DiscoverMdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
-import org.eclipse.daanse.xmla.ws.jakarta.model.ext.Authenticate;
-import org.eclipse.daanse.xmla.ws.jakarta.model.ext.AuthenticateResponse;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.BeginSession;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Discover;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.DiscoverResponse;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.EndSession;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Execute;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ExecuteResponse;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.Session;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ext.Authenticate;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ext.AuthenticateResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.BeginSession;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.EndSession;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Execute;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ExecuteResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Session;
 
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.ws.Holder;
