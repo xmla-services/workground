@@ -34,7 +34,7 @@ public class TestSchemaGen {
 		rowset.setRow(List.of(props));
 		ret.setValue(rowset);
 		System.out.println("========[ GEN SCHEMA ]=============");
-		Schema generateSchema = generateSchema(DiscoverPropertiesResponseRowXml.class, Schema.class);
+		Schema generateSchema = generateSchema(DiscoverPropertiesResponseRowXml.class);
 		response.setSchema(generateSchema);
 		System.out.println("=========[ DiscoverResponse ]============");
 		JAXBContext context = JAXBContext.newInstance(DiscoverResponse.class, Return.class, Rowset.class,
@@ -45,10 +45,11 @@ public class TestSchemaGen {
 	}
 	
 	public static final Schema generateSchema(Class<?> ...classes) throws JAXBException, IOException {
-		JAXBContext context = JAXBContext.newInstance(classes);
-		JaxBSchemaOutputResolver resolver = new JaxBSchemaOutputResolver(context);
-		context.generateSchema(resolver);
-		Marshaller marshaller = context.createMarshaller();
+		JAXBContext applicationContext = JAXBContext.newInstance(classes);
+		JAXBContext schemaContext = JAXBContext.newInstance(Schema.class);
+		JaxBSchemaOutputResolver resolver = new JaxBSchemaOutputResolver(schemaContext);
+		applicationContext.generateSchema(resolver);
+		Marshaller marshaller = schemaContext.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		Schema result = (Schema) resolver.schemas.get("urn:schemas-microsoft-com:xml-analysis:rowset").getResult();
 		marshaller.marshal(result, System.out);
