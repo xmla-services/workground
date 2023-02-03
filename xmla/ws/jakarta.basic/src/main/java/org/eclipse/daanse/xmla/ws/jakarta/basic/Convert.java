@@ -185,7 +185,7 @@ public class Convert {
         apiRow.value()
                 .ifPresent(row::setValue);
 
-        return new Row();
+        return (Row) row;
     }
 
     public static DiscoverDbSchemaCatalogsRequest fromDiscoverDbSchemaCatalogs(Discover requestWs) {
@@ -276,7 +276,7 @@ public class Convert {
     }
 
     public static DiscoverResponse toDiscoverLiterals(List<DiscoverLiteralsResponseRow> responseApi) {
-        //TODO
+        // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;
     }
@@ -296,11 +296,11 @@ public class Convert {
         String tableType = map.get(DiscoverDbSchemaTablesRestrictions.RESTRICTIONS_TABLE_TYPE);
 
         return new DiscoverDbSchemaTablesRestrictionsR(Optional.ofNullable(tableCatalog),
-            Optional.ofNullable(tableSchema), Optional.ofNullable(tableName), Optional.ofNullable(tableType));
+                Optional.ofNullable(tableSchema), Optional.ofNullable(tableName), Optional.ofNullable(tableType));
     }
 
     public static DiscoverResponse toDiscoverDbSchemaTables(List<DiscoverDbSchemaTablesResponseRow> responseApi) {
-        //TODO
+        // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;
     }
@@ -324,14 +324,13 @@ public class Convert {
         String invocation = map.get(DiscoverMdSchemaActionsRestrictions.RESTRICTIONS_INVOCATION);
 
         return new DiscoverMdSchemaActionsRestrictionsR(Optional.ofNullable(catalogName),
-            Optional.ofNullable(schemaName), cubeName, Optional.ofNullable(actionName),
-            Optional.ofNullable(Integer.decode(actionType)), Optional.ofNullable(coordinate),
-            Integer.valueOf(coordinateType),
-            Integer.valueOf(invocation));
+                Optional.ofNullable(schemaName), cubeName, Optional.ofNullable(actionName),
+                Optional.ofNullable(Integer.decode(actionType)), Optional.ofNullable(coordinate),
+                Integer.valueOf(coordinateType), Integer.valueOf(invocation));
     }
 
     public static DiscoverResponse toDiscoverMdSchemaActions(List<DiscoverMdSchemaActionsResponseRow> responseApi) {
-        //TODO
+        // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;
     }
@@ -350,13 +349,12 @@ public class Convert {
         String baseCubeName = map.get(DiscoverMdSchemaCubesRestrictions.RESTRICTIONS_BASE_CUBE_NAME);
         String cubeSource = map.get(DiscoverMdSchemaCubesRestrictions.RESTRICTIONS_CUBE_SOURCE);
 
-        return new DiscoverMdSchemaCubesRestrictionsR(Optional.ofNullable(schemaName),
-            Optional.ofNullable(cubeName), Optional.ofNullable(baseCubeName),
-            Optional.ofNullable(Integer.decode(cubeSource)));
+        return new DiscoverMdSchemaCubesRestrictionsR(Optional.ofNullable(schemaName), Optional.ofNullable(cubeName),
+                Optional.ofNullable(baseCubeName), Optional.ofNullable(Integer.decode(cubeSource)));
     }
 
     public static DiscoverResponse toDiscoverMdSchemaCubes(List<DiscoverMdSchemaCubesResponseRow> responseApi) {
-        //TODO
+        // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;
     }
@@ -377,13 +375,13 @@ public class Convert {
         String dimensionUniqueName = map.get(DiscoverMdSchemaDimensionsRestrictions.RESTRICTIONS_DIMENSION_UNIQUE_NAME);
 
         return new DiscoverMdSchemaDimensionsRestrictionsR(Optional.ofNullable(catalogName),
-            Optional.ofNullable(schemaName),
-            Optional.ofNullable(cubeName), Optional.ofNullable(dimensionName),
-            Optional.ofNullable(dimensionUniqueName));
+                Optional.ofNullable(schemaName), Optional.ofNullable(cubeName), Optional.ofNullable(dimensionName),
+                Optional.ofNullable(dimensionUniqueName));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaDimensions(List<DiscoverMdSchemaDimensionsResponseRow> responseApi) {
-        //TODO
+    public static DiscoverResponse toDiscoverMdSchemaDimensions(
+            List<DiscoverMdSchemaDimensionsResponseRow> responseApi) {
+        // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;
     }
@@ -402,12 +400,11 @@ public class Convert {
         String libraryName = map.get(DiscoverMdSchemaFunctionsRestrictions.RESTRICTIONS_LIBRARY_NAME);
 
         return new DiscoverMdSchemaFunctionsRestrictionsR(Optional.ofNullable(Integer.valueOf(origin)),
-            Optional.ofNullable(interfaceName),
-            Optional.ofNullable(libraryName));
+                Optional.ofNullable(interfaceName), Optional.ofNullable(libraryName));
     }
 
     public static DiscoverResponse toDiscoverMdSchemaFunctions(List<DiscoverMdSchemaFunctionsResponseRow> responseApi) {
-        //TODO
+        // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;
     }

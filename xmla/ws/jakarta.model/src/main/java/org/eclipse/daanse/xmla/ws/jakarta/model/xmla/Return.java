@@ -25,13 +25,13 @@ import jakarta.xml.bind.annotation.XmlElementRefs;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "return", propOrder = { "value" })
+@XmlType(name = "return", propOrder = { "value" }, namespace = "")
 public class Return {
 
-    @XmlElementRefs({ @XmlElementRef(name = "root", type = Mddataset.class,namespace = "" ,required = false),
-            @XmlElementRef(name = "root", type = Rowset.class,namespace = "", required = false),
-            @XmlElementRef(name = "root", type = Emptyresult.class,namespace = "", required = false),
-            @XmlElementRef(name = "results", type = Results.class,namespace = "", required = false) })
+    @XmlElementRefs({ @XmlElementRef(name = "root", type = Mddataset.class, namespace = "", required = false),
+            @XmlElementRef(name = "root", type = Rowset.class, namespace = "", required = false),
+            @XmlElementRef(name = "root", type = Emptyresult.class, namespace = "", required = false),
+            @XmlElementRef(name = "results", type = Results.class, namespace = "", required = false) })
     protected java.lang.Object value;
 
     public java.lang.Object getValue() {
