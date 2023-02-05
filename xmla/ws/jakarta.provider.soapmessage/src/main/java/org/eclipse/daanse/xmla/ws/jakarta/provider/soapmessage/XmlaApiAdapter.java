@@ -13,11 +13,8 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage;
 
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesRequest;
@@ -28,14 +25,14 @@ import org.eclipse.daanse.xmla.model.record.discover.discover.properties.Discove
 
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPBody;
-import jakarta.xml.soap.SOAPBodyElement;
+import jakarta.xml.soap.SOAPElement;
 import jakarta.xml.soap.SOAPEnvelope;
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
 
 public class XmlaApiAdapter {
 
-    XmlaService xmlaService;
+    public XmlaService xmlaService;
 
     public XmlaApiAdapter(XmlaService xmlaService) {
         this.xmlaService = xmlaService;
@@ -43,29 +40,85 @@ public class XmlaApiAdapter {
 
     private static final String DISCOVER_PROPERTIES = "DISCOVER_PROPERTIES";
 
-    public SOAPMessage handleRequest(SOAPMessage message) throws SOAPException {
-
-        handleDiscoverRequest(message.getSOAPBody());
+    public SOAPMessage handleRequest(SOAPMessage message) {
+        try {
+            SOAPEnvelope envelope = message.getSOAPPart()
+                    .getEnvelope();
+            handleBody(message.getSOAPBody());
+        } catch (SOAPException e) {
+            e.printStackTrace();
+        }
 
         return null;
 
     }
 
-    private SOAPBody handleDiscoverRequest(SOAPBody body) {
-        String requestType = null;
-        PropertiesR properties = null;
-        Node restriction = null;
+    private SOAPBody handleBody(SOAPBody body) {
+        SOAPElement node = null;
 
         Iterator<Node> nodeIterator = body.getChildElements();
         while (nodeIterator.hasNext()) {
+            Node nodeN = nodeIterator.next();
+            if (nodeN instanceof SOAPElement) {
+                node = (SOAPElement) nodeN;
+                break;
+            }
+        }
+        printNode(node);
 
-            Node node = nodeIterator.next();
+        if (Constants.QNAME_MSXMLA_DISCOVER.equals(node.getElementQName())) {
 
-            String name = node.getNodeName();
+            return discover(node);
+
+        }
+        if (Constants.QNAME_MSXMLA_EXECUTE.equals(node.getElementQName())) {
+
         }
 
-        return discover(requestType, properties, restriction);
+        return body;
 
+    }
+
+    private SOAPBody discover(SOAPElement discover) {
+
+        String requestType = null;
+        PropertiesR properties = null;
+        SOAPElement restictions = null;
+
+        Iterator<Node> nodeIterator = discover.getChildElements();
+        while (nodeIterator.hasNext()) {
+            Node node = nodeIterator.next();
+            if (node instanceof SOAPElement) {
+                SOAPElement element = (SOAPElement) node;
+                if (requestType == null && Constants.QNAME_MSXMLA_REQUESTTYPE.equals(element.getElementQName())) {
+                    requestType = element.getTextContent();
+                    continue;
+                }
+                if (restictions == null && Constants.QNAME_MSXMLA_RESTRICTIONS.equals(element.getElementQName())) {
+                    restictions = element;
+                    continue;
+                }
+                if (properties == null && Constants.QNAME_MSXMLA_PROPERTIES.equals(element.getElementQName())) {
+                    properties = Convert.toProperties(element);
+                    continue;
+                }
+            }
+        }
+
+        return discover(requestType, properties, restictions);
+    }
+
+    private void printNode(SOAPElement node) {
+        System.out.println(node.getNamespaceURI());
+        System.out.println(node.getBaseURI());
+        System.out.println(node.getPrefix());
+        System.out.println(node.getNodeName());
+        System.out.println(node.getLocalName());
+        System.out.println(node.getNodeValue());
+        System.out.println(node.getTextContent());
+        System.out.println(node.getValue());
+
+        System.out.println(node.getElementQName());
     }
 
     private PropertiesR properties(Node restriction) {
@@ -73,61 +126,27 @@ public class XmlaApiAdapter {
         return properties;
     }
 
-    private SOAPBody discover(String requestType, PropertiesR properties, Node restriction) {
+    private SOAPBody discover(String requestType, PropertiesR properties, SOAPElement restrictionElement) {
 
         SOAPBody discoverResponse = null;
 
         switch (requestType) {
-        case DISCOVER_PROPERTIES -> discoverResponse = handleDiscoverProperties(properties, restriction);
+        case DISCOVER_PROPERTIES -> discoverResponse = handleDiscoverProperties(properties, restrictionElement);
         default -> throw new IllegalArgumentException("Unexpected value: " + requestType);
 
         }
         return discoverResponse;
     }
 
-    private SOAPBody handleDiscoverProperties(PropertiesR propertiesR, Node restrictionNode) {
+    private SOAPBody handleDiscoverProperties(PropertiesR propertiesR, SOAPElement restrictionElement) {
 
-        DiscoverPropertiesRestrictionsR restrictionsR = Convert.discoverPropertiesRestrictions(restrictionNode);
+        DiscoverPropertiesRestrictionsR restrictionsR = Convert.discoverPropertiesRestrictions(restrictionElement);
         DiscoverPropertiesRequest request = new DiscoverPropertiesRequestR(propertiesR, restrictionsR);
-        List<DiscoverPropertiesResponseRow> rows = xmlaService.discover().discoverProperties(request);
+        List<DiscoverPropertiesResponseRow> rows = xmlaService.discover()
+                .discoverProperties(request);
         SOAPBody responseWs = Convert.toDiscoverProperties(rows);
 
         return responseWs;
     }
 
-    private static final String HTTP_SCHEMAS_XMLSOAP_ORG_SOAP_ENVELOPE = "http://schemas.xmlsoap.org/soap/envelope";
-
-    
-    public static HashMap<String, String> documentFromSoapBody(SOAPMessage soapMessage)
-            throws ParserConfigurationException, SOAPException {
-        SOAPEnvelope env = soapMessage.getSOAPPart()
-                .getEnvelope();
-        SOAPBodyElement body = (SOAPBodyElement) soapMessage.getSOAPBody()
-                .getChildNodes()
-                .item(0);
-        return getNamespaceDeclarations(env, body);
-    }
-
-    private static HashMap<String, String> getNamespaceDeclarations(SOAPEnvelope env, SOAPBodyElement body) {
-        HashMap<String, String> nsMap = new HashMap<String, String>();
-        @SuppressWarnings("rawtypes")
-        Iterator nsPrefixIterator = env.getNamespacePrefixes();
-        // all ns declarations from <SOAP-ENV>
-        while (nsPrefixIterator.hasNext()) {
-            String prefix = (String) nsPrefixIterator.next();
-            String nsUri = env.getNamespaceURI(prefix);
-            // filter SOAP-ENV ns
-            if (!nsUri.startsWith(HTTP_SCHEMAS_XMLSOAP_ORG_SOAP_ENVELOPE)) {
-                nsMap.put(prefix, nsUri);
-            }
-        }
-        // ns declarations from <SOAP-BODY>
-        nsPrefixIterator = body.getNamespacePrefixes();
-        while (nsPrefixIterator.hasNext()) {
-            String prefix = (String) nsPrefixIterator.next();
-            String nsUri = env.getNamespaceURI(prefix);
-            nsMap.put(prefix, nsUri);
-        }
-        return nsMap;
-    }
 }

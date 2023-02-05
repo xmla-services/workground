@@ -13,13 +13,8 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map.Entry;
