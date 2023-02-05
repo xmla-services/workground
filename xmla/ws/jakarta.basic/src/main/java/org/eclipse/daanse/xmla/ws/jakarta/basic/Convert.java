@@ -144,18 +144,18 @@ public class Convert {
     }
 
     private static PropertiesR discoverProperties(Discover requestWs) {
-        PropertiesR propertiesMap = new PropertiesR();
-        propertiesMap.setLocaleIdentifier(localeIdentifier(requestWs));
-        propertiesMap.setContent(content(requestWs));
-        propertiesMap.setFormat(format(requestWs));
-        propertiesMap.setDataSourceInfo(dataSourceInfo(requestWs));
-        propertiesMap.setCatalog(catalog(requestWs));
-        propertiesMap.setLocaleIdentifier(localeIdentifier(requestWs));
+        PropertiesR properties = new PropertiesR();
+        properties.setLocaleIdentifier(localeIdentifier(requestWs));
+        properties.setContent(content(requestWs));
+        properties.setFormat(format(requestWs));
+        properties.setDataSourceInfo(dataSourceInfo(requestWs));
+        properties.setCatalog(catalog(requestWs));
+        properties.setLocaleIdentifier(localeIdentifier(requestWs));
 
-        return propertiesMap;
+        return properties;
     }
 
-    private static DiscoverPropertiesRestrictionsR discoverPropertiesMapestrictions(Discover requestWs) {
+    private static DiscoverPropertiesRestrictionsR discoverPropertiesRestrictions(Discover requestWs) {
         Map<String, String> map = restrictionsMap(requestWs);
 
         String propertyName = map.get(DiscoverPropertiesRestrictions.RESTRICTIONS_PROPERTY_NAME);
@@ -167,7 +167,7 @@ public class Convert {
 
         System.out.println(requestWs);
         PropertiesR properties = discoverProperties(requestWs);
-        DiscoverPropertiesRestrictionsR restrictions = discoverPropertiesMapestrictions(requestWs);
+        DiscoverPropertiesRestrictionsR restrictions = discoverPropertiesRestrictions(requestWs);
 
         return new DiscoverPropertiesRequestR(properties, restrictions);
 
