@@ -11,7 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.ws.jakarta.basic;
+package org.eclipse.daanse.xmla.ws.tck;
 
 import static org.mockito.Mockito.mock;
 
@@ -23,7 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
-import org.osgi.service.component.runtime.ServiceComponentRuntime;
 import org.osgi.test.common.annotation.InjectBundleContext;
 import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.common.annotation.Property;
@@ -32,9 +31,6 @@ import org.osgi.test.junit5.cm.ConfigurationExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import aQute.bnd.annotation.service.ServiceCapability;
-
-@ServiceCapability(WsAdapter.class)
 @ExtendWith(ConfigurationExtension.class)
 @WithFactoryConfiguration(factoryPid = Constants.PID_MS_SOAP, name = "test-ms-config", location = "?", properties = {
         @Property(key = "xmlaService.target", value = "(" + Constants.XMLASERVICE_FILTER_KEY + "="
@@ -52,8 +48,7 @@ public class AuthRequestTest {
     @InjectBundleContext
     BundleContext bc;
 
-    @InjectService
-    ServiceComponentRuntime componentRuntime;
+
 
     @BeforeEach
     void beforaEach() {

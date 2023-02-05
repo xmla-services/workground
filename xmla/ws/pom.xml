@@ -24,5 +24,6 @@
     <module>jakarta.model.xmla</module>
     <module>jakarta.basic</module>
     <module>jakarta.provider.soapmessage</module>
+    <module>tck</module>
   </modules>
 </project>

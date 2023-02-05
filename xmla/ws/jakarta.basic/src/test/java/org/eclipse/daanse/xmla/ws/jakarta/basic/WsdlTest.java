@@ -26,6 +26,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.xmla.api.XmlaService;
+import org.eclipse.daanse.xmla.ws.tck.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

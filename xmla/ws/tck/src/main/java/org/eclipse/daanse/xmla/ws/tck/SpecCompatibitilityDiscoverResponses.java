@@ -1,4 +1,4 @@
-package org.eclipse.daanse.xmla.ws.jakarta.basic;
+package org.eclipse.daanse.xmla.ws.tck;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,7 +6,7 @@ import java.util.Optional;
 import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesResponseRow;
 import org.eclipse.daanse.xmla.model.record.discover.discover.properties.DiscoverPropertiesResponseRowR;
 
-public class SpecCompatibitilityDiscoverTest {
+public class SpecCompatibitilityDiscoverResponses {
 
     
     // 4.3.1 Client Sends Request

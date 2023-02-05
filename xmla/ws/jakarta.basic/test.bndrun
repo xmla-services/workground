@@ -23,7 +23,8 @@ port                              :   17290
 	bnd.identity;id='com.osgifx.console.agent',\
 	bnd.identity;id='org.apache.felix.http.jetty',\
 	bnd.identity;id='org.eclipse.daanse.ws.runtime.httpwhiteboard',\
-	bnd.identity;id='org.eclipse.daanse.ws.handler'
+	bnd.identity;id='org.eclipse.daanse.ws.handler',\
+	bnd.identity;id='org.eclipse.daanse.xmla.ws.tck'
 	
 
 	
@@ -78,6 +79,7 @@ port                              :   17290
 	org.eclipse.daanse.xmla.ws.jakarta.basic-tests;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.ws.jakarta.model.xmla;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.xmla.ws.jakarta.model.xsd;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.xmla.ws.tck;version='[0.0.1,0.0.2)',\
 	org.glassfish.external.management-api;version='[3.2.3,3.2.4)',\
 	org.glassfish.gmbal.gmbal-api-only;version='[4.0.3,4.0.4)',\
 	org.glassfish.ha.ha-api;version='[3.1.13,3.1.14)',\

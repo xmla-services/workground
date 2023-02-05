@@ -4,10 +4,8 @@
     <groupId>org.eclipse.daanse</groupId>
     <artifactId>org.eclipse.daanse.xmla.ws</artifactId>
     <version>${revision}</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
-  <artifactId>org.eclipse.daanse.xmla.ws.jakarta.basic</artifactId>
-
+  <artifactId>org.eclipse.daanse.xmla.ws.tck</artifactId>
   <dependencies>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
@@ -19,65 +17,28 @@
       <artifactId>org.eclipse.daanse.xmla.model.record</artifactId>
       <version>${revision}</version>
     </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.xmla.ws.jakarta.model.xsd</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
-        <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.xmla.ws.tck</artifactId>
-      <version>${revision}</version>
-      <scope>test</scope>
-    </dependency>
+
     <dependency>
       <groupId>jakarta.annotation</groupId>
       <artifactId>jakarta.annotation-api</artifactId>
     </dependency>
-    <dependency>
-      <groupId>biz.aQute.bnd</groupId>
-      <artifactId>biz.aQute.bnd.annotation</artifactId>
-      <version>${bnd.version}</version>
-    </dependency>
+
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.service.servlet</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.xmla.ws.jakarta.model.xmla</artifactId>
-      <version>${revision}</version>
-      <scope>compile</scope>
-    </dependency>
+
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.ws.api</artifactId>
       <version>${revision}</version>
       <scope>compile</scope>
     </dependency>
+
     <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.ws.runtime.registrar</artifactId>
-      <version>${revision}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.ws.handler</artifactId>
-      <version>${revision}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.xml.ws</groupId>
-      <artifactId>jaxws-rt</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.ws.runtime.httpwhiteboard</artifactId>
-      <version>${revision}</version>
-      <scope>test</scope>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.service.component.annotations</artifactId>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>jakarta.servlet</groupId>
@@ -95,17 +56,43 @@
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.service.component.annotations</artifactId>
     </dependency>
+
+    <!-- From test to compile -->
     <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.dto</artifactId>
-      <version>1.0.0</version>
-      <scope>test</scope>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.xmlunit</groupId>
       <artifactId>xmlunit-assertj3</artifactId>
       <version>2.9.0</version>
-      <scope>test</scope>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.test.common</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.test.junit5</artifactId>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.test.junit5.cm</artifactId>
+      <scope>compile</scope>
     </dependency>
 
   </dependencies>
