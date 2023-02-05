@@ -9,6 +9,7 @@ public interface Constants {
     QName QNAME_MSXMLA_RESTRICTIONS = new QName("urn:schemas-microsoft-com:xml-analysis", "Restrictions");
     QName QNAME_MSXMLA_RESTRICTIONLIST = new QName("urn:schemas-microsoft-com:xml-analysis", "RestrictionList");
     QName QNAME_MSXMLA_PROPERTIES = new QName("urn:schemas-microsoft-com:xml-analysis", "Properties");
+    QName QNAME_MSXMLA_PROPERTYLIST = new QName("urn:schemas-microsoft-com:xml-analysis", "PropertyList");
     QName QNAME_MSXMLA_EXECUTE = new QName("urn:schemas-microsoft-com:xml-analysis", "Execute");
 
 }

@@ -99,7 +99,7 @@ public class XmlaApiAdapter {
                     continue;
                 }
                 if (properties == null && Constants.QNAME_MSXMLA_PROPERTIES.equals(element.getElementQName())) {
-                    properties = Convert.toProperties(element);
+                    properties = Convert.propertiestoProperties(element);
                     continue;
                 }
             }
@@ -121,8 +121,8 @@ public class XmlaApiAdapter {
         System.out.println(node.getElementQName());
     }
 
-    private PropertiesR properties(Node restriction) {
-        PropertiesR properties = new PropertiesR(null, null, null, null, null);
+    private PropertiesR properties(SOAPElement propertiesElement) {
+        PropertiesR properties = new PropertiesR();
         return properties;
     }
 

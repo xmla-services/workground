@@ -40,18 +40,18 @@ import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverProperti
 import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchemaRowsetsRestrictions;
-import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesRestrictions;
+import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsRestrictions;
+import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesRestrictions;
 import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsRestrictions;
+import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsRestrictions;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.tables.DbSchemaTablesRequestR;
@@ -128,16 +128,18 @@ public class Convert {
     }
 
     private static PropertiesR discoverProperties(Discover requestWs) {
-        Optional<Integer> localeIdentifier = localeIdentifier(requestWs);
-        Optional<Content> content = content(requestWs);
-        Optional<Format> format = format(requestWs);
-        Optional<String> dataSourceInfo = dataSourceInfo(requestWs);
-        Optional<String> catalog = catalog(requestWs);
+        PropertiesR propertiesMap = new PropertiesR();
+        propertiesMap.setLocaleIdentifier(localeIdentifier(requestWs));
+        propertiesMap.setContent(content(requestWs));
+        propertiesMap.setFormat(format(requestWs));
+        propertiesMap.setDataSourceInfo(dataSourceInfo(requestWs));
+        propertiesMap.setCatalog(catalog(requestWs));
+        propertiesMap.setLocaleIdentifier(localeIdentifier(requestWs));
 
-        return new PropertiesR(localeIdentifier, dataSourceInfo, content, format, catalog);
+        return propertiesMap;
     }
 
-    private static DiscoverPropertiesRestrictionsR discoverPropertiesRestrictions(Discover requestWs) {
+    private static DiscoverPropertiesRestrictionsR discoverPropertiesMapestrictions(Discover requestWs) {
         Map<String, String> map = restrictionsMap(requestWs);
 
         String propertyName = map.get(DiscoverPropertiesRestrictions.RESTRICTIONS_PROPERTY_NAME);
@@ -149,7 +151,7 @@ public class Convert {
 
         System.out.println(requestWs);
         PropertiesR properties = discoverProperties(requestWs);
-        DiscoverPropertiesRestrictionsR restrictions = discoverPropertiesRestrictions(requestWs);
+        DiscoverPropertiesRestrictionsR restrictions = discoverPropertiesMapestrictions(requestWs);
 
         return new DiscoverPropertiesRequestR(properties, restrictions);
 
@@ -305,8 +307,8 @@ public class Convert {
         String tableName = map.get(DbSchemaTablesRestrictions.RESTRICTIONS_TABLE_NAME);
         String tableType = map.get(DbSchemaTablesRestrictions.RESTRICTIONS_TABLE_TYPE);
 
-        return new DbSchemaTablesRestrictionsR(Optional.ofNullable(tableCatalog),
-                Optional.ofNullable(tableSchema), Optional.ofNullable(tableName), Optional.ofNullable(tableType));
+        return new DbSchemaTablesRestrictionsR(Optional.ofNullable(tableCatalog), Optional.ofNullable(tableSchema),
+                Optional.ofNullable(tableName), Optional.ofNullable(tableType));
     }
 
     public static DiscoverResponse toDiscoverDbSchemaTables(List<DbSchemaTablesResponseRow> responseApi) {
@@ -333,10 +335,9 @@ public class Convert {
         String coordinateType = map.get(MdSchemaActionsRestrictions.RESTRICTIONS_COORDINATE_TYPE);
         String invocation = map.get(MdSchemaActionsRestrictions.RESTRICTIONS_INVOCATION);
 
-        return new MdSchemaActionsRestrictionsR(Optional.ofNullable(catalogName),
-                Optional.ofNullable(schemaName), cubeName, Optional.ofNullable(actionName),
-                Optional.ofNullable(Integer.decode(actionType)), Optional.ofNullable(coordinate),
-                Integer.valueOf(coordinateType), Integer.valueOf(invocation));
+        return new MdSchemaActionsRestrictionsR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName),
+                cubeName, Optional.ofNullable(actionName), Optional.ofNullable(Integer.decode(actionType)),
+                Optional.ofNullable(coordinate), Integer.valueOf(coordinateType), Integer.valueOf(invocation));
     }
 
     public static DiscoverResponse toDiscoverMdSchemaActions(List<MdSchemaActionsResponseRow> responseApi) {
@@ -384,13 +385,12 @@ public class Convert {
         String dimensionName = map.get(MdSchemaDimensionsRestrictions.RESTRICTIONS_DIMENSION_NAME);
         String dimensionUniqueName = map.get(MdSchemaDimensionsRestrictions.RESTRICTIONS_DIMENSION_UNIQUE_NAME);
 
-        return new MdSchemaDimensionsRestrictionsR(Optional.ofNullable(catalogName),
-                Optional.ofNullable(schemaName), Optional.ofNullable(cubeName), Optional.ofNullable(dimensionName),
+        return new MdSchemaDimensionsRestrictionsR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName),
+                Optional.ofNullable(cubeName), Optional.ofNullable(dimensionName),
                 Optional.ofNullable(dimensionUniqueName));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaDimensions(
-            List<MdSchemaDimensionsResponseRow> responseApi) {
+    public static DiscoverResponse toDiscoverMdSchemaDimensions(List<MdSchemaDimensionsResponseRow> responseApi) {
         // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;
