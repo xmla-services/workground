@@ -11,15 +11,12 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.api;
+package org.eclipse.daanse.xmla.api.discover.discover.properties;
 
-import org.eclipse.daanse.xmla.api.discover.DiscoverService;
-import org.eclipse.daanse.xmla.api.execute.ExecuteService;
+import java.util.Optional;
 
-public interface XmlaService {
+public interface DiscoverPropertiesRestrictions {
+    public static final String RESTRICTIONS_PROPERTY_NAME = "PropertyName";
 
-    
-    DiscoverService discover();
-  
-    ExecuteService execute();
+    Optional<String> propertyName();
 }

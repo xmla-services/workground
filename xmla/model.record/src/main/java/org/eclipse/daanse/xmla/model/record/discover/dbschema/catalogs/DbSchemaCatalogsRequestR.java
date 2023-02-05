@@ -11,15 +11,10 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.api;
+package org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs;
 
-import org.eclipse.daanse.xmla.api.discover.DiscoverService;
-import org.eclipse.daanse.xmla.api.execute.ExecuteService;
+import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 
-public interface XmlaService {
+public record DbSchemaCatalogsRequestR() implements DbSchemaCatalogsRequest {
 
-    
-    DiscoverService discover();
-  
-    ExecuteService execute();
 }

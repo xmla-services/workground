@@ -20,11 +20,11 @@ import java.util.List;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.daanse.xmla.api.XmlaService;
-import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesRequest;
-import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesRequest;
+import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesResponseRow;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
-import org.eclipse.daanse.xmla.model.record.discover.discoverproperties.DiscoverPropertiesRequestR;
-import org.eclipse.daanse.xmla.model.record.discover.discoverproperties.DiscoverPropertiesRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.discover.properties.DiscoverPropertiesRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.discover.properties.DiscoverPropertiesRestrictionsR;
 
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPBody;
@@ -89,7 +89,7 @@ public class XmlaApiAdapter {
 
         DiscoverPropertiesRestrictionsR restrictionsR = Convert.discoverPropertiesRestrictions(restrictionNode);
         DiscoverPropertiesRequest request = new DiscoverPropertiesRequestR(propertiesR, restrictionsR);
-        List<DiscoverPropertiesResponseRow> rows = xmlaService.discoverProperties(request);
+        List<DiscoverPropertiesResponseRow> rows = xmlaService.discover().discoverProperties(request);
         SOAPBody responseWs = Convert.toDiscoverProperties(rows);
 
         return responseWs;

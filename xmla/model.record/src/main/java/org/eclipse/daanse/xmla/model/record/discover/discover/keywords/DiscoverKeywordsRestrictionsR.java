@@ -11,15 +11,12 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.api;
+package org.eclipse.daanse.xmla.model.record.discover.discover.keywords;
 
-import org.eclipse.daanse.xmla.api.discover.DiscoverService;
-import org.eclipse.daanse.xmla.api.execute.ExecuteService;
+import java.util.Optional;
 
-public interface XmlaService {
+import org.eclipse.daanse.xmla.api.discover.discover.keywords.DiscoverKeywordsRestrictions;
 
-    
-    DiscoverService discover();
-  
-    ExecuteService execute();
+public record DiscoverKeywordsRestrictionsR(Optional<String> keyword) implements DiscoverKeywordsRestrictions {
+
 }
