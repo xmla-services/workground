@@ -16,7 +16,9 @@ package org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage;
 import java.io.IOException;
 
 import org.eclipse.daanse.ws.api.whiteboard.annotations.RequireSoapWhiteboard;
+import org.eclipse.daanse.ws.api.whiteboard.prototypes.SOAPWhiteboardEndpoint;
 import org.eclipse.daanse.xmla.api.XmlaService;
+import org.eclipse.daanse.xmla.ws.tck.SOAPUtil;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -44,6 +46,7 @@ import jakarta.xml.ws.soap.SOAPFaultException;
 @Component(service = Provider.class, name = "org.eclipse.daanse.msxmlanalysisservice")
 @RequireSoapWhiteboard
 @Designate(factory = true, ocd = XmlaWebserviceProvider.Config.class)
+@SOAPWhiteboardEndpoint(contextpath = "xmla")
 public class XmlaWebserviceProvider implements Provider<SOAPMessage> {
 
     @ObjectClassDefinition()
@@ -76,9 +79,9 @@ public class XmlaWebserviceProvider implements Provider<SOAPMessage> {
         try {
             request.writeTo(System.out);
             System.out.println();
-            
 
-            
+            System.out.println(SOAPUtil.string(request));
+
             wsAdapter.handleRequest(request);
 
             MessageFactory messageFactory = MessageFactory.newInstance();
