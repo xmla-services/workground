@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.api.common.properties;
 
 import java.util.EnumSet;
+import java.util.Optional;
 import java.util.Set;
 
 public enum PropertyListElementDefinition {
@@ -38,7 +39,6 @@ public enum PropertyListElementDefinition {
     PropertyListElementDefinition(Type type, Set<? extends Enum> enumSet, Access access, String value, boolean discover,
             boolean execute) {
 
-        assert value.indexOf('\r') == -1;
         assert (enumSet != null) == type.isEnum();
         this.type = type;
         this.enumSet = enumSet;
@@ -47,5 +47,8 @@ public enum PropertyListElementDefinition {
         this.discover = discover;
         this.execute = execute;
     }
-
+    
+   public static Optional<PropertyListElementDefinition> byName(String name) {
+        return EnumSet.allOf(PropertyListElementDefinition.class).stream().filter(pd->pd.toString().equalsIgnoreCase(name)).findAny();
+    }
 }

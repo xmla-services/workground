@@ -13,12 +13,12 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage;
 
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-import org.eclipse.daanse.xmla.api.common.properties.Content;
-import org.eclipse.daanse.xmla.api.common.properties.Format;
+import org.eclipse.daanse.xmla.api.common.properties.PropertyListElementDefinition;
 import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesResponseRow;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.properties.DiscoverPropertiesRestrictionsR;
@@ -34,22 +34,40 @@ public class Convert {
         return null;
     }
 
-    public static PropertiesR toProperties(SOAPElement properties) {
-        Integer localeIdentifier;
-        String dataSourceInfo;
-        Content content;
-        Format format;
-        String catalog;
-        Iterator<Node> nodeIterator = properties.getChildElements();
+    public static PropertiesR propertiestoProperties(SOAPElement propertiesElement) {
+
+        Iterator<Node> nodeIterator = propertiesElement.getChildElements();
         while (nodeIterator.hasNext()) {
             Node node = nodeIterator.next();
             if (node instanceof SOAPElement) {
-                SOAPElement element = (SOAPElement) node;
+                SOAPElement propertyList = (SOAPElement) node;
 
+                if (Constants.QNAME_MSXMLA_PROPERTYLIST.equals(propertyList.getElementQName())) {
+
+                    return propertyListToproperties(propertyList);
+                }
+            }
+
+        }
+        return new PropertiesR();
+
+    }
+
+    private static PropertiesR propertyListToproperties(SOAPElement propertyList) {
+        PropertiesR properties = new PropertiesR();
+
+        Iterator<Node> nodeIteratorPropertyList = propertyList.getChildElements();
+        while (nodeIteratorPropertyList.hasNext()) {
+            Node n = nodeIteratorPropertyList.next();
+
+            if (n instanceof SOAPElement) {
+                SOAPElement propertyListElement = (SOAPElement) n;
+                String name = propertyListElement.getLocalName();
+                Optional<PropertyListElementDefinition> opd = PropertyListElementDefinition.byName(name);
+                opd.ifPresent(pd -> properties.addProperty(pd, propertyListElement.getTextContent()));
             }
         }
-        return new PropertiesR(Optional.ofNullable(null), Optional.ofNullable(null), Optional.ofNullable(null),
-                Optional.ofNullable(null), Optional.ofNullable(null));
+        return properties;
     }
 
     public static SOAPBody toDiscoverProperties(List<DiscoverPropertiesResponseRow> rows) {
