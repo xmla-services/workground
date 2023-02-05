@@ -11,15 +11,12 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.api;
+package org.eclipse.daanse.xmla.model.record.discover.discover.schemarowsets;
 
-import org.eclipse.daanse.xmla.api.discover.DiscoverService;
-import org.eclipse.daanse.xmla.api.execute.ExecuteService;
+import java.util.Optional;
 
-public interface XmlaService {
+import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchemaRowsetsRestrictions;
 
-    
-    DiscoverService discover();
-  
-    ExecuteService execute();
+public record DiscoverSchemaRowsetsRestrictionsR(Optional<String> schemaName) implements DiscoverSchemaRowsetsRestrictions {
+
 }

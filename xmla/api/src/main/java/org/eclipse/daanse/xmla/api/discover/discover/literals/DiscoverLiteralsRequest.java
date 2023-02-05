@@ -11,15 +11,14 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.api;
+package org.eclipse.daanse.xmla.api.discover.discover.literals;
 
-import org.eclipse.daanse.xmla.api.discover.DiscoverService;
-import org.eclipse.daanse.xmla.api.execute.ExecuteService;
+import org.eclipse.daanse.xmla.api.discover.Properties;
 
-public interface XmlaService {
+public interface DiscoverLiteralsRequest {
 
-    
-    DiscoverService discover();
-  
-    ExecuteService execute();
+    Properties properties();
+
+    DiscoverLiteralsRestrictions restrictions();
+
 }

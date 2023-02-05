@@ -27,8 +27,9 @@ import java.util.stream.Stream;
 
 import org.assertj.core.api.Assertions;
 import org.eclipse.daanse.xmla.api.XmlaService;
-import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
-import org.eclipse.daanse.xmla.model.record.discover.discoverproperties.DiscoverPropertiesResponseRowR;
+import org.eclipse.daanse.xmla.api.discover.DiscoverService;
+import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesResponseRow;
+import org.eclipse.daanse.xmla.model.record.discover.discover.properties.DiscoverPropertiesResponseRowR;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -61,12 +62,14 @@ public class MsClientTest {
     @BeforeEach
     void beforaEach() throws InterruptedException {
         XmlaService xmlaService = mock(XmlaService.class);
+        DiscoverService discoverService = mock(DiscoverService.class);
+
+        when(xmlaService.discover()).thenReturn(discoverService);
+
         bc.registerService(XmlaService.class, xmlaService, FrameworkUtil
                 .asDictionary(Map.of(Constants.XMLASERVICE_FILTER_KEY, Constants.XMLASERVICE_FILTER_VALUE)));
         TimeUnit.SECONDS.sleep(2);
     }
-
-
 
     @Test
     void testRequest_1(@InjectService XmlaService xmlaService) throws Exception {
@@ -77,7 +80,9 @@ public class MsClientTest {
         result.add(new DiscoverPropertiesResponseRowR("MyPopertyName2", Optional.of("MyPopertyDescription1"),
                 Optional.of("string"), "Read", Optional.of(false), Optional.of("v")));
 
-        when(xmlaService.discoverProperties(Mockito.any())).thenReturn(result);
+        DiscoverService discoverService = xmlaService.discover();
+
+        when(discoverService.discoverProperties(Mockito.any())).thenReturn(result);
 
         // call test
 
@@ -100,8 +105,6 @@ public class MsClientTest {
                 .isEmpty();
         Assertions.assertThat(process.exitValue())
                 .isEqualTo(0);
-
-      
 
 //		verify client 
 

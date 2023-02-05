@@ -15,8 +15,8 @@ package org.eclipse.daanse.xmla.ws.jakarta.provider.soapmessage;
 
 import java.util.List;
 
-import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
-import org.eclipse.daanse.xmla.model.record.discover.discoverproperties.DiscoverPropertiesRestrictionsR;
+import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesResponseRow;
+import org.eclipse.daanse.xmla.model.record.discover.discover.properties.DiscoverPropertiesRestrictionsR;
 
 import jakarta.xml.soap.Node;
 import jakarta.xml.soap.SOAPBody;

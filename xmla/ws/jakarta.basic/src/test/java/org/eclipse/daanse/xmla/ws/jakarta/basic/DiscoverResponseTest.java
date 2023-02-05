@@ -22,7 +22,8 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.xmla.api.XmlaService;
-import org.eclipse.daanse.xmla.model.record.discover.discoverproperties.DiscoverPropertiesResponseRowR;
+import org.eclipse.daanse.xmla.api.discover.DiscoverService;
+import org.eclipse.daanse.xmla.model.record.discover.discover.properties.DiscoverPropertiesResponseRowR;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,6 +59,10 @@ public class DiscoverResponseTest {
     @BeforeEach
     void beforaEach() throws InterruptedException {
         XmlaService xmlaService = mock(XmlaService.class);
+        DiscoverService discoverService = mock(DiscoverService.class);
+
+        when(xmlaService.discover()).thenReturn(discoverService);
+        
         bc.registerService(XmlaService.class, xmlaService, FrameworkUtil
                 .asDictionary(Map.of(Constants.XMLASERVICE_FILTER_KEY, Constants.XMLASERVICE_FILTER_VALUE)));
         TimeUnit.SECONDS.sleep(2);
@@ -84,7 +89,8 @@ public class DiscoverResponseTest {
                 Optional.of("An enumeration value that determines the behavior of subqueries."), Optional.of("Integer"),
                 "ReadWrite", Optional.of(false), Optional.of("1"));
 
-        when(xmlaService.discoverProperties(Mockito.any())).thenReturn(List.of(row));
+        DiscoverService discoverService = xmlaService.discover();
+        when(discoverService.discoverProperties(Mockito.any())).thenReturn(List.of(row));
 
         SOAPMessage response = SOAPUtil.callSoapWebService(Constants.soapEndpointUrl,
                 Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(REQUEST_DISCOVER_DISCOVER_PROPERTIES));

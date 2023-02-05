@@ -3,8 +3,8 @@ package org.eclipse.daanse.xmla.ws.jakarta.basic;
 import java.util.List;
 import java.util.Optional;
 
-import org.eclipse.daanse.xmla.api.discover.discoverproperties.DiscoverPropertiesResponseRow;
-import org.eclipse.daanse.xmla.model.record.discover.discoverproperties.DiscoverPropertiesResponseRowR;
+import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesResponseRow;
+import org.eclipse.daanse.xmla.model.record.discover.discover.properties.DiscoverPropertiesResponseRowR;
 
 public class SpecCompatibitilityDiscoverTest {
 
