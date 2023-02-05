@@ -11,9 +11,9 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.ws.jakarta.basic;
+package org.eclipse.daanse.xmla.ws.tck;
 
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.XMLUtil.pretty;
+import static org.eclipse.daanse.xmla.ws.tck.XMLUtil.pretty;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.ByteArrayOutputStream;

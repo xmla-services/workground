@@ -11,7 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.ws.jakarta.basic;
+package org.eclipse.daanse.xmla.ws.tck;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.eclipse.daanse.xmla.api.common.properties.Content.SchemaData;
@@ -57,6 +57,8 @@ import org.slf4j.LoggerFactory;
         @Property(key = "xmlaService.target", value = "(" + Constants.XMLASERVICE_FILTER_KEY + "="
                 + Constants.XMLASERVICE_FILTER_VALUE + ")"),
         @Property(key = "osgi.soap.endpoint.contextpath", value = Constants.WS_PATH) })
+@WithFactoryConfiguration(factoryPid = "org.eclipse.daanse.ws.handler.SOAPLoggingHandler", name = "test-ms-config", location = "?", properties = {
+        @Property(key = "osgi.soap.endpoint.selector", value = "(service.pid=*)") })
 @RequireServiceComponentRuntime
 public class DiscoverRequestTest {
     private Logger logger = LoggerFactory.getLogger(DiscoverRequestTest.class);
