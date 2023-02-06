@@ -32,7 +32,7 @@ public class MdxStatementTest {
                    WHERE [Measures].[Internet Sales Amount]
                 """;
 
-        MdxStatement clause = Util.parseMdxStatement(mdx);
+        MdxStatement clause = new MdxParserWrapper(mdx).parseMdxStatement();
         assertThat(clause).isNotNull()
                 .isInstanceOf(SelectStatement.class);
 

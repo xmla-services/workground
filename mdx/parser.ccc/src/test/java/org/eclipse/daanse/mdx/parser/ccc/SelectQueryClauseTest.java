@@ -14,8 +14,6 @@
 package org.eclipse.daanse.mdx.parser.ccc;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.mdx.parser.ccc.Util.parseSelectQueryAsteriskClause;
-import static org.eclipse.daanse.mdx.parser.ccc.Util.parseSelectStatement;
 
 import org.eclipse.daanse.mdx.model.SelectStatement;
 import org.eclipse.daanse.mdx.model.select.SelectQueryAsteriskClause;
@@ -39,7 +37,7 @@ public class SelectQueryClauseTest {
                        FROM [c]
                     """;
 
-            SelectStatement selectStatement = parseSelectStatement(mdx);
+            SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
             System.out.println(selectStatement);
             assertThat(selectStatement).isNotNull();
 
@@ -52,7 +50,7 @@ public class SelectQueryClauseTest {
                             {[Customer].[Customer].[Aaron A. Allen],
                              [Customer].[Customer].[Abigail Clark]} ON ROWS
                     """;
-            SelectQueryAxesClause clause = Util.parseSelectQueryAxesClause(mdx);
+            SelectQueryAxesClause clause = new MdxParserWrapper(mdx).parseSelectQueryAxesClause();
             assertThat(clause).isNotNull()
                     .isInstanceOf(SelectQueryAxesClause.class);
         }
@@ -60,7 +58,7 @@ public class SelectQueryClauseTest {
         @Test
         public void testInClauseSingle() throws MdxParserException {
             String mdx = "[Customer] ON COLUMNS";
-            SelectQueryAxesClause clause = Util.parseSelectQueryAxesClause(mdx);
+            SelectQueryAxesClause clause = new MdxParserWrapper(mdx).parseSelectQueryAxesClause();
             assertThat(clause).isNotNull()
                     .isInstanceOf(SelectQueryAxesClause.class);
         }
@@ -72,7 +70,7 @@ public class SelectQueryClauseTest {
         public void testInStatement() throws MdxParserException {
             String mdx = "SELECT FROM [c]";
 
-            SelectStatement selectStatement = parseSelectStatement(mdx);
+            SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
             assertThat(selectStatement).isNotNull();
             assertThat(selectStatement.selectQueryClause()).isNotNull()
                     .isInstanceOf(SelectQueryEmptyClause.class);
@@ -87,7 +85,7 @@ public class SelectQueryClauseTest {
         public void testAsteriskInStatement() throws MdxParserException {
             String mdx = "SELECT * FROM [c]";
 
-            SelectStatement selectStatement = parseSelectStatement(mdx);
+            SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
             assertThat(selectStatement).isNotNull();
             assertThat(selectStatement.selectQueryClause()).isNotNull()
                     .isInstanceOf(SelectQueryAsteriskClause.class);
@@ -97,7 +95,7 @@ public class SelectQueryClauseTest {
         @Test
         public void testAsteriskInClause() throws MdxParserException {
             String mdx = "*";
-            SelectQueryAsteriskClause clause = parseSelectQueryAsteriskClause(mdx);
+            SelectQueryAsteriskClause clause = new MdxParserWrapper(mdx).parseSelectQueryAsteriskClause();
             assertThat(clause).isNotNull();
         }
 

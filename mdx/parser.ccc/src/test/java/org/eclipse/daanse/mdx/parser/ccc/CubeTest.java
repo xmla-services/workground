@@ -14,7 +14,6 @@
 package org.eclipse.daanse.mdx.parser.ccc;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.mdx.parser.ccc.Util.parseSelectStatement;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.eclipse.daanse.mdx.model.ObjectIdentifier.Quoting;
@@ -36,7 +35,7 @@ public class CubeTest {
         public void testQuoted(String cubeName) throws MdxParserException {
             String mdx = mdxCubeNameQuoted(cubeName);
 
-            SelectStatement selectStatement = parseSelectStatement(mdx);
+            SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
             assertThat(selectStatement).isNotNull();
             assertThat(selectStatement.selectSubcubeClause()).isNotNull()
                     .isInstanceOfSatisfying(SelectSubcubeClauseName.class, s -> {
@@ -51,18 +50,18 @@ public class CubeTest {
         @ParameterizedTest
         @ValueSource(strings = { "[]", "[a].[a]" })
         public void testQuotedFail(String cubeName) throws MdxParserException {
-            String mdx = mdxCubeName(cubeName);
+            String mdx = mdx_selectFromCubeName(cubeName);
 
-            assertThrows(MdxParserException.class, () -> parseSelectStatement(mdx));
+            assertThrows(MdxParserException.class, () -> new MdxParserWrapper(mdx).parseSelectStatement());
 
         }
 
         @ParameterizedTest
         @ValueSource(strings = { "a", "a1", "aAaAaA", "AaAaAaA" })
         public void testUnquoted(String cubeName) throws MdxParserException {
-            String mdx = mdxCubeName(cubeName);
+            String mdx = mdx_selectFromCubeName(cubeName);
 
-            SelectStatement selectStatement = parseSelectStatement(mdx);
+            SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
             assertThat(selectStatement).isNotNull();
             assertThat(selectStatement.selectSubcubeClause()).isNotNull()
                     .isInstanceOfSatisfying(SelectSubcubeClauseName.class, s -> {
@@ -79,19 +78,19 @@ public class CubeTest {
                 "CURRENTCUBE"// Reserved Word
         })
         public void testUnquotedFail(String cubeName) throws MdxParserException {
-            String mdx = mdxCubeName(cubeName);
+            String mdx = mdx_selectFromCubeName(cubeName);
 
-            assertThrows(MdxParserException.class, () -> parseSelectStatement(mdx));
+            assertThrows(MdxParserException.class, () -> new MdxParserWrapper(mdx).parseSelectStatement());
 
             //
         }
 
         private static String mdxCubeNameQuoted(String cubeName) {
             cubeName = cubeName.replace("]", "]]");
-            return mdxCubeName("[" + cubeName + "]");
+            return mdx_selectFromCubeName("[" + cubeName + "]");
         }
 
-        private static String mdxCubeName(String cubeName) {
+        private static String mdx_selectFromCubeName(String cubeName) {
             return "SELECT FROM " + cubeName;
         }
     }
