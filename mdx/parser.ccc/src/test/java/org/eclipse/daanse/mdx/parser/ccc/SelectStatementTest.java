@@ -31,7 +31,7 @@ public class SelectStatementTest {
                    WHERE [Measures].[Internet Sales Amount]
                 """;
 
-        SelectStatement selectStatement = Util.parseSelectStatement(mdx);
+        SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
         assertThat(selectStatement).isNotNull();
 
     }
