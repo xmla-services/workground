@@ -13,6 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.functions;
 
+import org.eclipse.daanse.xmla.api.common.enums.InterfaceNameEnum;
+import org.eclipse.daanse.xmla.api.common.enums.OriginEnum;
+
 import java.util.Optional;
 
 public interface MdSchemaFunctionsRestrictions {
@@ -28,7 +31,7 @@ public interface MdSchemaFunctionsRestrictions {
      * (0x3) RELATIONAL
      * (0x4) SCALAR
      */
-    Optional<Integer> origin();
+    Optional<OriginEnum> origin();
 
     /**
      * @return A logical classification of the type of function. For
@@ -37,7 +40,7 @@ public interface MdSchemaFunctionsRestrictions {
      * LOGICAL
      * FILTER
      */
-    Optional<String> interfaceName();
+    Optional<InterfaceNameEnum> interfaceName();
 
     /**
      * @return The library that implements the function.

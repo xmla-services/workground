@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.common.enums.*;
 import org.eclipse.daanse.xmla.api.common.properties.Content;
 import org.eclipse.daanse.xmla.api.common.properties.Format;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
@@ -25,6 +26,9 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRe
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRestrictions;
+import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
+import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRestrictions;
@@ -40,6 +44,9 @@ import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverProperti
 import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchemaRowsetsRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchemaRowsetsRestrictions;
+import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataRequest;
+import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataResponseRow;
+import org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata.DiscoverXmlMetaDataRestrictions;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRestrictions;
@@ -52,10 +59,15 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensio
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsRestrictions;
+import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRestrictions;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.tables.DbSchemaTablesRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.tables.DbSchemaTablesRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.discover.datasources.DiscoverDataSourcesRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.discover.datasources.DiscoverDataSourcesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.enumerators.DiscoverEnumeratorsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.enumerators.DiscoverEnumeratorsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.keywords.DiscoverKeywordsRequestR;
@@ -66,6 +78,8 @@ import org.eclipse.daanse.xmla.model.record.discover.discover.properties.Discove
 import org.eclipse.daanse.xmla.model.record.discover.discover.properties.DiscoverPropertiesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.schemarowsets.DiscoverSchemaRowsetsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.schemarowsets.DiscoverSchemaRowsetsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.discover.xmlmetadata.DiscoverXmlMetaDataRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.discover.xmlmetadata.DiscoverXmlMetaDataRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.actions.MdSchemaActionsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.actions.MdSchemaActionsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.cubes.MdSchemaCubesRequestR;
@@ -74,6 +88,8 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.demensions.MdSchem
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.demensions.MdSchemaDimensionsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.functions.MdSchemaFunctionsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.functions.MdSchemaFunctionsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.hierarchies.MdSchemaHierarchiesRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.hierarchies.MdSchemaHierarchiesRestrictionsR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PropertyList;
@@ -336,8 +352,9 @@ public class Convert {
         String invocation = map.get(MdSchemaActionsRestrictions.RESTRICTIONS_INVOCATION);
 
         return new MdSchemaActionsRestrictionsR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName),
-                cubeName, Optional.ofNullable(actionName), Optional.ofNullable(Integer.decode(actionType)),
-                Optional.ofNullable(coordinate), Integer.valueOf(coordinateType), Integer.valueOf(invocation));
+            cubeName, Optional.ofNullable(actionName), Optional.ofNullable(ActionTypeEnum.fromValue(actionType)),
+            Optional.ofNullable(coordinate), CoordinateTypeEnum.fromValue(coordinateType),
+            InvocationEnum.fromValue(invocation));
     }
 
     public static DiscoverResponse toDiscoverMdSchemaActions(List<MdSchemaActionsResponseRow> responseApi) {
@@ -361,7 +378,7 @@ public class Convert {
         String cubeSource = map.get(MdSchemaCubesRestrictions.RESTRICTIONS_CUBE_SOURCE);
 
         return new MdSchemaCubesRestrictionsR(Optional.ofNullable(schemaName), Optional.ofNullable(cubeName),
-                Optional.ofNullable(baseCubeName), Optional.ofNullable(Integer.decode(cubeSource)));
+                Optional.ofNullable(baseCubeName), Optional.ofNullable(CubeSourceEnum.fromValue(cubeSource)));
     }
 
     public static DiscoverResponse toDiscoverMdSchemaCubes(List<MdSchemaCubesResponseRow> responseApi) {
@@ -409,13 +426,147 @@ public class Convert {
         String interfaceName = map.get(MdSchemaFunctionsRestrictions.RESTRICTIONS_INTERFACE_NAME);
         String libraryName = map.get(MdSchemaFunctionsRestrictions.RESTRICTIONS_LIBRARY_NAME);
 
-        return new MdSchemaFunctionsRestrictionsR(Optional.ofNullable(Integer.valueOf(origin)),
-                Optional.ofNullable(interfaceName), Optional.ofNullable(libraryName));
+        return new MdSchemaFunctionsRestrictionsR(Optional.ofNullable(OriginEnum.fromValue(origin)),
+                Optional.ofNullable(InterfaceNameEnum.fromValue(interfaceName)), Optional.ofNullable(libraryName));
     }
 
     public static DiscoverResponse toDiscoverMdSchemaFunctions(List<MdSchemaFunctionsResponseRow> responseApi) {
         // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;
+    }
+
+    public static MdSchemaHierarchiesRequest fromDiscoverMdSchemaHierarchies(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        MdSchemaHierarchiesRestrictionsR restrictions = discoverMdSchemaHierarchiesRestrictions(requestWs);
+        return new MdSchemaHierarchiesRequestR(properties, restrictions);
+
+    }
+
+    private static MdSchemaHierarchiesRestrictionsR discoverMdSchemaHierarchiesRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String catalogName = map.get(MdSchemaHierarchiesRestrictions.RESTRICTIONS_CATALOG_NAME);
+        String schemaName = map.get(MdSchemaHierarchiesRestrictions.RESTRICTIONS_SCHEMA_NAME);
+        String cubeName = map.get(MdSchemaHierarchiesRestrictions.RESTRICTIONS_CUBE_NAME);
+        String dimensionUniqueName = map.get(MdSchemaHierarchiesRestrictions.RESTRICTIONS_DIMENSION_UNIQUE_NAME);
+        String hierarchyName = map.get(MdSchemaHierarchiesRestrictions.RESTRICTIONS_HIERARCHY_NAME);
+        String hierarchyUniqueName = map.get(MdSchemaHierarchiesRestrictions.RESTRICTIONS_HIERARCHY_UNIQUE_NAME);
+        String hierarchyOrigin = map.get(MdSchemaHierarchiesRestrictions.RESTRICTIONS_HIERARCHY_ORIGIN);
+        String cubeSource = map.get(MdSchemaHierarchiesRestrictions.RESTRICTIONS_CUBE_SOURCE);
+        String hierarchyVisibility = map.get(MdSchemaHierarchiesRestrictions.RESTRICTIONS_HIERARCHY_VISIBILITY);
+
+        return new MdSchemaHierarchiesRestrictionsR(Optional.ofNullable(catalogName),
+            Optional.ofNullable(schemaName),
+            Optional.ofNullable(cubeName),
+            Optional.ofNullable(dimensionUniqueName),
+            Optional.ofNullable(hierarchyName),
+            Optional.ofNullable(hierarchyUniqueName),
+            Optional.ofNullable(hierarchyOrigin == null ? null : Integer.valueOf(hierarchyOrigin)),
+            Optional.ofNullable(CubeSourceEnum.fromValue(cubeSource)),
+            Optional.ofNullable(VisibilityEnum.fromValue(hierarchyVisibility)));
+    }
+
+    public static DiscoverResponse toDiscoverMdSchemaHierarchies(List<MdSchemaHierarchiesResponseRow> responseApi) {
+        // TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static DiscoverDataSourcesRequest fromDiscoverDataSources(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DiscoverDataSourcesRestrictionsR restrictions = discoverDataSourcesRestrictions(requestWs);
+        return new DiscoverDataSourcesRequestR(properties, restrictions);
+    }
+
+    private static DiscoverDataSourcesRestrictionsR discoverDataSourcesRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+        String dataSourcesName = map.get(DiscoverDataSourcesRestrictions.RESTRICTIONS_DATA_SOURCE_NAME);
+        String dataSourcesDescription = map.get(DiscoverDataSourcesRestrictions.RESTRICTIONS_DATA_SOURCE_DESCRIPTION);
+        String url = map.get(DiscoverDataSourcesRestrictions.RESTRICTIONS_URL);
+        String dataSourcesInfo = map.get(DiscoverDataSourcesRestrictions.RESTRICTIONS_DATA_SOURCE_INFO);
+        String providerName = map.get(DiscoverDataSourcesRestrictions.RESTRICTIONS_PROVIDER_NAME);
+        String providerType = map.get(DiscoverDataSourcesRestrictions.RESTRICTIONS_PROVIDER_TYPE);
+        String authenticationMode = map.get(DiscoverDataSourcesRestrictions.RESTRICTIONS_AUTHENTICATION_MODE);
+
+
+        return new DiscoverDataSourcesRestrictionsR(
+            dataSourcesName,
+            Optional.ofNullable(dataSourcesDescription),
+            Optional.ofNullable(url),
+            Optional.ofNullable(dataSourcesInfo),
+            providerName,
+            Optional.ofNullable(ProviderTypeEnum.fromValue(providerType)),
+            Optional.ofNullable(AuthenticationModeEnum.fromValue(authenticationMode)));
+    }
+
+    public static DiscoverResponse toDiscoverDataSources(List<DiscoverDataSourcesResponseRow> responseApi) {
+        // TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static DiscoverResponse toDiscoverXmlMetaData(List<DiscoverXmlMetaDataResponseRow> responseApi) {
+        // TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static DiscoverXmlMetaDataRequest fromDiscoverXmlMetaData(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DiscoverXmlMetaDataRestrictionsR restrictions = discoverXmlMetaDataRestrictions(requestWs);
+        return new DiscoverXmlMetaDataRequestR(properties, restrictions);
+    }
+
+    private static DiscoverXmlMetaDataRestrictionsR discoverXmlMetaDataRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String databaseId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_DATABASE_ID);
+        String dimensionId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_DIMENSION_ID);
+        String cubeId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_CUBE_ID);
+        String measureGroupId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_MEASURE_GROUP_ID);
+        String partitionId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_PARTITION_ID);
+        String perspectiveId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_PERSPECTIVE_ID);
+        String dimensionPermissionId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_PERMISSION_ID);
+        String roleId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_ROLE_ID);
+        String databasePermissionId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_DATABASE_PERMISSION_ID);
+        String miningModelId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_MINING_MODEL_ID);
+        String miningModelPermissionId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_MINING_MODEL_PERMISSION_ID);
+        String dataSourceId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_DATA_SOURCE_ID);
+        String miningStructureId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_MINING_STRUCTURE_ID);
+        String aggregationDesignId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_AGGREGATION_DESIGN_ID);
+        String traceId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_TRACE_ID);
+        String miningStructurePermissionId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_MINING_STRUCTURE_PERMISSION_ID);
+        String cubePermissionId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_CUBE_PERMISSION_ID);
+        String assemblyId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_ASSEMBLY_ID);
+        String mdxScriptId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_MDX_SCRIPT_ID);
+        String dataSourceViewId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_DATA_SOURCE_VIEW_ID);
+        String dataSourcePermissionId = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_DATA_SOURCE_PERMISSION_ID);
+        String objectExpansion = map.get(DiscoverXmlMetaDataRestrictions.RESTRICTIONS_OBJECT_EXPANSION);
+
+
+        return new DiscoverXmlMetaDataRestrictionsR(
+            Optional.ofNullable(databaseId),
+            Optional.ofNullable(dimensionId),
+            Optional.ofNullable(cubeId),
+            Optional.ofNullable(measureGroupId),
+            Optional.ofNullable(partitionId),
+            Optional.ofNullable(perspectiveId),
+            Optional.ofNullable(dimensionPermissionId),
+            Optional.ofNullable(roleId),
+            Optional.ofNullable(databasePermissionId),
+            Optional.ofNullable(miningModelId),
+            Optional.ofNullable(miningModelPermissionId),
+            Optional.ofNullable(dataSourceId),
+            Optional.ofNullable(miningStructureId),
+            Optional.ofNullable(aggregationDesignId),
+            Optional.ofNullable(traceId),
+            Optional.ofNullable(miningStructurePermissionId),
+            Optional.ofNullable(cubePermissionId),
+            Optional.ofNullable(assemblyId),
+            Optional.ofNullable(mdxScriptId),
+            Optional.ofNullable(dataSourceViewId),
+            Optional.ofNullable(dataSourcePermissionId),
+            Optional.ofNullable(ObjectExpansionEnum.fromValue(objectExpansion)));
     }
 }

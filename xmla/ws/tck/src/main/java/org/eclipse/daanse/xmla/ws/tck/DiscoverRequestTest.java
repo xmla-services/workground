@@ -26,6 +26,8 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.xmla.api.XmlaService;
+import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRequest;
@@ -515,7 +517,7 @@ public class DiscoverRequestTest {
                                         .contains("actionName");
                                 assertThat(r.actionType()).isNotNull()
                                         .isPresent()
-                                        .contains(0x01);
+                                        .contains(ActionTypeEnum.URL);
                                 assertThat(r.coordinate()).isNotNull()
                                         .isPresent()
                                         .contains("coordinate");
@@ -594,7 +596,7 @@ public class DiscoverRequestTest {
                                 ;
                                 assertThat(r.cubeSource()).isNotNull()
                                         .isPresent()
-                                        .contains(0x01);
+                                        .contains(CubeSourceEnum.CUBE);
                             });
                     // getProperties
                     assertThat(d.properties()).isNotNull()
