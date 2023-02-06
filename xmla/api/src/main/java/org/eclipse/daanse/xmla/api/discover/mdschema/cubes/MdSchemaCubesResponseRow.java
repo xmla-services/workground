@@ -13,6 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.cubes;
 
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CubeTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PreferredQueryPatternsEnum;
+
 import java.time.LocalDateTime;
 
 /**
@@ -37,7 +41,7 @@ public interface MdSchemaCubesResponseRow {
      * CUBE
      * DIMENSION
      */
-    String cubeType();
+    CubeTypeEnum cubeType();
 
     /**
      * @return The GUID of the cube.
@@ -116,7 +120,7 @@ public interface MdSchemaCubesResponseRow {
      * 0x01-Cube
      * 0x02-Dimension
      */
-    Integer cubeSource();
+    CubeSourceEnum cubeSource();
 
     /**
      * @return A bitmask that describes query
@@ -136,6 +140,6 @@ public interface MdSchemaCubesResponseRow {
      * Analysis Services is running in
      * VertiPaq mode.
      */
-    Integer preferredQueryPatterns();
+    PreferredQueryPatternsEnum preferredQueryPatterns();
 
 }

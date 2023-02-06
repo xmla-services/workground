@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.actions;
 
+import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.InvocationEnum;
+
 import java.util.Optional;
 
 public interface MdSchemaActionsRestrictions {
@@ -60,7 +64,7 @@ public interface MdSchemaActionsRestrictions {
      * If the action is PROPRIETARY (0x40), then a value MUST be
      * provided in the APPLICATION column.
      */
-    Optional<Integer> actionType();
+    Optional<ActionTypeEnum> actionType();
 
     /**
      * @return An MDX expression that specifies an object or a coordinate in
@@ -80,7 +84,7 @@ public interface MdSchemaActionsRestrictions {
      * 5 - Action coordinate refers to a set.
      * 6 - Action coordinate refers to a cell.
      */
-    Integer coordinateType();
+    CoordinateTypeEnum coordinateType();
 
     /**
      * @return Information about how to invoke the action:
@@ -91,5 +95,5 @@ public interface MdSchemaActionsRestrictions {
      * 4 - Indicates that the action is performed as part of a batch
      * operation.
      */
-    Integer invocation();
+    InvocationEnum invocation();
 }

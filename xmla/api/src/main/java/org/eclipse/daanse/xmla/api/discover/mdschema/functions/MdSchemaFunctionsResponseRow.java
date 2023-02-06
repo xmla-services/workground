@@ -13,6 +13,10 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.functions;
 
+import org.eclipse.daanse.xmla.api.common.enums.DirectQueryPushableEnum;
+import org.eclipse.daanse.xmla.api.common.enums.InterfaceNameEnum;
+import org.eclipse.daanse.xmla.api.common.enums.OriginEnum;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -53,7 +57,7 @@ public interface MdSchemaFunctionsResponseRow {
      * (0x3) RELATIONAL
      * (0x4) SCALAR
      */
-    Optional<Integer> origin();
+    Optional<OriginEnum> origin();
 
     /**
      * @return A logical classification of the type of function. For
@@ -62,7 +66,7 @@ public interface MdSchemaFunctionsResponseRow {
      * LOGICAL
      * FILTER
      */
-    Optional<String> interfaceName();
+    Optional<InterfaceNameEnum> interfaceName();
 
     /**
      * @return The library that implements the function.
@@ -115,6 +119,6 @@ public interface MdSchemaFunctionsResponseRow {
      * (0x2) CALCCOL: This function can be used in
      * calculated column expressions.
      */
-    Optional<Integer> directQueryPushable();
+    Optional<DirectQueryPushableEnum> directQueryPushable();
 
 }

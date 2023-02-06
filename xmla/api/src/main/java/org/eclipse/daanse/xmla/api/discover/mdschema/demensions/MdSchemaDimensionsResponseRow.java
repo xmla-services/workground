@@ -13,6 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.demensions;
 
+import org.eclipse.daanse.xmla.api.common.enums.DimensionTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.DimensionUniqueSettingEnum;
+
 /**
  * This schema rowset describes the dimensions within a database.
  */
@@ -78,7 +81,7 @@ public interface MdSchemaDimensionsResponseRow {
      * 16 - BILL OF MATERIALS
      * 17 – GEOGRAPHY
      */
-    Integer dimensionType();
+    DimensionTypeEnum dimensionType();
 
     /**
      * @return The number of members in the key
@@ -116,7 +119,7 @@ public interface MdSchemaDimensionsResponseRow {
      * 0x00000002 - Member name columns
      * establish uniqueness.
      */
-    Integer dimensionUniqueSetting();
+    DimensionUniqueSettingEnum dimensionUniqueSetting();
 
     /**
      * @return The name of the master dimension.

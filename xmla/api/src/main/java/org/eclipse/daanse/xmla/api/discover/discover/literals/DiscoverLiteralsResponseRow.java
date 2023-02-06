@@ -13,6 +13,8 @@
 */
 package org.eclipse.daanse.xmla.api.discover.discover.literals;
 
+import org.eclipse.daanse.xmla.api.common.enums.LiteralNameEnumValueEnum;
+
 /**
  * This schema rowset returns information about literals supported by the server.
  */
@@ -68,6 +70,6 @@ public interface DiscoverLiteralsResponseRow {
      * DBLITERAL_TEXT_COMMAND = 18
      * DBLITERAL_USER_NAME = 19
      */
-    Integer literalNameEnumValue();
+    LiteralNameEnumValueEnum literalNameEnumValue();
 
 }
