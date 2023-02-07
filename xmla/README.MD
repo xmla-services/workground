@@ -5,6 +5,7 @@
 
 
 |RequestTypes|supported|description|
+|------------|:-------:|-----------|
 |MDSCHEMA_FUNCTIONS|+| |
 |MDSCHEMA_DIMENSIONS|+| |
 |MDSCHEMA_CUBES|+| |
