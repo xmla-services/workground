@@ -1,0 +1,58 @@
+package org.eclipse.daanse.xmla.client.soapmessage;
+
+import java.util.Optional;
+import java.util.function.Consumer;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import jakarta.xml.soap.MessageFactory;
+import jakarta.xml.soap.MimeHeaders;
+import jakarta.xml.soap.SOAPConnection;
+import jakarta.xml.soap.SOAPConnectionFactory;
+import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
+
+public class SoapClient {
+
+    public SoapClient(String soapEndpointUrl) {
+        this.soapEndpointUrl = soapEndpointUrl;
+    }
+
+    private String soapEndpointUrl;
+    public static Logger logger = LoggerFactory.getLogger(SoapClient.class);
+
+    public SOAPMessage callSoapWebService(Optional<String> oSoapAction, Consumer<SOAPMessage> consumer)
+            throws SOAPException {
+
+        MessageFactory messageFactory = MessageFactory.newInstance();
+        SOAPMessage message = messageFactory.createMessage();
+
+        consumer.accept(message);
+
+        MimeHeaders headers = message.getMimeHeaders();
+        oSoapAction.ifPresent(actionName -> headers.addHeader("SOAPAction", actionName));
+        message.saveChanges();
+
+        /* Print the request message, just for debugging purposes */
+        logger.error("Request SOAP Message:");
+
+        // Create SOAP Connection
+
+        SOAPConnectionFactory connectionFactory = SOAPConnectionFactory.newInstance();
+        SOAPConnection connection = connectionFactory.createConnection();
+
+        // Send SOAP Message to SOAP Server
+        SOAPMessage response = connection.call(message, soapEndpointUrl);
+
+        // Print the SOAP Response
+
+        logger.debug("Response SOAP Message:");
+
+        connection.close();
+
+        return response;
+
+    }
+
+}
