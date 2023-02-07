@@ -13,13 +13,15 @@
 */
 package org.eclipse.daanse.mdx.model;
 
+import java.util.List;
+
 import org.eclipse.daanse.mdx.model.select.SelectCellPropertyListClause;
 import org.eclipse.daanse.mdx.model.select.SelectQueryClause;
 import org.eclipse.daanse.mdx.model.select.SelectSlicerAxisClause;
 import org.eclipse.daanse.mdx.model.select.SelectSubcubeClause;
 import org.eclipse.daanse.mdx.model.select.SelectWithClause;
 
-public record SelectStatement(SelectWithClause selectWithClause,
+public record SelectStatement(List<SelectWithClause> selectWithClauses,
                               SelectQueryClause selectQueryClause,
                               SelectSubcubeClause selectSubcubeClause,
                               SelectSlicerAxisClause selectSlicerAxisClause,
