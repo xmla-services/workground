@@ -2,9 +2,18 @@ package org.eclipse.daanse.xmla.api.common.enums;
 
 public enum AuthenticationModeEnum {
 
-    Unauthenticated, // No user ID or password has to be sent.
-    Authenticated, // User ID and password MUST be included in the information required to connect to the data source.
-    Integrated; // The data source uses the underlying security to determine authorization.
+    /**
+     * No user ID or password has to be sent.
+     */
+    Unauthenticated,
+    /**
+     * User ID and password MUST be included in the information required to connect to the data source.
+     */
+    Authenticated,
+    /**
+     * The data source uses the underlying security to determine authorization.
+     */
+    Integrated;
 
     public static AuthenticationModeEnum fromValue(String v) {
         if (v == null) {

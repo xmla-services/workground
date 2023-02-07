@@ -15,10 +15,22 @@ package org.eclipse.daanse.xmla.api.common.enums;
 
 public enum StructureEnum {
 
-    HIERARCHY_FULLY_BALANCED(0), // Hierarchy is a fully balanced structure.
-    HIERARCHY_RAGGED_BALANCED(1), // Hierarchy is a ragged balanced structure.
-    HIERARCHY_UNBALANCED(2), // Hierarchy is an unbalanced
-    HIERARCHY_NETWORK(3); // Hierarchy is a network
+    /**
+     * Hierarchy is a fully balanced structure.
+     */
+    HIERARCHY_FULLY_BALANCED(0),
+    /**
+     * Hierarchy is a ragged balanced structure.
+     */
+    HIERARCHY_RAGGED_BALANCED(1),
+    /**
+     * Hierarchy is an unbalanced
+     */
+    HIERARCHY_UNBALANCED(2),
+    /**
+     *  Hierarchy is a network
+     */
+    HIERARCHY_NETWORK(3);
 
     private final int value;
 

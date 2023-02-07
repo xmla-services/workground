@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.api.common.enums;
 
 public enum InterfaceNameEnum {
+
     DATETIME,
     LOGICAL,
     FILTER;

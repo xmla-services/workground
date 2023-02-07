@@ -13,31 +13,33 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-public enum ProviderTypeEnum {
+public enum ColumnOlapTypeEnum {
 
     /**
-     * multidimensional data provider.
+     * indicates that the object is a measure.
      */
-    MDP,
+    MEASURE,
     /**
-     * tabular data provider.
+     *  indicates that the object is a
+     *  dimension attribute.
      */
-    TDP,
+    ATTRIBUTE,
     /**
-     * data mining provider (implements the OLE for DB for Data Mining specification)
+     * indicates that the object is a
+     * column in a schema rowset table.
      */
-    DMP;
+    SCHEMA;
 
-    public static ProviderTypeEnum fromValue(String v) {
+    public static ColumnOlapTypeEnum fromValue(String v) {
         if (v == null) {
             return null;
         }
-        for (ProviderTypeEnum e : ProviderTypeEnum.values()) {
+        for (ColumnOlapTypeEnum e : ColumnOlapTypeEnum.values()) {
             if (e.name().equals(v)) {
                 return e;
             }
         }
-        throw new IllegalArgumentException(new StringBuilder("ProviderTypeEnum Illegal argument ")
+        throw new IllegalArgumentException(new StringBuilder("ColumnOlapTypeEnum Illegal argument ")
             .append(v).toString());
     }
 }
