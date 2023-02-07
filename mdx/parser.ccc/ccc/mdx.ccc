@@ -436,7 +436,7 @@ MdxStatement parseMdxStatement :
   //	|
   //	DrillthroughStatement
   //    |
-  //	  CreateFormulaStatement
+  //	CreateFormulaStatement
   //    |
   //    ExplainStatement
   //    |
@@ -525,17 +525,27 @@ SelectWithClause parseSelectWithClause :
 
 SelectStatement parseSelectStatement :
 {
-  SelectWithClause selectWithClause = null;
+  List<SelectWithClause> selectWithClauses = new LinkedList<SelectWithClause>();
   SelectSlicerAxisClause selectSlicerAxisClause = null;
   SelectQueryClause selectQueryClause = null;
   SelectSubcubeClause selectSubcubeClause = null;
   SelectCellPropertyListClause selectCellPropertyListClause = null;
+  SelectWithClause selectWithClause = null;
 }
   (
     < WITH >
-    (
       selectWithClause = parseSelectWithClause
-    )+
+    {
+      selectWithClauses.add(selectWithClause);
+    }
+    
+    (
+      < COMMA > selectWithClause = parseSelectWithClause
+      {
+        selectWithClauses.add(selectWithClause);
+      }
+    )*
+    
   )?
   < SELECT >
   (
@@ -555,7 +565,7 @@ SelectStatement parseSelectStatement :
     selectCellPropertyListClause = parseSelectCellPropertyListClause
   )?
   {
-    return new SelectStatement(selectWithClause, selectQueryClause, selectSubcubeClause, selectSlicerAxisClause, selectCellPropertyListClause);
+    return new SelectStatement(selectWithClauses, selectQueryClause, selectSubcubeClause, selectSlicerAxisClause, selectCellPropertyListClause);
   }
 ;
 
