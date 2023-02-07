@@ -19,6 +19,10 @@ import java.util.List;
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponse;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
@@ -163,6 +167,8 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         try {
 
             switch (discover.getRequestType()) {
+            case DBSCHEMA_PROVIDER_TYPES -> discoverResponse = handleDiscoverDbSchemaProviderTypes(discover);
+            case DBSCHEMA_COLUMNS -> discoverResponse = handleDiscoverDbSchemaColumns(discover);
             case DISCOVER_XML_METADATA -> discoverResponse = handleDiscoverXmlMetaData(discover);
             case DISCOVER_DATASOURCES -> discoverResponse = handleDiscoverDataSources(discover);
             case MDSCHEMA_HIERARCHIES -> discoverResponse = handleDiscoverMdSchemaHierarchies(discover);
@@ -313,6 +319,24 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         DiscoverXmlMetaDataRequest requestApi = Convert.fromDiscoverXmlMetaData(requestWs);
         List<DiscoverXmlMetaDataResponseRow> responseApi = xmlaService.discover().xmlMetaData(requestApi);
         DiscoverResponse responseWs = Convert.toDiscoverXmlMetaData(responseApi);
+
+        return responseWs;
+    }
+
+    private DiscoverResponse handleDiscoverDbSchemaColumns(Discover requestWs) {
+
+        DbSchemaColumnsRequest requestApi = Convert.fromDiscoverDbSchemaColumns(requestWs);
+        List<DbSchemaColumnsResponseRow> responseApi = xmlaService.discover().dbSchemaColumns(requestApi);
+        DiscoverResponse responseWs = Convert.toDiscoverDbSchemaColumns(responseApi);
+
+        return responseWs;
+    }
+
+    private DiscoverResponse handleDiscoverDbSchemaProviderTypes(Discover requestWs) {
+
+        DbSchemaProviderTypesRequest requestApi = Convert.fromDiscoverDbSchemaProviderTypes(requestWs);
+        List<DbSchemaProviderTypesResponseRow> responseApi = xmlaService.discover().dbSchemaProviderTypes(requestApi);
+        DiscoverResponse responseWs = Convert.toDiscoverDbSchemaProviderTypes(responseApi);
 
         return responseWs;
     }

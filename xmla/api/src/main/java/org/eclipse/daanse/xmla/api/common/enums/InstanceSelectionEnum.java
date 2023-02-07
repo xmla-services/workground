@@ -15,10 +15,22 @@ package org.eclipse.daanse.xmla.api.common.enums;
 
 public enum InstanceSelectionEnum {
 
-    DROPDOWN(1), // DROPDOWN type of display is suggested.
-    LIST(2), // LIST type of display is suggested.
-    FILTERED_LIST(3), // FILTERED LIST type of display is suggested.
-    MANDATORY_FILTER(4); // MANDATORY FILTER type of display is suggested
+    /**
+     * DROPDOWN type of display is suggested.
+     */
+    DROPDOWN(1),
+    /**
+     * LIST type of display is suggested.
+     */
+    LIST(2),
+    /**
+     * FILTERED LIST type of display is suggested.
+     */
+    FILTERED_LIST(3),
+    /**
+     * MANDATORY FILTER type of display is suggested
+     */
+    MANDATORY_FILTER(4);
 
     private final int value;
 

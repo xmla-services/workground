@@ -15,8 +15,14 @@ package org.eclipse.daanse.xmla.api.common.enums;
 
 public enum DirectQueryPushableEnum {
 
-    MEASURE(0x1), //This function can be used in measure expressions.
-    CALCCOL(0x2); //This function can be used in calculated column expressions.
+    /**
+     * This function can be used in measure expressions.
+     */
+    MEASURE(0x1),
+    /**
+     * This function can be used in calculated column expressions.
+     */
+    CALCCOL(0x2);
 
     private final int value;
 

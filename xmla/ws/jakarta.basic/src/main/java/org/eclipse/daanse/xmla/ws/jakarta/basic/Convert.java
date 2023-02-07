@@ -23,6 +23,12 @@ import org.eclipse.daanse.xmla.api.common.properties.Content;
 import org.eclipse.daanse.xmla.api.common.properties.Format;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponse;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRestrictions;
+import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRestrictions;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRestrictions;
@@ -64,6 +70,10 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarc
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRestrictions;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes.DbSchemaProviderTypesRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes.DbSchemaProviderTypesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.tables.DbSchemaTablesRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.tables.DbSchemaTablesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.datasources.DiscoverDataSourcesRequestR;
@@ -568,5 +578,57 @@ public class Convert {
             Optional.ofNullable(dataSourceViewId),
             Optional.ofNullable(dataSourcePermissionId),
             Optional.ofNullable(ObjectExpansionEnum.fromValue(objectExpansion)));
+    }
+
+    public static DbSchemaColumnsRequest fromDiscoverDbSchemaColumns(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DbSchemaColumnsRestrictionsR restrictions = discoverDbSchemaColumnsRestrictions(requestWs);
+        return new DbSchemaColumnsRequestR(properties, restrictions);
+    }
+
+    private static DbSchemaColumnsRestrictionsR discoverDbSchemaColumnsRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String tableCatalog = map.get(DbSchemaColumnsRestrictions.RESTRICTIONS_TABLE_CATALOG);
+        String tableSchema = map.get(DbSchemaColumnsRestrictions.RESTRICTIONS_TABLE_SCHEMA);
+        String tableName = map.get(DbSchemaColumnsRestrictions.RESTRICTIONS_TABLE_NAME);
+        String columnName = map.get(DbSchemaColumnsRestrictions.RESTRICTIONS_COLUMN_NAME);
+        String columnOlapType = map.get(DbSchemaColumnsRestrictions.RESTRICTIONS_COLUMN_OLAP_TYPE);
+
+        return new DbSchemaColumnsRestrictionsR(
+            Optional.ofNullable(tableCatalog),
+            Optional.ofNullable(tableSchema),
+            Optional.ofNullable(tableName),
+            Optional.ofNullable(columnName),
+            Optional.ofNullable(ColumnOlapTypeEnum.fromValue(columnOlapType)));
+    }
+
+    public static DiscoverResponse toDiscoverDbSchemaColumns(List<DbSchemaColumnsResponseRow> responseApi) {
+        // TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static DbSchemaProviderTypesRequest fromDiscoverDbSchemaProviderTypes(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DbSchemaProviderTypesRestrictionsR restrictions = discoverDbSchemaProviderTypesRestrictions(requestWs);
+        return new DbSchemaProviderTypesRequestR(properties, restrictions);
+    }
+
+    private static DbSchemaProviderTypesRestrictionsR discoverDbSchemaProviderTypesRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String dataType = map.get(DbSchemaProviderTypesRestrictions.RESTRICTIONS_DATA_TYPE);
+        String bestMatch = map.get(DbSchemaProviderTypesRestrictions.RESTRICTIONS_BEST_MATCH);
+
+        return new DbSchemaProviderTypesRestrictionsR(
+            Optional.ofNullable(LevelDbTypeEnum.fromValue(dataType)),
+            Optional.ofNullable(bestMatch == null ? null : Boolean.valueOf(bestMatch)));
+    }
+
+    public static DiscoverResponse toDiscoverDbSchemaProviderTypes(List<DbSchemaProviderTypesResponseRow> responseApi) {
+        // TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
     }
 }
