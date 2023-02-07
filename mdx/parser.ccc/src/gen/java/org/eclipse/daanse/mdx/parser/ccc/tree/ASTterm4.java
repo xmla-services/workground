@@ -8,7 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *
-* Contributors: see .ccc file
+* Contributors: see corresponding .ccc file
 
 * Generated Code for ASTterm4 AST Node type
 * by the ASTNode.java.ftl template
@@ -16,7 +16,7 @@
 package org.eclipse.daanse.mdx.parser.ccc.tree;
 
 import org.eclipse.daanse.mdx.parser.ccc.*;
-import static org.eclipse.daanse.mdx.parser.ccc.TokenType.*;
+import static org.eclipse.daanse.mdx.parser.ccc.Token.TokenType.*;
 
 
 public class ASTterm4 extends BaseNode {

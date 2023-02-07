@@ -17,11 +17,11 @@ import org.eclipse.daanse.mdx.model.MdxStatement;
 import org.eclipse.daanse.mdx.model.SelectStatement;
 import org.eclipse.daanse.mdx.model.select.SelectQueryAsteriskClause;
 import org.eclipse.daanse.mdx.model.select.SelectQueryAxesClause;
-import org.eclipse.daanse.mdx.parser.api.MdxParser;
+
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 
-public class MdxParserWrapper implements MdxParser {
-    private MDXParser delegate;
+public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxParser {
+    private MdxParser delegate;
 
     public MdxParserWrapper(CharSequence mdx) throws MdxParserException {
 
@@ -33,7 +33,7 @@ public class MdxParserWrapper implements MdxParser {
             throw new MdxParserException("statement must not be empty");
         }
         try {
-            delegate = new MDXParser(mdx);
+            delegate = new MdxParser(mdx);
         } catch (Exception e) {
 
             throw new MdxParserException("statement must not be empty");

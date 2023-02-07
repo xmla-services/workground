@@ -8,7 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *
-* Contributors: see .ccc file
+* Contributors: see corresponding .ccc file
 */
 package org.eclipse.daanse.mdx.parser.ccc;
 
@@ -18,7 +18,7 @@ package org.eclipse.daanse.mdx.parser.ccc;
 */
 public class InvalidToken extends Token {
 
-    public InvalidToken(TokenSource tokenSource, int beginOffset, int endOffset) {
+    public InvalidToken(MdxLexer tokenSource, int beginOffset, int endOffset) {
         super(TokenType.INVALID, tokenSource, beginOffset, endOffset);
     }
 

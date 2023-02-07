@@ -8,7 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *
-* Contributors: see .ccc file
+* Contributors: see corresponding .ccc file
 */
 package org.eclipse.daanse.mdx.parser.ccc;
 
@@ -23,16 +23,30 @@ public interface Node {
     // Marker interface for objects
     // that represent a node's type, i.e. TokenType
     public interface NodeType {
+
+        boolean isUndefined();
+
+        boolean isInvalid();
+
+        boolean isEOF();
+
     }
 
 
     //Marker interface for tokens
     public interface TerminalNode extends Node {
+
+        TerminalNode getNext();
+
     }
 
 
     default NodeType getType() {
         return null;
+    }
+
+    default NodeType getNodeType() {
+        return getType();
     }
 
     /** Life-cycle hook method called after the node has been made the current
@@ -269,7 +283,7 @@ public interface Node {
     }
 
     /**
-    * @return the #mdxLexer from which this Node object
+    * @return the #MdxLexer from which this Node object
     * originated. There is no guarantee that this doesn't return null.
     * Most likely that would simply be because you constructed the
     * Node yourself, i.e. it didn't really come about via the parsing/tokenizing
@@ -281,7 +295,7 @@ public interface Node {
 
     /**
     * @return the original source content this Node came from
-    * a reference to the #mdxLexer that stores the source code and
+    * a reference to the #MdxLexer that stores the source code and
     * the start/end location info stored in the Node object itself.
     * This method could throw a NullPointerException if #getTokenSource
     * returns null. Also, the return value could be spurious if
@@ -416,10 +430,10 @@ public interface Node {
         return null;
     }
 
-    default Node firstChildOfType(NodeType tokenType) {
+    default Node firstChildOfType(NodeType type) {
         for (int i = 0; i < getChildCount(); i++) {
             Node child = getChild(i);
-            if (child.getType() == tokenType) return child;
+            if (child.getType() == type) return child;
         }
         return null;
     }

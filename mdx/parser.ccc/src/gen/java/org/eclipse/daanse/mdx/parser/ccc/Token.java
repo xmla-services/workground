@@ -9,7 +9,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *
-* Contributors: see .ccc file
+* Contributors: see corresponding .ccc file
 
 */
 package org.eclipse.daanse.mdx.parser.ccc;
@@ -22,8 +22,39 @@ import java.util.List;
 
 
 public class Token implements Node.TerminalNode {
-    private TokenSource tokenSource;
-    private TokenType type;
+
+    public enum TokenType implements Node.NodeType {
+        EOF, AND, AS, AXIS, BEGIN, BY, CASE, CALCULATION, CAST, CELL, CHAPTERS, CREATE,
+        COLUMNS, COMMIT, CUBE, CURRENTCUBE, DIMENSION, DRILLTHROUGH, ELSE, EMPTY,
+        END, EXPLAIN, FIRSTROWSET, FOR, FROM, IN, IS, MATCHES, MAXROWS, MEMBER, MEASURE,
+        NON, NOT, NULL, ON, OR, PAGES, PLAN, PROPERTIES, REFRESH, RETURN, ROLLBACK,
+        ROWS, SECTIONS, SELECT, SESSION, SET, THEN, TRAN, TRANSACTION, UPDATE, USE_EQUAL_ALLOCATION,
+        USE_EQUAL_INCREMENT, USE_WEIGHTED_ALLOCATION, USE_WEIGHTED_INCREMENT, WHEN,
+        WHERE, XOR, WITH, EXISTING, $SYSTEM, _TOKEN_61, _TOKEN_62, _TOKEN_63, _TOKEN_64,
+        _TOKEN_65, _TOKEN_66, _TOKEN_67, _TOKEN_68, _TOKEN_69, SINGLE_LINE_COMMENT,
+        FORMAL_COMMENT, MULTI_LINE_COMMENT, _TOKEN_73, LPAREN, RPAREN, LBRACE, RBRACE,
+        LBRACKET, RBRACKET, COMMA, SEMICOLON, DOT, ASTERISK, BANG, COLON, CONCAT,
+        EQ, GE, GT, LE, LT, MINUS, NE, PLUS, SOLIDUS, ATSIGN, ID, QUOTED_ID, AMP_QUOTED_ID,
+        AMP_UNQUOTED_ID, UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL,
+        FLOATING_POINT_LITERAL, STRING, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING,
+        CALCULATED, DUMMY, INVALID;
+
+        public boolean isUndefined() {
+            return this == DUMMY;
+        }
+
+        public boolean isInvalid() {
+            return this == INVALID;
+        }
+
+        public boolean isEOF() {
+            return this == EOF;
+        }
+
+    }
+
+    private MdxLexer tokenSource;
+    private TokenType type = TokenType.DUMMY;
     private int beginOffset, endOffset;
     private boolean unparsed;
     private Node parent;
@@ -62,13 +93,13 @@ public class Token implements Node.TerminalNode {
     * @param image the String content of the token
     * @param tokenSource the object that vended this token.
     */
-    public Token(TokenType type, String image, TokenSource tokenSource) {
+    public Token(TokenType type, String image, MdxLexer tokenSource) {
         this.type = type;
         this.image = image;
         this.tokenSource = tokenSource;
     }
 
-    public static Token newToken(TokenType type, String image, TokenSource tokenSource) {
+    public static Token newToken(TokenType type, String image, MdxLexer tokenSource) {
         Token result = newToken(type, tokenSource, 0, 0);
         result.setImage(image);
         return result;
@@ -93,10 +124,10 @@ public class Token implements Node.TerminalNode {
     }
 
     /**
-    * @return the mdxLexer object that handles
+    * @return the MdxLexer object that handles
     * location info for the tokens.
     */
-    public TokenSource getTokenSource() {
+    public MdxLexer getTokenSource() {
         return this.tokenSource;
     }
 
@@ -105,7 +136,7 @@ public class Token implements Node.TerminalNode {
     * programmer needs to use this method.
     */
     public void setTokenSource(TokenSource tokenSource) {
-        this.tokenSource = tokenSource;
+        this.tokenSource = (MdxLexer) tokenSource;
     }
 
     /**
@@ -187,7 +218,7 @@ public class Token implements Node.TerminalNode {
     public Token nextCachedToken() {
         if (getType() == TokenType.EOF) return null;
         if (appendedToken != null) return appendedToken;
-        TokenSource tokenSource = getTokenSource();
+        MdxLexer tokenSource = getTokenSource();
         return tokenSource != null ? (Token) tokenSource.nextCachedToken(getEndOffset()) : null;
     }
 
@@ -220,14 +251,14 @@ public class Token implements Node.TerminalNode {
 
     public String getSource() {
         if (type == TokenType.EOF) return "";
-        TokenSource flm = getTokenSource();
+        MdxLexer flm = getTokenSource();
         return flm == null ? null : flm.getText(getBeginOffset(), getEndOffset());
     }
 
     protected Token() {
     }
 
-    public Token(TokenType type, TokenSource tokenSource, int beginOffset, int endOffset) {
+    public Token(TokenType type, MdxLexer tokenSource, int beginOffset, int endOffset) {
         this.type = type;
         this.tokenSource = tokenSource;
         this.beginOffset = beginOffset;
@@ -334,7 +365,7 @@ public class Token implements Node.TerminalNode {
         }
     }
 
-    public static Token newToken(TokenType type, TokenSource tokenSource, int beginOffset, int endOffset) {
+    public static Token newToken(TokenType type, MdxLexer tokenSource, int beginOffset, int endOffset) {
         switch(type) {
             case AND : 
                 return new ASTAND(TokenType.AND, tokenSource, beginOffset, endOffset);
