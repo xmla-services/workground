@@ -13,6 +13,8 @@
 */
 package org.eclipse.daanse.mdx.model.select;
 
-public record CreateSetBodyClause() implements SelectWithClause{
+import java.math.BigDecimal;
+
+public record MeasureBodyClause(BigDecimal bigDecimal) implements SelectWithClause {
 
 }

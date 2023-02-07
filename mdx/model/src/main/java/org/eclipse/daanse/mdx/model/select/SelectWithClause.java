@@ -13,6 +13,6 @@
 */
 package org.eclipse.daanse.mdx.model.select;
 
-public record SelectWithClause() {
+public sealed interface SelectWithClause permits CreateCellCalculationBodyClause, CreateMemberBodyClause, CreateSetBodyClause, MeasureBodyClause {
 
 }

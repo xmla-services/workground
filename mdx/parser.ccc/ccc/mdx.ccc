@@ -58,8 +58,10 @@ import org.eclipse.daanse.mdx.model.ReturnItem;
 import org.eclipse.daanse.mdx.model.SelectStatement;
 import org.eclipse.daanse.mdx.model.StringLiteral;
 import org.eclipse.daanse.mdx.model.SymbolLiteral;
+import org.eclipse.daanse.mdx.model.select.CreateCellCalculationBodyClause;
 import org.eclipse.daanse.mdx.model.select.CreateMemberBodyClause;
 import org.eclipse.daanse.mdx.model.select.CreateSetBodyClause;
+import org.eclipse.daanse.mdx.model.select.MeasureBodyClause;
 import org.eclipse.daanse.mdx.model.select.SelectCellPropertyListClause;
 import org.eclipse.daanse.mdx.model.select.SelectDimensionPropertyListClause;
 import org.eclipse.daanse.mdx.model.select.SelectQueryAsteriskClause;
@@ -501,28 +503,40 @@ ReturnItem parseReturnItem :
   }
 ;
 
+//https://learn.microsoft.com/en-us/sql/mdx/mdx-data-definition-create-cell-calculation?view=sql-server-ver16
 
-//CreateCellCalculationBodyClause:
-//;
-//MeasureBodyClause:
-//  <APPROX_NUMERIC_LITERAL>
-//;
-SelectWithClause parseSelectWithClause :
+CreateCellCalculationBodyClause parseCreateCellCalculationBodyClause:
 {
-  CreateMemberBodyClause createMemberBodyClause = null;
-  CreateSetBodyClause createSetBodyClause = null;
+  CreateCellCalculationBodyClause createCellCalculationBC = null;
 }
-  ( //    <CELL> <CALCULATION> CreateCellCalculationBodyClause
-    ("CALCULATED")? < MEMBER > createMemberBodyClause = parseCreateMemberBodyClause
-  | < SET > createSetBodyClause = parseCreateSetBodyClause
-  )
-  // | <MEASURE> = MeasureBodyClause
+ <CELL><CELL><CELL><CELL><CELL><CELL><CELL>
   {
-    return new SelectWithClause();
+    return createCellCalculationBC;
   }
 ;
 
+MeasureBodyClause parseMeasureBodyClause:
+  < APPROX_NUMERIC_LITERAL >
+  {
+    return new MeasureBodyClause(new BigDecimal(getToken(0).getImage()));
+  }
+;
 
+SelectWithClause parseSelectWithClause :
+{
+  SelectWithClause selectWithClause = null;
+}
+  ( <CELL> <CALCULATION> selectWithClause = parseCreateCellCalculationBodyClause
+  | ("CALCULATED")? < MEMBER > selectWithClause = parseCreateMemberBodyClause
+  | < SET > selectWithClause = parseCreateSetBodyClause
+  | <MEASURE> selectWithClause = parseMeasureBodyClause
+  )
+  {
+    return selectWithClause;
+  }
+;
+
+//https://learn.microsoft.com/en-us/sql/mdx/mdx-data-manipulation-select?view=sql-server-ver16
 SelectStatement parseSelectStatement :
 {
   List<SelectWithClause> selectWithClauses = new LinkedList<SelectWithClause>();
