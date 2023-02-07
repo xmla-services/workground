@@ -509,19 +509,22 @@ CreateCellCalculationBodyClause parseCreateCellCalculationBodyClause:
 {
   CreateCellCalculationBodyClause createCellCalculationBC = null;
 }
- <CELL><CELL><CELL><CELL><CELL><CELL><CELL>
+ <NOT><NOT><NOT><NOT><NOT><NOT><NOT>
   {
     return createCellCalculationBC;
   }
 ;
 
+// https://learn.microsoft.com/en-us/analysis-services/multidimensional-models/mdx/mdx-building-measures?view=asallproducts-allversions
 MeasureBodyClause parseMeasureBodyClause:
-  < APPROX_NUMERIC_LITERAL >
+  <NOT><NOT><NOT><NOT><NOT><NOT><NOT>
   {
-    return new MeasureBodyClause(new BigDecimal(getToken(0).getImage()));
+    return new MeasureBodyClause();
   }
 ;
 
+
+https://docs.oracle.com/cd/E57185_01/ESBTR/mdx_grammar_rules.html
 SelectWithClause parseSelectWithClause :
 {
   SelectWithClause selectWithClause = null;
@@ -688,9 +691,15 @@ SelectCellPropertyListClause parseSelectCellPropertyListClause :
   }
 ;
 
-
+// https://learn.microsoft.com/en-us/sql/mdx/mdx-data-definition-create-member?view=sql-server-ver16
 CreateMemberBodyClause parseCreateMemberBodyClause :
-  parseIdentifier < AS > parseFormulaExpression
+{
+ ObjectIdentifier objectIdentifier=null;
+}
+  <CURRENTCUBE>
+  | objectIdentifier = parseIdentifier
+    < AS >
+   parseFormulaExpression
   (
     < COMMA > parseMemberPropertyDefinition
   )*
