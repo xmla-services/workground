@@ -8,7 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *
-* Contributors: see .ccc file
+* Contributors: see corresponding .ccc file
 */
 package org.eclipse.daanse.mdx.parser.ccc;
 
@@ -18,16 +18,14 @@ import java.util.*;
 @SuppressWarnings("serial")
 public class ParseException extends RuntimeException {
     // The token we tripped up on.
-    private Token token;
+    private Node.TerminalNode token;
     //We were expecting one of these token types
-    private EnumSet<TokenType> expectedTypes;
-    private List<MDXParser.NonTerminalCall> callStack;
+    private Set<? extends Node.NodeType> expectedTypes;
+    private List<NonTerminalCall> callStack;
     private boolean alreadyAdjusted;
-    private MDXParser parser;
 
-    private void setInfo(MDXParser parser, Token token, EnumSet<TokenType> expectedTypes, List<MDXParser.NonTerminalCall> callStack) {
-        this.parser = parser;
-        if (token != null && token.getType() != TokenType.EOF && token.getNext() != null) {
+    private void setInfo(Node.TerminalNode token, Set<? extends Node.NodeType> expectedTypes, List<NonTerminalCall> callStack) {
+        if (token != null && !token.getType().isEOF() && token.getNext() != null) {
             token = token.getNext();
         }
         this.token = token;
@@ -36,23 +34,22 @@ public class ParseException extends RuntimeException {
     }
 
     public boolean hitEOF() {
-        return token != null && token.getType() == TokenType.EOF;
+        return token != null && token.getType().isEOF();
     }
 
-    public ParseException(MDXParser parser, Token token, EnumSet<TokenType> expectedTypes, List<MDXParser.NonTerminalCall> callStack) {
-        setInfo(parser, token, expectedTypes, callStack);
+    public ParseException(MdxParser parser, Node.TerminalNode token, Set<? extends Node.NodeType> expectedTypes, List<NonTerminalCall> callStack) {
+        setInfo(token, expectedTypes, callStack);
     }
 
-    public ParseException(MDXParser parser, String message) {
+    public ParseException(MdxParser parser, String message) {
         super(message);
-        setInfo(parser, parser.lastConsumedToken, null, parser.parsingStack);
     }
 
-    public ParseException(MDXParser parser, EnumSet<TokenType> expectedTypes, List<MDXParser.NonTerminalCall> callStack) {
+    public ParseException(MdxParser parser, Set<? extends Node.NodeType> expectedTypes, List<NonTerminalCall> callStack) {
         this(parser, parser.lastConsumedToken, expectedTypes, callStack);
     }
 
-    public ParseException(Token token) {
+    public ParseException(Node.TerminalNode token) {
         this.token = token;
     }
 
@@ -81,7 +78,7 @@ public class ParseException extends RuntimeException {
         if (expectedTypes != null) {
             buf.append("\nWas expecting one of the following:\n");
             boolean isFirst = true;
-            for (TokenType type : expectedTypes) {
+            for (Node.NodeType type : expectedTypes) {
                 if (!isFirst) buf.append(", ");
                 isFirst = false;
                 buf.append(type);
@@ -90,7 +87,7 @@ public class ParseException extends RuntimeException {
         String content = token.getImage();
         if (content == null) content = "";
         if (content.length() > 32) content = content.substring(0, 32) + "...";
-        buf.append("\nFound string \"" + mdxLexer.addEscapes(content) + "\" of type " + token.getType());
+        buf.append("\nFound string \"" + addEscapes(content) + "\" of type " + token.getType());
         return buf.toString();
     }
 
@@ -111,19 +108,15 @@ public class ParseException extends RuntimeException {
     *
     * @return the token which causes the parse error and null otherwise.
     */
-    public Token getToken() {
+    public Node.TerminalNode getToken() {
         return token;
-    }
-
-    public MDXParser getParser() {
-        return parser;
     }
 
     private void adjustStackTrace() {
         if (alreadyAdjusted || callStack == null || callStack.isEmpty()) return;
         List<StackTraceElement> fullTrace = new LinkedList<>();
         List<StackTraceElement> ourCallStack = new LinkedList<>();
-        for (MDXParser.NonTerminalCall ntc : callStack) {
+        for (NonTerminalCall ntc : callStack) {
             ourCallStack.add(ntc.createStackTraceElement());
         }
         StackTraceElement[] jvmCallStack = super.getStackTrace();
@@ -150,6 +143,47 @@ public class ParseException extends RuntimeException {
             }
         }
         return null;
+    }
+
+    private static String addEscapes(String str) {
+        StringBuilder retval = new StringBuilder();
+        for (int ch : str.codePoints().toArray()) {
+            switch(ch) {
+                case'\b' : 
+                    retval.append("\\b");
+                    continue;
+                case'\t' : 
+                    retval.append("\\t");
+                    continue;
+                case'\n' : 
+                    retval.append("\\n");
+                    continue;
+                case'\f' : 
+                    retval.append("\\f");
+                    continue;
+                case'\r' : 
+                    retval.append("\\r");
+                    continue;
+                case'\"' : 
+                    retval.append("\\\"");
+                    continue;
+                case'\'' : 
+                    retval.append("\\\'");
+                    continue;
+                case'\\' : 
+                    retval.append("\\\\");
+                    continue;
+                default : 
+                    if (Character.isISOControl(ch)) {
+                        String s = "0000" + java.lang.Integer.toString(ch, 16);
+                        retval.append("\\u" + s.substring(s.length() - 4, s.length()));
+                    } else {
+                        retval.appendCodePoint(ch);
+                    }
+                    continue;
+            }
+        }
+        return retval.toString();
     }
 
 }

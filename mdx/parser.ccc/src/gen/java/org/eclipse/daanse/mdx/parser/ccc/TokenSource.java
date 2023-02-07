@@ -9,7 +9,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *
-* Contributors: see .ccc file
+* Contributors: see corresponding .ccc file
 
 */
 package org.eclipse.daanse.mdx.parser.ccc;
@@ -23,37 +23,465 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.CharacterCodingException;
 import static java.nio.charset.StandardCharsets.*;
+import java.util.Arrays;
+import java.util.BitSet;
 
 
-abstract public class TokenSource <T extends Node.TerminalNode> {
+abstract public class TokenSource {
+    private int tabSize = 1;
+
+    public void setTabSize(int tabSize) {
+        this.tabSize = tabSize;
+    }
+
+    // Typically a filename, I suppose.
+    private String inputSource = "input";
+
+    int getTabSize() {
+        return tabSize;
+    }
+
+    // Just a dummy Token value that we put in the tokenLocationTable
+    // to indicate that this location in the file is ignored.
+    private static final Token IGNORED = new Token(), SKIPPED = new Token();
+    // Just a very simple, bloody minded approach, just store the
+    // Token objects in a table where the offsets are the code unit
+    // positions in the content buffer. If the Token at a given offset is
+    // the dummy or marker type IGNORED, then the location is skipped via
+    // whatever preprocessor logic.
+    private Node.TerminalNode[] tokenLocationTable;
+    // A BitSet that stores where the tokens are located.
+    // This is not strictly necessary, I suppose...
+    private BitSet tokenOffsets;
+    //  A Bitset that stores the line numbers that
+    // contain either hard tabs or extended (beyond 0xFFFF) unicode
+    // characters.
+    private BitSet needToCalculateColumns = new BitSet();
+    // A list of offsets of the beginning of lines
+    private int[] lineOffsets;
+    // Munged content, possibly replace unicode escapes, tabs, or CRLF with LF.
+    private CharSequence content;
+    // The offset in the internal buffer to the very
+    // next character that the readChar method returns
+    private int bufferPosition;
+
+    final int getBufferPosition() {
+        return bufferPosition;
+    }
+
+    final void setBufferPosition(int bufferPosition) {
+        this.bufferPosition = bufferPosition;
+    }
+
+    // The starting line and column, usually 1,1
+    // that is used to report a file position
+    // in 1-based line/column terms
+    private int startingLine, startingColumn;
+
+    void setStartingPos(int startingLine, int startingColumn) {
+        this.startingLine = startingLine;
+        this.startingColumn = startingColumn;
+    }
+
+    public TokenSource(String inputSource, CharSequence input, int startingLine, int startingColumn) {
+        this.inputSource = inputSource;
+        tabSize = 4;
+        this.startingLine = startingLine;
+        this.startingColumn = startingColumn;
+    }
+
+    // Icky method to handle annoying stuff. Might make this public later if it is
+    // needed elsewhere
+    static String mungeContent(CharSequence content, boolean preserveTabs, int tabSize, boolean preserveLines, boolean javaUnicodeEscape, boolean ensureFinalEndline) {
+        if (preserveTabs && preserveLines && !javaUnicodeEscape) {
+            if (ensureFinalEndline) {
+                if (content.length() == 0) {
+                    content = "\n";
+                } else {
+                    int lastChar = content.charAt(content.length() - 1);
+                    if (lastChar != '\n' && lastChar != '\r') {
+                        if (content instanceof StringBuilder) {
+                            ((StringBuilder) content).append((char) '\n');
+                        } else {
+                            StringBuilder buf = new StringBuilder(content);
+                            buf.append('\n');
+                            content = buf.toString();
+                        }
+                    }
+                }
+            }
+            return content.toString();
+        }
+        StringBuilder buf = new StringBuilder();
+        // This is just to handle tabs to spaces. If you don't have that setting set, it
+        // is really unused.
+        int col = 0;
+        int index = 0, contentLength = content.length();
+        while (index < contentLength) {
+            char ch = content.charAt(index++);
+            if (ch == '\n') {
+                buf.append(ch);
+                col = 0;
+            } else if (javaUnicodeEscape && ch == '\\' && index < contentLength && content.charAt(index) == 'u') {
+                int numPrecedingSlashes = 0;
+                for (int i = index - 1; i >= 0; i--) {
+                    if (content.charAt(i) == '\\') numPrecedingSlashes++;
+                    else break;
+                }
+                if (numPrecedingSlashes % 2 == 0) {
+                    buf.append('\\');
+                    ++col;
+                    continue;
+                }
+                int numConsecutiveUs = 0;
+                for (int i = index; i < contentLength; i++) {
+                    if (content.charAt(i) == 'u') numConsecutiveUs++;
+                    else break;
+                }
+                String fourHexDigits = content.subSequence(index + numConsecutiveUs, index + numConsecutiveUs + 4).toString();
+                buf.append((char) Integer.parseInt(fourHexDigits, 16));
+                index += (numConsecutiveUs + 4);
+                ++col;
+            } else if (!preserveLines && ch == '\r') {
+                buf.append('\n');
+                col = 0;
+                if (index < contentLength && content.charAt(index) == '\n') {
+                    ++index;
+                }
+            } else if (ch == '\t' && !preserveTabs) {
+                int spacesToAdd = tabSize - col % tabSize;
+                for (int i = 0; i < spacesToAdd; i++) {
+                    buf.append(' ');
+                    col++;
+                }
+            } else {
+                buf.append(ch);
+                if (!Character.isLowSurrogate(ch)) col++;
+            }
+        }
+        if (ensureFinalEndline) {
+            if (buf.length() == 0) {
+                return "\n";
+            }
+            char lastChar = buf.charAt(buf.length() - 1);
+            if (lastChar != '\n' && lastChar != '\r') buf.append('\n');
+        }
+        return buf.toString();
+    }
+
+    final void createTokenLocationTable() {
+        int size = content.length() + 1;
+        tokenLocationTable = new Node.TerminalNode[size];
+        tokenOffsets = new BitSet(size);
+    }
+
+    final void skipTokens(int begin, int end) {
+        for (int i = begin; i < end; i++) {
+            if (tokenLocationTable[i] != IGNORED) tokenLocationTable[i] = SKIPPED;
+        }
+    }
+
+    void setContent(CharSequence content) {
+        this.content = content;
+    }
+
+    CharSequence getContent() {
+        return content;
+    }
+
+    int contentLength() {
+        return content.length();
+    }
+
+    int readChar() {
+        CharSequence content = getContent();
+        bufferPosition = nextUnignoredOffset(bufferPosition);
+        if (bufferPosition >= content.length()) {
+            return -1;
+        }
+        char ch = content.charAt(bufferPosition++);
+        if (Character.isHighSurrogate(ch) && bufferPosition < content.length()) {
+            char nextChar = content.charAt(bufferPosition);
+            if (Character.isLowSurrogate(nextChar)) {
+                ++bufferPosition;
+                return Character.toCodePoint(ch, nextChar);
+            }
+        }
+        return ch;
+    }
 
     /**
-    * @return the input source (usually a filename)
+    * backup a certain number of code points
     */
-    abstract public String getInputSource();
+    final void backup(int amount) {
+        for (int i = 0; i < amount; i++) {
+            bufferPosition--;
+            while (isIgnored(bufferPosition))bufferPosition--;
+            if (Character.isLowSurrogate(content.charAt(bufferPosition))) bufferPosition--;
+        }
+    }
 
     /**
-    * @return the text between startOffset (inclusive)
-    * and endOffset(exclusive)
+    * advance a certain number of code points
     */
-    abstract public String getText(int startOffset, int endOffset);
+    final void forward(int amount) {
+        for (int i = 0; i < amount; i++) {
+            if (Character.isHighSurrogate(content.charAt(bufferPosition))) bufferPosition++;
+            bufferPosition++;
+            while (isIgnored(bufferPosition))bufferPosition++;
+        }
+    }
+
+    // But there is no goto in Java!!!
+    final void goTo(int offset) {
+        this.bufferPosition = nextUnignoredOffset(offset);
+    }
+
+    private final int nextUnignoredOffset(int offset) {
+        while (offset < tokenLocationTable.length - 1 && tokenLocationTable[offset] == IGNORED) {
+            ++offset;
+        }
+        return offset;
+    }
+
+    final void setIgnoredRange(int begin, int end) {
+        for (int offset = begin; offset < end; offset++) {
+            tokenLocationTable[offset] = IGNORED;
+            tokenOffsets.clear(begin, end);
+        }
+    }
+
+    final boolean isIgnored(int offset) {
+        return tokenLocationTable[offset] == IGNORED;
+    }
+
+    final void cacheTokenAt(Node.TerminalNode tok, int offset) {
+        if (!isIgnored(offset)) {
+            tokenOffsets.set(offset);
+            tokenLocationTable[offset] = tok;
+        }
+    }
+
+    final Node.TerminalNode cachedTokenAt(int offset) {
+        return tokenLocationTable[offset];
+    }
+
+    void uncacheTokens(Node.TerminalNode lastToken) {
+        int endOffset = lastToken.getEndOffset();
+        if (endOffset < tokenOffsets.length()) {
+            tokenOffsets.clear(lastToken.getEndOffset(), tokenOffsets.length());
+        }
+    }
+
+    Node.TerminalNode nextCachedToken(int offset) {
+        int nextOffset = tokenOffsets.nextSetBit(offset);
+        return nextOffset != -1 ? cachedTokenAt(nextOffset) : null;
+    }
+
+    Node.TerminalNode previousCachedToken(int offset) {
+        int prevOffset = tokenOffsets.previousSetBit(offset - 1);
+        return prevOffset == -1 ? null : cachedTokenAt(prevOffset);
+    }
 
     /**
-    * @return the line number from the absolute offset passed in as a parameter
+    * This is used in conjunction with having a preprocessor.
+    * We set which lines are actually parsed lines and the
+    * unset ones are ignored.
+    * @param parsedLines a #java.util.BitSet that holds which lines
+    * are parsed (i.e. not ignored)
     */
-    abstract public int getLineFromOffset(int pos);
+    private void setParsedLines(BitSet parsedLines, boolean reversed) {
+        for (int i = 0; i < lineOffsets.length; i++) {
+            boolean turnOffLine = !parsedLines.get(i + 1);
+            if (reversed) turnOffLine = !turnOffLine;
+            if (turnOffLine) {
+                int lineOffset = lineOffsets[i];
+                int nextLineOffset = i < lineOffsets.length - 1 ? lineOffsets[i + 1] : content.length();
+                setIgnoredRange(lineOffset, nextLineOffset);
+            }
+        }
+    }
+
+    // Just use the canned binary search to check whether the char
+    // is in one of the intervals
+    static final boolean checkIntervals(int[] ranges, int ch) {
+        int result = Arrays.binarySearch(ranges, ch);
+        return result >= 0 || result % 2 == 0;
+    }
+
+    /**
+    * This is used in conjunction with having a preprocessor.
+    * We set which lines are actually parsed lines and the
+    * unset ones are ignored.
+    * @param parsedLines a #java.util.BitSet that holds which lines
+    * are parsed (i.e. not ignored)
+    */
+    public void setParsedLines(BitSet parsedLines) {
+        setParsedLines(parsedLines, false);
+    }
+
+    public void setUnparsedLines(BitSet unparsedLines) {
+        setParsedLines(unparsedLines, true);
+    }
+
+    void handleCContinuationLines() {
+        String input = content.toString();
+        for (int offset = input.indexOf('\\'); offset >= 0; offset = input.indexOf('\\', offset + 1)) {
+            int nlIndex = input.indexOf('\n', offset);
+            if (nlIndex < 0) break;
+            if (input.substring(offset + 1, nlIndex).trim().isEmpty()) {
+                for (int i = offset; i <= nlIndex; i++)setIgnoredRange(i, i + 1);
+            }
+        }
+    }
+
+    void setLineSkipped(Node.TerminalNode tok) {
+        int lineNum = tok.getBeginLine();
+        int start = getLineStartOffset(lineNum);
+        int end = getLineStartOffset(lineNum + 1);
+        setIgnoredRange(start, end);
+        tok.setBeginOffset(start);
+        tok.setEndOffset(end);
+    }
+
+    /**
+    * The offset of the start of the given line. This is in code units
+    */
+    int getLineStartOffset(int lineNumber) {
+        int realLineNumber = lineNumber - startingLine;
+        if (realLineNumber <= 0) {
+            return 0;
+        }
+        if (realLineNumber >= lineOffsets.length) {
+            return content.length();
+        }
+        return lineOffsets[realLineNumber];
+    }
+
+    /**
+    * The offset of the end of the given line. This is in code units.
+    */
+    int getLineEndOffset(int lineNumber) {
+        int realLineNumber = lineNumber - startingLine;
+        if (realLineNumber < 0) {
+            return 0;
+        }
+        if (realLineNumber >= lineOffsets.length) {
+            return content.length();
+        }
+        if (realLineNumber == lineOffsets.length - 1) {
+            return content.length() - 1;
+        }
+        return lineOffsets[realLineNumber + 1] - 1;
+    }
+
+    public int getLineFromOffset(int pos) {
+        if (pos >= content.length()) {
+            if (content.charAt(content.length() - 1) == '\n') {
+                return startingLine + lineOffsets.length;
+            }
+            return startingLine + lineOffsets.length - 1;
+        }
+        int bsearchResult = Arrays.binarySearch(lineOffsets, pos);
+        if (bsearchResult >= 0) {
+            return Math.max(1, startingLine + bsearchResult);
+        }
+        return Math.max(1, startingLine - (bsearchResult + 2));
+    }
+
+    void createLineOffsetsTable() {
+        if (content.length() == 0) {
+            this.lineOffsets = new int[0];
+            return;
+        }
+        int lineCount = 0;
+        int length = content.length();
+        for (int i = 0; i < length; i++) {
+            char ch = content.charAt(i);
+            if (ch == '\t' || Character.isHighSurrogate(ch)) {
+                needToCalculateColumns.set(lineCount);
+            }
+            if (ch == '\n') {
+                lineCount++;
+            }
+        }
+        if (content.charAt(length - 1) != '\n') {
+            lineCount++;
+        }
+        int[] lineOffsets = new int[lineCount];
+        lineOffsets[0] = 0;
+        int index = 1;
+        for (int i = 0; i < length; i++) {
+            char ch = content.charAt(i);
+            if (ch == '\n') {
+                if (i + 1 == length) break;
+                lineOffsets[index++] = i + 1;
+            }
+        }
+        this.lineOffsets = lineOffsets;
+    }
 
     /**
     * @return the column (1-based and in code points)
     * from the absolute offset passed in as a parameter
     */
-    abstract public int getCodePointColumnFromOffset(int pos);
+    public int getCodePointColumnFromOffset(int pos) {
+        if (pos >= content.length()) return 1;
+        if (pos == 0) return startingColumn;
+        final int line = getLineFromOffset(pos) - startingLine;
+        final int lineStart = lineOffsets[line];
+        int startColumnAdjustment = line > 0 ? 1 : startingColumn;
+        int unadjustedColumn = pos - lineStart + startColumnAdjustment;
+        if (!needToCalculateColumns.get(line)) {
+            return unadjustedColumn;
+        }
+        if (Character.isLowSurrogate(content.charAt(pos))) --pos;
+        int result = startColumnAdjustment;
+        for (int i = lineStart; i < pos; i++) {
+            char ch = content.charAt(i);
+            if (ch == '\t') {
+                result += tabSize - (result - 1) % tabSize;
+            } else if (Character.isHighSurrogate(ch)) {
+                ++result;
+                ++i;
+            } else {
+                ++result;
+            }
+        }
+        return result;
+    }
 
-    abstract void cacheToken(T token);
+    /**
+    * @return the line length in code _units_
+    */
+    int getLineLength(int lineNumber) {
+        int startOffset = getLineStartOffset(lineNumber);
+        int endOffset = getLineEndOffset(lineNumber);
+        return 1 + endOffset - startOffset;
+    }
 
-    abstract T previousCachedToken(int offset);
+    /**
+    * @return the text between startOffset (inclusive)
+    * and endOffset(exclusive)
+    */
+    public String getText(int startOffset, int endOffset) {
+        StringBuilder buf = new StringBuilder();
+        for (int offset = startOffset; offset < endOffset; offset++) {
+            if (!isIgnored(offset)) {
+                buf.append(content.charAt(offset));
+            }
+        }
+        return buf.toString();
+    }
 
-    abstract T nextCachedToken(int pos);
+    // The source of the raw characters that we are scanning
+    public String getInputSource() {
+        return inputSource;
+    }
+
+    public void setInputSource(String inputSource) {
+        this.inputSource = inputSource;
+    }
 
     /**
     * @param bytes the raw byte array
@@ -113,41 +541,6 @@ abstract public class TokenSource <T extends Node.TerminalNode> {
 
     static public String stringFromBytes(byte[] bytes) throws CharacterCodingException {
         return stringFromBytes(bytes, null);
-    }
-
-    static final int BUF_SIZE = 0x10000;
-
-    static public String readFully(Reader reader) throws IOException {
-        char[] block = new char[BUF_SIZE];
-        int charsRead = reader.read(block);
-        if (charsRead < 0) {
-            throw new IOException("No input");
-        } else if (charsRead < BUF_SIZE) {
-            char[] result = new char[charsRead];
-            System.arraycopy(block, 0, result, 0, charsRead);
-            reader.close();
-            return new String(block, 0, charsRead);
-        }
-        StringBuilder buf = new StringBuilder();
-        buf.append(block);
-        do {
-            charsRead = reader.read(block);
-            if (charsRead > 0) {
-                buf.append(block, 0, charsRead);
-            }
-        }
-        while (charsRead == BUF_SIZE);
-        reader.close();
-        return buf.toString();
-    }
-
-    // Annoying kludge really...
-    static public String readToEnd(Reader reader) {
-        try {
-            return readFully(reader);
-        } catch (IOException ioe) {
-            throw new RuntimeException(ioe);
-        }
     }
 
 }

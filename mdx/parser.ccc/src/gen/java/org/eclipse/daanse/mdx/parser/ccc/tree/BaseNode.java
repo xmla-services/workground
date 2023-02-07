@@ -8,11 +8,12 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *
-* Contributors: see .ccc file
+* Contributors: see corresponding .ccc file
 */
 package org.eclipse.daanse.mdx.parser.ccc.tree;
 
 import org.eclipse.daanse.mdx.parser.ccc.*;
+import static org.eclipse.daanse.mdx.parser.ccc.Token.TokenType.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,12 +25,12 @@ import java.util.Collections;
 * The base concrete class for non-terminal Nodes
 */
 public class BaseNode implements Node {
-    private TokenSource tokenSource;
+    private MdxLexer tokenSource;
 
-    public TokenSource getTokenSource() {
+    public MdxLexer getTokenSource() {
         if (tokenSource == null) {
             for (Node child : children()) {
-                tokenSource = child.getTokenSource();
+                if (child.getTokenSource()instanceof MdxLexer) tokenSource = (MdxLexer) child.getTokenSource();
                 if (tokenSource != null) break;
             }
         }
@@ -37,7 +38,7 @@ public class BaseNode implements Node {
     }
 
     public void setTokenSource(TokenSource tokenSource) {
-        this.tokenSource = tokenSource;
+        this.tokenSource = (MdxLexer) tokenSource;
     }
 
     static private Class<? extends List> listClass;

@@ -8,7 +8,7 @@
 *
 * SPDX-License-Identifier: EPL-2.0
 *
-* Contributors: see .ccc file
+* Contributors: see corresponding .ccc file
 
 * Generated Code for ASTUPDATE Token subclass
 * by the ASTToken.java.ftl template
@@ -16,13 +16,13 @@
 package org.eclipse.daanse.mdx.parser.ccc.tree;
 
 import org.eclipse.daanse.mdx.parser.ccc.*;
-import org.eclipse.daanse.mdx.parser.ccc.TokenType;
-import static org.eclipse.daanse.mdx.parser.ccc.TokenType.*;
+import org.eclipse.daanse.mdx.parser.ccc.Token.TokenType;
+import static org.eclipse.daanse.mdx.parser.ccc.Token.TokenType.*;
 
 
 public class ASTUPDATE extends Token {
 
-    public ASTUPDATE(TokenType type, TokenSource tokenSource, int beginOffset, int endOffset) {
+    public ASTUPDATE(TokenType type, MdxLexer tokenSource, int beginOffset, int endOffset) {
         super(type, tokenSource, beginOffset, endOffset);
     }
 
