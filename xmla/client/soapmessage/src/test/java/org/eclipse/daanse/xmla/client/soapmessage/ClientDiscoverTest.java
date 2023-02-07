@@ -1,17 +1,57 @@
 package org.eclipse.daanse.xmla.client.soapmessage;
 
-import java.util.List;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.eclipse.daanse.ws.api.whiteboard.annotations.RequireSoapWhiteboard;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.datasources.DiscoverDataSourcesRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.datasources.DiscoverDataSourcesRestrictionsR;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
+import org.osgi.framework.BundleContext;
+import org.osgi.service.component.annotations.RequireServiceComponentRuntime;
+import org.osgi.test.common.annotation.InjectBundleContext;
+import org.osgi.test.common.annotation.Property;
+import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
+import org.osgi.test.common.dictionary.Dictionaries;
+import org.osgi.test.junit5.cm.ConfigurationExtension;
 
+import jakarta.xml.soap.SOAPMessage;
+import jakarta.xml.ws.Provider;
+
+@RequireSoapWhiteboard
+@ExtendWith(ConfigurationExtension.class)
+@WithFactoryConfiguration(factoryPid = "org.eclipse.daanse.ws.handler.SOAPLoggingHandler", name = "test-ms-config", location = "?", properties = {
+        @Property(key = "osgi.soap.endpoint.selector", value = "(service.pid=*)") })
+@RequireServiceComponentRuntime
 public class ClientDiscoverTest {
-    XmlaServiceClientImpl client = new XmlaServiceClientImpl("");
+    XmlaServiceClientImpl client = new XmlaServiceClientImpl("http://localhost:8090/xmla");
     // Register a Provider using whiteboardpattern and xmlassert to check xml
+    @InjectBundleContext
+    BundleContext bc;
+
+    public Provider<SOAPMessage> provider = spy(new MockProvider());
+
+    private ArgumentCaptor<SOAPMessage> msgCaptor;
+
+    @BeforeEach
+    void beforeEach() throws InterruptedException {
+        msgCaptor = ArgumentCaptor.forClass(SOAPMessage.class);
+
+        bc.registerService(Provider.class, provider, Dictionaries.dictionaryOf("osgi.soap.endpoint.contextpath",
+                "/xmla", "osgi.soap.endpoint.implementor", "true"));
+        TimeUnit.SECONDS.sleep(2);
+
+    }
 
     @Test
     void testdataSources_simple() throws Exception {
@@ -23,5 +63,12 @@ public class ClientDiscoverTest {
 
         List<DiscoverDataSourcesResponseRow> rows = client.discover()
                 .dataSources(dataSourcesRequest);
+
+        verify(provider, (times(1))).invoke(msgCaptor.capture());
+
+        SOAPMessage msg = msgCaptor.getValue();
+        msg.writeTo(System.out);
+        // may reuse some tests from tck
+        System.out.println(2);
     }
 }
