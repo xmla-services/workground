@@ -1,6 +1,8 @@
 package org.eclipse.daanse.xmla.client.soapmessage;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
@@ -33,6 +35,7 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarc
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
 
 import jakarta.xml.soap.SOAPException;
+import jakarta.xml.soap.SOAPMessage;
 
 public class DiscoverServiceImpl implements DiscoverService {
 
@@ -121,7 +124,25 @@ public class DiscoverServiceImpl implements DiscoverService {
 
     @Override
     public List<DiscoverDataSourcesResponseRow> dataSources(DiscoverDataSourcesRequest requestApi) {
-        // TODO Auto-generated method stub
+        try {
+
+            Consumer<SOAPMessage> msg = new Consumer<SOAPMessage>() {
+
+                @Override
+                public void accept(SOAPMessage message) {
+                    try {
+                        message.getSOAPBody()
+                                .addChildElement("dummy");
+                    } catch (SOAPException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+                }
+            };
+            soapClient.callSoapWebService(Optional.empty(), msg);
+        } catch (SOAPException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

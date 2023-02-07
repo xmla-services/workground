@@ -43,8 +43,8 @@ import jakarta.xml.ws.soap.SOAPFaultException;
 
 @WebServiceProvider()
 @ServiceMode(value = Service.Mode.MESSAGE)
-@Component(service = Provider.class, name = "org.eclipse.daanse.msxmlanalysisservice")
 @RequireSoapWhiteboard
+@Component(service = Provider.class, name = "org.eclipse.daanse.msxmlanalysisservice")
 @Designate(factory = true, ocd = XmlaWebserviceProvider.Config.class)
 @SOAPWhiteboardEndpoint(contextpath = "xmla")
 public class XmlaWebserviceProvider implements Provider<SOAPMessage> {

@@ -6,7 +6,6 @@ import org.eclipse.daanse.xmla.api.execute.ExecuteService;
 
 public class XmlaServiceClientImpl implements XmlaService {
 
-
     private DiscoverServiceImpl ds;
     private ExecuteServiceImpl es;
 
