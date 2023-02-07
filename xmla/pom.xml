@@ -23,5 +23,6 @@
     <module>api</module>
     <module>ws</module>
     <module>model.record</module>
+    <module>client</module>
   </modules>
 </project>
