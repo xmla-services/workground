@@ -21,6 +21,8 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequ
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
@@ -47,6 +49,16 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctions
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 
 public interface DiscoverService {
 
@@ -85,4 +97,16 @@ public interface DiscoverService {
     List<DbSchemaColumnsResponseRow> dbSchemaColumns(DbSchemaColumnsRequest requestApi);
 
     List<DbSchemaProviderTypesResponseRow> dbSchemaProviderTypes(DbSchemaProviderTypesRequest requestApi);
+
+    List<DbSchemaSchemataResponseRow> dbSchemaSchemata(DbSchemaSchemataRequest requestApi);
+
+    List<MdSchemaLevelsResponseRow> mdSchemaLevels(MdSchemaLevelsRequest requestApi);
+
+    List<MdSchemaMeasureGroupDimensionsResponseRow> mdSchemaMeasureGroupDimensions(MdSchemaMeasureGroupDimensionsRequest requestApi);
+
+    List<MdSchemaMeasuresResponseRow> mdSchemaMeasures(MdSchemaMeasuresRequest requestApi);
+
+    List<MdSchemaMembersResponseRow> mdSchemaMembers(MdSchemaMembersRequest requestApi);
+
+    List<MdSchemaPropertiesResponseRow> mdSchemaProperties(MdSchemaPropertiesRequest requestApi);
 }

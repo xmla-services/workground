@@ -13,33 +13,25 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-public enum HierarchyOriginEnum {
+public enum LevelUniqueSettingsEnum {
 
     /**
-     * Identifies user-defined hierarchies.
-     */
-    USER_DEFINED(0x0001),
-    /**
-     * Identifies attribute hierarchies.
-     */
-    ATTRIBUTE(0x0002),
-    /**
-     * Identifies key attribute hierarchies.
-     */
-    KEY(0x0004),
-    /**
-     * Identifies attributes with no attribute hierarchies.
-     */
-    WITH_NO_ATTRIBUTE(0x0008),
-    /**
-     * The default restriction
-     */
-    DEFAULT(0x0003);
+    * Member
+    * key columns establish
+    * uniqueness.
+    */
+    KEY_COLUMNS(0x00000001),
 
+    /**
+     * Member
+     * name columns establish
+     * uniqueness.
+     */
+    NAME_COLUMNS(0x00000002);
 
     private final int value;
 
-    HierarchyOriginEnum(int v) {
+    LevelUniqueSettingsEnum(int v) {
         this.value = v;
     }
 
@@ -47,17 +39,17 @@ public enum HierarchyOriginEnum {
         return value;
     }
 
-    public static HierarchyOriginEnum fromValue(String v) {
+    public static LevelUniqueSettingsEnum fromValue(String v) {
         if (v == null) {
-            return DEFAULT;
+            return null;
         }
         int vi = Integer.decode(v);
-        for (HierarchyOriginEnum c : HierarchyOriginEnum.values()) {
+        for (LevelUniqueSettingsEnum c : LevelUniqueSettingsEnum.values()) {
             if (c.value == vi) {
                 return c;
             }
         }
-        throw new IllegalArgumentException(new StringBuilder("HierarchyOriginEnum Illegal argument ")
+        throw new IllegalArgumentException(new StringBuilder("LevelOriginEnum Illegal argument ")
             .append(v).toString());
     }
 }
