@@ -13,33 +13,39 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-public enum HierarchyOriginEnum {
+/**
+ * Applies only to a single member:
+ */
+public enum TreeOpEnum {
 
     /**
-     * Identifies user-defined hierarchies.
+     * Returns all of the ancestors.
      */
-    USER_DEFINED(0x0001),
+    all(0x20),
     /**
-     * Identifies attribute hierarchies.
+     *  Returns only the immediate children.
      */
-    ATTRIBUTE(0x0002),
+    children(0x01),
     /**
-     * Identifies key attribute hierarchies.
+     * Returns members on the same level.
      */
-    KEY(0x0004),
+    level(0x02),
     /**
-     * Identifies attributes with no attribute hierarchies.
+     * Returns only the immediate parent.
      */
-    WITH_NO_ATTRIBUTE(0x0008),
+    parent(0x04),
     /**
-     * The default restriction
+     * Returns only itself.
      */
-    DEFAULT(0x0003);
-
+    itself(0x08),
+    /**
+     * Returns all of the descendants.
+     */
+    all_descendants(0x10);
 
     private final int value;
 
-    HierarchyOriginEnum(int v) {
+    TreeOpEnum(int v) {
         this.value = v;
     }
 
@@ -47,17 +53,17 @@ public enum HierarchyOriginEnum {
         return value;
     }
 
-    public static HierarchyOriginEnum fromValue(String v) {
+    public static TreeOpEnum fromValue(String v) {
         if (v == null) {
-            return DEFAULT;
+            return null;
         }
         int vi = Integer.decode(v);
-        for (HierarchyOriginEnum c : HierarchyOriginEnum.values()) {
+        for (TreeOpEnum c : TreeOpEnum.values()) {
             if (c.value == vi) {
                 return c;
             }
         }
-        throw new IllegalArgumentException(new StringBuilder("HierarchyOriginEnum Illegal argument ")
+        throw new IllegalArgumentException(new StringBuilder("TreeOpEnum Illegal argument ")
             .append(v).toString());
     }
 }

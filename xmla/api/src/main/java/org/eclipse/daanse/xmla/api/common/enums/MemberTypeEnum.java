@@ -13,33 +13,35 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
-public enum HierarchyOriginEnum {
+/**
+ * The type of the member
+ */
+public enum MemberTypeEnum {
 
     /**
-     * Identifies user-defined hierarchies.
+     *  Is a regular member.
      */
-    USER_DEFINED(0x0001),
+    Regular_member(1),
     /**
-     * Identifies attribute hierarchies.
+     * Is the All member.
      */
-    ATTRIBUTE(0x0002),
+    All_member(2),
     /**
-     * Identifies key attribute hierarchies.
+     *  Is a measure.
      */
-    KEY(0x0004),
+    Measure(3),
     /**
-     * Identifies attributes with no attribute hierarchies.
+     * Is a formula.
      */
-    WITH_NO_ATTRIBUTE(0x0008),
+    Formula(4),
     /**
-     * The default restriction
+     *  Is of unknown type.
      */
-    DEFAULT(0x0003);
-
+    Unknown(0);
 
     private final int value;
 
-    HierarchyOriginEnum(int v) {
+    MemberTypeEnum(int v) {
         this.value = v;
     }
 
@@ -47,17 +49,14 @@ public enum HierarchyOriginEnum {
         return value;
     }
 
-    public static HierarchyOriginEnum fromValue(String v) {
-        if (v == null) {
-            return DEFAULT;
-        }
-        int vi = Integer.decode(v);
-        for (HierarchyOriginEnum c : HierarchyOriginEnum.values()) {
+    public static MemberTypeEnum fromValue(String v) {
+        int vi = Integer.valueOf(v);
+        for (MemberTypeEnum c : MemberTypeEnum.values()) {
             if (c.value == vi) {
                 return c;
             }
         }
-        throw new IllegalArgumentException(new StringBuilder("HierarchyOriginEnum Illegal argument ")
+        throw new IllegalArgumentException(new StringBuilder("MemberTypeEnum Illegal argument ")
             .append(v).toString());
     }
 }
