@@ -51,6 +51,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctions
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsRequest;
@@ -181,6 +183,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         try {
 
             switch (discover.getRequestType()) {
+            case MDSCHEMA_KPIS -> discoverResponse = handleDiscoverMdSchemaKpis(discover);
             case MDSCHEMA_SETS -> discoverResponse = handleDiscoverMdSchemaSets(discover);
             case MDSCHEMA_PROPERTIES -> discoverResponse = handleDiscoverMdSchemaProperties(discover);
             case MDSCHEMA_MEMBERS -> discoverResponse = handleDiscoverMdSchemaMembers(discover);
@@ -424,4 +427,14 @@ public class ApiXmlaWsAdapter implements WsAdapter {
 
         return responseWs;
     }
+
+    private DiscoverResponse handleDiscoverMdSchemaKpis(Discover requestWs) {
+
+        MdSchemaKpisRequest requestApi = Convert.fromDiscoverMdSchemaKpis(requestWs);
+        List<MdSchemaKpisResponseRow> responseApi = xmlaService.discover().mdSchemaKpis(requestApi);
+        DiscoverResponse responseWs = Convert.toDiscoverMdSchemaKpis(responseApi);
+
+        return responseWs;
+    }
+
 }
