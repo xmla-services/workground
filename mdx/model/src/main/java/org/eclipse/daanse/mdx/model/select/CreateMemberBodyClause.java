@@ -13,6 +13,13 @@
 */
 package org.eclipse.daanse.mdx.model.select;
 
-public record CreateMemberBodyClause() implements SelectWithClause {
+import java.util.List;
+
+import org.eclipse.daanse.mdx.model.MemberPropertyDefinition;
+import org.eclipse.daanse.mdx.model.ObjectIdentifier;
+
+public record CreateMemberBodyClause(ObjectIdentifier objectIdentifier,
+        List<MemberPropertyDefinition> memberPropertyDefinitions) implements SelectWithClause {
+
 
 }

@@ -13,7 +13,7 @@
 */
 package org.eclipse.daanse.mdx.model;
 
-public record Axis(int ordinal) {
+public record Axis(int ordinal,boolean named) {
 
     public Axis {
         if (ordinal < -2) {
@@ -21,35 +21,35 @@ public record Axis(int ordinal) {
         }
     }
 
-    public static Axis create(int ordinal) {
+    public static Axis createUnnamed(int ordinal) {
 
         if (ordinal == -2) {
             return NONE;
         } else if (ordinal == -1) {
             return SLICER;
         } else if (ordinal == 0) {
-            return COLUMNS;
+            return COLUMNS_NAMED;
         } else if (ordinal == 1) {
-            return ROWS;
+            return ROWS_NAMED;
         } else if (ordinal == 2) {
-            return PAGES;
+            return PAGES_NAMED;
         } else if (ordinal == 3) {
-            return CHAPTERS;
+            return CHAPTERS_NAMED;
         } else if (ordinal == 4) {
-            return SECTIONS;
+            return SECTIONS_NAMED;
         } else {
-            return new Axis(ordinal);
+            return new Axis(ordinal,false);
         }
 
     }
 
-    public static final Axis NONE = new Axis(-2);
-    public static final Axis SLICER = new Axis(-1);
-    public static final Axis COLUMNS = new Axis(0);
-    public static final Axis ROWS = new Axis(1);
-    public static final Axis PAGES = new Axis(2);
-    public static final Axis CHAPTERS = new Axis(3);
-    public static final Axis SECTIONS = new Axis(4);
+    public static final Axis NONE = new Axis(-2,false);
+    public static final Axis SLICER = new Axis(-1,false);
+    public static final Axis COLUMNS_NAMED = new Axis(0,true);
+    public static final Axis ROWS_NAMED = new Axis(1,true);
+    public static final Axis PAGES_NAMED = new Axis(2,true);
+    public static final Axis CHAPTERS_NAMED = new Axis(3,true);
+    public static final Axis SECTIONS_NAMED = new Axis(4,true);
 
     public boolean isFilter() {
         return isFilter(this);
