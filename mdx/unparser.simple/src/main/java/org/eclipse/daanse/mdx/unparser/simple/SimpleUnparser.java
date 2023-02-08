@@ -13,6 +13,7 @@
 */
 package org.eclipse.daanse.mdx.unparser.simple;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.daanse.mdx.model.DMVStatement;
@@ -76,7 +77,7 @@ public class SimpleUnparser implements UnParser {
     public StringBuilder unparse(SelectStatement selectStatement) {
         StringBuilder buf = new StringBuilder();
 
-        buf.append(unparse(selectStatement.selectWithClause()));
+        buf.append(unparse(selectStatement.selectWithClauses()));
         buf.append(unparse(selectStatement.selectQueryClause()));
         buf.append(unparse(selectStatement.selectSubcubeClause()));
         buf.append(unparse(selectStatement.selectSlicerAxisClause()));
@@ -106,7 +107,7 @@ public class SimpleUnparser implements UnParser {
         return null;
     }
 
-    private StringBuilder unparse(SelectWithClause selectWithClause) {
+    private StringBuilder unparse(List<SelectWithClause> selectWithClause) {
         return null;
         // TODO Auto-generated method stub
 

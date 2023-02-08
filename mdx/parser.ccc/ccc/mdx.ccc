@@ -517,6 +517,8 @@ CreateCellCalculationBodyClause parseCreateCellCalculationBodyClause:
 
 // https://learn.microsoft.com/en-us/analysis-services/multidimensional-models/mdx/mdx-building-measures?view=asallproducts-allversions
 MeasureBodyClause parseMeasureBodyClause:
+{
+}
   <NOT><NOT><NOT><NOT><NOT><NOT><NOT>
   {
     return new MeasureBodyClause();
@@ -524,7 +526,7 @@ MeasureBodyClause parseMeasureBodyClause:
 ;
 
 
-https://docs.oracle.com/cd/E57185_01/ESBTR/mdx_grammar_rules.html
+// https://docs.oracle.com/cd/E57185_01/ESBTR/mdx_grammar_rules.html
 SelectWithClause parseSelectWithClause :
 {
   SelectWithClause selectWithClause = null;
@@ -694,17 +696,24 @@ SelectCellPropertyListClause parseSelectCellPropertyListClause :
 // https://learn.microsoft.com/en-us/sql/mdx/mdx-data-definition-create-member?view=sql-server-ver16
 CreateMemberBodyClause parseCreateMemberBodyClause :
 {
- ObjectIdentifier objectIdentifier=null;
+ ObjectIdentifier objectIdentifier = null;
+ FormulaExpression formulaExpression = null;
+ List<MemberPropertyDefinition> memberPropertyDefinitions = new LinkedList<MemberPropertyDefinition>();
+ MemberPropertyDefinition memberPropertyDefinition = null;
 }
-  <CURRENTCUBE>
-  | objectIdentifier = parseIdentifier
-    < AS >
-   parseFormulaExpression
+//  <CURRENTCUBE>
+//  | 
+  objectIdentifier = parseIdentifier < AS > formulaExpression = parseFormulaExpression
+  
   (
-    < COMMA > parseMemberPropertyDefinition
+    < COMMA > memberPropertyDefinition = parseMemberPropertyDefinition
+    {
+      memberPropertyDefinitions.add(memberPropertyDefinition);
+    }
   )*
+
   {
-    return new CreateMemberBodyClause();
+    return new CreateMemberBodyClause(objectIdentifier,memberPropertyDefinitions);
   }
 ;
 
@@ -1468,30 +1477,30 @@ SelectQueryAxisClause parseSelectQueryAxisClause :
       }
       else
       {
-        axis = Axis.create(n);
+        axis = Axis.createUnnamed(n);
       }
     }
   |
     (
       < COLUMNS >
       {
-        axis = Axis.COLUMNS;
+        axis = Axis.COLUMNS_NAMED;
       }
     | < ROWS >
       {
-        axis = Axis.ROWS;
+        axis = Axis.ROWS_NAMED;
       }
     | < PAGES >
       {
-        axis = Axis.PAGES;
+        axis = Axis.PAGES_NAMED;
       }
     | < SECTIONS >
       {
-        axis = Axis.SECTIONS;
+        axis = Axis.SECTIONS_NAMED;
       }
     | < CHAPTERS >
       {
-        axis = Axis.CHAPTERS;
+        axis = Axis.CHAPTERS_NAMED;
       }
     )
   )
