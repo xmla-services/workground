@@ -61,6 +61,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersRequ
 import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ext.Authenticate;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ext.AuthenticateResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.BeginSession;
@@ -179,6 +181,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         try {
 
             switch (discover.getRequestType()) {
+            case MDSCHEMA_SETS -> discoverResponse = handleDiscoverMdSchemaSets(discover);
             case MDSCHEMA_PROPERTIES -> discoverResponse = handleDiscoverMdSchemaProperties(discover);
             case MDSCHEMA_MEMBERS -> discoverResponse = handleDiscoverMdSchemaMembers(discover);
             case MDSCHEMA_MEASURES -> discoverResponse = handleDiscoverMdSchemaMeasures(discover);
@@ -409,6 +412,15 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         MdSchemaPropertiesRequest requestApi = Convert.fromDiscoverMdSchemaProperties(requestWs);
         List<MdSchemaPropertiesResponseRow> responseApi = xmlaService.discover().mdSchemaProperties(requestApi);
         DiscoverResponse responseWs = Convert.toDiscoverMdSchemaProperties(responseApi);
+
+        return responseWs;
+    }
+
+    private DiscoverResponse handleDiscoverMdSchemaSets(Discover requestWs) {
+
+        MdSchemaSetsRequest requestApi = Convert.fromDiscoverMdSchemaSets(requestWs);
+        List<MdSchemaSetsResponseRow> responseApi = xmlaService.discover().mdSchemaSets(requestApi);
+        DiscoverResponse responseWs = Convert.toDiscoverMdSchemaSets(responseApi);
 
         return responseWs;
     }
