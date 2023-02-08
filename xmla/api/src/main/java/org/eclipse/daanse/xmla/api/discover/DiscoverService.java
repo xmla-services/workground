@@ -49,6 +49,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctions
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsRequest;
@@ -113,4 +115,6 @@ public interface DiscoverService {
     List<MdSchemaPropertiesResponseRow> mdSchemaProperties(MdSchemaPropertiesRequest requestApi);
 
     List<MdSchemaSetsResponseRow> mdSchemaSets(MdSchemaSetsRequest requestApi);
+
+    List<MdSchemaKpisResponseRow> mdSchemaKpis(MdSchemaKpisRequest requestApi);
 }

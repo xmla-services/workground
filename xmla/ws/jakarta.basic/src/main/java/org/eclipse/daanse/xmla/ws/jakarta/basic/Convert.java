@@ -71,6 +71,9 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.functions.MdSchemaFunctions
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRestrictions;
+import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisRestrictions;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsRestrictions;
@@ -123,6 +126,8 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.functions.MdSchema
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.functions.MdSchemaFunctionsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.hierarchies.MdSchemaHierarchiesRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.hierarchies.MdSchemaHierarchiesRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.kpis.MdSchemaKpisRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.kpis.MdSchemaKpisRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsRequestR;
@@ -913,6 +918,35 @@ public class Convert {
     }
 
     public static DiscoverResponse toDiscoverMdSchemaSets(List<MdSchemaSetsResponseRow> responseApi) {
+        // TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static MdSchemaKpisRequest fromDiscoverMdSchemaKpis(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        MdSchemaKpisRestrictionsR restrictions = discoverMdSchemaKpisRestrictions(requestWs);
+        return new MdSchemaKpisRequestR(properties, restrictions);
+    }
+
+    private static MdSchemaKpisRestrictionsR discoverMdSchemaKpisRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String catalogName = map.get(MdSchemaKpisRestrictions.RESTRICTIONS_CATALOG_NAME);
+        String schemaName = map.get(MdSchemaKpisRestrictions.RESTRICTIONS_SCHEMA_NAME);
+        String cubeName = map.get(MdSchemaKpisRestrictions.RESTRICTIONS_CUBE_NAME);
+        String kpiName = map.get(MdSchemaKpisRestrictions.RESTRICTIONS_KPI_NAME);
+        String cubeSource = map.get(MdSchemaKpisRestrictions.RESTRICTIONS_CUBE_SOURCE);
+
+        return new MdSchemaKpisRestrictionsR(
+            Optional.ofNullable(catalogName),
+            Optional.ofNullable(schemaName),
+            Optional.ofNullable(cubeName),
+            Optional.ofNullable(kpiName),
+            Optional.ofNullable(CubeSourceEnum.fromValue(cubeSource)));
+    }
+
+    public static DiscoverResponse toDiscoverMdSchemaKpis(List<MdSchemaKpisResponseRow> responseApi) {
         // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;

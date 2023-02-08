@@ -55,6 +55,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarc
 
 import jakarta.xml.soap.SOAPException;
 import jakarta.xml.soap.SOAPMessage;
+import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsRequest;
@@ -228,6 +230,11 @@ public class DiscoverServiceImpl implements DiscoverService {
 
     @Override
     public List<MdSchemaSetsResponseRow> mdSchemaSets(MdSchemaSetsRequest requestApi) {
+        return null;
+    }
+
+    @Override
+    public List<MdSchemaKpisResponseRow> mdSchemaKpis(MdSchemaKpisRequest requestApi) {
         return null;
     }
 
