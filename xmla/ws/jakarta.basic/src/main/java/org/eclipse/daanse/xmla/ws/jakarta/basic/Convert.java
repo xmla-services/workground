@@ -86,6 +86,9 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersRest
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesRestrictions;
+import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRestrictions;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsRequestR;
@@ -130,6 +133,8 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.members.MdSchemaMe
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.members.MdSchemaMembersRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRestrictionsR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PropertyList;
@@ -841,7 +846,6 @@ public class Convert {
         PropertiesR properties = discoverProperties(requestWs);
         MdSchemaPropertiesRestrictionsR restrictions = discoverMdSchemaPropertiesRestrictions(requestWs);
         return new MdSchemaPropertiesRequestR(properties, restrictions);
-
     }
 
     private static MdSchemaPropertiesRestrictionsR discoverMdSchemaPropertiesRestrictions(Discover requestWs) {
@@ -853,7 +857,6 @@ public class Convert {
         String dimensionUniqueName = map.get(MdSchemaPropertiesRestrictions.RESTRICTIONS_DIMENSION_UNIQUE_NAME);
         String hierarchyUniqueName = map.get(MdSchemaPropertiesRestrictions.RESTRICTIONS_HIERARCHY_UNIQUE_NAME);
         String levelUniqueName = map.get(MdSchemaPropertiesRestrictions.RESTRICTIONS_LEVEL_UNIQUE_NAME);
-
         String memberUniqueName = map.get(MdSchemaPropertiesRestrictions.RESTRICTIONS_MEMBER_UNIQUE_NAME);
         String propertyType = map.get(MdSchemaPropertiesRestrictions.RESTRICTIONS_PROPERTY_TYPE);
         String propertyName = map.get(MdSchemaPropertiesRestrictions.RESTRICTIONS_PROPERTY_NAME);
@@ -877,6 +880,39 @@ public class Convert {
     }
 
     public static DiscoverResponse toDiscoverMdSchemaProperties(List<MdSchemaPropertiesResponseRow> responseApi) {
+        // TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static MdSchemaSetsRequest fromDiscoverMdSchemaSets(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        MdSchemaSetsRestrictionsR restrictions = discoverMdSchemaSetsRestrictions(requestWs);
+        return new MdSchemaSetsRequestR(properties, restrictions);
+    }
+
+    private static MdSchemaSetsRestrictionsR discoverMdSchemaSetsRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String catalogName = map.get(MdSchemaSetsRestrictions.RESTRICTIONS_CATALOG_NAME);
+        String schemaName = map.get(MdSchemaSetsRestrictions.RESTRICTIONS_SCHEMA_NAME);
+        String cubeName = map.get(MdSchemaSetsRestrictions.RESTRICTIONS_CUBE_NAME);
+        String setName = map.get(MdSchemaSetsRestrictions.RESTRICTIONS_SET_NAME);
+        String scope = map.get(MdSchemaSetsRestrictions.RESTRICTIONS_SCOPE);
+        String cubeSource = map.get(MdSchemaSetsRestrictions.RESTRICTIONS_CUBE_SOURCE);
+        String hierarchyUniqueName = map.get(MdSchemaSetsRestrictions.RESTRICTIONS_HIERARCHY_UNIQUE_NAME);
+
+        return new MdSchemaSetsRestrictionsR(
+            Optional.ofNullable(catalogName),
+            Optional.ofNullable(schemaName),
+            Optional.ofNullable(cubeName),
+            Optional.ofNullable(setName),
+            Optional.ofNullable(ScopeEnum.fromValue(scope)),
+            Optional.ofNullable(CubeSourceEnum.fromValue(cubeSource)),
+            Optional.ofNullable(hierarchyUniqueName));
+    }
+
+    public static DiscoverResponse toDiscoverMdSchemaSets(List<MdSchemaSetsResponseRow> responseApi) {
         // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;

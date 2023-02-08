@@ -59,6 +59,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersRequ
 import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
 
 public interface DiscoverService {
 
@@ -109,4 +111,6 @@ public interface DiscoverService {
     List<MdSchemaMembersResponseRow> mdSchemaMembers(MdSchemaMembersRequest requestApi);
 
     List<MdSchemaPropertiesResponseRow> mdSchemaProperties(MdSchemaPropertiesRequest requestApi);
+
+    List<MdSchemaSetsResponseRow> mdSchemaSets(MdSchemaSetsRequest requestApi);
 }
