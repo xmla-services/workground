@@ -15,5 +15,6 @@
 		<module>model</module>
 		<module>unparser.simple</module>
 		<module>unparser.api</module>
+		<module>combinedtest</module>
 	</modules>
 </project>

@@ -13,6 +13,9 @@
 */
 package org.eclipse.daanse.mdx.model.select;
 
-public record SelectCellPropertyListClause() {
+import java.util.List;
+
+public record SelectCellPropertyListClause(List<String> properties,
+                                           boolean cell) {
 
 }

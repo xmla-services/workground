@@ -15,6 +15,7 @@ package org.eclipse.daanse.mdx.unparser.simple;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.daanse.mdx.model.Axis;
@@ -110,19 +111,43 @@ public class SimpleUnparser implements UnParser {
         sb = sb.append(unparseSelectQueryClause(selectStatement.selectQueryClause()));
         sb = sb.append(" FROM ");
         sb = sb.append(unparseSelectSubcubeClause(selectStatement.selectSubcubeClause()));
-        sb = sb.append(unparseSelectSlicerAxisClause(selectStatement.selectSlicerAxisClause()));
-        sb = sb.append(unparseSelectCellPropertyListClause(selectStatement.selectCellPropertyListClause()));
+
+        Optional<SelectSlicerAxisClause> ssac = selectStatement.selectSlicerAxisClause();
+        if (ssac.isPresent()) {
+            sb = sb.append(" ");// whitespace before WHERE
+            sb.append(unparseSelectSlicerAxisClause(ssac.get()));
+        }
+
+        Optional<SelectCellPropertyListClause> ssplc = selectStatement.selectCellPropertyListClause();
+        if (ssplc.isPresent()) {
+            sb.append(" ");
+            sb = sb.append(unparseSelectCellPropertyListClause(ssplc.get()));
+        }
 
         return sb;
 
     }
 
     public StringBuilder unparseSelectCellPropertyListClause(SelectCellPropertyListClause clause) {
-        return null;
+        StringBuilder sb = new StringBuilder();
+
+        if (clause.cell()) {
+
+            sb.append("CELL ");
+        }
+        sb.append("PROPERTIES ");
+
+        String properties = clause.properties()
+                .stream()
+                .collect(Collectors.joining(", "));
+        sb.append(properties);
+        return sb;
     }
 
     public StringBuilder unparseSelectSlicerAxisClause(SelectSlicerAxisClause clause) {
-        return null;
+        StringBuilder sb = new StringBuilder("WHERE ");
+
+        return sb.append(unparseExpression(clause.expression()));
     }
 
     public StringBuilder unparseSelectSubcubeClause(SelectSubcubeClause clause) {
@@ -195,15 +220,15 @@ public class SimpleUnparser implements UnParser {
 
     private StringBuilder unparseSelectQueryAxesClause(SelectQueryAxesClause clause) {
 
-        clause.selectQueryAxisClauses()
+        String ret = clause.selectQueryAxisClauses()
                 .stream()
                 .map(s -> unparseSelectQueryAxisClause(s))
                 .map(Object::toString)
                 .collect(Collectors.joining(","));
-        return null;
+        return new StringBuilder(ret);
     }
 
-    private Object unparseSelectQueryAxisClause(SelectQueryAxisClause clause) {
+    private StringBuilder unparseSelectQueryAxisClause(SelectQueryAxisClause clause) {
         StringBuilder sb = new StringBuilder();
 
         if (clause.nonEmpty()) {
@@ -337,7 +362,8 @@ public class SimpleUnparser implements UnParser {
         case Parentheses -> sb.append("(")
                 .append(expressionText)
                 .append(")");
-        case Property -> sb.append(".")
+        case Property -> sb.append(expressionText)
+                .append(".")
                 .append(name);
         case PropertyAmpersAndQuoted -> sb.append(".[&")
                 .append(name)

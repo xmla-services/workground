@@ -13,6 +13,10 @@
 */
 package org.eclipse.daanse.mdx.model.select;
 
-public record SelectSlicerAxisClause() {
+import org.eclipse.daanse.mdx.model.Expression;
+
+public record SelectSlicerAxisClause(Expression expression) {
+
+
 
 }

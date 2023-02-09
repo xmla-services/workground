@@ -13,9 +13,11 @@
 */
 package org.eclipse.daanse.mdx.model.select;
 
+import java.util.Optional;
+
 public record SelectSubcubeClauseStatement(SelectQueryClause selectQueryClause,
                                            SelectSubcubeClause selectSubcubeClause,
-                                           SelectSlicerAxisClause selectSlicerAxisClause)
+                                           Optional<SelectSlicerAxisClause> selectSlicerAxisClause)
         implements SelectSubcubeClause {
 
 }

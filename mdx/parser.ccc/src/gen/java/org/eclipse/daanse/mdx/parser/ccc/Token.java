@@ -36,8 +36,8 @@ public class Token implements Node.TerminalNode {
         LBRACKET, RBRACKET, COMMA, SEMICOLON, DOT, ASTERISK, BANG, COLON, CONCAT,
         EQ, GE, GT, LE, LT, MINUS, NE, PLUS, SOLIDUS, ATSIGN, ID, QUOTED_ID, AMP_QUOTED_ID,
         AMP_UNQUOTED_ID, UNSIGNED_INTEGER_LITERAL, APPROX_NUMERIC_LITERAL, DECIMAL_NUMERIC_LITERAL,
-        FLOATING_POINT_LITERAL, STRING, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING,
-        CALCULATED, DUMMY, INVALID;
+        FLOATING_POINT_LITERAL, SINGLE_QUOTED_STRING, DOUBLE_QUOTED_STRING, CALCULATED,
+        DUMMY, INVALID;
 
         public boolean isUndefined() {
             return this == DUMMY;
@@ -555,8 +555,6 @@ public class Token implements Node.TerminalNode {
                 return new ASTDECIMAL_NUMERIC_LITERAL(TokenType.DECIMAL_NUMERIC_LITERAL, tokenSource, beginOffset, endOffset);
             case FLOATING_POINT_LITERAL : 
                 return new ASTFLOATING_POINT_LITERAL(TokenType.FLOATING_POINT_LITERAL, tokenSource, beginOffset, endOffset);
-            case STRING : 
-                return new ASTSTRING(TokenType.STRING, tokenSource, beginOffset, endOffset);
             case SINGLE_QUOTED_STRING : 
                 return new ASTSINGLE_QUOTED_STRING(TokenType.SINGLE_QUOTED_STRING, tokenSource, beginOffset, endOffset);
             case DOUBLE_QUOTED_STRING : 

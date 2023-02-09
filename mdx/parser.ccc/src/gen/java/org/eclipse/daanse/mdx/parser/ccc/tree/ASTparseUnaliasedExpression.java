@@ -10,7 +10,7 @@
 *
 * Contributors: see corresponding .ccc file
 
-* Generated Code for ASTunaliasedExpression AST Node type
+* Generated Code for ASTparseUnaliasedExpression AST Node type
 * by the ASTNode.java.ftl template
 */
 package org.eclipse.daanse.mdx.parser.ccc.tree;
@@ -19,7 +19,7 @@ import org.eclipse.daanse.mdx.parser.ccc.*;
 import static org.eclipse.daanse.mdx.parser.ccc.Token.TokenType.*;
 
 
-public class ASTunaliasedExpression extends BaseNode {
+public class ASTparseUnaliasedExpression extends BaseNode {
 }
 
 

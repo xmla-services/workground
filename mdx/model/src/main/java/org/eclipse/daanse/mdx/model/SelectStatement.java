@@ -14,6 +14,7 @@
 package org.eclipse.daanse.mdx.model;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.daanse.mdx.model.select.SelectCellPropertyListClause;
 import org.eclipse.daanse.mdx.model.select.SelectQueryClause;
@@ -24,8 +25,8 @@ import org.eclipse.daanse.mdx.model.select.SelectWithClause;
 public record SelectStatement(List<SelectWithClause> selectWithClauses,
                               SelectQueryClause selectQueryClause,
                               SelectSubcubeClause selectSubcubeClause,
-                              SelectSlicerAxisClause selectSlicerAxisClause,
-                              SelectCellPropertyListClause selectCellPropertyListClause)
+                              Optional<SelectSlicerAxisClause> selectSlicerAxisClause,
+                              Optional<SelectCellPropertyListClause> selectCellPropertyListClause)
         implements MdxStatement {
 
 }
