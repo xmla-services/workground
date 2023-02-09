@@ -32,9 +32,15 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProvi
 import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataRestrictions;
+import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesRestrictions;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRestrictions;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoRestrictions;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRestrictions;
@@ -80,6 +86,9 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsRestri
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsRestrictions;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresRestrictions;
@@ -100,8 +109,12 @@ import org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes.DbSc
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes.DbSchemaProviderTypesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.schemata.DbSchemaSchemataRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.schemata.DbSchemaSchemataRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.sourcetables.DbSchemaSourceTablesRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.sourcetables.DbSchemaSourceTablesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.tables.DbSchemaTablesRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.tables.DbSchemaTablesRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.tablesinfo.DbSchemaTablesInfoRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.tablesinfo.DbSchemaTablesInfoRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.datasources.DiscoverDataSourcesRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.datasources.DiscoverDataSourcesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.discover.enumerators.DiscoverEnumeratorsRequestR;
@@ -132,6 +145,8 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLev
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroups.MdSchemaMeasureGroupsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroups.MdSchemaMeasureGroupsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.measures.MdSchemaMeasuresRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.measures.MdSchemaMeasuresRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.members.MdSchemaMembersRequestR;
@@ -400,11 +415,12 @@ public class Convert {
         String coordinate = map.get(MdSchemaActionsRestrictions.RESTRICTIONS_COORDINATE);
         String coordinateType = map.get(MdSchemaActionsRestrictions.RESTRICTIONS_COORDINATE_TYPE);
         String invocation = map.get(MdSchemaActionsRestrictions.RESTRICTIONS_INVOCATION);
+        String cubeSource = map.get(MdSchemaActionsRestrictions.RESTRICTIONS_CUBE_SOURCE);
 
         return new MdSchemaActionsRestrictionsR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName),
             cubeName, Optional.ofNullable(actionName), Optional.ofNullable(ActionTypeEnum.fromValue(actionType)),
             Optional.ofNullable(coordinate), CoordinateTypeEnum.fromValue(coordinateType),
-            InvocationEnum.fromValue(invocation));
+            InvocationEnum.fromValue(invocation), Optional.ofNullable(CubeSourceEnum.fromValue(cubeSource)));
     }
 
     public static DiscoverResponse toDiscoverMdSchemaActions(List<MdSchemaActionsResponseRow> responseApi) {
@@ -451,10 +467,14 @@ public class Convert {
         String cubeName = map.get(MdSchemaDimensionsRestrictions.RESTRICTIONS_CUBE_NAME);
         String dimensionName = map.get(MdSchemaDimensionsRestrictions.RESTRICTIONS_DIMENSION_NAME);
         String dimensionUniqueName = map.get(MdSchemaDimensionsRestrictions.RESTRICTIONS_DIMENSION_UNIQUE_NAME);
+        String cubeSource = map.get(MdSchemaDimensionsRestrictions.RESTRICTIONS_CUBE_SOURCE);
+        String dimensionVisibility = map.get(MdSchemaDimensionsRestrictions.RESTRICTIONS_DIMENSION_VISIBILITY);
 
         return new MdSchemaDimensionsRestrictionsR(Optional.ofNullable(catalogName), Optional.ofNullable(schemaName),
                 Optional.ofNullable(cubeName), Optional.ofNullable(dimensionName),
-                Optional.ofNullable(dimensionUniqueName));
+                Optional.ofNullable(dimensionUniqueName),
+                Optional.ofNullable(CubeSourceEnum.fromValue(cubeSource)),
+                Optional.ofNullable(VisibilityEnum.fromValue(dimensionVisibility)));
     }
 
     public static DiscoverResponse toDiscoverMdSchemaDimensions(List<MdSchemaDimensionsResponseRow> responseApi) {
@@ -947,6 +967,86 @@ public class Convert {
     }
 
     public static DiscoverResponse toDiscoverMdSchemaKpis(List<MdSchemaKpisResponseRow> responseApi) {
+        // TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static MdSchemaMeasureGroupsRequest fromDiscoverMdSchemaMeasureGroups(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        MdSchemaMeasureGroupsRestrictionsR restrictions = discoverMdSchemaMeasureGroupsRestrictions(requestWs);
+        return new MdSchemaMeasureGroupsRequestR(properties, restrictions);
+    }
+
+    private static MdSchemaMeasureGroupsRestrictionsR discoverMdSchemaMeasureGroupsRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String catalogName = map.get(MdSchemaMeasureGroupsRestrictions.RESTRICTIONS_CATALOG_NAME);
+        String schemaName = map.get(MdSchemaMeasureGroupsRestrictions.RESTRICTIONS_SCHEMA_NAME);
+        String cubeName = map.get(MdSchemaMeasureGroupsRestrictions.RESTRICTIONS_CUBE_NAME);
+        String measureGroupName = map.get(MdSchemaMeasureGroupsRestrictions.RESTRICTIONS_MEASUREGROUP_NAME);
+
+        return new MdSchemaMeasureGroupsRestrictionsR(
+            Optional.ofNullable(catalogName),
+            Optional.ofNullable(schemaName),
+            Optional.ofNullable(cubeName),
+            Optional.ofNullable(measureGroupName));
+    }
+
+    public static DiscoverResponse toDiscoverMdSchemaMeasureGroups(List<MdSchemaMeasureGroupsResponseRow> responseApi) {
+        // TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static DiscoverResponse toDiscoverDbSchemaSourceTables(List<DbSchemaSourceTablesResponseRow> responseApi) {
+        // TODO
+        DiscoverResponse responseWs = new DiscoverResponse();
+        return responseWs;
+    }
+
+    public static DbSchemaSourceTablesRequest fromDiscoverDbSchemaSourceTables(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DbSchemaSourceTablesRestrictionsR restrictions = discoverDdSchemaSourceTablesRestrictions(requestWs);
+        return new DbSchemaSourceTablesRequestR(properties, restrictions);
+    }
+
+    private static DbSchemaSourceTablesRestrictionsR discoverDdSchemaSourceTablesRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String catalogName = map.get(DbSchemaSourceTablesRestrictions.RESTRICTIONS_TABLE_CATALOG);
+        String schemaName = map.get(DbSchemaSourceTablesRestrictions.RESTRICTIONS_SCHEMA_NAME);
+        String tableName = map.get(DbSchemaSourceTablesRestrictions.RESTRICTIONS_TABLE_NAME);
+        String tableType = map.get(DbSchemaSourceTablesRestrictions.RESTRICTIONS_TABLE_TYPE);
+
+        return new DbSchemaSourceTablesRestrictionsR(
+            Optional.ofNullable(catalogName),
+            Optional.ofNullable(schemaName),
+            tableName, TableTypeEnum.fromValue(tableType));
+    }
+
+    public static DbSchemaTablesInfoRequest fromDiscoverDbSchemaTablesInfo(Discover requestWs) {
+        PropertiesR properties = discoverProperties(requestWs);
+        DbSchemaTablesInfoRestrictionsR restrictions = discoverDdSchemaTablesInfoRestrictions(requestWs);
+        return new DbSchemaTablesInfoRequestR(properties, restrictions);
+    }
+
+    private static DbSchemaTablesInfoRestrictionsR discoverDdSchemaTablesInfoRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String catalogName = map.get(DbSchemaTablesInfoRestrictions.RESTRICTIONS_TABLE_CATALOG);
+        String schemaName = map.get(DbSchemaTablesInfoRestrictions.RESTRICTIONS_TABLE_SCHEMA);
+        String tableName = map.get(DbSchemaTablesInfoRestrictions.RESTRICTIONS_TABLE_NAME);
+        String tableType = map.get(DbSchemaTablesInfoRestrictions.RESTRICTIONS_TABLE_TYPE);
+
+        return new DbSchemaTablesInfoRestrictionsR(
+            Optional.ofNullable(catalogName),
+            Optional.ofNullable(schemaName),
+            tableName,
+            TableTypeEnum.fromValue(tableType));
+    }
+
+    public static DiscoverResponse toDiscoverDbSchemaTablesInfo(List<DbSchemaTablesInfoResponseRow> responseApi) {
         // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;

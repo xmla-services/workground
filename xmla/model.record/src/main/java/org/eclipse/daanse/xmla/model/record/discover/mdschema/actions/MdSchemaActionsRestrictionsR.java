@@ -17,6 +17,7 @@ import java.util.Optional;
 
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.InvocationEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.actions.MdSchemaActionsRestrictions;
 
@@ -27,5 +28,6 @@ public record MdSchemaActionsRestrictionsR(Optional<String> catalogName,
                                            Optional<ActionTypeEnum> actionType,
                                            Optional<String> coordinate,
                                            CoordinateTypeEnum coordinateType,
-                                           InvocationEnum invocation) implements MdSchemaActionsRestrictions {
+                                           InvocationEnum invocation,
+                                           Optional<CubeSourceEnum> cubeSource) implements MdSchemaActionsRestrictions {
 }

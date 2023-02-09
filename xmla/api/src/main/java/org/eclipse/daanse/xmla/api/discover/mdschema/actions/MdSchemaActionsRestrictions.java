@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.actions;
 
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.InvocationEnum;
 
 import java.util.Optional;
@@ -29,6 +30,7 @@ public interface MdSchemaActionsRestrictions {
     String RESTRICTIONS_COORDINATE = "COORDINATE";
     String RESTRICTIONS_COORDINATE_TYPE = "COORDINATE_TYPE";
     String RESTRICTIONS_INVOCATION = "INVOCATION";
+    String RESTRICTIONS_CUBE_SOURCE = "CUBE_SOURCE";
 
     /**
      * @return The name of the database.
@@ -96,4 +98,12 @@ public interface MdSchemaActionsRestrictions {
      * operation.
      */
     InvocationEnum invocation();
+
+    /**
+     * @return A bitmask with one of these valid values:
+     * 0x01 - Cube
+     * 0x02 - Dimension
+     * The default restriction is a value of 1.
+     */
+    Optional<CubeSourceEnum> cubeSource();
 }
