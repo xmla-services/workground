@@ -15,11 +15,13 @@ package org.eclipse.daanse.mdx.model.select;
 
 import java.util.List;
 
+import org.eclipse.daanse.mdx.model.CompoundId;
+import org.eclipse.daanse.mdx.model.Expression;
 import org.eclipse.daanse.mdx.model.MemberPropertyDefinition;
-import org.eclipse.daanse.mdx.model.ObjectIdentifier;
 
-public record CreateMemberBodyClause(ObjectIdentifier objectIdentifier,
-        List<MemberPropertyDefinition> memberPropertyDefinitions) implements SelectWithClause {
-
+public record CreateMemberBodyClause(CompoundId compoundId,
+                                     Expression expression,
+                                     List<MemberPropertyDefinition> memberPropertyDefinitions)
+        implements SelectWithClause {
 
 }

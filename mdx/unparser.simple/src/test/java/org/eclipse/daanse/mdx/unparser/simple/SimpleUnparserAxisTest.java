@@ -2,6 +2,8 @@ package org.eclipse.daanse.mdx.unparser.simple;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.mdx.model.Axis;
 import org.eclipse.daanse.mdx.model.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.ObjectIdentifier.Quoting;
@@ -36,7 +38,7 @@ public class SimpleUnparserAxisTest {
     }
 
     private SelectSubcubeClauseStatement selectStatementsStatement(SelectQueryClause selectQueryClause,
-            SelectSubcubeClause selectSubcubeClause, SelectSlicerAxisClause selectSlicerAxisClause) {
+            SelectSubcubeClause selectSubcubeClause, Optional<SelectSlicerAxisClause> selectSlicerAxisClause) {
         SelectSubcubeClauseStatement sscs = new SelectSubcubeClauseStatement(selectQueryClause, selectSubcubeClause,
                 selectSlicerAxisClause);
 

@@ -13,6 +13,11 @@
 */
 package org.eclipse.daanse.mdx.model.select;
 
-public record CreateSetBodyClause() implements SelectWithClause{
+import org.eclipse.daanse.mdx.model.CompoundId;
+import org.eclipse.daanse.mdx.model.Expression;
+
+public record CreateSetBodyClause(CompoundId compoundId,
+                                  Expression expression)
+        implements SelectWithClause {
 
 }

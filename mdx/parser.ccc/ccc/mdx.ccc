@@ -39,6 +39,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import org.eclipse.daanse.mdx.model.Axis;
 import org.eclipse.daanse.mdx.model.CallExpression;
@@ -380,10 +381,6 @@ TOKEN :
 | 
   < #EXPONENT : [ "e", "E" ] ([ "+", "-" ])? ([ "0"-"9" ])+ >
 | 
-  < STRING :
-    < SINGLE_QUOTED_STRING >
-  | < DOUBLE_QUOTED_STRING > >
-| 
   < SINGLE_QUOTED_STRING :
     "'"
     (
@@ -545,9 +542,9 @@ SelectWithClause parseSelectWithClause :
 SelectStatement parseSelectStatement :
 {
   List<SelectWithClause> selectWithClauses = new LinkedList<SelectWithClause>();
-  SelectSlicerAxisClause selectSlicerAxisClause = null;
   SelectQueryClause selectQueryClause = null;
   SelectSubcubeClause selectSubcubeClause = null;
+  Optional<SelectSlicerAxisClause> selectSlicerAxisClause = null;
   SelectCellPropertyListClause selectCellPropertyListClause = null;
   SelectWithClause selectWithClause = null;
 }
@@ -557,9 +554,8 @@ SelectStatement parseSelectStatement :
     {
       selectWithClauses.add(selectWithClause);
     }
-    
     (
-      < COMMA > selectWithClause = parseSelectWithClause
+       selectWithClause = parseSelectWithClause
       {
         selectWithClauses.add(selectWithClause);
       }
@@ -584,7 +580,7 @@ SelectStatement parseSelectStatement :
     selectCellPropertyListClause = parseSelectCellPropertyListClause
   )?
   {
-    return new SelectStatement(selectWithClauses, selectQueryClause, selectSubcubeClause, selectSlicerAxisClause, selectCellPropertyListClause);
+    return new SelectStatement(selectWithClauses, selectQueryClause, selectSubcubeClause, selectSlicerAxisClause, Optional.ofNullable(selectCellPropertyListClause));
   }
 ;
 
@@ -617,9 +613,9 @@ SelectSubcubeClauseName parseSelectSubcubeClauseName :
 
 SelectSubcubeClauseStatement parseSelectSubcubeClauseStatement :
 {
-  SelectSlicerAxisClause selectSlicerAxisClause = null;
   SelectQueryClause selectQueryClause = null;
   SelectSubcubeClause selectSubcubeClause = null;
+  Optional<SelectSlicerAxisClause> selectSlicerAxisClause = null;
 }
   (
     < LPAREN > < SELECT >
@@ -669,41 +665,57 @@ SelectQueryAxesClause parseSelectQueryAxesClause :
 ;
 
 
-SelectSlicerAxisClause parseSelectSlicerAxisClause :
+Optional<SelectSlicerAxisClause> parseSelectSlicerAxisClause :
 {
   Expression expression = null;
 }
   < WHERE > expression = parseExpression
   {
-    return new SelectSlicerAxisClause();
+    if(expression==null)
+    {
+      return Optional.empty();
+    }
+    return Optional.of(new SelectSlicerAxisClause(expression));
   }
 ;
 
 
 SelectCellPropertyListClause parseSelectCellPropertyListClause :
 {
-  List < CellProperty > cellPropertys = new LinkedList < CellProperty > ();
+  List < String > cellProperties = new LinkedList < String > ();
+  String property=null;
+  boolean cell=false;
 }
-  (< CELL >)? < PROPERTIES > parseCellProperty
+  (< CELL >)?
+   {
+    cell=true;
+   }
+   < PROPERTIES > <ID>
+    {
+      cellProperties.add(getToken(0).getImage());
+    }
   (
-    < COMMA > parseCellProperty
+    < COMMA > <ID>
+    {
+      cellProperties.add(getToken(0).getImage());
+    }
   )*
   {
-    return new SelectCellPropertyListClause();
+    return new SelectCellPropertyListClause(cellProperties,cell);
   }
 ;
 
 // https://learn.microsoft.com/en-us/sql/mdx/mdx-data-definition-create-member?view=sql-server-ver16
 CreateMemberBodyClause parseCreateMemberBodyClause :
 {
- ObjectIdentifier objectIdentifier = null;
- FormulaExpression formulaExpression = null;
+ CompoundId compoundId = null;
+ Expression expression = null;
  List<MemberPropertyDefinition> memberPropertyDefinitions = new LinkedList<MemberPropertyDefinition>();
  MemberPropertyDefinition memberPropertyDefinition = null;
 }
 //  <CURRENTCUBE>
 //  | 
-  objectIdentifier = parseIdentifier < AS > formulaExpression = parseFormulaExpression
+  compoundId = parseCompoundId < AS > expression = parseExpression
   
   (
     < COMMA > memberPropertyDefinition = parseMemberPropertyDefinition
@@ -713,7 +725,7 @@ CreateMemberBodyClause parseCreateMemberBodyClause :
   )*
 
   {
-    return new CreateMemberBodyClause(objectIdentifier,memberPropertyDefinitions);
+    return new CreateMemberBodyClause(compoundId,expression,memberPropertyDefinitions);
   }
 ;
 
@@ -739,7 +751,7 @@ Expression parseExpression :
   Expression expression;
   ObjectIdentifier objectIdentifier;
 }
-  expression = unaliasedExpression
+  expression = parseUnaliasedExpression
   (
     < AS > objectIdentifier = parseIdentifier
     {
@@ -943,7 +955,7 @@ CompoundId parseCompoundId :
 
 // ----------------------------------------------------------------------------
 // Expressions
-Expression unaliasedExpression :
+Expression parseUnaliasedExpression :
 {
   Expression x, y;
 }
@@ -1296,7 +1308,7 @@ Expression atom :
   {
     return NullLiteral.SINGLETON;
   }
-| < CAST > < LPAREN > expression = unaliasedExpression 
+| < CAST > < LPAREN > expression = parseUnaliasedExpression 
   < AS > nameObjectIdentifier = parseNameObjectIdentifier < RPAREN >
   {
     return new CallExpression(
@@ -1411,18 +1423,18 @@ Expression caseExpression :
 ;
 
 
-CellProperty parseCellProperty :
-  parseIdentifier
-  {
-    return new CellProperty(List.of());
-  }
-;
-
 
 CreateSetBodyClause parseCreateSetBodyClause :
-  parseIdentifier < AS > parseIdentifier
+{
+ CompoundId compoundId = null;
+ Expression expression = null;
+ //List<MemberPropertyDefinition> memberPropertyDefinitions = new LinkedList<MemberPropertyDefinition>();
+ //MemberPropertyDefinition memberPropertyDefinition = null;
+}
+
+  compoundId = parseCompoundId < AS > expression = parseExpression
   {
-    return new CreateSetBodyClause();
+    return new CreateSetBodyClause(compoundId,expression);
   }
 ;
 
