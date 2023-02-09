@@ -29,4 +29,6 @@ public record SelectStatement(List<SelectWithClause> selectWithClauses,
                               Optional<SelectCellPropertyListClause> selectCellPropertyListClause)
         implements MdxStatement {
 
+
+
 }
