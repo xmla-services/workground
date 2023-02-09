@@ -17,7 +17,6 @@ public interface DbSchemaSchemataRestrictions {
 
     String RESTRICTIONS_CATALOG_NAME = "CATALOG_NAME";
     String RESTRICTIONS_SCHEMA_NAME = "SCHEMA_NAME";
-
     String RESTRICTIONS_SCHEMA_OWNER = "SCHEMA_OWNER";
 
     /**

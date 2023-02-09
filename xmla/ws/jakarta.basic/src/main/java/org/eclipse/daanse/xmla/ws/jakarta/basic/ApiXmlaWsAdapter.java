@@ -25,8 +25,12 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProvi
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.schemata.DbSchemaSchemataResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.sourcetables.DbSchemaSourceTablesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.tables.DbSchemaTablesResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoRequest;
+import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesInfoResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.datasources.DiscoverDataSourcesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRequest;
@@ -57,6 +61,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsReques
 import org.eclipse.daanse.xmla.api.discover.mdschema.levels.MdSchemaLevelsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsRequest;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.measures.MdSchemaMeasuresResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.members.MdSchemaMembersRequest;
@@ -104,7 +110,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
     private static final String DBSCHEMA_PROVIDER_TYPES = "DBSCHEMA_PROVIDER_TYPES";
     private static final String DBSCHEMA_SCHEMATA = "DBSCHEMA_SCHEMATA";
     private static final String DBSCHEMA_SOURCE_TABLES = "DBSCHEMA_SOURCE_TABLES";
-    private static final String DBSCHEMA_TABLES_INFO = "DBSCHEMA_SOURCE_TABLES";
+    private static final String DBSCHEMA_TABLES_INFO = "DBSCHEMA_TABLES_INFO";
     private static final String MDSCHEMA_HIERARCHIES = "MDSCHEMA_HIERARCHIES";
     private static final String MDSCHEMA_LEVELS = "MDSCHEMA_LEVELS";
     private static final String MDSCHEMA_MEASUREGROUP_DIMENSIONS = "MDSCHEMA_MEASUREGROUP_DIMENSIONS";
@@ -183,6 +189,9 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         try {
 
             switch (discover.getRequestType()) {
+            case DBSCHEMA_TABLES_INFO -> discoverResponse = handleDiscoverDbSchemaTablesInfo(discover);
+            case DBSCHEMA_SOURCE_TABLES -> discoverResponse = handleDiscoverDbSchemaSourceTables(discover);
+            case MDSCHEMA_MEASUREGROUPS -> discoverResponse = handleDiscoverMdSchemaMeasureGroups(discover);
             case MDSCHEMA_KPIS -> discoverResponse = handleDiscoverMdSchemaKpis(discover);
             case MDSCHEMA_SETS -> discoverResponse = handleDiscoverMdSchemaSets(discover);
             case MDSCHEMA_PROPERTIES -> discoverResponse = handleDiscoverMdSchemaProperties(discover);
@@ -433,6 +442,33 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         MdSchemaKpisRequest requestApi = Convert.fromDiscoverMdSchemaKpis(requestWs);
         List<MdSchemaKpisResponseRow> responseApi = xmlaService.discover().mdSchemaKpis(requestApi);
         DiscoverResponse responseWs = Convert.toDiscoverMdSchemaKpis(responseApi);
+
+        return responseWs;
+    }
+
+    private DiscoverResponse handleDiscoverMdSchemaMeasureGroups(Discover requestWs) {
+
+        MdSchemaMeasureGroupsRequest requestApi = Convert.fromDiscoverMdSchemaMeasureGroups(requestWs);
+        List<MdSchemaMeasureGroupsResponseRow> responseApi = xmlaService.discover().mdSchemaMeasureGroups(requestApi);
+        DiscoverResponse responseWs = Convert.toDiscoverMdSchemaMeasureGroups(responseApi);
+
+        return responseWs;
+    }
+
+    private DiscoverResponse handleDiscoverDbSchemaSourceTables(Discover requestWs) {
+
+        DbSchemaSourceTablesRequest requestApi = Convert.fromDiscoverDbSchemaSourceTables(requestWs);
+        List<DbSchemaSourceTablesResponseRow> responseApi = xmlaService.discover().dbSchemaSourceTables(requestApi);
+        DiscoverResponse responseWs = Convert.toDiscoverDbSchemaSourceTables(responseApi);
+
+        return responseWs;
+    }
+
+    private DiscoverResponse handleDiscoverDbSchemaTablesInfo(Discover requestWs) {
+
+        DbSchemaTablesInfoRequest requestApi = Convert.fromDiscoverDbSchemaTablesInfo(requestWs);
+        List<DbSchemaTablesInfoResponseRow> responseApi = xmlaService.discover().dbSchemaTablesInfo(requestApi);
+        DiscoverResponse responseWs = Convert.toDiscoverDbSchemaTablesInfo(responseApi);
 
         return responseWs;
     }

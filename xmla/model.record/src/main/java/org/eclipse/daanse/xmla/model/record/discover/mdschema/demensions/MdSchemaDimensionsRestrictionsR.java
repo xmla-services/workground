@@ -15,12 +15,15 @@ package org.eclipse.daanse.xmla.model.record.discover.mdschema.demensions;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
+import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.demensions.MdSchemaDimensionsRestrictions;
 
 public record MdSchemaDimensionsRestrictionsR(Optional<String> catalogName,
-                                                      Optional<String> schemaName,
-                                                      Optional<String> cubeName,
-                                                      Optional<String> dimensionName,
-                                                      Optional<String> dimensionUniqueName) implements MdSchemaDimensionsRestrictions {
-
+                                              Optional<String> schemaName,
+                                              Optional<String> cubeName,
+                                              Optional<String> dimensionName,
+                                              Optional<String> dimensionUniqueName,
+                                              Optional<CubeSourceEnum> cubeSource,
+                                              Optional<VisibilityEnum> dimensionVisibility) implements MdSchemaDimensionsRestrictions {
 }

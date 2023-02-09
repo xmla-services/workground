@@ -13,6 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.demensions;
 
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
+import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
+
 import java.util.Optional;
 
 public interface MdSchemaDimensionsRestrictions {
@@ -22,7 +25,8 @@ public interface MdSchemaDimensionsRestrictions {
     String RESTRICTIONS_CUBE_NAME = "CUBE_NAME";
     String RESTRICTIONS_DIMENSION_NAME = "DIMENSION_NAME";
     String RESTRICTIONS_DIMENSION_UNIQUE_NAME = "DIMENSION_UNIQUE_NAME";
-
+    String RESTRICTIONS_CUBE_SOURCE = "CUBE_SOURCE";
+    String RESTRICTIONS_DIMENSION_VISIBILITY = "DIMENSION_VISIBILITY";
 
     /**
      * @return The name of the database.
@@ -48,4 +52,20 @@ public interface MdSchemaDimensionsRestrictions {
      * The unique name of the dimension.
      */
     Optional<String> dimensionUniqueName();
+
+    /**
+     * @return A bitmask with one of these valid values:
+     * 0x01 - Cube
+     * 0x02 - Dimension
+     * The default restriction is a value of 1.
+     */
+    Optional<CubeSourceEnum> cubeSource();
+
+    /**
+     *A bitmask with one of these valid values:
+     * 0x01 - Visible
+     * 0x02 - Not Visible
+     * The default restriction is a value of 1.
+     */
+    Optional<VisibilityEnum> dimensionVisibility();
 }

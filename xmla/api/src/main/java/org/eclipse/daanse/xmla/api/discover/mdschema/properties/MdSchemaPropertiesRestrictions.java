@@ -29,11 +29,8 @@ public interface MdSchemaPropertiesRestrictions {
     String RESTRICTIONS_PROPERTY_TYPE = "PROPERTY_TYPE";
     String RESTRICTIONS_PROPERTY_NAME = "PROPERTY_NAME";
     String RESTRICTIONS_PROPERTY_ORIGIN = "PROPERTY_ORIGIN";
-
     String RESTRICTIONS_CUBE_SOURCE = "CUBE_SOURCE";
     String RESTRICTIONS_PROPERTY_VISIBILITY = "PROPERTY_VISIBILITY";
-
-
 
     /**
      * @return The name of the database.
