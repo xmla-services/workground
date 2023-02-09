@@ -88,7 +88,7 @@ public record CallExpression(String name,
          */
         Term_Case,
 
-        // max be replaced
+        // may be replaced
         Cast
 
     }

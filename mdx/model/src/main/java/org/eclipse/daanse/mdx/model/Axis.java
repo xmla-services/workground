@@ -76,7 +76,7 @@ public record Axis(int ordinal,boolean named) {
         } else if (this.ordinal == 4) {
             return "Sections";
         } else {
-            return "Axis(" + ")";
+            return "Axis(" +this.ordinal+ ")";
         }
     }
 }

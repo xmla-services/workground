@@ -17,5 +17,5 @@ import org.eclipse.daanse.mdx.model.MdxStatement;
 
 public interface UnParser {
 
-    public StringBuilder unparse(MdxStatement mdxStatement);
+    public StringBuilder unparseMdxStatement(MdxStatement mdxStatement);
 }
