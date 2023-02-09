@@ -741,7 +741,7 @@ public class MdxParser {
         List<SelectWithClause> selectWithClauses = new LinkedList<SelectWithClause>();
         SelectQueryClause selectQueryClause = null;
         SelectSubcubeClause selectSubcubeClause = null;
-        Optional<SelectSlicerAxisClause> selectSlicerAxisClause = null;
+        Optional<SelectSlicerAxisClause> selectSlicerAxisClause = Optional.empty();
         SelectCellPropertyListClause selectCellPropertyListClause = null;
         SelectWithClause selectWithClause = null;
         ParseException parseException279 = null;
