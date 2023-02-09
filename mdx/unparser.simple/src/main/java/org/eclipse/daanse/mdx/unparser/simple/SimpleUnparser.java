@@ -29,6 +29,7 @@ import org.eclipse.daanse.mdx.model.KeyObjectIdentifier;
 import org.eclipse.daanse.mdx.model.Literal;
 import org.eclipse.daanse.mdx.model.MdxRefreshStatement;
 import org.eclipse.daanse.mdx.model.MdxStatement;
+import org.eclipse.daanse.mdx.model.MemberPropertyDefinition;
 import org.eclipse.daanse.mdx.model.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.NullLiteral;
 import org.eclipse.daanse.mdx.model.NumericLiteral;
@@ -371,10 +372,31 @@ public class SimpleUnparser implements UnParser {
         case PropertyQuoted -> sb.append(".&")
                 .append(name)
                 .append("");
-        case Term_Case -> sb.append("TODO");
-        case Term_Infix -> sb.append("TODO");
-        case Term_Postfix -> sb.append("TODO");
-        case Term_Prefix -> sb.append("TODO");
+        case Term_Case -> {
+            int size=expressions.size();
+            sb.append("CASE ");
+            sb.append(unparseExpression(expressions.get(0)));
+            
+            for (int i = 1; i < size-1; i++) {
+                sb.append(" WHEN ");
+                sb.append(unparseExpression(expressions.get(i)));
+                
+            }
+
+            sb.append(" ELSE ");
+            sb.append(unparseExpression(expressions.get(size-1)));
+            sb.append(" END ");
+
+        }
+        case Term_Infix -> {
+            sb.append(unparseExpression(expressions.get(0)));
+            sb.append(" ");
+            sb.append(name);
+            sb.append(" ");
+            sb.append(unparseExpression(expressions.get(1)));
+        }
+        case Term_Postfix -> sb.append("TODO:Term_Postfix");
+        case Term_Prefix -> sb.append("TODO:Term_Prefix");
 
         }
 
@@ -392,8 +414,13 @@ public class SimpleUnparser implements UnParser {
         return new StringBuilder("*");
     }
 
-    public StringBuilder unparseSelectWithClauses(List<SelectWithClause> clause) {
-        return null;
+    public StringBuilder unparseSelectWithClauses(List<SelectWithClause> clauses) {
+
+        String s = clauses.stream()
+                .map(swc -> unparseSelectWithClause(swc))
+                .map(Object::toString)
+                .collect(Collectors.joining(" "));
+        return new StringBuilder(s);
 
     }
 
@@ -412,17 +439,49 @@ public class SimpleUnparser implements UnParser {
     }
 
     public StringBuilder unparseCreateCellCalculationBodyClause(CreateCellCalculationBodyClause clause) {
+
         return null;
 
     }
 
     public StringBuilder unparseCreateMemberBodyClause(CreateMemberBodyClause clause) {
-        return null;
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("MEMBER ");
+
+        sb.append(unparseCompoundId(clause.compoundId()))
+                .append(" AS ")
+                .append(unparseExpression(clause.expression()));
+
+        if (!clause.memberPropertyDefinitions()
+                .isEmpty()) {
+            sb.append(" ");
+
+            String ret = clause.memberPropertyDefinitions()
+                    .stream()
+                    .map(mpd -> unparseMemberPropertyDefinition(mpd))
+                    .collect(Collectors.joining(", "));
+            sb.append(ret);
+        }
+
+        return sb;
 
     }
 
-    public StringBuilder unparseCreateSetBodyClause(CreateSetBodyClause clause) {
+    private StringBuilder unparseMemberPropertyDefinition(MemberPropertyDefinition mpd) {
+        // TODO Auto-generated method stub
         return null;
+    }
+
+    public StringBuilder unparseCreateSetBodyClause(CreateSetBodyClause clause) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("SET ");
+        sb.append(unparseCompoundId(clause.compoundId()))
+                .append(" AS ")
+                .append(unparseExpression(clause.expression()));
+
+        return sb;
 
     }
 
