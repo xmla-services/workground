@@ -18,7 +18,6 @@ public enum VisibilityEnum {
     VISIBLE(0x01),
     NOT_VISIBLE(0x02);
 
-
     private final int value;
 
     VisibilityEnum(int v) {

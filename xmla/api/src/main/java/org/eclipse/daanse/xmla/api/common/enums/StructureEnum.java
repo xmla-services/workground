@@ -31,7 +31,7 @@ public enum StructureEnum {
     HIERARCHY_UNBALANCED(2),
 
     /**
-     *  Hierarchy is a network
+     * Hierarchy is a network
      */
     HIERARCHY_NETWORK(3);
 

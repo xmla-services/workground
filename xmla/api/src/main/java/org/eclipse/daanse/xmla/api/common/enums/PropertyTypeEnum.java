@@ -34,7 +34,7 @@ public enum PropertyTypeEnum {
 
     /**
      *  - Identifies an internal
-     *      * property.
+     * property.
      */
     internal_property(4),
 

@@ -11,7 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset;
+package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover;
 
 import java.io.Serializable;
 
@@ -20,6 +20,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DiscoverPropertiesResponseRowXml")
@@ -29,22 +30,22 @@ public class DiscoverPropertiesResponseRowXml extends Row implements Serializabl
     private final static long serialVersionUID = 1L;
 
     @XmlElement(name = "PropertyName", required = true)
-    String propertyName;
+    private String propertyName;
 
     @XmlElement(name = "PropertyDescription", required = false)
-    String propertyDescription;
+    private String propertyDescription;
 
     @XmlElement(name = "PropertyType", required = false)
-    String propertyType;
+    private String propertyType;
 
     @XmlElement(name = "PropertyAccessType", required = true)
-    String propertyAccessType;
+    private String propertyAccessType;
 
     @XmlElement(name = "IsRequired", required = false)
-    Boolean required;
+    private Boolean required;
 
     @XmlElement(name = "Value", required = false)
-    String value;
+    private String value;
 
     public String getPropertyName() {
         return propertyName;

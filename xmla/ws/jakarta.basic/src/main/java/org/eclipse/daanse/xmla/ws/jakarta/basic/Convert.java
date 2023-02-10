@@ -159,10 +159,11 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PropertyList;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Return;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.DiscoverLiteralsResponseRowXml;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.DiscoverPropertiesResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Rowset;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverEnumeratorsResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverLiteralsResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverPropertiesResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xsd.Schema;
 
 import jakarta.xml.bind.JAXBException;
@@ -247,17 +248,7 @@ public class Convert {
                 .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-
-        Schema schema = SchemaUtil.generateSchema("urn:schemas-microsoft-com:xml-analysis:rowset",
-                DiscoverPropertiesResponseRowXml.class);
-
-        Return r = new Return();
-
-        Rowset rs = new Rowset();
-        rs.setSchema(schema);
-        rs.setRow(rows);
-        r.setValue(rs);
-        responseWs.setReturn(r);
+        responseWs.setReturn(getReturn(rows, DiscoverPropertiesResponseRow.class));
 
         return responseWs;
     }
@@ -279,7 +270,7 @@ public class Convert {
         apiRow.value()
                 .ifPresent(row::setValue);
 
-        return (Row) row;
+        return row;
     }
 
     public static DbSchemaCatalogsRequest fromDiscoverDbSchemaCatalogs(Discover requestWs) {
@@ -329,10 +320,36 @@ public class Convert {
         return new DiscoverEnumeratorsRestrictionsR(Optional.ofNullable(enumName));
     }
 
-    public static DiscoverResponse toDiscoverEnumerators(List<DiscoverEnumeratorsResponseRow> responseApi) {
-        // TODO
+    public static DiscoverResponse toDiscoverEnumerators(List<DiscoverEnumeratorsResponseRow> responseApi)
+        throws JAXBException, IOException {
+
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDiscoverEnumeratorsResponseRow)
+            .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
+        responseWs.setReturn(getReturn(rows, DiscoverEnumeratorsResponseRow.class));
+
         return responseWs;
+    }
+
+    private static Row convertDiscoverEnumeratorsResponseRow(DiscoverEnumeratorsResponseRow apiRow) {
+        DiscoverEnumeratorsResponseRowXml row = new DiscoverEnumeratorsResponseRowXml();
+
+        // Mandatory
+        row.setEnumName(apiRow.enumName());
+        row.setEnumType(apiRow.enumType());
+        row.setElementName(apiRow.elementName());
+
+        // Optional
+        apiRow.enumDescription()
+            .ifPresent(row::setEnumDescription);
+        apiRow.elementDescription()
+            .ifPresent(row::setElementDescription);
+        apiRow.elementValue()
+            .ifPresent(row::setElementValue);
+
+        return row;
     }
 
     public static DiscoverKeywordsRequest fromDiscoverKeywords(Discover requestWs) {
@@ -377,17 +394,7 @@ public class Convert {
             .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-
-        Schema schema = SchemaUtil.generateSchema("urn:schemas-microsoft-com:xml-analysis:rowset",
-            DiscoverLiteralsResponseRowXml.class);
-
-        Return r = new Return();
-
-        Rowset rs = new Rowset();
-        rs.setSchema(schema);
-        rs.setRow(rows);
-        r.setValue(rs);
-        responseWs.setReturn(r);
+        responseWs.setReturn(getReturn(rows, DiscoverLiteralsResponseRow.class));
 
         return responseWs;
     }
@@ -1082,5 +1089,16 @@ public class Convert {
         // TODO
         DiscoverResponse responseWs = new DiscoverResponse();
         return responseWs;
+    }
+
+    private static Return getReturn(List<Row> rows, Class cl) throws JAXBException, IOException {
+        Schema schema = SchemaUtil.generateSchema("urn:schemas-microsoft-com:xml-analysis:rowset",
+            cl);
+        Return r = new Return();
+        Rowset rs = new Rowset();
+        rs.setSchema(schema);
+        rs.setRow(rows);
+        r.setValue(rs);
+        return r;
     }
 }

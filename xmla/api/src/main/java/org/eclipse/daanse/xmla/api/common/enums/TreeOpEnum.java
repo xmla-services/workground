@@ -22,22 +22,27 @@ public enum TreeOpEnum {
      * Returns all of the ancestors.
      */
     all(0x20),
+
     /**
      *  Returns only the immediate children.
      */
     children(0x01),
+
     /**
      * Returns members on the same level.
      */
     level(0x02),
+
     /**
      * Returns only the immediate parent.
      */
     parent(0x04),
+
     /**
      * Returns only itself.
      */
     itself(0x08),
+
     /**
      * Returns all of the descendants.
      */

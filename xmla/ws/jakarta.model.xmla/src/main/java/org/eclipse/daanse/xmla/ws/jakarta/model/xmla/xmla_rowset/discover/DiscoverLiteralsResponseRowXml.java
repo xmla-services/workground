@@ -11,10 +11,11 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset;
+package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover;
 
 import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LiteralNameEnumValueEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 import java.io.Serializable;
 
@@ -25,26 +26,26 @@ public class DiscoverLiteralsResponseRowXml extends Row implements Serializable 
     /**
      * The name of the literal.
      */
-    @XmlElement(name = "literalName", required = true)
-    String literalName;
+    @XmlElement(name = "LiteralName", required = true)
+    private String literalName;
 
     /**
      * The literal value.
      */
-    @XmlElement(name = "literalValue", required = true)
-    String literalValue;
+    @XmlElement(name = "LiteralValue", required = true)
+    private String literalValue;
 
     /**
      * The characters that are not valid in the literal.
      */
-    @XmlElement(name = "literalInvalidChars", required = true)
-    String literalInvalidChars;
+    @XmlElement(name = "LiteralInvalidChars", required = true)
+    private String literalInvalidChars;
 
     /**
      * The characters that are not valid as the first character of the literal.
      */
-    @XmlElement(name = "literalInvalidStartingChars", required = true)
-    String literalInvalidStartingChars;
+    @XmlElement(name = "LiteralInvalidStartingChars", required = true)
+    private String literalInvalidStartingChars;
 
     /**
      * @return The maximum number of characters in the literal. If
@@ -52,7 +53,7 @@ public class DiscoverLiteralsResponseRowXml extends Row implements Serializable 
      * value is -1.
      */
     @XmlElement(name = "LiteralMaxLength", required = true)
-    Integer LiteralMaxLength;
+    private Integer LiteralMaxLength;
 
     /**
      * The value is one of the following:
@@ -77,8 +78,8 @@ public class DiscoverLiteralsResponseRowXml extends Row implements Serializable 
      * DBLITERAL_TEXT_COMMAND = 18
      * DBLITERAL_USER_NAME = 19
      */
-    @XmlElement(name = "LiteralMaxLength", required = true)
-    LiteralNameEnumValueEnum literalNameValue;
+    @XmlElement(name = "LiteralNameValue", required = true)
+    private LiteralNameEnumValueEnum literalNameValue;
 
     public String getLiteralName() {
         return literalName;
