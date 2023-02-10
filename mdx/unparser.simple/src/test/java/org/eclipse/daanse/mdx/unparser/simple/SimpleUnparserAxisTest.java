@@ -1,18 +1,20 @@
 package org.eclipse.daanse.mdx.unparser.simple;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Optional;
 
-import org.eclipse.daanse.mdx.model.Axis;
-import org.eclipse.daanse.mdx.model.NameObjectIdentifier;
-import org.eclipse.daanse.mdx.model.ObjectIdentifier.Quoting;
-import org.eclipse.daanse.mdx.model.SelectStatement;
-import org.eclipse.daanse.mdx.model.select.SelectQueryClause;
-import org.eclipse.daanse.mdx.model.select.SelectSlicerAxisClause;
-import org.eclipse.daanse.mdx.model.select.SelectSubcubeClause;
-import org.eclipse.daanse.mdx.model.select.SelectSubcubeClauseName;
-import org.eclipse.daanse.mdx.model.select.SelectSubcubeClauseStatement;
+import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier.Quoting;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
+import org.eclipse.daanse.mdx.model.record.SelectStatementR;
+import org.eclipse.daanse.mdx.model.record.select.AxisR;
 import org.junit.jupiter.api.Test;
 
 public class SimpleUnparserAxisTest {
@@ -20,7 +22,7 @@ public class SimpleUnparserAxisTest {
     private SimpleUnparser unparser = new SimpleUnparser();
 
     private @Test void testSelectStatement() throws Exception {
-        SelectStatement selectStatement = new SelectStatement(null, null, null, null, null);
+        SelectStatementR selectStatement = new SelectStatementR(null, null, null, null, null);
         assertThat(unparser.unparseSelectStatement(selectStatement)).asString()
                 .isEqualTo("TODO");
     }
@@ -39,8 +41,11 @@ public class SimpleUnparserAxisTest {
 
     private SelectSubcubeClauseStatement selectStatementsStatement(SelectQueryClause selectQueryClause,
             SelectSubcubeClause selectSubcubeClause, Optional<SelectSlicerAxisClause> selectSlicerAxisClause) {
-        SelectSubcubeClauseStatement sscs = new SelectSubcubeClauseStatement(selectQueryClause, selectSubcubeClause,
-                selectSlicerAxisClause);
+        SelectSubcubeClauseStatement sscs = mock(SelectSubcubeClauseStatement.class);
+
+        when(sscs.selectQueryClause()).thenReturn(selectQueryClause);
+        when(sscs.selectSubcubeClause()).thenReturn(selectSubcubeClause);
+        when(sscs.selectSlicerAxisClause()).thenReturn(selectSlicerAxisClause);
 
         return sscs;
     }
@@ -71,12 +76,17 @@ public class SimpleUnparserAxisTest {
 
     private SelectSubcubeClauseName selectSubcubeClauseName(String name, Quoting quoting) {
         NameObjectIdentifier noi = nameObjectIdentifier(name, quoting);
-        SelectSubcubeClauseName sccn = new SelectSubcubeClauseName(noi);
+
+        SelectSubcubeClauseName sccn = mock(SelectSubcubeClauseName.class);
+        when(sccn.cubeName()).thenReturn(noi);
         return sccn;
     }
 
     private NameObjectIdentifier nameObjectIdentifier(String name, Quoting quoting) {
-        NameObjectIdentifier noi = new NameObjectIdentifier(name, quoting);
+        NameObjectIdentifier noi = mock(NameObjectIdentifier.class);
+        when(noi.name()).thenReturn(name);
+        when(noi.quoting()).thenReturn(quoting);
+
         return noi;
     }
 
@@ -90,14 +100,14 @@ public class SimpleUnparserAxisTest {
     @Test
     void testAxis() throws Exception {
 
-        Axis axis_M2 = new Axis(-2, false);
-        Axis axis_M1 = new Axis(-1, false);
-        Axis axis_0 = new Axis(0, false);
-        Axis axis_1 = new Axis(1, false);
-        Axis axis_2 = new Axis(2, false);
-        Axis axis_3 = new Axis(3, false);
-        Axis axis_4 = new Axis(4, false);
-        Axis axis_5 = new Axis(5, false);
+        AxisR axis_M2 = new AxisR(-2, false);
+        AxisR axis_M1 = new AxisR(-1, false);
+        AxisR axis_0 = new AxisR(0, false);
+        AxisR axis_1 = new AxisR(1, false);
+        AxisR axis_2 = new AxisR(2, false);
+        AxisR axis_3 = new AxisR(3, false);
+        AxisR axis_4 = new AxisR(4, false);
+        AxisR axis_5 = new AxisR(5, false);
 
         assertThat(unparser.unparseAxis(axis_M2)).asString()
                 .isEqualTo("-2");
@@ -120,14 +130,14 @@ public class SimpleUnparserAxisTest {
     @Test
     void testAxisNamed() throws Exception {
 
-        Axis axis_named_M2 = new Axis(-2, true);
-        Axis axis_named_M1 = new Axis(-1, true);
-        Axis axis_named_0 = new Axis(0, true);
-        Axis axis_named_1 = new Axis(1, true);
-        Axis axis_named_2 = new Axis(2, true);
-        Axis axis_named_3 = new Axis(3, true);
-        Axis axis_named_4 = new Axis(4, true);
-        Axis axis_named_5 = new Axis(5, true);
+        AxisR axis_named_M2 = new AxisR(-2, true);
+        AxisR axis_named_M1 = new AxisR(-1, true);
+        AxisR axis_named_0 = new AxisR(0, true);
+        AxisR axis_named_1 = new AxisR(1, true);
+        AxisR axis_named_2 = new AxisR(2, true);
+        AxisR axis_named_3 = new AxisR(3, true);
+        AxisR axis_named_4 = new AxisR(4, true);
+        AxisR axis_named_5 = new AxisR(5, true);
 
         assertThat(unparser.unparseAxis(axis_named_M2)).asString()
                 .isEqualTo("NONE");

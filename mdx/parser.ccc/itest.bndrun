@@ -27,7 +27,7 @@
 	junit-platform-engine;version='[1.9.1,1.9.2)',\
 	junit-platform-launcher;version='[1.9.1,1.9.2)',\
 	org.apache.felix.scr;version='[2.2.4,2.2.5)',\
-	org.eclipse.daanse.mdx.model;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.mdx.model.record;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.mdx.parser.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.mdx.parser.ccc;version='[0.0.1,0.0.2)',\
 	org.opentest4j;version='[1.2.0,1.2.1)',\

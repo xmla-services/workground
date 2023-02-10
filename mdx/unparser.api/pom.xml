@@ -16,7 +16,7 @@
 
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.mdx.model</artifactId>
+      <artifactId>org.eclipse.daanse.mdx.model.record</artifactId>
       <version>${revision}</version>
     </dependency>
   </dependencies>
