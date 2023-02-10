@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import org.eclipse.daanse.mdx.model.api.DMVStatement;
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
 import org.eclipse.daanse.mdx.model.api.ExplainStatement;
-import org.eclipse.daanse.mdx.model.api.MdxRefreshStatement;
+import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
@@ -505,7 +505,7 @@ public class SimpleUnparser implements UnParser {
 
     }
 
-    public StringBuilder unparseMdxRefreshStatement(MdxRefreshStatement selectStatement) {
+    public StringBuilder unparseMdxRefreshStatement(RefreshStatement selectStatement) {
         return null;
 
     }
