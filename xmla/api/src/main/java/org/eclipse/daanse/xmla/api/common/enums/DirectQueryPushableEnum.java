@@ -19,6 +19,7 @@ public enum DirectQueryPushableEnum {
      * This function can be used in measure expressions.
      */
     MEASURE(0x1),
+
     /**
      * This function can be used in calculated column expressions.
      */

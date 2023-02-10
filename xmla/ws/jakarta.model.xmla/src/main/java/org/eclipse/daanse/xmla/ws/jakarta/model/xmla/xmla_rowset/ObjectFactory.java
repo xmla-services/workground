@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset;
 
 import jakarta.xml.bind.annotation.XmlRegistry;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverPropertiesResponseRowXml;
 
 @XmlRegistry
 public class ObjectFactory {

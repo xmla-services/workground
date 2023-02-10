@@ -257,7 +257,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         return responseWs;
     }
 
-    private DiscoverResponse handleDiscoverEnumerators(Discover requestWs) {
+    private DiscoverResponse handleDiscoverEnumerators(Discover requestWs) throws JAXBException, IOException {
 
         DiscoverEnumeratorsRequest requestApi = Convert.fromDiscoverEnumerators(requestWs);
         List<DiscoverEnumeratorsResponseRow> responseApi = xmlaService.discover().discoverEnumerators(requestApi);
