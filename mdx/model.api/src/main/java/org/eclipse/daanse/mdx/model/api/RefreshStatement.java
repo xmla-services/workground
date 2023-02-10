@@ -11,10 +11,8 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.mdx.model.record;
+package org.eclipse.daanse.mdx.model.api;
 
-import org.eclipse.daanse.mdx.model.api.MdxRefreshStatement;
-
-public record MdxRefreshStatementR() implements MdxRefreshStatement {
+public non-sealed interface RefreshStatement extends MdxStatement {
 
 }
