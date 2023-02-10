@@ -13,7 +13,7 @@
 */
 package org.eclipse.daanse.mdx.combinedtest;
 
-import org.eclipse.daanse.mdx.model.SelectStatement;
+import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 import org.eclipse.daanse.mdx.parser.ccc.MdxParserWrapper;
 import org.eclipse.daanse.mdx.unparser.simple.SimpleUnparser;

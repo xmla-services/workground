@@ -41,40 +41,62 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Optional;
 import java.util.concurrent.CancellationException;
-import org.eclipse.daanse.mdx.model.Axis;
-import org.eclipse.daanse.mdx.model.CallExpression;
-import org.eclipse.daanse.mdx.model.CellProperty;
-import org.eclipse.daanse.mdx.model.CompoundId;
-import org.eclipse.daanse.mdx.model.DrillthroughStatement;
-import org.eclipse.daanse.mdx.model.Expression;
-import org.eclipse.daanse.mdx.model.FormulaExpression;
-import org.eclipse.daanse.mdx.model.KeyObjectIdentifier;
-import org.eclipse.daanse.mdx.model.MdxStatement;
-import org.eclipse.daanse.mdx.model.MemberPropertyDefinition;
-import org.eclipse.daanse.mdx.model.NameObjectIdentifier;
-import org.eclipse.daanse.mdx.model.NullLiteral;
-import org.eclipse.daanse.mdx.model.NumericLiteral;
-import org.eclipse.daanse.mdx.model.ObjectIdentifier;
-import org.eclipse.daanse.mdx.model.ReturnItem;
-import org.eclipse.daanse.mdx.model.SelectStatement;
-import org.eclipse.daanse.mdx.model.StringLiteral;
-import org.eclipse.daanse.mdx.model.SymbolLiteral;
-import org.eclipse.daanse.mdx.model.select.CreateCellCalculationBodyClause;
-import org.eclipse.daanse.mdx.model.select.CreateMemberBodyClause;
-import org.eclipse.daanse.mdx.model.select.CreateSetBodyClause;
-import org.eclipse.daanse.mdx.model.select.MeasureBodyClause;
-import org.eclipse.daanse.mdx.model.select.SelectCellPropertyListClause;
-import org.eclipse.daanse.mdx.model.select.SelectDimensionPropertyListClause;
-import org.eclipse.daanse.mdx.model.select.SelectQueryAsteriskClause;
-import org.eclipse.daanse.mdx.model.select.SelectQueryAxesClause;
-import org.eclipse.daanse.mdx.model.select.SelectQueryAxisClause;
-import org.eclipse.daanse.mdx.model.select.SelectQueryEmptyClause;
-import org.eclipse.daanse.mdx.model.select.SelectQueryClause;
-import org.eclipse.daanse.mdx.model.select.SelectSlicerAxisClause;
-import org.eclipse.daanse.mdx.model.select.SelectSubcubeClause;
-import org.eclipse.daanse.mdx.model.select.SelectSubcubeClauseName;
-import org.eclipse.daanse.mdx.model.select.SelectSubcubeClauseStatement;
-import org.eclipse.daanse.mdx.model.select.SelectWithClause;
+
+import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
+import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.ReturnItem;
+import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
+import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
+import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.FormulaExpression;
+import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.expression.NumericLiteral;
+import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.select.Axis;
+import org.eclipse.daanse.mdx.model.api.select.CreateCellCalculationBodyClause;
+import org.eclipse.daanse.mdx.model.api.select.CreateMemberBodyClause;
+import org.eclipse.daanse.mdx.model.api.select.CreateSetBodyClause;
+import org.eclipse.daanse.mdx.model.api.select.MeasureBodyClause;
+import org.eclipse.daanse.mdx.model.api.select.MemberPropertyDefinition;
+import org.eclipse.daanse.mdx.model.api.select.SelectCellPropertyListClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectDimensionPropertyListClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
+import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
+import org.eclipse.daanse.mdx.model.record.DrillthroughStatementR;
+import org.eclipse.daanse.mdx.model.record.ReturnItemR;
+import org.eclipse.daanse.mdx.model.record.SelectStatementR;
+import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
+import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
+import org.eclipse.daanse.mdx.model.record.expression.FormulaExpressionR;
+import org.eclipse.daanse.mdx.model.record.expression.KeyObjectIdentifierR;
+import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
+import org.eclipse.daanse.mdx.model.record.expression.NullLiteralR;
+import org.eclipse.daanse.mdx.model.record.expression.NumericLiteralR;
+import org.eclipse.daanse.mdx.model.record.expression.StringLiteralR;
+import org.eclipse.daanse.mdx.model.record.expression.SymbolLiteralR;
+import org.eclipse.daanse.mdx.model.record.select.AxisR;
+import org.eclipse.daanse.mdx.model.record.select.CreateMemberBodyClauseR;
+import org.eclipse.daanse.mdx.model.record.select.CreateSetBodyClauseR;
+import org.eclipse.daanse.mdx.model.record.select.MeasureBodyClauseR;
+import org.eclipse.daanse.mdx.model.record.select.MemberPropertyDefinitionR;
+import org.eclipse.daanse.mdx.model.record.select.SelectCellPropertyListClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectDimensionPropertyListClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryAsteriskClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxesClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxisClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryEmptyClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectSlicerAxisClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
+import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseStatementR;
 {
 
 
@@ -91,10 +113,10 @@ import org.eclipse.daanse.mdx.model.select.SelectWithClause;
             if (left != null) {
                 // Method syntax: "x.foo(arg1, arg2)" or "x.foo()"
                 expressions.add(0, left);
-                return new CallExpression(name, CallExpression.Type.Method, expressions);
+                return new CallExpressionR(name, CallExpression.Type.Method, expressions);
             } else {
                 // Function syntax: "foo(arg1, arg2)" or "foo()"
-                return new CallExpression(name, CallExpression.Type.Function, expressions);
+                return new CallExpressionR(name, CallExpression.Type.Function, expressions);
             }
         } else {
             // Member syntax: "foo.bar"
@@ -117,11 +139,11 @@ import org.eclipse.daanse.mdx.model.select.SelectWithClause;
             if (left instanceof CompoundId && !call) {
                 List<ObjectIdentifier> newObjectIdentifiers = new ArrayList<ObjectIdentifier> (((CompoundId) left).objectIdentifiers());
                 newObjectIdentifiers.add(objectIdentifier);
-                return new CompoundId(newObjectIdentifiers);
+                return new CompoundIdR(newObjectIdentifiers);
             } else if (left == null) {
-                return new CompoundId(List.of(objectIdentifier));
+                return new CompoundIdR(List.of(objectIdentifier));
             } else {
-                return new CallExpression(name, type, List.of(left));
+                return new CallExpressionR(name, type, List.of(left));
             }
         }
     }
@@ -464,7 +486,7 @@ DrillthroughStatement parseDrillthroughStatement :
     < RETURN > returnItems = parseReturnItems
   )?
   {
-    return new DrillthroughStatement();
+    return new DrillthroughStatementR();
   }
 ;
 
@@ -496,7 +518,7 @@ ReturnItem parseReturnItem :
 }
   compoundId = parseCompoundId
   {
-    return new ReturnItem(compoundId);
+    return new ReturnItemR(compoundId);
   }
 ;
 
@@ -518,7 +540,7 @@ MeasureBodyClause parseMeasureBodyClause:
 }
   <NOT><NOT><NOT><NOT><NOT><NOT><NOT>
   {
-    return new MeasureBodyClause();
+    return new MeasureBodyClauseR();
   }
 ;
 
@@ -569,7 +591,7 @@ SelectStatement parseSelectStatement :
     selectQueryClause = parseSelectQueryAxesClause
   | /* empty */
     {
-      selectQueryClause = new SelectQueryEmptyClause();
+      selectQueryClause = new SelectQueryEmptyClauseR();
     }
   )
   < FROM > selectSubcubeClause = parseSelectSubcubeClause
@@ -580,7 +602,7 @@ SelectStatement parseSelectStatement :
     selectCellPropertyListClause = parseSelectCellPropertyListClause
   )?
   {
-    return new SelectStatement(selectWithClauses, selectQueryClause, selectSubcubeClause, selectSlicerAxisClause, Optional.ofNullable(selectCellPropertyListClause));
+    return new SelectStatementR(selectWithClauses, selectQueryClause, selectSubcubeClause, selectSlicerAxisClause, Optional.ofNullable(selectCellPropertyListClause));
   }
 ;
 
@@ -606,7 +628,7 @@ SelectSubcubeClauseName parseSelectSubcubeClauseName :
 }
   nameObjectIdentifier = parseNameObjectIdentifier
   {
-    return new SelectSubcubeClauseName(nameObjectIdentifier);
+    return new SelectSubcubeClauseNameR(nameObjectIdentifier);
   }
 ;
 
@@ -631,7 +653,7 @@ SelectSubcubeClauseStatement parseSelectSubcubeClauseStatement :
     < RPAREN >
   )
   {
-    return new SelectSubcubeClauseStatement(selectQueryClause, selectSubcubeClause, selectSlicerAxisClause);
+    return new SelectSubcubeClauseStatementR(selectQueryClause, selectSubcubeClause, selectSlicerAxisClause);
   }
 ;
 
@@ -639,7 +661,7 @@ SelectSubcubeClauseStatement parseSelectSubcubeClauseStatement :
 SelectQueryAsteriskClause parseSelectQueryAsteriskClause :
   < ASTERISK >
   {
-    return new SelectQueryAsteriskClause();
+    return new SelectQueryAsteriskClauseR();
   }
 ;
 
@@ -660,7 +682,7 @@ SelectQueryAxesClause parseSelectQueryAxesClause :
     }
   )*
   {
-    return new SelectQueryAxesClause(selectQueryAxisClauses);
+    return new SelectQueryAxesClauseR(selectQueryAxisClauses);
   }
 ;
 
@@ -675,7 +697,7 @@ Optional<SelectSlicerAxisClause> parseSelectSlicerAxisClause :
     {
       return Optional.empty();
     }
-    return Optional.of(new SelectSlicerAxisClause(expression));
+    return Optional.of(new SelectSlicerAxisClauseR(expression));
   }
 ;
 
@@ -701,7 +723,7 @@ SelectCellPropertyListClause parseSelectCellPropertyListClause :
     }
   )*
   {
-    return new SelectCellPropertyListClause(cellProperties,cell);
+    return new SelectCellPropertyListClauseR(cellProperties,cell);
   }
 ;
 
@@ -725,7 +747,7 @@ CreateMemberBodyClause parseCreateMemberBodyClause :
   )*
 
   {
-    return new CreateMemberBodyClause(compoundId,expression,memberPropertyDefinitions);
+    return new CreateMemberBodyClauseR(compoundId,expression,memberPropertyDefinitions);
   }
 ;
 
@@ -733,7 +755,7 @@ CreateMemberBodyClause parseCreateMemberBodyClause :
 MemberPropertyDefinition parseMemberPropertyDefinition :
   parseIdentifier < EQ > parseExpression
   {
-    return new MemberPropertyDefinition();
+    return new MemberPropertyDefinitionR();
   }
 ;
 
@@ -741,7 +763,7 @@ MemberPropertyDefinition parseMemberPropertyDefinition :
 FormulaExpression parseFormulaExpression :
   parseIdentifier < EQ > parseIdentifier
   {
-    return new FormulaExpression();
+    return new FormulaExpressionR();
   }
 ;
 
@@ -755,8 +777,8 @@ Expression parseExpression :
   (
     < AS > objectIdentifier = parseIdentifier
     {
-      CompoundId compundId = new CompoundId(List.of(objectIdentifier));
-      expression = new CallExpression("AS", CallExpression.Type.Term_Infix, List.of(
+      CompoundId compundId = new CompoundIdR(List.of(objectIdentifier));
+      expression = new CallExpressionR("AS", CallExpression.Type.Term_Infix, List.of(
       expression, compundId
       )
       );
@@ -778,7 +800,7 @@ Expression expressionOrEmpty :
   }
 | /* empty */
   {
-    return new CallExpression("", CallExpression.Type.Empty, List.of()
+    return new CallExpressionR("", CallExpression.Type.Empty, List.of()
     );
   }
 ;
@@ -864,19 +886,19 @@ NameObjectIdentifier parseNameObjectIdentifier :
   id = parseKeyword
   {
     // Keywords that are  not Reserved could be used
-    return new NameObjectIdentifier(id, ObjectIdentifier.Quoting.UNQUOTED);
+    return new NameObjectIdentifierR(id, ObjectIdentifier.Quoting.UNQUOTED);
   }
 | < ID >
   {
-    return new NameObjectIdentifier(getToken(0).getImage(), ObjectIdentifier.Quoting.UNQUOTED);
+    return new NameObjectIdentifierR(getToken(0).getImage(), ObjectIdentifier.Quoting.UNQUOTED);
   }
 | < ATSIGN > < ID >
   {
-    return new NameObjectIdentifier("@" + getToken(0).getImage(), ObjectIdentifier.Quoting.UNQUOTED);
+    return new NameObjectIdentifierR("@" + getToken(0).getImage(), ObjectIdentifier.Quoting.UNQUOTED);
   }
 | < QUOTED_ID >
   {
-    return new NameObjectIdentifier(
+    return new NameObjectIdentifierR(
     stripQuotes(getToken(0).getImage(), "[", "]", "]]"), 
     ObjectIdentifier.Quoting.QUOTED);
   }
@@ -896,7 +918,7 @@ KeyObjectIdentifier parseKeyIdentifier :
     }
   )+
   {
-    return new KeyObjectIdentifier(list);
+    return new KeyObjectIdentifierR(list);
   }
 ;
 
@@ -904,14 +926,14 @@ KeyObjectIdentifier parseKeyIdentifier :
 NameObjectIdentifier parseAmpId :
   < AMP_QUOTED_ID >
   {
-    return new NameObjectIdentifier(
+    return new NameObjectIdentifierR(
     stripQuotes(getToken(0).getImage(), "&[", "]", "]]"), 
     ObjectIdentifier.Quoting.QUOTED);
   }
 | 
   < AMP_UNQUOTED_ID >
   {
-    return new NameObjectIdentifier(
+    return new NameObjectIdentifierR(
     getToken(0).getImage().substring(1), 
     ObjectIdentifier.Quoting.UNQUOTED);
   }
@@ -948,7 +970,7 @@ CompoundId parseCompoundId :
     }
   )*
   {
-    return new CompoundId(list);
+    return new CompoundIdR(list);
   }
 ;
 
@@ -963,14 +985,14 @@ Expression parseUnaliasedExpression :
   (
     < OR > y = term5
     {
-      x = new CallExpression("OR", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("OR", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
       );
     }
   | < XOR > y = term5
     {
-      x = new CallExpression("XOR", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("XOR", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
       );
@@ -979,7 +1001,7 @@ Expression parseUnaliasedExpression :
     // range 'm1 : m2' yields set of members
     < COLON > y = term5
     {
-      x = new CallExpression(":", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR(":", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
       );
@@ -999,7 +1021,7 @@ Expression term5 :
   (
     < AND > y = term4
     {
-      x = new CallExpression("AND", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("AND", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
       );
@@ -1021,7 +1043,7 @@ Expression term4 :
   }
 | < NOT > x = term4
   {
-    return new CallExpression("NOT", CallExpression.Type.Term_Prefix, List.of(
+    return new CallExpressionR("NOT", CallExpression.Type.Term_Prefix, List.of(
     x
     )
     );
@@ -1065,7 +1087,7 @@ Expression term3 :
     )
     y = term2
     {
-      x = new CallExpression(op.getImage(), CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR(op.getImage(), CallExpression.Type.Term_Infix, List.of(
       x, y
       )
       );
@@ -1076,7 +1098,7 @@ Expression term3 :
     SCAN 2 =>
     < IS > < NULL >
     {
-      x = new CallExpression("IS NULL", CallExpression.Type.Term_Postfix, List.of(
+      x = new CallExpressionR("IS NULL", CallExpression.Type.Term_Postfix, List.of(
       x
       )
       );
@@ -1086,19 +1108,19 @@ Expression term3 :
     SCAN 2 =>
     < IS > y = term2
     {
-      x = new CallExpression("IS", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("IS", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
       );
     }
   | < IS > < EMPTY >
     {
-      x = new CallExpression(
+      x = new CallExpressionR(
       "IS EMPTY", CallExpression.Type.Term_Postfix, List.of(x));
     }
   | < MATCHES > y = term2
     {
-      x = new CallExpression("MATCHES", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("MATCHES", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
       );
@@ -1106,9 +1128,9 @@ Expression term3 :
   | SCAN 2 =>
     < NOT > < MATCHES > y = term2
     {
-      x = new CallExpression(
+      x = new CallExpressionR(
       "NOT", CallExpression.Type.Term_Prefix, List.of(
-      new CallExpression(
+      new CallExpressionR(
       "MATCHES", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
@@ -1118,16 +1140,16 @@ Expression term3 :
     }
   | < IN > y = term2
     {
-      x = new CallExpression("IN", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("IN", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
       );
     }
   | < NOT > < IN > y = term2
     {
-      x = new CallExpression(
+      x = new CallExpressionR(
       "NOT", CallExpression.Type.Term_Prefix, List.of(
-      new CallExpression(
+      new CallExpressionR(
       "IN", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
@@ -1150,21 +1172,21 @@ Expression term2 :
   (
     < PLUS > y = term
     {
-      x = new CallExpression("+", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("+", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
       );
     }
   | < MINUS > y = term
     {
-      x = new CallExpression("-", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("-", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
       );
     }
   | < CONCAT > y = term
     {
-      x = new CallExpression("||", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("||", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
       );
@@ -1184,14 +1206,14 @@ Expression term :
   (
     < ASTERISK > y = factor
     {
-      x = new CallExpression("*", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("*", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
       );
     }
   | < SOLIDUS > y = factor
     {
-      x = new CallExpression("/", CallExpression.Type.Term_Infix, List.of(
+      x = new CallExpressionR("/", CallExpression.Type.Term_Infix, List.of(
       x, y
       )
       );
@@ -1217,14 +1239,14 @@ Expression factor :
   }
 | < MINUS > p = primary
   {
-    return new CallExpression("-", CallExpression.Type.Term_Prefix, List.of(
+    return new CallExpressionR("-", CallExpression.Type.Term_Prefix, List.of(
     p
     )
     );
   }
 | < EXISTING > p = primary
   {
-    return new CallExpression("Existing", CallExpression.Type.Term_Prefix, List.of(
+    return new CallExpressionR("Existing", CallExpression.Type.Term_Prefix, List.of(
     p
     )
     );
@@ -1273,15 +1295,15 @@ Expression objectIdentifierOrFuncall(Expression left) :
 NumericLiteral parseNumericLiteral :
   < DECIMAL_NUMERIC_LITERAL >
   {
-    return new NumericLiteral(new BigDecimal(getToken(0).getImage()));
+    return new NumericLiteralR(new BigDecimal(getToken(0).getImage()));
   }
 | < UNSIGNED_INTEGER_LITERAL >
   {
-    return new NumericLiteral(new BigDecimal(getToken(0).getImage()));
+    return new NumericLiteralR(new BigDecimal(getToken(0).getImage()));
   }
 | < APPROX_NUMERIC_LITERAL >
   {
-    return new NumericLiteral(new BigDecimal(getToken(0).getImage()));
+    return new NumericLiteralR(new BigDecimal(getToken(0).getImage()));
   }
 ;
 
@@ -1294,11 +1316,11 @@ Expression atom :
 }
   < SINGLE_QUOTED_STRING >
   {
-    return new StringLiteral(stripQuotes(getToken(0).getImage(), "'", "'", "''"));
+    return new StringLiteralR(stripQuotes(getToken(0).getImage(), "'", "'", "''"));
   }
 | < DOUBLE_QUOTED_STRING >
   {
-    return new StringLiteral(stripQuotes(getToken(0).getImage(), '"' + "", '"' + "", '"' + "" + '"'));
+    return new StringLiteralR(stripQuotes(getToken(0).getImage(), '"' + "", '"' + "", '"' + "" + '"'));
   }
 | expression = parseNumericLiteral
   {
@@ -1306,15 +1328,15 @@ Expression atom :
   }
 | < NULL >
   {
-    return NullLiteral.SINGLETON;
+    return NullLiteralR.SINGLETON;
   }
 | < CAST > < LPAREN > expression = parseUnaliasedExpression 
   < AS > nameObjectIdentifier = parseNameObjectIdentifier < RPAREN >
   {
-    return new CallExpression(
+    return new CallExpressionR(
     "CAST", CallExpression.Type.Cast, List.of(
     expression, 
-    new SymbolLiteral(nameObjectIdentifier.name())
+    new SymbolLiteralR(nameObjectIdentifier.name())
     )
     );
   }
@@ -1322,7 +1344,7 @@ Expression atom :
   {
     // Whereas ([Sales],[Time]) and () are tuples, ([Sales]) and (5)
     // are just expressions.
-    return new CallExpression(
+    return new CallExpressionR(
     "()", CallExpression.Type.Parentheses, expressions);
   }
 | 
@@ -1338,7 +1360,7 @@ Expression atom :
   )
   < RBRACE >
   {
-    return new CallExpression(
+    return new CallExpressionR(
     "{}", CallExpression.Type.Braces, expressions);
   }
 | expression = caseExpression
@@ -1411,12 +1433,12 @@ Expression caseExpression :
   {
     if (match)
     {
-      return new CallExpression(
+      return new CallExpressionR(
       "_CaseMatch", CallExpression.Type.Term_Case, expressions);
     }
     else
     {
-      return new CallExpression(
+      return new CallExpressionR(
       "_CaseTest", CallExpression.Type.Term_Case, expressions);
     }
   }
@@ -1434,7 +1456,7 @@ CreateSetBodyClause parseCreateSetBodyClause :
 
   compoundId = parseCompoundId < AS > expression = parseExpression
   {
-    return new CreateSetBodyClause(compoundId,expression);
+    return new CreateSetBodyClauseR(compoundId,expression);
   }
 ;
 
@@ -1446,7 +1468,7 @@ SelectDimensionPropertyListClause parseSelectDimensionPropertyListClause :
     < COMMA > parseIdentifier
   )*
   {
-    return new SelectDimensionPropertyListClause();
+    return new SelectDimensionPropertyListClauseR();
   }
 ;
 
@@ -1489,35 +1511,35 @@ SelectQueryAxisClause parseSelectQueryAxisClause :
       }
       else
       {
-        axis = Axis.createUnnamed(n);
+        axis = AxisR.createUnnamed(n);
       }
     }
   |
     (
       < COLUMNS >
       {
-        axis = Axis.COLUMNS_NAMED;
+        axis = AxisR.COLUMNS_NAMED;
       }
     | < ROWS >
       {
-        axis = Axis.ROWS_NAMED;
+        axis = AxisR.ROWS_NAMED;
       }
     | < PAGES >
       {
-        axis = Axis.PAGES_NAMED;
+        axis = AxisR.PAGES_NAMED;
       }
     | < SECTIONS >
       {
-        axis = Axis.SECTIONS_NAMED;
+        axis = AxisR.SECTIONS_NAMED;
       }
     | < CHAPTERS >
       {
-        axis = Axis.CHAPTERS_NAMED;
+        axis = AxisR.CHAPTERS_NAMED;
       }
     )
   )
   {
-    return new SelectQueryAxisClause(nonEmpty, expression, axis, selectDimensionPropertyListClause);
+    return new SelectQueryAxisClauseR(nonEmpty, expression, axis, selectDimensionPropertyListClause);
   }
 ;
 

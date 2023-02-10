@@ -15,8 +15,8 @@ package org.eclipse.daanse.mdx.parser.ccc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.eclipse.daanse.mdx.model.MdxStatement;
-import org.eclipse.daanse.mdx.model.SelectStatement;
+import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.record.SelectStatementR;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 import org.junit.jupiter.api.Test;
 
@@ -34,7 +34,7 @@ public class MdxStatementTest {
 
         MdxStatement clause = new MdxParserWrapper(mdx).parseMdxStatement();
         assertThat(clause).isNotNull()
-                .isInstanceOf(SelectStatement.class);
+                .isInstanceOf(SelectStatementR.class);
 
     }
 

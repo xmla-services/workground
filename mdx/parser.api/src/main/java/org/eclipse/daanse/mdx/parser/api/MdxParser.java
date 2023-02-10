@@ -13,10 +13,10 @@
 */
 package org.eclipse.daanse.mdx.parser.api;
 
-import org.eclipse.daanse.mdx.model.MdxStatement;
-import org.eclipse.daanse.mdx.model.SelectStatement;
-import org.eclipse.daanse.mdx.model.select.SelectQueryAsteriskClause;
-import org.eclipse.daanse.mdx.model.select.SelectQueryAxesClause;
+import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
 
 public interface MdxParser {
 

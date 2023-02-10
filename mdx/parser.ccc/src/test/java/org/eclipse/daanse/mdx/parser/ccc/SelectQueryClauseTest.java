@@ -15,10 +15,12 @@ package org.eclipse.daanse.mdx.parser.ccc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.eclipse.daanse.mdx.model.SelectStatement;
-import org.eclipse.daanse.mdx.model.select.SelectQueryAsteriskClause;
-import org.eclipse.daanse.mdx.model.select.SelectQueryAxesClause;
-import org.eclipse.daanse.mdx.model.select.SelectQueryEmptyClause;
+import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryAsteriskClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxesClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryEmptyClauseR;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -52,7 +54,7 @@ public class SelectQueryClauseTest {
                     """;
             SelectQueryAxesClause clause = new MdxParserWrapper(mdx).parseSelectQueryAxesClause();
             assertThat(clause).isNotNull()
-                    .isInstanceOf(SelectQueryAxesClause.class);
+                    .isInstanceOf(SelectQueryAxesClauseR.class);
         }
 
         @Test
@@ -60,7 +62,7 @@ public class SelectQueryClauseTest {
             String mdx = "[Customer] ON COLUMNS";
             SelectQueryAxesClause clause = new MdxParserWrapper(mdx).parseSelectQueryAxesClause();
             assertThat(clause).isNotNull()
-                    .isInstanceOf(SelectQueryAxesClause.class);
+                    .isInstanceOf(SelectQueryAxesClauseR.class);
         }
     }
 
@@ -73,7 +75,7 @@ public class SelectQueryClauseTest {
             SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
             assertThat(selectStatement).isNotNull();
             assertThat(selectStatement.selectQueryClause()).isNotNull()
-                    .isInstanceOf(SelectQueryEmptyClause.class);
+                    .isInstanceOf(SelectQueryEmptyClauseR.class);
 
         }
     }
@@ -88,7 +90,7 @@ public class SelectQueryClauseTest {
             SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
             assertThat(selectStatement).isNotNull();
             assertThat(selectStatement.selectQueryClause()).isNotNull()
-                    .isInstanceOf(SelectQueryAsteriskClause.class);
+                    .isInstanceOf(SelectQueryAsteriskClauseR.class);
 
         }
 

@@ -18,40 +18,40 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.eclipse.daanse.mdx.model.Axis;
-import org.eclipse.daanse.mdx.model.CallExpression;
-import org.eclipse.daanse.mdx.model.CompoundId;
-import org.eclipse.daanse.mdx.model.DMVStatement;
-import org.eclipse.daanse.mdx.model.DrillthroughStatement;
-import org.eclipse.daanse.mdx.model.ExplainStatement;
-import org.eclipse.daanse.mdx.model.Expression;
-import org.eclipse.daanse.mdx.model.KeyObjectIdentifier;
-import org.eclipse.daanse.mdx.model.Literal;
-import org.eclipse.daanse.mdx.model.MdxRefreshStatement;
-import org.eclipse.daanse.mdx.model.MdxStatement;
-import org.eclipse.daanse.mdx.model.MemberPropertyDefinition;
-import org.eclipse.daanse.mdx.model.NameObjectIdentifier;
-import org.eclipse.daanse.mdx.model.NullLiteral;
-import org.eclipse.daanse.mdx.model.NumericLiteral;
-import org.eclipse.daanse.mdx.model.ObjectIdentifier;
-import org.eclipse.daanse.mdx.model.SelectStatement;
-import org.eclipse.daanse.mdx.model.StringLiteral;
-import org.eclipse.daanse.mdx.model.SymbolLiteral;
-import org.eclipse.daanse.mdx.model.select.CreateCellCalculationBodyClause;
-import org.eclipse.daanse.mdx.model.select.CreateMemberBodyClause;
-import org.eclipse.daanse.mdx.model.select.CreateSetBodyClause;
-import org.eclipse.daanse.mdx.model.select.MeasureBodyClause;
-import org.eclipse.daanse.mdx.model.select.SelectCellPropertyListClause;
-import org.eclipse.daanse.mdx.model.select.SelectQueryAsteriskClause;
-import org.eclipse.daanse.mdx.model.select.SelectQueryAxesClause;
-import org.eclipse.daanse.mdx.model.select.SelectQueryAxisClause;
-import org.eclipse.daanse.mdx.model.select.SelectQueryClause;
-import org.eclipse.daanse.mdx.model.select.SelectQueryEmptyClause;
-import org.eclipse.daanse.mdx.model.select.SelectSlicerAxisClause;
-import org.eclipse.daanse.mdx.model.select.SelectSubcubeClause;
-import org.eclipse.daanse.mdx.model.select.SelectSubcubeClauseName;
-import org.eclipse.daanse.mdx.model.select.SelectSubcubeClauseStatement;
-import org.eclipse.daanse.mdx.model.select.SelectWithClause;
+import org.eclipse.daanse.mdx.model.api.DMVStatement;
+import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
+import org.eclipse.daanse.mdx.model.api.ExplainStatement;
+import org.eclipse.daanse.mdx.model.api.MdxRefreshStatement;
+import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
+import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
+import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.expression.Literal;
+import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.expression.NullLiteral;
+import org.eclipse.daanse.mdx.model.api.expression.NumericLiteral;
+import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.expression.StringLiteral;
+import org.eclipse.daanse.mdx.model.api.expression.SymbolLiteral;
+import org.eclipse.daanse.mdx.model.api.select.Axis;
+import org.eclipse.daanse.mdx.model.api.select.CreateCellCalculationBodyClause;
+import org.eclipse.daanse.mdx.model.api.select.CreateMemberBodyClause;
+import org.eclipse.daanse.mdx.model.api.select.CreateSetBodyClause;
+import org.eclipse.daanse.mdx.model.api.select.MeasureBodyClause;
+import org.eclipse.daanse.mdx.model.api.select.MemberPropertyDefinition;
+import org.eclipse.daanse.mdx.model.api.select.SelectCellPropertyListClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryEmptyClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
+import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
 import org.eclipse.daanse.mdx.unparser.api.UnParser;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
@@ -373,18 +373,18 @@ public class SimpleUnparser implements UnParser {
                 .append(name)
                 .append("");
         case Term_Case -> {
-            int size=expressions.size();
+            int size = expressions.size();
             sb.append("CASE ");
             sb.append(unparseExpression(expressions.get(0)));
-            
-            for (int i = 1; i < size-1; i++) {
+
+            for (int i = 1; i < size - 1; i++) {
                 sb.append(" WHEN ");
                 sb.append(unparseExpression(expressions.get(i)));
-                
+
             }
 
             sb.append(" ELSE ");
-            sb.append(unparseExpression(expressions.get(size-1)));
+            sb.append(unparseExpression(expressions.get(size - 1)));
             sb.append(" END ");
 
         }

@@ -13,7 +13,7 @@
 */
 package org.eclipse.daanse.mdx.unparser.api;
 
-import org.eclipse.daanse.mdx.model.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.MdxStatement;
 
 public interface UnParser {
 
