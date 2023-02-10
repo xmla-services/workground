@@ -31,6 +31,7 @@ public enum MeasureAggregatorEnum {
      */
     @XmlEnumValue("1")
     MDMEASURE_AGGR_SUM(1),
+
     /**
      * MEASURE aggregates from COUNT.
      */

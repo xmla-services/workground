@@ -28,12 +28,14 @@ public enum LevelOriginEnum {
      */
     @XmlEnumValue("0x0001")
     USER_DEFINED(0x0001),
+
     /**
      * Identifies levels
      * in an attribute hierarchy.
      */
     @XmlEnumValue("0x0002")
     ATTRIBUTE(0x0002),
+
     /**
      * Identifies levels
      * in a key attribute
@@ -49,7 +51,6 @@ public enum LevelOriginEnum {
      */
     @XmlEnumValue("0x0008")
     NOT_ENABLED(0x0008);
-
 
     private final int value;
 

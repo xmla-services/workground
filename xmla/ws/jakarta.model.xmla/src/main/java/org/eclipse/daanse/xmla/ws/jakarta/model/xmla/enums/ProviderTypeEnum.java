@@ -26,11 +26,13 @@ public enum ProviderTypeEnum {
      */
     @XmlEnumValue("MDP")
     MDP,
+
     /**
      * tabular data provider.
      */
     @XmlEnumValue("TDP")
     TDP,
+
     /**
      * data mining provider (implements the OLE for DB for Data Mining specification)
      */

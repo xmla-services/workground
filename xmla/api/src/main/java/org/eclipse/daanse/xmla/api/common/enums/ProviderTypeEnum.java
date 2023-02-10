@@ -19,10 +19,12 @@ public enum ProviderTypeEnum {
      * multidimensional data provider.
      */
     MDP,
+
     /**
      * tabular data provider.
      */
     TDP,
+
     /**
      * data mining provider (implements the OLE for DB for Data Mining specification)
      */

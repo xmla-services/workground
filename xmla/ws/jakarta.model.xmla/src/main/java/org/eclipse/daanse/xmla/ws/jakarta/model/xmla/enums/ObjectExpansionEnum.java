@@ -26,22 +26,24 @@ public enum ObjectExpansionEnum {
      */
     @XmlEnumValue("ReferenceOnly")
     ReferenceOnly,
+
     /**
      *  Expands the requested object with no references to contained objects (includes expanded minor contained objects).
      */
     @XmlEnumValue("ObjectProperties")
     ObjectProperties,
+
     /**
      * Same as ObjectProperties, but also returns the name, ID, and timestamp for contained major objects.
      */
     @XmlEnumValue("ExpandObject")
     ExpandObject,
+
     /**
      * Fully expands the requested object recursively to the bottom of every contained object.
      */
     @XmlEnumValue("ExpandFull")
     ExpandFull;
-
 
     public static ObjectExpansionEnum fromValue(String v) {
         if (v == null) {

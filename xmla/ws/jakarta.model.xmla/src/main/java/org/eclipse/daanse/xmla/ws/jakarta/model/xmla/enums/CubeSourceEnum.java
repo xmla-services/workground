@@ -20,8 +20,10 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "ACubeSource")
 @XmlEnum
 public enum CubeSourceEnum {
+
     @XmlEnumValue("0x01")
     CUBE(0x01),
+
     @XmlEnumValue("0x02")
     DIMENSION(0x02);
 

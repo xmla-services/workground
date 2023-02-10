@@ -15,6 +15,7 @@ public enum DimensionCardinalityEnum {
 
     @XmlEnumValue("ONE")
     ONE,
+
     @XmlEnumValue("MANY")
     MANY;
 

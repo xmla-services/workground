@@ -26,16 +26,19 @@ public enum StructureEnum {
      */
     @XmlEnumValue("0")
     HIERARCHY_FULLY_BALANCED(0),
+
     /**
      * Hierarchy is a ragged balanced structure.
      */
     @XmlEnumValue("1")
     HIERARCHY_RAGGED_BALANCED(1),
+
     /**
      * Hierarchy is an unbalanced
      */
     @XmlEnumValue("2")
     HIERARCHY_UNBALANCED(2),
+
     /**
      *  Hierarchy is a network
      */

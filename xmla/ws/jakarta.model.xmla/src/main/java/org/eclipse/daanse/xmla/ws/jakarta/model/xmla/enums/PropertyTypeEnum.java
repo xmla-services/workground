@@ -41,8 +41,8 @@ public enum PropertyTypeEnum {
     property_cell(2),
 
     /**
-     *  - Identifies an internal
-     *      * property.
+     * Identifies an internal
+     * property.
      */
     @XmlEnumValue("4")
     internal_property(4),

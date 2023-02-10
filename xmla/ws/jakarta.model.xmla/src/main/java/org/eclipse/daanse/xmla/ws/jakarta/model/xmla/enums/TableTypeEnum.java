@@ -26,23 +26,30 @@ public enum TableTypeEnum {
 
     @XmlEnumValue("ALIAS")
     ALIAS("ALIAS"),
+
     @XmlEnumValue("TABLE")
     TABLE("TABLE"),
+
     @XmlEnumValue("SYNONYM")
     SYNONYM("SYNONYM"),
+
     @XmlEnumValue("SYSTEM TABLE")
     SYSTEM_TABLE("SYSTEM TABLE"),
+
     @XmlEnumValue("VIEW")
     VIEW("VIEW"),
+
     @XmlEnumValue("GLOBAL TEMPORARY")
     GLOBAL_TEMPORARY("GLOBAL TEMPORARY"),
+
     @XmlEnumValue("LOCAL TEMPORARY")
     LOCAL_TEMPORARY("LOCAL TEMPORARY"),
+
     @XmlEnumValue("EXTERNAL TABLE")
     EXTERNAL_TABLE("EXTERNAL TABLE"),
+
     @XmlEnumValue("SYSTEM VIEW")
     SYSTEM_VIEW("SYSTEM VIEW");
-
 
     private final String value;
 

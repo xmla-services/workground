@@ -13,11 +13,13 @@ public enum AuthenticationModeEnum {
      */
     @XmlEnumValue("Unauthenticated")
     Unauthenticated,
+
     /**
      * User ID and password MUST be included in the information required to connect to the data source.
      */
     @XmlEnumValue("Authenticated")
     Authenticated,
+
     /**
      * The data source uses the underlying security to determine authorization.
      */

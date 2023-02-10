@@ -33,6 +33,7 @@ public enum PropertyOriginEnum {
      */
     @XmlEnumValue("1")
     user_defined(1),
+
     /**
      *  Indicates the property
      *  is on an attribute
@@ -40,6 +41,7 @@ public enum PropertyOriginEnum {
      */
     @XmlEnumValue("2")
     attribute_hierarchy(2),
+
     /**
      * Indicates the property
      * is on a key attribute

@@ -26,26 +26,31 @@ public enum CoordinateTypeEnum {
      */
     @XmlEnumValue("1")
     CUBE(1),
+
     /**
      * Action coordinate refers to a dimension.
      */
     @XmlEnumValue("2")
     DIMENSION(2),
+
     /**
      *  Action coordinate refers to a level.
      */
     @XmlEnumValue("3")
     LEVEL(3),
+
     /**
      * Action coordinate refers to a member.
      */
     @XmlEnumValue("4")
     MEMBER(4),
+
     /**
      * Action coordinate refers to a set.
      */
     @XmlEnumValue("5")
     SET(5),
+
     /**
      * Action coordinate refers to a cell.
      */

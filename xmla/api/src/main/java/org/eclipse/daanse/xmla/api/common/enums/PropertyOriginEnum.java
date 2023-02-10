@@ -26,12 +26,14 @@ public enum PropertyOriginEnum {
      *  hierarchy.
      */
     user_defined(1),
+
     /**
      *  Indicates the property
      *  is on an attribute
      *  hierarchy.
      */
     attribute_hierarchy(2),
+
     /**
      * Indicates the property
      * is on a key attribute

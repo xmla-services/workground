@@ -6,10 +6,12 @@ public enum AuthenticationModeEnum {
      * No user ID or password has to be sent.
      */
     Unauthenticated,
+
     /**
      * User ID and password MUST be included in the information required to connect to the data source.
      */
     Authenticated,
+
     /**
      * The data source uses the underlying security to determine authorization.
      */

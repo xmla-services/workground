@@ -17,7 +17,8 @@ package org.eclipse.daanse.xmla.api.common.enums;
 public enum CubeTypeEnum {
 
      CUBE,
-     DIMENSION;
+
+    DIMENSION;
 
     public static CubeTypeEnum fromValue(String v) {
         if (v == null) {

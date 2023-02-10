@@ -29,21 +29,25 @@ public enum MemberTypeEnum {
      */
     @XmlEnumValue("1")
     Regular_member(1),
+
     /**
      * Is the All member.
      */
     @XmlEnumValue("2")
     All_member(2),
+
     /**
      *  Is a measure.
      */
     @XmlEnumValue("3")
     Measure(3),
+
     /**
      * Is a formula.
      */
     @XmlEnumValue("4")
     Formula(4),
+
     /**
      *  Is of unknown type.
      */

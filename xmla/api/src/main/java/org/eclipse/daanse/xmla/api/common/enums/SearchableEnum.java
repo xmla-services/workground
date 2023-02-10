@@ -30,7 +30,7 @@ public enum SearchableEnum {
     DB_LIKE_ONLY (0x02),
 
     /**
-     *  - indicates that
+     * indicates that
      * the data type can be used in a WHERE clause
      * with all comparison operators except LIKE.
      */

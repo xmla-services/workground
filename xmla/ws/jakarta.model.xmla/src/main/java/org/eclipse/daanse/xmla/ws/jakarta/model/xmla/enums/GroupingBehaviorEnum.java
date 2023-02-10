@@ -26,6 +26,7 @@ public enum GroupingBehaviorEnum {
      */
     @XmlEnumValue("1")
     ENCOURAGED(1),
+
     /**
      * Client applications are discouraged from grouping by each member of the hierarchy.
      */

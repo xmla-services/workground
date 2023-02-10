@@ -23,8 +23,10 @@ public enum StructureTypeEnum {
 
     @XmlEnumValue("Natural")
     Natural,
+
     @XmlEnumValue("Unnatural")
     Unnatural,
+
     @XmlEnumValue("Unknown")
     Unknown;
 

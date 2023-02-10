@@ -21,11 +21,13 @@ public enum LevelOriginEnum {
      * hierarchy.
      */
     USER_DEFINED(0x0001),
+
     /**
      * Identifies levels
      * in an attribute hierarchy.
      */
     ATTRIBUTE(0x0002),
+
     /**
      * Identifies levels
      * in a key attribute

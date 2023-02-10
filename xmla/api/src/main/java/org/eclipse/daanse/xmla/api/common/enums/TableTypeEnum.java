@@ -18,7 +18,6 @@ package org.eclipse.daanse.xmla.api.common.enums;
  */
 public enum TableTypeEnum {
 
-
     ALIAS("ALIAS"),
     TABLE("TABLE"),
     SYNONYM("SYNONYM"),
@@ -28,7 +27,6 @@ public enum TableTypeEnum {
     LOCAL_TEMPORARY("LOCAL TEMPORARY"),
     EXTERNAL_TABLE("EXTERNAL TABLE"),
     SYSTEM_VIEW("SYSTEM VIEW");
-
 
     private final String value;
 

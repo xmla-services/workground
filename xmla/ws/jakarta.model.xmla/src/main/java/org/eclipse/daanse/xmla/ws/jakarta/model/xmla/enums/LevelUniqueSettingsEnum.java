@@ -57,7 +57,7 @@ public enum LevelUniqueSettingsEnum {
                 return c;
             }
         }
-        throw new IllegalArgumentException(new StringBuilder("LevelOriginEnum Illegal argument ")
+        throw new IllegalArgumentException(new StringBuilder("LevelUniqueSettingsEnum Illegal argument ")
             .append(v).toString());
     }
 }

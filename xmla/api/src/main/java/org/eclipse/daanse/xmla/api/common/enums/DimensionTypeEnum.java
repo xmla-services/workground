@@ -49,7 +49,7 @@ public enum DimensionTypeEnum {
                 return c;
             }
         }
-        throw new IllegalArgumentException(new StringBuilder("CoordinateTypeEnum Illegal argument ")
+        throw new IllegalArgumentException(new StringBuilder("DimensionTypeEnum Illegal argument ")
             .append(v).toString());
     }
 }

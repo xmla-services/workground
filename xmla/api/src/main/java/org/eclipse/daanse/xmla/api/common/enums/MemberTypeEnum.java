@@ -22,18 +22,22 @@ public enum MemberTypeEnum {
      *  Is a regular member.
      */
     Regular_member(1),
+
     /**
      * Is the All member.
      */
     All_member(2),
+
     /**
      *  Is a measure.
      */
     Measure(3),
+
     /**
      * Is a formula.
      */
     Formula(4),
+
     /**
      *  Is of unknown type.
      */

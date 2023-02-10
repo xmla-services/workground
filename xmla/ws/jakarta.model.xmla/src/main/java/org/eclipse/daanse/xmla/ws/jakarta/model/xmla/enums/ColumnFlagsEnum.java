@@ -26,11 +26,13 @@ public enum ColumnFlagsEnum {
      */
     @XmlEnumValue("0x1")
     DBCOLUMNFLAGS_ISBOOKMARK(0x1),
+
     /**
      * Set if the column is deferred.
      */
     @XmlEnumValue("0x2")
     DBCOLUMNFLAGS_MAYDEFER(0x2),
+
     /**
      * Set if the OLEDB interface
      * IRowsetChange:SetData can be
@@ -40,7 +42,7 @@ public enum ColumnFlagsEnum {
     DBCOLUMNFLAGS_WRITE(0x4),
 
     /**
-     * – Set if the column can be updated
+     * Set if the column can be updated
      * through some means, but the means
      * is unknown.
      */

@@ -21,47 +21,54 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlEnum
 public enum ActionTypeEnum {
 
-
     /**
      * Action type is URL.
      */
     @XmlEnumValue("0x01")
     URL(0x01),
+
     /**
      * Action type is HTML.
      */
     @XmlEnumValue("0x02")
     HTML(0x02),
+
     /**
      * Action type is Statement.
      */
     @XmlEnumValue("0x04")
     STATEMENT(0x04),
+
     /**
      * Action type is Dataset.
      */
     @XmlEnumValue("0x08")
     DATASET(0x08),
+
     /**
      * Action type is Rowset.
      */
     @XmlEnumValue("0x10")
     ROW_SET(0x10),
+
     /**
      * Action type is Commandline.
      */
     @XmlEnumValue("0x20")
     COMMANDLINE(0x20),
+
     /**
      * Action type is Proprietary.
      */
     @XmlEnumValue("0x40")
     PROPRIETARY(0x40),
+
     /**
      * Action type is Report.
      */
     @XmlEnumValue("0x80")
     REPORT(0x80),
+
     /**
      * Action type is DrillThrough.
      */
