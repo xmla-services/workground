@@ -23,10 +23,13 @@ public enum OriginEnum {
 
     @XmlEnumValue("0x1")
     MSOLAP(0x1),
+
     @XmlEnumValue("0x2")
     UDF(0x2),
+
     @XmlEnumValue("0x3")
     RELATIONAL(0x3),
+
     @XmlEnumValue("0x4")
     SCALAR(0x4);
 

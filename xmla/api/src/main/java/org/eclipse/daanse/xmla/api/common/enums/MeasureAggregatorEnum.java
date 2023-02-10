@@ -24,6 +24,7 @@ public enum MeasureAggregatorEnum {
      * MEASURE aggregates from SUM.
      */
     MDMEASURE_AGGR_SUM(1),
+
     /**
      * MEASURE aggregates from COUNT.
      */

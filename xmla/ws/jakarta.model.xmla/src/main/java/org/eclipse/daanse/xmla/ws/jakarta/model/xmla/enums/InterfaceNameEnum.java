@@ -23,8 +23,10 @@ public enum InterfaceNameEnum {
 
     @XmlEnumValue("DATETIME")
     DATETIME,
+
     @XmlEnumValue("LOGICAL")
     LOGICAL,
+
     @XmlEnumValue("FILTER")
     FILTER;
 

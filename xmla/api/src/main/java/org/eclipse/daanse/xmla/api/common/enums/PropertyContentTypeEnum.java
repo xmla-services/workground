@@ -109,7 +109,7 @@ public enum PropertyContentTypeEnum {
                 return c;
             }
         }
-        throw new IllegalArgumentException(new StringBuilder("HierarchyOriginEnum Illegal argument ")
+        throw new IllegalArgumentException(new StringBuilder("PropertyContentTypeEnum Illegal argument ")
             .append(v).toString());
     }
 }

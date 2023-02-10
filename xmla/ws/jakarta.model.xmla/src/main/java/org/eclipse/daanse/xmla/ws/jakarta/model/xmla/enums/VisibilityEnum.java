@@ -23,6 +23,7 @@ public enum VisibilityEnum {
 
     @XmlEnumValue("0x01")
     VISIBLE(0x01),
+
     @XmlEnumValue("0x02")
     NOT_VISIBLE(0x02);
 

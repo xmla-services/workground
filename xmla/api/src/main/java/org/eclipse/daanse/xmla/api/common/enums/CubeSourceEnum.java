@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.api.common.enums;
 public enum CubeSourceEnum {
 
     CUBE(0x01),
+
     DIMENSION(0x02);
 
     private final int value;

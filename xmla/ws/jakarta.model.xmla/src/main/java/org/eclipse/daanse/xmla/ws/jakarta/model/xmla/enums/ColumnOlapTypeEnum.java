@@ -26,12 +26,14 @@ public enum ColumnOlapTypeEnum {
      */
     @XmlEnumValue("MEASURE")
     MEASURE,
+
     /**
      *  indicates that the object is a
      *  dimension attribute.
      */
     @XmlEnumValue("ATTRIBUTE")
     ATTRIBUTE,
+
     /**
      * indicates that the object is a
      * column in a schema rowset table.

@@ -23,36 +23,51 @@ public enum DimensionTypeEnum {
 
     @XmlEnumValue("0")
     UNKNOWN(0),
+
     @XmlEnumValue("1")
     TIME(1),
+
     @XmlEnumValue("2")
     MEASURE(2),
+
     @XmlEnumValue("3")
     OTHER(3),
+
     @XmlEnumValue("5")
     QUANTITATIVE(5),
+
     @XmlEnumValue("6")
     ACCOUNTS(6),
+
     @XmlEnumValue("7")
     CUSTOMERS(7),
+
     @XmlEnumValue("8")
     PRODUCTS(8),
+
     @XmlEnumValue("9")
     SCENARIO(9),
+
     @XmlEnumValue("10")
     UTILITY(10),
     @XmlEnumValue("11")
     CURRENCY(11),
+
     @XmlEnumValue("12")
     RATES(12),
+
     @XmlEnumValue("13")
     CHANNEL(13),
+
     @XmlEnumValue("14")
     PROMOTION(14),
+
     @XmlEnumValue("15")
     ORGANIZATION(15),
+
     @XmlEnumValue("16")
     BILL_OF_MATERIALS(16),
+
     @XmlEnumValue("17")
     GEOGRAPHY(17);
 
@@ -72,7 +87,7 @@ public enum DimensionTypeEnum {
                 return c;
             }
         }
-        throw new IllegalArgumentException(new StringBuilder("CoordinateTypeEnum Illegal argument ")
+        throw new IllegalArgumentException(new StringBuilder("DimensionTypeEnum Illegal argument ")
             .append(v).toString());
     }
 }

@@ -23,6 +23,7 @@ public enum PreferredQueryPatternsEnum {
 
     @XmlEnumValue("0x00")
     CROSS_JOIN(0x00),
+
     @XmlEnumValue("0x01")
     DRILL_DOWN_MEMBER(0x01);
 

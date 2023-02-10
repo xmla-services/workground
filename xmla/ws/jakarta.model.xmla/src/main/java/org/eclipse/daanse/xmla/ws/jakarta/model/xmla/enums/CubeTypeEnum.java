@@ -24,6 +24,7 @@ public enum CubeTypeEnum {
 
     @XmlEnumValue("CUBE")
     CUBE,
+
     @XmlEnumValue("DIMENSION")
     DIMENSION;
 

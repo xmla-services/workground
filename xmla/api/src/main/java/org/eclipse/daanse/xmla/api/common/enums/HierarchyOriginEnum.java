@@ -19,23 +19,26 @@ public enum HierarchyOriginEnum {
      * Identifies user-defined hierarchies.
      */
     USER_DEFINED(0x0001),
+
     /**
      * Identifies attribute hierarchies.
      */
     ATTRIBUTE(0x0002),
+
     /**
      * Identifies key attribute hierarchies.
      */
     KEY(0x0004),
+
     /**
      * Identifies attributes with no attribute hierarchies.
      */
     WITH_NO_ATTRIBUTE(0x0008),
+
     /**
      * The default restriction
      */
     DEFAULT(0x0003);
-
 
     private final int value;
 

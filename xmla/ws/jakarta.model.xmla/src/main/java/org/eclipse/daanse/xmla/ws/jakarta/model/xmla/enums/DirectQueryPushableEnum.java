@@ -26,6 +26,7 @@ public enum DirectQueryPushableEnum {
      */
     @XmlEnumValue("0x1")
     MEASURE(0x1),
+
     /**
      * This function can be used in calculated column expressions.
      */

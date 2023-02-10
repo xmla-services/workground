@@ -19,22 +19,27 @@ public enum CoordinateTypeEnum {
      * Action coordinate refers to the cube.
      */
     CUBE(1),
+
     /**
      * Action coordinate refers to a dimension.
      */
     DIMENSION(2),
+
     /**
      *  Action coordinate refers to a level.
      */
     LEVEL(3),
+
     /**
      * Action coordinate refers to a member.
      */
     MEMBER(4),
+
     /**
      * Action coordinate refers to a set.
      */
     SET(5),
+
     /**
      * Action coordinate refers to a cell.
      */

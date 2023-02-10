@@ -43,7 +43,7 @@ public enum ScopeEnum {
                 return c;
             }
         }
-        throw new IllegalArgumentException(new StringBuilder("CoordinateTypeEnum Illegal argument ")
+        throw new IllegalArgumentException(new StringBuilder("ScopeEnum Illegal argument ")
             .append(v).toString());
     }
 }

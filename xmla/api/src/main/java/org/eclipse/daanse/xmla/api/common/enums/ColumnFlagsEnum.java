@@ -19,10 +19,12 @@ public enum ColumnFlagsEnum {
      * Set if the column is a bookmark.
      */
     DBCOLUMNFLAGS_ISBOOKMARK(0x1),
+
     /**
      * Set if the column is deferred.
      */
     DBCOLUMNFLAGS_MAYDEFER(0x2),
+
     /**
      * Set if the OLEDB interface
      * IRowsetChange:SetData can be

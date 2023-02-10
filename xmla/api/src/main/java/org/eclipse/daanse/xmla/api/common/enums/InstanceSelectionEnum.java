@@ -19,14 +19,17 @@ public enum InstanceSelectionEnum {
      * DROPDOWN type of display is suggested.
      */
     DROPDOWN(1),
+
     /**
      * LIST type of display is suggested.
      */
     LIST(2),
+
     /**
      * FILTERED LIST type of display is suggested.
      */
     FILTERED_LIST(3),
+
     /**
      * MANDATORY FILTER type of display is suggested
      */

@@ -23,6 +23,7 @@ public enum DimensionUniqueSettingEnum {
 
     @XmlEnumValue("0x00000001")
     MEMBER_KEY(0x00000001),
+
     @XmlEnumValue("0x00000002")
     MEMBER_NAME(0x00000002);
 

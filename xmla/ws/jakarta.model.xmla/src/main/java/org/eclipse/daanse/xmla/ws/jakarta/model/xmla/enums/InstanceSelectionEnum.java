@@ -26,16 +26,19 @@ public enum InstanceSelectionEnum {
      */
     @XmlEnumValue("1")
     DROPDOWN(1),
+
     /**
      * LIST type of display is suggested.
      */
     @XmlEnumValue("2")
     LIST(2),
+
     /**
      * FILTERED LIST type of display is suggested.
      */
     @XmlEnumValue("3")
     FILTERED_LIST(3),
+
     /**
      * MANDATORY FILTER type of display is suggested
      */

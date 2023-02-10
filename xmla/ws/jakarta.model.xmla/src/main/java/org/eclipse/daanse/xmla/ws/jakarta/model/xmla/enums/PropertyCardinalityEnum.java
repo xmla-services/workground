@@ -15,6 +15,7 @@ public enum PropertyCardinalityEnum {
 
     @XmlEnumValue("ONE")
     ONE,
+
     @XmlEnumValue("MANY")
     MANY;
 
@@ -27,7 +28,7 @@ public enum PropertyCardinalityEnum {
                 return e;
             }
         }
-        throw new IllegalArgumentException(new StringBuilder("AuthenticationModeEnum Illegal argument ")
+        throw new IllegalArgumentException(new StringBuilder("PropertyCardinalityEnum Illegal argument ")
             .append(v).toString());
     }
 }

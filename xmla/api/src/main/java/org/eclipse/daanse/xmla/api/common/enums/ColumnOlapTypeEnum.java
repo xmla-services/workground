@@ -19,11 +19,13 @@ public enum ColumnOlapTypeEnum {
      * indicates that the object is a measure.
      */
     MEASURE,
+
     /**
      *  indicates that the object is a
      *  dimension attribute.
      */
     ATTRIBUTE,
+
     /**
      * indicates that the object is a
      * column in a schema rowset table.

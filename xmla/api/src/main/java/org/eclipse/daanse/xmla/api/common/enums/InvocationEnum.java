@@ -19,10 +19,12 @@ public enum InvocationEnum {
      * Indicates a regular action used during normal operations. This is the default value for this column.
      */
     NORMAL_OPERATION(1),
+
     /**
      * Indicates that the action is performed when the cube is first opened.
      */
     FIRST_OPENED_CUBE(2),
+
     /**
      * Indicates that the action is performed as part of a batch
      */
@@ -45,7 +47,7 @@ public enum InvocationEnum {
                 return c;
             }
         }
-        throw new IllegalArgumentException(new StringBuilder("CoordinateTypeEnum Illegal argument ")
+        throw new IllegalArgumentException(new StringBuilder("InvocationEnum Illegal argument ")
             .append(v).toString());
     }
 }
