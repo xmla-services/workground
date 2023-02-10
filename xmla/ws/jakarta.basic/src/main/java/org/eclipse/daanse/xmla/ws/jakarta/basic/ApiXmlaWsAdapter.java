@@ -275,7 +275,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         return responseWs;
     }
 
-    private DiscoverResponse handleDiscoverLiterals(Discover requestWs) {
+    private DiscoverResponse handleDiscoverLiterals(Discover requestWs) throws JAXBException, IOException {
 
         DiscoverLiteralsRequest requestApi = Convert.fromDiscoverLiterals(requestWs);
         List<DiscoverLiteralsResponseRow> responseApi = xmlaService.discover().discoverLiterals(requestApi);
