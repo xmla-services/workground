@@ -159,6 +159,7 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PropertyList;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Return;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.DiscoverLiteralsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.DiscoverPropertiesResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Rowset;
@@ -368,10 +369,41 @@ public class Convert {
         return new DiscoverLiteralsRestrictionsR(Optional.ofNullable(keyword));
     }
 
-    public static DiscoverResponse toDiscoverLiterals(List<DiscoverLiteralsResponseRow> responseApi) {
-        // TODO
+    public static DiscoverResponse toDiscoverLiterals(List<DiscoverLiteralsResponseRow> responseApi)
+        throws JAXBException, IOException {
+
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDiscoverLiteralsResponseRow)
+            .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
+
+        Schema schema = SchemaUtil.generateSchema("urn:schemas-microsoft-com:xml-analysis:rowset",
+            DiscoverLiteralsResponseRowXml.class);
+
+        Return r = new Return();
+
+        Rowset rs = new Rowset();
+        rs.setSchema(schema);
+        rs.setRow(rows);
+        r.setValue(rs);
+        responseWs.setReturn(r);
+
         return responseWs;
+    }
+
+    private static Row convertDiscoverLiteralsResponseRow(DiscoverLiteralsResponseRow apiRow) {
+        DiscoverLiteralsResponseRowXml row = new DiscoverLiteralsResponseRowXml();
+
+        // Mandatory
+        row.setLiteralName(apiRow.literalName());
+        row.setLiteralValue(apiRow.literalValue());
+        row.setLiteralInvalidChars(apiRow.literalInvalidChars());
+        row.setLiteralInvalidStartingChars(apiRow.literalInvalidStartingChars());
+        row.setLiteralMaxLength(apiRow.literalMaxLength());
+        row.setLiteralNameValue(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LiteralNameEnumValueEnum.fromValue(apiRow.literalNameEnumValue().getValue()));
+
+        return row;
     }
 
     public static DbSchemaTablesRequest fromDiscoverDbSchemaTables(Discover requestWs) {

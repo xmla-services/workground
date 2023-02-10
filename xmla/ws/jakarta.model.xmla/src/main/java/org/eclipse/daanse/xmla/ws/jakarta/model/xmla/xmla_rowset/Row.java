@@ -7,9 +7,12 @@ import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "row")
-@XmlSeeAlso({DiscoverPropertiesResponseRowXml.class})
+@XmlSeeAlso({
+    DiscoverPropertiesResponseRowXml.class,
+    DiscoverLiteralsResponseRowXml.class
+})
 public abstract class Row {
-    
+
 
 
 }

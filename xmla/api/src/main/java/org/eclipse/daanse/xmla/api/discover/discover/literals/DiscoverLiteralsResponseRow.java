@@ -45,7 +45,7 @@ public interface DiscoverLiteralsResponseRow {
      * there is no maximum or the maximum is unknown, the
      * value is -1.
      */
-    Integer LiteralMaxLength();
+    Integer literalMaxLength();
 
     /**
      * @return The value is one of the following:
