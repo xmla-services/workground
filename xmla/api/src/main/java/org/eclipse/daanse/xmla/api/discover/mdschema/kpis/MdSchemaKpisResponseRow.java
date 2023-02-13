@@ -120,6 +120,11 @@ public interface MdSchemaKpisResponseRow {
     Optional<String> kpiParentKpiName();
 
     /**
+     * @return The annotations on the KPI.
+     */
+    Optional<String> annotation();
+
+    /**
      * The scope of the KPI. The KPI can be a session KPI
      * or global KPI.
      * This column can have one of the following values:

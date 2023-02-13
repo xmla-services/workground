@@ -19,11 +19,16 @@ import java.util.Optional;
 
 public interface MdSchemaCubesRestrictions {
 
+    String RESTRICTIONS_CATALOG_NAME = "CATALOG_NAME";
     String RESTRICTIONS_SCHEMA_NAME = "SCHEMA_NAME";
     String RESTRICTIONS_CUBE_NAME = "CUBE_NAME";
     String RESTRICTIONS_BASE_CUBE_NAME = "BASE_CUBE_NAME";
     String RESTRICTIONS_CUBE_SOURCE = "CUBE_SOURCE";
 
+    /**
+     * @return The catalog name.
+     */
+    String catalogName();
 
     /**
      * @return The name of the schema.

@@ -16,6 +16,9 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.dbschema;
 import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ColumnFlagsEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ColumnOlapTypeEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
+
+import java.io.Serializable;
 
 /**
  * This schema rowset returns a row for each measure, each cube dimension attribute, and each
@@ -23,7 +26,7 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ColumnOlapTypeEnum;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DbSchemaColumnsResponseRowXml")
-public class DbSchemaColumnsResponseRowXml {
+public class DbSchemaColumnsResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
     private final static long serialVersionUID = 5692876791695703039L;

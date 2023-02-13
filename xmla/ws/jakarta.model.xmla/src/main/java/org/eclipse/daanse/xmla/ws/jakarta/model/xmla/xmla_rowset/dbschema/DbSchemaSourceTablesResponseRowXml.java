@@ -15,7 +15,9 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.dbschema;
 
 import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.TableTypeEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
@@ -23,7 +25,7 @@ import java.util.Optional;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DbSchemaSourceTablesResponseRowXml")
-public class DbSchemaSourceTablesResponseRowXml {
+public class DbSchemaSourceTablesResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
     private final static long serialVersionUID = 4980356365829213910L;

@@ -16,6 +16,8 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.demensions;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionUniqueSettingEnum;
 
+import java.util.Optional;
+
 /**
  * This schema rowset describes the dimensions within a database.
  */
@@ -24,42 +26,42 @@ public interface MdSchemaDimensionsResponseRow {
     /**
      * @return The name of the database.
      */
-    String catalogName();
+    Optional<String> catalogName();
 
     /**
      * @return The name of the schema.
      */
-    String schemaName();
+    Optional<String> schemaName();
 
     /**
      * @return The name of the cube.
      */
-    String cubeName();
+    Optional<String> cubeName();
 
     /**
      * The name of the dimension.
      */
-    String dimensionName();
+    Optional<String> dimensionName();
 
     /**
      * The unique name of the dimension.
      */
-    String dimensionUniqueName();
+    Optional<String> dimensionUniqueName();
 
     /**
      * @return The GUID of the dimension.
      */
-    Integer dimensionGuid();
+    Optional<Integer> dimensionGuid();
 
     /**
      * @return The caption of the dimension.
      */
-    String dimensionCaption();
+    Optional<String> dimensionCaption();
 
     /**
      * @return The position of the dimension within the cube.
      */
-    Integer dimensionOptional();
+    Optional<Integer> dimensionOptional();
 
     /**
      * @return The type of the dimension. Valid values are:
@@ -81,35 +83,35 @@ public interface MdSchemaDimensionsResponseRow {
      * 16 - BILL OF MATERIALS
      * 17 – GEOGRAPHY
      */
-    DimensionTypeEnum dimensionType();
+    Optional<DimensionTypeEnum> dimensionType();
 
     /**
      * @return The number of members in the key
      * attribute.
      */
-    Integer dimensionCardinality();
+    Optional<Integer> dimensionCardinality();
 
     /**
      * @return The default hierarchy of the dimension.
      */
-    String defaultHierarchy();
+    Optional<String> defaultHierarchy();
 
     /**
      * @return A description of the dimension.
      */
-    String description();
+    Optional<String> description();
 
     /**
      * @return When true, indicates that the dimension is
      * virtual; otherwise false.
      */
-    Boolean isVirtual();
+    Optional<Boolean> isVirtual();
 
     /**
      * @return When true, indicates that the dimension is
      * write-enabled; otherwise false
      */
-    Boolean isReadWrite();
+    Optional<Boolean> isReadWrite();
 
     /**
      * @return A bitmask that specifies which columns
@@ -119,17 +121,17 @@ public interface MdSchemaDimensionsResponseRow {
      * 0x00000002 - Member name columns
      * establish uniqueness.
      */
-    DimensionUniqueSettingEnum dimensionUniqueSetting();
+    Optional<DimensionUniqueSettingEnum> dimensionUniqueSetting();
 
     /**
      * @return The name of the master dimension.
      */
-    String dimensionMasterName();
+    Optional<String> dimensionMasterName();
 
     /**
      * @return When true, indicates that the dimension is
      * visible in a client application; otherwise
      * false.
      */
-    Boolean dimensionIsVisible();
+    Optional<Boolean> dimensionIsVisible();
 }

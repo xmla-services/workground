@@ -16,13 +16,16 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.dbschema;
 import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelDbTypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.SearchableEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
+
+import java.io.Serializable;
 
 /**
  * This schema rowset identifies the (base) data types supported by the server.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DbSchemaProviderTypesResponseRowXml")
-public class DbSchemaProviderTypesResponseRowXml {
+public class DbSchemaProviderTypesResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
     private final static long serialVersionUID = 6172711439326894958L;

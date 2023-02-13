@@ -13,16 +13,14 @@
 */
 package org.eclipse.daanse.xmla.model.record.discover.discover.schemarowsets;
 
+import org.eclipse.daanse.xmla.api.discover.discover.schemarowsets.DiscoverSchemaRowsetsResponseRow;
+
 import java.util.Optional;
 
-import org.eclipse.daanse.xmla.api.discover.discover.properties.DiscoverPropertiesResponseRow;
-
-public record DiscoverSchemaRowsetsResponseRowR(String propertyName,
-                                             Optional<String> propertyDescription,
-                                             Optional<String> propertyType,
-                                             String propertyAccessType,
-                                             Optional<Boolean> required,
-                                             Optional<String> value)
-        implements DiscoverPropertiesResponseRow {
-
+public record DiscoverSchemaRowsetsResponseRowR(String schemaName,
+                                                Optional<String> schemaGuid,
+                                                    Optional<String> restrictions,
+                                                    Optional<String> description,
+                                                    Optional<Long> restrictionsMask)
+        implements DiscoverSchemaRowsetsResponseRow {
 }

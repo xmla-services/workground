@@ -14,6 +14,9 @@
 package org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata;
 
 import jakarta.xml.bind.annotation.*;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
+
+import java.io.Serializable;
 
 /**
  * This schema rowset returns a rowset with one row and one column. The single cell in the rowset
@@ -21,7 +24,7 @@ import jakarta.xml.bind.annotation.*;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DiscoverXmlMetaDataResponseRowXml")
-public class DiscoverXmlMetaDataResponseRowXml {
+public class DiscoverXmlMetaDataResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
     private final static long serialVersionUID = 5024203686449768474L;

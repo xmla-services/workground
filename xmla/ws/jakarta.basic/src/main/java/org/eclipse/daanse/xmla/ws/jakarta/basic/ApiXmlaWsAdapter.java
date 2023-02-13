@@ -266,7 +266,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         return responseWs;
     }
 
-    private DiscoverResponse handleDiscoverKeywords(Discover requestWs) {
+    private DiscoverResponse handleDiscoverKeywords(Discover requestWs) throws JAXBException, IOException {
 
         DiscoverKeywordsRequest requestApi = Convert.fromDiscoverKeywords(requestWs);
         List<DiscoverKeywordsResponseRow> responseApi = xmlaService.discover().discoverKeywords(requestApi);
