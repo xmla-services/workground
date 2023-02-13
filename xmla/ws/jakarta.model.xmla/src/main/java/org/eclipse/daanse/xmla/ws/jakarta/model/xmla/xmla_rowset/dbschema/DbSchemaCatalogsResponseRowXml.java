@@ -17,10 +17,13 @@ import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
+
+import java.io.Serializable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DbSchemaCatalogsResponseRowXml")
-public class DbSchemaCatalogsResponseRowXml {
+public class DbSchemaCatalogsResponseRowXml  extends Row implements Serializable {
     @XmlTransient
     private final static long serialVersionUID = 5290912238416901608L;
 

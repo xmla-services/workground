@@ -49,6 +49,7 @@ import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumera
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.discover.keywords.DiscoverKeywordsRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.keywords.DiscoverKeywordsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.discover.keywords.DiscoverKeywordsResponseRowXml;
 import org.eclipse.daanse.xmla.api.discover.discover.keywords.DiscoverKeywordsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.discover.literals.DiscoverLiteralsRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.literals.DiscoverLiteralsResponseRow;
@@ -366,10 +367,25 @@ public class Convert {
         return new DiscoverKeywordsRestrictionsR(Optional.ofNullable(keyword));
     }
 
-    public static DiscoverResponse toDiscoverKeywords(List<DiscoverKeywordsResponseRow> responseApi) {
-        // TODO
+    public static DiscoverResponse toDiscoverKeywords(List<DiscoverKeywordsResponseRow> responseApi)
+        throws JAXBException, IOException {
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDiscoverKeywordsResponseRow)
+            .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
+        responseWs.setReturn(getReturn(rows, DiscoverKeywordsResponseRow.class));
+
         return responseWs;
+    }
+
+    private static Row convertDiscoverKeywordsResponseRow(DiscoverKeywordsResponseRow apiRow) {
+        DiscoverKeywordsResponseRowXml row = new DiscoverKeywordsResponseRowXml();
+
+        // Mandatory
+        row.setKeyword(apiRow.keyword());
+        
+        return row;
     }
 
     public static DiscoverLiteralsRequest fromDiscoverLiterals(Discover requestWs) {
@@ -477,12 +493,13 @@ public class Convert {
     private static MdSchemaCubesRestrictionsR discoverMdSchemaCubesRestrictions(Discover requestWs) {
         Map<String, String> map = restrictionsMap(requestWs);
 
+        String catalogName = map.get(MdSchemaCubesRestrictions.RESTRICTIONS_CATALOG_NAME);
         String schemaName = map.get(MdSchemaCubesRestrictions.RESTRICTIONS_SCHEMA_NAME);
         String cubeName = map.get(MdSchemaCubesRestrictions.RESTRICTIONS_CUBE_NAME);
         String baseCubeName = map.get(MdSchemaCubesRestrictions.RESTRICTIONS_BASE_CUBE_NAME);
         String cubeSource = map.get(MdSchemaCubesRestrictions.RESTRICTIONS_CUBE_SOURCE);
 
-        return new MdSchemaCubesRestrictionsR(Optional.ofNullable(schemaName), Optional.ofNullable(cubeName),
+        return new MdSchemaCubesRestrictionsR(catalogName, Optional.ofNullable(schemaName), Optional.ofNullable(cubeName),
                 Optional.ofNullable(baseCubeName), Optional.ofNullable(CubeSourceEnum.fromValue(cubeSource)));
     }
 

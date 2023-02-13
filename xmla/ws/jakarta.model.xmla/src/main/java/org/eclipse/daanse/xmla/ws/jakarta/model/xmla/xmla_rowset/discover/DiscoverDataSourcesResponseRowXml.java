@@ -16,6 +16,9 @@ package org.eclipse.daanse.xmla.api.discover.discover.datasources;
 import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.AuthenticationModeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ProviderTypeEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
+
+import java.io.Serializable;
 
 /**
  * This schema rowset returns a list of names, data types, and enumeration values of enumerators
@@ -23,7 +26,7 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ProviderTypeEnum;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DiscoverDataSourcesResponseRowXml")
-public class DiscoverDataSourcesResponseRowXml {
+public class DiscoverDataSourcesResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
     private final static long serialVersionUID = 5049193502349862159L;

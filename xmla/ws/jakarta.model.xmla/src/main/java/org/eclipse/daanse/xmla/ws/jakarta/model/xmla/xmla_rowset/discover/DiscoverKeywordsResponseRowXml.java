@@ -14,6 +14,9 @@
 package org.eclipse.daanse.xmla.api.discover.discover.keywords;
 
 import jakarta.xml.bind.annotation.*;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
+
+import java.io.Serializable;
 
 /**
  * This schema rowset returns information about keywords that are reserved by the XMLA server.
@@ -22,7 +25,7 @@ import jakarta.xml.bind.annotation.*;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DiscoverKeywordsResponseRowXml")
-public class DiscoverKeywordsResponseRowXml {
+public class DiscoverKeywordsResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
     private final static long serialVersionUID = 3242326701758575261L;

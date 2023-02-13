@@ -18,6 +18,7 @@ import org.eclipse.daanse.xmla.api.common.enums.CubeTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PreferredQueryPatternsEnum;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * This schema rowset describes the structure of cubes within a database. Perspectives are also
@@ -26,14 +27,19 @@ import java.time.LocalDateTime;
 public interface MdSchemaCubesResponseRow {
 
     /**
+     * @return The catalog name.
+     */
+    String catalogName();
+
+    /**
      * @return The name of the schema.
      */
-    String schemaName();
+    Optional<String> schemaName();
 
     /**
      * @return The name of the cube.
      */
-    String cubeName();
+    Optional<String> cubeName();
 
     /**
      * @return The type of the cube.
@@ -41,86 +47,92 @@ public interface MdSchemaCubesResponseRow {
      * CUBE
      * DIMENSION
      */
-    CubeTypeEnum cubeType();
+    Optional<CubeTypeEnum> cubeType();
 
     /**
      * @return The GUID of the cube.
      */
-    Integer cubeGuid();
+    Optional<Integer> cubeGuid();
 
     /**
      * @return TimeThe date and time the cube was
      * created.
      */
-    LocalDateTime createdOn();
+    Optional<LocalDateTime> createdOn();
 
     /**
      * @return The date and time that the cube schema
      * was last updated.
      */
-    LocalDateTime lastSchemaUpdate();
+    Optional<LocalDateTime> lastSchemaUpdate();
 
     /**
      * @return The name of the user who last updated the
      * cube’s schema.
      */
-    String schemaUpdatedBy();
+    Optional<String> schemaUpdatedBy();
 
     /**
      * @return TimeThe date and time that the cube was last
      * processed.
      */
-    LocalDateTime lastDataUpdate();
+    Optional<LocalDateTime> lastDataUpdate();
 
     /**
      * @return The name of the user who last updated the
      * data of the cube.
      */
-    String dataUpdateDBy();
+    Optional<String> dataUpdateDBy();
 
     /**
      * @return A description of the cube.
      */
-    String description();
+    Optional<String> description();
 
     /**
      * @return When true, indicates that the cube has
      * drillthrough enabled; otherwise,
      * false.
      */
-    Boolean isDrillThroughEnabled();
+    Optional<Boolean> isDrillThroughEnabled();
 
     /**
      * @return When true, indicates that the cube can be
      * used in a linked cube; otherwise false.
      */
-    Boolean isLinkable();
+    Optional<Boolean> isLinkable();
 
     /**
      * @return When true, indicates that the cube is
      * write-enabled; otherwise false.
      */
-    Boolean isWriteEnabled();
+    Optional<Boolean> isWriteEnabled();
 
     /**
      * @return When true, indicates that SQL can be used
      * on the cube; otherwise false.
      */
-    Boolean isSqlEnabled();
+    Optional<Boolean> isSqlEnabled();
 
     /**
      * @return The caption of the cube.
      * BASE_CUBE_NAMExsd:stringYesThe name of the source cube if this cube is
      * a perspective cube.
      */
-    Boolean cubeCaption();
+    Optional<Boolean> cubeCaption();
+
+    /**
+     * @return The name of the source cube if this cube is
+     * a perspective cube.
+     */
+    Optional<String> baseCubeName();
 
     /**
      * @return A bitmask with one of these valid values:
      * 0x01-Cube
      * 0x02-Dimension
      */
-    CubeSourceEnum cubeSource();
+    Optional<CubeSourceEnum> cubeSource();
 
     /**
      * @return A bitmask that describes query
@@ -140,6 +152,6 @@ public interface MdSchemaCubesResponseRow {
      * Analysis Services is running in
      * VertiPaq mode.
      */
-    PreferredQueryPatternsEnum preferredQueryPatterns();
+    Optional<PreferredQueryPatternsEnum> preferredQueryPatterns();
 
 }

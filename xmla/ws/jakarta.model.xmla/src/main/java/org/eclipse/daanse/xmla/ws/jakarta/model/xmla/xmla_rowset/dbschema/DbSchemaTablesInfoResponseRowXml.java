@@ -14,13 +14,16 @@
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.dbschema;
 
 import jakarta.xml.bind.annotation.*;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
+
+import java.io.Serializable;
 
 /**
  * This schema rowset identifies the (base) data types supported by the server.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DbSchemaTablesInfoResponseRowXml")
-public class DbSchemaTablesInfoResponseRowXml {
+public class DbSchemaTablesInfoResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
     private final static long serialVersionUID = 3219953251608576475L;

@@ -13,6 +13,12 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset;
 
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlType;
+
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "ParameterInfo")
 public class ParameterInfoXml {
-//TODO
+
 }

@@ -18,9 +18,11 @@ import java.util.Optional;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.cubes.MdSchemaCubesRestrictions;
 
-public record MdSchemaCubesRestrictionsR(Optional<String> schemaName,
-                                                 Optional<String> cubeName,
-                                                 Optional<String> baseCubeName,
-                                                 Optional<CubeSourceEnum> cubeSource) implements MdSchemaCubesRestrictions {
+public record MdSchemaCubesRestrictionsR(
+    String catalogName,
+    Optional<String> schemaName,
+    Optional<String> cubeName,
+    Optional<String> baseCubeName,
+    Optional<CubeSourceEnum> cubeSource) implements MdSchemaCubesRestrictions {
 
 }

@@ -14,7 +14,9 @@
 package org.eclipse.daanse.xmla.api.discover.discover.schemarowsets;
 
 import jakarta.xml.bind.annotation.*;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
@@ -23,7 +25,7 @@ import java.util.Optional;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DiscoverSchemaRowsetsResponseRowXml")
-public class DiscoverSchemaRowsetsResponseRowXml {
+public class DiscoverSchemaRowsetsResponseRowXml extends Row implements Serializable {
 
     @XmlTransient
     private final static long serialVersionUID = 8000363696884603878L;
