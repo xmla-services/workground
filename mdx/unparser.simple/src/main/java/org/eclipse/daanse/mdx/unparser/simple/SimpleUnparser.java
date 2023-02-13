@@ -140,7 +140,7 @@ public class SimpleUnparser implements UnParser {
 
         String properties = clause.properties()
                 .stream()
-                .collect(Collectors.joining(", "));
+                .collect(Collectors.joining("\r\n, "));
         sb.append(properties);
         return sb;
     }
@@ -164,8 +164,24 @@ public class SimpleUnparser implements UnParser {
     }
 
     public StringBuilder unparseSelectSubcubeClauseStatement(SelectSubcubeClauseStatement clause) {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder sb = new StringBuilder();
+
+        Optional<SelectSlicerAxisClause> sOptional = clause.selectSlicerAxisClause();
+
+        sb.append(" ( \r\n");
+        sb.append("  SELECT \r\n");
+        sb.append(unparseSelectQueryClause(clause.selectQueryClause()));
+        sb.append(" FROM \r\n");
+        sb.append(unparseSelectSubcubeClause(clause.selectSubcubeClause()));
+
+        if (sOptional.isPresent()) {
+
+            sb.append(unparseSelectSlicerAxisClause(sOptional.get()));
+        }
+        sb.append("\r\n");
+        sb.append(" ) \r\n");
+
+        return sb;
     }
 
     public StringBuilder unparseSelectSubcubeClauseName(SelectSubcubeClauseName clause) {
@@ -225,7 +241,7 @@ public class SimpleUnparser implements UnParser {
                 .stream()
                 .map(s -> unparseSelectQueryAxisClause(s))
                 .map(Object::toString)
-                .collect(Collectors.joining(","));
+                .collect(Collectors.joining("\r\n,"));
         return new StringBuilder(ret);
     }
 
@@ -278,12 +294,14 @@ public class SimpleUnparser implements UnParser {
     private StringBuilder unparseKeyObjectIdentifier(KeyObjectIdentifier koi) {
         StringBuilder sb = new StringBuilder();
 
-        koi.nameObjectIdentifiers()
+        String s = koi.nameObjectIdentifiers()
                 .stream()
                 .map(k -> unparseNameObjectIdentifier(k))
                 .map(Object::toString)
                 .collect(Collectors.joining("."));
 
+        sb.append("&")
+                .append(s);
         return sb;
     }
 
@@ -398,6 +416,7 @@ public class SimpleUnparser implements UnParser {
         case Term_Postfix -> sb.append("TODO:Term_Postfix");
         case Term_Prefix -> sb.append("TODO:Term_Prefix");
 
+        default -> sb.append(":xxx");
         }
 
         return sb;
@@ -419,7 +438,7 @@ public class SimpleUnparser implements UnParser {
         String s = clauses.stream()
                 .map(swc -> unparseSelectWithClause(swc))
                 .map(Object::toString)
-                .collect(Collectors.joining(" "));
+                .collect(Collectors.joining("\r\n "));
         return new StringBuilder(s);
 
     }
@@ -460,7 +479,7 @@ public class SimpleUnparser implements UnParser {
             String ret = clause.memberPropertyDefinitions()
                     .stream()
                     .map(mpd -> unparseMemberPropertyDefinition(mpd))
-                    .collect(Collectors.joining(", "));
+                    .collect(Collectors.joining("\r\n,", ",\r\n ", ""));
             sb.append(ret);
         }
 
@@ -469,8 +488,12 @@ public class SimpleUnparser implements UnParser {
     }
 
     private StringBuilder unparseMemberPropertyDefinition(MemberPropertyDefinition mpd) {
-        // TODO Auto-generated method stub
-        return null;
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(unparseObjectIdentifier(mpd.objectIdentifier()));
+        sb.append(" = ");
+        sb.append(unparseExpression(mpd.expression()));
+        return sb;
     }
 
     public StringBuilder unparseCreateSetBodyClause(CreateSetBodyClause clause) {

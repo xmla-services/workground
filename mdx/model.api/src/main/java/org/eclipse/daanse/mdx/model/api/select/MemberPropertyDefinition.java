@@ -13,6 +13,13 @@
 */
 package org.eclipse.daanse.mdx.model.api.select;
 
+import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
+
 public interface MemberPropertyDefinition {
+
+    Expression expression();
+
+    ObjectIdentifier objectIdentifier();
 
 }
