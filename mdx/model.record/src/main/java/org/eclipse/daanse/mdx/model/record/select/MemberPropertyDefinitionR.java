@@ -13,8 +13,12 @@
 */
 package org.eclipse.daanse.mdx.model.record.select;
 
+import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.select.MemberPropertyDefinition;
 
-public record MemberPropertyDefinitionR() implements MemberPropertyDefinition {
+public record MemberPropertyDefinitionR(ObjectIdentifier objectIdentifier,
+                                        Expression expression)
+        implements MemberPropertyDefinition {
 
 }
