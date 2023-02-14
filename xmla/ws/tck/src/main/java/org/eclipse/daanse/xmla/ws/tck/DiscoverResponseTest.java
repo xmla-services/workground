@@ -61,7 +61,7 @@ public class DiscoverResponseTest {
         DiscoverService discoverService = mock(DiscoverService.class);
 
         when(xmlaService.discover()).thenReturn(discoverService);
-        
+
         bc.registerService(XmlaService.class, xmlaService, FrameworkUtil
                 .asDictionary(Map.of(Constants.XMLASERVICE_FILTER_KEY, Constants.XMLASERVICE_FILTER_VALUE)));
     }
@@ -92,6 +92,8 @@ public class DiscoverResponseTest {
 
         SOAPMessage response = SOAPUtil.callSoapWebService(Constants.soapEndpointUrl,
                 Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(REQUEST_DISCOVER_DISCOVER_PROPERTIES));
+
+        response.writeTo(System.out);
 
         XmlAssert xmlAssert = XMLUtil.createAssert(response);
         xmlAssert.hasXPath("/SOAP:Envelope");

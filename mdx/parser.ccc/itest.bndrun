@@ -21,12 +21,13 @@
 # The following is calculated by the bnd-resolver-maven-plugin
 
 -runbundles: \
-	junit-jupiter-api;version='[5.9.1,5.9.2)',\
-	junit-jupiter-engine;version='[5.9.1,5.9.2)',\
-	junit-platform-commons;version='[1.9.1,1.9.2)',\
-	junit-platform-engine;version='[1.9.1,1.9.2)',\
-	junit-platform-launcher;version='[1.9.1,1.9.2)',\
+	junit-jupiter-api;version='[5.9.2,5.9.3)',\
+	junit-jupiter-engine;version='[5.9.2,5.9.3)',\
+	junit-platform-commons;version='[1.9.2,1.9.3)',\
+	junit-platform-engine;version='[1.9.2,1.9.3)',\
+	junit-platform-launcher;version='[1.9.2,1.9.3)',\
 	org.apache.felix.scr;version='[2.2.4,2.2.5)',\
+	org.eclipse.daanse.mdx.model.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.mdx.model.record;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.mdx.parser.api;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.mdx.parser.ccc;version='[0.0.1,0.0.2)',\
