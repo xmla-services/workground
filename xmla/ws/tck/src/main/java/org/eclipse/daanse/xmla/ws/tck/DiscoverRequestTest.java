@@ -148,7 +148,6 @@ public class DiscoverRequestTest {
                                         .isNotPresent();
                                 assertThat(p.format()).isNotNull()
                                         .isNotPresent();
-
                             });
                     assertThat(d.restrictions()).isNotNull()
                             .satisfies(r -> {

@@ -15,54 +15,51 @@
   <groupId>org.eclipse.daanse</groupId>
   <artifactId>org.eclipse.daanse.pom.parent</artifactId>
   <version>${revision}</version>
-
   <packaging>pom</packaging>
   <name>OpenCube Parent POM</name>
   <description>daanse XMLA/Olap related sources</description>
+  <url>https://www.daanse.org</url>
+  <organization>
+    <name>Eclipse Foundation - Project Daanse</name>
     <url>https://www.daanse.org</url>
-    <organization>
-        <name>Eclipse Foundation - Project Daanse</name>
-        <url>https://www.daanse.org</url>
-    </organization>
-    <licenses>
-        <license>
-            <name>EPL-2.0</name>
-            <comments>Eclipse Public License, Version 2.0</comments>
-            <url>https://opensource.org/licenses/EPL-2.0</url>
-            <distribution>repo</distribution>
-        </license>
-        <license>
-          <name>Eclipse Public License (EPL), Version 1.0</name>
-          <url>http://www.eclipse.org/legal/epl-v10.html</url>
-          <distribution>repo</distribution>
-        </license>
-    </licenses>
-    <scm>
-        <url>https://github.com/xmla-services/org.eclipse.daanse</url>
-        <connection>scm:git:https://github.com/xmla-services/org.eclipse.daanse.git</connection>
-        <developerConnection>scm:git:git@github.com:xmla-services/org.eclipse.daanse.git</developerConnection>
-    </scm>
-    <developers>
-        <developer>
-            <id>stbischof</id>
-            <name>Stefan Bischof</name>
-            <email>stbischof@bipolis.org</email>
-            <url>https://www.bipolis.org</url>
-            <organization>bipolis</organization>
-            <organizationUrl>https://www.bipolis.org</organizationUrl>
-            <roles>
-                <role>developer</role>
-            </roles>
-            <timezone>Europe/Berlin</timezone>
-        </developer>
-    </developers>
-    <issueManagement>
-        <system>GitHub Issues</system>
-        <url>https://github.com/xmla-services/org.eclipse.daanse/issues</url>
-    </issueManagement>
-
+  </organization>
+  <licenses>
+    <license>
+      <name>EPL-2.0</name>
+      <comments>Eclipse Public License, Version 2.0</comments>
+      <url>https://opensource.org/licenses/EPL-2.0</url>
+      <distribution>repo</distribution>
+    </license>
+    <license>
+      <name>Eclipse Public License (EPL), Version 1.0</name>
+      <url>http://www.eclipse.org/legal/epl-v10.html</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <scm>
+    <url>https://github.com/xmla-services/org.eclipse.daanse</url>
+    <connection>scm:git:https://github.com/xmla-services/org.eclipse.daanse.git</connection>
+    <developerConnection>scm:git:git@github.com:xmla-services/org.eclipse.daanse.git</developerConnection>
+  </scm>
+  <developers>
+    <developer>
+      <id>stbischof</id>
+      <name>Stefan Bischof</name>
+      <email>stbischof@bipolis.org</email>
+      <url>https://www.bipolis.org</url>
+      <organization>bipolis</organization>
+      <organizationUrl>https://www.bipolis.org</organizationUrl>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>Europe/Berlin</timezone>
+    </developer>
+  </developers>
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/xmla-services/org.eclipse.daanse/issues</url>
+  </issueManagement>
   <properties>
-
     <revision>0.0.1-SNAPSHOT</revision>
     <project.build.outputTimestamp>1980-02-01T00:00:00Z</project.build.outputTimestamp>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -70,12 +67,10 @@
     <java.release>17</java.release>
     <maven.compiler.source>${java.version}</maven.compiler.source>
     <maven.compiler.target>${java.version}</maven.compiler.target>
-
     <slf4j.version>2.0.4</slf4j.version>
     <asm.version>9.4</asm.version>
     <spifly.version>1.3.6</spifly.version>
     <bnd.version>6.4.0</bnd.version>
-
     <junit-jupiter.version>5.9.2</junit-jupiter.version>
     <junit-platform.version>1.9.2</junit-platform.version>
     <assertj.version>3.24.2</assertj.version>
@@ -95,7 +90,6 @@
     <org.osgi.test.version>1.2.1</org.osgi.test.version>
     <caffeine.version>3.1.2</caffeine.version>
     <!-- Original Mondrian -->
-
     <olap4j.version>1.2.0</olap4j.version>
     <eigenbase-properties.version>1.1.2</eigenbase-properties.version>
     <mysql-connector-java.version>8.0.28</mysql-connector-java.version>
@@ -113,7 +107,6 @@
     <xmlunit.version>2.9.0</xmlunit.version>
     <javacup.version>10k</javacup.version>
   </properties>
-
   <repositories>
     <repository>
       <id>pentaho-public</id>
@@ -129,7 +122,6 @@
       </snapshots>
     </repository>
   </repositories>
-
   <pluginRepositories>
     <pluginRepository>
       <id>pentaho-public-plugins</id>
@@ -143,7 +135,6 @@
       </releases>
     </pluginRepository>
   </pluginRepositories>
-
   <build>
     <pluginManagement>
       <plugins>
@@ -179,7 +170,7 @@
                 <goal>test-jar</goal>
               </goals>
               <configuration>
-               <bndfile>tests.bnd</bndfile>
+                <bndfile>tests.bnd</bndfile>
                 <bnd>
                   <![CDATA[
               -dsannotations-options: felixExtensions
@@ -211,7 +202,7 @@
                   <include>*.bndrun</include>
                 </bndruns>
                 <bundles>
-                    <bundle>${project.build.directory}/${project.build.finalName}-tests.jar</bundle>
+                  <bundle>${project.build.directory}/${project.build.finalName}-tests.jar</bundle>
                 </bundles>
                 <failOnChanges>false</failOnChanges>
                 <includeDependencyManagement>true</includeDependencyManagement>
@@ -313,7 +304,6 @@
           </execution>
         </executions>
       </plugin>
-
       <plugin>
         <groupId>biz.aQute.bnd</groupId>
         <artifactId>bnd-baseline-maven-plugin</artifactId>
@@ -330,18 +320,17 @@
           </execution>
         </executions>
       </plugin>
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>2.22.2</version>
-          <!-- We let bnd-testing-maven-plugin do all the testing -->
-          <configuration>
-            <skipTests>true</skipTests>
-          </configuration>
-        </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version>
+        <!-- We let bnd-testing-maven-plugin do all the testing -->
+        <configuration>
+          <skipTests>true</skipTests>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
-
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -354,6 +343,12 @@
         <groupId>org.osgi</groupId>
         <artifactId>org.osgi.service.metatype.annotations</artifactId>
         <version>1.4.1</version>
+        <scope>compile</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.osgi</groupId>
+        <artifactId>org.osgi.service.cm</artifactId>
+        <version>${osgi.cm.version}</version>
         <scope>compile</scope>
       </dependency>
       <dependency>
@@ -398,12 +393,12 @@
         <version>1.0.9</version>
         <scope>compile</scope>
       </dependency>
-        <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.scr</artifactId>
-            <version>2.2.4</version>
-            <scope>runtime</scope>
-        </dependency>
+      <dependency>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>org.apache.felix.scr</artifactId>
+        <version>2.2.4</version>
+        <scope>runtime</scope>
+      </dependency>
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.gogo.shell</artifactId>
@@ -456,7 +451,6 @@
         <version>3.0.2</version>
         <scope>compile</scope>
       </dependency>
-
       <dependency>
         <groupId>jakarta.servlet</groupId>
         <artifactId>jakarta.servlet-api</artifactId>
@@ -466,6 +460,7 @@
       <dependency>
         <groupId>org.apache.felix</groupId>
         <artifactId>org.apache.felix.http.servlet-api</artifactId>
+        <scope>compile</scope>
         <version>2.1.0</version>
       </dependency>
       <dependency>
@@ -477,7 +472,7 @@
       <dependency>
         <groupId>org.glassfish.hk2</groupId>
         <artifactId>osgi-resource-locator</artifactId>
-       <!-- <version>2.5.0-b42</version> -->
+        <!-- <version>2.5.0-b42</version> -->
         <version>2.4.0</version>
       </dependency>
       <dependency>
@@ -508,10 +503,7 @@
         <artifactId>org.eclipse.osgi</artifactId>
         <version>3.18.200</version>
       </dependency>
-
       <!-- run -->
-
-
       <!-- test -->
       <dependency>
         <groupId>org.osgi</groupId>
@@ -555,7 +547,6 @@
         <version>${org.osgi.test.version}</version>
         <scope>test</scope>
       </dependency>
-
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
@@ -616,7 +607,6 @@
         <version>4.13.2_1</version>
         <scope>runtime</scope>
       </dependency>
-
       <dependency>
         <groupId>com.osgifx</groupId>
         <artifactId>com.osgifx.console.agent</artifactId>
@@ -646,12 +636,6 @@
         <groupId>commons-fileupload</groupId>
         <artifactId>commons-fileupload</artifactId>
         <version>1.4</version>
-        <scope>runtime</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.osgi</groupId>
-        <artifactId>org.osgi.service.http</artifactId>
-        <version>1.2.2</version>
         <scope>runtime</scope>
       </dependency>
       <dependency>
@@ -715,14 +699,12 @@
         <artifactId>asm-util</artifactId>
         <version>${asm.version}</version>
       </dependency>
-
       <dependency>
         <groupId>com.github.ben-manes.caffeine</groupId>
         <artifactId>caffeine</artifactId>
         <version>${caffeine.version}</version>
         <scope>compile</scope>
       </dependency>
-
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-math3</artifactId>
@@ -770,7 +752,6 @@
           </exclusion>
         </exclusions>
       </dependency>
-
       <dependency>
         <groupId>org.eclipse.daanse</groupId>
         <artifactId>org.eclipse.daanse.repackage.olap4j.xmla</artifactId>
@@ -793,7 +774,6 @@
         <version>1.2_5</version>
       </dependency>
       <dependency>
-
         <groupId>org.apache.servicemix.bundles</groupId>
         <artifactId>org.apache.servicemix.bundles.dom4j</artifactId>
         <version>2.1.3_1</version>
@@ -808,15 +788,12 @@
         <artifactId>jsp-api</artifactId>
         <version>${jsp-api.version}</version>
       </dependency>
-
-
       <dependency>
         <groupId>org.xmlunit</groupId>
         <artifactId>xmlunit-core</artifactId>
         <scope>test</scope>
         <version>${xmlunit.version}</version>
       </dependency>
-
       <dependency>
         <groupId>org.xmlunit</groupId>
         <artifactId>xmlunit-matchers</artifactId>
@@ -829,13 +806,12 @@
         <version>${xmlunit.version}</version>
         <scope>test</scope>
       </dependency>
-
       <dependency>
         <groupId>javax.xml.bind</groupId>
         <artifactId>jaxb-api</artifactId>
         <version>2.3.1</version>
       </dependency>
-<!--
+      <!--
       <dependency>
         <groupId>org.mockito</groupId>
         <artifactId>mockito-all</artifactId>
@@ -900,12 +876,10 @@
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.annotation.bundle</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.framework</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.service.component.annotations</artifactId>
@@ -922,13 +896,10 @@
       <version>${slf4j.version}</version>
       <scope>runtime</scope>
     </dependency>
-
-
     <dependency>
       <groupId>org.xmlunit</groupId>
       <artifactId>xmlunit-core</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.xmlunit</groupId>
       <artifactId>xmlunit-matchers</artifactId>
@@ -982,7 +953,6 @@
       <artifactId>assertj-core</artifactId>
     </dependency>
   </dependencies>
-
   <modules>
     <module>org.eclipse.daanse.repackage.olap4j.xmla</module>
     <module>org.eclipse.daanse.repackage.olap4j</module>
@@ -1005,7 +975,6 @@
     <module>ws</module>
     <module>xmla</module>
   </modules>
-
   <profiles>
     <profile>
       <id>eclipse-licenses-check</id>
