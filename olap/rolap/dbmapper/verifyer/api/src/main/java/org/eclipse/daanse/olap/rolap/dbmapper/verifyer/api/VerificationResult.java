@@ -21,6 +21,6 @@ public interface VerificationResult {
 
     Level level();
 
-    CAUSE cause();
+    Cause cause();
 
 }
