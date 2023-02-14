@@ -65,7 +65,7 @@ import jakarta.xml.ws.WebServiceContext;
 @Component(service = MsXmlAnalysisSoap.class, name = "org.eclipse.daanse.msxmlanalysisservice")
 @RequireSoapWhiteboard
 @Designate(factory = true, ocd = MsXmlAnalysisSoap.Config.class)
-@SOAPWhiteboardEndpoint(contextpath = "xmla")
+@SOAPWhiteboardEndpoint(contextpath = "/xmla")
 public class MsXmlAnalysisSoap {
 
     @ObjectClassDefinition()
