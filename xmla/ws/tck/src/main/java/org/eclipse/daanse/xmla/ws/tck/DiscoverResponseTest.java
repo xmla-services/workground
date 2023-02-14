@@ -19,7 +19,6 @@ import static org.mockito.Mockito.when;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
@@ -65,7 +64,6 @@ public class DiscoverResponseTest {
         
         bc.registerService(XmlaService.class, xmlaService, FrameworkUtil
                 .asDictionary(Map.of(Constants.XMLASERVICE_FILTER_KEY, Constants.XMLASERVICE_FILTER_VALUE)));
-        TimeUnit.SECONDS.sleep(2);
     }
 
     public static final String REQUEST_DISCOVER_DISCOVER_PROPERTIES = """

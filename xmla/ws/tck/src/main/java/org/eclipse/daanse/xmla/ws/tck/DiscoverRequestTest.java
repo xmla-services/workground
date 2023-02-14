@@ -18,7 +18,6 @@ import static org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum.CUBE;
 import static org.eclipse.daanse.xmla.api.common.enums.InvocationEnum.NORMAL_OPERATION;
 import static org.eclipse.daanse.xmla.api.common.properties.Content.SchemaData;
 import static org.eclipse.daanse.xmla.api.common.properties.Format.Tabular;
-import static org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies.MdSchemaHierarchiesRestrictions.RESTRICTIONS_HIERARCHY_ORIGIN;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -26,10 +25,22 @@ import static org.mockito.Mockito.when;
 
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.daanse.xmla.api.XmlaService;
-import org.eclipse.daanse.xmla.api.common.enums.*;
+import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
+import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ObjectExpansionEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyOriginEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ProviderTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.TreeOpEnum;
+import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRequest;
@@ -96,7 +107,6 @@ public class DiscoverRequestTest {
 
         bc.registerService(XmlaService.class, xmlaService, FrameworkUtil
                 .asDictionary(Map.of(Constants.XMLASERVICE_FILTER_KEY, Constants.XMLASERVICE_FILTER_VALUE)));
-        TimeUnit.SECONDS.sleep(2);
     }
 
     @Test
@@ -611,11 +621,9 @@ public class DiscoverRequestTest {
                                 assertThat(r.cubeName()).isNotNull()
                                         .isPresent()
                                         .contains("cubeName");
-                                ;
                                 assertThat(r.baseCubeName()).isNotNull()
                                         .isPresent()
                                         .contains("baseCubeName");
-                                ;
                                 assertThat(r.cubeSource()).isNotNull()
                                         .isPresent()
                                         .contains(CubeSourceEnum.CUBE);
