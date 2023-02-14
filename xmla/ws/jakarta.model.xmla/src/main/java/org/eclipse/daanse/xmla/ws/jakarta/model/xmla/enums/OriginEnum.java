@@ -43,13 +43,9 @@ public enum OriginEnum {
         return value;
     }
 
-    public static OriginEnum fromValue(String v) {
-        if (v == null) {
-            return null;
-        }
-        int vi = Integer.valueOf(v);
+    public static OriginEnum fromValue(int v) {
         for (OriginEnum c : OriginEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

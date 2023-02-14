@@ -79,24 +79,24 @@ public class MdSchemaDimensionsResponseRowXml extends Row implements Serializabl
     private Integer dimensionOptional;
 
     /**
-     * The type of the dimension. Valid values are:
-     * 0 - UNKNOWN
-     * 1 - TIME
-     * 2 - MEASURE
-     * 3 - OTHER
-     * 5 - QUANTITATIVE
-     * 6- ACCOUNTS
-     * 7 - CUSTOMERS
-     * 8- PRODUCTS
-     * 9 - SCENARIO
-     * 10- UTILITY
-     * 11 - CURRENCY
-     * 12 - RATES
-     * 13 - CHANNEL
-     * 14 - PROMOTION
-     * 15 - ORGANIZATION
-     * 16 - BILL OF MATERIALS
-     * 17 – GEOGRAPHY
+     *The type of the dimension. Valid values are:
+     *0 - UNKNOWN
+     *1 - TIME
+     *2 - MEASURE
+     *3 - OTHER
+     *5 - QUANTITATIVE
+     *6 - ACCOUNTS
+     *7 - CUSTOMERS
+     *8 - PRODUCTS
+     *9 - SCENARIO
+     *10 - UTILITY
+     *11 - CURRENCY
+     *12 - RATES
+     *13 - CHANNEL
+     *14 - PROMOTION
+     *15 - ORGANIZATION
+     *16 - BILL OF MATERIALS
+     *17 – GEOGRAPHY
      */
     @XmlElement(name = "DIMENSION_TYPE", required = false)
     private DimensionTypeEnum dimensionType;

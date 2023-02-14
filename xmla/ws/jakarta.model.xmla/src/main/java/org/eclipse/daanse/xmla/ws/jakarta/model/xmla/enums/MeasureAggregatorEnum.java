@@ -164,10 +164,9 @@ public enum MeasureAggregatorEnum {
         return value;
     }
 
-    public static MeasureAggregatorEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+    public static MeasureAggregatorEnum fromValue(int v) {
         for (MeasureAggregatorEnum c : MeasureAggregatorEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

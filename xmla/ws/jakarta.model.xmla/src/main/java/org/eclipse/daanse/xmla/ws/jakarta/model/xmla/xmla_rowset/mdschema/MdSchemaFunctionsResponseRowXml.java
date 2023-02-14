@@ -50,7 +50,7 @@ public class MdSchemaFunctionsResponseRowXml extends Row implements Serializable
      * A description the parameters accepted by the
      * function.
      */
-    @XmlElement(name = "PARAMETER_LIST", required = false)
+    @XmlElement(name = "PARAMETER_LIST", required = true)
     private String parameterList;
 
     /**

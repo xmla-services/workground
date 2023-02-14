@@ -37,13 +37,9 @@ public enum DimensionUniqueSettingEnum {
         return value;
     }
 
-    public static DimensionUniqueSettingEnum fromValue(String v) {
-        if (v == null) {
-            return null;
-        }
-        int vi = Integer.decode(v);
+    public static DimensionUniqueSettingEnum fromValue(int v) {
         for (DimensionUniqueSettingEnum c : DimensionUniqueSettingEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

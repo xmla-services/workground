@@ -74,13 +74,9 @@ public enum CustomRollupSettingEnum {
         return value;
     }
 
-    public static CustomRollupSettingEnum fromValue(String v) {
-        if (v == null) {
-            return null;
-        }
-        int vi = Integer.decode(v);
+    public static CustomRollupSettingEnum fromValue(int v) {
         for (CustomRollupSettingEnum c : CustomRollupSettingEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

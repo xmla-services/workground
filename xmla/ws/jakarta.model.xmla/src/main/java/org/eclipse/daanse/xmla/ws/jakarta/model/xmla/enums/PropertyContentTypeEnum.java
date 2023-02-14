@@ -234,13 +234,9 @@ public enum PropertyContentTypeEnum {
         return value;
     }
 
-    public static PropertyContentTypeEnum fromValue(String v) {
-        if (v == null) {
-            return null;
-        }
-        int vi = Integer.decode(v);
+    public static PropertyContentTypeEnum fromValue(int v) {
         for (PropertyContentTypeEnum c : PropertyContentTypeEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

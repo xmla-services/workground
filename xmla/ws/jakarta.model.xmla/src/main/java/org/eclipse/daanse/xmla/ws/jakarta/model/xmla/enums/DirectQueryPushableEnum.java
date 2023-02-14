@@ -43,13 +43,9 @@ public enum DirectQueryPushableEnum {
         return value;
     }
 
-    public static DirectQueryPushableEnum fromValue(String v) {
-        if (v == null) {
-            return null;
-        }
-        int vi = Integer.decode(v);
+    public static DirectQueryPushableEnum fromValue(int v) {
         for (DirectQueryPushableEnum c : DirectQueryPushableEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

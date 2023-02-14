@@ -148,13 +148,9 @@ public enum LevelTypeEnum {
         return value;
     }
 
-    public static LevelTypeEnum fromValue(String v) {
-        if (v == null) {
-            return null;
-        }
-        int vi = Integer.decode(v);
+    public static LevelTypeEnum fromValue(int v) {
         for (LevelTypeEnum c : LevelTypeEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

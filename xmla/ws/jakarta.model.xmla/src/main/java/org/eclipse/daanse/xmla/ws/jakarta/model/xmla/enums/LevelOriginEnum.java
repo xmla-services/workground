@@ -62,13 +62,9 @@ public enum LevelOriginEnum {
         return value;
     }
 
-    public static LevelOriginEnum fromValue(String v) {
-        if (v == null) {
-            return null;
-        }
-        int vi = Integer.decode(v);
+    public static LevelOriginEnum fromValue(int v) {
         for (LevelOriginEnum c : LevelOriginEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

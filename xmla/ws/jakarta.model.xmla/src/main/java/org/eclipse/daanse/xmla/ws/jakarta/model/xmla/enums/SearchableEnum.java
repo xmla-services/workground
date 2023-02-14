@@ -64,13 +64,9 @@ public enum SearchableEnum {
         return value;
     }
 
-    public static SearchableEnum fromValue(String v) {
-        if (v == null) {
-            return null;
-        }
-        int vi = Integer.decode(v);
+    public static SearchableEnum fromValue(int v) {
         for (SearchableEnum c : SearchableEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

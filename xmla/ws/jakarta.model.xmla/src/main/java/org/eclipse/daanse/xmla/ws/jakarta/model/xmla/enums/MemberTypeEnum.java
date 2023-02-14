@@ -64,10 +64,9 @@ public enum MemberTypeEnum {
         return value;
     }
 
-    public static MemberTypeEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+    public static MemberTypeEnum fromValue(int v) {
         for (MemberTypeEnum c : MemberTypeEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

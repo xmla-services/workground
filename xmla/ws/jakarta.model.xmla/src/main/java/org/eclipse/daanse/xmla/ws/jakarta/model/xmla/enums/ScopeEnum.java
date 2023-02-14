@@ -44,10 +44,9 @@ public enum ScopeEnum {
         return value;
     }
 
-    public static ScopeEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+    public static ScopeEnum fromValue(int v) {
         for (ScopeEnum c : ScopeEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

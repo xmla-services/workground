@@ -55,10 +55,9 @@ public enum InstanceSelectionEnum {
         return value;
     }
 
-    public static InstanceSelectionEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+    public static InstanceSelectionEnum fromValue(int v) {
         for (InstanceSelectionEnum c : InstanceSelectionEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

@@ -43,10 +43,9 @@ public enum GroupingBehaviorEnum {
         return value;
     }
 
-    public static GroupingBehaviorEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+    public static GroupingBehaviorEnum fromValue(int v) {
         for (GroupingBehaviorEnum c : GroupingBehaviorEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

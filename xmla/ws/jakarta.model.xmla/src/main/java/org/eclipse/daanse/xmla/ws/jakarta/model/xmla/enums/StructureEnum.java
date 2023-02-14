@@ -55,10 +55,9 @@ public enum StructureEnum {
         return value;
     }
 
-    public static StructureEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+    public static StructureEnum fromValue(int v) {
         for (StructureEnum c : StructureEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }
