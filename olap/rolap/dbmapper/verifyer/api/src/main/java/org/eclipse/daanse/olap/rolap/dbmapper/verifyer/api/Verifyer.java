@@ -13,15 +13,14 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api;
 
-import java.sql.DatabaseMetaData;
 import java.util.List;
-import java.util.Optional;
+
+import javax.sql.DataSource;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
 
 public interface Verifyer {
 
-
-    List<VerificationResult> verify(Schema schema, Optional<DatabaseMetaData> oDatabaseMetaData);
+    List<VerificationResult> verify(Schema schema, DataSource dataSource);
 
 }

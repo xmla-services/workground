@@ -13,6 +13,6 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api;
 
-public enum CAUSE {
+public enum Cause {
     SCHEMA, DATABASE;
 }

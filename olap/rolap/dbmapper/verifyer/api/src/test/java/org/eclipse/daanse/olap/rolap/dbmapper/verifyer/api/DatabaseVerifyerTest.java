@@ -1,5 +1,6 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api;
 
+import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
@@ -13,6 +14,9 @@ public class DatabaseVerifyerTest {
 
     @Mock
     DatabaseMetaData meta;
+    
+    @Mock
+    Connection connection;
 
     @Mock
     Schema schema;

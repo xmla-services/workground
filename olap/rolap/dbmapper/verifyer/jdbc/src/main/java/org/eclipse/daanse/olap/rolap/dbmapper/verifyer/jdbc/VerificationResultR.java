@@ -17,31 +17,10 @@ import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Cause;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
 
-public class NoDatabaseVerificationResult implements VerificationResult {
+public record VerificationResultR(String title,
+                                  String description,
+                                  Level level,
+                                  Cause cause)
+        implements VerificationResult {
 
-    public static final VerificationResult INSTANCE = new NoDatabaseVerificationResult();
-
-    private NoDatabaseVerificationResult() {
-
-    }
-
-    @Override
-    public String title() {
-        return "Not tested. Missing DataSource";
-    }
-
-    @Override
-    public Level level() {
-        return Level.ERROR;
-    }
-
-    @Override
-    public String description() {
-        return "Not tested. Missing DataSource.";
-    }
-
-    @Override
-    public Cause cause() {
-        return Cause.DATABASE;
-    }
 };
