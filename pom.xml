@@ -74,11 +74,11 @@
     <slf4j.version>2.0.4</slf4j.version>
     <asm.version>9.4</asm.version>
     <spifly.version>1.3.6</spifly.version>
-    <bnd.version>6.3.1</bnd.version>
+    <bnd.version>6.4.0</bnd.version>
 
-    <junit-jupiter.version>5.9.1</junit-jupiter.version>
-    <junit-platform.version>1.9.1</junit-platform.version>
-    <assertj.version>3.22.0</assertj.version>
+    <junit-jupiter.version>5.9.2</junit-jupiter.version>
+    <junit-platform.version>1.9.2</junit-platform.version>
+    <assertj.version>3.24.2</assertj.version>
     <mockito.version>4.9.0</mockito.version>
     <awaitility.version>4.2.0</awaitility.version>
     <osgi.annotation.version>8.1.0</osgi.annotation.version>
@@ -92,7 +92,7 @@
     <osgi.promise.compile.version>1.0.0</osgi.promise.compile.version>
     <osgi.function.version>1.2.0</osgi.function.version>
     <osgi.promise.version>1.2.0</osgi.promise.version>
-    <org.osgi.test.version>1.1.0</org.osgi.test.version>
+    <org.osgi.test.version>1.2.1</org.osgi.test.version>
     <caffeine.version>3.1.2</caffeine.version>
     <!-- Original Mondrian -->
 
@@ -872,7 +872,7 @@
       <dependency>
         <groupId>org.assertj</groupId>
         <artifactId>assertj-core</artifactId>
-        <version>3.22.0</version>
+        <version>${assertj.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>

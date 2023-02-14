@@ -255,7 +255,7 @@ public class Convert {
                 .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-        responseWs.setReturn(getReturn(rows, DiscoverPropertiesResponseRow.class));
+        responseWs.setReturn(getReturn(rows, DiscoverPropertiesResponseRowXml.class));
 
         return responseWs;
     }
@@ -335,7 +335,7 @@ public class Convert {
             .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-        responseWs.setReturn(getReturn(rows, DiscoverEnumeratorsResponseRow.class));
+        responseWs.setReturn(getReturn(rows, DiscoverEnumeratorsResponseRowXml.class));
 
         return responseWs;
     }
@@ -380,7 +380,7 @@ public class Convert {
             .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-        responseWs.setReturn(getReturn(rows, DiscoverKeywordsResponseRow.class));
+        responseWs.setReturn(getReturn(rows, DiscoverKeywordsResponseRowXml.class));
 
         return responseWs;
     }
@@ -416,7 +416,7 @@ public class Convert {
             .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-        responseWs.setReturn(getReturn(rows, DiscoverLiteralsResponseRow.class));
+        responseWs.setReturn(getReturn(rows, DiscoverLiteralsResponseRowXml.class));
 
         return responseWs;
     }
@@ -461,7 +461,7 @@ public class Convert {
             .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-        responseWs.setReturn(getReturn(rows, DbSchemaTablesResponseRow.class));
+        responseWs.setReturn(getReturn(rows, DbSchemaTablesResponseRowXml.class));
 
         return responseWs;
     }
@@ -525,7 +525,7 @@ public class Convert {
             .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-        responseWs.setReturn(getReturn(rows, MdSchemaActionsResponseRow.class));
+        responseWs.setReturn(getReturn(rows, MdSchemaActionsResponseRowXml.class));
 
         return responseWs;
     }
@@ -586,7 +586,7 @@ public class Convert {
             .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-        responseWs.setReturn(getReturn(rows, MdSchemaCubesResponseRow.class));
+        responseWs.setReturn(getReturn(rows, MdSchemaCubesResponseRowXml.class));
 
         return responseWs;
     }
@@ -672,7 +672,7 @@ public class Convert {
             .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-        responseWs.setReturn(getReturn(rows, MdSchemaDimensionsResponseRow.class));
+        responseWs.setReturn(getReturn(rows, MdSchemaDimensionsResponseRowXml.class));
 
         return responseWs;
     }
@@ -746,7 +746,7 @@ public class Convert {
             .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-        responseWs.setReturn(getReturn(rows, MdSchemaFunctionsResponseRow.class));
+        responseWs.setReturn(getReturn(rows, MdSchemaFunctionsResponseRowXml.class));
 
         return responseWs;
     }
@@ -837,7 +837,7 @@ public class Convert {
             .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-        responseWs.setReturn(getReturn(rows, MdSchemaHierarchiesResponseRow.class));
+        responseWs.setReturn(getReturn(rows, MdSchemaHierarchiesResponseRowXml.class));
 
         return responseWs;
     }
@@ -946,7 +946,7 @@ public class Convert {
             .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-        responseWs.setReturn(getReturn(rows, DiscoverDataSourcesResponseRow.class));
+        responseWs.setReturn(getReturn(rows, DiscoverDataSourcesResponseRowXml.class));
 
         return responseWs;
     }
@@ -981,7 +981,7 @@ public class Convert {
             .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-        responseWs.setReturn(getReturn(rows, DiscoverXmlMetaDataResponseRow.class));
+        responseWs.setReturn(getReturn(rows, DiscoverXmlMetaDataResponseRowXml.class));
 
         return responseWs;
     }
@@ -1083,7 +1083,7 @@ public class Convert {
             .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
-        responseWs.setReturn(getReturn(rows, DbSchemaColumnsResponseRow.class));
+        responseWs.setReturn(getReturn(rows, DbSchemaColumnsResponseRowXml.class));
 
         return responseWs;
     }
@@ -1178,7 +1178,7 @@ public class Convert {
                 .toList();
 
             DiscoverResponse responseWs = new DiscoverResponse();
-            responseWs.setReturn(getReturn(rows, DbSchemaProviderTypesResponseRow.class));
+            responseWs.setReturn(getReturn(rows, DbSchemaProviderTypesResponseRowXml.class));
 
             return responseWs;
     }
@@ -1259,7 +1259,7 @@ public class Convert {
                 .toList();
 
             DiscoverResponse responseWs = new DiscoverResponse();
-            responseWs.setReturn(getReturn(rows, DbSchemaSchemataResponseRow.class));
+            responseWs.setReturn(getReturn(rows, DbSchemaSchemataResponseRowXml.class));
 
             return responseWs;
     }
@@ -1313,7 +1313,7 @@ public class Convert {
                 .toList();
 
             DiscoverResponse responseWs = new DiscoverResponse();
-            responseWs.setReturn(getReturn(rows, MdSchemaLevelsResponseRow.class));
+            responseWs.setReturn(getReturn(rows, MdSchemaLevelsResponseRowXml.class));
 
             return responseWs;
     }
@@ -1414,7 +1414,7 @@ public class Convert {
                 .toList();
 
             DiscoverResponse responseWs = new DiscoverResponse();
-            responseWs.setReturn(getReturn(rows, MdSchemaMeasureGroupDimensionsResponseRow.class));
+            responseWs.setReturn(getReturn(rows, MdSchemaMeasureGroupDimensionsResponseRowXml.class));
 
             return responseWs;
     }
@@ -1592,7 +1592,7 @@ public class Convert {
                 .toList();
 
             DiscoverResponse responseWs = new DiscoverResponse();
-            responseWs.setReturn(getReturn(rows, MdSchemaMembersResponseRow.class));
+            responseWs.setReturn(getReturn(rows, MdSchemaMembersResponseRowXml.class));
 
             return responseWs;
     }
@@ -1697,7 +1697,7 @@ public class Convert {
                 .toList();
 
             DiscoverResponse responseWs = new DiscoverResponse();
-            responseWs.setReturn(getReturn(rows, MdSchemaPropertiesResponseRow.class));
+            responseWs.setReturn(getReturn(rows, MdSchemaPropertiesResponseRowXml.class));
 
             return responseWs;
     }
@@ -1793,7 +1793,7 @@ public class Convert {
                 .toList();
 
             DiscoverResponse responseWs = new DiscoverResponse();
-            responseWs.setReturn(getReturn(rows, MdSchemaSetsResponseRow.class));
+            responseWs.setReturn(getReturn(rows, MdSchemaSetsResponseRowXml.class));
 
             return responseWs;
     }
@@ -1860,7 +1860,7 @@ public class Convert {
                 .toList();
 
             DiscoverResponse responseWs = new DiscoverResponse();
-            responseWs.setReturn(getReturn(rows, MdSchemaKpisResponseRow.class));
+            responseWs.setReturn(getReturn(rows, MdSchemaKpisResponseRowXml.class));
 
             return responseWs;
     }
@@ -1940,7 +1940,7 @@ public class Convert {
                 .toList();
 
             DiscoverResponse responseWs = new DiscoverResponse();
-            responseWs.setReturn(getReturn(rows, MdSchemaMeasureGroupsResponseRow.class));
+            responseWs.setReturn(getReturn(rows, MdSchemaMeasureGroupsResponseRowXml.class));
 
             return responseWs;
     }
@@ -1974,7 +1974,7 @@ public class Convert {
                 .toList();
 
             DiscoverResponse responseWs = new DiscoverResponse();
-            responseWs.setReturn(getReturn(rows, DbSchemaSourceTablesResponseRow.class));
+            responseWs.setReturn(getReturn(rows, DbSchemaSourceTablesResponseRowXml.class));
 
             return responseWs;
     }
@@ -2043,7 +2043,7 @@ public class Convert {
                 .toList();
 
             DiscoverResponse responseWs = new DiscoverResponse();
-            responseWs.setReturn(getReturn(rows, DbSchemaTablesInfoResponseRow.class));
+            responseWs.setReturn(getReturn(rows, DbSchemaTablesInfoResponseRowXml.class));
 
             return responseWs;
     }
