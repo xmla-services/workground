@@ -18,7 +18,6 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.TableTypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * This schema rowset identifies the (base) data types supported by the server.
@@ -35,14 +34,14 @@ public class DbSchemaSourceTablesResponseRowXml extends Row implements Serializa
      * catalogs.
      */
     @XmlElement(name = "TABLE_CATALOG", required = false)
-    private Optional<String> catalogName;
+    private String catalogName;
 
     /**
      * @return Unqualified schema name. NULL if the provider does not
      * support schemas.
      */
     @XmlElement(name = "TABLE_SCHEMA", required = false)
-    private Optional<String> schemaName;
+    private String schemaName;
 
     /**
      * @return Table name
@@ -58,19 +57,19 @@ public class DbSchemaSourceTablesResponseRowXml extends Row implements Serializa
     @XmlElement(name = "TABLE_TYPE", required = false)
     private TableTypeEnum tableType;
 
-    public Optional<String> getCatalogName() {
+    public String getCatalogName() {
         return catalogName;
     }
 
-    public void setCatalogName(Optional<String> catalogName) {
+    public void setCatalogName(String catalogName) {
         this.catalogName = catalogName;
     }
 
-    public Optional<String> getSchemaName() {
+    public String getSchemaName() {
         return schemaName;
     }
 
-    public void setSchemaName(Optional<String> schemaName) {
+    public void setSchemaName(String schemaName) {
         this.schemaName = schemaName;
     }
 

@@ -77,7 +77,7 @@ public interface MdSchemaSetsResponseRow {
     /**
      * @return The display folder.
      */
-    Optional<String> setDisplay();
+    Optional<String> setDisplayFolder();
 
     /**
      * @return The context for the set. The set can be static or

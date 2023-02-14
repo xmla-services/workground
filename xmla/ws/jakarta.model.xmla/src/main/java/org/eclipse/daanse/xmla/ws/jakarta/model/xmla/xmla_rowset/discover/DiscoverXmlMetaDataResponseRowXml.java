@@ -11,7 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata;
+package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover;
 
 import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
@@ -31,4 +31,12 @@ public class DiscoverXmlMetaDataResponseRowXml extends Row implements Serializab
 
     @XmlElement(name = "MetaData", required = true)
     private String metaData;
+
+    public String getMetaData() {
+        return metaData;
+    }
+
+    public void setMetaData(String metaData) {
+        this.metaData = metaData;
+    }
 }

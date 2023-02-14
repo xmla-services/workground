@@ -17,6 +17,8 @@ import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.InvocationEnum;
 
+import java.util.Optional;
+
 /**
  * This schema rowset returns information about literals supported by the server.
  */
@@ -25,12 +27,12 @@ public interface MdSchemaActionsResponseRow {
     /**
      * @return The name of the database.
      */
-    String catalogName();
+    Optional<String> catalogName();
 
     /**
      * @return The name of the schema.
      */
-    String schemaName();
+    Optional<String> schemaName();
 
     /**
      * @return The name of the cube.
@@ -40,7 +42,7 @@ public interface MdSchemaActionsResponseRow {
     /**
      * @return The name of this action.
      */
-    String actionName();
+    Optional<String> actionName();
 
     /**
      * @return A bitmask that is used to specify the action type.
@@ -56,7 +58,7 @@ public interface MdSchemaActionsResponseRow {
      * If the action is PROPRIETARY (0x40), then a value MUST be
      * provided in the APPLICATION column.
      */
-    ActionTypeEnum actionType();
+    Optional<ActionTypeEnum> actionType();
 
     /**
      * @return An MDX expression that specifies an object or a coordinate in
@@ -83,22 +85,22 @@ public interface MdSchemaActionsResponseRow {
      * caption was specified and no translations were specified when
      * the action was created or altered.
      */
-    String actionCaption();
+    Optional<String> actionCaption();
 
     /**
      * @return A description of the action.
      */
-    String description();
+    Optional<String> description();
 
     /**
      * @return The expression or content of the action that is to be run.
      */
-    String content();
+    Optional<String> content();
 
     /**
      * @return The name of the application that is to be used to run the action.
      */
-    String action();
+    Optional<String> action();
 
     /**
      * @return Information about how to invoke the action:
@@ -109,5 +111,5 @@ public interface MdSchemaActionsResponseRow {
      * 4 - Indicates that the action is performed as part of a batch
      * operation.
      */
-    InvocationEnum invocation();
+    Optional<InvocationEnum> invocation();
 }

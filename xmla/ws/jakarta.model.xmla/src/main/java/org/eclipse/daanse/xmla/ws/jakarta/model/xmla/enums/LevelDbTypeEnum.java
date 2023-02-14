@@ -267,10 +267,9 @@ public enum LevelDbTypeEnum {
         return value;
     }
 
-    public static LevelDbTypeEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+    public static LevelDbTypeEnum fromValue(int v) {
         for (LevelDbTypeEnum c : LevelDbTypeEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

@@ -13,11 +13,7 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
+import jakarta.xml.bind.JAXBException;
 import org.eclipse.daanse.xmla.api.common.enums.*;
 import org.eclipse.daanse.xmla.api.common.properties.Content;
 import org.eclipse.daanse.xmla.api.common.properties.Format;
@@ -49,7 +45,6 @@ import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumera
 import org.eclipse.daanse.xmla.api.discover.discover.enumerators.DiscoverEnumeratorsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.discover.keywords.DiscoverKeywordsRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.keywords.DiscoverKeywordsResponseRow;
-import org.eclipse.daanse.xmla.api.discover.discover.keywords.DiscoverKeywordsResponseRowXml;
 import org.eclipse.daanse.xmla.api.discover.discover.keywords.DiscoverKeywordsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.discover.literals.DiscoverLiteralsRequest;
 import org.eclipse.daanse.xmla.api.discover.discover.literals.DiscoverLiteralsResponseRow;
@@ -160,14 +155,25 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PropertyList;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Return;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.MeasureGroupDimensionXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.ParameterInfoXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Rowset;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.dbschema.*;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverDataSourcesResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverEnumeratorsResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverKeywordsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverLiteralsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverPropertiesResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverXmlMetaDataResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.*;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xsd.Schema;
 
-import jakarta.xml.bind.JAXBException;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class Convert {
     private static Optional<Integer> localeIdentifier(Discover requestWs) {
@@ -384,7 +390,7 @@ public class Convert {
 
         // Mandatory
         row.setKeyword(apiRow.keyword());
-        
+
         return row;
     }
 
@@ -447,10 +453,43 @@ public class Convert {
                 Optional.ofNullable(tableName), Optional.ofNullable(tableType));
     }
 
-    public static DiscoverResponse toDiscoverDbSchemaTables(List<DbSchemaTablesResponseRow> responseApi) {
-        // TODO
+    public static DiscoverResponse toDiscoverDbSchemaTables(List<DbSchemaTablesResponseRow> responseApi)
+        throws JAXBException, IOException {
+
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDiscoverDbSchemaTablesResponseRow)
+            .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
+        responseWs.setReturn(getReturn(rows, DbSchemaTablesResponseRow.class));
+
         return responseWs;
+    }
+
+    private static Row convertDiscoverDbSchemaTablesResponseRow(DbSchemaTablesResponseRow apiRow) {
+        DbSchemaTablesResponseRowXml row = new DbSchemaTablesResponseRowXml();
+
+        // Optional
+        apiRow.tableCatalog()
+            .ifPresent(row::setTableCatalog);
+        apiRow.tableSchema()
+            .ifPresent(row::setTableSchema);
+        apiRow.tableName()
+            .ifPresent(row::setTableName);
+        apiRow.tableType()
+            .ifPresent(row::setTableType);
+        apiRow.tableGuid()
+            .ifPresent(row::setTableGuid);
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.tablePropId()
+            .ifPresent(row::setTablePropId);
+        apiRow.dateCreated()
+            .ifPresent(row::setDateCreated);
+        apiRow.dateModified()
+            .ifPresent(row::setDateModified);
+
+        return row;
     }
 
     public static MdSchemaActionsRequest fromDiscoverMdSchemaActions(Discover requestWs) {
@@ -478,10 +517,47 @@ public class Convert {
             InvocationEnum.fromValue(invocation), Optional.ofNullable(CubeSourceEnum.fromValue(cubeSource)));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaActions(List<MdSchemaActionsResponseRow> responseApi) {
-        // TODO
+    public static DiscoverResponse toDiscoverMdSchemaActions(List<MdSchemaActionsResponseRow> responseApi)
+        throws JAXBException, IOException {
+
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDiscoverMdSchemaActionsResponseRow)
+            .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
+        responseWs.setReturn(getReturn(rows, MdSchemaActionsResponseRow.class));
+
         return responseWs;
+    }
+
+    private static Row convertDiscoverMdSchemaActionsResponseRow(MdSchemaActionsResponseRow apiRow) {
+        MdSchemaActionsResponseRowXml row = new MdSchemaActionsResponseRowXml();
+
+        // Mandatory
+        row.setCubeName(apiRow.cubeName());
+        row.setCoordinate(apiRow.coordinate());
+        row.setCoordinateType(
+            org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CoordinateTypeEnum
+                .fromValue(apiRow.coordinateType().getValue()));
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+        apiRow.actionName()
+            .ifPresent(row::setActionName);
+        apiRow.actionType()
+            .ifPresent(i -> row.setActionType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ActionTypeEnum.fromValue(i.getValue())));
+        apiRow.actionCaption()
+            .ifPresent(row::setActionCaption);
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.invocation()
+            .ifPresent(i -> row.setInvocation(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.InvocationEnum.fromValue(i.getValue())));
+        return row;
     }
 
     public static MdSchemaCubesRequest fromDiscoverMdSchemaCubes(Discover requestWs) {
@@ -503,10 +579,66 @@ public class Convert {
                 Optional.ofNullable(baseCubeName), Optional.ofNullable(CubeSourceEnum.fromValue(cubeSource)));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaCubes(List<MdSchemaCubesResponseRow> responseApi) {
-        // TODO
+    public static DiscoverResponse toDiscoverMdSchemaCubes(List<MdSchemaCubesResponseRow> responseApi)
+        throws JAXBException, IOException {
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDiscoverMdSchemaCubesResponseRow)
+            .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
+        responseWs.setReturn(getReturn(rows, MdSchemaCubesResponseRow.class));
+
         return responseWs;
+    }
+
+    private static Row convertDiscoverMdSchemaCubesResponseRow(MdSchemaCubesResponseRow apiRow) {
+        MdSchemaCubesResponseRowXml row = new MdSchemaCubesResponseRowXml();
+
+        // Mandatory
+        row.setCubeName(apiRow.catalogName());
+
+        // Optional
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+        apiRow.cubeName()
+            .ifPresent(row::setCubeName);
+        apiRow.cubeType()
+            .ifPresent(i -> row.setCubeType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CubeTypeEnum.fromValue(i.name())));
+        apiRow.cubeGuid()
+            .ifPresent(row::setCubeGuid);
+        apiRow.createdOn()
+            .ifPresent(row::setCreatedOn);
+        apiRow.lastSchemaUpdate()
+            .ifPresent(row::setLastSchemaUpdate);
+        apiRow.schemaUpdatedBy()
+            .ifPresent(row::setSchemaUpdatedBy);
+        apiRow.lastDataUpdate()
+            .ifPresent(row::setLastDataUpdate);
+        apiRow.dataUpdateDBy()
+            .ifPresent(row::setDataUpdateDBy);
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.isDrillThroughEnabled()
+            .ifPresent(row::setDrillThroughEnabled);
+        apiRow.isLinkable()
+            .ifPresent(row::setLinkable);
+        apiRow.isWriteEnabled()
+            .ifPresent(row::setWriteEnabled);
+        apiRow.isSqlEnabled()
+            .ifPresent(row::setSqlEnabled);
+        apiRow.cubeCaption()
+            .ifPresent(row::setCubeCaption);
+        apiRow.baseCubeName()
+            .ifPresent(row::setBaseCubeName);
+        apiRow.cubeSource()
+            .ifPresent(i -> row.setCubeSource(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CubeSourceEnum.fromValue(i.getValue())));
+        apiRow.preferredQueryPatterns()
+            .ifPresent(i -> row.setPreferredQueryPatterns(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.PreferredQueryPatternsEnum.fromValue(i.getValue())));
+
+        return row;
     }
 
     public static MdSchemaDimensionsRequest fromDiscoverMdSchemaDimensions(Discover requestWs) {
@@ -533,11 +665,63 @@ public class Convert {
                 Optional.ofNullable(VisibilityEnum.fromValue(dimensionVisibility)));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaDimensions(List<MdSchemaDimensionsResponseRow> responseApi) {
-        // TODO
+    public static DiscoverResponse toDiscoverMdSchemaDimensions(List<MdSchemaDimensionsResponseRow> responseApi)
+        throws JAXBException, IOException {
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDiscoverMdSchemaDimensionsResponseRow)
+            .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
+        responseWs.setReturn(getReturn(rows, MdSchemaDimensionsResponseRow.class));
+
         return responseWs;
     }
+
+    private static Row convertDiscoverMdSchemaDimensionsResponseRow(MdSchemaDimensionsResponseRow apiRow) {
+        MdSchemaDimensionsResponseRowXml row = new MdSchemaDimensionsResponseRowXml();
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+        apiRow.cubeName()
+            .ifPresent(row::setCubeName);
+        apiRow.dimensionName()
+            .ifPresent(row::setDimensionName);
+        apiRow.dimensionUniqueName()
+            .ifPresent(row::setDimensionUniqueName);
+        apiRow.dimensionGuid()
+            .ifPresent(row::setDimensionGuid);
+        apiRow.dimensionCaption()
+            .ifPresent(row::setDimensionCaption);
+        apiRow.dimensionOptional()
+            .ifPresent(row::setDimensionOptional);
+        apiRow.dimensionType()
+            .ifPresent(i -> row.setDimensionType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DimensionTypeEnum.fromValue(i.getValue())));
+        apiRow.dimensionCardinality()
+            .ifPresent(row::setDimensionCardinality);
+        apiRow.defaultHierarchy()
+            .ifPresent(row::setDefaultHierarchy);
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.isVirtual()
+            .ifPresent(row::setVirtual);
+        apiRow.isReadWrite()
+            .ifPresent(row::setReadWrite);
+        apiRow.dimensionUniqueSetting()
+            .ifPresent(i -> row.setDimensionUniqueSetting(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DimensionUniqueSettingEnum.fromValue(i.getValue())));
+        apiRow.dimensionMasterName()
+            .ifPresent(row::setDimensionMasterName);
+        apiRow.dimensionIsVisible()
+            .ifPresent(row::setDimensionIsVisible);
+
+
+        return row;
+    }
+
 
     public static MdSchemaFunctionsRequest fromDiscoverMdSchemaFunctions(Discover requestWs) {
         PropertiesR properties = discoverProperties(requestWs);
@@ -556,17 +740,71 @@ public class Convert {
                 Optional.ofNullable(InterfaceNameEnum.fromValue(interfaceName)), Optional.ofNullable(libraryName));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaFunctions(List<MdSchemaFunctionsResponseRow> responseApi) {
-        // TODO
+    public static DiscoverResponse toDiscoverMdSchemaFunctions(List<MdSchemaFunctionsResponseRow> responseApi) throws JAXBException, IOException {
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDiscoverMdSchemaFunctionsResponseRow)
+            .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
+        responseWs.setReturn(getReturn(rows, MdSchemaFunctionsResponseRow.class));
+
         return responseWs;
+    }
+
+    private static Row convertDiscoverMdSchemaFunctionsResponseRow(MdSchemaFunctionsResponseRow apiRow) {
+        MdSchemaFunctionsResponseRowXml row = new MdSchemaFunctionsResponseRowXml();
+
+        // Mandatory
+        row.setParameterList(apiRow.parameterList());
+
+        // Optional
+        apiRow.functionalName()
+            .ifPresent(row::setFunctionalName);
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.returnType()
+            .ifPresent(row::setReturnType);
+        apiRow.origin()
+            .ifPresent(i -> row.setOrigin(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.OriginEnum.fromValue(i.getValue())));
+        apiRow.interfaceName()
+            .ifPresent(i -> row.setInterfaceName(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.InterfaceNameEnum.fromValue(i.name())));
+        apiRow.libraryName()
+            .ifPresent(row::setLibraryName);
+        apiRow.dllName()
+            .ifPresent(row::setDllName);
+        apiRow.helpFile()
+            .ifPresent(row::setHelpFile);
+        apiRow.helpContent()
+            .ifPresent(row::setHelpContent);
+        apiRow.object()
+            .ifPresent(row::setObject);
+        apiRow.caption()
+            .ifPresent(row::setCaption);
+        if (apiRow.parameterInfo().isPresent()) {
+            row.setParameterInfo(apiRow.parameterInfo().get().stream().map(i -> {
+                ParameterInfoXml result  = new ParameterInfoXml();
+                result.setName(i.name());
+                result.setDescription(i.description());
+                result.setOptional(i.optional());
+                result.setRepeatable(i.repeatable());
+                result.setRepeatGroup(i.repeatGroup());
+                return result;
+                //TODO
+            }).collect(Collectors.toList()));
+        }
+        apiRow.directQueryPushable()
+            .ifPresent(i -> row.setDirectQueryPushable(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DirectQueryPushableEnum.fromValue(i.getValue())));
+
+        return row;
     }
 
     public static MdSchemaHierarchiesRequest fromDiscoverMdSchemaHierarchies(Discover requestWs) {
         PropertiesR properties = discoverProperties(requestWs);
         MdSchemaHierarchiesRestrictionsR restrictions = discoverMdSchemaHierarchiesRestrictions(requestWs);
         return new MdSchemaHierarchiesRequestR(properties, restrictions);
-
     }
 
     private static MdSchemaHierarchiesRestrictionsR discoverMdSchemaHierarchiesRestrictions(Discover requestWs) {
@@ -593,10 +831,85 @@ public class Convert {
             Optional.ofNullable(VisibilityEnum.fromValue(hierarchyVisibility)));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaHierarchies(List<MdSchemaHierarchiesResponseRow> responseApi) {
-        // TODO
+    public static DiscoverResponse toDiscoverMdSchemaHierarchies(List<MdSchemaHierarchiesResponseRow> responseApi) throws JAXBException, IOException {
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDiscoverMdSchemaHierarchiesResponseRow)
+            .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
+        responseWs.setReturn(getReturn(rows, MdSchemaHierarchiesResponseRow.class));
+
         return responseWs;
+    }
+
+    private static Row convertDiscoverMdSchemaHierarchiesResponseRow(MdSchemaHierarchiesResponseRow apiRow) {
+        MdSchemaHierarchiesResponseRowXml row = new MdSchemaHierarchiesResponseRowXml();
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+        apiRow.cubeName()
+            .ifPresent(row::setCubeName);
+        apiRow.dimensionUniqueName()
+            .ifPresent(row::setDimensionUniqueName);
+        apiRow.hierarchyName()
+            .ifPresent(row::setHierarchyName);
+        apiRow.hierarchyUniqueName()
+            .ifPresent(row::setHierarchyUniqueName);
+        apiRow.hierarchyGuid()
+            .ifPresent(row::setHierarchyGuid);
+        apiRow.hierarchyCaption()
+            .ifPresent(row::setHierarchyCaption);
+        apiRow.dimensionType()
+            .ifPresent(i -> row.setDimensionType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DimensionTypeEnum.fromValue(i.getValue())));
+        apiRow.hierarchyCardinality()
+            .ifPresent(row::setHierarchyCardinality);
+        apiRow.defaultMember()
+            .ifPresent(row::setDefaultMember);
+        apiRow.allMember()
+            .ifPresent(row::setAllMember);
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.structure()
+            .ifPresent(i -> row.setStructure(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.StructureEnum.fromValue(i.getValue())));
+        apiRow.isVirtual()
+            .ifPresent(row::setVirtual);
+        apiRow.isReadWrite()
+            .ifPresent(row::setReadWrite);
+        apiRow.dimensionUniqueSettings()
+            .ifPresent(i -> row.setDimensionUniqueSettings(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DimensionUniqueSettingEnum.fromValue(i.getValue())));
+        apiRow.dimensionMasterUniqueName()
+            .ifPresent(row::setDimensionMasterUniqueName);
+        apiRow.dimensionIsVisible()
+            .ifPresent(row::setDimensionIsVisible);
+        apiRow.dimensionIsVisible()
+            .ifPresent(row::setDimensionIsVisible);
+        apiRow.hierarchyOrdinal()
+            .ifPresent(row::setHierarchyOrdinal);
+        apiRow.dimensionIsShared()
+            .ifPresent(row::setDimensionIsShared);
+        apiRow.dimensionIsVisible()
+            .ifPresent(row::setDimensionIsVisible);
+        apiRow.hierarchyOrdinal()
+            .ifPresent(row::setHierarchyOrdinal);
+        apiRow.hierarchyDisplayFolder()
+            .ifPresent(row::setHierarchyDisplayFolder);
+        apiRow.instanceSelection()
+            .ifPresent(i -> row.setInstanceSelection(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.InstanceSelectionEnum.fromValue(i.getValue())));
+        apiRow.groupingBehavior()
+            .ifPresent(i -> row.setGroupingBehavior(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.GroupingBehaviorEnum.fromValue(i.getValue())));
+        apiRow.structureType()
+            .ifPresent(i -> row.setStructureType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.StructureTypeEnum.fromValue(i.name())));
+
+        return row;
     }
 
     public static DiscoverDataSourcesRequest fromDiscoverDataSources(Discover requestWs) {
@@ -626,16 +939,60 @@ public class Convert {
             Optional.ofNullable(AuthenticationModeEnum.fromValue(authenticationMode)));
     }
 
-    public static DiscoverResponse toDiscoverDataSources(List<DiscoverDataSourcesResponseRow> responseApi) {
-        // TODO
+    public static DiscoverResponse toDiscoverDataSources(List<DiscoverDataSourcesResponseRow> responseApi)
+        throws JAXBException, IOException {
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDiscoverDataSourcesResponseRow)
+            .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
+        responseWs.setReturn(getReturn(rows, DiscoverDataSourcesResponseRow.class));
+
         return responseWs;
     }
 
-    public static DiscoverResponse toDiscoverXmlMetaData(List<DiscoverXmlMetaDataResponseRow> responseApi) {
-        // TODO
+    private static Row convertDiscoverDataSourcesResponseRow(DiscoverDataSourcesResponseRow apiRow) {
+        DiscoverDataSourcesResponseRowXml row = new DiscoverDataSourcesResponseRowXml();
+
+        // Mandatory
+        row.setDataSourceName(apiRow.dataSourceName());
+        row.setProviderName(apiRow.providerName());
+
+        // Optional
+        apiRow.dataSourceDescription()
+            .ifPresent(row::setDataSourceDescription);
+        apiRow.url()
+            .ifPresent(row::setUrl);
+        apiRow.dataSourceInfo()
+            .ifPresent(row::setDataSourceInfo);
+        apiRow.providerType()
+            .ifPresent(i -> row.setProviderType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ProviderTypeEnum.fromValue(i.name())));
+        apiRow.authenticationMode()
+            .ifPresent(i -> row.setAuthenticationMode(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.AuthenticationModeEnum.fromValue(i.name())));
+
+        return row;
+    }
+
+    public static DiscoverResponse toDiscoverXmlMetaData(List<DiscoverXmlMetaDataResponseRow> responseApi) throws JAXBException, IOException {
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDiscoverXmlMetaDataResponseRow)
+            .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
+        responseWs.setReturn(getReturn(rows, DiscoverXmlMetaDataResponseRow.class));
+
         return responseWs;
+    }
+
+    private static Row convertDiscoverXmlMetaDataResponseRow(DiscoverXmlMetaDataResponseRow apiRow) {
+        DiscoverXmlMetaDataResponseRowXml row = new DiscoverXmlMetaDataResponseRowXml();
+
+        // Mandatory
+        row.setMetaData(apiRow.metaData());
+
+        return row;
     }
 
     public static DiscoverXmlMetaDataRequest fromDiscoverXmlMetaData(Discover requestWs) {
@@ -719,10 +1076,82 @@ public class Convert {
             Optional.ofNullable(ColumnOlapTypeEnum.fromValue(columnOlapType)));
     }
 
-    public static DiscoverResponse toDiscoverDbSchemaColumns(List<DbSchemaColumnsResponseRow> responseApi) {
-        // TODO
+    public static DiscoverResponse toDiscoverDbSchemaColumns(List<DbSchemaColumnsResponseRow> responseApi)
+        throws JAXBException, IOException {
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDbSchemaColumnsResponseRow)
+            .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
+        responseWs.setReturn(getReturn(rows, DbSchemaColumnsResponseRow.class));
+
         return responseWs;
+    }
+
+    private static Row convertDbSchemaColumnsResponseRow(DbSchemaColumnsResponseRow apiRow) {
+        DbSchemaColumnsResponseRowXml row = new DbSchemaColumnsResponseRowXml();
+
+        // Optional
+        apiRow.tableCatalog()
+            .ifPresent(row::setTableCatalog);
+        apiRow.tableSchema()
+            .ifPresent(row::setTableSchema);
+        apiRow.tableName()
+            .ifPresent(row::setTableName);
+        apiRow.columnName()
+            .ifPresent(row::setColumnName);
+        apiRow.columnGuid()
+            .ifPresent(row::setColumnGuid);
+        apiRow.columnPropId()
+            .ifPresent(row::setColumnPropId);
+        apiRow.ordinalPosition()
+            .ifPresent(row::setOrdinalPosition);
+        apiRow.columnHasDefault()
+            .ifPresent(row::setColumnHasDefault);
+        apiRow.columnDefault()
+            .ifPresent(row::setColumnDefault);
+        apiRow.columnFlags()
+            .ifPresent(i -> row.setColumnFlags(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ColumnFlagsEnum.fromValue(i.name())));
+        apiRow.isNullable()
+            .ifPresent(row::setNullable);
+        apiRow.dataType()
+            .ifPresent(row::setDataType);
+        apiRow.typeGuid()
+            .ifPresent(row::setTypeGuid);
+        apiRow.characterMaximum()
+            .ifPresent(row::setCharacterMaximum);
+        apiRow.characterOctetLength()
+            .ifPresent(row::setCharacterOctetLength);
+        apiRow.numericPrecision()
+            .ifPresent(row::setNumericPrecision);
+        apiRow.numericScale()
+            .ifPresent(row::setNumericScale);
+        apiRow.dateTimePrecision()
+            .ifPresent(row::setDateTimePrecision);
+        apiRow.characterSetCatalog()
+            .ifPresent(row::setCharacterSetCatalog);
+        apiRow.characterSetSchema()
+            .ifPresent(row::setCharacterSetSchema);
+        apiRow.characterSetName()
+            .ifPresent(row::setCharacterSetName);
+        apiRow.collationCatalog()
+            .ifPresent(row::setCollationCatalog);
+        apiRow.collationSchema()
+            .ifPresent(row::setCollationSchema);
+        apiRow.collationName()
+            .ifPresent(row::setCollationName);
+        apiRow.domainCatalog()
+            .ifPresent(row::setDomainCatalog);
+        apiRow.domainSchema()
+            .ifPresent(row::setDomainSchema);
+        apiRow.domainName()
+            .ifPresent(row::setDomainName);
+        apiRow.columnOlapType()
+            .ifPresent(i -> row.setColumnOlapType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ColumnOlapTypeEnum.fromValue(i.name())));
+
+        return row;
     }
 
     public static DbSchemaProviderTypesRequest fromDiscoverDbSchemaProviderTypes(Discover requestWs) {
@@ -742,10 +1171,66 @@ public class Convert {
             Optional.ofNullable(bestMatch == null ? null : Boolean.valueOf(bestMatch)));
     }
 
-    public static DiscoverResponse toDiscoverDbSchemaProviderTypes(List<DbSchemaProviderTypesResponseRow> responseApi) {
-        // TODO
-        DiscoverResponse responseWs = new DiscoverResponse();
-        return responseWs;
+    public static DiscoverResponse toDiscoverDbSchemaProviderTypes(List<DbSchemaProviderTypesResponseRow> responseApi)
+        throws JAXBException, IOException {
+            List<Row> rows = responseApi.stream()
+                .map(Convert::convertDbSchemaProviderTypesResponseRow)
+                .toList();
+
+            DiscoverResponse responseWs = new DiscoverResponse();
+            responseWs.setReturn(getReturn(rows, DbSchemaProviderTypesResponseRow.class));
+
+            return responseWs;
+    }
+
+    private static Row convertDbSchemaProviderTypesResponseRow(DbSchemaProviderTypesResponseRow apiRow) {
+        DbSchemaProviderTypesResponseRowXml row = new DbSchemaProviderTypesResponseRowXml();
+
+        // Optional
+        apiRow.typeName()
+            .ifPresent(row::setTypeName);
+        apiRow.dataType()
+            .ifPresent(i -> row.setDataType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelDbTypeEnum.fromValue(i.getValue())));
+        apiRow.columnSize()
+            .ifPresent(row::setColumnSize);
+        apiRow.literalPrefix()
+            .ifPresent(row::setLiteralPrefix);
+        apiRow.createParams()
+            .ifPresent(row::setCreateParams);
+        apiRow.isNullable()
+            .ifPresent(row::setNullable);
+        apiRow.caseSensitive()
+            .ifPresent(row::setCaseSensitive);
+        apiRow.searchable()
+            .ifPresent(i -> row.setSearchable(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.SearchableEnum.fromValue(i.getValue())));
+        apiRow.unsignedAttribute()
+            .ifPresent(row::setUnsignedAttribute);
+        apiRow.fixedPrecScale()
+            .ifPresent(row::setFixedPrecScale);
+        apiRow.autoUniqueValue()
+            .ifPresent(row::setAutoUniqueValue);
+        apiRow.localTypeName()
+            .ifPresent(row::setLocalTypeName);
+        apiRow.minimumScale()
+            .ifPresent(row::setMinimumScale);
+        apiRow.maximumScale()
+            .ifPresent(row::setMaximumScale);
+        apiRow.guid()
+            .ifPresent(row::setGuid);
+        apiRow.typeLib()
+            .ifPresent(row::setTypeLib);
+        apiRow.version()
+            .ifPresent(row::setVersion);
+        apiRow.isLong()
+            .ifPresent(row::setLong);
+        apiRow.bestMatch()
+            .ifPresent(row::setBestMatch);
+        apiRow.isFixedLength()
+            .ifPresent(row::setFixedLength);
+
+        return row;
     }
 
     public static DbSchemaSchemataRequest fromDiscoverDbSchemaSchemata(Discover requestWs) {
@@ -767,10 +1252,27 @@ public class Convert {
             schemaOwner);
     }
 
-    public static DiscoverResponse toDiscoverDbSchemaSchemata(List<DbSchemaSchemataResponseRow> responseApi) {
-        // TODO
-        DiscoverResponse responseWs = new DiscoverResponse();
-        return responseWs;
+    public static DiscoverResponse toDiscoverDbSchemaSchemata(List<DbSchemaSchemataResponseRow> responseApi)
+        throws JAXBException, IOException {
+            List<Row> rows = responseApi.stream()
+                .map(Convert::convertDbSchemaSchemataResponseRow)
+                .toList();
+
+            DiscoverResponse responseWs = new DiscoverResponse();
+            responseWs.setReturn(getReturn(rows, DbSchemaSchemataResponseRow.class));
+
+            return responseWs;
+    }
+
+    private static Row convertDbSchemaSchemataResponseRow(DbSchemaSchemataResponseRow apiRow) {
+        DbSchemaSchemataResponseRowXml row = new DbSchemaSchemataResponseRowXml();
+
+        // Mandatory
+        row.setCatalogName(apiRow.catalogName());
+        row.setSchemaName(apiRow.schemaName());
+        row.setSchemaOwner(apiRow.schemaOwner());
+
+        return row;
     }
 
     public static MdSchemaLevelsRequest fromDiscoverMdSchemaLevels(Discover requestWs) {
@@ -804,10 +1306,79 @@ public class Convert {
             Optional.ofNullable(VisibilityEnum.fromValue(levelVisibility)));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaLevels(List<MdSchemaLevelsResponseRow> responseApi) {
-        // TODO
-        DiscoverResponse responseWs = new DiscoverResponse();
-        return responseWs;
+    public static DiscoverResponse toDiscoverMdSchemaLevels(List<MdSchemaLevelsResponseRow> responseApi)
+        throws JAXBException, IOException {
+            List<Row> rows = responseApi.stream()
+                .map(Convert::convertMdSchemaLevelsResponseRow)
+                .toList();
+
+            DiscoverResponse responseWs = new DiscoverResponse();
+            responseWs.setReturn(getReturn(rows, MdSchemaLevelsResponseRow.class));
+
+            return responseWs;
+    }
+
+    private static Row convertMdSchemaLevelsResponseRow(MdSchemaLevelsResponseRow apiRow) {
+        MdSchemaLevelsResponseRowXml row = new MdSchemaLevelsResponseRowXml();
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+        apiRow.cubeName()
+            .ifPresent(row::setCubeName);
+        apiRow.dimensionUniqueName()
+            .ifPresent(row::setDimensionUniqueName);
+        apiRow.hierarchyUniqueName()
+            .ifPresent(row::setHierarchyUniqueName);
+        apiRow.levelName()
+            .ifPresent(row::setLevelName);
+        apiRow.levelUniqueName()
+            .ifPresent(row::setLevelUniqueName);
+        apiRow.levelGuid()
+            .ifPresent(row::setLevelGuid);
+        apiRow.levelCaption()
+            .ifPresent(row::setLevelCaption);
+        apiRow.levelNumber()
+            .ifPresent(row::setLevelNumber);
+        apiRow.levelCardinality()
+            .ifPresent(row::setLevelCardinality);
+        apiRow.levelType()
+            .ifPresent(i -> row.setLevelType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelTypeEnum.fromValue(i.getValue())));
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.customRollupSetting()
+            .ifPresent(i -> row.setCustomRollupSettings(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CustomRollupSettingEnum.fromValue(i.getValue())));
+        apiRow.levelUniqueSettings()
+            .ifPresent(i -> row.setLevelUniqueSettings(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelUniqueSettingsEnum.fromValue(i.getValue())));
+        apiRow.levelIsVisible()
+            .ifPresent(row::setLevelIsVisible);
+        apiRow.levelOrderingProperty()
+            .ifPresent(row::setLevelOrderingProperty);
+        apiRow.levelDbType()
+            .ifPresent(i -> row.setLevelDbType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelDbTypeEnum.fromValue(i.getValue())));
+        apiRow.levelMasterUniqueName()
+            .ifPresent(row::setLevelMasterUniqueName);
+        apiRow.levelNameSqlColumnName()
+            .ifPresent(row::setLevelNameSqlColumnName);
+        apiRow.levelKeySqlColumnName()
+            .ifPresent(row::setLevelKeySqlColumnName);
+        apiRow.levelUniqueNameSqlColumnName()
+            .ifPresent(row::setLevelUniqueNameSqlColumnName);
+        apiRow.levelAttributeHierarchyName()
+            .ifPresent(row::setLevelAttributeHierarchyName);
+        apiRow.levelKeyCardinality()
+            .ifPresent(row::setLevelKeyCardinality);
+        apiRow.levelOrigin()
+            .ifPresent(i -> row.setLevelOrigin(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelOriginEnum.fromValue(i.getValue())));
+
+        return row;
     }
 
     public static MdSchemaMeasureGroupDimensionsRequest fromDiscoverMdSchemaMeasureGroupDimensions(Discover requestWs) {
@@ -836,10 +1407,53 @@ public class Convert {
             Optional.ofNullable(VisibilityEnum.fromValue(dimensionVisibility)));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaMeasureGroupDimensions(List<MdSchemaMeasureGroupDimensionsResponseRow> responseApi) {
-        // TODO
-        DiscoverResponse responseWs = new DiscoverResponse();
-        return responseWs;
+    public static DiscoverResponse toDiscoverMdSchemaMeasureGroupDimensions(List<MdSchemaMeasureGroupDimensionsResponseRow> responseApi)
+        throws JAXBException, IOException {
+            List<Row> rows = responseApi.stream()
+                .map(Convert::convertMdSchemaMeasureGroupDimensionsResponseRow)
+                .toList();
+
+            DiscoverResponse responseWs = new DiscoverResponse();
+            responseWs.setReturn(getReturn(rows, MdSchemaMeasureGroupDimensionsResponseRow.class));
+
+            return responseWs;
+    }
+
+    private static Row convertMdSchemaMeasureGroupDimensionsResponseRow(MdSchemaMeasureGroupDimensionsResponseRow apiRow) {
+        MdSchemaMeasureGroupDimensionsResponseRowXml row = new MdSchemaMeasureGroupDimensionsResponseRowXml();
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+        apiRow.cubeName()
+            .ifPresent(row::setCubeName);
+        apiRow.measureGroupName()
+            .ifPresent(row::setMeasureGroupName);
+        apiRow.measureGroupCardinality()
+            .ifPresent(row::setMeasureGroupCardinality);
+        apiRow.dimensionUniqueName()
+            .ifPresent(row::setDimensionUniqueName);
+        apiRow.dimensionCardinality()
+            .ifPresent(i -> row.setDimensionCardinality(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DimensionCardinalityEnum.fromValue(i.name())));
+        apiRow.dimensionIsVisible()
+            .ifPresent(row::setDimensionIsVisible);
+        apiRow.dimensionIsFactDimension()
+            .ifPresent(row::setDimensionIsFactDimension);
+        apiRow.dimensionGranularity()
+            .ifPresent(row::setDimensionGranularity);
+        if (apiRow.dimensionPath().isPresent()) {
+            row.setDimensionPath(apiRow.dimensionPath().get().stream().map(i -> {
+                MeasureGroupDimensionXml result  = new MeasureGroupDimensionXml();
+                result.setMeasureGroupDimension(i.getMeasureGroupDimension());
+                return result;
+                //TODO
+            }).collect(Collectors.toList()));
+        }
+
+        return row;
     }
 
     public static MdSchemaMeasuresRequest fromDiscoverMdSchemaMeasures(Discover requestWs) {
@@ -871,10 +1485,64 @@ public class Convert {
                 Optional.ofNullable(VisibilityEnum.fromValue(measureVisibility)));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaMeasures(List<MdSchemaMeasuresResponseRow> responseApi) {
-        // TODO
-        DiscoverResponse responseWs = new DiscoverResponse();
-        return responseWs;
+    public static DiscoverResponse toDiscoverMdSchemaMeasures(List<MdSchemaMeasuresResponseRow> responseApi)
+        throws JAXBException, IOException {
+            List<Row> rows = responseApi.stream()
+                .map(Convert::convertMdSchemaMeasuresResponseRow)
+                .toList();
+
+            DiscoverResponse responseWs = new DiscoverResponse();
+            responseWs.setReturn(getReturn(rows, MdSchemaMembersResponseRowXml.class));
+
+            return responseWs;
+    }
+
+    private static Row convertMdSchemaMeasuresResponseRow(MdSchemaMeasuresResponseRow apiRow) {
+        MdSchemaMeasuresResponseRowXml row = new MdSchemaMeasuresResponseRowXml();
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+        apiRow.cubeName()
+            .ifPresent(row::setCubeName);
+        apiRow.measureName()
+            .ifPresent(row::setMeasureName);
+        apiRow.measureUniqueName()
+            .ifPresent(row::setMeasureUniqueName);
+        apiRow.measureCaption()
+            .ifPresent(row::setMeasureCaption);
+        apiRow.measureGuid()
+            .ifPresent(row::setMeasureGuid);
+        apiRow.measureAggregator()
+            .ifPresent(i -> row.setMeasureAggregator(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.MeasureAggregatorEnum.fromValue(i.getValue())));
+        apiRow.dataType()
+            .ifPresent(i -> row.setDataType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelDbTypeEnum.fromValue(i.getValue())));
+        apiRow.numericPrecision()
+            .ifPresent(row::setNumericPrecision);
+        apiRow.numericScale()
+            .ifPresent(row::setNumericScale);
+        apiRow.measureUnits()
+            .ifPresent(row::setMeasureUnits);
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.expression()
+            .ifPresent(row::setExpression);
+        apiRow.measureIsVisible()
+            .ifPresent(row::setMeasureIsVisible);
+        apiRow.levelsList()
+            .ifPresent(row::setLevelsList);
+        apiRow.measureNameSqlColumnName()
+            .ifPresent(row::setMeasureNameSqlColumnName);
+        apiRow.measureUnqualifiedCaption()
+            .ifPresent(row::setMeasureUnqualifiedCaption);
+        apiRow.measureGroupName()
+            .ifPresent(row::setMeasureGroupName);
+
+        return row;
     }
 
     public static MdSchemaMembersRequest fromDiscoverMdSchemaMembers(Discover requestWs) {
@@ -917,10 +1585,72 @@ public class Convert {
                 Optional.ofNullable(TreeOpEnum.fromValue(treeOp)));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaMembers(List<MdSchemaMembersResponseRow> responseApi) {
-        // TODO
-        DiscoverResponse responseWs = new DiscoverResponse();
-        return responseWs;
+    public static DiscoverResponse toDiscoverMdSchemaMembers(List<MdSchemaMembersResponseRow> responseApi)
+        throws JAXBException, IOException {
+            List<Row> rows = responseApi.stream()
+                .map(Convert::convertMdSchemaMembersResponseRow)
+                .toList();
+
+            DiscoverResponse responseWs = new DiscoverResponse();
+            responseWs.setReturn(getReturn(rows, MdSchemaMembersResponseRow.class));
+
+            return responseWs;
+    }
+
+    private static Row convertMdSchemaMembersResponseRow(MdSchemaMembersResponseRow apiRow) {
+        MdSchemaMembersResponseRowXml row = new MdSchemaMembersResponseRowXml();
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+        apiRow.cubeName()
+            .ifPresent(row::setCubeName);
+        apiRow.dimensionUniqueName()
+            .ifPresent(row::setDimensionUniqueName);
+        apiRow.hierarchyUniqueName()
+            .ifPresent(row::setHierarchyUniqueName);
+        apiRow.levelUniqueName()
+            .ifPresent(row::setLevelUniqueName);
+        apiRow.levelNumber()
+            .ifPresent(row::setLevelNumber);
+        apiRow.memberOrdinal()
+            .ifPresent(row::setMemberOrdinal);
+        apiRow.memberName()
+            .ifPresent(row::setMemberName);
+        apiRow.memberUniqueName()
+            .ifPresent(row::setMemberUniqueName);
+        apiRow.memberType()
+            .ifPresent(i -> row.setMemberType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.MemberTypeEnum.fromValue(i.getValue())));
+        apiRow.memberGuid()
+            .ifPresent(row::setMemberGuid);
+        apiRow.measureCaption()
+            .ifPresent(row::setMeasureCaption);
+        apiRow.childrenCardinality()
+            .ifPresent(row::setChildrenCardinality);
+        apiRow.parentLevel()
+            .ifPresent(row::setParentLevel);
+        apiRow.parentUniqueName()
+            .ifPresent(row::setParentUniqueName);
+        apiRow.parentCount()
+            .ifPresent(row::setParentCount);
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.expression()
+            .ifPresent(row::setExpression);
+        apiRow.memberKey()
+            .ifPresent(row::setMemberKey);
+        apiRow.isPlaceHolderMember()
+            .ifPresent(row::setPlaceHolderMember);
+        apiRow.isDataMember()
+            .ifPresent(row::setDataMember);
+        apiRow.scope()
+            .ifPresent(i -> row.setScope(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ScopeEnum.fromValue(i.getValue())));
+
+        return row;
     }
 
     public static MdSchemaPropertiesRequest fromDiscoverMdSchemaProperties(Discover requestWs) {
@@ -960,10 +1690,73 @@ public class Convert {
             Optional.ofNullable(VisibilityEnum.fromValue(propertyVisibility)));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaProperties(List<MdSchemaPropertiesResponseRow> responseApi) {
-        // TODO
-        DiscoverResponse responseWs = new DiscoverResponse();
-        return responseWs;
+    public static DiscoverResponse toDiscoverMdSchemaProperties(List<MdSchemaPropertiesResponseRow> responseApi)
+        throws JAXBException, IOException {
+            List<Row> rows = responseApi.stream()
+                .map(Convert::convertMdSchemaPropertiesResponseRow)
+                .toList();
+
+            DiscoverResponse responseWs = new DiscoverResponse();
+            responseWs.setReturn(getReturn(rows, MdSchemaPropertiesResponseRow.class));
+
+            return responseWs;
+    }
+
+    private static Row convertMdSchemaPropertiesResponseRow(MdSchemaPropertiesResponseRow apiRow) {
+        MdSchemaPropertiesResponseRowXml row = new MdSchemaPropertiesResponseRowXml();
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+        apiRow.cubeName()
+            .ifPresent(row::setCubeName);
+        apiRow.dimensionUniqueName()
+            .ifPresent(row::setDimensionUniqueName);
+        apiRow.hierarchyUniqueName()
+            .ifPresent(row::setHierarchyUniqueName);
+        apiRow.levelUniqueName()
+            .ifPresent(row::setLevelUniqueName);
+        apiRow.memberUniqueName()
+            .ifPresent(row::setMemberUniqueName);
+        apiRow.propertyType()
+            .ifPresent(i -> row.setPropertyType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.PropertyTypeEnum.fromValue(i.getValue())));
+        apiRow.propertyName()
+            .ifPresent(row::setPropertyName);
+        apiRow.dataType()
+            .ifPresent(i -> row.setDataType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelDbTypeEnum.fromValue(i.getValue())));
+        apiRow.characterMaximumLength()
+            .ifPresent(row::setCharacterMaximumLength);
+        apiRow.numericPrecision()
+            .ifPresent(row::setNumericPrecision);
+        apiRow.numericScale()
+            .ifPresent(row::setNumericScale);
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.propertyContentType()
+            .ifPresent(i -> row.setPropertyContentType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.PropertyContentTypeEnum.fromValue(i.getValue())));
+        apiRow.sqlColumnName()
+            .ifPresent(row::setSqlColumnName);
+        apiRow.language()
+            .ifPresent(row::setLanguage);
+        apiRow.propertyOrigin()
+            .ifPresent(i -> row.setPropertyOrigin(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.PropertyOriginEnum.fromValue(i.getValue())));
+        apiRow.propertyAttributeHierarchyName()
+            .ifPresent(row::setPropertyAttributeHierarchyName);
+        apiRow.propertyCardinality()
+            .ifPresent(i -> row.setPropertyCardinality(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.PropertyCardinalityEnum.fromValue(i.name())));
+        apiRow.mimeType()
+            .ifPresent(row::setMimeType);
+        apiRow.propertyIsVisible()
+            .ifPresent(row::setPropertyIsVisible);
+
+        return row;
     }
 
     public static MdSchemaSetsRequest fromDiscoverMdSchemaSets(Discover requestWs) {
@@ -993,10 +1786,48 @@ public class Convert {
             Optional.ofNullable(hierarchyUniqueName));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaSets(List<MdSchemaSetsResponseRow> responseApi) {
-        // TODO
-        DiscoverResponse responseWs = new DiscoverResponse();
-        return responseWs;
+    public static DiscoverResponse toDiscoverMdSchemaSets(List<MdSchemaSetsResponseRow> responseApi)
+        throws JAXBException, IOException {
+            List<Row> rows = responseApi.stream()
+                .map(Convert::convertMdSchemaSetsResponseRow)
+                .toList();
+
+            DiscoverResponse responseWs = new DiscoverResponse();
+            responseWs.setReturn(getReturn(rows, MdSchemaSetsResponseRow.class));
+
+            return responseWs;
+    }
+
+    private static Row convertMdSchemaSetsResponseRow(MdSchemaSetsResponseRow apiRow) {
+        MdSchemaSetsResponseRowXml row = new MdSchemaSetsResponseRowXml();
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+        apiRow.cubeName()
+            .ifPresent(row::setCubeName);
+        apiRow.setName()
+            .ifPresent(row::setSetName);
+        apiRow.scope()
+            .ifPresent(i -> row.setScope(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ScopeEnum.fromValue(i.getValue())));
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.expression()
+            .ifPresent(row::setExpression);
+        apiRow.dimension()
+            .ifPresent(row::setDimension);
+        apiRow.setCaption()
+            .ifPresent(row::setSetCaption);
+        apiRow.setDisplayFolder()
+            .ifPresent(row::setSetDisplayFolder);
+        apiRow.setEvaluationContext()
+            .ifPresent(i -> row.setSetEvaluationContext(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.SetEvaluationContextEnum.fromValue(i.getValue())));
+
+        return row;
     }
 
     public static MdSchemaKpisRequest fromDiscoverMdSchemaKpis(Discover requestWs) {
@@ -1022,10 +1853,63 @@ public class Convert {
             Optional.ofNullable(CubeSourceEnum.fromValue(cubeSource)));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaKpis(List<MdSchemaKpisResponseRow> responseApi) {
-        // TODO
-        DiscoverResponse responseWs = new DiscoverResponse();
-        return responseWs;
+    public static DiscoverResponse toDiscoverMdSchemaKpis(List<MdSchemaKpisResponseRow> responseApi)
+        throws JAXBException, IOException {
+            List<Row> rows = responseApi.stream()
+                .map(Convert::convertMdSchemaKpisResponseRow)
+                .toList();
+
+            DiscoverResponse responseWs = new DiscoverResponse();
+            responseWs.setReturn(getReturn(rows, MdSchemaKpisResponseRow.class));
+
+            return responseWs;
+    }
+
+    private static Row convertMdSchemaKpisResponseRow(MdSchemaKpisResponseRow apiRow) {
+        MdSchemaKpisResponseRowXml row = new MdSchemaKpisResponseRowXml();
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+        apiRow.cubeName()
+            .ifPresent(row::setCubeName);
+        apiRow.measureGroupName()
+            .ifPresent(row::setMeasureGroupName);
+        apiRow.kpiName()
+            .ifPresent(row::setKpiName);
+        apiRow.kpiCaption()
+            .ifPresent(row::setKpiCaption);
+        apiRow.kpiDescription()
+            .ifPresent(row::setKpiDescription);
+        apiRow.kpiDisplayFolder()
+            .ifPresent(row::setKpiDisplayFolder);
+        apiRow.kpiValue()
+            .ifPresent(row::setKpiValue);
+        apiRow.kpiGoal()
+            .ifPresent(row::setKpiGoal);
+        apiRow.kpiStatus()
+            .ifPresent(row::setKpiStatus);
+        apiRow.kpiTrend()
+            .ifPresent(row::setKpiTrend);
+        apiRow.kpiStatusGraphic()
+            .ifPresent(row::setKpiStatusGraphic);
+        apiRow.kpiTrendGraphic()
+            .ifPresent(row::setKpiTrendGraphic);
+        apiRow.kpiWight()
+            .ifPresent(row::setKpiWight);
+        apiRow.kpiCurrentTimeMember()
+            .ifPresent(row::setKpiCurrentTimeMember);
+        apiRow.kpiParentKpiName()
+            .ifPresent(row::setKpiParentKpiName);
+        apiRow.annotation()
+            .ifPresent(row::setAnnotation);
+        apiRow.scope()
+            .ifPresent(i -> row.setScope(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ScopeEnum.fromValue(i.getValue())));
+
+        return row;
     }
 
     public static MdSchemaMeasureGroupsRequest fromDiscoverMdSchemaMeasureGroups(Discover requestWs) {
@@ -1049,16 +1933,66 @@ public class Convert {
             Optional.ofNullable(measureGroupName));
     }
 
-    public static DiscoverResponse toDiscoverMdSchemaMeasureGroups(List<MdSchemaMeasureGroupsResponseRow> responseApi) {
-        // TODO
-        DiscoverResponse responseWs = new DiscoverResponse();
-        return responseWs;
+    public static DiscoverResponse toDiscoverMdSchemaMeasureGroups(List<MdSchemaMeasureGroupsResponseRow> responseApi)
+        throws JAXBException, IOException {
+            List<Row> rows = responseApi.stream()
+                .map(Convert::convertMdSchemaMeasureGroupsResponseRow)
+                .toList();
+
+            DiscoverResponse responseWs = new DiscoverResponse();
+            responseWs.setReturn(getReturn(rows, MdSchemaMeasureGroupsResponseRow.class));
+
+            return responseWs;
     }
 
-    public static DiscoverResponse toDiscoverDbSchemaSourceTables(List<DbSchemaSourceTablesResponseRow> responseApi) {
-        // TODO
-        DiscoverResponse responseWs = new DiscoverResponse();
-        return responseWs;
+    private static Row convertMdSchemaMeasureGroupsResponseRow(MdSchemaMeasureGroupsResponseRow apiRow) {
+        MdSchemaMeasureGroupsResponseRowXml row = new MdSchemaMeasureGroupsResponseRowXml();
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+        apiRow.cubeName()
+            .ifPresent(row::setCubeName);
+        apiRow.measureGroupName()
+            .ifPresent(row::setMeasureGroupName);
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.isWriteEnabled()
+            .ifPresent(row::setWriteEnabled);
+        apiRow.measureGroupCaption()
+            .ifPresent(row::setMeasureGroupCaption);
+
+        return row;
+    }
+
+    public static DiscoverResponse toDiscoverDbSchemaSourceTables(List<DbSchemaSourceTablesResponseRow> responseApi)
+        throws JAXBException, IOException {
+            List<Row> rows = responseApi.stream()
+                .map(Convert::convertDbSchemaSourceTablesResponseRow)
+                .toList();
+
+            DiscoverResponse responseWs = new DiscoverResponse();
+            responseWs.setReturn(getReturn(rows, DbSchemaSourceTablesResponseRow.class));
+
+            return responseWs;
+    }
+
+    private static Row convertDbSchemaSourceTablesResponseRow(DbSchemaSourceTablesResponseRow apiRow) {
+        DbSchemaSourceTablesResponseRowXml row = new DbSchemaSourceTablesResponseRowXml();
+
+        // Mandatory
+        row.setTableName(apiRow.tableName());
+        row.setTableType(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.TableTypeEnum.fromValue(apiRow.tableType().getValue()));
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+
+        return row;
     }
 
     public static DbSchemaSourceTablesRequest fromDiscoverDbSchemaSourceTables(Discover requestWs) {
@@ -1102,10 +2036,52 @@ public class Convert {
             TableTypeEnum.fromValue(tableType));
     }
 
-    public static DiscoverResponse toDiscoverDbSchemaTablesInfo(List<DbSchemaTablesInfoResponseRow> responseApi) {
-        // TODO
-        DiscoverResponse responseWs = new DiscoverResponse();
-        return responseWs;
+    public static DiscoverResponse toDiscoverDbSchemaTablesInfo(List<DbSchemaTablesInfoResponseRow> responseApi)
+        throws JAXBException, IOException {
+            List<Row> rows = responseApi.stream()
+                .map(Convert::convertDbSchemaTablesInfoResponseRow)
+                .toList();
+
+            DiscoverResponse responseWs = new DiscoverResponse();
+            responseWs.setReturn(getReturn(rows, DbSchemaTablesInfoResponseRow.class));
+
+            return responseWs;
+    }
+
+    private static Row convertDbSchemaTablesInfoResponseRow(DbSchemaTablesInfoResponseRow apiRow) {
+        DbSchemaTablesInfoResponseRowXml row = new DbSchemaTablesInfoResponseRowXml();
+
+        // Mandatory
+        row.setTableName(apiRow.tableName());
+        row.setTableType(apiRow.tableType());
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.schemaName()
+            .ifPresent(row::setSchemaName);
+        apiRow.tableGuid()
+            .ifPresent(row::setTableGuid);
+        apiRow.bookmarks()
+            .ifPresent(row::setBookmarks);
+        apiRow.bookmarkType()
+            .ifPresent(row::setBookmarkType);
+        apiRow.bookmarkDataType()
+            .ifPresent(row::setBookmarkDataType);
+        apiRow.bookmarkMaximumLength()
+            .ifPresent(row::setBookmarkMaximumLength);
+        apiRow.bookmarkInformation()
+            .ifPresent(row::setBookmarkInformation);
+        apiRow.tableVersion()
+            .ifPresent(row::setTableVersion);
+        apiRow.cardinality()
+            .ifPresent(row::setCardinality);
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.tablePropId()
+            .ifPresent(row::setTablePropId);
+
+        return row;
     }
 
     private static Return getReturn(List<Row> rows, Class cl) throws JAXBException, IOException {

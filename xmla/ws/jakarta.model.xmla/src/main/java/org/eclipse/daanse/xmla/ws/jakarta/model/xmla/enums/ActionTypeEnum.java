@@ -85,13 +85,10 @@ public enum ActionTypeEnum {
         return value;
     }
 
-    public static ActionTypeEnum fromValue(String v) {
-        if (v == null){
-            return null;
-        }
-        int vi = Integer.decode(v);
+    public static ActionTypeEnum fromValue(int v) {
+
         for (ActionTypeEnum c : ActionTypeEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

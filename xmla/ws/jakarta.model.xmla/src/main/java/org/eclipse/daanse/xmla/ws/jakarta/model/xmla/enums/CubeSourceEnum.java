@@ -37,13 +37,9 @@ public enum CubeSourceEnum {
         return value;
     }
 
-    public static CubeSourceEnum fromValue(String v) {
-        if (v == null) {
-            return null;
-        }
-        int vi = Integer.decode(v);
+    public static CubeSourceEnum fromValue(int v) {
         for (CubeSourceEnum c : CubeSourceEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

@@ -65,10 +65,9 @@ public enum PropertyTypeEnum {
         return value;
     }
 
-    public static PropertyTypeEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+    public static PropertyTypeEnum fromValue(int v) {
         for (PropertyTypeEnum c : PropertyTypeEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

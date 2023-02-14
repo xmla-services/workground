@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema;
 
 import jakarta.xml.bind.annotation.*;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DimensionCardinalityEnum;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupDimension;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.MeasureGroupDimensionXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 import java.io.Serializable;
@@ -104,7 +104,7 @@ public class MdSchemaMeasureGroupDimensionsResponseRowXml extends Row implements
      * 2.2.4.1.3.1.1.
      */
     @XmlElement(name = "DIMENSION_PATH", required = false)
-    private List<MeasureGroupDimension> dimensionPath;
+    private List<MeasureGroupDimensionXml> dimensionPath;
 
     /**
      * The unique name of the attribute hierarchy
@@ -114,4 +114,91 @@ public class MdSchemaMeasureGroupDimensionsResponseRowXml extends Row implements
     @XmlElement(name = "DIMENSION_GRANULARITY", required = false)
     private String dimensionGranularity;
 
+    public String getCatalogName() {
+        return catalogName;
+    }
+
+    public void setCatalogName(String catalogName) {
+        this.catalogName = catalogName;
+    }
+
+    public String getSchemaName() {
+        return schemaName;
+    }
+
+    public void setSchemaName(String schemaName) {
+        this.schemaName = schemaName;
+    }
+
+    public String getCubeName() {
+        return cubeName;
+    }
+
+    public void setCubeName(String cubeName) {
+        this.cubeName = cubeName;
+    }
+
+    public String getMeasureGroupName() {
+        return measureGroupName;
+    }
+
+    public void setMeasureGroupName(String measureGroupName) {
+        this.measureGroupName = measureGroupName;
+    }
+
+    public String getMeasureGroupCardinality() {
+        return measureGroupCardinality;
+    }
+
+    public void setMeasureGroupCardinality(String measureGroupCardinality) {
+        this.measureGroupCardinality = measureGroupCardinality;
+    }
+
+    public String getDimensionUniqueName() {
+        return dimensionUniqueName;
+    }
+
+    public void setDimensionUniqueName(String dimensionUniqueName) {
+        this.dimensionUniqueName = dimensionUniqueName;
+    }
+
+    public DimensionCardinalityEnum getDimensionCardinality() {
+        return dimensionCardinality;
+    }
+
+    public void setDimensionCardinality(DimensionCardinalityEnum dimensionCardinality) {
+        this.dimensionCardinality = dimensionCardinality;
+    }
+
+    public Boolean getDimensionIsVisible() {
+        return dimensionIsVisible;
+    }
+
+    public void setDimensionIsVisible(Boolean dimensionIsVisible) {
+        this.dimensionIsVisible = dimensionIsVisible;
+    }
+
+    public Boolean getDimensionIsFactDimension() {
+        return dimensionIsFactDimension;
+    }
+
+    public void setDimensionIsFactDimension(Boolean dimensionIsFactDimension) {
+        this.dimensionIsFactDimension = dimensionIsFactDimension;
+    }
+
+    public List<MeasureGroupDimensionXml> getDimensionPath() {
+        return dimensionPath;
+    }
+
+    public void setDimensionPath(List<MeasureGroupDimensionXml> dimensionPath) {
+        this.dimensionPath = dimensionPath;
+    }
+
+    public String getDimensionGranularity() {
+        return dimensionGranularity;
+    }
+
+    public void setDimensionGranularity(String dimensionGranularity) {
+        this.dimensionGranularity = dimensionGranularity;
+    }
 }

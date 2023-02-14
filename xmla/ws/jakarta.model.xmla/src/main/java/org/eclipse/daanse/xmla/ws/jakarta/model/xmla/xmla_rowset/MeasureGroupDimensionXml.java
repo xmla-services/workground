@@ -11,13 +11,15 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions;
+package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset;
 
-public class MeasureGroupDimension {
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlType;
 
-    public MeasureGroupDimension(String measureGroupDimension) {
-        this.measureGroupDimension = measureGroupDimension;
-    }
+@XmlAccessorType(XmlAccessType.FIELD)
+@XmlType(name = "MeasureGroupDimension")
+public class MeasureGroupDimensionXml {
 
     private String measureGroupDimension;
 

@@ -47,13 +47,9 @@ public enum LevelUniqueSettingsEnum {
         return value;
     }
 
-    public static LevelUniqueSettingsEnum fromValue(String v) {
-        if (v == null) {
-            return null;
-        }
-        int vi = Integer.decode(v);
+    public static LevelUniqueSettingsEnum fromValue(int v) {
         for (LevelUniqueSettingsEnum c : LevelUniqueSettingsEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

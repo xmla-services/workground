@@ -41,13 +41,9 @@ public enum SetEvaluationContextEnum {
         return value;
     }
 
-    public static SetEvaluationContextEnum fromValue(String v) {
-        if (v == null) {
-            return null;
-        }
-        int vi = Integer.valueOf(v);
+    public static SetEvaluationContextEnum fromValue(int v) {
         for (SetEvaluationContextEnum c : SetEvaluationContextEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

@@ -21,4 +21,53 @@ import jakarta.xml.bind.annotation.XmlType;
 @XmlType(name = "ParameterInfo")
 public class ParameterInfoXml {
 
+    private String name;
+
+    private String description;
+
+    private Boolean optional;
+
+    private Boolean repeatable;
+
+    private Integer repeatGroup;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getOptional() {
+        return optional;
+    }
+
+    public void setOptional(Boolean optional) {
+        this.optional = optional;
+    }
+
+    public Boolean getRepeatable() {
+        return repeatable;
+    }
+
+    public void setRepeatable(Boolean repeatable) {
+        this.repeatable = repeatable;
+    }
+
+    public Integer getRepeatGroup() {
+        return repeatGroup;
+    }
+
+    public void setRepeatGroup(Integer repeatGroup) {
+        this.repeatGroup = repeatGroup;
+    }
 }

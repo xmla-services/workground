@@ -21,7 +21,6 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 /**
  * This schema rowset describes the structure of cubes within a database. Perspectives are also
@@ -151,7 +150,7 @@ public class MdSchemaCubesResponseRowXml extends Row implements Serializable {
      * a perspective cube.
      */
     @XmlElement(name = "BASE_CUBE_NAME")
-    private Optional<String> baseCubeName;
+    private String baseCubeName;
 
     /**
      * A bitmask with one of these valid values:
@@ -310,11 +309,11 @@ public class MdSchemaCubesResponseRowXml extends Row implements Serializable {
         this.cubeCaption = cubeCaption;
     }
 
-    public Optional<String> getBaseCubeName() {
+    public String getBaseCubeName() {
         return baseCubeName;
     }
 
-    public void setBaseCubeName(Optional<String> baseCubeName) {
+    public void setBaseCubeName(String baseCubeName) {
         this.baseCubeName = baseCubeName;
     }
 

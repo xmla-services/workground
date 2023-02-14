@@ -67,10 +67,9 @@ public enum CoordinateTypeEnum {
         return value;
     }
 
-    public static CoordinateTypeEnum fromValue(String v) {
-        int vi = Integer.valueOf(v);
+    public static CoordinateTypeEnum fromValue(int v) {
         for (CoordinateTypeEnum c : CoordinateTypeEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }
