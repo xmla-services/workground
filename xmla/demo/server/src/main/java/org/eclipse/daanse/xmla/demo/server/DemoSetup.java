@@ -32,7 +32,7 @@ public class DemoSetup {
 
         Dictionary<String, Object> dict = new Hashtable<>();
         dict.put("xmlaService.target", "(service.vendor=demo)");
-        dict.put( "osgi.soap.endpoint.contextpath","xmla");
+        dict.put( "osgi.soap.endpoint.contextpath","/xmla");
 
         cXmlaService.update(dict);
 
