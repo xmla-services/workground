@@ -13,7 +13,11 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema;
 
-import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CoordinateTypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.InvocationEnum;

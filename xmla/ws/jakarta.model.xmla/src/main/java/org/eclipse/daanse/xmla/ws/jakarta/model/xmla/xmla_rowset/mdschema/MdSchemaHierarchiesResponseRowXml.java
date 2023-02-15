@@ -13,8 +13,18 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema;
 
-import jakarta.xml.bind.annotation.*;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.*;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlTransient;
+import jakarta.xml.bind.annotation.XmlType;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DimensionTypeEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DimensionUniqueSettingEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.GroupingBehaviorEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.HierarchyOriginEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.InstanceSelectionEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.StructureEnum;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.StructureTypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 import java.io.Serializable;

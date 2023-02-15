@@ -13,7 +13,13 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.hierarchies;
 
-import org.eclipse.daanse.xmla.api.common.enums.*;
+import org.eclipse.daanse.xmla.api.common.enums.DimensionTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.DimensionUniqueSettingEnum;
+import org.eclipse.daanse.xmla.api.common.enums.GroupingBehaviorEnum;
+import org.eclipse.daanse.xmla.api.common.enums.HierarchyOriginEnum;
+import org.eclipse.daanse.xmla.api.common.enums.InstanceSelectionEnum;
+import org.eclipse.daanse.xmla.api.common.enums.StructureEnum;
+import org.eclipse.daanse.xmla.api.common.enums.StructureTypeEnum;
 
 import java.util.Optional;
 
