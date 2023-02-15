@@ -13,7 +13,8 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.sets;
 
-import org.eclipse.daanse.xmla.api.common.enums.*;
+import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.SetEvaluationContextEnum;
 
 import java.util.Optional;
 

@@ -13,8 +13,8 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.sets;
 
-import org.eclipse.daanse.xmla.api.common.enums.*;
-import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesRestrictions;
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRestrictions;
 
 import java.util.Optional;

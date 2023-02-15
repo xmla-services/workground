@@ -13,7 +13,11 @@
 */
 package org.eclipse.daanse.xmla.api.discover.mdschema.properties;
 
-import org.eclipse.daanse.xmla.api.common.enums.*;
+import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyCardinalityEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyContentTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyOriginEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyTypeEnum;
 
 import java.util.Optional;
 
