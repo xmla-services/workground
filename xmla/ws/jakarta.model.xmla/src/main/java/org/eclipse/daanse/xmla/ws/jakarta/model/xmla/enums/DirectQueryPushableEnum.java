@@ -22,13 +22,13 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum DirectQueryPushableEnum {
 
     /**
-     * This function can be used in measure expressions.
+     *This function can be used in measure expressions.
      */
     @XmlEnumValue("0x1")
     MEASURE(0x1),
 
     /**
-     * This function can be used in calculated column expressions.
+     *This function can be used in calculated column expressions.
      */
     @XmlEnumValue("0x2")
     CALCCOL(0x2);

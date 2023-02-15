@@ -22,31 +22,31 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum HierarchyOriginEnum {
 
     /**
-     * Identifies user-defined hierarchies.
+     *Identifies user-defined hierarchies.
      */
     @XmlEnumValue("0x0001")
     USER_DEFINED(0x0001),
 
     /**
-     * Identifies attribute hierarchies.
+     *Identifies attribute hierarchies.
      */
     @XmlEnumValue("0x0002")
     ATTRIBUTE(0x0002),
 
     /**
-     * Identifies key attribute hierarchies.
+     *Identifies key attribute hierarchies.
      */
     @XmlEnumValue("0x0004")
     KEY(0x0004),
 
     /**
-     * Identifies attributes with no attribute hierarchies.
+     *Identifies attributes with no attribute hierarchies.
      */
     @XmlEnumValue("0x0008")
     WITH_NO_ATTRIBUTE(0x0008),
 
     /**
-     * The default restriction
+     *The default restriction
      */
     @XmlEnumValue("0x0003")
     DEFAULT(0x0003);

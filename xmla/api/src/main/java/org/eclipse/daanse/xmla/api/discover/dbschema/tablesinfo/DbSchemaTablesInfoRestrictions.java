@@ -26,25 +26,25 @@ public interface DbSchemaTablesInfoRestrictions {
 
 
     /**
-     * @return Catalog name. NULL if the provider does not support
+     *@return Catalog name. NULL if the provider does not support
      */
     Optional<String> catalogName();
 
     /**
-     * Unqualified schema name. NULL if the provider does not
-     * support schemas.
+     *Unqualified schema name. NULL if the provider does not
+     *support schemas.
      */
     Optional<String> schemaName();
 
     /**
-     * @return Table name
+     *@return Table name
      */
     String tableName();
 
     /**
-     * @return Table type. One of the following or a provider-specific
-     * value: ALIAS, TABLE, SYNONYM, SYSTEM TABLE, VIEW, GLOBAL "
-     * TEMPORARY, LOCAL TEMPORARY, EXTERNAL TABLE, SYSTEM VIEW
+     *@return Table type. One of the following or a provider-specific
+     *value: ALIAS, TABLE, SYNONYM, SYSTEM TABLE, VIEW, GLOBAL "
+     *TEMPORARY, LOCAL TEMPORARY, EXTERNAL TABLE, SYSTEM VIEW
      */
     TableTypeEnum tableType();
 }

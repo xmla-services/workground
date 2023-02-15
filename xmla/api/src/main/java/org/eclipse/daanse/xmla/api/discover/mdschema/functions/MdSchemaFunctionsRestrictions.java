@@ -25,25 +25,25 @@ public interface MdSchemaFunctionsRestrictions {
     String RESTRICTIONS_LIBRARY_NAME = "LIBRARY_NAME";
 
     /**
-     * @return The possible values are as follows:
-     * (0x1) MSOLAP
-     * (0x2) UDF
-     * (0x3) RELATIONAL
-     * (0x4) SCALAR
+     *@return The possible values are as follows:
+     *(0x1) MSOLAP
+     *(0x2) UDF
+     *(0x3) RELATIONAL
+     *(0x4) SCALAR
      */
     Optional<OriginEnum> origin();
 
     /**
-     * @return A logical classification of the type of function. For
-     * example:
-     * DATETIME
-     * LOGICAL
-     * FILTER
+     *@return A logical classification of the type of function. For
+     *example:
+     *DATETIME
+     *LOGICAL
+     *FILTER
      */
     Optional<InterfaceNameEnum> interfaceName();
 
     /**
-     * @return The library that implements the function.
+     *@return The library that implements the function.
      */
     Optional<String> libraryName();
 }

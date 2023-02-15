@@ -42,123 +42,123 @@ public interface DiscoverXmlMetaDataRestrictions {
     public static final String RESTRICTIONS_OBJECT_EXPANSION = "ObjectExpansion";
 
     /**
-     * @return The database ID.
+     *@return The database ID.
      */
     Optional<String> databaseId();
 
     /**
-     * @return The dimension ID.
+     *@return The dimension ID.
      */
     Optional<String> dimensionId();
 
     /**
-     * @return The cube ID.
+     *@return The cube ID.
      */
     Optional<String> cubeId();
 
     /**
-     * @return The measure group ID.
+     *@return The measure group ID.
      */
     Optional<String> measureGroupId();
 
     /**
-     * @return The partition ID.
+     *@return The partition ID.
      */
     Optional<String> partitionId();
 
     /**
-     * @return The perspective ID.
+     *@return The perspective ID.
      */
     Optional<String> perspectiveId();
 
     /**
-     * @return The dimension permission ID.
+     *@return The dimension permission ID.
      */
     Optional<String> dimensionPermissionId();
 
     /**
-     * @return The role ID.
+     *@return The role ID.
      */
     Optional<String> roleId();
 
     /**
-     * @return The database permission ID.
+     *@return The database permission ID.
      */
     Optional<String> DatabasePermissionId();
 
     /**
-     * @return The mining model ID.
+     *@return The mining model ID.
      */
     Optional<String> miningModelId();
 
     /**
-     * @return The mining model permission ID.
+     *@return The mining model permission ID.
      */
     Optional<String> miningModelPermissionId();
 
     /**
-     * @return The data source ID.
+     *@return The data source ID.
      */
     Optional<String> dataSourceId();
 
     /**
-     * @return The mining structure ID.
+     *@return The mining structure ID.
      */
     Optional<String> miningStructureId();
 
     /**
-     * @return The aggregation design ID.
+     *@return The aggregation design ID.
      */
     Optional<String> aggregationDesignId();
 
     /**
-     * @return The trace ID.
+     *@return The trace ID.
      */
     Optional<String> traceId();
 
     /**
-     * @return The mining structure permission ID.
+     *@return The mining structure permission ID.
      */
     Optional<String> miningStructurePermissionId();
 
     /**
-     * @return The cube permission ID.
+     *@return The cube permission ID.
      */
     Optional<String> cubePermissionId();
 
     /**
-     * @return The assembly ID.
+     *@return The assembly ID.
      */
     Optional<String> assemblyId();
 
     /**
-     * @return The MDX script ID.
+     *@return The MDX script ID.
      */
     Optional<String> mdxScriptId();
 
     /**
-     * @return The data source view ID.
+     *@return The data source view ID.
      */
     Optional<String> dataSourceViewId();
 
     /**
-     * @return The data source permission ID.
+     *@return The data source permission ID.
      */
     Optional<String> dataSourcePermissionId();
 
     /**
-     * @return The degree of expansion that is wanted in the return result. The
-     * available values are:
-     * ReferenceOnly - Returns only the name/ID/timestamp/state
-     * requested for the requested objects and all descendant major
-     * objects recursively.
-     * ObjectProperties - Expands the requested object with no
-     * references to contained objects (includes expanded minor
-     * contained objects).
-     * ExpandObject - Same as ObjectProperties, but also returns the
-     * name, ID, and timestamp for contained major objects.
-     * ExpandFull - Fully expands the requested object recursively to
-     * the bottom of every contained object.
+     *@return The degree of expansion that is wanted in the return result. The
+     *available values are:
+     *ReferenceOnly - Returns only the name/ID/timestamp/state
+     *requested for the requested objects and all descendant major
+     *objects recursively.
+     *ObjectProperties - Expands the requested object with no
+     *references to contained objects (includes expanded minor
+     *contained objects).
+     *ExpandObject - Same as ObjectProperties, but also returns the
+     *name, ID, and timestamp for contained major objects.
+     *ExpandFull - Fully expands the requested object recursively to
+     *the bottom of every contained object.
      */
     Optional<ObjectExpansionEnum> objectExpansion();
 }

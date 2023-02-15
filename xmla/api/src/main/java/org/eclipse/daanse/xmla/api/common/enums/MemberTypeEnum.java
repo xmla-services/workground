@@ -14,32 +14,32 @@
 package org.eclipse.daanse.xmla.api.common.enums;
 
 /**
- * The type of the member
+ *The type of the member
  */
 public enum MemberTypeEnum {
 
     /**
-     *  Is a regular member.
+     *Is a regular member.
      */
     Regular_member(1),
 
     /**
-     * Is the All member.
+     *Is the All member.
      */
     All_member(2),
 
     /**
-     *  Is a measure.
+     *Is a measure.
      */
     Measure(3),
 
     /**
-     * Is a formula.
+     *Is a formula.
      */
     Formula(4),
 
     /**
-     *  Is of unknown type.
+     *Is of unknown type.
      */
     Unknown(0);
 

@@ -16,17 +16,17 @@ package org.eclipse.daanse.xmla.api.common.enums;
 public enum ProviderTypeEnum {
 
     /**
-     * multidimensional data provider.
+     *multidimensional data provider.
      */
     MDP,
 
     /**
-     * tabular data provider.
+     *tabular data provider.
      */
     TDP,
 
     /**
-     * data mining provider (implements the OLE for DB for Data Mining specification)
+     *data mining provider (implements the OLE for DB for Data Mining specification)
      */
     DMP;
 

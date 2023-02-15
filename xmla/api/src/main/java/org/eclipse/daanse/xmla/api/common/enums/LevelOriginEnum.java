@@ -16,29 +16,29 @@ package org.eclipse.daanse.xmla.api.common.enums;
 public enum LevelOriginEnum {
 
     /**
-     * Identifies levels
-     * in a user defined
-     * hierarchy.
+     *Identifies levels
+     *in a user defined
+     *hierarchy.
      */
     USER_DEFINED(0x0001),
 
     /**
-     * Identifies levels
-     * in an attribute hierarchy.
+     *Identifies levels
+     *in an attribute hierarchy.
      */
     ATTRIBUTE(0x0002),
 
     /**
-     * Identifies levels
-     * in a key attribute
-     * hierarchy.
+     *Identifies levels
+     *in a key attribute
+     *hierarchy.
      */
     KEY(0x0004),
 
     /**
-     * Identifies levels
-     * in attribute hierarchies
-     * that are not enabled
+     *Identifies levels
+     *in attribute hierarchies
+     *that are not enabled
      */
     NOT_ENABLED(0x0008);
 

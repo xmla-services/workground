@@ -18,39 +18,39 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * A bitmask that specifies the
- * type of the property, as
- * follows:
+ *A bitmask that specifies the
+ *type of the property, as
+ *follows:
  */
 @XmlType(name = "PropertyType")
 @XmlEnum
 public enum PropertyTypeEnum {
 
     /**
-     * Identifies a property of
-     * a member.
+     *Identifies a property of
+     *a member.
      */
     @XmlEnumValue("1")
     property_member(1),
 
     /**
-     * Identifies a property of
-     * a cell.
+     *Identifies a property of
+     *a cell.
      */
     @XmlEnumValue("2")
     property_cell(2),
 
     /**
-     * Identifies an internal
-     * property.
+     *Identifies an internal
+     *property.
      */
     @XmlEnumValue("4")
     internal_property(4),
 
     /**
-     * Identifies a property
-     * which contains a binary
-     * large object (BLOB).
+     *Identifies a property
+     *which contains a binary
+     *large object (BLOB).
      */
     @XmlEnumValue("8")
     BLOB_property(8);

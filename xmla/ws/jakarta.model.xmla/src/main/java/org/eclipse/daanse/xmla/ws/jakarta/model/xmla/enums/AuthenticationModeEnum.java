@@ -9,19 +9,19 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum AuthenticationModeEnum {
 
     /**
-     * No user ID or password has to be sent.
+     *No user ID or password has to be sent.
      */
     @XmlEnumValue("Unauthenticated")
     Unauthenticated,
 
     /**
-     * User ID and password MUST be included in the information required to connect to the data source.
+     *User ID and password MUST be included in the information required to connect to the data source.
      */
     @XmlEnumValue("Authenticated")
     Authenticated,
 
     /**
-     * The data source uses the underlying security to determine authorization.
+     *The data source uses the underlying security to determine authorization.
      */
     @XmlEnumValue("Integrated")
     Integrated;

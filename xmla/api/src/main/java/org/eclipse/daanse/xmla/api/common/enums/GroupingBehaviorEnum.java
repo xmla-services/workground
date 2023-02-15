@@ -16,12 +16,12 @@ package org.eclipse.daanse.xmla.api.common.enums;
 public enum GroupingBehaviorEnum {
 
     /**
-     * Client applications are encouraged to group by each member of the hierarchy.
+     *Client applications are encouraged to group by each member of the hierarchy.
      */
     ENCOURAGED(1),
 
     /**
-     * Client applications are discouraged from grouping by each member of the hierarchy.
+     *Client applications are discouraged from grouping by each member of the hierarchy.
      */
     DISCOURAGED(2);
 

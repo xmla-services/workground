@@ -16,32 +16,32 @@ package org.eclipse.daanse.xmla.api.common.enums;
 public enum CoordinateTypeEnum {
 
     /**
-     * Action coordinate refers to the cube.
+     *Action coordinate refers to the cube.
      */
     CUBE(1),
 
     /**
-     * Action coordinate refers to a dimension.
+     *Action coordinate refers to a dimension.
      */
     DIMENSION(2),
 
     /**
-     *  Action coordinate refers to a level.
+     * Action coordinate refers to a level.
      */
     LEVEL(3),
 
     /**
-     * Action coordinate refers to a member.
+     *Action coordinate refers to a member.
      */
     MEMBER(4),
 
     /**
-     * Action coordinate refers to a set.
+     *Action coordinate refers to a set.
      */
     SET(5),
 
     /**
-     * Action coordinate refers to a cell.
+     *Action coordinate refers to a cell.
      */
     CELL(6);
 

@@ -5,9 +5,9 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The number of instances a dimension
- * member can have for a single instance of a
- * measure group measure
+ *The number of instances a dimension
+ *member can have for a single instance of a
+ *measure group measure
  */
 @XmlType(name = "DimensionCardinality")
 @XmlEnum

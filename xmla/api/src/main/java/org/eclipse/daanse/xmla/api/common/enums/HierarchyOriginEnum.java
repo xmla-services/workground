@@ -16,27 +16,27 @@ package org.eclipse.daanse.xmla.api.common.enums;
 public enum HierarchyOriginEnum {
 
     /**
-     * Identifies user-defined hierarchies.
+     *Identifies user-defined hierarchies.
      */
     USER_DEFINED(0x0001),
 
     /**
-     * Identifies attribute hierarchies.
+     *Identifies attribute hierarchies.
      */
     ATTRIBUTE(0x0002),
 
     /**
-     * Identifies key attribute hierarchies.
+     *Identifies key attribute hierarchies.
      */
     KEY(0x0004),
 
     /**
-     * Identifies attributes with no attribute hierarchies.
+     *Identifies attributes with no attribute hierarchies.
      */
     WITH_NO_ATTRIBUTE(0x0008),
 
     /**
-     * The default restriction
+     *The default restriction
      */
     DEFAULT(0x0003);
 

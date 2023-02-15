@@ -18,12 +18,12 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The content type of the
- * property.
- * Built-in values are values listed
- * as follows. This enumeration is
- * extensible and additional values
- * can be added by users.
+ *The content type of the
+ *property.
+ *Built-in values are values listed
+ *as follows. This enumeration is
+ *extensible and additional values
+ *can be added by users.
  */
 @XmlType(name = "PropertyContentType")
 @XmlEnum

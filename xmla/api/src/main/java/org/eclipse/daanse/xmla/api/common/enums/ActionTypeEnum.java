@@ -16,47 +16,47 @@ package org.eclipse.daanse.xmla.api.common.enums;
 public enum ActionTypeEnum {
 
     /**
-     * Action type is URL.
+     *Action type is URL.
      */
     URL(0x01),
 
     /**
-     * Action type is HTML.
+     *Action type is HTML.
      */
     HTML(0x02),
 
     /**
-     * Action type is Statement.
+     *Action type is Statement.
      */
     STATEMENT(0x04),
 
     /**
-     * Action type is Dataset.
+     *Action type is Dataset.
      */
     DATASET(0x08),
 
     /**
-     * Action type is Rowset.
+     *Action type is Rowset.
      */
     ROW_SET(0x10),
 
     /**
-     * Action type is Commandline.
+     *Action type is Commandline.
      */
     COMMANDLINE(0x20),
 
     /**
-     * Action type is Proprietary.
+     *Action type is Proprietary.
      */
     PROPRIETARY(0x40),
 
     /**
-     * Action type is Report.
+     *Action type is Report.
      */
     REPORT(0x80),
 
     /**
-     * Action type is DrillThrough.
+     *Action type is DrillThrough.
      */
     DRILL_THROUGH(0x100);
 

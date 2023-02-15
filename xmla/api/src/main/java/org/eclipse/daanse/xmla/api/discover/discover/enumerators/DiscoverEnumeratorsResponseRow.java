@@ -16,42 +16,42 @@ package org.eclipse.daanse.xmla.api.discover.discover.enumerators;
 import java.util.Optional;
 
 /**
- * This schema rowset returns a list of names, data types, and enumeration values of enumerators
- * supported by the XMLA Provider for a specific data source.
+ *This schema rowset returns a list of names, data types, and enumeration values of enumerators
+ *supported by the XMLA Provider for a specific data source.
  */
 public interface DiscoverEnumeratorsResponseRow {
 
     /**
-     * @return The name of the enumerator that contains a set of values.
+     *@return The name of the enumerator that contains a set of values.
      */
     String enumName();
 
     /**
-     * @return A localizable description of the enumerator.
+     *@return A localizable description of the enumerator.
      */
     Optional<String> enumDescription();
 
     /**
-     * @return The data type of the enumeration values.
+     *@return The data type of the enumeration values.
      */
     String enumType();
 
     /**
-     * @return The name of one of the value elements in the enumerator set.
-     * Example: TDP
+     *@return The name of one of the value elements in the enumerator set.
+     *Example: TDP
      */
     String elementName();
 
     /**
-     * @return This column is optional.
-     * A localizable description of the element.
+     *@return This column is optional.
+     *A localizable description of the element.
      */
     Optional<Boolean> elementDescription();
 
     /**
-     * @return The value of the element. This is always a string representing a
-     * number, and it never has a leading 0.
-     * Example: 1
+     *@return The value of the element. This is always a string representing a
+     *number, and it never has a leading 0.
+     *Example: 1
      */
     Optional<String> elementValue();
 

@@ -22,25 +22,25 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum StructureEnum {
 
     /**
-     * Hierarchy is a fully balanced structure.
+     *Hierarchy is a fully balanced structure.
      */
     @XmlEnumValue("0")
     HIERARCHY_FULLY_BALANCED(0),
 
     /**
-     * Hierarchy is a ragged balanced structure.
+     *Hierarchy is a ragged balanced structure.
      */
     @XmlEnumValue("1")
     HIERARCHY_RAGGED_BALANCED(1),
 
     /**
-     * Hierarchy is an unbalanced
+     *Hierarchy is an unbalanced
      */
     @XmlEnumValue("2")
     HIERARCHY_UNBALANCED(2),
 
     /**
-     *  Hierarchy is a network
+     *Hierarchy is a network
      */
     @XmlEnumValue("3")
     HIERARCHY_NETWORK(3);

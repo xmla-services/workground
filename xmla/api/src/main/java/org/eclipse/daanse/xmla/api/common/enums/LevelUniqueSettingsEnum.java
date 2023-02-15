@@ -16,16 +16,16 @@ package org.eclipse.daanse.xmla.api.common.enums;
 public enum LevelUniqueSettingsEnum {
 
     /**
-    * Member
-    * key columns establish
-    * uniqueness.
+    *Member
+    *key columns establish
+    *uniqueness.
     */
     KEY_COLUMNS(0x00000001),
 
     /**
-     * Member
-     * name columns establish
-     * uniqueness.
+     *Member
+     *name columns establish
+     *uniqueness.
      */
     NAME_COLUMNS(0x00000002);
 

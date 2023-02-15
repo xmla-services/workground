@@ -18,11 +18,11 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The scope of the member. The member can be a
- * session-calculated member or a global-calculated
- * member. The column returns NULL for non-
- * calculated members.
- * This column can have one of the following
+ *The scope of the member. The member can be a
+ *session-calculated member or a global-calculated
+ *member. The column returns NULL for non-
+ *calculated members.
+ *This column can have one of the following
  */
 @XmlType(name = "Scope")
 @XmlEnum

@@ -20,17 +20,17 @@ public interface DbSchemaSchemataRestrictions {
     String RESTRICTIONS_SCHEMA_OWNER = "SCHEMA_OWNER";
 
     /**
-     * @return Catalog name
+     *@return Catalog name
      */
     String catalogName();
 
     /**
-     * Schema name
+     *Schema name
      */
     String schemaName();
 
     /**
-     * @return Schema owner
+     *@return Schema owner
      */
     String schemaOwner();
 }

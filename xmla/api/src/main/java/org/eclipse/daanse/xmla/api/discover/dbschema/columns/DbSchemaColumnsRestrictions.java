@@ -25,34 +25,34 @@ public interface DbSchemaColumnsRestrictions {
     String RESTRICTIONS_COLUMN_OLAP_TYPE = "COLUMN_OLAP_TYPE";
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> tableCatalog();
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> tableSchema();
 
     /**
-     * @return The name of the table.
+     *@return The name of the table.
      */
     Optional<String> tableName();
 
     /**
-     * The name of the attribute hierarchy or
-     * measure.
+     *The name of the attribute hierarchy or
+     *measure.
      */
     Optional<String> columnName();
 
     /**
-     * @return The OLAP type of the object:
-     * MEASURE indicates that the object is a
-     * measure.
-     * ATTRIBUTE indicates that the object is a
-     * dimension attribute.
-     * SCHEMA indicates that the object is a
-     * column in a schema rowset table.
+     *@return The OLAP type of the object:
+     *MEASURE indicates that the object is a
+     *measure.
+     *ATTRIBUTE indicates that the object is a
+     *dimension attribute.
+     *SCHEMA indicates that the object is a
+     *column in a schema rowset table.
      */
     Optional<ColumnOlapTypeEnum> columnOlapType();
 }

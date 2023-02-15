@@ -22,25 +22,25 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum InstanceSelectionEnum {
 
     /**
-     * DROPDOWN type of display is suggested.
+     *DROPDOWN type of display is suggested.
      */
     @XmlEnumValue("1")
     DROPDOWN(1),
 
     /**
-     * LIST type of display is suggested.
+     *LIST type of display is suggested.
      */
     @XmlEnumValue("2")
     LIST(2),
 
     /**
-     * FILTERED LIST type of display is suggested.
+     *FILTERED LIST type of display is suggested.
      */
     @XmlEnumValue("3")
     FILTERED_LIST(3),
 
     /**
-     * MANDATORY FILTER type of display is suggested
+     *MANDATORY FILTER type of display is suggested
      */
     @XmlEnumValue("4")
     MANDATORY_FILTER(4);

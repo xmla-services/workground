@@ -19,7 +19,7 @@ public interface DiscoverLiteralsRestrictions {
     public static final String RESTRICTIONS_LITERAL_NAME = "LiteralName";
 
     /**
-     * @return The name of the literal.
+     *@return The name of the literal.
      */
     Optional<String> literalName();
 

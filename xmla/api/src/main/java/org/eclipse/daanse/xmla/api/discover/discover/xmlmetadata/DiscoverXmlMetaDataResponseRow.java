@@ -14,14 +14,14 @@
 package org.eclipse.daanse.xmla.api.discover.discover.xmlmetadata;
 
 /**
- * This schema rowset returns a rowset with one row and one column. The single cell in the rowset
- * contains an XML document that contains the requested XML metadata.
+ *This schema rowset returns a rowset with one row and one column. The single cell in the rowset
+ *contains an XML document that contains the requested XML metadata.
  */
 public interface DiscoverXmlMetaDataResponseRow {
 
     /**
-     * @return An XML document that describes the object requested by the
-     * restriction.
+     *@return An XML document that describes the object requested by the
+     *restriction.
      */
     String metaData();
 }

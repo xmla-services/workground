@@ -22,37 +22,37 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum CoordinateTypeEnum {
 
     /**
-     * Action coordinate refers to the cube.
+     *Action coordinate refers to the cube.
      */
     @XmlEnumValue("1")
     CUBE(1),
 
     /**
-     * Action coordinate refers to a dimension.
+     *Action coordinate refers to a dimension.
      */
     @XmlEnumValue("2")
     DIMENSION(2),
 
     /**
-     *  Action coordinate refers to a level.
+     * Action coordinate refers to a level.
      */
     @XmlEnumValue("3")
     LEVEL(3),
 
     /**
-     * Action coordinate refers to a member.
+     *Action coordinate refers to a member.
      */
     @XmlEnumValue("4")
     MEMBER(4),
 
     /**
-     * Action coordinate refers to a set.
+     *Action coordinate refers to a set.
      */
     @XmlEnumValue("5")
     SET(5),
 
     /**
-     * Action coordinate refers to a cell.
+     *Action coordinate refers to a cell.
      */
     @XmlEnumValue("6")
     CELL(6);

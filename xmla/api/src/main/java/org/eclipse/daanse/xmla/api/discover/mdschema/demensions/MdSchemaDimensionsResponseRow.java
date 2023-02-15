@@ -19,119 +19,119 @@ import org.eclipse.daanse.xmla.api.common.enums.DimensionUniqueSettingEnum;
 import java.util.Optional;
 
 /**
- * This schema rowset describes the dimensions within a database.
+ *This schema rowset describes the dimensions within a database.
  */
 public interface MdSchemaDimensionsResponseRow {
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> catalogName();
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     Optional<String> cubeName();
 
     /**
-     * The name of the dimension.
+     *The name of the dimension.
      */
     Optional<String> dimensionName();
 
     /**
-     * The unique name of the dimension.
+     *The unique name of the dimension.
      */
     Optional<String> dimensionUniqueName();
 
     /**
-     * @return The GUID of the dimension.
+     *@return The GUID of the dimension.
      */
     Optional<Integer> dimensionGuid();
 
     /**
-     * @return The caption of the dimension.
+     *@return The caption of the dimension.
      */
     Optional<String> dimensionCaption();
 
     /**
-     * @return The position of the dimension within the cube.
+     *@return The position of the dimension within the cube.
      */
     Optional<Integer> dimensionOptional();
 
     /**
-     * @return The type of the dimension. Valid values are:
-     * 0 - UNKNOWN
-     * 1 - TIME
-     * 2 - MEASURE
-     * 3 - OTHER
-     * 5 - QUANTITATIVE
-     * 6- ACCOUNTS
-     * 7 - CUSTOMERS
-     * 8- PRODUCTS
-     * 9 - SCENARIO
-     * 10- UTILITY
-     * 11 - CURRENCY
-     * 12 - RATES
-     * 13 - CHANNEL
-     * 14 - PROMOTION
-     * 15 - ORGANIZATION
-     * 16 - BILL OF MATERIALS
-     * 17 – GEOGRAPHY
+     *@return The type of the dimension. Valid values are:
+     *0 - UNKNOWN
+     *1 - TIME
+     *2 - MEASURE
+     *3 - OTHER
+     *5 - QUANTITATIVE
+     *6 - ACCOUNTS
+     *7 - CUSTOMERS
+     *8 - PRODUCTS
+     *9 - SCENARIO
+     *10 - UTILITY
+     *11 - CURRENCY
+     *12 - RATES
+     *13 - CHANNEL
+     *14 - PROMOTION
+     *15 - ORGANIZATION
+     *16 - BILL OF MATERIALS
+     *17 – GEOGRAPHY
      */
     Optional<DimensionTypeEnum> dimensionType();
 
     /**
-     * @return The number of members in the key
-     * attribute.
+     *@return The number of members in the key
+     *attribute.
      */
     Optional<Integer> dimensionCardinality();
 
     /**
-     * @return The default hierarchy of the dimension.
+     *@return The default hierarchy of the dimension.
      */
     Optional<String> defaultHierarchy();
 
     /**
-     * @return A description of the dimension.
+     *@return A description of the dimension.
      */
     Optional<String> description();
 
     /**
-     * @return When true, indicates that the dimension is
-     * virtual; otherwise false.
+     *@return When true, indicates that the dimension is
+     *virtual; otherwise false.
      */
     Optional<Boolean> isVirtual();
 
     /**
-     * @return When true, indicates that the dimension is
-     * write-enabled; otherwise false
+     *@return When true, indicates that the dimension is
+     *write-enabled; otherwise false
      */
     Optional<Boolean> isReadWrite();
 
     /**
-     * @return A bitmask that specifies which columns
-     * contain unique values:
-     * 0x00000001 - Member key columns
-     * establish uniqueness.
-     * 0x00000002 - Member name columns
-     * establish uniqueness.
+     *@return A bitmask that specifies which columns
+     *contain unique values:
+     *0x00000001 - Member key columns
+     *establish uniqueness.
+     *0x00000002 - Member name columns
+     *establish uniqueness.
      */
     Optional<DimensionUniqueSettingEnum> dimensionUniqueSetting();
 
     /**
-     * @return The name of the master dimension.
+     *@return The name of the master dimension.
      */
     Optional<String> dimensionMasterName();
 
     /**
-     * @return When true, indicates that the dimension is
-     * visible in a client application; otherwise
-     * false.
+     *@return When true, indicates that the dimension is
+     *visible in a client application; otherwise
+     *false.
      */
     Optional<Boolean> dimensionIsVisible();
 }

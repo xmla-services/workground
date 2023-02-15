@@ -22,19 +22,19 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum ProviderTypeEnum {
 
     /**
-     * multidimensional data provider.
+     *multidimensional data provider.
      */
     @XmlEnumValue("MDP")
     MDP,
 
     /**
-     * tabular data provider.
+     *tabular data provider.
      */
     @XmlEnumValue("TDP")
     TDP,
 
     /**
-     * data mining provider (implements the OLE for DB for Data Mining specification)
+     *data mining provider (implements the OLE for DB for Data Mining specification)
      */
     @XmlEnumValue("DMP")
     DMP;

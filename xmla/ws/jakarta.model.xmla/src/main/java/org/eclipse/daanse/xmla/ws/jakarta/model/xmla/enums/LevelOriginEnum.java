@@ -22,32 +22,32 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum LevelOriginEnum {
 
     /**
-     * Identifies levels
-     * in a user defined
-     * hierarchy.
+     *Identifies levels
+     *in a user defined
+     *hierarchy.
      */
     @XmlEnumValue("0x0001")
     USER_DEFINED(0x0001),
 
     /**
-     * Identifies levels
-     * in an attribute hierarchy.
+     *Identifies levels
+     *in an attribute hierarchy.
      */
     @XmlEnumValue("0x0002")
     ATTRIBUTE(0x0002),
 
     /**
-     * Identifies levels
-     * in a key attribute
-     * hierarchy.
+     *Identifies levels
+     *in a key attribute
+     *hierarchy.
      */
     @XmlEnumValue("0x0004")
     KEY(0x0004),
 
     /**
-     * Identifies levels
-     * in attribute hierarchies
-     * that are not enabled
+     *Identifies levels
+     *in attribute hierarchies
+     *that are not enabled
      */
     @XmlEnumValue("0x0008")
     NOT_ENABLED(0x0008);

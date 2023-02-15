@@ -18,73 +18,73 @@ import org.eclipse.daanse.xmla.api.common.enums.*;
 import java.util.Optional;
 
 /**
- * This Discover element describes any sets that are currently defined in a database, including session-
- * scoped sets.
+ *This Discover element describes any sets that are currently defined in a database, including session-
+ *scoped sets.
  */
 public interface MdSchemaSetsResponseRow {
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> catalogName();
 
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     Optional<String> cubeName();
 
     /**
-     * The name of the set, as specified in the CREATE SET
-     * statement.
+     *The name of the set, as specified in the CREATE SET
+     *statement.
      */
     Optional<String> setName();
 
     /**
-     * The scope of the set. The set can be a session-defined
-     * set or a global-defined set.
-     * This column can have one of the following values:
-     * 1 - Global
-     * 2 – Session
+     *The scope of the set. The set can be a session-defined
+     *set or a global-defined set.
+     *This column can have one of the following values:
+     *1 - Global
+     *2 – Session
      */
     Optional<ScopeEnum> scope();
 
     /**
-     * @return A description of the set.
+     *@return A description of the set.
      */
     Optional<String> description();
 
     /**
-     * @return The expression for the set.
+     *@return The expression for the set.
      */
     Optional<String> expression();
 
     /**
-     * @return A comma-delimited list of hierarchies included in the set.
+     *@return A comma-delimited list of hierarchies included in the set.
      */
     Optional<String> dimension();
 
     /**
-     * @return A caption associated with the set.
+     *@return A caption associated with the set.
      */
     Optional<String> setCaption();
 
     /**
-     * @return The display folder.
+     *@return The display folder.
      */
     Optional<String> setDisplayFolder();
 
     /**
-     * @return The context for the set. The set can be static or
-     *  dynamic.
-     *  This column can have one of the following values:
-     *  1 - STATIC
-     *  2 – DYNAMIC
+     *@return The context for the set. The set can be static or
+     * dynamic.
+     * This column can have one of the following values:
+     * 1 - STATIC
+     * 2 – DYNAMIC
      */
     Optional<SetEvaluationContextEnum> setEvaluationContext();
 

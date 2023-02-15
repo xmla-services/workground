@@ -26,30 +26,30 @@ public interface MdSchemaCubesRestrictions {
     String RESTRICTIONS_CUBE_SOURCE = "CUBE_SOURCE";
 
     /**
-     * @return The catalog name.
+     *@return The catalog name.
      */
     String catalogName();
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     Optional<String> cubeName();
 
     /**
-     * @return The name of the source cube if this cube is
-     * a perspective cube.
+     *@return The name of the source cube if this cube is
+     *a perspective cube.
      */
     Optional<String> baseCubeName();
 
     /**
-     * A bitmask with one of these valid values:
-     * 0x01-Cube
-     * 0x02-Dimension
+     *A bitmask with one of these valid values:
+     *0x01-Cube
+     *0x02-Dimension
      */
     Optional<CubeSourceEnum> cubeSource();
 }

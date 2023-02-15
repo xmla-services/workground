@@ -22,19 +22,19 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum ActionTypeEnum {
 
     /**
-     * Action type is URL.
+     *Action type is URL.
      */
     @XmlEnumValue("0x01")
     URL(0x01),
 
     /**
-     * Action type is HTML.
+     *Action type is HTML.
      */
     @XmlEnumValue("0x02")
     HTML(0x02),
 
     /**
-     * Action type is Statement.
+     *Action type is Statement.
      */
     @XmlEnumValue("0x04")
     STATEMENT(0x04),

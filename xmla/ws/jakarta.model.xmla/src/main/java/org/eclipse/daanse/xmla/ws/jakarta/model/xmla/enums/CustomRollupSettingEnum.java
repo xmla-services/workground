@@ -22,44 +22,44 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum CustomRollupSettingEnum {
 
     /**
-     * Indicates that a
-     * custom rollup expression
-     * exists for this level.
+     *Indicates that a
+     *custom rollup expression
+     *exists for this level.
      */
     @XmlEnumValue("0x01")
     CUSTOM_ROLLUP_EXPRESSION_EXIST(0x01),
 
     /**
-     * Indicates that
-     * members of this level
-     * have custom rollup
-     * expressions.
+     *Indicates that
+     *members of this level
+     *have custom rollup
+     *expressions.
      */
     @XmlEnumValue("0x02")
     MEMBERS_LEVEL_HAVE_CUSTOM_ROLUP(0x02),
 
     /**
-     * Indicates that
-     * there is a skipped level
-     * associated with members
-     * of this level.
+     *Indicates that
+     *there is a skipped level
+     *associated with members
+     *of this level.
      */
     @XmlEnumValue("0x04")
     SKIPPEDLEVEL_ASSOCIATED_WITH_MEMBERS(0x04),
 
     /**
-     * Indicates that
-     * members of this level
-     * have custom member
-     * properties.
+     *Indicates that
+     *members of this level
+     *have custom member
+     *properties.
      */
     @XmlEnumValue("0x08")
     MEMBERS_LEVEL_HAVE_CUSTOM_MEMBER_PROPERTIES(0x08),
 
     /**
-     * Indicates that
-     * members on this level
-     * have unary operators.
+     *Indicates that
+     *members on this level
+     *have unary operators.
      */
     @XmlEnumValue("0x010")
     MEMBERS_LEVEL_HAVE_UNARY_OPERATORS(0x10);

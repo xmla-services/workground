@@ -16,19 +16,19 @@ package org.eclipse.daanse.xmla.api.common.enums;
 public enum ColumnOlapTypeEnum {
 
     /**
-     * indicates that the object is a measure.
+     *indicates that the object is a measure.
      */
     MEASURE,
 
     /**
-     *  indicates that the object is a
-     *  dimension attribute.
+     *indicates that the object is a
+     *dimension attribute.
      */
     ATTRIBUTE,
 
     /**
-     * indicates that the object is a
-     * column in a schema rowset table.
+     *indicates that the object is a
+     *column in a schema rowset table.
      */
     SCHEMA;
 

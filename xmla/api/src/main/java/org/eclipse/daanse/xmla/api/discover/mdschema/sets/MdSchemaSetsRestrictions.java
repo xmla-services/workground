@@ -34,40 +34,40 @@ public interface MdSchemaSetsRestrictions {
 
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     Optional<String> cubeName();
 
     /**
-     * The name of the set, as specified in the CREATE SET
-     * statement.
+     *The name of the set, as specified in the CREATE SET
+     *statement.
      */
     Optional<String> setName();
 
     /**
-     * The scope of the set. The set can be a session-defined
-     * set or a global-defined set.
-     * This column can have one of the following values:
-     * 1 - Global
-     * 2 – Session
+     *The scope of the set. The set can be a session-defined
+     *set or a global-defined set.
+     *This column can have one of the following values:
+     *1 - Global
+     *2 – Session
      */
     Optional<ScopeEnum> scope();
 
     /**
-     * A bitmask with one of the following valid values:
-     * 0x01 - Cube
-     * 0x02 - Dimension<233>
-     * The default restriction is a value of 1.
+     *A bitmask with one of the following valid values:
+     *0x01 - Cube
+     *0x02 - Dimension<233>
+     *The default restriction is a value of 1.
      */
     Optional<CubeSourceEnum> cubeSource();
 
     /**
-     * The unique name of the hierarchy that contains the set.
+     *The unique name of the hierarchy that contains the set.
      */
     Optional<String> hierarchyUniqueName();
 }

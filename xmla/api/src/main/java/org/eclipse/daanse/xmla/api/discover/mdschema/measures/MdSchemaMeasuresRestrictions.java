@@ -31,50 +31,50 @@ public interface MdSchemaMeasuresRestrictions {
 
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> catalogName();
 
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     Optional<String> cubeName();
 
     /**
-     * @return The name of the measure.
+     *@return The name of the measure.
      */
     Optional<String> measureName();
 
     /**
-     * The unique name of the measure
+     *The unique name of the measure
      */
     Optional<String> measureUniqueName();
 
     /**
-     * The name of the measure group to which the
-     * measure belongs.
+     *The name of the measure group to which the
+     *measure belongs.
      */
     Optional<String> measureGroupName();
 
     /**
-     * @return bitmask with one of these valid values:
-     * 0x01 - Cube
-     * 0x02 - Dimension
-     * The default restriction is a value of 1.
+     *@return bitmask with one of these valid values:
+     *0x01 - Cube
+     *0x02 - Dimension
+     *The default restriction is a value of 1.
      */
     Optional<CubeSourceEnum> cubeSource();
 
     /**
-     * @return A bitmask with one of these valid values:
-     * 0x01 - Visible
-     * 0x02 - Not Visible
-     * The default restriction is a value of 1.
+     *@return A bitmask with one of these valid values:
+     *0x01 - Visible
+     *0x02 - Not Visible
+     *The default restriction is a value of 1.
      */
     Optional<VisibilityEnum> measureVisibility();
 }

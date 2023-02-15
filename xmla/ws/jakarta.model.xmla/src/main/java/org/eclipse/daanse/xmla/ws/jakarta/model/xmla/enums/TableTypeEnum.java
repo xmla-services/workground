@@ -18,7 +18,7 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * Table type. One of the following or a provider-specific
+ *Table type. One of the following or a provider-specific
  */
 @XmlType(name = "TableType")
 @XmlEnum

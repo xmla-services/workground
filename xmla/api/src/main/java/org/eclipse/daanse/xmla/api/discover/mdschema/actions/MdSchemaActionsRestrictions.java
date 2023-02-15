@@ -33,77 +33,77 @@ public interface MdSchemaActionsRestrictions {
     String RESTRICTIONS_CUBE_SOURCE = "CUBE_SOURCE";
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> catalogName();
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     String cubeName();
 
     /**
-     * @return The name of this action.
+     *@return The name of this action.
      */
     Optional<String> actionName();
 
     /**
-     * @return A bitmask that is used to specify the action type.
-     * 0x01 - Action type is URL.
-     * 0x02 - Action type is HTML.
-     * 0x04 - Action type is Statement.
-     * 0x08 - Action type is Dataset.
-     * 0x10 - Action type is Rowset.
-     * 0x20 - Action type is Commandline.
-     * 0x40 - Action type is Proprietary.
-     * 0x80 - Action type is Report.
-     * 0x100 - Action type is DrillThrough.
-     * If the action is PROPRIETARY (0x40), then a value MUST be
-     * provided in the APPLICATION column.
+     *@return A bitmask that is used to specify the action type.
+     *0x01 - Action type is URL.
+     *0x02 - Action type is HTML.
+     *0x04 - Action type is Statement.
+     *0x08 - Action type is Dataset.
+     *0x10 - Action type is Rowset.
+     *0x20 - Action type is Commandline.
+     *0x40 - Action type is Proprietary.
+     *0x80 - Action type is Report.
+     *0x100 - Action type is DrillThrough.
+     *If the action is PROPRIETARY (0x40), then a value MUST be
+     *provided in the APPLICATION column.
      */
     Optional<ActionTypeEnum> actionType();
 
     /**
-     * @return An MDX expression that specifies an object or a coordinate in
-     * the multidimensional space in which the action is performed.
-     * The COORDINATE MUST resolve to the object specified in
-     * COORDINATE_TYPE.
+     *@return An MDX expression that specifies an object or a coordinate in
+     *the multidimensional space in which the action is performed.
+     *The COORDINATE MUST resolve to the object specified in
+     *COORDINATE_TYPE.
      */
     Optional<String> coordinate();
 
     /**
-     * @return An enumeration that specifies how the COORDINATE restriction
-     * column is interpreted. The possible values are as follows:
-     * 1 - Action coordinate refers to the cube.
-     * 2 - Action coordinate refers to a dimension.
-     * 3 - Action coordinate refers to a level.
-     * 4 - Action coordinate refers to a member.
-     * 5 - Action coordinate refers to a set.
-     * 6 - Action coordinate refers to a cell.
+     *@return An enumeration that specifies how the COORDINATE restriction
+     *column is interpreted. The possible values are as follows:
+     *1 - Action coordinate refers to the cube.
+     *2 - Action coordinate refers to a dimension.
+     *3 - Action coordinate refers to a level.
+     *4 - Action coordinate refers to a member.
+     *5 - Action coordinate refers to a set.
+     *6 - Action coordinate refers to a cell.
      */
     CoordinateTypeEnum coordinateType();
 
     /**
-     * @return Information about how to invoke the action:
-     * 1 - Indicates a regular action used during normal
-     * operations. This is the default value for this column.
-     * 2 - Indicates that the action is performed when the cube is
-     * first opened.
-     * 4 - Indicates that the action is performed as part of a batch
-     * operation.
+     *@return Information about how to invoke the action:
+     *1 - Indicates a regular action used during normal
+     *operations. This is the default value for this column.
+     *2 - Indicates that the action is performed when the cube is
+     *first opened.
+     *4 - Indicates that the action is performed as part of a batch
+     *operation.
      */
     InvocationEnum invocation();
 
     /**
-     * @return A bitmask with one of these valid values:
-     * 0x01 - Cube
-     * 0x02 - Dimension
-     * The default restriction is a value of 1.
+     *@return A bitmask with one of these valid values:
+     *0x01 - Cube
+     *0x02 - Dimension
+     *The default restriction is a value of 1.
      */
     Optional<CubeSourceEnum> cubeSource();
 }

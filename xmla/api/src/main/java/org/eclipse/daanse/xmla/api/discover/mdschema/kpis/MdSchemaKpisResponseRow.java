@@ -19,117 +19,117 @@ import org.eclipse.daanse.xmla.api.common.enums.SetEvaluationContextEnum;
 import java.util.Optional;
 
 /**
- * This schema rowset describes the KPIs within a database.
+ *This schema rowset describes the KPIs within a database.
  */
 public interface MdSchemaKpisResponseRow {
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> catalogName();
 
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     Optional<String> cubeName();
 
     /**
-     * @return The associated measure group for the KPI.
+     *@return The associated measure group for the KPI.
      */
     Optional<String> measureGroupName();
 
     /**
-     * The name of the KPI.
+     *The name of the KPI.
      */
     Optional<String> kpiName();
 
     /**
-     * @return A label or caption associated with the KPI.
+     *@return A label or caption associated with the KPI.
      */
     Optional<String> kpiCaption();
 
     /**
-     * @return A description of the KPI.
+     *@return A description of the KPI.
      */
     Optional<String> kpiDescription();
 
     /**
-     * @return The display folder.
+     *@return The display folder.
      */
     Optional<String> kpiDisplayFolder();
 
     /**
-     * @return The unique name of the member in the measures
-     * dimension for the KPI value.
+     *@return The unique name of the member in the measures
+     *dimension for the KPI value.
      */
     Optional<String> kpiValue();
 
     /**
-     * @return The unique name of the member in the measures
-     * dimension for the KPI goal.
+     *@return The unique name of the member in the measures
+     *dimension for the KPI goal.
      */
     Optional<String> kpiGoal();
 
     /**
-     * @return The unique name of the member in the measures
-     * dimension for the KPI status.
+     *@return The unique name of the member in the measures
+     *dimension for the KPI status.
      */
     Optional<String> kpiStatus();
 
     /**
-     * @return The unique name of the member in the measures
-     * dimension for the KPI trend.
+     *@return The unique name of the member in the measures
+     *dimension for the KPI trend.
      */
     Optional<String> kpiTrend();
 
     /**
-     * @return The default graphical representation of the KPI
-     * status.
+     *@return The default graphical representation of the KPI
+     *status.
      */
     Optional<String> kpiStatusGraphic();
 
     /**
-     * @return The default graphical representation of the KPI
-     * trend.
+     *@return The default graphical representation of the KPI
+     *trend.
      */
     Optional<String> kpiTrendGraphic();
 
     /**
-     * @return The unique name of the member in the measures
-     * dimension for the KPI weight.
+     *@return The unique name of the member in the measures
+     *dimension for the KPI weight.
      */
     Optional<String> kpiWight();
 
     /**
-     * @return The unique name of the member in the time
-     * dimension that defines the temporal context of the
-     * KPI.
+     *@return The unique name of the member in the time
+     *dimension that defines the temporal context of the
+     *KPI.
      */
     Optional<String> kpiCurrentTimeMember();
 
     /**
-     * @return The name of the parent KPI.
-     * ANNOTATIONSxsd:stringThe annotations on the KPI.
+     *@return The name of the parent KPI.
+     *ANNOTATIONSxsd:stringThe annotations on the KPI.
      */
     Optional<String> kpiParentKpiName();
 
     /**
-     * @return The annotations on the KPI.
+     *@return The annotations on the KPI.
      */
     Optional<String> annotation();
 
     /**
-     * The scope of the KPI. The KPI can be a session KPI
-     * or global KPI.
-     * This column can have one of the following values:
-     * 1 - Global
-     * 2 – Session
+     *The scope of the KPI. The KPI can be a session KPI
+     *or global KPI.
+     *This column can have one of the following values:
+     *1 - Global
+     *2 – Session
      */
     Optional<ScopeEnum> scope();
 

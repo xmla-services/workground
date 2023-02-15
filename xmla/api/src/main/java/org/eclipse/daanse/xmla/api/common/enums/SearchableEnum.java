@@ -16,30 +16,30 @@ package org.eclipse.daanse.xmla.api.common.enums;
 public enum SearchableEnum {
 
     /**
-     * indicates that
-     * the data type cannot be used in a WHERE
-     * clause.
+     *indicates that
+     *the data type cannot be used in a WHERE
+     *clause.
      */
     DB_UNSEARCHABLE(0x01),
 
     /**
-     * indicates that the
-     * data type can be used in a WHERE clause only
-     * with the LIKE predicate.
+     *indicates that the
+     *data type can be used in a WHERE clause only
+     *with the LIKE predicate.
      */
     DB_LIKE_ONLY (0x02),
 
     /**
-     * indicates that
-     * the data type can be used in a WHERE clause
-     * with all comparison operators except LIKE.
+     *indicates that
+     *the data type can be used in a WHERE clause
+     *with all comparison operators except LIKE.
      */
     DB_ALL_EXCEPT_LIKE (0x03),
 
     /**
-     * indicates that the
-     * data type can be used in a WHERE clause with
-     * any comparison operator.
+     *indicates that the
+     *data type can be used in a WHERE clause with
+     *any comparison operator.
      */
     DB_SEARCHABLE (0x04);
 

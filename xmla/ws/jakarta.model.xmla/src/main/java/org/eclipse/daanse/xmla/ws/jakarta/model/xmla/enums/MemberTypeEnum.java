@@ -18,38 +18,38 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The type of the member
+ *The type of the member
  */
 @XmlType(name = "MemberType")
 @XmlEnum
 public enum MemberTypeEnum {
 
     /**
-     *  Is a regular member.
+     *Is a regular member.
      */
     @XmlEnumValue("1")
     Regular_member(1),
 
     /**
-     * Is the All member.
+     *Is the All member.
      */
     @XmlEnumValue("2")
     All_member(2),
 
     /**
-     *  Is a measure.
+     *Is a measure.
      */
     @XmlEnumValue("3")
     Measure(3),
 
     /**
-     * Is a formula.
+     *Is a formula.
      */
     @XmlEnumValue("4")
     Formula(4),
 
     /**
-     *  Is of unknown type.
+     *Is of unknown type.
      */
     @XmlEnumValue("0")
     Unknown(0);

@@ -22,21 +22,21 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum ColumnOlapTypeEnum {
 
     /**
-     * indicates that the object is a measure.
+     *indicates that the object is a measure.
      */
     @XmlEnumValue("MEASURE")
     MEASURE,
 
     /**
-     *  indicates that the object is a
-     *  dimension attribute.
+     *indicates that the object is a
+     *dimension attribute.
      */
     @XmlEnumValue("ATTRIBUTE")
     ATTRIBUTE,
 
     /**
-     * indicates that the object is a
-     * column in a schema rowset table.
+     *indicates that the object is a
+     *column in a schema rowset table.
      */
     @XmlEnumValue("SCHEMA")
     SCHEMA;

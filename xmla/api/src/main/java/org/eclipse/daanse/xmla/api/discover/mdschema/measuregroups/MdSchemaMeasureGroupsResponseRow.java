@@ -16,46 +16,46 @@ package org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups;
 import java.util.Optional;
 
 /**
- * This schema rowset describes the measure groups within a database.
+ *This schema rowset describes the measure groups within a database.
  */
 public interface MdSchemaMeasureGroupsResponseRow {
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> catalogName();
 
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     Optional<String> cubeName();
 
     /**
-     * @return The name of the measure group.
+     *@return The name of the measure group.
      */
     Optional<String> measureGroupName();
 
     /**
-     * @return A description of the member.
+     *@return A description of the member.
      */
     Optional<String> description();
 
     /**
-     * @return When true, indicates that the measure group is write-
-     * enabled; otherwise false.
-     * Returns a value of true if the measure group is write-
-     * enabled.
+     *@return When true, indicates that the measure group is write-
+     *enabled; otherwise false.
+     *Returns a value of true if the measure group is write-
+     *enabled.
      */
     Optional<Boolean> isWriteEnabled();
 
     /**
-     * @return The caption for the measure group.
+     *@return The caption for the measure group.
      */
     Optional<String> measureGroupCaption();
 }

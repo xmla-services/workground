@@ -23,23 +23,23 @@ public interface MdSchemaMeasureGroupsRestrictions {
     String RESTRICTIONS_MEASUREGROUP_NAME = "MEASUREGROUP_NAME";
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> catalogName();
 
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     Optional<String> cubeName();
 
     /**
-     * The name of the measure group.
+     *The name of the measure group.
      */
     Optional<String> measureGroupName();
 

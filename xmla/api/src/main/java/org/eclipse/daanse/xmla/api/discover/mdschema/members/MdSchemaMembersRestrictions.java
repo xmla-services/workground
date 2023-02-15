@@ -36,83 +36,83 @@ public interface MdSchemaMembersRestrictions {
     String RESTRICTIONS_TREE_OP = "TREE_OP";
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> catalogName();
 
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     Optional<String> cubeName();
 
     /**
-     * The unique name of the dimension.
+     *The unique name of the dimension.
      */
     Optional<String> dimensionUniqueName();
 
     /**
-     * The unique name of the hierarchy.
+     *The unique name of the hierarchy.
      */
     Optional<String> hierarchyUniqueName();
 
     /**
-     * The unique name of the level.
+     *The unique name of the level.
      */
     Optional<String> levelUniqueName();
 
     /**
-     * The distance of the member from the root of the
-     * hierarchy. The root level is zero (0).
+     *The distance of the member from the root of the
+     *hierarchy. The root level is zero (0).
      */
     Optional<Integer> levelNumber();
 
     /**
-     * @return The name of the member.
+     *@return The name of the member.
      */
     Optional<String> memberName();
 
     /**
-     * @return The unique name of the member.
+     *@return The unique name of the member.
      */
     Optional<String> memberUniqueName();
 
     /**
-     * @return The type of the member.<228>
-     * 1 - Is a regular member.
-     * 2 - Is the All member.
-     * 3 - Is a measure.
-     * 4 - Is a formula.
-     * 0 - Is of unknown type.
+     *@return The type of the member.<228>
+     *1 - Is a regular member.
+     *2 - Is the All member.
+     *3 - Is a measure.
+     *4 - Is a formula.
+     *0 - Is of unknown type.
      */
     Optional<MemberTypeEnum> memberType();
 
     /**
-     * @return The caption of the member.
+     *@return The caption of the member.
      */
     Optional<String> measureCaption();
 
     /**
-     * @return bitmask with one of these valid values:
-     * 0x01 - Cube
-     * 0x02 - Dimension
-     * The default restriction is a value of 1.
+     *@return bitmask with one of these valid values:
+     *0x01 - Cube
+     *0x02 - Dimension
+     *The default restriction is a value of 1.
      */
     Optional<CubeSourceEnum> cubeSource();
 
     /**
-     * Applies only to a single member:
-     * 0x20 - Returns all of the ancestors.
-     * 0x01 - Returns only the immediate children.
-     * 0x02 - Returns members on the same level.
-     * 0x04 - Returns only the immediate parent.
-     * 0x08 – Returns only itself.
-     * 0x10 - Returns all of the descendants.
+     *Applies only to a single member:
+     *0x20 - Returns all of the ancestors.
+     *0x01 - Returns only the immediate children.
+     *0x02 - Returns members on the same level.
+     *0x04 - Returns only the immediate parent.
+     *0x08 – Returns only itself.
+     *0x10 - Returns all of the descendants.
      */
     Optional<TreeOpEnum> treeOp();
 }

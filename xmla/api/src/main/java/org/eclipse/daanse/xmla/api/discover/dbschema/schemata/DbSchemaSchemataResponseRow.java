@@ -14,22 +14,22 @@
 package org.eclipse.daanse.xmla.api.discover.dbschema.schemata;
 
 /**
- * This schema rowset identifies the (base) data types supported by the server.
+ *This schema rowset identifies the (base) data types supported by the server.
  */
 public interface DbSchemaSchemataResponseRow {
 
     /**
-     * @return Catalog name
+     *@return Catalog name
      */
     String catalogName();
 
     /**
-     * Schema name
+     *Schema name
      */
     String schemaName();
 
     /**
-     * @return Schema owner
+     *@return Schema owner
      */
     String schemaOwner();
 }

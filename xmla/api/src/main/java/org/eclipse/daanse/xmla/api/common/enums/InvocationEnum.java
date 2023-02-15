@@ -16,17 +16,17 @@ package org.eclipse.daanse.xmla.api.common.enums;
 public enum InvocationEnum {
 
     /**
-     * Indicates a regular action used during normal operations. This is the default value for this column.
+     *Indicates a regular action used during normal operations. This is the default value for this column.
      */
     NORMAL_OPERATION(1),
 
     /**
-     * Indicates that the action is performed when the cube is first opened.
+     *Indicates that the action is performed when the cube is first opened.
      */
     FIRST_OPENED_CUBE(2),
 
     /**
-     * Indicates that the action is performed as part of a batch
+     *Indicates that the action is performed as part of a batch
      */
     BATCH_OPERATION(4);
 

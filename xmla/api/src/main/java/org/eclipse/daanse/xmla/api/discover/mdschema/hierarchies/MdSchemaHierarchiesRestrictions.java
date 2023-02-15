@@ -31,57 +31,57 @@ public interface MdSchemaHierarchiesRestrictions {
     String RESTRICTIONS_HIERARCHY_VISIBILITY = "HIERARCHY_VISIBILITY";
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> catalogName();
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     Optional<String> cubeName();
 
     /**
-     * @return The unique name of the dimension.
+     *@return The unique name of the dimension.
      */
     Optional<String> dimensionUniqueName();
 
     /**
-     * @return The name of the hierarchy. This
-     * column MAY be blank if there
-     * is only a single hierarchy in the
-     * dimension.
+     *@return The name of the hierarchy. This
+     *column MAY be blank if there
+     *is only a single hierarchy in the
+     *dimension.
      */
     Optional<String> hierarchyName();
 
     /**
-     * @return The unique name of the hierarchy.
+     *@return The unique name of the hierarchy.
      */
     Optional<String> hierarchyUniqueName();
 
     /**
-     * @return A bitmask that determines the
-     * source of the hierarchy.
+     *@return A bitmask that determines the
+     *source of the hierarchy.
      */
     Optional<Integer> hierarchyOrigin();
 
     /**
-     * @return A bitmask with one of these valid values:
-     * 0x01 - Cube
-     * 0x02 - Dimension<214>
-     * The default restriction is a value of 1.
+     *@return A bitmask with one of these valid values:
+     *0x01 - Cube
+     *0x02 - Dimension<214>
+     *The default restriction is a value of 1.
      */
     Optional<CubeSourceEnum> cubeSource();
 
     /**
-     * @return A bitmask with one of these valid values:
-     * 0x01 - Visible
-     * 0x02 - Not Visible
-     * The default restriction is a value of 1.
+     *@return A bitmask with one of these valid values:
+     *0x01 - Visible
+     *0x02 - Not Visible
+     *The default restriction is a value of 1.
      */
     Optional<VisibilityEnum> hierarchyVisibility();
 

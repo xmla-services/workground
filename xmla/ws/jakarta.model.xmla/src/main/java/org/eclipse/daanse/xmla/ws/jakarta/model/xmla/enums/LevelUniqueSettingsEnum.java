@@ -22,17 +22,17 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum LevelUniqueSettingsEnum {
 
     /**
-    * Member
-    * key columns establish
-    * uniqueness.
+    *Member
+    *key columns establish
+    *uniqueness.
     */
     @XmlEnumValue("0x00000001")
     KEY_COLUMNS(0x00000001),
 
     /**
-     * Member
-     * name columns establish
-     * uniqueness.
+     *Member
+     *name columns establish
+     *uniqueness.
      */
     @XmlEnumValue("0x00000002")
     NAME_COLUMNS(0x00000002);

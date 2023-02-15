@@ -22,25 +22,25 @@ public interface DbSchemaTablesRestrictions {
     String RESTRICTIONS_TABLE_TYPE = "TABLE_TYPE";
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> tableCatalog();
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> tableSchema();
 
     /**
-     * @return The name of the table.
+     *@return The name of the table.
      */
     Optional<String> tableName();
 
     /**
-     * @return The type of table:
-     * TABLE for measure group.
-     * SYSTEM TABLE for dimension.
-     * SCHEMA for schema rowset table.
+     *@return The type of table:
+     *TABLE for measure group.
+     *SYSTEM TABLE for dimension.
+     *SCHEMA for schema rowset table.
      */
     Optional<String> tableType();
 

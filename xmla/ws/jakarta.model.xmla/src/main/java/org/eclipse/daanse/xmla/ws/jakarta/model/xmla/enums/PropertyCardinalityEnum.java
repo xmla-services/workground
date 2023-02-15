@@ -5,9 +5,9 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The cardinality of the property.
- * Possible values include the
- * following strings:
+ *The cardinality of the property.
+ *Possible values include the
+ *following strings:
  */
 @XmlType(name = "PropertyCardinality")
 @XmlEnum

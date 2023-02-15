@@ -18,8 +18,8 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * The context for the set. The set can be static or
- *  dynamic.
+ *The context for the set. The set can be static or
+ *dynamic.
  */
 @XmlType(name = "SetEvaluationContext")
 @XmlEnum

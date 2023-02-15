@@ -16,40 +16,40 @@ package org.eclipse.daanse.xmla.api.discover.discover.properties;
 import java.util.Optional;
 
 /**
- * This schema rowset returns a list of information and values about the properties that are supported by
- * the server for the specified data source.
+ *This schema rowset returns a list of information and values about the properties that are supported by
+ *the server for the specified data source.
  */
 public interface DiscoverPropertiesResponseRow {
 
     /**
-     * @return The name of the property.
+     *@return The name of the property.
      */
     String propertyName();
 
     /**
-     * @return A description of the property.
+     *@return A description of the property.
      */
     Optional<String> propertyDescription();
 
     /**
-     * @return The XSD data type of the property.
+     *@return The XSD data type of the property.
      */
     Optional<String> propertyType();
 
     /**
-     * @return The access for the property. The value can be Read, Write, or
-     * ReadWrite.
+     *@return The access for the property. The value can be Read, Write, or
+     *ReadWrite.
      */
     String propertyAccessType();
 
     /**
-     * @return When true, indicates that a property is required; otherwise
-     * false.
+     *@return When true, indicates that a property is required; otherwise
+     *false.
      */
     Optional<Boolean> required();
 
     /**
-     * @return The current value of the property.
+     *@return The current value of the property.
      */
     Optional<String> value();
 

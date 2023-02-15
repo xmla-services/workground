@@ -17,55 +17,55 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
- * This schema rowset returns dimensions, measure groups, or schema rowsets exposed as tables.
+ *This schema rowset returns dimensions, measure groups, or schema rowsets exposed as tables.
  */
 public interface DbSchemaTablesResponseRow {
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> tableCatalog();
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> tableSchema();
 
     /**
-     * @return The name of the table.
+     *@return The name of the table.
      */
     Optional<String> tableName();
 
     /**
-     * @return The type of table:
-     * TABLE for measure group.
-     * SYSTEM TABLE for dimension.
-     * SCHEMA for schema rowset table.
+     *@return The type of table:
+     *TABLE for measure group.
+     *SYSTEM TABLE for dimension.
+     *SCHEMA for schema rowset table.
      */
     Optional<String> tableType();
 
     /**
-     * @return The GUID of the table.
+     *@return The GUID of the table.
      */
     Optional<String> tableGuid();
 
     /**
-     * @return A description of the object.
+     *@return A description of the object.
      */
     Optional<String> description();
 
     /**
-     * @return The ID of the table.
+     *@return The ID of the table.
      */
     Optional<Integer> tablePropId();
 
     /**
-     * @return The date the table was created.
+     *@return The date the table was created.
      */
     Optional<LocalDateTime> dateCreated();
 
     /**
-     * @return The date the table was last modified.
+     *@return The date the table was last modified.
      */
     Optional<LocalDateTime> dateModified();
 }

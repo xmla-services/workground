@@ -19,7 +19,7 @@ public interface DiscoverKeywordsRestrictions {
     public static final String RESTRICTIONS_KEYWORD = "Keyword";
 
     /**
-     * @return The keyword string.
+     *@return The keyword string.
      */
     Optional<String> keyword();
 

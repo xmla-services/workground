@@ -28,51 +28,51 @@ public interface DiscoverDataSourcesRestrictions {
     public static final String RESTRICTIONS_AUTHENTICATION_MODE = "AuthenticationMode";
 
     /**
-     * @return The name of the data source.
+     *@return The name of the data source.
      */
     String dataSourceName();
 
     /**
-     * @return The description of the data source.
+     *@return The description of the data source.
      */
     Optional<String> dataSourceDescription();
 
     /**
-     * @return The unique path of the data source.
+     *@return The unique path of the data source.
      */
     Optional<String> url();
 
     /**
-     * @return A string that contains any additional information required to
-     * connect to the data source.
+     *@return A string that contains any additional information required to
+     *connect to the data source.
      */
     Optional<String> dataSourceInfo();
 
     /**
-     * @return The name of the provider for the data source.
+     *@return The name of the provider for the data source.
      */
     String providerName();
 
     /**
-     * @return This array specifies the types of data supported by the
-     * server. It can include one or more of the following types:
-     * MDP: multidimensional data provider.
-     * TDP: tabular data provider.
-     * DMP: data mining provider (implements the OLE for DB
-     * for Data Mining specification).
+     *@return This array specifies the types of data supported by the
+     *server. It can include one or more of the following types:
+     *MDP: multidimensional data provider.
+     *TDP: tabular data provider.
+     *DMP: data mining provider (implements the OLE for DB
+     *for Data Mining specification).
      */
     Optional<ProviderTypeEnum> providerType();
 
     /**
-     * @return A string that specifies what type of security mode the data
-     * source uses. Values can be one of the following:
-     * Unauthenticated: No user ID or password has to be
-     * sent.
-     * Authenticated: User ID and password MUST be included
-     * in the information required to connect to the data
-     * source.
-     * Integrated: The data source uses the underlying
-     * security to determine authorization.
+     *@return A string that specifies what type of security mode the data
+     *source uses. Values can be one of the following:
+     *Unauthenticated: No user ID or password has to be
+     *sent.
+     *Authenticated: User ID and password MUST be included
+     *in the information required to connect to the data
+     *source.
+     *Integrated: The data source uses the underlying
+     *security to determine authorization.
      */
     Optional<AuthenticationModeEnum> authenticationMode();
 }

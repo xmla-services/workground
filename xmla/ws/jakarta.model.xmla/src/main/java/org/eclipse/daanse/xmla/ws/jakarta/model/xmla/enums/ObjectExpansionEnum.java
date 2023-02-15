@@ -22,25 +22,25 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum ObjectExpansionEnum {
 
     /**
-     * Returns only the name/ID/timestamp/state requested for the requested objects and all descendant major objects recursively.
+     *Returns only the name/ID/timestamp/state requested for the requested objects and all descendant major objects recursively.
      */
     @XmlEnumValue("ReferenceOnly")
     ReferenceOnly,
 
     /**
-     *  Expands the requested object with no references to contained objects (includes expanded minor contained objects).
+     *Expands the requested object with no references to contained objects (includes expanded minor contained objects).
      */
     @XmlEnumValue("ObjectProperties")
     ObjectProperties,
 
     /**
-     * Same as ObjectProperties, but also returns the name, ID, and timestamp for contained major objects.
+     *Same as ObjectProperties, but also returns the name, ID, and timestamp for contained major objects.
      */
     @XmlEnumValue("ExpandObject")
     ExpandObject,
 
     /**
-     * Fully expands the requested object recursively to the bottom of every contained object.
+     *Fully expands the requested object recursively to the bottom of every contained object.
      */
     @XmlEnumValue("ExpandFull")
     ExpandFull;

@@ -29,43 +29,43 @@ public interface MdSchemaDimensionsRestrictions {
     String RESTRICTIONS_DIMENSION_VISIBILITY = "DIMENSION_VISIBILITY";
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> catalogName();
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     Optional<String> cubeName();
 
     /**
-     * The name of the dimension.
+     *The name of the dimension.
      */
     Optional<String> dimensionName();
 
     /**
-     * The unique name of the dimension.
+     *The unique name of the dimension.
      */
     Optional<String> dimensionUniqueName();
 
     /**
-     * @return A bitmask with one of these valid values:
-     * 0x01 - Cube
-     * 0x02 - Dimension
-     * The default restriction is a value of 1.
+     *@return A bitmask with one of these valid values:
+     *0x01 - Cube
+     *0x02 - Dimension
+     *The default restriction is a value of 1.
      */
     Optional<CubeSourceEnum> cubeSource();
 
     /**
      *A bitmask with one of these valid values:
-     * 0x01 - Visible
-     * 0x02 - Not Visible
-     * The default restriction is a value of 1.
+     *0x01 - Visible
+     *0x02 - Not Visible
+     *The default restriction is a value of 1.
      */
     Optional<VisibilityEnum> dimensionVisibility();
 }

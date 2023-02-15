@@ -19,7 +19,7 @@ public interface DiscoverEnumeratorsRestrictions {
     public static final String RESTRICTIONS_ENUM_NAME = "EnumName";
 
     /**
-     * @return The name of the enumerator that contains a set of values.
+     *@return The name of the enumerator that contains a set of values.
      */
     Optional<String> enumName();
 

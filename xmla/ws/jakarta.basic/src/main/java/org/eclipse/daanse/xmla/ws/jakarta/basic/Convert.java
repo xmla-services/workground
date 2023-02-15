@@ -14,7 +14,24 @@
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import jakarta.xml.bind.JAXBException;
-import org.eclipse.daanse.xmla.api.common.enums.*;
+import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
+import org.eclipse.daanse.xmla.api.common.enums.InterfaceNameEnum;
+import org.eclipse.daanse.xmla.api.common.enums.InvocationEnum;
+import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ObjectExpansionEnum;
+import org.eclipse.daanse.xmla.api.common.enums.OriginEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyOriginEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ProviderTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.TreeOpEnum;
+import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.common.properties.Content;
 import org.eclipse.daanse.xmla.api.common.properties.Format;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
@@ -166,7 +183,19 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.Discov
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverLiteralsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverPropertiesResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverXmlMetaDataResponseRowXml;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.*;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaActionsResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaCubesResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaDimensionsResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaFunctionsResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaHierarchiesResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaKpisResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaLevelsResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaMeasureGroupDimensionsResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaMeasureGroupsResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaMeasuresResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaMembersResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaPropertiesResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaSetsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xsd.Schema;
 
 import java.io.IOException;

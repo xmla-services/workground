@@ -22,19 +22,19 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum InvocationEnum {
 
     /**
-     * Indicates a regular action used during normal operations. This is the default value for this column.
+     *Indicates a regular action used during normal operations. This is the default value for this column.
      */
     @XmlEnumValue("1")
     NORMAL_OPERATION(1),
 
     /**
-     * Indicates that the action is performed when the cube is first opened.
+     *Indicates that the action is performed when the cube is first opened.
      */
     @XmlEnumValue("2")
     FIRST_OPENED_CUBE(2),
 
     /**
-     * Indicates that the action is performed as part of a batch
+     *Indicates that the action is performed as part of a batch
      */
     @XmlEnumValue("4")
     BATCH_OPERATION(4);

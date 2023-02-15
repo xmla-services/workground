@@ -27,32 +27,32 @@ public interface MdSchemaKpisRestrictions {
     String RESTRICTIONS_CUBE_SOURCE = "CUBE_SOURCE";
 
     /**
-     * @return The name of the database.
+     *@return The name of the database.
      */
     Optional<String> catalogName();
 
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     Optional<String> cubeName();
 
     /**
-     * The name of the set, as specified in the CREATE SET
-     * statement.
+     *The name of the set, as specified in the CREATE SET
+     *statement.
      */
     Optional<String> kpiName();
 
     /**
-     * A bitmask with one of the following valid values:
-     * 0x01 - Cube
-     * 0x02 - Dimension
-     * The default restriction is a value of 1.
+     *A bitmask with one of the following valid values:
+     *0x01 - Cube
+     *0x02 - Dimension
+     *The default restriction is a value of 1.
      */
     Optional<CubeSourceEnum> cubeSource();
 }

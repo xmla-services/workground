@@ -21,136 +21,136 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 /**
- * This schema rowset describes the structure of cubes within a database. Perspectives are also
- * returned in this schema.
+ *This schema rowset describes the structure of cubes within a database. Perspectives are also
+ *returned in this schema.
  */
 public interface MdSchemaCubesResponseRow {
 
     /**
-     * @return The catalog name.
+     *@return The catalog name.
      */
     String catalogName();
 
     /**
-     * @return The name of the schema.
+     *@return The name of the schema.
      */
     Optional<String> schemaName();
 
     /**
-     * @return The name of the cube.
+     *@return The name of the cube.
      */
     Optional<String> cubeName();
 
     /**
-     * @return The type of the cube.
-     * Valid values are:
-     * CUBE
-     * DIMENSION
+     *@return The type of the cube.
+     *Valid values are:
+     *CUBE
+     *DIMENSION
      */
     Optional<CubeTypeEnum> cubeType();
 
     /**
-     * @return The GUID of the cube.
+     *@return The GUID of the cube.
      */
     Optional<Integer> cubeGuid();
 
     /**
-     * @return TimeThe date and time the cube was
-     * created.
+     *@return TimeThe date and time the cube was
+     *created.
      */
     Optional<LocalDateTime> createdOn();
 
     /**
-     * @return The date and time that the cube schema
-     * was last updated.
+     *@return The date and time that the cube schema
+     *was last updated.
      */
     Optional<LocalDateTime> lastSchemaUpdate();
 
     /**
-     * @return The name of the user who last updated the
-     * cube’s schema.
+     *@return The name of the user who last updated the
+     *cube’s schema.
      */
     Optional<String> schemaUpdatedBy();
 
     /**
-     * @return TimeThe date and time that the cube was last
-     * processed.
+     *@return TimeThe date and time that the cube was last
+     *processed.
      */
     Optional<LocalDateTime> lastDataUpdate();
 
     /**
-     * @return The name of the user who last updated the
-     * data of the cube.
+     *@return The name of the user who last updated the
+     *data of the cube.
      */
     Optional<String> dataUpdateDBy();
 
     /**
-     * @return A description of the cube.
+     *@return A description of the cube.
      */
     Optional<String> description();
 
     /**
-     * @return When true, indicates that the cube has
-     * drillthrough enabled; otherwise,
-     * false.
+     *@return When true, indicates that the cube has
+     *drillthrough enabled; otherwise,
+     *false.
      */
     Optional<Boolean> isDrillThroughEnabled();
 
     /**
-     * @return When true, indicates that the cube can be
-     * used in a linked cube; otherwise false.
+     *@return When true, indicates that the cube can be
+     *used in a linked cube; otherwise false.
      */
     Optional<Boolean> isLinkable();
 
     /**
-     * @return When true, indicates that the cube is
-     * write-enabled; otherwise false.
+     *@return When true, indicates that the cube is
+     *write-enabled; otherwise false.
      */
     Optional<Boolean> isWriteEnabled();
 
     /**
-     * @return When true, indicates that SQL can be used
-     * on the cube; otherwise false.
+     *@return When true, indicates that SQL can be used
+     *on the cube; otherwise false.
      */
     Optional<Boolean> isSqlEnabled();
 
     /**
-     * @return The caption of the cube.
-     * BASE_CUBE_NAMExsd:stringYesThe name of the source cube if this cube is
-     * a perspective cube.
+     *@return The caption of the cube.
+     *BASE_CUBE_NAMExsd:stringYesThe name of the source cube if this cube is
+     *a perspective cube.
      */
     Optional<Boolean> cubeCaption();
 
     /**
-     * @return The name of the source cube if this cube is
-     * a perspective cube.
+     *@return The name of the source cube if this cube is
+     *a perspective cube.
      */
     Optional<String> baseCubeName();
 
     /**
-     * @return A bitmask with one of these valid values:
-     * 0x01-Cube
-     * 0x02-Dimension
+     *@return A bitmask with one of these valid values:
+     *0x01-Cube
+     *0x02-Dimension
      */
     Optional<CubeSourceEnum> cubeSource();
 
     /**
-     * @return A bitmask that describes query
-     * pattern client applications can utilize for
-     * higher performance. Valid values are:
+     *@return A bitmask that describes query
+     *pattern client applications can utilize for
+     *higher performance. Valid values are:
      *
-     * 0x00 – Use CrossJoin function to
-     * create symmetric sets on an axis. This
-     * is the default value for the 0th bit
-     * when Analysis Services is running in
-     * Traditional mode.
+     *0x00 – Use CrossJoin function to
+     *create symmetric sets on an axis. This
+     *is the default value for the 0th bit
+     *when Analysis Services is running in
+     *Traditional mode.
      *
-     * 0x01 – Use DrillDownMember to
-     * create a more restrictive, asymmetric
-     * axis. This is the default value for the
-     * 0th bit when a server that is running
-     * Analysis Services is running in
-     * VertiPaq mode.
+     *0x01 – Use DrillDownMember to
+     *create a more restrictive, asymmetric
+     *axis. This is the default value for the
+     *0th bit when a server that is running
+     *Analysis Services is running in
+     *VertiPaq mode.
      */
     Optional<PreferredQueryPatternsEnum> preferredQueryPatterns();
 

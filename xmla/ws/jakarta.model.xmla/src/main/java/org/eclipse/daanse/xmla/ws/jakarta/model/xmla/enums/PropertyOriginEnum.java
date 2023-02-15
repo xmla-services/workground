@@ -18,42 +18,42 @@ import jakarta.xml.bind.annotation.XmlEnumValue;
 import jakarta.xml.bind.annotation.XmlType;
 
 /**
- * A bitmask that specifies the
- * type of hierarchy to which the
- * property applies, as follows:
+ *A bitmask that specifies the
+ *type of hierarchy to which the
+ *property applies, as follows:
  */
 @XmlType(name = "PropertyOrigin")
 @XmlEnum
 public enum PropertyOriginEnum {
 
     /**
-     *  Indicates the property
-     *  is on a user defined
-     *  hierarchy.
+     * Indicates the property
+     * is on a user defined
+     * hierarchy.
      */
     @XmlEnumValue("1")
     user_defined(1),
 
     /**
-     *  Indicates the property
-     *  is on an attribute
-     *  hierarchy.
+     * Indicates the property
+     * is on an attribute
+     * hierarchy.
      */
     @XmlEnumValue("2")
     attribute_hierarchy(2),
 
     /**
-     * Indicates the property
-     * is on a key attribute
-     * hierarchy.
+     *Indicates the property
+     *is on a key attribute
+     *hierarchy.
      */
     @XmlEnumValue("4")
     key_attribute_hierarchy(4),
 
     /**
-     * Indicates the property
-     * is on an attribute hierarchy
-     * that is not enabled.
+     *Indicates the property
+     *is on an attribute hierarchy
+     *that is not enabled.
      */
     @XmlEnumValue("8")
     attribute_hierarchy_not_enabled(8);

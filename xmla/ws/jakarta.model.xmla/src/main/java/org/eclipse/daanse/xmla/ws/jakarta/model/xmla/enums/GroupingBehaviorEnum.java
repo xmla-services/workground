@@ -22,13 +22,13 @@ import jakarta.xml.bind.annotation.XmlType;
 public enum GroupingBehaviorEnum {
 
     /**
-     * Client applications are encouraged to group by each member of the hierarchy.
+     *Client applications are encouraged to group by each member of the hierarchy.
      */
     @XmlEnumValue("1")
     ENCOURAGED(1),
 
     /**
-     * Client applications are discouraged from grouping by each member of the hierarchy.
+     *Client applications are discouraged from grouping by each member of the hierarchy.
      */
     @XmlEnumValue("2")
     DISCOURAGED(2);
