@@ -46,7 +46,7 @@ public interface DiscoverEnumeratorsResponseRow {
      * @return This column is optional.
      * A localizable description of the element.
      */
-    Optional<Boolean> elementDescription();
+    Optional<String> elementDescription();
 
     /**
      * @return The value of the element. This is always a string representing a

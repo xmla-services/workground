@@ -42,7 +42,10 @@ public class DiscoverEnumeratorsResponseRowXml extends Row implements Serializab
     private String elementName;
 
     @XmlElement(name = "ElementDescription", required = true)
-    private Boolean elementDescription;
+    private String elementDescription;
+
+    @XmlElement(name = "ElementValue", required = true)
+    private String elementValue;
 
     public String getEnumName() {
         return enumName;
@@ -76,11 +79,11 @@ public class DiscoverEnumeratorsResponseRowXml extends Row implements Serializab
         this.elementName = elementName;
     }
 
-    public Boolean getElementDescription() {
+    public String getElementDescription() {
         return elementDescription;
     }
 
-    public void setElementDescription(Boolean elementDescription) {
+    public void setElementDescription(String elementDescription) {
         this.elementDescription = elementDescription;
     }
 
@@ -91,8 +94,5 @@ public class DiscoverEnumeratorsResponseRowXml extends Row implements Serializab
     public void setElementValue(String elementValue) {
         this.elementValue = elementValue;
     }
-
-    @XmlElement(name = "elementValue", required = true)
-    private String elementValue;
 
 }
