@@ -13,8 +13,25 @@
 */
 package org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs;
 
-import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponse;
+import org.eclipse.daanse.xmla.api.common.enums.ClientCacheRefreshPolicyEnum;
+import org.eclipse.daanse.xmla.api.common.enums.TypeEnum;
+import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
 
-public record DbSchemaCatalogsResponseRowR()
-        implements DbSchemaCatalogsResponse {
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+public record DbSchemaCatalogsResponseRowR(Optional<String> catalogName,
+                                           Optional<String> description,
+                                           Optional<String> roles,
+                                           Optional<LocalDateTime> dateModified,
+                                           Optional<Integer> compatibilityLevel,
+                                           Optional<TypeEnum> type,
+                                           Optional<Integer> version,
+                                           Optional<String> databaseId,
+                                           Optional<LocalDateTime> dateQueried,
+                                           Optional<Boolean> currentlyUsed,
+                                           Optional<Double> popularity,
+                                           Optional<Double> weightedPopularity,
+                                           Optional<ClientCacheRefreshPolicyEnum> clientCacheRefreshPolicy)
+    implements DbSchemaCatalogsResponseRow {
 }

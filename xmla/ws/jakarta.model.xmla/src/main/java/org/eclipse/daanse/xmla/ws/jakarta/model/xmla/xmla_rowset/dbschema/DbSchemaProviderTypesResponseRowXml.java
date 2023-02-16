@@ -333,7 +333,7 @@ public class DbSchemaProviderTypesResponseRowXml extends Row implements Serializ
      * returned if a localized name is not supported by
      * the server.
      */
-    @XmlElement(name = "DataSourceName", required = false)
+    @XmlElement(name = "LOCAL_TYPE_NAME", required = false)
     private String localTypeName;
 
     /**

@@ -35,7 +35,8 @@ import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
 import org.eclipse.daanse.xmla.api.common.properties.Content;
 import org.eclipse.daanse.xmla.api.common.properties.Format;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
-import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponse;
+import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
+import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRestrictions;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRestrictions;
@@ -116,6 +117,7 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRo
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRestrictions;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRequestR;
+import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes.DbSchemaProviderTypesRequestR;
@@ -176,6 +178,7 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.MeasureGroupDim
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.ParameterInfoXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Rowset;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.dbschema.DbSchemaCatalogsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.dbschema.DbSchemaColumnsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.dbschema.DbSchemaProviderTypesResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.dbschema.DbSchemaSchemataResponseRowXml;
@@ -187,6 +190,7 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.Discov
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverKeywordsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverLiteralsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverPropertiesResponseRowXml;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverSchemaRowsetsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.discover.DiscoverXmlMetaDataResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaActionsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaCubesResponseRowXml;
@@ -315,18 +319,97 @@ public class Convert {
     }
 
     public static DbSchemaCatalogsRequest fromDiscoverDbSchemaCatalogs(Discover requestWs) {
-        return new DbSchemaCatalogsRequestR();
+        PropertiesR properties = discoverProperties(requestWs);
+        DbSchemaCatalogsRestrictionsR restrictions = discoverDbSchemaCatalogsRestrictions(requestWs);
+
+        return new DbSchemaCatalogsRequestR(properties, restrictions);
     }
 
-    public static DiscoverResponse toDiscoverDbSchemaCatalogs(DbSchemaCatalogsResponse responseApi) {
+    private static DbSchemaCatalogsRestrictionsR discoverDbSchemaCatalogsRestrictions(Discover requestWs) {
+        Map<String, String> map = restrictionsMap(requestWs);
+
+        String catalogName = map.get(DbSchemaCatalogsRestrictions.RESTRICTIONS_CATALOG_NAME);
+        return new DbSchemaCatalogsRestrictionsR(Optional.ofNullable(catalogName));
+    }
+
+
+
+    public static DiscoverResponse toDiscoverDbSchemaCatalogs(List<DbSchemaCatalogsResponseRow> responseApi)
+        throws JAXBException, IOException {
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDbSchemaCatalogsResponseRow)
+            .toList();
+
         DiscoverResponse responseWs = new DiscoverResponse();
+        responseWs.setReturn(getReturn(rows, DbSchemaCatalogsResponseRowXml.class));
+
         return responseWs;
     }
 
-    public static DiscoverResponse toDiscoverSchemaRowsets(List<DiscoverSchemaRowsetsResponseRow> responseApi) {
+    private static Row convertDbSchemaCatalogsResponseRow(DbSchemaCatalogsResponseRow apiRow) {
+        DbSchemaCatalogsResponseRowXml row = new DbSchemaCatalogsResponseRowXml();
+
+        // Optional
+        apiRow.catalogName()
+            .ifPresent(row::setCatalogName);
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.roles()
+            .ifPresent(row::setRoles);
+        apiRow.dateModified()
+            .ifPresent(row::setDateModified);
+        apiRow.compatibilityLevel()
+            .ifPresent(row::setCompatibilityLevel);
+        apiRow.type()
+            .ifPresent(i -> row.setType(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.TypeEnum.fromValue(i.getValue())));
+        apiRow.version()
+            .ifPresent(row::setVersion);
+        apiRow.databaseId()
+            .ifPresent(row::setDatabaseId);
+        apiRow.dateQueried()
+            .ifPresent(row::setDateQueried);
+        apiRow.currentlyUsed()
+            .ifPresent(row::setCurrentlyUsed);
+        apiRow.popularity()
+            .ifPresent(row::setPopularity);
+        apiRow.weightedPopularity()
+            .ifPresent(row::setWeightedPopularity);
+        apiRow.clientCacheRefreshPolicy()
+            .ifPresent(i -> row.setClientCacheRefreshPolicy(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ClientCacheRefreshPolicyEnum.fromValue(i.getValue())));
+
+        return row;
+    }
+
+    public static DiscoverResponse toDiscoverSchemaRowsets(List<DiscoverSchemaRowsetsResponseRow> responseApi) throws JAXBException, IOException {
+        List<Row> rows = responseApi.stream()
+            .map(Convert::convertDiscoverSchemaRowsetsResponseRow)
+            .toList();
 
         DiscoverResponse responseWs = new DiscoverResponse();
+        responseWs.setReturn(getReturn(rows, DiscoverSchemaRowsetsResponseRowXml.class));
+
         return responseWs;
+    }
+
+    private static Row convertDiscoverSchemaRowsetsResponseRow(DiscoverSchemaRowsetsResponseRow apiRow) {
+        DiscoverSchemaRowsetsResponseRowXml row = new DiscoverSchemaRowsetsResponseRowXml();
+
+        // Mandatory
+        row.setSchemaName(apiRow.schemaName());
+
+        // Optional
+        apiRow.schemaGuid()
+            .ifPresent(row::setSchemaGuid);
+        apiRow.restrictions()
+            .ifPresent(row::setRestrictions);
+        apiRow.description()
+            .ifPresent(row::setDescription);
+        apiRow.restrictionsMask()
+            .ifPresent(row::setRestrictionsMask);
+
+        return row;
     }
 
     private static DiscoverSchemaRowsetsRestrictionsR discoverSchemaRowsetsRestrictions(Discover requestWs) {
@@ -810,8 +893,8 @@ public class Convert {
             .ifPresent(row::setDllName);
         apiRow.helpFile()
             .ifPresent(row::setHelpFile);
-        apiRow.helpContent()
-            .ifPresent(row::setHelpContent);
+        apiRow.helpContext()
+            .ifPresent(row::setHelpContext);
         apiRow.object()
             .ifPresent(row::setObject);
         apiRow.caption()

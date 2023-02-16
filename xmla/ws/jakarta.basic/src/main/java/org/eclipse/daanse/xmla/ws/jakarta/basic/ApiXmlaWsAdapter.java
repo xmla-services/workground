@@ -18,7 +18,7 @@ import java.util.List;
 
 import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
-import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponse;
+import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRequest;
@@ -103,7 +103,6 @@ public class ApiXmlaWsAdapter implements WsAdapter {
     private static final String DISCOVER_SCHEMA_ROWSETS = "DISCOVER_SCHEMA_ROWSETS";
     private static final String DISCOVER_PROPERTIES = "DISCOVER_PROPERTIES";
     private static final String DBSCHEMA_CATALOGS = "DBSCHEMA_CATALOGS";
-
     private static final String DISCOVER_DATASOURCES = "DISCOVER_DATASOURCES";
     private static final String DISCOVER_XML_METADATA = "DISCOVER_XML_METADATA";
     private static final String DBSCHEMA_COLUMNS = "DBSCHEMA_COLUMNS";
@@ -231,9 +230,9 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         return null;
     }
 
-    private DiscoverResponse handleDbSchemaCatalogs(Discover requestWs) {
+    private DiscoverResponse handleDbSchemaCatalogs(Discover requestWs) throws JAXBException, IOException {
         DbSchemaCatalogsRequest requestApi = Convert.fromDiscoverDbSchemaCatalogs(requestWs);
-        DbSchemaCatalogsResponse responseApi = xmlaService.discover().dbSchemaCatalogs(requestApi);
+        List<DbSchemaCatalogsResponseRow> responseApi = xmlaService.discover().dbSchemaCatalogs(requestApi);
         DiscoverResponse responseWs = Convert.toDiscoverDbSchemaCatalogs(responseApi);
 
         return responseWs;
@@ -248,7 +247,7 @@ public class ApiXmlaWsAdapter implements WsAdapter {
         return responseWs;
     }
 
-    private DiscoverResponse handleDiscoverSchemaRowsets(Discover requestWs) {
+    private DiscoverResponse handleDiscoverSchemaRowsets(Discover requestWs) throws JAXBException, IOException {
 
         DiscoverSchemaRowsetsRequest requestApi = Convert.fromDiscoverSchemaRowsets(requestWs);
         List<DiscoverSchemaRowsetsResponseRow> responseApi = xmlaService.discover().discoverSchemaRowsets(requestApi);

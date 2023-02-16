@@ -14,7 +14,8 @@
 package org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs;
 
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
+import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 
-public record DbSchemaCatalogsRequestR() implements DbSchemaCatalogsRequest {
-
+public record DbSchemaCatalogsRequestR(PropertiesR properties,
+                                       DbSchemaCatalogsRestrictionsR restrictions) implements DbSchemaCatalogsRequest {
 }

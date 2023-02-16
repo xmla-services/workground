@@ -17,19 +17,19 @@ import org.eclipse.daanse.xmla.api.discover.dbschema.tablesinfo.DbSchemaTablesIn
 
 import java.util.Optional;
 
-public record DbSchemaTablesInfoResponseRowR(    Optional<String> catalogName,
-                                                 Optional<String> schemaName,
-                                                 String tableName,
-                                                 String tableType,
-                                                 Optional<Integer> tableGuid,
-                                                 Optional<Boolean> bookmarks,
-                                                 Optional<Integer> bookmarkType,
-                                                 Optional<Integer> bookmarkDataType,
-                                                 Optional<Integer> bookmarkMaximumLength,
-                                                 Optional<Integer> bookmarkInformation,
-                                                 Optional<Long> tableVersion,
-                                                 Optional<Long> cardinality,
-                                                 Optional<String> description,
-                                                 Optional<Integer> tablePropId)
+public record DbSchemaTablesInfoResponseRowR(Optional<String> catalogName,
+                                             Optional<String> schemaName,
+                                             String tableName,
+                                             String tableType,
+                                             Optional<Integer> tableGuid,
+                                             Optional<Boolean> bookmarks,
+                                             Optional<Integer> bookmarkType,
+                                             Optional<Integer> bookmarkDataType,
+                                             Optional<Integer> bookmarkMaximumLength,
+                                             Optional<Integer> bookmarkInformation,
+                                             Optional<Long> tableVersion,
+                                             Optional<Long> cardinality,
+                                             Optional<String> description,
+                                             Optional<Integer> tablePropId)
     implements DbSchemaTablesInfoResponseRow {
 }
