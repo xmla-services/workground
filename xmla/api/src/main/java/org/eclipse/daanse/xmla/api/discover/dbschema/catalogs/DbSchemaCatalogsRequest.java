@@ -13,6 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.discover.dbschema.catalogs;
 
-public interface DbSchemaCatalogsRequest {
+import org.eclipse.daanse.xmla.api.discover.Properties;
 
+public interface DbSchemaCatalogsRequest {
+    Properties properties();
+
+    DbSchemaCatalogsRestrictions restrictions();
 }

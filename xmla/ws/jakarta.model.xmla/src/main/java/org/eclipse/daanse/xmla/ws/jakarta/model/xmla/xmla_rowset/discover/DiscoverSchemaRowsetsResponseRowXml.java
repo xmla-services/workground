@@ -47,4 +47,44 @@ public class DiscoverSchemaRowsetsResponseRowXml extends Row implements Serializ
 
     @XmlElement(name = "RestrictionsMask")
     private Long restrictionsMask;
+
+    public String getSchemaName() {
+        return schemaName;
+    }
+
+    public void setSchemaName(String schemaName) {
+        this.schemaName = schemaName;
+    }
+
+    public String getSchemaGuid() {
+        return schemaGuid;
+    }
+
+    public void setSchemaGuid(String schemaGuid) {
+        this.schemaGuid = schemaGuid;
+    }
+
+    public String getRestrictions() {
+        return restrictions;
+    }
+
+    public void setRestrictions(String restrictions) {
+        this.restrictions = restrictions;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Long getRestrictionsMask() {
+        return restrictionsMask;
+    }
+
+    public void setRestrictionsMask(Long restrictionsMask) {
+        this.restrictionsMask = restrictionsMask;
+    }
 }

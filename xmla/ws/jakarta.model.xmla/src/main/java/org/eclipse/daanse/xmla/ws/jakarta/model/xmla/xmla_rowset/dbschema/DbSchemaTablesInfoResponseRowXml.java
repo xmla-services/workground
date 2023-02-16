@@ -35,7 +35,7 @@ public class DbSchemaTablesInfoResponseRowXml extends Row implements Serializabl
     /**
      * @return Catalog name
      */
-    @XmlElement(name = "ABLE_CATALOG", required = false)
+    @XmlElement(name = "TABLE_CATALOG", required = false)
     private String catalogName;
 
     /**

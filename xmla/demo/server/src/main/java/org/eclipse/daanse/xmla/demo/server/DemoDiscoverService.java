@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
-import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponse;
+import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsRequest;
 import org.eclipse.daanse.xmla.api.discover.dbschema.columns.DbSchemaColumnsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.dbschema.providertypes.DbSchemaProviderTypesRequest;
@@ -61,7 +61,7 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRo
 public class DemoDiscoverService implements DiscoverService {
 
     @Override
-    public DbSchemaCatalogsResponse dbSchemaCatalogs(DbSchemaCatalogsRequest dbSchemaCatalogsRequest) {
+    public List<DbSchemaCatalogsResponseRow> dbSchemaCatalogs(DbSchemaCatalogsRequest dbSchemaCatalogsRequest) {
         // TODO Auto-generated method stub
         return null;
     }

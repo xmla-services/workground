@@ -35,19 +35,19 @@ public class DbSchemaSchemataResponseRowXml extends Row implements Serializable 
     /**
      * @return Catalog name
      */
-    @XmlElement(name = "CATALOG_NAME", required = false)
+    @XmlElement(name = "CATALOG_NAME", required = true)
     private String catalogName;
 
     /**
      * Schema name
      */
-    @XmlElement(name = "SCHEMA_NAME", required = false)
+    @XmlElement(name = "SCHEMA_NAME", required = true)
     private String schemaName;
 
     /**
      * @return Schema owner
      */
-    @XmlElement(name = "SCHEMA_OWNER", required = false)
+    @XmlElement(name = "SCHEMA_OWNER", required = true)
     private String schemaOwner;
 
     public String getCatalogName() {

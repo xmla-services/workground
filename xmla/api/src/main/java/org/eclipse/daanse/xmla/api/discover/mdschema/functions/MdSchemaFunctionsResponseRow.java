@@ -89,7 +89,7 @@ public interface MdSchemaFunctionsResponseRow {
      * @return Unused
      */
     @Deprecated
-    Optional<String> helpContent();
+    Optional<String> helpContext();
 
     /**
      * @return The type of object on which this function can be

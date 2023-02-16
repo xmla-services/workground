@@ -109,7 +109,7 @@ public class MdSchemaFunctionsResponseRowXml extends Row implements Serializable
      */
     @XmlElement(name = "HELP_CONTEXT", required = false)
     @Deprecated
-    private String helpContent;
+    private String helpContext;
 
     /**
      * The type of object on which this function can be
@@ -217,12 +217,12 @@ public class MdSchemaFunctionsResponseRowXml extends Row implements Serializable
         this.helpFile = helpFile;
     }
 
-    public String getHelpContent() {
-        return helpContent;
+    public String getHelpContext() {
+        return helpContext;
     }
 
-    public void setHelpContent(String helpContent) {
-        this.helpContent = helpContent;
+    public void setHelpContext(String helpContext) {
+        this.helpContext = helpContext;
     }
 
     public String getObject() {
