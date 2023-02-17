@@ -116,10 +116,9 @@ public interface MdSchemaCubesResponseRow {
 
     /**
      * @return The caption of the cube.
-     * BASE_CUBE_NAMExsd:stringYesThe name of the source cube if this cube is
-     * a perspective cube.
+     * 
      */
-    Optional<Boolean> cubeCaption();
+    Optional<String> cubeCaption();
 
     /**
      * @return The name of the source cube if this cube is

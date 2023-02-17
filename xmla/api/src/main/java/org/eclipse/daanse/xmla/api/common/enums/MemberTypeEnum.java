@@ -54,6 +54,9 @@ public enum MemberTypeEnum {
     }
 
     public static MemberTypeEnum fromValue(String v) {
+        if (v == null) {
+            return null;
+        }
         int vi = Integer.valueOf(v);
         for (MemberTypeEnum c : MemberTypeEnum.values()) {
             if (c.value == vi) {

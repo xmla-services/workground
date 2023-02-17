@@ -671,6 +671,10 @@ public class Convert {
             .ifPresent(row::setActionCaption);
         apiRow.description()
             .ifPresent(row::setDescription);
+        apiRow.content()
+            .ifPresent(row::setContent);
+        apiRow.application()
+            .ifPresent(row::setApplication);
         apiRow.invocation()
             .ifPresent(i -> row.setInvocation(
                 org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.InvocationEnum.fromValue(i.getValue())));
@@ -712,7 +716,7 @@ public class Convert {
         MdSchemaCubesResponseRowXml row = new MdSchemaCubesResponseRowXml();
 
         // Mandatory
-        row.setCubeName(apiRow.catalogName());
+        row.setCatalogName(apiRow.catalogName());
 
         // Optional
         apiRow.schemaName()
@@ -1010,10 +1014,11 @@ public class Convert {
             .ifPresent(row::setHierarchyOrdinal);
         apiRow.dimensionIsShared()
             .ifPresent(row::setDimensionIsShared);
-        apiRow.dimensionIsVisible()
-            .ifPresent(row::setDimensionIsVisible);
-        apiRow.hierarchyOrdinal()
-            .ifPresent(row::setHierarchyOrdinal);
+        apiRow.hierarchyIsVisible()
+            .ifPresent(row::setHierarchyIsVisible);
+        apiRow.hierarchyOrigin()
+            .ifPresent(i -> row.setHierarchyOrigin(
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.HierarchyOriginEnum.fromValue(i.getValue())));
         apiRow.hierarchyDisplayFolder()
             .ifPresent(row::setHierarchyDisplayFolder);
         apiRow.instanceSelection()
@@ -1229,7 +1234,7 @@ public class Convert {
             .ifPresent(row::setColumnDefault);
         apiRow.columnFlags()
             .ifPresent(i -> row.setColumnFlags(
-                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ColumnFlagsEnum.fromValue(i.name())));
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ColumnFlagsEnum.fromValue(i.getValue())));
         apiRow.isNullable()
             .ifPresent(row::setNullable);
         apiRow.dataType()
@@ -1264,6 +1269,8 @@ public class Convert {
             .ifPresent(row::setDomainSchema);
         apiRow.domainName()
             .ifPresent(row::setDomainName);
+        apiRow.description()
+            .ifPresent(row::setDescription);
         apiRow.columnOlapType()
             .ifPresent(i -> row.setColumnOlapType(
                 org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ColumnOlapTypeEnum.fromValue(i.name())));
@@ -1313,6 +1320,8 @@ public class Convert {
             .ifPresent(row::setColumnSize);
         apiRow.literalPrefix()
             .ifPresent(row::setLiteralPrefix);
+        apiRow.literalSuffix()
+        .ifPresent(row::setLiteralSuffix);
         apiRow.createParams()
             .ifPresent(row::setCreateParams);
         apiRow.isNullable()
@@ -1564,9 +1573,8 @@ public class Convert {
         if (apiRow.dimensionPath().isPresent()) {
             row.setDimensionPath(apiRow.dimensionPath().get().stream().map(i -> {
                 MeasureGroupDimensionXml result  = new MeasureGroupDimensionXml();
-                result.setMeasureGroupDimension(i.getMeasureGroupDimension());
+                result.setMeasureGroupDimension(i.measureGroupDimension());
                 return result;
-                //TODO
             }).collect(Collectors.toList()));
         }
 
@@ -1658,7 +1666,8 @@ public class Convert {
             .ifPresent(row::setMeasureUnqualifiedCaption);
         apiRow.measureGroupName()
             .ifPresent(row::setMeasureGroupName);
-
+        apiRow.defaultFormatString()
+            .ifPresent(row::setDefaultFormatString);
         return row;
     }
 
@@ -1842,11 +1851,15 @@ public class Convert {
                 org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.PropertyTypeEnum.fromValue(i.getValue())));
         apiRow.propertyName()
             .ifPresent(row::setPropertyName);
+        apiRow.propertyCaption()
+            .ifPresent(row::setPropertyCaption);
         apiRow.dataType()
             .ifPresent(i -> row.setDataType(
                 org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.LevelDbTypeEnum.fromValue(i.getValue())));
         apiRow.characterMaximumLength()
             .ifPresent(row::setCharacterMaximumLength);
+        apiRow.characterOctetLength()
+        .ifPresent(row::setCharacterOctetLength);
         apiRow.numericPrecision()
             .ifPresent(row::setNumericPrecision);
         apiRow.numericScale()

@@ -253,6 +253,17 @@ public interface DbSchemaColumnsResponseRow {
     Optional<String> domainName();
 
     /**
+     * @return The human-readable description of the
+     * column. For example, the description for
+     * a column that is named Name in the
+     * Employee table might be "Employee
+     * name." NULL if this column is not
+     * supported by the server, or if there is no
+     * description associated with the column.
+     */
+    Optional<String> description();
+
+    /**
      * @return The OLAP type of the object:
      * MEASURE indicates that the object is a
      * measure.

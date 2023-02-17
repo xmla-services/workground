@@ -61,13 +61,9 @@ public enum HierarchyOriginEnum {
         return value;
     }
 
-    public static HierarchyOriginEnum fromValue(String v) {
-        if (v == null) {
-            return DEFAULT;
-        }
-        int vi = Integer.decode(v);
+    public static HierarchyOriginEnum fromValue(int v) {
         for (HierarchyOriginEnum c : HierarchyOriginEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }

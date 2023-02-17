@@ -46,6 +46,7 @@ public record DbSchemaColumnsResponseRowR(Optional<String> tableCatalog,
                                           Optional<String> domainCatalog,
                                           Optional<String> domainSchema,
                                           Optional<String> domainName,
+                                          Optional<String> description,
                                           Optional<ColumnOlapTypeEnum> columnOlapType)
     implements DbSchemaColumnsResponseRow {
 

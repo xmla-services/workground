@@ -13,8 +13,7 @@
  */
 package org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroups;
 
-import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
-import org.eclipse.daanse.xmla.api.discover.mdschema.kpis.MdSchemaKpisResponseRow;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRow;
 
 import java.util.Optional;
 
@@ -22,20 +21,8 @@ public record MdSchemaMeasureGroupsResponseRowR(Optional<String> catalogName,
                                                 Optional<String> schemaName,
                                                 Optional<String> cubeName,
                                                 Optional<String> measureGroupName,
-                                                Optional<String> kpiName,
-                                                Optional<String> kpiCaption,
-                                                Optional<String> kpiDescription,
-                                                Optional<String> kpiDisplayFolder,
-                                                Optional<String> kpiValue,
-                                                Optional<String> kpiGoal,
-                                                Optional<String> kpiStatus,
-                                                Optional<String> kpiTrend,
-                                                Optional<String> kpiStatusGraphic,
-                                                Optional<String> kpiTrendGraphic,
-                                                Optional<String> kpiWight,
-                                                Optional<String> kpiCurrentTimeMember,
-                                                Optional<String> kpiParentKpiName,
-                                                Optional<String> annotation,
-                                                Optional<ScopeEnum> scope)
-    implements MdSchemaKpisResponseRow {
+                                                Optional<String> description,
+                                                Optional<Boolean> isWriteEnabled,
+                                                Optional<String> measureGroupCaption)
+    implements MdSchemaMeasureGroupsResponseRow {
 }

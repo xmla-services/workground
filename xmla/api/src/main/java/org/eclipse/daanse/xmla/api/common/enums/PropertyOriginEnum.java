@@ -59,6 +59,9 @@ public enum PropertyOriginEnum {
     }
 
     public static PropertyOriginEnum fromValue(String v) {
+        if (v == null) {
+            return null;
+        }
         int vi = Integer.valueOf(v);
         for (PropertyOriginEnum c : PropertyOriginEnum.values()) {
             if (c.value == vi) {

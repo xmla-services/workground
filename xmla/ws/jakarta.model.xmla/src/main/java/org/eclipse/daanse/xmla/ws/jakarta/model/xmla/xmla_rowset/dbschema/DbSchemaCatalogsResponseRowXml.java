@@ -18,13 +18,14 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.adapters.LocalDateTimeAdapter;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.ClientCacheRefreshPolicyEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.TypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "DbSchemaCatalogsResponseRowXml")
@@ -55,6 +56,7 @@ public class DbSchemaCatalogsResponseRowXml  extends Row implements Serializable
      * The date that the catalog was last modified.
      */
     @XmlElement(name = "DATE_MODIFIED", required = false)
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     LocalDateTime dateModified;
 
     /**
@@ -97,6 +99,7 @@ public class DbSchemaCatalogsResponseRowXml  extends Row implements Serializable
      */
     @Deprecated
     @XmlElement(name = "DATE_QUERIED", required = false)
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     LocalDateTime dateQueried;
 
     /**

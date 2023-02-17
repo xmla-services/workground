@@ -30,7 +30,7 @@ public record MdSchemaActionsResponseRowR(Optional<String> catalogName,
                                           Optional<String> actionCaption,
                                           Optional<String> description,
                                           Optional<String> content,
-                                          Optional<String> action,
+                                          Optional<String> application,
                                           Optional<InvocationEnum> invocation)
     implements MdSchemaActionsResponseRow {
 

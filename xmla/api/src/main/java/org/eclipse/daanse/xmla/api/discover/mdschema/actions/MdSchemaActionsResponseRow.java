@@ -100,7 +100,7 @@ public interface MdSchemaActionsResponseRow {
     /**
      * @return The name of the application that is to be used to run the action.
      */
-    Optional<String> action();
+    Optional<String> application();
 
     /**
      * @return Information about how to invoke the action:

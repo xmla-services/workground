@@ -84,6 +84,12 @@ public interface MdSchemaPropertiesResponseRow {
     Optional<String> propertyName();
 
     /**
+     * @return A label or caption associated
+     * with the property.
+     */
+    Optional<String> propertyCaption();
+
+    /**
      * @return This enumeration is the same
      * as LEVEL_DBTYPE for
      * MDSCHEMA_LEVELS.

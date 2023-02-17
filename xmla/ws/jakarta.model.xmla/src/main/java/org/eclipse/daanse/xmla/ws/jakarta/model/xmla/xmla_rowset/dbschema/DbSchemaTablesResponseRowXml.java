@@ -18,6 +18,8 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.adapters.LocalDateTimeAdapter;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.Row;
 
 import java.io.Serializable;
@@ -82,12 +84,14 @@ public class DbSchemaTablesResponseRowXml extends Row implements Serializable {
      * The date the table was created.
      */
     @XmlElement(name = "DATE_CREATED", required = false)
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime dateCreated;
 
     /**
      * The date the table was last modified.
      */
     @XmlElement(name = "DATE_MODIFIED", required = false)
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime dateModified;
 
     public String getTableCatalog() {

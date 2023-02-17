@@ -13,19 +13,6 @@
  */
 package org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions;
 
-public class MeasureGroupDimension {
-
-    public MeasureGroupDimension(String measureGroupDimension) {
-        this.measureGroupDimension = measureGroupDimension;
-    }
-
-    private String measureGroupDimension;
-
-    public String getMeasureGroupDimension() {
-        return measureGroupDimension;
-    }
-
-    public void setMeasureGroupDimension(String measureGroupDimension) {
-        this.measureGroupDimension = measureGroupDimension;
-    }
+public interface MeasureGroupDimension {
+    String measureGroupDimension();
 }

@@ -120,13 +120,9 @@ public enum ColumnFlagsEnum {
         return value;
     }
 
-    public static ColumnFlagsEnum fromValue(String v) {
-        if (v == null) {
-            return null;
-        }
-        int vi = Integer.decode(v);
+    public static ColumnFlagsEnum fromValue(int v) {
         for (ColumnFlagsEnum c : ColumnFlagsEnum.values()) {
-            if (c.value == vi) {
+            if (c.value == v) {
                 return c;
             }
         }
