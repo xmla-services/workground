@@ -232,6 +232,9 @@ public enum LevelDbTypeEnum {
     }
 
     public static LevelDbTypeEnum fromValue(String v) {
+        if (v == null) {
+            return null;
+        }
         int vi = Integer.valueOf(v);
         for (LevelDbTypeEnum c : LevelDbTypeEnum.values()) {
             if (c.value == vi) {

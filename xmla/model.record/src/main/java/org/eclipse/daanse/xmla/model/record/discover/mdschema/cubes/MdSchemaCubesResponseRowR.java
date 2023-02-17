@@ -36,7 +36,7 @@ public record MdSchemaCubesResponseRowR(String catalogName,
                                         Optional<Boolean> isLinkable,
                                         Optional<Boolean> isWriteEnabled,
                                         Optional<Boolean> isSqlEnabled,
-                                        Optional<Boolean> cubeCaption,
+                                        Optional<String> cubeCaption,
                                         Optional<String> baseCubeName,
                                         Optional<CubeSourceEnum> cubeSource,
                                         Optional<PreferredQueryPatternsEnum> preferredQueryPatterns)

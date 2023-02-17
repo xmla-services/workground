@@ -56,6 +56,9 @@ public enum PropertyTypeEnum {
     }
 
     public static PropertyTypeEnum fromValue(String v) {
+        if (v == null) {
+            return null;
+        }
         int vi = Integer.valueOf(v);
         for (PropertyTypeEnum c : PropertyTypeEnum.values()) {
             if (c.value == vi) {

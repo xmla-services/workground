@@ -37,6 +37,9 @@ public enum ScopeEnum {
     }
 
     public static ScopeEnum fromValue(String v) {
+        if (v == null) {
+            return null;
+        }
         int vi = Integer.valueOf(v);
         for (ScopeEnum c : ScopeEnum.values()) {
             if (c.value == vi) {

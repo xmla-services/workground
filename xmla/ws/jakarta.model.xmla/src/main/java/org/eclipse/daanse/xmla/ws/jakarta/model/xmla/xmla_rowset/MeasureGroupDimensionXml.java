@@ -16,11 +16,13 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset;
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.XmlValue;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MeasureGroupDimension")
 public class MeasureGroupDimensionXml {
 
+    @XmlValue
     private String measureGroupDimension;
 
     public String getMeasureGroupDimension() {

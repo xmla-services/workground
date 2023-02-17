@@ -22,6 +22,8 @@ import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CoordinateTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.api.common.enums.CubeTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.CustomRollupSettingEnum;
+import org.eclipse.daanse.xmla.api.common.enums.DimensionCardinalityEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DimensionUniqueSettingEnum;
 import org.eclipse.daanse.xmla.api.common.enums.DirectQueryPushableEnum;
@@ -31,16 +33,30 @@ import org.eclipse.daanse.xmla.api.common.enums.InstanceSelectionEnum;
 import org.eclipse.daanse.xmla.api.common.enums.InterfaceNameEnum;
 import org.eclipse.daanse.xmla.api.common.enums.InvocationEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LevelDbTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.LevelOriginEnum;
+import org.eclipse.daanse.xmla.api.common.enums.LevelTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.LevelUniqueSettingsEnum;
 import org.eclipse.daanse.xmla.api.common.enums.LiteralNameEnumValueEnum;
+import org.eclipse.daanse.xmla.api.common.enums.MeasureAggregatorEnum;
+import org.eclipse.daanse.xmla.api.common.enums.MemberTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.OriginEnum;
 import org.eclipse.daanse.xmla.api.common.enums.PreferredQueryPatternsEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyCardinalityEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyContentTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyOriginEnum;
+import org.eclipse.daanse.xmla.api.common.enums.PropertyTypeEnum;
+import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.SearchableEnum;
+import org.eclipse.daanse.xmla.api.common.enums.SetEvaluationContextEnum;
 import org.eclipse.daanse.xmla.api.common.enums.StructureEnum;
 import org.eclipse.daanse.xmla.api.common.enums.StructureTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TypeEnum;
 import org.eclipse.daanse.xmla.api.discover.DiscoverService;
 import org.eclipse.daanse.xmla.api.discover.mdschema.functions.ParameterInfo;
+import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.MeasureGroupDimension;
+import org.eclipse.daanse.xmla.model.record.discover.MeasureGroupDimensionR;
+import org.eclipse.daanse.xmla.model.record.discover.ParameterInfoR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.columns.DbSchemaColumnsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.providertypes.DbSchemaProviderTypesResponseRowR;
@@ -60,6 +76,14 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.cubes.MdSchemaCube
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.demensions.MdSchemaDimensionsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.functions.MdSchemaFunctionsResponseRowR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.hierarchies.MdSchemaHierarchiesResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.kpis.MdSchemaKpisResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.levels.MdSchemaLevelsResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroupdimensions.MdSchemaMeasureGroupDimensionsResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.measuregroups.MdSchemaMeasureGroupsResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.measures.MdSchemaMeasuresResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.members.MdSchemaMembersResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesResponseRowR;
+import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsResponseRowR;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -118,6 +142,9 @@ public class DiscoverResponseTest {
           <RequestType>%s</RequestType>
             <Restrictions>
               <RestrictionList>
+    		      <TABLE_TYPE>ALIAS</TABLE_TYPE>
+    		      <COORDINATE_TYPE>1</COORDINATE_TYPE>
+    		      <INVOCATION>1</INVOCATION>
               </RestrictionList>
           </Restrictions>
           <Properties>
@@ -348,15 +375,15 @@ public class DiscoverResponseTest {
             Map.entry("CATALOG_NAME", "catalogName"),
             Map.entry("DESCRIPTION", "description"),
             Map.entry("ROLES", "roles"),
-            Map.entry("DATE_MODIFIED", "2023-02-16 10:10:00"),
+            Map.entry("DATE_MODIFIED", "2023-02-16T10:10"),
             Map.entry("TYPE", "0x00"),
             Map.entry("VERSION", "2"),
             Map.entry("DATABASE_ID", "databaseId"),
-            Map.entry("DATE_QUERIED", "2023-02-16 10:10:00"),
+            Map.entry("DATE_QUERIED", "2023-02-16T10:10"),
             Map.entry("CURRENTLY_USED", "true"),
-            Map.entry("POPULARITY", "1.10"),
-            Map.entry("WEIGHTEDPOPULARITY", "1.20"),
-            Map.entry("CLIENTCACHEREFRESHPOLICY", "1")));
+            Map.entry("POPULARITY", "1.1"),
+            Map.entry("WEIGHTEDPOPULARITY", "1.2"),
+            Map.entry("CLIENTCACHEREFRESHPOLICY", "0")));
     }
 
     @Test
@@ -390,6 +417,7 @@ public class DiscoverResponseTest {
             Optional.of("domainCatalog"),
             Optional.of("domainSchema"),
             Optional.of("domainName"),
+            Optional.of("description"),
             Optional.of(ColumnOlapTypeEnum.ATTRIBUTE)
         );
 
@@ -411,8 +439,8 @@ public class DiscoverResponseTest {
             Map.entry("COLUMN_NAME", "columnName"),
             Map.entry("COLUMN_GUID", "1"),
             Map.entry("COLUMN_PROPID", "2"),
-            Map.entry("ordinalPosition", "3"),
-            Map.entry("ordinalPosition", "true"),
+            Map.entry("ORDINAL_POSITION", "3"),
+            Map.entry("COLUMN_HAS_DEFAULT", "true"),
             Map.entry("COLUMN_DEFAULT", "columnDefault"),
             Map.entry("COLUMN_FLAG", "0x1"),
             Map.entry("IS_NULLABLE", "false"),
@@ -433,7 +461,7 @@ public class DiscoverResponseTest {
             Map.entry("DOMAIN_SCHEMA", "domainSchema"),
             Map.entry("DOMAIN_NAME", "domainName"),
             Map.entry("DESCRIPTION", "description"),
-            Map.entry("COLUMN_OLAP_TYPE", "columnOlapType")));
+            Map.entry("COLUMN_OLAP_TYPE", "ATTRIBUTE")));
     }
 
     @Test
@@ -583,8 +611,8 @@ public class DiscoverResponseTest {
             Map.entry("TABLE_GUID", "tableGuid"),
             Map.entry("DESCRIPTION", "description"),
             Map.entry("TABLE_PROP_ID", "1"),
-            Map.entry("DATE_CREATED", "1"),
-            Map.entry("DATE_MODIFIED", "1")));
+            Map.entry("DATE_CREATED", "2023-02-16T10:10"),
+            Map.entry("DATE_MODIFIED", "2023-02-16T10:10")));
     }
 
     @Test
@@ -624,7 +652,7 @@ public class DiscoverResponseTest {
             Map.entry("TABLE_NAME", "tableName"),
             Map.entry("TABLE_TYPE", "tableType"),
             Map.entry("TABLE_GUID", "1"),
-            Map.entry("BOOKMARKS", "bookmarks"),
+            Map.entry("BOOKMARKS", "true"),
             Map.entry("BOOKMARK_TYPE", "2"),
             Map.entry("BOOKMARK_DATA_TYPE", "3"),
             Map.entry("BOOKMARK_MAXIMUM_LENGTH", "4"),
@@ -649,7 +677,7 @@ public class DiscoverResponseTest {
             Optional.of("actionCaption"),
             Optional.of("description"),
             Optional.of("content"),
-            Optional.of("action"),
+            Optional.of("application"),
             Optional.of(InvocationEnum.NORMAL_OPERATION));
 
         DiscoverService discoverService = xmlaService.discover();
@@ -665,10 +693,10 @@ public class DiscoverResponseTest {
 
         checkRowValues(xmlAssert, Map.ofEntries(
             Map.entry("CATALOG_NAME", "catalogName"),
-            Map.entry("TABLE_SCHEMA", "schemaName"),
+            Map.entry("SCHEMA_NAME", "schemaName"),
             Map.entry("CUBE_NAME", "cubeName"),
             Map.entry("ACTION_NAME", "actionName"),
-            Map.entry("ACTION_TYPE", "URL"),
+            Map.entry("ACTION_TYPE", "0x01"),
             Map.entry("COORDINATE", "coordinate"),
             Map.entry("COORDINATE_TYPE", "1"),
             Map.entry("ACTION_CAPTION", "actionCaption"),
@@ -697,7 +725,7 @@ public class DiscoverResponseTest {
             Optional.of(false),
             Optional.of(true),
             Optional.of(false),
-            Optional.of(true),
+            Optional.of("cubeCaption"),
             Optional.of("baseCubeName"),
             Optional.of(CubeSourceEnum.CUBE),
             Optional.of(PreferredQueryPatternsEnum.CROSS_JOIN));
@@ -719,10 +747,10 @@ public class DiscoverResponseTest {
             Map.entry("CUBE_NAME", "cubeName"),
             Map.entry("CUBE_TYPE", "CUBE"),
             Map.entry("CUBE_GUID", "1"),
-            Map.entry("CREATED_ON", "2023-02-16 10:10:00"),
-            Map.entry("LAST_SCHEMA_UPDATE", "2023-02-16 10:10:00"),
+            Map.entry("CREATED_ON", "2023-02-16T10:10"),
+            Map.entry("LAST_SCHEMA_UPDATE", "2023-02-16T10:10"),
             Map.entry("SCHEMA_UPDATED_BY", "schemaUpdatedBy"),
-            Map.entry("LAST_DATA_UPDATE", "2023-02-16 10:10:00"),
+            Map.entry("LAST_DATA_UPDATE", "2023-02-16T10:10"),
             Map.entry("DATA_UPDATED_BY", "dataUpdateDBy"),
             Map.entry("DESCRIPTION", "description"),
             Map.entry("IS_DRILLTHROUGH_ENABLED", "true"),
@@ -794,7 +822,12 @@ public class DiscoverResponseTest {
     @Test
     void test_MDSCHEMA_FUNCTIONS(@InjectService XmlaService xmlaService) throws Exception {
 
-        List<ParameterInfo> parameterInfoList = List.of();
+        List<ParameterInfo> parameterInfoList = List.of(new ParameterInfoR(
+            "name",
+            "description",
+            true,
+            false,
+            1));
         MdSchemaFunctionsResponseRowR row = new MdSchemaFunctionsResponseRowR(
             Optional.of("functionalName"),
             Optional.of("description"),
@@ -831,13 +864,12 @@ public class DiscoverResponseTest {
             Map.entry("ORIGIN", "0x1"),
             Map.entry("INTERFACE_NAME", "FILTER"),
             Map.entry("LIBRARY_NAME", "libraryName"),
-            Map.entry("LIBRARY_NAME", "libraryName"),
             Map.entry("DLL_NAME", "dllName"),
             Map.entry("HELP_FILE", "helpFile"),
             Map.entry("HELP_CONTEXT", "helpContext"),
             Map.entry("OBJECT", "object"),
             Map.entry("CAPTION", "caption"),
-            Map.entry("PARAMETERINFO", "[]"),
+            Map.entry("PARAMETERINFO", "namedescriptiontruefalse1"),
             Map.entry("DIRECTQUERY_PUSHABLE", "0x1")
         ));
     }
@@ -918,6 +950,463 @@ public class DiscoverResponseTest {
         ));
 
 
+    }
+
+    @Test
+    void test_MDSCHEMA_KPIS(@InjectService XmlaService xmlaService) throws Exception {
+
+        List<ParameterInfo> parameterInfoList = List.of();
+        MdSchemaKpisResponseRowR row = new MdSchemaKpisResponseRowR(
+            Optional.of("catalogName"),
+            Optional.of("schemaName"),
+            Optional.of("cubeName"),
+            Optional.of("measureGroupName"),
+            Optional.of("kpiName"),
+            Optional.of("kpiCaption"),
+            Optional.of("kpiDescription"),
+            Optional.of("kpiDisplayFolder"),
+            Optional.of("kpiValue"),
+            Optional.of("kpiGoal"),
+            Optional.of("kpiStatus"),
+            Optional.of("kpiTrend"),
+            Optional.of("kpiStatusGraphic"),
+            Optional.of("kpiTrendGraphic"),
+            Optional.of("kpiWight"),
+            Optional.of("kpiCurrentTimeMember"),
+            Optional.of("kpiParentKpiName"),
+            Optional.of("annotation"),
+            Optional.of(ScopeEnum.Global));
+
+        DiscoverService discoverService = xmlaService.discover();
+        when(discoverService.mdSchemaKpis(Mockito.any())).thenReturn(List.of(row));
+
+        SOAPMessage response = SOAPUtil.callSoapWebService(Constants.soapEndpointUrl,
+            Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(String.format(REQUEST,
+                "MDSCHEMA_KPIS")));
+
+        response.writeTo(System.out);
+
+        XmlAssert xmlAssert = XMLUtil.createAssert(response);
+        checkRow(xmlAssert);
+
+        checkRowValues(xmlAssert, Map.ofEntries(
+            Map.entry("CATALOG_NAME", "catalogName"),
+            Map.entry("SCHEMA_NAME", "schemaName"),
+            Map.entry("CUBE_NAME", "cubeName"),
+            Map.entry("MEASUREGROUP_NAME", "measureGroupName"),
+            Map.entry("KPI_NAME", "kpiName"),
+            Map.entry("KPI_CAPTION", "kpiCaption"),
+            Map.entry("KPI_DESCRIPTION", "kpiDescription"),
+            Map.entry("KPI_DISPLAY_FOLDER", "kpiDisplayFolder"),
+            Map.entry("KPI_VALUE", "kpiValue"),
+            Map.entry("KPI_GOAL", "kpiGoal"),
+            Map.entry("KPI_STATUS", "kpiStatus"),
+            Map.entry("KPI_TREND", "kpiTrend"),
+            Map.entry("KPI_STATUS_GRAPHIC", "kpiStatusGraphic"),
+            Map.entry("KPI_TREND_GRAPHIC", "kpiTrendGraphic"),
+            Map.entry("KPI_WEIGHT", "kpiWight"),
+            Map.entry("KPI_CURRENT_TIME_MEMBER", "kpiCurrentTimeMember"),
+            Map.entry("KPI_PARENT_KPI_NAME", "kpiParentKpiName"),
+            Map.entry("ANNOTATIONS", "annotation"),
+            Map.entry("SCOPE", "1")
+        ));
+    }
+
+    @Test
+    void test_MDSCHEMA_LEVELS(@InjectService XmlaService xmlaService) throws Exception {
+
+        List<ParameterInfo> parameterInfoList = List.of();
+        MdSchemaLevelsResponseRowR row = new MdSchemaLevelsResponseRowR(
+            Optional.of("catalogName"),
+            Optional.of("schemaName"),
+            Optional.of("cubeName"),
+            Optional.of("dimensionUniqueName"),
+            Optional.of("hierarchyUniqueName"),
+            Optional.of("levelName"),
+            Optional.of("levelUniqueName"),
+            Optional.of(1),
+            Optional.of("levelCaption"),
+            Optional.of(2),
+            Optional.of(3),
+            Optional.of(LevelTypeEnum.All),
+            Optional.of("description"),
+            Optional.of(CustomRollupSettingEnum.CUSTOM_ROLLUP_EXPRESSION_EXIST),
+            Optional.of(LevelUniqueSettingsEnum.KEY_COLUMNS),
+            Optional.of(true),
+            Optional.of("levelOrderingProperty"),
+            Optional.of(LevelDbTypeEnum.DBTYPE_EMPTY),
+            Optional.of("levelMasterUniqueName"),
+            Optional.of("levelNameSqlColumnName"),
+            Optional.of("levelKeySqlColumnName"),
+            Optional.of("levelUniqueNameSqlColumnName"),
+            Optional.of("levelAttributeHierarchyName"),
+            Optional.of(4),
+            Optional.of(LevelOriginEnum.USER_DEFINED));
+
+        DiscoverService discoverService = xmlaService.discover();
+        when(discoverService.mdSchemaLevels(Mockito.any())).thenReturn(List.of(row));
+
+        SOAPMessage response = SOAPUtil.callSoapWebService(Constants.soapEndpointUrl,
+            Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(String.format(REQUEST,
+                "MDSCHEMA_LEVELS")));
+
+        response.writeTo(System.out);
+
+        XmlAssert xmlAssert = XMLUtil.createAssert(response);
+        checkRow(xmlAssert);
+
+        checkRowValues(xmlAssert, Map.ofEntries(
+            Map.entry("CATALOG_NAME", "catalogName"),
+            Map.entry("SCHEMA_NAME", "schemaName"),
+            Map.entry("CUBE_NAME", "cubeName"),
+            Map.entry("DIMENSION_UNIQUE_NAME", "dimensionUniqueName"),
+            Map.entry("HIERARCHY_UNIQUE_NAME", "hierarchyUniqueName"),
+            Map.entry("LEVEL_NAME", "levelName"),
+            Map.entry("LEVEL_UNIQUE_NAME", "levelUniqueName"),
+            Map.entry("LEVEL_GUID", "1"),
+            Map.entry("LEVEL_CAPTION", "levelCaption"),
+            Map.entry("LEVEL_NUMBER", "2"),
+            Map.entry("LEVEL_CARDINALITY", "3"),
+            Map.entry("LEVEL_TYPE", "0x0001"),
+            Map.entry("DESCRIPTION", "description"),
+            Map.entry("CUSTOM_ROLLUP_SETTINGS", "0x01"),
+            Map.entry("LEVEL_UNIQUE_SETTINGS", "0x00000001"),
+            Map.entry("LEVEL_IS_VISIBLE", "true"),
+            Map.entry("LEVEL_ORDERING_PROPERTY", "levelOrderingProperty"),
+            Map.entry("LEVEL_DBTYPE", "0"),
+            Map.entry("LEVEL_MASTER_UNIQUE_NAME", "levelMasterUniqueName"),
+            Map.entry("LEVEL_NAME_SQL_COLUMN_NAME", "levelNameSqlColumnName"),
+            Map.entry("LEVEL_KEY_SQL_COLUMN_NAME", "levelKeySqlColumnName"),
+            Map.entry("LEVEL_UNIQUE_NAME_SQL_COLUMN_NAME", "levelUniqueNameSqlColumnName"),
+            Map.entry("LEVEL_ATTRIBUTE_HIERARCHY_NAME", "levelAttributeHierarchyName"),
+            Map.entry("LEVEL_KEY_CARDINALITY", "4"),
+            Map.entry("LEVEL_ORIGIN", "0x0001")
+        ));
+    }
+
+    @Test
+    void test_MDSCHEMA_MEASUREGROUP_DIMENSIONS(@InjectService XmlaService xmlaService) throws Exception {
+
+        List<MeasureGroupDimension> list = List.of(new MeasureGroupDimensionR("measureGroupDimension"));
+        MdSchemaMeasureGroupDimensionsResponseRowR row = new MdSchemaMeasureGroupDimensionsResponseRowR(
+            Optional.of("catalogName"),
+            Optional.of("schemaName"),
+            Optional.of("cubeName"),
+            Optional.of("measureGroupName"),
+            Optional.of("measureGroupCardinality"),
+            Optional.of("dimensionUniqueName"),
+            Optional.of(DimensionCardinalityEnum.ONE),
+            Optional.of(true),
+            Optional.of(false),
+            Optional.of(list),
+            Optional.of("dimensionGranularity"));
+
+        DiscoverService discoverService = xmlaService.discover();
+        when(discoverService.mdSchemaMeasureGroupDimensions(Mockito.any())).thenReturn(List.of(row));
+
+        SOAPMessage response = SOAPUtil.callSoapWebService(Constants.soapEndpointUrl,
+            Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(String.format(REQUEST,
+                "MDSCHEMA_MEASUREGROUP_DIMENSIONS")));
+
+        response.writeTo(System.out);
+
+        XmlAssert xmlAssert = XMLUtil.createAssert(response);
+        checkRow(xmlAssert);
+
+        checkRowValues(xmlAssert, Map.ofEntries(
+            Map.entry("CATALOG_NAME", "catalogName"),
+            Map.entry("SCHEMA_NAME", "schemaName"),
+            Map.entry("CUBE_NAME", "cubeName"),
+            Map.entry("MEASUREGROUP_NAME", "measureGroupName"),
+            Map.entry("MEASUREGROUP_CARDINALITY", "measureGroupCardinality"),
+            Map.entry("DIMENSION_UNIQUE_NAME", "dimensionUniqueName"),
+            Map.entry("DIMENSION_CARDINALITY", "ONE"),
+            Map.entry("DIMENSION_IS_VISIBLE", "true"),
+            Map.entry("DIMENSION_IS_FACT_DIMENSION", "false"),
+            Map.entry("DIMENSION_PATH", "measureGroupDimension"),
+            Map.entry("DIMENSION_GRANULARITY", "dimensionGranularity")
+        ));
+    }
+
+    @Test
+    void test_MDSCHEMA_MEASUREGROUPS(@InjectService XmlaService xmlaService) throws Exception {
+
+        List<MeasureGroupDimension> list = List.of();
+        MdSchemaMeasureGroupsResponseRowR row = new MdSchemaMeasureGroupsResponseRowR(
+            Optional.of("catalogName"),
+            Optional.of("schemaName"),
+            Optional.of("cubeName"),
+            Optional.of("measureGroupName"),
+            Optional.of("description"),
+            Optional.of(true),
+            Optional.of("measureGroupCaption")
+        );
+
+        DiscoverService discoverService = xmlaService.discover();
+        when(discoverService.mdSchemaMeasureGroups(Mockito.any())).thenReturn(List.of(row));
+
+        SOAPMessage response = SOAPUtil.callSoapWebService(Constants.soapEndpointUrl,
+            Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(String.format(REQUEST,
+                "MDSCHEMA_MEASUREGROUPS")));
+
+        response.writeTo(System.out);
+
+        XmlAssert xmlAssert = XMLUtil.createAssert(response);
+        checkRow(xmlAssert);
+
+        checkRowValues(xmlAssert, Map.ofEntries(
+            Map.entry("CATALOG_NAME", "catalogName"),
+            Map.entry("SCHEMA_NAME", "schemaName"),
+            Map.entry("CUBE_NAME", "cubeName"),
+            Map.entry("MEASUREGROUP_NAME", "measureGroupName"),
+            Map.entry("DESCRIPTION", "description"),
+            Map.entry("IS_WRITE_ENABLED", "true"),
+            Map.entry("MEASUREGROUP_CAPTION", "measureGroupCaption")
+        ));
+    }
+
+    @Test
+    void test_MDSCHEMA_MEASURES(@InjectService XmlaService xmlaService) throws Exception {
+
+        MdSchemaMeasuresResponseRowR row = new MdSchemaMeasuresResponseRowR(
+            Optional.of("catalogName"),
+            Optional.of("schemaName"),
+            Optional.of("cubeName"),
+            Optional.of("measureName"),
+            Optional.of("measureUniqueName"),
+            Optional.of("measureCaption"),
+            Optional.of(1),
+            Optional.of(MeasureAggregatorEnum.MDMEASURE_AGGR_UNKNOWN),
+            Optional.of(LevelDbTypeEnum.DBTYPE_EMPTY),
+            Optional.of(2),
+            Optional.of(3),
+            Optional.of("measureUnits"),
+            Optional.of("description"),
+            Optional.of("expression"),
+            Optional.of(true),
+            Optional.of("levelsList"),
+            Optional.of("measureNameSqlColumnName"),
+            Optional.of("measureUnqualifiedCaption"),
+            Optional.of("measureGroupName"),
+            Optional.of("defaultFormatString")
+        );
+
+        DiscoverService discoverService = xmlaService.discover();
+        when(discoverService.mdSchemaMeasures(Mockito.any())).thenReturn(List.of(row));
+
+        SOAPMessage response = SOAPUtil.callSoapWebService(Constants.soapEndpointUrl,
+            Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(String.format(REQUEST,
+                "MDSCHEMA_MEASURES")));
+
+        response.writeTo(System.out);
+
+        XmlAssert xmlAssert = XMLUtil.createAssert(response);
+        checkRow(xmlAssert);
+
+        checkRowValues(xmlAssert, Map.ofEntries(
+            Map.entry("CATALOG_NAME", "catalogName"),
+            Map.entry("SCHEMA_NAME", "schemaName"),
+            Map.entry("CUBE_NAME", "cubeName"),
+            Map.entry("MEASURE_NAME", "measureName"),
+            Map.entry("MEASURE_UNIQUE_NAME", "measureUniqueName"),
+            Map.entry("MEASURE_CAPTION", "measureCaption"),
+            Map.entry("MEASURE_GUID","1"),
+            Map.entry("MEASURE_AGGREGATOR", "0"),
+            Map.entry("DATA_TYPE", "0"),
+            Map.entry("NUMERIC_PRECISION", "2"),
+            Map.entry("NUMERIC_SCALE", "3"),
+            Map.entry("MEASURE_UNITS", "measureUnits"),
+            Map.entry("DESCRIPTION", "description"),
+            Map.entry("EXPRESSION", "expression"),
+            Map.entry("MEASURE_IS_VISIBLE", "true"),
+            Map.entry("LEVELS_LIST", "levelsList"),
+            Map.entry("MEASURE_NAME_SQL_COLUMN_NAME", "measureNameSqlColumnName"),
+            Map.entry("MEASURE_UNQUALIFIED_CAPTION", "measureUnqualifiedCaption"),
+            Map.entry("MEASUREGROUP_NAME", "measureGroupName"),
+            Map.entry("DEFAULT_FORMAT_STRING", "defaultFormatString")
+        ));
+    }
+
+    @Test
+    void test_MDSCHEMA_MEMBERS(@InjectService XmlaService xmlaService) throws Exception {
+
+        MdSchemaMembersResponseRowR row = new MdSchemaMembersResponseRowR(
+            Optional.of("catalogName"),
+            Optional.of("schemaName"),
+            Optional.of("cubeName"),
+            Optional.of("dimensionUniqueName"),
+            Optional.of("hierarchyUniqueName"),
+            Optional.of("levelUniqueName"),
+            Optional.of(1),
+            Optional.of(2),
+            Optional.of("memberName"),
+            Optional.of("memberUniqueName"),
+            Optional.of(MemberTypeEnum.Unknown),
+            Optional.of(3),
+            Optional.of("measureCaption"),
+            Optional.of(4),
+            Optional.of(5),
+            Optional.of("parentUniqueName"),
+            Optional.of(6),
+            Optional.of(7),
+            Optional.of(8),
+            Optional.of(9),
+            Optional.of(true),
+            Optional.of(false),
+            Optional.of(ScopeEnum.Global)
+        );
+
+        DiscoverService discoverService = xmlaService.discover();
+        when(discoverService.mdSchemaMembers(Mockito.any())).thenReturn(List.of(row));
+
+        SOAPMessage response = SOAPUtil.callSoapWebService(Constants.soapEndpointUrl,
+            Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(String.format(REQUEST,
+                "MDSCHEMA_MEMBERS")));
+
+        response.writeTo(System.out);
+
+        XmlAssert xmlAssert = XMLUtil.createAssert(response);
+        checkRow(xmlAssert);
+
+        checkRowValues(xmlAssert, Map.ofEntries(
+            Map.entry("CATALOG_NAME", "catalogName"),
+            Map.entry("SCHEMA_NAME", "schemaName"),
+            Map.entry("CUBE_NAME", "cubeName"),
+            Map.entry("DIMENSION_UNIQUE_NAME", "dimensionUniqueName"),
+            Map.entry("HIERARCHY_UNIQUE_NAME", "hierarchyUniqueName"),
+            Map.entry("LEVEL_UNIQUE_NAME", "levelUniqueName"),
+            Map.entry("LEVEL_NUMBER", "1"),
+            Map.entry("MEMBER_ORDINAL", "2"),
+            Map.entry("MEMBER_NAME", "memberName"),
+            Map.entry("MEMBER_UNIQUE_NAME", "memberUniqueName"),
+            Map.entry("MEMBER_TYPE", "0"),
+            Map.entry("MEMBER_GUID", "3"),
+            Map.entry("MEMBER_CAPTION", "measureCaption"),
+            Map.entry("CHILDREN_CARDINALITY", "4"),
+            Map.entry("PARENT_LEVEL", "5"),
+            Map.entry("PARENT_UNIQUE_NAME", "parentUniqueName"),
+            Map.entry("PARENT_COUNT", "6"),
+            Map.entry("DESCRIPTION", "7"),
+            Map.entry("EXPRESSION", "8"),
+            Map.entry("MEMBER_KEY", "9"),
+            Map.entry("IS_PLACEHOLDERMEMBER", "true"),
+            Map.entry("IS_DATAMEMBER", "false"),
+            Map.entry("SCOPE", "1")
+        ));
+    }
+
+    @Test
+    void test_MDSCHEMA_PROPERTIES(@InjectService XmlaService xmlaService) throws Exception {
+
+        MdSchemaPropertiesResponseRowR row = new MdSchemaPropertiesResponseRowR(
+            Optional.of("catalogName"),
+            Optional.of("schemaName"),
+            Optional.of("cubeName"),
+            Optional.of("dimensionUniqueName"),
+            Optional.of("hierarchyUniqueName"),
+            Optional.of("levelUniqueName"),
+            Optional.of("memberUniqueName"),
+            Optional.of(PropertyTypeEnum.property_member),
+            Optional.of("propertyName"),
+            Optional.of("propertyCaption"),
+            Optional.of(LevelDbTypeEnum.DBTYPE_EMPTY),
+            Optional.of(1),
+            Optional.of(2),
+            Optional.of(3),
+            Optional.of(4),
+            Optional.of("description"),
+            Optional.of(PropertyContentTypeEnum.Regular),
+            Optional.of("sqlColumnName"),
+            Optional.of(5),
+            Optional.of(PropertyOriginEnum.user_defined),
+            Optional.of("propertyAttributeHierarchyName"),
+            Optional.of(PropertyCardinalityEnum.ONE),
+            Optional.of("mimeType"),
+            Optional.of(true)
+        );
+
+        DiscoverService discoverService = xmlaService.discover();
+        when(discoverService.mdSchemaProperties(Mockito.any())).thenReturn(List.of(row));
+
+        SOAPMessage response = SOAPUtil.callSoapWebService(Constants.soapEndpointUrl,
+            Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(String.format(REQUEST,
+                "MDSCHEMA_PROPERTIES")));
+
+        response.writeTo(System.out);
+
+        XmlAssert xmlAssert = XMLUtil.createAssert(response);
+        checkRow(xmlAssert);
+
+        checkRowValues(xmlAssert, Map.ofEntries(
+            Map.entry("CATALOG_NAME", "catalogName"),
+            Map.entry("SCHEMA_NAME", "schemaName"),
+            Map.entry("CUBE_NAME", "cubeName"),
+            Map.entry("DIMENSION_UNIQUE_NAME", "dimensionUniqueName"),
+            Map.entry("HIERARCHY_UNIQUE_NAME", "hierarchyUniqueName"),
+            Map.entry("LEVEL_UNIQUE_NAME", "levelUniqueName"),
+            Map.entry("MEMBER_UNIQUE_NAME", "memberUniqueName"),
+            Map.entry("PROPERTY_TYPE", "1"),
+            Map.entry("PROPERTY_NAME", "propertyName"),
+            Map.entry("PROPERTY_CAPTION", "propertyCaption"),
+            Map.entry("DATA_TYPE", "0"),
+            Map.entry("CHARACTER_MAXIMUM_LENGTH", "1"),
+            Map.entry("CHARACTER_OCTET_LENGTH", "2"),
+            Map.entry("NUMERIC_PRECISION", "3"),
+            Map.entry("NUMERIC_SCALE", "4"),
+            Map.entry("DESCRIPTION", "description"),
+            Map.entry("PROPERTY_CONTENT_TYPE", "0x00"),
+            Map.entry("SQL_COLUMN_NAME", "sqlColumnName"),
+            Map.entry("LANGUAGE", "5"),
+            Map.entry("PROPERTY_ORIGIN", "1"),
+            Map.entry("PROPERTY_ATTRIBUTE_HIERARCHY_NAME", "propertyAttributeHierarchyName"),
+            Map.entry("PROPERTY_CARDINALITY", "ONE"),
+            Map.entry("MIME_TYPE", "mimeType"),
+            Map.entry("PROPERTY_IS_VISIBLE", "true")
+        ));
+    }
+
+    @Test
+    void test_MDSCHEMA_SETS(@InjectService XmlaService xmlaService) throws Exception {
+
+        MdSchemaSetsResponseRowR row = new MdSchemaSetsResponseRowR(
+            Optional.of("catalogName"),
+            Optional.of("schemaName"),
+            Optional.of("cubeName"),
+            Optional.of("setName"),
+            Optional.of(ScopeEnum.Global),
+            Optional.of("description"),
+            Optional.of("expression"),
+            Optional.of("dimension"),
+            Optional.of("setCaption"),
+            Optional.of("setDisplayFolder"),
+            Optional.of(SetEvaluationContextEnum.STATIC)
+        );
+
+        DiscoverService discoverService = xmlaService.discover();
+        when(discoverService.mdSchemaSets(Mockito.any())).thenReturn(List.of(row));
+
+        SOAPMessage response = SOAPUtil.callSoapWebService(Constants.soapEndpointUrl,
+            Optional.of(Constants.SOAP_ACTION_DISCOVER), SOAPUtil.envelop(String.format(REQUEST,
+                "MDSCHEMA_SETS")));
+
+        response.writeTo(System.out);
+
+        XmlAssert xmlAssert = XMLUtil.createAssert(response);
+        checkRow(xmlAssert);
+
+        checkRowValues(xmlAssert, Map.ofEntries(
+            Map.entry("CATALOG_NAME", "catalogName"),
+            Map.entry("SCHEMA_NAME", "schemaName"),
+            Map.entry("CUBE_NAME", "cubeName"),
+            Map.entry("SET_NAME", "setName"),
+            Map.entry("SCOPE",  "1"),
+            Map.entry("DESCRIPTION", "description"),
+            Map.entry("EXPRESSION", "expression"),
+            Map.entry("DIMENSIONS", "dimension"),
+            Map.entry("SET_CAPTION", "setCaption"),
+            Map.entry("SET_DISPLAY_FOLDER", "setDisplayFolder"),
+            Map.entry("SET_EVALUATION_CONTEXT", "1")
+        ));
     }
 
     private void checkRow(XmlAssert xmlAssert) {

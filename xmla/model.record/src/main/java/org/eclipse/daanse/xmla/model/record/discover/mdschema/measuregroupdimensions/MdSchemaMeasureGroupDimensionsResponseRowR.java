@@ -20,16 +20,17 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.measuregroupdimensions.Meas
 import java.util.List;
 import java.util.Optional;
 
-public record MdSchemaMeasureGroupDimensionsResponseRowR(    Optional<String> catalogName,
-                                                             Optional<String> schemaName,
-                                                             Optional<String> cubeName,
-                                                             Optional<String> measureGroupName,
-                                                             Optional<String> measureGroupCardinality,
-                                                             Optional<String> dimensionUniqueName,
-                                                             Optional<DimensionCardinalityEnum> dimensionCardinality,
-                                                             Optional<Boolean> dimensionIsVisible,
-                                                             Optional<Boolean> dimensionIsFactDimension,
-                                                             Optional<List<MeasureGroupDimension>> dimensionPath,
-                                                             Optional<String> dimensionGranularity)
+public record MdSchemaMeasureGroupDimensionsResponseRowR(Optional<String> catalogName,
+                                                         Optional<String> schemaName,
+                                                         Optional<String> cubeName,
+                                                         Optional<String> measureGroupName,
+                                                         Optional<String> measureGroupCardinality,
+                                                         Optional<String> dimensionUniqueName,
+                                                         Optional<DimensionCardinalityEnum> dimensionCardinality,
+                                                         Optional<Boolean> dimensionIsVisible,
+                                                         Optional<Boolean> dimensionIsFactDimension,
+                                                         Optional<List<MeasureGroupDimension>> dimensionPath,
+                                                         Optional<String> dimensionGranularity)
     implements MdSchemaMeasureGroupDimensionsResponseRow {
+
 }

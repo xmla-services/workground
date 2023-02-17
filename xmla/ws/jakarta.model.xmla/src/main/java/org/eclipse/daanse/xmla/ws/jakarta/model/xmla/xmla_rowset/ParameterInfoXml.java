@@ -18,7 +18,7 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "ParameterInfo")
+@XmlType(name = "PARAMETERINFO")
 public class ParameterInfoXml {
 
     private String name;

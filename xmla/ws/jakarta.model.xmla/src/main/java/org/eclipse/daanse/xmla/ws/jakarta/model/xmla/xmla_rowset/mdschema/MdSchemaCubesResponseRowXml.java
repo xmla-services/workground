@@ -18,6 +18,8 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlTransient;
 import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.adapters.LocalDateTimeAdapter;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CubeSourceEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.CubeTypeEnum;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.PreferredQueryPatternsEnum;
@@ -76,6 +78,7 @@ public class MdSchemaCubesResponseRowXml extends Row implements Serializable {
      * created.
      */
     @XmlElement(name = "CREATED_ON")
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime createdOn;
 
     /**
@@ -83,6 +86,7 @@ public class MdSchemaCubesResponseRowXml extends Row implements Serializable {
      * was last updated.
      */
     @XmlElement(name = "LAST_SCHEMA_UPDATE")
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime lastSchemaUpdate;
 
     /**
@@ -97,6 +101,7 @@ public class MdSchemaCubesResponseRowXml extends Row implements Serializable {
      * processed.
      */
     @XmlElement(name = "LAST_DATA_UPDATE")
+    @XmlJavaTypeAdapter(LocalDateTimeAdapter.class)
     private LocalDateTime lastDataUpdate;
 
     /**
@@ -147,7 +152,7 @@ public class MdSchemaCubesResponseRowXml extends Row implements Serializable {
      * a perspective cube.
      */
     @XmlElement(name = "CUBE_CAPTION")
-    private Boolean cubeCaption;
+    private String cubeCaption;
 
     /**
      * The name of the source cube if this cube is
@@ -305,11 +310,11 @@ public class MdSchemaCubesResponseRowXml extends Row implements Serializable {
         isSqlEnabled = sqlEnabled;
     }
 
-    public Boolean getCubeCaption() {
+    public String getCubeCaption() {
         return cubeCaption;
     }
 
-    public void setCubeCaption(Boolean cubeCaption) {
+    public void setCubeCaption(String cubeCaption) {
         this.cubeCaption = cubeCaption;
     }
 
