@@ -974,6 +974,7 @@
     <module>lcid</module>
     <module>ws</module>
     <module>xmla</module>
+    <module>odf</module>
   </modules>
   <profiles>
     <profile>
