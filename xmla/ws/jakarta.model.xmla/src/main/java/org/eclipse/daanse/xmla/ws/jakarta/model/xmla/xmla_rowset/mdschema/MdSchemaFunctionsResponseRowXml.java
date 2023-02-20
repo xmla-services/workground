@@ -210,18 +210,22 @@ public class MdSchemaFunctionsResponseRowXml extends Row implements Serializable
         this.dllName = dllName;
     }
 
+    @Deprecated
     public String getHelpFile() {
         return helpFile;
     }
 
+    @Deprecated
     public void setHelpFile(String helpFile) {
         this.helpFile = helpFile;
     }
 
+    @Deprecated
     public String getHelpContext() {
         return helpContext;
     }
 
+    @Deprecated
     public void setHelpContext(String helpContext) {
         this.helpContext = helpContext;
     }
