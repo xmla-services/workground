@@ -206,18 +206,22 @@ public class DbSchemaCatalogsResponseRowXml  extends Row implements Serializable
         this.databaseId = databaseId;
     }
 
+    @Deprecated
     public LocalDateTime getDateQueried() {
         return dateQueried;
     }
 
+    @Deprecated
     public void setDateQueried(LocalDateTime dateQueried) {
         this.dateQueried = dateQueried;
     }
 
+    @Deprecated
     public Boolean getCurrentlyUsed() {
         return currentlyUsed;
     }
 
+    @Deprecated
     public void setCurrentlyUsed(Boolean currentlyUsed) {
         this.currentlyUsed = currentlyUsed;
     }
