@@ -11,12 +11,7 @@
 *   SmartCity Jena - initial
 *   Stefan Bischof (bipolis.org) - initial
 */
-package org.eclipse.daanse.xmla.api.execute;
 
-import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
-import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
-
-public interface ExecuteService {
-
-    StatementResponse statement(StatementRequest statementRequest);
-}
+@org.osgi.annotation.bundle.Export
+@org.osgi.annotation.versioning.Version("0.0.1")
+package org.eclipse.daanse.xmla.api.execute.statement;

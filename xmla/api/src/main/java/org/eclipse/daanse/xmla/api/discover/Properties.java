@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.discover;
 
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.common.properties.AxisFormat;
 import org.eclipse.daanse.xmla.api.common.properties.Content;
 import org.eclipse.daanse.xmla.api.common.properties.Format;
 
@@ -29,5 +30,7 @@ public interface Properties {
     Optional<Format> format();
 
     Optional<String> catalog();
+
+    Optional<AxisFormat> axisFormat();
 
 }

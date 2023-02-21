@@ -71,6 +71,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaProperti
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
+import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
+import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ext.Authenticate;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ext.AuthenticateResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.BeginSession;
@@ -227,7 +229,28 @@ public class ApiXmlaWsAdapter implements WsAdapter {
     @Override
     public ExecuteResponse execute(Execute parameters, Holder<Session> session, BeginSession beginSession,
             EndSession endSession) {
-        return null;
+        if (parameters == null) {
+            return null;
+        }
+        ExecuteResponse executeResponse = null;
+        try {
+            if (parameters.getCommand() != null) {
+                if (parameters.getCommand().getStatement() != null) {
+                    executeResponse = handleStatement(parameters);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return executeResponse;
+    }
+
+    private ExecuteResponse handleStatement(Execute requestWs) {
+        StatementRequest requestApi = Convert.fromStatement(requestWs);
+        StatementResponse responseApi = xmlaService.execute().statement(requestApi);
+        ExecuteResponse responseWs = Convert.toStatement(responseApi);
+
+        return responseWs;
     }
 
     private DiscoverResponse handleDbSchemaCatalogs(Discover requestWs) throws JAXBException, IOException {
