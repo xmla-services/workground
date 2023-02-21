@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.exception;
 
-public interface WarningType  extends Type{
+public non-sealed interface WarningType  extends Type{
 
     MessageLocation location();
 

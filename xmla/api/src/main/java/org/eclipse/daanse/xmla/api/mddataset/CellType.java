@@ -13,22 +13,13 @@
  */
 package org.eclipse.daanse.xmla.api.mddataset;
 
-import org.w3c.dom.Element;
-
 import java.util.List;
 
 public interface CellType {
 
-    CellType.Value value();
+    Value value();
 
-    List<Element> any();
+    List<CellInfoItem> any();
 
     long cellOrdinal();
-
-    interface Value {
-
-        List<CellTypeError> error();
-
-    }
-
 }
