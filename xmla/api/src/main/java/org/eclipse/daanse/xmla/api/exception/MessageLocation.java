@@ -17,9 +17,9 @@ import org.eclipse.daanse.xmla.api.engine200.WarningLocationObject;
 
 public interface MessageLocation {
 
-    MessageLocation.Start start();
+    StartEnd start();
 
-    MessageLocation.End end();
+    StartEnd end();
 
     Integer lineOffset();
 
@@ -30,20 +30,5 @@ public interface MessageLocation {
     WarningLocationObject dependsOnObject();
 
     Integer rowNumber();
-
-    interface End {
-
-        int line();
-
-        int column();
-
-    }
-
-    interface Start {
-
-        int line();
-
-        int column();
-    }
 
 }

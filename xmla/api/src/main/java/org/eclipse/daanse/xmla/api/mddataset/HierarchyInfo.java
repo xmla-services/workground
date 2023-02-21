@@ -19,7 +19,7 @@ import java.util.List;
 
 public interface HierarchyInfo {
 
-    List<Element> any();
+    List<CellInfoItem> any();
 
     String name();
 

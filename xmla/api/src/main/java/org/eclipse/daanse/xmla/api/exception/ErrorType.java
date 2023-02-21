@@ -14,7 +14,7 @@
 package org.eclipse.daanse.xmla.api.exception;
 
 
-public interface ErrorType extends Type{
+public non-sealed interface ErrorType extends Type{
 
      MessageLocation location();
 

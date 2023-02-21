@@ -13,14 +13,14 @@
  */
 package org.eclipse.daanse.xmla.api.mddataset;
 
-import javax.xml.datatype.XMLGregorianCalendar;
+import java.time.Instant;
 
 public interface OlapInfoCube {
 
     String cubeName();
 
-    XMLGregorianCalendar lastDataUpdate();
+    Instant lastDataUpdate();
 
-    XMLGregorianCalendar lastSchemaUpdate();
+    Instant lastSchemaUpdate();
 
 }

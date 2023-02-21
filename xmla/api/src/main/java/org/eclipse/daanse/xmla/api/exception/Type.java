@@ -13,6 +13,6 @@
  */
 package org.eclipse.daanse.xmla.api.exception;
 
-public interface Type {
+public sealed interface Type permits  ErrorType, WarningType {
 
 }
