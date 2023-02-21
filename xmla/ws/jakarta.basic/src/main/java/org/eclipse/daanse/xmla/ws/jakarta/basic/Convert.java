@@ -32,6 +32,7 @@ import org.eclipse.daanse.xmla.api.common.enums.ScopeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TableTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.TreeOpEnum;
 import org.eclipse.daanse.xmla.api.common.enums.VisibilityEnum;
+import org.eclipse.daanse.xmla.api.common.properties.AxisFormat;
 import org.eclipse.daanse.xmla.api.common.properties.Content;
 import org.eclipse.daanse.xmla.api.common.properties.Format;
 import org.eclipse.daanse.xmla.api.discover.dbschema.catalogs.DbSchemaCatalogsRequest;
@@ -115,6 +116,9 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaProperti
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRestrictions;
+import org.eclipse.daanse.xmla.api.execute.ExecuteParameter;
+import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
+import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRestrictionsR;
@@ -170,8 +174,13 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchem
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchemaPropertiesRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRestrictionsR;
+import org.eclipse.daanse.xmla.model.record.execute.ExecuteParameterR;
+import org.eclipse.daanse.xmla.model.record.execute.statement.StatementCommandR;
+import org.eclipse.daanse.xmla.model.record.execute.statement.StatementRequestR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Execute;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ExecuteResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PropertyList;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Return;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.MeasureGroupDimensionXml;
@@ -214,33 +223,41 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class Convert {
-    private static Optional<Integer> localeIdentifier(Discover requestWs) {
-        Optional<Integer> oLocaleIdentifier = Optional.ofNullable(propertyList(requestWs).getLocaleIdentifier());
+    private static Optional<Integer> localeIdentifier(PropertyList propertyList) {
+        Optional<Integer> oLocaleIdentifier = Optional.ofNullable(propertyList.getLocaleIdentifier());
         return oLocaleIdentifier;
     }
 
-    private static Optional<Content> content(Discover requestWs) {
-        String content = propertyList(requestWs).getContent();
+    private static Optional<Content> content(PropertyList propertyList) {
+        String content = propertyList.getContent();
         if (content != null) {
             return Optional.ofNullable(Content.valueOf(content));
         }
         return Optional.empty();
     }
 
-    private static Optional<String> catalog(Discover requestWs) {
-        Optional<String> catalog = Optional.ofNullable(propertyList(requestWs).getCatalog());
+    private static Optional<String> catalog(PropertyList propertyList) {
+        Optional<String> catalog = Optional.ofNullable(propertyList.getCatalog());
         return catalog;
     }
 
-    private static Optional<String> dataSourceInfo(Discover requestWs) {
-        Optional<String> dataSourceInfo = Optional.ofNullable(propertyList(requestWs).getDataSourceInfo());
+    private static Optional<String> dataSourceInfo(PropertyList propertyList) {
+        Optional<String> dataSourceInfo = Optional.ofNullable(propertyList.getDataSourceInfo());
         return dataSourceInfo;
     }
 
-    private static Optional<Format> format(Discover requestWs) {
-        String format = propertyList(requestWs).getFormat();
+    private static Optional<Format> format(PropertyList propertyList) {
+        String format = propertyList.getFormat();
         if (format != null) {
             return Optional.ofNullable(Format.valueOf(format));
+        }
+        return Optional.empty();
+    }
+
+    private static Optional<AxisFormat> axisFormat(PropertyList propertyList) {
+        String format = propertyList.getAxisFormat();
+        if (format != null) {
+            return Optional.ofNullable(AxisFormat.valueOf(format));
         }
         return Optional.empty();
     }
@@ -250,19 +267,24 @@ public class Convert {
                 .getPropertyList();
     }
 
+    private static PropertyList propertyList(Execute requestWs) {
+        return requestWs.getProperties()
+            .getPropertyList();
+    }
+
     private static Map<String, String> restrictionsMap(Discover requestWs) {
         return requestWs.getRestrictions()
                 .getRestrictionMap();
     }
 
-    private static PropertiesR discoverProperties(Discover requestWs) {
+    private static PropertiesR discoverProperties(PropertyList propertyList) {
         PropertiesR properties = new PropertiesR();
-        properties.setLocaleIdentifier(localeIdentifier(requestWs));
-        properties.setContent(content(requestWs));
-        properties.setFormat(format(requestWs));
-        properties.setDataSourceInfo(dataSourceInfo(requestWs));
-        properties.setCatalog(catalog(requestWs));
-        properties.setLocaleIdentifier(localeIdentifier(requestWs));
+        properties.setLocaleIdentifier(localeIdentifier(propertyList));
+        properties.setContent(content(propertyList));
+        properties.setFormat(format(propertyList));
+        properties.setAxisFormat(axisFormat(propertyList));
+        properties.setDataSourceInfo(dataSourceInfo(propertyList));
+        properties.setCatalog(catalog(propertyList));
 
         return properties;
     }
@@ -278,7 +300,7 @@ public class Convert {
     public static DiscoverPropertiesRequest fromDiscoverProperties(Discover requestWs) {
 
         System.out.println(requestWs);
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DiscoverPropertiesRestrictionsR restrictions = discoverPropertiesRestrictions(requestWs);
 
         return new DiscoverPropertiesRequestR(properties, restrictions);
@@ -319,7 +341,7 @@ public class Convert {
     }
 
     public static DbSchemaCatalogsRequest fromDiscoverDbSchemaCatalogs(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DbSchemaCatalogsRestrictionsR restrictions = discoverDbSchemaCatalogsRestrictions(requestWs);
 
         return new DbSchemaCatalogsRequestR(properties, restrictions);
@@ -422,7 +444,7 @@ public class Convert {
 
     public static DiscoverSchemaRowsetsRequest fromDiscoverSchemaRowsets(Discover requestWs) {
 
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DiscoverSchemaRowsetsRestrictionsR restrictions = discoverSchemaRowsetsRestrictions(requestWs);
 
         return new DiscoverSchemaRowsetsRequestR(properties, restrictions);
@@ -430,7 +452,7 @@ public class Convert {
     }
 
     public static DiscoverEnumeratorsRequest fromDiscoverEnumerators(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DiscoverEnumeratorsRestrictionsR restrictions = discoverEnumeratorsRestrictions(requestWs);
         return new DiscoverEnumeratorsRequestR(properties, restrictions);
 
@@ -477,7 +499,7 @@ public class Convert {
     }
 
     public static DiscoverKeywordsRequest fromDiscoverKeywords(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DiscoverKeywordsRestrictionsR restrictions = discoverKeywordsRestrictions(requestWs);
         return new DiscoverKeywordsRequestR(properties, restrictions);
     }
@@ -512,7 +534,7 @@ public class Convert {
     }
 
     public static DiscoverLiteralsRequest fromDiscoverLiterals(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DiscoverLiteralsRestrictionsR restrictions = discoverLiteralsRestrictions(requestWs);
         return new DiscoverLiteralsRequestR(properties, restrictions);
     }
@@ -553,7 +575,7 @@ public class Convert {
     }
 
     public static DbSchemaTablesRequest fromDiscoverDbSchemaTables(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DbSchemaTablesRestrictionsR restrictions = discoverDbSchemaTablesRestrictions(requestWs);
         return new DbSchemaTablesRequestR(properties, restrictions);
     }
@@ -610,7 +632,7 @@ public class Convert {
     }
 
     public static MdSchemaActionsRequest fromDiscoverMdSchemaActions(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         MdSchemaActionsRestrictionsR restrictions = discoverMdSchemaActionsRestrictions(requestWs);
         return new MdSchemaActionsRequestR(properties, restrictions);
     }
@@ -682,7 +704,7 @@ public class Convert {
     }
 
     public static MdSchemaCubesRequest fromDiscoverMdSchemaCubes(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         MdSchemaCubesRestrictionsR restrictions = discoverMdSchemaCubesRestrictions(requestWs);
         return new MdSchemaCubesRequestR(properties, restrictions);
     }
@@ -763,7 +785,7 @@ public class Convert {
     }
 
     public static MdSchemaDimensionsRequest fromDiscoverMdSchemaDimensions(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         MdSchemaDimensionsRestrictionsR restrictions = discoverMdSchemaDimensionsRestrictions(requestWs);
         return new MdSchemaDimensionsRequestR(properties, restrictions);
     }
@@ -845,7 +867,7 @@ public class Convert {
 
 
     public static MdSchemaFunctionsRequest fromDiscoverMdSchemaFunctions(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         MdSchemaFunctionsRestrictionsR restrictions = discoverMdSchemaFunctionsRestrictions(requestWs);
         return new MdSchemaFunctionsRequestR(properties, restrictions);
     }
@@ -923,7 +945,7 @@ public class Convert {
     }
 
     public static MdSchemaHierarchiesRequest fromDiscoverMdSchemaHierarchies(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         MdSchemaHierarchiesRestrictionsR restrictions = discoverMdSchemaHierarchiesRestrictions(requestWs);
         return new MdSchemaHierarchiesRequestR(properties, restrictions);
     }
@@ -1035,7 +1057,7 @@ public class Convert {
     }
 
     public static DiscoverDataSourcesRequest fromDiscoverDataSources(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DiscoverDataSourcesRestrictionsR restrictions = discoverDataSourcesRestrictions(requestWs);
         return new DiscoverDataSourcesRequestR(properties, restrictions);
     }
@@ -1118,7 +1140,7 @@ public class Convert {
     }
 
     public static DiscoverXmlMetaDataRequest fromDiscoverXmlMetaData(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DiscoverXmlMetaDataRestrictionsR restrictions = discoverXmlMetaDataRestrictions(requestWs);
         return new DiscoverXmlMetaDataRequestR(properties, restrictions);
     }
@@ -1176,7 +1198,7 @@ public class Convert {
     }
 
     public static DbSchemaColumnsRequest fromDiscoverDbSchemaColumns(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DbSchemaColumnsRestrictionsR restrictions = discoverDbSchemaColumnsRestrictions(requestWs);
         return new DbSchemaColumnsRequestR(properties, restrictions);
     }
@@ -1279,7 +1301,7 @@ public class Convert {
     }
 
     public static DbSchemaProviderTypesRequest fromDiscoverDbSchemaProviderTypes(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DbSchemaProviderTypesRestrictionsR restrictions = discoverDbSchemaProviderTypesRestrictions(requestWs);
         return new DbSchemaProviderTypesRequestR(properties, restrictions);
     }
@@ -1360,7 +1382,7 @@ public class Convert {
     }
 
     public static DbSchemaSchemataRequest fromDiscoverDbSchemaSchemata(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DbSchemaSchemataRestrictionsR restrictions = discoverDbSchemaSchemataRestrictions(requestWs);
         return new DbSchemaSchemataRequestR(properties, restrictions);
     }
@@ -1402,7 +1424,7 @@ public class Convert {
     }
 
     public static MdSchemaLevelsRequest fromDiscoverMdSchemaLevels(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         MdSchemaLevelsRestrictionsR restrictions = discoverMdSchemaLevelsRestrictions(requestWs);
         return new MdSchemaLevelsRequestR(properties, restrictions);
     }
@@ -1508,7 +1530,7 @@ public class Convert {
     }
 
     public static MdSchemaMeasureGroupDimensionsRequest fromDiscoverMdSchemaMeasureGroupDimensions(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         MdSchemaMeasureGroupDimensionsRestrictionsR restrictions = discoverMdSchemaMeasureGroupDimensionsRestrictions(requestWs);
         return new MdSchemaMeasureGroupDimensionsRequestR(properties, restrictions);
     }
@@ -1582,7 +1604,7 @@ public class Convert {
     }
 
     public static MdSchemaMeasuresRequest fromDiscoverMdSchemaMeasures(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         MdSchemaMeasuresRestrictionsR restrictions = discoverMdSchemaMeasuresRestrictions(requestWs);
         return new MdSchemaMeasuresRequestR(properties, restrictions);
     }
@@ -1672,7 +1694,7 @@ public class Convert {
     }
 
     public static MdSchemaMembersRequest fromDiscoverMdSchemaMembers(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         MdSchemaMembersRestrictionsR restrictions = discoverMdSchemaMembersRestrictions(requestWs);
         return new MdSchemaMembersRequestR(properties, restrictions);
     }
@@ -1780,7 +1802,7 @@ public class Convert {
     }
 
     public static MdSchemaPropertiesRequest fromDiscoverMdSchemaProperties(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         MdSchemaPropertiesRestrictionsR restrictions = discoverMdSchemaPropertiesRestrictions(requestWs);
         return new MdSchemaPropertiesRequestR(properties, restrictions);
     }
@@ -1890,7 +1912,7 @@ public class Convert {
     }
 
     public static MdSchemaSetsRequest fromDiscoverMdSchemaSets(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         MdSchemaSetsRestrictionsR restrictions = discoverMdSchemaSetsRestrictions(requestWs);
         return new MdSchemaSetsRequestR(properties, restrictions);
     }
@@ -1961,7 +1983,7 @@ public class Convert {
     }
 
     public static MdSchemaKpisRequest fromDiscoverMdSchemaKpis(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         MdSchemaKpisRestrictionsR restrictions = discoverMdSchemaKpisRestrictions(requestWs);
         return new MdSchemaKpisRequestR(properties, restrictions);
     }
@@ -2043,7 +2065,7 @@ public class Convert {
     }
 
     public static MdSchemaMeasureGroupsRequest fromDiscoverMdSchemaMeasureGroups(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         MdSchemaMeasureGroupsRestrictionsR restrictions = discoverMdSchemaMeasureGroupsRestrictions(requestWs);
         return new MdSchemaMeasureGroupsRequestR(properties, restrictions);
     }
@@ -2126,7 +2148,7 @@ public class Convert {
     }
 
     public static DbSchemaSourceTablesRequest fromDiscoverDbSchemaSourceTables(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DbSchemaSourceTablesRestrictionsR restrictions = discoverDdSchemaSourceTablesRestrictions(requestWs);
         return new DbSchemaSourceTablesRequestR(properties, restrictions);
     }
@@ -2146,7 +2168,7 @@ public class Convert {
     }
 
     public static DbSchemaTablesInfoRequest fromDiscoverDbSchemaTablesInfo(Discover requestWs) {
-        PropertiesR properties = discoverProperties(requestWs);
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
         DbSchemaTablesInfoRestrictionsR restrictions = discoverDdSchemaTablesInfoRestrictions(requestWs);
         return new DbSchemaTablesInfoRequestR(properties, restrictions);
     }
@@ -2214,6 +2236,19 @@ public class Convert {
         return row;
     }
 
+    public static StatementRequest fromStatement(Execute requestWs) {
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
+        StatementCommandR command = new StatementCommandR(requestWs.getCommand().getStatement());
+        List<ExecuteParameter> parameters = parameters(requestWs);
+        return new StatementRequestR(properties, parameters, command);
+    }
+
+    public static ExecuteResponse toStatement(StatementResponse responseApi) {
+        // TODO convert
+        ExecuteResponse responseWs = new ExecuteResponse();
+        return responseWs;
+    }
+
     private static Return getReturn(List<Row> rows, Class cl) throws JAXBException, IOException {
         Schema schema = SchemaUtil.generateSchema("urn:schemas-microsoft-com:xml-analysis:rowset",
             cl);
@@ -2223,5 +2258,14 @@ public class Convert {
         rs.setRow(rows);
         r.setValue(rs);
         return r;
+    }
+
+    private static List<ExecuteParameter> parameters(Execute requestWs) {
+        if (requestWs.getParameters() != null) {
+            return requestWs.getParameters().getParameter()
+                .stream().map(i -> new ExecuteParameterR(i.getName(), i.getValue()))
+                .collect(Collectors.toList());
+        }
+        return null;
     }
 }

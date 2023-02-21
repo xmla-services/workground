@@ -5,6 +5,7 @@ package org.eclipse.daanse.xmla.model.record.discover;
 import java.math.BigInteger;
 import java.util.Optional;
 
+import org.eclipse.daanse.xmla.api.common.properties.AxisFormat;
 import org.eclipse.daanse.xmla.api.common.properties.Content;
 import org.eclipse.daanse.xmla.api.common.properties.Format;
 import org.eclipse.daanse.xmla.api.common.properties.PropertyListElementDefinition;
@@ -14,7 +15,7 @@ public class PropertiesR implements Properties {
 
     protected Optional<String> applicationContext;
 
-    protected Optional<String> axisFormat = Optional.empty();
+    protected Optional<AxisFormat> axisFormat = Optional.empty();
 
     protected Optional<BigInteger> beginRange = Optional.empty();
 
@@ -289,7 +290,7 @@ public class PropertiesR implements Properties {
         return applicationContext;
     }
 
-    public Optional<String> axisFormat() {
+    public Optional<AxisFormat> axisFormat() {
         return axisFormat;
     }
 
@@ -737,7 +738,7 @@ public class PropertiesR implements Properties {
         this.applicationContext = applicationContext;
     }
 
-    public void setAxisFormat(Optional<String> axisFormat) {
+    public void setAxisFormat(Optional<AxisFormat> axisFormat) {
         this.axisFormat = axisFormat;
     }
 

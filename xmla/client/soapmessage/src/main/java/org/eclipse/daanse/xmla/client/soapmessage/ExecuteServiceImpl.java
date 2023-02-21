@@ -14,6 +14,8 @@
 package org.eclipse.daanse.xmla.client.soapmessage;
 
 import org.eclipse.daanse.xmla.api.execute.ExecuteService;
+import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
+import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 
 public class ExecuteServiceImpl implements ExecuteService {
 
@@ -21,4 +23,8 @@ public class ExecuteServiceImpl implements ExecuteService {
         // TODO Auto-generated constructor stub
     }
 
+    @Override
+    public StatementResponse statement(StatementRequest statementRequest) {
+        return null;
+    }
 }
