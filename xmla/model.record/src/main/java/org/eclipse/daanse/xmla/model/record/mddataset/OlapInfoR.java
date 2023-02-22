@@ -11,14 +11,12 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.api.mddataset;
+package org.eclipse.daanse.xmla.model.record.mddataset;
 
-import java.util.List;
+import org.eclipse.daanse.xmla.api.mddataset.OlapInfo;
 
-public interface MemberType {
-
-    List<CellInfoItem> any();
-
-    String hierarchy();
+public record OlapInfoR(CubeInfoR cubeInfo,
+                        AxesInfoR axesInfo,
+                        CellInfoR cellInfo) implements OlapInfo {
 
 }

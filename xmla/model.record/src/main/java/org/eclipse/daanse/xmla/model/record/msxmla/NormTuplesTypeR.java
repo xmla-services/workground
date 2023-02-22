@@ -11,14 +11,13 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.api.mddataset;
+package org.eclipse.daanse.xmla.model.record.msxmla;
+
+import org.eclipse.daanse.xmla.api.msxmla.NormTuple;
+import org.eclipse.daanse.xmla.api.msxmla.NormTuplesType;
 
 import java.util.List;
 
-public interface MemberType {
-
-    List<CellInfoItem> any();
-
-    String hierarchy();
+public record NormTuplesTypeR (List<NormTuple> normTuple) implements NormTuplesType {
 
 }
