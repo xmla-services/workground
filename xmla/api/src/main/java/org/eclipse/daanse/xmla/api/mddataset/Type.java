@@ -13,10 +13,6 @@
  */
 package org.eclipse.daanse.xmla.api.mddataset;
 
-import java.util.List;
-
-public non-sealed interface Union extends Type{
-
-    List<Type> setType();
+public sealed interface Type permits MembersType, TuplesType, SetListType, NormTupleSet, Union {
 
 }

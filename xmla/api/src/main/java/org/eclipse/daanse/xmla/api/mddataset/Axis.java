@@ -17,7 +17,7 @@ import java.util.List;
 
 public interface Axis {
 
-    List<Object> setType();
+    List<Type> setType();
 
     String name();
 }

@@ -15,9 +15,9 @@ package org.eclipse.daanse.xmla.api.mddataset;
 
 import java.util.List;
 
-public interface SetListType {
+public non-sealed interface SetListType extends Type {
 
-    List<Object> setType();
+    List<Type> setType();
 
     Long size();
 }

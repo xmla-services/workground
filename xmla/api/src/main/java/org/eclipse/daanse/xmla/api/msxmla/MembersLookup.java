@@ -11,12 +11,15 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.api.mddataset;
+package org.eclipse.daanse.xmla.api.msxmla;
+
+import org.eclipse.daanse.xmla.api.mddataset.TupleType;
 
 import java.util.List;
 
-public non-sealed interface Union extends Type{
+public interface MembersLookup {
 
-    List<Type> setType();
-
+    List<TupleType> members();
 }
+
+

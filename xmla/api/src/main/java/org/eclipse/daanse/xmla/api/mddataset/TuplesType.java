@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.mddataset;
 
 import java.util.List;
 
-public interface TuplesType {
+public non-sealed interface TuplesType extends Type {
 
     List<TupleType> tuple();
 
