@@ -70,7 +70,7 @@ public class ExecuteRequestTest {
     }
 
     @Test
-    void test_DISCOVER_PROPERTIES_LocaleIdentifier(@InjectService XmlaService xmlaService) throws Exception {
+    void test_Statement(@InjectService XmlaService xmlaService) throws Exception {
         ArgumentCaptor<StatementRequest> captor = ArgumentCaptor.forClass(StatementRequest.class);
 
         final String sRequest = """

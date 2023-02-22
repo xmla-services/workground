@@ -11,14 +11,13 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.api.mddataset;
+package org.eclipse.daanse.xmla.model.record.mddataset;
+
+import org.eclipse.daanse.xmla.api.mddataset.Axes;
+import org.eclipse.daanse.xmla.api.mddataset.Axis;
 
 import java.util.List;
 
-public interface MemberType {
-
-    List<CellInfoItem> any();
-
-    String hierarchy();
+public record AxesR(List<Axis> axis) implements Axes {
 
 }

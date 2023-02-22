@@ -11,14 +11,12 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.api.mddataset;
+package org.eclipse.daanse.xmla.model.record.mddataset;
+
+import org.eclipse.daanse.xmla.api.mddataset.Type;
 
 import java.util.List;
 
-public interface MemberType {
-
-    List<CellInfoItem> any();
-
-    String hierarchy();
-
+public record SetListTypeR(List<Type> setType,
+                           Long size) {
 }

@@ -32,4 +32,7 @@ public class CellInfo {
         return this.any;
     }
 
+    public void setAny(List<Element> any) {
+        this.any = any;
+    }
 }

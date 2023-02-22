@@ -119,6 +119,7 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRestrictio
 import org.eclipse.daanse.xmla.api.execute.ExecuteParameter;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
+import org.eclipse.daanse.xmla.api.mddataset.Mddataset;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRestrictionsR;
@@ -2244,9 +2245,17 @@ public class Convert {
     }
 
     public static ExecuteResponse toStatement(StatementResponse responseApi) {
-        // TODO convert
+        Return ret = convertStatementResponse(responseApi.mdDataSet());
         ExecuteResponse responseWs = new ExecuteResponse();
+        responseWs.setReturn(ret);
+
         return responseWs;
+    }
+
+    private static Return convertStatementResponse(Mddataset mdDataSet) {
+        Return ret = new Return();
+        ret.setValue(MdDataSetConvertor.convertMdDataSet(mdDataSet));
+        return ret;
     }
 
     private static Return getReturn(List<Row> rows, Class cl) throws JAXBException, IOException {
