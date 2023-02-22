@@ -16,7 +16,7 @@ package org.eclipse.daanse.xmla.api.mddataset;
 
 import java.util.List;
 
-public interface MembersType {
+public non-sealed interface MembersType extends Type {
 
     List<MemberType> member();
 

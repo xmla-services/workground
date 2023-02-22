@@ -13,10 +13,12 @@
  */
 package org.eclipse.daanse.xmla.api.mddataset;
 
-import java.util.List;
+import org.eclipse.daanse.xmla.api.msxmla.MembersLookup;
+import org.eclipse.daanse.xmla.api.msxmla.NormTuplesType;
 
-public non-sealed interface Union extends Type{
+public non-sealed interface NormTupleSet extends Type {
 
-    List<Type> setType();
+    NormTuplesType normTuples();
 
+    MembersLookup membersLookup();
 }
