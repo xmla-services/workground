@@ -13,10 +13,14 @@
 */
 package org.eclipse.daanse.xmla.api.execute;
 
+import org.eclipse.daanse.xmla.api.execute.alter.AlterRequest;
+import org.eclipse.daanse.xmla.api.execute.alter.AlterResponse;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 
 public interface ExecuteService {
 
     StatementResponse statement(StatementRequest statementRequest);
+
+    AlterResponse alter(AlterRequest statementRequest);
 }
