@@ -71,6 +71,8 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaProperti
 import org.eclipse.daanse.xmla.api.discover.mdschema.properties.MdSchemaPropertiesResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
+import org.eclipse.daanse.xmla.api.execute.alter.AlterRequest;
+import org.eclipse.daanse.xmla.api.execute.alter.AlterResponse;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ext.Authenticate;
@@ -238,11 +240,22 @@ public class ApiXmlaWsAdapter implements WsAdapter {
                 if (parameters.getCommand().getStatement() != null) {
                     executeResponse = handleStatement(parameters);
                 }
+                if (parameters.getCommand().getAlter() != null) {
+                    executeResponse = handleAlter(parameters);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return executeResponse;
+    }
+
+    private ExecuteResponse handleAlter(Execute requestWs) {
+        AlterRequest requestApi = Convert.fromAlter(requestWs);
+        AlterResponse responseApi = xmlaService.execute().alter(requestApi);
+        ExecuteResponse responseWs = Convert.toAlter(responseApi);
+
+        return responseWs;
     }
 
     private ExecuteResponse handleStatement(Execute requestWs) {

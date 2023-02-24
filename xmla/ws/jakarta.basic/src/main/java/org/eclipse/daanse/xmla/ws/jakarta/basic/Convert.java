@@ -117,9 +117,12 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRestrictions;
 import org.eclipse.daanse.xmla.api.execute.ExecuteParameter;
+import org.eclipse.daanse.xmla.api.execute.alter.AlterRequest;
+import org.eclipse.daanse.xmla.api.execute.alter.AlterResponse;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.api.mddataset.Mddataset;
+import org.eclipse.daanse.xmla.api.xmla_empty.Emptyresult;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRestrictionsR;
@@ -176,8 +179,11 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchem
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.execute.ExecuteParameterR;
+import org.eclipse.daanse.xmla.model.record.execute.alter.AlterCommandR;
+import org.eclipse.daanse.xmla.model.record.execute.alter.AlterRequestR;
 import org.eclipse.daanse.xmla.model.record.execute.statement.StatementCommandR;
 import org.eclipse.daanse.xmla.model.record.execute.statement.StatementRequestR;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Alter;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Execute;
@@ -222,6 +228,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertException;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertMessages;
 
 public class Convert {
     private static Optional<Integer> localeIdentifier(PropertyList propertyList) {
@@ -2250,6 +2259,35 @@ public class Convert {
         responseWs.setReturn(ret);
 
         return responseWs;
+    }
+
+    public static AlterRequest fromAlter(Execute requestWs) {
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
+        AlterCommandR command = AlterCommandConvertor.convertAlterCommand(requestWs.getCommand().getAlter());
+        List<ExecuteParameter> parameters = parameters(requestWs);
+        return new AlterRequestR(properties, parameters, command);
+    }
+
+
+    public static ExecuteResponse toAlter(AlterResponse responseApi) {
+        Return ret = convertAlter(responseApi.emptyresult());
+        ExecuteResponse responseWs = new ExecuteResponse();
+        responseWs.setReturn(ret);
+
+        return responseWs;
+    }
+
+    private static Return convertAlter(Emptyresult emptyresult) {
+        Return ret = new Return();
+        ret.setValue(convertEmptyresult(emptyresult));
+        return ret;
+    }
+
+    private static org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_empty.Emptyresult convertEmptyresult(Emptyresult emptyresult) {
+        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_empty.Emptyresult result = new org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_empty.Emptyresult();
+        result.setException(convertException(emptyresult.exception()));
+        result.setMessages(convertMessages(emptyresult.messages()));
+        return result;
     }
 
     private static Return convertStatementResponse(Mddataset mdDataSet) {
