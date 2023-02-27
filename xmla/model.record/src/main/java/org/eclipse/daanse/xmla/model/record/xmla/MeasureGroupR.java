@@ -1,0 +1,86 @@
+/*
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
+package org.eclipse.daanse.xmla.model.record.xmla;
+
+import org.eclipse.daanse.xmla.api.xmla.AggregationDesign;
+import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Measure;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroup;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroupStorageModeEnumType;
+import org.eclipse.daanse.xmla.api.xmla.Partition;
+import org.eclipse.daanse.xmla.api.xmla.Translation;
+
+import java.math.BigInteger;
+import java.time.Instant;
+import java.util.List;
+
+public record MeasureGroupR(String name,
+                            String id,
+                            Instant createdTimestamp,
+                            Instant lastSchemaUpdate,
+                            String description,
+                            MeasureGroupR.Annotations annotations,
+                            Instant lastProcessed,
+                            MeasureGroupR.Translations translations,
+                            String type,
+                            String state,
+                            MeasureGroupR.Measures measures,
+                            String dataAggregation,
+                            MeasureGroupBindingR source,
+                            MeasureGroupR.StorageMode storageMode,
+                            String storageLocation,
+                            Boolean ignoreUnrelatedDimensions,
+                            ProactiveCachingR proactiveCaching,
+                            Long estimatedRows,
+                            ErrorConfigurationR errorConfiguration,
+                            Long estimatedSize,
+                            String processingMode,
+                            MeasureGroupR.Dimensions dimensions,
+                            MeasureGroupR.Partitions partitions,
+                            String aggregationPrefix,
+                            BigInteger processingPriority,
+                            MeasureGroupR.AggregationDesigns aggregationDesigns) implements MeasureGroup {
+
+    public record AggregationDesigns(
+        List<AggregationDesign> aggregationDesign) implements MeasureGroup.AggregationDesigns {
+
+    }
+
+    public record Annotations(List<Annotation> annotation) implements MeasureGroup.Annotations {
+
+    }
+
+    public record Dimensions(List<MeasureGroupDimension> dimension) implements MeasureGroup.Dimensions {
+
+    }
+
+    public record Measures(List<Measure> measure) implements MeasureGroup.Measures {
+
+    }
+
+    public record Partitions(List<Partition> partition) implements MeasureGroup.Partitions {
+
+    }
+
+    public record StorageMode(MeasureGroupStorageModeEnumType value,
+                              String valuens) implements MeasureGroup.StorageMode {
+
+    }
+
+    record Translations(List<Translation> translation) implements MeasureGroup.Translations {
+
+    }
+
+}
