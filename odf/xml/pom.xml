@@ -7,6 +7,7 @@
   </parent>
   <artifactId>org.eclipse.daanse.odf.xml</artifactId>
   <build>
+    <sourceDirectory>../src/main/gen</sourceDirectory>
     <plugins>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -20,8 +21,8 @@
             </goals>
             <configuration>
               <xjbSources>bind.xjb</xjbSources>
-              
               <outputDirectory>src/main/gen</outputDirectory>
+              <noGeneratedHeaderComments>true</noGeneratedHeaderComments>
             </configuration>
           </execution>
         </executions>

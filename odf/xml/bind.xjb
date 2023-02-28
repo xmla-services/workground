@@ -109,19 +109,26 @@
     </jaxb:schemaBindings>
   </jaxb:bindings>
   <jaxb:bindings
-    schemaLocation="src/main/xsd/OpenDocument-v1.3-dsig-schema.xsd"
+    schemaLocation="src/main/xsd/dsig.xsd"
     node="/xs:schema">
     <jaxb:schemaBindings>
       <jaxb:package name="org.eclipse.daanse.odf.xml.dsig" />
     </jaxb:schemaBindings>
   </jaxb:bindings>
   <jaxb:bindings
-    schemaLocation="src/main/xsd/OpenDocument-v1.3-manifest-schema.xsd"
+    schemaLocation="src/main/xsd/text.xsd"
     node="/xs:schema">
     <jaxb:schemaBindings>
       <jaxb:package name="org.eclipse.daanse.odf.xml.text" />
     </jaxb:schemaBindings>
   </jaxb:bindings>
+  <jaxb:bindings
+    schemaLocation="src/main/xsd/manifest.xsd"
+    node="/xs:schema">
+    <jaxb:schemaBindings>
+      <jaxb:package name="org.eclipse.daanse.odf.xml.manifest" />
+    </jaxb:schemaBindings>
+  </jaxb:bindings>  
   <jaxb:bindings
     schemaLocation="src/main/xsd/presentation.xsd"
     node="/xs:schema">
