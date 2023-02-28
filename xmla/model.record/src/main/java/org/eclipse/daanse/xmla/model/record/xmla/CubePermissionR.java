@@ -16,20 +16,21 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 import org.eclipse.daanse.xmla.api.xmla.CellPermission;
 import org.eclipse.daanse.xmla.api.xmla.CubeDimensionPermission;
 import org.eclipse.daanse.xmla.api.xmla.CubePermission;
+import org.eclipse.daanse.xmla.api.xmla.Permission;
 
 import java.time.Instant;
 import java.util.List;
 
 public record CubePermissionR(String readSourceData,
-                              CubePermissionR.DimensionPermissionsR dimensionPermissions,
-                              CubePermissionR.CellPermissionsR cellPermissions,
+                              CubePermission.DimensionPermissions dimensionPermissions,
+                              CubePermission.CellPermissions cellPermissions,
                               String write,
                               String name,
                               String id,
                               Instant createdTimestamp,
                               Instant lastSchemaUpdate,
                               String description,
-                              PermissionR.Annotations annotations,
+                              Permission.Annotations annotations,
                               String roleID,
                               Boolean process,
                               String readDefinition,

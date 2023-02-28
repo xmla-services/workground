@@ -13,6 +13,7 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
 import org.eclipse.daanse.xmla.api.xmla.Aggregation;
 import org.eclipse.daanse.xmla.api.xmla.AggregationAttribute;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesign;
@@ -20,10 +21,15 @@ import org.eclipse.daanse.xmla.api.xmla.AggregationDesignAttribute;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesignDimension;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDimension;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Assembly;
+import org.eclipse.daanse.xmla.api.xmla.Cube;
+import org.eclipse.daanse.xmla.api.xmla.CubeDimension;
+import org.eclipse.daanse.xmla.api.xmla.CubePermission;
 import org.eclipse.daanse.xmla.api.xmla.MajorObject;
 import org.eclipse.daanse.xmla.api.xmla.ObjectExpansion;
 import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
 import org.eclipse.daanse.xmla.api.xmla.Scope;
+import org.eclipse.daanse.xmla.model.record.engine.ImpersonationInfoR;
 import org.eclipse.daanse.xmla.model.record.execute.alter.AlterCommandR;
 import org.eclipse.daanse.xmla.model.record.xmla.AggregationAttributeR;
 import org.eclipse.daanse.xmla.model.record.xmla.AggregationDesignAttributeR;
@@ -32,15 +38,26 @@ import org.eclipse.daanse.xmla.model.record.xmla.AggregationDesignR;
 import org.eclipse.daanse.xmla.model.record.xmla.AggregationDimensionR;
 import org.eclipse.daanse.xmla.model.record.xmla.AggregationR;
 import org.eclipse.daanse.xmla.model.record.xmla.AnnotationR;
+import org.eclipse.daanse.xmla.model.record.xmla.AssemblyR;
+import org.eclipse.daanse.xmla.model.record.xmla.CubeDimensionR;
+import org.eclipse.daanse.xmla.model.record.xmla.CubePermissionR;
+import org.eclipse.daanse.xmla.model.record.xmla.CubeR;
 import org.eclipse.daanse.xmla.model.record.xmla.MajorObjectR;
 import org.eclipse.daanse.xmla.model.record.xmla.ObjectReferenceR;
+import org.eclipse.daanse.xmla.model.record.xmla.PermissionR;
+import org.eclipse.daanse.xmla.model.record.xmla.TranslationR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Alter;
+import org.eclipse.daanse.xmla.api.xmla.Translation;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertCube;
 
 public class AlterCommandConvertor {
 
@@ -65,8 +82,41 @@ public class AlterCommandConvertor {
 
     private static MajorObject convertMajorObject(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MajorObject objectDefinition) {
         AggregationDesign aggregationDesign = convertAggregationDesign(objectDefinition.getAggregationDesign());
+        Assembly assembly =  convertAssembly(objectDefinition.getAssembly());
+        Cube cube = convertCube(objectDefinition.getCube());
         //TODO
         return new MajorObjectR();
+    }
+
+
+    private static Assembly convertAssembly(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Assembly assembly) {
+        if (assembly != null) {
+            return new AssemblyR(assembly.getID(),
+                assembly.getName(),
+                convertToInstant(assembly.getCreatedTimestamp()),
+                convertToInstant(assembly.getLastSchemaUpdate()),
+                assembly.getDescription(),
+                convertAssemblyAnnotations(assembly.getAnnotations()),
+                converImpersonationInfo(assembly.getImpersonationInfo()));
+        }
+        return null;
+    }
+
+    private static ImpersonationInfo converImpersonationInfo(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine.ImpersonationInfo impersonationInfo) {
+        if (impersonationInfo != null) {
+            return new ImpersonationInfoR(impersonationInfo.getImpersonationMode(),
+                impersonationInfo.getAccount(),
+                impersonationInfo.getPassword(),
+                impersonationInfo.getImpersonationInfoSecurity());
+        }
+        return null;
+    }
+
+    private static AssemblyR.Annotations convertAssemblyAnnotations(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Assembly.Annotations annotations) {
+        if (annotations != null) {
+            return new AssemblyR.Annotations(convertAnnotationList(annotations.getAnnotation()));
+        }
+        return null;
     }
 
     private static AggregationDesign convertAggregationDesign(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesign aggregationDesign) {
@@ -240,22 +290,6 @@ public class AlterCommandConvertor {
         return null;
     }
 
-    private static List<Annotation> convertAnnotationList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Annotation> annotationList) {
-        if (annotationList != null) {
-            return annotationList.stream().map(AlterCommandConvertor::convertAnnotation).collect(Collectors.toList());
-        }
-        return null;
-    }
-
-    private static Annotation convertAnnotation(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Annotation annotation) {
-        return new AnnotationR(annotation.getName(),
-            annotation.getVisibility(),
-            annotation.getValue());
-    }
-
-    private static Instant convertToInstant(XMLGregorianCalendar createdTimestamp) {
-        return createdTimestamp.toGregorianCalendar().toInstant();
-    }
 
     private static Optional<ObjectReference> convertObjectReference(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ObjectReference object) {
         return Optional.of(new ObjectReferenceR(

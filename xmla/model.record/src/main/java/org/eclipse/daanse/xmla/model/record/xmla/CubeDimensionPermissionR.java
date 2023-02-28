@@ -23,8 +23,8 @@ public record CubeDimensionPermissionR(String cubeDimensionID,
                                        String description,
                                        String read,
                                        String write,
-                                       CubeDimensionPermissionR.AttributePermissions attributePermissions,
-                                       CubeDimensionPermissionR.Annotations annotations) implements CubeDimensionPermission {
+                                       CubeDimensionPermission.AttributePermissions attributePermissions,
+                                       CubeDimensionPermission.Annotations annotations) implements CubeDimensionPermission {
 
     public record Annotations(List<Annotation> annotation) implements CubeDimensionPermission.Annotations {
 

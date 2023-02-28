@@ -22,7 +22,7 @@ public record CubeHierarchyR(String hierarchyID,
                              String optimizedState,
                              Boolean visible,
                              Boolean enabled,
-                             CubeHierarchyR.Annotations annotations) implements CubeHierarchy {
+                             CubeHierarchy.Annotations annotations) implements CubeHierarchy {
 
     public record Annotations(List<Annotation> annotation) implements CubeHierarchy.Annotations {
 

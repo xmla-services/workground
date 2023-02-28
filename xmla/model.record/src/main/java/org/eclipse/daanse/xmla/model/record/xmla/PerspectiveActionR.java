@@ -19,7 +19,7 @@ import org.eclipse.daanse.xmla.api.xmla.PerspectiveAction;
 import java.util.List;
 
 public record PerspectiveActionR(String actionID,
-                                 PerspectiveActionR.Annotations annotations) implements PerspectiveAction {
+                                 PerspectiveAction.Annotations annotations) implements PerspectiveAction {
 
     public record Annotations(List<Annotation> annotation) implements PerspectiveAction.Annotations {
 
