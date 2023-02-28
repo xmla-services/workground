@@ -15,11 +15,14 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesign;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
 import org.eclipse.daanse.xmla.api.xmla.Measure;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroup;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroupBinding;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.Partition;
+import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
 
 import java.math.BigInteger;
@@ -31,27 +34,27 @@ public record MeasureGroupR(String name,
                             Instant createdTimestamp,
                             Instant lastSchemaUpdate,
                             String description,
-                            MeasureGroupR.Annotations annotations,
+                            MeasureGroup.Annotations annotations,
                             Instant lastProcessed,
-                            MeasureGroupR.Translations translations,
+                            MeasureGroup.Translations translations,
                             String type,
                             String state,
-                            MeasureGroupR.Measures measures,
+                            MeasureGroup.Measures measures,
                             String dataAggregation,
-                            MeasureGroupBindingR source,
-                            MeasureGroupR.StorageMode storageMode,
+                            MeasureGroupBinding source,
+                            MeasureGroup.StorageMode storageMode,
                             String storageLocation,
                             Boolean ignoreUnrelatedDimensions,
-                            ProactiveCachingR proactiveCaching,
+                            ProactiveCaching proactiveCaching,
                             Long estimatedRows,
-                            ErrorConfigurationR errorConfiguration,
+                            ErrorConfiguration errorConfiguration,
                             Long estimatedSize,
                             String processingMode,
-                            MeasureGroupR.Dimensions dimensions,
-                            MeasureGroupR.Partitions partitions,
+                            MeasureGroup.Dimensions dimensions,
+                            MeasureGroup.Partitions partitions,
                             String aggregationPrefix,
                             BigInteger processingPriority,
-                            MeasureGroupR.AggregationDesigns aggregationDesigns) implements MeasureGroup {
+                            MeasureGroup.AggregationDesigns aggregationDesigns) implements MeasureGroup {
 
     public record AggregationDesigns(
         List<AggregationDesign> aggregationDesign) implements MeasureGroup.AggregationDesigns {
@@ -79,7 +82,7 @@ public record MeasureGroupR(String name,
 
     }
 
-    record Translations(List<Translation> translation) implements MeasureGroup.Translations {
+    public record Translations(List<Translation> translation) implements MeasureGroup.Translations {
 
     }
 

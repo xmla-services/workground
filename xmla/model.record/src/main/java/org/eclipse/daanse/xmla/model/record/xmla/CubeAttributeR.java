@@ -23,7 +23,7 @@ public record CubeAttributeR(String attributeID,
                              String attributeHierarchyOptimizedState,
                              Boolean attributeHierarchyEnabled,
                              Boolean attributeHierarchyVisible,
-                             CubeAttributeR.Annotations annotations) implements CubeAttribute {
+                             CubeAttribute.Annotations annotations) implements CubeAttribute {
 
     public record Annotations(List<Annotation> annotation) implements CubeAttribute.Annotations {
 

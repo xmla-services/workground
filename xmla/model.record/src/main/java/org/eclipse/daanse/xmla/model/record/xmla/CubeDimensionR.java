@@ -30,9 +30,9 @@ public record CubeDimensionR(String id,
                              String allMemberAggregationUsage,
                              String hierarchyUniqueNameStyle,
                              String memberUniqueNameStyle,
-                             CubeDimensionR.Attributes attributes,
-                             CubeDimensionR.Hierarchies hierarchies,
-                             CubeDimensionR.Annotations annotations) implements CubeDimension {
+                             CubeDimension.Attributes attributes,
+                             CubeDimension.Hierarchies hierarchies,
+                             CubeDimension.Annotations annotations) implements CubeDimension {
 
     public record Annotations(List<Annotation> annotation) implements CubeDimension.Annotations {
 

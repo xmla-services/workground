@@ -157,4 +157,7 @@ public class ConvertorUtil {
         return null;
     }
 
+    public static Instant convertToInstant(XMLGregorianCalendar createdTimestamp) {
+        return createdTimestamp.toGregorianCalendar().toInstant();
+    }
 }

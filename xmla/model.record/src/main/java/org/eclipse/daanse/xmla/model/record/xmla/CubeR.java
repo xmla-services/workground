@@ -19,10 +19,13 @@ import org.eclipse.daanse.xmla.api.xmla.Cube;
 import org.eclipse.daanse.xmla.api.xmla.CubeDimension;
 import org.eclipse.daanse.xmla.api.xmla.CubePermission;
 import org.eclipse.daanse.xmla.api.xmla.CubeStorageModeEnumType;
+import org.eclipse.daanse.xmla.api.xmla.DataSourceViewBinding;
+import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
 import org.eclipse.daanse.xmla.api.xmla.Kpi;
 import org.eclipse.daanse.xmla.api.xmla.MdxScript;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroup;
 import org.eclipse.daanse.xmla.api.xmla.Perspective;
+import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
 
 import java.math.BigInteger;
@@ -34,72 +37,72 @@ public record CubeR(String name,
                     Instant createdTimestamp,
                     Instant lastSchemaUpdate,
                     String description,
-                    CubeR.Annotations annotations,
+                    Cube.Annotations annotations,
                     BigInteger language,
                     String collation,
-                    CubeR.Translations translations,
-                    CubeR.Dimensions dimensions,
-                    CubeR.CubePermissions cubePermissions,
-                    CubeR.MdxScripts mdxScripts,
-                    CubeR.Perspectives perspectives,
+                    Cube.Translations translations,
+                    Cube.Dimensions dimensions,
+                    Cube.CubePermissions cubePermissions,
+                    Cube.MdxScripts mdxScripts,
+                    Cube.Perspectives perspectives,
                     String state,
                     String defaultMeasure,
                     Boolean visible,
-                    CubeR.MeasureGroups measureGroups,
-                    DataSourceViewBindingR source,
+                    Cube.MeasureGroups measureGroups,
+                    DataSourceViewBinding source,
                     String aggregationPrefix,
                     BigInteger processingPriority,
-                    CubeR.StorageMode storageMode,
+                    Cube.StorageMode storageMode,
                     String processingMode,
                     String scriptCacheProcessingMode,
                     String scriptErrorHandlingMode,
                     String daxOptimizationMode,
-                    ProactiveCachingR proactiveCaching,
-                    CubeR.Kpis kpis,
-                    ErrorConfigurationR errorConfiguration,
-                    CubeR.Actions actions,
+                    ProactiveCaching proactiveCaching,
+                    Cube.Kpis kpis,
+                    ErrorConfiguration errorConfiguration,
+                    Cube.Actions actions,
                     String storageLocation,
                     Long estimatedRows,
                     Instant lastProcessed) implements Cube {
 
-    record Actions(List<Action> action) implements Cube.Actions {
+    public record Actions(List<Action> action) implements Cube.Actions {
 
     }
 
-    record Annotations(List<Annotation> annotation) implements Cube.Annotations {
+    public record Annotations(List<Annotation> annotation) implements Cube.Annotations {
 
     }
 
-    record CubePermissions(List<CubePermission> cubePermission) implements Cube.CubePermissions {
+    public record CubePermissions(List<CubePermission> cubePermission) implements Cube.CubePermissions {
 
     }
 
-    record Dimensions(List<CubeDimension> dimension) implements Cube.Dimensions {
+    public record Dimensions(List<CubeDimension> dimension) implements Cube.Dimensions {
 
     }
 
-    record Kpis(List<Kpi> kpi) implements Cube.Kpis {
+    public record Kpis(List<Kpi> kpi) implements Cube.Kpis {
 
     }
 
-    record MdxScripts(List<MdxScript> mdxScript) implements Cube.MdxScripts {
+    public record MdxScripts(List<MdxScript> mdxScript) implements Cube.MdxScripts {
 
     }
 
-    record MeasureGroups(List<MeasureGroup> measureGroup) implements Cube.MeasureGroups {
+    public record MeasureGroups(List<MeasureGroup> measureGroup) implements Cube.MeasureGroups {
 
     }
 
-    record Perspectives(List<Perspective> perspective) implements Cube.Perspectives {
+    public record Perspectives(List<Perspective> perspective) implements Cube.Perspectives {
 
     }
 
-    record StorageMode(CubeStorageModeEnumType value,
+    public record StorageMode(CubeStorageModeEnumType value,
                        String valuens) implements Cube.StorageMode {
 
     }
 
-    record Translations(List<Translation> translation) implements Cube.Translations {
+    public record Translations(List<Translation> translation) implements Cube.Translations {
 
     }
 
