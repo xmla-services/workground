@@ -15,34 +15,19 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public interface AggregationInstance {
+public interface MeasureGroupAttribute {
 
-    String id();
+    String attributeID();
 
-    String name();
+    MeasureGroupAttribute.KeyColumns keyColumns();
 
-    String aggregationType();
-
-    TabularBinding source();
-
-    AggregationInstance.Dimensions dimensions();
-
-    AggregationInstance.Measures measures();
+    String type();
 
     Annotations annotations();
 
-    String description();
+    interface KeyColumns {
 
-    public interface Dimensions {
-
-        List<AggregationInstanceDimension> dimension();
-
-
-    }
-
-    public interface Measures {
-
-        List<AggregationInstanceMeasure> measure();
+        List<DataItem> keyColumn();
 
     }
 

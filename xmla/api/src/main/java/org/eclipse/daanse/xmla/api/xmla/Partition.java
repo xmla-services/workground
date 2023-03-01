@@ -29,7 +29,7 @@ public interface Partition {
 
     String description();
 
-    Partition.Annotations annotations();
+    Annotations annotations();
 
     TabularBinding source();
 
@@ -79,11 +79,6 @@ public interface Partition {
 
         List<AggregationInstance> aggregationInstance();
 
-    }
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
     }
 
     public interface CurrentStorageMode {

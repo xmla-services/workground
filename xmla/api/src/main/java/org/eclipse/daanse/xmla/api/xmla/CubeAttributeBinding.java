@@ -13,36 +13,24 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.math.BigInteger;
 import java.util.List;
 
-public interface AggregationInstance {
+public interface CubeAttributeBinding extends Binding {
 
-    String id();
+    String cubeID();
 
-    String name();
+    String cubeDimensionID();
 
-    String aggregationType();
+    String attributeID();
 
-    TabularBinding source();
+    String type();
 
-    AggregationInstance.Dimensions dimensions();
+    CubeAttributeBinding.Ordinal ordinal();
 
-    AggregationInstance.Measures measures();
+    interface Ordinal {
 
-    Annotations annotations();
-
-    String description();
-
-    public interface Dimensions {
-
-        List<AggregationInstanceDimension> dimension();
-
-
-    }
-
-    public interface Measures {
-
-        List<AggregationInstanceMeasure> measure();
+        List<BigInteger> ordinal();
 
     }
 

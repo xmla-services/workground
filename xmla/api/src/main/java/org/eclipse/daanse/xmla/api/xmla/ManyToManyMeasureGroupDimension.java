@@ -15,35 +15,15 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public interface AggregationInstance {
+public interface ManyToManyMeasureGroupDimension extends MeasureGroupDimension {
 
-    String id();
-
-    String name();
-
-    String aggregationType();
-
-    TabularBinding source();
-
-    AggregationInstance.Dimensions dimensions();
-
-    AggregationInstance.Measures measures();
+    String cubeDimensionID();
 
     Annotations annotations();
 
-    String description();
+    MeasureGroupDimensionBinding source();
 
-    public interface Dimensions {
+    String measureGroupID();
 
-        List<AggregationInstanceDimension> dimension();
-
-
-    }
-
-    public interface Measures {
-
-        List<AggregationInstanceMeasure> measure();
-
-    }
-
+    String directSlice();
 }

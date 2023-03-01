@@ -14,10 +14,14 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.AggregationInstance;
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Annotations;
+import org.eclipse.daanse.xmla.api.xmla.DataSourceViewBinding;
+import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
 import org.eclipse.daanse.xmla.api.xmla.Partition;
 import org.eclipse.daanse.xmla.api.xmla.PartitionCurrentStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.PartitionStorageModeEnumType;
+import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
+import org.eclipse.daanse.xmla.api.xmla.TabularBinding;
 
 import java.math.BigInteger;
 import java.time.Instant;
@@ -28,24 +32,24 @@ public record PartitionR(String name,
                          Instant createdTimestamp,
                          Instant lastSchemaUpdate,
                          String description,
-                         PartitionR.Annotations annotations,
-                         TabularBindingR source,
+                         Annotations annotations,
+                         TabularBinding source,
                          BigInteger processingPriority,
                          String aggregationPrefix,
-                         PartitionR.StorageMode storageMode,
+                         Partition.StorageMode storageMode,
                          String processingMode,
-                         ErrorConfigurationR errorConfiguration,
+                         ErrorConfiguration errorConfiguration,
                          String storageLocation,
                          String remoteDatasourceID,
                          String slice,
-                         ProactiveCachingR proactiveCaching,
+                         ProactiveCaching proactiveCaching,
                          String type,
                          Long estimatedSize,
                          Long estimatedRows,
-                         PartitionR.CurrentStorageMode currentStorageMode,
+                         Partition.CurrentStorageMode currentStorageMode,
                          String aggregationDesignID,
-                         PartitionR.AggregationInstances aggregationInstances,
-                         DataSourceViewBindingR aggregationInstanceSource,
+                         Partition.AggregationInstances aggregationInstances,
+                         DataSourceViewBinding aggregationInstanceSource,
                          Instant lastProcessed,
                          String state,
                          Integer stringStoresCompatibilityLevel,
@@ -54,10 +58,6 @@ public record PartitionR(String name,
 
     public record AggregationInstances(
         List<AggregationInstance> aggregationInstance) implements Partition.AggregationInstances {
-
-    }
-
-    public record Annotations(List<Annotation> annotation) implements Partition.Annotations {
 
     }
 

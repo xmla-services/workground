@@ -14,12 +14,13 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
+import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingBinding;
 
 import javax.xml.datatype.Duration;
 
 public record ProactiveCachingR(String onlineMode,
                                 String aggregationStorage,
-                                ProactiveCachingBindingR source,
+                                ProactiveCachingBinding source,
                                 Duration silenceInterval,
                                 Duration latency,
                                 Duration silenceOverrideInterval,

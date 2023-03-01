@@ -13,37 +13,20 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-import java.util.List;
+public interface ReferenceMeasureGroupDimension extends MeasureGroupDimension {
 
-public interface AggregationInstance {
-
-    String id();
-
-    String name();
-
-    String aggregationType();
-
-    TabularBinding source();
-
-    AggregationInstance.Dimensions dimensions();
-
-    AggregationInstance.Measures measures();
+    String cubeDimensionID();
 
     Annotations annotations();
 
-    String description();
+    MeasureGroupDimensionBinding source();
 
-    public interface Dimensions {
+    String intermediateCubeDimensionID();
 
-        List<AggregationInstanceDimension> dimension();
+    String intermediateGranularityAttributeID();
 
+    String materialization();
 
-    }
-
-    public interface Measures {
-
-        List<AggregationInstanceMeasure> measure();
-
-    }
+    String processingState();
 
 }

@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import org.eclipse.daanse.xmla.api.xmla.Measure;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
 
@@ -24,7 +25,7 @@ public record MeasureR(String name,
                        String description,
                        String aggregateFunction,
                        String dataType,
-                       DataItemR source,
+                       DataItem source,
                        Boolean visible,
                        String measureExpression,
                        String displayFolder,
@@ -34,8 +35,8 @@ public record MeasureR(String name,
                        String fontName,
                        String fontSize,
                        String fontFlags,
-                       MeasureR.Translations translations,
-                       MeasureR.Annotations annotations) implements Measure {
+                       Measure.Translations translations,
+                       Measure.Annotations annotations) implements Measure {
 
     public record Annotations(List<Annotation> annotation) implements Measure.Annotations {
 
