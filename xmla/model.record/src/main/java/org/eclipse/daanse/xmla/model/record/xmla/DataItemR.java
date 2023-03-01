@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
 
 import java.math.BigInteger;
@@ -27,8 +28,8 @@ public record DataItemR(String dataType,
                         String invalidXmlCharacters,
                         String collation,
                         String format,
-                        BindingR source,
-                        DataItemR.Annotations annotations) implements DataItem {
+                        Binding source,
+                        DataItem.Annotations annotations) implements DataItem {
 
     public record Annotations(List<Annotation> annotation) implements DataItem.Annotations {
 

@@ -16,7 +16,7 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 import org.eclipse.daanse.xmla.api.xmla.AggregationInstance;
 import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceDimension;
 import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceMeasure;
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Annotations;
 import org.eclipse.daanse.xmla.api.xmla.TabularBinding;
 
 import java.util.List;
@@ -25,15 +25,12 @@ public record AggregationInstanceR(String id,
                                    String name,
                                    String aggregationType,
                                    TabularBinding source,
-                                   AggregationInstanceR.DimensionsR dimensions,
-                                   AggregationInstanceR.MeasuresR measures,
-                                   AggregationInstanceR.AnnotationsR annotations,
+                                   AggregationInstance.Dimensions dimensions,
+                                   AggregationInstance.Measures measures,
+                                   Annotations annotations,
                                    String description
 ) implements AggregationInstance {
 
-    public record AnnotationsR(List<Annotation> annotation) implements AggregationInstance.Annotations {
-
-    }
 
     public record DimensionsR(List<AggregationInstanceDimension> dimension) implements AggregationInstance.Dimensions {
 

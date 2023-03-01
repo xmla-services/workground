@@ -19,7 +19,7 @@ import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceDimension;
 import java.util.List;
 
 public record AggregationInstanceDimensionR(String cubeDimensionID,
-                                            AggregationInstanceDimensionR.Attributes attributes) implements AggregationInstanceDimension {
+                                            AggregationInstanceDimension.Attributes attributes) implements AggregationInstanceDimension {
 
     public record Attributes(
         List<AggregationInstanceAttribute> attribute) implements AggregationInstanceDimension.Attributes {
