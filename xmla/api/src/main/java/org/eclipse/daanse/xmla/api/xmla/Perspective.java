@@ -28,7 +28,7 @@ public interface Perspective {
 
     String description();
 
-    Perspective.Annotations annotations();
+    List<Annotation> annotations();
 
     Perspective.Translations translations();
 
@@ -48,11 +48,6 @@ public interface Perspective {
 
         List<PerspectiveAction> action();
 
-    }
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
     }
 
     public interface Calculations {

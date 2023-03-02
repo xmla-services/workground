@@ -17,17 +17,8 @@ import java.util.List;
 
 public interface PerspectiveAction {
 
+    String actionID();
 
-     String actionID();
-
-     PerspectiveAction.Annotations annotations();
-
-
-    public interface Annotations {
-
-
-         List<Annotation> annotation();
-
-    }
+    List<Annotation> annotations();
 
 }

@@ -24,11 +24,7 @@ public record AttributePermissionR(String attributeID,
                                    String visualTotals,
                                    String allowedSet,
                                    String deniedSet,
-                                   AttributePermission.Annotations annotations
+                                   List<Annotation> annotations
 ) implements AttributePermission {
-
-    public record Annotations(List<Annotation> annotation) implements AttributePermission.Annotations {
-
-    }
 
 }

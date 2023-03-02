@@ -23,17 +23,10 @@ public interface Account {
 
     Account.Aliases aliases();
 
-    Account.Annotations annotations();
+    List<Annotation> annotations();
 
     interface Aliases {
 
         List<String> alias();
-
-    }
-
-    interface Annotations {
-
-        List<Annotation> annotation();
-
     }
 }

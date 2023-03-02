@@ -32,11 +32,7 @@ public record CubeDimensionR(String id,
                              String memberUniqueNameStyle,
                              CubeDimension.Attributes attributes,
                              CubeDimension.Hierarchies hierarchies,
-                             CubeDimension.Annotations annotations) implements CubeDimension {
-
-    public record Annotations(List<Annotation> annotation) implements CubeDimension.Annotations {
-
-    }
+                             List<Annotation> annotations) implements CubeDimension {
 
     public record Attributes(List<CubeAttribute> attribute) implements CubeDimension.Attributes {
 

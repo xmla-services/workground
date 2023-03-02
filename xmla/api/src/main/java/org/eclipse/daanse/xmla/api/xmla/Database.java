@@ -32,7 +32,7 @@ public interface Database {
 
     String description();
 
-    Database.Annotations annotations();
+    List<Annotation> annotations();
 
     Instant lastUpdate();
 
@@ -99,12 +99,6 @@ public interface Database {
     public interface Accounts {
 
         List<Account> account();
-
-    }
-
-    interface Annotations {
-
-        List<Annotation> annotation();
 
     }
 

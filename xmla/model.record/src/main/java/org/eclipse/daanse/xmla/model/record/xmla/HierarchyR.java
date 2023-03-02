@@ -34,15 +34,11 @@ public record HierarchyR(String name,
                          String memberKeysUnique,
                          Boolean allowDuplicateNames,
                          HierarchyR.Levels levels,
-                         HierarchyR.Annotations annotations,
+                         List<Annotation> annotations,
                          HierarchyVisualizationProperties visualizationProperties) implements Hierarchy {
 
     public record AllMemberTranslationsR(
         List<Translation> allMemberTranslation) implements Hierarchy.AllMemberTranslations {
-
-    }
-
-    public record AnnotationsR(List<Annotation> annotation) implements Hierarchy.Annotations {
 
     }
 

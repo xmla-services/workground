@@ -23,7 +23,7 @@ public interface Aggregation {
 
     Aggregation.Dimensions dimensions();
 
-    Annotations annotations();
+    List<Annotation> annotations();
 
     String description();
 

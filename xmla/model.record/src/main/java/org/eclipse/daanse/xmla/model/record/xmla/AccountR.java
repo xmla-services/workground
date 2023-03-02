@@ -21,14 +21,11 @@ import java.util.List;
 public record AccountR(    String accountType,
                            String aggregationFunction,
                            AccountR.AliasesR aliases,
-                           AccountR.AnnotationsR annotations
+                           List<Annotation> annotations
 ) implements Account {
 
 
     public record AliasesR(List<String> alias) implements Account.Aliases {
     }
 
-    public record AnnotationsR(List<Annotation> annotation) implements Account.Annotations{
-
-    }
 }

@@ -49,13 +49,7 @@ public interface Measure {
 
     Measure.Translations translations();
 
-    Measure.Annotations annotations();
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-    }
+    List<Annotation> annotations();
 
     public interface Translations {
 

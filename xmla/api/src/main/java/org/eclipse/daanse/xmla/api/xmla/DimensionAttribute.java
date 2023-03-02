@@ -94,7 +94,7 @@ public interface DimensionAttribute {
 
     String instanceSelection();
 
-    DimensionAttribute.Annotations annotations();
+    List<Annotation> annotations();
 
     String processingState();
 
@@ -104,15 +104,6 @@ public interface DimensionAttribute {
     DimensionAttributeVisualizationProperties visualizationProperties();
 
     String extendedType();
-
-
-    public interface Annotations {
-
-
-        List<Annotation> annotation();
-
-
-    }
 
     public interface AttributeRelationships {
 

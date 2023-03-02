@@ -28,7 +28,7 @@ public interface Trace {
 
     String description();
 
-    Trace.Annotations annotations();
+    List<Annotation> annotations();
 
     String logFileName();
 
@@ -47,12 +47,4 @@ public interface Trace {
     TraceFilter filter();
 
     EventType eventType();
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-
-    }
-
 }

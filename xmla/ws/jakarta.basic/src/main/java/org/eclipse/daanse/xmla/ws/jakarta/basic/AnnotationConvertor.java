@@ -1,9 +1,7 @@
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
-import org.eclipse.daanse.xmla.api.xmla.Annotations;
 import org.eclipse.daanse.xmla.model.record.xmla.AnnotationR;
-import org.eclipse.daanse.xmla.model.record.xmla.AnnotationsR;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,13 +19,6 @@ public class AnnotationConvertor {
         return new AnnotationR(annotation.getName(),
             annotation.getVisibility(),
             annotation.getValue());
-    }
-
-    public static Annotations convertAnnotations(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Annotation> annotationList) {
-        if(annotationList != null) {
-            return new AnnotationsR(convertAnnotationList(annotationList));
-        }
-        return null;
     }
 
 }

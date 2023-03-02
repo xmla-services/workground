@@ -39,13 +39,7 @@ public interface CubeDimension {
 
     CubeDimension.Hierarchies hierarchies();
 
-    CubeDimension.Annotations annotations();
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-    }
+    List<Annotation> annotations();
 
     public interface Attributes {
 

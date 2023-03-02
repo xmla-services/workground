@@ -19,7 +19,7 @@ public class DataItemConvertor {
     }
 
     public static DataItem convertDataItem(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataItem source) {
-        if(source != null) {
+        if (source != null) {
             return new DataItemR(source.getDataType(),
                 source.getDataSize(),
                 source.getMimeType(),
@@ -29,15 +29,10 @@ public class DataItemConvertor {
                 source.getCollation(),
                 source.getFormat(),
                 convertBinding(source.getSource()),
-                convertDataItemAnnotations(source.getAnnotations()));
+                convertAnnotationList(source.getAnnotations() == null ? null :
+                    source.getAnnotations().getAnnotation()));
         }
         return null;
     }
 
-    private static DataItem.Annotations convertDataItemAnnotations(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataItem.Annotations annotations) {
-        if(annotations != null) {
-            return  new DataItemR.Annotations(convertAnnotationList(annotations.getAnnotation()));
-        }
-        return null;
-    }
 }

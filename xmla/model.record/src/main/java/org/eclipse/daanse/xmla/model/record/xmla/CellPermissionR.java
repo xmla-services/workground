@@ -21,9 +21,6 @@ import java.util.List;
 public record CellPermissionR(String access,
                               String description,
                               String expression,
-                              CellPermission.Annotations annotations) implements CellPermission {
+                              List<Annotation> annotations) implements CellPermission {
 
-    public record Annotations(List<Annotation> annotation) implements CellPermission.Annotations {
-
-    }
 }

@@ -30,16 +30,9 @@ public interface Level {
 
      Level.Translations translations();
 
-     Level.Annotations annotations();
+    List<Annotation> annotations();
 
-    public interface Annotations {
-
-
-         List<Annotation> annotation();
-
-    }
-
-    public interface Translations {
+    interface Translations {
 
          List<Translation> translation();
     }

@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 import java.time.Instant;
+import java.util.List;
 
 public interface DataSourceView {
 
@@ -27,7 +28,7 @@ public interface DataSourceView {
 
     String description();
 
-    Annotations annotations();
+    List<Annotation> annotations();
 
     String dataSourceID();
 

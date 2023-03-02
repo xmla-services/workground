@@ -18,31 +18,23 @@ import java.util.List;
 
 public interface DataItem {
 
+    String dataType();
 
-     String dataType();
+    BigInteger dataSize();
 
-     BigInteger dataSize();
+    String mimeType();
 
-     String mimeType();
+    String nullProcessing();
 
-     String nullProcessing();
+    String trimming();
 
-     String trimming();
+    String invalidXmlCharacters();
 
-     String invalidXmlCharacters();
+    String collation();
 
-     String collation();
+    String format();
 
-     String format();
+    Binding source();
 
-     Binding source();
-
-     DataItem.Annotations annotations();
-
-    public interface Annotations {
-
-         List<Annotation> annotation();
-
-    }
-
+    List<Annotation> annotations();
 }

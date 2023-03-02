@@ -34,11 +34,7 @@ public record KpiR(String name,
                    String statusGraphic,
                    String currentTimeMember,
                    String parentKpiID,
-                   Kpi.Annotations annotations) implements Kpi {
-
-    public record Annotations(List<Annotation> annotation) implements Kpi.Annotations {
-
-    }
+                   List<Annotation> annotations) implements Kpi {
 
     public record Translations(List<Translation> translation) implements Kpi.Translations {
 

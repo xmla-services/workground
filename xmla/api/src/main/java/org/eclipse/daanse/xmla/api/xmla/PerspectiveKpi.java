@@ -17,17 +17,7 @@ import java.util.List;
 
 public interface PerspectiveKpi {
 
+    String kpiID();
 
-     String kpiID();
-
-     PerspectiveKpi.Annotations annotations();
-
-
-    public interface Annotations {
-
-
-         List<Annotation> annotation();
-
-    }
-
+    List<Annotation> annotations();
 }

@@ -28,7 +28,7 @@ public interface Server {
 
     String description();
 
-    Server.Annotations annotations();
+    List<Annotation> annotations();
 
     String productName();
 
@@ -55,11 +55,6 @@ public interface Server {
     Server.Roles roles();
 
     Server.ServerProperties serverProperties();
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
-    }
 
     public interface Assemblies {
 

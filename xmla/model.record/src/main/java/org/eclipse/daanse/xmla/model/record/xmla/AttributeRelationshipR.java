@@ -24,15 +24,12 @@ public record AttributeRelationshipR(String attributeID,
                                      String cardinality,
                                      String optionality,
                                      String overrideBehavior,
-                                     AttributeRelationshipR.Annotations annotations,
+                                     List<Annotation> annotations,
                                      String name,
                                      Boolean visible,
                                      AttributeRelationshipR.Translations translations
 ) implements AttributeRelationship {
 
-    public record Annotations(List<Annotation> annotation) implements AttributeRelationship.Annotations {
-
-    }
 
     public record Translations(List<Translation> translation) implements AttributeRelationship.Translations {
 

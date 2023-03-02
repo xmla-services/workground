@@ -30,7 +30,7 @@ public interface Assembly {
 
     String description();
 
-    Annotations annotations();
+    List<Annotation> annotations();
 
     ImpersonationInfo impersonationInfo();
 }

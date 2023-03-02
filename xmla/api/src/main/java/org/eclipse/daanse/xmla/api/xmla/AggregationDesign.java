@@ -29,7 +29,7 @@ public interface AggregationDesign {
 
     String description();
 
-    Annotations annotations();
+    List<Annotation> annotations();
 
     Long estimatedRows();
 

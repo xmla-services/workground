@@ -21,13 +21,8 @@ public interface AggregationDesignDimension {
 
     AggregationDesignDimension.Attributes attributes();
 
-    AggregationDesignDimension.Annotations annotations();
+    List<Annotation> annotations();
 
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-    }
 
     public interface Attributes {
 

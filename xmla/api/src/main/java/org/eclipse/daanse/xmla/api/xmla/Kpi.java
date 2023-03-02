@@ -48,14 +48,7 @@ public interface Kpi {
 
      String parentKpiID();
 
-     Kpi.Annotations annotations();
-
-
-    public interface Annotations {
-
-         List<Annotation> annotation();
-
-    }
+    List<Annotation> annotations();
 
     public interface Translations {
 

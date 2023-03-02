@@ -46,7 +46,7 @@ public interface Hierarchy {
 
      Hierarchy.Levels levels();
 
-     Hierarchy.Annotations annotations();
+    List<Annotation> annotations();
 
      HierarchyVisualizationProperties visualizationProperties();
 
@@ -58,15 +58,7 @@ public interface Hierarchy {
 
     }
 
-    public interface Annotations {
-
-
-         List<Annotation> annotation();
-
-    }
-
     public interface Levels {
-
 
          List<Level> level();
 

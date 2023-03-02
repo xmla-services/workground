@@ -19,7 +19,7 @@ public interface RegularMeasureGroupDimension extends MeasureGroupDimension {
 
     String cubeDimensionID();
 
-    Annotations annotations();
+    List<Annotation> annotations();
 
     MeasureGroupDimensionBinding source();
 

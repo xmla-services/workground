@@ -29,11 +29,8 @@ public record MiningModelColumnR(String name,
                                  MiningModelColumnR.Translations translations,
                                  MiningModelColumnR.Columns columns,
                                  MiningModelColumnR.ModelingFlags modelingFlags,
-                                 MiningModelColumnR.Annotations annotations) implements MiningModelColumn {
+                                 List<Annotation> annotations) implements MiningModelColumn {
 
-    public record Annotations(List<Annotation> annotation) implements MiningModelColumn.Annotations {
-
-    }
 
     public record Columns(List<MiningModelColumn> column) implements MiningModelColumn.Columns {
 

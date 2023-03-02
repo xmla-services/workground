@@ -28,7 +28,7 @@ public record MiningModelR(String name,
                            Instant createdTimestamp,
                            Instant lastSchemaUpdate,
                            String description,
-                           MiningModelR.Annotations annotations,
+                           List<Annotation> annotations,
                            String algorithm,
                            Instant lastProcessed,
                            MiningModelR.AlgorithmParameters algorithmParameters,
@@ -44,10 +44,6 @@ public record MiningModelR(String name,
 
     public record AlgorithmParameters(
         List<AlgorithmParameter> algorithmParameter) implements MiningModel.AlgorithmParameters {
-
-    }
-
-    public record Annotations(List<Annotation> annotation) implements MiningModel.Annotations {
 
     }
 

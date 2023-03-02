@@ -19,10 +19,6 @@ import org.eclipse.daanse.xmla.api.xmla.PerspectiveKpi;
 import java.util.List;
 
 public record PerspectiveKpiR(String kpiID,
-                              PerspectiveKpi.Annotations annotations) implements PerspectiveKpi {
-
-    public record Annotations(List<Annotation> annotation) implements PerspectiveKpi.Annotations {
-
-    }
+                              List<Annotation> annotations) implements PerspectiveKpi {
 
 }

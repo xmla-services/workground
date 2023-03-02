@@ -17,18 +17,7 @@ import java.util.List;
 
 public interface PerspectiveMeasure {
 
+    String measureID();
 
-     String measureID();
-
-     PerspectiveMeasure.Annotations annotations();
-
-
-    public interface Annotations {
-
-
-         List<Annotation> annotation();
-
-
-    }
-
+    List<Annotation> annotations();
 }

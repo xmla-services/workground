@@ -19,6 +19,6 @@ public interface AggregationAttribute {
 
     String attributeID();
 
-    Annotations annotations();
+    List<Annotation> annotations();
 
 }

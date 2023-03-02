@@ -23,11 +23,7 @@ import java.util.List;
 public record PerspectiveDimensionR(String cubeDimensionID,
                                     PerspectiveDimension.Attributes attributes,
                                     PerspectiveDimension.Hierarchies hierarchies,
-                                    PerspectiveDimension.Annotations annotations) implements PerspectiveDimension {
-
-    public record Annotations(List<Annotation> annotation) implements PerspectiveDimension.Annotations {
-
-    }
+                                    List<Annotation> annotations) implements PerspectiveDimension {
 
     public record Attributes(List<PerspectiveAttribute> attribute) implements PerspectiveDimension.Attributes {
 

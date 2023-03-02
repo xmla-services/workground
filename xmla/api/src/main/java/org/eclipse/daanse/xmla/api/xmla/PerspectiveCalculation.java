@@ -22,14 +22,6 @@ public interface PerspectiveCalculation {
 
      String type();
 
-     PerspectiveCalculation.Annotations annotations();
-
-
-    public interface Annotations {
-
-
-         List<Annotation> annotation();
-
-    }
+    List<Annotation> annotations();
 
 }

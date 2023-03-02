@@ -23,7 +23,7 @@ public interface MeasureGroupAttribute {
 
     String type();
 
-    Annotations annotations();
+    List<Annotation> annotations();
 
     interface KeyColumns {
 

@@ -17,20 +17,11 @@ import java.util.List;
 
 public interface CellPermission {
 
+    String access();
 
-     String access();
+    String description();
 
-     String description();
+    String expression();
 
-     String expression();
-
-     CellPermission.Annotations annotations();
-
-
-    public interface Annotations {
-
-
-         List<Annotation> annotation();
-
-    }
+    List<Annotation> annotations();
 }

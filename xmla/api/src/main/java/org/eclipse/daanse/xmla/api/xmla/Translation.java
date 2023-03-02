@@ -25,12 +25,5 @@ public interface Translation {
 
     String displayFolder();
 
-    Translation.Annotations annotations();
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-    }
-
+    List<Annotation> annotations();
 }

@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.Annotations;
+import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupAttribute;
 
@@ -22,7 +22,7 @@ import java.util.List;
 public record MeasureGroupAttributeR(String attributeID,
                                      MeasureGroupAttribute.KeyColumns keyColumns,
                                      String type,
-                                     Annotations annotations) implements MeasureGroupAttribute {
+                                     List<Annotation> annotations) implements MeasureGroupAttribute {
 
     public record KeyColumns(List<DataItem> keyColumn) implements MeasureGroupAttribute.KeyColumns {
 

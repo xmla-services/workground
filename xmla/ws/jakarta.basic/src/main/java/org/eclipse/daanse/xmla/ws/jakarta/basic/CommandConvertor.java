@@ -114,7 +114,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.WhereR;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotations;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.BindingConvertor.convertBinding;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertDuration;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
@@ -1207,7 +1207,7 @@ public class CommandConvertor {
                 convertToInstant(dataSourceView.getCreatedTimestamp()),
                 convertToInstant(dataSourceView.getLastSchemaUpdate()),
                 dataSourceView.getDescription(),
-                convertAnnotations(dataSourceView.getAnnotations() == null ? null :
+                convertAnnotationList(dataSourceView.getAnnotations() == null ? null :
                     dataSourceView.getAnnotations().getAnnotation()),
                 dataSourceView.getDataSourceID());
         }
@@ -1221,7 +1221,7 @@ public class CommandConvertor {
                 convertToInstant(dataSource.getCreatedTimestamp()),
                 convertToInstant(dataSource.getLastSchemaUpdate()),
                 dataSource.getDescription(),
-                convertAnnotations(dataSource.getAnnotations() == null ? null :
+                convertAnnotationList(dataSource.getAnnotations() == null ? null :
                     dataSource.getAnnotations().getAnnotation()),
                 dataSource.getManagedProvider(),
                 dataSource.getConnectionString(),
@@ -1259,7 +1259,7 @@ public class CommandConvertor {
                 convertToInstant(dataSourcePermission.getCreatedTimestamp()),
                 convertToInstant(dataSourcePermission.getLastSchemaUpdate()),
                 dataSourcePermission.getDescription(),
-                convertAnnotations(dataSourcePermission.getAnnotations() == null ? null :
+                convertAnnotationList(dataSourcePermission.getAnnotations() == null ? null :
                     dataSourcePermission.getAnnotations().getAnnotation()),
                 dataSourcePermission.getRoleID(),
                 dataSourcePermission.isProcess(),

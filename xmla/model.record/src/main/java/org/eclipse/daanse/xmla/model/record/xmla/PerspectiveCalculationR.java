@@ -20,10 +20,6 @@ import java.util.List;
 
 public record PerspectiveCalculationR(String name,
                                       String type,
-                                      PerspectiveCalculationR.Annotations annotations) implements PerspectiveCalculation {
-
-    public record Annotations(List<Annotation> annotation) implements PerspectiveCalculation.Annotations {
-
-    }
+                                      List<Annotation> annotations) implements PerspectiveCalculation {
 
 }

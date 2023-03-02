@@ -28,7 +28,7 @@ public interface Permission {
 
     String description();
 
-    Annotations annotations();
+    List<Annotation> annotations();
 
     String roleID();
 

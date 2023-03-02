@@ -17,26 +17,15 @@ import java.util.List;
 
 public interface PerspectiveMeasureGroup {
 
+    String measureGroupID();
 
-     String measureGroupID();
+    PerspectiveMeasureGroup.Measures measures();
 
-     PerspectiveMeasureGroup.Measures measures();
-
-     PerspectiveMeasureGroup.Annotations annotations();
-
-
-
-    public interface Annotations {
-
-
-         List<Annotation> annotation();
-
-    }
+    List<Annotation> annotations();
 
     public interface Measures {
 
-
-         List<PerspectiveMeasure> measure();
+        List<PerspectiveMeasure> measure();
 
     }
 

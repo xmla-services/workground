@@ -27,11 +27,5 @@ public interface CubeAttribute {
 
     Boolean attributeHierarchyVisible();
 
-    CubeAttribute.Annotations annotations();
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
-    }
-
+    List<Annotation> annotations();
 }

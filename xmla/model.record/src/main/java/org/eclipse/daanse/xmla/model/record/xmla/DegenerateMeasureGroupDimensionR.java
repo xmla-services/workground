@@ -13,13 +13,15 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.Annotations;
+import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.DegenerateMeasureGroupDimension;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimensionBinding;
 
+import java.util.List;
+
 public record DegenerateMeasureGroupDimensionR(
     String cubeDimensionID,
-    Annotations annotations,
+    List<Annotation> annotations,
     MeasureGroupDimensionBinding source,
     String shareDimensionStorage) implements DegenerateMeasureGroupDimension {
 }

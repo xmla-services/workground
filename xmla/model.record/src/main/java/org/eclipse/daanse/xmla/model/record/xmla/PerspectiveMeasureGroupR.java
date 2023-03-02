@@ -21,11 +21,7 @@ import java.util.List;
 
 public record PerspectiveMeasureGroupR(String measureGroupID,
                                        PerspectiveMeasureGroup.Measures measures,
-                                       PerspectiveMeasureGroup.Annotations annotations) implements PerspectiveMeasureGroup {
-
-    public record Annotations(List<Annotation> annotation) implements PerspectiveMeasureGroup.Annotations {
-
-    }
+                                       List<Annotation> annotations) implements PerspectiveMeasureGroup {
 
     public record Measures(List<PerspectiveMeasure> measure) implements PerspectiveMeasureGroup.Measures {
 

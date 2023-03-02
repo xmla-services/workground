@@ -21,10 +21,6 @@ import java.util.List;
 public record PerspectiveAttributeR(String attributeID,
                                     Boolean attributeHierarchyVisible,
                                     String defaultMember,
-                                    PerspectiveAttribute.Annotations annotations) implements PerspectiveAttribute {
-
-    public record Annotations(List<Annotation> annotation) implements PerspectiveAttribute.Annotations {
-
-    }
+                                    List<Annotation> annotations) implements PerspectiveAttribute {
 
 }

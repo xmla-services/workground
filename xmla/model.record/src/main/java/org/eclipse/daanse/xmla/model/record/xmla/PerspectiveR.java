@@ -30,7 +30,7 @@ public record PerspectiveR(String name,
                            Instant createdTimestamp,
                            Instant lastSchemaUpdate,
                            String description,
-                           Perspective.Annotations annotations,
+                           List<Annotation> annotations,
                            Translations translations,
                            String defaultMeasure,
                            Perspective.Dimensions dimensions,
@@ -40,10 +40,6 @@ public record PerspectiveR(String name,
                            Perspective.Actions actions) implements Perspective {
 
     public record Actions(List<PerspectiveAction> action) implements Perspective.Actions {
-
-    }
-
-    public record Annotations(List<Annotation> annotation) implements Perspective.Annotations {
 
     }
 

@@ -32,7 +32,7 @@ public record DimensionR(String name,
                          Instant createdTimestamp,
                          Instant lastSchemaUpdate,
                          String description,
-                         DimensionR.Annotations annotations,
+                         List<Annotation> annotations,
                          BindingR source,
                          String miningModelID,
                          String type,
@@ -63,10 +63,6 @@ public record DimensionR(String name,
                          Relationships relationships,
                          Integer stringStoresCompatibilityLevel,
                          Integer currentStringStoresCompatibilityLevel) implements Dimension {
-
-    record Annotations(List<Annotation> annotation) implements Dimension.Annotations {
-
-    }
 
     record AttributeAllMemberTranslations(
         List<Translation> memberAllMemberTranslation) implements Dimension.AttributeAllMemberTranslations {

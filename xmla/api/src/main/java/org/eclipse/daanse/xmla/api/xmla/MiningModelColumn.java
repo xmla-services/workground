@@ -17,49 +17,41 @@ import java.util.List;
 
 public interface MiningModelColumn {
 
+    String name();
 
-     String name();
+    String id();
 
-     String id();
+    String description();
 
-     String description();
+    String sourceColumnID();
 
-     String sourceColumnID();
+    String usage();
 
-     String usage();
+    String filter();
 
-     String filter();
+    MiningModelColumn.Translations translations();
 
-     MiningModelColumn.Translations translations();
+    MiningModelColumn.Columns columns();
 
-     MiningModelColumn.Columns columns();
+    MiningModelColumn.ModelingFlags modelingFlags();
 
-     MiningModelColumn.ModelingFlags modelingFlags();
-
-     MiningModelColumn.Annotations annotations();
-
-    public interface Annotations {
-
-
-         List<Annotation> annotation();
-
-    }
+    List<Annotation> annotations();
 
     public interface Columns {
 
-         List<MiningModelColumn> column();
+        List<MiningModelColumn> column();
 
     }
 
     public interface ModelingFlags {
 
-         List<MiningModelingFlag> modelingFlag();
+        List<MiningModelingFlag> modelingFlag();
 
     }
 
     public interface Translations {
 
-         List<Translation> translation();
+        List<Translation> translation();
 
     }
 

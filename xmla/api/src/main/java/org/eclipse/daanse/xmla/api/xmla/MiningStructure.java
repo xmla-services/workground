@@ -24,7 +24,7 @@ public interface MiningStructure {
      Instant createdTimestamp();
      Instant lastSchemaUpdate();
      String description();
-     MiningStructure.Annotations annotations();
+    List<Annotation> annotations();
      Binding source();
      Instant lastProcessed();
      MiningStructure.Translations translations();
@@ -41,10 +41,6 @@ public interface MiningStructure {
      MiningStructure.MiningStructurePermissions miningStructurePermissions();
      MiningStructure.MiningModels miningModels();
 
-    public interface Annotations {
-
-         List<Annotation> annotation();
-    }
 
     public interface Columns {
 

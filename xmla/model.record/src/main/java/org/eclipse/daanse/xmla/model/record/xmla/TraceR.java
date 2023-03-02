@@ -24,7 +24,7 @@ public record TraceR(String name,
                      Instant createdTimestamp,
                      Instant lastSchemaUpdate,
                      String description,
-                     TraceR.Annotations annotations,
+                     List<Annotation> annotations,
                      String logFileName,
                      Boolean logFileAppend,
                      Long logFileSize,
@@ -35,7 +35,4 @@ public record TraceR(String name,
                      TraceFilterR filter,
                      EventTypeR eventType) implements Trace {
 
-    public record Annotations(List<Annotation> annotation) implements Trace.Annotations {
-
-    }
 }

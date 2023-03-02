@@ -23,13 +23,7 @@ public interface PerspectiveDimension {
 
     PerspectiveDimension.Hierarchies hierarchies();
 
-    PerspectiveDimension.Annotations annotations();
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-    }
+    List<Annotation> annotations();
 
     public interface Attributes {
 

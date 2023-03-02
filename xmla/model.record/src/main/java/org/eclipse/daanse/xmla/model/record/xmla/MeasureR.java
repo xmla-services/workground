@@ -36,11 +36,7 @@ public record MeasureR(String name,
                        String fontSize,
                        String fontFlags,
                        Measure.Translations translations,
-                       Measure.Annotations annotations) implements Measure {
-
-    public record Annotations(List<Annotation> annotation) implements Measure.Annotations {
-
-    }
+                       List<Annotation> annotations) implements Measure {
 
     public record Translations(List<Translation> translation) implements Measure.Translations {
 
