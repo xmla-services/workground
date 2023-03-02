@@ -14,9 +14,11 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Discover;
+import org.eclipse.daanse.xmla.api.xmla.Properties;
+import org.eclipse.daanse.xmla.api.xmla.Restrictions;
 
 public record DiscoverR(String requestType,
-                        RestrictionsR restrictions,
-                        PropertiesR properties) implements Discover {
+                        Restrictions restrictions,
+                        Properties properties) implements Discover {
 
 }

@@ -15,14 +15,15 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.AttributeInsertUpdate;
 import org.eclipse.daanse.xmla.api.xmla.Update;
+import org.eclipse.daanse.xmla.api.xmla.Where;
 
 import java.util.List;
 
 public record UpdateR(Object object,
-                      UpdateR.Attributes attributes,
+                      Update.Attributes attributes,
                       Boolean moveWithDescendants,
                       Boolean moveToRoot,
-                      WhereR where) implements Update {
+                      Where where) implements Update {
 
 
 

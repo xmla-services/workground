@@ -23,19 +23,13 @@ public interface Aggregation {
 
     Aggregation.Dimensions dimensions();
 
-    Aggregation.Annotations annotations();
+    Annotations annotations();
 
     String description();
 
-    public interface Annotations {
-
-        List<Annotation> annotation();
-    }
-
-    public interface Dimensions {
+    interface Dimensions {
 
         List<AggregationDimension> dimension();
-
     }
 
 }

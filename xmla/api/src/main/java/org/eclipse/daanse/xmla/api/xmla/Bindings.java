@@ -15,10 +15,8 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public interface AggregationAttribute {
+public interface Bindings {
 
-    String attributeID();
-
-    Annotations annotations();
+    List<OutOfLineBinding> binding();
 
 }

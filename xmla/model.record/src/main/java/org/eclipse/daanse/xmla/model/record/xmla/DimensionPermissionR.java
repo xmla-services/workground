@@ -13,6 +13,7 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import org.eclipse.daanse.xmla.api.xmla.Annotations;
 import org.eclipse.daanse.xmla.api.xmla.AttributePermission;
 import org.eclipse.daanse.xmla.api.xmla.DimensionPermission;
 
@@ -27,7 +28,7 @@ public record DimensionPermissionR(DimensionPermissionR.AttributePermissions att
                                    Instant createdTimestamp,
                                    Instant lastSchemaUpdate,
                                    String description,
-                                   PermissionR.Annotations annotations,
+                                   Annotations annotations,
                                    String roleID,
                                    Boolean process,
                                    String readDefinition,

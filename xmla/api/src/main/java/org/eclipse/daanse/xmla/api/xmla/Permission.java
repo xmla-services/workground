@@ -28,7 +28,7 @@ public interface Permission {
 
     String description();
 
-    Permission.Annotations annotations();
+    Annotations annotations();
 
     String roleID();
 
@@ -37,11 +37,4 @@ public interface Permission {
     String readDefinition();
 
     String read();
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-    }
-
 }

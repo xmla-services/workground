@@ -20,7 +20,7 @@ import org.eclipse.daanse.xmla.api.xmla.TableNotification;
 import java.util.List;
 
 public record NotifyTableChangeR(ObjectReference object,
-                                 NotifyTableChangeR.TableNotifications tableNotifications) implements NotifyTableChange {
+                                 NotifyTableChange.TableNotifications tableNotifications) implements NotifyTableChange {
 
     public record TableNotifications(
         List<TableNotification> tableNotification) implements NotifyTableChange.TableNotifications {

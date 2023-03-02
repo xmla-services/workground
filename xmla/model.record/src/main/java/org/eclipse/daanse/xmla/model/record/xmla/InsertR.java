@@ -19,7 +19,7 @@ import org.eclipse.daanse.xmla.api.xmla.Insert;
 import java.util.List;
 
 public record InsertR(Object object,
-                      InsertR.Attributes attributes) implements Insert {
+                      Insert.Attributes attributes) implements Insert {
 
     public record Attributes(List<AttributeInsertUpdate> attribute) implements Insert.Attributes {
 

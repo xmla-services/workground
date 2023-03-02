@@ -13,11 +13,10 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Annotations;
 import org.eclipse.daanse.xmla.api.xmla.DataSourceView;
 
 import java.time.Instant;
-import java.util.List;
 
 public record DataSourceViewR(
     String name,
@@ -25,12 +24,8 @@ public record DataSourceViewR(
     Instant createdTimestamp,
     Instant lastSchemaUpdate,
     String description,
-    DataSourceViewR.Annotations annotations,
+    Annotations annotations,
     String dataSourceID
 ) implements DataSourceView {
-
-    public record AnnotationsR(List<Annotation> annotation) implements DataSourceView.Annotations {
-
-    }
 
 }

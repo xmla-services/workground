@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Annotations;
 import org.eclipse.daanse.xmla.api.xmla.Assembly;
 
 import java.time.Instant;
@@ -25,11 +26,7 @@ public record AssemblyR(String id,
                         Instant createdTimestamp,
                         Instant lastSchemaUpdate,
                         String description,
-                        AssemblyR.Annotations annotations,
+                        Annotations annotations,
                         ImpersonationInfo impersonationInfo) implements Assembly {
-
-    public record Annotations(List<Annotation> annotation) implements Assembly.Annotations {
-
-    }
 
 }

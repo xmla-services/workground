@@ -16,17 +16,15 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 import org.eclipse.daanse.xmla.api.xmla.AggregationAttribute;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDimension;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Annotations;
 
 import java.util.List;
 
 public record AggregationDimensionR(String cubeDimensionID,
-                                    AggregationDimensionR.Attributes attributes,
-                                    AggregationDimensionR.Annotations annotations
+                                    AggregationDimension.Attributes attributes,
+                                    Annotations annotations
 ) implements AggregationDimension {
 
-    public record AnnotationsR(List<Annotation> annotation) implements AggregationDimension.Annotations {
-
-    }
 
     public record AttributesR(List<AggregationAttribute> attribute) implements AggregationDimension.Attributes {
 

@@ -13,25 +13,20 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Annotations;
 import org.eclipse.daanse.xmla.api.xmla.Permission;
 
 import java.time.Instant;
-import java.util.List;
 
 public record PermissionR(String name,
                           String id,
                           Instant createdTimestamp,
                           Instant lastSchemaUpdate,
                           String description,
-                          PermissionR.Annotations annotations,
+                          Annotations annotations,
                           String roleID,
                           Boolean process,
                           String readDefinition,
                           String read) implements Permission {
-
-    public record Annotations(List<Annotation> annotation) implements Permission.Annotations {
-
-    }
 
 }

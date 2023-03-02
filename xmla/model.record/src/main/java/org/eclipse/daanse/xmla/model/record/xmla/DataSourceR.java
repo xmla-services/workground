@@ -14,7 +14,7 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Annotations;
 import org.eclipse.daanse.xmla.api.xmla.DataSource;
 import org.eclipse.daanse.xmla.api.xmla.DataSourcePermission;
 
@@ -28,7 +28,7 @@ public record DataSourceR(String name,
                           Instant createdTimestamp,
                           Instant lastSchemaUpdate,
                           String description,
-                          DataSourceR.Annotations annotations,
+                          Annotations annotations,
                           String managedProvider,
                           String connectionString,
                           String connectionStringSecurity,
@@ -36,13 +36,9 @@ public record DataSourceR(String name,
                           String isolation,
                           BigInteger maxActiveConnections,
                           Duration timeout,
-                          DataSourceR.DataSourcePermissions dataSourcePermissions,
+                          DataSource.DataSourcePermissions dataSourcePermissions,
                           ImpersonationInfo queryImpersonationInfo,
                           String queryHints) implements DataSource {
-
-    public record Annotations(List<Annotation> annotation) implements DataSource.Annotations {
-
-    }
 
     public record DataSourcePermissions(
         List<DataSourcePermission> dataSourcePermission) implements DataSource.DataSourcePermissions {

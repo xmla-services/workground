@@ -30,14 +30,7 @@ public interface Assembly {
 
     String description();
 
-    Assembly.Annotations annotations();
+    Annotations annotations();
 
     ImpersonationInfo impersonationInfo();
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-    }
-
 }

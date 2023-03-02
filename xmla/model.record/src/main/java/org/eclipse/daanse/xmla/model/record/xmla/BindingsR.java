@@ -11,14 +11,13 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.api.xmla;
+package org.eclipse.daanse.xmla.model.record.xmla;
+
+import org.eclipse.daanse.xmla.api.xmla.Bindings;
+import org.eclipse.daanse.xmla.api.xmla.OutOfLineBinding;
 
 import java.util.List;
 
-public interface AggregationAttribute {
-
-    String attributeID();
-
-    Annotations annotations();
+public record BindingsR(List<OutOfLineBinding> binding) implements Bindings {
 
 }

@@ -13,6 +13,7 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import org.eclipse.daanse.xmla.api.xmla.Annotations;
 import org.eclipse.daanse.xmla.api.xmla.CellPermission;
 import org.eclipse.daanse.xmla.api.xmla.CubeDimensionPermission;
 import org.eclipse.daanse.xmla.api.xmla.CubePermission;
@@ -30,7 +31,7 @@ public record CubePermissionR(String readSourceData,
                               Instant createdTimestamp,
                               Instant lastSchemaUpdate,
                               String description,
-                              Permission.Annotations annotations,
+                              Annotations annotations,
                               String roleID,
                               Boolean process,
                               String readDefinition,

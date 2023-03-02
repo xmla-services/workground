@@ -25,13 +25,13 @@ public interface CubePermission extends Permission {
 
     String write();
 
-    public interface CellPermissions {
+    interface CellPermissions {
 
         List<CellPermission> cellPermission();
 
     }
 
-    public interface DimensionPermissions {
+    interface DimensionPermissions {
 
         List<CubeDimensionPermission> dimensionPermission();
 
