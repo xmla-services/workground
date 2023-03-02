@@ -13,7 +13,7 @@
 */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface Attach {
+public non-sealed interface Attach extends Command {
 
 
    String folder();

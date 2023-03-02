@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public interface Backup {
+public non-sealed interface Backup extends Command {
 
 
      ObjectReference object();

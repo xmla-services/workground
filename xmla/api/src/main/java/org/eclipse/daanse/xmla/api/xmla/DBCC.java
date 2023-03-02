@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface DBCC {
+public non-sealed interface DBCC extends Command {
 
     ObjectReference object();
 

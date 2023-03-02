@@ -17,10 +17,8 @@ import org.eclipse.daanse.xmla.api.xmla.MajorObject;
 import org.eclipse.daanse.xmla.api.xmla.ObjectExpansion;
 import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
 import org.eclipse.daanse.xmla.api.xmla.Scope;
-import org.eclipse.daanse.xmla.model.record.execute.alter.AlterCommandR;
+import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Alter;
-
-import java.util.Optional;
 
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertObjectExpansion;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertScope;
@@ -29,14 +27,14 @@ import static org.eclipse.daanse.xmla.ws.jakarta.basic.ObjectReferenceConvertor.
 
 public class AlterCommandConvertor {
 
-    public static AlterCommandR convertAlterCommand(Alter alter) {
-        Optional<ObjectReference> object = Optional.of(convertObjectReference(alter.getObject()));
+    public static AlterR convertAlterCommand(Alter alter) {
+        ObjectReference object = convertObjectReference(alter.getObject());
         MajorObject objectDefinition = convertMajorObject(alter.getObjectDefinition());
         Scope scope = convertScope(alter.getScope());
         Boolean allowCreate = alter.isAllowCreate();
         ObjectExpansion objectExpansion = convertObjectExpansion(alter.getObjectExpansion());
 
-        AlterCommandR alterCommand = new AlterCommandR(object, objectDefinition, scope, allowCreate, objectExpansion);
+        AlterR alterCommand = new AlterR(object, objectDefinition, scope, allowCreate, objectExpansion);
         return alterCommand;
     }
 

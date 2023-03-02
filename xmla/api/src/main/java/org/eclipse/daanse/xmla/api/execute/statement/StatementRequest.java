@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.execute.statement;
 
 import org.eclipse.daanse.xmla.api.discover.Properties;
 import org.eclipse.daanse.xmla.api.execute.ExecuteParameter;
+import org.eclipse.daanse.xmla.api.xmla.Statement;
 
 import java.util.List;
 
@@ -24,5 +25,5 @@ public interface StatementRequest {
 
     List<ExecuteParameter> parameters();
 
-    StatementCommand command();
+    Statement command();
 }

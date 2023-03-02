@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.execute.alter;
 
 import org.eclipse.daanse.xmla.api.discover.Properties;
 import org.eclipse.daanse.xmla.api.execute.ExecuteParameter;
+import org.eclipse.daanse.xmla.api.xmla.Alter;
 
 import java.util.List;
 
@@ -24,5 +25,5 @@ public interface AlterRequest {
 
     List<ExecuteParameter> parameters();
 
-    AlterCommand command();
+    Alter command();
 }

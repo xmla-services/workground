@@ -17,7 +17,7 @@ import java.math.BigInteger;
 import java.time.Duration;
 import java.util.List;
 
-public interface DesignAggregations {
+public non-sealed interface DesignAggregations extends Command {
 
     ObjectReference object();
 

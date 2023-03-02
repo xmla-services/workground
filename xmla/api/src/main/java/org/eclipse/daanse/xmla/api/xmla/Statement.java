@@ -11,10 +11,9 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.model.record.execute.statement;
+package org.eclipse.daanse.xmla.api.xmla;
 
-import org.eclipse.daanse.xmla.api.execute.statement.StatementCommand;
+public non-sealed interface Statement extends Command{
 
-public record StatementCommandR(String statement) implements StatementCommand {
-
+    String statement();
 }

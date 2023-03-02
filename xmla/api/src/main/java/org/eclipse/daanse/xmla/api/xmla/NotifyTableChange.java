@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public interface NotifyTableChange {
+public non-sealed interface NotifyTableChange extends Command {
 
     ObjectReference object();
 

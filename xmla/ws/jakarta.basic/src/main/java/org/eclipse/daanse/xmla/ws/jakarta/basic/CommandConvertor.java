@@ -32,7 +32,6 @@ import org.eclipse.daanse.xmla.api.xmla.Insert;
 import org.eclipse.daanse.xmla.api.xmla.Location;
 import org.eclipse.daanse.xmla.api.xmla.LocationBackup;
 import org.eclipse.daanse.xmla.api.xmla.Lock;
-import org.eclipse.daanse.xmla.api.xmla.MajorObject;
 import org.eclipse.daanse.xmla.api.xmla.MergePartitions;
 import org.eclipse.daanse.xmla.api.xmla.NotifyTableChange;
 import org.eclipse.daanse.xmla.api.xmla.ObjectExpansion;
@@ -70,7 +69,6 @@ import org.eclipse.daanse.xmla.model.record.xmla.CancelR;
 import org.eclipse.daanse.xmla.model.record.xmla.CellR;
 import org.eclipse.daanse.xmla.model.record.xmla.ClearCacheR;
 import org.eclipse.daanse.xmla.model.record.xmla.CloneDatabaseR;
-import org.eclipse.daanse.xmla.model.record.xmla.CommandR;
 import org.eclipse.daanse.xmla.model.record.xmla.CommitTransactionR;
 import org.eclipse.daanse.xmla.model.record.xmla.CreateR;
 import org.eclipse.daanse.xmla.model.record.xmla.DBCCR;
@@ -90,10 +88,8 @@ import org.eclipse.daanse.xmla.model.record.xmla.InsertR;
 import org.eclipse.daanse.xmla.model.record.xmla.LocationBackupR;
 import org.eclipse.daanse.xmla.model.record.xmla.LocationR;
 import org.eclipse.daanse.xmla.model.record.xmla.LockR;
-import org.eclipse.daanse.xmla.model.record.xmla.MajorObjectR;
 import org.eclipse.daanse.xmla.model.record.xmla.MergePartitionsR;
 import org.eclipse.daanse.xmla.model.record.xmla.NotifyTableChangeR;
-import org.eclipse.daanse.xmla.model.record.xmla.ObjectReferenceR;
 import org.eclipse.daanse.xmla.model.record.xmla.OutOfLineBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.ProcessR;
 import org.eclipse.daanse.xmla.model.record.xmla.PropertiesR;
@@ -103,6 +99,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.RestrictionsR;
 import org.eclipse.daanse.xmla.model.record.xmla.RollbackTransactionR;
 import org.eclipse.daanse.xmla.model.record.xmla.SetAuthContextR;
 import org.eclipse.daanse.xmla.model.record.xmla.SourceR;
+import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
 import org.eclipse.daanse.xmla.model.record.xmla.SubscribeR;
 import org.eclipse.daanse.xmla.model.record.xmla.SynchronizeR;
 import org.eclipse.daanse.xmla.model.record.xmla.TableNotificationR;
@@ -136,39 +133,102 @@ public class CommandConvertor {
 
     private static Command convertCommand(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Command command) {
         if (command != null) {
-
-            return new CommandR(command.getStatement(),
-                convertCreate(command.getCreate()),
-                convertAlter(command.getAlter()),
-                convertDelete(command.getDelete()),
-                convertProcess(command.getProcess()),
-                convertMergePartitions(command.getMergePartitions()),
-                convertDesignAggregations(command.getDesignAggregations()),
-                convertClearCache(command.getClearCache()),
-                convertSubscribe(command.getSubscribe()),
-                convertUnsubscribe(command.getUnsubscribe()),
-                convertCancel(command.getCancel()),
-                convertBeginTransaction(command.getBeginTransaction()),
-                convertCommitTransaction(command.getCommitTransaction()),
-                convertRollbackTransaction(command.getRollbackTransaction()),
-                convertLock(command.getLock()),
-                convertUnlock(command.getUnlock()),
-                convertBackup(command.getBackup()),
-                convertRestore(command.getRestore()),
-                convertSynchronize(command.getSynchronize()),
-                convertAttach(command.getAttach()),
-                convertDetach(command.getDetach()),
-                convertInsert(command.getInsert()),
-                convertUpdate(command.getUpdate()),
-                convertDrop(command.getDrop()),
-                convertUpdateCells(command.getUpdateCells()),
-                convertNotifyTableChange(command.getNotifyTableChange()),
-                convertBatch(command.getBatch()),
-                convertImageLoad(command.getImageLoad()),
-                convertImageSave(command.getImageSave()),
-                convertCloneDatabase(command.getCloneDatabase()),
-                convertSetAuthContext(command.getSetAuthContext()),
-                convertDBCC(command.getDBCC()));
+            if (command.getStatement() != null) {
+                return new StatementR(command.getStatement());
+            }
+            if (command.getCreate() != null) {
+                return convertCreate(command.getCreate());
+            }
+            if (command.getAlter() != null) {
+                convertAlter(command.getAlter());
+            }
+            if (command.getDelete() != null) {
+                convertDelete(command.getDelete());
+            }
+            if (command.getProcess() != null) {
+                convertProcess(command.getProcess());
+            }
+            if (command.getMergePartitions() != null) {
+                return convertMergePartitions(command.getMergePartitions());
+            }
+            if (command.getDesignAggregations() != null) {
+                return convertDesignAggregations(command.getDesignAggregations());
+            }
+            if (command.getClearCache() != null) {
+                return convertClearCache(command.getClearCache());
+            }
+            if (command.getSubscribe() != null) {
+                return convertSubscribe(command.getSubscribe());
+            }
+            if (command.getUnsubscribe() != null) {
+                return convertUnsubscribe(command.getUnsubscribe());
+            }
+            if (command.getCancel() != null) {
+                return convertCancel(command.getCancel());
+            }
+            if (command.getBeginTransaction() != null) {
+                return convertBeginTransaction(command.getBeginTransaction());
+            }
+            if (command.getCommitTransaction() != null) {
+                return convertCommitTransaction(command.getCommitTransaction());
+            }
+            if (command.getRollbackTransaction() != null) {
+                return convertRollbackTransaction(command.getRollbackTransaction());
+            }
+            if (command.getLock() != null) {
+                return convertLock(command.getLock());
+            }
+            if (command.getUnlock() != null) {
+                return convertUnlock(command.getUnlock());
+            }
+            if (command.getBackup() != null) {
+                return convertBackup(command.getBackup());
+            }
+            if (command.getRestore() != null) {
+                return convertRestore(command.getRestore());
+            }
+            if (command.getSynchronize() != null) {
+                return convertSynchronize(command.getSynchronize());
+            }
+            if (command.getAttach() != null) {
+                return convertAttach(command.getAttach());
+            }
+            if (command.getDetach() != null) {
+                return convertDetach(command.getDetach());
+            }
+            if (command.getInsert() != null) {
+                return convertInsert(command.getInsert());
+            }
+            if (command.getUpdate() != null) {
+                return convertUpdate(command.getUpdate());
+            }
+            if (command.getDrop() != null) {
+                return convertDrop(command.getDrop());
+            }
+            if (command.getUpdateCells() != null) {
+                return convertUpdateCells(command.getUpdateCells());
+            }
+            if (command.getNotifyTableChange() != null) {
+                return convertNotifyTableChange(command.getNotifyTableChange());
+            }
+            if (command.getBatch() != null) {
+                return convertBatch(command.getBatch());
+            }
+            if (command.getImageLoad() != null) {
+                return convertImageLoad(command.getImageLoad());
+            }
+            if (command.getImageSave() != null) {
+                return convertImageSave(command.getImageSave());
+            }
+            if (command.getCloneDatabase() != null) {
+                return convertCloneDatabase(command.getCloneDatabase());
+            }
+            if (command.getSetAuthContext() != null) {
+                return convertSetAuthContext(command.getSetAuthContext());
+            }
+            if (command.getDBCC() != null) {
+                return convertDBCC(command.getDBCC());
+            }
         }
         return null;
     }

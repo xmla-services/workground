@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface Subscribe {
+public non-sealed interface Subscribe extends Command {
 
     ObjectReference object();
 

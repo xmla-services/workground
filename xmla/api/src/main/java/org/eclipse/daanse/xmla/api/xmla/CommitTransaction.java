@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface CommitTransaction {
+public non-sealed interface CommitTransaction extends Command {
 
     String durabilityGuarantee();
 

@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public interface ImageLoad {
+public non-sealed interface ImageLoad extends Command {
 
     String imagePath();
 

@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public interface MergePartitions {
+public non-sealed interface MergePartitions extends Command{
 
     MergePartitions.Sources sources();
 

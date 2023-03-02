@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public interface Batch {
+public non-sealed interface Batch extends Command {
 
 
      List<Parallel> parallel();

@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface Detach {
+public non-sealed interface Detach extends Command {
 
     ObjectReference object();
 

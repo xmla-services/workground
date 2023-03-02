@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface SetAuthContext {
+public non-sealed interface SetAuthContext extends Command {
 
     String token();
 

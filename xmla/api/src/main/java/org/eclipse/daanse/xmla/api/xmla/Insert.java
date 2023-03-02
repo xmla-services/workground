@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public interface Insert {
+public non-sealed interface Insert extends Command {
 
     Object object();
 

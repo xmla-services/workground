@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface ImageSave {
+public non-sealed interface ImageSave extends Command {
 
     ObjectReference object();
 

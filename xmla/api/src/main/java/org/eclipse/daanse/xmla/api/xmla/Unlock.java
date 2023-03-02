@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface Unlock {
+public non-sealed interface Unlock extends Command {
 
     String id();
 

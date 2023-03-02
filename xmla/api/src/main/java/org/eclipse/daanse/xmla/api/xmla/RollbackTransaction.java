@@ -13,6 +13,6 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface RollbackTransaction {
+public non-sealed interface RollbackTransaction extends Command {
 
 }
