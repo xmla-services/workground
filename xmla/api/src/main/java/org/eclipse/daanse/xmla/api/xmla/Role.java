@@ -18,29 +18,23 @@ import java.util.List;
 
 public interface Role {
 
+    String name();
 
-     String name();
+    String id();
 
-     String id();
+    Instant createdTimestamp();
 
-     Instant createdTimestamp();
-     Instant lastSchemaUpdate();
-     String description();
+    Instant lastSchemaUpdate();
 
-     Role.Annotations annotations();
+    String description();
 
-     Role.Members members();
+    List<Annotation> annotations();
 
-
-    interface Annotations {
-
-         List<Annotation> annotation();
-
-    }
+    Role.Members members();
 
     interface Members {
 
-         List<Member> member();
+        List<Member> member();
 
     }
 

@@ -35,7 +35,7 @@ public record DatabaseR(String name,
                         Instant createdTimestamp,
                         Instant lastSchemaUpdate,
                         String description,
-                        DatabaseR.Annotations annotations,
+                        List<Annotation> annotations,
                         Instant lastUpdate,
                         String state,
                         String readWriteMode,
@@ -68,9 +68,6 @@ public record DatabaseR(String name,
                         BigInteger compatibilityLevel,
                         String directQueryMode) implements Database {
 
-    record AnnotationsR(List<Annotation> annotation) implements Database.Annotations {
-
-    }
 
     record AssembliesR(List<Assembly> assembly) implements Database.Assemblies {
 

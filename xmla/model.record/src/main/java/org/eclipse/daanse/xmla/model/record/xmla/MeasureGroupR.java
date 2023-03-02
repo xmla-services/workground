@@ -34,7 +34,7 @@ public record MeasureGroupR(String name,
                             Instant createdTimestamp,
                             Instant lastSchemaUpdate,
                             String description,
-                            MeasureGroup.Annotations annotations,
+                            List<Annotation> annotations,
                             Instant lastProcessed,
                             MeasureGroup.Translations translations,
                             String type,
@@ -58,10 +58,6 @@ public record MeasureGroupR(String name,
 
     public record AggregationDesigns(
         List<AggregationDesign> aggregationDesign) implements MeasureGroup.AggregationDesigns {
-
-    }
-
-    public record Annotations(List<Annotation> annotation) implements MeasureGroup.Annotations {
 
     }
 

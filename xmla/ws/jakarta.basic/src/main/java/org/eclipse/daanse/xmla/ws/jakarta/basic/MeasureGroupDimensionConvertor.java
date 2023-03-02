@@ -31,7 +31,7 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.RegularMeasureGroupDim
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotations;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.DataItemConvertor.convertDataItemList;
 
 public class MeasureGroupDimensionConvertor {
@@ -42,7 +42,7 @@ public class MeasureGroupDimensionConvertor {
                 ManyToManyMeasureGroupDimension manyToManyMeasureGroupDimension =
                     (ManyToManyMeasureGroupDimension) measureGroupDimension;
                 return new ManyToManyMeasureGroupDimensionR(manyToManyMeasureGroupDimension.getCubeDimensionID(),
-                    convertAnnotations(manyToManyMeasureGroupDimension.getAnnotations() == null ? null :
+                    convertAnnotationList(manyToManyMeasureGroupDimension.getAnnotations() == null ? null :
                         manyToManyMeasureGroupDimension.getAnnotations().getAnnotation()),
                     convertMeasureGroupDimensionBinding(manyToManyMeasureGroupDimension.getSource()),
                     manyToManyMeasureGroupDimension.getMeasureGroupID(),
@@ -52,7 +52,8 @@ public class MeasureGroupDimensionConvertor {
                 RegularMeasureGroupDimension regularMeasureGroupDimension =
                     (RegularMeasureGroupDimension) measureGroupDimension;
                 return new RegularMeasureGroupDimensionR(regularMeasureGroupDimension.getCubeDimensionID(),
-                    convertAnnotations(regularMeasureGroupDimension.getAnnotations().getAnnotation()),
+                    convertAnnotationList(regularMeasureGroupDimension.getAnnotations() == null ? null :
+                        regularMeasureGroupDimension.getAnnotations().getAnnotation()),
                     convertMeasureGroupDimensionBinding(regularMeasureGroupDimension.getSource()),
                     regularMeasureGroupDimension.getCardinality(),
                     convertRegularMeasureGroupDimensionAttributes(regularMeasureGroupDimension.getAttributes()));
@@ -61,7 +62,7 @@ public class MeasureGroupDimensionConvertor {
                 org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReferenceMeasureGroupDimension referenceMeasureGroupDimension =
                     (org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReferenceMeasureGroupDimension) measureGroupDimension;
                 return new ReferenceMeasureGroupDimensionR(referenceMeasureGroupDimension.getCubeDimensionID(),
-                    convertAnnotations(referenceMeasureGroupDimension.getAnnotations() == null ? null :
+                    convertAnnotationList(referenceMeasureGroupDimension.getAnnotations() == null ? null :
                         referenceMeasureGroupDimension.getAnnotations().getAnnotation()),
                     convertMeasureGroupDimensionBinding(referenceMeasureGroupDimension.getSource()),
                     referenceMeasureGroupDimension.getIntermediateCubeDimensionID(),
@@ -73,7 +74,7 @@ public class MeasureGroupDimensionConvertor {
                 DegenerateMeasureGroupDimension degenerateMeasureGroupDimension =
                     (DegenerateMeasureGroupDimension) measureGroupDimension;
                 return new DegenerateMeasureGroupDimensionR(degenerateMeasureGroupDimension.getCubeDimensionID(),
-                    convertAnnotations(degenerateMeasureGroupDimension.getAnnotations() == null
+                    convertAnnotationList(degenerateMeasureGroupDimension.getAnnotations() == null
                         ? null : degenerateMeasureGroupDimension.getAnnotations().getAnnotation()),
                     convertMeasureGroupDimensionBinding(degenerateMeasureGroupDimension.getSource()),
                     degenerateMeasureGroupDimension.getShareDimensionStorage());
@@ -82,7 +83,7 @@ public class MeasureGroupDimensionConvertor {
                 DataMiningMeasureGroupDimension dataMiningMeasureGroupDimension =
                     (DataMiningMeasureGroupDimension) measureGroupDimension;
                 return new DataMiningMeasureGroupDimensionR(dataMiningMeasureGroupDimension.getCubeDimensionID(),
-                    convertAnnotations(dataMiningMeasureGroupDimension.getAnnotations() == null ? null :
+                    convertAnnotationList(dataMiningMeasureGroupDimension.getAnnotations() == null ? null :
                         dataMiningMeasureGroupDimension.getAnnotations().getAnnotation()),
                     convertMeasureGroupDimensionBinding(dataMiningMeasureGroupDimension.getSource()),
                     dataMiningMeasureGroupDimension.getCaseCubeDimensionID());
@@ -112,7 +113,7 @@ public class MeasureGroupDimensionConvertor {
             return new MeasureGroupAttributeR(measureGroupAttribute.getAttributeID(),
                 convertMeasureGroupAttributeKeyColumns(measureGroupAttribute.getKeyColumns()),
                 measureGroupAttribute.getType(),
-                convertAnnotations(measureGroupAttribute.getAnnotations() == null ? null :
+                convertAnnotationList(measureGroupAttribute.getAnnotations() == null ? null :
                     measureGroupAttribute.getAnnotations().getAnnotation()));
         }
         return null;
@@ -131,5 +132,4 @@ public class MeasureGroupDimensionConvertor {
         }
         return null;
     }
-
 }

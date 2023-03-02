@@ -25,16 +25,9 @@ public interface AttributeTranslation {
 
     String displayFolder();
 
-    AttributeTranslation.Annotations annotations();
+    List<Annotation> annotations();
 
     DataItem captionColumn();
 
     String membersWithDataCaption();
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-    }
-
 }

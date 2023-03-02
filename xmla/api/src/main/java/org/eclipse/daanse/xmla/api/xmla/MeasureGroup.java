@@ -29,7 +29,7 @@ public interface MeasureGroup {
 
     String description();
 
-    MeasureGroup.Annotations annotations();
+    List<Annotation> annotations();
 
     Instant lastProcessed();
 
@@ -74,11 +74,6 @@ public interface MeasureGroup {
     public interface AggregationDesigns {
 
         List<AggregationDesign> aggregationDesign();
-    }
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
     }
 
     public interface Dimensions {

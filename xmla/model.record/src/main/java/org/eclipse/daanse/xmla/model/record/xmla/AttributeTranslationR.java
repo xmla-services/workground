@@ -22,12 +22,10 @@ public record AttributeTranslationR(long language,
                                     String caption,
                                     String description,
                                     String displayFolder,
-                                    AttributeTranslationR.Annotations annotations,
+                                    List<Annotation> annotations,
                                     DataItemR captionColumn,
                                     String membersWithDataCaption) implements AttributeTranslation {
 
-    public record Annotations(List<Annotation> annotation) implements AttributeTranslation.Annotations {
 
-    }
 
 }

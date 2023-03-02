@@ -28,7 +28,7 @@ public interface AttributeRelationship {
 
      String overrideBehavior();
 
-     AttributeRelationship.Annotations annotations();
+    List<Annotation> annotations();
 
      String name();
 
@@ -37,14 +37,7 @@ public interface AttributeRelationship {
      AttributeRelationship.Translations translations();
 
 
-    public interface Annotations {
-
-
-         List<Annotation> annotation();
-
-    }
-
-    public interface Translations {
+    interface Translations {
 
 
          List<Translation> translation();

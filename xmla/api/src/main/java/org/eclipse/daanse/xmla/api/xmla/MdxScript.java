@@ -29,19 +29,13 @@ public interface MdxScript {
 
     String description();
 
-    MdxScript.Annotations annotations();
+    List<Annotation> annotations();
 
     MdxScript.Commands commands();
 
     Boolean defaultScript();
 
     MdxScript.CalculationProperties calculationProperties();
-
-    interface Annotations {
-
-        List<Annotation> annotation();
-
-    }
 
     interface CalculationProperties {
 

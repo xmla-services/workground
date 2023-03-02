@@ -19,13 +19,7 @@ public interface PerspectiveHierarchy {
 
     String hierarchyID();
 
-    PerspectiveHierarchy.Annotations annotations();
+    List<Annotation> annotations();
 
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-
-    }
 
 }

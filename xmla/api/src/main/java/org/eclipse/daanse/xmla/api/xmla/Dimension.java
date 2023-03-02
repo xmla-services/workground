@@ -31,7 +31,7 @@ public interface Dimension {
 
     String description();
 
-    Dimension.Annotations annotations();
+    List<Annotation> annotations();
 
     Binding source();
 
@@ -92,12 +92,6 @@ public interface Dimension {
     Integer stringStoresCompatibilityLevel();
 
     Integer currentStringStoresCompatibilityLevel();
-
-    interface Annotations {
-
-        List<Annotation> annotation();
-
-    }
 
     interface AttributeAllMemberTranslations {
 

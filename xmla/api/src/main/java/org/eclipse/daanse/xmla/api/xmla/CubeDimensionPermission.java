@@ -27,14 +27,8 @@ public interface CubeDimensionPermission {
 
     CubeDimensionPermission.AttributePermissions attributePermissions();
 
-    CubeDimensionPermission.Annotations annotations();
+    List<Annotation> annotations();
 
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-
-    }
 
     public interface AttributePermissions {
 

@@ -62,15 +62,11 @@ public record DimensionAttributeR(String name,
                                   Boolean keyUniquenessGuarantee,
                                   String groupingBehavior,
                                   String instanceSelection,
-                                  DimensionAttributeR.Annotations annotations,
+                                  List<Annotation> annotations,
                                   String processingState,
                                   AttributeHierarchyProcessingState attributeHierarchyProcessingState,
                                   DimensionAttributeVisualizationProperties visualizationProperties,
                                   String extendedType) implements DimensionAttribute {
-
-    public record Annotations(List<Annotation> annotation) implements DimensionAttribute.Annotations {
-
-    }
 
     public record AttributeRelationships(
         List<AttributeRelationship> attributeRelationship) implements DimensionAttribute.AttributeRelationships {

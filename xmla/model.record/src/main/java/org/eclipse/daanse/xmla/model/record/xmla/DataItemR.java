@@ -29,10 +29,6 @@ public record DataItemR(String dataType,
                         String collation,
                         String format,
                         Binding source,
-                        DataItem.Annotations annotations) implements DataItem {
-
-    public record Annotations(List<Annotation> annotation) implements DataItem.Annotations {
-
-    }
+                        List<Annotation> annotations) implements DataItem {
 
 }

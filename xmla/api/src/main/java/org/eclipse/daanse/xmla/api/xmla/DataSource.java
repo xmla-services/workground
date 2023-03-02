@@ -32,7 +32,7 @@ public interface DataSource {
 
     String description();
 
-    Annotations annotations();
+    List<Annotation> annotations();
 
     String managedProvider();
 

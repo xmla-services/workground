@@ -29,7 +29,7 @@ public record ServerR(String name,
                       Instant createdTimestamp,
                       Instant lastSchemaUpdate,
                       String description,
-                      ServerR.Annotations annotations,
+                      List<Annotation> annotations,
                       String productName,
                       String edition,
                       Long editionID,
@@ -43,10 +43,6 @@ public record ServerR(String name,
                       ServerR.Traces traces,
                       ServerR.Roles roles,
                       ServerR.ServerProperties serverProperties) implements Server {
-
-    public record Annotations(List<Annotation> annotation) implements Server.Annotations {
-
-    }
 
     public record Assemblies(List<Assembly> assembly) implements Server.Assemblies {
 

@@ -26,14 +26,10 @@ public record MdxScriptR(String name,
                          Instant createdTimestamp,
                          Instant lastSchemaUpdate,
                          String description,
-                         Annotations annotations,
+                         List<Annotation> annotations,
                          Commands commands,
                          Boolean defaultScript,
                          CalculationProperties calculationProperties) implements MdxScript {
-
-    public record AnnotationsR(List<Annotation> annotation) implements MdxScript.Annotations {
-
-    }
 
     public record CalculationPropertiesR(
         List<CalculationProperty> calculationProperty) implements MdxScript.CalculationProperties {

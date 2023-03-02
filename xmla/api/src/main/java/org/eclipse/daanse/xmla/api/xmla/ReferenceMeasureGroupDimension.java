@@ -13,11 +13,13 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.List;
+
 public interface ReferenceMeasureGroupDimension extends MeasureGroupDimension {
 
     String cubeDimensionID();
 
-    Annotations annotations();
+    List<Annotation> annotations();
 
     MeasureGroupDimensionBinding source();
 

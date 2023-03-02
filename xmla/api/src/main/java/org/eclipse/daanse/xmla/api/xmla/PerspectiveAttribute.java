@@ -24,14 +24,8 @@ public interface PerspectiveAttribute {
 
      String defaultMember();
 
-     PerspectiveAttribute.Annotations annotations();
+    List<Annotation> annotations();
 
 
-    public interface Annotations {
-
-
-         List<Annotation> annotation();
-
-    }
 
 }

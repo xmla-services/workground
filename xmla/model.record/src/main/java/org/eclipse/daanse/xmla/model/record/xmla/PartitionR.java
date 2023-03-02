@@ -14,7 +14,7 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.AggregationInstance;
-import org.eclipse.daanse.xmla.api.xmla.Annotations;
+import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.DataSourceViewBinding;
 import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
 import org.eclipse.daanse.xmla.api.xmla.Partition;
@@ -32,7 +32,7 @@ public record PartitionR(String name,
                          Instant createdTimestamp,
                          Instant lastSchemaUpdate,
                          String description,
-                         Annotations annotations,
+                         List<Annotation> annotations,
                          TabularBinding source,
                          BigInteger processingPriority,
                          String aggregationPrefix,

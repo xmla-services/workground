@@ -29,7 +29,7 @@ public interface AggregationInstance {
 
     AggregationInstance.Measures measures();
 
-    Annotations annotations();
+    List<Annotation> annotations();
 
     String description();
 

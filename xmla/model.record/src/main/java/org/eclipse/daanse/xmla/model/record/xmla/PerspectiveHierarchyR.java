@@ -19,11 +19,7 @@ import org.eclipse.daanse.xmla.api.xmla.PerspectiveHierarchy;
 import java.util.List;
 
 public record PerspectiveHierarchyR(String hierarchyID,
-                                    PerspectiveHierarchy.Annotations annotations
+                                    List<Annotation> annotations
 ) implements PerspectiveHierarchy {
-
-    public record Annotations(List<Annotation> annotation) implements PerspectiveHierarchy.Annotations {
-
-    }
 
 }

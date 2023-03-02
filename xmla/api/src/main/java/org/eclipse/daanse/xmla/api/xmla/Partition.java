@@ -29,7 +29,7 @@ public interface Partition {
 
     String description();
 
-    Annotations annotations();
+    List<Annotation> annotations();
 
     TabularBinding source();
 

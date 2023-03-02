@@ -13,13 +13,15 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.Annotations;
+import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.ManyToManyMeasureGroupDimension;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimensionBinding;
 
+import java.util.List;
+
 public record ManyToManyMeasureGroupDimensionR(
     String cubeDimensionID,
-    Annotations annotations,
+    List<Annotation> annotations,
     MeasureGroupDimensionBinding source,
     String measureGroupID,
     String directSlice) implements ManyToManyMeasureGroupDimension {

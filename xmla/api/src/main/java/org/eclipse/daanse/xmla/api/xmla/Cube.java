@@ -29,7 +29,7 @@ public interface Cube {
 
     String description();
 
-    Cube.Annotations annotations();
+    List<Annotation> annotations();
 
     BigInteger language();
 
@@ -86,12 +86,6 @@ public interface Cube {
     interface Actions {
 
         List<Action> action();
-
-    }
-
-    interface Annotations {
-
-        List<Annotation> annotation();
 
     }
 

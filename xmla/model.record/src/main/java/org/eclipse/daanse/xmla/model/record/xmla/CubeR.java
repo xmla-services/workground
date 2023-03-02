@@ -37,7 +37,7 @@ public record CubeR(String name,
                     Instant createdTimestamp,
                     Instant lastSchemaUpdate,
                     String description,
-                    Cube.Annotations annotations,
+                    List<Annotation> annotations,
                     BigInteger language,
                     String collation,
                     Cube.Translations translations,
@@ -69,10 +69,6 @@ public record CubeR(String name,
 
     }
 
-    public record Annotations(List<Annotation> annotation) implements Cube.Annotations {
-
-    }
-
     public record CubePermissions(List<CubePermission> cubePermission) implements Cube.CubePermissions {
 
     }
@@ -98,7 +94,7 @@ public record CubeR(String name,
     }
 
     public record StorageMode(CubeStorageModeEnumType value,
-                       String valuens) implements Cube.StorageMode {
+                              String valuens) implements Cube.StorageMode {
 
     }
 

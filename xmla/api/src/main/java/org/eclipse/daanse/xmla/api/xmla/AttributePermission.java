@@ -17,7 +17,6 @@ import java.util.List;
 
 public interface AttributePermission {
 
-
      String attributeID();
 
      String description();
@@ -30,14 +29,5 @@ public interface AttributePermission {
 
      String deniedSet();
 
-     AttributePermission.Annotations annotations();
-
-
-    public interface Annotations {
-
-
-         List<Annotation> annotation();
-
-    }
-
+    List<Annotation> annotations();
 }

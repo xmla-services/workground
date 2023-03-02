@@ -25,11 +25,6 @@ public interface CubeHierarchy {
 
     Boolean enabled();
 
-    CubeHierarchy.Annotations annotations();
+    List<Annotation> annotations();
 
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-    }
 }

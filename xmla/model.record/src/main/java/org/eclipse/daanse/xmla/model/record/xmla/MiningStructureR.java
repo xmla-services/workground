@@ -29,7 +29,7 @@ public record MiningStructureR(String name,
                                Instant createdTimestamp,
                                Instant lastSchemaUpdate,
                                String description,
-                               MiningStructureR.Annotations annotations,
+                               List<Annotation> annotations,
                                BindingR source,
                                Instant lastProcessed,
                                MiningStructureR.Translations translations,
@@ -45,10 +45,6 @@ public record MiningStructureR(String name,
                                String state,
                                MiningStructureR.MiningStructurePermissions miningStructurePermissions,
                                MiningStructureR.MiningModels miningModels) implements MiningStructure {
-
-    public record Annotations(List<Annotation> annotation) implements MiningStructure.Annotations {
-
-    }
 
     public record Columns(List<MiningStructureColumn> column) implements MiningStructure.Columns {
 

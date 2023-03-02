@@ -20,10 +20,7 @@ import java.util.List;
 
 public record PerspectiveMeasureR(String measureID,
 
-                                  PerspectiveMeasureR.Annotations annotations) implements PerspectiveMeasure {
+                                  List<Annotation> annotations) implements PerspectiveMeasure {
 
-    public record Annotations(List<Annotation> annotation) implements PerspectiveMeasure.Annotations {
-
-    }
 
 }

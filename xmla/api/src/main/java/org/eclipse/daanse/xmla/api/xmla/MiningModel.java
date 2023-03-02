@@ -23,7 +23,7 @@ public interface MiningModel {
      Instant createdTimestamp();
      Instant lastSchemaUpdate();
      String description();
-     MiningModel.Annotations annotations();
+    List<Annotation> annotations();
      String algorithm();
      Instant lastProcessed();
      MiningModel.AlgorithmParameters algorithmParameters();
@@ -40,12 +40,6 @@ public interface MiningModel {
     public interface AlgorithmParameters {
 
          List<AlgorithmParameter> algorithmParameter();
-
-    }
-
-    public interface Annotations {
-
-         List<Annotation> annotation();
 
     }
 

@@ -22,10 +22,6 @@ public record TranslationR(long language,
                            String caption,
                            String description,
                            String displayFolder,
-                           Translation.Annotations annotations) implements Translation {
-
-    public record Annotations(List<Annotation> annotation) implements Translation.Annotations {
-
-    }
+                           List<Annotation> annotations) implements Translation {
 
 }
