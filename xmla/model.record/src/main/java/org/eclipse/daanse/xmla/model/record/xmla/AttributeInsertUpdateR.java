@@ -21,8 +21,8 @@ import java.util.List;
 
 public record AttributeInsertUpdateR(String attributeName,
                                      String name,
-                                     AttributeInsertUpdateR.Keys keys,
-                                     AttributeInsertUpdateR.Translations translations,
+                                     AttributeInsertUpdate.Keys keys,
+                                     AttributeInsertUpdate.Translations translations,
                                      String value,
                                      String customrollup,
                                      String customrollupproperties,

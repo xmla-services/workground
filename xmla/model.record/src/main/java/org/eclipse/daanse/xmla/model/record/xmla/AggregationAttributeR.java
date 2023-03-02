@@ -14,15 +14,10 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.AggregationAttribute;
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
-
-import java.util.List;
+import org.eclipse.daanse.xmla.api.xmla.Annotations;
 
 public record AggregationAttributeR(String attributeID,
-                                    AggregationAttribute.Annotations annotations
-) implements AggregationAttribute{
+                                    Annotations annotations
+) implements AggregationAttribute {
 
-    public record AnnotationsR(List<Annotation> annotation) implements AggregationAttribute.Annotations {
-
-    }
 }

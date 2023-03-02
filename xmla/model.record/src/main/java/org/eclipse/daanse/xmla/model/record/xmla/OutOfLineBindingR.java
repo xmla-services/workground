@@ -12,7 +12,6 @@
  *   Stefan Bischof (bipolis.org) - initial
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
-
 import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.OutOfLineBinding;
 
@@ -30,7 +29,7 @@ public record OutOfLineBindingR(String databaseID,
                                 String measureID,
                                 String parentColumnID,
                                 String columnID,
-                                BindingR source,
+                                Binding source,
                                 OutOfLineBinding.NameColumn nameColumn,
                                 OutOfLineBinding.SkippedLevelsColumn skippedLevelsColumn,
                                 OutOfLineBinding.CustomRollupColumn customRollupColumn,
@@ -46,7 +45,7 @@ public record OutOfLineBindingR(String databaseID,
     }
 
     public record CustomRollupPropertiesColumn(
-        BindingR source) implements OutOfLineBinding.CustomRollupPropertiesColumn {
+        Binding source) implements OutOfLineBinding.CustomRollupPropertiesColumn {
 
     }
 
@@ -62,17 +61,17 @@ public record OutOfLineBindingR(String databaseID,
     public record KeyColumns(
         List<OutOfLineBinding.KeyColumns.KeyColumn> keyColumn) implements OutOfLineBinding.KeyColumns {
 
-        public record KeyColumn(BindingR source) implements OutOfLineBinding.KeyColumns.KeyColumn {
+        public record KeyColumn(Binding source) implements OutOfLineBinding.KeyColumns.KeyColumn {
 
         }
 
     }
 
-    public record NameColumn(BindingR source) implements OutOfLineBinding.NameColumn {
+    public record NameColumn(Binding source) implements OutOfLineBinding.NameColumn {
 
     }
 
-    public record SkippedLevelsColumn(BindingR source) implements OutOfLineBinding.SkippedLevelsColumn {
+    public record SkippedLevelsColumn(Binding source) implements OutOfLineBinding.SkippedLevelsColumn {
 
     }
 
@@ -80,18 +79,18 @@ public record OutOfLineBindingR(String databaseID,
         List<OutOfLineBinding.Translations.Translation> translation) implements OutOfLineBinding.Translations {
 
         public record Translation(int language,
-                                  BindingR source
+                                  Binding source
         ) implements OutOfLineBinding.Translations.Translation {
 
         }
 
     }
 
-    public record UnaryOperatorColumn(BindingR source) implements OutOfLineBinding.UnaryOperatorColumn {
+    public record UnaryOperatorColumn(Binding source) implements OutOfLineBinding.UnaryOperatorColumn {
 
     }
 
-    public record ValueColumn(BindingR source) implements OutOfLineBinding.ValueColumn {
+    public record ValueColumn(Binding source) implements OutOfLineBinding.ValueColumn {
 
     }
 

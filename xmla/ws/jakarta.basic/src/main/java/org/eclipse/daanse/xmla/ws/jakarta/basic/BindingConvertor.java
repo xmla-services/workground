@@ -210,6 +210,4 @@ public class BindingConvertor {
         }
         return null;
     }
-
-
 }

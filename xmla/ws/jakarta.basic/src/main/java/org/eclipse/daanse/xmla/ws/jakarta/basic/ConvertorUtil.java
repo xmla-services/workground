@@ -65,7 +65,7 @@ public class ConvertorUtil {
                 res.setErrorCode(et.errorCode());
                 res.setDescription(et.description());
                 res.setCallstack(et.callstack());
-                res.setLocation(convertLocation(et.location()));
+                res.setLocation(convertMessageLocation(et.location()));
                 res.setHelpFile(et.helpFile());
                 res.setSource(et.source());
                 return res;
@@ -77,7 +77,7 @@ public class ConvertorUtil {
                 res.setHelpFile(wt.helpFile());
                 res.setWarningCode(wt.warningCode());
                 res.setSource(wt.source());
-                res.setLocation(convertLocation(wt.location()));
+                res.setLocation(convertMessageLocation(wt.location()));
 
                 return res;
             }
@@ -85,7 +85,7 @@ public class ConvertorUtil {
         return null;
     }
 
-    private static MessageLocation convertLocation(org.eclipse.daanse.xmla.api.exception.MessageLocation location) {
+    private static MessageLocation convertMessageLocation(org.eclipse.daanse.xmla.api.exception.MessageLocation location) {
         if (location != null) {
             MessageLocation res = new MessageLocation();
             res.setEnd(convertEnd(location.end()));

@@ -14,7 +14,8 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Properties;
+import org.eclipse.daanse.xmla.api.xmla.PropertyList;
 
-public record PropertiesR(PropertyListR propertyList) implements Properties {
+public record PropertiesR(PropertyList propertyList) implements Properties {
 
 }

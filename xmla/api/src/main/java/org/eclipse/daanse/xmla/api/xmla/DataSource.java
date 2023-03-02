@@ -32,7 +32,7 @@ public interface DataSource {
 
     String description();
 
-    DataSource.Annotations annotations();
+    Annotations annotations();
 
     String managedProvider();
 
@@ -54,11 +54,6 @@ public interface DataSource {
 
     String queryHints();
 
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-    }
 
     public interface DataSourcePermissions {
 

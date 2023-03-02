@@ -23,11 +23,15 @@ import org.eclipse.daanse.xmla.api.xmla.ClearCache;
 import org.eclipse.daanse.xmla.api.xmla.CloneDatabase;
 import org.eclipse.daanse.xmla.api.xmla.CommitTransaction;
 import org.eclipse.daanse.xmla.api.xmla.Create;
+import org.eclipse.daanse.xmla.api.xmla.DBCC;
+import org.eclipse.daanse.xmla.api.xmla.DataSource;
+import org.eclipse.daanse.xmla.api.xmla.DataSourceView;
 import org.eclipse.daanse.xmla.api.xmla.Delete;
 import org.eclipse.daanse.xmla.api.xmla.DesignAggregations;
 import org.eclipse.daanse.xmla.api.xmla.Detach;
 import org.eclipse.daanse.xmla.api.xmla.Discover;
 import org.eclipse.daanse.xmla.api.xmla.Drop;
+import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
 import org.eclipse.daanse.xmla.api.xmla.ImageLoad;
 import org.eclipse.daanse.xmla.api.xmla.ImageSave;
 import org.eclipse.daanse.xmla.api.xmla.Insert;
@@ -35,6 +39,7 @@ import org.eclipse.daanse.xmla.api.xmla.Lock;
 import org.eclipse.daanse.xmla.api.xmla.MergePartitions;
 import org.eclipse.daanse.xmla.api.xmla.NotifyTableChange;
 import org.eclipse.daanse.xmla.api.xmla.OutOfLineBinding;
+import org.eclipse.daanse.xmla.api.xmla.Process;
 import org.eclipse.daanse.xmla.api.xmla.Restore;
 import org.eclipse.daanse.xmla.api.xmla.RollbackTransaction;
 import org.eclipse.daanse.xmla.api.xmla.SetAuthContext;
@@ -49,9 +54,9 @@ import java.util.List;
 
 public record BatchR(List<Batch.Parallel> parallel,
                      OutOfLineBinding bindings,
-                     DataSourceR dataSource,
-                     DataSourceViewR dataSourceView,
-                     ErrorConfigurationR errorConfiguration,
+                     DataSource dataSource,
+                     DataSourceView dataSourceView,
+                     ErrorConfiguration errorConfiguration,
                      List<Create> create,
                      List<Alter> alter,
                      List<Delete> delete,
@@ -81,7 +86,7 @@ public record BatchR(List<Batch.Parallel> parallel,
                      List<ImageSave> imageSave,
                      List<CloneDatabase> cloneDatabase,
                      List<SetAuthContext> setAuthContext,
-                     DBCCR dbcc,
+                     DBCC dbcc,
                      List<Discover> discover,
                      Boolean transaction,
                      Boolean processAffectedObjects

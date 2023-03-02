@@ -14,15 +14,16 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Location;
+import org.eclipse.daanse.xmla.api.xmla.Source;
 import org.eclipse.daanse.xmla.api.xmla.Synchronize;
 
 import java.util.List;
 
-public record SynchronizeR(SourceR source,
+public record SynchronizeR(Source source,
                            String synchronizeSecurity,
                            Boolean applyCompression,
                            String dbStorageLocation,
-                           SynchronizeR.Locations locations) implements Synchronize {
+                           Synchronize.Locations locations) implements Synchronize {
 
     public record Locations(List<Location> location) implements Synchronize.Locations {
 

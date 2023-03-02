@@ -20,7 +20,7 @@ import java.util.List;
 
 public record LocationR(String dataSourceType,
                         String connectionString,
-                        LocationR.FoldersR folders,
+                        Location.Folders folders,
                         String file,
                         String dataSourceID
 ) implements Location {

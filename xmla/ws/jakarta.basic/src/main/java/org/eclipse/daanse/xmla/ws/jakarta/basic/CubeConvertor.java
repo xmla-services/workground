@@ -49,7 +49,6 @@ import org.eclipse.daanse.xmla.api.xmla.MeasureGroupStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.Partition;
 import org.eclipse.daanse.xmla.api.xmla.PartitionCurrentStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.PartitionStorageModeEnumType;
-import org.eclipse.daanse.xmla.api.xmla.Permission;
 import org.eclipse.daanse.xmla.api.xmla.Perspective;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveAction;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveAttribute;
@@ -96,7 +95,6 @@ import org.eclipse.daanse.xmla.model.record.xmla.MeasureGroupBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.MeasureGroupR;
 import org.eclipse.daanse.xmla.model.record.xmla.MeasureR;
 import org.eclipse.daanse.xmla.model.record.xmla.PartitionR;
-import org.eclipse.daanse.xmla.model.record.xmla.PermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveActionR;
 import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveAttributeR;
 import org.eclipse.daanse.xmla.model.record.xmla.PerspectiveCalculationR;
@@ -500,7 +498,7 @@ public class CubeConvertor {
                 convertToInstant(aggregationDesign.getCreatedTimestamp()),
                 convertToInstant(aggregationDesign.getLastSchemaUpdate()),
                 aggregationDesign.getDescription(),
-                convertAggregationDesignAnnotations(aggregationDesign.getAnnotations()),
+                convertAnnotations(aggregationDesign.getAnnotations() == null ? null : aggregationDesign.getAnnotations().getAnnotation()),
                 aggregationDesign.getEstimatedRows(),
                 convertAggregationDesignDimensions(aggregationDesign.getDimensions()),
                 convertAggregationDesignAggregations(aggregationDesign.getAggregations()),
@@ -528,15 +526,8 @@ public class CubeConvertor {
             return new AggregationR(aggregation.getID(),
                 aggregation.getName(),
                 convertAggregationDimensions(aggregation.getDimensions()),
-                convertAggregationAnnotations(aggregation.getAnnotations()),
+                convertAnnotations(aggregation.getAnnotations() == null ? null : aggregation.getAnnotations().getAnnotation()),
                 aggregation.getDescription());
-        }
-        return null;
-    }
-
-    private static AggregationR.Annotations convertAggregationAnnotations(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Aggregation.Annotations annotations) {
-        if (annotations != null) {
-            return new AggregationR.Annotations(convertAnnotationList(annotations.getAnnotation()));
         }
         return null;
     }
@@ -559,14 +550,7 @@ public class CubeConvertor {
         if (aggregationDimension != null) {
             return new AggregationDimensionR(aggregationDimension.getCubeDimensionID(),
                 convertAggregationDimensionAttributes(aggregationDimension.getAttributes()),
-                convertAggregationDimensionAnnotations(aggregationDimension.getAnnotations()));
-        }
-        return null;
-    }
-
-    private static AggregationDimension.Annotations convertAggregationDimensionAnnotations(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDimension.Annotations annotations) {
-        if (annotations != null) {
-            return new AggregationDimensionR.AnnotationsR(convertAnnotationList(annotations.getAnnotation()));
+                convertAnnotations(aggregationDimension.getAnnotations() == null ? null : aggregationDimension.getAnnotations().getAnnotation()));
         }
         return null;
     }
@@ -588,14 +572,7 @@ public class CubeConvertor {
     private static AggregationAttribute convertAggregationAttribute(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationAttribute aggregationAttribute) {
         if (aggregationAttribute != null) {
             return new AggregationAttributeR(aggregationAttribute.getAttributeID(),
-                convertAggregationAttributeAnnotations(aggregationAttribute.getAnnotations()));
-        }
-        return null;
-    }
-
-    private static AggregationAttribute.Annotations convertAggregationAttributeAnnotations(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationAttribute.Annotations annotations) {
-        if (annotations != null) {
-            return new AggregationAttributeR.AnnotationsR(convertAnnotationList(annotations.getAnnotation()));
+                convertAnnotations(aggregationAttribute.getAnnotations() == null ? null : aggregationAttribute.getAnnotations().getAnnotation()));
         }
         return null;
     }
@@ -648,13 +625,6 @@ public class CubeConvertor {
         if (aggregationDesignAttribute != null) {
             return new AggregationDesignAttributeR(aggregationDesignAttribute.getAttributeID(),
                 aggregationDesignAttribute.getEstimatedCount());
-        }
-        return null;
-    }
-
-    private static AggregationDesign.Annotations convertAggregationDesignAnnotations(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesign.Annotations annotations) {
-        if (annotations != null) {
-            return new AggregationDesignR.Annotations(convertAnnotationList(annotations.getAnnotation()));
         }
         return null;
     }
@@ -1277,7 +1247,7 @@ public class CubeConvertor {
                 convertToInstant(cubePermission.getCreatedTimestamp()),
                 convertToInstant(cubePermission.getLastSchemaUpdate()),
                 cubePermission.getDescription(),
-                convertPermissionAnnotations(cubePermission.getAnnotations()),
+                convertAnnotations(cubePermission.getAnnotations() == null ? null : cubePermission.getAnnotations().getAnnotation()),
                 cubePermission.getRoleID(),
                 cubePermission.isProcess(),
                 cubePermission.getReadDefinition(),
@@ -1382,14 +1352,6 @@ public class CubeConvertor {
             return new CellPermissionR.Annotations(convertAnnotationList(annotations.getAnnotation()));
         }
         return null;
-    }
-
-    private static Permission.Annotations convertPermissionAnnotations(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Permission.Annotations annotations) {
-        if (annotations != null) {
-            return new PermissionR.Annotations(convertAnnotationList(annotations.getAnnotation()));
-        }
-        return null;
-
     }
 
     private static Cube.Dimensions convertCubeDimensions(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Cube.Dimensions dimensions) {

@@ -16,7 +16,7 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 import org.eclipse.daanse.xmla.api.xmla.Aggregation;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesign;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesignDimension;
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Annotations;
 
 import java.math.BigInteger;
 import java.time.Instant;
@@ -27,7 +27,7 @@ public record AggregationDesignR(String name,
                                  Instant createdTimestamp,
                                  Instant lastSchemaUpdate,
                                  String description,
-                                 AggregationDesign.Annotations annotations,
+                                 Annotations annotations,
                                  Long estimatedRows,
                                  AggregationDesign.Dimensions dimensions,
                                  AggregationDesign.Aggregations aggregations,
@@ -35,9 +35,6 @@ public record AggregationDesignR(String name,
                                  ) implements AggregationDesign{
 
     public record Aggregations(List<Aggregation> aggregation) implements AggregationDesign.Aggregations{
-    }
-
-    public record Annotations(List<Annotation> annotation) implements AggregationDesign.Annotations {
     }
 
     public record Dimensions(List<AggregationDesignDimension> dimension) implements AggregationDesign.Dimensions{

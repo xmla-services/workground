@@ -29,7 +29,7 @@ public interface AggregationDesign {
 
     String description();
 
-    AggregationDesign.Annotations annotations();
+    Annotations annotations();
 
     Long estimatedRows();
 
@@ -39,17 +39,12 @@ public interface AggregationDesign {
 
     BigInteger estimatedPerformanceGain();
 
-    public interface Aggregations {
+    interface Aggregations {
 
         List<Aggregation> aggregation();
     }
 
-    public interface Annotations {
-
-        List<Annotation> annotation();
-    }
-
-    public interface Dimensions {
+    interface Dimensions {
 
         List<AggregationDesignDimension> dimension();
 

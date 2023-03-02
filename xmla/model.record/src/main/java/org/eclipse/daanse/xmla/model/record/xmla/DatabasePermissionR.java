@@ -13,6 +13,7 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import org.eclipse.daanse.xmla.api.xmla.Annotations;
 import org.eclipse.daanse.xmla.api.xmla.DatabasePermission;
 
 import java.time.Instant;
@@ -24,7 +25,7 @@ public record DatabasePermissionR(Boolean administer,
                                   Instant createdTimestamp,
                                   Instant lastSchemaUpdate,
                                   String description,
-                                  PermissionR.Annotations annotations,
+                                  Annotations annotations,
                                   String roleID,
                                   Boolean process,
                                   String readDefinition,

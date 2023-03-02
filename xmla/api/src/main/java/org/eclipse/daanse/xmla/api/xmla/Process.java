@@ -13,12 +13,20 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-import java.util.List;
+public interface Process {
 
-public interface AggregationAttribute {
+    String type();
 
-    String attributeID();
+    ObjectReference object();
 
-    Annotations annotations();
+    Bindings bindings();
+
+    DataSource dataSource();
+
+    DataSourceView dataSourceView();
+
+    ErrorConfiguration errorConfiguration();
+
+    WriteBackTableCreation writeBackTableCreation();
 
 }

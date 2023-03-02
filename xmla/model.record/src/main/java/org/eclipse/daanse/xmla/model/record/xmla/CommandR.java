@@ -13,42 +13,71 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import org.eclipse.daanse.xmla.api.xmla.Alter;
 import org.eclipse.daanse.xmla.api.xmla.Attach;
+import org.eclipse.daanse.xmla.api.xmla.Backup;
+import org.eclipse.daanse.xmla.api.xmla.Batch;
+import org.eclipse.daanse.xmla.api.xmla.Process;
+import org.eclipse.daanse.xmla.api.xmla.BeginTransaction;
 import org.eclipse.daanse.xmla.api.xmla.Cancel;
+import org.eclipse.daanse.xmla.api.xmla.ClearCache;
+import org.eclipse.daanse.xmla.api.xmla.CloneDatabase;
 import org.eclipse.daanse.xmla.api.xmla.Command;
+import org.eclipse.daanse.xmla.api.xmla.CommitTransaction;
+import org.eclipse.daanse.xmla.api.xmla.Create;
+import org.eclipse.daanse.xmla.api.xmla.DBCC;
+import org.eclipse.daanse.xmla.api.xmla.Delete;
+import org.eclipse.daanse.xmla.api.xmla.DesignAggregations;
+import org.eclipse.daanse.xmla.api.xmla.Detach;
+import org.eclipse.daanse.xmla.api.xmla.Drop;
+import org.eclipse.daanse.xmla.api.xmla.ImageLoad;
+import org.eclipse.daanse.xmla.api.xmla.ImageSave;
+import org.eclipse.daanse.xmla.api.xmla.Insert;
+import org.eclipse.daanse.xmla.api.xmla.Lock;
+import org.eclipse.daanse.xmla.api.xmla.MergePartitions;
+import org.eclipse.daanse.xmla.api.xmla.NotifyTableChange;
+import org.eclipse.daanse.xmla.api.xmla.Restore;
+import org.eclipse.daanse.xmla.api.xmla.RollbackTransaction;
+import org.eclipse.daanse.xmla.api.xmla.SetAuthContext;
+import org.eclipse.daanse.xmla.api.xmla.Subscribe;
+import org.eclipse.daanse.xmla.api.xmla.Synchronize;
+import org.eclipse.daanse.xmla.api.xmla.Unlock;
+import org.eclipse.daanse.xmla.api.xmla.Unsubscribe;
+import org.eclipse.daanse.xmla.api.xmla.Update;
+import org.eclipse.daanse.xmla.api.xmla.UpdateCells;
 
 public record CommandR(
     String statement,
-    CreateR create,
-    AlterR alter,
-    DeleteR delete,
+    Create create,
+    Alter alter,
+    Delete delete,
     Process process,
-    MergePartitionsR mergePartitions,
-    DesignAggregationsR designAggregations,
-    ClearCacheR clearCache,
-    SubscribeR subscribe,
-    UnsubscribeR unsubscribe,
+    MergePartitions mergePartitions,
+    DesignAggregations designAggregations,
+    ClearCache clearCache,
+    Subscribe subscribe,
+    Unsubscribe unsubscribe,
     Cancel cancel,
-    BeginTransactionR beginTransaction,
-    CommitTransactionR commitTransaction,
-    RollbackTransactionR rollbackTransaction,
-    LockR lock,
-    UnlockR unlock,
-    BackupR backup,
-    RestoreR restore,
-    SynchronizeR synchronize,
+    BeginTransaction beginTransaction,
+    CommitTransaction commitTransaction,
+    RollbackTransaction rollbackTransaction,
+    Lock lock,
+    Unlock unlock,
+    Backup backup,
+    Restore restore,
+    Synchronize synchronize,
     Attach attach,
-    DetachR detach,
-    InsertR insert,
-    UpdateR update,
-    DropR drop,
-    UpdateCellsR updateCells,
-    NotifyTableChangeR notifyTableChange,
-    BatchR batch,
-    ImageLoadR imageLoad,
-    ImageSaveR imageSave,
-    CloneDatabaseR cloneDatabase,
-    SetAuthContextR setAuthContext,
-    DBCCR dbcc) implements Command {
+    Detach detach,
+    Insert insert,
+    Update update,
+    Drop drop,
+    UpdateCells updateCells,
+    NotifyTableChange notifyTableChange,
+    Batch batch,
+    ImageLoad imageLoad,
+    ImageSave imageSave,
+    CloneDatabase cloneDatabase,
+    SetAuthContext setAuthContext,
+    DBCC dbcc) implements Command {
 
 }

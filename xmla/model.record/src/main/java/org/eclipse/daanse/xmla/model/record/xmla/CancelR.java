@@ -13,12 +13,14 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import org.eclipse.daanse.xmla.api.xmla.Cancel;
+
 import java.math.BigInteger;
 
 public record CancelR(
     BigInteger connectionID,
     String sessionID,
     BigInteger spid,
-    Boolean cancelAssociated) {
+    Boolean cancelAssociated) implements Cancel {
 
 }

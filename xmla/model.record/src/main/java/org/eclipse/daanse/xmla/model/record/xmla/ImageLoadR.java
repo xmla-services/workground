@@ -25,7 +25,7 @@ public record ImageLoadR(String imagePath,
                          String dbStorageLocation,
                          String databaseName,
                          String databaseID,
-                         ImageLoadR.Data data) implements ImageLoad {
+                         ImageLoad.Data data) implements ImageLoad {
 
     public record Data(List<String> dataBlock) implements ImageLoad.Data {
 

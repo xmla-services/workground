@@ -16,8 +16,8 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 import org.eclipse.daanse.xmla.api.xmla.CloneDatabase;
 import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
 
-public record CloneDatabaseR(CloneDatabaseR.Object object,
-                             CloneDatabaseR.Target target) implements CloneDatabase {
+public record CloneDatabaseR(CloneDatabase.Object object,
+                             CloneDatabase.Target target) implements CloneDatabase {
 
     public record Object(ObjectReference databaseID) implements CloneDatabase.Object {
 
