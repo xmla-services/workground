@@ -14,7 +14,7 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 
-public interface Drop {
+public non-sealed interface Drop extends Command {
 
 
   Object object();

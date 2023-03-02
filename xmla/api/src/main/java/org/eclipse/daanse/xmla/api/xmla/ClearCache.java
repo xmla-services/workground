@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface ClearCache {
+public non-sealed interface ClearCache extends Command {
 
     ObjectReference object();
 

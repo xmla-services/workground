@@ -11,9 +11,10 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.api.execute.statement;
+package org.eclipse.daanse.xmla.model.record.xmla;
 
-public interface StatementCommand {
+import org.eclipse.daanse.xmla.api.xmla.Statement;
 
-    String statement();
+public record StatementR(String statement) implements Statement {
+
 }

@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public interface UpdateCells {
+public non-sealed interface UpdateCells extends Command {
 
     List<Cell> cell();
 }

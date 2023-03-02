@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface Alter {
+public non-sealed interface Alter extends Command {
 
     ObjectReference object();
 

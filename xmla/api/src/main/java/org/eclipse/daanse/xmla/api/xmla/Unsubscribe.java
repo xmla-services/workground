@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface Unsubscribe {
+public non-sealed interface Unsubscribe extends Command {
 
     String subscriptionId();
 }

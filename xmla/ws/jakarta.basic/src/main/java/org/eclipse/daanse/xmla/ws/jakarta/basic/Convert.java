@@ -179,11 +179,10 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.properties.MdSchem
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRequestR;
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.execute.ExecuteParameterR;
-import org.eclipse.daanse.xmla.model.record.execute.alter.AlterCommandR;
 import org.eclipse.daanse.xmla.model.record.execute.alter.AlterRequestR;
-import org.eclipse.daanse.xmla.model.record.execute.statement.StatementCommandR;
+import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
+import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
 import org.eclipse.daanse.xmla.model.record.execute.statement.StatementRequestR;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Alter;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Execute;
@@ -2248,7 +2247,7 @@ public class Convert {
 
     public static StatementRequest fromStatement(Execute requestWs) {
         PropertiesR properties = discoverProperties(propertyList(requestWs));
-        StatementCommandR command = new StatementCommandR(requestWs.getCommand().getStatement());
+        StatementR command = new StatementR(requestWs.getCommand().getStatement());
         List<ExecuteParameter> parameters = parameters(requestWs);
         return new StatementRequestR(properties, parameters, command);
     }
@@ -2263,7 +2262,7 @@ public class Convert {
 
     public static AlterRequest fromAlter(Execute requestWs) {
         PropertiesR properties = discoverProperties(propertyList(requestWs));
-        AlterCommandR command = AlterCommandConvertor.convertAlterCommand(requestWs.getCommand().getAlter());
+        AlterR command = AlterCommandConvertor.convertAlterCommand(requestWs.getCommand().getAlter());
         List<ExecuteParameter> parameters = parameters(requestWs);
         return new AlterRequestR(properties, parameters, command);
     }

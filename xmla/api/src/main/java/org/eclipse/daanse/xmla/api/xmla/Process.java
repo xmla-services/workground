@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface Process {
+public non-sealed interface Process extends Command{
 
     String type();
 

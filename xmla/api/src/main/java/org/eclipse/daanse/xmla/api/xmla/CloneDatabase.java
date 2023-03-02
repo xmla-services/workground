@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface CloneDatabase {
+public non-sealed interface CloneDatabase extends Command {
 
     CloneDatabase.Object object();
 

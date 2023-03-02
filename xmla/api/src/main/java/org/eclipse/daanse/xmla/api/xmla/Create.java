@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface Create {
+public non-sealed interface Create extends Command{
 
     ObjectReference parentObject();
 

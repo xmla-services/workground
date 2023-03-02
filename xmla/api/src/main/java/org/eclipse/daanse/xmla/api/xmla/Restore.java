@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public interface Restore {
+public non-sealed interface Restore extends Command {
 
     String databaseName();
 

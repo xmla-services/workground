@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public interface Synchronize {
+public non-sealed interface Synchronize extends Command {
 
     Source source();
 

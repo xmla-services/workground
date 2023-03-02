@@ -13,7 +13,7 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface Delete {
+public non-sealed interface Delete extends Command{
 
     ObjectReference object();
 

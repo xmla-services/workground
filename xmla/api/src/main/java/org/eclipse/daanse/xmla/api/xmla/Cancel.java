@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.math.BigInteger;
 
-public interface Cancel {
+public non-sealed interface Cancel extends Command {
 
     BigInteger connectionID();
 

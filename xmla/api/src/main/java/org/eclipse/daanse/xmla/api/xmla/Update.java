@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public interface Update {
+public non-sealed interface Update extends Command {
 
     Object object();
 
