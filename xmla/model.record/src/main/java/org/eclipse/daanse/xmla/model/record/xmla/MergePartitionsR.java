@@ -18,11 +18,7 @@ import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
 
 import java.util.List;
 
-public record MergePartitionsR(MergePartitions.Sources sources,
+public record MergePartitionsR(List<ObjectReference> sources,
                                ObjectReference target) implements MergePartitions {
-
-    public record Sources(List<ObjectReference> source) implements MergePartitions.Sources {
-
-    }
 
 }

@@ -40,15 +40,15 @@ public record CubeR(String name,
                     List<Annotation> annotations,
                     BigInteger language,
                     String collation,
-                    Cube.Translations translations,
-                    Cube.Dimensions dimensions,
-                    Cube.CubePermissions cubePermissions,
-                    Cube.MdxScripts mdxScripts,
-                    Cube.Perspectives perspectives,
+                    List<Translation> translations,
+                    List<CubeDimension> dimensions,
+                    List<CubePermission> cubePermissions,
+                    List<MdxScript> mdxScripts,
+                    List<Perspective> perspectives,
                     String state,
                     String defaultMeasure,
                     Boolean visible,
-                    Cube.MeasureGroups measureGroups,
+                    List<MeasureGroup> measureGroups,
                     DataSourceViewBinding source,
                     String aggregationPrefix,
                     BigInteger processingPriority,
@@ -58,48 +58,15 @@ public record CubeR(String name,
                     String scriptErrorHandlingMode,
                     String daxOptimizationMode,
                     ProactiveCaching proactiveCaching,
-                    Cube.Kpis kpis,
+                    List<Kpi> kpis,
                     ErrorConfiguration errorConfiguration,
-                    Cube.Actions actions,
+                    List<Action> actions,
                     String storageLocation,
                     Long estimatedRows,
                     Instant lastProcessed) implements Cube {
-
-    public record Actions(List<Action> action) implements Cube.Actions {
-
-    }
-
-    public record CubePermissions(List<CubePermission> cubePermission) implements Cube.CubePermissions {
-
-    }
-
-    public record Dimensions(List<CubeDimension> dimension) implements Cube.Dimensions {
-
-    }
-
-    public record Kpis(List<Kpi> kpi) implements Cube.Kpis {
-
-    }
-
-    public record MdxScripts(List<MdxScript> mdxScript) implements Cube.MdxScripts {
-
-    }
-
-    public record MeasureGroups(List<MeasureGroup> measureGroup) implements Cube.MeasureGroups {
-
-    }
-
-    public record Perspectives(List<Perspective> perspective) implements Cube.Perspectives {
-
-    }
 
     public record StorageMode(CubeStorageModeEnumType value,
                               String valuens) implements Cube.StorageMode {
 
     }
-
-    public record Translations(List<Translation> translation) implements Cube.Translations {
-
-    }
-
 }

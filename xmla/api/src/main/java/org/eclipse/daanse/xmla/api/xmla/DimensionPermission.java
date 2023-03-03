@@ -17,16 +17,9 @@ import java.util.List;
 
 public interface DimensionPermission extends Permission {
 
-    DimensionPermission.AttributePermissions attributePermissions();
+    List<AttributePermission> attributePermissions();
 
     String write();
 
     String allowedRowsExpression();
-
-    public interface AttributePermissions {
-
-        List<AttributePermission> attributePermission();
-
-    }
-
 }

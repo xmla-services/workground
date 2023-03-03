@@ -31,36 +31,12 @@ public record PerspectiveR(String name,
                            Instant lastSchemaUpdate,
                            String description,
                            List<Annotation> annotations,
-                           Translations translations,
+                           List<Translation> translations,
                            String defaultMeasure,
-                           Perspective.Dimensions dimensions,
-                           MeasureGroups measureGroups,
-                           Perspective.Calculations calculations,
-                           Kpis kpis,
-                           Perspective.Actions actions) implements Perspective {
-
-    public record Actions(List<PerspectiveAction> action) implements Perspective.Actions {
-
-    }
-
-    public record Calculations(List<PerspectiveCalculation> calculation) implements Perspective.Calculations {
-
-    }
-
-    public record Dimensions(List<PerspectiveDimension> dimension) implements Perspective.Dimensions {
-
-    }
-
-    public record KpisR(List<PerspectiveKpi> kpi) implements Perspective.Kpis {
-
-    }
-
-    public record MeasureGroupsR(List<PerspectiveMeasureGroup> measureGroup) implements Perspective.MeasureGroups {
-
-    }
-
-    public record TranslationsR(List<Translation> translation) implements Perspective.Translations {
-
-    }
+                           List<PerspectiveDimension> dimensions,
+                           List<PerspectiveMeasureGroup> measureGroups,
+                           List<PerspectiveCalculation> calculations,
+                           List<PerspectiveKpi> kpis,
+                           List<PerspectiveAction> actions) implements Perspective {
 
 }

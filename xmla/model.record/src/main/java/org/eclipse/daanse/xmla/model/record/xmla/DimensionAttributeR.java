@@ -29,15 +29,15 @@ import java.util.List;
 public record DimensionAttributeR(String name,
                                   String id,
                                   String description,
-                                  DimensionAttributeR.Type type,
+                                  DimensionAttribute.Type type,
                                   String usage,
                                   BindingR source,
                                   Long estimatedCount,
-                                  DimensionAttributeR.KeyColumns keyColumns,
+                                  List<DataItem> keyColumns,
                                   DataItemR nameColumn,
                                   DataItemR valueColumn,
-                                  DimensionAttributeR.Translations translations,
-                                  DimensionAttributeR.AttributeRelationships attributeRelationships,
+                                  List<AttributeTranslation> translations,
+                                  List<AttributeRelationship> attributeRelationships,
                                   String discretizationMethod,
                                   BigInteger discretizationBucketCount,
                                   String rootMemberIf,
@@ -48,7 +48,7 @@ public record DimensionAttributeR(String name,
                                   String namingTemplate,
                                   String membersWithData,
                                   String membersWithDataCaption,
-                                  DimensionAttributeR.NamingTemplateTranslations namingTemplateTranslations,
+                                  List<Translation> namingTemplateTranslations,
                                   DataItemR customRollupColumn,
                                   DataItemR customRollupPropertiesColumn,
                                   DataItemR unaryOperatorColumn,
@@ -67,24 +67,6 @@ public record DimensionAttributeR(String name,
                                   AttributeHierarchyProcessingState attributeHierarchyProcessingState,
                                   DimensionAttributeVisualizationProperties visualizationProperties,
                                   String extendedType) implements DimensionAttribute {
-
-    public record AttributeRelationships(
-        List<AttributeRelationship> attributeRelationship) implements DimensionAttribute.AttributeRelationships {
-
-    }
-
-    public record KeyColumns(List<DataItem> keyColumn) implements DimensionAttribute.KeyColumns {
-
-    }
-
-    public record NamingTemplateTranslations(
-        List<Translation> namingTemplateTranslation) implements DimensionAttribute.NamingTemplateTranslations {
-
-    }
-
-    public record Translations(List<AttributeTranslation> translation) implements DimensionAttribute.Translations {
-
-    }
 
     public record Type(DimensionAttributeTypeEnumType value,
                        String valuens) implements DimensionAttribute.Type {

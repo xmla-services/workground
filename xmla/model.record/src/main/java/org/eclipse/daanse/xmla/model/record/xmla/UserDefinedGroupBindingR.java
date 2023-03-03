@@ -20,9 +20,6 @@ import java.util.List;
 
 public record UserDefinedGroupBindingR(
     String attributeID,
-    UserDefinedGroupBinding.Groups groups) implements UserDefinedGroupBinding {
+    List<Group> groups) implements UserDefinedGroupBinding {
 
-    public record Groups(List<Group> group) implements UserDefinedGroupBinding.Groups {
-
-    }
 }

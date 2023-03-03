@@ -20,6 +20,4 @@ public interface PerspectiveHierarchy {
     String hierarchyID();
 
     List<Annotation> annotations();
-
-
 }

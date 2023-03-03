@@ -19,51 +19,45 @@ import java.util.List;
 
 public interface MiningStructure {
 
-     String name();
-     String id();
-     Instant createdTimestamp();
-     Instant lastSchemaUpdate();
-     String description();
+    String name();
+
+    String id();
+
+    Instant createdTimestamp();
+
+    Instant lastSchemaUpdate();
+
+    String description();
+
     List<Annotation> annotations();
-     Binding source();
-     Instant lastProcessed();
-     MiningStructure.Translations translations();
-     BigInteger language();
-     String collation();
-     ErrorConfiguration errorConfiguration();
-     String cacheMode();
-     Integer holdoutMaxPercent();
-     Integer holdoutMaxCases();
-     Integer holdoutSeed();
-     Integer holdoutActualSize();
-     MiningStructure.Columns columns();
-     String state();
-     MiningStructure.MiningStructurePermissions miningStructurePermissions();
-     MiningStructure.MiningModels miningModels();
 
+    Binding source();
 
-    public interface Columns {
+    Instant lastProcessed();
 
-         List<MiningStructureColumn> column();
+    List<Translation> translations();
 
-    }
+    BigInteger language();
 
-    interface MiningModels {
+    String collation();
 
-         List<MiningModel> miningModel();
+    ErrorConfiguration errorConfiguration();
 
-    }
+    String cacheMode();
 
-    interface MiningStructurePermissions {
+    Integer holdoutMaxPercent();
 
-         List<MiningStructurePermission> miningStructurePermission();
+    Integer holdoutMaxCases();
 
-    }
+    Integer holdoutSeed();
 
-    interface Translations {
+    Integer holdoutActualSize();
 
-         List<Translation> translation();
+    List<MiningStructureColumn> columns();
 
-    }
+    String state();
 
+    List<MiningStructurePermission> miningStructurePermissions();
+
+    List<MiningModel> miningModels();
 }

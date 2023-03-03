@@ -25,19 +25,10 @@ public record AggregationInstanceR(String id,
                                    String name,
                                    String aggregationType,
                                    TabularBinding source,
-                                   AggregationInstance.Dimensions dimensions,
-                                   AggregationInstance.Measures measures,
+                                   List<AggregationInstanceDimension> dimensions,
+                                   List<AggregationInstanceMeasure> measures,
                                    List<Annotation> annotations,
                                    String description
 ) implements AggregationInstance {
-
-
-    public record DimensionsR(List<AggregationInstanceDimension> dimension) implements AggregationInstance.Dimensions {
-
-    }
-
-    public record MeasuresR(List<AggregationInstanceMeasure> measure) implements AggregationInstance.Measures {
-
-    }
 
 }

@@ -25,25 +25,12 @@ public interface AggregationInstance {
 
     TabularBinding source();
 
-    AggregationInstance.Dimensions dimensions();
+    List<AggregationInstanceDimension> dimensions();
 
-    AggregationInstance.Measures measures();
+    List<AggregationInstanceMeasure> measures();
 
     List<Annotation> annotations();
 
     String description();
-
-    public interface Dimensions {
-
-        List<AggregationInstanceDimension> dimension();
-
-
-    }
-
-    public interface Measures {
-
-        List<AggregationInstanceMeasure> measure();
-
-    }
 
 }

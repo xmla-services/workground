@@ -19,12 +19,5 @@ public interface WhereAttribute {
 
     String attributeName();
 
-    WhereAttribute.Keys keys();
-
-    public interface Keys {
-
-        List<Object> key();
-
-    }
-
+    List<Object> keys();
 }

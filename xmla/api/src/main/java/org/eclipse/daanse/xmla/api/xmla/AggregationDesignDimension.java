@@ -19,14 +19,8 @@ public interface AggregationDesignDimension {
 
     String cubeDimensionID();
 
-    AggregationDesignDimension.Attributes attributes();
+    List<AggregationDesignAttribute> attributes();
 
     List<Annotation> annotations();
-
-
-    public interface Attributes {
-
-        List<AggregationDesignAttribute> attribute();
-    }
 
 }

@@ -29,30 +29,11 @@ public interface MiningModelColumn {
 
     String filter();
 
-    MiningModelColumn.Translations translations();
+    List<Translation> translations();
 
-    MiningModelColumn.Columns columns();
+    List<MiningModelColumn> columns();
 
-    MiningModelColumn.ModelingFlags modelingFlags();
+    List<MiningModelingFlag> modelingFlags();
 
     List<Annotation> annotations();
-
-    public interface Columns {
-
-        List<MiningModelColumn> column();
-
-    }
-
-    public interface ModelingFlags {
-
-        List<MiningModelingFlag> modelingFlag();
-
-    }
-
-    public interface Translations {
-
-        List<Translation> translation();
-
-    }
-
 }

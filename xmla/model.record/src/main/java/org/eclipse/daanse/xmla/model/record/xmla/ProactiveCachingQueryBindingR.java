@@ -21,11 +21,6 @@ import java.util.List;
 
 public record ProactiveCachingQueryBindingR(
     Duration refreshInterval,
-    ProactiveCachingQueryBinding.QueryNotifications queryNotifications) implements ProactiveCachingQueryBinding {
-
-    public record QueryNotifications(List<QueryNotification> queryNotification)
-        implements ProactiveCachingQueryBinding.QueryNotifications {
-
-    }
+    List<QueryNotification> queryNotifications) implements ProactiveCachingQueryBinding {
 
 }

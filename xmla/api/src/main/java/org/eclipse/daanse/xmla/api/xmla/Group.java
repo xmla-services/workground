@@ -19,10 +19,5 @@ public interface Group {
 
     String name();
 
-    Group.Members members();
-
-    interface Members {
-
-        List<String> member();
-    }
+    List<String> members();
 }

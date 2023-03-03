@@ -20,12 +20,6 @@ public interface ProactiveCachingIncrementalProcessingBinding extends ProactiveC
 
     Duration refreshInterval();
 
-    ProactiveCachingIncrementalProcessingBinding.IncrementalProcessingNotifications incrementalProcessingNotifications();
-
-    interface IncrementalProcessingNotifications {
-
-        List<IncrementalProcessingNotification> incrementalProcessingNotification();
-
-    }
+    List<IncrementalProcessingNotification> incrementalProcessingNotifications();
 
 }

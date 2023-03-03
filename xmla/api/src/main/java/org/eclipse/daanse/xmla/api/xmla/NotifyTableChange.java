@@ -15,16 +15,11 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
-public non-sealed interface NotifyTableChange extends Command {
+public non-sealed
+
+interface NotifyTableChange extends Command {
 
     ObjectReference object();
 
-    NotifyTableChange.TableNotifications tableNotifications();
-
-    public interface TableNotifications {
-
-        List<TableNotification> tableNotification();
-
-    }
-
+    List<TableNotification> tableNotifications();
 }

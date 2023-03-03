@@ -24,26 +24,14 @@ import java.util.List;
 public record CubeDimensionR(String id,
                              String name,
                              String description,
-                             CubeDimensionR.Translations translations,
+                             List<Translation> translations,
                              String dimensionID,
                              Boolean visible,
                              String allMemberAggregationUsage,
                              String hierarchyUniqueNameStyle,
                              String memberUniqueNameStyle,
-                             CubeDimension.Attributes attributes,
-                             CubeDimension.Hierarchies hierarchies,
+                             List<CubeAttribute> attributes,
+                             List<CubeHierarchy> hierarchies,
                              List<Annotation> annotations) implements CubeDimension {
-
-    public record Attributes(List<CubeAttribute> attribute) implements CubeDimension.Attributes {
-
-    }
-
-    public record Hierarchies(List<CubeHierarchy> hierarchy) implements CubeDimension.Hierarchies {
-
-    }
-
-    public record Translations(List<Translation> translation) implements CubeDimension.Translations {
-
-    }
 
 }

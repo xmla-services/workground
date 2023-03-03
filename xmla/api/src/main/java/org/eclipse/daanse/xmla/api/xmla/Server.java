@@ -46,39 +46,14 @@ public interface Server {
 
     String supportedCompatibilityLevels();
 
-    Server.Databases databases();
+    List<Database> databases();
 
-    Server.Assemblies assemblies();
+    List<Assembly> assemblies();
 
-    Server.Traces traces();
+    List<Trace> traces();
 
-    Server.Roles roles();
+    List<Role> roles();
 
-    Server.ServerProperties serverProperties();
-
-    public interface Assemblies {
-
-        List<Assembly> assembly();
-    }
-
-    public interface Databases {
-
-        List<Database> database();
-    }
-
-    public interface Roles {
-
-        List<Role> role();
-    }
-
-    public interface ServerProperties {
-
-        List<ServerProperty> serverProperty();
-    }
-
-    public interface Traces {
-
-        List<Trace> trace();
-    }
+    List<ServerProperty> serverProperties();
 
 }

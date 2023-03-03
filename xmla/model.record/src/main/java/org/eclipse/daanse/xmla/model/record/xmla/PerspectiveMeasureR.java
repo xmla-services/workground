@@ -19,8 +19,6 @@ import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasure;
 import java.util.List;
 
 public record PerspectiveMeasureR(String measureID,
-
                                   List<Annotation> annotations) implements PerspectiveMeasure {
-
 
 }

@@ -32,5 +32,4 @@ public interface DataSourceView {
 
     String dataSourceID();
 
-
 }

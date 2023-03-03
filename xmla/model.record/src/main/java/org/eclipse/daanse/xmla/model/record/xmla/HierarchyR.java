@@ -27,27 +27,14 @@ public record HierarchyR(String name,
                          String processingState,
                          String structureType,
                          String displayFolder,
-                         HierarchyR.Translations translations,
+                         List<Translation> translations,
                          String allMemberName,
-                         HierarchyR.AllMemberTranslations allMemberTranslations,
+                         List<Translation> allMemberTranslations,
                          Boolean memberNamesUnique,
                          String memberKeysUnique,
                          Boolean allowDuplicateNames,
-                         HierarchyR.Levels levels,
+                         List<Level> levels,
                          List<Annotation> annotations,
                          HierarchyVisualizationProperties visualizationProperties) implements Hierarchy {
-
-    public record AllMemberTranslationsR(
-        List<Translation> allMemberTranslation) implements Hierarchy.AllMemberTranslations {
-
-    }
-
-    public record LevelsR(List<Level> level) implements Hierarchy.Levels {
-
-    }
-
-    public record TranslationsR(List<Translation> translation) implements Hierarchy.Translations {
-
-    }
 
 }

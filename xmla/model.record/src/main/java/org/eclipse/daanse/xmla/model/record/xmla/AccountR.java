@@ -20,12 +20,8 @@ import java.util.List;
 
 public record AccountR(    String accountType,
                            String aggregationFunction,
-                           AccountR.AliasesR aliases,
+                           List<String> aliases,
                            List<Annotation> annotations
 ) implements Account {
-
-
-    public record AliasesR(List<String> alias) implements Account.Aliases {
-    }
 
 }

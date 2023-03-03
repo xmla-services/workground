@@ -15,24 +15,17 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 public non-sealed interface CloneDatabase extends Command {
 
-    CloneDatabase.Object object();
+    ObjectReference object();
 
     CloneDatabase.Target target();
 
-    public interface Object {
-
-        ObjectReference databaseID();
-
-    }
-
-    public interface Target {
+    interface Target {
 
         String dbStorageLocation();
 
         String databaseName();
 
         String databaseID();
-
     }
 
 }

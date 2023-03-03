@@ -33,13 +33,13 @@ public interface MeasureGroup {
 
     Instant lastProcessed();
 
-    MeasureGroup.Translations translations();
+    List<Translation> translations();
 
     String type();
 
     String state();
 
-    MeasureGroup.Measures measures();
+    List<Measure> measures();
 
     String dataAggregation();
 
@@ -61,51 +61,21 @@ public interface MeasureGroup {
 
     String processingMode();
 
-    MeasureGroup.Dimensions dimensions();
+    List<MeasureGroupDimension> dimensions();
 
-    MeasureGroup.Partitions partitions();
+    List<Partition> partitions();
 
     String aggregationPrefix();
 
     BigInteger processingPriority();
 
-    MeasureGroup.AggregationDesigns aggregationDesigns();
+    List<AggregationDesign> aggregationDesigns();
 
-    public interface AggregationDesigns {
-
-        List<AggregationDesign> aggregationDesign();
-    }
-
-    public interface Dimensions {
-
-        List<MeasureGroupDimension> dimension();
-
-    }
-
-    public interface Measures {
-
-        List<Measure> measure();
-
-    }
-
-    public interface Partitions {
-
-        List<Partition> partition();
-
-    }
-
-    public interface StorageMode {
+    interface StorageMode {
 
         MeasureGroupStorageModeEnumType value();
 
         String valuens();
 
     }
-
-    interface Translations {
-
-        List<Translation> translation();
-
-    }
-
 }

@@ -24,7 +24,7 @@ public interface CalculationProperty {
 
     String calculationType();
 
-    CalculationProperty.Translations translations();
+    List<Translation> translations();
 
     String description();
 
@@ -53,11 +53,4 @@ public interface CalculationProperty {
     BigInteger language();
 
     CalculationPropertiesVisualizationProperties visualizationProperties();
-
-    public interface Translations {
-
-        List<Translation> translation();
-
-    }
-
 }

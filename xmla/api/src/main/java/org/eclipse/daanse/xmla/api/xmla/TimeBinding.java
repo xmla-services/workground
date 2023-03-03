@@ -44,5 +44,4 @@ public interface TimeBinding extends Binding {
 
     Integer manufacturingExtraMonthQuarter();
 
-
 }

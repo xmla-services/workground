@@ -48,17 +48,9 @@ public interface DataSource {
 
     Duration timeout();
 
-    DataSource.DataSourcePermissions dataSourcePermissions();
+    List<DataSourcePermission> dataSourcePermissions();
 
     ImpersonationInfo queryImpersonationInfo();
 
     String queryHints();
-
-
-    public interface DataSourcePermissions {
-
-        List<DataSourcePermission> dataSourcePermission();
-
-    }
-
 }

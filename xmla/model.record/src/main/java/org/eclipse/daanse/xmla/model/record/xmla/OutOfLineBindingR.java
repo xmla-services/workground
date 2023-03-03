@@ -30,50 +30,16 @@ public record OutOfLineBindingR(String databaseID,
                                 String parentColumnID,
                                 String columnID,
                                 Binding source,
-                                OutOfLineBinding.NameColumn nameColumn,
-                                OutOfLineBinding.SkippedLevelsColumn skippedLevelsColumn,
-                                OutOfLineBinding.CustomRollupColumn customRollupColumn,
-                                OutOfLineBinding.CustomRollupPropertiesColumn customRollupPropertiesColumn,
-                                OutOfLineBinding.ValueColumn valueColumn,
-                                OutOfLineBinding.UnaryOperatorColumn unaryOperatorColumn,
-                                OutOfLineBinding.KeyColumns keyColumns,
-                                OutOfLineBinding.ForeignKeyColumns foreignKeyColumns,
+                                Binding nameColumn,
+                                Binding skippedLevelsColumn,
+                                Binding customRollupColumn,
+                                Binding customRollupPropertiesColumn,
+                                Binding valueColumn,
+                                Binding unaryOperatorColumn,
+                                List<Binding> keyColumns,
+                                List<Binding> foreignKeyColumns,
                                 OutOfLineBinding.Translations translations) implements OutOfLineBinding {
 
-    public record CustomRollupColumn(Binding source) implements OutOfLineBinding.CustomRollupColumn {
-
-    }
-
-    public record CustomRollupPropertiesColumn(
-        Binding source) implements OutOfLineBinding.CustomRollupPropertiesColumn {
-
-    }
-
-    public record ForeignKeyColumns(
-        List<OutOfLineBinding.ForeignKeyColumns.ForeignKeyColumn> foreignKeyColumn) implements OutOfLineBinding.ForeignKeyColumns {
-
-        public record ForeignKeyColumn(Binding source) implements OutOfLineBinding.ForeignKeyColumns.ForeignKeyColumn {
-
-        }
-
-    }
-
-    public record KeyColumns(
-        List<OutOfLineBinding.KeyColumns.KeyColumn> keyColumn) implements OutOfLineBinding.KeyColumns {
-
-        public record KeyColumn(Binding source) implements OutOfLineBinding.KeyColumns.KeyColumn {
-
-        }
-
-    }
-
-    public record NameColumn(Binding source) implements OutOfLineBinding.NameColumn {
-
-    }
-
-    public record SkippedLevelsColumn(Binding source) implements OutOfLineBinding.SkippedLevelsColumn {
-
-    }
 
     public record Translations(
         List<OutOfLineBinding.Translations.Translation> translation) implements OutOfLineBinding.Translations {
@@ -85,13 +51,4 @@ public record OutOfLineBindingR(String databaseID,
         }
 
     }
-
-    public record UnaryOperatorColumn(Binding source) implements OutOfLineBinding.UnaryOperatorColumn {
-
-    }
-
-    public record ValueColumn(Binding source) implements OutOfLineBinding.ValueColumn {
-
-    }
-
 }

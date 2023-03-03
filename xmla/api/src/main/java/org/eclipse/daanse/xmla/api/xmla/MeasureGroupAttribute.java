@@ -19,16 +19,9 @@ public interface MeasureGroupAttribute {
 
     String attributeID();
 
-    MeasureGroupAttribute.KeyColumns keyColumns();
+    List<DataItem> keyColumns();
 
     String type();
 
     List<Annotation> annotations();
-
-    interface KeyColumns {
-
-        List<DataItem> keyColumn();
-
-    }
-
 }

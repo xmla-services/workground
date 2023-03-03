@@ -18,6 +18,4 @@ public interface Folder {
     String original();
 
     String _new();
-
-
 }

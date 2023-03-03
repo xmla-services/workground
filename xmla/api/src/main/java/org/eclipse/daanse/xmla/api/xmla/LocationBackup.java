@@ -18,5 +18,4 @@ public interface LocationBackup {
     String file();
 
     String dataSourceID();
-
 }

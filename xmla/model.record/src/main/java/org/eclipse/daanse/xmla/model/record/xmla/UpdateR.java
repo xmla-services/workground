@@ -20,17 +20,9 @@ import org.eclipse.daanse.xmla.api.xmla.Where;
 import java.util.List;
 
 public record UpdateR(Object object,
-                      Update.Attributes attributes,
+                      List<AttributeInsertUpdate> attributes,
                       Boolean moveWithDescendants,
                       Boolean moveToRoot,
                       Where where) implements Update {
-
-
-
-    public record Attributes(List<AttributeInsertUpdate> attribute) implements Update.Attributes {
-
-
-
-    }
 
 }

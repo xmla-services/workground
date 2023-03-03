@@ -61,7 +61,7 @@ public interface Partition {
 
     String aggregationDesignID();
 
-    Partition.AggregationInstances aggregationInstances();
+    List<AggregationInstance> aggregationInstances();
 
     DataSourceViewBinding aggregationInstanceSource();
 
@@ -74,12 +74,6 @@ public interface Partition {
     Integer currentStringStoresCompatibilityLevel();
 
     String directQueryUsage();
-
-    public interface AggregationInstances {
-
-        List<AggregationInstance> aggregationInstance();
-
-    }
 
     public interface CurrentStorageMode {
 

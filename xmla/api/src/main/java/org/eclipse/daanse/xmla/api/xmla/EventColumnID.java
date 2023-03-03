@@ -18,5 +18,4 @@ import java.util.List;
 public interface EventColumnID {
 
     List<String> columnID();
-
 }

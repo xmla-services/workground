@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
 import org.eclipse.daanse.xmla.api.xmla.MiningModel;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructureColumn;
@@ -32,35 +33,18 @@ public record MiningStructureR(String name,
                                List<Annotation> annotations,
                                BindingR source,
                                Instant lastProcessed,
-                               MiningStructureR.Translations translations,
+                               List<Translation> translations,
                                BigInteger language,
                                String collation,
-                               ErrorConfigurationR errorConfiguration,
+                               ErrorConfiguration errorConfiguration,
                                String cacheMode,
                                Integer holdoutMaxPercent,
                                Integer holdoutMaxCases,
                                Integer holdoutSeed,
                                Integer holdoutActualSize,
-                               MiningStructureR.Columns columns,
+                               List<MiningStructureColumn> columns,
                                String state,
-                               MiningStructureR.MiningStructurePermissions miningStructurePermissions,
-                               MiningStructureR.MiningModels miningModels) implements MiningStructure {
-
-    public record Columns(List<MiningStructureColumn> column) implements MiningStructure.Columns {
-
-    }
-
-    record MiningModels(List<MiningModel> miningModel) implements MiningStructure.MiningModels {
-
-    }
-
-    record MiningStructurePermissions(
-        List<MiningStructurePermission> miningStructurePermission) implements MiningStructure.MiningStructurePermissions {
-
-    }
-
-    record Translations(List<Translation> translation) implements MiningStructure.Translations {
-
-    }
+                               List<MiningStructurePermission> miningStructurePermissions,
+                               List<MiningModel> miningModels) implements MiningStructure {
 
 }

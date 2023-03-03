@@ -13,7 +13,6 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-
 import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
 
 import java.math.BigInteger;
@@ -60,25 +59,25 @@ public interface Database {
 
     ImpersonationInfo dataSourceImpersonationInfo();
 
-    Database.Accounts accounts();
+    List<Account> accounts();
 
-    Database.DataSources dataSources();
+    List<DataSource> dataSources();
 
-    Database.DataSourceViews dataSourceViews();
+    List<DataSourceView> dataSourceViews();
 
-    Database.Dimensions dimensions();
+    List<Dimension> dimensions();
 
-    Database.Cubes cubes();
+    List<Cube> cubes();
 
-    Database.MiningStructures miningStructures();
+    List<MiningStructure> miningStructures();
 
-    Database.Roles roles();
+    List<Role> roles();
 
-    Database.Assemblies assemblies();
+    List<Assembly> assemblies();
 
-    Database.DatabasePermissions databasePermissions();
+    List<DatabasePermission> databasePermissions();
 
-    Database.Translations translations();
+    List<Translation> translations();
 
     String storageEngineUsed();
 
@@ -95,64 +94,4 @@ public interface Database {
     BigInteger compatibilityLevel();
 
     String directQueryMode();
-
-    public interface Accounts {
-
-        List<Account> account();
-
-    }
-
-    interface Assemblies {
-
-        List<Assembly> assembly();
-
-    }
-
-    interface Cubes {
-
-        List<Cube> cube();
-
-    }
-
-    interface DatabasePermissions {
-
-        List<DatabasePermission> databasePermission();
-
-    }
-
-    interface DataSources {
-
-        List<DataSource> dataSource();
-
-    }
-
-    interface DataSourceViews {
-
-        List<DataSourceView> dataSourceView();
-
-    }
-
-    interface Dimensions {
-
-        List<Dimension> dimension();
-
-    }
-
-    interface MiningStructures {
-
-        List<MiningStructure> miningStructure();
-
-    }
-
-    interface Roles {
-
-        List<Role> role();
-
-    }
-
-    interface Translations {
-
-        List<Translation> translation();
-    }
-
 }

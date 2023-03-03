@@ -36,13 +36,8 @@ public record DataSourceR(String name,
                           String isolation,
                           BigInteger maxActiveConnections,
                           Duration timeout,
-                          DataSource.DataSourcePermissions dataSourcePermissions,
+                          List<DataSourcePermission> dataSourcePermissions,
                           ImpersonationInfo queryImpersonationInfo,
                           String queryHints) implements DataSource {
-
-    public record DataSourcePermissions(
-        List<DataSourcePermission> dataSourcePermission) implements DataSource.DataSourcePermissions {
-
-    }
 
 }

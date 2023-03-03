@@ -16,5 +16,4 @@ package org.eclipse.daanse.xmla.api.xmla;
 public interface DataSourceViewBinding extends Binding {
 
     String dataSourceViewID();
-
 }

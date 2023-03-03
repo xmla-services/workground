@@ -30,5 +30,4 @@ public interface ReferenceMeasureGroupDimension extends MeasureGroupDimension {
     String materialization();
 
     String processingState();
-
 }

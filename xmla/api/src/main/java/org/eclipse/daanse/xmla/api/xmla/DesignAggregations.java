@@ -31,12 +31,5 @@ public non-sealed interface DesignAggregations extends Command {
 
     Boolean materialize();
 
-    DesignAggregations.Queries queries();
-
-    public interface Queries {
-
-        List<String> query();
-
-    }
-
+    List<String> queries();
 }

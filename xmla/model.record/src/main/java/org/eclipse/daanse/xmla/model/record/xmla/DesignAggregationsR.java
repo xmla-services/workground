@@ -26,10 +26,5 @@ public record DesignAggregationsR(ObjectReference object,
                                   Double optimization,
                                   Long storage,
                                   Boolean materialize,
-                                  DesignAggregationsR.Queries queries) implements DesignAggregations {
-
-    public record QueriesR(List<String> query) implements DesignAggregations.Queries {
-
-    }
-
+                                  List<String> queries) implements DesignAggregations {
 }

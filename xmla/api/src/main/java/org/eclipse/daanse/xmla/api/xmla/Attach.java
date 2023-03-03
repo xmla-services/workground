@@ -15,7 +15,6 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 public non-sealed interface Attach extends Command {
 
-
    String folder();
 
    String password();
@@ -23,6 +22,5 @@ public non-sealed interface Attach extends Command {
    Boolean allowOverwrite();
 
    String readWriteMode();
-
 
 }

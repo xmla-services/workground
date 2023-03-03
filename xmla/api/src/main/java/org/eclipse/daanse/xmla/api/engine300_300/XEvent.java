@@ -18,6 +18,4 @@ import org.eclipse.daanse.xmla.api.xmla.EventSession;
 public interface XEvent {
 
     EventSession eventSession();
-
-
 }

@@ -38,30 +38,10 @@ public record ServerR(String name,
                       String productLevel,
                       Long defaultCompatibilityLevel,
                       String supportedCompatibilityLevels,
-                      ServerR.Databases databases,
-                      ServerR.Assemblies assemblies,
-                      ServerR.Traces traces,
-                      ServerR.Roles roles,
-                      ServerR.ServerProperties serverProperties) implements Server {
-
-    public record Assemblies(List<Assembly> assembly) implements Server.Assemblies {
-
-    }
-
-    public record Databases(List<Database> database) implements Server.Databases {
-
-    }
-
-    public record Roles(List<Role> role) implements Server.Roles {
-
-    }
-
-    public record ServerProperties(List<ServerProperty> serverProperty) implements Server.ServerProperties {
-
-    }
-
-    public record Traces(List<Trace> trace) implements Server.Traces {
-
-    }
+                      List<Database> databases,
+                      List<Assembly> assemblies,
+                      List<Trace> traces,
+                      List<Role> roles,
+                      List<ServerProperty> serverProperties) implements Server {
 
 }

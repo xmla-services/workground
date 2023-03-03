@@ -19,6 +19,7 @@ import org.eclipse.daanse.xmla.api.xmla.Dimension;
 import org.eclipse.daanse.xmla.api.xmla.DimensionAttribute;
 import org.eclipse.daanse.xmla.api.xmla.DimensionCurrentStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.DimensionPermission;
+import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
 import org.eclipse.daanse.xmla.api.xmla.Hierarchy;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
 import org.eclipse.daanse.xmla.api.xmla.UnknownMemberEnumType;
@@ -38,40 +39,32 @@ public record DimensionR(String name,
                          String type,
                          DimensionR.UnknownMember unknownMember,
                          String mdxMissingMemberMode,
-                         ErrorConfigurationR errorConfiguration,
+                         ErrorConfiguration errorConfiguration,
                          String storageMode,
                          Boolean writeEnabled,
                          BigInteger processingPriority,
                          Instant lastProcessed,
-                         DimensionR.DimensionPermissions dimensionPermissions,
+                         List<DimensionPermission> dimensionPermissions,
                          String dependsOnDimensionID,
                          BigInteger language,
                          String collation,
                          String unknownMemberName,
-                         DimensionR.UnknownMemberTranslations unknownMemberTranslations,
+                         List<Translation> unknownMemberTranslations,
                          String state,
                          ProactiveCachingR proactiveCaching,
                          String processingMode,
                          String processingGroup,
-                         DimensionR.CurrentStorageMode currentStorageMode,
-                         DimensionR.Translations translations,
-                         DimensionR.Attributes attributes,
+                         Dimension.CurrentStorageMode currentStorageMode,
+                         List<Translation> translations,
+                         List<DimensionAttribute> attributes,
                          String attributeAllMemberName,
-                         DimensionR.AttributeAllMemberTranslations attributeAllMemberTranslations,
-                         DimensionR.Hierarchies hierarchies,
+                         List<Translation> attributeAllMemberTranslations,
+                         List<Hierarchy> hierarchies,
                          String processingRecommendation,
                          Relationships relationships,
                          Integer stringStoresCompatibilityLevel,
                          Integer currentStringStoresCompatibilityLevel) implements Dimension {
 
-    record AttributeAllMemberTranslations(
-        List<Translation> memberAllMemberTranslation) implements Dimension.AttributeAllMemberTranslations {
-
-    }
-
-    record Attributes(List<DimensionAttribute> attribute) implements Dimension.Attributes {
-
-    }
 
     record CurrentStorageMode(DimensionCurrentStorageModeEnumType value,
 
@@ -79,26 +72,8 @@ public record DimensionR(String name,
 
     }
 
-    record DimensionPermissions(
-        List<DimensionPermission> dimensionPermission) implements Dimension.DimensionPermissions {
-
-    }
-
-    record Hierarchies(List<Hierarchy> hierarchy) implements Dimension.Hierarchies {
-
-    }
-
-    record Translations(List<Translation> translation) implements Dimension.Translations {
-
-    }
-
     record UnknownMember(UnknownMemberEnumType value,
                          String valuens) implements Dimension.UnknownMember {
-
-    }
-
-    record UnknownMemberTranslations(
-        List<Translation> unknownMemberTranslation) implements Dimension.UnknownMemberTranslations {
 
     }
 

@@ -28,6 +28,4 @@ public interface ServerProperty {
     Boolean displayFlag();
 
     String type();
-
-
 }

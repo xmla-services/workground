@@ -20,7 +20,7 @@ import org.eclipse.daanse.xmla.api.xmla.DimensionPermission;
 import java.time.Instant;
 import java.util.List;
 
-public record DimensionPermissionR(DimensionPermissionR.AttributePermissions attributePermissions,
+public record DimensionPermissionR(List<AttributePermission> attributePermissions,
                                    String write,
                                    String allowedRowsExpression,
                                    String name,
@@ -34,10 +34,4 @@ public record DimensionPermissionR(DimensionPermissionR.AttributePermissions att
                                    String readDefinition,
                                    String read
 ) implements DimensionPermission {
-
-    public record AttributePermissionsR(
-        List<AttributePermission> attributePermission) implements DimensionPermission.AttributePermissions {
-
-    }
-
 }

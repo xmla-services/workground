@@ -13,6 +13,7 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupAttribute;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimensionBinding;
@@ -92,11 +93,11 @@ public class MeasureGroupDimensionConvertor {
         return null;
     }
 
-    private static org.eclipse.daanse.xmla.api.xmla.RegularMeasureGroupDimension.Attributes convertRegularMeasureGroupDimensionAttributes(
+    private static List<MeasureGroupAttribute> convertRegularMeasureGroupDimensionAttributes(
         org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.RegularMeasureGroupDimension.Attributes attributes
     ) {
         if (attributes != null) {
-            return new RegularMeasureGroupDimensionR.AttributesR(convertMeasureGroupAttributeList(attributes.getAttribute()));
+            return convertMeasureGroupAttributeList(attributes.getAttribute());
         }
         return null;
     }
@@ -119,9 +120,9 @@ public class MeasureGroupDimensionConvertor {
         return null;
     }
 
-    private static MeasureGroupAttribute.KeyColumns convertMeasureGroupAttributeKeyColumns(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupAttribute.KeyColumns keyColumns) {
+    private static List<DataItem> convertMeasureGroupAttributeKeyColumns(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupAttribute.KeyColumns keyColumns) {
         if (keyColumns != null) {
-            return new MeasureGroupAttributeR.KeyColumns(convertDataItemList(keyColumns.getKeyColumn()));
+            return convertDataItemList(keyColumns.getKeyColumn());
         }
         return null;
     }

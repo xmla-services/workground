@@ -17,129 +17,60 @@ import java.util.List;
 
 public interface OutOfLineBinding {
 
+    String databaseID();
 
-     String databaseID();
+    String dimensionID();
 
-     String dimensionID();
+    String cubeID();
 
-     String cubeID();
+    String measureGroupID();
 
-     String measureGroupID();
+    String partitionID();
 
-     String partitionID();
+    String miningModelID();
 
-     String miningModelID();
+    String miningStructureID();
 
-     String miningStructureID();
+    String attributeID();
 
-     String attributeID();
+    String cubeDimensionID();
 
-     String cubeDimensionID();
+    String measureID();
 
-     String measureID();
+    String parentColumnID();
 
-     String parentColumnID();
+    String columnID();
 
-     String columnID();
+    Binding source();
 
-     Binding source();
+    Binding nameColumn();
 
-     OutOfLineBinding.NameColumn nameColumn();
+    Binding skippedLevelsColumn();
 
-     OutOfLineBinding.SkippedLevelsColumn skippedLevelsColumn();
+    Binding customRollupColumn();
 
-     OutOfLineBinding.CustomRollupColumn customRollupColumn();
+    Binding customRollupPropertiesColumn();
 
-     OutOfLineBinding.CustomRollupPropertiesColumn customRollupPropertiesColumn();
+    Binding valueColumn();
 
-     OutOfLineBinding.ValueColumn valueColumn();
+    Binding unaryOperatorColumn();
 
-     OutOfLineBinding.UnaryOperatorColumn unaryOperatorColumn();
+    List<Binding> keyColumns();
 
-     OutOfLineBinding.KeyColumns keyColumns();
+    List<Binding> foreignKeyColumns();
 
-     OutOfLineBinding.ForeignKeyColumns foreignKeyColumns();
+    OutOfLineBinding.Translations translations();
 
-     OutOfLineBinding.Translations translations();
+    interface Translations {
 
-
-    public interface CustomRollupColumn {
-
-         Binding source();
-
-    }
-
-    public interface CustomRollupPropertiesColumn {
-
-         Binding source();
-
-
-    }
-
-    public interface ForeignKeyColumns {
-
-         List<ForeignKeyColumn> foreignKeyColumn();
-
-
-        public interface ForeignKeyColumn {
-
-             Binding source();
-
-
-        }
-
-    }
-
-    public interface KeyColumns {
-
-         List<OutOfLineBinding.KeyColumns.KeyColumn> keyColumn();
-
-
-        public interface KeyColumn {
-
-             Binding source();
-
-        }
-
-    }
-
-    public interface NameColumn {
-
-         Binding source();
-
-    }
-
-
-    public interface SkippedLevelsColumn {
-
-         Binding source();
-
-
-    }
-
-    public interface Translations {
-
-         List<OutOfLineBinding.Translations.Translation> translation();
+        List<OutOfLineBinding.Translations.Translation> translation();
 
         public interface Translation {
 
-             int language();
-             Binding source();
+            int language();
 
-
+            Binding source();
         }
-
-    }
-
-    public interface UnaryOperatorColumn {
-
-         Binding source();
-    }
-
-    public interface ValueColumn {
-
-         Binding source();
-
     }
 
 }

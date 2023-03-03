@@ -18,5 +18,4 @@ public non-sealed interface Subscribe extends Command {
     ObjectReference object();
 
     String subscriptionId();
-
 }

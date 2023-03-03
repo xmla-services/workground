@@ -19,11 +19,5 @@ public interface UserDefinedGroupBinding extends Binding {
 
     String attributeID();
 
-    UserDefinedGroupBinding.Groups groups();
-
-    interface Groups {
-
-        List<Group> group();
-
-    }
+    List<Group> groups();
 }

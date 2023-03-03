@@ -21,11 +21,5 @@ public interface Location extends LocationBackup {
 
     String connectionString();
 
-    Location.Folders folders();
-
-    public interface Folders {
-
-        List<Folder> folder();
-
-    }
+    List<Folder> folders();
 }

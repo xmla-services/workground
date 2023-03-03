@@ -15,10 +15,8 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 public interface TableNotification {
 
-
   String dbTableName();
 
   String dbSchemaName();
-
 
 }

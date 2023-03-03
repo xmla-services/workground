@@ -20,12 +20,8 @@ import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import java.util.List;
 
 public record AggregationDimensionR(String cubeDimensionID,
-                                    AggregationDimension.Attributes attributes,
+                                    List<AggregationAttribute> attributes,
                                     List<Annotation> annotations
 ) implements AggregationDimension {
 
-
-    public record AttributesR(List<AggregationAttribute> attribute) implements AggregationDimension.Attributes {
-
-    }
 }

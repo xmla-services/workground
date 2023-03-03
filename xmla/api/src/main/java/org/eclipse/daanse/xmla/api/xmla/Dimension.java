@@ -53,7 +53,7 @@ public interface Dimension {
 
     Instant lastProcessed();
 
-    Dimension.DimensionPermissions dimensionPermissions();
+    List<DimensionPermission> dimensionPermissions();
 
     String dependsOnDimensionID();
 
@@ -63,7 +63,7 @@ public interface Dimension {
 
     String unknownMemberName();
 
-    Dimension.UnknownMemberTranslations unknownMemberTranslations();
+    List<Translation> unknownMemberTranslations();
 
     String state();
 
@@ -75,15 +75,15 @@ public interface Dimension {
 
     Dimension.CurrentStorageMode currentStorageMode();
 
-    Dimension.Translations translations();
+    List<Translation> translations();
 
-    Dimension.Attributes attributes();
+    List<DimensionAttribute> attributes();
 
     String attributeAllMemberName();
 
-    Dimension.AttributeAllMemberTranslations attributeAllMemberTranslations();
+    List<Translation> attributeAllMemberTranslations();
 
-    Dimension.Hierarchies hierarchies();
+    List<Hierarchy> hierarchies();
 
     String processingRecommendation();
 
@@ -93,42 +93,11 @@ public interface Dimension {
 
     Integer currentStringStoresCompatibilityLevel();
 
-    interface AttributeAllMemberTranslations {
-
-        List<Translation> memberAllMemberTranslation();
-
-    }
-
-    interface Attributes {
-
-        List<DimensionAttribute> attribute();
-    }
-
     interface CurrentStorageMode {
 
         DimensionCurrentStorageModeEnumType value();
 
         String valuens();
-
-    }
-
-    interface DimensionPermissions {
-
-        List<DimensionPermission> dimensionPermission();
-
-    }
-
-    interface Hierarchies {
-
-        List<Hierarchy> hierarchy();
-
-
-    }
-
-    interface Translations {
-
-        List<Translation> translation();
-
     }
 
     interface UnknownMember {
@@ -137,11 +106,4 @@ public interface Dimension {
 
         String valuens();
     }
-
-    interface UnknownMemberTranslations {
-
-        List<Translation> unknownMemberTranslation();
-
-    }
-
 }

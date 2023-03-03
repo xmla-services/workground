@@ -26,22 +26,10 @@ public record MiningModelColumnR(String name,
                                  String sourceColumnID,
                                  String usage,
                                  String filter,
-                                 MiningModelColumnR.Translations translations,
-                                 MiningModelColumnR.Columns columns,
-                                 MiningModelColumnR.ModelingFlags modelingFlags,
+                                 List<Translation> translations,
+                                 List<MiningModelColumn> columns,
+                                 List<MiningModelingFlag> modelingFlags,
                                  List<Annotation> annotations) implements MiningModelColumn {
 
-
-    public record Columns(List<MiningModelColumn> column) implements MiningModelColumn.Columns {
-
-    }
-
-    public record ModelingFlags(List<MiningModelingFlag> modelingFlag) implements MiningModelColumn.ModelingFlags {
-
-    }
-
-    public record Translations(List<Translation> translation) implements MiningModelColumn.Translations {
-
-    }
 
 }

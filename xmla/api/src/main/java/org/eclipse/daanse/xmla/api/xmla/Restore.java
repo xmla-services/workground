@@ -33,11 +33,6 @@ public non-sealed interface Restore extends Command {
 
     String readWriteMode();
 
-    Restore.Locations locations();
+    List<Location> locations();
 
-    public interface Locations {
-
-        List<Location> location();
-
-    }
 }

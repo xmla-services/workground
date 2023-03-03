@@ -24,6 +24,4 @@ public interface FoldingParameters {
     Long foldMaxCases();
 
     String foldTargetAttribute();
-
-
 }

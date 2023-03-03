@@ -32,5 +32,4 @@ public interface ErrorConfiguration {
     String nullKeyNotAllowed();
 
     String calculationError();
-
 }

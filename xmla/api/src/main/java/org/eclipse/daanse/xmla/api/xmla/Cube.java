@@ -35,15 +35,15 @@ public interface Cube {
 
     String collation();
 
-    Cube.Translations translations();
+    List<Translation> translations();
 
-    Cube.Dimensions dimensions();
+    List<CubeDimension> dimensions();
 
-    Cube.CubePermissions cubePermissions();
+    List<CubePermission> cubePermissions();
 
-    Cube.MdxScripts mdxScripts();
+    List<MdxScript> mdxScripts();
 
-    Cube.Perspectives perspectives();
+    List<Perspective> perspectives();
 
     String state();
 
@@ -51,7 +51,7 @@ public interface Cube {
 
     Boolean visible();
 
-    Cube.MeasureGroups measureGroups();
+    List<MeasureGroup> measureGroups();
 
     DataSourceViewBinding source();
 
@@ -71,11 +71,11 @@ public interface Cube {
 
     ProactiveCaching proactiveCaching();
 
-    Cube.Kpis kpis();
+    List<Kpi> kpis();
 
     ErrorConfiguration errorConfiguration();
 
-    Cube.Actions actions();
+    List<Action> actions();
 
     String storageLocation();
 
@@ -83,63 +83,10 @@ public interface Cube {
 
     Instant lastProcessed();
 
-    interface Actions {
-
-        List<Action> action();
-
-    }
-
-    interface CubePermissions {
-
-        List<CubePermission> cubePermission();
-
-    }
-
-    interface Dimensions {
-
-        List<CubeDimension> dimension();
-
-
-    }
-
-    interface Kpis {
-
-        List<Kpi> kpi();
-
-    }
-
-    interface MdxScripts {
-
-        List<MdxScript> mdxScript();
-
-
-    }
-
-    interface MeasureGroups {
-
-        List<MeasureGroup> measureGroup();
-
-    }
-
-    interface Perspectives {
-
-        List<Perspective> perspective();
-
-
-    }
-
     interface StorageMode {
 
         CubeStorageModeEnumType value();
 
         String valuens();
-
     }
-
-    interface Translations {
-
-        List<Translation> translation();
-
-    }
-
 }

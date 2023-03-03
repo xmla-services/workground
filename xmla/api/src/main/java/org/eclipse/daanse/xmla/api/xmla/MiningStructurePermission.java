@@ -18,6 +18,4 @@ public interface MiningStructurePermission extends Permission {
     Boolean allowDrillThrough();
 
     String write();
-
-
 }

@@ -19,5 +19,4 @@ public non-sealed interface Detach extends Command {
 
     String password();
 
-
 }

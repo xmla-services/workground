@@ -20,11 +20,7 @@ import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasureGroup;
 import java.util.List;
 
 public record PerspectiveMeasureGroupR(String measureGroupID,
-                                       PerspectiveMeasureGroup.Measures measures,
+                                       List<PerspectiveMeasure> measures,
                                        List<Annotation> annotations) implements PerspectiveMeasureGroup {
-
-    public record Measures(List<PerspectiveMeasure> measure) implements PerspectiveMeasureGroup.Measures {
-
-    }
 
 }

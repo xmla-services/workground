@@ -17,24 +17,18 @@ import java.util.List;
 
 public interface Level {
 
+    String name();
 
-     String name();
+    String id();
 
-     String id();
+    String description();
 
-     String description();
+    String sourceAttributeID();
 
-     String sourceAttributeID();
+    String hideMemberIf();
 
-     String hideMemberIf();
-
-     Level.Translations translations();
+    List<Translation> translations();
 
     List<Annotation> annotations();
-
-    interface Translations {
-
-         List<Translation> translation();
-    }
 
 }

@@ -19,43 +19,16 @@ import java.util.List;
 
 public interface RelationshipEnd {
 
+    String role();
 
+    String multiplicity();
 
-     String role();
+    String dimensionID();
 
-     String multiplicity();
+    List<String> attributes();
 
-     String dimensionID();
+    List<RelationshipEndTranslation> translations();
 
-     RelationshipEnd.Attributes attributes();
-
-     RelationshipEnd.Translations translations();
-
-     RelationshipEndVisualizationProperties visualizationProperties();
-
-
-    public interface Attributes  {
-
-
-
-         List<Attribute> attribute();
-
-
-        public interface Attribute  {
-
-
-
-             String attributeID();
-
-
-        }
-
-    }
-
-    public interface Translations {
-
-         List<RelationshipEndTranslation> translation();
-
-    }
+    RelationshipEndVisualizationProperties visualizationProperties();
 
 }

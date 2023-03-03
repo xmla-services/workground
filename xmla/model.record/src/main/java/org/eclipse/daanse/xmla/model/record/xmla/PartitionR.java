@@ -48,7 +48,7 @@ public record PartitionR(String name,
                          Long estimatedRows,
                          Partition.CurrentStorageMode currentStorageMode,
                          String aggregationDesignID,
-                         Partition.AggregationInstances aggregationInstances,
+                         List<AggregationInstance> aggregationInstances,
                          DataSourceViewBinding aggregationInstanceSource,
                          Instant lastProcessed,
                          String state,
@@ -56,13 +56,8 @@ public record PartitionR(String name,
                          Integer currentStringStoresCompatibilityLevel,
                          String directQueryUsage) implements Partition {
 
-    public record AggregationInstances(
-        List<AggregationInstance> aggregationInstance) implements Partition.AggregationInstances {
-
-    }
 
     public record CurrentStorageMode(PartitionCurrentStorageModeEnumType value,
-
                                      String valuens) implements Partition.CurrentStorageMode {
 
     }

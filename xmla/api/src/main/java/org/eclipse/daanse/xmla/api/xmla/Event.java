@@ -18,5 +18,4 @@ public interface Event {
     String eventID();
 
     EventColumnID columns();
-
 }

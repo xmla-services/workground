@@ -19,24 +19,15 @@ import java.util.List;
 
 public interface RelationshipEndTranslation {
 
+    long language();
 
-     long language();
+    String caption();
 
-     String caption();
+    String collectionCaption();
 
-     String collectionCaption();
+    String description();
 
-     String description();
+    String displayFolder();
 
-     String displayFolder();
-
-     RelationshipEndTranslation.Annotations annotations();
-
-
-    public interface Annotations {
-
-        List<Annotation> annotation();
-
-    }
-
+    List<Annotation> annotations();
 }

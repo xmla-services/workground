@@ -96,12 +96,9 @@ public non-sealed interface Batch extends Command {
 
     public interface Parallel {
 
-
          List<Process> process();
 
          Integer maxParallel();
-
-
     }
 
 }

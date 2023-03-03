@@ -47,13 +47,7 @@ public interface Measure {
 
     String fontFlags();
 
-    Measure.Translations translations();
+    List<Translation> translations();
 
     List<Annotation> annotations();
-
-    public interface Translations {
-
-        List<Translation> translation();
-    }
-
 }

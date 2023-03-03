@@ -23,12 +23,7 @@ public record CubeDimensionPermissionR(String cubeDimensionID,
                                        String description,
                                        String read,
                                        String write,
-                                       CubeDimensionPermission.AttributePermissions attributePermissions,
+                                       List<AttributePermission> attributePermissions,
                                        List<Annotation> annotations) implements CubeDimensionPermission {
-
-    public record AttributePermissions(
-        List<AttributePermission> attributePermission) implements CubeDimensionPermission.AttributePermissions {
-
-    }
 
 }

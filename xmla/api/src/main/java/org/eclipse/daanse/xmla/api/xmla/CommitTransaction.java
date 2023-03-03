@@ -16,5 +16,4 @@ package org.eclipse.daanse.xmla.api.xmla;
 public non-sealed interface CommitTransaction extends Command {
 
     String durabilityGuarantee();
-
 }

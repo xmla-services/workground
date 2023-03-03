@@ -25,15 +25,7 @@ public interface CubeDimensionPermission {
 
     String write();
 
-    CubeDimensionPermission.AttributePermissions attributePermissions();
+    List<AttributePermission> attributePermissions();
 
     List<Annotation> annotations();
-
-
-    public interface AttributePermissions {
-
-        List<AttributePermission> attributePermission();
-
-    }
-
 }

@@ -33,11 +33,5 @@ public non-sealed interface ImageLoad extends Command {
 
     String databaseID();
 
-    ImageLoad.Data data();
-
-    public interface Data {
-
-        List<String> dataBlock();
-    }
-
+    List<String> data();
 }

@@ -26,10 +26,6 @@ public record RoleR(String name,
                     Instant lastSchemaUpdate,
                     String description,
                     List<Annotation> annotations,
-                    RoleR.Members members) implements Role {
-
-    record Members(List<Member> member) implements Role.Members {
-
-    }
+                    List<Member> members) implements Role {
 
 }

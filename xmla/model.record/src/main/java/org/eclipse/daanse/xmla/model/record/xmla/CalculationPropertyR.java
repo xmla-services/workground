@@ -23,7 +23,7 @@ import java.util.List;
 public record CalculationPropertyR(
     String calculationReference,
     String calculationType,
-    CalculationProperty.Translations translations,
+    List<Translation> translations,
     String description,
     Boolean visible,
     BigInteger solveOrder,
@@ -38,9 +38,5 @@ public record CalculationPropertyR(
     String displayFolder,
     BigInteger language,
     CalculationPropertiesVisualizationProperties visualizationProperties) implements CalculationProperty {
-
-    public record Translations(List<Translation> translation) implements CalculationProperty.Translations {
-
-    }
 
 }

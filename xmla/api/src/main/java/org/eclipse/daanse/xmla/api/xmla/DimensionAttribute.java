@@ -21,7 +21,6 @@ import java.util.List;
 
 public interface DimensionAttribute {
 
-
     String name();
 
     String id();
@@ -36,15 +35,15 @@ public interface DimensionAttribute {
 
     Long estimatedCount();
 
-    DimensionAttribute.KeyColumns keyColumns();
+    List<DataItem> keyColumns();
 
     DataItem nameColumn();
 
     DataItem valueColumn();
 
-    DimensionAttribute.Translations translations();
+    List<AttributeTranslation> translations();
 
-    DimensionAttribute.AttributeRelationships attributeRelationships();
+    List<AttributeRelationship> attributeRelationships();
 
     String discretizationMethod();
 
@@ -66,7 +65,7 @@ public interface DimensionAttribute {
 
     String membersWithDataCaption();
 
-    DimensionAttribute.NamingTemplateTranslations namingTemplateTranslations();
+    List<Translation> namingTemplateTranslations();
 
     DataItem customRollupColumn();
 
@@ -98,47 +97,17 @@ public interface DimensionAttribute {
 
     String processingState();
 
-
     AttributeHierarchyProcessingState attributeHierarchyProcessingState();
 
     DimensionAttributeVisualizationProperties visualizationProperties();
 
     String extendedType();
 
-    public interface AttributeRelationships {
-
-
-        List<AttributeRelationship> attributeRelationship();
-
-    }
-
-    public interface KeyColumns {
-
-
-        List<DataItem> keyColumn();
-
-    }
-
-    public interface NamingTemplateTranslations {
-
-
-        List<Translation> namingTemplateTranslation();
-
-    }
-
-    public interface Translations {
-
-
-        List<AttributeTranslation> translation();
-
-    }
-
     public interface Type {
 
         DimensionAttributeTypeEnumType value();
 
         String valuens();
-
     }
 
 }

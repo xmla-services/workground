@@ -15,13 +15,9 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 public interface Discover {
 
-
     String requestType();
-
 
     Restrictions restrictions();
 
     Properties properties();
-
-
 }

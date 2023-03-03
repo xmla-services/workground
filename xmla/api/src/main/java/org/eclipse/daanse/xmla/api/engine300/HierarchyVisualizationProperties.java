@@ -20,6 +20,4 @@ public interface HierarchyVisualizationProperties {
     String contextualNameRule();
 
     BigInteger folderPosition();
-
-
 }
