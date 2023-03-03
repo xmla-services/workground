@@ -13,18 +13,21 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import org.eclipse.daanse.xmla.api.xmla.AndOrType;
+import org.eclipse.daanse.xmla.api.xmla.BoolBinop;
+import org.eclipse.daanse.xmla.api.xmla.NotType;
 import org.eclipse.daanse.xmla.api.xmla.TraceFilter;
 
-public record TraceFilterR(NotTypeR not,
-                           AndOrTypeR or,
-                           AndOrTypeR and,
-                           BoolBinopR equal,
-                           BoolBinopR notEqual,
-                           BoolBinopR less,
-                           BoolBinopR lessOrEqual,
-                           BoolBinopR greater,
-                           BoolBinopR greaterOrEqual,
-                           BoolBinopR like,
-                           BoolBinopR notLike) implements TraceFilter {
+public record TraceFilterR(NotType not,
+                           AndOrType or,
+                           AndOrType and,
+                           BoolBinop equal,
+                           BoolBinop notEqual,
+                           BoolBinop less,
+                           BoolBinop lessOrEqual,
+                           BoolBinop greater,
+                           BoolBinop greaterOrEqual,
+                           BoolBinop like,
+                           BoolBinop notLike) implements TraceFilter {
 
 }

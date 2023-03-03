@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
 import org.eclipse.daanse.xmla.api.xmla.MiningModel;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
@@ -31,7 +32,7 @@ public record MiningStructureR(String name,
                                Instant lastSchemaUpdate,
                                String description,
                                List<Annotation> annotations,
-                               BindingR source,
+                               Binding source,
                                Instant lastProcessed,
                                List<Translation> translations,
                                BigInteger language,

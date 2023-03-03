@@ -11,17 +11,13 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.model.record.xmla;
+package org.eclipse.daanse.xmla.model.record.engine300_300;
 
-import org.eclipse.daanse.xmla.api.xmla.Account;
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.engine300_300.Relationship;
+import org.eclipse.daanse.xmla.api.engine300_300.Relationships;
 
 import java.util.List;
 
-public record AccountR(String accountType,
-                       String aggregationFunction,
-                       List<String> aliases,
-                       List<Annotation> annotations
-) implements Account {
+public record RelationshipsR(List<Relationship> relationship) implements Relationships {
 
 }
