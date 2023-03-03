@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
@@ -9,7 +22,21 @@ import org.eclipse.daanse.xmla.api.xmla.AggregationDesignDimension;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDimension;
 import org.eclipse.daanse.xmla.api.xmla.Assembly;
 import org.eclipse.daanse.xmla.api.xmla.Cube;
+import org.eclipse.daanse.xmla.api.xmla.DataSource;
+import org.eclipse.daanse.xmla.api.xmla.DataSourceView;
+import org.eclipse.daanse.xmla.api.xmla.Database;
+import org.eclipse.daanse.xmla.api.xmla.Dimension;
 import org.eclipse.daanse.xmla.api.xmla.MajorObject;
+import org.eclipse.daanse.xmla.api.xmla.MdxScript;
+import org.eclipse.daanse.xmla.api.xmla.MeasureGroup;
+import org.eclipse.daanse.xmla.api.xmla.MiningModel;
+import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
+import org.eclipse.daanse.xmla.api.xmla.Partition;
+import org.eclipse.daanse.xmla.api.xmla.Permission;
+import org.eclipse.daanse.xmla.api.xmla.Perspective;
+import org.eclipse.daanse.xmla.api.xmla.Role;
+import org.eclipse.daanse.xmla.api.xmla.Server;
+import org.eclipse.daanse.xmla.api.xmla.Trace;
 import org.eclipse.daanse.xmla.model.record.engine.ImpersonationInfoR;
 import org.eclipse.daanse.xmla.model.record.xmla.AggregationAttributeR;
 import org.eclipse.daanse.xmla.model.record.xmla.AggregationDesignAttributeR;
@@ -24,27 +51,74 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertDataSource;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertDataSourceView;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertCube;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertCubeDimension;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertMdxScript;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertMeasureGroup;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertPartition;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertPerspective;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.DatabaseConvertor.convertDatabase;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.DimensionConvertor.convertDimension;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.MiningModelConvertor.convertMiningModel;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.MiningStructureConvertor.convertMiningStructure;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.PermissionConvertor.convertPermission;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.RoleConvertor.convertRole;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ServerConvertor.convertServer;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.TraceConvertor.convertTrace;
 
 public class MajorObjectConvertor {
+
     public static MajorObject convertMajorObject(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MajorObject objectDefinition) {
         AggregationDesign aggregationDesign = convertAggregationDesign(objectDefinition.getAggregationDesign());
-        Assembly assembly =  convertAssembly(objectDefinition.getAssembly());
+        Assembly assembly = convertAssembly(objectDefinition.getAssembly());
         Cube cube = convertCube(objectDefinition.getCube());
-        //TODO
-        return new MajorObjectR();
+        Database database = convertDatabase(objectDefinition.getDatabase());
+        DataSource dataSource = convertDataSource(objectDefinition.getDataSource());
+        DataSourceView dataSourceView = convertDataSourceView(objectDefinition.getDataSourceView());
+        Dimension dimension = convertDimension(objectDefinition.getDimension());
+        MdxScript mdxScript = convertMdxScript(objectDefinition.getMdxScript());
+        MeasureGroup measureGroup = convertMeasureGroup(objectDefinition.getMeasureGroup());
+        MiningModel miningModel = convertMiningModel(objectDefinition.getMiningModel());
+        MiningStructure miningStructure = convertMiningStructure(objectDefinition.getMiningStructure());
+        Partition partition = convertPartition(objectDefinition.getPartition());
+        Permission permission = convertPermission(objectDefinition.getPermission());
+        Perspective perspective = convertPerspective(objectDefinition.getPerspective());
+        Role role = convertRole(objectDefinition.getRole());
+        Server server = convertServer(objectDefinition.getServer());
+        Trace trace = convertTrace(objectDefinition.getTrace());
+
+        return new MajorObjectR(
+            aggregationDesign,
+            assembly,
+            cube,
+            database,
+            dataSource,
+            dataSourceView,
+            dimension,
+            mdxScript,
+            measureGroup,
+            miningModel,
+            miningStructure,
+            partition,
+            permission,
+            perspective,
+            role,
+            server,
+            trace);
     }
 
-
-    private static Assembly convertAssembly(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Assembly assembly) {
+    public static Assembly convertAssembly(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Assembly assembly) {
         if (assembly != null) {
             return new AssemblyR(assembly.getID(),
                 assembly.getName(),
                 convertToInstant(assembly.getCreatedTimestamp()),
                 convertToInstant(assembly.getLastSchemaUpdate()),
                 assembly.getDescription(),
-                convertAnnotationList(assembly.getAnnotations() == null ? null : assembly.getAnnotations().getAnnotation()),
+                convertAnnotationList(assembly.getAnnotations() == null ? null :
+                    assembly.getAnnotations().getAnnotation()),
                 converImpersonationInfo(assembly.getImpersonationInfo()));
         }
         return null;
@@ -67,7 +141,8 @@ public class MajorObjectConvertor {
                 convertToInstant(aggregationDesign.getCreatedTimestamp()),
                 convertToInstant(aggregationDesign.getLastSchemaUpdate()),
                 aggregationDesign.getDescription(),
-                convertAnnotationList(aggregationDesign.getAnnotations() == null ? null : aggregationDesign.getAnnotations().getAnnotation()),
+                convertAnnotationList(aggregationDesign.getAnnotations() == null ? null :
+                    aggregationDesign.getAnnotations().getAnnotation()),
                 aggregationDesign.getEstimatedRows(),
                 convertAggregationDesignDimensions(aggregationDesign.getDimensions()),
                 convertAggregationDesignAggregations(aggregationDesign.getAggregations()),
@@ -96,7 +171,8 @@ public class MajorObjectConvertor {
             return new AggregationDesignDimensionR(
                 aggregationDesignDimension.getCubeDimensionID(),
                 convertAggregationDesignDimensionAttributes(aggregationDesignDimension.getAttributes()),
-                convertAnnotationList(aggregationDesignDimension.getAnnotations() == null ? null : aggregationDesignDimension.getAnnotations().getAnnotation()));
+                convertAnnotationList(aggregationDesignDimension.getAnnotations() == null ? null :
+                    aggregationDesignDimension.getAnnotations().getAnnotation()));
         }
         return null;
     }
@@ -143,7 +219,8 @@ public class MajorObjectConvertor {
             return new AggregationR(aggregation.getID(),
                 aggregation.getName(),
                 convertAggregationDimensions(aggregation.getDimensions()),
-                convertAnnotationList(aggregation.getAnnotations() == null ? null : aggregation.getAnnotations().getAnnotation()),
+                convertAnnotationList(aggregation.getAnnotations() == null ? null :
+                    aggregation.getAnnotations().getAnnotation()),
                 aggregation.getDescription());
         }
         return null;
@@ -167,7 +244,8 @@ public class MajorObjectConvertor {
         if (aggregationDimension != null) {
             return new AggregationDimensionR(aggregationDimension.getCubeDimensionID(),
                 convertAggregationDimensionAttributes(aggregationDimension.getAttributes()),
-                convertAnnotationList(aggregationDimension.getAnnotations() == null ? null : aggregationDimension.getAnnotations().getAnnotation()));
+                convertAnnotationList(aggregationDimension.getAnnotations() == null ? null :
+                    aggregationDimension.getAnnotations().getAnnotation()));
         }
         return null;
     }
@@ -190,7 +268,8 @@ public class MajorObjectConvertor {
         if (aggregationAttribute != null) {
             return new AggregationAttributeR(
                 aggregationAttribute.getAttributeID(),
-                convertAnnotationList(aggregationAttribute.getAnnotations() == null ? null : aggregationAttribute.getAnnotations().getAnnotation()));
+                convertAnnotationList(aggregationAttribute.getAnnotations() == null ? null :
+                    aggregationAttribute.getAnnotations().getAnnotation()));
         }
         return null;
     }

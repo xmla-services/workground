@@ -19,91 +19,23 @@ import org.eclipse.daanse.xmla.api.xmla.Role;
 import org.eclipse.daanse.xmla.api.xmla.Server;
 import org.eclipse.daanse.xmla.api.xmla.Trace;
 
-public class MajorObjectR implements MajorObject {
-    //TODO record
+public record MajorObjectR(
+    AggregationDesign aggregationDesign,
+    Assembly assembly,
+    Cube cube,
+    Database database,
+    DataSource dataSource,
+    DataSourceView dataSourceView,
+    Dimension dimension,
+    MdxScript mdxScript,
+    MeasureGroup measureGroup,
+    MiningModel miningModel,
+    MiningStructure miningStructure,
+    Partition partition,
+    Permission permission,
+    Perspective perspective,
+    Role role,
+    Server server,
+    Trace trace) implements MajorObject {
 
-    @Override
-    public AggregationDesign aggregationDesign() {
-        return null;
-    }
-
-    @Override
-    public Assembly assembly() {
-        return null;
-    }
-
-    @Override
-    public Cube cube() {
-        return null;
-    }
-
-    @Override
-    public Database database() {
-        return null;
-    }
-
-    @Override
-    public DataSource dataSource() {
-        return null;
-    }
-
-    @Override
-    public DataSourceView dataSourceView() {
-        return null;
-    }
-
-    @Override
-    public Dimension dimension() {
-        return null;
-    }
-
-    @Override
-    public MdxScript mdxScript() {
-        return null;
-    }
-
-    @Override
-    public MeasureGroup measureGroup() {
-        return null;
-    }
-
-    @Override
-    public MiningModel miningModel() {
-        return null;
-    }
-
-    @Override
-    public MiningStructure miningStructure() {
-        return null;
-    }
-
-    @Override
-    public Partition partition() {
-        return null;
-    }
-
-    @Override
-    public Permission permission() {
-        return null;
-    }
-
-    @Override
-    public Perspective perspective() {
-        return null;
-    }
-
-    @Override
-    public Role role() {
-        return null;
-    }
-
-    @Override
-    public Server server() {
-        return null;
-    }
-
-    @Override
-    public Trace trace() {
-        return null;
-    }
 }

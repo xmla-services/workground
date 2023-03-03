@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
@@ -1091,7 +1104,7 @@ public class CommandConvertor {
         return null;
     }
 
-    private static ErrorConfiguration convertErrorConfiguration(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ErrorConfiguration errorConfiguration) {
+    public static ErrorConfiguration convertErrorConfiguration(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ErrorConfiguration errorConfiguration) {
         if (errorConfiguration != null) {
             return new ErrorConfigurationR(errorConfiguration.getKeyErrorLimit(),
                 errorConfiguration.getKeyErrorLogFile(),
@@ -1106,7 +1119,7 @@ public class CommandConvertor {
         return null;
     }
 
-    private static DataSourceView convertDataSourceView(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSourceView dataSourceView) {
+    public static DataSourceView convertDataSourceView(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSourceView dataSourceView) {
         if (dataSourceView != null) {
             return new DataSourceViewR(dataSourceView.getName(),
                 dataSourceView.getID(),
@@ -1120,7 +1133,7 @@ public class CommandConvertor {
         return null;
     }
 
-    private static DataSource convertDataSource(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource dataSource) {
+    public static DataSource convertDataSource(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource dataSource) {
         if (dataSource != null) {
             return new DataSourceR(dataSource.getName(),
                 dataSource.getID(),
@@ -1169,7 +1182,7 @@ public class CommandConvertor {
         return null;
     }
 
-    private static ImpersonationInfo convertImpersonationInfo(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine.ImpersonationInfo impersonationInfo) {
+    public static ImpersonationInfo convertImpersonationInfo(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine.ImpersonationInfo impersonationInfo) {
         if (impersonationInfo != null) {
             return new ImpersonationInfoR(impersonationInfo.getImpersonationMode(),
                 impersonationInfo.getAccount(),

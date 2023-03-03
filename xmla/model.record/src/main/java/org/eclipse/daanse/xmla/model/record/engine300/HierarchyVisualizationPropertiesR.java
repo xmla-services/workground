@@ -11,17 +11,13 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.model.record.xmla;
+package org.eclipse.daanse.xmla.model.record.engine300;
 
-import org.eclipse.daanse.xmla.api.xmla.Account;
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.engine300.HierarchyVisualizationProperties;
 
-import java.util.List;
+import java.math.BigInteger;
 
-public record AccountR(String accountType,
-                       String aggregationFunction,
-                       List<String> aliases,
-                       List<Annotation> annotations
-) implements Account {
+public record HierarchyVisualizationPropertiesR(String contextualNameRule,
+                                                BigInteger folderPosition) implements HierarchyVisualizationProperties {
 
 }

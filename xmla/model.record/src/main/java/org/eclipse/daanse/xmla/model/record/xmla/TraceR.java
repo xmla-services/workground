@@ -14,7 +14,9 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.EventType;
 import org.eclipse.daanse.xmla.api.xmla.Trace;
+import org.eclipse.daanse.xmla.api.xmla.TraceFilter;
 
 import java.time.Instant;
 import java.util.List;
@@ -32,7 +34,7 @@ public record TraceR(String name,
                      Boolean logFileRollover,
                      Boolean autoRestart,
                      Instant stopTime,
-                     TraceFilterR filter,
-                     EventTypeR eventType) implements Trace {
+                     TraceFilter filter,
+                     EventType eventType) implements Trace {
 
 }

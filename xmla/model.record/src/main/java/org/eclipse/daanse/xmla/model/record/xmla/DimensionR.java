@@ -15,12 +15,14 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.engine300_300.Relationships;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
+import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.Dimension;
 import org.eclipse.daanse.xmla.api.xmla.DimensionAttribute;
 import org.eclipse.daanse.xmla.api.xmla.DimensionCurrentStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.DimensionPermission;
 import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
 import org.eclipse.daanse.xmla.api.xmla.Hierarchy;
+import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
 import org.eclipse.daanse.xmla.api.xmla.UnknownMemberEnumType;
 
@@ -34,10 +36,10 @@ public record DimensionR(String name,
                          Instant lastSchemaUpdate,
                          String description,
                          List<Annotation> annotations,
-                         BindingR source,
+                         Binding source,
                          String miningModelID,
                          String type,
-                         DimensionR.UnknownMember unknownMember,
+                         Dimension.UnknownMember unknownMember,
                          String mdxMissingMemberMode,
                          ErrorConfiguration errorConfiguration,
                          String storageMode,
@@ -51,7 +53,7 @@ public record DimensionR(String name,
                          String unknownMemberName,
                          List<Translation> unknownMemberTranslations,
                          String state,
-                         ProactiveCachingR proactiveCaching,
+                         ProactiveCaching proactiveCaching,
                          String processingMode,
                          String processingGroup,
                          Dimension.CurrentStorageMode currentStorageMode,
@@ -66,13 +68,13 @@ public record DimensionR(String name,
                          Integer currentStringStoresCompatibilityLevel) implements Dimension {
 
 
-    record CurrentStorageMode(DimensionCurrentStorageModeEnumType value,
+    public record CurrentStorageMode(DimensionCurrentStorageModeEnumType value,
 
                               String valuens) implements Dimension.CurrentStorageMode {
 
     }
 
-    record UnknownMember(UnknownMemberEnumType value,
+    public record UnknownMember(UnknownMemberEnumType value,
                          String valuens) implements Dimension.UnknownMember {
 
     }

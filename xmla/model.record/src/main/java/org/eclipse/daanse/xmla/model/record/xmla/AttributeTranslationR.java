@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.AttributeTranslation;
+import org.eclipse.daanse.xmla.api.xmla.DataItem;
 
 import java.util.List;
 
@@ -23,7 +24,7 @@ public record AttributeTranslationR(long language,
                                     String description,
                                     String displayFolder,
                                     List<Annotation> annotations,
-                                    DataItemR captionColumn,
+                                    DataItem captionColumn,
                                     String membersWithDataCaption) implements AttributeTranslation {
 
 

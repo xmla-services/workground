@@ -18,6 +18,7 @@ import org.eclipse.daanse.xmla.api.engine300.DimensionAttributeVisualizationProp
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.AttributeRelationship;
 import org.eclipse.daanse.xmla.api.xmla.AttributeTranslation;
+import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import org.eclipse.daanse.xmla.api.xmla.DimensionAttribute;
 import org.eclipse.daanse.xmla.api.xmla.DimensionAttributeTypeEnumType;
@@ -31,11 +32,11 @@ public record DimensionAttributeR(String name,
                                   String description,
                                   DimensionAttribute.Type type,
                                   String usage,
-                                  BindingR source,
+                                  Binding source,
                                   Long estimatedCount,
                                   List<DataItem> keyColumns,
-                                  DataItemR nameColumn,
-                                  DataItemR valueColumn,
+                                  DataItem nameColumn,
+                                  DataItem valueColumn,
                                   List<AttributeTranslation> translations,
                                   List<AttributeRelationship> attributeRelationships,
                                   String discretizationMethod,
@@ -44,14 +45,14 @@ public record DimensionAttributeR(String name,
                                   String orderBy,
                                   String defaultMember,
                                   String orderByAttributeID,
-                                  DataItemR skippedLevelsColumn,
+                                  DataItem skippedLevelsColumn,
                                   String namingTemplate,
                                   String membersWithData,
                                   String membersWithDataCaption,
                                   List<Translation> namingTemplateTranslations,
-                                  DataItemR customRollupColumn,
-                                  DataItemR customRollupPropertiesColumn,
-                                  DataItemR unaryOperatorColumn,
+                                  DataItem customRollupColumn,
+                                  DataItem customRollupPropertiesColumn,
+                                  DataItem unaryOperatorColumn,
                                   Boolean attributeHierarchyOrdered,
                                   Boolean memberNamesUnique,
                                   Boolean isAggregatable,

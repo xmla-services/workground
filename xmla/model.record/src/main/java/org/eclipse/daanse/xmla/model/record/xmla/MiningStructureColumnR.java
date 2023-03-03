@@ -13,6 +13,8 @@
 */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-public record MiningStructureColumnR() {
+import org.eclipse.daanse.xmla.api.xmla.MiningStructureColumn;
+
+public record MiningStructureColumnR() implements MiningStructureColumn {
 
 }

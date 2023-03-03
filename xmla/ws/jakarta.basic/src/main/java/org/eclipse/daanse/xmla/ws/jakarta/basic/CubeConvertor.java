@@ -182,7 +182,7 @@ public class CubeConvertor {
         return null;
     }
 
-    private static MeasureGroup convertMeasureGroup(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroup measureGroup) {
+    public static MeasureGroup convertMeasureGroup(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroup measureGroup) {
         if (measureGroup != null) {
             return new MeasureGroupR(measureGroup.getName(),
                 measureGroup.getID(),
@@ -241,7 +241,7 @@ public class CubeConvertor {
         return null;
     }
 
-    private static Partition convertPartition(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Partition partition) {
+    public static Partition convertPartition(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Partition partition) {
         if (partition != null) {
             return new PartitionR(partition.getName(),
                 partition.getID(),
@@ -629,7 +629,7 @@ public class CubeConvertor {
         return null;
     }
 
-    private static ProactiveCaching convertProactiveCaching(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ProactiveCaching proactiveCaching) {
+    public static ProactiveCaching convertProactiveCaching(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ProactiveCaching proactiveCaching) {
         if (proactiveCaching != null) {
             return new ProactiveCachingR(proactiveCaching.getOnlineMode(),
                 proactiveCaching.getAggregationStorage(),
@@ -812,7 +812,7 @@ public class CubeConvertor {
 
     }
 
-    private static Perspective convertPerspective(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Perspective perspective) {
+    public static Perspective convertPerspective(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Perspective perspective) {
         if (perspective != null) {
             return new PerspectiveR(perspective.getName(),
                 perspective.getID(),
@@ -1036,7 +1036,7 @@ public class CubeConvertor {
         return null;
     }
 
-    private static MdxScript convertMdxScript(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MdxScript mdxScript) {
+    public static MdxScript convertMdxScript(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MdxScript mdxScript) {
         if (mdxScript != null) {
             return new MdxScriptR(mdxScript.getName(),
                 mdxScript.getID(),
@@ -1166,12 +1166,12 @@ public class CubeConvertor {
 
     private static List<CubeDimensionPermission> convertCubeDimensionPermissionList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.CubeDimensionPermission> dimensionPermissionList) {
         if (dimensionPermissionList != null) {
-            return dimensionPermissionList.stream().map(CubeConvertor::convertDimensionPermission).collect(Collectors.toList());
+            return dimensionPermissionList.stream().map(CubeConvertor::convertCubeDimensionPermission).collect(Collectors.toList());
         }
         return null;
     }
 
-    private static CubeDimensionPermission convertDimensionPermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.CubeDimensionPermission cubeDimensionPermission) {
+    public static CubeDimensionPermission convertCubeDimensionPermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.CubeDimensionPermission cubeDimensionPermission) {
         if (cubeDimensionPermission != null) {
             return new CubeDimensionPermissionR(cubeDimensionPermission.getCubeDimensionID(),
                 cubeDimensionPermission.getDescription(),
@@ -1190,7 +1190,7 @@ public class CubeConvertor {
         return null;
     }
 
-    private static List<AttributePermission> convertAttributePermissionList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AttributePermission> attributePermissionList) {
+    public static List<AttributePermission> convertAttributePermissionList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AttributePermission> attributePermissionList) {
         if (attributePermissionList != null) {
             return attributePermissionList.stream().map(CubeConvertor::convertAttributePermission).collect(Collectors.toList());
         }
@@ -1244,12 +1244,12 @@ public class CubeConvertor {
 
     private static List<CubeDimension> convertDimensionList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.CubeDimension> dimensionList) {
         if (dimensionList != null) {
-            return dimensionList.stream().map(CubeConvertor::convertDimension).collect(Collectors.toList());
+            return dimensionList.stream().map(CubeConvertor::convertCubeDimension).collect(Collectors.toList());
         }
         return null;
     }
 
-    private static CubeDimension convertDimension(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.CubeDimension cubeDimension) {
+    public static CubeDimension convertCubeDimension(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.CubeDimension cubeDimension) {
         if (cubeDimension != null) {
             return new CubeDimensionR(cubeDimension.getDimensionID(),
                 cubeDimension.getName(),
@@ -1333,7 +1333,7 @@ public class CubeConvertor {
         return null;
     }
 
-    private static List<Translation> convertTranslationList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Translation> translationList) {
+    public static List<Translation> convertTranslationList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Translation> translationList) {
         if (translationList != null) {
             return translationList.stream().map(CubeConvertor::convertTranslation).collect(Collectors.toList());
         }
