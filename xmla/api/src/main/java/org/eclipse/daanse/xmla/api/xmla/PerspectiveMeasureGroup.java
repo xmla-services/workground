@@ -19,14 +19,7 @@ public interface PerspectiveMeasureGroup {
 
     String measureGroupID();
 
-    PerspectiveMeasureGroup.Measures measures();
+    List<PerspectiveMeasure> measures();
 
     List<Annotation> annotations();
-
-    public interface Measures {
-
-        List<PerspectiveMeasure> measure();
-
-    }
-
 }

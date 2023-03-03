@@ -20,6 +20,4 @@ public interface MiningModelPermission extends Permission {
     Boolean allowBrowsing();
 
     String write();
-
-
 }

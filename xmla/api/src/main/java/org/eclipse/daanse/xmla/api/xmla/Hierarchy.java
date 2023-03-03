@@ -19,55 +19,33 @@ import java.util.List;
 
 public interface Hierarchy {
 
+    String name();
 
-     String name();
+    String id();
 
-     String id();
+    String description();
 
-     String description();
+    String processingState();
 
-     String processingState();
+    String structureType();
 
-     String structureType();
+    String displayFolder();
 
-     String displayFolder();
+    List<Translation> translations();
 
-     Hierarchy.Translations translations();
+    String allMemberName();
 
-     String allMemberName();
+    List<Translation> allMemberTranslations();
 
-     Hierarchy.AllMemberTranslations allMemberTranslations();
+    Boolean memberNamesUnique();
 
-     Boolean memberNamesUnique();
+    String memberKeysUnique();
 
-     String memberKeysUnique();
+    Boolean allowDuplicateNames();
 
-     Boolean allowDuplicateNames();
-
-     Hierarchy.Levels levels();
+    List<Level> levels();
 
     List<Annotation> annotations();
 
-     HierarchyVisualizationProperties visualizationProperties();
-
-
-    public interface AllMemberTranslations {
-
-
-         List<Translation> allMemberTranslation();
-
-    }
-
-    public interface Levels {
-
-         List<Level> level();
-
-    }
-
-    public interface Translations {
-
-         List<Translation> translation();
-
-    }
-
+    HierarchyVisualizationProperties visualizationProperties();
 }

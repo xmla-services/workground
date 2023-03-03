@@ -31,22 +31,10 @@ public interface MdxScript {
 
     List<Annotation> annotations();
 
-    MdxScript.Commands commands();
+    List<Command> commands();
 
     Boolean defaultScript();
 
-    MdxScript.CalculationProperties calculationProperties();
-
-    interface CalculationProperties {
-
-        List<CalculationProperty> calculationProperty();
-
-    }
-
-    interface Commands {
-
-        List<Command> command();
-
-    }
+    List<CalculationProperty> calculationProperties();
 
 }

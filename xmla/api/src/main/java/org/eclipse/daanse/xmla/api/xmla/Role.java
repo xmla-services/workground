@@ -30,12 +30,5 @@ public interface Role {
 
     List<Annotation> annotations();
 
-    Role.Members members();
-
-    interface Members {
-
-        List<Member> member();
-
-    }
-
+    List<Member> members();
 }

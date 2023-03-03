@@ -15,7 +15,6 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 public interface CubeDimensionBinding extends Binding {
 
-
    String dataSourceID();
 
    String cubeID();
@@ -23,6 +22,5 @@ public interface CubeDimensionBinding extends Binding {
    String cubeDimensionID();
 
    String filter();
-
 
 }

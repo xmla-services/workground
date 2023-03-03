@@ -21,12 +21,8 @@ public interface Account {
 
     String aggregationFunction();
 
-    Account.Aliases aliases();
+    List<String> aliases();
 
     List<Annotation> annotations();
 
-    interface Aliases {
-
-        List<String> alias();
-    }
 }

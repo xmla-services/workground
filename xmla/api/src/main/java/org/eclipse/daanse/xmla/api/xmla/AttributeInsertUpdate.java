@@ -19,14 +19,13 @@ import java.util.List;
 
 public interface AttributeInsertUpdate {
 
-
      String attributeName();
 
      String name();
 
-     AttributeInsertUpdate.Keys keys();
+    List<Object> keys();
 
-     AttributeInsertUpdate.Translations translations();
+    List<TranslationInsertUpdate> translations();
 
      String value();
 
@@ -37,20 +36,5 @@ public interface AttributeInsertUpdate {
      String unaryoperator();
 
      BigInteger skippedlevels();
-
-
-    public interface Keys {
-
-
-         List<Object> key();
-
-    }
-
-    public interface Translations {
-
-
-         List<TranslationInsertUpdate> translation();
-
-    }
 
 }

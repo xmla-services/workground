@@ -23,10 +23,7 @@ public record CubeAttributeBindingR(String cubeID,
                                     String cubeDimensionID,
                                     String attributeID,
                                     String type,
-                                    CubeAttributeBinding.Ordinal ordinal
+                                    List<BigInteger> ordinal
 ) implements CubeAttributeBinding {
 
-    public record Ordinal(List<BigInteger> ordinal) implements CubeAttributeBinding.Ordinal {
-
-    }
 }

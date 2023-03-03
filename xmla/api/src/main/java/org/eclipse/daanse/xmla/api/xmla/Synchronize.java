@@ -25,12 +25,6 @@ public non-sealed interface Synchronize extends Command {
 
     String dbStorageLocation();
 
-    Synchronize.Locations locations();
-
-    public interface Locations {
-
-        List<Location> location();
-
-    }
+    List<Location> locations();
 
 }

@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 import org.eclipse.daanse.xmla.api.xmla.AlgorithmParameter;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.AttributeTranslation;
+import org.eclipse.daanse.xmla.api.xmla.FoldingParameters;
 import org.eclipse.daanse.xmla.api.xmla.MiningModel;
 import org.eclipse.daanse.xmla.api.xmla.MiningModelColumn;
 import org.eclipse.daanse.xmla.api.xmla.MiningModelPermission;
@@ -31,33 +32,15 @@ public record MiningModelR(String name,
                            List<Annotation> annotations,
                            String algorithm,
                            Instant lastProcessed,
-                           MiningModelR.AlgorithmParameters algorithmParameters,
+                           List<AlgorithmParameter> algorithmParameters,
                            Boolean allowDrillThrough,
-                           MiningModelR.Translations translations,
-                           MiningModelR.Columns columns,
+                           List<AttributeTranslation> translations,
+                           List<MiningModelColumn> columns,
                            String state,
-                           FoldingParametersR foldingParameters,
+                           FoldingParameters foldingParameters,
                            String filter,
-                           MiningModelR.MiningModelPermissions miningModelPermissions,
+                           List<MiningModelPermission> miningModelPermissions,
                            String language,
                            String collation) implements MiningModel {
-
-    public record AlgorithmParameters(
-        List<AlgorithmParameter> algorithmParameter) implements MiningModel.AlgorithmParameters {
-
-    }
-
-    public record Columns(List<MiningModelColumn> column) implements MiningModel.Columns {
-
-    }
-
-    public record MiningModelPermissions(
-        List<MiningModelPermission> miningModelPermission) implements MiningModel.MiningModelPermissions {
-
-    }
-
-    public record Translations(List<AttributeTranslation> translation) implements MiningModel.Translations {
-
-    }
 
 }

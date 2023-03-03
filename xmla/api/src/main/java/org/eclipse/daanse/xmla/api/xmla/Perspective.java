@@ -30,52 +30,18 @@ public interface Perspective {
 
     List<Annotation> annotations();
 
-    Perspective.Translations translations();
+    List<Translation> translations();
 
     String defaultMeasure();
 
-    Perspective.Dimensions dimensions();
+    List<PerspectiveDimension> dimensions();
 
-    Perspective.MeasureGroups measureGroups();
+    List<PerspectiveMeasureGroup> measureGroups();
 
-    Perspective.Calculations calculations();
+    List<PerspectiveCalculation> calculations();
 
-    Perspective.Kpis kpis();
+    List<PerspectiveKpi> kpis();
 
-    Perspective.Actions actions();
-
-    public interface Actions {
-
-        List<PerspectiveAction> action();
-
-    }
-
-    public interface Calculations {
-
-        List<PerspectiveCalculation> calculation();
-
-    }
-
-    public interface Dimensions {
-
-        List<PerspectiveDimension> dimension();
-    }
-
-    public interface Kpis {
-
-        List<PerspectiveKpi> kpi();
-    }
-
-    interface MeasureGroups {
-
-        List<PerspectiveMeasureGroup> measureGroup();
-
-    }
-
-    interface Translations {
-
-        List<Translation> translation();
-
-    }
+    List<PerspectiveAction> actions();
 
 }

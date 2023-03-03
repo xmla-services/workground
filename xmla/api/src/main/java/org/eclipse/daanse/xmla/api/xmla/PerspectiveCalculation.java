@@ -17,7 +17,6 @@ import java.util.List;
 
 public interface PerspectiveCalculation {
 
-
      String name();
 
      String type();

@@ -23,10 +23,6 @@ public record SynchronizeR(Source source,
                            String synchronizeSecurity,
                            Boolean applyCompression,
                            String dbStorageLocation,
-                           Synchronize.Locations locations) implements Synchronize {
-
-    public record Locations(List<Location> location) implements Synchronize.Locations {
-
-    }
+                           List<Location> locations) implements Synchronize {
 
 }

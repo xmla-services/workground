@@ -22,8 +22,8 @@ import java.time.Instant;
 import java.util.List;
 
 public record CubePermissionR(String readSourceData,
-                              CubePermission.DimensionPermissions dimensionPermissions,
-                              CubePermission.CellPermissions cellPermissions,
+                              List<CubeDimensionPermission> dimensionPermissions,
+                              List<CellPermission> cellPermissions,
                               String write,
                               String name,
                               String id,
@@ -35,14 +35,5 @@ public record CubePermissionR(String readSourceData,
                               Boolean process,
                               String readDefinition,
                               String read) implements CubePermission {
-
-    public record CellPermissionsR(List<CellPermission> cellPermission) implements CubePermission.CellPermissions {
-
-    }
-
-    public record DimensionPermissionsR(
-        List<CubeDimensionPermission> dimensionPermission) implements CubePermission.DimensionPermissions {
-
-    }
 
 }

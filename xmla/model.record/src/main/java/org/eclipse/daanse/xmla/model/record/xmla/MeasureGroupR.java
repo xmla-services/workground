@@ -36,10 +36,10 @@ public record MeasureGroupR(String name,
                             String description,
                             List<Annotation> annotations,
                             Instant lastProcessed,
-                            MeasureGroup.Translations translations,
+                            List<Translation> translations,
                             String type,
                             String state,
-                            MeasureGroup.Measures measures,
+                            List<Measure> measures,
                             String dataAggregation,
                             MeasureGroupBinding source,
                             MeasureGroup.StorageMode storageMode,
@@ -50,36 +50,14 @@ public record MeasureGroupR(String name,
                             ErrorConfiguration errorConfiguration,
                             Long estimatedSize,
                             String processingMode,
-                            MeasureGroup.Dimensions dimensions,
-                            MeasureGroup.Partitions partitions,
+                            List<MeasureGroupDimension> dimensions,
+                            List<Partition> partitions,
                             String aggregationPrefix,
                             BigInteger processingPriority,
-                            MeasureGroup.AggregationDesigns aggregationDesigns) implements MeasureGroup {
-
-    public record AggregationDesigns(
-        List<AggregationDesign> aggregationDesign) implements MeasureGroup.AggregationDesigns {
-
-    }
-
-    public record Dimensions(List<MeasureGroupDimension> dimension) implements MeasureGroup.Dimensions {
-
-    }
-
-    public record Measures(List<Measure> measure) implements MeasureGroup.Measures {
-
-    }
-
-    public record Partitions(List<Partition> partition) implements MeasureGroup.Partitions {
-
-    }
+                            List<AggregationDesign> aggregationDesigns) implements MeasureGroup {
 
     public record StorageMode(MeasureGroupStorageModeEnumType value,
                               String valuens) implements MeasureGroup.StorageMode {
 
     }
-
-    public record Translations(List<Translation> translation) implements MeasureGroup.Translations {
-
-    }
-
 }

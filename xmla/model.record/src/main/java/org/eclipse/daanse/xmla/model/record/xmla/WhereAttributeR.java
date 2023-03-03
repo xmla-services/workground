@@ -18,11 +18,7 @@ import org.eclipse.daanse.xmla.api.xmla.WhereAttribute;
 import java.util.List;
 
 public record WhereAttributeR(String attributeName,
-                              WhereAttribute.Keys keys
+                              List<Object> keys
 ) implements WhereAttribute {
-
-    public record Keys(List<Object> key) implements WhereAttribute.Keys {
-
-    }
 
 }

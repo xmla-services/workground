@@ -19,22 +19,9 @@ public interface CubePermission extends Permission {
 
     String readSourceData();
 
-    CubePermission.DimensionPermissions dimensionPermissions();
+    List<CubeDimensionPermission> dimensionPermissions();
 
-    CubePermission.CellPermissions cellPermissions();
+    List<CellPermission> cellPermissions();
 
     String write();
-
-    interface CellPermissions {
-
-        List<CellPermission> cellPermission();
-
-    }
-
-    interface DimensionPermissions {
-
-        List<CubeDimensionPermission> dimensionPermission();
-
-    }
-
 }

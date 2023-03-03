@@ -21,15 +21,10 @@ public interface Aggregation {
 
     String name();
 
-    Aggregation.Dimensions dimensions();
+    List<AggregationDimension> dimensions();
 
     List<Annotation> annotations();
 
     String description();
-
-    interface Dimensions {
-
-        List<AggregationDimension> dimension();
-    }
 
 }

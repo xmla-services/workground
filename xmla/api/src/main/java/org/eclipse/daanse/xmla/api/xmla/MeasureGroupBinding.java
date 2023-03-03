@@ -30,6 +30,4 @@ public interface MeasureGroupBinding extends Binding {
     Duration refreshInterval();
 
     String filter();
-
-
 }

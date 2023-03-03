@@ -33,21 +33,10 @@ public interface AggregationDesign {
 
     Long estimatedRows();
 
-    AggregationDesign.Dimensions dimensions();
+    List<AggregationDesignDimension> dimensions();
 
-    AggregationDesign.Aggregations aggregations();
+    List<Aggregation> aggregations();
 
     BigInteger estimatedPerformanceGain();
-
-    interface Aggregations {
-
-        List<Aggregation> aggregation();
-    }
-
-    interface Dimensions {
-
-        List<AggregationDesignDimension> dimension();
-
-    }
 
 }

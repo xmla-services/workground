@@ -26,9 +26,5 @@ public record RestoreR(String databaseName,
                        String password,
                        String dbStorageLocation,
                        String readWriteMode,
-                       Restore.Locations locations) implements Restore {
-
-    public record Locations(List<Location> location) implements Restore.Locations {
-
-    }
+                       List<Location> locations) implements Restore {
 }

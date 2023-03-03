@@ -17,27 +17,19 @@ import java.util.List;
 
 public non-sealed interface Backup extends Command {
 
+    ObjectReference object();
 
-     ObjectReference object();
+    String file();
 
-     String file();
+    String security();
 
-     String security();
+    Boolean applyCompression();
 
-     Boolean applyCompression();
+    Boolean allowOverwrite();
 
-     Boolean allowOverwrite();
+    String password();
 
-     String password();
+    Boolean backupRemotePartitions();
 
-     Boolean backupRemotePartitions();
-
-     Backup.Locations locations();
-
-
-    public interface Locations {
-
-         List<LocationBackup> location();
-    }
-
+    List<LocationBackup> locations();
 }

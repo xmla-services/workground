@@ -21,13 +21,7 @@ import java.util.List;
 
 public record ProactiveCachingIncrementalProcessingBindingR(
     Duration refreshInterval,
-    ProactiveCachingIncrementalProcessingBinding.IncrementalProcessingNotifications incrementalProcessingNotifications)
+    List<IncrementalProcessingNotification> incrementalProcessingNotifications)
     implements ProactiveCachingIncrementalProcessingBinding {
-
-    public record IncrementalProcessingNotificationsR(
-        List<IncrementalProcessingNotification> incrementalProcessingNotification)
-        implements ProactiveCachingIncrementalProcessingBinding.IncrementalProcessingNotifications {
-
-    }
 
 }

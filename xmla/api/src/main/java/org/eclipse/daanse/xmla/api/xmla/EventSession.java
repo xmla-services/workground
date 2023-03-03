@@ -41,5 +41,4 @@ public interface EventSession {
     PartitionModes memoryPartitionMode();
 
     Boolean trackCausality();
-
 }

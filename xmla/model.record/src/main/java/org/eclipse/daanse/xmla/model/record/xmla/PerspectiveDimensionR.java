@@ -21,16 +21,7 @@ import org.eclipse.daanse.xmla.api.xmla.PerspectiveHierarchy;
 import java.util.List;
 
 public record PerspectiveDimensionR(String cubeDimensionID,
-                                    PerspectiveDimension.Attributes attributes,
-                                    PerspectiveDimension.Hierarchies hierarchies,
+                                    List<PerspectiveAttribute> attributes,
+                                    List<PerspectiveHierarchy> hierarchies,
                                     List<Annotation> annotations) implements PerspectiveDimension {
-
-    public record Attributes(List<PerspectiveAttribute> attribute) implements PerspectiveDimension.Attributes {
-
-    }
-
-    public record Hierarchies(List<PerspectiveHierarchy> hierarchy) implements PerspectiveDimension.Hierarchies {
-
-    }
-
 }

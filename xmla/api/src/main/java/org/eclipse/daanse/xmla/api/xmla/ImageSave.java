@@ -18,6 +18,4 @@ public non-sealed interface ImageSave extends Command {
     ObjectReference object();
 
     Boolean data();
-
-
 }

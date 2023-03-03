@@ -19,12 +19,6 @@ public interface AggregationInstanceAttribute {
 
     String attributeID();
 
-    AggregationInstanceAttribute.KeyColumns keyColumns();
-
-    public interface KeyColumns {
-
-        List<DataItem> keyColumn();
-
-    }
+    List<DataItem> keyColumns();
 
 }

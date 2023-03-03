@@ -25,10 +25,6 @@ public record RegularMeasureGroupDimensionR(
     List<Annotation> annotations,
     MeasureGroupDimensionBinding source,
     String cardinality,
-    RegularMeasureGroupDimension.Attributes attributes) implements RegularMeasureGroupDimension {
+    List<MeasureGroupAttribute> attributes) implements RegularMeasureGroupDimension {
 
-    public record AttributesR(
-        List<MeasureGroupAttribute> attribute) implements RegularMeasureGroupDimension.Attributes {
-
-    }
 }

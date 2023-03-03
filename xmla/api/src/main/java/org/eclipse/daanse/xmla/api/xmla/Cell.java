@@ -18,6 +18,4 @@ public interface Cell {
     java.lang.Object value();
 
     Long cellOrdinal();
-
-
 }

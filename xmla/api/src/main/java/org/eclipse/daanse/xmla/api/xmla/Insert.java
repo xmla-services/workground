@@ -19,12 +19,6 @@ public non-sealed interface Insert extends Command {
 
     Object object();
 
-    Insert.Attributes attributes();
-
-    public interface Attributes {
-
-        List<AttributeInsertUpdate> attribute();
-
-    }
+    List<AttributeInsertUpdate> attributes();
 
 }

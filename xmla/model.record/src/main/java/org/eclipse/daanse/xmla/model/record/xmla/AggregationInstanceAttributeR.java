@@ -19,10 +19,6 @@ import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import java.util.List;
 
 public record AggregationInstanceAttributeR(String attributeID,
-                                            AggregationInstanceAttribute.KeyColumns keyColumns) implements AggregationInstanceAttribute{
-
-    public record KeyColumnsR(List<DataItem> keyColumn)
-        implements AggregationInstanceAttribute.KeyColumns{
-    }
+                                            List<DataItem> keyColumns) implements AggregationInstanceAttribute{
 
 }

@@ -38,6 +38,7 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TimeAttributeBinding;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TimeBinding;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.UserDefinedGroupBinding;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -169,21 +170,21 @@ public class BindingConvertor {
         return null;
     }
 
-    private static org.eclipse.daanse.xmla.api.xmla.CubeAttributeBinding.Ordinal convertCubeAttributeBindingOrdinal(
+    private static List<BigInteger> convertCubeAttributeBindingOrdinal(
         CubeAttributeBinding.Ordinal ordinal
     ) {
         if (ordinal != null) {
-            return new CubeAttributeBindingR.Ordinal(ordinal.getOrdinal());
+            return ordinal.getOrdinal();
         }
         return null;
 
     }
 
-    private static org.eclipse.daanse.xmla.api.xmla.UserDefinedGroupBinding.Groups convertUserDefinedGroupBindingGroups(
+    private static List<Group> convertUserDefinedGroupBindingGroups(
         UserDefinedGroupBinding.Groups groups
     ) {
         if (groups != null) {
-            return new UserDefinedGroupBindingR.Groups(convertGroupList(groups.getGroup()));
+            return convertGroupList(groups.getGroup());
         }
         return null;
     }
@@ -204,9 +205,9 @@ public class BindingConvertor {
         return null;
     }
 
-    private static Group.Members convertGroupMembers(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Group.Members members) {
+    private static List<String> convertGroupMembers(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Group.Members members) {
         if (members != null) {
-            return new GroupR.Members(members.getMember());
+            return members.getMember();
         }
         return null;
     }

@@ -18,5 +18,4 @@ public interface IncrementalProcessingNotification {
     String tableID();
 
     String processingQuery();
-
 }

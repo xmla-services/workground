@@ -16,5 +16,4 @@ package org.eclipse.daanse.xmla.api.xmla;
 public non-sealed interface DBCC extends Command {
 
     ObjectReference object();
-
 }

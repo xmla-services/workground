@@ -21,12 +21,7 @@ import java.util.List;
 
 public record AggregationDesignDimensionR(
     String cubeDimensionID,
-    AggregationDesignDimension.Attributes attributes,
+    List<AggregationDesignAttribute> attributes,
     List<Annotation> annotations) implements AggregationDesignDimension {
-
-    public record AttributesR(
-        List<AggregationDesignAttribute> attribute) implements AggregationDesignDimension.Attributes {
-
-    }
 
 }

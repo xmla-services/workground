@@ -22,7 +22,7 @@ import java.util.List;
 public record KpiR(String name,
                    String id,
                    String description,
-                   Kpi.Translations translations,
+                   List<Translation> translations,
                    String displayFolder,
                    String associatedMeasureGroupID,
                    String value,
@@ -35,9 +35,5 @@ public record KpiR(String name,
                    String currentTimeMember,
                    String parentKpiID,
                    List<Annotation> annotations) implements Kpi {
-
-    public record Translations(List<Translation> translation) implements Kpi.Translations {
-
-    }
 
 }

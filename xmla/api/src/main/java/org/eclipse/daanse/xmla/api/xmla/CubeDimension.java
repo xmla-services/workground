@@ -23,7 +23,7 @@ public interface CubeDimension {
 
     String description();
 
-    CubeDimension.Translations translations();
+    List<Translation> translations();
 
     String dimensionID();
 
@@ -35,27 +35,9 @@ public interface CubeDimension {
 
     String memberUniqueNameStyle();
 
-    CubeDimension.Attributes attributes();
+    List<CubeAttribute> attributes();
 
-    CubeDimension.Hierarchies hierarchies();
+    List<CubeHierarchy> hierarchies();
 
     List<Annotation> annotations();
-
-    public interface Attributes {
-
-        List<CubeAttribute> attribute();
-
-    }
-
-    public interface Hierarchies {
-
-        List<CubeHierarchy> hierarchy();
-
-    }
-
-    public interface Translations {
-
-        List<Translation> translation();
-    }
-
 }

@@ -26,11 +26,7 @@ public record BackupR(ObjectReference object,
                       Boolean allowOverwrite,
                       String password,
                       Boolean backupRemotePartitions,
-                      Backup.Locations locations
+                      List<LocationBackup> locations
                       ) implements Backup {
-
-    public record Locations(List<LocationBackup> location) implements Backup.Locations {
-
-    }
 
 }

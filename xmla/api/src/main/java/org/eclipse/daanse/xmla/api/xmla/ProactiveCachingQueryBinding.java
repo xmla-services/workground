@@ -20,11 +20,6 @@ public interface ProactiveCachingQueryBinding extends ProactiveCachingBinding {
 
     Duration refreshInterval();
 
-    ProactiveCachingQueryBinding.QueryNotifications queryNotifications();
-
-    interface QueryNotifications {
-
-        List<QueryNotification> queryNotification();
-    }
+    List<QueryNotification> queryNotifications();
 
 }

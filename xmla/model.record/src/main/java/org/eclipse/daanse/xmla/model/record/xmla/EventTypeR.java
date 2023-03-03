@@ -19,10 +19,7 @@ import org.eclipse.daanse.xmla.api.xmla.EventType;
 
 import java.util.List;
 
-public record EventTypeR(EventTypeR.Events events,
+public record EventTypeR(List<Event> events,
                          XEvent xEvent) implements EventType {
 
-    public record Events(List<Event> event) implements EventType.Events {
-
-    }
 }

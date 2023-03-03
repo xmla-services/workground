@@ -24,11 +24,7 @@ public record LevelR(String name,
                      String description,
                      String sourceAttributeID,
                      String hideMemberIf,
-                     LevelR.Translations translations,
+                     List<Translation> translations,
                      List<Annotation> annotations) implements Level {
-
-    public record Translations(List<Translation> translation) implements Level.Translations {
-
-    }
 
 }

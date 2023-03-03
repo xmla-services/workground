@@ -7,6 +7,7 @@ import org.eclipse.daanse.xmla.api.xmla.AttributeInsertUpdate;
 import org.eclipse.daanse.xmla.api.xmla.Backup;
 import org.eclipse.daanse.xmla.api.xmla.Batch;
 import org.eclipse.daanse.xmla.api.xmla.BeginTransaction;
+import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.Bindings;
 import org.eclipse.daanse.xmla.api.xmla.Cancel;
 import org.eclipse.daanse.xmla.api.xmla.Cell;
@@ -252,7 +253,7 @@ public class CommandConvertor {
 
     private static CloneDatabase convertCloneDatabase(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.CloneDatabase cloneDatabase) {
         if (cloneDatabase != null) {
-            return new CloneDatabaseR(convertCloneDatabaseObject(cloneDatabase.getObject()),
+            return new CloneDatabaseR(convertObjectReference(cloneDatabase.getObject() == null ? null : cloneDatabase.getObject().getDatabaseID()),
                 convertCloneDatabaseTarget(cloneDatabase.getTarget()));
         }
         return null;
@@ -264,13 +265,6 @@ public class CommandConvertor {
             return new CloneDatabaseR.Target(target.getDbStorageLocation(),
                 target.getDatabaseName(),
                 target.getDatabaseID());
-        }
-        return null;
-    }
-
-    private static CloneDatabase.Object convertCloneDatabaseObject(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.CloneDatabase.Object object) {
-        if (object != null) {
-            return new CloneDatabaseR.Object(convertObjectReference(object.getDatabaseID()));
         }
         return null;
     }
@@ -293,17 +287,10 @@ public class CommandConvertor {
                 imageLoad.getDbStorageLocation(),
                 imageLoad.getDatabaseName(),
                 imageLoad.getDatabaseID(),
-                convertImageLoadData(imageLoad.getData()));
+                imageLoad.getData() == null ? null : imageLoad.getData().getDataBlock());
         }
         return null;
 
-    }
-
-    private static ImageLoad.Data convertImageLoadData(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ImageLoad.Data data) {
-        if (data != null) {
-            return new ImageLoadR.Data(data.getDataBlock());
-        }
-        return null;
     }
 
     private static Batch convertBatch(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Batch batch) {
@@ -730,17 +717,11 @@ public class CommandConvertor {
     private static NotifyTableChange convertNotifyTableChange(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.NotifyTableChange notifyTableChange) {
         if (notifyTableChange != null) {
             return new NotifyTableChangeR(convertObjectReference(notifyTableChange.getObject()),
-                convertNotifyTableChangeTableNotifications(notifyTableChange.getTableNotifications()));
+                convertTableNotificationList(notifyTableChange.getTableNotifications() == null ?
+                    null :notifyTableChange.getTableNotifications().getTableNotification()));
         }
         return null;
 
-    }
-
-    private static NotifyTableChange.TableNotifications convertNotifyTableChangeTableNotifications(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.NotifyTableChange.TableNotifications tableNotifications) {
-        if (tableNotifications != null) {
-            return new NotifyTableChangeR.TableNotifications(convertTableNotificationList(tableNotifications.getTableNotification()));
-        }
-        return null;
     }
 
     private static List<TableNotification> convertTableNotificationList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TableNotification> tableNotificationList) {
@@ -799,14 +780,7 @@ public class CommandConvertor {
     private static WhereAttribute convertWhereAttribute(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.WhereAttribute attribute) {
         if (attribute != null) {
             return new WhereAttributeR(attribute.getAttributeName(),
-                convertWhereAttributeKeys(attribute.getKeys()));
-        }
-        return null;
-    }
-
-    private static WhereAttribute.Keys convertWhereAttributeKeys(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.WhereAttribute.Keys keys) {
-        if (keys != null) {
-            return new WhereAttributeR.Keys(keys.getKey());
+                attribute.getKeys() == null ? null : attribute.getKeys().getKey());
         }
         return null;
     }
@@ -814,20 +788,13 @@ public class CommandConvertor {
     private static Update convertUpdate(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Update update) {
         if (update != null) {
             return new UpdateR(update.getObject(),
-                convertUpdateAttributes(update.getAttributes()),
+                convertAttributeInsertUpdateList(update.getAttributes() == null ? null : update.getAttributes().getAttribute()),
                 update.isMoveWithDescendants(),
                 update.isMoveToRoot(),
                 convertWhere(update.getWhere()));
         }
         return null;
 
-    }
-
-    private static Update.Attributes convertUpdateAttributes(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Update.Attributes attributes) {
-        if (attributes != null) {
-            return new UpdateR.Attributes(convertAttributeInsertUpdateList(attributes.getAttribute()));
-        }
-        return null;
     }
 
     private static List<AttributeInsertUpdate> convertAttributeInsertUpdateList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AttributeInsertUpdate> attributeList) {
@@ -841,20 +808,14 @@ public class CommandConvertor {
         if (attributeInsertUpdate != null) {
             return new AttributeInsertUpdateR(attributeInsertUpdate.getAttributeName(),
                 attributeInsertUpdate.getName(),
-                convertAttributeInsertUpdateKeys(attributeInsertUpdate.getKeys()),
-                convertAttributeInsertUpdateTranslations(attributeInsertUpdate.getTranslations()),
+                attributeInsertUpdate.getKeys() == null ? null : attributeInsertUpdate.getKeys().getKey(),
+                convertTranslationInsertUpdateList(attributeInsertUpdate.getTranslations() == null ?
+                    null : attributeInsertUpdate.getTranslations().getTranslation()),
                 attributeInsertUpdate.getValue(),
                 attributeInsertUpdate.getCustomrollup(),
                 attributeInsertUpdate.getCustomrollupproperties(),
                 attributeInsertUpdate.getUnaryoperator(),
                 attributeInsertUpdate.getSkippedlevels());
-        }
-        return null;
-    }
-
-    private static AttributeInsertUpdate.Translations convertAttributeInsertUpdateTranslations(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AttributeInsertUpdate.Translations translations) {
-        if (translations != null) {
-            return new AttributeInsertUpdateR.Translations(convertTranslationInsertUpdateList(translations.getTranslation()));
         }
         return null;
     }
@@ -874,24 +835,11 @@ public class CommandConvertor {
         return null;
     }
 
-    private static AttributeInsertUpdate.Keys convertAttributeInsertUpdateKeys(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AttributeInsertUpdate.Keys keys) {
-        if (keys != null) {
-            return new AttributeInsertUpdateR.Keys(keys.getKey());
-        }
-        return null;
-    }
-
     private static Insert convertInsert(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Insert insert) {
         if (insert != null) {
             return new InsertR(insert.getObject(),
-                convertInsertAttributes(insert.getAttributes()));
-        }
-        return null;
-    }
-
-    private static Insert.Attributes convertInsertAttributes(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Insert.Attributes attributes) {
-        if (attributes != null) {
-            return new InsertR.Attributes(convertAttributeInsertUpdateList(attributes.getAttribute()));
+                convertAttributeInsertUpdateList(insert.getAttributes() == null ?
+                    null : insert.getAttributes().getAttribute()));
         }
         return null;
     }
@@ -922,17 +870,10 @@ public class CommandConvertor {
                 synchronize.getSynchronizeSecurity(),
                 synchronize.isApplyCompression(),
                 synchronize.getDbStorageLocation(),
-                convertSynchronizeLocations(synchronize.getLocations()));
+                convertLocationList(synchronize.getLocations() == null ? null : synchronize.getLocations().getLocation()));
         }
         return null;
 
-    }
-
-    private static Synchronize.Locations convertSynchronizeLocations(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Synchronize.Locations locations) {
-        if (locations != null) {
-            return new SynchronizeR.Locations(convertLocationList(locations.getLocation()));
-        }
-        return null;
     }
 
     private static Source convertSource(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Source source) {
@@ -953,17 +894,10 @@ public class CommandConvertor {
                 restore.getPassword(),
                 restore.getDbStorageLocation(),
                 restore.getReadWriteMode(),
-                convertRestoreLocations(restore.getLocations()));
+                convertLocationList(restore.getLocations() == null ? null : restore.getLocations().getLocation()));
         }
         return null;
 
-    }
-
-    private static Restore.Locations convertRestoreLocations(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Restore.Locations locations) {
-        if (locations != null) {
-            return new RestoreR.Locations(convertLocationList(locations.getLocation()));
-        }
-        return null;
     }
 
     private static List<Location> convertLocationList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Location> locationList) {
@@ -977,16 +911,9 @@ public class CommandConvertor {
         if (location != null) {
             return new LocationR(location.getDataSourceType(),
                 location.getConnectionString(),
-                convertLocationFolders(location.getFolders()),
+                convertFolderList(location.getFolders() == null ? null : location.getFolders().getFolder()),
                 location.getFile(),
                 location.getDataSourceID());
-        }
-        return null;
-    }
-
-    private static Location.Folders convertLocationFolders(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Location.Folders folders) {
-        if (folders != null) {
-            return new LocationR.FoldersR(convertFolderList(folders.getFolder()));
         }
         return null;
     }
@@ -1014,15 +941,7 @@ public class CommandConvertor {
                 backup.isAllowOverwrite(),
                 backup.getPassword(),
                 backup.isBackupRemotePartitions(),
-                convertBackupLocations(backup.getLocations()));
-        }
-        return null;
-
-    }
-
-    private static Backup.Locations convertBackupLocations(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Backup.Locations locations) {
-        if (locations != null) {
-            return new BackupR.Locations(convertLocationBackupList(locations.getLocation()));
+                convertLocationBackupList(backup.getLocations() == null ? null : backup.getLocations().getLocation()));
         }
         return null;
 
@@ -1130,30 +1049,17 @@ public class CommandConvertor {
                 designAggregations.getOptimization(),
                 designAggregations.getStorage(),
                 designAggregations.isMaterialize(),
-                convertDesignAggregationsQueries(designAggregations.getQueries()));
+                designAggregations.getQueries() == null ? null : designAggregations.getQueries().getQuery());
         }
         return null;
 
-    }
-
-    private static DesignAggregations.Queries convertDesignAggregationsQueries(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DesignAggregations.Queries queries) {
-        if (queries != null) {
-            return new DesignAggregationsR.QueriesR(queries.getQuery());
-        }
-        return null;
     }
 
     private static MergePartitions convertMergePartitions(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MergePartitions mergePartitions) {
         if (mergePartitions != null) {
-            return new MergePartitionsR(convertMergePartitionsSources(mergePartitions.getSources()),
+            return new MergePartitionsR(
+                convertObjectReferencList(mergePartitions.getSources() == null ? null : mergePartitions.getSources().getSource()),
                 convertObjectReference(mergePartitions.getTarget()));
-        }
-        return null;
-    }
-
-    private static MergePartitions.Sources convertMergePartitionsSources(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MergePartitions.Sources sources) {
-        if (sources != null) {
-            return new MergePartitionsR.Sources(convertObjectReferencList(sources.getSource()));
         }
         return null;
     }
@@ -1230,16 +1136,10 @@ public class CommandConvertor {
                 dataSource.getIsolation(),
                 dataSource.getMaxActiveConnections(),
                 convertDuration(dataSource.getTimeout()),
-                convertDataSourceDataSourcePermissions(dataSource.getDataSourcePermissions()),
+                convertDataSourcePermissionList(dataSource.getDataSourcePermissions() == null ?
+                    null : dataSource.getDataSourcePermissions().getDataSourcePermission()),
                 convertImpersonationInfo(dataSource.getQueryImpersonationInfo()),
                 dataSource.getQueryHints());
-        }
-        return null;
-    }
-
-    private static DataSource.DataSourcePermissions convertDataSourceDataSourcePermissions(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource.DataSourcePermissions dataSourcePermissions) {
-        if (dataSourcePermissions != null) {
-            return new DataSourceR.DataSourcePermissions(convertDataSourcePermissionList(dataSourcePermissions.getDataSourcePermission()));
         }
         return null;
     }
@@ -1308,12 +1208,15 @@ public class CommandConvertor {
                 outOfLineBinding.getParentColumnID(),
                 outOfLineBinding.getColumnID(),
                 convertBinding(outOfLineBinding.getSource()),
-                convertOutOfLineBindingNameColumn(outOfLineBinding.getNameColumn()),
-                convertOutOfLineBindingSkippedLevelsColumn(outOfLineBinding.getSkippedLevelsColumn()),
-                convertOutOfLineBindingCustomRollupColumn(outOfLineBinding.getCustomRollupColumn()),
-                convertOutOfLineBindingCustomRollupPropertiesColumn(outOfLineBinding.getCustomRollupPropertiesColumn()),
-                convertOutOfLineBindingValueColumn(outOfLineBinding.getValueColumn()),
-                convertOutOfLineBindingUnaryOperatorColumn(outOfLineBinding.getUnaryOperatorColumn()),
+                convertBinding(outOfLineBinding.getNameColumn() == null ? null : outOfLineBinding.getNameColumn().getSource()),
+                convertBinding(outOfLineBinding.getSkippedLevelsColumn() == null ?
+                    null : outOfLineBinding.getSkippedLevelsColumn().getSource()),
+                convertBinding(outOfLineBinding.getCustomRollupColumn() == null ?
+                    null : outOfLineBinding.getCustomRollupColumn().getSource()),
+                convertBinding(outOfLineBinding.getCustomRollupPropertiesColumn() == null ?
+                    null : outOfLineBinding.getCustomRollupPropertiesColumn().getSource()),
+                convertBinding(outOfLineBinding.getValueColumn() == null ? null : outOfLineBinding.getValueColumn().getSource()),
+                convertBinding(outOfLineBinding.getUnaryOperatorColumn() == null ? null : outOfLineBinding.getUnaryOperatorColumn().getSource()),
                 convertOutOfLineBindingKeyColumns(outOfLineBinding.getKeyColumns()),
                 convertOutOfLineBindingForeignKeyColumns(outOfLineBinding.getForeignKeyColumns()),
                 convertOutOfLineBindingTranslations(outOfLineBinding.getTranslations()));
@@ -1347,15 +1250,15 @@ public class CommandConvertor {
         return null;
     }
 
-    private static OutOfLineBinding.ForeignKeyColumns convertOutOfLineBindingForeignKeyColumns(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.ForeignKeyColumns foreignKeyColumns) {
+    private static List<Binding> convertOutOfLineBindingForeignKeyColumns(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.ForeignKeyColumns foreignKeyColumns) {
         if (foreignKeyColumns != null) {
-            return new OutOfLineBindingR.ForeignKeyColumns(convertOutOfLineBindingForeignKeyColumnsForeignKeyColumnList(foreignKeyColumns.getForeignKeyColumn()));
+            return convertOutOfLineBindingForeignKeyColumnsForeignKeyColumnList(foreignKeyColumns.getForeignKeyColumn());
         }
         return null;
 
     }
 
-    private static List<OutOfLineBinding.ForeignKeyColumns.ForeignKeyColumn> convertOutOfLineBindingForeignKeyColumnsForeignKeyColumnList(
+    private static List<Binding> convertOutOfLineBindingForeignKeyColumnsForeignKeyColumnList(
         List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.ForeignKeyColumns.ForeignKeyColumn> foreignKeyColumnList
     ) {
         if (foreignKeyColumnList != null) {
@@ -1364,81 +1267,34 @@ public class CommandConvertor {
         return null;
     }
 
-    private static OutOfLineBinding.ForeignKeyColumns.ForeignKeyColumn convertOutOfLineBindingForeignKeyColumnsForeignKeyColumn(
+    private static Binding convertOutOfLineBindingForeignKeyColumnsForeignKeyColumn(
         org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.ForeignKeyColumns.ForeignKeyColumn foreignKeyColumn
     ) {
         if (foreignKeyColumn != null) {
-            return new OutOfLineBindingR.ForeignKeyColumns.ForeignKeyColumn(convertBinding(foreignKeyColumn.getSource()));
+            return convertBinding(foreignKeyColumn.getSource());
         }
         return null;
     }
 
-    private static OutOfLineBinding.KeyColumns convertOutOfLineBindingKeyColumns(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.KeyColumns keyColumns) {
+    private static List<Binding> convertOutOfLineBindingKeyColumns(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.KeyColumns keyColumns) {
         if (keyColumns != null) {
-            return new OutOfLineBindingR.KeyColumns(convertOutOfLineBindingKeyColumnsKeyColumnList(keyColumns.getKeyColumn()));
+            return convertOutOfLineBindingKeyColumnsKeyColumnList(keyColumns.getKeyColumn());
         }
         return null;
     }
 
-    private static List<OutOfLineBinding.KeyColumns.KeyColumn> convertOutOfLineBindingKeyColumnsKeyColumnList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.KeyColumns.KeyColumn> keyColumnList) {
+    private static List<Binding> convertOutOfLineBindingKeyColumnsKeyColumnList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.KeyColumns.KeyColumn> keyColumnList) {
         if (keyColumnList != null) {
             return keyColumnList.stream().map(CommandConvertor::convertOutOfLineBindingKeyColumnsKeyColumn).collect(Collectors.toList());
         }
         return null;
     }
 
-    private static OutOfLineBinding.KeyColumns.KeyColumn convertOutOfLineBindingKeyColumnsKeyColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.KeyColumns.KeyColumn keyColumn) {
+    private static Binding convertOutOfLineBindingKeyColumnsKeyColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.KeyColumns.KeyColumn keyColumn) {
         if (keyColumn != null) {
-            return new OutOfLineBindingR.KeyColumns.KeyColumn(convertBinding(keyColumn.getSource()));
+            return convertBinding(keyColumn.getSource());
         }
         return null;
-    }
-
-    private static OutOfLineBinding.UnaryOperatorColumn convertOutOfLineBindingUnaryOperatorColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.UnaryOperatorColumn unaryOperatorColumn) {
-        if (unaryOperatorColumn != null) {
-            return new OutOfLineBindingR.UnaryOperatorColumn(convertBinding(unaryOperatorColumn.getSource()));
-        }
-        return null;
-    }
-
-    private static OutOfLineBinding.ValueColumn convertOutOfLineBindingValueColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.ValueColumn valueColumn) {
-        if (valueColumn != null) {
-            return new OutOfLineBindingR.ValueColumn(convertBinding(valueColumn.getSource()));
-        }
-        return null;
-
-    }
-
-    private static OutOfLineBinding.CustomRollupPropertiesColumn convertOutOfLineBindingCustomRollupPropertiesColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.CustomRollupPropertiesColumn customRollupPropertiesColumn) {
-        if (customRollupPropertiesColumn != null) {
-            return new OutOfLineBindingR.CustomRollupPropertiesColumn(convertBinding(customRollupPropertiesColumn.getSource()));
-        }
-        return null;
-
-    }
-
-    private static OutOfLineBinding.CustomRollupColumn convertOutOfLineBindingCustomRollupColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.CustomRollupColumn customRollupColumn) {
-        if (customRollupColumn != null) {
-            return new OutOfLineBindingR.CustomRollupColumn(convertBinding(customRollupColumn.getSource()));
-        }
-        return null;
-
-    }
-
-    private static OutOfLineBinding.SkippedLevelsColumn convertOutOfLineBindingSkippedLevelsColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.SkippedLevelsColumn skippedLevelsColumn) {
-        if (skippedLevelsColumn != null) {
-            return new OutOfLineBindingR.SkippedLevelsColumn(convertBinding(skippedLevelsColumn.getSource()));
-        }
-        return null;
-
-    }
-
-    private static OutOfLineBinding.NameColumn convertOutOfLineBindingNameColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.OutOfLineBinding.NameColumn nameColumn) {
-        if (nameColumn != null) {
-            return new OutOfLineBindingR.NameColumn(convertBinding(nameColumn.getSource()));
-        }
-        return null;
-
     }
 
     private static Delete convertDelete(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Delete delete) {

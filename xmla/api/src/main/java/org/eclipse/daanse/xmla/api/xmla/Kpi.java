@@ -17,43 +17,36 @@ import java.util.List;
 
 public interface Kpi {
 
+    String name();
 
-     String name();
+    String id();
 
-     String id();
+    String description();
 
-     String description();
+    List<Translation> translations();
 
-     Kpi.Translations translations();
+    String displayFolder();
 
-     String displayFolder();
+    String associatedMeasureGroupID();
 
-     String associatedMeasureGroupID();
+    String value();
 
-     String value();
+    String goal();
 
-     String goal();
+    String status();
 
-     String status();
+    String trend();
 
-     String trend();
+    String weight();
 
-     String weight();
+    String trendGraphic();
 
-     String trendGraphic();
+    String statusGraphic();
 
-     String statusGraphic();
+    String currentTimeMember();
 
-     String currentTimeMember();
-
-     String parentKpiID();
+    String parentKpiID();
 
     List<Annotation> annotations();
-
-    public interface Translations {
-
-         List<Translation> translation();
-
-    }
 
 }

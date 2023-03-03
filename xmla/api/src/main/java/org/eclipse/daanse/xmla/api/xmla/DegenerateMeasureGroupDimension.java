@@ -24,5 +24,4 @@ public interface DegenerateMeasureGroupDimension extends MeasureGroupDimension {
     MeasureGroupDimensionBinding source();
 
     String shareDimensionStorage();
-
 }

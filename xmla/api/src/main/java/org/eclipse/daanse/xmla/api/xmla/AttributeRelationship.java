@@ -17,7 +17,6 @@ import java.util.List;
 
 public interface AttributeRelationship {
 
-
      String attributeID();
 
      String relationshipType();
@@ -34,14 +33,5 @@ public interface AttributeRelationship {
 
      Boolean visible();
 
-     AttributeRelationship.Translations translations();
-
-
-    interface Translations {
-
-
-         List<Translation> translation();
-
-    }
-
+    List<Translation> translations();
 }

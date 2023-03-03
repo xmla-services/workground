@@ -20,6 +20,4 @@ public non-sealed interface Lock extends Command {
     ObjectReference object();
 
     String mode();
-
-
 }

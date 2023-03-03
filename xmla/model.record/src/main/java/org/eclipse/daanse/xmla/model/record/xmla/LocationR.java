@@ -20,12 +20,9 @@ import java.util.List;
 
 public record LocationR(String dataSourceType,
                         String connectionString,
-                        Location.Folders folders,
+                        List<Folder> folders,
                         String file,
                         String dataSourceID
 ) implements Location {
 
-    public record FoldersR(List<Folder> folder) implements Location.Folders {
-
-    }
 }

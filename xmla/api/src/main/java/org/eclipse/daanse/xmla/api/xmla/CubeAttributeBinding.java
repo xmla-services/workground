@@ -26,12 +26,5 @@ public interface CubeAttributeBinding extends Binding {
 
     String type();
 
-    CubeAttributeBinding.Ordinal ordinal();
-
-    interface Ordinal {
-
-        List<BigInteger> ordinal();
-
-    }
-
+    List<BigInteger> ordinal();
 }

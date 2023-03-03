@@ -21,22 +21,13 @@ import java.util.List;
 
 public record AttributeInsertUpdateR(String attributeName,
                                      String name,
-                                     AttributeInsertUpdate.Keys keys,
-                                     AttributeInsertUpdate.Translations translations,
+                                     List<Object> keys,
+                                     List<TranslationInsertUpdate> translations,
                                      String value,
                                      String customrollup,
                                      String customrollupproperties,
                                      String unaryoperator,
                                      BigInteger skippedlevels
 ) implements AttributeInsertUpdate {
-
-    public record Keys(List<Object> key) implements AttributeInsertUpdate.Keys {
-
-    }
-
-    public record Translations(
-        List<TranslationInsertUpdate> translation) implements AttributeInsertUpdate.Translations {
-
-    }
 
 }

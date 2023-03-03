@@ -21,12 +21,9 @@ import java.util.List;
 
 public record AggregationR(String id,
                            String name,
-                           Aggregation.Dimensions dimensions,
+                           List<AggregationDimension> dimensions,
                            List<Annotation> annotations,
                            String description
 ) implements Aggregation {
 
-    public record Dimensions(List<AggregationDimension> dimension) implements Aggregation.Dimensions {
-
-    }
 }

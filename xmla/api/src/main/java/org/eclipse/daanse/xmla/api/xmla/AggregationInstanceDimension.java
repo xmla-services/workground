@@ -19,12 +19,6 @@ public interface AggregationInstanceDimension {
 
     String cubeDimensionID();
 
-    AggregationInstanceDimension.Attributes attributes();
-
-    public interface Attributes {
-
-        List<AggregationInstanceAttribute> attribute();
-
-    }
+    List<AggregationInstanceAttribute> attributes();
 
 }

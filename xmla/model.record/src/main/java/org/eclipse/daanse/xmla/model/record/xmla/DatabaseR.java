@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
+import org.eclipse.daanse.xmla.api.xmla.Account;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Assembly;
 import org.eclipse.daanse.xmla.api.xmla.Cube;
@@ -49,16 +50,16 @@ public record DatabaseR(String name,
                         Boolean visible,
                         String masterDataSourceID,
                         ImpersonationInfo dataSourceImpersonationInfo,
-                        DatabaseR.Accounts accounts,
-                        DatabaseR.DataSources dataSources,
-                        DatabaseR.DataSourceViews dataSourceViews,
-                        DatabaseR.Dimensions dimensions,
-                        DatabaseR.Cubes cubes,
-                        DatabaseR.MiningStructures miningStructures,
-                        DatabaseR.Roles roles,
-                        DatabaseR.Assemblies assemblies,
-                        DatabaseR.DatabasePermissions databasePermissions,
-                        DatabaseR.Translations translations,
+                        List<Account> accounts,
+                        List<DataSource> dataSources,
+                        List<DataSourceView> dataSourceViews,
+                        List<Dimension> dimensions,
+                        List<Cube> cubes,
+                        List<MiningStructure> miningStructures,
+                        List<Role> roles,
+                        List<Assembly> assemblies,
+                        List<DatabasePermission> databasePermissions,
+                        List<Translation> translations,
                         String storageEngineUsed,
                         String imagePath,
                         String imageUrl,
@@ -68,40 +69,4 @@ public record DatabaseR(String name,
                         BigInteger compatibilityLevel,
                         String directQueryMode) implements Database {
 
-
-    record AssembliesR(List<Assembly> assembly) implements Database.Assemblies {
-
-    }
-
-    record CubesR(List<Cube> cube) implements Database.Cubes {
-
-    }
-
-    record DatabasePermissionsR(List<DatabasePermission> databasePermission) implements Database.DatabasePermissions {
-
-    }
-
-    record DataSourcesR(List<DataSource> dataSource) implements Database.DataSources {
-
-    }
-
-    record DataSourceViewsR(List<DataSourceView> dataSourceView) implements Database.DataSourceViews {
-
-    }
-
-    record DimensionsR(List<Dimension> dimension) implements Database.Dimensions {
-
-    }
-
-    record MiningStructuresR(List<MiningStructure> miningStructure) implements Database.MiningStructures {
-
-    }
-
-    record RolesR(List<Role> role) implements Database.Roles {
-
-    }
-
-    record TranslationsR(List<Translation> translation) implements Database.Translations {
-
-    }
 }

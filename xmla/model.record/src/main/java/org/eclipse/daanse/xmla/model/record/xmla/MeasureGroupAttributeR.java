@@ -20,11 +20,8 @@ import org.eclipse.daanse.xmla.api.xmla.MeasureGroupAttribute;
 import java.util.List;
 
 public record MeasureGroupAttributeR(String attributeID,
-                                     MeasureGroupAttribute.KeyColumns keyColumns,
+                                     List<DataItem> keyColumns,
                                      String type,
                                      List<Annotation> annotations) implements MeasureGroupAttribute {
 
-    public record KeyColumns(List<DataItem> keyColumn) implements MeasureGroupAttribute.KeyColumns {
-
-    }
 }

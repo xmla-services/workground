@@ -15,24 +15,21 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import javax.xml.datatype.Duration;
 
-
 public interface ProactiveCaching {
 
+    String onlineMode();
 
-     String onlineMode();
+    String aggregationStorage();
 
-     String aggregationStorage();
+    ProactiveCachingBinding source();
 
-     ProactiveCachingBinding source();
+    Duration silenceInterval();
 
-     Duration silenceInterval();
+    Duration latency();
 
-     Duration latency();
+    Duration silenceOverrideInterval();
 
-     Duration silenceOverrideInterval();
+    Duration forceRebuildInterval();
 
-     Duration forceRebuildInterval();
-
-     Boolean enabled();
-
+    Boolean enabled();
 }

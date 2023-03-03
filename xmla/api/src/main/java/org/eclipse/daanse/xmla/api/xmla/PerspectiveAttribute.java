@@ -17,7 +17,6 @@ import java.util.List;
 
 public interface PerspectiveAttribute {
 
-
      String attributeID();
 
      Boolean attributeHierarchyVisible();

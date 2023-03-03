@@ -25,11 +25,6 @@ public interface RegularMeasureGroupDimension extends MeasureGroupDimension {
 
     String cardinality();
 
-    RegularMeasureGroupDimension.Attributes attributes();
-
-    interface Attributes {
-
-        List<MeasureGroupAttribute> attribute();
-    }
+    List<MeasureGroupAttribute> attributes();
 
 }

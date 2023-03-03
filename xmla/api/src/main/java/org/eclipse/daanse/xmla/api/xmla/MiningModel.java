@@ -18,47 +18,39 @@ import java.util.List;
 
 public interface MiningModel {
 
-     String name();
-     String id();
-     Instant createdTimestamp();
-     Instant lastSchemaUpdate();
-     String description();
+    String name();
+
+    String id();
+
+    Instant createdTimestamp();
+
+    Instant lastSchemaUpdate();
+
+    String description();
+
     List<Annotation> annotations();
-     String algorithm();
-     Instant lastProcessed();
-     MiningModel.AlgorithmParameters algorithmParameters();
-     Boolean allowDrillThrough();
-     MiningModel.Translations translations();
-     MiningModel.Columns columns();
-     String state();
-     FoldingParameters foldingParameters();
-     String filter();
-     MiningModel.MiningModelPermissions miningModelPermissions();
-     String language();
-     String collation();
 
-    public interface AlgorithmParameters {
+    String algorithm();
 
-         List<AlgorithmParameter> algorithmParameter();
+    Instant lastProcessed();
 
-    }
+    List<AlgorithmParameter> algorithmParameters();
 
-    public interface Columns {
+    Boolean allowDrillThrough();
 
-         List<MiningModelColumn> column();
+    List<AttributeTranslation> translations();
 
-    }
+    List<MiningModelColumn> columns();
 
-    public interface MiningModelPermissions {
+    String state();
 
-         List<MiningModelPermission> miningModelPermission();
+    FoldingParameters foldingParameters();
 
-    }
+    String filter();
 
-    public interface Translations {
+    List<MiningModelPermission> miningModelPermissions();
 
-         List<AttributeTranslation> translation();
+    String language();
 
-    }
-
+    String collation();
 }

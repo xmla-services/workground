@@ -19,9 +19,6 @@ import java.util.List;
 
 public record GroupR(
     String name,
-    Group.Members members) implements Group {
+    List<String> members) implements Group {
 
-    public record Members(List<String> member) implements Group.Members {
-
-    }
 }

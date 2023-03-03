@@ -19,14 +19,7 @@ import java.util.List;
 
 public interface EventType {
 
-    EventType.Events events();
+    List<Event> events();
 
     XEvent xEvent();
-
-    public interface Events {
-
-        List<Event> event();
-
-
-    }
 }

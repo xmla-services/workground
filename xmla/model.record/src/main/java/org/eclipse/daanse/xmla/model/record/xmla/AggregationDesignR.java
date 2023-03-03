@@ -29,15 +29,9 @@ public record AggregationDesignR(String name,
                                  String description,
                                  List<Annotation> annotations,
                                  Long estimatedRows,
-                                 AggregationDesign.Dimensions dimensions,
-                                 AggregationDesign.Aggregations aggregations,
+                                 List<AggregationDesignDimension> dimensions,
+                                 List<Aggregation> aggregations,
                                  BigInteger estimatedPerformanceGain
                                  ) implements AggregationDesign{
-
-    public record Aggregations(List<Aggregation> aggregation) implements AggregationDesign.Aggregations{
-    }
-
-    public record Dimensions(List<AggregationDesignDimension> dimension) implements AggregationDesign.Dimensions{
-    }
 
 }

@@ -19,18 +19,11 @@ public non-sealed interface Update extends Command {
 
     Object object();
 
-    Update.Attributes attributes();
+    List<AttributeInsertUpdate> attributes();
 
     Boolean moveWithDescendants();
 
     Boolean moveToRoot();
 
     Where where();
-
-    public interface Attributes {
-
-        List<AttributeInsertUpdate> attribute();
-
-    }
-
 }

@@ -17,14 +17,7 @@ import java.util.List;
 
 public non-sealed interface MergePartitions extends Command{
 
-    MergePartitions.Sources sources();
+    List<ObjectReference> sources();
 
     ObjectReference target();
-
-    public interface Sources {
-
-        List<ObjectReference> source();
-
-    }
-
 }

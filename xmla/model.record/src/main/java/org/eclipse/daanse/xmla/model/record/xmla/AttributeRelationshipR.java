@@ -27,12 +27,7 @@ public record AttributeRelationshipR(String attributeID,
                                      List<Annotation> annotations,
                                      String name,
                                      Boolean visible,
-                                     AttributeRelationshipR.Translations translations
+                                     List<Translation> translations
 ) implements AttributeRelationship {
-
-
-    public record Translations(List<Translation> translation) implements AttributeRelationship.Translations {
-
-    }
 
 }

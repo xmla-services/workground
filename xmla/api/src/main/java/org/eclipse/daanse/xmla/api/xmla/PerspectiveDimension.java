@@ -19,22 +19,9 @@ public interface PerspectiveDimension {
 
     String cubeDimensionID();
 
-    PerspectiveDimension.Attributes attributes();
+    List<PerspectiveAttribute> attributes();
 
-    PerspectiveDimension.Hierarchies hierarchies();
+    List<PerspectiveHierarchy> hierarchies();
 
     List<Annotation> annotations();
-
-    public interface Attributes {
-
-        List<PerspectiveAttribute> attribute();
-
-    }
-
-    public interface Hierarchies {
-
-        List<PerspectiveHierarchy> hierarchy();
-
-    }
-
 }
