@@ -1,0 +1,9 @@
+- title: Home
+  link: /
+  show_on_mobile: true
+- title: Tutorials
+  link: /docs/
+  show_on_mobile: true
+- title: Examples
+  link: /examples/
+  show_on_mobile: true

@@ -1,0 +1,5 @@
+- name: Max Mustermann
+  url: https://max.mustermann.com/
+  image: max-mustermann.png
+  categories:
+    - muster

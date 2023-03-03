@@ -1,0 +1,29 @@
+<div class="unit one-fifth hide-on-mobiles">
+  <aside>
+    <ul>
+      <li {%- if page.title == 'News' %} class="current" {%- endif %}>
+        <a href="{{ '/examples/' | relative_url }}">News Example</a>
+      </li>
+      <li {%- if page.title == 'Releases' %} class="current" {%- endif %}>
+        <a href="{{ '/examples/tutorials-example/' | relative_url }}">Tutorials Example</a>
+      </li>
+    </ul>
+    <h4>Recent Releases</h4>
+    <ul>
+      {% for post in site.categories.release limit:5 -%}
+      <li {% if page.title == post.title %} class="current"{% endif %}>
+        <a href="{{ post.url | relative_url }}">Version {{ post.version }}</a>
+      </li>
+      {% endfor -%}
+      <li>
+        <a href="{{ '/docs/history/' | relative_url }}">404 example</a>
+      </li>
+    </ul>
+    <h4>Other News</h4>
+    <ul>
+      <li {%- if page.title == post.title %} class="current" {%- endif %}>
+        <a href="/examples/news-item-example/">News Item Example</a>
+      </li>
+    </ul>
+  </aside>
+</div>
