@@ -13,12 +13,17 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
-import jakarta.xml.bind.annotation.*;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Property;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.PropertyTypeAdaptor;
+
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "propertyFormatter" })

@@ -13,11 +13,17 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
-import jakarta.xml.bind.annotation.*;
+import java.util.List;
+
 import org.eclipse.daanse.olap.rolap.dbmapper.api.WritebackColumn;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.WritebackTable;
 
-import java.util.List;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElements;
+import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "WritebackTable")

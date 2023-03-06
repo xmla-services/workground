@@ -13,8 +13,9 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.WritebackMeasure;
+
+import jakarta.xml.bind.annotation.XmlAttribute;
 
 public class WritebackMeasureImpl implements WritebackMeasure {
 
