@@ -13,15 +13,31 @@
  */
 package org.eclipse.daanse.xmla.api.engine300_300;
 
+/**
+ * The Relationship complex type specifies a relationship between in-memory Dimensions.
+ */
 public interface Relationship {
 
+    /**
+     * @return The object ID string.
+     */
     String id();
 
+    /**
+     * @return Provides a hint to client applications that this Relationship
+     * is not to be exposed.
+     */
     boolean visible();
 
+    /**
+     * @return A collection of properties that defines the characteristics of
+     * the Relationship-End.
+     */
     RelationshipEnd fromRelationshipEnd();
 
+    /**
+     * @return A collection of properties that defines the characteristics of
+     * the Relationship-End.
+     */
     RelationshipEnd toRelationshipEnd();
-
-
 }

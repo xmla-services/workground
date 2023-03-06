@@ -15,7 +15,13 @@ package org.eclipse.daanse.xmla.api.engine200_200;
 
 import org.eclipse.daanse.xmla.api.xmla.Binding;
 
+/**
+ * This complex type represents a binding to a calculation expression.
+ */
 public interface ExpressionBinding extends Binding {
 
+    /**
+     * @return The expression text.
+     */
     String expression();
 }

@@ -13,6 +13,13 @@
  */
 package org.eclipse.daanse.xmla.api.common.enums;
 
+/**
+ * Describes the current hierarchy structure. Values are the
+ * following:
+ * Natural
+ * Unnatural
+ * Unknown
+ */
 public enum StructureTypeEnum {
 
     Natural,

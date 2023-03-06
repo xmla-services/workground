@@ -13,7 +13,13 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+/**
+ * This complex type represents a binding to a calculated measure.
+ */
 public interface CalculatedMeasureBinding extends Binding {
 
+    /**
+     * @return The name of the calculated measure.
+     */
     String measureName();
 }
