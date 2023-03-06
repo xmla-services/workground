@@ -15,8 +15,9 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Drop;
 import org.eclipse.daanse.xmla.api.xmla.Where;
+import org.eclipse.daanse.xmla.api.xmla.XmlaObject;
 
-public record DropR(Object object,
+public record DropR(XmlaObject object,
                     Boolean deleteWithDescendants,
                     Where where) implements Drop {
 

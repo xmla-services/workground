@@ -11,15 +11,14 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.model.record.xmla;
+package org.eclipse.daanse.xmla.api.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.AttributeInsertUpdate;
-import org.eclipse.daanse.xmla.api.xmla.Insert;
-import org.eclipse.daanse.xmla.api.xmla.XmlaObject;
+public interface XmlaObject {
 
-import java.util.List;
+    String database();
 
-public record InsertR(XmlaObject object,
-                      List<AttributeInsertUpdate> attributes) implements Insert {
+    String cube();
+
+    String dimension();
 
 }

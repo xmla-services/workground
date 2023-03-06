@@ -16,10 +16,11 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 import org.eclipse.daanse.xmla.api.xmla.AttributeInsertUpdate;
 import org.eclipse.daanse.xmla.api.xmla.Update;
 import org.eclipse.daanse.xmla.api.xmla.Where;
+import org.eclipse.daanse.xmla.api.xmla.XmlaObject;
 
 import java.util.List;
 
-public record UpdateR(Object object,
+public record UpdateR(XmlaObject object,
                       List<AttributeInsertUpdate> attributes,
                       Boolean moveWithDescendants,
                       Boolean moveToRoot,

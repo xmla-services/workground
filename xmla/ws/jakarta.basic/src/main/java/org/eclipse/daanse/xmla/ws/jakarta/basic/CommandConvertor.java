@@ -71,6 +71,7 @@ import org.eclipse.daanse.xmla.api.xmla.UpdateCells;
 import org.eclipse.daanse.xmla.api.xmla.Where;
 import org.eclipse.daanse.xmla.api.xmla.WhereAttribute;
 import org.eclipse.daanse.xmla.api.xmla.WriteBackTableCreation;
+import org.eclipse.daanse.xmla.api.xmla.XmlaObject;
 import org.eclipse.daanse.xmla.model.record.engine.ImpersonationInfoR;
 import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
 import org.eclipse.daanse.xmla.model.record.xmla.AttachR;
@@ -124,6 +125,8 @@ import org.eclipse.daanse.xmla.model.record.xmla.UpdateCellsR;
 import org.eclipse.daanse.xmla.model.record.xmla.UpdateR;
 import org.eclipse.daanse.xmla.model.record.xmla.WhereAttributeR;
 import org.eclipse.daanse.xmla.model.record.xmla.WhereR;
+import org.eclipse.daanse.xmla.model.record.xmla.XmlaObjectR;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Object;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -775,12 +778,21 @@ public class CommandConvertor {
 
     private static Drop convertDrop(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Drop drop) {
         if (drop != null) {
-            return new DropR(drop.getObject(),
+            return new DropR(convertObject(drop.getObject()),
                 drop.isDeleteWithDescendants(),
                 convertWhere(drop.getWhere()));
         }
         return null;
 
+    }
+
+    private static XmlaObject convertObject(Object object) {
+        if (object != null) {
+            return new XmlaObjectR(object.getDatabase(),
+                object.getCube(),
+                object.getDimension());
+        }
+        return null;
     }
 
     private static Where convertWhere(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Where where) {
@@ -800,7 +812,7 @@ public class CommandConvertor {
 
     private static Update convertUpdate(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Update update) {
         if (update != null) {
-            return new UpdateR(update.getObject(),
+            return new UpdateR(convertObject(update.getObject()),
                 convertAttributeInsertUpdateList(update.getAttributes() == null ? null : update.getAttributes().getAttribute()),
                 update.isMoveWithDescendants(),
                 update.isMoveToRoot(),
@@ -850,7 +862,7 @@ public class CommandConvertor {
 
     private static Insert convertInsert(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Insert insert) {
         if (insert != null) {
-            return new InsertR(insert.getObject(),
+            return new InsertR(convertObject(insert.getObject()),
                 convertAttributeInsertUpdateList(insert.getAttributes() == null ?
                     null : insert.getAttributes().getAttribute()));
         }
