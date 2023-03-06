@@ -13,11 +13,12 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Formula;
+
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlType;
 import jakarta.xml.bind.annotation.XmlValue;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Formula;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")

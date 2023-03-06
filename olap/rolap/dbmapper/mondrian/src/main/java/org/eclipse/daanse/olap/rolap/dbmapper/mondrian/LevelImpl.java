@@ -13,9 +13,14 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
-import jakarta.xml.bind.annotation.*;
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Closure;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.ExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.HideMemberIfEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.InternalTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.LevelTypeEnum;
@@ -25,8 +30,13 @@ import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.InternalTypeAdapt
 import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.LevelTypeAdaptor;
 import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.TypeAdaptor;
 
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
+import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "annotations", "keyExpression", "nameExpression", "captionExpression",

@@ -16,17 +16,17 @@ package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 import java.util.ArrayList;
 import java.util.List;
 
-import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.HierarchyGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.MemberGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.AccessEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.AccessAdaptor;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlAttribute;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.MemberGrant;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.AccessEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.adapter.AccessAdaptor;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = { "memberGrant" })

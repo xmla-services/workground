@@ -14,12 +14,19 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
-import jakarta.xml.bind.annotation.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
-
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
+
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlAttribute;
+import jakarta.xml.bind.annotation.XmlElement;
+import jakarta.xml.bind.annotation.XmlElementWrapper;
+import jakarta.xml.bind.annotation.XmlRootElement;
+import jakarta.xml.bind.annotation.XmlType;
 
 /**
  * A schema is a collection of cubes and virtual cubes. It can also contain

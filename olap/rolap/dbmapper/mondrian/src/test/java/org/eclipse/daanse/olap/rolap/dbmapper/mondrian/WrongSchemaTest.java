@@ -13,14 +13,15 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.mondrian;
 
-import jakarta.xml.bind.JAXBException;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
-import org.junit.jupiter.api.Test;
+import static org.eclipse.daanse.olap.rolap.dbmapper.mondrian.ReadTest.extracted;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 
-import static org.eclipse.daanse.olap.rolap.dbmapper.mondrian.ReadTest.extracted;
-import static org.junit.jupiter.api.Assertions.fail;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
+import org.junit.jupiter.api.Test;
+
+import jakarta.xml.bind.JAXBException;
 
 public class WrongSchemaTest {
 
