@@ -124,11 +124,11 @@ public class ExecuteRequestTest {
     @Test
     void test_Alter(@InjectService XmlaService xmlaService) throws Exception {
         ArgumentCaptor<AlterRequest> captor = ArgumentCaptor.forClass(AlterRequest.class);
-
+        //<Alter xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
         final String sRequest = """
             <Execute xmlns="urn:schemas-microsoft-com:xml-analysis">
               <Command>
-                <Alter xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+                <Alter>
                   <Object>
                     <DatabaseID>AdventureWorks_SSAS_Alter</DatabaseID>
                     <DimensionID>Dim Customer</DimensionID>
@@ -137,26 +137,6 @@ public class ExecuteRequestTest {
                     <Dimension>
                         <ID>Dim Customer</ID>
                         <Name>Customer</Name>
-                        <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramLayout</Name>
-                        <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowFriendlyNames</Name>
-                        <Value>true</Value>
-                        <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:ShowRelationshipNames</Name>
-                        <Value>false</Value>
-                        <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:UseDiagramDefaultLayout</Name>
-                        <Value>true</Value>
-                        <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortLeft</Name>
-                        <Value>0</Value>
-                        <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramViewPortTop</Name>
-                        <Value>0</Value>
-                        <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingLeft</Name>
-                        <Value>0</Value>
-                        <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramBoundingTop</Name>
-                        <Value>0</Value>
-                        <Name>http://schemas.microsoft.com/DataWarehouse/Designer/1.0:DiagramZoom</Name>
-                        <Value>100</Value>
-                        <Source type="DataSourceViewBinding">
-                            <DataSourceViewID>dsvAdventureWorksDW2008</DataSourceViewID>
-                        </Source>
                         <ErrorConfiguration>
                             <KeyNotFound>ReportAndStop</KeyNotFound>
                             <KeyDuplicate>ReportAndStop</KeyDuplicate>
@@ -166,37 +146,19 @@ public class ExecuteRequestTest {
                         <Collation>Latin1_General_CI_AS</Collation>
                         <UnknownMemberName>Unknown</UnknownMemberName>
                         <Attributes>
-                          <Attribute>
-                            <ID>Customer Key</ID>
-                            <Name>Customer Key</Name>
-                            <Usage>Key</Usage>
-                            <EstimatedCount>18484</EstimatedCount>
-                            <KeyColumns>
-                                <KeyColumn>
-                                    <DataType>Integer</DataType>
-                                    <Source type="ColumnBinding">
-                                        <TableID>dbo_DimCustomer</TableID>
-                                        <ColumnID>CustomerKey</ColumnID>
-                                    </Source>
-                                </KeyColumn>
-                            </KeyColumns>
-                            <NameColumn>
-                                <DataType>WChar</DataType>
-                                <Source type="ColumnBinding">
-                                    <TableID>dbo_DimCustomer</TableID>
-                                    <ColumnID>CustomerKey</ColumnID>
-                                </Source>
-                            </NameColumn>
-                            <OrderBy>Key</OrderBy>
-                          </Attribute>
+                            <Attribute>
+                                <ID>Customer Key</ID>
+                                <Name>Customer Key</Name>
+                                <Usage>Key</Usage>
+                                <EstimatedCount>18484</EstimatedCount>
+                                <KeyColumns>
+                                    <KeyColumn>
+                                        <DataType>Integer</DataType>
+                                    </KeyColumn>
+                                </KeyColumns>
+                                <OrderBy>Key</OrderBy>
+                            </Attribute>
                         </Attributes>
-                        <ProactiveCaching>
-                            <SilenceInterval>-PT1S</SilenceInterval>
-                            <Latency>-PT1S</Latency>
-                            <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
-                            <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
-                            <Source type="ProactiveCachingInheritedBinding"/>
-                        </ProactiveCaching>
                     </Dimension>
                   </ObjectDefinition>
                 </Alter>
@@ -235,8 +197,16 @@ public class ExecuteRequestTest {
                 assertThat(d.command()).isNotNull()
                     .satisfies(r -> {
                         assertThat(r.object()).isNotNull();
-                        assertThat(r.allowCreate()).isNull();
-                        //TODO
+                        assertThat(r.object().databaseID())
+                        .isNotNull().isEqualTo("AdventureWorks_SSAS_Alter");
+                        assertThat(r.object().dimensionID())
+                        .isNotNull().isEqualTo("Dim Customer");
+                        assertThat(r.objectDefinition()).isNotNull().satisfies(od -> {
+                        	assertThat(od.dimension()).isNotNull().satisfies(dimension -> {
+                        		assertThat(dimension.id()).isNotNull().isEqualTo("Dim Customer");
+                        		assertThat(dimension.name()).isNotNull().isEqualTo("Customer");
+                        	});
+                        });
                     });
             });
     }

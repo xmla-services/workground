@@ -13,7 +13,6 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.MiningModel;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructureColumn;

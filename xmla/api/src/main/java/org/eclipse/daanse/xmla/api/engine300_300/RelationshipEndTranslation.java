@@ -19,15 +19,35 @@ import java.util.List;
 
 public interface RelationshipEndTranslation {
 
+    /**
+     * @return The locale ID of the language. For more details on locale
+     * identifiers, see [MS-LCID].
+     */
     long language();
 
+    /**
+     * @return The caption of the object in the language represented by
+     * the Language element.
+     */
     String caption();
 
+    /**
+     * @return The caption of a collection of objects.
+     */
     String collectionCaption();
 
+    /**
+     * @return The object description.
+     */
     String description();
 
+    /**
+     * @return The folder in which the object is displayed.
+     */
     String displayFolder();
 
+    /**
+     * @return A collection of Annotation objects.
+     */
     List<Annotation> annotations();
 }

@@ -13,14 +13,45 @@
  */
 package org.eclipse.daanse.xmla.api.engine;
 
+/**
+ * The ImpersonationInfo complex type represents impersonation settings for an object or operation.
+ */
 public interface ImpersonationInfo {
 
+    /**
+     * A string that specifies the credentials to use for
+     * impersonation. The enumeration values are as follows:
+     * Default - The server uses the impersonation method
+     * that it deems to be appropriate for the context in which
+     * impersonation is used.
+     * ImpersonateServiceAccount - Use the user account that
+     * the server is running as.
+     * ImpersonateAnonymous - Use the anonymous user
+     * account.
+     * ImpersonateCurrentUser - Use the user account that
+     * the client is connecting as.
+     * ImpersonateAccount - Use the specified user
+     * account
+     * @return
+     */
     String impersonationMode();
 
+    /**
+     * The user account to impersonate when
+     * ImpersonationMode=ImpersonateAccount.
+     * @return
+     */
     String account();
 
+    /**
+     * @return The password of the user account when
+     * ImpersonationMode=ImpersonateAccount.
+     */
     String password();
 
+    /**
+     * @return Specifies whether the password was removed.
+     */
     String impersonationInfoSecurity();
 
 }

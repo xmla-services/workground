@@ -37,6 +37,4 @@ public class AlterCommandConvertor {
         AlterR alterCommand = new AlterR(object, objectDefinition, scope, allowCreate, objectExpansion);
         return alterCommand;
     }
-
-
 }

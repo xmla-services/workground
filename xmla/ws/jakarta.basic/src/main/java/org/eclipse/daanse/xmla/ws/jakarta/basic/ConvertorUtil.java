@@ -155,7 +155,10 @@ public class ConvertorUtil {
     }
 
     public static Instant convertToInstant(XMLGregorianCalendar createdTimestamp) {
-        return createdTimestamp.toGregorianCalendar().toInstant();
+        if (createdTimestamp != null) {
+            return createdTimestamp.toGregorianCalendar().toInstant();
+        }
+        return null;
     }
 
     public static Duration convertDuration(javax.xml.datatype.Duration duration) {
