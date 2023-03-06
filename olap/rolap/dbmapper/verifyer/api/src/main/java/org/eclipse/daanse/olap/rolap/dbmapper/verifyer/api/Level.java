@@ -14,5 +14,5 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api;
 
 public enum Level {
-    ERROR, WARNING, INFO;
+    ERROR, WARNING, INFO, QUALITY;
 }
