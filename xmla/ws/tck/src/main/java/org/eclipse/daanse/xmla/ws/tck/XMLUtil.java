@@ -51,6 +51,8 @@ public class XMLUtil {
         nsMap.put("mddataset", "urn:schemas-microsoft-com:xml-analysis:mddataset");
         nsMap.put("engine", "http://schemas.microsoft.com/analysisservices/2003/engine");
         nsMap.put("engine200", "http://schemas.microsoft.com/analysisservices/2010/engine/200");
+        nsMap.put("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+
         xmlAssert = xmlAssert.withNamespaceContext(nsMap);
         return xmlAssert;
     }

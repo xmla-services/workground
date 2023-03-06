@@ -72,6 +72,8 @@ import org.slf4j.LoggerFactory;
 import org.xmlunit.assertj3.XmlAssert;
 
 import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -387,6 +389,8 @@ public class ExecuteResponseTest {
     }
 
     private void checkRow(XmlAssert xmlAssert) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+            .withZone(ZoneId.systemDefault());
         xmlAssert.hasXPath("/SOAP:Envelope");
         xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse").exist();
         xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return")
@@ -405,11 +409,11 @@ public class ExecuteResponseTest {
         xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/mddataset:root/OlapInfo/CubeInfo/Cube/engine:LastDataUpdate")
             .exist();
         xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/mddataset:root/OlapInfo/CubeInfo/Cube/engine:LastDataUpdate")
-            .isEqualTo("1970-01-01T03:00:02.000+03:00");
+            .isEqualTo(formatter.format(Instant.ofEpochMilli(2000l)));
         xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/mddataset:root/OlapInfo/CubeInfo/Cube/engine:LastSchemaUpdate")
             .exist();
         xmlAssert.valueByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/mddataset:root/OlapInfo/CubeInfo/Cube/engine:LastSchemaUpdate")
-            .isEqualTo("1970-01-01T03:00:02.000+03:00");
+            .isEqualTo(formatter.format(Instant.ofEpochMilli(2000l)));
 
 
         xmlAssert.nodesByXPath("/SOAP:Envelope/SOAP:Body/msxmla:ExecuteResponse/msxmla:return/mddataset:root/OlapInfo/AxesInfo")

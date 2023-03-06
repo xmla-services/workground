@@ -134,7 +134,11 @@ public class ExecuteRequestTest {
                     <DimensionID>Dim Customer</DimensionID>
                   </Object>
                   <ObjectDefinition>
-                    <Dimension>
+                    <Dimension xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                                                               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                                                               xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2"
+                                                               xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2"
+                                                               xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100">
                         <ID>Dim Customer</ID>
                         <Name>Customer</Name>
                         <ErrorConfiguration>
@@ -154,6 +158,10 @@ public class ExecuteRequestTest {
                                 <KeyColumns>
                                     <KeyColumn>
                                         <DataType>Integer</DataType>
+                                        <Source xsi:type="ColumnBinding">
+        									<TableID>dbo_DimCustomer</TableID>
+        									<ColumnID>CustomerKey</ColumnID>
+        								</Source>
                                     </KeyColumn>
                                 </KeyColumns>
                                 <OrderBy>Key</OrderBy>
