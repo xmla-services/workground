@@ -17,7 +17,7 @@ import java.util.List;
 
 public non-sealed interface Insert extends Command {
 
-    Object object();
+    XmlaObject object();
 
     List<AttributeInsertUpdate> attributes();
 

@@ -15,7 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 public non-sealed interface Drop extends Command {
 
-    Object object();
+    XmlaObject object();
 
     Boolean deleteWithDescendants();
 
