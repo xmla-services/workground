@@ -11,14 +11,19 @@
  *   SmartCity Jena - initial
  *   Stefan Bischof (bipolis.org) - initial
  */
-package org.eclipse.daanse.xmla.api.xmla;
+package org.eclipse.daanse.xmla.api.execute.clearcache;
 
-public non-sealed interface ClearCache extends Command {
+import org.eclipse.daanse.xmla.api.discover.Properties;
+import org.eclipse.daanse.xmla.api.execute.ExecuteParameter;
+import org.eclipse.daanse.xmla.api.xmla.ClearCache;
 
-    /**
-     * @return The object to clear from the cache. The object MUST be one of the following:
-     * Database, Dimension, Cube, or MeasureGroup. The ObjectReference type is defined
-     * in section 3.1.4.3.2.1.1.1.
-     */
-    ObjectReference object();
+import java.util.List;
+
+public interface ClearCacheRequest {
+
+    Properties properties();
+
+    List<ExecuteParameter> parameters();
+
+    ClearCache command();
 }

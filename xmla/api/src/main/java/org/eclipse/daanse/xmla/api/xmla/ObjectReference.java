@@ -1,63 +1,61 @@
 /*
-* Copyright (c) 2023 Contributors to the Eclipse Foundation.
-*
-* This program and the accompanying materials are made
-* available under the terms of the Eclipse Public License 2.0
-* which is available at https://www.eclipse.org/legal/epl-2.0/
-*
-* SPDX-License-Identifier: EPL-2.0
-*
-* Contributors:
-*   SmartCity Jena - initial
-*   Stefan Bischof (bipolis.org) - initial
-*/
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
 package org.eclipse.daanse.xmla.api.xmla;
-
 
 public interface ObjectReference {
 
-  String serverID();
+    String serverID();
 
-   String databaseID();
+    String databaseID();
 
-   String roleID();
+    String roleID();
 
-   String traceID();
+    String traceID();
 
-   String assemblyID();
+    String assemblyID();
 
-   String dimensionID();
+    String dimensionID();
 
-   String dimensionPermissionID();
+    String dimensionPermissionID();
 
-   String dataSourceID();
+    String dataSourceID();
 
-   String dataSourcePermissionID();
+    String dataSourcePermissionID();
 
-   String databasePermissionID();
+    String databasePermissionID();
 
-   String dataSourceViewID();
+    String dataSourceViewID();
 
-   String cubeID();
+    String cubeID();
 
-   String miningStructureID();
+    String miningStructureID();
 
-   String measureGroupID();
+    String measureGroupID();
 
-   String perspectiveID();
+    String perspectiveID();
 
-   String cubePermissionID();
+    String cubePermissionID();
 
-   String mdxScriptID();
+    String mdxScriptID();
 
-   String partitionID();
+    String partitionID();
 
-   String aggregationDesignID();
+    String aggregationDesignID();
 
-   String miningModelID();
+    String miningModelID();
 
-   String miningModelPermissionID();
+    String miningModelPermissionID();
 
-   String miningStructurePermissionID();
-
+    String miningStructurePermissionID();
 }
