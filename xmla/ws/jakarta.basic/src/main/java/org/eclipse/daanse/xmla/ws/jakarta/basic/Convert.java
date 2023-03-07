@@ -119,9 +119,15 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRestrictio
 import org.eclipse.daanse.xmla.api.execute.ExecuteParameter;
 import org.eclipse.daanse.xmla.api.execute.alter.AlterRequest;
 import org.eclipse.daanse.xmla.api.execute.alter.AlterResponse;
+import org.eclipse.daanse.xmla.api.execute.cancel.CancelRequest;
+import org.eclipse.daanse.xmla.api.execute.cancel.CancelResponse;
+import org.eclipse.daanse.xmla.api.execute.clearcache.ClearCacheRequest;
+import org.eclipse.daanse.xmla.api.execute.clearcache.ClearCacheResponse;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.api.mddataset.Mddataset;
+import org.eclipse.daanse.xmla.api.xmla.Cancel;
+import org.eclipse.daanse.xmla.api.xmla.ClearCache;
 import org.eclipse.daanse.xmla.api.xmla_empty.Emptyresult;
 import org.eclipse.daanse.xmla.model.record.discover.PropertiesR;
 import org.eclipse.daanse.xmla.model.record.discover.dbschema.catalogs.DbSchemaCatalogsRequestR;
@@ -180,6 +186,8 @@ import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsR
 import org.eclipse.daanse.xmla.model.record.discover.mdschema.sets.MdSchemaSetsRestrictionsR;
 import org.eclipse.daanse.xmla.model.record.execute.ExecuteParameterR;
 import org.eclipse.daanse.xmla.model.record.execute.alter.AlterRequestR;
+import org.eclipse.daanse.xmla.model.record.execute.cancel.CancelRequestR;
+import org.eclipse.daanse.xmla.model.record.execute.clearcache.ClearCacheRequestR;
 import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
 import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
 import org.eclipse.daanse.xmla.model.record.execute.statement.StatementRequestR;
@@ -228,6 +236,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertCancel;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertClearCache;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertException;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertMessages;
 
@@ -2269,14 +2279,44 @@ public class Convert {
 
 
     public static ExecuteResponse toAlter(AlterResponse responseApi) {
-        Return ret = convertAlter(responseApi.emptyresult());
+        Return ret = converReturnEmptyresult(responseApi.emptyresult());
         ExecuteResponse responseWs = new ExecuteResponse();
         responseWs.setReturn(ret);
 
         return responseWs;
     }
 
-    private static Return convertAlter(Emptyresult emptyresult) {
+    public static ClearCacheRequest fromClearCache(Execute requestWs) {
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
+        ClearCache command = convertClearCache(requestWs.getCommand().getClearCache());
+        List<ExecuteParameter> parameters = parameters(requestWs);
+        return new ClearCacheRequestR(properties, parameters, command);
+    }
+
+    public static ExecuteResponse toClearCache(ClearCacheResponse responseApi) {
+        Return ret = converReturnEmptyresult(responseApi.emptyresult());
+        ExecuteResponse responseWs = new ExecuteResponse();
+        responseWs.setReturn(ret);
+
+        return responseWs;
+    }
+
+    public static CancelRequest fromCancel(Execute requestWs) {
+        PropertiesR properties = discoverProperties(propertyList(requestWs));
+        Cancel command = convertCancel(requestWs.getCommand().getCancel());
+        List<ExecuteParameter> parameters = parameters(requestWs);
+        return new CancelRequestR(properties, parameters, command);
+    }
+
+    public static ExecuteResponse toCancel(CancelResponse responseApi) {
+        Return ret = converReturnEmptyresult(responseApi.emptyresult());
+        ExecuteResponse responseWs = new ExecuteResponse();
+        responseWs.setReturn(ret);
+
+        return responseWs;
+    }
+
+    private static Return converReturnEmptyresult(Emptyresult emptyresult) {
         Return ret = new Return();
         ret.setValue(convertEmptyresult(emptyresult));
         return ret;
@@ -2314,4 +2354,5 @@ public class Convert {
         }
         return null;
     }
+
 }

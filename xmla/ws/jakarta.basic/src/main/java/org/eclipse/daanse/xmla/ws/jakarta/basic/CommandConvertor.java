@@ -1030,7 +1030,7 @@ public class CommandConvertor {
 
     }
 
-    private static Cancel convertCancel(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Cancel cancel) {
+    public static Cancel convertCancel(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Cancel cancel) {
         if (cancel != null) {
             return new CancelR(cancel.getConnectionID(),
                 cancel.getSessionID(),
@@ -1058,7 +1058,7 @@ public class CommandConvertor {
 
     }
 
-    private static ClearCache convertClearCache(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ClearCache clearCache) {
+    public static ClearCache convertClearCache(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ClearCache clearCache) {
         if (clearCache != null) {
             return new ClearCacheR(convertObjectReference(clearCache.getObject()));
         }

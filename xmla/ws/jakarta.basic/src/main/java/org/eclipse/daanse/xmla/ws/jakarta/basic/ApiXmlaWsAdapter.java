@@ -73,6 +73,10 @@ import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsRequest;
 import org.eclipse.daanse.xmla.api.discover.mdschema.sets.MdSchemaSetsResponseRow;
 import org.eclipse.daanse.xmla.api.execute.alter.AlterRequest;
 import org.eclipse.daanse.xmla.api.execute.alter.AlterResponse;
+import org.eclipse.daanse.xmla.api.execute.cancel.CancelRequest;
+import org.eclipse.daanse.xmla.api.execute.cancel.CancelResponse;
+import org.eclipse.daanse.xmla.api.execute.clearcache.ClearCacheRequest;
+import org.eclipse.daanse.xmla.api.execute.clearcache.ClearCacheResponse;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.ext.Authenticate;
@@ -243,11 +247,33 @@ public class ApiXmlaWsAdapter implements WsAdapter {
                 if (parameters.getCommand().getAlter() != null) {
                     executeResponse = handleAlter(parameters);
                 }
+                if (parameters.getCommand().getClearCache() != null) {
+                    executeResponse = handleClearCache(parameters);
+                }
+                if (parameters.getCommand().getCancel() != null) {
+                    executeResponse = handleCancel(parameters);
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return executeResponse;
+    }
+
+    private ExecuteResponse handleCancel(Execute requestWs) {
+        CancelRequest requestApi = Convert.fromCancel(requestWs);
+        CancelResponse responseApi = xmlaService.execute().cancel(requestApi);
+        ExecuteResponse responseWs = Convert.toCancel(responseApi);
+
+        return responseWs;
+    }
+
+    private ExecuteResponse handleClearCache(Execute requestWs) {
+        ClearCacheRequest requestApi = Convert.fromClearCache(requestWs);
+        ClearCacheResponse responseApi = xmlaService.execute().clearCache(requestApi);
+        ExecuteResponse responseWs = Convert.toClearCache(responseApi);
+
+        return responseWs;
     }
 
     private ExecuteResponse handleAlter(Execute requestWs) {
