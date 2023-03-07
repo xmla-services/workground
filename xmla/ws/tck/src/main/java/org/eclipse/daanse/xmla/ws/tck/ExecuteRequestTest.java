@@ -17,6 +17,8 @@ import org.eclipse.daanse.xmla.api.XmlaService;
 import org.eclipse.daanse.xmla.api.execute.ExecuteService;
 import org.eclipse.daanse.xmla.api.execute.alter.AlterRequest;
 import org.eclipse.daanse.xmla.api.execute.statement.StatementRequest;
+import org.eclipse.daanse.xmla.api.xmla.ColumnBinding;
+import org.eclipse.daanse.xmla.api.xmla.DataSourceViewBinding;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +34,8 @@ import org.osgi.test.junit5.cm.ConfigurationExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.Duration;
 import java.util.Map;
 import java.util.Optional;
 
@@ -124,7 +128,7 @@ public class ExecuteRequestTest {
     @Test
     void test_Alter(@InjectService XmlaService xmlaService) throws Exception {
         ArgumentCaptor<AlterRequest> captor = ArgumentCaptor.forClass(AlterRequest.class);
-        //<Alter xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">
+        Duration duration = DatatypeFactory.newInstance().newDuration("-PT1S");
         final String sRequest = """
             <Execute xmlns="urn:schemas-microsoft-com:xml-analysis">
               <Command>
@@ -141,6 +145,9 @@ public class ExecuteRequestTest {
                                                                xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100">
                         <ID>Dim Customer</ID>
                         <Name>Customer</Name>
+                        <Source xsi:type="DataSourceViewBinding">
+                            <DataSourceViewID>dsvAdventureWorksDW2008</DataSourceViewID>
+                        </Source>
                         <ErrorConfiguration>
                             <KeyNotFound>ReportAndStop</KeyNotFound>
                             <KeyDuplicate>ReportAndStop</KeyDuplicate>
@@ -167,6 +174,12 @@ public class ExecuteRequestTest {
                                 <OrderBy>Key</OrderBy>
                             </Attribute>
                         </Attributes>
+                        <ProactiveCaching>
+                            <SilenceInterval>-PT1S</SilenceInterval>
+                            <Latency>-PT1S</Latency>
+                            <SilenceOverrideInterval>-PT1S</SilenceOverrideInterval>
+                            <ForceRebuildInterval>-PT1S</ForceRebuildInterval>
+                        </ProactiveCaching>
                     </Dimension>
                   </ObjectDefinition>
                 </Alter>
@@ -213,6 +226,41 @@ public class ExecuteRequestTest {
                         	assertThat(od.dimension()).isNotNull().satisfies(dimension -> {
                         		assertThat(dimension.id()).isNotNull().isEqualTo("Dim Customer");
                         		assertThat(dimension.name()).isNotNull().isEqualTo("Customer");
+                                assertThat(dimension.language()).isNotNull().isEqualTo(1033);
+                                assertThat(dimension.collation()).isNotNull().isEqualTo("Latin1_General_CI_AS");
+                                assertThat(dimension.unknownMemberName()).isNotNull().isEqualTo("Unknown");
+                                assertThat(dimension.source()).isNotNull().satisfies(s -> {
+                                    assertThat(((DataSourceViewBinding)s).dataSourceViewID()).isNotNull().isEqualTo("dsvAdventureWorksDW2008");
+                                });
+                                assertThat(dimension.errorConfiguration()).isNotNull().satisfies(ec -> {
+                                    assertThat(ec.keyNotFound()).isNotNull().isEqualTo("ReportAndStop");
+                                    assertThat(ec.keyDuplicate()).isNotNull().isEqualTo("ReportAndStop");
+                                    assertThat(ec.nullKeyNotAllowed()).isNotNull().isEqualTo("ReportAndStop");
+                                });
+                                assertThat(dimension.attributes()).isNotNull().satisfies(ats -> {
+                                    assertThat(ats.get(0)).isNotNull().satisfies(at -> {
+                                        assertThat(at.id()).isNotNull().isEqualTo("Customer Key");
+                                        assertThat(at.name()).isNotNull().isEqualTo("Customer Key");
+                                        assertThat(at.usage()).isNotNull().isEqualTo("Key");
+                                        assertThat(at.estimatedCount()).isNotNull().isEqualTo(18484);
+                                        assertThat(at.orderBy()).isNotNull().isEqualTo("Key");
+                                        assertThat(at.keyColumns()).isNotNull().satisfies(kcs -> {
+                                            assertThat(kcs.get(0)).isNotNull().satisfies(kc -> {
+                                                assertThat(kc.dataType()).isNotNull().isEqualTo("Integer");
+                                                assertThat(kc.source()).isNotNull().satisfies(s -> {
+                                                    assertThat(((ColumnBinding)s).tableID()).isNotNull().isEqualTo("dbo_DimCustomer");
+                                                    assertThat(((ColumnBinding)s).columnID()).isNotNull().isEqualTo("CustomerKey");
+                                                });
+                                            });
+                                        });
+                                    });
+                                });
+                                assertThat(dimension.proactiveCaching()).isNotNull().satisfies(pc -> {
+                                    assertThat(pc.silenceInterval()).isNotNull().isEqualTo(duration);
+                                    assertThat(pc.latency()).isNotNull().isEqualTo(duration);
+                                    assertThat(pc.silenceOverrideInterval()).isNotNull().isEqualTo(duration);
+                                    assertThat(pc.forceRebuildInterval()).isNotNull().isEqualTo(duration);
+                                });
                         	});
                         });
                     });
