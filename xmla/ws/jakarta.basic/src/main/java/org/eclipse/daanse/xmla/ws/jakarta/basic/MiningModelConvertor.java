@@ -127,7 +127,7 @@ public class MiningModelConvertor {
 
     }
 
-    private static List<MiningModelingFlag> convertMiningModelingFlagList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningModelingFlag> list) {
+    public static List<MiningModelingFlag> convertMiningModelingFlagList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningModelingFlag> list) {
         if (list != null) {
             return list.stream().map(MiningModelConvertor::convertMiningModelingFlag).collect(Collectors.toList());
         }

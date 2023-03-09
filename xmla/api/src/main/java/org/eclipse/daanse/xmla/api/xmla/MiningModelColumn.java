@@ -15,25 +15,63 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
+/**
+ * This complex type represents a column in a MiningModel.
+ */
 public interface MiningModelColumn {
 
+    /**
+     * @return The object name.
+     */
     String name();
 
+    /**
+     * @return The object ID string.
+     */
     String id();
 
+    /**
+     * @return The object description.
+     */
     String description();
 
+    /**
+     * @return The ID of the source column in the parent structure.
+     */
     String sourceColumnID();
 
+    /**
+     * @return Specifies the usage for this column within the MiningModel. If
+     * the column that is referenced by the SourceColumnID value is a
+     * key column, the Usage element MUST be set to "Key".
+     */
     String usage();
 
+    /**
+     * @return A string that contains a valid DMX filter to be applied to nested
+     * table columns. An empty string or missing element implies no
+     * filter. This element is empty for non-table columns.
+     */
     String filter();
 
+    /**
+     * @return A collection of Translation objects.
+     */
     List<Translation> translations();
 
+    /**
+     * @return A set of Column objects. This is a nesting of this same type. It is
+     * used only for nested tables.
+     */
     List<MiningModelColumn> columns();
 
+    /**
+     * @return A collection of ModelingFlag objects.
+     */
     List<MiningModelingFlag> modelingFlags();
 
+    /**
+     * @return A collection of Annotation objects.
+     */
     List<Annotation> annotations();
 }

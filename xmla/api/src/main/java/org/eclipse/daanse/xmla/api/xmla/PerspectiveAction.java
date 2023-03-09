@@ -15,10 +15,19 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
+/**
+ * This complex type represents an Action in a Perspective.
+ */
 public interface PerspectiveAction {
 
+    /**
+     * @return The ID of the Action.
+     */
     String actionID();
 
+    /**
+     * @return A collection of Annotation objects.
+     */
     List<Annotation> annotations();
 
 }

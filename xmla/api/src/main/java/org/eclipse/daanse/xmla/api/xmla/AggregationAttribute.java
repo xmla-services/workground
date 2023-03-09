@@ -15,10 +15,20 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
+/**
+ * This complex type represents the attribute in the AggregationDimension for which the fact data is
+ * aggregated.
+ */
 public interface AggregationAttribute {
 
+    /**
+     * @return The ID of the attribute.
+     */
     String attributeID();
 
+    /**
+     * @return A collection of Annotation objects.
+     */
     List<Annotation> annotations();
 
 }

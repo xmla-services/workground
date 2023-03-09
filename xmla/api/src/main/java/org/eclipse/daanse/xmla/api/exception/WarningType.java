@@ -15,13 +15,28 @@ package org.eclipse.daanse.xmla.api.exception;
 
 public non-sealed interface WarningType  extends Type{
 
+    /**
+     * @return The location information for the Warning.
+     */
     MessageLocation location();
 
+    /**
+     * @return The warning code for the Warning.
+     */
     Integer warningCode();
 
+    /**
+     * @return A description of the Warning.
+     */
     String description();
 
+    /**
+     * @return The source of the Warning, such as a product name.
+     */
     String source();
 
+    /**
+     * @return A help file that contains information about the Warning.
+     */
     String helpFile();
 }

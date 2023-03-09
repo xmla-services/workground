@@ -15,9 +15,18 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
+/**
+ * This complex type represents a KPI in a Perspective.
+ */
 public interface PerspectiveKpi {
 
+    /**
+     * @return The ID of the KPI.
+     */
     String kpiID();
 
+    /**
+     * @return A collection of Annotation objects.
+     */
     List<Annotation> annotations();
 }

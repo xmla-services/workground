@@ -15,10 +15,30 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
+/**
+ * This complex type represents the attribute in the AggregationInstanceDimension for which the fact
+ * data is aggregated.
+ */
 public interface AggregationInstanceAttribute {
 
+    /**
+     * @return The ID of the attribute.
+     */
     String attributeID();
 
+    /**
+     * @return A collection of KeyColumn elements of type
+     * DataItem. This can be used to override the
+     * binding that is specified on the attribute. The
+     * Source element within the DataItem MUST be
+     * of type ColumnBinding.
+     *
+     * Required. However, if this element is
+     * specified as empty, the default is the
+     * binding that is specified on the
+     * attribute that is pointed to by
+     * AttributeID.
+     */
     List<DataItem> keyColumns();
 
 }

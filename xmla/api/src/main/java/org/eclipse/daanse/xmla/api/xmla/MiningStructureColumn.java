@@ -13,6 +13,10 @@
 */
 package org.eclipse.daanse.xmla.api.xmla;
 
-public interface MiningStructureColumn {
+/**
+ * This complex type represents a column in a MiningStructure. This is an abstract type for the
+ * ScalarMiningStructureColumn and TableMiningStructureColumn derived types.
+ */
+public sealed interface MiningStructureColumn permits ScalarMiningStructureColumn, TableMiningStructureColumn{
 
 }

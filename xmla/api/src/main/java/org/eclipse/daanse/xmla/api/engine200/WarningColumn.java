@@ -15,8 +15,14 @@ package org.eclipse.daanse.xmla.api.engine200;
 
 public interface WarningColumn {
 
+    /**
+     * @return Identifies the Dimension of the SourceObject or DependsOnObject.
+     */
     String dimension();
 
+    /**
+     * @return Identifies the Attribute of the SourceObject or DependsOnObject.
+     */
     String attribute();
 
 }

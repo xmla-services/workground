@@ -15,16 +15,30 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
+/**
+ * This complex type represents an attribute in a PerspectiveDimension.
+ */
 public interface PerspectiveAttribute {
 
+    /**
+     * @return The ID of the attribute.
+     */
      String attributeID();
 
+    /**
+     * @return When true, specifies whether the attribute hierarchy is
+     * visible; otherwise, false.
+     */
      Boolean attributeHierarchyVisible();
 
+    /**
+     * @return An MDX expression specifying the default member for this
+     * attribute.<79>
+     */
      String defaultMember();
 
+    /**
+     * @return A collection of Annotation objects.
+     */
     List<Annotation> annotations();
-
-
-
 }

@@ -25,7 +25,7 @@ import java.util.List;
 @XmlType(name = "ScalarMiningStructureColumn", propOrder = {
 
 })
-public class ScalarMiningStructureColumn {
+public class ScalarMiningStructureColumn extends MiningStructureColumn{
 
     @XmlElement(name = "Name", required = true)
     protected String name;

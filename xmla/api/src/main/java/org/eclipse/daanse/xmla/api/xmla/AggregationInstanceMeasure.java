@@ -13,9 +13,18 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+/**
+ * This complex type represents a Measure in an AggregationInstance.
+ */
 public interface AggregationInstanceMeasure {
 
+    /**
+     * @return The ID of the Measure.
+     */
     String measureID();
 
+    /**
+     * @return The source of the measure data.
+     */
     ColumnBinding source();
 }
