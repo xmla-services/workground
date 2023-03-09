@@ -15,12 +15,25 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
+/**
+ * This complex type represents a dimension in the aggregation.
+ */
 public interface AggregationDimension {
 
+    /**
+     * @return The ID of the cube dimension. For example, a reference to a
+     * specific dimension on the owning measure group.
+     */
     String cubeDimensionID();
 
+    /**
+     * @return A collection of objects of type AggregationAttribute.
+     */
     List<AggregationAttribute> attributes();
 
+    /**
+     * @return A collection of Annotation objects.
+     */
     List<Annotation> annotations();
 
 }

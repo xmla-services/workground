@@ -15,9 +15,18 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
+/**
+ * This complex type represents a hierarchy in a PerspectiveDimension.
+ */
 public interface PerspectiveHierarchy {
 
+    /**
+     * @return The ID of the hierarchy.
+     */
     String hierarchyID();
 
+    /**
+     * @return A collection of Annotation objects.
+     */
     List<Annotation> annotations();
 }

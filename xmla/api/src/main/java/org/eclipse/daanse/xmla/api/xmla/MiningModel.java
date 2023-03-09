@@ -16,41 +16,113 @@ package org.eclipse.daanse.xmla.api.xmla;
 import java.time.Instant;
 import java.util.List;
 
+/**
+ * This complex type represents a mining model.
+ */
 public interface MiningModel {
 
+    /**
+     * @return The object name.
+     */
     String name();
 
+    /**
+     * @return The object ID string.
+     */
     String id();
 
+    /**
+     * @return A timestamp for the time that the object was created.
+     */
     Instant createdTimestamp();
 
+    /**
+     * @return A timestamp for the time that the schema was last
+     * updated.
+     */
     Instant lastSchemaUpdate();
 
+    /**
+     * @return The object description.
+     */
     String description();
 
+    /**
+     * @return A collection of Annotation objects.
+     */
     List<Annotation> annotations();
 
+    /**
+     * @return The protocol does not require any particular algorithms to be
+     * supported, and each server developer can support whichever
+     * algorithms he or she chooses to support.
+     */
     String algorithm();
 
+    /**
+     * @return The date and time when the mining model was last
+     * processed.
+     */
     Instant lastProcessed();
 
+    /**
+     * @return A collection of objects of type AlgorithmParameter. The
+     * allowed parameters are different depending on the algorithm.
+     */
     List<AlgorithmParameter> algorithmParameters();
 
+    /**
+     * @return When true, indicates that drillthrough is allowed; otherwise,
+     * false.
+     */
     Boolean allowDrillThrough();
 
+    /**
+     * @return A collection of Translation objects.
+     */
     List<AttributeTranslation> translations();
 
+    /**
+     * @return A collection of objects of type MiningModelColumn.
+     */
     List<MiningModelColumn> columns();
 
+    /**
+     * @return Represents the processing state of the partition. Values
+     * include:
+     *
+     * Processed
+     * Unprocessed
+     */
     String state();
 
+    /**
+     * @return An object of type FoldingParameters. Describes a fold (a
+     * partition of the training data) to be used for training this
+     * mining model. Used only as part of the multifold cross-
+     * validation procedure.
+     */
     FoldingParameters foldingParameters();
 
+    /**
+     * @return The DMX filter statement to be applied to training data for
+     * models that are trained only on a part of a structure's data.
+     * An empty string or missing element implies no filter.
+     */
     String filter();
 
+    /**
+     * @return A collection of MiningModelPermission objects.
+     */
     List<MiningModelPermission> miningModelPermissions();
 
+    /**
+     * @return The language to use by default.
+     */
     String language();
 
+    /**
+     * @return The collation sequence to use.
+     */
     String collation();
 }

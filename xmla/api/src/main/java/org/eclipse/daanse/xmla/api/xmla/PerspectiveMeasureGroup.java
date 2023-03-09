@@ -15,11 +15,23 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
+/**
+ * This complex type represents a measure group in a Perspective.
+ */
 public interface PerspectiveMeasureGroup {
 
+    /**
+     * @return The ID of the measure group.
+     */
     String measureGroupID();
 
+    /**
+     * @return A collection of objects of type PerspectiveMeasure.
+     */
     List<PerspectiveMeasure> measures();
 
+    /**
+     * @return A collection of Annotation objects.
+     */
     List<Annotation> annotations();
 }

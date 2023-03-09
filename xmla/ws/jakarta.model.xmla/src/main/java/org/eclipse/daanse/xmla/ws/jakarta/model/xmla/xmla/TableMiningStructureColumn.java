@@ -24,7 +24,7 @@ import java.util.List;
 @XmlType(name = "TableMiningStructureColumn", propOrder = {
 
 })
-public class TableMiningStructureColumn {
+public class TableMiningStructureColumn extends MiningStructureColumn{
 
     @XmlElement(name = "ForeignKeyColumns")
     protected TableMiningStructureColumn.ForeignKeyColumns foreignKeyColumns;

@@ -15,12 +15,28 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
+/**
+ * This complex type represents a calculation in a Perspective.
+ */
 public interface PerspectiveCalculation {
 
+    /**
+     * @return Indicates the name of the calculation. This is the UniqueName of the
+     * calculated member or set.
+     */
      String name();
 
+    /**
+     * @return Indicates the type of the calculation. The enumeration values are the
+     * following:
+     * Member: Calculated member
+     * Set: Named set
+     */
      String type();
 
+    /**
+     * @return A collection of Annotation objects.
+     */
     List<Annotation> annotations();
 
 }

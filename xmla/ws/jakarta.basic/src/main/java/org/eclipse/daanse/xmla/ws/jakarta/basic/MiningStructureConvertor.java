@@ -17,11 +17,11 @@ import org.eclipse.daanse.xmla.api.xmla.MiningModel;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructureColumn;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructurePermission;
-import org.eclipse.daanse.xmla.model.record.xmla.MiningStructureColumnR;
 import org.eclipse.daanse.xmla.model.record.xmla.MiningStructurePermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.MiningStructureR;
+import org.eclipse.daanse.xmla.model.record.xmla.ScalarMiningStructureColumnR;
+import org.eclipse.daanse.xmla.model.record.xmla.TableMiningStructureColumnR;
 
-import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +29,11 @@ import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.conve
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.BindingConvertor.convertBinding;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertErrorConfiguration;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertMeasureGroupBinding;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertTranslationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.DataItemConvertor.convertDataItem;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.DataItemConvertor.convertDataItemList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.MiningModelConvertor.convertMiningModelingFlagList;
 
 public class MiningStructureConvertor {
 
@@ -106,7 +110,32 @@ public class MiningStructureConvertor {
 
     private static MiningStructureColumn convertMiningStructureColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningStructureColumn miningStructureColumn) {
         if (miningStructureColumn != null) {
-            return new MiningStructureColumnR();
+            if (miningStructureColumn instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ScalarMiningStructureColumn) {
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ScalarMiningStructureColumn scalarMiningStructureColumn = (org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ScalarMiningStructureColumn)miningStructureColumn;
+                return new ScalarMiningStructureColumnR(scalarMiningStructureColumn.getName(),
+                    scalarMiningStructureColumn.getID(),
+                    scalarMiningStructureColumn.getDescription(),
+                    scalarMiningStructureColumn.getType(),
+                    convertAnnotationList(scalarMiningStructureColumn.getAnnotations() == null ? null : scalarMiningStructureColumn.getAnnotations().getAnnotation()),
+                    scalarMiningStructureColumn.isIsKey(),
+                    convertBinding(scalarMiningStructureColumn.getSource()),
+                    scalarMiningStructureColumn.getDistribution(),
+                    convertMiningModelingFlagList(scalarMiningStructureColumn.getModelingFlags() == null ? null : scalarMiningStructureColumn.getModelingFlags().getModelingFlag()),
+                    scalarMiningStructureColumn.getContent(),
+                    scalarMiningStructureColumn.getClassifiedColumns() == null ? null : scalarMiningStructureColumn.getClassifiedColumns().getClassifiedColumnID(),
+                    scalarMiningStructureColumn.getDiscretizationMethod(),
+                    scalarMiningStructureColumn.getDiscretizationBucketCount(),
+                    convertDataItemList(scalarMiningStructureColumn.getKeyColumns() == null ? null : scalarMiningStructureColumn.getKeyColumns().getKeyColumn()),
+                    convertDataItem(scalarMiningStructureColumn.getNameColumn()),
+                    convertTranslationList(scalarMiningStructureColumn.getTranslations() == null ? null : scalarMiningStructureColumn.getTranslations().getTranslation()));
+            }
+            if (miningStructureColumn instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TableMiningStructureColumn) {
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TableMiningStructureColumn tableMiningStructureColumn = (org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TableMiningStructureColumn)miningStructureColumn;
+                return new TableMiningStructureColumnR(convertDataItemList(tableMiningStructureColumn.getForeignKeyColumns() == null ? null : tableMiningStructureColumn.getForeignKeyColumns().getForeignKeyColumn()),
+                    convertMeasureGroupBinding(tableMiningStructureColumn.getSourceMeasureGroup()),
+                    convertMiningStructureColumnList(tableMiningStructureColumn.getColumns() == null ? null : tableMiningStructureColumn.getColumns().getColumn()),
+                    convertTranslationList(tableMiningStructureColumn.getTranslations() == null ? null : tableMiningStructureColumn.getTranslations().getTranslation()));
+            }
         }
         return null;
     }

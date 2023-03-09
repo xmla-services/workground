@@ -15,16 +15,34 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
 
+/**
+ * This complex type represents an aggregation in the AggregationDesign.
+ */
 public interface Aggregation {
 
+    /**
+     * @return The object ID string.
+     */
     String id();
 
+    /**
+     * @return The object name.
+     */
     String name();
 
+    /**
+     * @return A collection of objects of type AggregationDimension.
+     */
     List<AggregationDimension> dimensions();
 
+    /**
+     * @return A collection of Annotation objects.
+     */
     List<Annotation> annotations();
 
+    /**
+     * @return The object description.
+     */
     String description();
 
 }

@@ -214,7 +214,7 @@ public class CubeConvertor {
         return null;
     }
 
-    private static MeasureGroupBinding convertMeasureGroupBinding(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupBinding source) {
+    public static MeasureGroupBinding convertMeasureGroupBinding(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupBinding source) {
         if (source != null) {
             return new MeasureGroupBindingR(source.getDataSourceID(),
                 source.getCubeID(),
