@@ -14,14 +14,34 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * This complex type represents a CubeDimension in a Perspective.
+ */
 public interface PerspectiveDimension {
 
+    /**
+     * @return The ID of a CubeDimension.
+     */
     String cubeDimensionID();
 
-    List<PerspectiveAttribute> attributes();
+    /**
+     * @return A collection of objects of type
+     * PerspectiveAttribute that is included in this
+     * PerspectiveDimension.
+     */
+    Optional<List<PerspectiveAttribute>> attributes();
 
-    List<PerspectiveHierarchy> hierarchies();
+    /**
+     * @return A collection of objects of type
+     * PerspectiveHierarchy that is included in this
+     * PerspectiveDimension.
+     */
+    Optional<List<PerspectiveHierarchy>> hierarchies();
 
-    List<Annotation> annotations();
+    /**
+     * @return A collection of Annotation objects.
+     */
+    Optional<List<Annotation>> annotations();
 }

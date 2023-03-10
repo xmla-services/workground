@@ -13,8 +13,6 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
-import java.math.BigInteger;
-
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -27,27 +25,27 @@ import jakarta.xml.bind.annotation.XmlType;
 public class FoldingParameters {
 
   @XmlElement(name = "FoldIndex", required = true)
-  protected BigInteger foldIndex;
+  protected Integer foldIndex;
   @XmlElement(name = "FoldCount", required = true)
-  protected BigInteger foldCount;
+  protected Integer foldCount;
   @XmlElement(name = "FoldMaxCases")
   protected Long foldMaxCases;
   @XmlElement(name = "FoldTargetAttribute")
   protected String foldTargetAttribute;
 
-  public BigInteger getFoldIndex() {
+  public Integer getFoldIndex() {
     return foldIndex;
   }
 
-  public void setFoldIndex(BigInteger value) {
+  public void setFoldIndex(Integer value) {
     this.foldIndex = value;
   }
 
-  public BigInteger getFoldCount() {
+  public Integer getFoldCount() {
     return foldCount;
   }
 
-  public void setFoldCount(BigInteger value) {
+  public void setFoldCount(Integer value) {
     this.foldCount = value;
   }
 

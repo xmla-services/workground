@@ -258,9 +258,9 @@ public class ExecuteRequestTest {
                                         assertThat(at.keyColumns()).isNotNull().satisfies(kcs -> {
                                             assertThat(kcs.get(0)).isNotNull().satisfies(kc -> {
                                                 assertThat(kc.dataType()).isNotNull().isEqualTo("Integer");
-                                                assertThat(kc.source()).isNotNull().satisfies(s -> {
-                                                    assertThat(((ColumnBinding)s).tableID()).isNotNull().isEqualTo("dbo_DimCustomer");
-                                                    assertThat(((ColumnBinding)s).columnID()).isNotNull().isEqualTo("CustomerKey");
+                                                assertThat(kc.source()).isNotNull().isPresent().satisfies(o -> {
+                                                    assertThat(((ColumnBinding)o.get()).tableID()).isNotNull().isEqualTo("dbo_DimCustomer");
+                                                    assertThat(((ColumnBinding)o.get()).columnID()).isNotNull().isEqualTo("CustomerKey");
                                                 });
                                             });
                                         });

@@ -14,10 +14,20 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * This complex type represents a binding to a grouping of members from another DimensionAttribute.
+ */
 public interface UserDefinedGroupBinding extends Binding {
 
+    /**
+     * @return The ID of the Attribute that is being grouped.
+     */
     String attributeID();
 
-    List<Group> groups();
+    /**
+     * @return A collection of objects of type Group.
+     */
+    Optional<List<Group>> groups();
 }

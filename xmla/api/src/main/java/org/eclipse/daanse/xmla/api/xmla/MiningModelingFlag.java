@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.Optional;
+
 /**
  * This complex type represents a flag for a MiningModel algorithm. The flags that can be accepted
  * depend upon the algorithm used in the MiningModel.
@@ -25,6 +27,6 @@ public interface MiningModelingFlag {
      * for the algorithm chosen.<84> Server vendors can define flags that
      * support their algorithms.
      */
-    String modelingFlag();
+    Optional<String> modelingFlag();
 
 }

@@ -13,10 +13,20 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+/**
+ * This complex type represents an algorithm parameter for a MiningModel. The parameters that are
+ * allowed vary by which algorithm is chosen.
+ */
 public interface AlgorithmParameter {
 
+    /**
+     * @return The parameter name. Algorithm-specific.
+     */
     String name();
 
+    /**
+     * @return The parameter value. Algorithm-specific.
+     */
     java.lang.Object value();
 
 

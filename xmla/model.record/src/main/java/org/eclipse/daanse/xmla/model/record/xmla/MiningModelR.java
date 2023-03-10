@@ -23,24 +23,25 @@ import org.eclipse.daanse.xmla.api.xmla.MiningModelPermission;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 public record MiningModelR(String name,
-                           String id,
-                           Instant createdTimestamp,
-                           Instant lastSchemaUpdate,
-                           String description,
-                           List<Annotation> annotations,
+                           Optional<String> id,
+                           Optional<Instant> createdTimestamp,
+                           Optional<Instant> lastSchemaUpdate,
+                           Optional<String> description,
+                           Optional<List<Annotation>> annotations,
                            String algorithm,
-                           Instant lastProcessed,
-                           List<AlgorithmParameter> algorithmParameters,
-                           Boolean allowDrillThrough,
-                           List<AttributeTranslation> translations,
-                           List<MiningModelColumn> columns,
-                           String state,
-                           FoldingParameters foldingParameters,
-                           String filter,
-                           List<MiningModelPermission> miningModelPermissions,
-                           String language,
-                           String collation) implements MiningModel {
+                           Optional<Instant> lastProcessed,
+                           Optional<List<AlgorithmParameter>> algorithmParameters,
+                           Optional<Boolean> allowDrillThrough,
+                           Optional<List<AttributeTranslation>> translations,
+                           Optional<List<MiningModelColumn>> columns,
+                           Optional<String> state,
+                           Optional<FoldingParameters> foldingParameters,
+                           Optional<String> filter,
+                           Optional<List<MiningModelPermission>> miningModelPermissions,
+                           Optional<String> language,
+                           Optional<String> collation) implements MiningModel {
 
 }

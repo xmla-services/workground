@@ -18,10 +18,11 @@ import org.eclipse.daanse.xmla.api.xmla.AggregationDesignDimension;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 
 import java.util.List;
+import java.util.Optional;
 
 public record AggregationDesignDimensionR(
     String cubeDimensionID,
-    List<AggregationDesignAttribute> attributes,
-    List<Annotation> annotations) implements AggregationDesignDimension {
+    Optional<List<AggregationDesignAttribute>> attributes,
+    Optional<List<Annotation>> annotations) implements AggregationDesignDimension {
 
 }

@@ -18,7 +18,6 @@ import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -30,7 +29,7 @@ public class DataItem {
     @XmlElement(name = "DataType", required = true)
     protected String dataType;
     @XmlElement(name = "DataSize")
-    protected BigInteger dataSize;
+    protected Integer dataSize;
     @XmlElement(name = "MimeType")
     protected String mimeType;
     @XmlElement(name = "NullProcessing")
@@ -56,11 +55,11 @@ public class DataItem {
         this.dataType = value;
     }
 
-    public BigInteger getDataSize() {
+    public Integer getDataSize() {
         return dataSize;
     }
 
-    public void setDataSize(BigInteger value) {
+    public void setDataSize(Integer value) {
         this.dataSize = value;
     }
 

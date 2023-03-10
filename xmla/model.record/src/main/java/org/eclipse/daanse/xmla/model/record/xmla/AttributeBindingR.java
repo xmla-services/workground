@@ -14,12 +14,13 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.AttributeBinding;
+import org.eclipse.daanse.xmla.api.xmla.AttributeBindingTypeEnum;
 
-import java.math.BigInteger;
+import java.util.Optional;
 
 public record AttributeBindingR(
     String attributeID,
-    String type,
-    BigInteger ordinal) implements AttributeBinding {
+    AttributeBindingTypeEnum type,
+    Optional<Integer> ordinal) implements AttributeBinding {
 
 }

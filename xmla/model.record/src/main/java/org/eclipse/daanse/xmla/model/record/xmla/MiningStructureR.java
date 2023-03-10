@@ -25,27 +25,28 @@ import org.eclipse.daanse.xmla.api.xmla.Translation;
 import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 public record MiningStructureR(String name,
-                               String id,
-                               Instant createdTimestamp,
-                               Instant lastSchemaUpdate,
-                               String description,
-                               List<Annotation> annotations,
-                               Binding source,
-                               Instant lastProcessed,
-                               List<Translation> translations,
-                               BigInteger language,
-                               String collation,
-                               ErrorConfiguration errorConfiguration,
-                               String cacheMode,
-                               Integer holdoutMaxPercent,
-                               Integer holdoutMaxCases,
-                               Integer holdoutSeed,
-                               Integer holdoutActualSize,
+                               Optional<String> id,
+                               Optional<Instant> createdTimestamp,
+                               Optional<Instant> lastSchemaUpdate,
+                               Optional<String> description,
+                               Optional<List<Annotation>> annotations,
+                               Optional<Binding> source,
+                               Optional<Instant> lastProcessed,
+                               Optional<List<Translation>> translations,
+                               Optional<BigInteger> language,
+                               Optional<String> collation,
+                               Optional<ErrorConfiguration> errorConfiguration,
+                               Optional<String> cacheMode,
+                               Optional<Integer> holdoutMaxPercent,
+                               Optional<Integer> holdoutMaxCases,
+                               Optional<Integer> holdoutSeed,
+                               Optional<Integer> holdoutActualSize,
                                List<MiningStructureColumn> columns,
-                               String state,
-                               List<MiningStructurePermission> miningStructurePermissions,
-                               List<MiningModel> miningModels) implements MiningStructure {
+                               Optional<String> state,
+                               Optional<List<MiningStructurePermission>> miningStructurePermissions,
+                               Optional<List<MiningModel>> miningModels) implements MiningStructure {
 
 }

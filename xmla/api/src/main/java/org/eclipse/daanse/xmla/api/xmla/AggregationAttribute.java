@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This complex type represents the attribute in the AggregationDimension for which the fact data is
@@ -29,6 +30,6 @@ public interface AggregationAttribute {
     /**
      * @return A collection of Annotation objects.
      */
-    List<Annotation> annotations();
+    Optional<List<Annotation>> annotations();
 
 }

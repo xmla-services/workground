@@ -23,22 +23,23 @@ import org.eclipse.daanse.xmla.api.xmla.Translation;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 public record ScalarMiningStructureColumnR(
     String name,
-    String id,
-    String description,
-    String type,
-    List<Annotation> annotations,
-    Boolean isKey,
-    Binding source,
-    String distribution,
-    List<MiningModelingFlag> modelingFlags,
+    Optional<String> id,
+    Optional<String> description,
+    Optional<String> type,
+    Optional<List<Annotation>> annotations,
+    Optional<Boolean> isKey,
+    Optional<Binding> source,
+    Optional<String> distribution,
+    Optional<List<MiningModelingFlag>> modelingFlags,
     String content,
-    List<String> classifiedColumns,
-    String discretizationMethod,
-    BigInteger discretizationBucketCount,
-    List<DataItem> keyColumns,
-    DataItem nameColumn,
-    List<Translation> translations) implements ScalarMiningStructureColumn {
+    Optional<List<String>> classifiedColumns,
+    Optional<String> discretizationMethod,
+    Optional<BigInteger> discretizationBucketCount,
+    Optional<List<DataItem>> keyColumns,
+    Optional<DataItem> nameColumn,
+    Optional<List<Translation>> translations) implements ScalarMiningStructureColumn {
 }

@@ -15,8 +15,10 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesignAttribute;
 
+import java.util.Optional;
+
 public record AggregationDesignAttributeR(
     String attributeID,
-    Long estimatedCount) implements AggregationDesignAttribute {
+    Optional<Long> estimatedCount) implements AggregationDesignAttribute {
 
 }

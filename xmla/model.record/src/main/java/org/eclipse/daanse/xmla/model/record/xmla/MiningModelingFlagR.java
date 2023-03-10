@@ -15,6 +15,8 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.MiningModelingFlag;
 
-public record MiningModelingFlagR(String modelingFlag) implements MiningModelingFlag {
+import java.util.Optional;
+
+public record MiningModelingFlagR(Optional<String> modelingFlag) implements MiningModelingFlag {
 
 }

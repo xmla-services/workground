@@ -17,9 +17,10 @@ import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveCalculation;
 
 import java.util.List;
+import java.util.Optional;
 
 public record PerspectiveCalculationR(String name,
                                       String type,
-                                      List<Annotation> annotations) implements PerspectiveCalculation {
+                                      Optional<List<Annotation>> annotations) implements PerspectiveCalculation {
 
 }

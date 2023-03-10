@@ -14,13 +14,26 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * This complex type represents a CubeDimension within an AggregationDesign.
+ */
 public interface AggregationDesignDimension {
 
+    /**
+     * @return The ID of the CubeDimension.
+     */
     String cubeDimensionID();
 
-    List<AggregationDesignAttribute> attributes();
+    /**
+     * @return A collection of AggregationDesignAttribute objects.
+     */
+    Optional<List<AggregationDesignAttribute>> attributes();
 
-    List<Annotation> annotations();
+    /**
+     * @return A collection of Annotation objects.
+     */
+    Optional<List<Annotation>> annotations();
 
 }

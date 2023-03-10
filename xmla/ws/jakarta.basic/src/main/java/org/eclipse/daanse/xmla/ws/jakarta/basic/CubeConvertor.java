@@ -111,6 +111,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.QueryNotificationR;
 import org.eclipse.daanse.xmla.model.record.xmla.TranslationR;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
@@ -352,7 +353,7 @@ public class CubeConvertor {
     private static AggregationInstanceDimension convertAggregationInstanceDimension(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationInstanceDimension aggregationInstanceDimension) {
         if (aggregationInstanceDimension != null) {
             return new AggregationInstanceDimensionR(aggregationInstanceDimension.getCubeDimensionID(),
-                convertAggregationInstanceDimensionAttributes(aggregationInstanceDimension.getAttributes()));
+                Optional.ofNullable(convertAggregationInstanceDimensionAttributes(aggregationInstanceDimension.getAttributes())));
         }
         return null;
     }
@@ -374,7 +375,7 @@ public class CubeConvertor {
     private static AggregationInstanceAttribute convertAggregationInstanceAttribute(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationInstanceAttribute aggregationInstanceAttribute) {
         if (aggregationInstanceAttribute != null) {
             return new AggregationInstanceAttributeR(aggregationInstanceAttribute.getAttributeID(),
-                convertAggregationInstanceAttributeKeyColumns(aggregationInstanceAttribute.getKeyColumns()));
+                Optional.ofNullable(convertAggregationInstanceAttributeKeyColumns(aggregationInstanceAttribute.getKeyColumns())));
         }
         return null;
     }
@@ -486,15 +487,15 @@ public class CubeConvertor {
     private static AggregationDesign convertAggregationDesign(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesign aggregationDesign) {
         if (aggregationDesign != null) {
             return new AggregationDesignR(aggregationDesign.getName(),
-                aggregationDesign.getID(),
-                convertToInstant(aggregationDesign.getCreatedTimestamp()),
-                convertToInstant(aggregationDesign.getLastSchemaUpdate()),
-                aggregationDesign.getDescription(),
-                convertAnnotationList(aggregationDesign.getAnnotations() == null ? null : aggregationDesign.getAnnotations().getAnnotation()),
-                aggregationDesign.getEstimatedRows(),
-                convertAggregationDesignDimensions(aggregationDesign.getDimensions()),
-                convertAggregationDesignAggregations(aggregationDesign.getAggregations()),
-                aggregationDesign.getEstimatedPerformanceGain());
+                Optional.ofNullable(aggregationDesign.getID()),
+                Optional.ofNullable(convertToInstant(aggregationDesign.getCreatedTimestamp())),
+                Optional.ofNullable(convertToInstant(aggregationDesign.getLastSchemaUpdate())),
+                Optional.ofNullable(aggregationDesign.getDescription()),
+                Optional.ofNullable(convertAnnotationList(aggregationDesign.getAnnotations() == null ? null : aggregationDesign.getAnnotations().getAnnotation())),
+                Optional.ofNullable(aggregationDesign.getEstimatedRows()),
+                Optional.ofNullable(convertAggregationDesignDimensions(aggregationDesign.getDimensions())),
+                Optional.ofNullable(convertAggregationDesignAggregations(aggregationDesign.getAggregations())),
+                Optional.ofNullable(aggregationDesign.getEstimatedPerformanceGain()));
         }
         return null;
     }
@@ -515,11 +516,11 @@ public class CubeConvertor {
 
     private static Aggregation convertAggregation(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Aggregation aggregation) {
         if (aggregation != null) {
-            return new AggregationR(aggregation.getID(),
+            return new AggregationR(Optional.ofNullable(aggregation.getID()),
                 aggregation.getName(),
-                convertAggregationDimensions(aggregation.getDimensions()),
-                convertAnnotationList(aggregation.getAnnotations() == null ? null : aggregation.getAnnotations().getAnnotation()),
-                aggregation.getDescription());
+                Optional.ofNullable(convertAggregationDimensions(aggregation.getDimensions())),
+                Optional.ofNullable(convertAnnotationList(aggregation.getAnnotations() == null ? null : aggregation.getAnnotations().getAnnotation())),
+                Optional.ofNullable(aggregation.getDescription()));
         }
         return null;
     }
@@ -541,8 +542,8 @@ public class CubeConvertor {
     private static AggregationDimension convertAggregationDimension(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDimension aggregationDimension) {
         if (aggregationDimension != null) {
             return new AggregationDimensionR(aggregationDimension.getCubeDimensionID(),
-                convertAggregationDimensionAttributes(aggregationDimension.getAttributes()),
-                convertAnnotationList(aggregationDimension.getAnnotations() == null ? null : aggregationDimension.getAnnotations().getAnnotation()));
+                Optional.ofNullable(convertAggregationDimensionAttributes(aggregationDimension.getAttributes())),
+                Optional.ofNullable(convertAnnotationList(aggregationDimension.getAnnotations() == null ? null : aggregationDimension.getAnnotations().getAnnotation())));
         }
         return null;
     }
@@ -564,7 +565,7 @@ public class CubeConvertor {
     private static AggregationAttribute convertAggregationAttribute(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationAttribute aggregationAttribute) {
         if (aggregationAttribute != null) {
             return new AggregationAttributeR(aggregationAttribute.getAttributeID(),
-                convertAnnotationList(aggregationAttribute.getAnnotations() == null ? null : aggregationAttribute.getAnnotations().getAnnotation()));
+                Optional.ofNullable(convertAnnotationList(aggregationAttribute.getAnnotations() == null ? null : aggregationAttribute.getAnnotations().getAnnotation())));
         }
         return null;
     }
@@ -586,8 +587,8 @@ public class CubeConvertor {
     private static AggregationDesignDimension convertAggregationDesignDimension(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesignDimension aggregationDesignDimension) {
         if (aggregationDesignDimension != null) {
             return new AggregationDesignDimensionR(aggregationDesignDimension.getCubeDimensionID(),
-                convertAggregationDesignDimensionAttributes(aggregationDesignDimension.getAttributes()),
-                convertAnnotationList(aggregationDesignDimension.getAnnotations() == null ? null : aggregationDesignDimension.getAnnotations().getAnnotation()));
+                Optional.ofNullable(convertAggregationDesignDimensionAttributes(aggregationDesignDimension.getAttributes())),
+                Optional.ofNullable(convertAnnotationList(aggregationDesignDimension.getAnnotations() == null ? null : aggregationDesignDimension.getAnnotations().getAnnotation())));
         }
         return null;
     }
@@ -609,7 +610,7 @@ public class CubeConvertor {
     private static AggregationDesignAttribute convertAggregationDesignAttribute(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesignAttribute aggregationDesignAttribute) {
         if (aggregationDesignAttribute != null) {
             return new AggregationDesignAttributeR(aggregationDesignAttribute.getAttributeID(),
-                aggregationDesignAttribute.getEstimatedCount());
+                Optional.ofNullable(aggregationDesignAttribute.getEstimatedCount()));
         }
         return null;
     }
@@ -848,7 +849,7 @@ public class CubeConvertor {
     private static PerspectiveKpi convertPerspectiveKpi(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PerspectiveKpi perspectiveKpi) {
         if (perspectiveKpi != null) {
             return new PerspectiveKpiR(perspectiveKpi.getKpiID(),
-                convertAnnotationList(perspectiveKpi.getAnnotations() == null ? null : perspectiveKpi.getAnnotations().getAnnotation()));
+                Optional.ofNullable(convertAnnotationList(perspectiveKpi.getAnnotations() == null ? null : perspectiveKpi.getAnnotations().getAnnotation())));
         }
         return null;
     }
@@ -871,7 +872,7 @@ public class CubeConvertor {
         if (perspectiveCalculation != null) {
             return new PerspectiveCalculationR(perspectiveCalculation.getName(),
                 perspectiveCalculation.getType(),
-                convertAnnotationList(perspectiveCalculation.getAnnotations() == null ? null : perspectiveCalculation.getAnnotations().getAnnotation()));
+                Optional.ofNullable(convertAnnotationList(perspectiveCalculation.getAnnotations() == null ? null : perspectiveCalculation.getAnnotations().getAnnotation())));
         }
         return null;
     }
@@ -893,7 +894,7 @@ public class CubeConvertor {
     private static PerspectiveAction convertPerspectiveAction(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PerspectiveAction perspectiveAction) {
         if (perspectiveAction != null) {
             return new PerspectiveActionR(perspectiveAction.getActionID(),
-                convertAnnotationList(perspectiveAction.getAnnotations() == null ? null : perspectiveAction.getAnnotations().getAnnotation()));
+                Optional.ofNullable(convertAnnotationList(perspectiveAction.getAnnotations() == null ? null : perspectiveAction.getAnnotations().getAnnotation())));
         }
         return null;
     }
@@ -915,8 +916,8 @@ public class CubeConvertor {
     private static PerspectiveMeasureGroup convertPerspectiveMeasureGroup(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PerspectiveMeasureGroup perspectiveMeasureGroup) {
         if (perspectiveMeasureGroup != null) {
             return new PerspectiveMeasureGroupR(perspectiveMeasureGroup.getMeasureGroupID(),
-                convertPerspectiveMeasureGroupMeasures(perspectiveMeasureGroup.getMeasures()),
-                convertAnnotationList(perspectiveMeasureGroup.getAnnotations() == null ? null : perspectiveMeasureGroup.getAnnotations().getAnnotation()));
+                Optional.ofNullable(convertPerspectiveMeasureGroupMeasures(perspectiveMeasureGroup.getMeasures())),
+                Optional.ofNullable(convertAnnotationList(perspectiveMeasureGroup.getAnnotations() == null ? null : perspectiveMeasureGroup.getAnnotations().getAnnotation())));
         }
         return null;
     }
@@ -961,9 +962,9 @@ public class CubeConvertor {
     private static PerspectiveDimension convertPerspectiveDimension(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PerspectiveDimension perspectiveDimension) {
         if (perspectiveDimension != null) {
             return new PerspectiveDimensionR(perspectiveDimension.getCubeDimensionID(),
-                convertPerspectiveDimensionAttributes(perspectiveDimension.getAttributes()),
-                convertPerspectiveDimensionHierarchies(perspectiveDimension.getHierarchies()),
-                convertAnnotationList(perspectiveDimension.getAnnotations() == null ? null : perspectiveDimension.getAnnotations().getAnnotation()));
+                Optional.ofNullable(convertPerspectiveDimensionAttributes(perspectiveDimension.getAttributes())),
+                Optional.ofNullable(convertPerspectiveDimensionHierarchies(perspectiveDimension.getHierarchies())),
+                Optional.ofNullable(convertAnnotationList(perspectiveDimension.getAnnotations() == null ? null : perspectiveDimension.getAnnotations().getAnnotation())));
         }
         return null;
     }
@@ -986,7 +987,7 @@ public class CubeConvertor {
     private static PerspectiveHierarchy convertPerspectiveHierarchy(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PerspectiveHierarchy perspectiveHierarchy) {
         if (perspectiveHierarchy != null) {
             return new PerspectiveHierarchyR(perspectiveHierarchy.getHierarchyID(),
-                convertAnnotationList(perspectiveHierarchy.getAnnotations() == null ? null : perspectiveHierarchy.getAnnotations().getAnnotation()));
+                Optional.ofNullable(convertAnnotationList(perspectiveHierarchy.getAnnotations() == null ? null : perspectiveHierarchy.getAnnotations().getAnnotation())));
         }
         return null;
     }
@@ -1008,9 +1009,9 @@ public class CubeConvertor {
     private static PerspectiveAttribute convertPerspectiveAttribute(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.PerspectiveAttribute perspectiveAttribute) {
         if (perspectiveAttribute != null) {
             return new PerspectiveAttributeR(perspectiveAttribute.getAttributeID(),
-                perspectiveAttribute.isAttributeHierarchyVisible(),
-                perspectiveAttribute.getDefaultMember(),
-                convertAnnotationList(perspectiveAttribute.getAnnotations() == null ? null : perspectiveAttribute.getAnnotations().getAnnotation()));
+                Optional.ofNullable(perspectiveAttribute.isAttributeHierarchyVisible()),
+                Optional.ofNullable(perspectiveAttribute.getDefaultMember()),
+                Optional.ofNullable(convertAnnotationList(perspectiveAttribute.getAnnotations() == null ? null : perspectiveAttribute.getAnnotations().getAnnotation())));
         }
         return null;
     }

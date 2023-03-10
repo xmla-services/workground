@@ -17,10 +17,11 @@ import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveAttribute;
 
 import java.util.List;
+import java.util.Optional;
 
 public record PerspectiveAttributeR(String attributeID,
-                                    Boolean attributeHierarchyVisible,
-                                    String defaultMember,
-                                    List<Annotation> annotations) implements PerspectiveAttribute {
+                                    Optional<Boolean> attributeHierarchyVisible,
+                                    Optional<String> defaultMember,
+                                    Optional<List<Annotation>> annotations) implements PerspectiveAttribute {
 
 }

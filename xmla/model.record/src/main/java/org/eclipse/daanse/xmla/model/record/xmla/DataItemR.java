@@ -16,19 +16,22 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
+import org.eclipse.daanse.xmla.api.xmla.DataItemFormatEnum;
+import org.eclipse.daanse.xmla.api.xmla.InvalidXmlCharacterEnum;
+import org.eclipse.daanse.xmla.api.xmla.NullProcessingEnum;
 
-import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 public record DataItemR(String dataType,
-                        BigInteger dataSize,
-                        String mimeType,
-                        String nullProcessing,
-                        String trimming,
-                        String invalidXmlCharacters,
-                        String collation,
-                        String format,
-                        Binding source,
-                        List<Annotation> annotations) implements DataItem {
+                        Optional<Integer> dataSize,
+                        Optional<String> mimeType,
+                        Optional<NullProcessingEnum> nullProcessing,
+                        Optional<String> trimming,
+                        Optional<InvalidXmlCharacterEnum> invalidXmlCharacters,
+                        Optional<String> collation,
+                        Optional<DataItemFormatEnum> format,
+                        Optional<Binding> source,
+                        Optional<List<Annotation>> annotations) implements DataItem {
 
 }

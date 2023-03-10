@@ -13,7 +13,13 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+/**
+ * This complex type represents a binding to the rows of a table.
+ */
 public interface RowBinding extends Binding {
 
+    /**
+     * @return The ID of the table in the DataSourceView.
+     */
     String tableID();
 }

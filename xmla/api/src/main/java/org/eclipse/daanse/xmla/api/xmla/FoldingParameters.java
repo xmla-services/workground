@@ -13,15 +13,37 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-import java.math.BigInteger;
+import java.util.Optional;
 
+/**
+ * This complex type represents the folding parameters for a MiningModel.
+ */
 public interface FoldingParameters {
 
-    BigInteger foldIndex();
+    /**
+     * @return An integer that indicates the index of the partition to be used for
+     * validating this mining model in a multifold cross-validation
+     * procedure.
+     */
+    Integer foldIndex();
 
-    BigInteger foldCount();
+    /**
+     * @return An integer that indicates the number of partitions in the multifold
+     * cross-validation procedure.
+     */
+    Integer foldCount();
 
-    Long foldMaxCases();
+    /**
+     * @return An integer value that indicates the maximum number of training
+     * cases to be used for cross-validation in this model. This value
+     * MUST be a positive integer.
+     * A value of 0 indicates that all cases are used.
+     */
+    Optional<Long> foldMaxCases();
 
-    String foldTargetAttribute();
+    /**
+     * @return A string that indicates the ID of the model column that contains
+     * the predictable attribute.
+     */
+    Optional<String> foldTargetAttribute();
 }

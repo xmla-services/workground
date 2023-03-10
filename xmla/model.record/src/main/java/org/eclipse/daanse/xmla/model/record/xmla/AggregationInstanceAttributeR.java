@@ -17,8 +17,9 @@ import org.eclipse.daanse.xmla.api.xmla.AggregationInstanceAttribute;
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
 
 import java.util.List;
+import java.util.Optional;
 
 public record AggregationInstanceAttributeR(String attributeID,
-                                            List<DataItem> keyColumns) implements AggregationInstanceAttribute{
+                                            Optional<List<DataItem>> keyColumns) implements AggregationInstanceAttribute{
 
 }

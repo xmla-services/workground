@@ -19,17 +19,18 @@ import org.eclipse.daanse.xmla.api.xmla.MiningModelingFlag;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
 
 import java.util.List;
+import java.util.Optional;
 
 public record MiningModelColumnR(String name,
-                                 String id,
-                                 String description,
-                                 String sourceColumnID,
-                                 String usage,
-                                 String filter,
-                                 List<Translation> translations,
-                                 List<MiningModelColumn> columns,
-                                 List<MiningModelingFlag> modelingFlags,
-                                 List<Annotation> annotations) implements MiningModelColumn {
+                                 Optional<String> id,
+                                 Optional<String> description,
+                                 Optional<String> sourceColumnID,
+                                 Optional<String> usage,
+                                 Optional<String> filter,
+                                 Optional<List<Translation>> translations,
+                                 Optional<List<MiningModelColumn>> columns,
+                                 Optional<List<MiningModelingFlag>> modelingFlags,
+                                 Optional<List<Annotation>> annotations) implements MiningModelColumn {
 
 
 }
