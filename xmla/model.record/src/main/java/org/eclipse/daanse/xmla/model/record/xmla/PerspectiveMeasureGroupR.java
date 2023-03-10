@@ -18,9 +18,10 @@ import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasure;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasureGroup;
 
 import java.util.List;
+import java.util.Optional;
 
 public record PerspectiveMeasureGroupR(String measureGroupID,
-                                       List<PerspectiveMeasure> measures,
-                                       List<Annotation> annotations) implements PerspectiveMeasureGroup {
+                                       Optional<List<PerspectiveMeasure>> measures,
+                                       Optional<List<Annotation>> annotations) implements PerspectiveMeasureGroup {
 
 }

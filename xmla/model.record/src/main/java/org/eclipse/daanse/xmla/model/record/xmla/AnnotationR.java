@@ -15,8 +15,10 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 
+import java.util.Optional;
+
 public record AnnotationR(String name,
-                          String visibility,
-                          java.lang.Object value) implements Annotation {
+                          Optional<String> visibility,
+                          Optional<java.lang.Object> value) implements Annotation {
 
 }

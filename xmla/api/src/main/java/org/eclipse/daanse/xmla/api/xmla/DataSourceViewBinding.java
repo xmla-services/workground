@@ -13,7 +13,13 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+/**
+ * This complex type represents a binding to a DataSourceView.
+ */
 public interface DataSourceViewBinding extends Binding {
 
+    /**
+     * @return The ID of the DataSourceView.
+     */
     String dataSourceViewID();
 }

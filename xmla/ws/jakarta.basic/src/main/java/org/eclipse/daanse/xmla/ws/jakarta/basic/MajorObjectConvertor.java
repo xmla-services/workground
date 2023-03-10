@@ -48,6 +48,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.AssemblyR;
 import org.eclipse.daanse.xmla.model.record.xmla.MajorObjectR;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
@@ -137,16 +138,16 @@ public class MajorObjectConvertor {
     private static AggregationDesign convertAggregationDesign(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesign aggregationDesign) {
         if (aggregationDesign != null) {
             AggregationDesign res = new AggregationDesignR(aggregationDesign.getName(),
-                aggregationDesign.getID(),
-                convertToInstant(aggregationDesign.getCreatedTimestamp()),
-                convertToInstant(aggregationDesign.getLastSchemaUpdate()),
-                aggregationDesign.getDescription(),
-                convertAnnotationList(aggregationDesign.getAnnotations() == null ? null :
-                    aggregationDesign.getAnnotations().getAnnotation()),
-                aggregationDesign.getEstimatedRows(),
-                convertAggregationDesignDimensions(aggregationDesign.getDimensions()),
-                convertAggregationDesignAggregations(aggregationDesign.getAggregations()),
-                aggregationDesign.getEstimatedPerformanceGain());
+                Optional.ofNullable(aggregationDesign.getID()),
+                Optional.ofNullable(convertToInstant(aggregationDesign.getCreatedTimestamp())),
+                Optional.ofNullable(convertToInstant(aggregationDesign.getLastSchemaUpdate())),
+                Optional.ofNullable(aggregationDesign.getDescription()),
+                Optional.ofNullable(convertAnnotationList(aggregationDesign.getAnnotations() == null ? null :
+                    aggregationDesign.getAnnotations().getAnnotation())),
+                Optional.ofNullable(aggregationDesign.getEstimatedRows()),
+                Optional.ofNullable(convertAggregationDesignDimensions(aggregationDesign.getDimensions())),
+                Optional.ofNullable(convertAggregationDesignAggregations(aggregationDesign.getAggregations())),
+                Optional.ofNullable(aggregationDesign.getEstimatedPerformanceGain()));
             return res;
         }
         return null;
@@ -170,9 +171,9 @@ public class MajorObjectConvertor {
         if (aggregationDesignDimension != null) {
             return new AggregationDesignDimensionR(
                 aggregationDesignDimension.getCubeDimensionID(),
-                convertAggregationDesignDimensionAttributes(aggregationDesignDimension.getAttributes()),
-                convertAnnotationList(aggregationDesignDimension.getAnnotations() == null ? null :
-                    aggregationDesignDimension.getAnnotations().getAnnotation()));
+                Optional.ofNullable(convertAggregationDesignDimensionAttributes(aggregationDesignDimension.getAttributes())),
+                Optional.ofNullable(convertAnnotationList(aggregationDesignDimension.getAnnotations() == null ? null :
+                    aggregationDesignDimension.getAnnotations().getAnnotation())));
         }
         return null;
     }
@@ -194,7 +195,7 @@ public class MajorObjectConvertor {
     private static AggregationDesignAttribute convertAggregationDesignAttribute(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesignAttribute aggregationDesignAttribute) {
         if (aggregationDesignAttribute != null) {
             return new AggregationDesignAttributeR(aggregationDesignAttribute.getAttributeID(),
-                aggregationDesignAttribute.getEstimatedCount());
+                Optional.ofNullable(aggregationDesignAttribute.getEstimatedCount()));
         }
         return null;
 
@@ -216,12 +217,12 @@ public class MajorObjectConvertor {
 
     private static Aggregation convertAggregation(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Aggregation aggregation) {
         if (aggregation != null) {
-            return new AggregationR(aggregation.getID(),
+            return new AggregationR(Optional.ofNullable(aggregation.getID()),
                 aggregation.getName(),
-                convertAggregationDimensions(aggregation.getDimensions()),
-                convertAnnotationList(aggregation.getAnnotations() == null ? null :
-                    aggregation.getAnnotations().getAnnotation()),
-                aggregation.getDescription());
+                Optional.ofNullable(convertAggregationDimensions(aggregation.getDimensions())),
+                Optional.ofNullable(convertAnnotationList(aggregation.getAnnotations() == null ? null :
+                    aggregation.getAnnotations().getAnnotation())),
+                Optional.ofNullable(aggregation.getDescription()));
         }
         return null;
     }
@@ -243,9 +244,9 @@ public class MajorObjectConvertor {
     private static AggregationDimension convertAggregationDimension(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDimension aggregationDimension) {
         if (aggregationDimension != null) {
             return new AggregationDimensionR(aggregationDimension.getCubeDimensionID(),
-                convertAggregationDimensionAttributes(aggregationDimension.getAttributes()),
-                convertAnnotationList(aggregationDimension.getAnnotations() == null ? null :
-                    aggregationDimension.getAnnotations().getAnnotation()));
+                Optional.ofNullable(convertAggregationDimensionAttributes(aggregationDimension.getAttributes())),
+                Optional.ofNullable(convertAnnotationList(aggregationDimension.getAnnotations() == null ? null :
+                    aggregationDimension.getAnnotations().getAnnotation())));
         }
         return null;
     }
@@ -268,8 +269,8 @@ public class MajorObjectConvertor {
         if (aggregationAttribute != null) {
             return new AggregationAttributeR(
                 aggregationAttribute.getAttributeID(),
-                convertAnnotationList(aggregationAttribute.getAnnotations() == null ? null :
-                    aggregationAttribute.getAnnotations().getAnnotation()));
+                Optional.ofNullable(convertAnnotationList(aggregationAttribute.getAnnotations() == null ? null :
+                    aggregationAttribute.getAnnotations().getAnnotation())));
         }
         return null;
     }

@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This complex type represents the attribute in the AggregationInstanceDimension for which the fact
@@ -39,6 +40,6 @@ public interface AggregationInstanceAttribute {
      * attribute that is pointed to by
      * AttributeID.
      */
-    List<DataItem> keyColumns();
+    Optional<List<DataItem>> keyColumns();
 
 }

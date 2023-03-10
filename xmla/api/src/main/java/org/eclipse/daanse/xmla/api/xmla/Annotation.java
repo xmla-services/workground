@@ -13,11 +13,33 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.Optional;
+
+/**
+ *
+ */
 public interface Annotation {
 
+    /**
+     * @return This element SHOULD<92> be in a style that references the vendor's
+     * XML namespace, to prevent collisions in sharing of information
+     * contained in other Annotation objects. The Name element MUST be
+     * unique within the collection of Annotations that is contained within an
+     * individual object.
+     */
     String name();
 
-    String visibility();
+    /**
+     * @return This element determines the way in which Annotation objects are
+     * exposed. By default, Annotation objects are exposed only in
+     * DISCOVER_XML_METADATA, and are not visible to client software. If
+     * Visibility is set to SchemaRowset, then Annotation object
+     * information is exposed as a column by schema rowset requests.
+     */
+    Optional<String> visibility();
 
-    java.lang.Object value();
+    /**
+     * @return The content of the Annotation.
+     */
+    Optional<java.lang.Object> value();
 }

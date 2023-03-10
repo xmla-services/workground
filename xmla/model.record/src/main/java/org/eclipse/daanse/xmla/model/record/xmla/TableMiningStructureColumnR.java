@@ -20,11 +20,12 @@ import org.eclipse.daanse.xmla.api.xmla.TableMiningStructureColumn;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
 
 import java.util.List;
+import java.util.Optional;
 
-public record TableMiningStructureColumnR(List<DataItem> foreignKeyColumns,
-                                          MeasureGroupBinding sourceMeasureGroup,
-                                          List<MiningStructureColumn> columns,
-                                          List<Translation> translations
+public record TableMiningStructureColumnR(Optional<List<DataItem>> foreignKeyColumns,
+                                          Optional<MeasureGroupBinding> sourceMeasureGroup,
+                                          Optional<List<MiningStructureColumn>> columns,
+                                          Optional<List<Translation>> translations
 ) implements TableMiningStructureColumn {
 
 }

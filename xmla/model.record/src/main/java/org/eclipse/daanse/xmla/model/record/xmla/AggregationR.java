@@ -18,12 +18,13 @@ import org.eclipse.daanse.xmla.api.xmla.AggregationDimension;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 
 import java.util.List;
+import java.util.Optional;
 
-public record AggregationR(String id,
+public record AggregationR(Optional<String> id,
                            String name,
-                           List<AggregationDimension> dimensions,
-                           List<Annotation> annotations,
-                           String description
+                           Optional<List<AggregationDimension>> dimensions,
+                           Optional<List<Annotation>> annotations,
+                           Optional<String> description
 ) implements Aggregation {
 
 }

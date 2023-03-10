@@ -18,20 +18,20 @@ import org.eclipse.daanse.xmla.api.xmla.AggregationDesign;
 import org.eclipse.daanse.xmla.api.xmla.AggregationDesignDimension;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 
-import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 public record AggregationDesignR(String name,
-                                 String id,
-                                 Instant createdTimestamp,
-                                 Instant lastSchemaUpdate,
-                                 String description,
-                                 List<Annotation> annotations,
-                                 Long estimatedRows,
-                                 List<AggregationDesignDimension> dimensions,
-                                 List<Aggregation> aggregations,
-                                 BigInteger estimatedPerformanceGain
+                                 Optional<String> id,
+                                 Optional<Instant> createdTimestamp,
+                                 Optional<Instant> lastSchemaUpdate,
+                                 Optional<String> description,
+                                 Optional<List<Annotation>> annotations,
+                                 Optional<Long> estimatedRows,
+                                 Optional<List<AggregationDesignDimension>> dimensions,
+                                 Optional<List<Aggregation>> aggregations,
+                                 Optional<Integer> estimatedPerformanceGain
                                  ) implements AggregationDesign{
 
 }

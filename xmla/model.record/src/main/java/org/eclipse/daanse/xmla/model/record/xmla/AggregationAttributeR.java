@@ -17,9 +17,10 @@ import org.eclipse.daanse.xmla.api.xmla.AggregationAttribute;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 
 import java.util.List;
+import java.util.Optional;
 
 public record AggregationAttributeR(String attributeID,
-                                    List<Annotation> annotations
+                                    Optional<List<Annotation>> annotations
 ) implements AggregationAttribute {
 
 }

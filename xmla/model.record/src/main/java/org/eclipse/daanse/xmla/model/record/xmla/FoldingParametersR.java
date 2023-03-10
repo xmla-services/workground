@@ -15,11 +15,11 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.FoldingParameters;
 
-import java.math.BigInteger;
+import java.util.Optional;
 
-public record FoldingParametersR(BigInteger foldIndex,
-                                 BigInteger foldCount,
-                                 Long foldMaxCases,
-                                 String foldTargetAttribute) implements FoldingParameters {
+public record FoldingParametersR(Integer foldIndex,
+                                 Integer foldCount,
+                                 Optional<Long> foldMaxCases,
+                                 Optional<String> foldTargetAttribute) implements FoldingParameters {
 
 }

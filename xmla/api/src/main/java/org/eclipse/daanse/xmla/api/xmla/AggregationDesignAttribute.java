@@ -13,9 +13,20 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.Optional;
+
+/**
+ * This complex type represents an attribute in the AggregationDesignDimension.
+ */
 public interface AggregationDesignAttribute {
 
+    /**
+     * @return The ID of the attribute.
+     */
     String attributeID();
 
-    Long estimatedCount();
+    /**
+     * @return The estimated number of members for the attribute.
+     */
+    Optional<Long> estimatedCount();
 }

@@ -16,6 +16,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This complex type represents a mining structure.
@@ -30,28 +31,28 @@ public interface MiningStructure {
     /**
      * @return The object ID string.
      */
-    String id();
+    Optional<String> id();
 
     /**
      * @return A timestamp for the time that the object was created.
      */
-    Instant createdTimestamp();
+    Optional<Instant> createdTimestamp();
 
     /**
      * @return A timestamp for the time that the schema was last
      * updated.
      */
-    Instant lastSchemaUpdate();
+    Optional<Instant> lastSchemaUpdate();
 
     /**
      * @return The object description.
      */
-    String description();
+    Optional<String> description();
 
     /**
      * @return A collection of Annotation objects.
      */
-    List<Annotation> annotations();
+    Optional<List<Annotation>> annotations();
 
     /**
      * @return The source for the MiningStructure data. Source
@@ -64,18 +65,18 @@ public interface MiningStructure {
      * CubeDimensionBinding MUST indicate an OLAP
      * source.
      */
-    Binding source();
+    Optional<Binding> source();
 
     /**
      * @return The date and time when the mining structure was
      * last processed.
      */
-    Instant lastProcessed();
+    Optional<Instant> lastProcessed();
 
     /**
      * @return A collection of Translation objects.
      */
-    List<Translation> translations();
+    Optional<List<Translation>> translations();
 
     /**
      * @return The LCID of the language to use by default. See
@@ -83,24 +84,24 @@ public interface MiningStructure {
      * the server will determine the language to
      * use.<80>
      */
-    BigInteger language();
+    Optional<BigInteger> language();
 
     /**
      * @return The collation of this MiningStructure.
      */
-    String collation();
+    Optional<String> collation();
 
     /**
      * @return Error configuration settings to deal with issues in
      * the source data.
      */
-    ErrorConfiguration errorConfiguration();
+    Optional<ErrorConfiguration> errorConfiguration();
 
     /**
      * @return Determines caching mechanism for training data
      * retrieved during mining structure processing.
      */
-    String cacheMode();
+    Optional<String> cacheMode();
 
     /**
      * @return An integer value between 0 and 99 that specifies
@@ -109,7 +110,7 @@ public interface MiningStructure {
      * become the training data set.
      * Zero indicates no limit.
      */
-    Integer holdoutMaxPercent();
+    Optional<Integer> holdoutMaxPercent();
 
     /**
      * @return An integer value equal to or greater than zero that
@@ -120,14 +121,14 @@ public interface MiningStructure {
      * lowest of (HoldoutMaxCases,
      * HoldoutMaxPercent) is used.
      */
-    Integer holdoutMaxCases();
+    Optional<Integer> holdoutMaxCases();
 
     /**
      * @return Used as the seed for repeatable partitioning. If
      * unspecified or set to zero, a hash of the mining
      * structure name is used as the seed.
      */
-    Integer holdoutSeed();
+    Optional<Integer> holdoutSeed();
 
     /**
      * @return If the mining structure is processed, this indicates
@@ -136,7 +137,7 @@ public interface MiningStructure {
      * Zero indicates either no test partition or that the
      * structure is not processed.
      */
-    Integer holdoutActualSize();
+    Optional<Integer> holdoutActualSize();
 
     /**
      * @return A collection of Column objects for
@@ -147,17 +148,17 @@ public interface MiningStructure {
     /**
      * @return The state of processing of the object.
      */
-    String state();
+    Optional<String> state();
 
     /**
      * @return A collection of MiningStructurePermission objects.
      * Each MiningStructurePermission defines the
      * permissions a role has on this MiningStructure.
      */
-    List<MiningStructurePermission> miningStructurePermissions();
+    Optional<List<MiningStructurePermission>> miningStructurePermissions();
 
     /**
      * @return A collection of MiningModel objects.
      */
-    List<MiningModel> miningModels();
+    Optional<List<MiningModel>> miningModels();
 }

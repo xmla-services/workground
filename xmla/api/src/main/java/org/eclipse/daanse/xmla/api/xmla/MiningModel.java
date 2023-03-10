@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This complex type represents a mining model.
@@ -29,28 +30,28 @@ public interface MiningModel {
     /**
      * @return The object ID string.
      */
-    String id();
+    Optional<String> id();
 
     /**
      * @return A timestamp for the time that the object was created.
      */
-    Instant createdTimestamp();
+    Optional<Instant> createdTimestamp();
 
     /**
      * @return A timestamp for the time that the schema was last
      * updated.
      */
-    Instant lastSchemaUpdate();
+    Optional<Instant> lastSchemaUpdate();
 
     /**
      * @return The object description.
      */
-    String description();
+    Optional<String> description();
 
     /**
      * @return A collection of Annotation objects.
      */
-    List<Annotation> annotations();
+    Optional<List<Annotation>> annotations();
 
     /**
      * @return The protocol does not require any particular algorithms to be
@@ -63,29 +64,29 @@ public interface MiningModel {
      * @return The date and time when the mining model was last
      * processed.
      */
-    Instant lastProcessed();
+    Optional<Instant> lastProcessed();
 
     /**
      * @return A collection of objects of type AlgorithmParameter. The
      * allowed parameters are different depending on the algorithm.
      */
-    List<AlgorithmParameter> algorithmParameters();
+    Optional<List<AlgorithmParameter>> algorithmParameters();
 
     /**
      * @return When true, indicates that drillthrough is allowed; otherwise,
      * false.
      */
-    Boolean allowDrillThrough();
+    Optional<Boolean> allowDrillThrough();
 
     /**
      * @return A collection of Translation objects.
      */
-    List<AttributeTranslation> translations();
+    Optional<List<AttributeTranslation>> translations();
 
     /**
      * @return A collection of objects of type MiningModelColumn.
      */
-    List<MiningModelColumn> columns();
+    Optional<List<MiningModelColumn>> columns();
 
     /**
      * @return Represents the processing state of the partition. Values
@@ -94,7 +95,7 @@ public interface MiningModel {
      * Processed
      * Unprocessed
      */
-    String state();
+    Optional<String> state();
 
     /**
      * @return An object of type FoldingParameters. Describes a fold (a
@@ -102,27 +103,27 @@ public interface MiningModel {
      * mining model. Used only as part of the multifold cross-
      * validation procedure.
      */
-    FoldingParameters foldingParameters();
+    Optional<FoldingParameters> foldingParameters();
 
     /**
      * @return The DMX filter statement to be applied to training data for
      * models that are trained only on a part of a structure's data.
      * An empty string or missing element implies no filter.
      */
-    String filter();
+    Optional<String> filter();
 
     /**
      * @return A collection of MiningModelPermission objects.
      */
-    List<MiningModelPermission> miningModelPermissions();
+    Optional<List<MiningModelPermission>> miningModelPermissions();
 
     /**
      * @return The language to use by default.
      */
-    String language();
+    Optional<String> language();
 
     /**
      * @return The collation sequence to use.
      */
-    String collation();
+    Optional<String> collation();
 }

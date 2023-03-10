@@ -31,9 +31,8 @@ import org.eclipse.daanse.xmla.model.record.xmla.MiningModelPermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.MiningModelR;
 import org.eclipse.daanse.xmla.model.record.xmla.MiningModelingFlagR;
 
-import java.math.BigInteger;
-import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
@@ -46,28 +45,28 @@ public class MiningModelConvertor {
     public static MiningModel convertMiningModel(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningModel miningModel) {
         if (miningModel != null) {
             return new MiningModelR(miningModel.getName(),
-                miningModel.getID(),
-                convertToInstant(miningModel.getCreatedTimestamp()),
-                convertToInstant(miningModel.getLastSchemaUpdate()),
-                miningModel.getDescription(),
-                convertAnnotationList(miningModel.getAnnotations() == null ? null :
-                    miningModel.getAnnotations().getAnnotation()),
+                Optional.ofNullable(miningModel.getID()),
+                Optional.ofNullable(convertToInstant(miningModel.getCreatedTimestamp())),
+                Optional.ofNullable(convertToInstant(miningModel.getLastSchemaUpdate())),
+                Optional.ofNullable(miningModel.getDescription()),
+                Optional.ofNullable(convertAnnotationList(miningModel.getAnnotations() == null ? null :
+                    miningModel.getAnnotations().getAnnotation())),
                 miningModel.getAlgorithm(),
-                convertToInstant(miningModel.getLastProcessed()),
-                convertAlgorithmParameterList(miningModel.getAlgorithmParameters() == null ? null :
-                    miningModel.getAlgorithmParameters().getAlgorithmParameter()),
-                miningModel.isAllowDrillThrough(),
-                convertAttributeTranslationList(miningModel.getTranslations() == null ? null :
-                    miningModel.getTranslations().getTranslation()),
-                convertMiningModelColumnList(miningModel.getColumns() == null ? null :
-                    miningModel.getColumns().getColumn()),
-                miningModel.getState(),
-                convertFoldingParameters(miningModel.getFoldingParameters()),
-                miningModel.getFilter(),
-                convertMiningModelPermissionList(miningModel.getMiningModelPermissions() == null ? null :
-                    miningModel.getMiningModelPermissions().getMiningModelPermission()),
-                miningModel.getLanguage(),
-                miningModel.getCollation());
+                Optional.ofNullable(convertToInstant(miningModel.getLastProcessed())),
+                Optional.ofNullable(convertAlgorithmParameterList(miningModel.getAlgorithmParameters() == null ? null :
+                    miningModel.getAlgorithmParameters().getAlgorithmParameter())),
+                Optional.ofNullable(miningModel.isAllowDrillThrough()),
+                Optional.ofNullable(convertAttributeTranslationList(miningModel.getTranslations() == null ? null :
+                    miningModel.getTranslations().getTranslation())),
+                Optional.ofNullable(convertMiningModelColumnList(miningModel.getColumns() == null ? null :
+                    miningModel.getColumns().getColumn())),
+                Optional.ofNullable(miningModel.getState()),
+                Optional.ofNullable(convertFoldingParameters(miningModel.getFoldingParameters())),
+                Optional.ofNullable(miningModel.getFilter()),
+                Optional.ofNullable(convertMiningModelPermissionList(miningModel.getMiningModelPermissions() == null ? null :
+                    miningModel.getMiningModelPermissions().getMiningModelPermission())),
+                Optional.ofNullable(miningModel.getLanguage()),
+                Optional.ofNullable(miningModel.getCollation()));
         }
         return null;
     }
@@ -109,19 +108,19 @@ public class MiningModelConvertor {
     private static MiningModelColumn convertMiningModelColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningModelColumn miningModelColumn) {
         if (miningModelColumn != null) {
             return new MiningModelColumnR(miningModelColumn.getName(),
-                miningModelColumn.getID(),
-                miningModelColumn.getDescription(),
-                miningModelColumn.getSourceColumnID(),
-                miningModelColumn.getUsage(),
-                miningModelColumn.getFilter(),
-                convertTranslationList(miningModelColumn.getTranslations() == null ? null :
-                    miningModelColumn.getTranslations().getTranslation()),
-                convertMiningModelColumnList(miningModelColumn.getColumns() == null ? null :
-                    miningModelColumn.getColumns().getColumn()),
-                convertMiningModelingFlagList(miningModelColumn.getModelingFlags() == null ? null :
-                    miningModelColumn.getModelingFlags().getModelingFlag()),
-                convertAnnotationList(miningModelColumn.getAnnotations() == null ? null :
-                    miningModelColumn.getAnnotations().getAnnotation()));
+                Optional.ofNullable(miningModelColumn.getID()),
+                Optional.ofNullable(miningModelColumn.getDescription()),
+                Optional.ofNullable(miningModelColumn.getSourceColumnID()),
+                Optional.ofNullable(miningModelColumn.getUsage()),
+                Optional.ofNullable(miningModelColumn.getFilter()),
+                Optional.ofNullable(convertTranslationList(miningModelColumn.getTranslations() == null ? null :
+                    miningModelColumn.getTranslations().getTranslation())),
+                Optional.ofNullable(convertMiningModelColumnList(miningModelColumn.getColumns() == null ? null :
+                    miningModelColumn.getColumns().getColumn())),
+                Optional.ofNullable(convertMiningModelingFlagList(miningModelColumn.getModelingFlags() == null ? null :
+                    miningModelColumn.getModelingFlags().getModelingFlag())),
+                Optional.ofNullable(convertAnnotationList(miningModelColumn.getAnnotations() == null ? null :
+                    miningModelColumn.getAnnotations().getAnnotation())));
         }
         return null;
 
@@ -136,7 +135,7 @@ public class MiningModelConvertor {
 
     private static MiningModelingFlag convertMiningModelingFlag(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningModelingFlag miningModelingFlag) {
         if (miningModelingFlag != null) {
-            return new MiningModelingFlagR(miningModelingFlag.getModelingFlag());
+            return new MiningModelingFlagR(Optional.ofNullable(miningModelingFlag.getModelingFlag()));
         }
         return null;
     }
@@ -151,13 +150,13 @@ public class MiningModelConvertor {
     private static AttributeTranslation convertAttributeTranslation(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AttributeTranslation attributeTranslation) {
         if (attributeTranslation != null) {
             return new AttributeTranslationR(attributeTranslation.getLanguage(),
-                attributeTranslation.getCaption(),
-                attributeTranslation.getDescription(),
-                attributeTranslation.getDisplayFolder(),
-                convertAnnotationList(attributeTranslation.getAnnotations() == null ? null :
-                    attributeTranslation.getAnnotations().getAnnotation()),
-                convertDataItem(attributeTranslation.getCaptionColumn()),
-                attributeTranslation.getMembersWithDataCaption());
+                Optional.ofNullable(attributeTranslation.getCaption()),
+                Optional.ofNullable(attributeTranslation.getDescription()),
+                Optional.ofNullable(attributeTranslation.getDisplayFolder()),
+                Optional.ofNullable(convertAnnotationList(attributeTranslation.getAnnotations() == null ? null :
+                    attributeTranslation.getAnnotations().getAnnotation())),
+                Optional.ofNullable(convertDataItem(attributeTranslation.getCaptionColumn())),
+                Optional.ofNullable(attributeTranslation.getMembersWithDataCaption()));
         }
         return null;
     }
@@ -181,8 +180,8 @@ public class MiningModelConvertor {
         if (foldingParameters != null) {
             return new FoldingParametersR(foldingParameters.getFoldIndex(),
                 foldingParameters.getFoldCount(),
-                foldingParameters.getFoldMaxCases(),
-                foldingParameters.getFoldTargetAttribute());
+                Optional.ofNullable(foldingParameters.getFoldMaxCases()),
+                Optional.ofNullable(foldingParameters.getFoldTargetAttribute()));
         }
         return null;
     }

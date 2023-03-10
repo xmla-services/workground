@@ -15,6 +15,7 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This complex type represents a scalar column in the MiningStructure.
@@ -30,22 +31,22 @@ public non-sealed interface ScalarMiningStructureColumn extends MiningStructureC
     /**
      * @return The object ID string.
      */
-    String id();
+    Optional<String> id();
 
     /**
      * @return The object description.
      */
-    String description();
+    Optional<String> description();
 
     /**
      * @return Contains the data type of the element.
      */
-    String type();
+    Optional<String> type();
 
     /**
      * @return A collection of Annotation objects.
      */
-    List<Annotation> annotations();
+    Optional<List<Annotation>> annotations();
 
     /**
      * @return When true, indicates that the column provides the key
@@ -53,7 +54,7 @@ public non-sealed interface ScalarMiningStructureColumn extends MiningStructureC
      * MAY be designated as the key. At least one column
      * MUST be designated as the key.
      */
-    Boolean isKey();
+    Optional<Boolean> isKey();
 
     /**
      * @return The data source for this column, if the mining structure
@@ -64,20 +65,20 @@ public non-sealed interface ScalarMiningStructureColumn extends MiningStructureC
      * be used: AttributeBinding, CubeAttributeBinding, or
      * MeasureBinding.
      */
-    Binding source();
+    Optional<Binding> source();
 
     /**
      * @return An extensible enumeration, such as Normal, Uniform,
      * and LogNormal.
      */
-    String distribution();
+    Optional<String> distribution();
 
     /**
      * @return A collection of MiningModelingFlag objects.
      * If non-empty, the only supported string value is
      * "NotNull".
      */
-    List<MiningModelingFlag> modelingFlags();
+    Optional<List<MiningModelingFlag>> modelingFlags();
 
     /**
      * @return An enumeration that describes the type of content
@@ -90,7 +91,7 @@ public non-sealed interface ScalarMiningStructureColumn extends MiningStructureC
      * @return A string collection of the ID for any columns classified
      * by this column.
      */
-    List<String> classifiedColumns();
+    Optional<List<String>> classifiedColumns();
 
     /**
      * @return Defines the method to be used for discretization.
@@ -108,12 +109,12 @@ public non-sealed interface ScalarMiningStructureColumn extends MiningStructureC
      * "Clusters" - Finds buckets by single dimension
      * clustering by using the K-Means algorithm.
      */
-    String discretizationMethod();
+    Optional<String> discretizationMethod();
 
     /**
      * @return The number of buckets in which to discretize.
      */
-    BigInteger discretizationBucketCount();
+    Optional<BigInteger> discretizationBucketCount();
 
     /**
      * @return The data source for this column, for mining structures
@@ -122,7 +123,7 @@ public non-sealed interface ScalarMiningStructureColumn extends MiningStructureC
      * column. The Source element within the DataItem
      * MUST be of type ColumnBinding.
      */
-    List<DataItem> keyColumns();
+    Optional<List<DataItem>> keyColumns();
 
     /**
      * @return An optional column binding containing the name of the
@@ -131,10 +132,10 @@ public non-sealed interface ScalarMiningStructureColumn extends MiningStructureC
      * element within the DataItem MUST be of type
      * ColumnBinding.
      */
-    DataItem nameColumn();
+    Optional<DataItem> nameColumn();
 
     /**
      * @return A collection of Translation objects.
      */
-    List<Translation> translations();
+    Optional<List<Translation>> translations();
 }

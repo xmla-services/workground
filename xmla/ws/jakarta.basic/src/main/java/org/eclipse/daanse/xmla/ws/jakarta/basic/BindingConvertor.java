@@ -13,6 +13,7 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import org.eclipse.daanse.xmla.api.xmla.AttributeBindingTypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.Group;
 import org.eclipse.daanse.xmla.model.record.engine200_200.ExpressionBindingR;
@@ -53,6 +54,7 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.UserDefinedGroupBindin
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertDuration;
@@ -80,14 +82,14 @@ public class BindingConvertor {
             if (source instanceof AttributeBinding) {
                 AttributeBinding s = (AttributeBinding) source;
                 return new AttributeBindingR(s.getAttributeID(),
-                    s.getType(),
-                    s.getOrdinal());
+                    AttributeBindingTypeEnum.fromValue(s.getType()),
+                    Optional.ofNullable(s.getOrdinal()));
 
             }
             if (source instanceof UserDefinedGroupBinding) {
                 UserDefinedGroupBinding s = (UserDefinedGroupBinding) source;
                 return new UserDefinedGroupBindingR(s.getAttributeID(),
-                    convertUserDefinedGroupBindingGroups(s.getGroups()));
+                    Optional.ofNullable(convertUserDefinedGroupBindingGroups(s.getGroups())));
 
             }
             if (source instanceof MeasureBinding) {

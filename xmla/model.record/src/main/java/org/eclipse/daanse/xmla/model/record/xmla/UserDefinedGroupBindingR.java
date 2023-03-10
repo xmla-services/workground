@@ -17,9 +17,10 @@ import org.eclipse.daanse.xmla.api.xmla.Group;
 import org.eclipse.daanse.xmla.api.xmla.UserDefinedGroupBinding;
 
 import java.util.List;
+import java.util.Optional;
 
 public record UserDefinedGroupBindingR(
     String attributeID,
-    List<Group> groups) implements UserDefinedGroupBinding {
+    Optional<List<Group>> groups) implements UserDefinedGroupBinding {
 
 }

@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This complex type represents a CubeDimension in an AggregationInstance.
@@ -28,6 +29,6 @@ public interface AggregationInstanceDimension {
     /**
      * @return A collection of objects of type AggregationInstanceAttribute.
      */
-    List<AggregationInstanceAttribute> attributes();
+    Optional<List<AggregationInstanceAttribute>> attributes();
 
 }

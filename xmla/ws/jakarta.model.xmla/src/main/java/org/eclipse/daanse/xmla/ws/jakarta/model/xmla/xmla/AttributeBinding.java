@@ -13,8 +13,6 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
-import java.math.BigInteger;
-
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
 import jakarta.xml.bind.annotation.XmlElement;
@@ -29,7 +27,7 @@ public class AttributeBinding extends Binding {
   @XmlElement(name = "Type", required = true)
   protected String type;
   @XmlElement(name = "Ordinal")
-  protected BigInteger ordinal;
+  protected Integer ordinal;
 
   public String getAttributeID() {
     return attributeID;
@@ -47,11 +45,11 @@ public class AttributeBinding extends Binding {
     this.type = value;
   }
 
-  public BigInteger getOrdinal() {
+  public Integer getOrdinal() {
     return ordinal;
   }
 
-  public void setOrdinal(BigInteger value) {
+  public void setOrdinal(Integer value) {
     this.ordinal = value;
   }
 

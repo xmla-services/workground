@@ -13,9 +13,18 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+/**
+ * This complex type represents a binding to a column of a table.
+ */
 public interface ColumnBinding extends Binding {
 
+    /**
+     * @return The ID of the table in the DataSourceView.
+     */
     String tableID();
 
+    /**
+     * @return The ID of the column in the DataSourceView.
+     */
     String columnID();
 }

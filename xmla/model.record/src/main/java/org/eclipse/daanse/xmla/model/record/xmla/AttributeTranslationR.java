@@ -18,14 +18,15 @@ import org.eclipse.daanse.xmla.api.xmla.AttributeTranslation;
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
 
 import java.util.List;
+import java.util.Optional;
 
 public record AttributeTranslationR(long language,
-                                    String caption,
-                                    String description,
-                                    String displayFolder,
-                                    List<Annotation> annotations,
-                                    DataItem captionColumn,
-                                    String membersWithDataCaption) implements AttributeTranslation {
+                                    Optional<String> caption,
+                                    Optional<String> description,
+                                    Optional<String> displayFolder,
+                                    Optional<List<Annotation>> annotations,
+                                    Optional<DataItem> captionColumn,
+                                    Optional<String> membersWithDataCaption) implements AttributeTranslation {
 
 
 

@@ -13,13 +13,37 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
-import java.math.BigInteger;
+import java.util.Optional;
 
+/**
+ * This complex type represents a binding to a DimensionAttribute.
+ */
 public interface AttributeBinding extends Binding {
 
+    /**
+     * @return The ID of the Attribute.
+     */
     String attributeID();
 
-    String type();
+    /**
+     * @return Indicates the part of the Attribute to bind to. Enumeration values are as
+     * follows:
+     * All: All Level
+     * Key: Member keys
+     * Name: Member name
+     * Value: Member value
+     * Translation: Member translations
+     * UnaryOperator: Unary operators
+     * SkippedLevels: Skipped levels
+     * CustomRollup: Custom rollup formulas
+     * CustomRollupProperties: Custom rollup properties
+     */
+    AttributeBindingTypeEnum type();
 
-    BigInteger ordinal();
+    /**
+     * @return When the binding is to a collection of objects, the ordinal indicates the
+     * ordinal number within that collection to bind to. (Applies to KeyColumns
+     * and Translation objects).
+     */
+    Optional<Integer> ordinal();
 }

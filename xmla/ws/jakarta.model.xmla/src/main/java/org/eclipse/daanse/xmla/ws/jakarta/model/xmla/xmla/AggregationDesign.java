@@ -20,7 +20,6 @@ import jakarta.xml.bind.annotation.XmlSchemaType;
 import jakarta.xml.bind.annotation.XmlType;
 
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.math.BigInteger;
 import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -50,7 +49,7 @@ public class AggregationDesign {
     @XmlElement(name = "Aggregations")
     protected AggregationDesign.Aggregations aggregations;
     @XmlElement(name = "EstimatedPerformanceGain")
-    protected BigInteger estimatedPerformanceGain;
+    protected Integer estimatedPerformanceGain;
 
     public String getName() {
         return name;
@@ -124,11 +123,11 @@ public class AggregationDesign {
         this.aggregations = value;
     }
 
-    public BigInteger getEstimatedPerformanceGain() {
+    public Integer getEstimatedPerformanceGain() {
         return estimatedPerformanceGain;
     }
 
-    public void setEstimatedPerformanceGain(BigInteger value) {
+    public void setEstimatedPerformanceGain(Integer value) {
         this.estimatedPerformanceGain = value;
     }
 

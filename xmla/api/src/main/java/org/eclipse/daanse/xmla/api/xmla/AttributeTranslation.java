@@ -14,20 +14,49 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * This complex type represents a translation of a DimensionAttribute in a specific language. The
+ * AttributeTranslation type is an extension of the Translation type, and includes all its elements.
+ */
 public interface AttributeTranslation {
 
+    /**
+     * @return The locale ID of the language. For more details on locale
+     * identifiers, see [MS-LCID].
+     */
     long language();
 
-    String caption();
+    /**
+     * @return The caption of the object in the language represented by the
+     * Language element.
+     */
+    Optional<String> caption();
 
-    String description();
+    /**
+     * @return The description for the object.
+     */
+    Optional<String> description();
 
-    String displayFolder();
+    /**
+     * @return The folder in which the object is displayed.
+     */
+    Optional<String> displayFolder();
 
-    List<Annotation> annotations();
+    /**
+     * @return A collection of Annotation objects.
+     */
+    Optional<List<Annotation>> annotations();
 
-    DataItem captionColumn();
+    /**
+     * @return The source column for the attribute member captions.
+     */
+    Optional<DataItem> captionColumn();
 
-    String membersWithDataCaption();
+    /**
+     * @return The caption template for data members. This applies only if
+     * Usage is set to Parent in the DimensionAttribute.
+     */
+    Optional<String> membersWithDataCaption();
 }

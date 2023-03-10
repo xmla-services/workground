@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * This complex type represents a nested table column in the MiningStructure.
@@ -26,13 +27,13 @@ public non-sealed interface TableMiningStructureColumn extends MiningStructureCo
      * column. The Source element within the DataItem MUST be of
      * type ColumnBinding.
      */
-    List<DataItem> foreignKeyColumns();
+    Optional<List<DataItem>> foreignKeyColumns();
 
     /**
      * @return An optional binding to a MeasureGroup if DataSourceID for
      * MiningStructure is OLAP.
      */
-    MeasureGroupBinding sourceMeasureGroup();
+    Optional<MeasureGroupBinding> sourceMeasureGroup();
 
     /**
      * @return A collection of bindings to MiningStructureColumns.
@@ -41,10 +42,10 @@ public non-sealed interface TableMiningStructureColumn extends MiningStructureCo
      * be specified here, but included columns cannot have included
      * columns nested within them.
      */
-    List<MiningStructureColumn> columns();
+    Optional<List<MiningStructureColumn>> columns();
 
     /**
      * @return A collection of Translation objects.
      */
-    List<Translation> translations();
+    Optional<List<Translation>> translations();
 }

@@ -4,6 +4,7 @@ import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.model.record.xmla.AnnotationR;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class AnnotationConvertor {
@@ -17,8 +18,8 @@ public class AnnotationConvertor {
 
     public static Annotation convertAnnotation(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Annotation annotation) {
         return new AnnotationR(annotation.getName(),
-            annotation.getVisibility(),
-            annotation.getValue());
+            Optional.ofNullable(annotation.getVisibility()),
+            Optional.ofNullable(annotation.getValue()));
     }
 
 }
