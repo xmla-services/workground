@@ -11,7 +11,7 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.jdbc;
+package org.eclipse.daanse.db.jdbc.metadata.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
