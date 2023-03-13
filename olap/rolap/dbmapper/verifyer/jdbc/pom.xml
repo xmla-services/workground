@@ -6,12 +6,15 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.verifyer.jdbc</artifactId>
-
-
   <dependencies>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api</artifactId>
+      <version>${revision}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.jdbc.metadata</artifactId>
       <version>${revision}</version>
     </dependency>
   </dependencies>

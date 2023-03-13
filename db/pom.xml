@@ -9,6 +9,7 @@
 	<artifactId>org.eclipse.daanse.db</artifactId>
 	<packaging>pom</packaging>
 	<modules>
+		<module>jdbc</module>
 		<module>dialect</module>
 		<module>statistics</module>
 		<module>datasource</module>
