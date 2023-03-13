@@ -25,6 +25,7 @@ import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataServiceFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Cause;
+import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.DescriptionVerifierConfig;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Verifyer;
@@ -37,8 +38,10 @@ public class DatabaseVerifyer implements Verifyer {
     private static final Logger LOGGER = LoggerFactory.getLogger(Verifyer.class);
 
     @Reference
-
     JdbcMetaDataServiceFactory jmdsf;
+
+    @Reference
+    DescriptionVerifierConfig config;
 
     @Override
     public List<VerificationResult> verify(Schema schema, DataSource dataSource) {
@@ -50,6 +53,9 @@ public class DatabaseVerifyer implements Verifyer {
             JDBCSchemaWalker walker = new JDBCSchemaWalker(jmds);
             Collection<? extends VerificationResult> res = walker.checkSchema(schema);
             results.addAll(res);
+            DescriptionWalker descriptionWalker = new DescriptionWalker(config);
+            results.addAll(descriptionWalker.checkSchema(schema));
+
         } catch (SQLException e) {
             results.add(new VerificationResultR("Database access error", e.getMessage(), Level.ERROR, Cause.DATABASE));
         }

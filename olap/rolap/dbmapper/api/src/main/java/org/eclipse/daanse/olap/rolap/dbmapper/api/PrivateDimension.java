@@ -23,7 +23,5 @@ public interface PrivateDimension extends CubeDimension {
 
     DimensionTypeEnum type();
 
-    String description();
-
     String usagePrefix();
 }
