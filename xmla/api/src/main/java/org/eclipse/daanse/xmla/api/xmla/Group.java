@@ -14,10 +14,21 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * This complex type represents a single group within a UserDefinedGroupBinding.
+ */
 public interface Group {
 
+    /**
+     * @return Name of the grouping member.
+     */
     String name();
 
-    List<String> members();
+    /**
+     * @return A collection of strings that contain MDX expressions that identify the set
+     * of members to be grouped.
+     */
+    Optional<List<String>> members();
 }

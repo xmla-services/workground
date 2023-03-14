@@ -13,11 +13,22 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.Optional;
+
+/**
+ * The MiningModelPermission complex type represents permissions for a MiningModel.
+ */
 public interface MiningModelPermission extends Permission {
 
-    Boolean allowDrillThrough();
+    /**
+     * @return When true, indicates that drillthrough is allowed on the
+     * MiningModel; otherwise, false.
+     */
+    Optional<Boolean> allowDrillThrough();
 
-    Boolean allowBrowsing();
-
-    String write();
+    /**
+     * @return When true, indicates that browsing is allowed on the object;
+     * otherwise, false.
+     */
+    Optional<Boolean> allowBrowsing();
 }

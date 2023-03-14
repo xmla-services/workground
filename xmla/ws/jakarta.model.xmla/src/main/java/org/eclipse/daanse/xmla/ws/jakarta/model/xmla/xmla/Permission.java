@@ -25,7 +25,7 @@ import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "Permission", propOrder = {"name", "id", "createdTimestamp", "lastSchemaUpdate", "description",
-    "annotations", "roleID", "process", "readDefinition", "read"})
+    "annotations", "roleID", "process", "readDefinition", "read", "write"})
 @XmlSeeAlso({DatabasePermission.class, DataSourcePermission.class, DimensionPermission.class,
     MiningStructurePermission.class, MiningModelPermission.class, CubePermission.class})
 public class Permission {
@@ -52,6 +52,8 @@ public class Permission {
     protected String readDefinition;
     @XmlElement(name = "Read")
     protected String read;
+    @XmlElement(name = "Write")
+    protected String write;
 
     public String getName() {
         return name;
@@ -131,6 +133,14 @@ public class Permission {
 
     public void setRead(String value) {
         this.read = value;
+    }
+
+    public String getWrite() {
+        return write;
+    }
+
+    public void setWrite(String write) {
+        this.write = write;
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)

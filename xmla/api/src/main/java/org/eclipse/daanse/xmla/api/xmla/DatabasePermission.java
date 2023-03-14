@@ -13,10 +13,18 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.Optional;
+
+/**
+ * The DatabasePermission complex type represents permissions for a Database.
+ */
 public interface DatabasePermission extends Permission {
 
-    Boolean administer();
+    /**
+     * @return When true, specifies that the Role has permission to administer the
+     * Database; otherwise, false.
+     */
+    Optional<Boolean> administer();
 
-    String write();
 
 }

@@ -13,9 +13,18 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+/**
+ * This complex type represents an incremental processing notification for proactive caching.
+ */
 public interface IncrementalProcessingNotification {
 
+    /**
+     * @return The ID of the table in the DataSourceView.
+     */
     String tableID();
 
+    /**
+     * @return The processing query text.
+     */
     String processingQuery();
 }

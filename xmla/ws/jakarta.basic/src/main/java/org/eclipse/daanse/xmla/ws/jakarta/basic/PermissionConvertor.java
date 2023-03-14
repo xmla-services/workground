@@ -14,7 +14,11 @@
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import org.eclipse.daanse.xmla.api.xmla.Permission;
+import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
 import org.eclipse.daanse.xmla.model.record.xmla.PermissionR;
+
+import java.util.Optional;
 
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
@@ -23,15 +27,16 @@ public class PermissionConvertor {
     public static Permission convertPermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Permission permission) {
         if (permission != null) {
             return new PermissionR(permission.getName(),
-                permission.getID(),
-                convertToInstant(permission.getCreatedTimestamp()),
-                convertToInstant(permission.getLastSchemaUpdate()),
-                permission.getDescription(),
-                convertAnnotationList(permission.getAnnotations() == null ? null : permission.getAnnotations().getAnnotation()),
+                Optional.ofNullable(permission.getID()),
+                Optional.ofNullable(convertToInstant(permission.getCreatedTimestamp())),
+                Optional.ofNullable(convertToInstant(permission.getLastSchemaUpdate())),
+                Optional.ofNullable(permission.getDescription()),
+                Optional.ofNullable(convertAnnotationList(permission.getAnnotations() == null ? null : permission.getAnnotations().getAnnotation())),
                 permission.getRoleID(),
-                permission.isProcess(),
-                permission.getReadDefinition(),
-                permission.getRead());
+                Optional.ofNullable(permission.isProcess()),
+                Optional.ofNullable(ReadDefinitionEnum.fromValue(permission.getReadDefinition())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(permission.getRead())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(permission.getWrite())));
         }
         return null;
     }

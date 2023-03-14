@@ -14,15 +14,18 @@
 package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupBinding;
+import org.eclipse.daanse.xmla.api.xmla.PersistenceEnum;
+import org.eclipse.daanse.xmla.api.xmla.RefreshPolicyEnum;
 
 import java.time.Duration;
+import java.util.Optional;
 
 public record MeasureGroupBindingR(String dataSourceID,
                                    String cubeID,
                                    String measureGroupID,
-                                   String persistence,
-                                   String refreshPolicy,
-                                   Duration refreshInterval,
-                                   String filter) implements MeasureGroupBinding {
+                                   Optional<PersistenceEnum> persistence,
+                                   Optional<RefreshPolicyEnum> refreshPolicy,
+                                   Optional<Duration> refreshInterval,
+                                   Optional<String> filter) implements MeasureGroupBinding {
 
 }

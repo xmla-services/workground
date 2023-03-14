@@ -14,14 +14,27 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * The CubePermission complex type represents permissions for a Cube.
+ */
 public interface CubePermission extends Permission {
 
-    String readSourceData();
+    /**
+     * @return Specifies whether the role has permission to read
+     * the underlying source data in the Cube.
+     */
+    Optional<String> readSourceData();
 
-    List<CubeDimensionPermission> dimensionPermissions();
+    /**
+     * @return A collection of CubeDimensionPermission objects.
+     */
+    Optional<List<CubeDimensionPermission>> dimensionPermissions();
 
-    List<CellPermission> cellPermissions();
+    /**
+     * @return A collection of CellPermission objects.
+     */
+    Optional<List<CellPermission>> cellPermissions();
 
-    String write();
 }

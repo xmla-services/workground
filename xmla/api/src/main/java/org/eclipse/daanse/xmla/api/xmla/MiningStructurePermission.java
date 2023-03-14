@@ -13,9 +13,17 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.Optional;
+
+/**
+ * The MiningStructurePermission complex type represents permissions for a MiningStructure.
+ */
 public interface MiningStructurePermission extends Permission {
 
-    Boolean allowDrillThrough();
+    /**
+     * @return A Boolean that indicates whether drillthrough is allowed on the
+     * MiningModel.
+     */
+    Optional<Boolean> allowDrillThrough();
 
-    String write();
 }

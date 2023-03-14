@@ -13,11 +13,25 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.Optional;
+
+/**
+ * The TableBinding complex type represents a binding to a table.
+ */
 public interface TableBinding extends TabularBinding {
 
-    String dataSourceID();
+    /**
+     * @return The ID of the DataSource.
+     */
+    Optional<String> dataSourceID();
 
+    /**
+     * @return The name of the table.
+     */
     String dbTableName();
 
-    String dbSchemaName();
+    /**
+     * @return The name of the schema.
+     */
+    Optional<String> dbSchemaName();
 }

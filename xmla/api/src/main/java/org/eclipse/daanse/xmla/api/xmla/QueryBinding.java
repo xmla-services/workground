@@ -13,9 +13,20 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.Optional;
+
+/**
+ * The QueryBinding complex type represents a binding to a query.
+ */
 public interface QueryBinding extends TabularBinding {
 
-    String dataSourceID();
+    /**
+     * @return The ID of the DataSource.
+     */
+    Optional<String> dataSourceID();
 
+    /**
+     * @return The text of the query.
+     */
     String queryDefinition();
 }

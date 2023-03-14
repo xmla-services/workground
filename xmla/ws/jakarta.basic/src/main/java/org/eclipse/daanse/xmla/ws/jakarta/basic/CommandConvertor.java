@@ -54,6 +54,8 @@ import org.eclipse.daanse.xmla.api.xmla.OutOfLineBinding;
 import org.eclipse.daanse.xmla.api.xmla.Process;
 import org.eclipse.daanse.xmla.api.xmla.Properties;
 import org.eclipse.daanse.xmla.api.xmla.PropertyList;
+import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
 import org.eclipse.daanse.xmla.api.xmla.Restore;
 import org.eclipse.daanse.xmla.api.xmla.Restrictions;
 import org.eclipse.daanse.xmla.api.xmla.RollbackTransaction;
@@ -129,6 +131,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.XmlaObjectR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Object;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
@@ -750,7 +753,7 @@ public class CommandConvertor {
     private static TableNotification convertTableNotification(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TableNotification tableNotification) {
         if (tableNotification != null) {
             return new TableNotificationR(tableNotification.getDbTableName(),
-                tableNotification.getDbSchemaName());
+                Optional.ofNullable(tableNotification.getDbSchemaName()));
         }
         return null;
     }
@@ -1118,15 +1121,15 @@ public class CommandConvertor {
 
     public static ErrorConfiguration convertErrorConfiguration(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ErrorConfiguration errorConfiguration) {
         if (errorConfiguration != null) {
-            return new ErrorConfigurationR(errorConfiguration.getKeyErrorLimit(),
-                errorConfiguration.getKeyErrorLogFile(),
-                errorConfiguration.getKeyErrorAction(),
-                errorConfiguration.getKeyErrorLimitAction(),
-                errorConfiguration.getKeyNotFound(),
-                errorConfiguration.getKeyDuplicate(),
-                errorConfiguration.getNullKeyConvertedToUnknown(),
-                errorConfiguration.getNullKeyNotAllowed(),
-                errorConfiguration.getCalculationError());
+            return new ErrorConfigurationR(Optional.ofNullable(errorConfiguration.getKeyErrorLimit()),
+                Optional.ofNullable(errorConfiguration.getKeyErrorLogFile()),
+                Optional.ofNullable(errorConfiguration.getKeyErrorAction()),
+                Optional.ofNullable(errorConfiguration.getKeyErrorLimitAction()),
+                Optional.ofNullable(errorConfiguration.getKeyNotFound()),
+                Optional.ofNullable(errorConfiguration.getKeyDuplicate()),
+                Optional.ofNullable(errorConfiguration.getNullKeyConvertedToUnknown()),
+                Optional.ofNullable(errorConfiguration.getNullKeyNotAllowed()),
+                Optional.ofNullable(errorConfiguration.getCalculationError()));
         }
         return null;
     }
@@ -1178,18 +1181,19 @@ public class CommandConvertor {
 
     private static DataSourcePermission convertDataSourcePermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSourcePermission dataSourcePermission) {
         if (dataSourcePermission != null) {
-            return new DataSourcePermissionR(dataSourcePermission.getWrite(),
+            return new DataSourcePermissionR(
                 dataSourcePermission.getName(),
-                dataSourcePermission.getID(),
-                convertToInstant(dataSourcePermission.getCreatedTimestamp()),
-                convertToInstant(dataSourcePermission.getLastSchemaUpdate()),
-                dataSourcePermission.getDescription(),
-                convertAnnotationList(dataSourcePermission.getAnnotations() == null ? null :
-                    dataSourcePermission.getAnnotations().getAnnotation()),
+                Optional.ofNullable(dataSourcePermission.getID()),
+                Optional.ofNullable(convertToInstant(dataSourcePermission.getCreatedTimestamp())),
+                Optional.ofNullable(convertToInstant(dataSourcePermission.getLastSchemaUpdate())),
+                Optional.ofNullable(dataSourcePermission.getDescription()),
+                Optional.ofNullable(convertAnnotationList(dataSourcePermission.getAnnotations() == null ? null :
+                    dataSourcePermission.getAnnotations().getAnnotation())),
                 dataSourcePermission.getRoleID(),
-                dataSourcePermission.isProcess(),
-                dataSourcePermission.getReadDefinition(),
-                dataSourcePermission.getRead());
+                Optional.ofNullable(dataSourcePermission.isProcess()),
+                Optional.ofNullable(ReadDefinitionEnum.fromValue(dataSourcePermission.getReadDefinition())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(dataSourcePermission.getRead())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(dataSourcePermission.getWrite())));
         }
         return null;
     }
@@ -1197,9 +1201,9 @@ public class CommandConvertor {
     public static ImpersonationInfo convertImpersonationInfo(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine.ImpersonationInfo impersonationInfo) {
         if (impersonationInfo != null) {
             return new ImpersonationInfoR(impersonationInfo.getImpersonationMode(),
-                impersonationInfo.getAccount(),
-                impersonationInfo.getPassword(),
-                impersonationInfo.getImpersonationInfoSecurity());
+                Optional.ofNullable(impersonationInfo.getAccount()),
+                Optional.ofNullable(impersonationInfo.getPassword()),
+                Optional.ofNullable(impersonationInfo.getImpersonationInfoSecurity()));
         }
         return null;
     }

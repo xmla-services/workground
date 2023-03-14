@@ -15,11 +15,24 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * This complex type represents a binding to a collection of incremental processing notifications for
+ * proactive caching
+ */
 public interface ProactiveCachingIncrementalProcessingBinding extends ProactiveCachingBinding {
 
-    Duration refreshInterval();
+    /**
+     * @return The interval for running the queries.
+     * default 1 second
+     */
+    Optional<Duration> refreshInterval();
 
+    /**
+     * @return A collection of objects of type
+     * IncrementalProcessingNotification.
+     */
     List<IncrementalProcessingNotification> incrementalProcessingNotifications();
 
 }

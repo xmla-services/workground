@@ -13,8 +13,9 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
-import org.eclipse.daanse.xmla.api.xmla.Action;
+import org.eclipse.daanse.xmla.api.xmla.ReportFormatParameter;
 
-public record ActionR() implements Action {
+public record ReportFormatParameterR(String name,
+                                     String value) implements ReportFormatParameter {
 
 }

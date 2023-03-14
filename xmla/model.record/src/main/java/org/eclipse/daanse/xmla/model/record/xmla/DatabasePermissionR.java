@@ -15,22 +15,25 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.DatabasePermission;
+import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
-public record DatabasePermissionR(Boolean administer,
-                                  String write,
+public record DatabasePermissionR(Optional<Boolean> administer,
                                   String name,
-                                  String id,
-                                  Instant createdTimestamp,
-                                  Instant lastSchemaUpdate,
-                                  String description,
-                                  List<Annotation> annotations,
+                                  Optional<String> id,
+                                  Optional<Instant> createdTimestamp,
+                                  Optional<Instant> lastSchemaUpdate,
+                                  Optional<String> description,
+                                  Optional<List<Annotation>> annotations,
                                   String roleID,
-                                  Boolean process,
-                                  String readDefinition,
-                                  String read
+                                  Optional<Boolean> process,
+                                  Optional<ReadDefinitionEnum> readDefinition,
+                                  Optional<ReadWritePermissionEnum> read,
+                                  Optional<ReadWritePermissionEnum> write
 ) implements DatabasePermission {
 
 }

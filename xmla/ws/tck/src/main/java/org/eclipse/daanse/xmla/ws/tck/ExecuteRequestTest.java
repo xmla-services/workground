@@ -244,9 +244,9 @@ public class ExecuteRequestTest {
                                     assertThat(((DataSourceViewBinding)s).dataSourceViewID()).isNotNull().isEqualTo("dsvAdventureWorksDW2008");
                                 });
                                 assertThat(dimension.errorConfiguration()).isNotNull().satisfies(ec -> {
-                                    assertThat(ec.keyNotFound()).isNotNull().isEqualTo("ReportAndStop");
-                                    assertThat(ec.keyDuplicate()).isNotNull().isEqualTo("ReportAndStop");
-                                    assertThat(ec.nullKeyNotAllowed()).isNotNull().isEqualTo("ReportAndStop");
+                                    assertThat(ec.keyNotFound()).isNotNull().isPresent().contains("ReportAndStop");
+                                    assertThat(ec.keyDuplicate()).isNotNull().isPresent().contains("ReportAndStop");
+                                    assertThat(ec.nullKeyNotAllowed()).isNotNull().isPresent().contains("ReportAndStop");
                                 });
                                 assertThat(dimension.attributes()).isNotNull().satisfies(ats -> {
                                     assertThat(ats.get(0)).isNotNull().satisfies(at -> {
@@ -267,10 +267,10 @@ public class ExecuteRequestTest {
                                     });
                                 });
                                 assertThat(dimension.proactiveCaching()).isNotNull().satisfies(pc -> {
-                                    assertThat(pc.silenceInterval()).isNotNull().isEqualTo(duration);
-                                    assertThat(pc.latency()).isNotNull().isEqualTo(duration);
-                                    assertThat(pc.silenceOverrideInterval()).isNotNull().isEqualTo(duration);
-                                    assertThat(pc.forceRebuildInterval()).isNotNull().isEqualTo(duration);
+                                    assertThat(pc.silenceInterval()).isNotNull().isPresent().contains(duration);
+                                    assertThat(pc.latency()).isNotNull().isPresent().contains(duration);
+                                    assertThat(pc.silenceOverrideInterval()).isNotNull().isPresent().contains(duration);
+                                    assertThat(pc.forceRebuildInterval()).isNotNull().isPresent().contains(duration);
                                 });
                         	});
                         });

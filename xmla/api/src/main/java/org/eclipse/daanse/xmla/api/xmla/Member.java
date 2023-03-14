@@ -13,9 +13,20 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.Optional;
+
+/**
+ * The Member complex type represents a member in a role.
+ */
 public interface Member {
 
-    String name();
+    /**
+     * @return The name of the user.
+     */
+    Optional<String> name();
 
-    String sid();
+    /**
+     * @return The SID of the user.
+     */
+    Optional<String> sid();
 }

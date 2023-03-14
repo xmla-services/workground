@@ -16,22 +16,25 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.AttributePermission;
 import org.eclipse.daanse.xmla.api.xmla.DimensionPermission;
+import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
-public record DimensionPermissionR(List<AttributePermission> attributePermissions,
-                                   String write,
-                                   String allowedRowsExpression,
+public record DimensionPermissionR(Optional<List<AttributePermission>> attributePermissions,
+                                   Optional<String> allowedRowsExpression,
                                    String name,
-                                   String id,
-                                   Instant createdTimestamp,
-                                   Instant lastSchemaUpdate,
-                                   String description,
-                                   List<Annotation> annotations,
+                                   Optional<String> id,
+                                   Optional<Instant> createdTimestamp,
+                                   Optional<Instant> lastSchemaUpdate,
+                                   Optional<String> description,
+                                   Optional<List<Annotation>> annotations,
                                    String roleID,
-                                   Boolean process,
-                                   String readDefinition,
-                                   String read
+                                   Optional<Boolean> process,
+                                   Optional<ReadDefinitionEnum> readDefinition,
+                                   Optional<ReadWritePermissionEnum> read,
+                                   Optional<ReadWritePermissionEnum> write
 ) implements DimensionPermission {
 }

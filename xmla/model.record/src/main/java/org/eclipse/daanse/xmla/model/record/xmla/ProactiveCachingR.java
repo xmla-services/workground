@@ -17,14 +17,15 @@ import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingBinding;
 
 import javax.xml.datatype.Duration;
+import java.util.Optional;
 
-public record ProactiveCachingR(String onlineMode,
-                                String aggregationStorage,
-                                ProactiveCachingBinding source,
-                                Duration silenceInterval,
-                                Duration latency,
-                                Duration silenceOverrideInterval,
-                                Duration forceRebuildInterval,
-                                Boolean enabled) implements ProactiveCaching {
+public record ProactiveCachingR(Optional<String> onlineMode,
+                                Optional<String> aggregationStorage,
+                                Optional<ProactiveCachingBinding> source,
+                                Optional<Duration> silenceInterval,
+                                Optional<Duration> latency,
+                                Optional<Duration> silenceOverrideInterval,
+                                Optional<Duration> forceRebuildInterval,
+                                Optional<Boolean> enabled) implements ProactiveCaching {
 
 }

@@ -15,10 +15,12 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.CubeDimensionBinding;
 
+import java.util.Optional;
+
 public record CubeDimensionBindingR(
     String dataSourceID,
     String cubeID,
     String cubeDimensionID,
-    String filter) implements CubeDimensionBinding {
+    Optional<String> filter) implements CubeDimensionBinding {
 
 }

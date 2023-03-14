@@ -30,6 +30,8 @@ import org.eclipse.daanse.xmla.api.xmla.DimensionCurrentStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.DimensionPermission;
 import org.eclipse.daanse.xmla.api.xmla.Hierarchy;
 import org.eclipse.daanse.xmla.api.xmla.Level;
+import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
 import org.eclipse.daanse.xmla.api.xmla.UnknownMemberEnumType;
 import org.eclipse.daanse.xmla.model.record.engine300.DimensionAttributeVisualizationPropertiesR;
@@ -48,6 +50,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.LevelR;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
@@ -182,21 +185,21 @@ public class DimensionConvertor {
     private static DimensionPermission convertDimensionPermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DimensionPermission dimensionPermission) {
         if (dimensionPermission != null) {
             return new DimensionPermissionR(
-                convertAttributePermissionList(dimensionPermission.getAttributePermissions() == null ? null :
-                    dimensionPermission.getAttributePermissions().getAttributePermission()),
-                dimensionPermission.getWrite(),
-                dimensionPermission.getAllowedRowsExpression(),
+                Optional.ofNullable(convertAttributePermissionList(dimensionPermission.getAttributePermissions() == null ? null :
+                    dimensionPermission.getAttributePermissions().getAttributePermission())),
+                Optional.ofNullable(dimensionPermission.getAllowedRowsExpression()),
                 dimensionPermission.getName(),
-                dimensionPermission.getID(),
-                convertToInstant(dimensionPermission.getCreatedTimestamp()),
-                convertToInstant(dimensionPermission.getLastSchemaUpdate()),
-                dimensionPermission.getDescription(),
-                convertAnnotationList(dimensionPermission.getAnnotations() == null ? null :
-                    dimensionPermission.getAnnotations().getAnnotation()),
+                Optional.ofNullable(dimensionPermission.getID()),
+                Optional.ofNullable(convertToInstant(dimensionPermission.getCreatedTimestamp())),
+                Optional.ofNullable(convertToInstant(dimensionPermission.getLastSchemaUpdate())),
+                Optional.ofNullable(dimensionPermission.getDescription()),
+                Optional.ofNullable(convertAnnotationList(dimensionPermission.getAnnotations() == null ? null :
+                    dimensionPermission.getAnnotations().getAnnotation())),
                 dimensionPermission.getRoleID(),
-                dimensionPermission.isProcess(),
-                dimensionPermission.getReadDefinition(),
-                dimensionPermission.getRead());
+                Optional.ofNullable(dimensionPermission.isProcess()),
+                Optional.ofNullable(ReadDefinitionEnum.fromValue(dimensionPermission.getReadDefinition())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(dimensionPermission.getRead())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(dimensionPermission.getWrite())));
         }
         return null;
     }

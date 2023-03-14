@@ -14,18 +14,51 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 import java.time.Duration;
+import java.util.Optional;
 
+/**
+ * The DimensionBinding complex type represents a binding to a dimension.
+ */
 public interface DimensionBinding extends Binding {
 
+    /**
+     * @return The ID of the DataSource.
+     */
     String dataSourceID();
 
+    /**
+     * @return The ID of the Dimension.
+     */
     String dimensionID();
 
-    String persistence();
+    /**
+     * @return Determines which parts of the bound source data are dynamic and
+     * are checked for updates by using the frequency that is specified by
+     * the RefreshPolicy element. Enumeration values are as follows:
+     * NotPersisted - Source metadata, members, and data are all
+     * dynamic.
+     * Metadata - Source metadata is static, but members and data
+     * are dynamic.
+     */
+    Optional<PersistenceEnum> persistence();
 
-    String refreshPolicy();
+    /**
+     * @return Determines how often the dynamic part of the dimension or
+     * measure group (as specified by the Persistence element) is
+     * checked for changes. Enumeration values are as follows:
+     * ByQuery - Every query checks to see whether the source data
+     * has changed.
+     * ByInterval - Source data is checked for changes only at the
+     * interval that is specified by the RefreshInterval element.
+     */
+    Optional<RefreshPolicyEnum> refreshPolicy();
 
-    Duration refreshInterval();
+    /**
+     * @return Specifies the interval at which the dynamic part of the dimension or
+     * measure group is refreshed. The value -10000000 is interpreted to
+     * mean infinite.
+     */
+    Optional<Duration> refreshInterval();
 
 
 }

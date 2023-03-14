@@ -13,14 +13,32 @@
 */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.Optional;
+
+/**
+ * The CubeDimensionBinding complex type represents a binding to a CubeDimension.
+ */
 public interface CubeDimensionBinding extends Binding {
 
+    /**
+     * @return The ID of the DataSource.
+     */
    String dataSourceID();
 
+    /**
+     * @return The ID of the Cube.
+     */
    String cubeID();
 
+    /**
+     * @return The ID of the CubeDimension.
+     */
    String cubeDimensionID();
 
-   String filter();
+    /**
+     * @return An MDX expression that specifies how to filter the source
+     * data.
+     */
+   Optional<String> filter();
 
 }

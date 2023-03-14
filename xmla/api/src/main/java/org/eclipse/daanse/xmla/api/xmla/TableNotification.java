@@ -13,10 +13,21 @@
 */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.Optional;
+
+/**
+ * The TableNotification complex type represents a table notification for proactive caching.
+ */
 public interface TableNotification {
 
+    /**
+     * @return The name of the table.
+     */
   String dbTableName();
 
-  String dbSchemaName();
+    /**
+     * @return The name of the schema.
+     */
+  Optional<String> dbSchemaName();
 
 }

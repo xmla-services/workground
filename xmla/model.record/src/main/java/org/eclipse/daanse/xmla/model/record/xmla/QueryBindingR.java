@@ -15,7 +15,9 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.QueryBinding;
 
-public record QueryBindingR(String dataSourceID,
+import java.util.Optional;
+
+public record QueryBindingR(Optional<String> dataSourceID,
                             String queryDefinition) implements QueryBinding {
 
 }

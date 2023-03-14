@@ -19,13 +19,14 @@ import org.eclipse.daanse.xmla.api.xmla.Role;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 public record RoleR(String name,
-                    String id,
-                    Instant createdTimestamp,
-                    Instant lastSchemaUpdate,
-                    String description,
-                    List<Annotation> annotations,
-                    List<Member> members) implements Role {
+                    Optional<String> id,
+                    Optional<Instant> createdTimestamp,
+                    Optional<Instant> lastSchemaUpdate,
+                    Optional<String> description,
+                    Optional<List<Annotation>> annotations,
+                    Optional<List<Member>> members) implements Role {
 
 }

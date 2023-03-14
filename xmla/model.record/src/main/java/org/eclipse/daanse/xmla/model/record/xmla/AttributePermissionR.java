@@ -17,14 +17,15 @@ import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.AttributePermission;
 
 import java.util.List;
+import java.util.Optional;
 
 public record AttributePermissionR(String attributeID,
-                                   String description,
-                                   String defaultMember,
-                                   String visualTotals,
-                                   String allowedSet,
-                                   String deniedSet,
-                                   List<Annotation> annotations
+                                   Optional<String> description,
+                                   Optional<String> defaultMember,
+                                   Optional<String> visualTotals,
+                                   Optional<String> allowedSet,
+                                   Optional<String> deniedSet,
+                                   Optional<List<Annotation>> annotations
 ) implements AttributePermission {
 
 }

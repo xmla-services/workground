@@ -13,7 +13,15 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.Optional;
+
+/**
+ * The QueryNotification complex type represents a query notification for proactive caching.
+ */
 public interface QueryNotification {
 
-    String query();
+    /**
+     * @return The query text.
+     */
+    Optional<String> query();
 }

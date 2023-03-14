@@ -15,21 +15,24 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructurePermission;
+import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
-public record MiningStructurePermissionR(Boolean allowDrillThrough,
-                                         String write,
+public record MiningStructurePermissionR(Optional<Boolean> allowDrillThrough,
                                          String name,
-                                         String id,
-                                         Instant createdTimestamp,
-                                         Instant lastSchemaUpdate,
-                                         String description,
-                                         List<Annotation> annotations,
+                                         Optional<String> id,
+                                         Optional<Instant> createdTimestamp,
+                                         Optional<Instant> lastSchemaUpdate,
+                                         Optional<String> description,
+                                         Optional<List<Annotation>> annotations,
                                          String roleID,
-                                         Boolean process,
-                                         String readDefinition,
-                                         String read) implements MiningStructurePermission {
+                                         Optional<Boolean> process,
+                                         Optional<ReadDefinitionEnum> readDefinition,
+                                         Optional<ReadWritePermissionEnum> read,
+                                         Optional<ReadWritePermissionEnum> write) implements MiningStructurePermission {
 
 }

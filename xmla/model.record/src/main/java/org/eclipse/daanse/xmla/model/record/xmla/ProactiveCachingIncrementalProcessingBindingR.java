@@ -18,9 +18,10 @@ import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingIncrementalProcessingBin
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 public record ProactiveCachingIncrementalProcessingBindingR(
-    Duration refreshInterval,
+    Optional<Duration> refreshInterval,
     List<IncrementalProcessingNotification> incrementalProcessingNotifications)
     implements ProactiveCachingIncrementalProcessingBinding {
 

@@ -15,9 +15,11 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.DSVTableBinding;
 
+import java.util.Optional;
+
 public record DSVTableBindingR(
-    String dataSourceViewID,
+    Optional<String> dataSourceViewID,
     String tableID,
-    String dataEmbeddingStyle) implements DSVTableBinding {
+    Optional<String> dataEmbeddingStyle) implements DSVTableBinding {
 
 }

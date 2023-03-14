@@ -14,18 +14,43 @@
 package org.eclipse.daanse.xmla.api.xmla;
 
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * The CubeDimensionPermission complex type represents permissions for a CubeDimension.
+ */
 public interface CubeDimensionPermission {
 
+    /**
+     * @return The ID of the CubeDimension. For the Measures dimension,
+     * this string MUST be set to "Measures".
+     */
     String cubeDimensionID();
 
-    String description();
+    /**
+     * @return The object description.
+     */
+    Optional<String> description();
 
-    String read();
+    /**
+     * @return Specifies whether the role has permission to read metadata or
+     * data from the CubeDimension.
+     */
+    Optional<ReadWritePermissionEnum> read();
 
-    String write();
+    /**
+     * @return Specifies whether the role has permission to write to the
+     * CubeDimension.
+     */
+    Optional<ReadWritePermissionEnum> write();
 
-    List<AttributePermission> attributePermissions();
+    /**
+     * @return A collection of AttributePermission objects.
+     */
+    Optional<List<AttributePermission>> attributePermissions();
 
-    List<Annotation> annotations();
+    /**
+     * @return A collection of Annotation objects.
+     */
+    Optional<List<Annotation>> annotations();
 }

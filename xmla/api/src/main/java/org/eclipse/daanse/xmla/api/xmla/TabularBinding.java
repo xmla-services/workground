@@ -13,6 +13,9 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+/**
+ * The TabularBinding abstract complex type represents a binding to a tabular source of data.
+ */
 public interface TabularBinding {
 
 }

@@ -21,13 +21,11 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DimensionPermission", propOrder = {"attributePermissions", "write", "allowedRowsExpression"})
+@XmlType(name = "DimensionPermission", propOrder = {"attributePermissions", "allowedRowsExpression"})
 public class DimensionPermission extends Permission {
 
     @XmlElement(name = "AttributePermissions")
     protected DimensionPermission.AttributePermissions attributePermissions;
-    @XmlElement(name = "Write")
-    protected String write;
     @XmlElement(name = "AllowedRowsExpression", namespace = "http://schemas.microsoft" +
         ".com/analysisservices/2011/engine/300/300")
     protected String allowedRowsExpression;
@@ -38,14 +36,6 @@ public class DimensionPermission extends Permission {
 
     public void setAttributePermissions(DimensionPermission.AttributePermissions value) {
         this.attributePermissions = value;
-    }
-
-    public String getWrite() {
-        return write;
-    }
-
-    public void setWrite(String value) {
-        this.write = value;
     }
 
     public String getAllowedRowsExpression() {

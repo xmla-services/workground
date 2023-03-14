@@ -19,13 +19,11 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DatabasePermission", propOrder = { "administer", "write" })
+@XmlType(name = "DatabasePermission", propOrder = { "administer" })
 public class DatabasePermission extends Permission {
 
   @XmlElement(name = "Administer")
   protected Boolean administer;
-  @XmlElement(name = "Write")
-  protected String write;
 
   public Boolean isAdminister() {
     return administer;
@@ -34,13 +32,4 @@ public class DatabasePermission extends Permission {
   public void setAdminister(Boolean value) {
     this.administer = value;
   }
-
-  public String getWrite() {
-    return write;
-  }
-
-  public void setWrite(String value) {
-    this.write = value;
-  }
-
 }
