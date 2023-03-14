@@ -15,10 +15,12 @@ package org.eclipse.daanse.xmla.model.record.engine;
 
 import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
 
+import java.util.Optional;
+
 public record ImpersonationInfoR(String impersonationMode,
-                                 String account,
-                                 String password,
-                                 String impersonationInfoSecurity
+                                 Optional<String> account,
+                                 Optional<String> password,
+                                 Optional<String> impersonationInfoSecurity
 ) implements ImpersonationInfo {
 
 }

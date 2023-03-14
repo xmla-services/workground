@@ -15,14 +15,16 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.ErrorConfiguration;
 
-public record ErrorConfigurationR(Long keyErrorLimit,
-                                  String keyErrorLogFile,
-                                  String keyErrorAction,
-                                  String keyErrorLimitAction,
-                                  String keyNotFound,
-                                  String keyDuplicate,
-                                  String nullKeyConvertedToUnknown,
-                                  String nullKeyNotAllowed,
-                                  String calculationError) implements ErrorConfiguration {
+import java.util.Optional;
+
+public record ErrorConfigurationR(Optional<Long> keyErrorLimit,
+                                  Optional<String> keyErrorLogFile,
+                                  Optional<String> keyErrorAction,
+                                  Optional<String> keyErrorLimitAction,
+                                  Optional<String> keyNotFound,
+                                  Optional<String> keyDuplicate,
+                                  Optional<String> nullKeyConvertedToUnknown,
+                                  Optional<String> nullKeyNotAllowed,
+                                  Optional<String> calculationError) implements ErrorConfiguration {
 
 }

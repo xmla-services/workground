@@ -15,11 +15,23 @@ package org.eclipse.daanse.xmla.api.xmla;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * The ProactiveCachingQueryBinding complex type represents a binding to a collection of query
+ * notifications for proactive caching. The base type has no elements.
+ */
 public interface ProactiveCachingQueryBinding extends ProactiveCachingBinding {
 
-    Duration refreshInterval();
+    /**
+     * @return The interval for running the queries.
+     * default 1 second
+     */
+    Optional<Duration> refreshInterval();
 
+    /**
+     * @return A collection of objects of type QueryNotification.
+     */
     List<QueryNotification> queryNotifications();
 
 }

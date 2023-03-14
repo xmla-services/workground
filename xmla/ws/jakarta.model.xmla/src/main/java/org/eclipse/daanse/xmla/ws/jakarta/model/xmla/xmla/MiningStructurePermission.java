@@ -19,13 +19,11 @@ import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "MiningStructurePermission", propOrder = { "allowDrillThrough", "write" })
+@XmlType(name = "MiningStructurePermission", propOrder = { "allowDrillThrough"})
 public class MiningStructurePermission extends Permission {
 
   @XmlElement(name = "AllowDrillThrough")
   protected Boolean allowDrillThrough;
-  @XmlElement(name = "Write")
-  protected String write;
 
   public Boolean isAllowDrillThrough() {
     return allowDrillThrough;
@@ -33,14 +31,6 @@ public class MiningStructurePermission extends Permission {
 
   public void setAllowDrillThrough(Boolean value) {
     this.allowDrillThrough = value;
-  }
-
-  public String getWrite() {
-    return write;
-  }
-
-  public void setWrite(String value) {
-    this.write = value;
   }
 
 }

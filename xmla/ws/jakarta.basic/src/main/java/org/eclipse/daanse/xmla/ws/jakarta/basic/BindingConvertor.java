@@ -15,7 +15,11 @@ package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import org.eclipse.daanse.xmla.api.xmla.AttributeBindingTypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.Binding;
+import org.eclipse.daanse.xmla.api.xmla.FiscalYearNameEnum;
 import org.eclipse.daanse.xmla.api.xmla.Group;
+import org.eclipse.daanse.xmla.api.xmla.PersistenceEnum;
+import org.eclipse.daanse.xmla.api.xmla.RefreshPolicyEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReportingWeekToMonthPatternEnum;
 import org.eclipse.daanse.xmla.model.record.engine200_200.ExpressionBindingR;
 import org.eclipse.daanse.xmla.model.record.engine200_200.RowNumberBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.AttributeBindingR;
@@ -102,17 +106,17 @@ public class BindingConvertor {
                 return new CubeAttributeBindingR(s.getCubeID(),
                     s.getCubeDimensionID(),
                     s.getAttributeID(),
-                    s.getType(),
-                    convertCubeAttributeBindingOrdinal(s.getOrdinal()));
+                    AttributeBindingTypeEnum.fromValue(s.getType()),
+                    Optional.ofNullable(convertCubeAttributeBindingOrdinal(s.getOrdinal())));
 
             }
             if (source instanceof DimensionBinding) {
                 DimensionBinding s = (DimensionBinding) source;
                 return new DimensionBindingR(s.getDataSourceID(),
                     s.getDimensionID(),
-                    s.getPersistence(),
-                    s.getRefreshPolicy(),
-                    convertDuration(s.getRefreshInterval()));
+                    Optional.ofNullable(PersistenceEnum.fromValue(s.getPersistence())),
+                    Optional.ofNullable(RefreshPolicyEnum.fromValue(s.getRefreshPolicy())),
+                    Optional.ofNullable(convertDuration(s.getRefreshInterval())));
 
             }
             if (source instanceof CubeDimensionBinding) {
@@ -120,7 +124,7 @@ public class BindingConvertor {
                 return new CubeDimensionBindingR(s.getDataSourceID(),
                     s.getCubeID(),
                     s.getCubeDimensionID(),
-                    s.getFilter());
+                    Optional.ofNullable(s.getFilter()));
 
             }
             if (source instanceof MeasureGroupBinding) {
@@ -128,10 +132,10 @@ public class BindingConvertor {
                 return new MeasureGroupBindingR(s.getDataSourceID(),
                     s.getCubeID(),
                     s.getMeasureGroupID(),
-                    s.getPersistence(),
-                    s.getRefreshPolicy(),
-                    convertDuration(s.getRefreshInterval()),
-                    s.getFilter());
+                    Optional.ofNullable(PersistenceEnum.fromValue(s.getPersistence())),
+                    Optional.ofNullable(RefreshPolicyEnum.fromValue(s.getRefreshPolicy())),
+                    Optional.ofNullable(convertDuration(s.getRefreshInterval())),
+                    Optional.ofNullable(s.getFilter()));
 
             }
             if (source instanceof MeasureGroupDimensionBinding) {
@@ -143,17 +147,17 @@ public class BindingConvertor {
                 TimeBinding s = (TimeBinding) source;
                 return new TimeBindingR(convertToInstant(s.getCalendarStartDate()),
                     convertToInstant(s.getCalendarEndDate()),
-                    s.getFirstDayOfWeek(),
-                    s.getCalendarLanguage(),
-                    s.getFiscalFirstMonth(),
-                    s.getFiscalFirstDayOfMonth(),
-                    s.getFiscalYearName(),
-                    s.getReportingFirstMonth(),
-                    s.getReportingFirstWeekOfMonth(),
-                    s.getReportingWeekToMonthPattern(),
-                    s.getManufacturingFirstMonth(),
-                    s.getManufacturingFirstWeekOfMonth(),
-                    s.getManufacturingExtraMonthQuarter());
+                    Optional.ofNullable(s.getFirstDayOfWeek()),
+                    Optional.ofNullable(s.getCalendarLanguage()),
+                    Optional.ofNullable(s.getFiscalFirstMonth()),
+                    Optional.ofNullable(s.getFiscalFirstDayOfMonth()),
+                    Optional.ofNullable(FiscalYearNameEnum.fromValue(s.getFiscalYearName())),
+                    Optional.ofNullable(s.getReportingFirstMonth()),
+                    Optional.ofNullable(s.getReportingFirstWeekOfMonth()),
+                    Optional.ofNullable(ReportingWeekToMonthPatternEnum.fromValue(s.getReportingWeekToMonthPattern())),
+                    Optional.ofNullable(s.getManufacturingFirstMonth()),
+                    Optional.ofNullable(s.getManufacturingFirstWeekOfMonth()),
+                    Optional.ofNullable(s.getManufacturingExtraMonthQuarter()));
 
             }
             if (source instanceof TimeAttributeBinding) {
@@ -181,6 +185,13 @@ public class BindingConvertor {
                 return new ExpressionBindingR(s.getExpression());
 
             }
+        }
+        return null;
+    }
+
+    public static List<Binding> convertBindingList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Binding> list) {
+        if (list != null) {
+            return list.stream().map(BindingConvertor::convertBinding).collect(Collectors.toList());
         }
         return null;
     }
@@ -215,7 +226,7 @@ public class BindingConvertor {
     private static Group convertGroup(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Group group) {
         if (group != null) {
             return new GroupR(group.getName(),
-                convertGroupMembers(group.getMembers()));
+                Optional.ofNullable(convertGroupMembers(group.getMembers())));
         }
         return null;
     }

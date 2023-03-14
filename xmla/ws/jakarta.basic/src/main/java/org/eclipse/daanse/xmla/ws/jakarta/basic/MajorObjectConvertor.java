@@ -128,9 +128,9 @@ public class MajorObjectConvertor {
     private static ImpersonationInfo converImpersonationInfo(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine.ImpersonationInfo impersonationInfo) {
         if (impersonationInfo != null) {
             return new ImpersonationInfoR(impersonationInfo.getImpersonationMode(),
-                impersonationInfo.getAccount(),
-                impersonationInfo.getPassword(),
-                impersonationInfo.getImpersonationInfoSecurity());
+                Optional.ofNullable(impersonationInfo.getAccount()),
+                Optional.ofNullable(impersonationInfo.getPassword()),
+                Optional.ofNullable(impersonationInfo.getImpersonationInfoSecurity()));
         }
         return null;
     }

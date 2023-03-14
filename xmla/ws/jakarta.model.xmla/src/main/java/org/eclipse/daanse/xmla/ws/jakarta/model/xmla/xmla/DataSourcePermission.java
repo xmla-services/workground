@@ -15,22 +15,10 @@ package org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
-import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "DataSourcePermission", propOrder = { "write" })
+@XmlType(name = "DataSourcePermission")
 public class DataSourcePermission extends Permission {
-
-  @XmlElement(name = "Write")
-  protected String write;
-
-  public String getWrite() {
-    return write;
-  }
-
-  public void setWrite(String value) {
-    this.write = value;
-  }
 
 }

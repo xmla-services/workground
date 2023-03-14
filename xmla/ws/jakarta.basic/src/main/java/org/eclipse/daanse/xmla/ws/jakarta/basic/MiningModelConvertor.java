@@ -14,15 +14,14 @@
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import org.eclipse.daanse.xmla.api.xmla.AlgorithmParameter;
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.AttributeTranslation;
-import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import org.eclipse.daanse.xmla.api.xmla.FoldingParameters;
 import org.eclipse.daanse.xmla.api.xmla.MiningModel;
 import org.eclipse.daanse.xmla.api.xmla.MiningModelColumn;
 import org.eclipse.daanse.xmla.api.xmla.MiningModelPermission;
 import org.eclipse.daanse.xmla.api.xmla.MiningModelingFlag;
-import org.eclipse.daanse.xmla.api.xmla.Translation;
+import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
 import org.eclipse.daanse.xmla.model.record.xmla.AlgorithmParameterR;
 import org.eclipse.daanse.xmla.model.record.xmla.AttributeTranslationR;
 import org.eclipse.daanse.xmla.model.record.xmla.FoldingParametersR;
@@ -80,20 +79,20 @@ public class MiningModelConvertor {
 
     private static MiningModelPermission convertMiningModelPermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningModelPermission miningModelPermission) {
         if (miningModelPermission != null) {
-            return new MiningModelPermissionR(miningModelPermission.isAllowDrillThrough(),
-                miningModelPermission.isAllowBrowsing(),
-                miningModelPermission.getWrite(),
+            return new MiningModelPermissionR(Optional.ofNullable(miningModelPermission.isAllowDrillThrough()),
+                Optional.ofNullable(miningModelPermission.isAllowBrowsing()),
                 miningModelPermission.getName(),
-                miningModelPermission.getID(),
-                convertToInstant(miningModelPermission.getCreatedTimestamp()),
-                convertToInstant(miningModelPermission.getLastSchemaUpdate()),
-                miningModelPermission.getDescription(),
-                convertAnnotationList(miningModelPermission.getAnnotations() == null ? null :
-                    miningModelPermission.getAnnotations().getAnnotation()),
+                Optional.ofNullable(miningModelPermission.getID()),
+                Optional.ofNullable(convertToInstant(miningModelPermission.getCreatedTimestamp())),
+                Optional.ofNullable(convertToInstant(miningModelPermission.getLastSchemaUpdate())),
+                Optional.ofNullable(miningModelPermission.getDescription()),
+                Optional.ofNullable(convertAnnotationList(miningModelPermission.getAnnotations() == null ? null :
+                    miningModelPermission.getAnnotations().getAnnotation())),
                 miningModelPermission.getRoleID(),
-                miningModelPermission.isProcess(),
-                miningModelPermission.getReadDefinition(),
-                miningModelPermission.getRead());
+                Optional.ofNullable(miningModelPermission.isProcess()),
+                Optional.ofNullable(ReadDefinitionEnum.fromValue(miningModelPermission.getReadDefinition())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(miningModelPermission.getRead())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(miningModelPermission.getWrite())));
         }
         return null;
     }

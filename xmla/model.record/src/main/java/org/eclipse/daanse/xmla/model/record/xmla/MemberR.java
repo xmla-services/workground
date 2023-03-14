@@ -15,7 +15,9 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.Member;
 
-public record MemberR(String name,
-                      String sid) implements Member {
+import java.util.Optional;
+
+public record MemberR(Optional<String> name,
+                      Optional<String> sid) implements Member {
 
 }

@@ -13,8 +13,9 @@
 */
 package org.eclipse.daanse.xmla.api.xmla;
 
-
-
+/**
+ * The ProactiveCachingBinding abstract complex type represents a binding for proactive caching.
+ */
 public interface ProactiveCachingBinding {
 
 }

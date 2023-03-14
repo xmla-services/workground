@@ -18,9 +18,10 @@ import org.eclipse.daanse.xmla.api.xmla.QueryNotification;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Optional;
 
 public record ProactiveCachingQueryBindingR(
-    Duration refreshInterval,
+    Optional<Duration> refreshInterval,
     List<QueryNotification> queryNotifications) implements ProactiveCachingQueryBinding {
 
 }

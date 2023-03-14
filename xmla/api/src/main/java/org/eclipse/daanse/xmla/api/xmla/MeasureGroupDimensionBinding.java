@@ -13,8 +13,15 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+/**
+ * The MeasureGroupDimensionBinding complex type represents a binding to a
+ * MeasureGroupDimension.
+ */
 public interface MeasureGroupDimensionBinding extends Binding {
 
+    /**
+     * @return The ID of the CubeDimension.
+     */
     String cubeDimensionID();
 
 }

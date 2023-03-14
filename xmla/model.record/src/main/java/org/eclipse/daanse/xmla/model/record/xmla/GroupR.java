@@ -16,9 +16,10 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 import org.eclipse.daanse.xmla.api.xmla.Group;
 
 import java.util.List;
+import java.util.Optional;
 
 public record GroupR(
     String name,
-    List<String> members) implements Group {
+    Optional<List<String>> members) implements Group {
 
 }

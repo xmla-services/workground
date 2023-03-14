@@ -13,6 +13,11 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+/**
+ * The InheritedBinding complex type represents a binding that is inherited from another object.
+ * InheritedBinding has no elements. It is used to indicate that a MeasureGroupAttribute inherits its
+ * bindings from the corresponding DimensionAttribute.
+ */
 public interface InheritedBinding extends Binding {
 
 }

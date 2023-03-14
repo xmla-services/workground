@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.api.engine;
 
+import java.util.Optional;
+
 /**
  * The ImpersonationInfo complex type represents impersonation settings for an object or operation.
  */
@@ -41,17 +43,17 @@ public interface ImpersonationInfo {
      * ImpersonationMode=ImpersonateAccount.
      * @return
      */
-    String account();
+    Optional<String> account();
 
     /**
      * @return The password of the user account when
      * ImpersonationMode=ImpersonateAccount.
      */
-    String password();
+    Optional<String> password();
 
     /**
      * @return Specifies whether the password was removed.
      */
-    String impersonationInfoSecurity();
+    Optional<String> impersonationInfoSecurity();
 
 }

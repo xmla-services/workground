@@ -58,7 +58,7 @@ public class DrillThroughAction extends Action {
     @XmlElement(name = "Columns")
     protected DrillThroughAction.Columns columns;
     @XmlElement(name = "MaximumRows")
-    protected BigInteger maximumRows;
+    protected Integer maximumRows;
 
     public String getName() {
         return name;
@@ -184,11 +184,11 @@ public class DrillThroughAction extends Action {
         this.columns = value;
     }
 
-    public BigInteger getMaximumRows() {
+    public Integer getMaximumRows() {
         return maximumRows;
     }
 
-    public void setMaximumRows(BigInteger value) {
+    public void setMaximumRows(Integer value) {
         this.maximumRows = value;
     }
 

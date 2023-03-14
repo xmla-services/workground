@@ -13,6 +13,11 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+/**
+ * The TimeAttributeBinding complex type represents a binding of a DimensionAttribute to a time
+ * calendar. It has no additional elements. It is used for the KeyColumns of attributes in dimensions
+ * that have a Source property with type TimeBinding.
+ */
 public interface TimeAttributeBinding extends Binding {
 
 }

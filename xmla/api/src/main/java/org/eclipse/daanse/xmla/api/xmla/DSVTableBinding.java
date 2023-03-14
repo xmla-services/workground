@@ -13,11 +13,27 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+import java.util.Optional;
+
+/**
+ * The DSVTableBinding complex type represents a binding to a table within a DataSourceView.
+ */
 public interface DSVTableBinding extends TabularBinding {
 
-    String dataSourceViewID();
+    /**
+     * @return The ID of the DataSourceView.
+     */
+    Optional<String> dataSourceViewID();
 
+    /**
+     * @return The ID of the table.
+     */
     String tableID();
 
-    String dataEmbeddingStyle();
+    /**
+     * @return Specifies whether the table contents are embedded within the
+     * DSV, or whether the DSV refers to their actual location.
+     * default NotEmbedded
+     */
+    Optional<String> dataEmbeddingStyle();
 }

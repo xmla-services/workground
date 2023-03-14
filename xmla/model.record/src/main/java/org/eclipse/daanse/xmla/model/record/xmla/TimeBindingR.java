@@ -13,25 +13,28 @@
  */
 package org.eclipse.daanse.xmla.model.record.xmla;
 
+import org.eclipse.daanse.xmla.api.xmla.FiscalYearNameEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReportingWeekToMonthPatternEnum;
 import org.eclipse.daanse.xmla.api.xmla.TimeBinding;
 
 import java.math.BigInteger;
 import java.time.Instant;
+import java.util.Optional;
 
 public record TimeBindingR(
     Instant calendarStartDate,
     Instant calendarEndDate,
-    Integer firstDayOfWeek,
-    BigInteger calendarLanguage,
-    Integer fiscalFirstMonth,
-    Integer fiscalFirstDayOfMonth,
-    String fiscalYearName,
-    Integer reportingFirstMonth,
-    String reportingFirstWeekOfMonth,
-    String reportingWeekToMonthPattern,
-    Integer manufacturingFirstMonth,
-    Integer manufacturingFirstWeekOfMonth,
-    Integer manufacturingExtraMonthQuarter
+    Optional<Integer> firstDayOfWeek,
+    Optional<BigInteger> calendarLanguage,
+    Optional<Integer> fiscalFirstMonth,
+    Optional<Integer> fiscalFirstDayOfMonth,
+    Optional<FiscalYearNameEnum> fiscalYearName,
+    Optional<Integer> reportingFirstMonth,
+    Optional<String> reportingFirstWeekOfMonth,
+    Optional<ReportingWeekToMonthPatternEnum> reportingWeekToMonthPattern,
+    Optional<Integer> manufacturingFirstMonth,
+    Optional<Integer> manufacturingFirstWeekOfMonth,
+    Optional<Integer> manufacturingExtraMonthQuarter
 ) implements TimeBinding {
 
 }

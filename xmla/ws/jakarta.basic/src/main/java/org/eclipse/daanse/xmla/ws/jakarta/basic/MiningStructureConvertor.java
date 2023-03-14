@@ -17,6 +17,8 @@ import org.eclipse.daanse.xmla.api.xmla.MiningModel;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructureColumn;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructurePermission;
+import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
 import org.eclipse.daanse.xmla.model.record.xmla.MiningStructurePermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.MiningStructureR;
 import org.eclipse.daanse.xmla.model.record.xmla.ScalarMiningStructureColumnR;
@@ -86,18 +88,18 @@ public class MiningStructureConvertor {
 
     private static MiningStructurePermission convertMiningStructurePermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningStructurePermission miningStructurePermission) {
         if (miningStructurePermission != null) {
-            return new MiningStructurePermissionR(miningStructurePermission.isAllowDrillThrough(),
-                miningStructurePermission.getWrite(),
+            return new MiningStructurePermissionR(Optional.ofNullable(miningStructurePermission.isAllowDrillThrough()),
                 miningStructurePermission.getName(),
-                miningStructurePermission.getID(),
-                convertToInstant(miningStructurePermission.getCreatedTimestamp()),
-                convertToInstant(miningStructurePermission.getLastSchemaUpdate()),
-                miningStructurePermission.getDescription(),
-                convertAnnotationList(miningStructurePermission.getAnnotations() == null ? null : miningStructurePermission.getAnnotations().getAnnotation()),
+                Optional.ofNullable(miningStructurePermission.getID()),
+                Optional.ofNullable(convertToInstant(miningStructurePermission.getCreatedTimestamp())),
+                Optional.ofNullable(convertToInstant(miningStructurePermission.getLastSchemaUpdate())),
+                Optional.ofNullable(miningStructurePermission.getDescription()),
+                Optional.ofNullable(convertAnnotationList(miningStructurePermission.getAnnotations() == null ? null : miningStructurePermission.getAnnotations().getAnnotation())),
                 miningStructurePermission.getRoleID(),
-                miningStructurePermission.isProcess(),
-                miningStructurePermission.getReadDefinition(),
-                miningStructurePermission.getRead());
+                Optional.ofNullable(miningStructurePermission.isProcess()),
+                Optional.ofNullable(ReadDefinitionEnum.fromValue(miningStructurePermission.getReadDefinition())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(miningStructurePermission.getRead())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(miningStructurePermission.getWrite())));
         }
         return null;
     }

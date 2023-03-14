@@ -13,7 +13,10 @@
  */
 package org.eclipse.daanse.xmla.api.xmla;
 
+/**
+ * DataSourcePermission has no elements that are additional to those that are contained in the
+ * Permission object.
+ */
 public interface DataSourcePermission extends Permission {
 
-    String write();
 }

@@ -21,27 +21,29 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DSVTableBinding;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.QueryBinding;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TableBinding;
 
+import java.util.Optional;
+
 public class TabularBindingConvertor {
 
     public static TabularBinding convertTabularBinding(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TabularBinding source) {
         if (source != null) {
             if (source instanceof TableBinding) {
                 TableBinding tableBinding = (TableBinding) source;
-                return new TableBindingR(tableBinding.getDataSourceID(),
+                return new TableBindingR(Optional.ofNullable(tableBinding.getDataSourceID()),
                     tableBinding.getDbTableName(),
-                    tableBinding.getDbSchemaName());
+                    Optional.ofNullable(tableBinding.getDbSchemaName()));
             }
             if (source instanceof QueryBinding) {
                 QueryBinding queryBinding = (QueryBinding) source;
-                return new QueryBindingR(queryBinding.getDataSourceID(),
+                return new QueryBindingR(Optional.ofNullable(queryBinding.getDataSourceID()),
                     queryBinding.getQueryDefinition());
 
             }
             if (source instanceof DSVTableBinding) {
                 DSVTableBinding dsvTableBinding = (DSVTableBinding) source;
-                return new DSVTableBindingR(dsvTableBinding.getDataSourceViewID(),
+                return new DSVTableBindingR(Optional.ofNullable(dsvTableBinding.getDataSourceViewID()),
                     dsvTableBinding.getTableID(),
-                    dsvTableBinding.getDataEmbeddingStyle());
+                    Optional.ofNullable(dsvTableBinding.getDataEmbeddingStyle()));
             }
         }
         return null;

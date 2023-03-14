@@ -21,7 +21,7 @@ import jakarta.xml.bind.annotation.XmlType;
 import java.util.List;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "CubePermission", propOrder = {"readSourceData", "dimensionPermissions", "cellPermissions", "write"})
+@XmlType(name = "CubePermission", propOrder = {"readSourceData", "dimensionPermissions", "cellPermissions"})
 public class CubePermission extends Permission {
 
     @XmlElement(name = "ReadSourceData")
@@ -30,8 +30,6 @@ public class CubePermission extends Permission {
     protected CubePermission.DimensionPermissions dimensionPermissions;
     @XmlElement(name = "CellPermissions")
     protected CubePermission.CellPermissions cellPermissions;
-    @XmlElement(name = "Write")
-    protected String write;
 
     public String getReadSourceData() {
         return readSourceData;
@@ -55,14 +53,6 @@ public class CubePermission extends Permission {
 
     public void setCellPermissions(CubePermission.CellPermissions value) {
         this.cellPermissions = value;
-    }
-
-    public String getWrite() {
-        return write;
-    }
-
-    public void setWrite(String value) {
-        this.write = value;
     }
 
     @XmlAccessorType(XmlAccessType.FIELD)

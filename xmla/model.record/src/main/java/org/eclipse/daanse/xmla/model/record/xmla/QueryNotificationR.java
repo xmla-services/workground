@@ -15,6 +15,8 @@ package org.eclipse.daanse.xmla.model.record.xmla;
 
 import org.eclipse.daanse.xmla.api.xmla.QueryNotification;
 
-public record QueryNotificationR(String query) implements QueryNotification {
+import java.util.Optional;
+
+public record QueryNotificationR(Optional<String> query) implements QueryNotification {
 
 }

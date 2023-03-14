@@ -14,6 +14,7 @@
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import org.eclipse.daanse.xmla.api.engine300.CalculationPropertiesVisualizationProperties;
+import org.eclipse.daanse.xmla.api.xmla.AccessEnum;
 import org.eclipse.daanse.xmla.api.xmla.Action;
 import org.eclipse.daanse.xmla.api.xmla.Aggregation;
 import org.eclipse.daanse.xmla.api.xmla.AggregationAttribute;
@@ -51,6 +52,7 @@ import org.eclipse.daanse.xmla.api.xmla.MeasureGroupStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.Partition;
 import org.eclipse.daanse.xmla.api.xmla.PartitionCurrentStorageModeEnumType;
 import org.eclipse.daanse.xmla.api.xmla.PartitionStorageModeEnumType;
+import org.eclipse.daanse.xmla.api.xmla.PersistenceEnum;
 import org.eclipse.daanse.xmla.api.xmla.Perspective;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveAction;
 import org.eclipse.daanse.xmla.api.xmla.PerspectiveAttribute;
@@ -63,9 +65,15 @@ import org.eclipse.daanse.xmla.api.xmla.PerspectiveMeasureGroup;
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCaching;
 import org.eclipse.daanse.xmla.api.xmla.ProactiveCachingBinding;
 import org.eclipse.daanse.xmla.api.xmla.QueryNotification;
+import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
+import org.eclipse.daanse.xmla.api.xmla.RefreshPolicyEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReportFormatParameter;
+import org.eclipse.daanse.xmla.api.xmla.ReportParameter;
+import org.eclipse.daanse.xmla.api.xmla.TargetTypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.Translation;
+import org.eclipse.daanse.xmla.api.xmla.TypeEnum;
 import org.eclipse.daanse.xmla.model.record.engine300.CalculationPropertiesVisualizationPropertiesR;
-import org.eclipse.daanse.xmla.model.record.xmla.ActionR;
 import org.eclipse.daanse.xmla.model.record.xmla.AggregationAttributeR;
 import org.eclipse.daanse.xmla.model.record.xmla.AggregationDesignAttributeR;
 import org.eclipse.daanse.xmla.model.record.xmla.AggregationDesignDimensionR;
@@ -87,6 +95,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.CubeHierarchyR;
 import org.eclipse.daanse.xmla.model.record.xmla.CubePermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.CubeR;
 import org.eclipse.daanse.xmla.model.record.xmla.DataSourceViewBindingR;
+import org.eclipse.daanse.xmla.model.record.xmla.DrillThroughActionR;
 import org.eclipse.daanse.xmla.model.record.xmla.ErrorConfigurationR;
 import org.eclipse.daanse.xmla.model.record.xmla.IncrementalProcessingNotificationR;
 import org.eclipse.daanse.xmla.model.record.xmla.KpiR;
@@ -108,6 +117,10 @@ import org.eclipse.daanse.xmla.model.record.xmla.ProactiveCachingIncrementalProc
 import org.eclipse.daanse.xmla.model.record.xmla.ProactiveCachingQueryBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.ProactiveCachingR;
 import org.eclipse.daanse.xmla.model.record.xmla.QueryNotificationR;
+import org.eclipse.daanse.xmla.model.record.xmla.ReportActionR;
+import org.eclipse.daanse.xmla.model.record.xmla.ReportFormatParameterR;
+import org.eclipse.daanse.xmla.model.record.xmla.ReportParameterR;
+import org.eclipse.daanse.xmla.model.record.xmla.StandardActionR;
 import org.eclipse.daanse.xmla.model.record.xmla.TranslationR;
 
 import java.util.List;
@@ -115,6 +128,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.BindingConvertor.convertBindingList;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertCommandList;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertDuration;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
@@ -220,10 +234,10 @@ public class CubeConvertor {
             return new MeasureGroupBindingR(source.getDataSourceID(),
                 source.getCubeID(),
                 source.getMeasureGroupID(),
-                source.getPersistence(),
-                source.getRefreshPolicy(),
-                convertDuration(source.getRefreshInterval()),
-                source.getFilter());
+                Optional.ofNullable(PersistenceEnum.fromValue(source.getPersistence())),
+                Optional.ofNullable(RefreshPolicyEnum.fromValue(source.getRefreshPolicy())),
+                Optional.ofNullable(convertDuration(source.getRefreshInterval())),
+                Optional.ofNullable(source.getFilter()));
         }
         return null;
     }
@@ -632,14 +646,14 @@ public class CubeConvertor {
 
     public static ProactiveCaching convertProactiveCaching(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ProactiveCaching proactiveCaching) {
         if (proactiveCaching != null) {
-            return new ProactiveCachingR(proactiveCaching.getOnlineMode(),
-                proactiveCaching.getAggregationStorage(),
-                convertProactiveCachingBinding(proactiveCaching.getSource()),
-                proactiveCaching.getSilenceInterval(),
-                proactiveCaching.getLatency(),
-                proactiveCaching.getSilenceOverrideInterval(),
-                proactiveCaching.getForceRebuildInterval(),
-                proactiveCaching.getEnabled());
+            return new ProactiveCachingR(Optional.ofNullable(proactiveCaching.getOnlineMode()),
+                Optional.ofNullable(proactiveCaching.getAggregationStorage()),
+                Optional.ofNullable(convertProactiveCachingBinding(proactiveCaching.getSource())),
+                Optional.ofNullable(proactiveCaching.getSilenceInterval()),
+                Optional.ofNullable(proactiveCaching.getLatency()),
+                Optional.ofNullable(proactiveCaching.getSilenceOverrideInterval()),
+                Optional.ofNullable(proactiveCaching.getForceRebuildInterval()),
+                Optional.ofNullable(proactiveCaching.getEnabled()));
         }
         return null;
     }
@@ -649,13 +663,13 @@ public class CubeConvertor {
             if (source instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ProactiveCachingQueryBinding) {
                 org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ProactiveCachingQueryBinding proactiveCachingQueryBinding =
                     (org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ProactiveCachingQueryBinding) source;
-                return new ProactiveCachingQueryBindingR(convertDuration(proactiveCachingQueryBinding.getRefreshInterval()),
+                return new ProactiveCachingQueryBindingR(Optional.ofNullable(convertDuration(proactiveCachingQueryBinding.getRefreshInterval())),
                     convertProactiveCachingQueryBindingQueryNotifications(proactiveCachingQueryBinding.getQueryNotifications()));
             }
             if (source instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ProactiveCachingIncrementalProcessingBinding) {
                 org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ProactiveCachingIncrementalProcessingBinding proactiveCachingIncrementalProcessingBinding =
                     (org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ProactiveCachingIncrementalProcessingBinding) source;
-                return new ProactiveCachingIncrementalProcessingBindingR(convertDuration(proactiveCachingIncrementalProcessingBinding.getRefreshInterval()),
+                return new ProactiveCachingIncrementalProcessingBindingR(Optional.ofNullable(convertDuration(proactiveCachingIncrementalProcessingBinding.getRefreshInterval())),
                     convertProactiveCachingIncrementalProcessingBindingIncrementalProcessingNotifications(
                         proactiveCachingIncrementalProcessingBinding.getIncrementalProcessingNotifications()));
             }
@@ -712,7 +726,7 @@ public class CubeConvertor {
 
     private static QueryNotification convertQueryNotification(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.QueryNotification queryNotification) {
         if (queryNotification != null) {
-            return new QueryNotificationR(queryNotification.getQuery());
+            return new QueryNotificationR(Optional.ofNullable(queryNotification.getQuery()));
         }
         return null;
     }
@@ -763,15 +777,15 @@ public class CubeConvertor {
 
     private static ErrorConfiguration convertErrorConfiguration(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ErrorConfiguration errorConfiguration) {
         if (errorConfiguration != null) {
-            return new ErrorConfigurationR(errorConfiguration.getKeyErrorLimit(),
-                errorConfiguration.getKeyErrorLogFile(),
-                errorConfiguration.getKeyErrorAction(),
-                errorConfiguration.getKeyErrorLimitAction(),
-                errorConfiguration.getKeyNotFound(),
-                errorConfiguration.getKeyDuplicate(),
-                errorConfiguration.getNullKeyConvertedToUnknown(),
-                errorConfiguration.getNullKeyNotAllowed(),
-                errorConfiguration.getCalculationError());
+            return new ErrorConfigurationR(Optional.ofNullable(errorConfiguration.getKeyErrorLimit()),
+                Optional.ofNullable(errorConfiguration.getKeyErrorLogFile()),
+                Optional.ofNullable(errorConfiguration.getKeyErrorAction()),
+                Optional.ofNullable(errorConfiguration.getKeyErrorLimitAction()),
+                Optional.ofNullable(errorConfiguration.getKeyNotFound()),
+                Optional.ofNullable(errorConfiguration.getKeyDuplicate()),
+                Optional.ofNullable(errorConfiguration.getNullKeyConvertedToUnknown()),
+                Optional.ofNullable(errorConfiguration.getNullKeyNotAllowed()),
+                Optional.ofNullable(errorConfiguration.getCalculationError()));
         }
         return null;
 
@@ -793,7 +807,102 @@ public class CubeConvertor {
 
     private static Action convertAction(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Action action) {
         if (action != null) {
-            return new ActionR();
+            if (action instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.StandardAction) {
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.StandardAction standardAction
+                    = (org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.StandardAction) action;
+                return new StandardActionR(standardAction.getName(),
+                    Optional.ofNullable(standardAction.getID()),
+                    Optional.ofNullable(standardAction.getCaption()),
+                    Optional.ofNullable(standardAction.isCaptionIsMdx()),
+                    Optional.ofNullable(convertTranslationList(standardAction.getTranslations() == null ?
+                        null : standardAction.getTranslations().getTranslation())),
+                    TargetTypeEnum.fromValue(standardAction.getTargetType()),
+                    Optional.ofNullable(standardAction.getTarget()),
+                    Optional.ofNullable(standardAction.getCondition()),
+                    TypeEnum.fromValue(standardAction.getType()),
+                    Optional.ofNullable(standardAction.getInvocation()),
+                    Optional.ofNullable(standardAction.getApplication()),
+                    Optional.ofNullable(standardAction.getDescription()),
+                    Optional.ofNullable(convertAnnotationList(standardAction.getAnnotations() == null ? null : standardAction.getAnnotations().getAnnotation())),
+                    standardAction.getExpression());
+            }
+            if (action instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReportAction) {
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReportAction reportAction
+                    = (org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReportAction) action;
+                return new ReportActionR(reportAction.getName(),
+                    Optional.ofNullable(reportAction.getID()),
+                    Optional.ofNullable(reportAction.getCaption()),
+                    Optional.ofNullable(reportAction.isCaptionIsMdx()),
+                    Optional.ofNullable(convertTranslationList(reportAction.getTranslations() == null ?
+                        null : reportAction.getTranslations().getTranslation())),
+                    TargetTypeEnum.fromValue(reportAction.getTargetType()),
+                    Optional.ofNullable(reportAction.getTarget()),
+                    Optional.ofNullable(reportAction.getCondition()),
+                    TypeEnum.fromValue(reportAction.getType()),
+                    Optional.ofNullable(reportAction.getInvocation()),
+                    Optional.ofNullable(reportAction.getApplication()),
+                    Optional.ofNullable(reportAction.getDescription()),
+                    Optional.ofNullable(convertAnnotationList(reportAction.getAnnotations() == null ?
+                        null : reportAction.getAnnotations().getAnnotation())),
+                    reportAction.getReportServer(),
+                    Optional.ofNullable(reportAction.getPath()),
+                    Optional.ofNullable(convertReportParametersList(reportAction.getReportParameters() == null ?
+                        null : reportAction.getReportParameters().getReportParameter())),
+                    Optional.ofNullable(convertReportFormatParameterList(reportAction.getReportFormatParameters() == null ?
+                        null : reportAction.getReportFormatParameters().getReportFormatParameter())));
+            }
+            if (action instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DrillThroughAction) {
+                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DrillThroughAction drillThroughAction
+                    = (org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DrillThroughAction) action;
+                return new DrillThroughActionR(drillThroughAction.getName(),
+                    Optional.ofNullable(drillThroughAction.getID()),
+                    Optional.ofNullable(drillThroughAction.getCaption()),
+                    Optional.ofNullable(drillThroughAction.isCaptionIsMdx()),
+                    Optional.ofNullable(convertTranslationList(drillThroughAction.getTranslations() == null ?
+                        null : drillThroughAction.getTranslations().getTranslation())),
+                    TargetTypeEnum.fromValue(drillThroughAction.getTargetType()),
+                    Optional.ofNullable(drillThroughAction.getTarget()),
+                    Optional.ofNullable(drillThroughAction.getCondition()),
+                    TypeEnum.fromValue(drillThroughAction.getType()),
+                    Optional.ofNullable(drillThroughAction.getInvocation()),
+                    Optional.ofNullable(drillThroughAction.getApplication()),
+                    Optional.ofNullable(drillThroughAction.getDescription()),
+                    Optional.ofNullable(convertAnnotationList(drillThroughAction.getAnnotations() == null ?
+                        null : drillThroughAction.getAnnotations().getAnnotation())),
+                    Optional.ofNullable(drillThroughAction.isDefault()),
+                    Optional.ofNullable(convertBindingList(drillThroughAction.getColumns().getColumn())),
+                    Optional.ofNullable(drillThroughAction.getMaximumRows()));
+            }
+        }
+        return null;
+    }
+
+    private static List<ReportFormatParameter> convertReportFormatParameterList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReportFormatParameter> list) {
+        if (list != null) {
+            return list.stream().map(CubeConvertor::convertReportFormatParameter).collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    private static ReportFormatParameter convertReportFormatParameter(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReportFormatParameter reportFormatParameter) {
+        if (reportFormatParameter != null) {
+            return new ReportFormatParameterR(reportFormatParameter.getName(),
+                reportFormatParameter.getValue());
+        }
+        return null;
+    }
+
+    private static List<ReportParameter> convertReportParametersList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReportParameter> list) {
+        if (list != null) {
+            return list.stream().map(CubeConvertor::convertReportParameter).collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    private static ReportParameter convertReportParameter(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReportParameter reportParameter) {
+        if (reportParameter != null) {
+            return new ReportParameterR(reportParameter.getName(),
+                reportParameter.getValue());
         }
         return null;
     }
@@ -1140,20 +1249,20 @@ public class CubeConvertor {
     private static CubePermission convertCubePermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.CubePermission cubePermission) {
         if (cubePermission != null) {
             return new CubePermissionR(
-                cubePermission.getReadSourceData(),
-                convertCubePermissionDimensionPermissions(cubePermission.getDimensionPermissions()),
-                convertCubePermissionCellPermissions(cubePermission.getCellPermissions()),
-                cubePermission.getWrite(),
+                Optional.ofNullable(cubePermission.getReadSourceData()),
+                Optional.ofNullable(convertCubePermissionDimensionPermissions(cubePermission.getDimensionPermissions())),
+                Optional.ofNullable(convertCubePermissionCellPermissions(cubePermission.getCellPermissions())),
                 cubePermission.getName(),
-                cubePermission.getID(),
-                convertToInstant(cubePermission.getCreatedTimestamp()),
-                convertToInstant(cubePermission.getLastSchemaUpdate()),
-                cubePermission.getDescription(),
-                convertAnnotationList(cubePermission.getAnnotations() == null ? null : cubePermission.getAnnotations().getAnnotation()),
+                Optional.ofNullable(cubePermission.getID()),
+                Optional.ofNullable(convertToInstant(cubePermission.getCreatedTimestamp())),
+                Optional.ofNullable(convertToInstant(cubePermission.getLastSchemaUpdate())),
+                Optional.ofNullable(cubePermission.getDescription()),
+                Optional.ofNullable(convertAnnotationList(cubePermission.getAnnotations() == null ? null : cubePermission.getAnnotations().getAnnotation())),
                 cubePermission.getRoleID(),
-                cubePermission.isProcess(),
-                cubePermission.getReadDefinition(),
-                cubePermission.getRead());
+                Optional.ofNullable(cubePermission.isProcess()),
+                Optional.ofNullable(ReadDefinitionEnum.fromValue(cubePermission.getReadDefinition())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(cubePermission.getRead())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(cubePermission.getWrite())));
         }
         return null;
     }
@@ -1175,11 +1284,11 @@ public class CubeConvertor {
     public static CubeDimensionPermission convertCubeDimensionPermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.CubeDimensionPermission cubeDimensionPermission) {
         if (cubeDimensionPermission != null) {
             return new CubeDimensionPermissionR(cubeDimensionPermission.getCubeDimensionID(),
-                cubeDimensionPermission.getDescription(),
-                cubeDimensionPermission.getRead(),
-                cubeDimensionPermission.getWrite(),
-                convertCubeDimensionPermissionAttributePermissions(cubeDimensionPermission.getAttributePermissions()),
-                convertAnnotationList(cubeDimensionPermission.getAnnotations() == null ? null : cubeDimensionPermission.getAnnotations().getAnnotation()));
+                Optional.ofNullable(cubeDimensionPermission.getDescription()),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(cubeDimensionPermission.getRead())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(cubeDimensionPermission.getWrite())),
+                Optional.ofNullable(convertCubeDimensionPermissionAttributePermissions(cubeDimensionPermission.getAttributePermissions())),
+                Optional.ofNullable(convertAnnotationList(cubeDimensionPermission.getAnnotations() == null ? null : cubeDimensionPermission.getAnnotations().getAnnotation())));
         }
         return null;
     }
@@ -1201,12 +1310,12 @@ public class CubeConvertor {
     private static AttributePermission convertAttributePermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AttributePermission attributePermission) {
         if (attributePermission != null) {
             return new AttributePermissionR(attributePermission.getAttributeID(),
-                attributePermission.getDescription(),
-                attributePermission.getDefaultMember(),
-                attributePermission.getVisualTotals(),
-                attributePermission.getAllowedSet(),
-                attributePermission.getDeniedSet(),
-                convertAnnotationList(attributePermission.getAnnotations() == null ? null : attributePermission.getAnnotations().getAnnotation()));
+                Optional.ofNullable(attributePermission.getDescription()),
+                Optional.ofNullable(attributePermission.getDefaultMember()),
+                Optional.ofNullable(attributePermission.getVisualTotals()),
+                Optional.ofNullable(attributePermission.getAllowedSet()),
+                Optional.ofNullable(attributePermission.getDeniedSet()),
+                Optional.ofNullable(convertAnnotationList(attributePermission.getAnnotations() == null ? null : attributePermission.getAnnotations().getAnnotation())));
         }
         return null;
     }
@@ -1227,10 +1336,10 @@ public class CubeConvertor {
 
     private static CellPermission convertCellPermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.CellPermission cellPermission) {
         if (cellPermission != null) {
-            return new CellPermissionR(cellPermission.getAccess(),
-                cellPermission.getDescription(),
-                cellPermission.getExpression(),
-                convertAnnotationList(cellPermission.getAnnotations() == null ? null : cellPermission.getAnnotations().getAnnotation()));
+            return new CellPermissionR(Optional.ofNullable(AccessEnum.fromValue(cellPermission.getAccess())),
+                Optional.ofNullable(cellPermission.getDescription()),
+                Optional.ofNullable(cellPermission.getExpression()),
+                Optional.ofNullable(convertAnnotationList(cellPermission.getAnnotations() == null ? null : cellPermission.getAnnotations().getAnnotation())));
         }
         return null;
     }

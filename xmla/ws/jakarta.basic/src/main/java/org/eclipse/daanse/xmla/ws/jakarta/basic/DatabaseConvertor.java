@@ -1,7 +1,6 @@
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
 import org.eclipse.daanse.xmla.api.xmla.Account;
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.Assembly;
 import org.eclipse.daanse.xmla.api.xmla.Cube;
 import org.eclipse.daanse.xmla.api.xmla.DataSource;
@@ -10,14 +9,15 @@ import org.eclipse.daanse.xmla.api.xmla.Database;
 import org.eclipse.daanse.xmla.api.xmla.DatabasePermission;
 import org.eclipse.daanse.xmla.api.xmla.Dimension;
 import org.eclipse.daanse.xmla.api.xmla.MiningStructure;
+import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
+import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
 import org.eclipse.daanse.xmla.api.xmla.Role;
 import org.eclipse.daanse.xmla.model.record.xmla.AccountR;
 import org.eclipse.daanse.xmla.model.record.xmla.DatabasePermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.DatabaseR;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ServerProperty;
 
-import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
@@ -79,18 +79,18 @@ public class DatabaseConvertor {
 
     private static DatabasePermission convertDatabasePermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DatabasePermission databasePermission) {
         if (databasePermission != null) {
-            return new DatabasePermissionR(databasePermission.isAdminister(),
-                databasePermission.getWrite(),
+            return new DatabasePermissionR(Optional.ofNullable(databasePermission.isAdminister()),
                 databasePermission.getName(),
-                databasePermission.getID(),
-                convertToInstant(databasePermission.getCreatedTimestamp()),
-                convertToInstant(databasePermission.getLastSchemaUpdate()),
-                databasePermission.getDescription(),
-                convertAnnotationList(databasePermission.getAnnotations() == null ? null : databasePermission.getAnnotations().getAnnotation()),
+                Optional.ofNullable(databasePermission.getID()),
+                Optional.ofNullable(convertToInstant(databasePermission.getCreatedTimestamp())),
+                Optional.ofNullable(convertToInstant(databasePermission.getLastSchemaUpdate())),
+                Optional.ofNullable(databasePermission.getDescription()),
+                Optional.ofNullable(convertAnnotationList(databasePermission.getAnnotations() == null ? null : databasePermission.getAnnotations().getAnnotation())),
                 databasePermission.getRoleID(),
-                databasePermission.isProcess(),
-                databasePermission.getReadDefinition(),
-                databasePermission.getRead());
+                Optional.ofNullable(databasePermission.isProcess()),
+                Optional.ofNullable(ReadDefinitionEnum.fromValue(databasePermission.getReadDefinition())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(databasePermission.getRead())),
+                Optional.ofNullable(ReadWritePermissionEnum.fromValue(databasePermission.getWrite())));
         }
         return null;
     }
