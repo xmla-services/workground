@@ -13,11 +13,11 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.jdbc;
 
+import java.util.TreeSet;
+
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Join;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
-
-import java.util.TreeSet;
 
 public class SchemaExplorer {
 
