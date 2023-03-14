@@ -17,5 +17,10 @@
       <artifactId>org.eclipse.daanse.db.jdbc.metadata</artifactId>
       <version>${revision}</version>
     </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.service.metatype.annotations</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 </project>

@@ -29,14 +29,20 @@ import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.SharedDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.VirtualCube;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Cause;
-import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.DescriptionVerifierConfig;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.ServiceScope;
+import org.osgi.service.metatype.annotations.Designate;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 
+@Designate(ocd = DescriptionVerifierConfig.class, factory = true)
+@Component(service = DescriptionWalker.class, scope = ServiceScope.SINGLETON)
 public class DescriptionWalker extends AbstractSchemaWalker{
     private DescriptionVerifierConfig config;
 
@@ -55,8 +61,14 @@ public class DescriptionWalker extends AbstractSchemaWalker{
     private Consumer<Action> actionConsumer = this::checkAction;
     private Consumer<SharedDimension> sharedDimensionConsumer = this::checkSharedDimension;
 
+    @Activate
     public DescriptionWalker(DescriptionVerifierConfig config) {
         this.config = config;
+    }
+
+    @Deactivate
+    public void deactivate() {
+        config = null;
     }
 
     public Collection<? extends VerificationResult> checkSchema(Schema schema) {
