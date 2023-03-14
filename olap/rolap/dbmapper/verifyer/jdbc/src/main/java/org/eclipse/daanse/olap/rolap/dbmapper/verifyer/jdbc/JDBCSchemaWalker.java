@@ -14,7 +14,6 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.jdbc;
 
 import java.lang.reflect.Field;
-import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -31,7 +30,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.api.Measure;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Property;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.UserDefinedFunction;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.View;
@@ -40,7 +38,6 @@ import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.DimensionTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.LevelTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Cause;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Verifyer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,8 +45,10 @@ import org.slf4j.LoggerFactory;
 public class JDBCSchemaWalker extends AbstractSchemaWalker {
 
     private JdbcMetaDataService jmds;
+    private DatabaseVerifierConfig config;
 
-    public JDBCSchemaWalker(JdbcMetaDataService jmds) {
+    public JDBCSchemaWalker(DatabaseVerifierConfig config, JdbcMetaDataService jmds) {
+        this.config = config;
         this.jmds = jmds;
     }
 
@@ -57,29 +56,8 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
     private boolean isSchemaRequired = true;
     String[] DEF_LEVEL = { "column", "nameColumn", "parentColumn", "ordinalColumn", "captionColumn" };
 
-    public Collection<? extends VerificationResult> checkSchema(Schema schema) {
-
-//TODO: move walking into abstract all simple checks Inso SImple (or better name) jand jdbc into jdbcSchemawalker
-        schema.cube()
-                .forEach(this::checkCube);
-
-        checkNamedSetList(schema.namedSet());
-
-        if (schema.virtualCube() != null) {
-            schema.virtualCube()
-                    .forEach(this::checkVirtualCube);
-        }
-
-        if (schema.userDefinedFunctions() != null) {
-            schema.userDefinedFunctions()
-                    .forEach(this::checkUserDefinedFunction);
-        }
-        return results;
-
-    }
-
     @Override
-    List<VerificationResult> checkCube(Cube cube) {
+    void checkCube(Cube cube) {
         super.checkCube(cube);
 
         if (cube.fact() == null
@@ -129,10 +107,9 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
                     .forEach(cm -> checkCalculatedMember(cm));
         }
 
-        return results;
     }
 
-    private List<VerificationResult> checkVirtualCube(VirtualCube virtCube) {
+    void checkVirtualCube(VirtualCube virtCube) {
 
         if (JDBCSchemaWalker.isEmpty(virtCube.name())) {
             results.add(new VerificationResultR("VirtualCube name must be set", "VirtualCube name must be set",
@@ -155,7 +132,6 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
                     .forEach(cm -> checkCalculatedMember(cm));
         }
 
-        return results;
     }
 
     private void checkMeasure(Measure measure, Cube cube) {
@@ -506,16 +482,8 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
         }
     }
 
-    private void checkNamedSetList(List<? extends NamedSet> collection) {
-        if (collection != null) {
-            collection.forEach(ns -> checkNamedSet(ns));
-
-        }
-
-    }
-
-    private void checkNamedSet(NamedSet namedSet) {
-
+    void checkNamedSet(NamedSet namedSet) {
+        super.checkNamedSet(namedSet);
         if (JDBCSchemaWalker.isEmpty(namedSet.name())) {
             results.add(new VerificationResultR("NamedSet name must be set", "NamedSet name must be set", Level.ERROR,
                     Cause.SCHEMA));
@@ -540,8 +508,8 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
 
     }
 
-    private void checkUserDefinedFunction(UserDefinedFunction udf) {
-
+    void checkUserDefinedFunction(UserDefinedFunction udf) {
+        super.checkUserDefinedFunction(udf);
         if (JDBCSchemaWalker.isEmpty(udf.name())) {
             results.add(new VerificationResultR("UserDefinedFunction name must be set",
                     "UserDefinedFunction name must be set", Level.ERROR, Cause.SCHEMA));

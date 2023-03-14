@@ -13,47 +13,36 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.jdbc;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
-import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataServiceFactory;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Cause;
-import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Verifyer;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
-import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.metatype.annotations.Designate;
 import org.osgi.util.converter.Converter;
 import org.osgi.util.converter.Converters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@Designate(ocd = DatabaseVerifierConfig.class)
+@Designate(ocd = DescriptionVerifierConfig.class)
 @Component(service = Verifyer.class)
-public class DatabaseVerifyer implements Verifyer {
+public class DescriptionVerifyer implements Verifyer {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseVerifyer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DescriptionVerifyer.class);
     public static final Converter CONVERTER = Converters.standardConverter();
 
-    @Reference
-    JdbcMetaDataServiceFactory jmdsf;
-
-    private DatabaseVerifierConfig config;
+    private DescriptionVerifierConfig config;
 
     @Activate
     public void activate(Map<String, Object> configMap) {
         this.config = CONVERTER.convert(configMap)
-                .to(DatabaseVerifierConfig.class);
+                .to(DescriptionVerifierConfig.class);
     }
 
     @Deactivate
@@ -61,21 +50,12 @@ public class DatabaseVerifyer implements Verifyer {
         config = null;
     }
 
+    DescriptionWalker descriptionWalker;
+
     @Override
     public List<VerificationResult> verify(Schema schema, DataSource dataSource) {
-        List<VerificationResult> results = new ArrayList<>();
 
-        try (Connection connection = dataSource.getConnection()) {
-            JdbcMetaDataService jmds = jmdsf.create(connection);
-
-            JDBCSchemaWalker walker = new JDBCSchemaWalker(config, jmds);
-            return walker.checkSchema(schema);
-
-        } catch (SQLException e) {
-            results.add(new VerificationResultR("Database access error", e.getMessage(), Level.ERROR, Cause.DATABASE));
-        }
-
-        return results;
+        return new DescriptionWalker(config).checkSchema(schema);
     }
 
 }
