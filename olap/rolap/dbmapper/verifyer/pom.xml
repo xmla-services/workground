@@ -9,6 +9,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>api</module>
-    <module>jdbc</module>
+    <module>basic</module>
   </modules>
 </project>
