@@ -14,7 +14,9 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.jdbc;
 
 import java.lang.reflect.Field;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.TreeSet;
 
 import org.eclipse.daanse.db.jdbc.metadata.api.JdbcMetaDataService;
@@ -90,11 +92,17 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
             final Table table = (Table) cube.fact();
             String schemaName = table.schema();
             String factTable = table.name();
-            if (!jmds.doesTableExist(schemaName, factTable)) {
-                results.add(new VerificationResultR("Cube must contain measures", "Cube must contain measures",
-                        Level.ERROR, Cause.SCHEMA));
+            try {
+                if (!jmds.doesTableExist(schemaName, factTable)) {
+                    results.add(new VerificationResultR("Cube must contain measures", "Cube must contain measures",
+                            Level.ERROR, Cause.SCHEMA));
 
-                String message = String.format("Fact table {0} does not exist in database {1}", factTable,
+                    String message = String.format("Fact table {0} does not exist in database {1}", factTable,
+                            ((schemaName == null || schemaName.equals("")) ? "." : "schema " + schemaName));
+                    results.add(new VerificationResultR(message, message, Level.ERROR, Cause.DATABASE));
+                }
+            } catch (SQLException e) {
+                String message = String.format("could noch check existance of Fact table {0} does not exist in database {1}", factTable,
                         ((schemaName == null || schemaName.equals("")) ? "." : "schema " + schemaName));
                 results.add(new VerificationResultR(message, message, Level.ERROR, Cause.DATABASE));
             }
@@ -161,28 +169,51 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
                 final Table factTable = (Table) cube.fact();
 
                 String column = measure.column();
-                if (jmds.doesColumnExist(factTable.schema(), factTable.name(), column)) {
-                    // Check for aggregator type only if column
-                    // exists in table.
+                try {
+                    if (jmds.doesColumnExist(factTable.schema(), factTable.name(), column)) {
+                        // Check for aggregator type only if column
+                        // exists in table.
 
-                    // Check if aggregator selected is valid on
-                    // the data type of the column selected.
-                    int colType = jmds.getColumnDataType(factTable.schema(), factTable.name(), measure.column());
-                    // Coltype of 2, 4,5, 7, 8, -5 is numeric types
-                    // whereas 1, 12 are char varchar string
-                    // and 91 is date type.
-                    // Types are enumerated in java.sql.Types.
-                    int agIndex = -1;
-                    if ("sum".equals(measure.aggregator()) || "avg".equals(measure.aggregator())) {
-                        // aggregator = sum or avg, column should
-                        // be numeric
-                        agIndex = 0;
+                        // Check if aggregator selected is valid on
+                        // the data type of the column selected.
+                        Optional<Integer> oColType=Optional.empty();
+                        try {
+                            oColType = jmds.getColumnDataType(factTable.schema(), factTable.name(), measure.column());
+                        } catch (SQLException e) {
+                            
+                            String msg = String.format("Could not Query ColumnDataType on Schema: %s, Table: %s, Column: %s",
+                                    measure.aggregator(), measure.column());
+                            results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.SCHEMA));
+                        }
+                        // Coltype of 2, 4,5, 7, 8, -5 is numeric types
+                        // whereas 1, 12 are char varchar string
+                        // and 91 is date type.
+                        // Types are enumerated in java.sql.Types.
+                        int agIndex = -1;
+                        if ("sum".equals(measure.aggregator()) || "avg".equals(measure.aggregator())) {
+                            // aggregator = sum or avg, column should
+                            // be numeric
+                            agIndex = 0;
+                        }
+                        if(oColType.isPresent()) {
+                           int colType=oColType.get(); 
+                        if (!(agIndex == -1 || (colType >= 2 && colType <= 8) || colType == -5 || colType == -6)) {
+                            String msg = String.format("Aggregator %s is not valid for the data type of the column %s",
+                                    measure.aggregator(), measure.column());
+                            results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.SCHEMA));
+                        }
+                        }else {
+                            String msg = String.format("Database does now answer with DataType for aggregator: %s Column: %s",
+                                    measure.aggregator(), measure.column());
+                            results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
+                            
+                        }
                     }
-                    if (!(agIndex == -1 || (colType >= 2 && colType <= 8) || colType == -5 || colType == -6)) {
-                        String msg = String.format("Aggregator %s is not valid for the data type of the column %s",
-                                measure.aggregator(), measure.column());
-                        results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.SCHEMA));
-                    }
+                } catch (SQLException e) {
+
+                    String msg = String.format("Could not evalueate doesColumnExist Schema: %s Table: %s Column: %s",
+                            factTable.schema(), factTable.name(), column);
+                    results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
                 }
 
             }
@@ -212,10 +243,16 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
                 if (cube.fact() instanceof Table) {
                     final Table factTable = (Table) cube.fact();
                     String foreignKey = ((PrivateDimension) cubeDimension).foreignKey();
-                    if (!jmds.doesColumnExist(factTable.schema(), factTable.name(), foreignKey)) {
-                        String msg = String.format("Cube Dimension foreignKey %s does not exist in fact table",
-                                foreignKey);
-                        results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.SCHEMA));
+                    try {
+                        if (!jmds.doesColumnExist(factTable.schema(), factTable.name(), foreignKey)) {
+                            String msg = String.format("Cube Dimension foreignKey %s does not exist in fact table",
+                                    foreignKey);
+                            results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.SCHEMA));
+                        }
+                    } catch (SQLException e) {
+                        String msg = String.format("Could not lookup existance of Column %s defined in field %s in table {2}",
+                                JDBCSchemaWalker.isEmpty(foreignKey.trim()) ? "' '" : foreignKey, "foreignKey", factTable.name());
+                        results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
                     }
 
                 }
@@ -271,11 +308,17 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
             schema = table.schema();
         }
 
-        if (pkTable != null && !jmds.doesColumnExist(schema, pkTable, hierarchy.primaryKey())) {
-            String msg = String.format("Column %s defined in field %s does not exist in table %s",
-                    JDBCSchemaWalker.isEmpty(hierarchy.primaryKey()
-                            .trim()) ? "' '" : hierarchy.primaryKey(),
-                    "primaryKey", pkTable);
+        try {
+            if (pkTable != null && !jmds.doesColumnExist(schema, pkTable, hierarchy.primaryKey())) {
+                String msg = String.format("Column %s defined in field %s does not exist in table %s",
+                        JDBCSchemaWalker.isEmpty(hierarchy.primaryKey()
+                                .trim()) ? "' '" : hierarchy.primaryKey(),
+                        "primaryKey", pkTable);
+                results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
+            }
+        } catch (SQLException e) {
+            String msg = String.format("Could not lookup existance of Column %s defined in field %s in table {2}",
+                    JDBCSchemaWalker.isEmpty(hierarchy.primaryKey().trim()) ? "' '" : hierarchy.primaryKey(), "hierarchy.primaryKey", pkTable);
             results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
         }
 
@@ -426,24 +469,42 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
                     // Case of degenerate dimension within cube,
                     // hierarchy table not specified
                     final Table factTable = (Table) cube.fact();
-                    if (!jmds.doesColumnExist(factTable.schema(), factTable.name(), column)) {
-                        String msg = String.format(
-                                "Degenerate dimension validation check - Column %s does not " + "exist in fact table",
-                                column);
+                    try {
+                        if (!jmds.doesColumnExist(factTable.schema(), factTable.name(), column)) {
+                            String msg = String.format(
+                                    "Degenerate dimension validation check - Column %s does not " + "exist in fact table",
+                                    column);
+                            results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
+                        }
+                    } catch (SQLException e) {
+                        String msg = String.format("Could not lookup existance of Column %s defined in field %s in table {2}",
+                                JDBCSchemaWalker.isEmpty(column.trim()) ? "' '" : column, "relaton", factTable.name());
                         results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
                     }
                 } else if (hierarchy.relation() instanceof Table) {
                     final Table parentTable = (Table) hierarchy.relation();
-                    if (!jmds.doesColumnExist(parentTable.schema(), parentTable.name(), column)) {
-                        String msg = String.format("Column {0} does not exist in Dimension table", parentTable.name());
+                    try {
+                        if (!jmds.doesColumnExist(parentTable.schema(), parentTable.name(), column)) {
+                            String msg = String.format("Column {0} does not exist in Dimension table", parentTable.name());
+                            results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
+                        }
+                    } catch (SQLException e) {
+                        String msg = String.format("Could not lookup existance of Column %s defined in field %s in table {2}",
+                                JDBCSchemaWalker.isEmpty(column.trim()) ? "' '" : column, "parentTable.name", parentTable.name());
                         results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
                     }
                     checkTable(parentTable, isSchemaRequired);
                 }
             }
         } else {
-            if (!jmds.doesColumnExist(null, table, column)) {
-                String msg = String.format("Column %s does not exist in Level table %s", column, table);
+            try {
+                if (!jmds.doesColumnExist(null, table, column)) {
+                    String msg = String.format("Column %s does not exist in Level table %s", column, table);
+                    results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
+                }
+            } catch (SQLException e) {
+                String msg = String.format("Could not lookup existance of Column %s defined in field %s in table {2}",
+                        JDBCSchemaWalker.isEmpty(column.trim()) ? "' '" : column, "-", table);
                 results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
             }
         }
@@ -469,15 +530,27 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
     private void checkTable(Table table, boolean isSchemaRequired) {
 
         String tableName = table.name();
-        if (!jmds.doesTableExist(null, tableName)) {
-            String msg = String.format("Table %s does not exist in database", tableName);
-            results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
+        try {
+            if (!jmds.doesTableExist(null, tableName)) {
+                String msg = String.format("Table %s does not exist in database", tableName);
+                results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
+            }
+        } catch (SQLException e) {
+            String message = String.format("could noch check existance of Table {0}", tableName);
+            results.add(new VerificationResultR(message, message, Level.ERROR, Cause.DATABASE));
         }
 
         String theSchema = table.schema();
-        if (!JDBCSchemaWalker.isEmpty(theSchema) && !jmds.doesSchemaExist(theSchema)) {
-            String msg = String.format("Schema %s does not exist", theSchema);
+        try {
+            if (!JDBCSchemaWalker.isEmpty(theSchema) && !jmds.doesSchemaExist(theSchema)) {
+                String msg = String.format("Schema %s does not exist", theSchema);
+                results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
+            }
+        } catch (SQLException e) {
+            String msg = String.format("could not check existance of Schema %s", theSchema);
+
             results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
+
         }
         if (JDBCSchemaWalker.isEmpty(theSchema) && isSchemaRequired) {
             results.add(
@@ -613,20 +686,32 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
                     if (parentHierarchy.relation() == null && cube != null) {
                         // case of degenerate dimension within cube,
                         // hierarchy table not specified
-                        if (!jmds.doesColumnExist(((Table) cube.fact()).schema(), ((Table) cube.fact()).name(),
-                                column)) {
-                            String msg = String.format("Degenerate dimension validation check - Column %s does "
-                                    + "not exist in fact table", column);
-                            results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.SCHEMA));
+                        try {
+                            if (!jmds.doesColumnExist(((Table) cube.fact()).schema(), ((Table) cube.fact()).name(),
+                                    column)) {
+                                String msg = String.format("Degenerate dimension validation check - Column %s does "
+                                        + "not exist in fact table", column);
+                                results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.SCHEMA));
+                            }
+                        } catch (SQLException e) {
+                            String msg = String.format("Could not lookup existance of Column %s defined in field %s in table {2}",
+                                    JDBCSchemaWalker.isEmpty(column.trim()) ? "' '" : column, fieldName, table);
+                            results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
                         }
                     } else if (parentHierarchy.relation() instanceof Table) {
                         final Table parentTable = (Table) parentHierarchy.relation();
-                        if (!jmds.doesColumnExist(parentTable.schema(), parentTable.name(), column)) {
-                            String msg = String.format("Column %s defined in field %s does not exist in table %s",
-                                    JDBCSchemaWalker.isEmpty(column.trim()) ? "' '" : column, fieldName,
-                                    parentTable.name());
+                        try {
+                            if (!jmds.doesColumnExist(parentTable.schema(), parentTable.name(), column)) {
+                                String msg = String.format("Column %s defined in field %s does not exist in table %s",
+                                        JDBCSchemaWalker.isEmpty(column.trim()) ? "' '" : column, fieldName,
+                                        parentTable.name());
+                                results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
+                                checkTable((Table) parentHierarchy.relation(), isSchemaRequired);
+                            }
+                        } catch (SQLException e) {
+                            String msg = String.format("Could not lookup existance of Column %s defined in field %s in table {2}",
+                                    JDBCSchemaWalker.isEmpty(column.trim()) ? "' '" : column, fieldName, table);
                             results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
-                            checkTable((Table) parentHierarchy.relation(), isSchemaRequired);
                         }
                     } else if (parentHierarchy.relation() instanceof Join) {
                         // relation is join, table should be specified
@@ -646,10 +731,17 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
                     table = schemaAndTable[1];
                     checkJoin((Join) parentHierarchy.relation());
                 }
-                if (!jmds.doesColumnExist(schema, table, column)) {
-                    String msg = String.format("Column %s defined in field %s does not exist in table {2}",
+                try {
+                    if (!jmds.doesColumnExist(schema, table, column)) {
+                        String msg = String.format("Column %s defined in field %s does not exist in table {2}",
+                                JDBCSchemaWalker.isEmpty(column.trim()) ? "' '" : column, fieldName, table);
+                        results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.SCHEMA));
+                    }
+                } catch (SQLException e) {
+                    String msg = String.format("Could not lookup existance of Column %s defined in field %s in table {2}",
                             JDBCSchemaWalker.isEmpty(column.trim()) ? "' '" : column, fieldName, table);
-                    results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.SCHEMA));
+                    results.add(new VerificationResultR(msg, msg, Level.ERROR, Cause.DATABASE));
+
                 }
             }
 
