@@ -37,16 +37,19 @@ import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.AbstractSchemaWalker;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.VerificationResultR;
 
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.*;
+
 public class DescriptionWalker extends AbstractSchemaWalker {
+
     private DescriptionVerifierConfig config;
 
     public DescriptionWalker(DescriptionVerifierConfig config) {
         this.config = config;
     }
 
-    private Consumer<Cube> cubeConsumer = this::checkCubeDescription;
+    private Consumer<Cube> cubeConsumer = this::checkCube;
     private Consumer<VirtualCube> virtualCubeConsumer = this::checkVirtualCube;
-    private Consumer<CubeDimension> dimensionConsumer = this::checkDimension;
+    private Consumer<CubeDimension> dimensionConsumer = this::checkCubeDimension;
     private Consumer<CalculatedMemberProperty> calculatedMemberPropertyConsumer = this::checkCalculatedMemberProperty;
     private Consumer<CalculatedMember> calculatedMemberConsumer = this::checkCalculatedMember;
     private Consumer<Measure> measureConsumer = this::checkMeasure;
@@ -59,11 +62,12 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     private Consumer<Action> actionConsumer = this::checkAction;
     private Consumer<SharedDimension> sharedDimensionConsumer = this::checkSharedDimension;
 
+    @Override
     public List<VerificationResult> checkSchema(Schema schema) {
         Level lavel = config.schema();
         if (lavel != null && (schema.description() == null || schema.description()
                 .isEmpty())) {
-            results.add(new VerificationResultR("Schema", "Schema must contain description", lavel, Cause.SCHEMA));
+            results.add(new VerificationResultR(SCHEMA, "Schema must contain description", lavel, Cause.SCHEMA));
         }
 
         checkList(schema.cube(), cubeConsumer);
@@ -79,23 +83,24 @@ public class DescriptionWalker extends AbstractSchemaWalker {
         return results;
     }
 
-    private void checkDimension(CubeDimension dimension) {
+    protected void checkCubeDimension(CubeDimension dimension) {
         Level lavel = config.privateDimension();
         if (lavel != null && (dimension.description() == null || dimension.description()
                 .isEmpty())) {
             results.add(
-                    new VerificationResultR("Dimension", "Dimension must contain description", lavel, Cause.SCHEMA));
+                    new VerificationResultR(DIMENSIONS, DIMENSION_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
         if (dimension instanceof PrivateDimension) {
             checkList(((PrivateDimension) dimension).hierarchy(), hierarchyConsumer);
         }
     }
 
+    @Override
     protected void checkVirtualCube(VirtualCube virtualCube) {
         Level lavel = config.virtualCube();
         if (lavel != null && (virtualCube.description() == null || virtualCube.description()
                 .isEmpty())) {
-            results.add(new VerificationResultR("Virtual Cube", "Virtual Cube must contain description", lavel,
+            results.add(new VerificationResultR(VIRTUAL_CUBE, VIRTUAL_CUBE_MUST_CONTAIN_DESCRIPTION, lavel,
                     Cause.SCHEMA));
         }
 
@@ -106,11 +111,12 @@ public class DescriptionWalker extends AbstractSchemaWalker {
         checkList(virtualCube.namedSet(), namedSetConsumer);
     }
 
-    private void checkCubeDescription(Cube cube) {
+    @Override
+    protected void checkCube(Cube cube) {
         Level lavel = config.cube();
         if (lavel != null && (cube.description() == null || cube.description()
                 .isEmpty())) {
-            results.add(new VerificationResultR("Cube", "Cube must contain description", lavel, Cause.SCHEMA));
+            results.add(new VerificationResultR(CUBE, CUBE_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
 
         checkList(cube.calculatedMember(), calculatedMemberConsumer);
@@ -131,100 +137,106 @@ public class DescriptionWalker extends AbstractSchemaWalker {
         checkList(cube.drillThroughAction(), drillThroughActionConsumer);
     }
 
-    private void checkMeasure(Measure measure) {
+    protected void checkMeasure(Measure measure) {
         Level lavel = config.measure();
         if (lavel != null && (measure.description() == null || measure.description()
                 .isEmpty())) {
-            results.add(new VerificationResultR("Measure", "Measure must contain description", lavel, Cause.SCHEMA));
+            results.add(new VerificationResultR(MEASURE, MEASURE_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
         checkList(measure.calculatedMemberProperty(), calculatedMemberPropertyConsumer);
     }
 
-    private void checkCalculatedMemberProperty(CalculatedMemberProperty calculatedMemberProperty) {
+    @Override
+    protected void checkCalculatedMemberProperty(CalculatedMemberProperty calculatedMemberProperty) {
         Level lavel = config.calculatedMemberProperty();
         if (lavel != null && (calculatedMemberProperty.description() == null || calculatedMemberProperty.description()
                 .isEmpty())) {
-            results.add(new VerificationResultR("CalculatedMemberProperty",
-                    "CalculatedMemberProperty must contain description", lavel, Cause.SCHEMA));
+            results.add(new VerificationResultR(CALCULATED_MEMBER_PROPERTY,
+                CALCULATED_MEMBER_PROPERTY_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
     }
 
-    private void checkCalculatedMember(CalculatedMember calculatedMember) {
+    @Override
+    protected void checkCalculatedMember(CalculatedMember calculatedMember) {
         Level lavel = config.calculatedMember();
         if (lavel != null && (calculatedMember.description() == null || calculatedMember.description()
                 .isEmpty())) {
-            results.add(new VerificationResultR("CalculatedMember", "CalculatedMember must contain description", lavel,
+            results.add(new VerificationResultR(CALCULATED_MEMBER, CALCULATED_MEMBER_MUST_CONTAIN_DESCRIPTION, lavel,
                     Cause.SCHEMA));
         }
 
         checkList(calculatedMember.calculatedMemberProperty(), calculatedMemberPropertyConsumer);
     }
 
-    private void checkHierarchy(Hierarchy hierarchy) {
+    protected void checkHierarchy(Hierarchy hierarchy) {
         Level lavel = config.hierarchy();
         if (lavel != null && (hierarchy.description() == null || hierarchy.description()
                 .isEmpty())) {
             results.add(
-                    new VerificationResultR("Hierarchy", "Hierarchy must contain description", lavel, Cause.SCHEMA));
+                    new VerificationResultR(HIERARCHY, HIERARCHY_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
+        checkList(hierarchy.level(), levelConsumer);
     }
 
-    private void checkLevel(final org.eclipse.daanse.olap.rolap.dbmapper.api.Level l) {
+    protected void checkLevel(final org.eclipse.daanse.olap.rolap.dbmapper.api.Level l) {
         Level lavel = config.level();
         if (lavel != null && (l.description() == null || l.description()
                 .isEmpty())) {
-            results.add(new VerificationResultR("Level", "Level must contain description", lavel, Cause.SCHEMA));
+            results.add(new VerificationResultR(LEVEL, LEVEL_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
         checkList(l.property(), propertyConsumer);
     }
 
-    private void checkAction(final Action action) {
+    protected void checkAction(final Action action) {
         Level lavel = config.action();
         if (lavel != null && (action.description() == null || action.description()
                 .isEmpty())) {
-            results.add(new VerificationResultR("Action", "Action must contain description", lavel, Cause.SCHEMA));
+            results.add(new VerificationResultR(ACTION, ACTION_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
     }
 
-    private void checkSharedDimension(final SharedDimension sharedDimension) {
+    protected void checkSharedDimension(final SharedDimension sharedDimension) {
         Level lavel = config.sharedDimension();
         if (lavel != null && (sharedDimension.description() == null || sharedDimension.description()
                 .isEmpty())) {
-            results.add(new VerificationResultR("SharedDimension", "SharedDimension must contain description", lavel,
+            results.add(new VerificationResultR(SHARED_DIMENSION, SHARED_DIMENSION_MUST_CONTAIN_DESCRIPTION, lavel,
                     Cause.SCHEMA));
         }
     }
 
-    private void checkProperty(final Property property) {
+    protected void checkProperty(final Property property) {
         Level lavel = config.property();
         if (lavel != null && (property.description() == null || property.description()
                 .isEmpty())) {
-            results.add(new VerificationResultR("Property", "Property must contain description", lavel, Cause.SCHEMA));
+            results.add(new VerificationResultR(PROPERTY, PROPERTY_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
     }
 
+    @Override
     protected void checkNamedSet(final NamedSet namedSet) {
         Level lavel = config.namedSet();
         if (lavel != null && (namedSet.description() == null || namedSet.description()
                 .isEmpty())) {
-            results.add(new VerificationResultR("NamedSet", "NamedSet must contain description", lavel, Cause.SCHEMA));
+            results.add(new VerificationResultR(NAMED_SET, NAMED_SET_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
     }
 
-    private void checkParameter(final Parameter parameter) {
+    @Override
+    protected void checkParameter(final Parameter parameter) {
         Level lavel = config.parameter();
         if (lavel != null && (parameter.description() == null || parameter.description()
                 .isEmpty())) {
             results.add(
-                    new VerificationResultR("Parameter", "Parameter must contain description", lavel, Cause.SCHEMA));
+                    new VerificationResultR(PARAMETER, PARAMETER_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
     }
 
-    private void checkDrillThroughAction(final DrillThroughAction drillThroughAction) {
+    @Override
+    protected void checkDrillThroughAction(final DrillThroughAction drillThroughAction) {
         Level lavel = config.drillThroughAction();
         if (lavel != null && (drillThroughAction.description() == null || drillThroughAction.description()
                 .isEmpty())) {
-            results.add(new VerificationResultR("DrillThroughAction", "DrillThroughAction must contain description",
+            results.add(new VerificationResultR(DRILL_THROUGH_ACTION, DRILL_THROUGH_ACTION_MUST_CONTAIN_DESCRIPTION,
                     lavel, Cause.SCHEMA));
         }
     }
