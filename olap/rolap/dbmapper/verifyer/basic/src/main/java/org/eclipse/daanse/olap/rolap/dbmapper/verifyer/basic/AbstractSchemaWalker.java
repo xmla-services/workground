@@ -62,6 +62,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.api.Row;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.SQL;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.SchemaGrant;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.SharedDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Union;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.UserDefinedFunction;
@@ -86,46 +87,56 @@ public abstract class AbstractSchemaWalker {
 
     public List<VerificationResult> checkSchema(Schema schema) {
 
-        checkAnnotationList(schema.annotations());
-        checkParameterList(schema.parameter());
-        checkCubeDimensionList(schema.dimension(), null);
-        checkCubeList(schema.cube());
-        checkVirtualCubeList(schema.virtualCube());
-        checkNamedSetList(schema.namedSet());
-        checkRoleList(schema.roles());
-        checkUserDefinedFunctionList(schema.userDefinedFunctions());
+        if (schema != null) {
+            checkAnnotationList(schema.annotations());
+            checkParameterList(schema.parameter());
+            checkCubeDimensionList(schema.dimension(), null);
+            checkCubeList(schema.cube());
+            checkVirtualCubeList(schema.virtualCube());
+            checkNamedSetList(schema.namedSet());
+            checkRoleList(schema.roles());
+            checkUserDefinedFunctionList(schema.userDefinedFunctions());
+        }
 
         return results;
     }
 
     protected void checkCube(Cube cube) {
-        checkAnnotationList(cube.annotations());
-        checkCubeDimensionList(cube.dimensionUsageOrDimension(), cube);
-        checkMeasureList(cube.measure(), cube);
-        checkCalculatedMemberList(cube.calculatedMember());
-        checkNamedSetList(cube.namedSet());
-        checkDrillThroughActionList(cube.drillThroughAction());
-        checkWritebackTableList(cube.writebackTable());
-        if (cube.action() != null) {
-            cube.action().forEach(this::checkAction);
+        if (cube != null) {
+            checkAnnotationList(cube.annotations());
+            checkCubeDimensionList(cube.dimensionUsageOrDimension(), cube);
+            checkMeasureList(cube.measure(), cube);
+            checkCalculatedMemberList(cube.calculatedMember());
+            checkNamedSetList(cube.namedSet());
+            checkDrillThroughActionList(cube.drillThroughAction());
+            checkWritebackTableList(cube.writebackTable());
+            if (cube.action() != null) {
+                cube.action().forEach(this::checkAction);
+            }
         }
     }
 
     protected void checkAction(Action action) {
-        checkAnnotationList(action.annotations());
+        if (action != null) {
+            checkAnnotationList(action.annotations());
+        }
     }
 
     protected void checkDrillThroughAction(DrillThroughAction drillThroughAction) {
-        checkAnnotationList(drillThroughAction.annotations());
-        checkDrillThroughElementList(drillThroughAction.drillThroughElement());
+        if (drillThroughAction != null) {
+            checkAnnotationList(drillThroughAction.annotations());
+            checkDrillThroughElementList(drillThroughAction.drillThroughElement());
+        }
     }
 
     protected void checkDrillThroughElement(DrillThroughElement drillThroughElement) {
-        if (drillThroughElement instanceof DrillThroughMeasure) {
-            checkDrillThroughMeasure((DrillThroughMeasure) drillThroughElement);
-        }
-        if (drillThroughElement instanceof DrillThroughAttribute) {
-            checkDrillThroughAttribute((DrillThroughAttribute) drillThroughElement);
+        if (drillThroughElement != null) {
+            if (drillThroughElement instanceof DrillThroughMeasure) {
+                checkDrillThroughMeasure((DrillThroughMeasure) drillThroughElement);
+            }
+            if (drillThroughElement instanceof DrillThroughAttribute) {
+                checkDrillThroughAttribute((DrillThroughAttribute) drillThroughElement);
+            }
         }
     }
 
@@ -138,10 +149,12 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkMeasure(Measure measure, Cube cube) {
-        checkAnnotationList(measure.annotations());
-        checkCalculatedMemberPropertyList(measure.calculatedMemberProperty());
-        checkExpressionView(measure.measureExpression());
-        checkElementFormatter(measure.cellFormatter());
+        if (measure != null) {
+            checkAnnotationList(measure.annotations());
+            checkCalculatedMemberPropertyList(measure.calculatedMemberProperty());
+            checkExpressionView(measure.measureExpression());
+            checkElementFormatter(measure.cellFormatter());
+        }
     }
 
     protected void checkCalculatedMemberProperty(CalculatedMemberProperty calculatedMemberProperty) {
@@ -149,7 +162,9 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkExpressionView(ExpressionView measureExpression) {
-        checkSQLList(measureExpression.sql());
+        if (measureExpression != null) {
+            checkSQLList(measureExpression.sql());
+        }
     }
 
     protected void checkSQL(SQL sql) {
@@ -161,24 +176,27 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkCubeDimension(CubeDimension cubeDimension, Cube cube) {
-        checkAnnotationList(cubeDimension.annotations());
-        if (cubeDimension instanceof PrivateDimension) {
-            if (((PrivateDimension) cubeDimension).hierarchy() != null) {
-                ((PrivateDimension) cubeDimension).hierarchy()
-                    .forEach(h -> checkHierarchy(h, (PrivateDimension) cubeDimension, cube));
+        if (cubeDimension != null) {
+            checkAnnotationList(cubeDimension.annotations());
+            if (cubeDimension instanceof PrivateDimension) {
+                if (((PrivateDimension) cubeDimension).hierarchy() != null) {
+                    ((PrivateDimension) cubeDimension).hierarchy()
+                        .forEach(h -> checkHierarchy(h, (PrivateDimension) cubeDimension, cube));
+                }
             }
         }
     }
 
     protected void checkHierarchy(Hierarchy hierarchy, PrivateDimension cubeDimension, Cube cube) {
-        checkAnnotationList(hierarchy.annotations());
-        checkMemberReaderParameterList(hierarchy.memberReaderParameter());
+        if (hierarchy != null) {
+            checkAnnotationList(hierarchy.annotations());
+            checkMemberReaderParameterList(hierarchy.memberReaderParameter());
 
-        //Level
-        if (hierarchy.level() != null) {
-            hierarchy.level().forEach(l -> checkLevel(l, hierarchy, cubeDimension, cube));
+            //Level
+            if (hierarchy.level() != null) {
+                hierarchy.level().forEach(l -> checkLevel(l, hierarchy, cubeDimension, cube));
+            }
         }
-
     }
 
     protected void checkMemberReaderParameter(MemberReaderParameter memberReaderParameter) {
@@ -186,36 +204,45 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkJoin(Join join) {
-        checkRelationOrJoinList(join.relation());
+        if (join != null) {
+            checkRelationOrJoinList(join.relation());
+        }
     }
 
     protected void checkRelationOrJoin(RelationOrJoin relationOrJoin) {
-
-        if (relationOrJoin instanceof InlineTable) {
-            checkInlineTable((InlineTable) relationOrJoin);
-        }
-        if (relationOrJoin instanceof Join) {
-            checkJoin((Join) relationOrJoin);
-        }
-        if (relationOrJoin instanceof Table) {
-            checkTable((Table) relationOrJoin);
-        }
-        if (relationOrJoin instanceof View) {
-            checkView((View) relationOrJoin);
+        if (relationOrJoin != null) {
+            if (relationOrJoin instanceof InlineTable) {
+                checkInlineTable((InlineTable) relationOrJoin);
+            }
+            if (relationOrJoin instanceof Join) {
+                checkJoin((Join) relationOrJoin);
+            }
+            if (relationOrJoin instanceof Table) {
+                checkTable((Table) relationOrJoin);
+            }
+            if (relationOrJoin instanceof View) {
+                checkView((View) relationOrJoin);
+            }
         }
     }
 
     protected void checkView(View relationOrJoin) {
-        checkSQLList(relationOrJoin.sqls());
+        if (relationOrJoin != null) {
+            checkSQLList(relationOrJoin.sqls());
+        }
     }
 
     protected void checkInlineTable(InlineTable relationOrJoin) {
-        checkColumnDefList(relationOrJoin.columnDefs());
-        checkRowList(relationOrJoin.rows());
+        if (relationOrJoin != null) {
+            checkColumnDefList(relationOrJoin.columnDefs());
+            checkRowList(relationOrJoin.rows());
+        }
     }
 
     protected void checkRow(Row row) {
-        checkValueList(row.values());
+        if (row != null) {
+            checkValueList(row.values());
+        }
     }
 
     protected void checkValue(Value value) {
@@ -227,13 +254,15 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkTable(Table table) {
-        checkSQL(table.sql());
+        if (table != null) {
+            checkSQL(table.sql());
 
-        checkAggExcludeList(table.aggExclude());
+            checkAggExcludeList(table.aggExclude());
 
-        checkAggTableList(table.aggTable());
+            checkAggTableList(table.aggTable());
 
-        checkHintList(table.hint());
+            checkHintList(table.hint());
+        }
     }
 
     protected void checkHint(Hint hint) {
@@ -241,22 +270,26 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkAggTable(AggTable aggTable) {
-        checkAggColumnName(aggTable.aggFactCount());
-        checkAggColumnNameList(aggTable.aggIgnoreColumn());
-        checkAggForeignKeyList(aggTable.aggForeignKey());
-        checkAggMeasureList(aggTable.aggMeasure());
-        checkAggLevelList(aggTable.aggLevel());
-        checkAggMeasureFactCountList(aggTable.measuresFactCount());
-        if (aggTable instanceof AggName){
-            checkAggName((AggName) aggTable);
-        }
-        if (aggTable instanceof AggPattern) {
-            checkAggPattern((AggPattern) aggTable);
+        if (aggTable != null) {
+            checkAggColumnName(aggTable.aggFactCount());
+            checkAggColumnNameList(aggTable.aggIgnoreColumn());
+            checkAggForeignKeyList(aggTable.aggForeignKey());
+            checkAggMeasureList(aggTable.aggMeasure());
+            checkAggLevelList(aggTable.aggLevel());
+            checkAggMeasureFactCountList(aggTable.measuresFactCount());
+            if (aggTable instanceof AggName) {
+                checkAggName((AggName) aggTable);
+            }
+            if (aggTable instanceof AggPattern) {
+                checkAggPattern((AggPattern) aggTable);
+            }
         }
     }
 
     protected void checkAggPattern(AggPattern aggTable) {
-        checkAggExcludeList(aggTable.aggExclude());
+        if (aggTable != null) {
+            checkAggExcludeList(aggTable.aggExclude());
+        }
     }
 
     protected void checkAggName(AggName aggTable) {
@@ -268,7 +301,9 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkAggLevel(AggLevel aggLevel) {
-        checkAggLevelPropertyList(aggLevel.properties());
+        if (aggLevel != null) {
+            checkAggLevelPropertyList(aggLevel.properties());
+        }
     }
 
     protected void checkAggLevelProperty(AggLevelProperty aggLevelProperty) {
@@ -284,8 +319,10 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkAggColumnName(AggColumnName aggFactCount) {
-        if (aggFactCount instanceof AggMeasureFactCount) {
-            checkAggMeasureFactCount((AggMeasureFactCount) aggFactCount);
+        if (aggFactCount != null) {
+            if (aggFactCount instanceof AggMeasureFactCount) {
+                checkAggMeasureFactCount((AggMeasureFactCount) aggFactCount);
+            }
         }
     }
 
@@ -297,37 +334,42 @@ public abstract class AbstractSchemaWalker {
         org.eclipse.daanse.olap.rolap.dbmapper.api.Level level, Hierarchy hierarchy,
         PrivateDimension parentDimension, Cube cube
     ) {
+        if (level != null) {
+            checkAnnotationList(level.annotations());
 
-        checkAnnotationList(level.annotations());
+            checkExpression(level.keyExpression());
 
-        checkExpression(level.keyExpression());
+            checkExpression(level.nameExpression());
 
-        checkExpression(level.nameExpression());
+            checkExpression(level.captionExpression());
 
-        checkExpression(level.captionExpression());
+            checkExpression(level.ordinalExpression());
 
-        checkExpression(level.ordinalExpression());
+            checkExpression(level.parentExpression());
 
-        checkExpression(level.parentExpression());
+            checkClosure(level.closure());
 
-        checkClosure(level.closure());
+            checkPropertyList(level.property(), level, hierarchy,
+                cube);
 
-        checkPropertyList(level.property(), level, hierarchy,
-            cube);
-
-        checkElementFormatter(level.memberFormatter());
+            checkElementFormatter(level.memberFormatter());
+        }
     }
 
     protected void checkClosure(Closure closure) {
-        checkTable(closure.table());
+        if (closure != null) {
+            checkTable(closure.table());
+        }
     }
 
     protected void checkExpression(Expression keyExpression) {
-        if (keyExpression instanceof Column) {
-            checkColumn((Column) keyExpression);
-        }
-        if (keyExpression instanceof ExpressionView) {
-            checkExpressionView((ExpressionView) keyExpression);
+        if (keyExpression != null) {
+            if (keyExpression instanceof Column) {
+                checkColumn((Column) keyExpression);
+            }
+            if (keyExpression instanceof ExpressionView) {
+                checkExpressionView((ExpressionView) keyExpression);
+            }
         }
     }
 
@@ -339,31 +381,30 @@ public abstract class AbstractSchemaWalker {
         Property property, org.eclipse.daanse.olap.rolap.dbmapper.api.Level level,
         Hierarchy hierarchy, Cube cube
     ) {
-        //ElementFormatter
-        if (property.propertyFormatter() != null) {
+        if (property != null) {
+            //ElementFormatter
             checkElementFormatter(property.propertyFormatter());
         }
-
     }
 
     protected void checkVirtualCube(VirtualCube virtCube) {
+        if (virtCube != null) {
+            checkAnnotationList(virtCube.annotations());
 
-        checkAnnotationList(virtCube.annotations());
+            checkCubeUsageList(virtCube.cubeUsages());
 
-        checkCubeUsageList(virtCube.cubeUsages());
+            checkCubeDimensionList(virtCube.virtualCubeDimension(), null);
 
-        checkCubeDimensionList(virtCube.virtualCubeDimension(), null);
+            checkVirtualCubeMeasureList(virtCube.virtualCubeMeasure());
 
-        checkVirtualCubeMeasureList(virtCube.virtualCubeMeasure());
+            checkNamedSetList(virtCube.namedSet());
 
-        checkNamedSetList(virtCube.namedSet());
-
-        //CalculatedMember
-        if (virtCube.calculatedMember() != null) {
-            virtCube.calculatedMember()
-                .forEach(cm -> checkCalculatedMember(cm));
+            //CalculatedMember
+            if (virtCube.calculatedMember() != null) {
+                virtCube.calculatedMember()
+                    .forEach(cm -> checkCalculatedMember(cm));
+            }
         }
-
     }
 
     protected void checkCubeUsage(CubeUsage cubeUsage) {
@@ -371,19 +412,23 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkVirtualCubeMeasure(VirtualCubeMeasure virtualCubeMeasure) {
-        checkAnnotationList(virtualCubeMeasure.annotations());
+        if (virtualCubeMeasure != null) {
+            checkAnnotationList(virtualCubeMeasure.annotations());
+        }
     }
 
     protected void checkCalculatedMember(CalculatedMember calculatedMember) {
-        checkAnnotationList(calculatedMember.annotations());
-        checkCalculatedMemberPropertyList(calculatedMember.calculatedMemberProperty());
+        if (calculatedMember != null) {
+            checkAnnotationList(calculatedMember.annotations());
+            checkCalculatedMemberPropertyList(calculatedMember.calculatedMemberProperty());
 
-        if (calculatedMember.formulaElement() != null) {
-            checkFormula(calculatedMember.formulaElement());
-        }
+            if (calculatedMember.formulaElement() != null) {
+                checkFormula(calculatedMember.formulaElement());
+            }
 
-        if (calculatedMember.cellFormatter() != null) {
-            checkElementFormatter(calculatedMember.cellFormatter());
+            if (calculatedMember.cellFormatter() != null) {
+                checkElementFormatter(calculatedMember.cellFormatter());
+            }
         }
     }
 
@@ -408,10 +453,12 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkNamedSet(NamedSet namedSet) {
-        checkAnnotationList(namedSet.annotations());
+        if (namedSet != null) {
+            checkAnnotationList(namedSet.annotations());
 
-        if (namedSet.formulaElement() != null) {
-            checkFormula(namedSet.formulaElement());
+            if (namedSet.formulaElement() != null) {
+                checkFormula(namedSet.formulaElement());
+            }
         }
     }
 
@@ -428,13 +475,17 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkRole(Role role) {
-        checkAnnotationList(role.annotations());
-        checkSchemaGrantList(role.schemaGrant());
-        checkUnion(role.union());
+        if (role != null) {
+            checkAnnotationList(role.annotations());
+            checkSchemaGrantList(role.schemaGrant());
+            checkUnion(role.union());
+        }
     }
 
     protected void checkUnion(Union union){
-        checkRoleUsageList(union.roleUsage());
+        if (union != null) {
+            checkRoleUsageList(union.roleUsage());
+        }
     }
 
     private void checkRoleUsageList(List<? extends RoleUsage> list) {
@@ -448,16 +499,22 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkSchemaGrant(SchemaGrant schemaGrant) {
-        checkCubeGrantList(schemaGrant.cubeGrant());
+        if (schemaGrant != null) {
+            checkCubeGrantList(schemaGrant.cubeGrant());
+        }
     }
 
     protected void checkCubeGrant(CubeGrant cubeGrant) {
-        checkDimensionGrantList(cubeGrant.dimensionGrant());
-        checkHierarchyGrantList(cubeGrant.hierarchyGrant());
+        if (cubeGrant != null) {
+            checkDimensionGrantList(cubeGrant.dimensionGrant());
+            checkHierarchyGrantList(cubeGrant.hierarchyGrant());
+        }
     }
 
     protected void checkHierarchyGrant(HierarchyGrant hierarchyGrant) {
-        checkMemberGrantList(hierarchyGrant.memberGrant());
+        if (hierarchyGrant != null) {
+            checkMemberGrantList(hierarchyGrant.memberGrant());
+        }
     }
 
     protected void checkMemberGrant(MemberGrant memberGrant) {
@@ -480,17 +537,21 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkWritebackTable(WritebackTable writebackTable) {
-        if (writebackTable.columns() != null) {
-            writebackTable.columns().forEach(this::checkWritebackColumn);
+        if (writebackTable != null) {
+            if (writebackTable.columns() != null) {
+                writebackTable.columns().forEach(this::checkWritebackColumn);
+            }
         }
     }
 
     protected void checkWritebackColumn(WritebackColumn writebackColumn) {
-        if (writebackColumn instanceof WritebackAttribute) {
-            checkWritebackAttribute((WritebackAttribute) writebackColumn);
-        }
-        if (writebackColumn instanceof WritebackMeasure) {
-            checkWritebackMeasure((WritebackMeasure) writebackColumn);
+        if (writebackColumn != null) {
+            if (writebackColumn instanceof WritebackAttribute) {
+                checkWritebackAttribute((WritebackAttribute) writebackColumn);
+            }
+            if (writebackColumn instanceof WritebackMeasure) {
+                checkWritebackMeasure((WritebackMeasure) writebackColumn);
+            }
         }
     }
 
@@ -499,6 +560,10 @@ public abstract class AbstractSchemaWalker {
     }
 
     protected void checkWritebackAttribute(WritebackAttribute writebackColumn) {
+        //empty
+    }
+
+    protected void checkSharedDimension(final SharedDimension sharedDimension) {
         //empty
     }
 

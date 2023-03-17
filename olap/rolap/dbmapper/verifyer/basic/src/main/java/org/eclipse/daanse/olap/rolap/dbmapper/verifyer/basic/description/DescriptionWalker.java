@@ -13,9 +13,6 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.description;
 
-import java.util.List;
-import java.util.function.Consumer;
-
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Action;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMember;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMemberProperty;
@@ -37,7 +34,38 @@ import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.AbstractSchemaWalker;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.VerificationResultR;
 
-import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.*;
+import java.util.List;
+
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.ACTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.ACTION_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CALCULATED_MEMBER;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CALCULATED_MEMBER_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CALCULATED_MEMBER_PROPERTY;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CALCULATED_MEMBER_PROPERTY_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CUBE;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CUBE_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.DIMENSIONS;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.DIMENSION_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.DRILL_THROUGH_ACTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.DRILL_THROUGH_ACTION_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.HIERARCHY;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.HIERARCHY_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.LEVEL;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.LEVEL_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.MEASURE;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.MEASURE_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.NAMED_SET;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.NAMED_SET_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PARAMETER;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PARAMETER_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PROPERTY;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PROPERTY_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.SCHEMA;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.SCHEMA_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.SHARED_DIMENSION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.SHARED_DIMENSION_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.VIRTUAL_CUBE;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.VIRTUAL_CUBE_MUST_CONTAIN_DESCRIPTION;
 
 public class DescriptionWalker extends AbstractSchemaWalker {
 
@@ -47,106 +75,63 @@ public class DescriptionWalker extends AbstractSchemaWalker {
         this.config = config;
     }
 
-    private Consumer<Cube> cubeConsumer = this::checkCube;
-    private Consumer<VirtualCube> virtualCubeConsumer = this::checkVirtualCube;
-    private Consumer<CubeDimension> dimensionConsumer = this::checkCubeDimension;
-    private Consumer<CalculatedMemberProperty> calculatedMemberPropertyConsumer = this::checkCalculatedMemberProperty;
-    private Consumer<CalculatedMember> calculatedMemberConsumer = this::checkCalculatedMember;
-    private Consumer<Measure> measureConsumer = this::checkMeasure;
-    private Consumer<Hierarchy> hierarchyConsumer = this::checkHierarchy;
-    private Consumer<org.eclipse.daanse.olap.rolap.dbmapper.api.Level> levelConsumer = this::checkLevel;
-    private Consumer<Property> propertyConsumer = this::checkProperty;
-    private Consumer<NamedSet> namedSetConsumer = this::checkNamedSet;
-    private Consumer<Parameter> parameterConsumer = this::checkParameter;
-    private Consumer<DrillThroughAction> drillThroughActionConsumer = this::checkDrillThroughAction;
-    private Consumer<Action> actionConsumer = this::checkAction;
-
     @Override
     public List<VerificationResult> checkSchema(Schema schema) {
+        super.checkSchema(schema);
         Level lavel = config.schema();
         if (lavel != null && (schema.description() == null || schema.description()
                 .isEmpty())) {
             results.add(new VerificationResultR(SCHEMA, SCHEMA_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
 
-        checkList(schema.cube(), cubeConsumer);
-
-        checkList(schema.virtualCube(), virtualCubeConsumer);
-
-        checkList(schema.dimension(), dimensionConsumer);
-
-        checkList(schema.namedSet(), namedSetConsumer);
-
-        checkList(schema.parameter(), parameterConsumer);
-
         return results;
     }
 
-    protected void checkCubeDimension(CubeDimension dimension) {
+    @Override
+    protected void checkCubeDimension(CubeDimension dimension, Cube cube) {
+        super.checkCubeDimension(dimension, cube);
         Level lavel = config.dimension();
         if (lavel != null && (dimension.description() == null || dimension.description()
                 .isEmpty())) {
             results.add(
                     new VerificationResultR(DIMENSIONS, DIMENSION_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
-        if (dimension instanceof PrivateDimension) {
-            checkList(((PrivateDimension) dimension).hierarchy(), hierarchyConsumer);
-        }
     }
 
     @Override
     protected void checkVirtualCube(VirtualCube virtualCube) {
+        super.checkVirtualCube(virtualCube);
         Level lavel = config.virtualCube();
         if (lavel != null && (virtualCube.description() == null || virtualCube.description()
                 .isEmpty())) {
             results.add(new VerificationResultR(VIRTUAL_CUBE, VIRTUAL_CUBE_MUST_CONTAIN_DESCRIPTION, lavel,
                     Cause.SCHEMA));
         }
-
-        checkList(virtualCube.virtualCubeDimension(), dimensionConsumer);
-
-        checkList(virtualCube.calculatedMember(), calculatedMemberConsumer);
-
-        checkList(virtualCube.namedSet(), namedSetConsumer);
     }
 
     @Override
     protected void checkCube(Cube cube) {
+        super.checkCube(cube);
         Level lavel = config.cube();
         if (lavel != null && (cube.description() == null || cube.description()
                 .isEmpty())) {
             results.add(new VerificationResultR(CUBE, CUBE_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
-
-        checkList(cube.calculatedMember(), calculatedMemberConsumer);
-
-        checkList(cube.dimensionUsageOrDimension(), dimensionConsumer);
-
-        checkList(cube.measure(), measureConsumer);
-
-        if (cube.action() != null && cube.action()
-                .iterator() != null) {
-            cube.action()
-                    .iterator()
-                    .forEachRemaining(actionConsumer);
-        }
-
-        checkList(cube.namedSet(), namedSetConsumer);
-
-        checkList(cube.drillThroughAction(), drillThroughActionConsumer);
     }
 
-    protected void checkMeasure(Measure measure) {
+    @Override
+    protected void checkMeasure(Measure measure, Cube cube) {
+        super.checkMeasure(measure, cube);
         Level lavel = config.measure();
         if (lavel != null && (measure.description() == null || measure.description()
                 .isEmpty())) {
             results.add(new VerificationResultR(MEASURE, MEASURE_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
-        checkList(measure.calculatedMemberProperty(), calculatedMemberPropertyConsumer);
     }
 
     @Override
     protected void checkCalculatedMemberProperty(CalculatedMemberProperty calculatedMemberProperty) {
+        super.checkCalculatedMemberProperty(calculatedMemberProperty);
         Level lavel = config.calculatedMemberProperty();
         if (lavel != null && (calculatedMemberProperty.description() == null || calculatedMemberProperty.description()
                 .isEmpty())) {
@@ -157,36 +142,41 @@ public class DescriptionWalker extends AbstractSchemaWalker {
 
     @Override
     protected void checkCalculatedMember(CalculatedMember calculatedMember) {
+        super.checkCalculatedMember(calculatedMember);
         Level lavel = config.calculatedMember();
         if (lavel != null && (calculatedMember.description() == null || calculatedMember.description()
                 .isEmpty())) {
             results.add(new VerificationResultR(CALCULATED_MEMBER, CALCULATED_MEMBER_MUST_CONTAIN_DESCRIPTION, lavel,
                     Cause.SCHEMA));
         }
-
-        checkList(calculatedMember.calculatedMemberProperty(), calculatedMemberPropertyConsumer);
     }
 
-    protected void checkHierarchy(Hierarchy hierarchy) {
+    @Override
+    protected void checkHierarchy(Hierarchy hierarchy, PrivateDimension cubeDimension, Cube cube) {
+        super.checkHierarchy(hierarchy, cubeDimension, cube);
         Level lavel = config.hierarchy();
         if (lavel != null && (hierarchy.description() == null || hierarchy.description()
                 .isEmpty())) {
             results.add(
                     new VerificationResultR(HIERARCHY, HIERARCHY_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
-        checkList(hierarchy.level(), levelConsumer);
     }
 
-    protected void checkLevel(final org.eclipse.daanse.olap.rolap.dbmapper.api.Level l) {
+    @Override
+    protected void checkLevel(final org.eclipse.daanse.olap.rolap.dbmapper.api.Level l,
+                              Hierarchy hierarchy,
+                              PrivateDimension parentDimension, Cube cube) {
+        super.checkLevel(l, hierarchy, parentDimension, cube);
         Level lavel = config.level();
         if (lavel != null && (l.description() == null || l.description()
                 .isEmpty())) {
             results.add(new VerificationResultR(LEVEL, LEVEL_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
-        checkList(l.property(), propertyConsumer);
     }
 
+    @Override
     protected void checkAction(final Action action) {
+        super.checkAction(action);
         Level lavel = config.action();
         if (lavel != null && (action.description() == null || action.description()
                 .isEmpty())) {
@@ -194,7 +184,9 @@ public class DescriptionWalker extends AbstractSchemaWalker {
         }
     }
 
+    @Override
     protected void checkSharedDimension(final SharedDimension sharedDimension) {
+        super.checkSharedDimension(sharedDimension);
         Level lavel = config.sharedDimension();
         if (lavel != null && (sharedDimension.description() == null || sharedDimension.description()
                 .isEmpty())) {
@@ -203,7 +195,10 @@ public class DescriptionWalker extends AbstractSchemaWalker {
         }
     }
 
-    protected void checkProperty(final Property property) {
+    @Override
+    protected void checkProperty(final Property property, org.eclipse.daanse.olap.rolap.dbmapper.api.Level level,
+                                 Hierarchy hierarchy, Cube cube) {
+        super.checkProperty(property, level, hierarchy, cube);
         Level lavel = config.property();
         if (lavel != null && (property.description() == null || property.description()
                 .isEmpty())) {
@@ -213,6 +208,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
 
     @Override
     protected void checkNamedSet(final NamedSet namedSet) {
+        super.checkNamedSet(namedSet);
         Level lavel = config.namedSet();
         if (lavel != null && (namedSet.description() == null || namedSet.description()
                 .isEmpty())) {
@@ -222,6 +218,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
 
     @Override
     protected void checkParameter(final Parameter parameter) {
+        super.checkParameter(parameter);
         Level lavel = config.parameter();
         if (lavel != null && (parameter.description() == null || parameter.description()
                 .isEmpty())) {
@@ -232,18 +229,12 @@ public class DescriptionWalker extends AbstractSchemaWalker {
 
     @Override
     protected void checkDrillThroughAction(final DrillThroughAction drillThroughAction) {
+        super.checkDrillThroughAction(drillThroughAction);
         Level lavel = config.drillThroughAction();
         if (lavel != null && (drillThroughAction.description() == null || drillThroughAction.description()
                 .isEmpty())) {
             results.add(new VerificationResultR(DRILL_THROUGH_ACTION, DRILL_THROUGH_ACTION_MUST_CONTAIN_DESCRIPTION,
                     lavel, Cause.SCHEMA));
-        }
-    }
-
-    private <T> void checkList(List<? extends T> list, Consumer fun) {
-        if (list != null) {
-            list.stream()
-                    .forEach(it -> fun.accept(it));
         }
     }
 }
