@@ -40,11 +40,6 @@ public interface DescriptionVerifierConfig {
         return null;
     }
 
-    @AttributeDefinition(description = "cubeDimension")
-    default Level cubeDimension() {
-        return null;
-    }
-
     @AttributeDefinition(description = "drillThroughAction")
     default Level drillThroughAction() {
         return null;
@@ -76,7 +71,7 @@ public interface DescriptionVerifierConfig {
     }
 
     @AttributeDefinition(description = "dimension")
-    default Level privateDimension() {
+    default Level dimension() {
         return null;
     }
 

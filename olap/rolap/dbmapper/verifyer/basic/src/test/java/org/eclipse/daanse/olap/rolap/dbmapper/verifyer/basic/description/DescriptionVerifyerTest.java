@@ -1,14 +1,58 @@
 package org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.description;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Action;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Cube;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.DrillThroughAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Hierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Measure;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Parameter;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.SharedDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.VirtualCube;
+import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.VerificationResult;
 import org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Verifyer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 import org.osgi.test.common.annotation.InjectService;
 import org.osgi.test.common.annotation.Property;
 import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
 import org.osgi.test.junit5.cm.ConfigurationExtension;
 import org.osgi.test.junit5.context.BundleContextExtension;
 import org.osgi.test.junit5.service.ServiceExtension;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.ACTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.ACTION_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CALCULATED_MEMBER;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CALCULATED_MEMBER_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CUBE;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.NAMED_SET;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PARAMETER;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.SCHEMA;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.CUBE_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.DIMENSIONS;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.DIMENSION_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.MEASURE;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.MEASURE_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.NAMED_SET_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.PARAMETER_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.SCHEMA_MUST_CONTAIN_DESCRIPTION;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.VIRTUAL_CUBE;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.VIRTUAL_CUBE_MUST_CONTAIN_DESCRIPTION;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
@@ -18,7 +62,6 @@ import org.osgi.test.junit5.service.ServiceExtension;
         @Property(key = "action", value = "INFO"), //
         @Property(key = "calculatedMember", value = "INFO"), //
         @Property(key = "cube", value = "INFO"), //
-        @Property(key = "cubeDimension", value = "INFO"), //
         @Property(key = "drillThroughAction", value = "INFO"), //
         @Property(key = "hierarchy", value = "INFO"), //
         @Property(key = "level", value = "INFO"), //
@@ -36,9 +79,99 @@ public class DescriptionVerifyerTest {
     @InjectService(filter = "(component.name=" + COMPONENT_NAME + ")")
     Verifyer verifyer;
 
+    Schema schema = mock(Schema.class);
+    Cube cube = mock(Cube.class);
+    VirtualCube virtualCube = mock(VirtualCube.class);
+    CubeDimension dimension = mock(PrivateDimension.class);
+    CalculatedMemberProperty calculatedMemberProperty = mock(CalculatedMemberProperty.class);
+    CalculatedMember calculatedMember = mock(CalculatedMember.class);
+    Measure measure = mock(Measure.class);
+    Hierarchy hierarchyConsumer = mock(Hierarchy.class);
+    Level level = mock(Level.class);
+    org.eclipse.daanse.olap.rolap.dbmapper.api.Property propertyConsumer = mock(org.eclipse.daanse.olap.rolap.dbmapper.api.Property.class);
+    NamedSet namedSet = mock(NamedSet.class);
+    Parameter parameter = mock(Parameter.class);
+    DrillThroughAction drillThroughAction = mock(DrillThroughAction.class);
+    Action action = mock(Action.class);
+    SharedDimension sharedDimension = mock(SharedDimension.class);
+
     @Test
-    void testName() throws Exception {
-        verifyer.verify(null, null);
+    void testSchema() {
+
+        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
+        when(schema.virtualCube()).thenAnswer(setupDummyListAnswer(virtualCube));
+        when(schema.dimension()).thenAnswer(setupDummyListAnswer(dimension));
+        when(schema.namedSet()).thenAnswer(setupDummyListAnswer(namedSet));
+        when(schema.parameter()).thenAnswer(setupDummyListAnswer(parameter));
+
+        List<VerificationResult> result = verifyer.verify(schema, null);
+        assertThat(result).isNotNull()
+            .hasSize(6);
+
+        assertThat(result)
+            .extracting(VerificationResult::description)
+            .contains(SCHEMA_MUST_CONTAIN_DESCRIPTION)
+            .contains(CUBE_MUST_CONTAIN_DESCRIPTION)
+            .contains(VIRTUAL_CUBE_MUST_CONTAIN_DESCRIPTION)
+            .contains(DIMENSION_MUST_CONTAIN_DESCRIPTION)
+            .contains(NAMED_SET_MUST_CONTAIN_DESCRIPTION)
+            .contains(PARAMETER_MUST_CONTAIN_DESCRIPTION);
+        assertThat(result).extracting(VerificationResult::title)
+            .contains(SCHEMA)
+            .contains(CUBE)
+            .contains(VIRTUAL_CUBE)
+            .contains(DIMENSIONS)
+            .contains(NAMED_SET)
+            .contains(PARAMETER);
+        assertThat(result).extracting(VerificationResult::level)
+            .containsOnly(org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.INFO);
+    }
+
+    @Test
+    void testCube() {
+
+        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.calculatedMember()).thenAnswer(setupDummyListAnswer(calculatedMember));
+        when(cube.dimensionUsageOrDimension()).thenAnswer(setupDummyListAnswer(dimension));
+        when(cube.measure()).thenAnswer(setupDummyListAnswer(measure));
+        when(cube.action()).thenAnswer(setupDummyListAnswer(action));
+
+
+        List<VerificationResult> result = verifyer.verify(schema, null);
+        assertThat(result).isNotNull()
+            .hasSize(6);
+
+        assertThat(result)
+            .extracting(VerificationResult::description)
+            .contains(SCHEMA_MUST_CONTAIN_DESCRIPTION)
+            .contains(CUBE_MUST_CONTAIN_DESCRIPTION)
+            .contains(CALCULATED_MEMBER_MUST_CONTAIN_DESCRIPTION)
+            .contains(DIMENSION_MUST_CONTAIN_DESCRIPTION)
+            .contains(MEASURE_MUST_CONTAIN_DESCRIPTION)
+            .contains(ACTION_MUST_CONTAIN_DESCRIPTION);
+        assertThat(result).extracting(VerificationResult::title)
+            .contains(SCHEMA)
+            .contains(CUBE)
+            .contains(CALCULATED_MEMBER)
+            .contains(DIMENSIONS)
+            .contains(MEASURE)
+            .contains(ACTION);
+        assertThat(result).extracting(VerificationResult::level)
+            .containsOnly(org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.INFO);
+    }
+
+
+    public static  <N> Answer<List<N>> setupDummyListAnswer(N... values) {
+        final List<N> someList = new ArrayList<N>();
+
+        someList.addAll(Arrays.asList(values));
+
+        Answer<List<N>> answer = new Answer<List<N>>() {
+            public List<N> answer(InvocationOnMock invocation) throws Throwable {
+                return someList;
+            }
+        };
+        return answer;
     }
 
 }

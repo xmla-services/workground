@@ -60,14 +60,13 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     private Consumer<Parameter> parameterConsumer = this::checkParameter;
     private Consumer<DrillThroughAction> drillThroughActionConsumer = this::checkDrillThroughAction;
     private Consumer<Action> actionConsumer = this::checkAction;
-    private Consumer<SharedDimension> sharedDimensionConsumer = this::checkSharedDimension;
 
     @Override
     public List<VerificationResult> checkSchema(Schema schema) {
         Level lavel = config.schema();
         if (lavel != null && (schema.description() == null || schema.description()
                 .isEmpty())) {
-            results.add(new VerificationResultR(SCHEMA, "Schema must contain description", lavel, Cause.SCHEMA));
+            results.add(new VerificationResultR(SCHEMA, SCHEMA_MUST_CONTAIN_DESCRIPTION, lavel, Cause.SCHEMA));
         }
 
         checkList(schema.cube(), cubeConsumer);
@@ -84,7 +83,7 @@ public class DescriptionWalker extends AbstractSchemaWalker {
     }
 
     protected void checkCubeDimension(CubeDimension dimension) {
-        Level lavel = config.privateDimension();
+        Level lavel = config.dimension();
         if (lavel != null && (dimension.description() == null || dimension.description()
                 .isEmpty())) {
             results.add(

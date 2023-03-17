@@ -63,6 +63,9 @@ public class SchemaWalkerMessages {
     public static final String ACTION = "Action";
     public static final String COLUMN = "Column";
     public static final String NAMED_SET = "NamedSet";
+    public static final String SHARED_DIMENSION = "SharedDimension";
+    public static final String DRILL_THROUGH_ACTION = "DrillThroughAction";
+
 
     public static final String SCHEMA_ = "schema ";
     public static final String WRITEBACK_TABLE_NAME_MUST_BE_SET = "WritebackTable name must be set";
@@ -242,7 +245,6 @@ public class SchemaWalkerMessages {
     public static final String PARAMETER_MUST_CONTAIN_DESCRIPTION = "Parameter must contain description";
     public static final String DRILL_THROUGH_ACTION_MUST_CONTAIN_DESCRIPTION =
         "DrillThroughAction must contain description";
-    public static final String SHARED_DIMENSION = "SharedDimension";
-    public static final String DRILL_THROUGH_ACTION = "DrillThroughAction";
+    public static final String SCHEMA_MUST_CONTAIN_DESCRIPTION = "Schema must contain description";
 
 }
