@@ -91,7 +91,7 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
                 if (!jmds.doesTableExist(schemaName, factTable)) {
                     String msg = String.format(CUBE_MUST_CONTAIN_MEASURES, orNotSet(cube.name()));
                     results.add(new VerificationResultR(CUBE, msg,
-                        ERROR, Cause.SCHEMA));
+                        ERROR, DATABASE));
 
                     String message = String.format(FACT_TABLE_0_DOES_NOT_EXIST_IN_DATABASE, factTable,
                         ((schemaName == null || schemaName.equals("")) ? "." : SCHEMA_ + schemaName));
@@ -104,10 +104,6 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
             }
         }
 
-        if (cube.namedSet() != null) {
-            cube.namedSet()
-                .forEach(ns -> checkNamedSet(ns));
-        }
     }
 
     @Override
