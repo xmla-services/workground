@@ -178,6 +178,7 @@ public class SchemaWalkerMessages {
         "Dimension must be set for CalculatedMember with name %s";
     public static final String USER_DEFINED_FUNCTION_NAME_MUST_BE_SET = "UserDefinedFunction name must be set";
     public static final String SCHEMA_NAME_MUST_BE_SET = "Schema name must be set";
+    public static final String SCHEMA_MUST_BE_NOT_NULL = "Schema must be set";
     public static final String VIRTUAL_CUBE_MUST_CONTAIN_DIMENSIONS =
         "VirtualCube with name %s must contain dimensions ";
     public static final String VIRTUAL_CUBE_MUST_CONTAIN_MEASURES =

@@ -175,7 +175,7 @@ public class JDBCSchemaWalker extends AbstractSchemaWalker {
             if (!isEmpty((cubeDimension).foreignKey())) {
 
                 // TODO: Need to add validation for Views
-                if (cube.fact() instanceof Table) {
+                if (cube != null && cube.fact() instanceof Table) {
                     final Table factTable = (Table) cube.fact();
                     String foreignKey = (cubeDimension).foreignKey();
                     try {
