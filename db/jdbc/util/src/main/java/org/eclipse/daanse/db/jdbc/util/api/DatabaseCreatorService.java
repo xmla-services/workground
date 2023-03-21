@@ -11,13 +11,13 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-package org.eclipse.daanse.olap.rolap.dbmapper.creator.api;
+package org.eclipse.daanse.db.jdbc.util.api;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
+import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
 
+import javax.sql.DataSource;
 import java.sql.SQLException;
 
-public interface DbCreatorService {
-
-    void createSchema(Schema schema) throws SQLException;
+public interface DatabaseCreatorService {
+    void createDatabaseSchema(DataSource dataSource, DBStructure dbStructure) throws SQLException;
 }
