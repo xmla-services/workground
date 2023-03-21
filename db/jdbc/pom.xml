@@ -9,5 +9,6 @@
   <packaging>pom</packaging>
   <modules>
       <module>metadata</module>
+      <module>util</module>
   </modules>
 </project>

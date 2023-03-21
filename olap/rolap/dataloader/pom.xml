@@ -2,13 +2,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.eclipse.daanse</groupId>
-    <artifactId>org.eclipse.daanse.olap</artifactId>
+    <artifactId>org.eclipse.daanse.olap.rolap</artifactId>
     <version>${revision}</version>
   </parent>
-  <artifactId>org.eclipse.daanse.olap.rolap</artifactId>
+  <artifactId>org.eclipse.daanse.olap.rolap.dataloader</artifactId>
   <packaging>pom</packaging>
   <modules>
-    <module>dbmapper</module>
-    <module>dataloader</module>
+    <module>csv</module>
   </modules>
 </project>
