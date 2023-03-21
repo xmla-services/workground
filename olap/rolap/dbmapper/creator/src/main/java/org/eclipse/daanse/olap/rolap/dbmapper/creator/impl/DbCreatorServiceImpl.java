@@ -13,23 +13,32 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.creator.impl;
 
+import org.eclipse.daanse.db.jdbc.util.api.DatabaseCreatorService;
+import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.creator.api.DbCreatorService;
 
 import javax.sql.DataSource;
-import java.io.InputStream;
+import java.sql.SQLException;
 
 public class DbCreatorServiceImpl  implements DbCreatorService {
+    private DataSource dataSource;
+    private DatabaseCreatorService databaseCreatorService;
 
-    public DbCreatorServiceImpl(DataSource dataSource) {
+    public DbCreatorServiceImpl(DataSource dataSource, DatabaseCreatorService databaseCreatorService) {
+        this.dataSource = dataSource;
+        this.databaseCreatorService = databaseCreatorService;
     }
 
     @Override
-    public void loadData(InputStream inputStream) {
-        //TODO
+    public void createSchema(Schema schema) throws SQLException {
+        DBStructure dbStructure = getDBStructure(schema);
+        databaseCreatorService.createDatabaseSchema(dataSource, dbStructure);
     }
 
-    @Override
-    public void createSchema(InputStream inputStream) {
+    private DBStructure getDBStructure(Schema schema) {
         //TODO
+        DBStructure dbStructure = new DBStructure();
+        return dbStructure;
     }
 }

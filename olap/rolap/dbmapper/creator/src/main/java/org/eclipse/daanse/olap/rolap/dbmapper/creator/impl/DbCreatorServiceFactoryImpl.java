@@ -13,21 +13,25 @@
  */
 package org.eclipse.daanse.olap.rolap.dbmapper.creator.impl;
 
+import org.eclipse.daanse.db.jdbc.util.api.DatabaseCreatorService;
 import org.eclipse.daanse.olap.rolap.dbmapper.creator.api.DbCreatorService;
 import org.eclipse.daanse.olap.rolap.dbmapper.creator.api.DbCreatorServiceFactory;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ServiceScope;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
 @Component(service = DbCreatorServiceFactory.class, scope = ServiceScope.SINGLETON)
-
 public class DbCreatorServiceFactoryImpl implements DbCreatorServiceFactory {
+
+    @Reference
+    private DatabaseCreatorService databaseCreatorService;
 
     @Override
     public DbCreatorService create(DataSource dataSource) throws SQLException {
-        return new DbCreatorServiceImpl(dataSource);
+        return new DbCreatorServiceImpl(dataSource, databaseCreatorService);
     }
 
 }
