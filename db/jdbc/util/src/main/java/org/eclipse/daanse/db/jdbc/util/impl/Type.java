@@ -15,27 +15,38 @@ package org.eclipse.daanse.db.jdbc.util.impl;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
 
-public class Type {
+public enum Type {
+
+    INTEGER("INTEGER"),
+    NUMERIC("DECIMAL(15,4)"),
+    SMALLINT("SMALLINT"),
+    STRING("VARCHAR(255)"),
+    BOOLEAN("BOOLEAN"),
+    LONG("BIGINT"),
+    DATE("DATE"),
+    TIMESTAMP("TIMESTAMP"),
+    TIME("TIME");
 
     /**
      * The name of this type. Immutable, and independent of the RDBMS.
      */
     public final String name;
 
-    public final Type Integer = new Type("INTEGER");
-    public final Type Currency = new Type("DECIMAL(10,4)");
-    public final Type Smallint = new Type("SMALLINT");
-    public final Type Varchar30 = new Type("VARCHAR(30)");
-    public final Type Varchar255 = new Type("VARCHAR(255)");
-    public final Type Varchar60 = new Type("VARCHAR(60)");
-    public final Type Real = new Type("REAL");
-    public final Type Boolean = new Type("BOOLEAN");
-    public final Type Bigint = new Type("BIGINT");
-    public final Type Date = new Type("DATE");
-    public final Type Timestamp = new Type("TIMESTAMP");
-
-    public Type(String name) {
+    Type(String name) {
         this.name = name;
+    }
+
+    public static Type fromName(String n) {
+        if (n == null){
+            return Type.STRING;
+        }
+        for (Type t : Type.values()) {
+            if (t.name.equals(n)) {
+                return t;
+            }
+        }
+        throw new IllegalArgumentException(new StringBuilder("Type Illegal name ")
+            .append(n).toString());
     }
 
     /**
@@ -44,11 +55,11 @@ public class Type {
      */
     public String toPhysical(Dialect dialect) {
         //TODO move logic to dialect
-        if (this == Integer || this == Currency || this == Smallint || this == Varchar30 || this == Varchar60
-            || this == Varchar255 || this == Real) {
+        if (this == INTEGER ||  this == SMALLINT
+            || this == STRING) {
             return name;
         }
-        if (this == Boolean) {
+        if (this == BOOLEAN) {
             switch (dialect.getDialectName()) {
                 case "POSTGRES":
                 case "GREENPLUM":
@@ -64,10 +75,10 @@ public class Type {
                 case "SYBASE":
                     return "BIT";
                 default:
-                    return Smallint.name;
+                    return SMALLINT.name;
             }
         }
-        if (this == Bigint) {
+        if (this == LONG) {
             switch (dialect.getDialectName()) {
                 case "ORACLE":
                 case "FIREBIRD":
@@ -76,7 +87,7 @@ public class Type {
                     return name;
             }
         }
-        if (this == Date) {
+        if (this == DATE) {
             switch (dialect.getDialectName()) {
                 case "MSSQL":
                     return "DATETIME";
@@ -86,7 +97,7 @@ public class Type {
                     return name;
             }
         }
-        if (this == Timestamp) {
+        if (this == TIMESTAMP) {
             switch (dialect.getDialectName()) {
                 case "MSSQL":
                 case "MARIADB":

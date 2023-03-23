@@ -18,6 +18,9 @@ import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.jdbc.util.api.DatabaseCreatorService;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ServiceScope;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -27,9 +30,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component(service = DatabaseCreatorService.class)
+@Component(service = DatabaseCreatorService.class, scope = ServiceScope.SINGLETON)
 public class DatabaseCreatorServiceImpl implements DatabaseCreatorService {
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseCreatorServiceImpl.class);
     public static final String nl = System.getProperty("line.separator");
     @Reference
     private DialectResolver dialectResolver;
@@ -45,20 +48,24 @@ public class DatabaseCreatorServiceImpl implements DatabaseCreatorService {
                 List<String> createTableList = dbStructure.getTables().parallelStream()
                     .map(t -> createTableSQL(t, dialect)).collect(Collectors.toList());
                 List<String> createIndexList = dbStructure.getTables().parallelStream()
-                    .map(t -> createTableSQL(t, dialect)).collect(Collectors.toList());
+                    .flatMap(t -> createIndexSqls(t, dialect).stream()).collect(Collectors.toList());
 
                 final Statement statement = connection.createStatement();
                 StringBuilder sb = new StringBuilder("CREATE DATABASE IF NOT EXISTS ")
                     .append(dbStructure.getName());
+                LOGGER.debug(sb.toString());
                 statement.execute(sb.toString());
                 connection.setAutoCommit(false);
                 for (String sql : dropTableList) {
+                    LOGGER.debug(sql);
                     statement.addBatch(sql);
                 }
                 for (String sql : createTableList) {
+                    LOGGER.debug(sql);
                     statement.addBatch(sql);
                 }
                 for (String sql : createIndexList) {
+                    LOGGER.debug(sql);
                     statement.addBatch(sql);
                 }
                 statement.executeBatch();
@@ -105,9 +112,9 @@ public class DatabaseCreatorServiceImpl implements DatabaseCreatorService {
             buf.append(nl);
             buf.append("    ").append(dialect.quoteIdentifier(column.getName()));
             buf.append(" ").append(column.getType().toPhysical(dialect));
-            if (!column.getConstraint().equals("")) {
-                buf.append(" ").append(column.getConstraint());
-            }
+            //if (!column.getConstraint().equals("")) {
+            //    buf.append(" ").append(column.getConstraint());
+            //}
         }
 
         buf.append(")");

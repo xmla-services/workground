@@ -13,23 +13,15 @@
  */
 package org.eclipse.daanse.db.jdbc.util.impl;
 
-public class Constraint {
+import java.util.List;
 
-    private final String name;
-    private final String[] columnNames;
-    private final boolean unique;
-
-    public Constraint(String name, boolean unique, String... columnNames) {
-        this.name = name;
-        this.unique = unique;
-        this.columnNames = columnNames;
-    }
+public record Constraint(String name, boolean unique, List<String> columnNames) {
 
     public String getName() {
         return name;
     }
 
-    public String[] getColumnNames() {
+    public List<String> getColumnNames() {
         return columnNames;
     }
 

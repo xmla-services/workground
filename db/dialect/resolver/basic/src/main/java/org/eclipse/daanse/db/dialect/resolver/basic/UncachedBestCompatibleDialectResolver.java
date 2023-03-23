@@ -34,6 +34,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +54,7 @@ public class UncachedBestCompatibleDialectResolver implements DialectResolver {
     private static final Logger LOGGER = LoggerFactory.getLogger(UncachedBestCompatibleDialectResolver.class);
     private List<Dialect> dialects = new ArrayList<>();
 
-    @Reference(service = Dialect.class)
+    @Reference(service = Dialect.class, cardinality = ReferenceCardinality.MULTIPLE )
     public void bindDialect(Dialect dialect) {
         dialects.add(dialect);
     }

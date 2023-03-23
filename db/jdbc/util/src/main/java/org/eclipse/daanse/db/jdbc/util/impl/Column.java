@@ -13,17 +13,8 @@
  */
 package org.eclipse.daanse.db.jdbc.util.impl;
 
-public class Column {
+public record Column(String name, Type type) {
 
-    private final String name;
-    private final Type type;
-    private final String constraint;
-
-    public Column(String name, Type type, boolean nullsAllowed) {
-        this.name = name;
-        this.type = type;
-        this.constraint = nullsAllowed ? "" : "NOT NULL";
-    }
 
     public String getName() {
         return name;
@@ -31,9 +22,5 @@ public class Column {
 
     public Type getType() {
         return type;
-    }
-
-    public String getConstraint() {
-        return constraint;
     }
 }

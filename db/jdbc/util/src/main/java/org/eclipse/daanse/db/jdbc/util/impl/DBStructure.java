@@ -15,24 +15,15 @@ package org.eclipse.daanse.db.jdbc.util.impl;
 
 import java.util.List;
 
-public class DBStructure {
-
-    private String name;
-    private List<Table> tables;
+public record DBStructure(String name, List<Table> tables) {
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public List<Table> getTables() {
         return tables;
     }
 
-    public void setTables(List<Table> tables) {
-        this.tables = tables;
-    }
 }
