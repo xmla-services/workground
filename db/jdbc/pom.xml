@@ -10,5 +10,6 @@
   <modules>
       <module>metadata</module>
       <module>util</module>
+      <module>dataloader</module>
   </modules>
 </project>

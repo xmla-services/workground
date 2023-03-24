@@ -11,11 +11,9 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-package org.eclipse.daanse.olap.rolap.dataloader.csv.api;
+package org.eclipse.daanse.db.jdbc.dataloader.csv.api;
 
-import java.io.InputStream;
+public interface CsvDataLoadServiceFactory {
 
-public interface CsvDataLoadService {
-
-    void loadData(InputStream inputStream);
+    CsvDataLoadService create() throws Exception;
 }

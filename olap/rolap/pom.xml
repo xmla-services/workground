@@ -9,6 +9,5 @@
   <packaging>pom</packaging>
   <modules>
     <module>dbmapper</module>
-    <module>dataloader</module>
   </modules>
 </project>
