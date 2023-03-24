@@ -471,7 +471,7 @@ public class MandantoriesVerifyerTest {
 
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
-            .hasSize(13);
+            .hasSize(15);
 
         assertThat(result)
             .extracting(VerificationResult::description)
@@ -496,7 +496,8 @@ public class MandantoriesVerifyerTest {
         ;
 
         assertThat(result).extracting(VerificationResult::level)
-            .containsOnly(org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.ERROR);
+            .contains(org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.ERROR,
+            		org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.WARNING);
     }
 
     @Test
@@ -511,7 +512,7 @@ public class MandantoriesVerifyerTest {
         when(table.name()).thenReturn("tableName");
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
-            .hasSize(18);
+            .hasSize(20);
 
         assertThat(result)
             .extracting(VerificationResult::description)
@@ -532,7 +533,8 @@ public class MandantoriesVerifyerTest {
             .contains(PROPERTY);
 
         assertThat(result).extracting(VerificationResult::level)
-            .containsOnly(org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.ERROR);
+            .contains(org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.ERROR,
+            		org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.WARNING);
     }
 
     @Test
@@ -548,7 +550,7 @@ public class MandantoriesVerifyerTest {
         when(table.name()).thenReturn("tableName");
         List<VerificationResult> result = verifyer.verify(schema, null);
         assertThat(result).isNotNull()
-            .hasSize(34);
+            .hasSize(36);
 
         assertThat(result)
             .extracting(VerificationResult::description)
@@ -570,7 +572,7 @@ public class MandantoriesVerifyerTest {
             .contains(PROPERTY);
 
         assertThat(result).extracting(VerificationResult::level)
-            .containsOnly(org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.ERROR);
+            .contains(org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.ERROR, org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.WARNING);
     }
 
     public record LevelTest(String name,

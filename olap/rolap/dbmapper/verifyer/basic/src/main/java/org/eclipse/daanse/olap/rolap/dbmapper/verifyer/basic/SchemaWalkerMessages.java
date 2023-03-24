@@ -152,10 +152,13 @@ public class SchemaWalkerMessages {
         "Level: levelType %s can only be used with a TimeDimension";
     public static final String LEVEL_TYPE_S_CAN_ONLY_BE_USED_WITH_A_STANDARD_DIMENSION =
         "Level: levelType %s can only be used with a StandardDimension";
+    public static final String LEVEL_TYPE_MUST_BE_SET =
+    "Level: Type should be set";
     public static final String NAMED_SET_NAME_MUST_BE_SET = "NamedSet name must be set";
     public static final String NAMED_SET_FORMULA_MUST_BE_SET = "NamedSet Formula must be set";
     public static final String USER_DEFINED_FUNCTION = "UserDefinedFunction";
     public static final String PROPERTY_COLUMN_MUST_BE_SET = "Property Column must be set";
+    public static final String PROPERTY_TYPE_MUST_BE_SET = "Property type should be set";
     public static final String LEVEL_COLUMN_MUST_BE_SET =
         "Level: Column must be set for hierarchy with name %s";
     public static final String LEVEL_NAME_MUST_BE_SET =
