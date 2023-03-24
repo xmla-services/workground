@@ -16,13 +16,21 @@ package org.eclipse.daanse.olap.rolap.dbmapper.creator.impl;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.jdbc.util.impl.Column;
+import org.eclipse.daanse.db.jdbc.util.impl.Constraint;
 import org.eclipse.daanse.db.jdbc.util.impl.DBStructure;
+import org.eclipse.daanse.db.jdbc.util.impl.Type;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.ColumnDef;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Cube;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.DimensionUsage;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Hierarchy;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.InlineTable;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.Measure;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Property;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.MeasureDataTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.PropertyTypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.TypeEnum;
 import org.eclipse.daanse.olap.rolap.dbmapper.creator.api.DbCreatorService;
@@ -71,10 +79,19 @@ class DbCreatorServiceImplTest {
     PrivateDimension privateDimension = mock(PrivateDimension.class);
     Hierarchy hierarchy = mock(Hierarchy.class);
     Table table = mock(Table.class);
+    Table tableFact = mock(Table.class);
     Level level1 = mock(Level.class);
     Level level2 = mock(Level.class);
     Property property1 = mock(Property.class);
     Property property11 = mock(Property.class);
+    Cube cube = mock(Cube.class);
+    DimensionUsage dimensionUsage = mock(DimensionUsage.class);
+    Measure measure1 = mock(Measure.class);
+    Measure measure2 = mock(Measure.class);
+    InlineTable inlineTable = mock(InlineTable.class);
+    ColumnDef columnDef1 = mock(ColumnDef.class);
+    ColumnDef columnDef2 = mock(ColumnDef.class);
+
 
     @BeforeEach
     void beforeEach() throws SQLException {
@@ -86,7 +103,7 @@ class DbCreatorServiceImplTest {
     }
 
     @Test
-    void test(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory) throws SQLException {
+    void testPrivateDimension(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory) throws SQLException {
         when(schema.name()).thenReturn("schemaName");
         when(schema.dimension()).thenAnswer(setupDummyListAnswer(privateDimension));
         when(privateDimension.hierarchy()).thenAnswer(setupDummyListAnswer(hierarchy));
@@ -95,7 +112,7 @@ class DbCreatorServiceImplTest {
         when(hierarchy.level()).thenAnswer(setupDummyListAnswer(level1, level2));
         when(hierarchy.primaryKey()).thenReturn("id");
         when(level1.type()).thenReturn(TypeEnum.INTEGER);
-        when(level2.type()).thenReturn(TypeEnum.INTEGER);
+        when(level2.type()).thenReturn(TypeEnum.NUMERIC);
         when(level1.column()).thenReturn("column1");
         when(level2.column()).thenReturn("column2");
         when(level1.ordinalColumn()).thenReturn("ordinalColumn1");
@@ -109,6 +126,8 @@ class DbCreatorServiceImplTest {
         when(property1.column()).thenReturn("property1Column");
         when(property11.column()).thenReturn("property11Column");
         when(property1.type()).thenReturn(PropertyTypeEnum.INTEGER);
+
+
 
         dbCreatorService = dbCreatorServiceFactory.create(dataSource);
         DBStructure dbStructure = dbCreatorService.createSchema(schema);
@@ -134,6 +153,240 @@ class DbCreatorServiceImplTest {
             .contains("nameColumn1")
             .contains("property1Column")
             .contains("property11Column");
+        assertThat(dbStructure.getTables().get(0).getColumns())
+            .extracting(Column::type)
+            .contains(Type.INTEGER)
+            .contains(Type.NUMERIC)
+            .contains(Type.STRING);
+        assertThat(dbStructure.getTables().get(0).getConstraints())
+            .extracting(Constraint::name)
+            .contains("id");
+        assertThat(dbStructure.getTables().get(0).getConstraints())
+            .extracting(Constraint::unique)
+            .contains(true);
+        assertThat(dbStructure.getTables().get(0).getConstraints())
+            .extracting(Constraint::unique)
+            .contains(true);
+        assertThat(dbStructure.getTables().get(0).getConstraints())
+            .isNotNull().hasSize(1);
+        assertThat(dbStructure.getTables().get(0).getConstraints().get(0).columnNames())
+            .contains("id");
+
+    }
+
+    @Test
+    void testCube(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory) throws SQLException {
+        when(schema.name()).thenReturn("schemaName");
+        when(privateDimension.hierarchy()).thenAnswer(setupDummyListAnswer(hierarchy));
+        when(hierarchy.relation()).thenReturn(table);
+        when(table.name()).thenReturn("tableName");
+        when(hierarchy.level()).thenAnswer(setupDummyListAnswer(level1, level2));
+        when(hierarchy.primaryKey()).thenReturn("id");
+        when(level1.type()).thenReturn(TypeEnum.INTEGER);
+        when(level2.type()).thenReturn(TypeEnum.NUMERIC);
+        when(level1.column()).thenReturn("column1");
+        when(level2.column()).thenReturn("column2");
+        when(level1.ordinalColumn()).thenReturn("ordinalColumn1");
+        when(level2.ordinalColumn()).thenReturn("ordinalColumn2");
+        when(level1.captionColumn()).thenReturn("captionColumn1");
+        when(level2.captionColumn()).thenReturn("captionColumn2");
+        when(level1.parentColumn()).thenReturn("parentColumn1");
+        when(level2.parentColumn()).thenReturn("parentColumn2");
+        when(level1.nameColumn()).thenReturn("nameColumn1");
+        when(level1.property()).thenAnswer(setupDummyListAnswer(property1, property11));
+        when(property1.column()).thenReturn("property1Column");
+        when(property11.column()).thenReturn("property11Column");
+        when(property1.type()).thenReturn(PropertyTypeEnum.INTEGER);
+        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.fact()).thenReturn(tableFact);
+        when(cube.dimensionUsageOrDimension()).thenAnswer(setupDummyListAnswer(dimensionUsage, privateDimension));
+        when(cube.measure()).thenAnswer(setupDummyListAnswer(measure1, measure2));
+        when(measure1.column()).thenReturn("measure1Column");
+        when(measure2.column()).thenReturn("measure2Column");
+        when(measure1.datatype()).thenReturn(MeasureDataTypeEnum.NUMERIC);
+
+
+
+        when(tableFact.name()).thenReturn("tableFact");
+        when(dimensionUsage.foreignKey()).thenReturn("tableFactId");
+
+        dbCreatorService = dbCreatorServiceFactory.create(dataSource);
+        DBStructure dbStructure = dbCreatorService.createSchema(schema);
+        assertThat(dbStructure).isNotNull().extracting(DBStructure::getName)
+            .isNotNull().isEqualTo("schemaName");
+        assertThat(dbStructure).isNotNull().extracting(DBStructure::getTables).isNotNull();
+        assertThat(dbStructure.getTables()).isNotNull().hasSize(2);
+        assertThat(dbStructure.getTables()).extracting(org.eclipse.daanse.db.jdbc.util.impl.Table::getTableName).contains("tableName", "tableFact");
+        org.eclipse.daanse.db.jdbc.util.impl.Table table = dbStructure.getTables().get(0);
+        assertThat(table.getColumns()).isNotNull().hasSize(3);
+        assertThat(table.getColumns())
+            .extracting(Column::name)
+            .contains("tableFactId")
+            .contains("measure1Column")
+            .contains("measure2Column");
+        assertThat(table.getColumns())
+            .extracting(Column::type)
+            .contains(Type.INTEGER)
+            .contains(Type.STRING)
+            .contains(Type.NUMERIC);
+        assertThat(table.getConstraints())
+            .extracting(Constraint::name)
+            .contains("tableFactId");
+        assertThat(table.getConstraints())
+            .extracting(Constraint::unique)
+            .contains(true);
+        assertThat(table.getConstraints())
+            .extracting(Constraint::unique)
+            .contains(true);
+        assertThat(table.getConstraints())
+            .isNotNull().hasSize(1);
+        assertThat(table.getConstraints().get(0).columnNames())
+            .contains("tableFactId");
+
+        table = dbStructure.getTables().get(1);
+        assertThat(table.getColumns()).isNotNull().hasSize(12);
+        assertThat(table.getColumns())
+            .extracting(Column::name)
+            .contains("id")
+            .contains("column1")
+            .contains("column2")
+            .contains("ordinalColumn1")
+            .contains("ordinalColumn2")
+            .contains("captionColumn1")
+            .contains("captionColumn2")
+            .contains("parentColumn1")
+            .contains("parentColumn2")
+            .contains("nameColumn1")
+            .contains("property1Column")
+            .contains("property11Column");
+        assertThat(table.getColumns())
+            .extracting(Column::type)
+            .contains(Type.INTEGER)
+            .contains(Type.NUMERIC)
+            .contains(Type.STRING);
+        assertThat(table.getConstraints())
+            .extracting(Constraint::name)
+            .contains("id");
+        assertThat(table.getConstraints())
+            .extracting(Constraint::unique)
+            .contains(true);
+        assertThat(table.getConstraints())
+            .extracting(Constraint::unique)
+            .contains(true);
+        assertThat(table.getConstraints())
+            .isNotNull().hasSize(1);
+        assertThat(table.getConstraints().get(0).columnNames())
+            .contains("id");
+    }
+
+    @Test
+    void testInlineTableColumnDef(@InjectService(filter = "(component.name=" + COMPONENT_NAME + ")") DbCreatorServiceFactory dbCreatorServiceFactory) throws SQLException {
+        when(schema.name()).thenReturn("schemaName");
+        when(privateDimension.hierarchy()).thenAnswer(setupDummyListAnswer(hierarchy));
+        when(hierarchy.relation()).thenReturn(table);
+        when(table.name()).thenReturn("tableName");
+        when(hierarchy.level()).thenAnswer(setupDummyListAnswer(level1, level2));
+        when(hierarchy.primaryKey()).thenReturn("id");
+        when(level1.type()).thenReturn(TypeEnum.INTEGER);
+        when(level2.type()).thenReturn(TypeEnum.NUMERIC);
+        when(level1.column()).thenReturn("column1");
+        when(level2.column()).thenReturn("column2");
+        when(level1.ordinalColumn()).thenReturn("ordinalColumn1");
+        when(level2.ordinalColumn()).thenReturn("ordinalColumn2");
+        when(level1.captionColumn()).thenReturn("captionColumn1");
+        when(level2.captionColumn()).thenReturn("captionColumn2");
+        when(level1.parentColumn()).thenReturn("parentColumn1");
+        when(level2.parentColumn()).thenReturn("parentColumn2");
+        when(level1.nameColumn()).thenReturn("nameColumn1");
+        when(level1.property()).thenAnswer(setupDummyListAnswer(property1, property11));
+        when(property1.column()).thenReturn("property1Column");
+        when(property11.column()).thenReturn("property11Column");
+        when(property1.type()).thenReturn(PropertyTypeEnum.INTEGER);
+        when(schema.cube()).thenAnswer(setupDummyListAnswer(cube));
+        when(cube.fact()).thenReturn(inlineTable);
+        when(inlineTable.alias()).thenReturn("inlineTableName");
+        when(inlineTable.columnDefs()).thenAnswer(setupDummyListAnswer(columnDef1, columnDef2));
+        when(columnDef1.name()).thenReturn("columnDef1Name");
+        when(columnDef2.name()).thenReturn("columnDef2Name");
+        when(columnDef1.type()).thenReturn(TypeEnum.BOOLEAN);
+        when(cube.dimensionUsageOrDimension()).thenAnswer(setupDummyListAnswer(dimensionUsage, privateDimension));
+        when(cube.measure()).thenAnswer(setupDummyListAnswer(measure1, measure2));
+        when(measure1.column()).thenReturn("measure1Column");
+        when(measure2.column()).thenReturn("measure2Column");
+        when(measure1.datatype()).thenReturn(MeasureDataTypeEnum.NUMERIC);
+        when(dimensionUsage.foreignKey()).thenReturn("tableFactId");
+
+        dbCreatorService = dbCreatorServiceFactory.create(dataSource);
+        DBStructure dbStructure = dbCreatorService.createSchema(schema);
+
+        assertThat(dbStructure).isNotNull().extracting(DBStructure::getName)
+            .isNotNull().isEqualTo("schemaName");
+        assertThat(dbStructure).isNotNull().extracting(DBStructure::getTables).isNotNull();
+        assertThat(dbStructure.getTables()).isNotNull().hasSize(2);
+        assertThat(dbStructure.getTables()).extracting(org.eclipse.daanse.db.jdbc.util.impl.Table::getTableName).contains("tableName", "inlineTableName");
+        org.eclipse.daanse.db.jdbc.util.impl.Table table = dbStructure.getTables().get(0);
+        assertThat(table.getColumns()).isNotNull().hasSize(5);
+        assertThat(table.getColumns())
+            .extracting(Column::name)
+            .contains("tableFactId")
+            .contains("measure1Column")
+            .contains("measure2Column")
+            .contains("columnDef1Name")
+            .contains("columnDef2Name");
+        assertThat(table.getColumns())
+            .extracting(Column::type)
+            .contains(Type.INTEGER)
+            .contains(Type.STRING)
+            .contains(Type.NUMERIC)
+            .contains(Type.BOOLEAN);
+        assertThat(table.getConstraints())
+            .extracting(Constraint::name)
+            .contains("tableFactId");
+        assertThat(table.getConstraints())
+            .extracting(Constraint::unique)
+            .contains(true);
+        assertThat(table.getConstraints())
+            .extracting(Constraint::unique)
+            .contains(true);
+        assertThat(table.getConstraints())
+            .isNotNull().hasSize(1);
+        assertThat(table.getConstraints().get(0).columnNames())
+            .contains("tableFactId");
+
+        table = dbStructure.getTables().get(1);
+        assertThat(table.getColumns()).isNotNull().hasSize(12);
+        assertThat(table.getColumns())
+            .extracting(Column::name)
+            .contains("id")
+            .contains("column1")
+            .contains("column2")
+            .contains("ordinalColumn1")
+            .contains("ordinalColumn2")
+            .contains("captionColumn1")
+            .contains("captionColumn2")
+            .contains("parentColumn1")
+            .contains("parentColumn2")
+            .contains("nameColumn1")
+            .contains("property1Column")
+            .contains("property11Column");
+        assertThat(table.getColumns())
+            .extracting(Column::type)
+            .contains(Type.INTEGER)
+            .contains(Type.NUMERIC)
+            .contains(Type.STRING);
+        assertThat(table.getConstraints())
+            .extracting(Constraint::name)
+            .contains("id");
+        assertThat(table.getConstraints())
+            .extracting(Constraint::unique)
+            .contains(true);
+        assertThat(table.getConstraints())
+            .extracting(Constraint::unique)
+            .contains(true);
+        assertThat(table.getConstraints())
+            .isNotNull().hasSize(1);
+        assertThat(table.getConstraints().get(0).columnNames())
+            .contains("id");
     }
 
     private static  <N> Answer<List<N>> setupDummyListAnswer(N... values) {
