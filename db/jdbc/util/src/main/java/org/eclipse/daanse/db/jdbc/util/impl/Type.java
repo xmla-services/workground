@@ -30,10 +30,10 @@ public enum Type {
     /**
      * The name of this type. Immutable, and independent of the RDBMS.
      */
-    public final String name;
+    public final String value;
 
     Type(String name) {
-        this.name = name;
+        this.value = name;
     }
 
     public static Type fromName(String n) {
@@ -41,7 +41,7 @@ public enum Type {
             return Type.STRING;
         }
         for (Type t : Type.values()) {
-            if (t.name.equals(n)) {
+            if (t.name().equals(n)) {
                 return t;
             }
         }
@@ -56,8 +56,8 @@ public enum Type {
     public String toPhysical(Dialect dialect) {
         //TODO move logic to dialect
         if (this == INTEGER ||  this == SMALLINT
-            || this == STRING) {
-            return name;
+            || this == STRING || this == NUMERIC || this == TIME) {
+            return value;
         }
         if (this == BOOLEAN) {
             switch (dialect.getDialectName()) {
@@ -66,7 +66,7 @@ public enum Type {
                 case "LUCIDDB":
                 case "NETEZZA":
                 case "HSQLDB":
-                    return name;
+                    return value;
                 case "MARIADB":
                 case "MYSQL":
                 case "INFOBRIGHT":
@@ -75,7 +75,7 @@ public enum Type {
                 case "SYBASE":
                     return "BIT";
                 default:
-                    return SMALLINT.name;
+                    return SMALLINT.value;
             }
         }
         if (this == LONG) {
@@ -84,7 +84,7 @@ public enum Type {
                 case "FIREBIRD":
                     return "DECIMAL(15,0)";
                 default:
-                    return name;
+                    return value;
             }
         }
         if (this == DATE) {
@@ -94,7 +94,7 @@ public enum Type {
                 case "INGRES":
                     return "INGRESDATE";
                 default:
-                    return name;
+                    return value;
             }
         }
         if (this == TIMESTAMP) {
@@ -110,10 +110,10 @@ public enum Type {
                 case "INFORMIX":
                     return "DATETIME YEAR TO FRACTION(1)";
                 default:
-                    return name;
+                    return value;
             }
         }
-        throw new AssertionError("unexpected type: " + name);
+        throw new AssertionError("unexpected type: " + value);
     }
 }
 

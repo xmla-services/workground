@@ -61,7 +61,7 @@ public class DbCreatorServiceImpl implements DbCreatorService {
         String schemaName = schema.name();
         Map<String, Table> tables = new HashMap<>();
         if (schema.dimension() != null) {
-            schema.dimension().forEach(d -> processingDimension(d, tables, schemaName));
+            schema.dimension().forEach(d -> processingDimension(d, tables, null, schemaName));
         }
         if (schema.cube() != null) {
             schema.cube().forEach(c -> processingCube(c, tables, schemaName));
@@ -81,12 +81,12 @@ public class DbCreatorServiceImpl implements DbCreatorService {
                 tableName = processingRelation(cube.fact(), tables, schemaName);
             }
             if (cube.dimensionUsageOrDimension() != null) {
-                cube.dimensionUsageOrDimension().forEach(d -> processingDimension(d, tables, schemaName));
+                String tName = tableName;
+                cube.dimensionUsageOrDimension().forEach(d -> processingDimension(d, tables, tName, schemaName));
             }
             if (cube.measure() != null) {
-                for (Measure m : cube.measure()) {
-                    processingMeasure(m, tables, tableName, schemaName);
-                }
+                String tName = tableName;
+                cube.measure().forEach(m -> processingMeasure(m, tables, tName, schemaName));
             }
         }
     }
@@ -103,12 +103,20 @@ public class DbCreatorServiceImpl implements DbCreatorService {
         }
     }
 
-    private void processingDimension(CubeDimension d, Map<String, Table> tables, String schemaName) {
+    private void processingDimension(CubeDimension d, Map<String, Table> tables, String tableName, String schemaName) {
         if (d instanceof PrivateDimension) {
             PrivateDimension privateDimension = (PrivateDimension) d;
             if (privateDimension.hierarchy() != null) {
                 privateDimension.hierarchy().forEach(h -> processingHierarchy(h, tables, schemaName));
             }
+        }
+        if (tableName != null) {
+                Table table = getTableOrCreateNew(tables, tableName, schemaName);
+                if (d.foreignKey() != null) {
+                    getColumnOrCreateNew(table.getColumns(), d.foreignKey(), Type.INTEGER);
+                    getConstraintOrCreateNew(table.getConstraint(), d.foreignKey(),
+                        true, List.of(d.foreignKey()));
+                }
         }
     }
 
