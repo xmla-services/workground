@@ -66,6 +66,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.ERROR;
+import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.api.Level.WARNING;
 import static org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.SchemaWalkerMessages.*;
 
 public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
@@ -339,6 +340,9 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
                     }
                 }
             }
+            if (level.type() != null) {
+                results.add(new VerificationResultR(LEVEL, LEVEL_TYPE_MUST_BE_SET, WARNING, Cause.SCHEMA));
+            }
             // verify level's name is set
             if (isEmpty(level.name())) {
                 String msg = String.format(LEVEL_NAME_MUST_BE_SET, orNotSet(hierarchy.name()));
@@ -402,6 +406,10 @@ public class MandantoriesSchemaWalker extends AbstractSchemaWalker {
             String column = property.column();
             if (isEmpty(column)) {
                 results.add(new VerificationResultR(PROPERTY, PROPERTY_COLUMN_MUST_BE_SET, ERROR, Cause.SCHEMA));
+            }
+
+            if (property.type() == null) {
+                results.add(new VerificationResultR(PROPERTY, PROPERTY_TYPE_MUST_BE_SET, WARNING, Cause.SCHEMA));
             }
         }
 
