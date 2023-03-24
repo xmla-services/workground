@@ -13,9 +13,14 @@
  */
 package org.eclipse.daanse.db.jdbc.dataloader.csv.api;
 
+import org.eclipse.daanse.db.jdbc.util.impl.Table;
+
+import javax.sql.DataSource;
 import java.io.InputStream;
+import java.nio.file.Path;
+import java.util.List;
 
 public interface CsvDataLoadService {
 
-    void loadData(InputStream inputStream);
+    void loadData(DataSource dataSource, List<Table> tables, Path csvDir);
 }
