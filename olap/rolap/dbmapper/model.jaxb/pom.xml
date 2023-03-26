@@ -18,23 +18,24 @@
             <goals>
               <goal>schemagen</goal>
             </goals>
-            <!--
+            <phase>generate-resources</phase>
             <configuration>
+              <sources>
+                <source>src/main/java/org/eclipse/daanse/olap/rolap/dbmapper/model/jaxb</source>
+              </sources>
+              <outputDirectory>${project.build.directory}/schemas</outputDirectory>
             </configuration>
-            -->
           </execution>
         </executions>
       </plugin>
     </plugins>
   </build>
-
   <dependencies>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.api</artifactId>
       <version>${revision}</version>
     </dependency>
-
     <dependency>
       <groupId>jakarta.xml.bind</groupId>
       <artifactId>jakarta.xml.bind-api</artifactId>
