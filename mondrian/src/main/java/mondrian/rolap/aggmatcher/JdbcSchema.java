@@ -32,9 +32,9 @@ import java.util.TreeMap;
 import javax.sql.DataSource;
 
 import org.eclipse.daanse.db.dialect.api.Datatype;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.olap4j.impl.Olap4jUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -378,8 +378,8 @@ public class JdbcSchema {
                 public RolapStar.Measure rMeasure;
 
                 // hierarchy stuff
-                public org.eclipse.daanse.olap.rolap.dbmapper.api.Relation relation;
-                public org.eclipse.daanse.olap.rolap.dbmapper.api.Expression joinExp;
+                public org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation relation;
+                public org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression joinExp;
                 public String levelColumnName;
 
                 // level stuff
@@ -445,8 +445,8 @@ public class JdbcSchema {
                     return symbolicName;
                 }
 
-                public org.eclipse.daanse.olap.rolap.dbmapper.api.Expression getOrdinalExp() {
-                    org.eclipse.daanse.olap.rolap.dbmapper.api.Expression ordinalExp = null;
+                public org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression getOrdinalExp() {
+                    org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression ordinalExp = null;
                     if (ordinalColumn != null) {
                         ordinalExp =
                             new ColumnR(
@@ -455,8 +455,8 @@ public class JdbcSchema {
                     return ordinalExp;
                 }
 
-                public org.eclipse.daanse.olap.rolap.dbmapper.api.Expression getCaptionExp() {
-                    org.eclipse.daanse.olap.rolap.dbmapper.api.Expression captionExp = null;
+                public org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression getCaptionExp() {
+                    org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression captionExp = null;
                     if (captionColumn != null) {
                         captionExp =
                             new ColumnR(
@@ -465,9 +465,9 @@ public class JdbcSchema {
                     return captionExp;
                 }
 
-                public Map<String, org.eclipse.daanse.olap.rolap.dbmapper.api.Expression> getProperties() {
-                    Map<String, org.eclipse.daanse.olap.rolap.dbmapper.api.Expression> map =
-                        new HashMap<String, org.eclipse.daanse.olap.rolap.dbmapper.api.Expression>();
+                public Map<String, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression> getProperties() {
+                    Map<String, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression> map =
+                        new HashMap<String, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression>();
                     if (properties == null) {
                         return map;
                     }
@@ -550,7 +550,7 @@ public class JdbcSchema {
              */
             private boolean isNullable;
 
-            public final org.eclipse.daanse.olap.rolap.dbmapper.api.Column column;
+            public final org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column column;
 
             private final List<JdbcSchema.Table.Column.Usage> usages;
 
@@ -885,7 +885,7 @@ public class JdbcSchema {
         private final String tableType;
 
         // mondriandef stuff
-        public org.eclipse.daanse.olap.rolap.dbmapper.api.Table table;
+        public org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table table;
 
         private boolean allColumnsLoaded;
 

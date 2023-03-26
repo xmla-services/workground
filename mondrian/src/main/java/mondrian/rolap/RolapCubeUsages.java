@@ -11,9 +11,9 @@
 
 package mondrian.rolap;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeUsage;
-
 import java.util.List;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeUsage;
 
 /**
  * Provides the base cubes that a virtual cube uses and

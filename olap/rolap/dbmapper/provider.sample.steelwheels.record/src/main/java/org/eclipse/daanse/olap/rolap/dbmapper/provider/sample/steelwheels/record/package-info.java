@@ -1,0 +1,1 @@
+package org.eclipse.daanse.olap.rolap.dbmapper.provider.sample.steelwheels.record;

@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,8 +101,8 @@ class RolapDimension extends DimensionBase {
     RolapDimension(
         RolapSchema schema,
         RolapCube cube,
-        org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension xmlDimension,
-        org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension xmlCubeDimension)
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension xmlDimension,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension xmlCubeDimension)
     {
         this(
             schema,

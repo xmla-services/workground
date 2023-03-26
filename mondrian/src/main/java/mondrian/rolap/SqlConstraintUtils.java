@@ -33,7 +33,7 @@ import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

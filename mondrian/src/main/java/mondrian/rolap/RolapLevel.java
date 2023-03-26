@@ -24,10 +24,10 @@ import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Level;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.model.OlapElement;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.InternalTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.PropertyTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.InternalTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.PropertyTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
 import org.olap4j.impl.UnmodifiableArrayMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -345,7 +345,7 @@ public class RolapLevel extends LevelBase {
     RolapLevel(
         RolapHierarchy hierarchy,
         int depth,
-        org.eclipse.daanse.olap.rolap.dbmapper.api.Level xmlLevel)
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level xmlLevel)
     {
 
         this(
@@ -389,7 +389,7 @@ public class RolapLevel extends LevelBase {
     }
 
     // helper for constructor
-    private static RolapProperty[] createProperties(org.eclipse.daanse.olap.rolap.dbmapper.api.Level xmlLevel)
+    private static RolapProperty[] createProperties(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level xmlLevel)
     {
         List<RolapProperty> list = new ArrayList<RolapProperty>();
         final Expression nameExp = LevelUtil.getNameExp(xmlLevel);
@@ -402,7 +402,7 @@ public class RolapLevel extends LevelBase {
                     Property.NAME.description));
         }
         for (int i = 0; i < xmlLevel.property().size(); i++) {
-            org.eclipse.daanse.olap.rolap.dbmapper.api.Property xmlProperty = xmlLevel.property().get(i);
+            org.eclipse.daanse.olap.rolap.dbmapper.model.api.Property xmlProperty = xmlLevel.property().get(i);
 
             FormatterCreateContext formatterContext =
                     new FormatterCreateContext.Builder(xmlProperty.name())

@@ -13,10 +13,11 @@
  */
 package mondrian.rolap.util;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+
 import mondrian.olap.Util;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Join;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
 
 public class JoinUtil {
 

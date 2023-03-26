@@ -11,6 +11,7 @@ package mondrian.rolap.sql;
 import java.util.List;
 
 import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 
 import mondrian.olap.Evaluator;
 import mondrian.olap.MondrianDef;
@@ -20,7 +21,6 @@ import mondrian.rolap.RolapMember;
 import mondrian.rolap.SqlConstraintUtils;
 import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.util.Pair;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 
 /**
  * Restricts the SQL result set to members where particular columns have

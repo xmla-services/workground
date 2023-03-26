@@ -11,12 +11,13 @@ package mondrian.spi.impl;
 
 import java.util.Random;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+
 import mondrian.olap.MondrianDef;
 import mondrian.rolap.RolapHierarchy;
 import mondrian.rolap.agg.AggregationKey;
 import mondrian.spi.DataSourceChangeListener;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
 
 /**
  * Default implementation of a data source change listener

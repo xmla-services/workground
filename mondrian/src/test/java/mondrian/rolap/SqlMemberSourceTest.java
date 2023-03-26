@@ -26,9 +26,9 @@ import javax.sql.DataSource;
 
 import org.eclipse.daanse.olap.api.model.Dimension;
 import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
-import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.LevelImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.LevelImpl;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;

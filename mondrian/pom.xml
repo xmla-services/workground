@@ -391,19 +391,19 @@
     </dependency>
       <dependency>
           <groupId>org.eclipse.daanse</groupId>
-          <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.api</artifactId>
+          <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.api</artifactId>
           <version>${revision}</version>
           <scope>compile</scope>
       </dependency>
       <dependency>
           <groupId>org.eclipse.daanse</groupId>
-          <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.record</artifactId>
+          <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.record</artifactId>
           <version>${revision}</version>
           <scope>compile</scope>
       </dependency>
       <dependency>
           <groupId>org.eclipse.daanse</groupId>
-          <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.mondrian</artifactId>
+          <artifactId>org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb</artifactId>
           <version>${revision}</version>
           <scope>compile</scope>
       </dependency>
