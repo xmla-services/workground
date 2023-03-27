@@ -13,8 +13,9 @@
  */
 package mondrian.rolap.util;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
+
 import mondrian.olap.Util;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
 public class DimensionUtil {
 

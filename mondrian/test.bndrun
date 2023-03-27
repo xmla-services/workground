@@ -71,9 +71,9 @@
 	org.eclipse.daanse.emondrian;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.emondrian-tests;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.engine.api;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.olap.rolap.dbmapper.api;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.olap.rolap.dbmapper.mondrian;version='[0.0.1,0.0.2)',\
-	org.eclipse.daanse.olap.rolap.dbmapper.record;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.model.api;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb;version='[0.0.1,0.0.2)',\
+	org.eclipse.daanse.olap.rolap.dbmapper.model.record;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.repackage.apache.commons.dbcp;version='[1.2.1,1.2.2)',\
 	org.eclipse.daanse.repackage.dockerjava;version='[0.0.1,0.0.2)',\
 	org.eclipse.daanse.repackage.eigenbase.properties;version='[1.1.2,1.1.3)',\

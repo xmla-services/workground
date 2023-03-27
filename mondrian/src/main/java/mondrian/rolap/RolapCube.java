@@ -11,6 +11,76 @@
 */
 package mondrian.rolap;
 
+import static mondrian.rolap.util.CalculatedMemberUtil.getFormatString;
+import static mondrian.rolap.util.CalculatedMemberUtil.getFormula;
+import static mondrian.rolap.util.JoinUtil.changeLeftRight;
+import static mondrian.rolap.util.JoinUtil.getLeftAlias;
+import static mondrian.rolap.util.JoinUtil.getRightAlias;
+import static mondrian.rolap.util.JoinUtil.left;
+import static mondrian.rolap.util.JoinUtil.right;
+import static mondrian.rolap.util.RelationUtil.getAlias;
+
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
+
+import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.api.access.Access;
+import org.eclipse.daanse.olap.api.access.Role;
+import org.eclipse.daanse.olap.api.model.Cube;
+import org.eclipse.daanse.olap.api.model.Dimension;
+import org.eclipse.daanse.olap.api.model.Hierarchy;
+import org.eclipse.daanse.olap.api.model.Level;
+import org.eclipse.daanse.olap.api.model.Member;
+import org.eclipse.daanse.olap.api.model.NamedSet;
+import org.eclipse.daanse.olap.api.model.OlapElement;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Action;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DimensionUsage;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAction;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughAttribute;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughElement;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.DrillThroughMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.InlineTable;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Join;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackAttribute;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackColumn;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackMeasure;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.AnnotationImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.CalculatedMemberImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.MeasureImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.NamedSetImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.InlineTableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.JoinR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
+import org.eigenbase.xom.DOMWrapper;
+import org.eigenbase.xom.Parser;
+import org.eigenbase.xom.XOMException;
+import org.eigenbase.xom.XOMUtil;
+import org.olap4j.mdx.IdentifierNode;
+import org.olap4j.mdx.IdentifierSegment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
@@ -19,10 +89,27 @@ import mondrian.calc.ExpCompiler;
 import mondrian.mdx.MdxVisitorImpl;
 import mondrian.mdx.MemberExpr;
 import mondrian.mdx.ResolvedFunCall;
+import mondrian.olap.CacheControl;
+import mondrian.olap.Category;
+import mondrian.olap.CubeBase;
+import mondrian.olap.DimensionType;
+import mondrian.olap.Evaluator;
+import mondrian.olap.Exp;
 import mondrian.olap.Formula;
+import mondrian.olap.Id;
+import mondrian.olap.MatchType;
+import mondrian.olap.MemberProperty;
+import mondrian.olap.MondrianException;
+import mondrian.olap.MondrianProperties;
+import mondrian.olap.NameResolver;
 import mondrian.olap.Parameter;
 import mondrian.olap.Property;
-import mondrian.olap.*;
+import mondrian.olap.Query;
+import mondrian.olap.QueryAxis;
+import mondrian.olap.QueryPart;
+import mondrian.olap.SchemaReader;
+import mondrian.olap.SetBase;
+import mondrian.olap.Util;
 import mondrian.olap.fun.FunDefBase;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.aggmatcher.ExplicitRules;
@@ -34,34 +121,6 @@ import mondrian.rolap.util.NamedSetUtil;
 import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.spi.CellFormatter;
-import org.eclipse.daanse.engine.api.Context;
-import org.eclipse.daanse.olap.api.access.Access;
-import org.eclipse.daanse.olap.api.access.Role;
-import org.eclipse.daanse.olap.api.model.Cube;
-import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.api.model.NamedSet;
-import org.eclipse.daanse.olap.api.model.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Schema;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.record.*;
-import org.eigenbase.xom.DOMWrapper;
-import org.eigenbase.xom.Parser;
-import org.eigenbase.xom.XOMException;
-import org.eigenbase.xom.XOMUtil;
-import org.olap4j.mdx.IdentifierNode;
-import org.olap4j.mdx.IdentifierSegment;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.StringReader;
-import java.util.*;
-
-import static mondrian.rolap.util.CalculatedMemberUtil.getFormatString;
-import static mondrian.rolap.util.CalculatedMemberUtil.getFormula;
-import static mondrian.rolap.util.JoinUtil.*;
-import static mondrian.rolap.util.RelationUtil.getAlias;
 
 /**
  * <code>RolapCube</code> implements {@link Cube} for a ROLAP database.
@@ -156,14 +215,14 @@ public class RolapCube extends CubeBase {
      */
     private RolapCube(
         RolapSchema schema,
-        org.eclipse.daanse.olap.rolap.dbmapper.api.Schema xmlSchema,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema xmlSchema,
         String name,
         boolean visible,
         String caption,
         String description,
         boolean isCache,
-        org.eclipse.daanse.olap.rolap.dbmapper.api.Relation fact,
-        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension> dimensions,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation fact,
+        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension> dimensions,
         boolean load,
         Map<String, Object> metadata,
         Context context)
@@ -270,8 +329,8 @@ public class RolapCube extends CubeBase {
      */
     RolapCube(
         RolapSchema schema,
-        org.eclipse.daanse.olap.rolap.dbmapper.api.Schema xmlSchema,
-        org.eclipse.daanse.olap.rolap.dbmapper.api.Cube xmlCube,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema xmlSchema,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube xmlCube,
         boolean load, Context context)
     {
         this(
@@ -463,7 +522,7 @@ public class RolapCube extends CubeBase {
             }
         }
 
-        for(org.eclipse.daanse.olap.rolap.dbmapper.api.WritebackTable writebackTable: xmlCube.writebackTable()) {
+        for(org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable writebackTable: xmlCube.writebackTable()) {
             List<RolapWritebackColumn> columns = new ArrayList<RolapWritebackColumn>();
 
             for(WritebackColumn writebackColumn: writebackTable.columns()) {
@@ -535,12 +594,12 @@ public class RolapCube extends CubeBase {
      * @return Measure
      */
     private RolapBaseCubeMeasure createMeasure(
-        org.eclipse.daanse.olap.rolap.dbmapper.api.Cube xmlCube,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube xmlCube,
         RolapLevel measuresLevel,
         int ordinal,
-        final org.eclipse.daanse.olap.rolap.dbmapper.api.Measure xmlMeasure)
+        final org.eclipse.daanse.olap.rolap.dbmapper.model.api.Measure xmlMeasure)
     {
-        org.eclipse.daanse.olap.rolap.dbmapper.api.Expression measureExp;
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression measureExp;
         if (xmlMeasure.column() != null) {
             if (xmlMeasure.measureExpression() != null) {
                 throw MondrianResource.instance().BadMeasureSource.ex(
@@ -650,8 +709,8 @@ public class RolapCube extends CubeBase {
      */
     RolapCube(
         RolapSchema schema,
-        org.eclipse.daanse.olap.rolap.dbmapper.api.Schema xmlSchema,
-        org.eclipse.daanse.olap.rolap.dbmapper.api.VirtualCube xmlVirtualCube,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema xmlSchema,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCube xmlVirtualCube,
         boolean load, Context context)
     {
         this(
@@ -795,7 +854,7 @@ public class RolapCube extends CubeBase {
             Query queryExp =
                 resolveCalcMembers(
                     xmlCalculatedMemberList,
-                    Collections.<org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet>emptyList(),
+                    Collections.<org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet>emptyList(),
                     baseCube,
                     false);
             MeasureFinder measureFinder =
@@ -1008,7 +1067,7 @@ public class RolapCube extends CubeBase {
         return aggGroup;
     }
 
-    void loadAggGroup(org.eclipse.daanse.olap.rolap.dbmapper.api.Cube xmlCube) {
+    void loadAggGroup(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube xmlCube) {
         aggGroup = ExplicitRules.Group.make(this, xmlCube);
     }
 
@@ -1064,7 +1123,7 @@ public class RolapCube extends CubeBase {
      * constructor.
      */
     private void init(
-        org.eclipse.daanse.olap.rolap.dbmapper.api.Cube xmlCube,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube xmlCube,
         final List<RolapMember> memberList)
     {
         // Load calculated members and named sets.
@@ -1119,8 +1178,8 @@ public class RolapCube extends CubeBase {
      * @param errOnDups throws an error if a duplicate member is found
      */
     private void createCalcMembersAndNamedSets(
-        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMember> xmlCalcMembers,
-        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet> xmlNamedSets,
+        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember> xmlCalcMembers,
+        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet> xmlNamedSets,
         List<RolapMember> memberList,
         List<Formula> formulaList,
         RolapCube cube,
@@ -1150,8 +1209,8 @@ public class RolapCube extends CubeBase {
     }
 
     private Query resolveCalcMembers(
-        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMember> xmlCalcMembers,
-        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet> xmlNamedSets,
+        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember> xmlCalcMembers,
+        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet> xmlNamedSets,
         RolapCube cube,
         boolean errOnDups)
     {
@@ -1175,7 +1234,7 @@ public class RolapCube extends CubeBase {
         for (Formula namedSet : namedSetList) {
             nameSet.add(namedSet.getName());
         }
-        for (org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet xmlNamedSet : xmlNamedSets) {
+        for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet xmlNamedSet : xmlNamedSets) {
             preNamedSet(xmlNamedSet, nameSet, buf);
         }
 
@@ -1203,13 +1262,13 @@ public class RolapCube extends CubeBase {
     }
 
     private void postNamedSet(
-        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet> xmlNamedSets,
+        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet> xmlNamedSets,
         final int offset,
         int i,
         final Query queryExp,
         List<Formula> formulaList)
     {
-        org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet xmlNamedSet = xmlNamedSets.get(i);
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet xmlNamedSet = xmlNamedSets.get(i);
         Util.discard(xmlNamedSet);
         Formula formula = queryExp.getFormulas()[offset + i];
         final SetBase namedSet = (SetBase) formula.getNamedSet();
@@ -1239,7 +1298,7 @@ public class RolapCube extends CubeBase {
     }
 
     private void preNamedSet(
-        org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet xmlNamedSet,
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet xmlNamedSet,
         Set<String> nameSet,
         StringBuilder buf)
     {
@@ -1307,14 +1366,14 @@ public class RolapCube extends CubeBase {
     }
 
     private void preCalcMember(
-        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMember> xmlCalcMembers,
+        List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember> xmlCalcMembers,
         int j,
         StringBuilder buf,
         RolapCube cube,
         boolean errOnDup,
         Set<String> fqNames)
     {
-        org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMember xmlCalcMember = xmlCalcMembers.get(j);
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember xmlCalcMember = xmlCalcMembers.get(j);
 
         if (xmlCalcMember.hierarchy() != null
             && xmlCalcMember.dimension() != null)
@@ -1413,7 +1472,7 @@ public class RolapCube extends CubeBase {
                 getName());
         }
 
-        final List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMemberProperty> xmlProperties =
+        final List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty> xmlProperties =
                 xmlCalcMember.calculatedMemberProperty();
         List<String> propNames = new ArrayList<String>();
         List<String> propExprs = new ArrayList<String>();
@@ -2982,7 +3041,7 @@ public class RolapCube extends CubeBase {
 
     public Formula createNamedSet(String xml) {
         //CalculatedMember xmlCalcMember;
-        org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet xmlNamedSet;
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet xmlNamedSet;
         try {
             final Parser xmlParser = XOMUtil.createDefaultParser();
             final DOMWrapper def = xmlParser.parse(xml);
@@ -2990,7 +3049,7 @@ public class RolapCube extends CubeBase {
             if (tagName.equals("NamedSet")) {
                 JAXBContext jaxbContext = JAXBContext.newInstance(NamedSetImpl.class);
                 Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-                xmlNamedSet = (org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet) jaxbUnmarshaller.unmarshal(new StringReader(xml));
+                xmlNamedSet = (org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet) jaxbUnmarshaller.unmarshal(new StringReader(xml));
 
             } else {
                 throw new XOMException(
@@ -3021,7 +3080,7 @@ public class RolapCube extends CubeBase {
     }
 
     public Member createCalculatedMember(String xml) {
-        org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMember xmlCalcMember;
+        org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember xmlCalcMember;
         try {
             final Parser xmlParser = XOMUtil.createDefaultParser();
             final DOMWrapper def = xmlParser.parse(xml);
@@ -3047,7 +3106,7 @@ public class RolapCube extends CubeBase {
             final List<RolapMember> memberList = new ArrayList<RolapMember>();
             createCalcMembersAndNamedSets(
                 Collections.singletonList(xmlCalcMember),
-                Collections.<org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet>emptyList(),
+                Collections.<org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet>emptyList(),
                 memberList,
                 new ArrayList<Formula>(),
                 this,
@@ -3430,13 +3489,13 @@ public class RolapCube extends CubeBase {
                             virtualCube.measuresHierarchy,
                             Util.<RolapMember>cast(measuresFound))));
 
-                org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMember xmlCalcMember =
+                org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember xmlCalcMember =
                     schema.lookupXmlCalculatedMember(
                         calcMember.getUniqueName(),
                         baseCube.name);
                 createCalcMembersAndNamedSets(
                     Collections.singletonList(xmlCalcMember),
-                    Collections.<org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet>emptyList(),
+                    Collections.<org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet>emptyList(),
                     new ArrayList<RolapMember>(),
                     new ArrayList<Formula>(),
                     virtualCube,

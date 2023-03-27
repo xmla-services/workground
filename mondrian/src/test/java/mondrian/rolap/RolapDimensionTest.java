@@ -9,14 +9,15 @@
 package mondrian.rolap;
 
 import mondrian.test.PropertySaver5;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.HideMemberIfEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.LevelTypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.TypeEnum;
-import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.HierarchyImpl;
-import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.LevelImpl;
-import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.PrivateDimensionImpl;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.HideMemberIfEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.LevelTypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.TypeEnum;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.HierarchyImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.LevelImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.PrivateDimensionImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;

@@ -13,8 +13,9 @@
  */
 package mondrian.rolap.util;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
+
 import mondrian.olap.DimensionType;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
 
 public class DimensionTypeUtil {
 

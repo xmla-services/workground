@@ -11,8 +11,9 @@ package mondrian.rolap;
 
 import java.util.Map;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+
 import mondrian.olap.MondrianDef;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 
 /**
  * Measure which is defined in a virtual cube, and based on a stored measure

@@ -14,9 +14,10 @@
 package mondrian.rolap.util;
 
 import mondrian.rolap.sql.SqlQuery;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.View;
 
 import static mondrian.rolap.util.SQLUtil.toCodeSet;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.View;
 
 public class ViewUtil {
     public static SqlQuery.CodeSet getCodeSet(View view) {
