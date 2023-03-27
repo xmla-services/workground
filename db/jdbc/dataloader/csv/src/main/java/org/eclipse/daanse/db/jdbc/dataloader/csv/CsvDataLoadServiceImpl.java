@@ -1,10 +1,23 @@
-package org.eclipse.daanse.db.jdbc.dataloader.csv.impl;
+/*
+ * Copyright (c) 2022 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena, Stefan Bischof - initial
+ *
+ */
+package org.eclipse.daanse.db.jdbc.dataloader.csv;
 
 import com.univocity.parsers.csv.Csv;
 import com.univocity.parsers.csv.CsvParserSettings;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
-import org.eclipse.daanse.db.jdbc.dataloader.csv.api.CsvDataLoadService;
+import org.eclipse.daanse.db.jdbc.dataloader.api.CsvDataLoadService;
 import org.eclipse.daanse.db.jdbc.util.impl.Column;
 import org.eclipse.daanse.db.jdbc.util.impl.Table;
 import org.eclipse.daanse.db.jdbc.util.impl.Type;
