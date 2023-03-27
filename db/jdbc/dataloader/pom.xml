@@ -6,8 +6,17 @@
     <version>${revision}</version>
   </parent>
   <artifactId>org.eclipse.daanse.db.jdbc.dataloader</artifactId>
+  <dependencies>
+    <dependency>
+      <groupId>org.eclipse.daanse</groupId>
+      <artifactId>org.eclipse.daanse.db.jdbc.util</artifactId>
+      <version>${revision}</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
   <packaging>pom</packaging>
   <modules>
+    <module>api</module>
     <module>csv</module>
   </modules>
 </project>

@@ -11,6 +11,14 @@
  *   SmartCity Jena, Stefan Bischof - initial
  *
  */
-@org.osgi.annotation.bundle.Export
-@org.osgi.annotation.versioning.Version("0.0.1")
-package org.eclipse.daanse.db.jdbc.dataloader.csv.api;
+package org.eclipse.daanse.db.jdbc.dataloader.api;
+
+import org.eclipse.daanse.db.jdbc.util.impl.Table;
+import javax.sql.DataSource;
+import java.nio.file.Path;
+import java.util.List;
+
+public interface CsvDataLoadService {
+
+    void loadData(DataSource dataSource, List<Table> tables, Path csvDir);
+}
