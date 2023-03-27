@@ -9,10 +9,11 @@
 */
 package mondrian.rolap.format;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ElementFormatter;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Script;
+
 import mondrian.olap.MondrianDef;
 import mondrian.olap.Util;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.ElementFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Script;
 
 /**
  * Context data to create a formatter for the element.

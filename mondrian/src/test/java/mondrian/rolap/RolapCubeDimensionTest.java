@@ -11,8 +11,8 @@
 package mondrian.rolap;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
-import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.PrivateDimensionImpl;
-import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.VirtualCubeDimensionImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.PrivateDimensionImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.VirtualCubeDimensionImpl;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 

@@ -13,7 +13,7 @@
 
 package mondrian.rolap;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 
 /**
  * A measure which is implemented by a SQL column or SQL expression (as opposed

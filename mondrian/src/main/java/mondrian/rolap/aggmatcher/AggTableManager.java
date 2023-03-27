@@ -17,10 +17,10 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Hint;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.RelationOrJoin;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
-import org.eclipse.daanse.olap.rolap.dbmapper.record.TableR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Hint;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.RelationOrJoin;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.TableR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

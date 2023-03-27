@@ -20,9 +20,9 @@ import mondrian.rolap.RolapLevel;
 import mondrian.rolap.RolapStar;
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Member;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.record.AggLevelPropertyR;
-import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.AggLevelPropertyR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -91,17 +91,17 @@ public class ExplicitRules {
          */
         public static ExplicitRules.Group make(
             final RolapCube cube,
-            final org.eclipse.daanse.olap.rolap.dbmapper.api.Cube xmlCube)
+            final org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube xmlCube)
         {
             Group group = new Group(cube);
 
             Relation relation = xmlCube.fact();
 
-            if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.api.Table) {
-                List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.AggExclude> aggExcludes =
-                    ((org.eclipse.daanse.olap.rolap.dbmapper.api.Table) relation).aggExclude();
+            if (relation instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table) {
+                List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude> aggExcludes =
+                    ((org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table) relation).aggExclude();
                 if (aggExcludes != null) {
-                    for (org.eclipse.daanse.olap.rolap.dbmapper.api.AggExclude aggExclude : aggExcludes) {
+                    for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude aggExclude : aggExcludes) {
                         Exclude exclude =
                             ExplicitRules.make(aggExclude);
                         group.addExclude(exclude);
@@ -304,7 +304,7 @@ public class ExplicitRules {
         }
     }
 
-    private static Exclude make(final org.eclipse.daanse.olap.rolap.dbmapper.api.AggExclude aggExclude) {
+    private static Exclude make(final org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude aggExclude) {
         return (aggExclude.name() != null)
             ? new ExcludeName(
                 aggExclude.name(),
@@ -512,7 +512,7 @@ public class ExplicitRules {
          */
         private static void add(
             final ExplicitRules.TableDef tableDef,
-            final org.eclipse.daanse.olap.rolap.dbmapper.api.AggTable aggTable)
+            final org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggTable aggTable)
         {
 
             if (aggTable instanceof AggName) {
@@ -537,11 +537,11 @@ public class ExplicitRules {
                 }
             }
 
-            List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.AggColumnName> ignores =
+            List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName> ignores =
                 aggTable.aggIgnoreColumn();
 
             if (ignores != null) {
-                for (org.eclipse.daanse.olap.rolap.dbmapper.api.AggColumnName ignore : ignores) {
+                for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggColumnName ignore : ignores) {
                     tableDef.addIgnoreColumnName(ignore.column());
                 }
             }
@@ -1402,7 +1402,7 @@ public class ExplicitRules {
          * Makes a NameTableDef from the catalog schema.
          */
         static ExplicitRules.NameTableDef make(
-            final org.eclipse.daanse.olap.rolap.dbmapper.api.AggName aggName,
+            final org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggName aggName,
             final ExplicitRules.Group group)
         {
             ExplicitRules.NameTableDef name =
@@ -1488,7 +1488,7 @@ public class ExplicitRules {
          * Make a PatternTableDef from the catalog schema.
          */
         static ExplicitRules.PatternTableDef make(
-            final org.eclipse.daanse.olap.rolap.dbmapper.api.AggPattern aggPattern,
+            final org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggPattern aggPattern,
             final ExplicitRules.Group group)
         {
             ExplicitRules.PatternTableDef pattern =
@@ -1497,9 +1497,9 @@ public class ExplicitRules {
                     aggPattern.ignorecase(),
                     group);
 
-            List<? extends org.eclipse.daanse.olap.rolap.dbmapper.api.AggExclude> excludes = aggPattern.aggExclude();
+            List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude> excludes = aggPattern.aggExclude();
             if (excludes != null) {
-                for (org.eclipse.daanse.olap.rolap.dbmapper.api.AggExclude exclude1 : excludes) {
+                for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.AggExclude exclude1 : excludes) {
                     Exclude exclude = ExplicitRules.make(exclude1);
                     pattern.add(exclude);
                 }

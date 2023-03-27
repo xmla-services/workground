@@ -13,9 +13,9 @@
  */
 package mondrian.rolap.util;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Table;
-
 import java.util.Map;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
 
 public class TableUtil {
     public static Map<String,String> getHintMap(Table table) {

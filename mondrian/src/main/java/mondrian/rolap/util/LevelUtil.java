@@ -13,10 +13,10 @@
  */
 package mondrian.rolap.util;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.ColumnImpl;
-import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ColumnImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 
 import java.util.Objects;
 

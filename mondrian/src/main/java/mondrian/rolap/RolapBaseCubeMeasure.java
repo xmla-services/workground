@@ -12,14 +12,14 @@ package mondrian.rolap;
 import java.util.Map;
 
 import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.enums.MeasureDataTypeEnum;
 
 import mondrian.olap.Literal;
 import mondrian.olap.MondrianDef;
 import mondrian.olap.Property;
 import mondrian.resource.MondrianResource;
 import mondrian.spi.CellFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.enums.MeasureDataTypeEnum;
 
 /**
  * Measure which is computed from a SQL column (or expression) and which is
