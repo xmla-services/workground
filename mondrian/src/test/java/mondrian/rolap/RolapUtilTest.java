@@ -19,8 +19,8 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Relation;
-import org.eclipse.daanse.olap.rolap.dbmapper.mondrian.TableImpl;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.TableImpl;
 import org.eigenbase.xom.DOMWrapper;
 import org.eigenbase.xom.Parser;
 import org.eigenbase.xom.XOMException;

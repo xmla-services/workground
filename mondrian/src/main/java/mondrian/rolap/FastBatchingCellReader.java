@@ -25,9 +25,9 @@ import java.util.SortedSet;
 import java.util.concurrent.Future;
 
 import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.ExpressionView;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.SQL;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.ExpressionView;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.SQL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

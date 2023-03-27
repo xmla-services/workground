@@ -18,8 +18,8 @@
  */
 package mondrian.rolap;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.PrivateDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.PrivateDimension;
 
 public class TestPublicRolapDimension extends RolapDimension{
 

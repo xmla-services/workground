@@ -14,11 +14,11 @@ package mondrian.rolap;
 import java.util.List;
 
 import org.eclipse.daanse.olap.api.model.Schema;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.VirtualCubeDimension;
 
 import mondrian.olap.DimensionType;
 import mondrian.olap.HierarchyBase;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.CubeDimension;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.VirtualCubeDimension;
 
 /**
  * RolapCubeDimension wraps a RolapDimension for a specific Cube.

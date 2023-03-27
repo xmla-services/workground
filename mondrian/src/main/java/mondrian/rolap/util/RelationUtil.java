@@ -13,9 +13,9 @@
  */
 package mondrian.rolap.util;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
-
 import java.util.Objects;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
 
 import static mondrian.rolap.util.JoinUtil.left;
 import static mondrian.rolap.util.JoinUtil.right;

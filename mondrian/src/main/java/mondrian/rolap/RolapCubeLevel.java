@@ -17,8 +17,9 @@ import mondrian.rolap.agg.*;
 import mondrian.rolap.util.ExpressionUtil;
 import mondrian.rolap.util.RelationUtil;
 import mondrian.spi.MemberFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
+
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 
 /**
  * RolapCubeLevel wraps a RolapLevel for a specific Cube.

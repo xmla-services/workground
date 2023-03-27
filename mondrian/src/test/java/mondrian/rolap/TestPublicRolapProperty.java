@@ -18,8 +18,9 @@
  */
 package mondrian.rolap;
 
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
+
 import mondrian.spi.PropertyFormatter;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
 
 public class TestPublicRolapProperty extends RolapProperty {
 

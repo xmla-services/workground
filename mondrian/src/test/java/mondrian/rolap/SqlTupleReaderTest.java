@@ -24,8 +24,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Column;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.Expression;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 

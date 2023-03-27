@@ -13,8 +13,8 @@
  */
 package mondrian.rolap.util;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMember;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.CalculatedMemberProperty;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty;
 
 public class CalculatedMemberUtil {
 

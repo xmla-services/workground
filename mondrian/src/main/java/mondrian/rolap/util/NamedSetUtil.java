@@ -13,7 +13,7 @@
  */
 package mondrian.rolap.util;
 
-import org.eclipse.daanse.olap.rolap.dbmapper.api.NamedSet;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet;
 
 public class NamedSetUtil {
     /**

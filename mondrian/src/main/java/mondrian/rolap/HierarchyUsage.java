@@ -17,8 +17,8 @@ import java.util.Objects;
 
 import org.eclipse.daanse.olap.api.model.Hierarchy;
 import org.eclipse.daanse.olap.api.model.Level;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
-import org.eclipse.daanse.olap.rolap.dbmapper.record.ColumnR;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.record.ColumnR;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

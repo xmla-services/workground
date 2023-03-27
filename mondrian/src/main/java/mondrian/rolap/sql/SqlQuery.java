@@ -22,6 +22,7 @@ import mondrian.rolap.util.RelationUtil;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.engine.api.Context;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.*;
 
 import mondrian.olap.MondrianDef;
 import mondrian.olap.MondrianProperties;
@@ -29,7 +30,6 @@ import mondrian.olap.Util;
 import mondrian.rolap.RolapStar;
 import mondrian.rolap.RolapUtil;
 import mondrian.util.Pair;
-import org.eclipse.daanse.olap.rolap.dbmapper.api.*;
 
 import static mondrian.rolap.util.ExpressionUtil.getTableAlias;
 import static mondrian.rolap.util.JoinUtil.getLeftAlias;
@@ -381,7 +381,7 @@ public class SqlQuery {
             return addFromQuery(sqlString, viewAlias, false);
 
         } else if (relation instanceof InlineTable) {
-            final org.eclipse.daanse.olap.rolap.dbmapper.api.Relation relation1 =
+            final org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation relation1 =
                 RolapUtil.convertInlineTableToRelation(
                     (InlineTable) relation, dialect);
             return addFrom(relation1, alias, failIfExists);
