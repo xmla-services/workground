@@ -10,6 +10,12 @@
 */
 package org.eclipse.daanse.db.dialect.db.common;
 
+import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
+import org.eclipse.daanse.db.dialect.api.Datatype;
+import org.eclipse.daanse.db.dialect.api.Dialect;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.Date;
@@ -30,12 +36,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
-import org.eclipse.daanse.db.dialect.api.Datatype;
-import org.eclipse.daanse.db.dialect.api.Dialect;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Implementation of {@link Dialect} based on a JDBC connection and metadata.
@@ -1123,6 +1123,26 @@ public abstract class JdbcDialectImpl implements Dialect {
     @Override
     public boolean allowsInnerDistinct() {
             return true;
+    }
+
+    @Override
+    public void clearTable(Connection connection, String schemaName, String tableName) {
+        try {
+            Statement statement = connection.createStatement();
+            statement.execute(new StringBuilder("TRUNCATE TABLE ").append(quoteIdentifier(tableName, schemaName)).toString());
+        } catch (SQLException e) {
+            throw new RuntimeException("clear table error", e);
+        }
+    }
+
+    @Override
+    public boolean supportParallelLoading() {
+        return true;
+    }
+
+    @Override
+    public boolean supportBatchOperations() {
+        return true;
     }
 
 }

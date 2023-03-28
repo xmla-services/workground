@@ -18,7 +18,7 @@ import javax.sql.DataSource;
 import java.nio.file.Path;
 import java.util.List;
 
-public interface CsvDataLoadService {
+public interface DataLoadService {
 
-    void loadData(DataSource dataSource, List<Table> tables, Path csvDir);
+    void loadData(DataSource dataSource, List<Table> tables);
 }
