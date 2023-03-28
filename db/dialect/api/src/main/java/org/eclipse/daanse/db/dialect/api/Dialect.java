@@ -767,4 +767,10 @@ public interface Dialect {
     boolean allowsInnerDistinct();
 
     String getDialectName();
+
+    void clearTable(Connection connection, String schemaName, String tableName);
+
+    boolean supportParallelLoading();
+
+    boolean supportBatchOperations();
 }
