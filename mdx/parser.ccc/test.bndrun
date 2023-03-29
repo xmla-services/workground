@@ -19,7 +19,6 @@
 	bnd.identity;id=junit-platform-launcher,\
 	bnd.identity;id='org.apache.felix.scr'
 # The following is calculated by the bnd-resolver-maven-plugin
-
 -runbundles: \
 	junit-jupiter-api;version='[5.9.2,5.9.3)',\
 	junit-jupiter-engine;version='[5.9.2,5.9.3)',\
