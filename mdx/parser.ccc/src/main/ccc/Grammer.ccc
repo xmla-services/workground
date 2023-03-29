@@ -1235,11 +1235,6 @@ Expression objectIdentifierOrFuncall(Expression left) :
   (
     < LPAREN >
     (
-      SCAN < RPAREN > =>
-      {
-        argList = Collections.emptyList();
-      }
-    | 
       argList = expOrEmptyList
     )
     < RPAREN >
