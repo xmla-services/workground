@@ -1,5 +1,7 @@
 target
+generated
 */src/generated
+*/src/gen
 mondrian.*properties
 *.ipr
 *.iws
