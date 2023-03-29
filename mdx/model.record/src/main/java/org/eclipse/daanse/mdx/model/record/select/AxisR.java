@@ -80,7 +80,7 @@ public record AxisR(int ordinal,
         } else if (this.ordinal == 4) {
             return "Sections";
         } else {
-            return "AxisR(" + this.ordinal + ")";
+            return "Axis(" + this.ordinal + ")";
         }
     }
 }

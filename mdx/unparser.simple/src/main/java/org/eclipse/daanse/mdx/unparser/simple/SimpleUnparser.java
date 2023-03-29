@@ -259,7 +259,7 @@ public class SimpleUnparser implements UnParser {
         return sb;
     }
 
-    private StringBuilder unparseExpression(Expression expression) {
+    public StringBuilder unparseExpression(Expression expression) {
 
         if (expression instanceof CallExpression ce) {
             return unparseCallExpression(ce);
@@ -309,7 +309,7 @@ public class SimpleUnparser implements UnParser {
         String s = compoundId.objectIdentifiers()
                 .stream()
                 .map(o -> unparseObjectIdentifier(o))
-                .collect(Collectors.joining("."));
+                .collect(Collectors.joining(","));
         return new StringBuilder(s);
     }
 
