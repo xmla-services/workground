@@ -16,11 +16,11 @@
   <artifactId>org.eclipse.daanse.pom.parent</artifactId>
   <version>${revision}</version>
   <packaging>pom</packaging>
-  <name>OpenCube Parent POM</name>
+  <name>Eclipse daanse Parent POM</name>
   <description>daanse XMLA/Olap related sources</description>
   <url>https://www.daanse.org</url>
   <organization>
-    <name>Eclipse Foundation - Project Daanse</name>
+    <name>Eclipse Foundation - Project daanse</name>
     <url>https://www.daanse.org</url>
   </organization>
   <licenses>
@@ -140,6 +140,11 @@
   <build>
     <pluginManagement>
       <plugins>
+        <plugin>
+          <groupId>org.sonarsource.scanner.maven</groupId>
+          <artifactId>sonar-maven-plugin</artifactId>
+          <version>3.9.1.2184</version>
+        </plugin>
         <plugin>
           <groupId>biz.aQute.bnd</groupId>
           <artifactId>bnd-maven-plugin</artifactId>

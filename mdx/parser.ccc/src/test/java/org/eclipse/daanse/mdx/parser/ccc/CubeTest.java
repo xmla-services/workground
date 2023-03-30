@@ -73,6 +73,7 @@ public class CubeTest {
                     });
         }
 
+        //TODO: check ""
         @ParameterizedTest
         @ValueSource(strings = { "", "1", "1 1", "a a", "-", "cube", // Reserved Word
                 "CURRENTCUBE"// Reserved Word
