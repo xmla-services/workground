@@ -14,13 +14,25 @@
 package org.eclipse.daanse.mdx.parser.ccc;
 
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
+import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.expression.NullLiteral;
+import org.eclipse.daanse.mdx.model.api.expression.NumericLiteral;
+import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier.Quoting;
+import org.eclipse.daanse.mdx.model.api.expression.StringLiteral;
+import org.eclipse.daanse.mdx.model.api.expression.SymbolLiteral;
 import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
 import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
+import org.eclipse.daanse.mdx.model.record.expression.NumericLiteralR;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+
+import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -89,7 +101,7 @@ public class ExpressionTest {
             assertThat(((CallExpressionR) clause).expressions()).hasSize(3);
             checkArgument((CallExpressionR) clause, 0, "arg1");
             checkArgument((CallExpressionR) clause, 2, "arg2");
-            CallExpression callExpression = ((CallExpression)(((CallExpressionR) clause).expressions().get(1)));
+            CallExpression callExpression = ((CallExpression) (((CallExpressionR) clause).expressions().get(1)));
             assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Empty);
             assertThat(callExpression.name()).isEqualTo("");
         }
@@ -126,7 +138,7 @@ public class ExpressionTest {
             assertThat(((CallExpressionR) clause).name()).isEqualTo("FunctionName");
             assertThat(((CallExpressionR) clause).expressions()).hasSize(2);
             checkArgument((CallExpressionR) clause, 0, "object");
-            CallExpression callExpression = ((CallExpression)(((CallExpressionR) clause).expressions().get(1)));
+            CallExpression callExpression = ((CallExpression) (((CallExpressionR) clause).expressions().get(1)));
             assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Empty);
             assertThat(callExpression.name()).isEqualTo("");
             assertThat(callExpression.expressions()).isNotNull().hasSize(0);
@@ -163,7 +175,7 @@ public class ExpressionTest {
             assertThat(((CallExpressionR) clause).expressions()).hasSize(2);
             checkArgument((CallExpressionR) clause, 0, "object");
             assertThat(((CallExpressionR) clause).expressions().get(1)).isInstanceOf(CallExpressionR.class);
-            CallExpression callExpression = ((CallExpression)(((CallExpressionR) clause).expressions().get(1)));
+            CallExpression callExpression = ((CallExpression) (((CallExpressionR) clause).expressions().get(1)));
             assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Function);
             assertThat(callExpression.name()).isEqualTo("FunctionInner");
             assertThat(callExpression.expressions()).isNotNull().hasSize(0);
@@ -211,7 +223,7 @@ public class ExpressionTest {
             assertThat(((CallExpressionR) clause).expressions()).hasSize(1);
 
             assertThat(((CallExpressionR) clause).expressions().get(0)).isInstanceOf(CallExpressionR.class);
-            CallExpressionR callExpression = ((CallExpressionR)(((CallExpressionR) clause).expressions().get(0)));
+            CallExpressionR callExpression = ((CallExpressionR) (((CallExpressionR) clause).expressions().get(0)));
             assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Term_Infix);
             assertThat(callExpression.name()).isEqualTo(":");
             assertThat(callExpression.expressions()).isNotNull().hasSize(2);
@@ -230,17 +242,17 @@ public class ExpressionTest {
             assertThat(callExpression.expressions()).hasSize(3);
             assertThat(callExpression.expressions().get(0)).isInstanceOf(CompoundIdR.class);
 
-            CompoundIdR compoundId0 = (CompoundIdR)callExpression.expressions().get(0);
+            CompoundIdR compoundId0 = (CompoundIdR) callExpression.expressions().get(0);
             assertThat(compoundId0.objectIdentifiers()).hasSize(2);
             checkCompoundId(compoundId0, 2, 0, "a");
             checkCompoundId(compoundId0, 2, 1, "a");
 
-            CompoundIdR compoundId1 = (CompoundIdR)callExpression.expressions().get(1);
+            CompoundIdR compoundId1 = (CompoundIdR) callExpression.expressions().get(1);
             assertThat(compoundId1.objectIdentifiers()).hasSize(2);
             checkCompoundId(compoundId1, 2, 0, "a");
             checkCompoundId(compoundId1, 2, 1, "b");
 
-            CompoundIdR compoundId2 = (CompoundIdR)callExpression.expressions().get(2);
+            CompoundIdR compoundId2 = (CompoundIdR) callExpression.expressions().get(2);
             assertThat(compoundId2.objectIdentifiers()).hasSize(2);
             checkCompoundId(compoundId2, 2, 0, "a");
             checkCompoundId(compoundId2, 2, 1, "c");
@@ -311,4 +323,115 @@ public class ExpressionTest {
             assertThat(((NameObjectIdentifier) (compoundId.objectIdentifiers().get(index))).name()).isEqualTo(arg);
         }
     }
+
+    @Nested
+    public class LiteralTest {
+
+        @Test
+        public void testNumericLiteral1() throws MdxParserException {
+            Expression clause = new MdxParserWrapper("10").parseExpression();
+            assertThat(clause).isInstanceOf(NumericLiteral.class);
+            NumericLiteral numericLiteral = (NumericLiteral) clause;
+            assertThat(numericLiteral.value()).isEqualTo(BigDecimal.valueOf(10));
+        }
+
+        @Test
+        public void testNumericLiteral2() throws MdxParserException {
+            Expression clause = new MdxParserWrapper("10.25").parseExpression();
+            assertThat(clause).isInstanceOf(NumericLiteral.class);
+            NumericLiteral numericLiteral = (NumericLiteral) clause;
+            assertThat(numericLiteral.value()).isEqualTo(BigDecimal.valueOf(10.25));
+        }
+
+        @Test
+        public void testNumericLiteral3() throws MdxParserException {
+            Expression clause = new MdxParserWrapper("-10.25").parseExpression();
+            assertThat(clause).isInstanceOf(CallExpressionR.class);
+            CallExpression callExpression = (CallExpression)clause;
+            assertThat(callExpression.name()).isEqualTo("-");
+            assertThat(callExpression.expressions()).hasSize(1);
+            assertThat(callExpression.expressions().get(0)).isNotNull().isInstanceOf(NumericLiteralR.class);
+            NumericLiteral numericLiteral = (NumericLiteral) callExpression.expressions().get(0);
+            assertThat(numericLiteral.value()).isEqualTo(BigDecimal.valueOf(10.25));
+        }
+
+
+        @ParameterizedTest
+        @ValueSource(strings = { "null", "Null", "NULL"})
+        public void testNull(String exp) throws MdxParserException {
+            Expression clause = new MdxParserWrapper(exp).parseExpression();
+            assertThat(clause).isInstanceOf(NullLiteral.class);
+        }
+
+        @Test
+        public void testStringLiteral1() throws MdxParserException {
+            Expression clause = new MdxParserWrapper("\"String'Literal\"").parseExpression();
+            assertThat(clause).isInstanceOf(StringLiteral.class);
+            StringLiteral numericLiteral = (StringLiteral) clause;
+            assertThat(numericLiteral.value()).isEqualTo("String'Literal");
+        }
+
+        @Test
+        public void testStringLiteral2() throws MdxParserException {
+            Expression clause = new MdxParserWrapper("'StringLiteral'").parseExpression();
+            assertThat(clause).isInstanceOf(StringLiteral.class);
+            StringLiteral numericLiteral = (StringLiteral) clause;
+            assertThat(numericLiteral.value()).isEqualTo("StringLiteral");
+        }
+
+        @Test
+        public void testSymbolLiteral() throws MdxParserException {
+            Expression clause = new MdxParserWrapper("cast(\"the_date\" as DATE)").parseExpression();
+            assertThat(clause).isInstanceOf(CallExpressionR.class);
+            CallExpression callExpression = (CallExpression)clause;
+            assertThat(callExpression.name()).isEqualTo("CAST");
+            assertThat(callExpression.expressions()).hasSize(2);
+            assertThat(callExpression.expressions().get(0)).isNotNull().isInstanceOf(StringLiteral.class);
+            StringLiteral stringLiteral = (StringLiteral) callExpression.expressions().get(0);
+            assertThat(stringLiteral.value()).isEqualTo("the_date");
+            assertThat(callExpression.expressions().get(1)).isNotNull().isInstanceOf(SymbolLiteral.class);
+            SymbolLiteral symbolLiteral = (SymbolLiteral) callExpression.expressions().get(1);
+            assertThat(symbolLiteral.value()).isEqualTo("DATE");
+        }
+
+    }
+    
+    @Nested
+    public class ObjectIdentifierTest {
+    	
+        @Test
+        public void testKeyObjectIdentifier() throws MdxParserException {
+            Expression clause = new MdxParserWrapper("[x].&foo&[1]&bar.[y]").parseExpression();
+            assertThat(clause).isInstanceOf(CompoundId.class);
+            CompoundId compoundId = (CompoundId)clause;
+            assertThat(compoundId.objectIdentifiers()).hasSize(3);
+            assertThat(compoundId.objectIdentifiers().get(0)).isNotNull().isInstanceOf(NameObjectIdentifier.class);
+            assertThat(compoundId.objectIdentifiers().get(1)).isNotNull().isInstanceOf(KeyObjectIdentifier.class);
+            assertThat(compoundId.objectIdentifiers().get(2)).isNotNull().isInstanceOf(NameObjectIdentifier.class);
+            
+            NameObjectIdentifier nameObjectIdentifier00 = (NameObjectIdentifier)compoundId.objectIdentifiers().get(0);
+            assertThat(nameObjectIdentifier00.name()).isEqualTo("x");
+            assertThat(nameObjectIdentifier00.quoting()).isEqualTo(Quoting.QUOTED);
+            
+            KeyObjectIdentifier keyObjectIdentifier = (KeyObjectIdentifier) compoundId.objectIdentifiers().get(1);
+            assertThat(keyObjectIdentifier.nameObjectIdentifiers()).isNotNull().hasSize(3);
+            assertThat(keyObjectIdentifier.nameObjectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
+            assertThat(keyObjectIdentifier.nameObjectIdentifiers().get(1)).isInstanceOf(NameObjectIdentifier.class);
+            assertThat(keyObjectIdentifier.nameObjectIdentifiers().get(2)).isInstanceOf(NameObjectIdentifier.class);
+            NameObjectIdentifier nameObjectIdentifier0 = (NameObjectIdentifier)keyObjectIdentifier.nameObjectIdentifiers().get(0);
+            NameObjectIdentifier nameObjectIdentifier1 = (NameObjectIdentifier)keyObjectIdentifier.nameObjectIdentifiers().get(1);
+            NameObjectIdentifier nameObjectIdentifier2 = (NameObjectIdentifier)keyObjectIdentifier.nameObjectIdentifiers().get(2);
+            assertThat(nameObjectIdentifier0.name()).isEqualTo("foo");
+            assertThat(nameObjectIdentifier1.name()).isEqualTo("1");
+            assertThat(nameObjectIdentifier2.name()).isEqualTo("bar");
+            assertThat(nameObjectIdentifier0.quoting()).isEqualTo(Quoting.UNQUOTED);
+            assertThat(nameObjectIdentifier1.quoting()).isEqualTo(Quoting.QUOTED);
+            assertThat(nameObjectIdentifier2.quoting()).isEqualTo(Quoting.UNQUOTED);
+            
+            NameObjectIdentifier nameObjectIdentifier22 = (NameObjectIdentifier)compoundId.objectIdentifiers().get(2);
+            assertThat(nameObjectIdentifier22.name()).isEqualTo("y");
+            assertThat(nameObjectIdentifier22.quoting()).isEqualTo(Quoting.QUOTED);
+        }    	
+    }
+    
 }
