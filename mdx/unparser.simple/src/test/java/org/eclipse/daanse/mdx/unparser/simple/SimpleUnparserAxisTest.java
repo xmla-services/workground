@@ -1,16 +1,19 @@
+/*
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
 package org.eclipse.daanse.mdx.unparser.simple;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
-import java.util.List;
-import java.util.Optional;
-
-import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
-import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
-import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier.Quoting;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
@@ -18,11 +21,14 @@ import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
 import org.eclipse.daanse.mdx.model.record.SelectStatementR;
-import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
-import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
-import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.select.AxisR;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class SimpleUnparserAxisTest {
 
@@ -163,41 +169,6 @@ public class SimpleUnparserAxisTest {
         assertThat(unparser.unparseAxis(axis_named_5)).asString()
                 .isEqualTo("AXIS(5)");
 
-    }
-
-    @Test
-    void testCallExpression() {
-
-        ObjectIdentifier objectIdentifier = new NameObjectIdentifierR("arg1, arg2", Quoting.QUOTED);
-        CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
-        CallExpression callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Function, List.of(compoundId));
-        assertThat(unparser.unparseExpression(callExpression)).asString()
-            .isEqualTo("FunctionName([arg1, arg2])");
-
-        compoundId = new CompoundIdR(List.of());
-        callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Function, List.of(compoundId));
-        assertThat(unparser.unparseExpression(callExpression)).asString()
-            .isEqualTo("FunctionName()");
-
-        objectIdentifier = new NameObjectIdentifierR("arg", Quoting.UNQUOTED);
-        compoundId = new CompoundIdR(List.of(objectIdentifier));
-        callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Function, List.of(compoundId));
-        assertThat(unparser.unparseExpression(callExpression)).asString()
-            .isEqualTo("FunctionName(arg)");
-
-        objectIdentifier = new NameObjectIdentifierR("arg1", Quoting.UNQUOTED);
-        NameObjectIdentifier objectIdentifier1 = new NameObjectIdentifierR("arg2", Quoting.UNQUOTED);
-        compoundId = new CompoundIdR(List.of(objectIdentifier, objectIdentifier1));
-        callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Function, List.of(compoundId));
-        assertThat(unparser.unparseExpression(callExpression)).asString()
-            .isEqualTo("FunctionName(arg1,arg2)");
-
-        objectIdentifier = new NameObjectIdentifierR("arg1", Quoting.UNQUOTED);
-        objectIdentifier1 = new NameObjectIdentifierR("arg2, arg3", Quoting.QUOTED);
-        compoundId = new CompoundIdR(List.of(objectIdentifier, objectIdentifier1));
-        callExpression = new CallExpressionR("FunctionName", CallExpression.Type.Function, List.of(compoundId));
-        assertThat(unparser.unparseExpression(callExpression)).asString()
-            .isEqualTo("FunctionName(arg1,[arg2, arg3])");
     }
 
 }
