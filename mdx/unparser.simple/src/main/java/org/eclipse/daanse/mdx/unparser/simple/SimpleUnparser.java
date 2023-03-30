@@ -309,7 +309,7 @@ public class SimpleUnparser implements UnParser {
         String s = compoundId.objectIdentifiers()
                 .stream()
                 .map(o -> unparseObjectIdentifier(o))
-                .collect(Collectors.joining(","));
+                .collect(Collectors.joining("."));
         return new StringBuilder(s);
     }
 
@@ -358,7 +358,14 @@ public class SimpleUnparser implements UnParser {
         StringBuilder sb = new StringBuilder();
         String name = callExpression.name();
         List<Expression> expressions = callExpression.expressions();
-        String expressionText = unparseExpressions(expressions);
+        String expressionText;
+        String object = "";
+        if (CallExpression.Type.Method.equals(callExpression.type()) && expressions.size() > 0) {
+            expressionText = unparseExpressions(expressions.subList(1, expressions.size()));
+            object = unparseExpression(expressions.get(0)).toString();
+        } else {
+            expressionText = unparseExpressions(expressions);
+        }
         switch (callExpression.type()) {
         case Braces -> sb.append("{")
                 .append(expressionText)
@@ -373,7 +380,7 @@ public class SimpleUnparser implements UnParser {
                 .append(")");
         case Internal -> sb.append("$")
                 .append(expressionText);
-        case Method -> sb.append(".")
+        case Method -> sb.append(object).append(".")
                 .append(name)
                 .append("(")
                 .append(expressionText)
@@ -384,10 +391,10 @@ public class SimpleUnparser implements UnParser {
         case Property -> sb.append(expressionText)
                 .append(".")
                 .append(name);
-        case PropertyAmpersAndQuoted -> sb.append(".[&")
+        case PropertyAmpersAndQuoted -> sb.append(expressionText).append(".[&")
                 .append(name)
                 .append("]");
-        case PropertyQuoted -> sb.append(".&")
+        case PropertyQuoted -> sb.append(expressionText).append(".&")
                 .append(name)
                 .append("");
         case Term_Case -> {
@@ -401,7 +408,7 @@ public class SimpleUnparser implements UnParser {
 
             }
 
-            sb.append(" ELSE ");
+            sb.append(" THEN ");
             sb.append(unparseExpression(expressions.get(size - 1)));
             sb.append(" END ");
 
@@ -413,8 +420,8 @@ public class SimpleUnparser implements UnParser {
             sb.append(" ");
             sb.append(unparseExpression(expressions.get(1)));
         }
-        case Term_Postfix -> sb.append("TODO:Term_Postfix");
-        case Term_Prefix -> sb.append("TODO:Term_Prefix");
+        case Term_Postfix -> sb.append(expressionText).append(" ").append(name);
+        case Term_Prefix -> sb.append(name).append(" ").append(expressionText);
 
         default -> sb.append(":xxx");
         }
