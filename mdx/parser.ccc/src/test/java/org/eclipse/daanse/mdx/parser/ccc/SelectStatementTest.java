@@ -36,4 +36,16 @@ public class SelectStatementTest {
 
     }
 
+    @Test
+    public void test1() throws MdxParserException {
+        String mdx = """
+                SELECT [Store].[Store].Members DIMENSION PROPERTIES [Store].[Store].[Store Name].[Store Type] on 0 
+                from [Sales]
+                """;
+
+        SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
+        assertThat(selectStatement).isNotNull();
+
+    }
+    
 }

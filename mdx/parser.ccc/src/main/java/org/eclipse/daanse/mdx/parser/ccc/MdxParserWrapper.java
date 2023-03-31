@@ -18,6 +18,7 @@ import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 
 public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxParser {
@@ -108,6 +109,16 @@ public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxPa
         } finally {
             dump();
         }
+    }
 
+    public SelectWithClause parseSelectWithClause() throws MdxParserException {
+        try {
+            return delegate.parseSelectWithClause();
+
+        } catch (Throwable e) {
+            throw new MdxParserException(e);
+        } finally {
+            dump();
+        }
     }
 }
