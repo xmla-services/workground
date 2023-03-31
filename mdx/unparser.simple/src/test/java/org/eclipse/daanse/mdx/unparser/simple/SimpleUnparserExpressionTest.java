@@ -13,21 +13,31 @@
  */
 package org.eclipse.daanse.mdx.unparser.simple;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.util.List;
-
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
+import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.expression.NullLiteral;
+import org.eclipse.daanse.mdx.model.api.expression.NumericLiteral;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier.Quoting;
+import org.eclipse.daanse.mdx.model.api.expression.StringLiteral;
+import org.eclipse.daanse.mdx.model.api.expression.SymbolLiteral;
 import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
 import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
+import org.eclipse.daanse.mdx.model.record.expression.KeyObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
+import org.eclipse.daanse.mdx.model.record.expression.NullLiteralR;
+import org.eclipse.daanse.mdx.model.record.expression.NumericLiteralR;
+import org.eclipse.daanse.mdx.model.record.expression.StringLiteralR;
+import org.eclipse.daanse.mdx.model.record.expression.SymbolLiteralR;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import org.junit.jupiter.api.Nested;
+import java.math.BigDecimal;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class SimpleUnparserExpressionTest {
 
@@ -304,4 +314,94 @@ public class SimpleUnparserExpressionTest {
         }
 
     }
+
+    @Nested
+    public class LiteralTest {
+
+        @Test
+        public void testNumericLiteral1() {
+            NumericLiteral numericLiteral = new NumericLiteralR(BigDecimal.valueOf(10));
+            assertThat(unparser.unparseExpression(numericLiteral)).asString()
+                .isEqualTo("10");
+        }
+
+        @Test
+        public void testNumericLiteral2() {
+            NumericLiteral numericLiteral = new NumericLiteralR(BigDecimal.valueOf(10.25));
+            assertThat(unparser.unparseExpression(numericLiteral)).asString()
+                .isEqualTo("10.25");
+        }
+
+        @Test
+        public void testNumericLiteral3() {
+            NumericLiteral numericLiteral = new NumericLiteralR(BigDecimal.valueOf(10.25));
+            CallExpression callExpression = new CallExpressionR("-", CallExpression.Type.Term_Prefix,
+                List.of(numericLiteral));
+            assertThat(unparser.unparseExpression(callExpression)).asString()
+                .isEqualTo("- 10.25");
+        }
+
+        @Test
+        public void testNull() {
+            NullLiteral nullLiteral = new NullLiteralR();
+            assertThat(unparser.unparseExpression(nullLiteral)).asString()
+                .isEqualTo("NULL");
+        }
+
+        @Test
+        public void testStringLiteral1() {
+            StringLiteral stringLiteral = new StringLiteralR("\"String'Literal\"");
+            assertThat(unparser.unparseExpression(stringLiteral)).asString()
+                .isEqualTo("\"String'Literal\"");
+        }
+
+        @Test
+        public void testStringLiteral2() {
+            StringLiteral stringLiteral = new StringLiteralR("'StringLiteral'");
+            assertThat(unparser.unparseExpression(stringLiteral)).asString()
+                .isEqualTo("'StringLiteral'");
+        }
+
+        @Test
+        public void testSymbolLiteral() {
+            StringLiteral stringLiteral = new StringLiteralR("the_date");
+            SymbolLiteral symbolLiteral = new SymbolLiteralR("DATE");
+            CallExpression callExpression = new CallExpressionR("cast",
+                CallExpression.Type.Cast,
+                List.of(stringLiteral, symbolLiteral));
+            assertThat(unparser.unparseExpression(callExpression)).asString()
+                .isEqualTo("CAST(the_date AS DATE)");
+        }
+
+    }
+
+    @Nested
+    public class ObjectIdentifierTest {
+
+        @Test
+        public void testKeyObjectIdentifier() {
+
+            NameObjectIdentifier nameObjectIdentifier1 = new NameObjectIdentifierR("x", Quoting.QUOTED);
+
+            NameObjectIdentifier nameObjectIdentifier21 = new NameObjectIdentifierR("foo", Quoting.UNQUOTED);
+            NameObjectIdentifier nameObjectIdentifier22 = new NameObjectIdentifierR("1", Quoting.QUOTED);
+            NameObjectIdentifier nameObjectIdentifier23 = new NameObjectIdentifierR("bar", Quoting.UNQUOTED);
+            KeyObjectIdentifier keyObjectIdentifier = new KeyObjectIdentifierR(List.of(
+                nameObjectIdentifier21,
+                nameObjectIdentifier22,
+                nameObjectIdentifier23
+            ));
+
+            NameObjectIdentifier nameObjectIdentifier3 = new NameObjectIdentifierR("y", Quoting.QUOTED);
+
+            CompoundId compoundId = new CompoundIdR(List.of(
+                nameObjectIdentifier1,
+                keyObjectIdentifier,
+                nameObjectIdentifier3
+            ));
+            assertThat(unparser.unparseExpression(compoundId)).asString()
+                .isEqualTo("[x].&foo&[1]&bar.[y]");
+        }
+    }
+
 }
