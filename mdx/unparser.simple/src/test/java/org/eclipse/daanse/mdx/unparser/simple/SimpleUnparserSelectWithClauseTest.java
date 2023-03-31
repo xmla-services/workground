@@ -17,11 +17,13 @@ import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.select.CreateMemberBodyClause;
 import org.eclipse.daanse.mdx.model.api.select.CreateSetBodyClause;
 import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
 import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
 import org.eclipse.daanse.mdx.model.record.expression.KeyObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
+import org.eclipse.daanse.mdx.model.record.select.CreateMemberBodyClauseR;
 import org.eclipse.daanse.mdx.model.record.select.CreateSetBodyClauseR;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -59,6 +61,25 @@ public class SimpleUnparserSelectWithClauseTest {
             CreateSetBodyClause createSetBodyClause = new CreateSetBodyClauseR(new CompoundIdR(List.of(nameObjectIdentifier)), callExpression);
             assertThat(unparser.unparseCreateSetBodyClause(createSetBodyClause)).asString()
                 .isEqualTo("SET MySet AS Union([Customer].[Gender].Members,{[Customer].[Gender].&[F]})");
+        }
+    }
+
+    @Nested
+    public class CreateMemberBodyClauseTest {
+
+        @Test
+        public void testCreateMemberBodyClause() {
+            CreateMemberBodyClause createMemberBodyClause =
+                new CreateMemberBodyClauseR(
+                    new CompoundIdR(List.of(
+                        new NameObjectIdentifierR("Measures", ObjectIdentifier.Quoting.QUOTED),
+                        new NameObjectIdentifierR("Calculate Internet Sales Amount", ObjectIdentifier.Quoting.QUOTED)
+                    )),
+                    new CompoundIdR(List.of(new NameObjectIdentifierR("M", ObjectIdentifier.Quoting.UNQUOTED))),
+                    List.of());
+
+            assertThat(unparser.unparseCreateMemberBodyClause(createMemberBodyClause)).asString()
+                .isEqualTo("MEMBER [Measures].[Calculate Internet Sales Amount] AS M");
         }
     }
 }
