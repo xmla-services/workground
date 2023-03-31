@@ -18,7 +18,9 @@ import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.expression.KeyObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.select.CreateMemberBodyClause;
 import org.eclipse.daanse.mdx.model.api.select.CreateSetBodyClause;
+import org.eclipse.daanse.mdx.model.api.select.MeasureBodyClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 import org.junit.jupiter.api.Nested;
@@ -63,10 +65,10 @@ public class SelectWithClauseTest {
             CompoundId compoundId1 = (CompoundId) callExpression1.expressions().get(0);
             assertThat(compoundId1.objectIdentifiers()).hasSize(2);
             assertThat(compoundId1.objectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
-            assertThat(((NameObjectIdentifier)compoundId1.objectIdentifiers().get(0)).name()).isEqualTo("Customer");
+            assertThat(((NameObjectIdentifier) compoundId1.objectIdentifiers().get(0)).name()).isEqualTo("Customer");
             assertThat((compoundId1.objectIdentifiers().get(0)).quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
             assertThat(compoundId1.objectIdentifiers().get(1)).isInstanceOf(NameObjectIdentifier.class);
-            assertThat(((NameObjectIdentifier)compoundId1.objectIdentifiers().get(1)).name()).isEqualTo("Gender");
+            assertThat(((NameObjectIdentifier) compoundId1.objectIdentifiers().get(1)).name()).isEqualTo("Gender");
             assertThat((compoundId1.objectIdentifiers().get(1)).quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
 
             assertThat(callExpression2.name()).isEqualTo("{}");
@@ -78,14 +80,64 @@ public class SelectWithClauseTest {
             assertThat(compoundId2.objectIdentifiers().get(1)).isInstanceOf(NameObjectIdentifier.class);
             assertThat(compoundId2.objectIdentifiers().get(2)).isInstanceOf(KeyObjectIdentifier.class);
 
-            assertThat(((NameObjectIdentifier)compoundId2.objectIdentifiers().get(0)).name()).isEqualTo("Customer");
+            assertThat(((NameObjectIdentifier) compoundId2.objectIdentifiers().get(0)).name()).isEqualTo("Customer");
             assertThat((compoundId2.objectIdentifiers().get(0)).quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
-            assertThat(((NameObjectIdentifier)compoundId2.objectIdentifiers().get(1)).name()).isEqualTo("Gender");
+            assertThat(((NameObjectIdentifier) compoundId2.objectIdentifiers().get(1)).name()).isEqualTo("Gender");
             assertThat((compoundId2.objectIdentifiers().get(1)).quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
-            assertThat(((KeyObjectIdentifier)compoundId2.objectIdentifiers().get(2)).nameObjectIdentifiers()).hasSize(1);
-            assertThat(((KeyObjectIdentifier)compoundId2.objectIdentifiers().get(2)).nameObjectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
-            assertThat(((KeyObjectIdentifier)compoundId2.objectIdentifiers().get(2)).nameObjectIdentifiers().get(0).name()).isEqualTo("F");
-            assertThat(((KeyObjectIdentifier)compoundId2.objectIdentifiers().get(2)).nameObjectIdentifiers().get(0).quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
+            assertThat(((KeyObjectIdentifier) compoundId2.objectIdentifiers().get(2)).nameObjectIdentifiers()).hasSize(1);
+            assertThat(((KeyObjectIdentifier) compoundId2.objectIdentifiers().get(2)).nameObjectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
+            assertThat(((KeyObjectIdentifier) compoundId2.objectIdentifiers().get(2)).nameObjectIdentifiers().get(0).name()).isEqualTo("F");
+            assertThat(((KeyObjectIdentifier) compoundId2.objectIdentifiers().get(2)).nameObjectIdentifiers().get(0).quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
+        }
+    }
+    @Nested
+    public class MeasureBodyClauseTest {
+
+        //TODO
+        public void testMeasureBodyClause() throws MdxParserException {
+            String mdx = """
+                with measure 'Sales Territory'[Total Sales Amount] = SUM('Internet Sales'[Sales Amount]) + SUM('Reseller Sales'[Sales Amount])
+                select measures.[Total Sales Amount] on columns,
+                NON EMPTY [Date].[Calendar Year].children on rows
+                from [Model]
+                """;
+            SelectWithClause selectWithClause = new MdxParserWrapper(mdx).parseSelectWithClause();
+            assertThat(selectWithClause).isNotNull().isInstanceOf(MeasureBodyClause.class);
+            MeasureBodyClause measureBodyClause = (MeasureBodyClause) selectWithClause;
+        }
+    }
+
+    @Nested
+    public class CreateMemberBodyClauseTest {
+
+        @Test
+        public void testCreateMemberBodyClause() throws MdxParserException {
+            String mdx = """
+                MEMBER [Measures].[Calculate Internet Sales Amount] AS M
+                """;
+            SelectWithClause selectWithClause = new MdxParserWrapper(mdx).parseSelectWithClause();
+            assertThat(selectWithClause).isNotNull().isInstanceOf(CreateMemberBodyClause.class);
+            CreateMemberBodyClause createMemberBodyClause = (CreateMemberBodyClause) selectWithClause;
+
+            assertThat(createMemberBodyClause.memberPropertyDefinitions()).isNotNull().hasSize(0);
+            assertThat(createMemberBodyClause.expression()).isNotNull();
+            assertThat(createMemberBodyClause.expression()).isInstanceOf(CompoundId.class);
+            CompoundId compoundId = (CompoundId) createMemberBodyClause.expression();
+            assertThat(compoundId.objectIdentifiers()).hasSize(1);
+            assertThat(compoundId.objectIdentifiers().get(0)).isNotNull().isInstanceOf(NameObjectIdentifier.class);
+            assertThat(((NameObjectIdentifier) compoundId.objectIdentifiers().get(0)).name()).isEqualTo("M");
+            assertThat(((NameObjectIdentifier) compoundId.objectIdentifiers().get(0)).quoting()).isEqualTo(ObjectIdentifier.Quoting.UNQUOTED);
+
+            assertThat(createMemberBodyClause.compoundId()).isNotNull();
+            assertThat(createMemberBodyClause.compoundId().objectIdentifiers()).hasSize(2);
+            assertThat(createMemberBodyClause.compoundId().objectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
+            assertThat(createMemberBodyClause.compoundId().objectIdentifiers().get(1)).isInstanceOf(NameObjectIdentifier.class);
+            NameObjectIdentifier nameObjectIdentifier1 = (NameObjectIdentifier) createMemberBodyClause.compoundId().objectIdentifiers().get(0);
+            NameObjectIdentifier nameObjectIdentifier2 = (NameObjectIdentifier) createMemberBodyClause.compoundId().objectIdentifiers().get(1);
+            assertThat(nameObjectIdentifier1.name()).isEqualTo("Measures");
+            assertThat(nameObjectIdentifier1.quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
+            assertThat(nameObjectIdentifier2.name()).isEqualTo("Calculate Internet Sales Amount");
+            assertThat(nameObjectIdentifier2.quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
         }
     }
 }
