@@ -35,6 +35,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class ExpressionTest {
 
@@ -349,6 +350,7 @@ public class ExpressionTest {
             assertThat(clause).isInstanceOf(CallExpressionR.class);
             CallExpression callExpression = (CallExpression)clause;
             assertThat(callExpression.name()).isEqualTo("-");
+            assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Term_Prefix);
             assertThat(callExpression.expressions()).hasSize(1);
             assertThat(callExpression.expressions().get(0)).isNotNull().isInstanceOf(NumericLiteralR.class);
             NumericLiteral numericLiteral = (NumericLiteral) callExpression.expressions().get(0);
@@ -385,6 +387,7 @@ public class ExpressionTest {
             assertThat(clause).isInstanceOf(CallExpressionR.class);
             CallExpression callExpression = (CallExpression)clause;
             assertThat(callExpression.name()).isEqualTo("CAST");
+            assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Cast);
             assertThat(callExpression.expressions()).hasSize(2);
             assertThat(callExpression.expressions().get(0)).isNotNull().isInstanceOf(StringLiteral.class);
             StringLiteral stringLiteral = (StringLiteral) callExpression.expressions().get(0);
@@ -394,11 +397,16 @@ public class ExpressionTest {
             assertThat(symbolLiteral.value()).isEqualTo("DATE");
         }
 
+        @Test
+        public void testSymbolLiteral1() throws MdxParserException {            
+            assertThrows(MdxParserException.class, () -> new MdxParserWrapper("cast(a, \"the_date\" as DATE)").parseExpression());
+        }
+
     }
-    
+
     @Nested
     public class ObjectIdentifierTest {
-    	
+
         @Test
         public void testKeyObjectIdentifier() throws MdxParserException {
             Expression clause = new MdxParserWrapper("[x].&foo&[1]&bar.[y]").parseExpression();
@@ -408,11 +416,11 @@ public class ExpressionTest {
             assertThat(compoundId.objectIdentifiers().get(0)).isNotNull().isInstanceOf(NameObjectIdentifier.class);
             assertThat(compoundId.objectIdentifiers().get(1)).isNotNull().isInstanceOf(KeyObjectIdentifier.class);
             assertThat(compoundId.objectIdentifiers().get(2)).isNotNull().isInstanceOf(NameObjectIdentifier.class);
-            
+
             NameObjectIdentifier nameObjectIdentifier00 = (NameObjectIdentifier)compoundId.objectIdentifiers().get(0);
             assertThat(nameObjectIdentifier00.name()).isEqualTo("x");
             assertThat(nameObjectIdentifier00.quoting()).isEqualTo(Quoting.QUOTED);
-            
+
             KeyObjectIdentifier keyObjectIdentifier = (KeyObjectIdentifier) compoundId.objectIdentifiers().get(1);
             assertThat(keyObjectIdentifier.nameObjectIdentifiers()).isNotNull().hasSize(3);
             assertThat(keyObjectIdentifier.nameObjectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
@@ -427,11 +435,11 @@ public class ExpressionTest {
             assertThat(nameObjectIdentifier0.quoting()).isEqualTo(Quoting.UNQUOTED);
             assertThat(nameObjectIdentifier1.quoting()).isEqualTo(Quoting.QUOTED);
             assertThat(nameObjectIdentifier2.quoting()).isEqualTo(Quoting.UNQUOTED);
-            
+
             NameObjectIdentifier nameObjectIdentifier22 = (NameObjectIdentifier)compoundId.objectIdentifiers().get(2);
             assertThat(nameObjectIdentifier22.name()).isEqualTo("y");
             assertThat(nameObjectIdentifier22.quoting()).isEqualTo(Quoting.QUOTED);
-        }    	
+        }
     }
-    
+
 }

@@ -298,7 +298,7 @@ public class SimpleUnparser implements UnParser {
                 .stream()
                 .map(k -> unparseNameObjectIdentifier(k))
                 .map(Object::toString)
-                .collect(Collectors.joining("."));
+                .collect(Collectors.joining("&"));
 
         sb.append("&")
                 .append(s);
@@ -371,7 +371,7 @@ public class SimpleUnparser implements UnParser {
                 .append(expressionText)
                 .append("}");
         case Cast -> sb.append("CAST(")
-                .append(expressionText)
+                .append(expressionText.replace(",", " AS "))
                 .append(")");
         case Empty -> sb.append("");
         case Function -> sb.append(name)
