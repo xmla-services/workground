@@ -345,6 +345,22 @@ public class ExpressionTest {
         }
 
         @Test
+        public void testNumericLiteral4() throws MdxParserException {
+            Expression clause = new MdxParserWrapper("10e+5").parseExpression();
+            assertThat(clause).isInstanceOf(NumericLiteral.class);
+            NumericLiteral numericLiteral = (NumericLiteral) clause;
+            assertThat(numericLiteral.value()).isEqualTo(new BigDecimal("10e+5"));
+        }
+
+        @Test
+        public void testNumericLiteral5() throws MdxParserException {
+            Expression clause = new MdxParserWrapper("10e-5").parseExpression();
+            assertThat(clause).isInstanceOf(NumericLiteral.class);
+            NumericLiteral numericLiteral = (NumericLiteral) clause;
+            assertThat(numericLiteral.value()).isEqualTo(new BigDecimal("10e-5"));
+        }
+
+        @Test
         public void testNumericLiteral3() throws MdxParserException {
             Expression clause = new MdxParserWrapper("-10.25").parseExpression();
             assertThat(clause).isInstanceOf(CallExpressionR.class);
@@ -398,7 +414,7 @@ public class ExpressionTest {
         }
 
         @Test
-        public void testSymbolLiteral1() throws MdxParserException {            
+        public void testSymbolLiteral1() throws MdxParserException {
             assertThrows(MdxParserException.class, () -> new MdxParserWrapper("cast(a, \"the_date\" as DATE)").parseExpression());
         }
 
