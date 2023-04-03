@@ -39,7 +39,7 @@ public class SelectStatementTest {
     @Test
     public void test1() throws MdxParserException {
         String mdx = """
-                SELECT [Store].[Store].Members DIMENSION PROPERTIES [Store].[Store].[Store Name].[Store Type] on 0 
+                SELECT [Store].[Store].Members DIMENSION PROPERTIES [Store].[Store].[Store Name].[Store Type] on 0
                 from [Sales]
                 """;
 
@@ -47,5 +47,24 @@ public class SelectStatementTest {
         assertThat(selectStatement).isNotNull();
 
     }
-    
+
+
+    @Test
+    public void testSubCube() throws MdxParserException {
+        String mdx = """
+            SELECT
+            [Measures].[Internet Sales Amount] on 0,
+            [Date].[Calendar].Members on 1
+            FROM\s
+            (
+            SELECT {[Date].[Calendar].[Month].&[2001]&[7], [Date].[Calendar].[Month].&[2001]&[12]} on 0
+            FROM
+            (SELECT {[Date].[Calendar].[Calendar Year].&[2001]} ON 0 FROM [Adventure Works])
+            )
+                """;
+
+        SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
+        assertThat(selectStatement).isNotNull();
+
+    }
 }

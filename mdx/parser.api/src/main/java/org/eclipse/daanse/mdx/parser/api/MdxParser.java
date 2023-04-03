@@ -18,6 +18,7 @@ import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
 
 public interface MdxParser {
 
@@ -31,4 +32,5 @@ public interface MdxParser {
 
     Expression parseExpression() throws MdxParserException;
 
+    SelectSubcubeClause parseSelectSubcubeClause() throws MdxParserException;
 }
