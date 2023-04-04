@@ -16,13 +16,15 @@ package org.eclipse.daanse.olap.rolap.dbmapper.model.record;
 import java.util.List;
 
 import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Cube;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension;
+import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Relation;
 
 public record CubeR(String name,
                     String caption,
                     String description,
                     String defaultMeasure,
                     List<AnnotationR> annotations,
-                    List<CubeDimensionR> dimensionUsageOrDimension,
+                    List<CubeDimension> dimensionUsageOrDimension,
                     List<MeasureR> measure,
                     List<CalculatedMemberR> calculatedMember,
                     List<NamedSetR> namedSet,
@@ -31,7 +33,7 @@ public record CubeR(String name,
                     boolean enabled,
                     boolean cache,
                     boolean visible,
-                    RelationR fact,
+                    Relation fact,
                     List<ActionR> action
                     )
         implements Cube {
