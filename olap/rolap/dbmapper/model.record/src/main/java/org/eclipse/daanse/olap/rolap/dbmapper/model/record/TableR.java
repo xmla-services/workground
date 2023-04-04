@@ -36,6 +36,11 @@ public class TableR implements Table {
         this(table.schema(), table.name(), table.alias(), table.hint());
     }
 
+    public TableR(String name, List<? extends AggExclude> aggExclude, List<? extends AggTable> aggTable) {
+        this.name = name;
+        this.aggExclude = aggExclude;
+        this.aggTable = aggTable;
+    }
     public TableR(String schema, String name, String alias, List<? extends Hint> hint) {
         this.name = name;
         this.schema = schema;
@@ -54,6 +59,13 @@ public class TableR implements Table {
                     : tbl.alias(),
                 possibleName) : null, tbl.sql().dialect());
         }
+    }
+
+    public TableR(String name) {
+    	this.name = name;
+    	this.schema = null;
+    	this.alias = null;
+    	this.hint = List.of();
     }
 
     @Override
