@@ -13,6 +13,26 @@
  */
 package org.eclipse.daanse.db.jdbc.dataloader.csv;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.osgi.test.common.dictionary.Dictionaries.dictionaryOf;
+
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Optional;
+
+import javax.sql.DataSource;
+
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.eclipse.daanse.db.dialect.api.DialectResolver;
 import org.eclipse.daanse.db.jdbc.dataloader.api.DataLoadService;
@@ -30,27 +50,6 @@ import org.osgi.test.common.annotation.Property;
 import org.osgi.test.common.annotation.config.WithFactoryConfiguration;
 import org.osgi.test.junit5.context.BundleContextExtension;
 import org.osgi.test.junit5.service.ServiceExtension;
-
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.Connection;
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Optional;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.osgi.test.common.dictionary.Dictionaries.dictionaryOf;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
@@ -70,7 +69,7 @@ import static org.osgi.test.common.dictionary.Dictionaries.dictionaryOf;
 class CsvDataLoadServiceImplTest {
 
     public static final String COMPONENT_NAME = "org.eclipse.daanse.db.jdbc.dataloader.csv.CsvDataLoadServiceImpl";
-    public static final String PATH = "../../../../src/test/resources/";
+    public static final String PATH = "../../../../../src/test/resources/";
     @InjectBundleContext
     BundleContext bc;
     DialectResolver dialectResolver = mock(DialectResolver.class);
@@ -103,7 +102,6 @@ class CsvDataLoadServiceImplTest {
         ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);
         when(dialect.supportBatchOperations()).thenReturn(true);
 
-        Column column  = new Column("id", Type.INTEGER);
         List<Column> list = List.of(
             new Column("id", Type.INTEGER),
             new Column("testLong", Type.LONG),
@@ -118,7 +116,6 @@ class CsvDataLoadServiceImplTest {
         Table t = new Table("test", "test",  List.of(), list);
         List<Table> tables = List.of(t);
         //
-        Path csvDir = Paths.get(System.getProperty("user.dir") + "/../../../../src/test/resources/");
         csvDataLoadService.loadData(dataSource, tables);
         verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
 
@@ -147,7 +144,6 @@ class CsvDataLoadServiceImplTest {
         ArgumentCaptor<Timestamp> timestampCaptor = ArgumentCaptor.forClass(Timestamp.class);
         when(dialect.supportBatchOperations()).thenReturn(false);
 
-        Column column  = new Column("id", Type.INTEGER);
         List<Column> list = List.of(
             new Column("id", Type.INTEGER),
             new Column("testLong", Type.LONG),
@@ -162,7 +158,6 @@ class CsvDataLoadServiceImplTest {
         Table t = new Table("test", "test",  List.of(), list);
         List<Table> tables = List.of(t);
         //
-        Path csvDir = Paths.get(System.getProperty("user.dir") + "/../../../../src/test/resources/");
         csvDataLoadService.loadData(dataSource, tables);
         verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
 
