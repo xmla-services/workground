@@ -318,7 +318,7 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
             Hierarchy[] independentHierarchies,
             String mdxString)
         {
-            super("DummyExp",calc.getType());
+            super("DteScalarCalcImpl",calc.getType());
             this.calc = calc;
             this.independentHierarchies = independentHierarchies;
             this.mdxString = mdxString;
@@ -355,7 +355,7 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
             boolean mutableList,
             String mdxString)
         {
-            super("DummyExp",calc.getType());
+            super("DteIterCalcImpl",calc.getType());
             this.calc = calc;
             this.independentHierarchies = independentHierarchies;
             this.mutableList = mutableList;

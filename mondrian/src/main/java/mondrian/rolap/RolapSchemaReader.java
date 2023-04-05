@@ -826,7 +826,7 @@ public class RolapSchemaReader
         }
 
         public Calc compile(ExpCompiler compiler) {
-            return new GenericCalc("DummyExp",getType()) {
+            return new GenericCalc("SystemPropertyCalc",getType()) {
                 public Calc[] getCalcs() {
                     return new Calc[0];
                 }

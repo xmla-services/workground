@@ -30,8 +30,8 @@ public class ValueCalc extends GenericCalc {
      *
      * @param exp Source expression
      */
-    public ValueCalc(String name, Type type) {
-        super(name,type, new Calc[0]);
+    public ValueCalc( Type type) {
+        super("ValueCalc",type, new Calc[0]);
     }
 
     @Override

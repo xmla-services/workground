@@ -45,8 +45,8 @@ public class TupleValueCalc extends GenericCalc {
      * @param nullCheck Whether to check for null values due to non-joining
      *     dimensions in a virtual cube
      */
-    public TupleValueCalc(String name, Type type, TupleCalc tupleCalc, boolean nullCheck) {
-        super(name,type);
+    public TupleValueCalc( Type type, TupleCalc tupleCalc, boolean nullCheck) {
+        super("TupleValueCalc",type);
         this.tupleCalc = tupleCalc;
         this.nullCheck = nullCheck;
     }
@@ -115,7 +115,7 @@ public class TupleValueCalc extends GenericCalc {
     public Calc optimize() {
         if (tupleCalc instanceof TupleFunDef.CalcImpl calc) {
             return MemberValueCalc.create(
-                    "DummyExp",type,
+                    type,
                     calc.getMemberCalcs(),
                     nullCheck);
         }

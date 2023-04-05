@@ -49,8 +49,8 @@ public class MemberValueCalc extends GenericCalc {
      * @param nullCheck Whether to check for null values due to non-joining
      *     dimensions in a virtual cube
      */
-    public MemberValueCalc(String name, Type type, MemberCalc memberCalc, boolean nullCheck) {
-        super( name,  type);
+    public MemberValueCalc(Type type, MemberCalc memberCalc, boolean nullCheck) {
+        super( "MemberValueCalc",  type);
         this.nullCheck = nullCheck;
         assert type instanceof ScalarType ;
         this.memberCalc = memberCalc;
@@ -69,14 +69,14 @@ public class MemberValueCalc extends GenericCalc {
      *   context
      */
     public static GenericCalc create(
-    		String name, Type type,
+    		 Type type,
             MemberCalc[] memberCalcs,
             boolean nullCheck)
     {
         return switch (memberCalcs.length) {
-        case 0 -> new ValueCalc(name,type);
-        case 1 -> new MemberValueCalc("MemberValueCalc",type, memberCalcs[0], nullCheck);
-        default -> new MemberArrayValueCalc(name,type, memberCalcs, nullCheck);
+        case 0 -> new ValueCalc(type);
+        case 1 -> new MemberValueCalc(type, memberCalcs[0], nullCheck);
+        default -> new MemberArrayValueCalc(type, memberCalcs, nullCheck);
         };
     }
 

@@ -610,7 +610,7 @@ public class RankFunDef extends FunDefBase {
      *          Whether elements of the list are tuples (as opposed to members)
      */
     public RankedListCalc( ListCalc listCalc, boolean tuple ) {
-      super( "DummyExp", listCalc.getType() , new Calc[] { listCalc } );
+      super( "RankedListCalc", listCalc.getType() , new Calc[] { listCalc } );
       this.listCalc = listCalc;
       this.tuple = tuple;
     }

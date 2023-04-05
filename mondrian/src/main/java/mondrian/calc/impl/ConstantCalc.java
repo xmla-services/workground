@@ -45,7 +45,7 @@ public class ConstantCalc extends GenericCalc {
     private final double d;
 
     public ConstantCalc( Type type, Object o) {
-        super("DummyExp",type);
+        super("ConstantCalc",type);
         this.o = o;
         i = initializeInteger(o);
         d = initializeDouble(o);

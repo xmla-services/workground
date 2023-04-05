@@ -388,7 +388,6 @@ public class SetFunDef extends FunDefBase {
         private final IterCalc[] iterCalcs;
 
         public ExprIterCalc(
-			String name,
 			Type type,
             Exp[] args,
             ExpCompiler compiler,

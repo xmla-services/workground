@@ -167,7 +167,7 @@ public abstract class LinReg extends FunDefBase {
         final DoubleCalc xCalc =
             call.getArgCount() > 2
             ? compiler.compileDouble(call.getArg(2))
-            : new ValueCalc(call.getFunName(),call.getType());
+            : new ValueCalc(call.getType());
         return new LinRegCalc(call, listCalc, yCalc, xCalc, regType);
     }
 
@@ -282,7 +282,7 @@ public abstract class LinReg extends FunDefBase {
             final DoubleCalc xCalc =
                 call.getArgCount() > 3
                 ? compiler.compileDouble(call.getArg(3))
-                : new ValueCalc(call.getFunName(),call.getType());
+                : new ValueCalc(call.getType());
             return new PointCalc(
                 call, xPointCalc, listCalc, yCalc, xCalc);
         }
