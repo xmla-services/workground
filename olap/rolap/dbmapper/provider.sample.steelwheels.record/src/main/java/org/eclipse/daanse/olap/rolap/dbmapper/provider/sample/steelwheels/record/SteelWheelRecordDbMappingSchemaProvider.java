@@ -23,7 +23,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 import java.util.List;
 
-@Component(service = DbMappingSchemaProvider.class, scope = ServiceScope.SINGLETON)
+@Component(service = DbMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = { "sample.name=SteelWheels",
+		"sample.type=record" })
 public class SteelWheelRecordDbMappingSchemaProvider implements DbMappingSchemaProvider {
 
     private static String SCHEMA_NAME = "SteelWheels";

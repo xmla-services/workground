@@ -36,6 +36,8 @@ public class Activator {
 
         Hashtable<String, Object> ht = new Hashtable<>();
         ht.put("url", url.toString());
+		ht.put("sample.name", "SteelWheels");
+		ht.put("sample.type", "xml");
 
         c.update(ht);
 
