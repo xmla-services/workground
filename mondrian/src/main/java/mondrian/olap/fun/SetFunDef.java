@@ -116,7 +116,7 @@ public class SetFunDef extends FunDefBase {
             return args[0].accept(compiler);
         }
         return new SetListCalc(
-            call.getFunName(),call.getType(), args, compiler, ResultStyle.LIST_MUTABLELIST);
+            call.getType(), args, compiler, ResultStyle.LIST_MUTABLELIST);
     }
 
     /**
@@ -135,7 +135,6 @@ public class SetFunDef extends FunDefBase {
         private final VoidCalc[] voidCalcs;
 
         public SetListCalc(
-            String name,
             Type type,
             Exp[] args,
             ExpCompiler compiler,
@@ -171,7 +170,7 @@ public class SetFunDef extends FunDefBase {
             if (type instanceof SetType) {
                 // TODO use resultStyles
                 final ListCalc listCalc = compiler.compileList(arg);
-                return new AbstractVoidCalc("VoidCalc",type, new Calc[] {listCalc}) {
+                return new AbstractVoidCalc("AbstractVoidCalc1",type, new Calc[] {listCalc}) {
                     public void evaluateVoid(Evaluator evaluator) {
                         TupleList list =
                             listCalc.evaluateList(evaluator);
@@ -198,7 +197,7 @@ public class SetFunDef extends FunDefBase {
                         mondrian.olap.Syntax.Property,
                         new Exp[] {arg});
                 final ListCalc listCalc = compiler.compileList(unresolvedFunCall.accept(compiler.getValidator()));
-                return new AbstractVoidCalc("VoidCalc",type, new Calc[] {listCalc}) {
+                return new AbstractVoidCalc("AbstractVoidCalc2",type, new Calc[] {listCalc}) {
                     public void evaluateVoid(Evaluator evaluator) {
                         TupleList list =
                                 listCalc.evaluateList(evaluator);
@@ -207,7 +206,7 @@ public class SetFunDef extends FunDefBase {
                 };
             } else if (type.getArity() == 1 && arg instanceof MemberType) {
                 final MemberCalc memberCalc = compiler.compileMember(arg);
-                return new AbstractVoidCalc("VoidCalc",type, new Calc[]{memberCalc}) {
+                return new AbstractVoidCalc("AbstractVoidCalc3",type, new Calc[]{memberCalc}) {
                     final Member[] members = {null};
                     public void evaluateVoid(Evaluator evaluator) {
                         // Don't add null or partially null tuple to result.
@@ -221,7 +220,7 @@ public class SetFunDef extends FunDefBase {
                 };
             } else {
                 final TupleCalc tupleCalc = compiler.compileTuple(arg);
-                return new AbstractVoidCalc("VoidCalc",type, new Calc[]{tupleCalc}) {
+                return new AbstractVoidCalc("AbstractVoidCalc4",type, new Calc[]{tupleCalc}) {
                     public void evaluateVoid(Evaluator evaluator) {
                         // Don't add null or partially null tuple to result.
                         Member[] members = tupleCalc.evaluateTuple(evaluator);

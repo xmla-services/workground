@@ -70,7 +70,7 @@ public class BetterExpCompiler extends AbstractExpCompiler {
         } else if (type instanceof MemberType) {
             assert calc instanceof MemberCalc;
             final MemberCalc memberCalc = (MemberCalc) calc;
-            return new AbstractTupleCalc("SomeNameToBeBetterEvaluated",type, new Calc[] {memberCalc}) {
+            return new AbstractTupleCalc("AbstractTupleCalc1",type, new Calc[] {memberCalc}) {
                 @Override
                 public Member[] evaluateTuple(Evaluator evaluator) {
                     final Member member = memberCalc.evaluateMember(evaluator);
