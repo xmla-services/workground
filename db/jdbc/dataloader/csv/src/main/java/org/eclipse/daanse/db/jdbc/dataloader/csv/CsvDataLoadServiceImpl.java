@@ -102,12 +102,7 @@ public class CsvDataLoadServiceImpl implements DataLoadService {
 
             Path p = Paths.get(config.csvFolderPath()).resolve(new StringBuilder().append(config.csvFilePrefix())
                 .append(table.tableName()).append(config.csvFileSuffix()).toString());
-            System.out.println(p.toAbsolutePath());
-            System.out.println(p.toAbsolutePath());
-            System.out.println(p.toAbsolutePath());
-            System.out.println(p.toAbsolutePath());
-            System.out.println(p.toAbsolutePath());
-            System.out.println(p.toAbsolutePath());
+
             if (!p.toFile().exists()) {
                 LOGGER.warn("file does not exist-" + table.tableName());
                 return;
