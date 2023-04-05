@@ -102,3 +102,6 @@
 	org.xmlunit.xmlunit-matchers;version='[2.9.0,2.9.1)',\
 	slf4j.api;version='[2.0.4,2.0.5)',\
 	slf4j.simple;version='[2.0.4,2.0.5)'
+	
+#-runproperties.tester:  \
+#  tester.names=mondrian.test.ExplainPlanTest

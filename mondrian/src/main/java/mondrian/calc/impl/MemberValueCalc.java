@@ -75,7 +75,7 @@ public class MemberValueCalc extends GenericCalc {
     {
         return switch (memberCalcs.length) {
         case 0 -> new ValueCalc(name,type);
-        case 1 -> new MemberValueCalc(name,type, memberCalcs[0], nullCheck);
+        case 1 -> new MemberValueCalc("MemberValueCalc",type, memberCalcs[0], nullCheck);
         default -> new MemberArrayValueCalc(name,type, memberCalcs, nullCheck);
         };
     }

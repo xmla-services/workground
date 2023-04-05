@@ -95,16 +95,16 @@ class OrderFunDef extends FunDefBase {
         } else if ( variableList.isEmpty() ) {
           // All members are constant. Optimize by setting entire
           // context first.
-          calcList[1] = new ValueCalc( "DummyExp",expCalc.getType()  );
-          return new ContextCalc( calcs, new CalcImpl( call.getFunName(),call.getType(), calcList, keySpecList ) );
+          calcList[1] = new ValueCalc( "ValueCalc",expCalc.getType()  );
+          return new ContextCalc( calcs, new CalcImpl( "CalcImpl",call.getType(), calcList, keySpecList ) );
         } else {
           // Some members are constant. Evaluate these before
           // evaluating the list expression.
           calcList[1] =
-              MemberValueCalc.create( "DummyExp", expCalc.getType() , variableList.toArray(
+              MemberValueCalc.create( "MemberValueCalc", expCalc.getType() , variableList.toArray(
                   new MemberCalc[variableList.size()] ), compiler.getEvaluator()
                       .mightReturnNullForUnrelatedDimension() );
-          return new ContextCalc( constantList.toArray( new MemberCalc[constantList.size()] ), new CalcImpl( call.getFunName(),call.getType(),
+          return new ContextCalc( constantList.toArray( new MemberCalc[constantList.size()] ), new CalcImpl( "CalcImpl",call.getType(),
               calcList, keySpecList ) );
         }
       }
@@ -113,7 +113,7 @@ class OrderFunDef extends FunDefBase {
       final Calc expCalcs = keySpecList.get( i ).getKey();
       calcList[i + 1] = expCalcs;
     }
-    return new CalcImpl( call.getFunName(),call.getType(), calcList, keySpecList );
+    return new CalcImpl( "CalcImpl",call.getType(), calcList, keySpecList );
   }
 
   private void buildKeySpecList( List<SortKeySpec> keySpecList, ResolvedFunCall call, ExpCompiler compiler ) {
@@ -285,7 +285,7 @@ class OrderFunDef extends FunDefBase {
     private final Member[] members; // workspace
 
     protected ContextCalc( MemberCalc[] memberCalcs, CalcWithDual calc ) {
-      super( "DummyExp",calc.getType() , ContextCalc.xx( memberCalcs, calc ) );
+      super( "ContextCalc",calc.getType() , ContextCalc.xx( memberCalcs, calc ) );
       this.memberCalcs = memberCalcs;
       this.calc = calc;
       this.members = new Member[memberCalcs.length];

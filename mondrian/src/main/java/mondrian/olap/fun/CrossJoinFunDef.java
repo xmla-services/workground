@@ -60,7 +60,6 @@ import mondrian.olap.type.MemberType;
 import mondrian.olap.type.SetType;
 import mondrian.olap.type.TupleType;
 import mondrian.olap.type.Type;
-import mondrian.olap.type.TypeWrapperExp;
 import mondrian.resource.MondrianResource;
 import mondrian.rolap.RolapEvaluator;
 import mondrian.rolap.SqlConstraintUtils;
@@ -224,7 +223,7 @@ public class CrossJoinFunDef extends FunDefBase {
   class CrossJoinIterCalc extends AbstractIterCalc {
 	private  ResolvedFunCall call;
     CrossJoinIterCalc( ResolvedFunCall call, Calc[] calcs ) {
-      super( call.getFunName(),call.getType(), calcs );
+      super( "CrossJoinIterCalc",call.getType(), calcs );
       this.call=call;
     }
 
@@ -396,7 +395,7 @@ public class CrossJoinFunDef extends FunDefBase {
       }
       return (ListCalc) calc;
     } else {
-      return new SetFunDef.SetListCalc( "TypeWrapperExp", new SetType( type ), new Exp[] { exp }, compiler,
+      return new SetFunDef.SetListCalc(  new SetType( type ), new Exp[] { exp }, compiler,
           ResultStyle.LIST_MUTABLELIST );
     }
   }
