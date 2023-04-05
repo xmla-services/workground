@@ -49,7 +49,7 @@ public class MemberArrayValueCalc extends GenericCalc {
      * @param nullCheck Whether to check for null values due to non-joining
      *     dimensions in a virtual cube
      */
-    MemberArrayValueCalc(String name, Type type, MemberCalc[] memberCalcs, boolean nullCheck) {
+    MemberArrayValueCalc(Type type, MemberCalc[] memberCalcs, boolean nullCheck) {
         super("MemberArrayValueCalc",type);
         this.nullCheck = nullCheck;
 

@@ -280,7 +280,7 @@ public class RolapResult extends ResultBase {
         SetType setType = new SetType(memberType1);
         mondrian.calc.ListCalc listCalc =
                 new mondrian.calc.impl.AbstractListCalc(
-                        "DummyExp",setType, new Calc[0])
+                        "AbstractListCalc",setType, new Calc[0])
                 {
                   public TupleList evaluateList(
                           Evaluator evaluator)
@@ -451,7 +451,7 @@ public class RolapResult extends ResultBase {
           tupleList = AggregateFunDef.AggregateCalc.optimizeTupleList( evaluator, tupleList, false );
           evaluator.setSlicerTuples( tupleList );
 
-          final Calc valueCalc = new ValueCalc( "DummyExp",new ScalarType() ) ;
+          final Calc valueCalc = new ValueCalc( new ScalarType() ) ;
 
           final List<Member> prevSlicerMembers = new ArrayList<Member>();
 

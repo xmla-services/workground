@@ -104,7 +104,6 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
                     .getTimeHierarchy(getName());
             memberCalc =
                 new HierarchyCurrentMemberFunDef.FixedCalcImpl(
-                    "DummyExp",
                         MemberType.forHierarchy(defaultTimeHierarchy),
                     defaultTimeHierarchy);
             levelCalc = null;
@@ -116,7 +115,7 @@ class OpeningClosingPeriodFunDef extends FunDefBase {
             levelCalc = compiler.compileLevel(call.getArg(0));
             memberCalc =
                 new HierarchyCurrentMemberFunDef.FixedCalcImpl(
-                    "DummyExp",
+                    
                         MemberType.forHierarchy(defaultTimeHierarchy),
                     defaultTimeHierarchy);
             break;

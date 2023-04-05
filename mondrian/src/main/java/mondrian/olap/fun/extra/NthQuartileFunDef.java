@@ -65,7 +65,7 @@ public class NthQuartileFunDef extends AbstractAggregateFunDef {
         final DoubleCalc doubleCalc =
             call.getArgCount() > 1
             ? compiler.compileDouble(call.getArg(1))
-            : new ValueCalc(call.getFunName(),call.getType());
+            : new ValueCalc(call.getType());
         return new AbstractDoubleCalc(call.getFunName(),call.getType(), new Calc[] {listCalc, doubleCalc}) {
             public double evaluateDouble(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();

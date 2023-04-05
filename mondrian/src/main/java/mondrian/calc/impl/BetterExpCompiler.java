@@ -103,7 +103,7 @@ public class BetterExpCompiler extends AbstractExpCompiler {
         private final ListCalc listCalc;
 
         public CopyListCalc(ListCalc listCalc) {
-			super("DummyExp", listCalc.getType(), new Calc[] { listCalc });
+			super("CopyListCalc", listCalc.getType(), new Calc[] { listCalc });
             this.listCalc = listCalc;
         }
 

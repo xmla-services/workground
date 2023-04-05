@@ -56,7 +56,7 @@ class VarFunDef extends AbstractAggregateFunDef {
         final Calc calc =
             call.getArgCount() > 1
             ? compiler.compileScalar(call.getArg(1), true)
-            : new ValueCalc(call.getFunName(),call.getType());
+            : new ValueCalc(call.getType());
         return new AbstractDoubleCalc(call.getFunName(),call.getType(), new Calc[] {listCalc, calc}) {
             public double evaluateDouble(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();

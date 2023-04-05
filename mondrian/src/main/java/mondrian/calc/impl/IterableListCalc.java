@@ -33,7 +33,7 @@ public class IterableListCalc extends AbstractListCalc {
      * @param iterCalc Calculation that returns an iterable.
      */
     public IterableListCalc(IterCalc iterCalc) {
-        super("DummyExp",iterCalc.getType(), new Calc[] {iterCalc});
+        super("IterableListCalc",iterCalc.getType(), new Calc[] {iterCalc});
         this.iterCalc = iterCalc;
     }
 

@@ -99,7 +99,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         final Calc calc =
             call.getArgCount() > 1
                 ? compiler.compileScalar(call.getArg(1), true)
-                : new ValueCalc(call.getFunName(),call.getType());
+                : new ValueCalc(call.getType());
         final Member member =
             call.getArgCount() > 1 ? getMember(call.getArg(1)) : null;
         return new AggregateCalc(call.getFunName(),calc.getType(), listCalc, calc, member);

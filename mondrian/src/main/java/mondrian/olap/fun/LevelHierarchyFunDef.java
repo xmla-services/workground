@@ -37,14 +37,14 @@ public class LevelHierarchyFunDef extends FunDefBase {
     public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final LevelCalc levelCalc =
                 compiler.compileLevel(call.getArg(0));
-        return new CalcImpl(call.getFunName(),call.getType(), levelCalc);
+        return new CalcImpl(call.getType(), levelCalc);
     }
 
     public static class CalcImpl extends AbstractHierarchyCalc {
         private final LevelCalc levelCalc;
 
-        public CalcImpl(String name,Type type, LevelCalc levelCalc) {
-            super(name,type, new Calc[] {levelCalc});
+        public CalcImpl(Type type, LevelCalc levelCalc) {
+            super("LevelHirarchy",type, new Calc[] {levelCalc});
             this.levelCalc = levelCalc;
         }
 

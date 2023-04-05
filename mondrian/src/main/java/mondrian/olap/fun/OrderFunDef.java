@@ -95,13 +95,13 @@ class OrderFunDef extends FunDefBase {
         } else if ( variableList.isEmpty() ) {
           // All members are constant. Optimize by setting entire
           // context first.
-          calcList[1] = new ValueCalc( "ValueCalc",expCalc.getType()  );
+          calcList[1] = new ValueCalc( expCalc.getType()  );
           return new ContextCalc( calcs, new CalcImpl( "CalcImpl",call.getType(), calcList, keySpecList ) );
         } else {
           // Some members are constant. Evaluate these before
           // evaluating the list expression.
           calcList[1] =
-              MemberValueCalc.create( "MemberValueCalc", expCalc.getType() , variableList.toArray(
+              MemberValueCalc.create(  expCalc.getType() , variableList.toArray(
                   new MemberCalc[variableList.size()] ), compiler.getEvaluator()
                       .mightReturnNullForUnrelatedDimension() );
           return new ContextCalc( constantList.toArray( new MemberCalc[constantList.size()] ), new CalcImpl( "CalcImpl",call.getType(),

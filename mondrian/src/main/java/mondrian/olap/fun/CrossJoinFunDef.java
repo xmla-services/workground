@@ -215,7 +215,7 @@ public class CrossJoinFunDef extends FunDefBase {
       return compiler.compileAs( exp, null, ResultStyle.ITERABLE_LIST_MUTABLELIST );
     } else {
       // this always returns an IterCalc
-      return new SetFunDef.ExprIterCalc( "DummyExp", new SetType( type ) , new Exp[] { exp }, compiler,
+      return new SetFunDef.ExprIterCalc(  new SetType( type ) , new Exp[] { exp }, compiler,
           ResultStyle.ITERABLE_LIST_MUTABLELIST );
     }
   }
