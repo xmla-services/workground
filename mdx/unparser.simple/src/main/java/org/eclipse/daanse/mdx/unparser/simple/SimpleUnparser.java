@@ -245,7 +245,7 @@ public class SimpleUnparser implements UnParser {
         return new StringBuilder(ret);
     }
 
-    private StringBuilder unparseSelectQueryAxisClause(SelectQueryAxisClause clause) {
+    public StringBuilder unparseSelectQueryAxisClause(SelectQueryAxisClause clause) {
         StringBuilder sb = new StringBuilder();
 
         if (clause.nonEmpty()) {

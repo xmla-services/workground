@@ -16,11 +16,16 @@ package org.eclipse.daanse.mdx.parser.ccc;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.select.SelectCellPropertyListClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
+
+import java.util.Optional;
 
 public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxParser {
     private MdxParser delegate;
@@ -127,6 +132,39 @@ public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxPa
     public SelectWithClause parseSelectWithClause() throws MdxParserException {
         try {
             return delegate.parseSelectWithClause();
+
+        } catch (Throwable e) {
+            throw new MdxParserException(e);
+        } finally {
+            dump();
+        }
+    }
+
+    public SelectQueryAxisClause parseSelectQueryAxisClause() throws MdxParserException {
+        try {
+            return delegate.parseSelectQueryAxisClause();
+
+        } catch (Throwable e) {
+            throw new MdxParserException(e);
+        } finally {
+            dump();
+        }
+    }
+
+    public Optional<SelectSlicerAxisClause> parseSelectSlicerAxisClause() throws MdxParserException {
+        try {
+            return delegate.parseSelectSlicerAxisClause();
+
+        } catch (Throwable e) {
+            throw new MdxParserException(e);
+        } finally {
+            dump();
+        }
+    }
+
+    public SelectCellPropertyListClause parseSelectCellPropertyListClause() throws MdxParserException {
+        try {
+            return delegate.parseSelectCellPropertyListClause();
 
         } catch (Throwable e) {
             throw new MdxParserException(e);
