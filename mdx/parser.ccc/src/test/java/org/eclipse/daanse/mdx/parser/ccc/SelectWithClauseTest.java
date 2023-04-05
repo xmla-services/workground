@@ -93,17 +93,22 @@ public class SelectWithClauseTest {
     @Nested
     public class MeasureBodyClauseTest {
 
-        //TODO
+        @Test
         public void testMeasureBodyClause() throws MdxParserException {
-            String mdx = """
-                with measure 'Sales Territory'[Total Sales Amount] = SUM('Internet Sales'[Sales Amount]) + SUM('Reseller Sales'[Sales Amount])
-                select measures.[Total Sales Amount] on columns,
-                NON EMPTY [Date].[Calendar Year].children on rows
-                from [Model]
-                """;
-            SelectWithClause selectWithClause = new MdxParserWrapper(mdx).parseSelectWithClause();
+            SelectWithClause selectWithClause = new MdxParserWrapper("MEASURE NOT NOT NOT NOT NOT NOT NOT").parseSelectWithClause();
             assertThat(selectWithClause).isNotNull().isInstanceOf(MeasureBodyClause.class);
             MeasureBodyClause measureBodyClause = (MeasureBodyClause) selectWithClause;
+            assertThat(measureBodyClause).isNotNull();
+        }
+    }
+
+    @Nested
+    public class CreateCellCalculationBodyClauseTest {
+
+        @Test
+        public void testMeasureBodyClause() throws MdxParserException {
+            SelectWithClause selectWithClause = new MdxParserWrapper("CELL CALCULATION NOT NOT NOT NOT NOT NOT NOT").parseSelectWithClause();
+            assertThat(selectWithClause).isNull();
         }
     }
 

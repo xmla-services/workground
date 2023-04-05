@@ -29,6 +29,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.daanse.mdx.parser.ccc.SelectSubCubeClauseTest.SelectSubCubeClauseNameTest.checkSelectSubcubeClauseName;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class SelectSubCubeClauseTest {
@@ -50,10 +51,9 @@ public class SelectSubCubeClauseTest {
         public void testQuoted() throws MdxParserException {
             SelectSubcubeClause selectSubcubeClause = new MdxParserWrapper("[subcube]").parseSelectSubcubeClause();
             assertThat(selectSubcubeClause).isNotNull().isInstanceOf(SelectSubcubeClauseName.class);
-            SelectSubcubeClauseName selectSubcubeClauseName = (SelectSubcubeClauseName) selectSubcubeClause;
-            assertThat(selectSubcubeClauseName.cubeName()).isNotNull();
-            assertThat(selectSubcubeClauseName.cubeName().name()).isNotNull().isEqualTo("subcube");
-            assertThat(selectSubcubeClauseName.cubeName().quoting()).isNotNull().isEqualTo(ObjectIdentifier.Quoting.QUOTED);
+            checkSelectSubcubeClauseName((SelectSubcubeClauseName) selectSubcubeClause,
+                "subcube",
+                ObjectIdentifier.Quoting.QUOTED);
         }
 
         @Test
@@ -61,6 +61,13 @@ public class SelectSubCubeClauseTest {
             assertThrows(MdxParserException.class, () -> new MdxParserWrapper("").parseSelectSubcubeClause());
         }
 
+        public static void checkSelectSubcubeClauseName(SelectSubcubeClauseName selectSubcubeClauseName,
+                                                        String name,
+                                                        ObjectIdentifier.Quoting quoting) {
+            assertThat(selectSubcubeClauseName.cubeName()).isNotNull();
+            assertThat(selectSubcubeClauseName.cubeName().name()).isNotNull().isEqualTo(name);
+            assertThat(selectSubcubeClauseName.cubeName().quoting()).isNotNull().isEqualTo(quoting);
+        }
     }
 
     @Nested
@@ -111,11 +118,8 @@ public class SelectSubCubeClauseTest {
             assertThat(keyObjectIdentifier.nameObjectIdentifiers().get(0).quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
 
             assertThat(selectSubcubeClauseStatement.selectSubcubeClause()).isNotNull().isInstanceOf(SelectSubcubeClauseName.class);
-            SelectSubcubeClauseName selectSubcubeClauseName = (SelectSubcubeClauseName)selectSubcubeClauseStatement.selectSubcubeClause();
-            assertThat(selectSubcubeClauseName.cubeName()).isNotNull();
-            assertThat(selectSubcubeClauseName.cubeName().name()).isEqualTo("Adventure Works");
-            assertThat(selectSubcubeClauseName.cubeName().quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
-
+            checkSelectSubcubeClauseName((SelectSubcubeClauseName)selectSubcubeClauseStatement.selectSubcubeClause(),
+                "Adventure Works", ObjectIdentifier.Quoting.QUOTED);
             assertThat(selectSubcubeClauseStatement.selectSlicerAxisClause()).isNotNull().isNotPresent();
         }
     }
@@ -195,10 +199,8 @@ public class SelectSubCubeClauseTest {
         assertThat(selectSubcubeClauseStatementInner.selectSlicerAxisClause()).isNotNull().isNotPresent();
 
         assertThat(selectSubcubeClauseStatementInner.selectSubcubeClause()).isNotNull().isInstanceOf(SelectSubcubeClauseName.class);
-        SelectSubcubeClauseName selectSubcubeClauseNameInner = (SelectSubcubeClauseName)selectSubcubeClauseStatementInner.selectSubcubeClause();
-        assertThat(selectSubcubeClauseNameInner.cubeName()).isNotNull();
-        assertThat(selectSubcubeClauseNameInner.cubeName().name()).isEqualTo("cube");
-        assertThat(selectSubcubeClauseNameInner.cubeName().quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
+        checkSelectSubcubeClauseName((SelectSubcubeClauseName)selectSubcubeClauseStatementInner.selectSubcubeClause(),
+            "cube", ObjectIdentifier.Quoting.QUOTED);
     }
 
 }
