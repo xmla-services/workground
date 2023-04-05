@@ -65,7 +65,8 @@ import org.osgi.service.component.annotations.ServiceScope;
 
 import java.util.List;
 
-@Component(service = DbMappingSchemaProvider.class, scope = ServiceScope.SINGLETON)
+@Component(service = DbMappingSchemaProvider.class, scope = ServiceScope.SINGLETON, property = { "sample.name=FoodMart",
+		"sample.type=record" })
 public class FoodMartRecordDbMappingSchemaProvider implements DbMappingSchemaProvider {
 
     private static String SCHEMA_NAME = "FoodMart";

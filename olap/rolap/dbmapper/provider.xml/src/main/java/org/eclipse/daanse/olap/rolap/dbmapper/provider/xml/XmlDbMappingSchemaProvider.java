@@ -18,27 +18,31 @@ import jakarta.xml.bind.JAXBException;
 @Designate(ocd = Config.class, factory = true)
 public class XmlDbMappingSchemaProvider implements DbMappingSchemaProvider {
 
-    @ObjectClassDefinition
-    @interface Config {
+	@ObjectClassDefinition
+	@interface Config {
 
-        String url();
+		String url();
 
-    }
+	}
 
-    private XmlSchemaReader reader = new XmlSchemaReader();
-    private Schema schema;
+	private XmlSchemaReader reader = new XmlSchemaReader();
+	private Schema schema;
 
-    @Activate
-    public void activate(Config config) throws JAXBException, IOException {
-        URL url = new URL(config.url());
-        try (InputStream in = url.openStream()) {
-            schema = reader.read(in);
-        }
-    }
+	@Activate
+	public void activate(Config config) throws JAXBException, IOException {
+		URL url = new URL(config.url());
+		try (InputStream in = url.openStream()) {
+			schema = reader.read(in);
+			System.out.println(schema);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw e;
+		}
+	}
 
-    @Override
-    public Schema get() {
-        return schema;
-    }
+	@Override
+	public Schema get() {
+		return schema;
+	}
 
 }

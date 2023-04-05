@@ -15,27 +15,29 @@ import org.osgi.service.component.annotations.Reference;
 @Component(immediate = true)
 public class Activator {
 
-    @Reference
-    ConfigurationAdmin ca;
-    private Configuration c;
+	@Reference
+	ConfigurationAdmin ca;
+	private Configuration c;
 
-    @Activate
-    public void activate(BundleContext bc) throws IOException {
-        c = ca.createFactoryConfiguration(
-                "org.eclipse.daanse.olap.rolap.dbmapper.provider.xml.XmlDbMappingSchemaProvider", "?");
+	@Activate
+	public void activate(BundleContext bc) throws IOException {
+		c = ca.createFactoryConfiguration(
+				"org.eclipse.daanse.olap.rolap.dbmapper.provider.xml.XmlDbMappingSchemaProvider", "?");
 
-        URL url = bc.getBundle()
-                .getEntry("/FoodMart.xml");
+		URL url = bc.getBundle().getEntry("/FoodMart.xml");
 
-        Hashtable<String, Object> ht = new Hashtable<>();
-        ht.put("url", url.toString());
-        c.update(ht);
-    }
+		Hashtable<String, Object> ht = new Hashtable<>();
+		ht.put("url", url.toString());
+		ht.put("sample.name", "FoodMart");
+		ht.put("sample.type", "xml");
 
-    @Deactivate
-    public void deactivate() throws IOException {
-        c.delete();
+		c.update(ht);
+	}
 
-    }
+	@Deactivate
+	public void deactivate() throws IOException {
+		c.delete();
+
+	}
 
 }
