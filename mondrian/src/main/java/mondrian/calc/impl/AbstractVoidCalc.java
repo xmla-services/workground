@@ -25,7 +25,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 29, 2005
  */
-public class AbstractVoidCalc extends GenericCalc implements VoidCalc {
+public class AbstractVoidCalc extends GenericCalc<Void> implements VoidCalc {
     private final Calc[] calcs;
 
     protected AbstractVoidCalc(String name, Type type, Calc[] calcs) {
@@ -33,8 +33,8 @@ public class AbstractVoidCalc extends GenericCalc implements VoidCalc {
         this.calcs = calcs;
     }
 
-    @Override
-    public Object evaluate(Evaluator evaluator) {
+    
+    public Void evaluate(Evaluator evaluator) {
         evaluateVoid(evaluator);
         return null;
     }

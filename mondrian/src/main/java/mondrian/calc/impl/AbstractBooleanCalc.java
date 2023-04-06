@@ -25,7 +25,7 @@ import mondrian.olap.type.Type;
  * @since Sep 26, 2005
  */
 public abstract class AbstractBooleanCalc
-extends AbstractCalc
+extends AbstractCalc<Boolean>
 implements BooleanCalc
 {
     /**
@@ -42,7 +42,7 @@ implements BooleanCalc
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Boolean evaluate(Evaluator evaluator) {
         return Boolean.valueOf(evaluateBoolean(evaluator));
     }
 }

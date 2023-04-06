@@ -9,6 +9,8 @@
 
 package mondrian.calc.impl;
 
+import java.util.Date;
+
 import mondrian.calc.Calc;
 import mondrian.calc.DateTimeCalc;
 import mondrian.olap.Evaluator;
@@ -25,7 +27,7 @@ import mondrian.olap.type.Type;
  * @since Sep 26, 2005
  */
 public abstract class AbstractDateTimeCalc
-extends AbstractCalc
+extends AbstractCalc<Date>
 implements DateTimeCalc
 {
     /**
@@ -39,7 +41,7 @@ implements DateTimeCalc
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Date evaluate(Evaluator evaluator) {
         return evaluateDateTime(evaluator);
     }
 }

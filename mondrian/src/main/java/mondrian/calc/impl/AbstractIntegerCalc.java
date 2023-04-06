@@ -27,7 +27,7 @@ import mondrian.olap.type.Type;
  * @since Sep 26, 2005
  */
 public abstract class AbstractIntegerCalc
-extends AbstractCalc
+extends AbstractCalc<Integer>
 implements IntegerCalc
 {
     /**
@@ -42,7 +42,7 @@ implements IntegerCalc
     }
 
     @Override
-    public Object evaluate(Evaluator evaluator) {
+    public Integer evaluate(Evaluator evaluator) {
         final int i = evaluateInteger(evaluator);
         if (i == FunUtil.IntegerNull) {
             return null;

@@ -30,7 +30,7 @@ import mondrian.rolap.RolapHierarchy;
  * @author jhyde
  * @since Sep 27, 2005
  */
-public abstract class AbstractCalc implements Calc {
+public abstract class AbstractCalc<R> implements Calc<R> {
     private final Calc[] calcs;
     protected final Type type;
 	private String name;
@@ -70,7 +70,7 @@ public abstract class AbstractCalc implements Calc {
      * Default implementation just casts to TargetClass. Subtypes that are wrappers should override.
      */
     @Override
-    public <T> T unwrap( Class<T> iface ) {
+   public <S,T extends Calc<S>> T unwrap(java.lang.Class<T> iface) {
         return iface.cast( this );
     }
 

@@ -20,7 +20,7 @@ import mondrian.olap.Evaluator;
  * @author jhyde
  * @since Sep 27, 2005
  */
-public interface BooleanCalc extends Calc {
+public interface BooleanCalc extends Calc<Boolean> {
     /**
      * Evaluates this expression to yield a <code>boolean</code> value.
      * If the result is null, returns the special

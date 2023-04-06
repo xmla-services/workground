@@ -20,7 +20,7 @@ import mondrian.olap.Evaluator;
  * @author jhyde
  * @since Sep 27, 2005
  */
-public interface IntegerCalc extends Calc {
+public interface IntegerCalc extends Calc<Integer> {
     /**
      * Evaluates this expression to yield an <code>int</code> value.
      * If the result is null, returns the special

@@ -22,7 +22,7 @@ import mondrian.olap.Evaluator;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public interface MemberCalc extends Calc {
+public interface MemberCalc extends Calc<Member> {
     /**
      * Evaluates this expression to yield a member.
      *

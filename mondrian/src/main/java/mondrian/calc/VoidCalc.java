@@ -20,6 +20,6 @@ import mondrian.olap.Evaluator;
  * @author jhyde
  * @since Sep 29, 2005
  */
-public interface VoidCalc extends Calc {
+public interface VoidCalc extends Calc<Void> {
     void evaluateVoid(Evaluator evaluator);
 }

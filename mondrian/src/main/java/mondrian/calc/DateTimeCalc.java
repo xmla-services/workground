@@ -23,7 +23,7 @@ import mondrian.olap.Evaluator;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public interface DateTimeCalc extends Calc {
+public interface DateTimeCalc extends Calc<Date> {
     /**
      * Evaluates this expression to yield a {@link Date} value.
      *

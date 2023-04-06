@@ -41,11 +41,8 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public abstract class GenericCalc
-extends AbstractCalc
-implements TupleCalc,
-StringCalc, IntegerCalc, DoubleCalc, BooleanCalc, DateTimeCalc,
-VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
+public abstract class GenericCalc<R>
+extends AbstractCalc<R>
 {
     /**
      * Creates a GenericCalc without specifying child calculated expressions.
@@ -70,7 +67,7 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
 
   
 
-	@Override
+	
     public Member[] evaluateTuple(Evaluator evaluator) {
         return (Member[]) evaluate(evaluator);
     }
@@ -106,7 +103,7 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         }
     }
 
-    @Override
+    
     public String evaluateString(Evaluator evaluator) {
         final Object o = evaluate(evaluator);
         try {
@@ -116,7 +113,7 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         }
     }
 
-    @Override
+    
     public int evaluateInteger(Evaluator evaluator) {
         final Object o = evaluate(evaluator);
         try {
@@ -129,7 +126,7 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         }
     }
 
-    @Override
+    
     public double evaluateDouble(Evaluator evaluator) {
         final Object o = evaluate(evaluator);
         try {
@@ -146,7 +143,7 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
                         : number.doubleValue();
     }
 
-    @Override
+    
     public boolean evaluateBoolean(Evaluator evaluator) {
         final Object o = evaluate(evaluator);
         try {
@@ -156,7 +153,7 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         }
     }
 
-    @Override
+    
     public Date evaluateDateTime(Evaluator evaluator) {
         final Object o = evaluate(evaluator);
         try {
@@ -166,13 +163,13 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         }
     }
 
-    @Override
+    
     public void evaluateVoid(Evaluator evaluator) {
         final Object result = evaluate(evaluator);
         assert result == null;
     }
 
-    @Override
+    
     public Member evaluateMember(Evaluator evaluator) {
         final Object o = evaluate(evaluator);
         try {
@@ -182,7 +179,7 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         }
     }
 
-    @Override
+    
     public Level evaluateLevel(Evaluator evaluator) {
         final Object o = evaluate(evaluator);
         try {
@@ -192,7 +189,7 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         }
     }
 
-    @Override
+    
     public Hierarchy evaluateHierarchy(Evaluator evaluator) {
         final Object o = evaluate(evaluator);
         try {
@@ -202,7 +199,7 @@ VoidCalc, MemberCalc, LevelCalc, HierarchyCalc, DimensionCalc
         }
     }
 
-    @Override
+    
     public Dimension evaluateDimension(Evaluator evaluator) {
         final Object o = evaluate(evaluator);
         try {

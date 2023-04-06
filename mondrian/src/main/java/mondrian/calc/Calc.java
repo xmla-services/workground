@@ -68,7 +68,7 @@ import mondrian.olap.type.Type;
  * @author jhyde
  * @since Sep 26, 2005
  */
-public interface Calc {
+public interface Calc<R> {
     /**
      * Evaluates this expression.
      *
@@ -76,7 +76,7 @@ public interface Calc {
      *                  this expression
      * @return Result of expression evaluation
      */
-    Object evaluate(Evaluator evaluator);
+    R evaluate(Evaluator evaluator);
 
     /**
      * Returns whether this expression depends upon a given hierarchy.
@@ -139,5 +139,5 @@ public interface Calc {
 
     boolean isWrapperFor(java.lang.Class<?> iface);
 
-    <T> T unwrap(java.lang.Class<T> iface);
+    <S,T extends Calc<S>> T unwrap(java.lang.Class<T> iface);
 }
