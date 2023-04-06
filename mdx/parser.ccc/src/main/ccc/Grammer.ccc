@@ -270,61 +270,61 @@ TOKEN :
       < LETTER >
     | < DIGIT >
     )* >
-| 
+|
   < QUOTED_ID :
     < LBRACKET >
     (
       (~[ "]", "\n", "\r" ])
     | ("]]")
     )*
-    < RBRACKET > 
+    < RBRACKET >
   >
-| 
+|
   < AMP_QUOTED_ID : "&" < QUOTED_ID > >
-| 
+|
   < AMP_UNQUOTED_ID :
     "&" [ "a"-"z", "A"-"Z" ]
     (
       < LETTER >
     | < DIGIT >
     )* >
-| 
-  < #LETTER : 
-    [ 
-    "$", 
-    "A"-"Z", 
-    "_", 
-    "a"-"z", 
-    "\u00c0"-"\u00d6", 
-    "\u00d8"-"\u00f6", 
-    "\u00f8"-"\u00ff", 
-    "\u0100"-"\u1fff", 
-    "\u3040"-"\u318f", 
-    "\u3300"-"\u337f", 
-    "\u3400"-"\u3d2d", 
-    "\u4e00"-"\u9fff", 
-    "\uf900"-"\ufaff" 
-    ] 
+|
+  < #LETTER :
+    [
+    "$",
+    "A"-"Z",
+    "_",
+    "a"-"z",
+    "\u00c0"-"\u00d6",
+    "\u00d8"-"\u00f6",
+    "\u00f8"-"\u00ff",
+    "\u0100"-"\u1fff",
+    "\u3040"-"\u318f",
+    "\u3300"-"\u337f",
+    "\u3400"-"\u3d2d",
+    "\u4e00"-"\u9fff",
+    "\uf900"-"\ufaff"
+    ]
   >
-| 
-  < #DIGIT : 
-    [ 
-    "0"-"9", 
-    "\u0660"-"\u0669", 
-    "\u06f0"-"\u06f9", 
-    "\u0966"-"\u096f", 
-    "\u09e6"-"\u09ef", 
-    "\u0a66"-"\u0a6f", 
-    "\u0ae6"-"\u0aef", 
-    "\u0b66"-"\u0b6f", 
-    "\u0be7"-"\u0bef", 
-    "\u0c66"-"\u0c6f", 
-    "\u0ce6"-"\u0cef", 
-    "\u0d66"-"\u0d6f", 
-    "\u0e50"-"\u0e59", 
-    "\u0ed0"-"\u0ed9", 
-    "\u1040"-"\u1049" 
-    ] 
+|
+  < #DIGIT :
+    [
+    "0"-"9",
+    "\u0660"-"\u0669",
+    "\u06f0"-"\u06f9",
+    "\u0966"-"\u096f",
+    "\u09e6"-"\u09ef",
+    "\u0a66"-"\u0a6f",
+    "\u0ae6"-"\u0aef",
+    "\u0b66"-"\u0b6f",
+    "\u0be7"-"\u0bef",
+    "\u0c66"-"\u0c6f",
+    "\u0ce6"-"\u0cef",
+    "\u0d66"-"\u0d6f",
+    "\u0e50"-"\u0e59",
+    "\u0ed0"-"\u0ed9",
+    "\u1040"-"\u1049"
+    ]
   >
 ;
 
@@ -332,28 +332,28 @@ TOKEN :
 // Literals
 TOKEN :
   < UNSIGNED_INTEGER_LITERAL : ([ "0"-"9" ])+ >
-| 
+|
   < APPROX_NUMERIC_LITERAL :
     (
       < UNSIGNED_INTEGER_LITERAL >
     | < DECIMAL_NUMERIC_LITERAL >
     )
     < EXPONENT > >
-| 
+|
   < DECIMAL_NUMERIC_LITERAL :
     ([ "0"-"9" ])+ (".")? ([ "0"-"9" ])*
-  | "." ([ "0"-"9" ])+ 
+  | "." ([ "0"-"9" ])+
   >
-| 
+|
   < FLOATING_POINT_LITERAL :
     ([ "0"-"9" ])+ "." ([ "0"-"9" ])* (< EXPONENT >)? ([ "f", "F", "d", "D" ])?
   | "." ([ "0"-"9" ])+ (< EXPONENT >)? ([ "f", "F", "d", "D" ])?
   | ([ "0"-"9" ])+ < EXPONENT > ([ "f", "F", "d", "D" ])?
-  | ([ "0"-"9" ])+ (< EXPONENT >)? [ "f", "F", "d", "D" ] 
+  | ([ "0"-"9" ])+ (< EXPONENT >)? [ "f", "F", "d", "D" ]
   >
-| 
+|
   < #EXPONENT : [ "e", "E" ] ([ "+", "-" ])? ([ "0"-"9" ])+ >
-| 
+|
   < SINGLE_QUOTED_STRING :
     "'"
     (
@@ -361,7 +361,7 @@ TOKEN :
     | ("''")
     )*
     "'" >
-| 
+|
   < DOUBLE_QUOTED_STRING :
     "\""
     (
@@ -369,9 +369,9 @@ TOKEN :
     | ("\"\"")
     )*
     "\"" >
-| 
-  < #WHITESPACE : 
-    [ " ", "\t", "\n", "\r", "\f" ] 
+|
+  < #WHITESPACE :
+    [ " ", "\t", "\n", "\r", "\f" ]
   >
 ;
 
@@ -404,7 +404,7 @@ MdxStatement parseMdxStatement :
 {
   MdxStatement mdxStatement = null;
 }
-  mdxStatement = parseSelectStatement 
+  mdxStatement = parseSelectStatement
   //	|
   //	DrillthroughStatement
   //    |
@@ -416,7 +416,7 @@ MdxStatement parseMdxStatement :
   //    |
   //    UpdateStatement
   //    |
-  //    TransactionCommandStatement	
+  //    TransactionCommandStatement
   < EOF >
   {
     return mdxStatement;
@@ -428,16 +428,28 @@ DrillthroughStatement parseDrillthroughStatement :
 {
   SelectStatement selectStatement = null;
   List < ReturnItem > returnItems = null;
+  Optional<Integer> maxRows = Optional.ofNullable(null);
+  Optional<Integer> firstRowSet = Optional.ofNullable(null);
 }
-  < DRILLTHROUGH > 
-  (< MAXROWS > < UNSIGNED_INTEGER_LITERAL >)? 
-  (< FIRSTROWSET > < UNSIGNED_INTEGER_LITERAL >)? 
+  < DRILLTHROUGH >
+  (
+    < MAXROWS > < UNSIGNED_INTEGER_LITERAL >
+    {
+        maxRows = Optional.of(Integer.valueOf(getToken(0).getImage()));
+    }
+  )?
+  (
+    < FIRSTROWSET > < UNSIGNED_INTEGER_LITERAL >
+    {
+        firstRowSet = Optional.of(Integer.valueOf(getToken(0).getImage()));
+    }
+  )?
   selectStatement = parseSelectStatement
   (
     < RETURN > returnItems = parseReturnItems
   )?
   {
-    return new DrillthroughStatementR();
+    return new DrillthroughStatementR(maxRows, firstRowSet, selectStatement, returnItems);
   }
 ;
 
@@ -533,12 +545,12 @@ SelectStatement parseSelectStatement :
         selectWithClauses.add(selectWithClause);
       }
     )*
-    
+
   )?
   < SELECT >
   (
     selectQueryClause = parseSelectQueryAsteriskClause
-  | 
+  |
     selectQueryClause = parseSelectQueryAxesClause
   | /* empty */
     {
@@ -564,7 +576,7 @@ SelectSubcubeClause parseSelectSubcubeClause :
 }
   (
     selectSubcubeClause = parseSelectSubcubeClauseName
-  | 
+  |
     selectSubcubeClause = parseSelectSubcubeClauseStatement
   )
   {
@@ -594,7 +606,7 @@ SelectSubcubeClauseStatement parseSelectSubcubeClauseStatement :
     < LPAREN > < SELECT >
     (
       selectQueryClause = parseSelectQueryAsteriskClause
-    | 
+    |
       selectQueryClause = parseSelectQueryAxesClause
     | {
           selectQueryClause = new SelectQueryEmptyClauseR();
@@ -690,9 +702,9 @@ CreateMemberBodyClause parseCreateMemberBodyClause :
  MemberPropertyDefinition memberPropertyDefinition = null;
 }
 //  <CURRENTCUBE>
-//  | 
+//  |
   compoundId = parseCompoundId < AS > expression = parseExpression
-  
+
   (
     < COMMA > memberPropertyDefinition = parseMemberPropertyDefinition
     {
@@ -776,7 +788,7 @@ List < Expression > expOrEmptyList :
     list.add(expression);
   }
   (
-    < COMMA > 
+    < COMMA >
     expression = parseExpressionOrEmpty
     {
       list.add(expression);
@@ -799,7 +811,7 @@ List < Expression > expList :
     list.add(expression);
   }
   (
-    < COMMA > 
+    < COMMA >
     expression = parseExpression
     {
       list.add(expression);
@@ -828,7 +840,7 @@ ObjectIdentifier parseIdentifier :
 }
   (
     objectIdentifier = parseNameObjectIdentifier
-  | 
+  |
     objectIdentifier = parseKeyIdentifier
   )
   {
@@ -857,7 +869,7 @@ NameObjectIdentifier parseNameObjectIdentifier :
 | < QUOTED_ID >
   {
     return new NameObjectIdentifierR(
-    MdxParserUtil.stripQuotes(getToken(0).getImage(), "[", "]", "]]"), 
+    MdxParserUtil.stripQuotes(getToken(0).getImage(), "[", "]", "]]"),
     ObjectIdentifier.Quoting.QUOTED);
   }
 ;
@@ -885,14 +897,14 @@ NameObjectIdentifier parseAmpId :
   < AMP_QUOTED_ID >
   {
     return new NameObjectIdentifierR(
-    MdxParserUtil.stripQuotes(getToken(0).getImage(), "&[", "]", "]]"), 
+    MdxParserUtil.stripQuotes(getToken(0).getImage(), "&[", "]", "]]"),
     ObjectIdentifier.Quoting.QUOTED);
   }
-| 
+|
   < AMP_UNQUOTED_ID >
   {
     return new NameObjectIdentifierR(
-    getToken(0).getImage().substring(1), 
+    getToken(0).getImage().substring(1),
     ObjectIdentifier.Quoting.UNQUOTED);
   }
 ;
@@ -955,7 +967,7 @@ Expression parseUnaliasedExpression :
       )
       );
     }
-  | 
+  |
     // range 'm1 : m2' yields set of members
     < COLON > y = parseTerm5
     {
@@ -1050,7 +1062,7 @@ Expression parseTerm3 :
       )
       );
     }
-  | 
+  |
     // We expect a shift-reduce conflict here, because NULL is a literal and
     // so is a valid argument to the IS operator. We want to shift.
     SCAN 2 =>
@@ -1061,7 +1073,7 @@ Expression parseTerm3 :
       )
       );
     }
-  | 
+  |
     // e.g. "x IS y"; but "x IS NULL" is handled elsewhere
     SCAN 2 =>
     < IS > y = parseTerm2
@@ -1283,12 +1295,12 @@ Expression parseAtom :
   {
     return NullLiteralR.SINGLETON;
   }
-| < CAST > < LPAREN > expression = parseUnaliasedExpression 
+| < CAST > < LPAREN > expression = parseUnaliasedExpression
   < AS > nameObjectIdentifier = parseNameObjectIdentifier < RPAREN >
   {
     return new CallExpressionR(
     "CAST", CallExpression.Type.Cast, List.of(
-    expression, 
+    expression,
     new SymbolLiteralR(nameObjectIdentifier.name())
     )
     );
@@ -1300,7 +1312,7 @@ Expression parseAtom :
     return new CallExpressionR(
     "()", CallExpression.Type.Parentheses, expressions);
   }
-| 
+|
   // set built from sets/tuples
   < LBRACE >
   (
@@ -1308,7 +1320,7 @@ Expression parseAtom :
     {
       expressions = Collections.emptyList();
     }
-  | 
+  |
     expressions = expList
   )
   < RBRACE >
@@ -1320,7 +1332,7 @@ Expression parseAtom :
   {
     return expression;
   }
-| 
+|
   // Function call "foo(a, b)" or "whiz!bang!foo(a, b)".
   // Properties "x.PROP" and methods "exp.meth(a)" are in primary().
   nameObjectIdentifier = parseNameObjectIdentifier
@@ -1340,7 +1352,7 @@ Expression parseAtom :
       {
         expressions = Collections.emptyList();
       }
-    | 
+    |
       expressions = expOrEmptyList
     )
     < RPAREN >
@@ -1415,7 +1427,7 @@ CreateSetBodyClause parseCreateSetBodyClause :
 
 
 SelectDimensionPropertyListClause parseSelectDimensionPropertyListClause :
-  (< DIMENSION >)? < PROPERTIES > 
+  (< DIMENSION >)? < PROPERTIES >
   parseIdentifier
   (
     < COMMA > parseIdentifier
@@ -1439,7 +1451,7 @@ SelectQueryAxisClause parseSelectQueryAxisClause :
   {
     nonEmpty = true;
   }
-  )? 
+  )?
   expression = parseExpression
   (
     selectDimensionPropertyListClause = parseSelectDimensionPropertyListClause

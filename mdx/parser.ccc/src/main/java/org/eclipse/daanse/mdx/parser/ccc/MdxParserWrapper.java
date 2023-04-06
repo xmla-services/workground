@@ -13,7 +13,10 @@
 */
 package org.eclipse.daanse.mdx.parser.ccc;
 
+import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
+import org.eclipse.daanse.mdx.model.api.ExplainStatement;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.ReturnItem;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
 import org.eclipse.daanse.mdx.model.api.select.SelectCellPropertyListClause;
@@ -25,6 +28,7 @@ import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 
+import java.util.List;
 import java.util.Optional;
 
 public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxParser {
@@ -165,6 +169,40 @@ public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxPa
     public SelectCellPropertyListClause parseSelectCellPropertyListClause() throws MdxParserException {
         try {
             return delegate.parseSelectCellPropertyListClause();
+
+        } catch (Throwable e) {
+            throw new MdxParserException(e);
+        } finally {
+            dump();
+        }
+    }
+
+    public DrillthroughStatement parseDrillthroughStatement() throws MdxParserException {
+        try {
+            return delegate.parseDrillthroughStatement();
+
+        } catch (Throwable e) {
+            throw new MdxParserException(e);
+        } finally {
+            dump();
+        }
+    }
+
+    public ExplainStatement parseExplainStatement() throws MdxParserException {
+        try {
+            //return delegate.parseExplainStatement();
+            return null;
+
+        } catch (Throwable e) {
+            throw new MdxParserException(e);
+        } finally {
+            dump();
+        }
+    }
+
+    public List<ReturnItem> parseReturnItems() throws MdxParserException {
+        try {
+            return delegate.parseReturnItems();
 
         } catch (Throwable e) {
             throw new MdxParserException(e);
