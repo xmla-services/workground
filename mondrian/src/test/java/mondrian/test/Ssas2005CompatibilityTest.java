@@ -25,6 +25,7 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
@@ -233,6 +234,7 @@ public class Ssas2005CompatibilityTest {
     }
 
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testDimensionDotHierarchyAmbiguous(TestingContext context) {
         // If there is a dimension, hierarchy, level with the same name X,
@@ -432,6 +434,7 @@ public class Ssas2005CompatibilityTest {
     }
 
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testDimensionMembersOnSingleHierarchyDimension(TestingContext context) {
         // [dimension].members for a dimension with one hierarchy
@@ -662,6 +665,7 @@ public class Ssas2005CompatibilityTest {
     }
 
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testDimensionMemberRequiresHierarchyQualification(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
@@ -1055,6 +1059,7 @@ public class Ssas2005CompatibilityTest {
     }
 
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testDimensionDotHierarchyInBrackets(TestingContext context) {
         // [dimension.hierarchy] is valid
@@ -1070,6 +1075,7 @@ public class Ssas2005CompatibilityTest {
      * [name.name].
      */
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testDimensionDotHierarchySameNameInBrackets(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
@@ -1583,6 +1589,7 @@ public class Ssas2005CompatibilityTest {
     }
 
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testKeyNonExistent(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
@@ -1924,6 +1931,7 @@ public class Ssas2005CompatibilityTest {
     }
 
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testMemberNameSortCaseSensitivity(TestingContext context)
     {
