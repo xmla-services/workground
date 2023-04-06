@@ -23,6 +23,7 @@ import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
 import org.eclipse.daanse.mdx.model.api.ExplainStatement;
 import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.ReturnItem;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
@@ -520,14 +521,40 @@ public class SimpleUnparser implements UnParser {
 
     }
 
-    public StringBuilder unparseDrillthroughStatement(DrillthroughStatement selectStatement) {
-        return null;
+    public StringBuilder unparseDrillthroughStatement(DrillthroughStatement statement) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("DRILLTHROUGH");
+        if (statement.maxRows().isPresent()) {
+            sb.append("\r\n ").append("MAXROWS").append(" ").append(statement.maxRows().get());
+        }
+        if (statement.firstRowSet().isPresent()) {
+            sb.append("\r\n ").append("FIRSTROWSET").append(" ").append(statement.firstRowSet().get());
+        }
+        if (statement.selectStatement() != null) {
+            sb.append("\r\n ").append(unparseSelectStatement(statement.selectStatement()));
+        }
+        if (statement.returnItems() != null && !statement.returnItems().isEmpty()) {
+            sb.append("\r\n ").append(unparseSelectStatement(statement.selectStatement()));
+        }
 
+        return sb;
     }
+
+    public StringBuilder unparseReturnItems(List<ReturnItem> returnItems) {
+        StringBuilder sb = new StringBuilder();
+        if (!returnItems.isEmpty()) {
+            sb.append("RETURN ");
+            sb.append(returnItems.stream()
+                .map(r -> unparseCompoundId(r.compoundId()))
+                .map(Object::toString)
+                .collect(Collectors.joining(",")));
+        }
+        return sb;
+    }
+
 
     public StringBuilder unparseExplainStatement(ExplainStatement selectStatement) {
         return null;
-
     }
 
     public StringBuilder unparseDMVStatement(DMVStatement selectStatement) {
