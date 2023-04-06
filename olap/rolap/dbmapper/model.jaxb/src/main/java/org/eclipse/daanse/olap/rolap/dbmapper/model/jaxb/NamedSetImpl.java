@@ -27,7 +27,7 @@ import jakarta.xml.bind.annotation.XmlElementWrapper;
 import jakarta.xml.bind.annotation.XmlType;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "NamedSet", propOrder = { "annotations", "formulaElement" })
+@XmlType(name = "NamedSet", propOrder = {"annotations", "formulaElement"})
 public class NamedSetImpl implements NamedSet {
 
     @XmlElement(name = "Annotation")
@@ -50,7 +50,6 @@ public class NamedSetImpl implements NamedSet {
      * Gets the value of the annotations property.
      *
      * @return possible object is {@link Annotations }
-     *
      */
     @Override
     public List<AnnotationImpl> annotations() {
@@ -105,6 +104,14 @@ public class NamedSetImpl implements NamedSet {
 
     public void setDescription(String value) {
         this.description = value;
+    }
+
+    public void setDisplayFolder(String displayFolder) {
+        this.displayFolder = displayFolder;
+    }
+
+    public void setFormulaElement(FormulaImpl formulaElement) {
+        this.formulaElement = formulaElement;
     }
 
 }

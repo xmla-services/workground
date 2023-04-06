@@ -35,8 +35,8 @@ import mondrian.olap.type.Type;
  * @since Jul 22, 2006
  */
 public class ParameterImpl
-    implements Parameter, ParameterCompilable
-{
+    implements Parameter, ParameterCompilable {
+
     private final String name;
     private String description;
     private Exp defaultExp;
@@ -93,8 +93,8 @@ public class ParameterImpl
         String name,
         Exp defaultExp,
         String description,
-        Type type)
-    {
+        Type type
+    ) {
         this.name = name;
         this.defaultExp = defaultExp;
         this.description = description;
@@ -188,7 +188,7 @@ public class ParameterImpl
             || type instanceof NumericType
             || type instanceof MemberType
             || (type instanceof SetType
-                && ((SetType) type).getElementType() instanceof MemberType)
+            && ((SetType) type).getElementType() instanceof MemberType)
             : type;
         this.type = type;
     }
@@ -253,8 +253,8 @@ public class ParameterImpl
      * @see MemberListParameterCalc
      */
     private static class ParameterCalc
-        extends GenericCalc
-    {
+        extends GenericCalc {
+
         private final ParameterSlot slot;
 
         /**
@@ -286,8 +286,8 @@ public class ParameterImpl
      * @see ParameterCalc
      */
     private static class MemberListParameterCalc
-        extends AbstractListCalc
-    {
+        extends AbstractListCalc {
+
         private final ParameterSlot slot;
 
         /**
