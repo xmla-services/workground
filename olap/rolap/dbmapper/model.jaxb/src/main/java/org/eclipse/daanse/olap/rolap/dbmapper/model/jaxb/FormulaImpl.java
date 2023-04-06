@@ -31,4 +31,8 @@ public class FormulaImpl implements Formula {
     public String cdata() {
         return cdata;
     }
+
+	public void setCdata(String cdata) {
+		this.cdata = cdata;
+	}
 }

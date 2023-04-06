@@ -176,4 +176,27 @@ public class SchemaImpl implements Schema {
         this.defaultRole = value;
     }
 
+	public void setNamedSet(List<NamedSetImpl> namedSet) {
+		this.namedSet=namedSet;
+		
+	}
+
+	public void setParameter(List<ParameterImpl> parameter) {
+		this.parameter=parameter;
+		
+	}
+
+	public void setRole(List<RoleImpl> role) {
+		this.role=role;
+		
+	}
+
+	public void setUserDefinedFunction(List<UserDefinedFunctionImpl> userDefinedFunction) {
+		this.userDefinedFunction=userDefinedFunction;	
+	}
+
+	public void setVirtualCube(List<VirtualCubeImpl> virtualCub) {
+		this.virtualCube=virtualCub;		
+	}
+
 }

@@ -107,4 +107,12 @@ public class NamedSetImpl implements NamedSet {
         this.description = value;
     }
 
+	public void setDisplayFolder(String displayFolder) {
+		this.displayFolder = displayFolder;
+	}
+
+	public void setFormulaElement(FormulaImpl formulaElement) {
+		this.formulaElement = formulaElement;
+	}
+
 }
