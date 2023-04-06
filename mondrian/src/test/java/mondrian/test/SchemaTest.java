@@ -49,6 +49,7 @@ import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.metadata.NamedList;
 import org.opencube.junit5.ContextSource;
@@ -2969,6 +2970,7 @@ public class SchemaTest {
      * Negative test for Level@internalType attribute.
      */
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testLevelInternalTypeErr(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(

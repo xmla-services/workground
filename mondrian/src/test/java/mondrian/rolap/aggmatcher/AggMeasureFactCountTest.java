@@ -21,6 +21,7 @@ import mondrian.enums.DatabaseProduct;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.TestUtil;
@@ -187,6 +188,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
     }
 
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     public void testFactColumnNotExists(TestingContext context) {
         prepareContext(context);

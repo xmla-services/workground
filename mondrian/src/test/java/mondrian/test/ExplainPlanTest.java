@@ -29,6 +29,7 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Cube;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
@@ -46,7 +47,7 @@ import mondrian.spi.ProfileHandler;
 
 /**
  * Tests related to explain plan and QueryTiming
- * 
+ *
  * @author Benny
  *
  */
@@ -101,6 +102,7 @@ public class ExplainPlanTest {
   }
 
   @ParameterizedTest
+  @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
   public void testExplainComplex(TestingContext context) throws SQLException {
 //    Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
@@ -125,7 +127,7 @@ public class ExplainPlanTest {
     	+ "SetListCalc(name=SetListCalc, class=class mondrian.olap.fun.SetFunDef$SetListCalc, type=SetType<TupleType<MemberType<member=[Gender].[F]>>>, resultStyle=MUTABLE_LIST)\n"
     	+ "    AbstractVoidCalc4(name=AbstractVoidCalc4, class=class mondrian.olap.fun.SetFunDef$SetListCalc$-anonymous-class-, type=TupleType<MemberType<member=[Gender].[F]>>, resultStyle=VALUE)\n"
     	+ "        CalcImpl(name=CalcImpl, class=class mondrian.olap.fun.TupleFunDef$CalcImpl, type=TupleType<MemberType<member=[Gender].[F]>>, resultStyle=VALUE)\n"
-    	+ "            Literal(name=Literal, class=class mondrian.calc.impl.ConstantCalc, type=MemberType<member=[Gender].[F]>, resultStyle=VALUE_NOT_NULL, value=[Gender].[F])\n"	
+    	+ "            Literal(name=Literal, class=class mondrian.calc.impl.ConstantCalc, type=MemberType<member=[Gender].[F]>, resultStyle=VALUE_NOT_NULL, value=[Gender].[F])\n"
         + "\n" + "Axis (COLUMNS):\n"
         + "SetListCalc(name=SetListCalc, class=class mondrian.olap.fun.SetFunDef$SetListCalc, "
         + "type=SetType<MemberType<member=[Measures].[Unit Sales]>>, resultStyle=MUTABLE_LIST)\n"
@@ -181,7 +183,7 @@ public class ExplainPlanTest {
         + "            Literal(name=Literal, class=class mondrian.calc.impl.ConstantCalc, type=MemberType<member=[Measures].[Unit Sales]>, resultStyle=VALUE_NOT_NULL, value=[Measures].[Unit Sales])\n"
         + "    AbstractVoidCalc4(name=AbstractVoidCalc4, class=class mondrian.olap.fun.SetFunDef$SetListCalc$-anonymous-class-, type=MemberType<member=[Measures].[Store Margin]>, resultStyle=VALUE)\n"
         + "        AbstractTupleCalc1(name=AbstractTupleCalc1, class=class mondrian.calc.impl.BetterExpCompiler$-anonymous-class-, type=MemberType<member=[Measures].[Store Margin]>, resultStyle=VALUE, callCount=2, callMillis=nnn)\n"
-        + "            Literal(name=Literal, class=class mondrian.calc.impl.ConstantCalc, type=MemberType<member=[Measures].[Store Margin]>, resultStyle=VALUE_NOT_NULL, value=[Measures].[Store Margin])\n",	
+        + "            Literal(name=Literal, class=class mondrian.calc.impl.ConstantCalc, type=MemberType<member=[Measures].[Store Margin]>, resultStyle=VALUE_NOT_NULL, value=[Measures].[Store Margin])\n",
         actual );
 
     actual = strings.get( 4 ).replaceAll( "callMillis=[0-9]+", "callMillis=nnn" ).replaceAll( "[0-9]+ms", "nnnms" );
@@ -217,7 +219,7 @@ public class ExplainPlanTest {
 
   /**
    * Verifies all QueryTiming elements
-   * 
+   *
    * @throws SQLException
    */
   @ParameterizedTest
@@ -288,7 +290,7 @@ public class ExplainPlanTest {
   /**
    * Verifies that we don't double count the time spent in instrumented functions such as a SUM within a SUM MDX
    * expression.
-   * 
+   *
    * @throws SQLException
    */
   @ParameterizedTest
@@ -318,7 +320,7 @@ public class ExplainPlanTest {
   /**
    * Verifies the QueryTimings for when the Aggregate total CM solve order is ABOVE the compound slicer member solve
    * order
-   * 
+   *
    * @throws SQLException
    */
   @ParameterizedTest
@@ -353,7 +355,7 @@ public class ExplainPlanTest {
   /**
    * Verifies the QueryTimings for when the Aggregate total CM solve order is BELOW the compound slicer member solve
    * order
-   * 
+   *
    * @throws SQLException
    */
   @ParameterizedTest
@@ -361,7 +363,7 @@ public class ExplainPlanTest {
   public void testAggBelowSlicerSolveOrder(TestingContext context) throws SQLException {
     propSaver.set(MondrianProperties.instance().DisableCaching, true );
     propSaver.set(MondrianProperties.instance().CompoundSlicerMemberSolveOrder, 0);
-	  
+
     final String mdx =
         "WITH\r\n"
             + " SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Customers_],[*BASE_MEMBERS__Product_]))'\r\n"

@@ -39,6 +39,7 @@ import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Result;
 //import org.apache.logging.log4j.ThreadContext;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.CellSet;
 import org.olap4j.OlapConnection;
@@ -1045,6 +1046,7 @@ public class UdfTest {
      * Unit test for a UDF defined in JavaScript.
      */
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testScriptUdf(TestingContext context) {
         udfTestContext(context,
@@ -1089,6 +1091,7 @@ public class UdfTest {
      * function. We also use 'CDATA' section to mask the '&lt;' symbol.
      */
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testScriptUdfFactorial(TestingContext context) {
     	//prepareContext(context);
@@ -1121,6 +1124,7 @@ public class UdfTest {
      * Unit test that we get a nice error if a script UDF contains an error.
      */
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testScriptUdfInvalid(TestingContext context) {
         udfTestContext(context,

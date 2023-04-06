@@ -41,6 +41,7 @@ import org.eclipse.daanse.olap.api.Connection;
 import org.eclipse.daanse.olap.api.model.Member;
 import org.eclipse.daanse.olap.api.result.Result;
 import org.eigenbase.util.property.Property;
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.olap4j.impl.Olap4jUtil;
 import org.opencube.junit5.ContextSource;
@@ -1305,6 +1306,7 @@ public class ParameterTest {
     }
 
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testSchemaPropIllegalTypeFails(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);

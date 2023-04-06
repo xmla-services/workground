@@ -11,6 +11,7 @@ package mondrian.test;
 
 import static org.opencube.junit5.TestUtil.executeQuery;
 
+import org.junit.jupiter.api.condition.DisabledIfSystemProperty;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.opencube.junit5.ContextSource;
 import org.opencube.junit5.context.TestingContext;
@@ -38,6 +39,7 @@ public class SteelWheelsPerformanceTest extends SteelWheelsTestCase {
      * of some bug fixes before/after.
      */
     @ParameterizedTest
+    @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
     public void testComplexFilters(TestingContext context) throws Exception {
         if (!LOGGER.isDebugEnabled()) {
