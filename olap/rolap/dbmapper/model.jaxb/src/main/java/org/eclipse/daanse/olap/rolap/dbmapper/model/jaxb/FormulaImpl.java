@@ -32,7 +32,7 @@ public class FormulaImpl implements Formula {
         return cdata;
     }
 
-	public void setCdata(String cdata) {
-		this.cdata = cdata;
-	}
+    public void setCdata(String cdata) {
+        this.cdata = cdata;
+    }
 }

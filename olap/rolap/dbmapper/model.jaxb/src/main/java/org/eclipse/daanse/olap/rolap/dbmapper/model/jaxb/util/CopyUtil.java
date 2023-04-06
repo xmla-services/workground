@@ -27,6 +27,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.ParameterImpl;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.jaxb.SchemaImpl;
 
 public class CopyUtil {
+
     public static SchemaImpl copy(Schema schemaApi) {
         SchemaImpl schemaImpl = new SchemaImpl();
         schemaImpl.setAnnotations(copyAnnotation(schemaApi.annotations()));
@@ -47,28 +48,28 @@ public class CopyUtil {
 
         // Please no null checks in List. getList must provide minimal a empty List.
         return annotations.stream()
-                .map(CopyUtil::copy)
-                .toList();
+            .map(CopyUtil::copy)
+            .toList();
 
     }
-    
-    private static List<NamedSetImpl> copyNamedSet(List<? extends NamedSet> namedSet){
-    	return namedSet.stream()
-    			.map(CopyUtil::copy)
-    			.toList();
+
+    private static List<NamedSetImpl> copyNamedSet(List<? extends NamedSet> namedSet) {
+        return namedSet.stream()
+            .map(CopyUtil::copy)
+            .toList();
     }
-    
-    private static List<ParameterImpl> copyParameter(List<? extends Parameter> parameter){
-    	return parameter.stream()
-    			.map(CopyUtil::copy)
-    			.toList();
+
+    private static List<ParameterImpl> copyParameter(List<? extends Parameter> parameter) {
+        return parameter.stream()
+            .map(CopyUtil::copy)
+            .toList();
     }
-    
+
     //I'm not sure about this one, added it, because it fits the pattern; Daniel
     private static FormulaImpl copyFormula(Formula formulaApi) {
-    	FormulaImpl impl = new FormulaImpl();
-    	impl.setCdata(formulaApi.cdata());
-    	return impl;
+        FormulaImpl impl = new FormulaImpl();
+        impl.setCdata(formulaApi.cdata());
+        return impl;
     }
 
     private static AnnotationImpl copy(Annotation annotationApi) {
@@ -77,27 +78,27 @@ public class CopyUtil {
         impl.setName(annotationApi.name());
         return impl;
     }
-    
+
     private static NamedSetImpl copy(NamedSet namedSetApi) {
-    	NamedSetImpl impl = new NamedSetImpl();
-    	impl.setAnnotations(copyAnnotation(namedSetApi.annotations()));
-    	impl.setCaption(namedSetApi.caption());
-    	impl.setDescription(namedSetApi.description());
-    	impl.setDisplayFolder(namedSetApi.displayFolder());
-    	impl.setFormula(namedSetApi.formula());
-    	impl.setFormulaElement(copyFormula(namedSetApi.formulaElement()));
-    	impl.setName(namedSetApi.name());
-    	return impl;
+        NamedSetImpl impl = new NamedSetImpl();
+        impl.setAnnotations(copyAnnotation(namedSetApi.annotations()));
+        impl.setCaption(namedSetApi.caption());
+        impl.setDescription(namedSetApi.description());
+        impl.setDisplayFolder(namedSetApi.displayFolder());
+        impl.setFormula(namedSetApi.formula());
+        impl.setFormulaElement(copyFormula(namedSetApi.formulaElement()));
+        impl.setName(namedSetApi.name());
+        return impl;
     }
-    
+
     private static ParameterImpl copy(Parameter parameterApi) {
-    	ParameterImpl impl = new ParameterImpl();
-    	impl.setDefaultValue(parameterApi.defaultValue());
-    	impl.setDescription(parameterApi.description());
-    	impl.setModifiable(parameterApi.modifiable());
-    	impl.setName(parameterApi.name());
-    	impl.setType(parameterApi.type());
-    	return impl;
+        ParameterImpl impl = new ParameterImpl();
+        impl.setDefaultValue(parameterApi.defaultValue());
+        impl.setDescription(parameterApi.description());
+        impl.setModifiable(parameterApi.modifiable());
+        impl.setName(parameterApi.name());
+        impl.setType(parameterApi.type());
+        return impl;
     }
-  
+
 }

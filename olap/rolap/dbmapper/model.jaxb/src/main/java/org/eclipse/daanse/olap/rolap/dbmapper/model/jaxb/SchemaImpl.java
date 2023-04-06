@@ -34,8 +34,8 @@ import jakarta.xml.bind.annotation.XmlType;
  * declarations of user-defined functions.
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "", propOrder = { "annotations", "parameter", "dimension", "cube", "virtualCube", "namedSet", "role",
-        "userDefinedFunction" })
+@XmlType(name = "", propOrder = {"annotations", "parameter", "dimension", "cube", "virtualCube", "namedSet", "role",
+    "userDefinedFunction"})
 @XmlRootElement(name = "Schema")
 public class SchemaImpl implements Schema {
 
@@ -176,27 +176,27 @@ public class SchemaImpl implements Schema {
         this.defaultRole = value;
     }
 
-	public void setNamedSet(List<NamedSetImpl> namedSet) {
-		this.namedSet=namedSet;
-		
-	}
+    public void setNamedSet(List<NamedSetImpl> namedSet) {
+        this.namedSet = namedSet;
 
-	public void setParameter(List<ParameterImpl> parameter) {
-		this.parameter=parameter;
-		
-	}
+    }
 
-	public void setRole(List<RoleImpl> role) {
-		this.role=role;
-		
-	}
+    public void setParameter(List<ParameterImpl> parameter) {
+        this.parameter = parameter;
 
-	public void setUserDefinedFunction(List<UserDefinedFunctionImpl> userDefinedFunction) {
-		this.userDefinedFunction=userDefinedFunction;	
-	}
+    }
 
-	public void setVirtualCube(List<VirtualCubeImpl> virtualCub) {
-		this.virtualCube=virtualCub;		
-	}
+    public void setRole(List<RoleImpl> role) {
+        this.role = role;
+
+    }
+
+    public void setUserDefinedFunction(List<UserDefinedFunctionImpl> userDefinedFunction) {
+        this.userDefinedFunction = userDefinedFunction;
+    }
+
+    public void setVirtualCube(List<VirtualCubeImpl> virtualCub) {
+        this.virtualCube = virtualCub;
+    }
 
 }
