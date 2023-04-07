@@ -25,6 +25,7 @@ import org.eclipse.daanse.mdx.model.record.expression.KeyObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.select.CreateMemberBodyClauseR;
 import org.eclipse.daanse.mdx.model.record.select.CreateSetBodyClauseR;
+import org.eclipse.daanse.mdx.model.record.select.MemberPropertyDefinitionR;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -41,14 +42,20 @@ public class SimpleUnparserSelectWithClauseTest {
 
         @Test
         public void testCreateSetBodyClause() {
-            NameObjectIdentifier nameObjectIdentifier = new NameObjectIdentifierR("MySet", ObjectIdentifier.Quoting.UNQUOTED);
+            NameObjectIdentifier nameObjectIdentifier = new NameObjectIdentifierR("MySet",
+                ObjectIdentifier.Quoting.UNQUOTED);
 
-            NameObjectIdentifier nameObjectIdentifier11 = new NameObjectIdentifierR("Customer", ObjectIdentifier.Quoting.QUOTED);
-            NameObjectIdentifier nameObjectIdentifier12 = new NameObjectIdentifierR("Gender", ObjectIdentifier.Quoting.QUOTED);
+            NameObjectIdentifier nameObjectIdentifier11 = new NameObjectIdentifierR("Customer",
+                ObjectIdentifier.Quoting.QUOTED);
+            NameObjectIdentifier nameObjectIdentifier12 = new NameObjectIdentifierR("Gender",
+                ObjectIdentifier.Quoting.QUOTED);
 
-            NameObjectIdentifier nameObjectIdentifier21 = new NameObjectIdentifierR("Customer", ObjectIdentifier.Quoting.QUOTED);
-            NameObjectIdentifier nameObjectIdentifier22 = new NameObjectIdentifierR("Gender", ObjectIdentifier.Quoting.QUOTED);
-            NameObjectIdentifier nameObjectIdentifier3 = new NameObjectIdentifierR("F", ObjectIdentifier.Quoting.QUOTED);
+            NameObjectIdentifier nameObjectIdentifier21 = new NameObjectIdentifierR("Customer",
+                ObjectIdentifier.Quoting.QUOTED);
+            NameObjectIdentifier nameObjectIdentifier22 = new NameObjectIdentifierR("Gender",
+                ObjectIdentifier.Quoting.QUOTED);
+            NameObjectIdentifier nameObjectIdentifier3 = new NameObjectIdentifierR("F",
+                ObjectIdentifier.Quoting.QUOTED);
             KeyObjectIdentifier keyObjectIdentifier = new KeyObjectIdentifierR(List.of(nameObjectIdentifier3));
 
             CallExpression callExpression1 = new CallExpressionR("Members", CallExpression.Type.Property,
@@ -57,8 +64,10 @@ public class SimpleUnparserSelectWithClauseTest {
             CallExpression callExpression2 = new CallExpressionR("{}", CallExpression.Type.Braces,
                 List.of(new CompoundIdR(List.of(nameObjectIdentifier21, nameObjectIdentifier22, keyObjectIdentifier))));
 
-            CallExpression callExpression = new CallExpressionR("Union", CallExpression.Type.Function, List.of(callExpression1, callExpression2));
-            CreateSetBodyClause createSetBodyClause = new CreateSetBodyClauseR(new CompoundIdR(List.of(nameObjectIdentifier)), callExpression);
+            CallExpression callExpression = new CallExpressionR("Union", CallExpression.Type.Function,
+                List.of(callExpression1, callExpression2));
+            CreateSetBodyClause createSetBodyClause =
+                new CreateSetBodyClauseR(new CompoundIdR(List.of(nameObjectIdentifier)), callExpression);
             assertThat(unparser.unparseCreateSetBodyClause(createSetBodyClause)).asString()
                 .isEqualTo("SET MySet AS Union([Customer].[Gender].Members,{[Customer].[Gender].&[F]})");
         }
@@ -81,5 +90,26 @@ public class SimpleUnparserSelectWithClauseTest {
             assertThat(unparser.unparseCreateMemberBodyClause(createMemberBodyClause)).asString()
                 .isEqualTo("MEMBER [Measures].[Calculate Internet Sales Amount] AS M");
         }
+
+        @Test
+        public void testCreateMemberBodyClauseWithMemberPropertyDefinition() {
+            CreateMemberBodyClause createMemberBodyClause =
+                new CreateMemberBodyClauseR(
+                    new CompoundIdR(List.of(
+                        new NameObjectIdentifierR("Measures", ObjectIdentifier.Quoting.QUOTED),
+                        new NameObjectIdentifierR("Calculate Internet Sales Amount", ObjectIdentifier.Quoting.QUOTED)
+                    )),
+                    new CompoundIdR(List.of(new NameObjectIdentifierR("M", ObjectIdentifier.Quoting.UNQUOTED))),
+                    List.of(
+                        new MemberPropertyDefinitionR(
+                            new NameObjectIdentifierR("name", ObjectIdentifier.Quoting.QUOTED),
+                            new CompoundIdR(List.of(new NameObjectIdentifierR("test", ObjectIdentifier.Quoting.QUOTED)))
+                        )
+                    ));
+
+            assertThat(unparser.unparseCreateMemberBodyClause(createMemberBodyClause)).asString()
+                .isEqualTo("MEMBER [Measures].[Calculate Internet Sales Amount] AS M ,\r\n [name] = [test]");
+        }
+
     }
 }

@@ -1,16 +1,16 @@
 /*
-* Copyright (c) 2023 Contributors to the Eclipse Foundation.
-*
-* This program and the accompanying materials are made
-* available under the terms of the Eclipse Public License 2.0
-* which is available at https://www.eclipse.org/legal/epl-2.0/
-*
-* SPDX-License-Identifier: EPL-2.0
-*
-* Contributors:
-*   SmartCity Jena - initial
-*   Stefan Bischof (bipolis.org) - initial
-*/
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
 package org.eclipse.daanse.mdx.parser.ccc;
 
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
@@ -19,6 +19,7 @@ import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.model.api.ReturnItem;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
+import org.eclipse.daanse.mdx.model.api.select.MemberPropertyDefinition;
 import org.eclipse.daanse.mdx.model.api.select.SelectCellPropertyListClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
@@ -32,6 +33,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxParser {
+
     private MdxParser delegate;
 
     public MdxParserWrapper(CharSequence mdx) throws MdxParserException {
@@ -190,8 +192,7 @@ public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxPa
 
     public ExplainStatement parseExplainStatement() throws MdxParserException {
         try {
-            //return delegate.parseExplainStatement();
-            return null;
+            return delegate.parseExplainStatement();
 
         } catch (Throwable e) {
             throw new MdxParserException(e);
@@ -203,6 +204,17 @@ public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxPa
     public List<ReturnItem> parseReturnItems() throws MdxParserException {
         try {
             return delegate.parseReturnItems();
+
+        } catch (Throwable e) {
+            throw new MdxParserException(e);
+        } finally {
+            dump();
+        }
+    }
+
+    public MemberPropertyDefinition parseMemberPropertyDefinition() throws MdxParserException {
+        try {
+            return delegate.parseMemberPropertyDefinition();
 
         } catch (Throwable e) {
             throw new MdxParserException(e);

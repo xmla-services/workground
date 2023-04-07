@@ -16,7 +16,7 @@ public class DrillthroughStatementTest {
         String mdx = """
             DRILLTHROUGH MAXROWS 10
             SELECT *
-                   FROM [Adventure Works]
+            FROM [Adventure Works]
             """;
         DrillthroughStatement clause = new MdxParserWrapper(mdx).parseDrillthroughStatement();
         assertThat(clause).isNotNull().isInstanceOf(DrillthroughStatement.class);
@@ -24,7 +24,8 @@ public class DrillthroughStatementTest {
         assertThat(clause.maxRows()).isPresent().contains(10);
         assertThat(clause.selectStatement()).isNotNull();
         assertThat(clause.selectStatement().selectSubcubeClause()).isNotNull().isInstanceOf(SelectSubcubeClauseName.class);
-        SelectSubcubeClauseName selectSubcubeClauseName = (SelectSubcubeClauseName) clause.selectStatement().selectSubcubeClause();
+        SelectSubcubeClauseName selectSubcubeClauseName =
+            (SelectSubcubeClauseName) clause.selectStatement().selectSubcubeClause();
         assertThat(selectSubcubeClauseName.cubeName().name()).isEqualTo("Adventure Works");
         assertThat(selectSubcubeClauseName.cubeName().quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
         assertThat(clause.returnItems()).isNull();
@@ -36,8 +37,8 @@ public class DrillthroughStatementTest {
             DRILLTHROUGH MAXROWS 10
             FIRSTROWSET 1
             SELECT *
-                   FROM [Adventure Works]
-                   RETURN a
+            FROM [Adventure Works]
+            RETURN a
             """;
         DrillthroughStatement clause = new MdxParserWrapper(mdx).parseDrillthroughStatement();
         assertThat(clause).isNotNull().isInstanceOf(DrillthroughStatement.class);
@@ -45,7 +46,8 @@ public class DrillthroughStatementTest {
         assertThat(clause.maxRows()).isPresent().contains(10);
         assertThat(clause.selectStatement()).isNotNull();
         assertThat(clause.selectStatement().selectSubcubeClause()).isNotNull().isInstanceOf(SelectSubcubeClauseName.class);
-        SelectSubcubeClauseName selectSubcubeClauseName = (SelectSubcubeClauseName) clause.selectStatement().selectSubcubeClause();
+        SelectSubcubeClauseName selectSubcubeClauseName =
+            (SelectSubcubeClauseName) clause.selectStatement().selectSubcubeClause();
         assertThat(selectSubcubeClauseName.cubeName().name()).isEqualTo("Adventure Works");
         assertThat(selectSubcubeClauseName.cubeName().quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
         assertThat(clause.returnItems()).isNotNull().hasSize(1);
@@ -53,7 +55,7 @@ public class DrillthroughStatementTest {
         assertThat(clause.returnItems().get(0).compoundId().objectIdentifiers()).isNotNull().hasSize(1);
         assertThat(clause.returnItems().get(0).compoundId().objectIdentifiers().get(0))
             .isInstanceOf(NameObjectIdentifier.class);
-        assertThat(((NameObjectIdentifier)clause.returnItems().get(0).compoundId().objectIdentifiers().get(0)).name())
+        assertThat(((NameObjectIdentifier) clause.returnItems().get(0).compoundId().objectIdentifiers().get(0)).name())
             .isEqualTo("a");
         assertThat(clause.returnItems().get(0).compoundId().objectIdentifiers().get(0).quoting())
             .isEqualTo(ObjectIdentifier.Quoting.UNQUOTED);
