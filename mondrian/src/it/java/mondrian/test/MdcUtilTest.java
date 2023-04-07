@@ -30,7 +30,7 @@ public class MdcUtilTest extends BatchTestCase {
 
   private static Logger rolapUtilLogger = LoggerFactory.getLogger( mondrian.rolap.RolapUtil.class );
 
-  public void testMdcContext() throws Exception {
+  void testMdcContext() throws Exception {
 
     TestContext.instance().flushSchemaCache();
 

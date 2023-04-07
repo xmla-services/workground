@@ -37,23 +37,23 @@ public class OracleDialectTest {
     }
 
     @Test
-    public void testAllowsRegularExpressionInWhereClause() {
+    void testAllowsRegularExpressionInWhereClause() {
         assertTrue(dialect.allowsRegularExpressionInWhereClause());
     }
 
     @Test
-    public void testGenerateRegularExpression_InvalidRegex() throws Exception {
+    void testGenerateRegularExpression_InvalidRegex() throws Exception {
         assertNull(dialect.generateRegularExpression("table.column", "(a"), "Invalid regex should be ignored");
     }
 
     @Test
-    public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
+    void testGenerateRegularExpression_CaseInsensitive() throws Exception {
         String sql = dialect.generateRegularExpression("table.column", "(?i)|(?u).*a.*").toString();
         assertEquals("table.column IS NOT NULL AND REGEXP_LIKE(table.column, '.*a.*', 'i')", sql);
     }
 
     @Test
-    public void testGenerateRegularExpression_CaseSensitive() throws Exception {
+    void testGenerateRegularExpression_CaseSensitive() throws Exception {
         String sql = dialect.generateRegularExpression("table.column", ".*a.*").toString();
         assertEquals("table.column IS NOT NULL AND REGEXP_LIKE(table.column, '.*a.*', '')", sql);
     }

@@ -35,17 +35,17 @@ public class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
     }
 
 
-    public void testTopCount_ImplicitCountMeasure() throws Exception {
+    void testTopCount_ImplicitCountMeasure() throws Exception {
         assertResultsAreEqual(
             "Implicit Count Measure", IMPLICIT_COUNT_MEASURE_QUERY);
     }
 
-    public void testTopCount_SumMeasure() throws Exception {
+    void testTopCount_SumMeasure() throws Exception {
         assertResultsAreEqual(
             "Sum Measure", SUM_MEASURE_QUERY);
     }
 
-    public void testTopCount_CountMeasure() throws Exception {
+    void testTopCount_CountMeasure() throws Exception {
         final String schema = TestContext.instance()
             .getSchema(null, CUSTOM_COUNT_MEASURE_CUBE, null, null, null, null);
 
@@ -58,32 +58,32 @@ public class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
     }
 
 
-    public void testEmptyCellsAreShown_Countries() throws Exception {
+    void testEmptyCellsAreShown_Countries() throws Exception {
         assertResultsAreEqual(
             "Empty Cells Are Shown - Countries",
             EMPTY_CELLS_ARE_SHOWN_COUNTRIES_QUERY);
     }
 
-    public void testEmptyCellsAreShown_States() throws Exception {
+    void testEmptyCellsAreShown_States() throws Exception {
         assertResultsAreEqual(
             "Empty Cells Are Shown - States",
             EMPTY_CELLS_ARE_SHOWN_STATES_QUERY);
     }
 
-    public void testEmptyCellsAreShown_ButNoMoreThanReallyExist() {
+    void testEmptyCellsAreShown_ButNoMoreThanReallyExist() {
         assertResultsAreEqual(
             "Empty Cells Are Shown - But no more than really exist",
             EMPTY_CELLS_ARE_SHOWN_NOT_MORE_THAN_EXIST_QUERY);
     }
 
-    public void testEmptyCellsAreHidden_WhenNonEmptyIsDeclaredExplicitly() {
+    void testEmptyCellsAreHidden_WhenNonEmptyIsDeclaredExplicitly() {
         assertResultsAreEqual(
             "Empty Cells Are Hidden - When NON EMPTY is declared explicitly",
             EMPTY_CELLS_ARE_HIDDEN_WHEN_NON_EMPTY_QUERY);
     }
 
 
-    public void testRoleRestrictionWorks_ForRowWithData() {
+    void testRoleRestrictionWorks_ForRowWithData() {
         TestContext ctx = TestContext.instance()
             .create(
                 null, null, null, null, null,
@@ -95,7 +95,7 @@ public class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
             ROLE_RESTRICTION_WORKS_WA_QUERY, ctx);
     }
 
-    public void testRoleRestrictionWorks_ForRowWithOutData() {
+    void testRoleRestrictionWorks_ForRowWithOutData() {
         TestContext ctx = TestContext.instance()
             .create(
                 null, null, null, null, null,
@@ -108,25 +108,25 @@ public class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
     }
 
 
-    public void testMimicsHeadWhenTwoParams_States() {
+    void testMimicsHeadWhenTwoParams_States() {
         assertResultsAreEqual(
             "Two Parameters - States",
             TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_STATES_QUERY);
     }
 
-    public void testMimicsHeadWhenTwoParams_Cities() {
+    void testMimicsHeadWhenTwoParams_Cities() {
         assertResultsAreEqual(
             "Two Parameters - Cities",
             TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_CITIES_QUERY);
     }
 
-    public void testMimicsHeadWhenTwoParams_ShowsNotMoreThanExist() {
+    void testMimicsHeadWhenTwoParams_ShowsNotMoreThanExist() {
         assertResultsAreEqual(
             "Two Parameters - Shows not more than really exist",
             RESULTS_ARE_SHOWN_NOT_MORE_THAN_EXIST_2_PARAMS_QUERY);
     }
 
-    public void testMimicsHeadWhenTwoParams_DoesNotIgnoreNonEmpty() {
+    void testMimicsHeadWhenTwoParams_DoesNotIgnoreNonEmpty() {
         assertResultsAreEqual(
             "Two Parameters - Does not ignore NON EMPTY",
             NON_EMPTY_IS_NOT_IGNORED_WHEN_TWO_PARAMS_QUERY);

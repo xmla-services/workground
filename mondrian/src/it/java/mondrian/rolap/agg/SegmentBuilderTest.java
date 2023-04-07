@@ -49,7 +49,7 @@ public class SegmentBuilderTest extends BatchTestCase {
         RolapUtil.setHook(null);
     }
 
-    public void testRollupWithNullAxisVals() {
+    void testRollupWithNullAxisVals() {
         // Perform two rollups.  One with two columns each containing 3 values.
         // The second with two columns containing 2 values + null.
         // The rolled up values should be equal in the two cases.
@@ -80,7 +80,7 @@ public class SegmentBuilderTest extends BatchTestCase {
                 .get(0).columnExpression);
     }
 
-    public void testRollupWithMixOfNullAxisValues() {
+    void testRollupWithMixOfNullAxisValues() {
         // constructed segment has 3 columns:
         //    2 values in the first
         //    2 values + null in the second and third
@@ -109,7 +109,7 @@ public class SegmentBuilderTest extends BatchTestCase {
                 .get(0).columnExpression);
     }
 
-    public void testRollup2ColumnsWithMixOfNullAxisValues() {
+    void testRollup2ColumnsWithMixOfNullAxisValues() {
         // constructed segment has 3 columns:
         //    2 values in the first
         //    2 values + null in the second and third
@@ -145,7 +145,7 @@ public class SegmentBuilderTest extends BatchTestCase {
                 .get(1).columnExpression);
     }
 
-    public void testMultiSegRollupWithMixOfNullAxisValues() {
+    void testMultiSegRollupWithMixOfNullAxisValues() {
         // rolls up 2 segments.
         // Segment 1 has 3 columns:
         //    2 values in the first
@@ -214,7 +214,7 @@ public class SegmentBuilderTest extends BatchTestCase {
         return true;
     }
 
-    public void testNullMemberOffset() {
+    void testNullMemberOffset() {
         // verifies that presence of a null member does not cause
         // offsets to be incorrect for a Segment rollup.
         // First query loads the cache with a segment that can fulfill the
@@ -252,7 +252,7 @@ public class SegmentBuilderTest extends BatchTestCase {
             + "Row #0: 24,576\n");
     }
 
-    public void testNullMemberOffset2ColRollup() {
+    void testNullMemberOffset2ColRollup() {
         // verifies that presence of a null member does not cause
         // offsets to be incorrect for a Segment rollup involving 2
         // columns.  This tests a case where
@@ -295,7 +295,7 @@ public class SegmentBuilderTest extends BatchTestCase {
             + "Row #0: 1,907\n");
     }
 
-    public void testSegmentBodyIterator() {
+    void testSegmentBodyIterator() {
         // checks that cell key coordinates are generated correctly
         // when a null member is present.
         List<Pair<SortedSet<Comparable>, Boolean>> axes =
@@ -323,7 +323,7 @@ public class SegmentBuilderTest extends BatchTestCase {
             valueMap.toString());
     }
 
-    public void testSparseRollup() {
+    void testSparseRollup() {
         // functional test for a case that causes OOM if rollup creates
         // a dense segment.
         // This takes several seconds to run
@@ -353,7 +353,7 @@ public class SegmentBuilderTest extends BatchTestCase {
         }
     }
 
-    public void testRollupWithIntOverflowPossibility() {
+    void testRollupWithIntOverflowPossibility() {
         // rolling up a segment that would cause int overflow if
         // rolled up to a dense segment
         // MONDRIAN-1377
@@ -371,7 +371,7 @@ public class SegmentBuilderTest extends BatchTestCase {
         assertTrue(rollup.right instanceof SparseSegmentBody);
     }
 
-    public void testRollupWithOOMPossibility() {
+    void testRollupWithOOMPossibility() {
         // rolling up a segment that would cause OOM if
         // rolled up to a dense segment
         // MONDRIAN-1377
@@ -388,7 +388,7 @@ public class SegmentBuilderTest extends BatchTestCase {
         assertTrue(rollup.right instanceof SparseSegmentBody);
     }
 
-    public void testRollupShouldBeDense() {
+    void testRollupShouldBeDense() {
         // Fewer than 1000 column values in rolled up segment.
         Pair<SegmentHeader, SegmentBody> rollup =
             SegmentBuilder.rollup(
@@ -411,7 +411,7 @@ public class SegmentBuilderTest extends BatchTestCase {
         assertTrue(rollup.right instanceof DenseDoubleSegmentBody);
     }
 
-    public void testRollupWithDenseIntBody() {
+    void testRollupWithDenseIntBody() {
       //
       //  We have the following data:
       //
@@ -465,7 +465,7 @@ public class SegmentBuilderTest extends BatchTestCase {
       }
     }
 
-    public void testOverlappingSegments() {
+    void testOverlappingSegments() {
         // MONDRIAN-2107
         // The segments created by the first 2 queries below overlap on
         //  [1997].[Q1].[1].  The rollup of these two segments should not
@@ -517,7 +517,7 @@ public class SegmentBuilderTest extends BatchTestCase {
             + "Row #0: 72,024\n");
     }
 
-    public void testNonOverlappingRollupWithUnconstrainedColumn() {
+    void testNonOverlappingRollupWithUnconstrainedColumn() {
         // MONDRIAN-2107
         // The two segments loaded by the 1st 2 queries will have predicates
         // optimized for Name.  Prior to the fix for 2107 this would
@@ -556,7 +556,7 @@ public class SegmentBuilderTest extends BatchTestCase {
             context.toString(result));
     }
 
-    public void testNonOverlappingRollupWithUnconstrainedColumnAndHasNull() {
+    void testNonOverlappingRollupWithUnconstrainedColumnAndHasNull() {
         // MONDRIAN-2107
         // Creates 10 segments, one for each city, with various sets
         // of [Store Sqft].  Some contain NULL, some do not.
@@ -597,7 +597,7 @@ public class SegmentBuilderTest extends BatchTestCase {
             context.toString(result));
     }
 
-    public void testBadRollupCausesGreaterThan12Iterations() {
+    void testBadRollupCausesGreaterThan12Iterations() {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
         // The first two queries populate the cache with segments
         // capable of being rolled up to fulfill the 3rd query.
@@ -624,7 +624,7 @@ public class SegmentBuilderTest extends BatchTestCase {
         context.executeQuery("select [Time].[1998].[Q1] on 0 from sales");
     }
 
-    public void testSameRollupRegardlessOfSegmentOrderWithEmptySegmentBody() {
+    void testSameRollupRegardlessOfSegmentOrderWithEmptySegmentBody() {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
         // rollup of segments {A, B} should produce the same resulting segment
         // regardless of whether rollup processes them in the order A,B or B,A.
@@ -665,7 +665,7 @@ public class SegmentBuilderTest extends BatchTestCase {
             + "Compound Predicates:[]\n");
     }
 
-    public void testSameRollupRegardlessOfSegmentOrderWithData() {
+    void testSameRollupRegardlessOfSegmentOrderWithData() {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
         // Tests a wildcarded segment rolled up w/ a seg containing a single
         // val.  Both segments are associated w/ non empty results.
@@ -692,7 +692,7 @@ public class SegmentBuilderTest extends BatchTestCase {
             + "Compound Predicates:[]\n");
     }
 
-    public void testSameRollupRegardlessOfSegmentOrderNoWildcards() {
+    void testSameRollupRegardlessOfSegmentOrderNoWildcards() {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
         // Tests 2 segments, each w/ no wildcarded values.
         runRollupTest(
@@ -717,7 +717,7 @@ public class SegmentBuilderTest extends BatchTestCase {
             + "Compound Predicates:[]\n");
     }
 
-    public void testSameRollupRegardlessOfSegmentOrderThreeSegs() {
+    void testSameRollupRegardlessOfSegmentOrderThreeSegs() {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
         // Tests 3 segments, each w/ no wildcarded values.
         runRollupTest(
@@ -744,11 +744,11 @@ public class SegmentBuilderTest extends BatchTestCase {
     }
 
 
-    public void testSegmentCreationForBoolean_True() {
+    void testSegmentCreationForBoolean_True() {
         doTestSegmentCreationForBoolean(true);
     }
 
-    public void testSegmentCreationForBoolean_False() {
+    void testSegmentCreationForBoolean_False() {
         doTestSegmentCreationForBoolean(false);
     }
 
@@ -1017,7 +1017,7 @@ public class SegmentBuilderTest extends BatchTestCase {
     return new TreeSet<Comparable>(list);
   }
 
-  public void testRollupWithNonUniqueColumns() {
+  void testRollupWithNonUniqueColumns() {
       Pair<SegmentHeader, SegmentBody> rollup =
           SegmentBuilder.rollup(
               makeSegmentMap(

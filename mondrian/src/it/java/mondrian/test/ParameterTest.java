@@ -55,7 +55,7 @@ public class ParameterTest extends FoodMartTestCase {
 
     // -- Tests --------------
 
-    public void testChangeable() {
+    void testChangeable() {
         // jpivot needs to set a parameters value before the query is executed
         String mdx =
             "select {Parameter(\"Foo\",[Time],[Time].[1997],\"Foo\")} "
@@ -78,7 +78,7 @@ public class ParameterTest extends FoodMartTestCase {
             mdx);
     }
 
-    public void testParameterInFormatString() {
+    void testParameterInFormatString() {
         assertQueryReturns(
             "with member [Measures].[X] as '[Measures].[Store Sales]',\n"
             + "format_string = Parameter(\"fmtstrpara\", STRING, \"#\")\n"
@@ -92,7 +92,7 @@ public class ParameterTest extends FoodMartTestCase {
             + "Row #0: 565238\n");
     }
 
-    public void testParameterInFormatString_Bug1584439() {
+    void testParameterInFormatString_Bug1584439() {
         String queryString =
             "with member [Measures].[X] as '[Measures].[Store Sales]',\n"
             + "format_string = Parameter(\"fmtstrpara\", STRING, \"#\")\n"
@@ -105,7 +105,7 @@ public class ParameterTest extends FoodMartTestCase {
         query.toString();
     }
 
-    public void testParameterOnAxis() {
+    void testParameterOnAxis() {
         assertQueryReturns(
             "select {[Measures].[Unit Sales]} on rows,\n"
             + " {Parameter(\"GenderParam\",[Gender],[Gender].[M],\"Which gender?\")} on columns\n"
@@ -120,13 +120,13 @@ public class ParameterTest extends FoodMartTestCase {
             + "Row #0: 135,215\n");
     }
 
-    public void testNumericParameter() {
+    void testNumericParameter() {
         String s =
             executeExpr("Parameter(\"N\",NUMERIC,2+3,\"A numeric parameter\")");
         Assert.assertEquals("5", s);
     }
 
-    public void testStringParameter() {
+    void testStringParameter() {
         String s =
             executeExpr(
                 "Parameter(\"S\",STRING,\"x\" || \"y\","
@@ -134,7 +134,7 @@ public class ParameterTest extends FoodMartTestCase {
         Assert.assertEquals("xy", s);
     }
 
-    public void testStringParameterNull() {
+    void testStringParameterNull() {
         getTestContext().assertParameterizedExprReturns(
             "Parameter('foo', STRING, 'default')",
             "xxx",
@@ -158,7 +158,7 @@ public class ParameterTest extends FoodMartTestCase {
             "foo", null);
     }
 
-    public void testNumericParameterNull() {
+    void testNumericParameterNull() {
         getTestContext().assertParameterizedExprReturns(
             "Parameter('foo', NUMERIC, 12.3)",
             "234",
@@ -174,7 +174,7 @@ public class ParameterTest extends FoodMartTestCase {
             "foo", null);
     }
 
-    public void testMemberParameterNull() {
+    void testMemberParameterNull() {
         getTestContext().assertParameterizedExprReturns(
             "Parameter('foo', [Gender], [Gender].[F]).Name",
             "M",
@@ -210,7 +210,7 @@ public class ParameterTest extends FoodMartTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-745">MONDRIAN-745,
      * "NullPointerException when passing in null param value"</a>.
      */
-    public void testNullStrToMember() {
+    void testNullStrToMember() {
         Connection connection = getConnection();
         Query query = connection.parseQuery(
             "select NON EMPTY {[Time].[1997]} ON COLUMNS, "
@@ -266,7 +266,7 @@ public class ParameterTest extends FoodMartTestCase {
         assertFalse(parameter0.isSet());
     }
 
-    public void testSetUnsetParameter() {
+    void testSetUnsetParameter() {
         Connection connection = getConnection();
         Query query = connection.parseQuery(
             "with member [Measures].[Foo] as\n"
@@ -324,13 +324,13 @@ public class ParameterTest extends FoodMartTestCase {
         assertFalse(parameter0.isSet());
     }
 
-    public void testNumericParameterStringValueFails() {
+    void testNumericParameterStringValueFails() {
         assertExprThrows(
             "Parameter(\"S\",NUMERIC,\"x\" || \"y\",\"A string parameter\")",
             "java.lang.NumberFormatException: For input string: \"xy\"");
     }
 
-    public void testParameterDimensionWithTwoHierarchies() {
+    void testParameterDimensionWithTwoHierarchies() {
         assertExprReturns(
             "Parameter(\"Foo\",[Time],[Time].[1997],\"Foo\").Name", "1997");
         assertExprReturns(
@@ -346,7 +346,7 @@ public class ParameterTest extends FoodMartTestCase {
             "MDX object '[Time].[1997].[Q5]' not found in cube 'Sales'");
     }
 
-    public void testParameterDimensionWithOneHierarchy() {
+    void testParameterDimensionWithOneHierarchy() {
       assertExprReturns(
           "Parameter(\"Foo\",[Store],[Store].[USA],\"Foo\").Name", "USA");
       assertExprReturns(
@@ -362,7 +362,7 @@ public class ParameterTest extends FoodMartTestCase {
           "MDX object '[Store].[USA].[NY]' not found in cube 'Sales'");
   }
 
-    public void testParameterHierarchy() {
+    void testParameterHierarchy() {
         assertExprReturns(
             "Parameter(\"Foo\", [Time.Weekly], [Time.Weekly].[1997].[40],\"Foo\").Name",
             "40");
@@ -388,7 +388,7 @@ public class ParameterTest extends FoodMartTestCase {
             "MDX object '[Widget].[All Widgets]' not found in cube 'Sales'");
     }
 
-    public void testParameterLevel() {
+    void testParameterLevel() {
         assertExprReturns(
             "Parameter(\"Foo\",[Time].[Quarter], [Time].[1997].[Q3], \"Foo\").Name",
             "Q3");
@@ -397,7 +397,7 @@ public class ParameterTest extends FoodMartTestCase {
             "Default value of parameter 'Foo' is not consistent with the parameter type 'MemberType<level=[Time].[Quarter]>");
     }
 
-    public void testParameterMemberFails() {
+    void testParameterMemberFails() {
         // type of a param can be dimension, hierarchy, level but not member
         assertExprThrows(
             "Parameter(\"Foo\",[Time].[1997].[Q2],[Time].[1997],\"Foo\")",
@@ -408,7 +408,7 @@ public class ParameterTest extends FoodMartTestCase {
      * Tests that member parameter fails validation if the level name is
      * invalid.
      */
-    public void testParameterMemberFailsBadLevel() {
+    void testParameterMemberFailsBadLevel() {
         assertExprThrows(
             "Parameter(\"Foo\", [Customers].[State], [Customers].[USA].[CA], \"\")",
             "MDX object '[Customers].[State]' not found in cube 'Sales'");
@@ -422,7 +422,7 @@ public class ParameterTest extends FoodMartTestCase {
      * member-valued parameter. It is interpreted to mean the default value of
      * that dimension.
      */
-    public void testParameterMemberDefaultValue() {
+    void testParameterMemberDefaultValue() {
         // "[Time]" is shorthand for "[Time].CurrentMember"
         assertExprReturns(
             "Parameter(\"Foo\", [Time], [Time].[Time], \"Description\").UniqueName",
@@ -439,7 +439,7 @@ public class ParameterTest extends FoodMartTestCase {
      * use it to solve the more common problem "How do I automatically set the
      * time dimension to the latest date for which there are transactions?".
      */
-    public void testParameterMemberDefaultValue2() {
+    void testParameterMemberDefaultValue2() {
         assertQueryReturns(
             "select [Measures].[Unit Sales] on 0,\n"
             + " [Product].Children on 1\n"
@@ -470,7 +470,7 @@ public class ParameterTest extends FoodMartTestCase {
             + "Row #2: 4,648\n");
     }
 
-    public void testParameterWithExpressionForHierarchyFails() {
+    void testParameterWithExpressionForHierarchyFails() {
         assertExprThrows(
             "Parameter(\"Foo\",[Gender].DefaultMember.Hierarchy,[Gender].[M],\"Foo\")",
             "Invalid parameter 'Foo'. Type must be a NUMERIC, STRING, or a dimension, hierarchy or level");
@@ -480,13 +480,13 @@ public class ParameterTest extends FoodMartTestCase {
      * Tests a parameter derived from another parameter. OK as long as it is
      * not cyclic.
      */
-    public void testDerivedParameter() {
+    void testDerivedParameter() {
         assertExprReturns(
             "Parameter(\"X\", NUMERIC, Parameter(\"Y\", NUMERIC, 1) + 2)",
             "3");
     }
 
-    public void testParameterInSlicer() {
+    void testParameterInSlicer() {
         assertQueryReturns(
             "select {[Measures].[Unit Sales]} on rows,\n"
             + " {[Marital Status].children} on columns\n"
@@ -525,11 +525,11 @@ public class ParameterTest extends FoodMartTestCase {
         Assert.assertEquals("xyY.xyY", s);
     }
 
-    public void testParamRefWithoutParamFails() {
+    void testParamRefWithoutParamFails() {
         assertExprThrows("ParamRef(\"Y\")", "Unknown parameter 'Y'");
     }
 
-    public void testParamDefinedTwiceFails() {
+    void testParamDefinedTwiceFails() {
         assertQueryThrows(
             "select {[Measures].[Unit Sales]} on rows,\n"
             + " {Parameter(\"P\",[Gender],[Gender].[M],\"Which gender?\"),\n"
@@ -537,27 +537,27 @@ public class ParameterTest extends FoodMartTestCase {
             + "from Sales", "Parameter 'P' is defined more than once");
     }
 
-    public void testParamBadTypeFails() {
+    void testParamBadTypeFails() {
         assertExprThrows(
             "Parameter(\"P\", 5)",
             "No function matches signature 'Parameter(<String>, <Numeric Expression>)'");
     }
 
-    public void testParamCyclicOk() {
+    void testParamCyclicOk() {
         assertExprReturns(
             "Parameter(\"P\", NUMERIC, ParamRef(\"Q\") + 1) + "
             + "Parameter(\"Q\", NUMERIC, Iif(1 = 0, ParamRef(\"P\"), 2))",
             "5");
     }
 
-    public void testParamCyclicFails() {
+    void testParamCyclicFails() {
         assertExprThrows(
             "Parameter(\"P\", NUMERIC, ParamRef(\"Q\") + 1) + "
             + "Parameter(\"Q\", NUMERIC, Iif(1 = 1, ParamRef(\"P\"), 2))",
             "Cycle occurred while evaluating parameter 'P'");
     }
 
-    public void testParameterMetadata() {
+    void testParameterMetadata() {
         Connection connection = getConnection();
         Query query = connection.parseQuery(
             "with member [Measures].[A string] as \n"
@@ -587,7 +587,7 @@ public class ParameterTest extends FoodMartTestCase {
             Util.unparse(query));
     }
 
-    public void testTwoParametersBug1425153() {
+    void testTwoParametersBug1425153() {
         Connection connection = getTestContext().getConnection();
         Query query = connection.parseQuery(
             "select \n"
@@ -674,7 +674,7 @@ public class ParameterTest extends FoodMartTestCase {
      * Positive and negative tests assigning values to a parameter of type
      * NUMERIC.
      */
-    public void testAssignNumericParameter() {
+    void testAssignNumericParameter() {
         final String para = "Parameter(\"x\", NUMERIC, 1)";
         assertAssignParameter(para, false, "8", null);
         assertAssignParameter(para, false, "8.24", null);
@@ -700,7 +700,7 @@ public class ParameterTest extends FoodMartTestCase {
      * Positive and negative tests assigning values to a parameter of type
      * STRING.
      */
-    public void testAssignStringParameter() {
+    void testAssignStringParameter() {
         final String para = "Parameter(\"x\", STRING, 'xxx')";
         assertAssignParameter(para, false, "8", null);
         assertAssignParameter(para, false, "8.24", null);
@@ -720,7 +720,7 @@ public class ParameterTest extends FoodMartTestCase {
      * Positive and negative tests assigning values to a parameter whose type is
      * a member.
      */
-    public void testAssignMemberParameter() {
+    void testAssignMemberParameter() {
         final String para = "Parameter(\"x\", [Customers], [Customers].[USA])";
         assertAssignParameter(
             para, false, "8", "MDX object '8' not found in cube 'Sales'");
@@ -813,7 +813,7 @@ public class ParameterTest extends FoodMartTestCase {
      * Positive and negative tests assigning values to a parameter whose type is
      * a set of members.
      */
-    public void testAssignSetParameter() {
+    void testAssignSetParameter() {
         final String para =
             "Parameter(\"x\", [Customers], {[Customers].[USA], [Customers].[USA].[CA]})";
         assertAssignParameter(
@@ -1003,7 +1003,7 @@ public class ParameterTest extends FoodMartTestCase {
     /**
      * Tests a parameter whose type is a set of members.
      */
-    public void testParamSet() {
+    void testParamSet() {
         Connection connection = getTestContext().getConnection();
         try {
             String mdx =
@@ -1054,7 +1054,7 @@ public class ParameterTest extends FoodMartTestCase {
     /**
      * Tests that certain connection properties which should be null, are.
      */
-    public void testConnectionPropsWhichShouldBeNull() {
+    void testConnectionPropsWhichShouldBeNull() {
         // properties which must always return null
         assertExprReturns("ParamRef(\"JdbcPassword\")", "");
         assertExprReturns("ParamRef(\"CatalogContent\")", "");
@@ -1064,7 +1064,7 @@ public class ParameterTest extends FoodMartTestCase {
      * Tests that non-overrideable properties cannot be overridden in a
      * statement.
      */
-    public void testConnectionPropsCannotBeOverridden() {
+    void testConnectionPropsCannotBeOverridden() {
         Set<RolapConnectionProperties> overrideableProps = Olap4jUtil.enumSetOf(
             RolapConnectionProperties.Catalog,
             RolapConnectionProperties.Locale);
@@ -1083,7 +1083,7 @@ public class ParameterTest extends FoodMartTestCase {
     /**
      * Tests accessing system properties as parameters in a statement.
      */
-    public void testSystemPropsGet() {
+    void testSystemPropsGet() {
         final List<Property> propertyList =
             MondrianProperties.instance().getPropertyList();
         for (Property property : propertyList) {
@@ -1098,7 +1098,7 @@ public class ParameterTest extends FoodMartTestCase {
     /**
      * Tests getting a java system property is not possible
      */
-    public void testSystemPropsNotAvailable() {
+    void testSystemPropsNotAvailable() {
         assertExprThrows(
             "ParamRef(\"java.version\")",
             "Unknown parameter 'java.version'");
@@ -1107,7 +1107,7 @@ public class ParameterTest extends FoodMartTestCase {
     /**
      * Tests getting a mondrian property.
      */
-    public void testMondrianPropsGetJava() {
+    void testMondrianPropsGetJava() {
         final String jdbcDrivers =
             MondrianProperties.instance().JdbcDrivers.get();
         assertExprReturns(
@@ -1117,7 +1117,7 @@ public class ParameterTest extends FoodMartTestCase {
     /**
      * Tests setting system properties.
      */
-    public void testSystemPropsSet() {
+    void testSystemPropsSet() {
         final List<Property> propertyList =
             MondrianProperties.instance().getPropertyList();
         for (Property property : propertyList) {
@@ -1131,7 +1131,7 @@ public class ParameterTest extends FoodMartTestCase {
     /**
      * Tests a schema property with a default value.
      */
-    public void testSchemaProp() {
+    void testSchemaProp() {
         final TestContext tc = TestContext.instance().create(
             "<Parameter name=\"prop\" type=\"String\" "
             + "defaultValue=\" 'foo bar' \" />",
@@ -1144,7 +1144,7 @@ public class ParameterTest extends FoodMartTestCase {
     /**
      * Tests a schema property with a default value.
      */
-    public void testSchemaPropDupFails() {
+    void testSchemaPropDupFails() {
         final TestContext tc = TestContext.instance().create(
             "<Parameter name=\"foo\" type=\"Numeric\" defaultValue=\"1\" />\n"
             + "<Parameter name=\"bar\" type=\"Numeric\" defaultValue=\"2\" />\n"
@@ -1159,7 +1159,7 @@ public class ParameterTest extends FoodMartTestCase {
             "Duplicate parameter 'foo' in schema");
     }
 
-    public void testSchemaPropIllegalTypeFails() {
+    void testSchemaPropIllegalTypeFails() {
         final TestContext tc = TestContext.instance().create(
             "<Parameter name=\"foo\" type=\"Bad type\" defaultValue=\"1\" />",
             null,
@@ -1174,7 +1174,7 @@ public class ParameterTest extends FoodMartTestCase {
             + "Legal values: {String, Numeric, Integer, Boolean, Date, Time, Timestamp, Member}");
     }
 
-    public void testSchemaPropInvalidDefaultExpFails() {
+    void testSchemaPropInvalidDefaultExpFails() {
         final TestContext tc = TestContext.instance().create(
             "<Parameter name=\"Product Current Member\" type=\"Member\" defaultValue=\"[Product].DefaultMember.Children(2) \" />",
             null,
@@ -1191,7 +1191,7 @@ public class ParameterTest extends FoodMartTestCase {
      * Tests that a schema property fails if it references dimensions which
      * are not available.
      */
-    public void testSchemaPropContext() {
+    void testSchemaPropContext() {
         final TestContext tc = TestContext.instance().create(
             "<Parameter name=\"Customer Current Member\" type=\"Member\" defaultValue=\"[Customers].DefaultMember.Children.Item(2) \" />",
             null,

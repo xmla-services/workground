@@ -24,12 +24,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleUnparserSelectSlicerAxisClauseTest {
+class SimpleUnparserSelectSlicerAxisClauseTest {
 
     private SimpleUnparser unparser = new SimpleUnparser();
 
     @Test
-    public void test1() {
+    void test1() {
         SelectSlicerAxisClause selectSlicerAxisClause =
             new SelectSlicerAxisClauseR(new CompoundIdR(
                 List.of(

@@ -78,7 +78,7 @@ public class GroupingSetQueryTest extends BatchTestCase {
         prop.WarnIfNoPatternForDialect.set(origWarnIfNoPatternForDialect);
     }
 
-    public void testGroupingSetsWithAggregateOverDefaultMember() {
+    void testGroupingSetsWithAggregateOverDefaultMember() {
         // testcase for MONDRIAN-705
         if (getTestContext().getDialect().supportsGroupingSets()) {
             propSaver.set(prop.EnableGroupingSets, true);
@@ -103,7 +103,7 @@ public class GroupingSetQueryTest extends BatchTestCase {
             + "Row #2: 225,627.23\n");
     }
 
-    public void testGroupingSetForSingleColumnConstraint() {
+    void testGroupingSetForSingleColumnConstraint() {
         propSaver.set(prop.DisableCaching, false);
 
         CellRequest request1 = createRequest(
@@ -184,7 +184,7 @@ public class GroupingSetQueryTest extends BatchTestCase {
                 patternsWithoutGsets);
         }
     }
-    public void testNotUsingGroupingSetWhenGroupUsesDifferentAggregateTable() {
+    void testNotUsingGroupingSetWhenGroupUsesDifferentAggregateTable() {
         if (!(prop.UseAggregates.get()
               && prop.ReadAggregates.get()))
         {
@@ -226,7 +226,7 @@ public class GroupingSetQueryTest extends BatchTestCase {
             patternsWithoutGsets);
     }
 
-    public void testNotUsingGroupingSet() {
+    void testNotUsingGroupingSet() {
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
         }
@@ -272,7 +272,7 @@ public class GroupingSetQueryTest extends BatchTestCase {
             patternsWithoutGsets);
     }
 
-    public void testGroupingSetForMultipleMeasureAndSingleConstraint() {
+    void testGroupingSetForMultipleMeasureAndSingleConstraint() {
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
         }
@@ -336,7 +336,7 @@ public class GroupingSetQueryTest extends BatchTestCase {
             patternsWithoutGsets);
     }
 
-    public void testGroupingSetForASummaryCanBeGroupedWith2DetailBatch() {
+    void testGroupingSetForASummaryCanBeGroupedWith2DetailBatch() {
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
         }
@@ -405,7 +405,7 @@ public class GroupingSetQueryTest extends BatchTestCase {
             patternWithoutGsets);
     }
 
-    public void testGroupingSetForMultipleColumnConstraint() {
+    void testGroupingSetForMultipleColumnConstraint() {
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
         }
@@ -545,7 +545,7 @@ public class GroupingSetQueryTest extends BatchTestCase {
     /**
      * Testcase for bug 2004202, "Except not working with grouping sets".
      */
-    public void testBug2004202() {
+    void testBug2004202() {
         assertQueryReturns(
             "with member store.allbutwallawalla as\n"
             + " 'aggregate(\n"

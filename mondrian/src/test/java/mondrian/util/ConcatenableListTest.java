@@ -42,7 +42,7 @@ public class ConcatenableListTest{
      * whether or not there are intervening empty lists.
      */
     @Test
-    public void testBasicIteration() {
+    void testBasicIteration() {
         List<String> testList = new ConcatenableList<String>();
         testList.addAll(Arrays.asList(VALUE_1));
         testList.addAll(new ArrayList<String>());
@@ -78,7 +78,7 @@ public class ConcatenableListTest{
      * if hasNext() wasn't called first.)
      */
     @Test
-    public void testIteratorNextWithoutHasNext() {
+    void testIteratorNextWithoutHasNext() {
         List<String> testList = new ConcatenableList<String>();
         testList.addAll(Arrays.asList(VALUE_1));
         testList.addAll(new ArrayList<String>());
@@ -109,7 +109,7 @@ public class ConcatenableListTest{
      * backing lists included two consecutive empty lists.)
      */
     @Test
-    public void testGetZeroWithMultipleEmptyLists() {
+    void testGetZeroWithMultipleEmptyLists() {
         List<String> testList = new ConcatenableList<String>();
 
         testList.addAll(new ArrayList<String>());

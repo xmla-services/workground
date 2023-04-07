@@ -38,7 +38,7 @@ public class SybaseDialectTest extends TestCase {
      * Test for MONDRIAN-2259 issue.
      * Is assumed SybaseDialect methods are called.
      */
-    public void testQuoteDateLiteral() {
+    void testQuoteDateLiteral() {
         String input = "1997-01-03 00:00:00.0";
 
         doCallRealMethod().when(sybaseDialectMock).quoteDateLiteral(

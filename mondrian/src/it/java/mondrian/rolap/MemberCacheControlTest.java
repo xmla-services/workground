@@ -265,7 +265,7 @@ public class MemberCacheControlTest extends FoodMartTestCase {
      * Tests operations on member sets, in particular the
      * {@link mondrian.olap.CacheControl#filter} method.
      */
-    public void testFilter() {
+    void testFilter() {
         final TestContext tc = getTestContext();
         final Connection conn = tc.getConnection();
         final DiffRepository dr = getDiffRepos();
@@ -282,7 +282,7 @@ public class MemberCacheControlTest extends FoodMartTestCase {
     /**
      * Tests that member operations fail if cache is enabled.
      */
-    public void testMemberOpsFailIfCacheEnabled() {
+    void testMemberOpsFailIfCacheEnabled() {
         propSaver.set(
             MondrianProperties.instance().EnableRolapCubeMemberCache,
             true);
@@ -306,7 +306,7 @@ public class MemberCacheControlTest extends FoodMartTestCase {
     /**
      * Test that edits the properties of a single leaf Member.
      */
-    public void testSetPropertyCommandOnLeafMember() {
+    void testSetPropertyCommandOnLeafMember() {
         final TestContext tc = getTestContext();
         final Connection conn = tc.getConnection();
         final DiffRepository dr = getDiffRepos();
@@ -361,7 +361,7 @@ public class MemberCacheControlTest extends FoodMartTestCase {
      * Test that edits properties of Members at various Levels (use Retail
      * Dimension), but leaves grouping unchanged, so results not changed.
      */
-    public void testSetPropertyCommandOnNonLeafMember() {
+    void testSetPropertyCommandOnNonLeafMember() {
         final TestContext tc = getTestContext();
         final Connection conn = tc.getConnection();
         final DiffRepository dr = getDiffRepos();
@@ -425,7 +425,7 @@ public class MemberCacheControlTest extends FoodMartTestCase {
             TestContext.toString(r));
     }
 
-    public void testAddCommand() {
+    void testAddCommand() {
         final TestContext tc = getTestContext();
         final Connection conn = tc.getConnection();
         final CacheControl cc = conn.getCacheControl(null);
@@ -639,7 +639,7 @@ public class MemberCacheControlTest extends FoodMartTestCase {
         }
     }
 
-    public void testDeleteCommand() {
+    void testDeleteCommand() {
         final TestContext tc = getTestContext();
         final Connection conn = tc.getConnection();
         final CacheControl cc = conn.getCacheControl(null);
@@ -710,7 +710,7 @@ public class MemberCacheControlTest extends FoodMartTestCase {
             + "[Retail].[CA].[San Diego]");
     }
 
-    public void testMoveCommand() {
+    void testMoveCommand() {
         final TestContext tc = getTestContext();
         final Connection conn = tc.getConnection();
         final CacheControl cc = conn.getCacheControl(null);
@@ -794,7 +794,7 @@ public class MemberCacheControlTest extends FoodMartTestCase {
             storeMember.getParentMember().equals(alamedaMember));
     }
 
-    public void testMoveFailBadLevel() {
+    void testMoveFailBadLevel() {
         final TestContext tc = getTestContext();
         final Connection conn = tc.getConnection();
         final CacheControl cc = conn.getCacheControl(null);
@@ -874,7 +874,7 @@ public class MemberCacheControlTest extends FoodMartTestCase {
      * Tests a variety of negative cases including add/delete/move null members
      * add/delete/move members in parent-child hierarchies.
      */
-    public void testAddCommandNegative() {
+    void testAddCommandNegative() {
         final TestContext tc = getTestContext();
         final Connection conn = tc.getConnection();
         final CacheControl cc = conn.getCacheControl(null);
@@ -983,7 +983,7 @@ public class MemberCacheControlTest extends FoodMartTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-1076">MONDRIAN-1076,
      * "Add CacheControl API to flush members from dimension cache"</a>.
      */
-    public void testFlushHierarchy() {
+    void testFlushHierarchy() {
 
         final TestContext testContext = getTestContext();
         CacheControlTest.flushCache(testContext);

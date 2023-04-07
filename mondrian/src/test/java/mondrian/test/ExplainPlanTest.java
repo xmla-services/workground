@@ -66,7 +66,7 @@ public class ExplainPlanTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testExplain(TestingContext context) throws SQLException {
+  void testExplain(TestingContext context) throws SQLException {
 //    Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
     //Util.setLevel( RolapUtil.PROFILE_LOGGER, Level.OFF ); // Must turn off in case test environment has enabled profiling
     OlapConnection connection = context.createOlap4jConnection();
@@ -104,7 +104,7 @@ public class ExplainPlanTest {
   @ParameterizedTest
   @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testExplainComplex(TestingContext context) throws SQLException {
+  void testExplainComplex(TestingContext context) throws SQLException {
 //    Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
     //Util.setLevel( RolapUtil.PROFILE_LOGGER, Level.OFF );; // Must turn off in case test environment has enabled profiling
     OlapConnection connection = context.createOlap4jConnection();
@@ -204,7 +204,7 @@ public class ExplainPlanTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testExplainInvalid(TestingContext context) throws SQLException {
+  void testExplainInvalid(TestingContext context) throws SQLException {
     OlapConnection connection = context.createOlap4jConnection();
     final OlapStatement statement = connection.createStatement();
     try {
@@ -224,7 +224,7 @@ public class ExplainPlanTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testQueryTimingAnalyzer(TestingContext context) throws SQLException {
+  void testQueryTimingAnalyzer(TestingContext context) throws SQLException {
 
     final String mdx =
         "WITH\r\n"
@@ -265,7 +265,7 @@ public class ExplainPlanTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testMutiKeySort(TestingContext context) throws SQLException {
+  void testMutiKeySort(TestingContext context) throws SQLException {
     final String mdx =
         "WITH\r\n"
             + " SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Gender_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],[*BASE_MEMBERS__Product_]))'\r\n"
@@ -295,7 +295,7 @@ public class ExplainPlanTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testNestedSumFunDef(TestingContext context) throws SQLException {
+  void testNestedSumFunDef(TestingContext context) throws SQLException {
     final String mdx =
         "WITH\r\n"
             + " SET [*NATIVE_CJ_SET] AS 'FILTER([Time].[Month].MEMBERS, NOT ISEMPTY ([Measures].[Unit Sales]))'\r\n"
@@ -325,7 +325,7 @@ public class ExplainPlanTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testAggAboveSlicerSolveOrder(TestingContext context) throws SQLException {
+  void testAggAboveSlicerSolveOrder(TestingContext context) throws SQLException {
 
     final String mdx =
         "WITH\r\n"
@@ -360,7 +360,7 @@ public class ExplainPlanTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testAggBelowSlicerSolveOrder(TestingContext context) throws SQLException {
+  void testAggBelowSlicerSolveOrder(TestingContext context) throws SQLException {
     propSaver.set(MondrianProperties.instance().DisableCaching, true );
     propSaver.set(MondrianProperties.instance().CompoundSlicerMemberSolveOrder, 0);
 

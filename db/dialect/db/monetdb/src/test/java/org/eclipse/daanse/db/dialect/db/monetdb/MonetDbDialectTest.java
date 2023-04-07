@@ -41,7 +41,7 @@ public class MonetDbDialectTest {
     }
 
     @Test
-    public void testAllowsCountDistinctFalse_BeforeAug2011SP2() throws Exception {
+    void testAllowsCountDistinctFalse_BeforeAug2011SP2() throws Exception {
         // set up the version before Aug2011 SP2
         when(metaData.getDatabaseProductVersion()).thenReturn(AUG_2011_SP1_DB_VERSION);
         dialect = new MonetDbDialect();
@@ -50,7 +50,7 @@ public class MonetDbDialectTest {
     }
 
     @Test
-    public void testAllowsCountDistinctTrue_StartingFromAug2011SP2() throws Exception {
+    void testAllowsCountDistinctTrue_StartingFromAug2011SP2() throws Exception {
         // set up the version starting from Aug2011 SP2
         when(metaData.getDatabaseProductVersion()).thenReturn(AUG_2011_SP2_DB_VERSION);
         dialect = new MonetDbDialect();
@@ -59,107 +59,107 @@ public class MonetDbDialectTest {
     }
 
     @Test
-    public void testAllowsCountDistinct() throws Exception {
+    void testAllowsCountDistinct() throws Exception {
         assertTrue(dialect.allowsCountDistinct());
     }
 
     @Test
-    public void testAllowsCompoundCountDistinct() {
+    void testAllowsCompoundCountDistinct() {
         assertFalse(dialect.allowsCompoundCountDistinct());
     }
 
     @Test
-    public void testAllowsMultipleCountDistinct() {
+    void testAllowsMultipleCountDistinct() {
         assertFalse(dialect.allowsMultipleCountDistinct());
     }
 
     @Test
-    public void testAllowsMultipleDistinctSqlMeasures() {
+    void testAllowsMultipleDistinctSqlMeasures() {
         assertFalse(dialect.allowsMultipleDistinctSqlMeasures());
     }
 
     @Test
-    public void testAllowsCountDistinctWithOtherAggs() {
+    void testAllowsCountDistinctWithOtherAggs() {
         assertFalse(dialect.allowsCountDistinctWithOtherAggs());
     }
 
     @Test
-    public void testRequiresAliasForFromQuery() {
+    void testRequiresAliasForFromQuery() {
         assertTrue(dialect.requiresAliasForFromQuery());
     }
 
     @Test
-    public void testSupportsGroupByExpressions() {
+    void testSupportsGroupByExpressions() {
         assertFalse(dialect.supportsGroupByExpressions());
     }
 
     @Test
-    public void testRequiresHavingAlias() {
+    void testRequiresHavingAlias() {
         assertFalse(dialect.requiresHavingAlias());
     }
 
     @Test
-    public void testRequiresGroupByAlias() {
+    void testRequiresGroupByAlias() {
         assertFalse(dialect.requiresGroupByAlias());
     }
 
     @Test
-    public void testRequiresOrderByAlias() {
+    void testRequiresOrderByAlias() {
         assertFalse(dialect.requiresOrderByAlias());
     }
 
     @Test
-    public void testAllowsOrderByAlias() {
+    void testAllowsOrderByAlias() {
         assertFalse(dialect.allowsOrderByAlias());
     }
 
     @Test
-    public void testCompareVersions_Equals() {
+    void testCompareVersions_Equals() {
         assertEquals(0, dialect.compareVersions(AUG_2011_SP2_DB_VERSION, AUG_2011_SP2_DB_VERSION));
     }
 
     @Test
-    public void testCompareVersions_SubStringLeft_Less() {
+    void testCompareVersions_SubStringLeft_Less() {
         assertEquals(-1, dialect.compareVersions("11.3", "11.3.28"));
     }
 
     @Test
-    public void testCompareVersions_SubStringRight_More() {
+    void testCompareVersions_SubStringRight_More() {
         assertEquals(1, dialect.compareVersions("11.3.28", "11.3"));
     }
 
     @Test
-    public void testCompareVersions_LessOnMajor() {
+    void testCompareVersions_LessOnMajor() {
         assertEquals(-1, dialect.compareVersions("3.3.28", "11.3.28"));
     }
 
     @Test
-    public void testCompareVersions_MoreOnMajor() {
+    void testCompareVersions_MoreOnMajor() {
         assertEquals(1, dialect.compareVersions("10.3.28", "2.3.28"));
     }
 
     @Test
-    public void testCompareVersions_LessOnMinor() {
+    void testCompareVersions_LessOnMinor() {
         assertEquals(-1, dialect.compareVersions("11.3.28", "11.11.28"));
     }
 
     @Test
-    public void testCompareVersions_MoreOnMinor() {
+    void testCompareVersions_MoreOnMinor() {
         assertEquals(1, dialect.compareVersions("11.11.28", "11.3.28"));
     }
 
     @Test
-    public void testCompareVersions_LessOnPatch() {
+    void testCompareVersions_LessOnPatch() {
         assertEquals(-1, dialect.compareVersions("11.10.3", "11.10.28"));
     }
 
     @Test
-    public void testCompareVersions_MoreOnPatch() {
+    void testCompareVersions_MoreOnPatch() {
         assertEquals(1, dialect.compareVersions("11.10.28", "11.10.3"));
     }
 
     @Test
-    public void testCompareVersions_OnlyMajor() {
+    void testCompareVersions_OnlyMajor() {
         assertEquals(-1, dialect.compareVersions("7", "10"));
     }
 

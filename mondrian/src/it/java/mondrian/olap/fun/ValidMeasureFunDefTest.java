@@ -27,7 +27,7 @@ public class ValidMeasureFunDefTest extends TestCase {
   /**
    * Test for MONDRIAN-1032 issue.
    */
-  public void testSecondHierarchyInDimension() throws SQLException {
+  void testSecondHierarchyInDimension() throws SQLException {
     final String schema = "<?xml version=\"1.0\"?>\n"
     + "<Schema name=\"FoodMart\">\n"
     + "  <Dimension name=\"Product\">\n"
@@ -81,7 +81,7 @@ public class ValidMeasureFunDefTest extends TestCase {
         query, expected);
   }
 
-  public void testValidMeasureWithNullTuple() {
+  void testValidMeasureWithNullTuple() {
     TestContext.instance().assertQueryReturns(
         "with member measures.vm as "
         + "'ValidMeasure((Measures.[Unit Sales], Store.[All Stores].Parent))' "

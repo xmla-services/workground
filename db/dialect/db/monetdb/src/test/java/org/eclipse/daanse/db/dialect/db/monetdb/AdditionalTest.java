@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Test;
 public class AdditionalTest {
 
     @Test
-    public void testMonetBooleanColumn() throws SQLException {
+    void testMonetBooleanColumn() throws SQLException {
       ResultSetMetaData resultSet = mock(ResultSetMetaData.class);
       when(resultSet.getColumnType(1)).thenReturn(Types.BOOLEAN );
 

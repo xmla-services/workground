@@ -31,7 +31,7 @@ public class DefaultRecognizerTest extends BatchTestCase {
      * When an alias is used for the fact table, the default agg table
      * recognizer doesn't use the agg tables anymore.
      */
-    public void testDefaultRecognizerWithFactAlias() {
+    void testDefaultRecognizerWithFactAlias() {
         final String cube =
             "<Cube name=\"Sales\" defaultMeasure=\"Unit Sales\"> "
             // For this test, we use an alias on the fact table.
@@ -89,7 +89,7 @@ public class DefaultRecognizerTest extends BatchTestCase {
             false, true, true);
     }
 
-    public void testTupleReaderWithDistinctCountMeasureInContext() {
+    void testTupleReaderWithDistinctCountMeasureInContext() {
         // Validates that if a distinct count measure is in context
         // SqlTupleReader is able to find an appropriate agg table, if
         // available. MONDRIAN-2376

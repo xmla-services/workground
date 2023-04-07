@@ -29,27 +29,27 @@ public class JdbcDialectImplTest extends TestCase {
     buf = new StringBuilder();
   }
 
-  public void testAllowsRegularExpressionInWhereClause() {
+  void testAllowsRegularExpressionInWhereClause() {
     assertFalse(jdbcDialect.allowsRegularExpressionInWhereClause());
   }
 
-  public void testGenerateRegularExpression() {
+  void testGenerateRegularExpression() {
     assertNull(jdbcDialect.generateRegularExpression(null, null));
   }
 
-  public void testQuoteBooleanLiteral_True() throws Exception {
+  void testQuoteBooleanLiteral_True() throws Exception {
     assertEquals(0, buf.length());
     jdbcDialect.quoteBooleanLiteral(buf, BOOLEAN_LITERAL_TRUE);
     assertEquals(BOOLEAN_LITERAL_TRUE, buf.toString());
   }
 
-  public void testQuoteBooleanLiteral_False() throws Exception {
+  void testQuoteBooleanLiteral_False() throws Exception {
     assertEquals(0, buf.length());
     jdbcDialect.quoteBooleanLiteral(buf, BOOLEAN_LITERAL_FALSE);
     assertEquals(BOOLEAN_LITERAL_FALSE, buf.toString());
   }
 
-  public void testQuoteBooleanLiteral_OneIllegaLiteral() throws Exception {
+  void testQuoteBooleanLiteral_OneIllegaLiteral() throws Exception {
     assertEquals(0, buf.length());
     try {
       jdbcDialect.quoteBooleanLiteral(buf, BOOLEAN_LITERAL_ONE);
@@ -63,7 +63,7 @@ public class JdbcDialectImplTest extends TestCase {
     }
   }
 
-  public void testQuoteBooleanLiteral_ZeroIllegaLiteral() throws Exception {
+  void testQuoteBooleanLiteral_ZeroIllegaLiteral() throws Exception {
     assertEquals(0, buf.length());
     try {
       jdbcDialect.quoteBooleanLiteral(buf, BOOLEAN_LITERAL_ZERO);
@@ -77,7 +77,7 @@ public class JdbcDialectImplTest extends TestCase {
     }
   }
 
-  public void testQuoteBooleanLiteral_TrowsExceptionOnIllegaLiteral()
+  void testQuoteBooleanLiteral_TrowsExceptionOnIllegaLiteral()
       throws Exception {
     assertEquals(0, buf.length());
     try {

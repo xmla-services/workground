@@ -28,7 +28,7 @@ import mondrian.olap.fun.TestMember;
 public class RolapAxisTest {
 
     @Test
-    public void testMemberArrayList() {
+    void testMemberArrayList() {
         TupleList list = TupleCollections.createList(3);
         list.add(
             Arrays.<Member>asList(

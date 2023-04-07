@@ -13,6 +13,11 @@
  */
 package org.eclipse.daanse.mdx.parser.ccc;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.Optional;
+
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.CompoundId;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
@@ -23,67 +28,62 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.Optional;
+class SelectSlicerAxisClauseTest {
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+	@Test
+	void test1() throws MdxParserException {
+		Optional<SelectSlicerAxisClause> selectSlicerAxisClauseOption = new MdxParserWrapper(
+				"WHERE [Measures].[Internet Sales Amount]").parseSelectSlicerAxisClause();
+		assertThat(selectSlicerAxisClauseOption).isPresent();
+		checkSelectSlicerAxisClause1(selectSlicerAxisClauseOption.get());
+	}
 
-public class SelectSlicerAxisClauseTest {
+	@Test
+	void test2() throws MdxParserException {
+		Optional<SelectSlicerAxisClause> selectSlicerAxisClauseOption = new MdxParserWrapper("where a=b")
+				.parseSelectSlicerAxisClause();
+		assertThat(selectSlicerAxisClauseOption).isPresent();
+		SelectSlicerAxisClause selectSlicerAxisClause = selectSlicerAxisClauseOption.get();
+		assertThat(selectSlicerAxisClause.expression()).isNotNull().isInstanceOf(CallExpression.class);
+		CallExpression callExpression = (CallExpression) selectSlicerAxisClause.expression();
+		assertThat(callExpression.name()).isEqualTo("=");
+		assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Term_Infix);
+		assertThat(callExpression.expressions()).isNotNull().hasSize(2);
+		assertThat(callExpression.expressions().get(0)).isInstanceOf(CompoundId.class);
+		assertThat(callExpression.expressions().get(1)).isInstanceOf(CompoundId.class);
+		CompoundId compoundId1 = (CompoundId) callExpression.expressions().get(0);
+		CompoundId compoundId2 = (CompoundId) callExpression.expressions().get(1);
+		assertThat(compoundId1.objectIdentifiers()).hasSize(1);
+		assertThat(compoundId1.objectIdentifiers().get(0).quoting()).isEqualTo(ObjectIdentifier.Quoting.UNQUOTED);
+		assertThat(compoundId1.objectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
+		assertThat(((NameObjectIdentifier) compoundId1.objectIdentifiers().get(0)).name()).isEqualTo("a");
 
-    @Test
-    public void test1() throws MdxParserException {
-        Optional<SelectSlicerAxisClause> selectSlicerAxisClauseOption =
-            new MdxParserWrapper("WHERE [Measures].[Internet Sales Amount]")
-                .parseSelectSlicerAxisClause();
-        assertThat(selectSlicerAxisClauseOption).isPresent();
-        checkSelectSlicerAxisClause1(selectSlicerAxisClauseOption.get());
-    }
+		assertThat(compoundId2.objectIdentifiers()).hasSize(1);
+		assertThat(compoundId2.objectIdentifiers().get(0).quoting()).isEqualTo(ObjectIdentifier.Quoting.UNQUOTED);
+		assertThat(compoundId2.objectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
+		assertThat(((NameObjectIdentifier) compoundId2.objectIdentifiers().get(0)).name()).isEqualTo("b");
+	}
 
-    @Test
-    public void test2() throws MdxParserException {
-        Optional<SelectSlicerAxisClause> selectSlicerAxisClauseOption =
-            new MdxParserWrapper("where a=b")
-                .parseSelectSlicerAxisClause();
-        assertThat(selectSlicerAxisClauseOption).isPresent();
-        SelectSlicerAxisClause selectSlicerAxisClause = selectSlicerAxisClauseOption.get();
-        assertThat(selectSlicerAxisClause.expression()).isNotNull().isInstanceOf(CallExpression.class);
-        CallExpression callExpression = (CallExpression)selectSlicerAxisClause.expression();
-        assertThat(callExpression.name()).isEqualTo("=");
-        assertThat(callExpression.type()).isEqualTo(CallExpression.Type.Term_Infix);
-        assertThat(callExpression.expressions()).isNotNull().hasSize(2);
-        assertThat(callExpression.expressions().get(0)).isInstanceOf(CompoundId.class);
-        assertThat(callExpression.expressions().get(1)).isInstanceOf(CompoundId.class);
-        CompoundId compoundId1 = (CompoundId) callExpression.expressions().get(0);
-        CompoundId compoundId2 = (CompoundId) callExpression.expressions().get(1);
-        assertThat(compoundId1.objectIdentifiers()).hasSize(1);
-        assertThat(compoundId1.objectIdentifiers().get(0).quoting()).isEqualTo(ObjectIdentifier.Quoting.UNQUOTED);
-        assertThat(compoundId1.objectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
-        assertThat(((NameObjectIdentifier)compoundId1.objectIdentifiers().get(0)).name()).isEqualTo("a");
+	@ParameterizedTest
+	@ValueSource(strings = { "where ", "where", "" })
+	void testThrows(String where) throws MdxParserException {
 
-        assertThat(compoundId2.objectIdentifiers()).hasSize(1);
-        assertThat(compoundId2.objectIdentifiers().get(0).quoting()).isEqualTo(ObjectIdentifier.Quoting.UNQUOTED);
-        assertThat(compoundId2.objectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
-        assertThat(((NameObjectIdentifier)compoundId2.objectIdentifiers().get(0)).name()).isEqualTo("b");
-    }
+		MdxParserWrapper parser = new MdxParserWrapper(where);
+		assertThrows(MdxParserException.class, () -> parser.parseSelectSlicerAxisClause());
+	}
 
-    @ParameterizedTest
-    @ValueSource(strings = { "where ", "where", "" })
-    public void testThrows(String where) {
-        assertThrows(MdxParserException.class, () -> new MdxParserWrapper(where).parseSelectSlicerAxisClause());
-    }
-
-    //WHERE [Measures].[Internet Sales Amount]
-    public static void checkSelectSlicerAxisClause1(SelectSlicerAxisClause selectSlicerAxisClause) {
-        assertThat(selectSlicerAxisClause.expression()).isNotNull().isInstanceOf(CompoundId.class);
-        CompoundId compoundId = (CompoundId) selectSlicerAxisClause.expression();
-        assertThat(compoundId.objectIdentifiers()).isNotNull().hasSize(2);
-        assertThat(compoundId.objectIdentifiers().get(0)).isNotNull().isInstanceOf(NameObjectIdentifier.class);
-        assertThat(compoundId.objectIdentifiers().get(1)).isNotNull().isInstanceOf(NameObjectIdentifier.class);
-        NameObjectIdentifier nameObjectIdentifier1 = (NameObjectIdentifier) compoundId.objectIdentifiers().get(0);
-        NameObjectIdentifier nameObjectIdentifier2 = (NameObjectIdentifier) compoundId.objectIdentifiers().get(1);
-        assertThat(nameObjectIdentifier1.name()).isEqualTo("Measures");
-        assertThat(nameObjectIdentifier1.quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
-        assertThat(nameObjectIdentifier2.name()).isEqualTo("Internet Sales Amount");
-        assertThat(nameObjectIdentifier2.quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
-    }
+	// WHERE [Measures].[Internet Sales Amount]
+	public static void checkSelectSlicerAxisClause1(SelectSlicerAxisClause selectSlicerAxisClause) {
+		assertThat(selectSlicerAxisClause.expression()).isNotNull().isInstanceOf(CompoundId.class);
+		CompoundId compoundId = (CompoundId) selectSlicerAxisClause.expression();
+		assertThat(compoundId.objectIdentifiers()).isNotNull().hasSize(2);
+		assertThat(compoundId.objectIdentifiers().get(0)).isNotNull().isInstanceOf(NameObjectIdentifier.class);
+		assertThat(compoundId.objectIdentifiers().get(1)).isNotNull().isInstanceOf(NameObjectIdentifier.class);
+		NameObjectIdentifier nameObjectIdentifier1 = (NameObjectIdentifier) compoundId.objectIdentifiers().get(0);
+		NameObjectIdentifier nameObjectIdentifier2 = (NameObjectIdentifier) compoundId.objectIdentifiers().get(1);
+		assertThat(nameObjectIdentifier1.name()).isEqualTo("Measures");
+		assertThat(nameObjectIdentifier1.quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
+		assertThat(nameObjectIdentifier2.name()).isEqualTo("Internet Sales Amount");
+		assertThat(nameObjectIdentifier2.quoting()).isEqualTo(ObjectIdentifier.Quoting.QUOTED);
+	}
 }

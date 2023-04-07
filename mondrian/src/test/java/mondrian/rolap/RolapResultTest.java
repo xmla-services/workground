@@ -83,7 +83,7 @@ public class RolapResultTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAll(TestingContext context) throws Exception {
+    void testAll(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -110,7 +110,7 @@ public class RolapResultTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testD1(TestingContext context) throws Exception {
+    void testD1(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -143,7 +143,7 @@ Axis #2:
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testD2(TestingContext context) throws Exception {
+    void testD2(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -293,7 +293,7 @@ Axis #2:
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonAllPromotionMembers(TestingContext context) {
+    void testNonAllPromotionMembers(TestingContext context) {
         prepareContext(context);
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",

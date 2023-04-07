@@ -25,7 +25,7 @@ public class RolapSchemaReaderTest extends FoodMartTestCase {
         super(name);
     }
 
-    public void testGetCubesWithNoHrCubes() {
+    void testGetCubesWithNoHrCubes() {
         String[] expectedCubes = new String[] {
                 "Sales", "Warehouse", "Warehouse and Sales", "Store",
                 "Sales Ragged", "Sales 2"
@@ -46,7 +46,7 @@ public class RolapSchemaReaderTest extends FoodMartTestCase {
         }
     }
 
-    public void testGetCubesWithNoRole() {
+    void testGetCubesWithNoRole() {
         String[] expectedCubes = new String[] {
                 "Sales", "Warehouse", "Warehouse and Sales", "Store",
                 "Sales Ragged", "Sales 2", "HR"
@@ -66,7 +66,7 @@ public class RolapSchemaReaderTest extends FoodMartTestCase {
         }
     }
 
-    public void testGetCubesForCaliforniaManager() {
+    void testGetCubesForCaliforniaManager() {
         String[] expectedCubes = new String[] {
                 "Sales"
         };
@@ -86,7 +86,7 @@ public class RolapSchemaReaderTest extends FoodMartTestCase {
         }
     }
 
-    public void testConnectUseContentChecksum() {
+    void testConnectUseContentChecksum() {
         Util.PropertyList properties =
             TestContext.instance().getConnectionProperties().clone();
         properties.put(
@@ -123,7 +123,7 @@ public class RolapSchemaReaderTest extends FoodMartTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-691">MONDRIAN-691,
      * "RolapSchemaReader is not enforcing access control on two APIs"</a>.
      */
-    public void testGetCubeDimensions() {
+    void testGetCubeDimensions() {
         final String timeWeekly =
             TestContext.hierarchyName("Time", "Weekly");
         final String timeTime =

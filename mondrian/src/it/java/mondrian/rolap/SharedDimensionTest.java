@@ -339,7 +339,7 @@ public class SharedDimensionTest extends FoodMartTestCase {
         super(name);
     }
 
-    public void testA() {
+    void testA() {
         // Schema has two cubes sharing a dimension.
         // Query from the first cube.
         TestContext testContext = getTestContextForSharedDimCubeACubeB();
@@ -347,7 +347,7 @@ public class SharedDimensionTest extends FoodMartTestCase {
         testContext.assertQueryReturns(queryCubeA, resultCubeA);
     }
 
-    public void testB() {
+    void testB() {
         // Schema has two cubes sharing a dimension.
         // Query from the second cube.
         TestContext testContext = getTestContextForSharedDimCubeACubeB();
@@ -355,7 +355,7 @@ public class SharedDimensionTest extends FoodMartTestCase {
         testContext.assertQueryReturns(queryCubeB, resultCubeB);
     }
 
-    public void testVirtualCube() {
+    void testVirtualCube() {
         // Schema has two cubes sharing a dimension, and a virtual cube built
         // over these two cubes.
         // Query from the virtual cube.
@@ -372,7 +372,7 @@ public class SharedDimensionTest extends FoodMartTestCase {
         testContext.assertQueryReturns(queryVirtualCube, resultVirtualCube);
     }
 
-    public void testNECJMemberList() {
+    void testNECJMemberList() {
         // Schema has two cubes sharing a dimension.
         // Query from the second cube.
         TestContext testContext = getTestContextForSharedDimCubeACubeB();
@@ -382,7 +382,7 @@ public class SharedDimensionTest extends FoodMartTestCase {
             resultNECJMemberList);
     }
 
-    public void testNECJMultiLevelMemberList() {
+    void testNECJMultiLevelMemberList() {
         // Schema has two cubes sharing a dimension.
         // Query from the first cube.
         // This is a case where not using alias not only affects performance,
@@ -398,13 +398,13 @@ public class SharedDimensionTest extends FoodMartTestCase {
      * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-286">
      * MONDRIAN-286, "NullPointerException for certain mdx using [Sales 2]"</a>.
      */
-    public void testBugMondrian286() {
+    void testBugMondrian286() {
         // Test for sourceforge.net bug 1711865 (MONDRIAN-286).
         // Use the default FoodMart schema
         getTestContext().assertQueryReturns(querySF1711865, resultSF1711865);
     }
 
-    public void testStoreCube() {
+    void testStoreCube() {
         // Use the default FoodMart schema
         getTestContext().assertQueryReturns(queryStoreCube, resultStoreCube);
     }
@@ -414,13 +414,13 @@ public class SharedDimensionTest extends FoodMartTestCase {
      * MONDRIAN-1243, "Wrong table alias in SQL generated to populate member
      * cache"</a>.
      */
-    public void testBugMondrian1243WrongAlias() {
+    void testBugMondrian1243WrongAlias() {
         getTestContextForSharedDimCubeAltSales().assertQueryReturns(
             queryIssue1243,
             resultIssue1243);
     }
 
-    public void testMemberUniqueNameForSharedWithChangedName() {
+    void testMemberUniqueNameForSharedWithChangedName() {
         getTestContextForSharedDimCubeAltSales().assertQueryReturns(
             "with "
             + " member [BuyerTwo].[Mexico].[calc] as '[BuyerTwo].[Mexico]' "

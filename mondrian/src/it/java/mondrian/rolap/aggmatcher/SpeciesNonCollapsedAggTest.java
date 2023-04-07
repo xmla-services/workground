@@ -92,7 +92,7 @@ public class SpeciesNonCollapsedAggTest extends AggTableTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-1105">MONDRIAN-1105,
      * "AggLevel column attribute not used properly in all cases"</a>.
      */
-    public void testBugMondrian1105() {
+    void testBugMondrian1105() {
         if (!isApplicable()) {
             return;
         }

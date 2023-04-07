@@ -24,7 +24,7 @@ public class InlineTableTest extends FoodMartTestCase {
         super(name);
     }
 
-    public void testInlineTable() {
+    void testInlineTable() {
         final String cubeName = "Sales_inline";
         TestContext testContext = TestContext.instance().create(
             null,
@@ -73,7 +73,7 @@ public class InlineTableTest extends FoodMartTestCase {
             + "Row #0: \n");
     }
 
-    public void testInlineTableInSharedDim() {
+    void testInlineTableInSharedDim() {
         final String cubeName = "Sales_inline_shared";
         final TestContext testContext = TestContext.instance().create(
             null,
@@ -125,7 +125,7 @@ public class InlineTableTest extends FoodMartTestCase {
             + "Row #0: \n");
     }
 
-    public void testInlineTableSnowflake() {
+    void testInlineTableSnowflake() {
         if (getTestContext().getDialect().getDatabaseProduct()
             == Dialect.DatabaseProduct.INFOBRIGHT)
         {
@@ -194,7 +194,7 @@ public class InlineTableTest extends FoodMartTestCase {
             + "Row #0: 266,773\n");
     }
 
-    public void testInlineTableDate() {
+    void testInlineTableDate() {
         final String cubeName = "Sales_Inline_Date";
         final TestContext testContext = TestContext.instance().create(
             null,

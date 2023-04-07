@@ -44,7 +44,7 @@ public class SimpleUnparserExpressionTest {
     private SimpleUnparser unparser = new SimpleUnparser();
 
     @Nested
-    public class CallExpressionTest {
+    class CallExpressionTest {
 
         @Test
         void testCallExpressionFunctionWithArrayParam() {
@@ -100,7 +100,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionEmpty() {
+        void testCallExpressionEmpty() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("arg1", Quoting.UNQUOTED);
             NameObjectIdentifier objectIdentifier1 = new NameObjectIdentifierR("", Quoting.UNQUOTED);
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("arg2", Quoting.UNQUOTED);
@@ -114,7 +114,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionProperty() {
+        void testCallExpressionProperty() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("object", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
             CallExpression callExpression = new CallExpressionR("PROPERTY", CallExpression.Type.Property,
@@ -124,7 +124,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionPropertyQuoted() {
+        void testCallExpressionPropertyQuoted() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("object", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
             CallExpression callExpression = new CallExpressionR("PROPERTY", CallExpression.Type.PropertyQuoted,
@@ -134,7 +134,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionPropertyAmpersAndQuoted() {
+        void testCallExpressionPropertyAmpersAndQuoted() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("object", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
             CallExpression callExpression = new CallExpressionR("PROPERTY", CallExpression.Type.PropertyAmpersAndQuoted,
@@ -144,7 +144,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionMethod() {
+        void testCallExpressionMethod() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("object", Quoting.UNQUOTED);
             CallExpression callExpressionEmpty = new CallExpressionR("", CallExpression.Type.Empty, List.of());
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
@@ -155,7 +155,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionMethodWithParameter() {
+        void testCallExpressionMethodWithParameter() {
             NameObjectIdentifier objectIdentifier1 = new NameObjectIdentifierR("object", Quoting.UNQUOTED);
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("arg", Quoting.UNQUOTED);
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
@@ -167,7 +167,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionMethodWithParameterArray() {
+        void testCallExpressionMethodWithParameterArray() {
             NameObjectIdentifier objectIdentifier1 = new NameObjectIdentifierR("object", Quoting.UNQUOTED);
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("arg1, arg2", Quoting.QUOTED);
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
@@ -179,7 +179,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionMethodWithInnerFunction() {
+        void testCallExpressionMethodWithInnerFunction() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("object", Quoting.UNQUOTED);
             CallExpression сallExpression = new CallExpressionR("FunctionInner", CallExpression.Type.Function,
                 List.of());
@@ -191,7 +191,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionTermCase() {
+        void testCallExpressionTermCase() {
             NameObjectIdentifier objectIdentifier1 = new NameObjectIdentifierR("a", Quoting.UNQUOTED);
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("b", Quoting.UNQUOTED);
             NameObjectIdentifier objectIdentifier3 = new NameObjectIdentifierR("c", Quoting.UNQUOTED);
@@ -205,7 +205,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionBraces1() {
+        void testCallExpressionBraces1() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("expression", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
             CallExpression callExpression = new CallExpressionR("{}", CallExpression.Type.Braces,
@@ -215,7 +215,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionBraces2() {
+        void testCallExpressionBraces2() {
             NameObjectIdentifier objectIdentifier1 = new NameObjectIdentifierR("expression1", Quoting.UNQUOTED);
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("expression2", Quoting.UNQUOTED);
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
@@ -227,7 +227,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionBraces3() {
+        void testCallExpressionBraces3() {
             NameObjectIdentifier objectIdentifier1 = new NameObjectIdentifierR("a", Quoting.QUOTED);
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("c", Quoting.QUOTED);
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
@@ -241,7 +241,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionBraces4() {
+        void testCallExpressionBraces4() {
             NameObjectIdentifier objectIdentifier11 = new NameObjectIdentifierR("a", Quoting.QUOTED);
             NameObjectIdentifier objectIdentifier12 = new NameObjectIdentifierR("a", Quoting.QUOTED);
             NameObjectIdentifier objectIdentifier21 = new NameObjectIdentifierR("a", Quoting.QUOTED);
@@ -258,7 +258,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionParentheses() {
+        void testCallExpressionParentheses() {
             NameObjectIdentifier objectIdentifier1 = new NameObjectIdentifierR("arg1", Quoting.UNQUOTED);
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("arg2", Quoting.UNQUOTED);
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
@@ -270,7 +270,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionParenthesesWithArray() {
+        void testCallExpressionParenthesesWithArray() {
             NameObjectIdentifier objectIdentifier1 = new NameObjectIdentifierR("arg1", Quoting.UNQUOTED);
             NameObjectIdentifier objectIdentifier2 = new NameObjectIdentifierR("arg2, arg3", Quoting.QUOTED);
             CompoundId compoundId1 = new CompoundIdR(List.of(objectIdentifier1));
@@ -282,7 +282,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionTermPostfix() {
+        void testCallExpressionTermPostfix() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("arg", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
             CallExpression callExpression = new CallExpressionR("IS EMPTY", CallExpression.Type.Term_Postfix,
@@ -292,7 +292,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionTermPrefix() {
+        void testCallExpressionTermPrefix() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("arg", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
             CallExpression callExpression = new CallExpressionR("NOT", CallExpression.Type.Term_Prefix,
@@ -302,7 +302,7 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testCallExpressionTermInfix() {
+        void testCallExpressionTermInfix() {
             NameObjectIdentifier objectIdentifier = new NameObjectIdentifierR("arg1", Quoting.UNQUOTED);
             NameObjectIdentifier objectIdentifier1 = new NameObjectIdentifierR("arg2", Quoting.UNQUOTED);
             CompoundId compoundId = new CompoundIdR(List.of(objectIdentifier));
@@ -316,24 +316,24 @@ public class SimpleUnparserExpressionTest {
     }
 
     @Nested
-    public class LiteralTest {
+    class LiteralTest {
 
         @Test
-        public void testNumericLiteral1() {
+        void testNumericLiteral1() {
             NumericLiteral numericLiteral = new NumericLiteralR(BigDecimal.valueOf(10));
             assertThat(unparser.unparseExpression(numericLiteral)).asString()
                 .isEqualTo("10");
         }
 
         @Test
-        public void testNumericLiteral2() {
+        void testNumericLiteral2() {
             NumericLiteral numericLiteral = new NumericLiteralR(BigDecimal.valueOf(10.25));
             assertThat(unparser.unparseExpression(numericLiteral)).asString()
                 .isEqualTo("10.25");
         }
 
         @Test
-        public void testNumericLiteral3() {
+        void testNumericLiteral3() {
             NumericLiteral numericLiteral = new NumericLiteralR(BigDecimal.valueOf(10.25));
             CallExpression callExpression = new CallExpressionR("-", CallExpression.Type.Term_Prefix,
                 List.of(numericLiteral));
@@ -342,28 +342,28 @@ public class SimpleUnparserExpressionTest {
         }
 
         @Test
-        public void testNull() {
+        void testNull() {
             NullLiteral nullLiteral = new NullLiteralR();
             assertThat(unparser.unparseExpression(nullLiteral)).asString()
                 .isEqualTo("NULL");
         }
 
         @Test
-        public void testStringLiteral1() {
+        void testStringLiteral1() {
             StringLiteral stringLiteral = new StringLiteralR("\"String'Literal\"");
             assertThat(unparser.unparseExpression(stringLiteral)).asString()
                 .isEqualTo("\"String'Literal\"");
         }
 
         @Test
-        public void testStringLiteral2() {
+        void testStringLiteral2() {
             StringLiteral stringLiteral = new StringLiteralR("'StringLiteral'");
             assertThat(unparser.unparseExpression(stringLiteral)).asString()
                 .isEqualTo("'StringLiteral'");
         }
 
         @Test
-        public void testSymbolLiteral() {
+        void testSymbolLiteral() {
             StringLiteral stringLiteral = new StringLiteralR("the_date");
             SymbolLiteral symbolLiteral = new SymbolLiteralR("DATE");
             CallExpression callExpression = new CallExpressionR("cast",
@@ -376,10 +376,10 @@ public class SimpleUnparserExpressionTest {
     }
 
     @Nested
-    public class ObjectIdentifierTest {
+    class ObjectIdentifierTest {
 
         @Test
-        public void testKeyObjectIdentifier() {
+        void testKeyObjectIdentifier() {
 
             NameObjectIdentifier nameObjectIdentifier1 = new NameObjectIdentifierR("x", Quoting.QUOTED);
 

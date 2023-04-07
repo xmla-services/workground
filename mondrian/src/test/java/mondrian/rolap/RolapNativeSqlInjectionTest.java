@@ -46,7 +46,7 @@ public class RolapNativeSqlInjectionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMondrian2436(TestingContext context) {
+    void testMondrian2436(TestingContext context) {
         String mdxQuery = ""
             + "select {[Measures].[Store Sales]} on columns, "
             + "filter([Customers].[Name].Members, (([Measures].[Store Sales]) > '(select 1000)')) on rows "

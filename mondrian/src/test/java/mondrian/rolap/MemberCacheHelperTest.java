@@ -52,7 +52,7 @@ public class MemberCacheHelperTest {
     }
 
     @Test
-    public void testRoundtripChildrenUsingChildByNameConstraint() {
+    void testRoundtripChildrenUsingChildByNameConstraint() {
         List<String> childNames = fillChildren(children, 3);
         when(childByNameConstraint.getChildNames()).thenReturn(childNames);
 
@@ -66,7 +66,7 @@ public class MemberCacheHelperTest {
     }
 
     @Test
-    public void testCachedByDefaultConstraint() {
+    void testCachedByDefaultConstraint() {
         List<String> childNames = fillChildren(children, 5);
         when(childByNameConstraint.getChildNames()).thenReturn(childNames);
 
@@ -85,7 +85,7 @@ public class MemberCacheHelperTest {
     }
 
     @Test
-    public void testOnlyRequestedChildrenRetrieved() {
+    void testOnlyRequestedChildrenRetrieved() {
         // tests retrieval of a subset of children from
         // the cache with keyed with DefaultMemberChildrenConstraint
         List<String> childNames = fillChildren(children, 5);
@@ -113,12 +113,12 @@ public class MemberCacheHelperTest {
     }
 
     @Test
-    public void testMissingChildrenNotRetrievedDefaultConst() {
+    void testMissingChildrenNotRetrievedDefaultConst() {
         runMissingChildrenNotRetrievedTest(defMemChildrenConstraint);
     }
 
     @Test
-    public void testMissingChildrenNotRetrievedChildByName() {
+    void testMissingChildrenNotRetrievedChildByName() {
         runMissingChildrenNotRetrievedTest(childByNameConstraint);
     }
 
@@ -143,7 +143,7 @@ public class MemberCacheHelperTest {
 
 
     @Test
-    public void testRemoveChildMemberPresentInNamedChildrenMap() {
+    void testRemoveChildMemberPresentInNamedChildrenMap() {
         List<String> childNames = fillChildren(children, 3);
         when(childByNameConstraint.getChildNames()).thenReturn(
             childNames.subList(1, 3));

@@ -54,7 +54,7 @@ public class UnionFunDefTest {
    * Tuples are gotten from customer attachments.
    */
   @Test
-  public void testMondrian2250() {
+  void testMondrian2250() {
     Member[] dates = new Member[4];
     for (int i = 25; i < 29; i++) {
       dates[i - 25] =
@@ -128,7 +128,7 @@ public class UnionFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testArity4TupleUnion(TestingContext context) {
+  void testArity4TupleUnion(TestingContext context) {
     String tupleSet =
         "CrossJoin( [Customers].[USA].Children,"
         + " CrossJoin( Time.[1997].children, { (Gender.F, [Marital Status].M ) }) ) ";
@@ -151,7 +151,7 @@ public class UnionFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testArity5TupleUnion(TestingContext context) {
+  void testArity5TupleUnion(TestingContext context) {
     String tupleSet = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].lastChild, "
         + "CrossJoin ([Education Level].children,{ (Gender.F, [Marital Status].M ) })) )";
@@ -167,7 +167,7 @@ public class UnionFunDefTest {
     assertAxisReturns(connection, "Union( " + tupleSet + ", " + tupleSet + ")", expected);
   }
 
-  public void testArity5TupleUnionAll(TestingContext context) {
+  void testArity5TupleUnionAll(TestingContext context) {
     String tupleSet = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1998].firstChild, "
         + "CrossJoin ([Education Level].members,{ (Gender.F, [Marital Status].M ) })) )";
@@ -189,7 +189,7 @@ public class UnionFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testArity6TupleUnion(TestingContext context) {
+  void testArity6TupleUnion(TestingContext context) {
     String tupleSet1 = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].firstChild, "
         + "CrossJoin ([Education Level].lastChild,"
@@ -225,7 +225,7 @@ public class UnionFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testArity6TupleUnionAll(TestingContext context) {
+  void testArity6TupleUnionAll(TestingContext context) {
     String tupleSet1 = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].firstChild, "
         + "CrossJoin ([Education Level].lastChild,"

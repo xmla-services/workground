@@ -18,7 +18,7 @@ import mondrian.spi.SegmentHeader;
 
 public class SegmentCacheIndexImplTest {
 	@Test
-    public void testNoHeaderOnLoad() {
+    void testNoHeaderOnLoad() {
         final SegmentCacheIndexImpl index =
             new SegmentCacheIndexImpl(Thread.currentThread());
 

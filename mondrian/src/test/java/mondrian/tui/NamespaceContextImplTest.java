@@ -40,7 +40,7 @@ public class NamespaceContextImplTest {
     }
     
     @Test
-    public void testGetNamespaceURI() throws Exception
+    void testGetNamespaceURI() throws Exception
     {
         assertEquals(
             "http://foo.bar.baz",
@@ -54,14 +54,14 @@ public class NamespaceContextImplTest {
     }
 
     @Test
-    public void testGetPrefix() throws Exception {
+    void testGetPrefix() throws Exception {
         String prefix = namespaceContext.getPrefix("http://foo.bar.baz");
         // will arbitrarily get one when more than one prefix maps
         assertTrue(prefix.equals("FOO") || prefix.equals("BAR"));
     }
 
     @Test
-    public void testGetPrefixNullArg() throws Exception {
+    void testGetPrefixNullArg() throws Exception {
         try {
             namespaceContext.getPrefix(null);
             fail("expected exception");
@@ -71,7 +71,7 @@ public class NamespaceContextImplTest {
     }
 
     @Test
-    public void testGetPrefixes() throws Exception {
+    void testGetPrefixes() throws Exception {
         Iterator iter = namespaceContext.getPrefixes("http://foo.bar.baz");
         assertTrue(iter.hasNext());
         List<String> list = new ArrayList<>();

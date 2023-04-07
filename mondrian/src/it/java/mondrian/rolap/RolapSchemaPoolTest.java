@@ -30,7 +30,7 @@ public class RolapSchemaPoolTest extends FoodMartTestCase {
         super(name);
     }
 
-    public void testBasicSchemaFetch() {
+    void testBasicSchemaFetch() {
         RolapSchemaPool schemaPool = RolapSchemaPool.instance();
         schemaPool.clear();
 
@@ -56,7 +56,7 @@ public class RolapSchemaPoolTest extends FoodMartTestCase {
         assertTrue(schema == schemaA);
     }
 
-    public void testSchemaFetchCatalogUrlJdbcUuid() {
+    void testSchemaFetchCatalogUrlJdbcUuid() {
         RolapSchemaPool schemaPool = RolapSchemaPool.instance();
         schemaPool.clear();
         final String uuid = "UUID-1";
@@ -111,7 +111,7 @@ public class RolapSchemaPoolTest extends FoodMartTestCase {
      * Test using JdbcConnectionUUID and useSchemaChecksum
      * fetches the same schema in all scenarios.
      */
-    public void testSchemaFetchMd5JdbcUid() throws IOException {
+    void testSchemaFetchMd5JdbcUid() throws IOException {
         RolapSchemaPool pool = RolapSchemaPool.instance();
         pool.clear();
         final String uuid = "UUID-1";

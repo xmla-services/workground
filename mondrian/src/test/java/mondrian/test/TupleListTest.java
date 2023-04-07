@@ -52,14 +52,14 @@ import mondrian.server.Locus;
 public class TupleListTest {
 
     @Test
-    public void testTupleList() {
+    void testTupleList() {
         assertTrue(TupleCollections.createList(1) instanceof UnaryTupleList);
         assertTrue(TupleCollections.createList(2) instanceof ArrayTupleList);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUnaryTupleList(TestingContext context) {
+    void testUnaryTupleList(TestingContext context) {
         // empty list
         final TupleList list0 = new UnaryTupleList();
         assertTrue(list0.isEmpty());
@@ -98,7 +98,7 @@ public class TupleListTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testArrayTupleList(TestingContext context) {
+    void testArrayTupleList(TestingContext context) {
         Connection connection = context.createConnection();
         final Member genderFMember = xxx(connection, "[Gender].[F]");
         final Member genderMMember = xxx(connection,"[Gender].[M]");
@@ -181,7 +181,7 @@ public class TupleListTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDelegatingTupleList(TestingContext context) {
+    void testDelegatingTupleList(TestingContext context) {
         Connection connection = context.createConnection();
         final Member genderFMember = xxx(connection, "[Gender].[F]");
         final Member genderMMember = xxx(connection, "[Gender].[M]");
@@ -208,7 +208,7 @@ public class TupleListTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDelegatingTupleListSlice(TestingContext context) {
+    void testDelegatingTupleListSlice(TestingContext context) {
         // Functional test.
         Connection connection = context.createConnection();
         assertQueryReturns(connection,

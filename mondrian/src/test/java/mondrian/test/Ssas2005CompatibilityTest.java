@@ -221,7 +221,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUniqueName(TestingContext context) {
+    void testUniqueName(TestingContext context) {
         // TODO:
         // Unique mmbers:
         // [Time].[Time2].[Year2].[1997]
@@ -236,7 +236,7 @@ public class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionDotHierarchyAmbiguous(TestingContext context) {
+    void testDimensionDotHierarchyAmbiguous(TestingContext context) {
         // If there is a dimension, hierarchy, level with the same name X,
         // then [X].[X] might reasonably resolve to hierarchy or the level.
         // SSAS resolves to hierarchy, old mondrian resolves to level.
@@ -298,7 +298,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHierarchyLevelsFunction(TestingContext context) {
+    void testHierarchyLevelsFunction(TestingContext context) {
         if (!IMPLEMENTED) {
             return;
         }
@@ -315,7 +315,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionDotHierarchyDotLevelDotMembers(TestingContext context) {
+    void testDimensionDotHierarchyDotLevelDotMembers(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -329,7 +329,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionDotHierarchyDotLevel(TestingContext context) {
+    void testDimensionDotHierarchyDotLevel(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -367,7 +367,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamingDimensionDotLevel(TestingContext context) {
+    void testNamingDimensionDotLevel(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -396,7 +396,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamingDimensionDotLevel2(TestingContext context) {
+    void testNamingDimensionDotLevel2(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -414,7 +414,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamingDimensionDotLevelNotUnique(TestingContext context) {
+    void testNamingDimensionDotLevelNotUnique(TestingContext context) {
         if (!IMPLEMENTED) {
             return;
         }
@@ -436,7 +436,7 @@ public class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionMembersOnSingleHierarchyDimension(TestingContext context) {
+    void testDimensionMembersOnSingleHierarchyDimension(TestingContext context) {
         // [dimension].members for a dimension with one hierarchy
         // (and no attributes)
         // SSAS2005 succeeds
@@ -481,7 +481,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMultipleHierarchyRequiresQualification(TestingContext context) {
+    void testMultipleHierarchyRequiresQualification(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -506,7 +506,7 @@ public class Ssas2005CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberAmbiguousHierarchy(TestingContext context) {
+    void testCalcMemberAmbiguousHierarchy(TestingContext context) {
         String mdx =
             "WITH MEMBER [Measures].[ProfitPercent] AS\n"
             + "     '([Measures].[Store Sales]-[Measures].[Store Cost])/"
@@ -566,7 +566,7 @@ public class Ssas2005CompatibilityTest {
     // TODO:
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUnqualifiedHierarchy(TestingContext context) {
+    void testUnqualifiedHierarchy(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -598,7 +598,7 @@ public class Ssas2005CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testYtd(TestingContext context) {
+    void testYtd(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -623,7 +623,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAxesOutOfOrder(TestingContext context) {
+    void testAxesOutOfOrder(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -649,7 +649,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionMembersRequiresHierarchyQualification(TestingContext context) {
+    void testDimensionMembersRequiresHierarchyQualification(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -667,7 +667,7 @@ public class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionMemberRequiresHierarchyQualification(TestingContext context) {
+    void testDimensionMemberRequiresHierarchyQualification(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -734,7 +734,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testImplicitCurrentMemberRequiresHierarchyQualification(TestingContext context) {
+    void testImplicitCurrentMemberRequiresHierarchyQualification(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -762,7 +762,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUnqualifiedHierarchyCurrentMember(TestingContext context) {
+    void testUnqualifiedHierarchyCurrentMember(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -775,7 +775,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCannotDistinguishMdxFromSql(TestingContext context) {
+    void testCannotDistinguishMdxFromSql(TestingContext context) {
         // Cannot tell whether statement is MDX or SQL
         // SSAS2005 gives error:
         //   Parser: The statement dialect could not be resolved due
@@ -788,7 +788,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamingDimensionAttr(TestingContext context) {
+    void testNamingDimensionAttr(TestingContext context) {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -800,7 +800,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamingDimensionAttrVsLevel(TestingContext context) {
+    void testNamingDimensionAttrVsLevel(TestingContext context) {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -815,7 +815,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAttrHierarchyMemberParent(TestingContext context) {
+    void testAttrHierarchyMemberParent(TestingContext context) {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -829,7 +829,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAttrHierarchyMemberChildren(TestingContext context) {
+    void testAttrHierarchyMemberChildren(TestingContext context) {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -842,7 +842,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAttrHierarchyAllMemberChildren(TestingContext context) {
+    void testAttrHierarchyAllMemberChildren(TestingContext context) {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -855,7 +855,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAttrHierarchyMemberLevel(TestingContext context) {
+    void testAttrHierarchyMemberLevel(TestingContext context) {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -869,7 +869,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAttrHierarchyUniqueName(TestingContext context) {
+    void testAttrHierarchyUniqueName(TestingContext context) {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -882,7 +882,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMemberAddressedByLevelAndKey(TestingContext context) {
+    void testMemberAddressedByLevelAndKey(TestingContext context) {
         if (!MEMBER_NAMING_IMPL) {
             return;
         }
@@ -895,7 +895,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMemberAddressedByCompoundKey(TestingContext context) {
+    void testMemberAddressedByCompoundKey(TestingContext context) {
         if (!MEMBER_NAMING_IMPL) {
             return;
         }
@@ -908,7 +908,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMemberAddressedByPartialCompoundKey(TestingContext context) {
+    void testMemberAddressedByPartialCompoundKey(TestingContext context) {
         if (!MEMBER_NAMING_IMPL) {
             return;
         }
@@ -921,7 +921,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMemberAddressedByNonUniqueName(TestingContext context) {
+    void testMemberAddressedByNonUniqueName(TestingContext context) {
         if (!MEMBER_NAMING_IMPL) {
             return;
         }
@@ -935,7 +935,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMemberAddressedByLevelAndCompoundKey(TestingContext context) {
+    void testMemberAddressedByLevelAndCompoundKey(TestingContext context) {
         if (!MEMBER_NAMING_IMPL) {
             return;
         }
@@ -948,7 +948,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMemberAddressedByLevelAndName(TestingContext context) {
+    void testMemberAddressedByLevelAndName(TestingContext context) {
         if (!MEMBER_NAMING_IMPL) {
             return;
         }
@@ -962,7 +962,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testFoo31(TestingContext context) {
+    void testFoo31(TestingContext context) {
         // [dimension].[member name]
         // returns [Product].[Products].[Product Department].[Dairy]
         // note that there are members
@@ -977,7 +977,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testFoo32(TestingContext context) {
+    void testFoo32(TestingContext context) {
         if (!IMPLEMENTED) {
             return;
         }
@@ -995,7 +995,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamingAttrVsLevel(TestingContext context) {
+    void testNamingAttrVsLevel(TestingContext context) {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -1015,7 +1015,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUnqualifiedLevel(TestingContext context) {
+    void testUnqualifiedLevel(TestingContext context) {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1028,7 +1028,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionAsScalarExpression(TestingContext context) {
+    void testDimensionAsScalarExpression(TestingContext context) {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1044,7 +1044,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionWithMultipleHierarchiesDotParent(TestingContext context) {
+    void testDimensionWithMultipleHierarchiesDotParent(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1061,7 +1061,7 @@ public class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionDotHierarchyInBrackets(TestingContext context) {
+    void testDimensionDotHierarchyInBrackets(TestingContext context) {
         // [dimension.hierarchy] is valid
         // SSAS2005 succeeds
         runQ(context,
@@ -1077,7 +1077,7 @@ public class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionDotHierarchySameNameInBrackets(TestingContext context) {
+    void testDimensionDotHierarchySameNameInBrackets(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Store Type 2\" foreignKey=\"store_id\">"
@@ -1109,7 +1109,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionDotLevelDotHierarchyInBrackets(TestingContext context) {
+    void testDimensionDotLevelDotHierarchyInBrackets(TestingContext context) {
         // [dimension.hierarchy.level]
         // SSAS2005 gives error:
         //   Query (1, 8) The dimension '[Time.Time2.Quarter]' was not
@@ -1123,7 +1123,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionDotInvalidHierarchyInBrackets(TestingContext context) {
+    void testDimensionDotInvalidHierarchyInBrackets(TestingContext context) {
         // invalid hierarchy name
         // SSAS2005 gives error:
         //  Query (1, 9) The dimension '[Time.Time By Week55]' was not
@@ -1137,7 +1137,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionDotDimensionInBrackets(TestingContext context) {
+    void testDimensionDotDimensionInBrackets(TestingContext context) {
         // [dimension.dimension] is invalid.  SSAS2005 gives similar
         // error to above.  (The Time dimension has hierarchies called
         // [Time2] and [Time By Day]. but no hierarchy [Time].)
@@ -1149,7 +1149,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionDotHierarchyDotNonExistentLevel(TestingContext context) {
+    void testDimensionDotHierarchyDotNonExistentLevel(TestingContext context) {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1169,7 +1169,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionDotHierarchyDotLevelMembers(TestingContext context) {
+    void testDimensionDotHierarchyDotLevelMembers(TestingContext context) {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1181,7 +1181,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDupHierarchyOnAxes(TestingContext context) {
+    void testDupHierarchyOnAxes(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1202,7 +1202,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionOnAxis(TestingContext context) {
+    void testDimensionOnAxis(TestingContext context) {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1213,7 +1213,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionDotHierarchyOnAxis(TestingContext context) {
+    void testDimensionDotHierarchyOnAxis(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1227,7 +1227,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHierarchiesFromSameDimensionOnAxes(TestingContext context) {
+    void testHierarchiesFromSameDimensionOnAxes(TestingContext context) {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1242,7 +1242,7 @@ public class Ssas2005CompatibilityTest {
     // TODO:
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDifferentHierarchiesFromSameDimensionOnAxes(TestingContext context) {
+    void testDifferentHierarchiesFromSameDimensionOnAxes(TestingContext context) {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1259,7 +1259,7 @@ public class Ssas2005CompatibilityTest {
     // TODO:
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDifferentHierarchiesFromSameDimensionInCrossjoin(TestingContext context) {
+    void testDifferentHierarchiesFromSameDimensionInCrossjoin(TestingContext context) {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1272,7 +1272,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHierarchyUsedTwiceInCrossjoin(TestingContext context) {
+    void testHierarchyUsedTwiceInCrossjoin(TestingContext context) {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1289,7 +1289,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAttributeHierarchyUsedTwiceInCrossjoin(TestingContext context) {
+    void testAttributeHierarchyUsedTwiceInCrossjoin(TestingContext context) {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -1308,7 +1308,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testFoo50(TestingContext context) {
+    void testFoo50(TestingContext context) {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -1322,7 +1322,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testQuoteInStringInQuotedFormula(TestingContext context) {
+    void testQuoteInStringInQuotedFormula(TestingContext context) {
         // Quoted formulas vs. unquoted formulas
         // Single quote in string
         // SSAS2005 returns 5
@@ -1339,7 +1339,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testQuoteInStringInUnquotedFormula(TestingContext context) {
+    void testQuoteInStringInUnquotedFormula(TestingContext context) {
         // SSAS2005 returns 6
         assertQueryReturns(context.createConnection(),
             "with member [Measures].[Foo] as len(\"can''t\")\n"
@@ -1354,7 +1354,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMemberIdentifiedByDimensionAndKey(TestingContext context) {
+    void testMemberIdentifiedByDimensionAndKey(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1370,7 +1370,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionHierarchyKey(TestingContext context) {
+    void testDimensionHierarchyKey(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1385,7 +1385,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCompoundKey(TestingContext context) {
+    void testCompoundKey(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1407,7 +1407,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCompoundKeySyntaxError(TestingContext context) {
+    void testCompoundKeySyntaxError(TestingContext context) {
         // without [] fails on SSAS (syntax error because a number)
         assertQueryThrows(context.createConnection(),
             "select [Measures].[Unit Sales] on 0,\n"
@@ -1418,7 +1418,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCompoundKeyStringBad(TestingContext context) {
+    void testCompoundKeyStringBad(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1452,7 +1452,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCompoundKeyString(TestingContext context) {
+    void testCompoundKeyString(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1481,7 +1481,7 @@ public class Ssas2005CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNameAfterKey(TestingContext context) {
+    void testNameAfterKey(TestingContext context) {
         prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "select [Measures].[Unit Sales] on 0,\n"
@@ -1505,7 +1505,7 @@ public class Ssas2005CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNameAfterCompositeKey(TestingContext context) {
+    void testNameAfterCompositeKey(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1525,7 +1525,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCompoundKeyAll(TestingContext context) {
+    void testCompoundKeyAll(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1542,7 +1542,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCompoundKeyParent(TestingContext context) {
+    void testCompoundKeyParent(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1554,7 +1554,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCompoundKeyNull(TestingContext context) {
+    void testCompoundKeyNull(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1577,7 +1577,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testFoo56(TestingContext context) {
+    void testFoo56(TestingContext context) {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1591,7 +1591,7 @@ public class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testKeyNonExistent(TestingContext context) {
+    void testKeyNonExistent(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1627,7 +1627,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAxesLabelsOutOfSequence(TestingContext context) {
+    void testAxesLabelsOutOfSequence(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1648,7 +1648,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAxisLabelsNotContiguousFails(TestingContext context) {
+    void testAxisLabelsNotContiguousFails(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1666,7 +1666,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLotsOfAxes(TestingContext context) {
+    void testLotsOfAxes(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1686,7 +1686,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOnAxesFails(TestingContext context) {
+    void testOnAxesFails(TestingContext context) {
         // axes(n) is not an acceptable alternative to axis(n)
         // SSAS gives:
         //   Query (1, 35) Parser: The syntax for 'axes' is incorrect.
@@ -1698,7 +1698,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOnExpression(TestingContext context) {
+    void testOnExpression(TestingContext context) {
         // SSAS gives syntax error
         assertQueryThrows(context.createConnection(),
             "select [Measures].[Unit Sales] on 0 + 1\n"
@@ -1708,7 +1708,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOnFractionFails(TestingContext context) {
+    void testOnFractionFails(TestingContext context) {
         // SSAS gives syntax error
         assertQueryThrows(context.createConnection(),
             "select [Measures].[Unit Sales] on 0.4\n"
@@ -1719,7 +1719,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAxisFunction(TestingContext context) {
+    void testAxisFunction(TestingContext context) {
         // AXIS(n) function as expression
         // SSAS succeeds
         if (!AXIS_IMPL) {
@@ -1735,7 +1735,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAxisAppliedToExpr(TestingContext context) {
+    void testAxisAppliedToExpr(TestingContext context) {
         // Axis applied to an expression ('3 - 2' in place of '1' above).
         // SSAS succeeds.
         // When we implement Axis, it may be acceptable for Mondrian to fail in
@@ -1754,7 +1754,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAxisFunctionReferencesPreviousAxis(TestingContext context) {
+    void testAxisFunctionReferencesPreviousAxis(TestingContext context) {
         // reference axis 0 while computing axis 1
         // SSAS succeeds
         if (!AXIS_IMPL) {
@@ -1771,7 +1771,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAxisFunctionReferencesSameAxisFails(TestingContext context) {
+    void testAxisFunctionReferencesSameAxisFails(TestingContext context) {
         // reference axis 1 while computing axis 1, not ok
         // SSAS gives:
         //   Infinite recursion detected. The loop of dependencies is: AXISDEMO
@@ -1790,7 +1790,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAxisFunctionReferencesSameAxisZeroFails(TestingContext context) {
+    void testAxisFunctionReferencesSameAxisZeroFails(TestingContext context) {
         // reference axis 0 while computing axis 0, not ok
         // SSAS gives:
         //   Infinite recursion detected. The loop of dependencies is: AXISDEMO
@@ -1809,7 +1809,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAxisFunctionReferencesLaterAxis(TestingContext context) {
+    void testAxisFunctionReferencesLaterAxis(TestingContext context) {
         // reference axis 1 while computing axis 0, ok
         // The SSAS online doc says:
         //    An axis can reference only a prior axis. For example, Axis(0) must
@@ -1830,7 +1830,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAxisFunctionReferencesSameAxisInlineFails(TestingContext context) {
+    void testAxisFunctionReferencesSameAxisInlineFails(TestingContext context) {
         // If we inline the member, SSAS runs out of memory.
         // SSAS gives error:
         //   Memory error: Allocation failure : The paging file is too small for
@@ -1848,7 +1848,7 @@ public class Ssas2005CompatibilityTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCrossjoinMember(TestingContext context) {
+    void testCrossjoinMember(TestingContext context) {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // Can't resolve [Products] under old mondrian
             return;
@@ -1874,7 +1874,7 @@ public class Ssas2005CompatibilityTest {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCanHaveMemberWithSameNameAsLevel(TestingContext context) throws SQLException {
+    void testCanHaveMemberWithSameNameAsLevel(TestingContext context) throws SQLException {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
              "<Dimension name=\"SameName\" foreignKey=\"customer_id\">\n"
@@ -1933,7 +1933,7 @@ public class Ssas2005CompatibilityTest {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMemberNameSortCaseSensitivity(TestingContext context)
+    void testMemberNameSortCaseSensitivity(TestingContext context)
     {
         // In SSAS, "MacDougal" occurs between "Maccietto" and "Macha". This
         // would not occur if sort was case-sensitive.
@@ -1992,7 +1992,7 @@ public class Ssas2005CompatibilityTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testRootMembers(TestingContext context) {
+    void testRootMembers(TestingContext context) {
     	prepareContext(context);
         // for member defined in the database
         final String timeByWeek =

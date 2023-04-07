@@ -35,7 +35,7 @@ public class CacheTest extends FoodMartTestCase {
      * managed to share work. If it has not increased, the cache was probably
      * not flushed correctly.</p>
      */
-    public void testNQueriesWaitingForSameSegmentRepeat()
+    void testNQueriesWaitingForSameSegmentRepeat()
         throws ExecutionException, InterruptedException
     {
         final int parallel = 10;

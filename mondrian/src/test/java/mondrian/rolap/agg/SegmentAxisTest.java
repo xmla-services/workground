@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 public class SegmentAxisTest {
 
     @Test
-    public void testIsTested() {
+    void testIsTested() {
         assertTrue(SegmentAxis.isSorted(new Integer[] { 1, 2, 3, 4 }));
         assertFalse(SegmentAxis.isSorted(new Integer[] { 1, 2, 5, 4 }));
 

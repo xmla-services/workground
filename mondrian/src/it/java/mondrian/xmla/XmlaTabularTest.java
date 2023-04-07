@@ -26,31 +26,31 @@ public class XmlaTabularTest extends XmlaBaseTestCase {
         super(name);
     }
 
-    public void testTabularOneByOne() throws Exception {
+    void testTabularOneByOne() throws Exception {
         executeMDX();
     }
 
-    public void testTabularOneByTwo() throws Exception {
+    void testTabularOneByTwo() throws Exception {
         executeMDX();
     }
 
-    public void testTabularTwoByOne() throws Exception {
+    void testTabularTwoByOne() throws Exception {
         executeMDX();
     }
 
-    public void testTabularTwoByTwo() throws Exception {
+    void testTabularTwoByTwo() throws Exception {
         executeMDX();
     }
 
-    public void testTabularZeroByZero() throws Exception {
+    void testTabularZeroByZero() throws Exception {
         executeMDX();
     }
 
-    public void testTabularVoid() throws Exception {
+    void testTabularVoid() throws Exception {
         executeMDX();
     }
 
-    public void testTabularThreeAxes() throws Exception {
+    void testTabularThreeAxes() throws Exception {
         executeMDX();
     }
 

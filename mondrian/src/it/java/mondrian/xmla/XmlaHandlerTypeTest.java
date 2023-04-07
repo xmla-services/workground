@@ -44,7 +44,7 @@ public class XmlaHandlerTypeTest extends FoodMartTestCase {
     };
 
 
-    public void testMarshalledValueType() {
+    void testMarshalledValueType() {
         // run through the tests once with no hint, then again with
         // the hint value.
         for (TestVal val : typeTests) {
@@ -65,7 +65,7 @@ public class XmlaHandlerTypeTest extends FoodMartTestCase {
      * retrieved from Olap4jXmla, Olap4j, or native Mondrian.
      * @throws SQLException
      */
-    public void testDatatypeConsistency() throws SQLException {
+    void testDatatypeConsistency() throws SQLException {
         TestContext context = getTestContext();
 
         // MDX cast expressions

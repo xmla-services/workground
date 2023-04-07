@@ -61,7 +61,7 @@ public class SqlMemberSourceTest extends FoodMartTestCase {
     addLevels( storeHierarchyMock, storeLevels );
   }
 
-  public void testMakeLevelMemberCountSql() throws Exception {
+  void testMakeLevelMemberCountSql() throws Exception {
     boolean[] mustCount = new boolean[1];
     sqlMemberSource = new SqlMemberSource( storeHierarchyMock );
 

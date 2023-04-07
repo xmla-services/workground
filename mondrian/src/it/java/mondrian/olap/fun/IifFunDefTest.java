@@ -42,7 +42,7 @@ public class IifFunDefTest extends TestCase {
     when( compilerMock.compileAs( any(), any(), any() ) ).thenReturn( setListCalc );
   }
 
-  public void testGetResultType() {
+  void testGetResultType() {
     ResultStyle actualResStyle = null;
     ResultStyle expectedResStyle = setListCalc.getResultStyle();
     // Compile calculation for IIf function for (<Logical Expression>, <SetType>, <SetType>) params

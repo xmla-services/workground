@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 import org.eclipse.daanse.mdx.model.api.DMVStatement;
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
 import org.eclipse.daanse.mdx.model.api.ExplainStatement;
-import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
+import org.eclipse.daanse.mdx.model.api.RefreshStatement;
 import org.eclipse.daanse.mdx.model.api.ReturnItem;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
@@ -68,541 +68,485 @@ import org.osgi.util.converter.Converters;
 @Designate(ocd = SimpleUnparser.Config.class)
 public class SimpleUnparser implements UnParser {
 
-    @ObjectClassDefinition()
-    public interface Config {
-
-        @AttributeDefinition(defaultValue = "false")
-        default boolean commentUnusedElements() {
-            return true;
-        }
-    }
+	private static final String DELIMITER = "\r\n ";
 
-    int indent = 0;
+	@ObjectClassDefinition()
+	public interface Config {
 
-    public Config config = null;
+		@AttributeDefinition(defaultValue = "false")
+		default boolean commentUnusedElements() {
+			return true;
+		}
+	}
 
-    @Activate
-    public void activate(Map<String, Object> configMap) {
-        modifies(configMap);
+	int indent = 0;
 
-    }
+	private Config config = null;
 
-    @Deactivate
-    public void deActivate(Map<String, Object> configMap) {
-        this.config = null;
-
-    }
+	@Activate
+	public void activate(Map<String, Object> configMap) {
+		modifies(configMap);
 
-    @Modified
-    public void modifies(Map<String, Object> configMap) {
-        this.config = Converters.standardConverter()
-            .convert(configMap)
-            .to(Config.class);
+	}
 
-    }
+	@Deactivate
+	public void deActivate(Map<String, Object> configMap) {
+		this.config = null;
 
-    public StringBuilder unparseSelectStatement(SelectStatement selectStatement) {
-        StringBuilder sb = new StringBuilder();
-        if (!selectStatement.selectWithClauses()
-            .isEmpty()) {
-            sb = sb.append("WITH ");
-            sb = sb.append(unparseSelectWithClauses(selectStatement.selectWithClauses()));
-            sb = sb.append(" ");
-        }
+	}
 
-        sb = sb.append("SELECT ");
-        sb = sb.append(unparseSelectQueryClause(selectStatement.selectQueryClause()));
-        sb = sb.append(" FROM ");
-        sb = sb.append(unparseSelectSubcubeClause(selectStatement.selectSubcubeClause()));
+	@Modified
+	public void modifies(Map<String, Object> configMap) {
+		this.config = Converters.standardConverter().convert(configMap).to(Config.class);
 
-        Optional<SelectSlicerAxisClause> ssac = selectStatement.selectSlicerAxisClause();
-        if (ssac.isPresent()) {
-            sb = sb.append(" ");// whitespace before WHERE
-            sb.append(unparseSelectSlicerAxisClause(ssac.get()));
-        }
+	}
 
-        Optional<SelectCellPropertyListClause> ssplc = selectStatement.selectCellPropertyListClause();
-        if (ssplc.isPresent()) {
-            sb.append(" ");
-            sb = sb.append(unparseSelectCellPropertyListClause(ssplc.get()));
-        }
+	public StringBuilder unparseSelectStatement(SelectStatement selectStatement) {
+		StringBuilder sb = new StringBuilder();
+		if (!selectStatement.selectWithClauses().isEmpty()) {
+			sb = sb.append("WITH ");
+			sb = sb.append(unparseSelectWithClauses(selectStatement.selectWithClauses()));
+			sb = sb.append(" ");
+		}
 
-        return sb;
+		sb = sb.append("SELECT ");
+		sb = sb.append(unparseSelectQueryClause(selectStatement.selectQueryClause()));
+		sb = sb.append(" FROM ");
+		sb = sb.append(unparseSelectSubcubeClause(selectStatement.selectSubcubeClause()));
 
-    }
+		Optional<SelectSlicerAxisClause> ssac = selectStatement.selectSlicerAxisClause();
+		if (ssac.isPresent()) {
+			sb = sb.append(" ");// whitespace before WHERE
+			sb.append(unparseSelectSlicerAxisClause(ssac.get()));
+		}
 
-    public StringBuilder unparseSelectCellPropertyListClause(SelectCellPropertyListClause clause) {
-        StringBuilder sb = new StringBuilder();
+		Optional<SelectCellPropertyListClause> ssplc = selectStatement.selectCellPropertyListClause();
+		if (ssplc.isPresent()) {
+			sb.append(" ");
+			sb = sb.append(unparseSelectCellPropertyListClause(ssplc.get()));
+		}
 
-        if (clause.cell()) {
+		return sb;
 
-            sb.append("CELL ");
-        }
-        sb.append(unparseProperties(clause.properties()));
-        return sb;
-    }
+	}
 
-    public StringBuilder unparseProperties(List<String> propertyList) {
-        StringBuilder sb = new StringBuilder();
-        if (propertyList != null && !propertyList.isEmpty()) {
-            sb.append("PROPERTIES ");
+	public StringBuilder unparseSelectCellPropertyListClause(SelectCellPropertyListClause clause) {
+		StringBuilder sb = new StringBuilder();
 
-            String properties = propertyList
-                .stream()
-                .collect(Collectors.joining("\r\n, "));
-            sb.append(properties);
-        }
-        return sb;
-    }
+		if (clause.cell()) {
 
-    public StringBuilder unparseSelectSlicerAxisClause(SelectSlicerAxisClause clause) {
-        StringBuilder sb = new StringBuilder("WHERE ");
+			sb.append("CELL ");
+		}
+		sb.append(unparseProperties(clause.properties()));
+		return sb;
+	}
 
-        return sb.append(unparseExpression(clause.expression()));
-    }
+	public StringBuilder unparseProperties(List<String> propertyList) {
+		StringBuilder sb = new StringBuilder();
+		if (propertyList != null && !propertyList.isEmpty()) {
+			sb.append("PROPERTIES ");
 
-    public StringBuilder unparseSelectSubcubeClause(SelectSubcubeClause clause) {
+			String properties = propertyList.stream().collect(Collectors.joining("\r\n, "));
+			sb.append(properties);
+		}
+		return sb;
+	}
 
-        if (clause instanceof SelectSubcubeClauseName sscn) {
-            return unparseSelectSubcubeClauseName(sscn);
-        }
-        if (clause instanceof SelectSubcubeClauseStatement sscs) {
-            return unparseSelectSubcubeClauseStatement(sscs);
-        }
+	public StringBuilder unparseSelectSlicerAxisClause(SelectSlicerAxisClause clause) {
+		StringBuilder sb = new StringBuilder("WHERE ");
 
-        return null;
-    }
+		return sb.append(unparseExpression(clause.expression()));
+	}
 
-    public StringBuilder unparseSelectSubcubeClauseStatement(SelectSubcubeClauseStatement clause) {
-        StringBuilder sb = new StringBuilder();
+	public StringBuilder unparseSelectSubcubeClause(SelectSubcubeClause clause) {
 
-        Optional<SelectSlicerAxisClause> sOptional = clause.selectSlicerAxisClause();
+		if (clause instanceof SelectSubcubeClauseName sscn) {
+			return unparseSelectSubcubeClauseName(sscn);
+		}
+		if (clause instanceof SelectSubcubeClauseStatement sscs) {
+			return unparseSelectSubcubeClauseStatement(sscs);
+		}
 
-        sb.append(" ( \r\n");
-        sb.append("  SELECT \r\n");
-        sb.append(unparseSelectQueryClause(clause.selectQueryClause()));
-        sb.append(" FROM \r\n");
-        sb.append(unparseSelectSubcubeClause(clause.selectSubcubeClause()));
+		return null;
+	}
 
-        if (sOptional.isPresent()) {
+	public StringBuilder unparseSelectSubcubeClauseStatement(SelectSubcubeClauseStatement clause) {
+		StringBuilder sb = new StringBuilder();
 
-            sb.append(unparseSelectSlicerAxisClause(sOptional.get()));
-        }
-        sb.append("\r\n");
-        sb.append(" ) \r\n");
+		Optional<SelectSlicerAxisClause> sOptional = clause.selectSlicerAxisClause();
 
-        return sb;
-    }
+		sb.append(" ( \r\n");
+		sb.append("  SELECT \r\n");
+		sb.append(unparseSelectQueryClause(clause.selectQueryClause()));
+		sb.append(" FROM \r\n");
+		sb.append(unparseSelectSubcubeClause(clause.selectSubcubeClause()));
 
-    public StringBuilder unparseSelectSubcubeClauseName(SelectSubcubeClauseName clause) {
+		if (sOptional.isPresent()) {
 
-        return unparseNameObjectIdentifier(clause.cubeName());
-    }
+			sb.append(unparseSelectSlicerAxisClause(sOptional.get()));
+		}
+		sb.append("\r\n");
+		sb.append(" ) \r\n");
 
-    private StringBuilder unparseNameObjectIdentifier(NameObjectIdentifier nameObjectIdentifier) {
+		return sb;
+	}
 
-        StringBuilder sb = new StringBuilder();
-        switch (nameObjectIdentifier.quoting()) {
-            case KEY -> sb.append("&")
-                .append(nameObjectIdentifier.name());
+	public StringBuilder unparseSelectSubcubeClauseName(SelectSubcubeClauseName clause) {
 
-            case QUOTED -> sb.append("[")
-                .append(nameObjectIdentifier.name()
-                    .replace("]", "]]"))
-                .append("]");
+		return unparseNameObjectIdentifier(clause.cubeName());
+	}
 
-            case UNQUOTED -> sb.append(nameObjectIdentifier.name());
+	private StringBuilder unparseNameObjectIdentifier(NameObjectIdentifier nameObjectIdentifier) {
 
-        }
+		StringBuilder sb = new StringBuilder();
+		switch (nameObjectIdentifier.quoting()) {
+		case KEY -> sb.append("&").append(nameObjectIdentifier.name());
 
-        return sb;
-    }
+		case QUOTED -> sb.append("[").append(nameObjectIdentifier.name().replace("]", "]]")).append("]");
 
-    public StringBuilder unparseSelectQueryClause(SelectQueryClause clause) {
+		case UNQUOTED -> sb.append(nameObjectIdentifier.name());
 
-        if (clause instanceof SelectQueryAsteriskClause sqasc) {
-            return unparseSelectQueryAsteriskClause(sqasc);
-        }
-        if (clause instanceof SelectQueryAxesClause sqaxc) {
-            return unparseSelectQueryAxesClause(sqaxc);
+		}
 
-        }
-        if (clause instanceof SelectQueryEmptyClause sqec) {
-            return unparseSelectQueryEmptyClause(sqec);
+		return sb;
+	}
 
-        }
+	public StringBuilder unparseSelectQueryClause(SelectQueryClause clause) {
 
-        return null;
-    }
+		if (clause instanceof SelectQueryAsteriskClause) {
+			return unparseSelectQueryAsteriskClause();
+		}
+		if (clause instanceof SelectQueryAxesClause sqaxc) {
+			return unparseSelectQueryAxesClause(sqaxc);
 
-    private StringBuilder unparseSelectQueryEmptyClause(SelectQueryEmptyClause clause) {
-        return new StringBuilder();/* empty */
-    }
+		}
+		if (clause instanceof SelectQueryEmptyClause) {
+			return unparseSelectQueryEmptyClause();
 
-    private StringBuilder unparseSelectQueryAxesClause(SelectQueryAxesClause clause) {
+		}
 
-        String ret = clause.selectQueryAxisClauses()
-            .stream()
-            .map(s -> unparseSelectQueryAxisClause(s))
-            .map(Object::toString)
-            .collect(Collectors.joining("\r\n,"));
-        return new StringBuilder(ret);
-    }
+		return null;
+	}
 
-    public StringBuilder unparseSelectQueryAxisClause(SelectQueryAxisClause clause) {
-        StringBuilder sb = new StringBuilder();
+	private StringBuilder unparseSelectQueryEmptyClause() {
+		return new StringBuilder();/* empty */
+	}
 
-        if (clause.nonEmpty()) {
+	private StringBuilder unparseSelectQueryAxesClause(SelectQueryAxesClause clause) {
 
-            sb.append("NON EMPTY ");
-        }
-        sb.append(unparseExpression(clause.expression()));
-        sb.append(" ON ");
-        sb.append(unparseAxis(clause.axis()));
+		String ret = clause.selectQueryAxisClauses().stream().map(this::unparseSelectQueryAxisClause)
+				.map(Object::toString).collect(Collectors.joining("\r\n,"));
+		return new StringBuilder(ret);
+	}
 
-        return sb;
-    }
+	public StringBuilder unparseSelectQueryAxisClause(SelectQueryAxisClause clause) {
+		StringBuilder sb = new StringBuilder();
 
-    public StringBuilder unparseExpression(Expression expression) {
+		if (clause.nonEmpty()) {
 
-        if (expression instanceof CallExpression ce) {
-            return unparseCallExpression(ce);
-        }
-        if (expression instanceof Literal l) {
-            return unparseLiteral(l);
-        }
-        if (expression instanceof CompoundId cId) {
-            return unparseCompoundId(cId);
-        }
-        if (expression instanceof ObjectIdentifier oi) {
-            return unparseObjectIdentifier(oi);
-        }
+			sb.append("NON EMPTY ");
+		}
+		sb.append(unparseExpression(clause.expression()));
+		sb.append(" ON ");
+		sb.append(unparseAxis(clause.axis()));
 
-        return null;
-    }
+		return sb;
+	}
 
-    private StringBuilder unparseObjectIdentifier(ObjectIdentifier objectIdentifier) {
-
-        if (objectIdentifier instanceof KeyObjectIdentifier koi) {
-
-            return unparseKeyObjectIdentifier(koi);
-        }
-        if (objectIdentifier instanceof NameObjectIdentifier noi) {
-
-            return unparseNameObjectIdentifier(noi);
-
-        }
-        return null;
-    }
-
-    private StringBuilder unparseKeyObjectIdentifier(KeyObjectIdentifier koi) {
-        StringBuilder sb = new StringBuilder();
-
-        String s = koi.nameObjectIdentifiers()
-            .stream()
-            .map(k -> unparseNameObjectIdentifier(k))
-            .map(Object::toString)
-            .collect(Collectors.joining("&"));
-
-        sb.append("&")
-            .append(s);
-        return sb;
-    }
-
-    private StringBuilder unparseCompoundId(CompoundId compoundId) {
-        String s = compoundId.objectIdentifiers()
-            .stream()
-            .map(o -> unparseObjectIdentifier(o))
-            .collect(Collectors.joining("."));
-        return new StringBuilder(s);
-    }
-
-    private StringBuilder unparseLiteral(Literal literal) {
-
-        if (literal instanceof NullLiteral nullLiteral) {
-            return unparseNullLiteral(nullLiteral);
-        }
-        if (literal instanceof NumericLiteral numericLiteral) {
-            return unparseNumericLiteral(numericLiteral);
-
-        }
-        if (literal instanceof StringLiteral stringLiteral) {
-            return unparseStringLiteral(stringLiteral);
-
-        }
-        if (literal instanceof SymbolLiteral symbolLiteral) {
-            return unparseSymbolLiteral(symbolLiteral);
-
-        }
-
-        return null;
-    }
-
-    private StringBuilder unparseSymbolLiteral(SymbolLiteral symbolLiteral) {
-        return new StringBuilder(symbolLiteral.value());
-    }
-
-    private StringBuilder unparseStringLiteral(StringLiteral stringLiteral) {
-        return new StringBuilder(stringLiteral.value());
-
-    }
-
-    private StringBuilder unparseNumericLiteral(NumericLiteral numericLiteral) {
-        return new StringBuilder(numericLiteral.value()
-            .toString());
-
-    }
-
-    private StringBuilder unparseNullLiteral(NullLiteral nullLiteral) {
-        return new StringBuilder("NULL");
-
-    }
-
-    private StringBuilder unparseCallExpression(CallExpression callExpression) {
-        StringBuilder sb = new StringBuilder();
-        String name = callExpression.name();
-        List<Expression> expressions = callExpression.expressions();
-        String expressionText;
-        String object = "";
-        if (CallExpression.Type.Method.equals(callExpression.type()) && expressions.size() > 0) {
-            expressionText = unparseExpressions(expressions.subList(1, expressions.size()));
-            object = unparseExpression(expressions.get(0)).toString();
-        } else {
-            expressionText = unparseExpressions(expressions);
-        }
-        switch (callExpression.type()) {
-            case Braces -> sb.append("{")
-                .append(expressionText)
-                .append("}");
-            case Cast -> sb.append("CAST(")
-                .append(expressionText.replace(",", " AS "))
-                .append(")");
-            case Empty -> sb.append("");
-            case Function -> sb.append(name)
-                .append("(")
-                .append(expressionText)
-                .append(")");
-            case Internal -> sb.append("$")
-                .append(expressionText);
-            case Method -> sb.append(object).append(".")
-                .append(name)
-                .append("(")
-                .append(expressionText)
-                .append(")");
-            case Parentheses -> sb.append("(")
-                .append(expressionText)
-                .append(")");
-            case Property -> sb.append(expressionText)
-                .append(".")
-                .append(name);
-            case PropertyAmpersAndQuoted -> sb.append(expressionText).append(".[&")
-                .append(name)
-                .append("]");
-            case PropertyQuoted -> sb.append(expressionText).append(".&")
-                .append(name)
-                .append("");
-            case Term_Case -> {
-                int size = expressions.size();
-                sb.append("CASE ");
-                sb.append(unparseExpression(expressions.get(0)));
-
-                for (int i = 1; i < size - 1; i++) {
-                    sb.append(" WHEN ");
-                    sb.append(unparseExpression(expressions.get(i)));
-
-                }
-
-                sb.append(" THEN ");
-                sb.append(unparseExpression(expressions.get(size - 1)));
-                sb.append(" END ");
-
-            }
-            case Term_Infix -> {
-                sb.append(unparseExpression(expressions.get(0)));
-                sb.append(" ");
-                sb.append(name);
-                sb.append(" ");
-                sb.append(unparseExpression(expressions.get(1)));
-            }
-            case Term_Postfix -> sb.append(expressionText).append(" ").append(name);
-            case Term_Prefix -> sb.append(name).append(" ").append(expressionText);
-
-            default -> sb.append(":xxx");
-        }
-
-        return sb;
-    }
-
-    private String unparseExpressions(List<Expression> expressions) {
-        return expressions.stream()
-            .map(e -> unparseExpression(e))
-            .map(Object::toString)
-            .collect(Collectors.joining(","));
-    }
-
-    private StringBuilder unparseSelectQueryAsteriskClause(SelectQueryAsteriskClause clause) {
-        return new StringBuilder("*");
-    }
-
-    public StringBuilder unparseSelectWithClauses(List<SelectWithClause> clauses) {
-
-        String s = clauses.stream()
-            .map(swc -> unparseSelectWithClause(swc))
-            .map(Object::toString)
-            .collect(Collectors.joining("\r\n "));
-        return new StringBuilder(s);
-
-    }
-
-    public StringBuilder unparseSelectWithClause(SelectWithClause clause) {
-        if (clause instanceof CreateCellCalculationBodyClause c) {
-            return unparseCreateCellCalculationBodyClause(c);
-        } else if (clause instanceof CreateMemberBodyClause c) {
-            return unparseCreateMemberBodyClause(c);
-        } else if (clause instanceof CreateSetBodyClause c) {
-            return unparseCreateSetBodyClause(c);
-        } else if (clause instanceof MeasureBodyClause c) {
-            return unparseMeasureBodyClause(c);
-        }
-        return new StringBuilder();
-
-    }
-
-    public StringBuilder unparseCreateCellCalculationBodyClause(CreateCellCalculationBodyClause clause) {
-
-        return null;
-
-    }
-
-    public StringBuilder unparseCreateMemberBodyClause(CreateMemberBodyClause clause) {
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("MEMBER ");
-
-        sb.append(unparseCompoundId(clause.compoundId()))
-            .append(" AS ")
-            .append(unparseExpression(clause.expression()));
-
-        if (!clause.memberPropertyDefinitions()
-            .isEmpty()) {
-            sb.append(" ");
-
-            String ret = clause.memberPropertyDefinitions()
-                .stream()
-                .map(mpd -> unparseMemberPropertyDefinition(mpd))
-                .collect(Collectors.joining("\r\n,", ",\r\n ", ""));
-            sb.append(ret);
-        }
-
-        return sb;
-
-    }
-
-    public StringBuilder unparseMemberPropertyDefinition(MemberPropertyDefinition mpd) {
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(unparseObjectIdentifier(mpd.objectIdentifier()));
-        sb.append(" = ");
-        sb.append(unparseExpression(mpd.expression()));
-        return sb;
-    }
-
-    public StringBuilder unparseCreateSetBodyClause(CreateSetBodyClause clause) {
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("SET ");
-        sb.append(unparseCompoundId(clause.compoundId()))
-            .append(" AS ")
-            .append(unparseExpression(clause.expression()));
-
-        return sb;
-
-    }
-
-    public StringBuilder unparseMeasureBodyClause(MeasureBodyClause clause) {
-        return null;
-
-    }
-
-    public StringBuilder unparseDrillthroughStatement(DrillthroughStatement statement) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("DRILLTHROUGH");
-        if (statement.maxRows().isPresent()) {
-            sb.append("\r\n ").append("MAXROWS").append(" ").append(statement.maxRows().get());
-        }
-        if (statement.firstRowSet().isPresent()) {
-            sb.append("\r\n ").append("FIRSTROWSET").append(" ").append(statement.firstRowSet().get());
-        }
-        if (statement.selectStatement() != null) {
-            sb.append("\r\n ").append(unparseSelectStatement(statement.selectStatement()));
-        }
-        if (statement.returnItems() != null && !statement.returnItems().isEmpty()) {
-            sb.append("\r\n ").append(unparseSelectStatement(statement.selectStatement()));
-        }
-
-        return sb;
-    }
-
-    public StringBuilder unparseReturnItems(List<ReturnItem> returnItems) {
-        StringBuilder sb = new StringBuilder();
-        if (!returnItems.isEmpty()) {
-            sb.append("RETURN ");
-            sb.append(returnItems.stream()
-                .map(r -> unparseCompoundId(r.compoundId()))
-                .map(Object::toString)
-                .collect(Collectors.joining(",")));
-        }
-        return sb;
-    }
-
-    public StringBuilder unparseExplainStatement(ExplainStatement selectStatement) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("EXPLAIN PLAN FOR");
-        if (selectStatement.mdxStatement() != null) {
-            sb.append("\r\n ").append(unparseMdxStatement(selectStatement.mdxStatement()));
-        }
-        return sb;
-    }
-
-    public StringBuilder unparseDMVStatement(DMVStatement selectStatement) {
-        return null;
-
-    }
-
-    public StringBuilder unparseMdxRefreshStatement(RefreshStatement selectStatement) {
-        return null;
-
-    }
-
-    public StringBuilder unparseSelectDimensionPropertyListClause(SelectDimensionPropertyListClause clause) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("DIMENSION");
-        sb.append("\r\n ").append(unparseProperties(clause.properties()));
-        return sb;
-    }
-
-    @Override
-    public StringBuilder unparseMdxStatement(MdxStatement mdxStatement) {
-        if (mdxStatement instanceof SelectStatement) {
-            return unparseSelectStatement((SelectStatement) mdxStatement);
-        } else if (mdxStatement instanceof DrillthroughStatement) {
-            return unparseDrillthroughStatement((DrillthroughStatement) mdxStatement);
-        } else if (mdxStatement instanceof ExplainStatement) {
-            return unparseExplainStatement((ExplainStatement) mdxStatement);
-        } else if (mdxStatement instanceof DMVStatement) {
-            return unparseDMVStatement((DMVStatement) mdxStatement);
-        } else if (mdxStatement instanceof SelectStatement) {
-            return unparseSelectStatement((SelectStatement) mdxStatement);
-        }
-
-        return new StringBuilder();
-    }
-
-    public StringBuilder unparseAxis(Axis axis) {
-        StringBuilder sb = new StringBuilder().append(axis.named() ? axis.name()
-            .toUpperCase() : axis.ordinal());
-        return sb;
-
-    }
+	public StringBuilder unparseExpression(Expression expression) {
+
+		if (expression instanceof CallExpression ce) {
+			return unparseCallExpression(ce);
+		}
+		if (expression instanceof Literal l) {
+			return unparseLiteral(l);
+		}
+		if (expression instanceof CompoundId cId) {
+			return unparseCompoundId(cId);
+		}
+		if (expression instanceof ObjectIdentifier oi) {
+			return unparseObjectIdentifier(oi);
+		}
+
+		return null;
+	}
+
+	private StringBuilder unparseObjectIdentifier(ObjectIdentifier objectIdentifier) {
+
+		if (objectIdentifier instanceof KeyObjectIdentifier koi) {
+
+			return unparseKeyObjectIdentifier(koi);
+		}
+		if (objectIdentifier instanceof NameObjectIdentifier noi) {
+
+			return unparseNameObjectIdentifier(noi);
+
+		}
+		return null;
+	}
+
+	private StringBuilder unparseKeyObjectIdentifier(KeyObjectIdentifier koi) {
+		StringBuilder sb = new StringBuilder();
+
+		String s = koi.nameObjectIdentifiers().stream().map(this::unparseNameObjectIdentifier).map(Object::toString)
+				.collect(Collectors.joining("&"));
+
+		sb.append("&").append(s);
+		return sb;
+	}
+
+	private StringBuilder unparseCompoundId(CompoundId compoundId) {
+		String s = compoundId.objectIdentifiers().stream().map(this::unparseObjectIdentifier)
+				.collect(Collectors.joining("."));
+		return new StringBuilder(s);
+	}
+
+	private StringBuilder unparseLiteral(Literal literal) {
+
+		if (literal instanceof NullLiteral) {
+			return unparseNullLiteral();
+		}
+		if (literal instanceof NumericLiteral numericLiteral) {
+			return unparseNumericLiteral(numericLiteral);
+
+		}
+		if (literal instanceof StringLiteral stringLiteral) {
+			return unparseStringLiteral(stringLiteral);
+
+		}
+		if (literal instanceof SymbolLiteral symbolLiteral) {
+			return unparseSymbolLiteral(symbolLiteral);
+
+		}
+
+		return null;
+	}
+
+	private StringBuilder unparseSymbolLiteral(SymbolLiteral symbolLiteral) {
+		return new StringBuilder(symbolLiteral.value());
+	}
+
+	private StringBuilder unparseStringLiteral(StringLiteral stringLiteral) {
+		return new StringBuilder(stringLiteral.value());
+
+	}
+
+	private StringBuilder unparseNumericLiteral(NumericLiteral numericLiteral) {
+		return new StringBuilder(numericLiteral.value().toString());
+
+	}
+
+	private StringBuilder unparseNullLiteral() {
+		return new StringBuilder("NULL");
+
+	}
+
+	private StringBuilder unparseCallExpression(CallExpression callExpression) {
+		StringBuilder sb = new StringBuilder();
+		String name = callExpression.name();
+		List<Expression> expressions = callExpression.expressions();
+		String expressionText;
+		String object = "";
+		if (CallExpression.Type.Method.equals(callExpression.type()) && !expressions.isEmpty()) {
+			expressionText = unparseExpressions(expressions.subList(1, expressions.size()));
+			object = unparseExpression(expressions.get(0)).toString();
+		} else {
+			expressionText = unparseExpressions(expressions);
+		}
+		switch (callExpression.type()) {
+		case Braces -> sb.append("{").append(expressionText).append("}");
+		case Cast -> sb.append("CAST(").append(expressionText.replace(",", " AS ")).append(")");
+		case Empty -> sb.append("");
+		case Function -> sb.append(name).append("(").append(expressionText).append(")");
+		case Internal -> sb.append("$").append(expressionText);
+		case Method -> sb.append(object).append(".").append(name).append("(").append(expressionText).append(")");
+		case Parentheses -> sb.append("(").append(expressionText).append(")");
+		case Property -> sb.append(expressionText).append(".").append(name);
+		case PropertyAmpersAndQuoted -> sb.append(expressionText).append(".[&").append(name).append("]");
+		case PropertyQuoted -> sb.append(expressionText).append(".&").append(name).append("");
+		case Term_Case -> {
+			int size = expressions.size();
+			sb.append("CASE ");
+			sb.append(unparseExpression(expressions.get(0)));
+
+			for (int i = 1; i < size - 1; i++) {
+				sb.append(" WHEN ");
+				sb.append(unparseExpression(expressions.get(i)));
+
+			}
+
+			sb.append(" THEN ");
+			sb.append(unparseExpression(expressions.get(size - 1)));
+			sb.append(" END ");
+
+		}
+		case Term_Infix -> {
+			sb.append(unparseExpression(expressions.get(0)));
+			sb.append(" ");
+			sb.append(name);
+			sb.append(" ");
+			sb.append(unparseExpression(expressions.get(1)));
+		}
+		case Term_Postfix -> sb.append(expressionText).append(" ").append(name);
+		case Term_Prefix -> sb.append(name).append(" ").append(expressionText);
+
+		default -> sb.append(":xxx");
+		}
+
+		return sb;
+	}
+
+	private String unparseExpressions(List<Expression> expressions) {
+		return expressions.stream().map(this::unparseExpression).map(Object::toString).collect(Collectors.joining(","));
+	}
+
+	private StringBuilder unparseSelectQueryAsteriskClause() {
+		return new StringBuilder("*");
+	}
+
+	public StringBuilder unparseSelectWithClauses(List<SelectWithClause> clauses) {
+
+		String s = clauses.stream().map(this::unparseSelectWithClause).map(Object::toString)
+				.collect(Collectors.joining(DELIMITER));
+		return new StringBuilder(s);
+
+	}
+
+	public StringBuilder unparseSelectWithClause(SelectWithClause clause) {
+		if (clause instanceof CreateCellCalculationBodyClause c) {
+			return unparseCreateCellCalculationBodyClause(c);
+		} else if (clause instanceof CreateMemberBodyClause c) {
+			return unparseCreateMemberBodyClause(c);
+		} else if (clause instanceof CreateSetBodyClause c) {
+			return unparseCreateSetBodyClause(c);
+		} else if (clause instanceof MeasureBodyClause c) {
+			return unparseMeasureBodyClause(c);
+		}
+		return new StringBuilder();
+
+	}
+
+	public StringBuilder unparseCreateCellCalculationBodyClause(CreateCellCalculationBodyClause clause) {
+
+		return null;
+
+	}
+
+	public StringBuilder unparseCreateMemberBodyClause(CreateMemberBodyClause clause) {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("MEMBER ");
+
+		sb.append(unparseCompoundId(clause.compoundId())).append(" AS ").append(unparseExpression(clause.expression()));
+
+		if (!clause.memberPropertyDefinitions().isEmpty()) {
+			sb.append(" ");
+
+			String ret = clause.memberPropertyDefinitions().stream().map(this::unparseMemberPropertyDefinition)
+					.collect(Collectors.joining("\r\n,", ",\r\n ", ""));
+			sb.append(ret);
+		}
+
+		return sb;
+
+	}
+
+	public StringBuilder unparseMemberPropertyDefinition(MemberPropertyDefinition mpd) {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append(unparseObjectIdentifier(mpd.objectIdentifier()));
+		sb.append(" = ");
+		sb.append(unparseExpression(mpd.expression()));
+		return sb;
+	}
+
+	public StringBuilder unparseCreateSetBodyClause(CreateSetBodyClause clause) {
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("SET ");
+		sb.append(unparseCompoundId(clause.compoundId())).append(" AS ").append(unparseExpression(clause.expression()));
+
+		return sb;
+
+	}
+
+	public StringBuilder unparseMeasureBodyClause(MeasureBodyClause clause) {
+		return null;
+
+	}
+
+	public StringBuilder unparseDrillthroughStatement(DrillthroughStatement statement) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("DRILLTHROUGH");
+
+		statement.maxRows().ifPresent(sb.append(DELIMITER).append("MAXROWS").append(" ")::append);
+
+		statement.firstRowSet().ifPresent(sb.append(DELIMITER).append("FIRSTROWSET").append(" ")::append);
+
+		sb.append(DELIMITER).append(unparseSelectStatement(statement.selectStatement()));
+
+		if (!statement.returnItems().isEmpty()) {
+			sb.append(DELIMITER).append(unparseReturnItems(statement.returnItems()));
+		}
+
+		return sb;
+	}
+
+	public StringBuilder unparseReturnItems(List<ReturnItem> returnItems) {
+		StringBuilder sb = new StringBuilder();
+		if (!returnItems.isEmpty()) {
+			sb.append("RETURN ");
+			sb.append(returnItems.stream().map(r -> unparseCompoundId(r.compoundId())).map(Object::toString)
+					.collect(Collectors.joining(",")));
+		}
+		return sb;
+	}
+
+	public StringBuilder unparseExplainStatement(ExplainStatement selectStatement) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("EXPLAIN PLAN FOR");
+		if (selectStatement.mdxStatement() != null) {
+			sb.append(DELIMITER).append(unparseMdxStatement(selectStatement.mdxStatement()));
+		}
+		return sb;
+	}
+
+	public StringBuilder unparseDMVStatement(DMVStatement selectStatement) {
+		return null;
+
+	}
+
+	public StringBuilder unparseMdxRefreshStatement(RefreshStatement selectStatement) {
+		return null;
+
+	}
+
+	public StringBuilder unparseSelectDimensionPropertyListClause(SelectDimensionPropertyListClause clause) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("DIMENSION");
+		sb.append(DELIMITER).append(unparseProperties(clause.properties()));
+		return sb;
+	}
+
+	@Override
+	public StringBuilder unparseMdxStatement(MdxStatement mdxStatement) {
+
+		if (mdxStatement instanceof SelectStatement selectStatement) {
+			return unparseSelectStatement(selectStatement);
+		} else if (mdxStatement instanceof DrillthroughStatement drillthroughStatement) {
+			return unparseDrillthroughStatement(drillthroughStatement);
+		} else if (mdxStatement instanceof ExplainStatement explainStatement) {
+			return unparseExplainStatement(explainStatement);
+		} else if (mdxStatement instanceof DMVStatement dMVStatement) {
+			return unparseDMVStatement(dMVStatement);
+		}
+
+		return new StringBuilder();
+	}
+
+	public StringBuilder unparseAxis(Axis axis) {
+		return new StringBuilder().append(axis.named() ? axis.name().toUpperCase() : axis.ordinal());
+
+	}
 
 }

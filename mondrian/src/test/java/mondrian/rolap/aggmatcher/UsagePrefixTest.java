@@ -74,7 +74,7 @@ public class UsagePrefixTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testUsagePrefix(TestingContext context) throws Exception {
+    void testUsagePrefix(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -108,7 +108,7 @@ public class UsagePrefixTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testUsagePrefixTwoDims(TestingContext context) throws Exception {
+    void testUsagePrefixTwoDims(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;

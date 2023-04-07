@@ -32,7 +32,7 @@ public class ModulosTest extends TestCase {
         super(name);
     }
 
-    public void testMany() {
+    void testMany() {
         Axis[] axes = new Axis[3];
         TupleList positions = newPositionList(4);
         axes[0] = new RolapAxis(positions);
@@ -51,7 +51,7 @@ public class ModulosTest extends TestCase {
         assertTrue("Pos[2] length equals 1", pos[2] == 1);
     }
 
-    public void testOne() {
+    void testOne() {
         Axis[] axes = new Axis[1];
         TupleList positions = newPositionList(53);
         axes[0] = new RolapAxis(positions);
@@ -91,7 +91,7 @@ public class ModulosTest extends TestCase {
         assertTrue("Ordinals are not equal", oMany == o);
     }
 
-    public void testTwo() {
+    void testTwo() {
         Axis[] axes = new Axis[2];
         TupleList positions = newPositionList(23);
         axes[0] = new RolapAxis(positions);
@@ -134,7 +134,7 @@ public class ModulosTest extends TestCase {
         assertTrue("Ordinals are not equal", oMany == o);
     }
 
-    public void testThree() {
+    void testThree() {
         Axis[] axes = new Axis[3];
         TupleList positions = newPositionList(4);
         axes[0] = new RolapAxis(positions);

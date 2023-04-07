@@ -105,7 +105,7 @@ public class SpeciesNonCollapsedAggTest extends AggTableTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testBugMondrian1105(TestingContext context) {
+    void testBugMondrian1105(TestingContext context) {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;

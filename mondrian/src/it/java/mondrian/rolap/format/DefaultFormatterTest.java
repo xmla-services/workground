@@ -75,7 +75,7 @@ public class DefaultFormatterTest extends TestCase {
      * any unwanted decimal digits due to floating point representation,
      * as well as scientific notations.
      */
-    public void testNumberFormatting() {
+    void testNumberFormatting() {
         for (Map.Entry<Object, String> entry : VALUES.entrySet()) {
             String formatted = formatter.format(entry.getKey());
 

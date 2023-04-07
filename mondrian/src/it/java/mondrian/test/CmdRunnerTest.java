@@ -30,10 +30,10 @@ public class CmdRunnerTest extends FoodMartTestCase {
         super(name);
     }
 
-    public void testQuery() throws IOException {
+    void testQuery() throws IOException {
         doTest();
     }
-    public void test7731() throws IOException {
+    void test7731() throws IOException {
         doTest();
     }
     protected void doTest() {

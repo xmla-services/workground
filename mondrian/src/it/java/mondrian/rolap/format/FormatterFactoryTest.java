@@ -24,7 +24,7 @@ public class FormatterFactoryTest extends TestCase {
      * factory should instantiate an object of specified class.
      * </p>
      */
-    public void testShouldCreateFormatterByClassName() {
+    void testShouldCreateFormatterByClassName() {
         FormatterCreateContext cellFormatterContext =
             new FormatterCreateContext.Builder("name")
                 .formatterAttr("mondrian.rolap.format.CellFormatterTestImpl")
@@ -61,7 +61,7 @@ public class FormatterFactoryTest extends TestCase {
      * factory should instantiate an object of script based implementation.
      * </p>
      */
-    public void testShouldCreateFormatterByScript() {
+    void testShouldCreateFormatterByScript() {
         FormatterCreateContext context =
             new FormatterCreateContext.Builder("name")
                 .script("return null;", "JavaScript")
@@ -86,7 +86,7 @@ public class FormatterFactoryTest extends TestCase {
      * factory should instantiate an object of <b>specified class</b>.
      * </p>
      */
-    public void testShouldCreateFormatterByClassNameIfBothSpecified() {
+    void testShouldCreateFormatterByClassNameIfBothSpecified() {
         FormatterCreateContext cellFormatterContext =
             new FormatterCreateContext.Builder("name")
                 .formatterAttr("mondrian.rolap.format.CellFormatterTestImpl")
@@ -127,7 +127,7 @@ public class FormatterFactoryTest extends TestCase {
      * <li>{@link CellFormatter}</li>
      * </p>
      */
-    public void testShouldReturnNullIfEmptyContext() {
+    void testShouldReturnNullIfEmptyContext() {
         FormatterCreateContext context =
             new FormatterCreateContext.Builder("name").build();
 
@@ -147,7 +147,7 @@ public class FormatterFactoryTest extends TestCase {
      * <li>{@link MemberFormatter}</li>
      * </p>
      */
-    public void testShouldReturnDefaultFormatterIfEmptyContext() {
+    void testShouldReturnDefaultFormatterIfEmptyContext() {
         FormatterCreateContext context =
             new FormatterCreateContext.Builder("name").build();
 

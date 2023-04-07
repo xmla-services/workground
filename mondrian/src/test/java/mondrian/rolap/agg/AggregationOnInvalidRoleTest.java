@@ -66,7 +66,7 @@ public class AggregationOnInvalidRoleTest extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void test_ExecutesCorrectly_WhenIgnoringInvalidMembers(TestingContext context) {
+    void test_ExecutesCorrectly_WhenIgnoringInvalidMembers(TestingContext context) {
         prepareContext(context);
         Connection connection = context.createConnection();
         //TestContext context = getTestContext().withFreshConnection();

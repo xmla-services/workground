@@ -23,7 +23,7 @@ public class RolapEvaluatorTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testGetSlicerPredicateInfo(TestingContext context) throws Exception {
+    void testGetSlicerPredicateInfo(TestingContext context) throws Exception {
         RolapResult result = (RolapResult) executeQuery(context.createConnection(),
             "select  from sales "
             + "WHERE {[Time].[1997].Q1, [Time].[1997].Q2} "
@@ -39,7 +39,7 @@ public class RolapEvaluatorTest {
     }
 
     /*
-    public void testSlicerPredicateUnsatisfiable() {
+    void testSlicerPredicateUnsatisfiable() {
         assertQueryReturns(
             "select measures.[Customer Count] on 0 from [warehouse and sales] "
             + "WHERE {[Time].[1997].Q1, [Time].[1997].Q2} "
@@ -56,7 +56,7 @@ public class RolapEvaluatorTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testListColumnPredicateInfo(TestingContext context) throws Exception {
+    void testListColumnPredicateInfo(TestingContext context) throws Exception {
       RolapResult result = (RolapResult) executeQuery(context.createConnection(),
           "select  from sales "
           + "WHERE {[Product].[Drink],[Product].[Non-Consumable]} ");
@@ -71,7 +71,7 @@ public class RolapEvaluatorTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testOrPredicateInfo(TestingContext context) throws Exception {
+    void testOrPredicateInfo(TestingContext context) throws Exception {
       RolapResult result = (RolapResult) executeQuery(context.createConnection(),
           "select  from sales "
           + "WHERE {[Product].[Drink].[Beverages],[Product].[Food].[Produce],[Product].[Non-Consumable]} ");

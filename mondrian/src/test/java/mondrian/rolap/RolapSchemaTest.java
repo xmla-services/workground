@@ -99,7 +99,7 @@ public class RolapSchemaTest {
     }
 
     @Test
-    public void testCreateUnionRole_ThrowsException_WhenSchemaGrantsExist() {
+    void testCreateUnionRole_ThrowsException_WhenSchemaGrantsExist() {
         RoleImpl role = new RoleImpl();
         role.setSchemaGrant(
             List.of(new SchemaGrantImpl()));
@@ -116,7 +116,7 @@ public class RolapSchemaTest {
     }
 
     @Test
-    public void testCreateUnionRole_ThrowsException_WhenRoleNameIsUnknown() {
+    void testCreateUnionRole_ThrowsException_WhenRoleNameIsUnknown() {
         final String roleName = "non-existing role name";
         RoleUsageImpl usage = new RoleUsageImpl();
         usage.setRoleName(roleName);
@@ -138,7 +138,7 @@ public class RolapSchemaTest {
 
 
     @Test
-    public void testHandleSchemaGrant() {
+    void testHandleSchemaGrant() {
         RolapSchema schema = createSchema();
         schema = spy(schema);
         doNothing().when(schema)
@@ -159,7 +159,7 @@ public class RolapSchemaTest {
 
 
     @Test
-    public void testHandleCubeGrant_ThrowsException_WhenCubeIsUnknown() {
+    void testHandleCubeGrant_ThrowsException_WhenCubeIsUnknown() {
         RolapSchema schema = createSchema();
         schema = spy(schema);
         doReturn(null).when(schema).lookupCube(anyString());
@@ -178,7 +178,7 @@ public class RolapSchemaTest {
     }
 
     @Test
-    public void testHandleCubeGrant_GrantsCubeDimensionsAndHierarchies() {
+    void testHandleCubeGrant_GrantsCubeDimensionsAndHierarchies() {
         RolapSchema schema = createSchema();
         schema = spy(schema);
         doNothing().when(schema)
@@ -221,17 +221,17 @@ public class RolapSchemaTest {
     }
 
     @Test
-    public void testHandleHierarchyGrant_ValidMembers() {
+    void testHandleHierarchyGrant_ValidMembers() {
         doTestHandleHierarchyGrant(Access.CUSTOM, Access.ALL);
     }
 
     @Test
-    public void testHandleHierarchyGrant_NoValidMembers() {
+    void testHandleHierarchyGrant_NoValidMembers() {
         doTestHandleHierarchyGrant(Access.NONE, null);
     }
 
     @Test
-    public void testEmptyRolapStarRegistryCreatedForTheNewSchema()
+    void testEmptyRolapStarRegistryCreatedForTheNewSchema()
         throws Exception {
       RolapSchema schema = createSchema();
       RolapStarRegistry rolapStarRegistry = schema.getRolapStarRegistry();
@@ -240,7 +240,7 @@ public class RolapSchemaTest {
     }
 
     @Test
-    public void testGetOrCreateStar_StarCreatedAndUsed()
+    void testGetOrCreateStar_StarCreatedAndUsed()
         throws Exception {
       //Create the test fact
       Relation fact =
@@ -268,7 +268,7 @@ public class RolapSchemaTest {
     }
 
     @Test
-    public void testGetStarFromRegistryByStarKey() throws Exception {
+    void testGetStarFromRegistryByStarKey() throws Exception {
       //Create the test fact
       Relation fact =
           SchemaUtil.parse(getFactTableWithSQLFilter(), TableImpl.class);
@@ -284,7 +284,7 @@ public class RolapSchemaTest {
     }
 
     @Test
-    public void testGetStarFromRegistryByFactTableName() throws Exception {
+    void testGetStarFromRegistryByFactTableName() throws Exception {
       //Create the test fact
       Relation fact =
           SchemaUtil.parse(getFactTable(), TableImpl.class);

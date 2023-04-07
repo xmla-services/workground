@@ -34,7 +34,7 @@ public class AdditionalTest {
 
 
     @Test
-    public void testOracleTypeMapQuirks() throws SQLException {
+    void testOracleTypeMapQuirks() throws SQLException {
 
         ResultSetMetaData resultSet = mock(ResultSetMetaData.class);
         when(resultSet.getColumnName(1)).thenReturn("c0");

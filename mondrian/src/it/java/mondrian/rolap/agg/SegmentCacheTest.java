@@ -35,7 +35,7 @@ public class SegmentCacheTest extends BasicQueryTest {
             .flushSchemaCache();
     }
 
-    public void testCompoundPredicatesCollision() {
+    void testCompoundPredicatesCollision() {
         String query =
             "SELECT [Gender].[All Gender] ON 0, [MEASURES].[CUSTOMER COUNT] ON 1 FROM SALES";
         String query2 =
@@ -62,7 +62,7 @@ public class SegmentCacheTest extends BasicQueryTest {
         assertQueryReturns(query2, result2);
     }
 
-    public void testSegmentCacheEvents() throws Exception {
+    void testSegmentCacheEvents() throws Exception {
         SegmentCache mockCache = new MockSegmentCache();
         SegmentCacheWorker testWorker =
             new SegmentCacheWorker(mockCache, null);

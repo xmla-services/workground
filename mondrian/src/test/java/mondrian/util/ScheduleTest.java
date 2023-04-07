@@ -132,7 +132,7 @@ public class ScheduleTest {
     // test cases
 
     @Test
-    public void testOnceTimeSchedule() {
+    void testOnceTimeSchedule() {
         Calendar calendar0827 = ScheduleUtil.createCalendar(time0827);
         OnceTimeSchedule onceTimeSchedule = new OnceTimeSchedule(calendar0827);
         Calendar t = onceTimeSchedule.nextOccurrence(null, true);
@@ -150,7 +150,7 @@ public class ScheduleTest {
     }
 
     @Test
-    public void testOnce() {
+    void testOnce() {
         Schedule schedule =
             Schedule.createOnce(toDate(2002, 04, 23, "Tue", 8, 27), gmtTz);
         Date d;
@@ -169,7 +169,7 @@ public class ScheduleTest {
     }
 
     @Test
-    public void testDaily() {
+    void testDaily() {
         int period = 1;
         Schedule schedule = Schedule.createDaily(
             toDate(2002, 04, 20, "Sat", 8, 27),
@@ -191,7 +191,7 @@ public class ScheduleTest {
     }
 
     @Test
-    public void testDailyNoUpperLimit() {
+    void testDailyNoUpperLimit() {
         int period = 1;
         Schedule schedule = Schedule.createDaily(
             toDate(2002, 4, 20, "Sat", 8, 27), null, gmtTz, time0827,
@@ -203,7 +203,7 @@ public class ScheduleTest {
     }
 
     @Test
-    public void testDailyPeriodic() {
+    void testDailyPeriodic() {
         int period = 10;
         Schedule schedule = Schedule.createDaily(
             toDate(2002, 4, 20, "Sat", 8, 27),
@@ -216,7 +216,7 @@ public class ScheduleTest {
     }
 
     @Test
-    public void testWeeklyEmptyBitmapFails() {
+    void testWeeklyEmptyBitmapFails() {
         boolean failed = false;
         try {
             Schedule.createWeekly(null, null, gmtTz, time0827, 1, 0);
@@ -227,7 +227,7 @@ public class ScheduleTest {
     }
 
     @Test
-    public void testWeeklyBadBitmapFails() {
+    void testWeeklyBadBitmapFails() {
         boolean failed = false;
         try {
             int period = 1;
@@ -240,7 +240,7 @@ public class ScheduleTest {
     }
 
     @Test
-    public void testWeekly() {
+    void testWeekly() {
         int thuesday =
             (1 << Calendar.TUESDAY) |
             (1 << Calendar.THURSDAY);
@@ -259,7 +259,7 @@ public class ScheduleTest {
     }
 
     @Test
-    public void testMonthlyByDay() {
+    void testMonthlyByDay() {
         int period = 1;
         int daysOfMonth =
             (1 << 12) | (1 << 21) | (1 << Schedule.LAST_DAY_OF_MONTH);
@@ -283,7 +283,7 @@ public class ScheduleTest {
     }
 
     @Test
-    public void testMonthlyByDayPeriodic() {
+    void testMonthlyByDayPeriodic() {
         int daysOfMonth =
             (1 << 12) | (1 << 21) | (1 << Schedule.LAST_DAY_OF_MONTH);
         int period = 2;
@@ -308,7 +308,7 @@ public class ScheduleTest {
     }
 
     @Test
-    public void testMonthlyByWeek() {
+    void testMonthlyByWeek() {
         int period = 3;
         int daysOfWeek = (1 << Calendar.THURSDAY) | (1 << Calendar.SUNDAY);
         int weeksOfMonth = (1 << 2) | (1 << Schedule.LAST_WEEK_OF_MONTH);
@@ -330,7 +330,7 @@ public class ScheduleTest {
     }
 
     @Test
-    public void testTimeZone
+    void testTimeZone
             () {
         int period = 1;
         int daysOfWeek = (1 << Calendar.THURSDAY);
@@ -387,7 +387,7 @@ public class ScheduleTest {
     }
 
     @Test
-    public void testTimeZoneChange
+    void testTimeZoneChange
             () {
         int period = 1;
         TimeZone tz = pstTz;

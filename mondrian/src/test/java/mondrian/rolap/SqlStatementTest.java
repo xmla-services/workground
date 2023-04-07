@@ -72,7 +72,7 @@ public class SqlStatementTest {
   }
 
   @Test
-  public void testPrintingNilDurationIfCancelledBeforeStart() throws Exception {
+  void testPrintingNilDurationIfCancelledBeforeStart() throws Exception {
     try {
       statement.execute();
     } catch (Exception e) {
@@ -88,7 +88,7 @@ public class SqlStatementTest {
   }
 
   @Test
-  public void testGetDialectSchemaAndConnectionNull() {
+  void testGetDialectSchemaAndConnectionNull() {
     try {
       this.statement.getDialect(null);
       fail("Should throw exception");
@@ -99,7 +99,7 @@ public class SqlStatementTest {
   }
 
   @Test
-  public void testGetDialectDialectNull() {
+  void testGetDialectDialectNull() {
     RolapSchema schema = mock(RolapSchema.class);
     when(schema.getDialect()).thenReturn(null);
     try {
@@ -112,7 +112,7 @@ public class SqlStatementTest {
   }
 
   @Test
-  public void testGetDialect() {
+  void testGetDialect() {
     RolapSchema schema = mock(RolapSchema.class);
     Dialect dialect = mock(Dialect.class);
     when(schema.getDialect()).thenReturn(dialect);
@@ -122,7 +122,7 @@ public class SqlStatementTest {
   }
 
   @Test
-  public void testCreateDialect() {
+  void testCreateDialect() {
     statement = mock(SqlStatement.class);
     Dialect dialect = mock(Dialect.class);
     Context context = mock(Context.class);

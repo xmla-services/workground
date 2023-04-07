@@ -47,104 +47,104 @@ public class XmlaExcel2000Test extends XmlaBaseTestCase {
         }
     }
 
-    public void test01() {
+    void test01() {
         helperTest(false);
     }
 
     // BeginSession
-    public void test02() {
+    void test02() {
         helperTest(false);
     }
 
-    public void test03() {
+    void test03() {
         helperTest(true);
     }
 
-    public void test04() {
+    void test04() {
         helperTest(true);
     }
 
-    public void test05() {
+    void test05() {
         helperTest(true);
     }
 
-    public void test06() {
+    void test06() {
         helperTest(true);
     }
 
     // BeginSession
-    public void test07() {
+    void test07() {
         helperTest(false);
     }
 
-    public void test08() {
+    void test08() {
         helperTest(true);
     }
 
-    public void test09() {
+    void test09() {
         helperTest(true);
     }
 
-    public void test10() {
+    void test10() {
         helperTest(true);
     }
 
-    public void test11() {
+    void test11() {
         helperTest(true);
     }
 
-    public void test12() {
+    void test12() {
         helperTest(true);
     }
 
-    public void testMdschemaMeasures() {
+    void testMdschemaMeasures() {
         helperTest(true);
     }
 
-    public void testMdschemaMeasuresEmitInvisible() {
+    void testMdschemaMeasuresEmitInvisible() {
         helperTest(true);
     }
 
-    public void test14() {
+    void test14() {
         helperTest(true);
     }
 
-    public void test15() {
+    void test15() {
         helperTest(true);
     }
 
-    public void test16() {
+    void test16() {
         helperTest(true);
     }
-    public void test17() {
-        helperTest(true);
-    }
-
-    public void test18() {
+    void test17() {
         helperTest(true);
     }
 
-    public void testExpect01() {
+    void test18() {
+        helperTest(true);
+    }
+
+    void testExpect01() {
         helperTestExpect(false);
     }
 
-    public void testExpect02() {
+    void testExpect02() {
         helperTestExpect(false);
     }
 
-    public void testExpect03() {
+    void testExpect03() {
         helperTestExpect(true);
     }
 
-    public void testExpect04() {
+    void testExpect04() {
         helperTestExpect(true);
     }
 
-    public void testExpect05() {
+    void testExpect05() {
         helperTestExpect(true);
     }
 
-    public void testExpect06() {
+    void testExpect06() {
         helperTestExpect(true);
     }
 

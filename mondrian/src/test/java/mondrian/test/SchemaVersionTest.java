@@ -35,7 +35,7 @@ public class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchema3withVersion(TestingContext context) throws SQLException {
+    void testSchema3withVersion(TestingContext context) throws SQLException {
         withSchema(context, SCHEMA_3_VHEADER + SCHEMA_3_BODY);
         Util.PropertyList connectInfo =
             getConnectionProperties(context.createConnection());
@@ -46,7 +46,7 @@ public class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchema3noVersion(TestingContext context) throws SQLException {
+    void testSchema3noVersion(TestingContext context) throws SQLException {
         withSchema(context,SCHEMA_3_HEADER + SCHEMA_3_BODY);
         Util.PropertyList connectInfo =
             getConnectionProperties(context.createConnection());
@@ -57,7 +57,7 @@ public class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchema4withVersion(TestingContext context) {
+    void testSchema4withVersion(TestingContext context) {
         withSchema(context,SCHEMA_4_HEADER + SCHEMA_4_BODY);
         try {
             Util.PropertyList connectInfo =
@@ -72,7 +72,7 @@ public class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchema4noVersion(TestingContext context) {
+    void testSchema4noVersion(TestingContext context) {
         withSchema(context,
                 SCHEMA_4_NVHEADER + SCHEMA_4_BODY);
         try {

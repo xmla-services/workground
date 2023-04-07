@@ -87,7 +87,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             null);
     }
 
-    public void testTupleWithAllLevelMembersOnly() {
+    void testTupleWithAllLevelMembersOnly() {
         assertQueryReturns(
             "WITH MEMBER GENDER.X AS 'AGGREGATE({([GENDER].DEFAULTMEMBER,\n"
             + "[STORE].DEFAULTMEMBER)})'\n"
@@ -101,7 +101,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             + "Row #0: 5,581\n");
     }
 
-    public void testCrossJoinOfAllMembers() {
+    void testCrossJoinOfAllMembers() {
         assertQueryReturns(
             "WITH MEMBER GENDER.X AS 'AGGREGATE({CROSSJOIN({[GENDER].DEFAULTMEMBER},\n"
             + "{[STORE].DEFAULTMEMBER})})'\n"
@@ -115,7 +115,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             + "Row #0: 5,581\n");
     }
 
-    public void testCrossJoinMembersWithASingleMember() {
+    void testCrossJoinMembersWithASingleMember() {
         // make sure tuple optimization will be used
         propSaver.set(propSaver.properties.MaxConstraints, 1);
 
@@ -163,7 +163,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         assertQuerySql(query, patterns);
     }
 
-    public void testCrossJoinMembersWithSetOfMembers() {
+    void testCrossJoinMembersWithSetOfMembers() {
         // make sure tuple optimization will be used
         propSaver.set(propSaver.properties.MaxConstraints, 2);
 
@@ -225,7 +225,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         assertQuerySql(query, patterns);
     }
 
-    public void testCrossJoinParticularMembersFromTwoDimensions() {
+    void testCrossJoinParticularMembersFromTwoDimensions() {
         assertQueryReturns(
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].M} * "
             + "{[STORE].[ALL STORES].[USA].[CA]})', solve_order=100 "
@@ -239,7 +239,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             + "Row #0: 1,389\n");
     }
 
-    public void testDistinctCountOnSetOfMembersFromOneDimension() {
+    void testDistinctCountOnSetOfMembersFromOneDimension() {
         assertQueryReturns(
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].[GENDER].members})'"
             + "SELECT GENDER.X ON 0, [MEASURES].[CUSTOMER COUNT] ON 1 FROM SALES",
@@ -252,7 +252,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             + "Row #0: 5,581\n");
     }
 
-    public void testDistinctCountWithAMeasureAsPartOfTuple() {
+    void testDistinctCountWithAMeasureAsPartOfTuple() {
         assertQueryReturns(
             "SELECT [STORE].[ALL STORES].[USA].[CA] ON 0, "
             + "([MEASURES].[CUSTOMER COUNT], [Gender].[m]) ON 1 FROM SALES",
@@ -265,7 +265,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             + "Row #0: 1,389\n");
     }
 
-    public void testDistinctCountOnSetOfMembers() {
+    void testDistinctCountOnSetOfMembers() {
         assertQueryReturns(
             "WITH MEMBER STORE.X as 'Aggregate({[STORE].[ALL STORES].[USA].[CA],"
             + "[STORE].[ALL STORES].[USA].[WA]})'"
@@ -281,7 +281,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             + "Row #0: 4,544\n");
     }
 
-    public void testDistinctCountOnTuplesWithSomeNonJoiningDimensions() {
+    void testDistinctCountOnTuplesWithSomeNonJoiningDimensions() {
         propSaver.set(
             props.IgnoreMeasureForNonJoiningDimension, false);
         String mdx =
@@ -304,7 +304,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         assertQueryReturns(mdx, expectedResult);
     }
 
-    public void testAggregationListOptimizationForChildren() {
+    void testAggregationListOptimizationForChildren() {
         assertQueryReturns(
             "WITH MEMBER GENDER.X AS 'AGGREGATE({[GENDER].[GENDER].members} * "
             + "{[STORE].[ALL STORES].[USA].[CA], [STORE].[ALL STORES].[USA].[OR], "
@@ -319,7 +319,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             + "Row #0: 5,581\n");
     }
 
-    public void testDistinctCountOnMembersWithNonJoiningDimensionNotAtAllLevel()
+    void testDistinctCountOnMembersWithNonJoiningDimensionNotAtAllLevel()
     {
         assertQueryReturns(
             "WITH MEMBER WAREHOUSE.X as "
@@ -336,7 +336,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             + "Row #0: \n");
     }
 
-    public void testNonJoiningDimensionWithAllMember() {
+    void testNonJoiningDimensionWithAllMember() {
         assertQueryReturns(
             "WITH MEMBER WAREHOUSE.X as 'Aggregate({WAREHOUSE.MEMBERS})'"
             + "SELECT WAREHOUSE.X  ON ROWS, "
@@ -351,7 +351,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             + "Row #0: 5,581\n");
     }
 
-    public void testCrossJoinOfJoiningAndNonJoiningDimensionWithAllMember() {
+    void testCrossJoinOfJoiningAndNonJoiningDimensionWithAllMember() {
         assertQueryReturns(
             "WITH MEMBER WAREHOUSE.X AS "
             + "'AGGREGATE({GENDER.GENDER.MEMBERS} * {WAREHOUSE.MEMBERS})'"
@@ -381,7 +381,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             + "Row #0: 5,581\n");
     }
 
-    public void testCrossJoinOfJoiningAndNonJoiningDimension() {
+    void testCrossJoinOfJoiningAndNonJoiningDimension() {
         assertQueryReturns(
             "WITH MEMBER WAREHOUSE.X AS "
             + "'AGGREGATE({GENDER.GENDER.MEMBERS} * {WAREHOUSE.[STATE PROVINCE].MEMBERS})'"
@@ -411,7 +411,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             + "Row #0: 5,581\n");
     }
 
-    public void testAggregationOverLargeListGeneratesError() {
+    void testAggregationOverLargeListGeneratesError() {
         propSaver.set(props.MaxConstraints, 7);
 
         // LucidDB has no limit on the size of IN list
@@ -501,7 +501,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
      *
      * @see #testAggregationOverLargeListGeneratesError
      */
-    public void testAggregateMaxConstraints() {
+    void testAggregateMaxConstraints() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -536,7 +536,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             + "Row #2: 937\n");
     }
 
-    public void testMultiLevelMembersNullParents() {
+    void testMultiLevelMembersNullParents() {
         if (!isDefaultNullMemberRepresentation()) {
             return;
         }
@@ -607,7 +607,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         assertQuerySql(testContext, query, patterns);
     }
 
-    public void testMultiLevelMembersMixedNullNonNullParent() {
+    void testMultiLevelMembersMixedNullNonNullParent() {
         if (!isDefaultNullMemberRepresentation()) {
             return;
         }
@@ -662,7 +662,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         testContext.assertQueryReturns(query, result);
     }
 
-    public void testMultiLevelsMixedNullNonNullChild() {
+    void testMultiLevelsMixedNullNonNullChild() {
         if (!isDefaultNullMemberRepresentation()) {
             return;
         }
@@ -717,7 +717,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         testContext.assertQueryReturns(query, result);
     }
 
-    public void testAggregationOnCJofMembersGeneratesOptimalQuery() {
+    void testAggregationOnCJofMembersGeneratesOptimalQuery() {
         // Mondrian does not use GROUPING SETS for distinct-count measures.
         // So, this test should not use GROUPING SETS, even if they are enabled.
         // See change 12310, bug MONDRIAN-470 (aka SF.net 2207515).
@@ -764,7 +764,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             patterns);
     }
 
-    public void testCanNotBatchForDifferentCompoundPredicate() {
+    void testCanNotBatchForDifferentCompoundPredicate() {
         propSaver.set(props.EnableGroupingSets, true);
         String mdxQueryWithFewMembers =
             "WITH "
@@ -840,7 +840,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
      * Test distinct count agg happens in non gs query for subset of members
      * with mixed measures.
      */
-    public void testDistinctCountInNonGroupingSetsQuery() {
+    void testDistinctCountInNonGroupingSetsQuery() {
         propSaver.set(props.EnableGroupingSets, true);
 
         String mdxQueryWithFewMembers =
@@ -916,7 +916,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         assertQuerySql(mdxQueryWithFewMembers, patterns);
     }
 
-    public void testAggregationOfMembersAndDefaultMemberWithoutGroupingSets() {
+    void testAggregationOfMembersAndDefaultMemberWithoutGroupingSets() {
         propSaver.set(props.EnableGroupingSets, false);
 
         String mdxQueryWithMembers =
@@ -976,7 +976,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         assertQuerySql(mdxQueryWithDefaultMember, patterns);
     }
 
-    public void testOptimizeChildren() {
+    void testOptimizeChildren() {
         String query =
             "with member gender.x as "
             + "'aggregate("
@@ -1029,7 +1029,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         assertQuerySql(query, patterns);
     }
 
-    public void testOptimizeListWhenTuplesAreFormedWithDifferentLevels() {
+    void testOptimizeListWhenTuplesAreFormedWithDifferentLevels() {
         String query =
             "WITH\n"
             + "MEMBER Product.Agg AS \n"
@@ -1116,7 +1116,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         assertQuerySql(query, patterns);
     }
 
-    public void testOptimizeListWithTuplesOfLength3() {
+    void testOptimizeListWithTuplesOfLength3() {
         String query =
             "WITH\n"
             + "MEMBER Product.Agg AS \n"
@@ -1152,7 +1152,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         assertQueryReturns(query, expected);
     }
 
-    public void testOptimizeChildrenForTuplesWithLength1() {
+    void testOptimizeChildrenForTuplesWithLength1() {
         TupleList memberList =
             productMembersPotScrubbersPotsAndPans(
                 salesCubeSchemaReader);
@@ -1195,7 +1195,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         assertEquals(4, tuples.size());
     }
 
-    public void testOptimizeChildrenForTuplesWithLength3() {
+    void testOptimizeChildrenForTuplesWithLength3() {
         TupleList genderMembers =
             genderMembersIncludingAll(false, salesCubeSchemaReader, salesCube);
         TupleList productMembers =
@@ -1221,7 +1221,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         assertEquals(16, tuples.size());
     }
 
-    public void testOptimizeChildrenWhenTuplesAreFormedWithDifferentLevels() {
+    void testOptimizeChildrenWhenTuplesAreFormedWithDifferentLevels() {
         TupleList genderMembers =
             genderMembersIncludingAll(false, salesCubeSchemaReader, salesCube);
         TupleList productMembers =
@@ -1258,7 +1258,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
                 salesCubeSchemaReader)));
     }
 
-    public void testWhetherCJOfChildren() {
+    void testWhetherCJOfChildren() {
         TupleList genderMembers =
             genderMembersIncludingAll(false, salesCubeSchemaReader, salesCube);
         TupleList storeMembers =
@@ -1269,7 +1269,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         assertEquals(2, tuples.size());
     }
 
-    public void testShouldNotRemoveDuplicateTuples() {
+    void testShouldNotRemoveDuplicateTuples() {
         Member maleChildMember = member(
             Id.Segment.toList("Gender", "All Gender", "M"),
             salesCubeSchemaReader);
@@ -1286,7 +1286,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
         assertEquals(3, tuples.size());
     }
 
-    public void testMemberCountIsSameForAllMembersInTuple() {
+    void testMemberCountIsSameForAllMembersInTuple() {
         TupleList genderMembers =
             genderMembersIncludingAll(false, salesCubeSchemaReader, salesCube);
         TupleList storeMembers =
@@ -1304,7 +1304,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
                 memberCounterMap[1].values()));
     }
 
-    public void testMemberCountIsNotSameForAllMembersInTuple() {
+    void testMemberCountIsNotSameForAllMembersInTuple() {
         Member maleChild =
             member(
                 Id.Segment.toList("Gender", "All Gender", "M"),
@@ -1341,7 +1341,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
                 memberCounterMap[1].values()));
     }
 
-    public void testAggregatesAtTheSameLevelForNormalAndDistinctCountMeasure() {
+    void testAggregatesAtTheSameLevelForNormalAndDistinctCountMeasure() {
         propSaver.set(props.EnableGroupingSets, true);
 
         assertQueryReturns(
@@ -1366,7 +1366,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
             + "Row #1: 135,215\n");
     }
 
-    public void testDistinctCountForAggregatesAtTheSameLevel() {
+    void testDistinctCountForAggregatesAtTheSameLevel() {
         propSaver.set(props.EnableGroupingSets, true);
         assertQueryReturns(
             "WITH "
@@ -1390,7 +1390,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
      * results in wrong data for a distinct count operation when using roles to
      * narrow down the members access.
      */
-    public void testMondrian906() {
+    void testMondrian906() {
         final TestContext context =
             TestContext.instance().create(
                 null, null, null, null, null,
@@ -1430,7 +1430,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
      * <p>The optimization routine for tuple lists was implementing a single
      * side of an IF conditional, which resulted in an NPE.
      */
-    public void testTupleOptimizationBug1225() {
+    void testTupleOptimizationBug1225() {
         Member caMember =
             member(
                 Id.Segment.toList(
@@ -1525,7 +1525,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-1370">MONDRIAN-1370</a>
      * <br> Wrong results for aggregate with distinct count measure.
      */
-    public void testDistinctCountAggMeasure() {
+    void testDistinctCountAggMeasure() {
         String dimension =
             "<Dimension name=\"Time\" type=\"TimeDimension\"> "
             + "  <Hierarchy hasAll=\"false\" primaryKey=\"time_id\"> "
@@ -1632,7 +1632,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
    * Type].[*TOTAL_MEMBER_SEL~AGG] would be re-used for [Gender].[M], [Store Type].[*TOTAL_MEMBER_SEL~AGG]
    * 
    */
-  public void testCachedAggregate() {
+  void testCachedAggregate() {
 
     Result result =
         executeQuery( " WITH\r\n"
@@ -1665,7 +1665,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
   /**
    * Similar to above test except now we verify the cache key is correct when generated for the slicer compound member.
    */
-  public void testCachedCompoundSlicer() {
+  void testCachedCompoundSlicer() {
 
     Result result =
         executeQuery( " WITH\r\n"
@@ -1701,7 +1701,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
   /**
    * Verifies that expression cache entries generated with aggregation lists can be re-used.
    */
-  public void testExpCacheHit() {
+  void testExpCacheHit() {
 
     Result result =
         executeQuery( "WITH\r\n"
@@ -1735,7 +1735,7 @@ public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
     assertEquals( 23, e.getExpCacheMissCount() );
   }
   
-  public void testExpCacheHit2() {
+  void testExpCacheHit2() {
 
     Result result =
         executeQuery( "WITH\r\n" + 

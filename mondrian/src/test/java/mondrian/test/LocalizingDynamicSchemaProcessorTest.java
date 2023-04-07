@@ -32,7 +32,7 @@ public class LocalizingDynamicSchemaProcessorTest
      * definition.
      */
     @Test
-    public void testProcessingCatalog() {
+    void testProcessingCatalog() {
         String variable = "%{translate}";
         String translation = "Translate";
         String catalog = "..." + variable + "...";

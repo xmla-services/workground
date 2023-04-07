@@ -34,7 +34,7 @@ public class CodeComplianceTest
     /**
      * Checks source code file formatting.
      */
-    public void testCodeFormatting()  throws Exception
+    void testCodeFormatting()  throws Exception
     {
         runAntTest("checkCodeFormatting");
     }
@@ -42,7 +42,7 @@ public class CodeComplianceTest
     /**
      * Checks that javadoc can be generated without errors.
      */
-    public void testJavadoc() throws Exception
+    void testJavadoc() throws Exception
     {
         runAntTest("checkJavadoc");
     }

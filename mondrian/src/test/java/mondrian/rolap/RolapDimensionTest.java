@@ -79,7 +79,7 @@ public class RolapDimensionTest {
 
   @Disabled //disabled for CI build
   @Test
-  public void testHierarchyRelation() {
+  void testHierarchyRelation() {
     Relation hierarchyTable = Mockito
             .mock(Relation.class);
     hierarchy.setRelation(hierarchyTable);
@@ -94,7 +94,7 @@ public class RolapDimensionTest {
    */
   @Disabled //disabled for CI build
   @Test
-  public void testHierarchyRelationNotSet() {
+  void testHierarchyRelationNotSet() {
     new RolapDimension(schema, cube, xmlDimension, xmlCubeDimension);
 
     assertNotNull(hierarchy);

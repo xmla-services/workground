@@ -84,7 +84,7 @@ public class SorterTest{
   // |Not-OrderByKey| BreakTupleComparator|HierarchicalTupleComparator   |
   // +--------------+---------------------+------------------------------+
   @Test
-  public void testComparatorSelectionBrkOrderByKey() {
+  void testComparatorSelectionBrkOrderByKey() {
     setupSortKeyMocks( true, Sorter.Flag.BASC, Sorter.Flag.BDESC );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec1 );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec2 );
@@ -93,7 +93,7 @@ public class SorterTest{
   }
 
   @Test
-  public void testComparatorSelectionBrkNotOrderByKey() {
+  void testComparatorSelectionBrkNotOrderByKey() {
     setupSortKeyMocks( false, Sorter.Flag.BASC, Sorter.Flag.BDESC );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec1 );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec2 );
@@ -102,7 +102,7 @@ public class SorterTest{
   }
 
   @Test
-  public void testComparatorSelectionNotBreakingOrderByKey() {
+  void testComparatorSelectionNotBreakingOrderByKey() {
     setupSortKeyMocks( true, Sorter.Flag.ASC, Sorter.Flag.DESC );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec1 );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec2 );
@@ -111,7 +111,7 @@ public class SorterTest{
   }
 
   @Test
-  public void testComparatorSelectionNotBreaking() {
+  void testComparatorSelectionNotBreaking() {
     setupSortKeyMocks( false, Sorter.Flag.ASC, Sorter.Flag.DESC );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec1 );
     Sorter.applySortSpecToComparator( evaluator, 2, comparatorChain, sortKeySpec2 );
@@ -121,7 +121,7 @@ public class SorterTest{
   }
 
   @Test
-  public void testSortTuplesBreakingByKey() {
+  void testSortTuplesBreakingByKey() {
     TupleList tupleList = genList();
     setupSortKeyMocks( true, Sorter.Flag.BASC, Sorter.Flag.BDESC );
 
@@ -136,7 +136,7 @@ public class SorterTest{
   }
 
   @Test
-  public void testCancel() {
+  void testCancel() {
     setupSortKeyMocks( true, Sorter.Flag.ASC, Sorter.Flag.DESC );
     // pass in a null tupleList, and an iterable.  cancel should be checked while generating the list
     // from the iterable

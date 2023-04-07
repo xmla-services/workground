@@ -58,7 +58,7 @@ public class CancellationTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonEmptyListCancellation(TestingContext context) throws MondrianException {
+    void testNonEmptyListCancellation(TestingContext context) throws MondrianException {
         // tests that cancellation/timeout is checked in
         // CrossJoinFunDef.nonEmptyList
         propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 1);
@@ -81,7 +81,7 @@ public class CancellationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMutableCrossJoinCancellation(TestingContext context) throws MondrianException {
+    void testMutableCrossJoinCancellation(TestingContext context) throws MondrianException {
         // tests that cancellation/timeout is checked in
         // CrossJoinFunDef.mutableCrossJoin
         propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 1);

@@ -97,21 +97,21 @@ public class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
         return props.toString();
     }
 
-    public void testDBSchemataFiltered() throws Exception {
+    void testDBSchemataFiltered() throws Exception {
         doTest(
             RowsetDefinition.DBSCHEMA_SCHEMATA.name(), "FoodMart2");
         doTest(
             RowsetDefinition.DBSCHEMA_SCHEMATA.name(), "FoodMart1");
     }
 
-    public void testDBSchemataFilteredByRestraints() throws Exception {
+    void testDBSchemataFilteredByRestraints() throws Exception {
         doTest(
             RowsetDefinition.DBSCHEMA_SCHEMATA.name(), "FoodMart2");
         doTest(
             RowsetDefinition.DBSCHEMA_SCHEMATA.name(), "FoodMart1");
     }
 
-    public void testCatalogsFiltered() throws Exception {
+    void testCatalogsFiltered() throws Exception {
         //Catalog in the properties has not filter DBSCHEMA_CATALOGS. Only if is set in restrictions.
         doTest(
             RowsetDefinition.DBSCHEMA_CATALOGS.name(), "FoodMart2");
@@ -119,21 +119,21 @@ public class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
             RowsetDefinition.DBSCHEMA_CATALOGS.name(), "FoodMart1");
     }
 
-    public void testCatalogsFilteredByRestraints() throws Exception {
+    void testCatalogsFilteredByRestraints() throws Exception {
         doTest(
             RowsetDefinition.DBSCHEMA_CATALOGS.name(), "FoodMart2");
         doTest(
             RowsetDefinition.DBSCHEMA_CATALOGS.name(), "FoodMart1");
     }
 
-    public void testCubesFiltered() throws Exception {
+    void testCubesFiltered() throws Exception {
         doTest(
             RowsetDefinition.MDSCHEMA_CUBES.name(), "FoodMart2");
         doTest(
             RowsetDefinition.MDSCHEMA_CUBES.name(), "FoodMart1");
     }
 
-    public void testCubesFilteredByRestraints() throws Exception {
+    void testCubesFilteredByRestraints() throws Exception {
         doTest(
             RowsetDefinition.MDSCHEMA_CUBES.name(), "FoodMart2");
         doTest(

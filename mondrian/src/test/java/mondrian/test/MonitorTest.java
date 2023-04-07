@@ -47,7 +47,7 @@ public class MonitorTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMe(TestingContext context) throws SQLException {
+    void testMe(TestingContext context) throws SQLException {
         String queryString =
             "WITH MEMBER [Measures].[Foo] AS\n"
             + " [Measures].[Unit Sales]"

@@ -15,7 +15,7 @@ import mondrian.olap.MondrianProperties;
 
 public class DeadlockTest extends FoodMartTestCase {
 
-    public void testSegmentLoadDeadlock() {
+    void testSegmentLoadDeadlock() {
         // http://jira.pentaho.com/browse/MONDRIAN-1726
         // Deadlock can occur if a cardinality query is fired after
         // all available database connections have been consumed and active

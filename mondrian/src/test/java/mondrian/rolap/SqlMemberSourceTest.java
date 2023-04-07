@@ -76,7 +76,7 @@ public class SqlMemberSourceTest {
 
   @Disabled //disabled for CI build
   @Test
-  public void testMakeLevelMemberCountSql() throws Exception {
+  void testMakeLevelMemberCountSql() throws Exception {
     boolean[] mustCount = new boolean[1];
     sqlMemberSource = new SqlMemberSource( storeHierarchyMock );
 

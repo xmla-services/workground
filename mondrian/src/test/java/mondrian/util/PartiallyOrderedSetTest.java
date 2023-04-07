@@ -91,7 +91,7 @@ public class PartiallyOrderedSetTest {
         };
     
     @Test
-    public void testPoset() {
+    void testPoset() {
         String empty = "''";
         String abcd = "'abcd'";
         PartiallyOrderedSet<String> poset =
@@ -180,7 +180,7 @@ public class PartiallyOrderedSetTest {
         assertEqualsList("['ab', 'abcd']", poset.getAncestors("'a'"));
     }
     @Test
-    public void testPosetTricky() {
+    void testPosetTricky() {
         PartiallyOrderedSet<String> poset =
             new PartiallyOrderedSet<String>(stringSubsetOrdering);
 
@@ -197,7 +197,7 @@ public class PartiallyOrderedSetTest {
         printValidate(poset);
     }
     @Test
-    public void testPosetBits() {
+    void testPosetBits() {
         final PartiallyOrderedSet<Integer> poset =
             new PartiallyOrderedSet<Integer>(isBitSuperset);
         poset.add(2112); // {6, 11} i.e. 64 + 2048
@@ -211,7 +211,7 @@ public class PartiallyOrderedSetTest {
     }
 
     @Test
-    public void testPosetBitsRemoveParent() {
+    void testPosetBitsRemoveParent() {
         final PartiallyOrderedSet<Integer> poset =
             new PartiallyOrderedSet<Integer>(isBitSuperset);
         poset.add(66); // {bit 2, bit 6}
@@ -224,7 +224,7 @@ public class PartiallyOrderedSetTest {
     }
 
     @Test
-    public void testMondrian2628() {
+    void testMondrian2628() {
         PartiallyOrderedSet<Integer> integers =
             new PartiallyOrderedSet<Integer>(isDivisorWithNulls,
               range(1, 1000));
@@ -238,7 +238,7 @@ public class PartiallyOrderedSetTest {
     }
 
     @Test
-    public void testDivisorPoset() {
+    void testDivisorPoset() {
         PartiallyOrderedSet<Integer> integers =
             new PartiallyOrderedSet<Integer>(isDivisor, range(1, 1000));
         assertEquals(
@@ -255,12 +255,12 @@ public class PartiallyOrderedSetTest {
     }
 
     @Test
-    public void testDivisorSeries() {
+    void testDivisorSeries() {
         checkPoset(isDivisor, debug, range(1, SCALE * 3), false);
     }
 
     @Test
-    public void testDivisorRandom() {
+    void testDivisorRandom() {
         boolean ok = false;
         try {
             checkPoset(
@@ -274,7 +274,7 @@ public class PartiallyOrderedSetTest {
     }
 
     @Test
-    public void testDivisorRandomWithRemoval() {
+    void testDivisorRandomWithRemoval() {
         boolean ok = false;
         try {
             checkPoset(
@@ -288,12 +288,12 @@ public class PartiallyOrderedSetTest {
     }
 
     @Test
-    public void testDivisorInverseSeries() {
+    void testDivisorInverseSeries() {
         checkPoset(isDivisorInverse, debug, range(1, SCALE * 3), false);
     }
 
     @Test
-    public void testDivisorInverseRandom() {
+    void testDivisorInverseRandom() {
         boolean ok = false;
         try {
             checkPoset(
@@ -308,7 +308,7 @@ public class PartiallyOrderedSetTest {
     }
 
     @Test
-    public void testDivisorInverseRandomWithRemoval() {
+    void testDivisorInverseRandomWithRemoval() {
         boolean ok = false;
         try {
             checkPoset(
@@ -323,12 +323,12 @@ public class PartiallyOrderedSetTest {
     }
 
     @Test
-    public void testSubsetSeries() {
+    void testSubsetSeries() {
         checkPoset(isBitSubset, debug, range(1, SCALE / 2), false);
     }
 
     @Test
-    public void testSubsetRandom() {
+    void testSubsetRandom() {
         boolean ok = false;
         try {
             checkPoset(

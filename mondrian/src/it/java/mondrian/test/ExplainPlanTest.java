@@ -49,7 +49,7 @@ public class ExplainPlanTest extends FoodMartTestCase {
     super( name );
   }
 
-  public void testExplain() throws SQLException {
+  void testExplain() throws SQLException {
     Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
     Util.setLevel( RolapUtil.PROFILE_LOGGER, Level.OFF ); // Must turn off in case test environment has enabled profiling
     OlapConnection connection = TestContext.instance().getOlap4jConnection();
@@ -85,7 +85,7 @@ public class ExplainPlanTest extends FoodMartTestCase {
     Util.setLevel( RolapUtil.PROFILE_LOGGER, originalLevel );
   }
 
-  public void testExplainComplex() throws SQLException {
+  void testExplainComplex() throws SQLException {
     Level originalLevel = RolapUtil.PROFILE_LOGGER.getLevel();
     Util.setLevel( RolapUtil.PROFILE_LOGGER, Level.OFF );; // Must turn off in case test environment has enabled profiling
     OlapConnection connection = TestContext.instance().getOlap4jConnection();
@@ -185,7 +185,7 @@ public class ExplainPlanTest extends FoodMartTestCase {
     Util.setLevel( RolapUtil.PROFILE_LOGGER, originalLevel );
   }
 
-  public void testExplainInvalid() throws SQLException {
+  void testExplainInvalid() throws SQLException {
     OlapConnection connection = TestContext.instance().getOlap4jConnection();
     final OlapStatement statement = connection.createStatement();
     try {
@@ -203,7 +203,7 @@ public class ExplainPlanTest extends FoodMartTestCase {
    * 
    * @throws SQLException
    */
-  public void testQueryTimingAnalyzer() throws SQLException {
+  void testQueryTimingAnalyzer() throws SQLException {
 
     final String mdx =
         "WITH\r\n"
@@ -242,7 +242,7 @@ public class ExplainPlanTest extends FoodMartTestCase {
         "SqlStatement-SqlTupleReader.readTuples [[Gender].[Gender], [Education Level].[Education Level]] invoked 1 times" ) );
   }
 
-  public void testMutiKeySort() throws SQLException {
+  void testMutiKeySort() throws SQLException {
     final String mdx =
         "WITH\r\n"
             + " SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Gender_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],[*BASE_MEMBERS__Product_]))'\r\n"
@@ -270,7 +270,7 @@ public class ExplainPlanTest extends FoodMartTestCase {
    * 
    * @throws SQLException
    */
-  public void testNestedSumFunDef() throws SQLException {
+  void testNestedSumFunDef() throws SQLException {
     final String mdx =
         "WITH\r\n"
             + " SET [*NATIVE_CJ_SET] AS 'FILTER([Time].[Month].MEMBERS, NOT ISEMPTY ([Measures].[Unit Sales]))'\r\n"
@@ -298,7 +298,7 @@ public class ExplainPlanTest extends FoodMartTestCase {
    * 
    * @throws SQLException
    */
-  public void testAggAboveSlicerSolveOrder() throws SQLException {
+  void testAggAboveSlicerSolveOrder() throws SQLException {
 
     final String mdx =
         "WITH\r\n"
@@ -331,7 +331,7 @@ public class ExplainPlanTest extends FoodMartTestCase {
    * 
    * @throws SQLException
    */
-  public void testAggBelowSlicerSolveOrder() throws SQLException {
+  void testAggBelowSlicerSolveOrder() throws SQLException {
 
     int original = MondrianProperties.instance().CompoundSlicerMemberSolveOrder.get();
     MondrianProperties.instance().CompoundSlicerMemberSolveOrder.set( 0 );

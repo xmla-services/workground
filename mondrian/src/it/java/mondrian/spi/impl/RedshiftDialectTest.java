@@ -32,20 +32,20 @@ public class RedshiftDialectTest extends TestCase {
     dialect = new RedshiftDialect( connection );
   }
 
-  public void testAllowsRegularExpressionInWhereClause() {
+  void testAllowsRegularExpressionInWhereClause() {
     assertTrue( dialect.allowsRegularExpressionInWhereClause() );
   }
 
-  public void testGenerateRegularExpression_InvalidRegex() throws Exception {
+  void testGenerateRegularExpression_InvalidRegex() throws Exception {
     assertNull( "Invalid regex should be ignored", dialect.generateRegularExpression( "table.column", "(a" ) );
   }
 
-  public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
+  void testGenerateRegularExpression_CaseInsensitive() throws Exception {
     String sql = dialect.generateRegularExpression( "table.column", "(?is)|(?u).*a.*" );
     assertEquals( "REGEXP_INSTR(table.column,'.*a.*',1,1,0,'i') > 0", sql );
   }
 
-  public void testGenerateRegularExpression_CaseSensitive() throws Exception {
+  void testGenerateRegularExpression_CaseSensitive() throws Exception {
     String sql = dialect.generateRegularExpression( "table.column", ".*a.*" );
     assertEquals( "REGEXP_INSTR(table.column,'.*a.*',1,1,0,'c') > 0", sql );
   }

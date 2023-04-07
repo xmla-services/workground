@@ -45,7 +45,7 @@ public class TypeTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testConversions(TestingContext foodMartContext) {
+    void testConversions(TestingContext foodMartContext) {
         final Connection connection = foodMartContext.createConnection();
         Cube salesCube =
             getCubeWithName("Sales", connection.getSchema().getCubes());
@@ -176,7 +176,7 @@ public class TypeTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testCommonTypeWhenSetTypeHavingMemberTypeAndTupleType(TestingContext foodMartContext) {
+    void testCommonTypeWhenSetTypeHavingMemberTypeAndTupleType(TestingContext foodMartContext) {
         Connection connection=	foodMartContext.createConnection();
         MemberType measureMemberType =
             getMemberTypeHavingMeasureInIt(getUnitSalesMeasure(connection));
@@ -207,7 +207,7 @@ public class TypeTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testCommonTypeOfMemberandTupleTypeIsTupleType(TestingContext foodMartContext) {
+    void testCommonTypeOfMemberandTupleTypeIsTupleType(TestingContext foodMartContext) {
         Connection connection=	foodMartContext.createConnection();
         MemberType measureMemberType =
             getMemberTypeHavingMeasureInIt(getUnitSalesMeasure(connection));
@@ -233,7 +233,7 @@ public class TypeTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testCommonTypeBetweenTuplesOfDifferentSizesIsATupleType(TestingContext foodMartContext) {
+    void testCommonTypeBetweenTuplesOfDifferentSizesIsATupleType(TestingContext foodMartContext) {
     Connection connection=	foodMartContext.createConnection();
         MemberType measureMemberType =
             getMemberTypeHavingMeasureInIt(getUnitSalesMeasure(connection));

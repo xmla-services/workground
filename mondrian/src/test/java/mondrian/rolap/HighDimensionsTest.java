@@ -65,7 +65,7 @@ public class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBug1971406(TestingContext context) throws Exception {
+    void testBug1971406(TestingContext context) throws Exception {
         if (!MondrianProperties.instance().EnableNativeCrossJoin.get()) {
             return;
         }
@@ -133,7 +133,7 @@ public class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testPromotionsTwoDimensions(TestingContext context) throws Exception {
+    void testPromotionsTwoDimensions(TestingContext context) throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -148,7 +148,7 @@ public class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHead(TestingContext context) throws Exception {
+    void testHead(TestingContext context) throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -215,7 +215,7 @@ public class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonEmpty(TestingContext context) throws Exception {
+    void testNonEmpty(TestingContext context) throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -230,7 +230,7 @@ public class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testFilter(TestingContext context) throws Exception {
+    void testFilter(TestingContext context) throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -255,7 +255,7 @@ public class HighDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMondrian1488(TestingContext context) {
+    void testMondrian1488(TestingContext context) {
         //  MONDRIAN-1501 / MONDRIAN-1488
         // Both involve an attempt to modify the list backing
         // HighCardSqlTupleReader when handling null values.

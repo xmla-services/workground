@@ -49,11 +49,11 @@ public class AggStarTest extends PropertyRestoringTestCase {
     super.tearDown();
   }
 
-  public void testSizeIntegerOverflow() {
+  void testSizeIntegerOverflow() {
     Assert.assertEquals(BIG_NUMBER.longValue(), aggStar.getSize());
   }
 
-  public void testVolumeIntegerOverflow() {
+  void testVolumeIntegerOverflow() {
     propSaver.set(propSaver.properties.ChooseAggregateByVolume, true);
     Assert.assertEquals(BIG_NUMBER.longValue(), aggStar.getSize());
   }

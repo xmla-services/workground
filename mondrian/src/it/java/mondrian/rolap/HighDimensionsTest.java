@@ -35,7 +35,7 @@ public class HighDimensionsTest extends FoodMartTestCase {
         super(name);
     }
 
-    public void testBug1971406() throws Exception {
+    void testBug1971406() throws Exception {
         if (!MondrianProperties.instance().EnableNativeCrossJoin.get()) {
             return;
         }
@@ -102,7 +102,7 @@ public class HighDimensionsTest extends FoodMartTestCase {
         return scaleFactor;
     }
 
-    public void testPromotionsTwoDimensions() throws Exception {
+    void testPromotionsTwoDimensions() throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -116,7 +116,7 @@ public class HighDimensionsTest extends FoodMartTestCase {
     }
 
 
-    public void testHead() throws Exception {
+    void testHead() throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -180,7 +180,7 @@ public class HighDimensionsTest extends FoodMartTestCase {
     }
 
 
-    public void testNonEmpty() throws Exception {
+    void testNonEmpty() throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -193,7 +193,7 @@ public class HighDimensionsTest extends FoodMartTestCase {
             nonEmptyHighCardResults, nonEmptyCells, true, 48);
     }
 
-    public void testFilter() throws Exception {
+    void testFilter() throws Exception {
         if (!Bug.BugMondrian486Fixed) {
             return;
         }
@@ -216,7 +216,7 @@ public class HighDimensionsTest extends FoodMartTestCase {
             moreThan4000highCardResults, moreThan4000Cells, true, 3);
     }
 
-    public void testMondrian1488() {
+    void testMondrian1488() {
         //  MONDRIAN-1501 / MONDRIAN-1488
         // Both involve an attempt to modify the list backing
         // HighCardSqlTupleReader when handling null values.

@@ -21,12 +21,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleUnparserSelectDimensionPropertyListClauseTest {
+class SimpleUnparserSelectDimensionPropertyListClauseTest {
 
     private SimpleUnparser unparser = new SimpleUnparser();
 
     @Test
-    public void test() {
+    void test() {
         SelectDimensionPropertyListClause selectDimensionPropertyListClause =
             new SelectDimensionPropertyListClauseR(List.of("BACK_COLOR", "FORE_COLOR"));
 

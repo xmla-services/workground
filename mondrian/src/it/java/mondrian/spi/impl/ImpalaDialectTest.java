@@ -33,20 +33,20 @@ public class ImpalaDialectTest extends TestCase {
     impalaDialect = new ImpalaDialect( connection );
   }
 
-  public void testAllowsRegularExpressionInWhereClause() {
+  void testAllowsRegularExpressionInWhereClause() {
     assertTrue( impalaDialect.allowsRegularExpressionInWhereClause() );
   }
 
-  public void testGenerateRegularExpression_InvalidRegex() throws Exception {
+  void testGenerateRegularExpression_InvalidRegex() throws Exception {
     assertNull( "Invalid regex should be ignored", impalaDialect.generateRegularExpression( "table.column", "(a" ) );
   }
 
-  public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
+  void testGenerateRegularExpression_CaseInsensitive() throws Exception {
     String sql = impalaDialect.generateRegularExpression( "table.column", "(?i)|(?u).*a.*" );
     assertSqlWithRegex( false, sql, "'.*A.*'" );
   }
 
-  public void testGenerateRegularExpression_CaseSensitive() throws Exception {
+  void testGenerateRegularExpression_CaseSensitive() throws Exception {
     String sql = impalaDialect.generateRegularExpression( "table.column", ".*1.*" );
     assertSqlWithRegex( true, sql, "'.*1.*'" );
   }

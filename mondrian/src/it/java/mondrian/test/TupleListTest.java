@@ -32,12 +32,12 @@ public class TupleListTest extends FoodMartTestCase {
         super();
     }
 
-    public void testTupleList() {
+    void testTupleList() {
         assertTrue(TupleCollections.createList(1) instanceof UnaryTupleList);
         assertTrue(TupleCollections.createList(2) instanceof ArrayTupleList);
     }
 
-    public void testUnaryTupleList() {
+    void testUnaryTupleList() {
         // empty list
         final TupleList list0 = new UnaryTupleList();
         assertTrue(list0.isEmpty());
@@ -74,7 +74,7 @@ public class TupleListTest extends FoodMartTestCase {
         list1.add(Collections.<Member>singletonList(null));
     }
 
-    public void testArrayTupleList() {
+    void testArrayTupleList() {
         final Member genderFMember = xxx("[Gender].[F]");
         final Member genderMMember = xxx("[Gender].[M]");
 
@@ -154,7 +154,7 @@ public class TupleListTest extends FoodMartTestCase {
         checkProject(fm);
     }
 
-    public void testDelegatingTupleList() {
+    void testDelegatingTupleList() {
         final Member genderFMember = xxx("[Gender].[F]");
         final Member genderMMember = xxx("[Gender].[M]");
         final Member storeUsaMember = xxx("[Store].[USA]");
@@ -178,7 +178,7 @@ public class TupleListTest extends FoodMartTestCase {
      * This is a test for MONDRIAN-1040. The DelegatingTupleList.slice()
      * method was mixing up the column and index variables.
      */
-    public void testDelegatingTupleListSlice() {
+    void testDelegatingTupleListSlice() {
         // Functional test.
         assertQueryReturns(
             "select {[Measures].[Store Sales]} ON COLUMNS, Hierarchize(Except({[Customers].[All Customers], [Customers].[All Customers].Children}, {[Customers].[All Customers]})) ON ROWS from [Sales] ",

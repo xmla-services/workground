@@ -48,7 +48,7 @@ public class IifFunDefTest {
   }
 
   @Test
-  public void testGetResultType() {
+  void testGetResultType() {
     ResultStyle actualResStyle = null;
     ResultStyle expectedResStyle = setListCalc.getResultStyle();
     // Compile calculation for IIf function for (<Logical Expression>, <SetType>, <SetType>) params

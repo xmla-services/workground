@@ -53,7 +53,7 @@ public class AggregationOnInvalidRoleTest extends CsvDBTestCase {
     }
 
 
-    public void test_ExecutesCorrectly_WhenIgnoringInvalidMembers() {
+    void test_ExecutesCorrectly_WhenIgnoringInvalidMembers() {
         TestContext context = getTestContext().withFreshConnection();
         try {
             executeAnalyzerQuery(context);

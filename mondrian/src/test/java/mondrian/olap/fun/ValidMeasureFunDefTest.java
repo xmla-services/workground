@@ -32,7 +32,7 @@ public class ValidMeasureFunDefTest {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testSecondHierarchyInDimension(TestingContext context) throws SQLException {
+  void testSecondHierarchyInDimension(TestingContext context) throws SQLException {
     final String schema = "<?xml version=\"1.0\"?>\n"
     + "<Schema name=\"FoodMart\">\n"
     + "  <Dimension name=\"Product\">\n"
@@ -87,7 +87,7 @@ public class ValidMeasureFunDefTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testValidMeasureWithNullTuple(TestingContext context) {
+  void testValidMeasureWithNullTuple(TestingContext context) {
     assertQueryReturns(context.createConnection(),
         "with member measures.vm as "
         + "'ValidMeasure((Measures.[Unit Sales], Store.[All Stores].Parent))' "

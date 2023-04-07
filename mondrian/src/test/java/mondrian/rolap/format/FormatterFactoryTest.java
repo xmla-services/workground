@@ -32,7 +32,7 @@ public class FormatterFactoryTest {
      * </p>
      */
     @Test
-    public void testShouldCreateFormatterByClassName() {
+    void testShouldCreateFormatterByClassName() {
         FormatterCreateContext cellFormatterContext =
             new FormatterCreateContext.Builder("name")
                 .formatterAttr("mondrian.rolap.format.CellFormatterTestImpl")
@@ -71,7 +71,7 @@ public class FormatterFactoryTest {
      */
     @Test
     @Disabled //has not been fixed during creating Daanse project 
-    public void testShouldCreateFormatterByScript() {
+    void testShouldCreateFormatterByScript() {
         FormatterCreateContext context =
             new FormatterCreateContext.Builder("name")
                 .script("return null;", "JavaScript")
@@ -97,7 +97,7 @@ public class FormatterFactoryTest {
      * </p>
      */
     @Test
-    public void testShouldCreateFormatterByClassNameIfBothSpecified() {
+    void testShouldCreateFormatterByClassNameIfBothSpecified() {
         FormatterCreateContext cellFormatterContext =
             new FormatterCreateContext.Builder("name")
                 .formatterAttr("mondrian.rolap.format.CellFormatterTestImpl")
@@ -139,7 +139,7 @@ public class FormatterFactoryTest {
      * </p>
      */
     @Test
-    public void testShouldReturnNullIfEmptyContext() {
+    void testShouldReturnNullIfEmptyContext() {
         FormatterCreateContext context =
             new FormatterCreateContext.Builder("name").build();
 
@@ -160,7 +160,7 @@ public class FormatterFactoryTest {
      * </p>
      */
     @Test
-    public void testShouldReturnDefaultFormatterIfEmptyContext() {
+    void testShouldReturnDefaultFormatterIfEmptyContext() {
         FormatterCreateContext context =
             new FormatterCreateContext.Builder("name").build();
 

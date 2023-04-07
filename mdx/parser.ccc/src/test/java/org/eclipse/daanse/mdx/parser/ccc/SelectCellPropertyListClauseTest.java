@@ -13,37 +13,35 @@
  */
 package org.eclipse.daanse.mdx.parser.ccc;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.assertj.core.data.Index;
 import org.eclipse.daanse.mdx.model.api.select.SelectCellPropertyListClause;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+class SelectCellPropertyListClauseTest {
 
-public class SelectCellPropertyListClauseTest {
+	@Test
+	void test1() throws MdxParserException {
+		SelectCellPropertyListClause selectCellPropertyListClause = new MdxParserWrapper(
+				"CELL PROPERTIES BACK_COLOR, FORE_COLOR").parseSelectCellPropertyListClause();
+		assertThat(selectCellPropertyListClause).isNotNull();
+		assertThat(selectCellPropertyListClause.cell()).isTrue();
+		assertThat(selectCellPropertyListClause.properties()).isNotNull().hasSize(2);
+		assertThat(selectCellPropertyListClause.properties()).contains("BACK_COLOR", Index.atIndex(0));
+		assertThat(selectCellPropertyListClause.properties()).contains("FORE_COLOR", Index.atIndex(1));
+	}
 
-    @Test
-    public void test1() throws MdxParserException {
-        SelectCellPropertyListClause selectCellPropertyListClause =
-            new MdxParserWrapper("CELL PROPERTIES BACK_COLOR, FORE_COLOR")
-                .parseSelectCellPropertyListClause();
-        assertThat(selectCellPropertyListClause).isNotNull();
-        assertThat(selectCellPropertyListClause.cell()).isEqualTo(true);
-        assertThat(selectCellPropertyListClause.properties()).isNotNull().hasSize(2);
-        assertThat(selectCellPropertyListClause.properties()).contains("BACK_COLOR", Index.atIndex(0));
-        assertThat(selectCellPropertyListClause.properties()).contains("FORE_COLOR", Index.atIndex(1));
-    }
-
-    @Test
-    public void test2() throws MdxParserException {
-        SelectCellPropertyListClause selectCellPropertyListClause =
-            new MdxParserWrapper("PROPERTIES BACK_COLOR, FORE_COLOR, TEST")
-                .parseSelectCellPropertyListClause();
-        assertThat(selectCellPropertyListClause).isNotNull();
-        assertThat(selectCellPropertyListClause.cell()).isEqualTo(false);
-        assertThat(selectCellPropertyListClause.properties()).isNotNull().hasSize(3);
-        assertThat(selectCellPropertyListClause.properties()).contains("BACK_COLOR", Index.atIndex(0));
-        assertThat(selectCellPropertyListClause.properties()).contains("FORE_COLOR", Index.atIndex(1));
-        assertThat(selectCellPropertyListClause.properties()).contains("TEST", Index.atIndex(2));
-    }
+	@Test
+	void test2() throws MdxParserException {
+		SelectCellPropertyListClause selectCellPropertyListClause = new MdxParserWrapper(
+				"PROPERTIES BACK_COLOR, FORE_COLOR, TEST").parseSelectCellPropertyListClause();
+		assertThat(selectCellPropertyListClause).isNotNull();
+		assertThat(selectCellPropertyListClause.cell()).isFalse();
+		assertThat(selectCellPropertyListClause.properties()).isNotNull().hasSize(3);
+		assertThat(selectCellPropertyListClause.properties()).contains("BACK_COLOR", Index.atIndex(0));
+		assertThat(selectCellPropertyListClause.properties()).contains("FORE_COLOR", Index.atIndex(1));
+		assertThat(selectCellPropertyListClause.properties()).contains("TEST", Index.atIndex(2));
+	}
 }

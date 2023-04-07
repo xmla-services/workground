@@ -98,7 +98,7 @@ public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
-    public void testWithAggregation(TestingContext context) throws Exception {
+    void testWithAggregation(TestingContext context) throws Exception {
         final String schema = getSchemaWith
                 (""
                         + " <Role name=\"Power User\"> \n"
@@ -123,7 +123,7 @@ public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
-    public void testWithAggregationNoRestrictionsOnTopLevel(TestingContext context) throws Exception {
+    void testWithAggregationNoRestrictionsOnTopLevel(TestingContext context) throws Exception {
         final String schema = getSchemaWith
                 (""
                         + " <Role name=\"Power User\"> \n"
@@ -148,7 +148,7 @@ public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
-    public void testUnionWithAggregation(TestingContext context) throws Exception {
+    void testUnionWithAggregation(TestingContext context) throws Exception {
         final String schema = getSchemaWith
                 (""
                         + " <Role name=\"Foo\"> \n"
@@ -184,7 +184,7 @@ public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
     @Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
-    public void testWithAggregationUnionRolesWithSameGrants(TestingContext context) throws Exception {
+    void testWithAggregationUnionRolesWithSameGrants(TestingContext context) throws Exception {
         final String schema = getSchemaWith
                 (""
                         + " <Role name=\"Foo\"> \n"

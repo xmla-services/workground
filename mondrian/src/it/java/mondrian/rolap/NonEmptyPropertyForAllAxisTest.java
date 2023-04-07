@@ -9,7 +9,7 @@ import mondrian.test.TestContext;
  * Tests the {@link MondrianProperties#EnableNonEmptyOnAllAxis} property.
  */
 public class NonEmptyPropertyForAllAxisTest extends FoodMartTestCase {
-    public void testNonEmptyForAllAxesWithPropertySet() {
+    void testNonEmptyForAllAxesWithPropertySet() {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, true);
         final String MDX_QUERY =
@@ -59,7 +59,7 @@ public class NonEmptyPropertyForAllAxisTest extends FoodMartTestCase {
         assertQueryReturns(MDX_QUERY, EXPECTED_RESULT);
     }
 
-    public void testNonEmptyForAllAxesWithOutPropertySet() {
+    void testNonEmptyForAllAxesWithOutPropertySet() {
         final String MDX_QUERY =
             "SELECT {customers.USA.CA.[Santa Cruz].[Brian Merlo]} on 0, "
             + "[product].[product category].members on 1 FROM [sales]";
@@ -182,7 +182,7 @@ public class NonEmptyPropertyForAllAxisTest extends FoodMartTestCase {
         assertQueryReturns(MDX_QUERY, EXPECTED_RESULT);
     }
 
-    public void testSlicerAxisDoesNotGetNonEmptyApplied() {
+    void testSlicerAxisDoesNotGetNonEmptyApplied() {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, true);
         String mdxQuery = "select from [Sales]\n"

@@ -57,7 +57,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testAxisParsing() throws Exception {
+    void testAxisParsing() throws Exception {
         checkAxisAllWays(0, "COLUMNS");
         checkAxisAllWays(1, "ROWS");
         checkAxisAllWays(2, "PAGES");
@@ -89,7 +89,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testNegativeCases() throws Exception {
+    void testNegativeCases() throws Exception {
         assertParseQueryFails(
             "select [member] on axis(1.7) from sales",
             "Invalid axis specification. "
@@ -125,7 +125,7 @@ public class ParserTest {
      * characters must be a letter, and underscore, or a digit.
      */
     @Test
-    public void testScannerPunc() {
+    void testScannerPunc() {
         assertParseQuery(
             "with member [Measures].__Foo as 1 + 2\n"
             + "select __Foo on 0\n"
@@ -166,12 +166,12 @@ public class ParserTest {
     }
 
     @Test
-    public void testUnderscore() {
+    void testUnderscore() {
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUnparse(TestingContext context) {
+    void testUnparse(TestingContext context) {
         checkUnparse(context.createConnection(),
             "with member [Measures].[Foo] as ' 123 '\n"
             + "select {[Measures].members} on columns,\n"
@@ -216,7 +216,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testMultipleAxes() throws Exception {
+    void testMultipleAxes() throws Exception {
         TestParser p = createParser();
         String query = "select {[axis0mbr]} on axis(0), "
                 + "{[axis1mbr]} on axis(1) from cube";
@@ -270,7 +270,7 @@ public class ParserTest {
      * If an axis expression is a member, implicitly convert it to a set.
      */
     @Test
-    public void testMemberOnAxis() {
+    void testMemberOnAxis() {
         assertParseQuery(
             "select [Measures].[Sales Count] on 0, non empty [Store].[Store State].members on 1 from [Sales]",
             "select [Measures].[Sales Count] ON COLUMNS,\n"
@@ -279,7 +279,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testCaseTest() {
+    void testCaseTest() {
         assertParseQuery(
             "with member [Measures].[Foo] as "
             + " ' case when x = y then \"eq\" when x < y then \"lt\" else \"gt\" end '"
@@ -290,7 +290,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testCaseSwitch() {
+    void testCaseSwitch() {
         assertParseQuery(
             "with member [Measures].[Foo] as "
             + " ' case x when 1 then 2 when 3 then 4 else 5 end '"
@@ -306,7 +306,7 @@ public class ParserTest {
      * SET"</a>.
      */
     @Test
-    public void testSetExpr() {
+    void testSetExpr() {
         assertParseQuery(
             "with set [Set1] as '[Product].[Drink]:[Product].[Food]' \n"
             + "select [Set1] on columns, {[Measures].defaultMember} on rows \n"
@@ -327,7 +327,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testDimensionProperties() {
+    void testDimensionProperties() {
         assertParseQuery(
             "select {[foo]} properties p1,   p2 on columns from [cube]",
             "select {[foo]} DIMENSION PROPERTIES p1, p2 ON COLUMNS\n"
@@ -335,7 +335,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testCellProperties() {
+    void testCellProperties() {
         assertParseQuery(
             "select {[foo]} on columns "
             + "from [cube] CELL PROPERTIES FORMATTED_VALUE",
@@ -345,7 +345,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testIsEmpty() {
+    void testIsEmpty() {
         assertParseExpr(
             "[Measures].[Unit Sales] IS EMPTY",
             "([Measures].[Unit Sales] IS EMPTY)");
@@ -363,7 +363,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testIs() {
+    void testIs() {
         assertParseExpr(
             "[Measures].[Unit Sales] IS [Measures].[Unit Sales] "
             + "AND [Measures].[Unit Sales] IS NULL",
@@ -372,7 +372,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testIsNull() {
+    void testIsNull() {
         assertParseExpr(
             "[Measures].[Unit Sales] IS NULL",
             "([Measures].[Unit Sales] IS NULL)");
@@ -399,14 +399,14 @@ public class ParserTest {
     }
 
     @Test
-    public void testNull() {
+    void testNull() {
         assertParseExpr(
             "Filter({[Measures].[Foo]}, Iif(1 = 2, NULL, 'X'))",
             "Filter({[Measures].[Foo]}, Iif((1 = 2), NULL, \"X\"))");
     }
 
     @Test
-    public void testCast() {
+    void testCast() {
         assertParseExpr(
             "Cast([Measures].[Unit Sales] AS Numeric)",
             "CAST([Measures].[Unit Sales] AS Numeric)");
@@ -422,7 +422,7 @@ public class ParserTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMultiplication(TestingContext context) {
+    void testMultiplication(TestingContext context) {
         Parser p = new Parser();
         final String mdx =
             wrapExpr(
@@ -446,7 +446,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testBangFunction() {
+    void testBangFunction() {
         // Parser accepts '<id> [! <id>] *' as a function name, but ignores
         // all but last name.
         assertParseExpr("foo!bar!Exp(2.0)", "Exp(2.0)");
@@ -454,7 +454,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testId() {
+    void testId() {
         assertParseExpr("foo", "foo");
         assertParseExpr("fOo", "fOo");
         assertParseExpr("[Foo].[Bar Baz]", "[Foo].[Bar Baz]");
@@ -462,7 +462,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testIdWithKey() {
+    void testIdWithKey() {
         // two segments each with a compound key
         final String mdx = "[Foo].&Key1&Key2.&[Key3]&Key4&[5]";
         assertParseExpr(mdx, mdx, false);
@@ -511,7 +511,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testIdComplex() {
+    void testIdComplex() {
         // simple key
         assertParseExpr(
             "[Foo].&[Key1]&[Key2].[Bar]",
@@ -551,7 +551,7 @@ public class ParserTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCloneQuery(TestingContext context) {
+    void testCloneQuery(TestingContext context) {
         Connection connection = context.createConnection();
         Query query = connection.parseQuery(
             "select {[Measures].Members} on columns,\n"
@@ -568,7 +568,7 @@ public class ParserTest {
      * Tests parsing of numbers.
      */
     @Test
-    public void testNumbers() {
+    void testNumbers() {
         // Number: [+-] <digits> [ . <digits> ] [e [+-] <digits> ]
         assertParseExpr("2", "2");
 
@@ -624,7 +624,7 @@ public class ParserTest {
      * used to gather the mantissa.
      */
     @Test
-    public void testLargePrecision() {
+    void testLargePrecision() {
         // Now, a query with several numeric literals. This is the original
         // testcase for the bug.
         assertParseQuery(
@@ -643,7 +643,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testIdentifier() {
+    void testIdentifier() {
         // must have at least one segment
         Id id;
         try {
@@ -694,7 +694,7 @@ public class ParserTest {
      * > bug 3030772, "DrilldownLevelTop parser error"</a>.
      */
     @Test
-    public void testEmptyExpr() {
+    void testEmptyExpr() {
         assertParseQuery(
             "select NON EMPTY HIERARCHIZE(\n"
             + "  {DrillDownLevelTop(\n"
@@ -760,7 +760,7 @@ public class ParserTest {
      * precedence, so CAST works as it should but 'expr AS namedSet' does not.
      */
     @Test
-    public void testAsPrecedence() {
+    void testAsPrecedence() {
         // low precedence operator (AND) in CAST.
         assertParseQuery(
             "select cast(a and b as string) on 0 from [cube]",
@@ -828,7 +828,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testDrillThrough() {
+    void testDrillThrough() {
         assertParseQuery(
             "DRILLTHROUGH SELECT [Foo] on 0, [Bar] on 1 FROM [Cube]",
             "drillthrough\n"
@@ -838,7 +838,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testDrillThroughExtended1() {
+    void testDrillThroughExtended1() {
         assertParseQuery(
             "DRILLTHROUGH MAXROWS 5 FIRSTROWSET 7\n"
             + "SELECT [Foo] on 0, [Bar] on 1 FROM [Cube]\n"
@@ -851,7 +851,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testDrillThroughExtended() {
+    void testDrillThroughExtended() {
         assertParseQuery(
             "DRILLTHROUGH MAXROWS 5 FIRSTROWSET 7\n"
             + "SELECT [Foo] on 0, [Bar] on 1 FROM [Cube]\n"
@@ -864,7 +864,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testDrillThroughExtended3() {
+    void testDrillThroughExtended3() {
         assertParseQuery(
             "DRILLTHROUGH MAXROWS 5 FIRSTROWSET 7\n"
             + "SELECT [Foo] on 0, [Bar] on 1 FROM [Cube]\n"
@@ -877,7 +877,7 @@ public class ParserTest {
     }
 
     @Test
-    public void testExplain() {
+    void testExplain() {
         assertParseQuery(
             "explain plan for\n"
             + "with member [Mesaures].[Foo] as 1 + 3\n"
@@ -910,7 +910,7 @@ public class ParserTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMultipleSpaces(TestingContext context) {
+    void testMultipleSpaces(TestingContext context) {
         assertParseQuery(
             "select [Store].[With   multiple  spaces] on 0\n"
             + "from [Sales]",
@@ -959,7 +959,7 @@ public class ParserTest {
      * "Inconsistent parsing behavior('.CHILDREN' and '.Children')".
      */
     @Test
-    public void testChildren() {
+    void testChildren() {
         TestParser p = createParser();
 
         checkChildren0(p, "CHILDREN");

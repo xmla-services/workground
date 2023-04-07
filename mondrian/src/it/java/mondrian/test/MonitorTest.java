@@ -38,7 +38,7 @@ public class MonitorTest extends FoodMartTestCase {
      * Exercises as many fields of the monitoring stats classes as possible.
      * So that we can check that they are being populated.
      */
-    public void testMe() throws SQLException {
+    void testMe() throws SQLException {
         String queryString =
             "WITH MEMBER [Measures].[Foo] AS\n"
             + " [Measures].[Unit Sales]"

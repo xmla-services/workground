@@ -44,7 +44,7 @@ public class DrillThroughFieldListTest extends FoodMartTestCase {
     propSaver.set(propSaver.properties.GenerateFormattedSql, true);
   }
 
-  public void testOneJoin() {
+  void testOneJoin() {
     String mdx = "SELECT\n"
         + "[Measures].[Unit Sales] ON COLUMNS,\n"
         + "[Time].[Quarter].[Q1] ON ROWS\n"
@@ -112,7 +112,7 @@ public class DrillThroughFieldListTest extends FoodMartTestCase {
     context.assertSqlEquals(expectedSql, actual, expectedRowsNumber);
   }
 
-  public void testOneJoinTwoMeasures() {
+  void testOneJoinTwoMeasures() {
     String mdx = "SELECT\n"
         + "{[Measures].[Unit Sales], [Measures].[Store Cost]} ON COLUMNS,\n"
         + "[Time].[Quarter].[Q1] ON ROWS\n"
@@ -184,7 +184,7 @@ public class DrillThroughFieldListTest extends FoodMartTestCase {
     context.assertSqlEquals(expectedSql, actual, expectedRowsNumber);
   }
 
-  public void testTwoJoins() {
+  void testTwoJoins() {
     String mdx = "SELECT\n"
         + "{[Measures].[Unit Sales], [Measures].[Store Cost]} ON COLUMNS,\n"
         + "NONEMPTYCROSSJOIN({[Time].[Quarter].[Q1]},"
@@ -265,7 +265,7 @@ public class DrillThroughFieldListTest extends FoodMartTestCase {
     context.assertSqlEquals(expectedSql, actual, expectedRowsNumber);
   }
 
-  public void testNoJoin() {
+  void testNoJoin() {
     String mdx = "SELECT\n"
         + "Measures.[Store Sqft] on COLUMNS\n"
         + "FROM [Store]";
@@ -308,7 +308,7 @@ public class DrillThroughFieldListTest extends FoodMartTestCase {
     context.assertSqlEquals(expectedSql, actual, expectedRowsNumber);
   }
 
-  public void testVirtualCube() {
+  void testVirtualCube() {
     String mdx = " SELECT\n"
         + " [Measures].[Unit Sales] ON COLUMNS\n"
         + " FROM [Warehouse and Sales]\n"

@@ -30,7 +30,7 @@ public class XmlaExtraTest extends TestCase {
      * {@link RolapConnectionProperties#JdbcPassword} isn't leaked through
      * the XmlaExtra interface.
      */
-     public void testGetDataSourceDoesntLeakPassword() throws Exception {
+     void testGetDataSourceDoesntLeakPassword() throws Exception {
         final List<Map<String, Object>> expectedList =
             new ArrayList<Map<String,Object>>();
         final Map<String, Object> expectedMap =

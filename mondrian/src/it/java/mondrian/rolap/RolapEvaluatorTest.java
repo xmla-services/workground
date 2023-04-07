@@ -13,7 +13,7 @@ import mondrian.test.FoodMartTestCase;
 
 public class RolapEvaluatorTest extends FoodMartTestCase {
 
-    public void testGetSlicerPredicateInfo() throws Exception {
+    void testGetSlicerPredicateInfo() throws Exception {
         RolapResult result = (RolapResult) executeQuery(
             "select  from sales "
             + "WHERE {[Time].[1997].Q1, [Time].[1997].Q2} "
@@ -29,7 +29,7 @@ public class RolapEvaluatorTest extends FoodMartTestCase {
     }
 
     /*
-    public void testSlicerPredicateUnsatisfiable() {
+    void testSlicerPredicateUnsatisfiable() {
         assertQueryReturns(
             "select measures.[Customer Count] on 0 from [warehouse and sales] "
             + "WHERE {[Time].[1997].Q1, [Time].[1997].Q2} "
@@ -44,7 +44,7 @@ public class RolapEvaluatorTest extends FoodMartTestCase {
     }
     */
     
-    public void testListColumnPredicateInfo() throws Exception {
+    void testListColumnPredicateInfo() throws Exception {
       RolapResult result = (RolapResult) executeQuery(
           "select  from sales "
           + "WHERE {[Product].[Drink],[Product].[Non-Consumable]} ");
@@ -57,7 +57,7 @@ public class RolapEvaluatorTest extends FoodMartTestCase {
       assertTrue(slicerPredicateInfo.isSatisfiable());
     }
     
-    public void testOrPredicateInfo() throws Exception {
+    void testOrPredicateInfo() throws Exception {
       RolapResult result = (RolapResult) executeQuery(
           "select  from sales "
           + "WHERE {[Product].[Drink].[Beverages],[Product].[Food].[Produce],[Product].[Non-Consumable]} ");

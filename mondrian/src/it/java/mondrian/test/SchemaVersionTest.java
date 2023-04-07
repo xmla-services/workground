@@ -20,7 +20,7 @@ import junit.framework.Assert;
  * Unit test for automatic detection of schema version.
  */
 public class SchemaVersionTest extends FoodMartTestCase {
-    public void testSchema3withVersion() {
+    void testSchema3withVersion() {
         TestContext testContext =
             TestContext.instance().withSchema(SCHEMA_3_VHEADER + SCHEMA_3_BODY);
         Util.PropertyList connectInfo =
@@ -30,7 +30,7 @@ public class SchemaVersionTest extends FoodMartTestCase {
         conn.close();
     }
 
-    public void testSchema3noVersion() {
+    void testSchema3noVersion() {
         TestContext testContext =
             TestContext.instance().withSchema(SCHEMA_3_HEADER + SCHEMA_3_BODY);
         Util.PropertyList connectInfo =
@@ -40,7 +40,7 @@ public class SchemaVersionTest extends FoodMartTestCase {
         conn.close();
     }
 
-    public void testSchema4withVersion() {
+    void testSchema4withVersion() {
         TestContext testContext =
             TestContext.instance().withSchema(SCHEMA_4_HEADER + SCHEMA_4_BODY);
         Util.PropertyList connectInfo =
@@ -54,7 +54,7 @@ public class SchemaVersionTest extends FoodMartTestCase {
         }
     }
 
-    public void testSchema4noVersion() {
+    void testSchema4noVersion() {
         TestContext testContext =
             TestContext.instance().withSchema(
                 SCHEMA_4_NVHEADER + SCHEMA_4_BODY);

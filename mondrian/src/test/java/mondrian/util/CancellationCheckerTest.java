@@ -29,7 +29,7 @@ import mondrian.test.PropertySaver5;
     private Execution excMock = mock(Execution.class);
 
     @Test
-    public void testCheckCancelOrTimeoutWithIntExecution() {
+    void testCheckCancelOrTimeoutWithIntExecution() {
       int currentIteration = 10;
       propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 1);
       CancellationChecker.checkCancelOrTimeout(currentIteration, excMock);
@@ -37,7 +37,7 @@ import mondrian.test.PropertySaver5;
     }
 
     @Test
-    public void testCheckCancelOrTimeoutWithLongExecution() {
+    void testCheckCancelOrTimeoutWithLongExecution() {
       long currentIteration = 10L;
       propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 1);
       CancellationChecker.checkCancelOrTimeout(currentIteration, excMock);
@@ -45,7 +45,7 @@ import mondrian.test.PropertySaver5;
     }
 
     @Test
-    public void testCheckCancelOrTimeoutLongMoreThanIntExecution() {
+    void testCheckCancelOrTimeoutLongMoreThanIntExecution() {
       long currentIteration = 2147483648L;
       propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 1);
       CancellationChecker.checkCancelOrTimeout(currentIteration, excMock);
@@ -53,7 +53,7 @@ import mondrian.test.PropertySaver5;
     }
 
     @Test
-    public void testCheckCancelOrTimeoutMaxLongExecution() {
+    void testCheckCancelOrTimeoutMaxLongExecution() {
       long currentIteration = 9223372036854775807L;
       propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 1);
       CancellationChecker.checkCancelOrTimeout(currentIteration, excMock);
@@ -61,7 +61,7 @@ import mondrian.test.PropertySaver5;
     }
 
     @Test
-    public void testCheckCancelOrTimeoutNoExecution_IntervalZero() {
+    void testCheckCancelOrTimeoutNoExecution_IntervalZero() {
       int currentIteration = 10;
       propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 0);
       CancellationChecker.checkCancelOrTimeout(currentIteration, excMock);
@@ -69,7 +69,7 @@ import mondrian.test.PropertySaver5;
     }
 
     @Test
-    public void testCheckCancelOrTimeoutNoExecutionEvenIntervalOddIteration() {
+    void testCheckCancelOrTimeoutNoExecutionEvenIntervalOddIteration() {
       int currentIteration = 3;
       propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 10);
       CancellationChecker.checkCancelOrTimeout(currentIteration, excMock);

@@ -24,7 +24,7 @@ import java.util.*;
  */
 public class RolapCubeTest extends FoodMartTestCase {
 
-    public void testProcessFormatStringAttributeToIgnoreNullFormatString() {
+    void testProcessFormatStringAttributeToIgnoreNullFormatString() {
         RolapCube cube =
             (RolapCube) getConnection().getSchema().lookupCube("Sales", false);
         StringBuilder builder = new StringBuilder();
@@ -33,7 +33,7 @@ public class RolapCubeTest extends FoodMartTestCase {
         assertEquals(0, builder.length());
     }
 
-    public void testProcessFormatStringAttribute() {
+    void testProcessFormatStringAttribute() {
         RolapCube cube =
             (RolapCube) getConnection().getSchema().lookupCube("Sales", false);
         StringBuilder builder = new StringBuilder();
@@ -47,7 +47,7 @@ public class RolapCubeTest extends FoodMartTestCase {
             builder.toString());
     }
 
-    public void testGetCalculatedMembersWithNoRole() {
+    void testGetCalculatedMembersWithNoRole() {
         String[] expectedCalculatedMembers = {
             "[Measures].[Profit]",
             "[Measures].[Average Warehouse Sale]",
@@ -74,7 +74,7 @@ public class RolapCubeTest extends FoodMartTestCase {
         }
     }
 
-    public void testGetCalculatedMembersForCaliforniaManager() {
+    void testGetCalculatedMembersForCaliforniaManager() {
         String[] expectedCalculatedMembers = new String[] {
             "[Measures].[Profit]", "[Measures].[Profit last Period]",
             "[Measures].[Profit Growth]"
@@ -101,7 +101,7 @@ public class RolapCubeTest extends FoodMartTestCase {
         }
     }
 
-    public void testGetCalculatedMembersReturnsOnlyAccessibleMembers() {
+    void testGetCalculatedMembersReturnsOnlyAccessibleMembers() {
         String[] expectedCalculatedMembers = {
             "[Measures].[Profit]",
             "[Measures].[Profit last Period]",
@@ -173,7 +173,7 @@ public class RolapCubeTest extends FoodMartTestCase {
         }
     }
 
-    public void testGetCalculatedMembersReturnsOnlyAccessibleMembersForLevel() {
+    void testGetCalculatedMembersReturnsOnlyAccessibleMembersForLevel() {
         String[] expectedCalculatedMembersFromProduct = new String[]{
             "[Product].[~Missing]"
         };
@@ -215,7 +215,7 @@ public class RolapCubeTest extends FoodMartTestCase {
         }
     }
 
-    public void testNonJoiningDimensions() {
+    void testNonJoiningDimensions() {
         TestContext testContext = this.getTestContext();
 
         Connection connection = testContext.getConnection();
@@ -248,7 +248,7 @@ public class RolapCubeTest extends FoodMartTestCase {
         }
     }
 
-    public void testRolapCubeDimensionEquality() {
+    void testRolapCubeDimensionEquality() {
         TestContext testContext = getTestContext();
 
         Connection connection1 = testContext.getConnection();
@@ -324,7 +324,7 @@ public class RolapCubeTest extends FoodMartTestCase {
         }
     }
 
-    public void testBasedCubesForVirtualCube() {
+    void testBasedCubesForVirtualCube() {
       RolapCube cubeSales =
           (RolapCube) getConnection().getSchema().lookupCube("Sales", false);
       RolapCube cubeWarehouse =
@@ -344,7 +344,7 @@ public class RolapCubeTest extends FoodMartTestCase {
       assertEquals(cubeWarehouse, baseCubes.get(1));
     }
 
-    public void testBasedCubesForNotVirtualCubeIsThisCube() {
+    void testBasedCubesForNotVirtualCubeIsThisCube() {
       RolapCube cubeSales =
           (RolapCube) getConnection().getSchema().lookupCube("Sales", false);
       assertNotNull(cubeSales);

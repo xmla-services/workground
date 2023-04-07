@@ -59,7 +59,7 @@ public class DynamicSchemaProcessorTest
      * replacement. Does not test Mondrian is able to connect with the schema
      * definition.
      */
-    public void testDSPBasics() {
+    void testDSPBasics() {
         DynamicSchemaProcessor dsp = new BaseDsp();
         Util.PropertyList dummy = new Util.PropertyList();
         String processedSchema = "";
@@ -76,7 +76,7 @@ public class DynamicSchemaProcessorTest
      * Tests to make sure that our base DynamicSchemaProcessor works, and
      * Mondrian is able to parse and connect to FoodMart with it
      */
-    public void testFoodmartDsp() {
+    void testFoodmartDsp() {
         final Connection monConnection =
             TestContext.instance()
                 .withSchemaProcessor(BaseDsp.class)
@@ -114,7 +114,7 @@ public class DynamicSchemaProcessorTest
     /**
      * Tests to ensure we have access to Connect properies in a DSP
      */
-    public void testProviderTestDSP() {
+    void testProviderTestDSP() {
         Connection monConnection =
             TestContext.instance()
                 .withSchemaProcessor(ProviderTestDSP.class)
@@ -143,7 +143,7 @@ public class DynamicSchemaProcessorTest
     /**
      * Tests to ensure we have access to Connect properies in a DSP
      */
-    public void testDBInfoDSP() {
+    void testDBInfoDSP() {
         Connection monConnection =
             TestContext.instance()
                 .withSchemaProcessor(FoodMartCatalogDsp.class)
@@ -179,7 +179,7 @@ public class DynamicSchemaProcessorTest
     /**
      * Tests to ensure we have access to Connect properties in a DSP
      */
-    public void testCheckJdbcPropertyDsp() {
+    void testCheckJdbcPropertyDsp() {
         Connection monConnection =
             TestContext.instance()
                 .withSchemaProcessor(CheckJdbcPropertyDsp.class)

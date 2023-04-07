@@ -162,7 +162,7 @@ public class SelectNotInGroupByTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDependentPropertySkipped(TestingContext context) {
+    void testDependentPropertySkipped(TestingContext context) {
         // Property group by should be skipped only if dialect supports it
         String sqlpat;
         if (dialectAllowsSelectNotInGroupBy(context.createConnection())) {
@@ -189,7 +189,7 @@ public class SelectNotInGroupByTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testIndependentPropertyNotSkipped(TestingContext context) {
+    void testIndependentPropertyNotSkipped(TestingContext context) {
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
                 DatabaseProduct.MYSQL,
@@ -212,7 +212,7 @@ public class SelectNotInGroupByTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGroupBySkippedIfUniqueLevel(TestingContext context) {
+    void testGroupBySkippedIfUniqueLevel(TestingContext context) {
         // If unique level is included and all properties are level
         // dependent, then group by can be skipped regardless of dialect
         SqlPattern[] sqlPatterns = {
@@ -237,7 +237,7 @@ public class SelectNotInGroupByTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGroupByNotSkippedIfIndependentProperty(TestingContext context) {
+    void testGroupByNotSkippedIfIndependentProperty(TestingContext context) {
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
                 DatabaseProduct.MYSQL,

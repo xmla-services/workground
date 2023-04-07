@@ -38,14 +38,14 @@ public class CmdRunnerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testQuery(TestingContext context) throws IOException {
+    void testQuery(TestingContext context) throws IOException {
         connection = context.createConnection();
         doTest();
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void test7731(TestingContext context) throws IOException {
+    void test7731(TestingContext context) throws IOException {
         connection = context.createConnection();
         doTest();
     }

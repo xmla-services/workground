@@ -78,7 +78,7 @@ public class DefaultFormatterTest {
      * as well as scientific notations.
      */
     @Test
-    public void testNumberFormatting() {
+    void testNumberFormatting() {
         for (Map.Entry<Object, String> entry : VALUES.entrySet()) {
             String formatted = formatter.format(entry.getKey());
 

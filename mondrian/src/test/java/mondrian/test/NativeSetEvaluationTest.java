@@ -210,7 +210,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeTopCountWithAggFlatSet(TestingContext context) {
+  void testNativeTopCountWithAggFlatSet(TestingContext context) {
     // Note: changed mdx and expected as a part of the fix for MONDRIAN-2202
     // Formerly the aggregate set and measures used a conflicting hierarchy,
     // which is not a safe scenario for nativization.
@@ -252,7 +252,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeTopCountWithAggMemberNamedSet(TestingContext context) {
+  void testNativeTopCountWithAggMemberNamedSet(TestingContext context) {
     final boolean useAgg =
       MondrianProperties.instance().UseAggregates.get()
         && MondrianProperties.instance().ReadAggregates.get();
@@ -285,7 +285,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeFilterWithAggDescendants(TestingContext context) {
+  void testNativeFilterWithAggDescendants(TestingContext context) {
     final boolean useAgg =
       MondrianProperties.instance().UseAggregates.get()
         && MondrianProperties.instance().ReadAggregates.get();
@@ -394,7 +394,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeTopCountWithMemberOnlySlicer(TestingContext context) {
+  void testNativeTopCountWithMemberOnlySlicer(TestingContext context) {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final boolean useAggregates =
       MondrianProperties.instance().UseAggregates.get()
@@ -498,7 +498,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeTopCountWithParenthesesMemberSlicer(TestingContext context) {
+  void testNativeTopCountWithParenthesesMemberSlicer(TestingContext context) {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
 
     final boolean useAggregates =
@@ -603,7 +603,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeTopCountWithMemberSumSlicer(TestingContext context) {
+  void testNativeTopCountWithMemberSumSlicer(TestingContext context) {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final boolean useAggregates =
       MondrianProperties.instance().UseAggregates.get()
@@ -706,7 +706,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testAggTCNoExplicitMeasure(TestingContext context) {
+  void testAggTCNoExplicitMeasure(TestingContext context) {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final String mdx =
       "WITH\n"
@@ -729,7 +729,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testAggTCTwoArg(TestingContext context) {
+  void testAggTCTwoArg(TestingContext context) {
     // will throw an error if native eval is not used
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
@@ -760,7 +760,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testAggTCTwoArgWithCrossjoinedSet(TestingContext context) {
+  void testAggTCTwoArgWithCrossjoinedSet(TestingContext context) {
     if ( !MondrianProperties.instance().EnableNativeTopCount.get() ) {
       return;
     }
@@ -779,7 +779,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testAggTCTwoArgWithCalcMemPresent(TestingContext context) {
+  void testAggTCTwoArgWithCalcMemPresent(TestingContext context) {
     if ( !MondrianProperties.instance().EnableNativeTopCount.get() ) {
       return;
     }
@@ -803,7 +803,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testCJSameDimAsSlicerNamedSet(TestingContext context) {
+  void testCJSameDimAsSlicerNamedSet(TestingContext context) {
     String mdx =
       "WITH\n"
         + "SET ST AS 'TopCount([Store Type].[Store Type].CurrentMember, 5)'\n"
@@ -830,7 +830,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testLoopDetection(TestingContext context) {
+  void testLoopDetection(TestingContext context) {
     // Note that this test will fail if the query below is executed
     // non-natively, or if the level.members expressions are replaced
     // with enumerated sets.
@@ -857,7 +857,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testSlicerTuplesPartialCrossJoin(TestingContext context) {
+  void testSlicerTuplesPartialCrossJoin(TestingContext context) {
     final String mdx =
       "with\n"
         + "set TSET as {NonEmptyCrossJoin({[Time].[1997].[Q1], [Time].[1997].[Q2]}, {[Store Type].[Supermarket]}),\n"
@@ -891,7 +891,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testSlicerTuplesFullCrossJoin(TestingContext context) {
+  void testSlicerTuplesFullCrossJoin(TestingContext context) {
     if ( !MondrianProperties.instance().EnableNativeCrossJoin.get()
       && !Bug.BugMondrian2452Fixed ) {
       // The NonEmptyCrossJoin in the TSET named set below returns
@@ -933,7 +933,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testTopCountWithAggregatedMemberAggStar(TestingContext context) {
+  void testTopCountWithAggregatedMemberAggStar(TestingContext context) {
     propSaver.set(
       propSaver.properties.UseAggregates,
       true );
@@ -1017,7 +1017,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testMultipleAllWithInExpr(TestingContext context) {
+  void testMultipleAllWithInExpr(TestingContext context) {
     // set up three hierarchies on same dimension
     final String multiHierarchyCube =
       " <Cube name=\"3StoreHCube\">\n"
@@ -1081,7 +1081,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testCompoundSlicerNativeEval(TestingContext context) {
+  void testCompoundSlicerNativeEval(TestingContext context) {
     // MONDRIAN-1404
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -1169,7 +1169,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testSnowflakeDimInSlicerBug1407(TestingContext context) {
+  void testSnowflakeDimInSlicerBug1407(TestingContext context) {
     // MONDRIAN-1407
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -1266,7 +1266,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testCompoundSlicerNonUniqueMemberNames1413(TestingContext context) {
+  void testCompoundSlicerNonUniqueMemberNames1413(TestingContext context) {
     // MONDRIAN-1413
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -1362,7 +1362,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testConstraintCacheIncludesMultiPositionSlicer(TestingContext context) {
+  void testConstraintCacheIncludesMultiPositionSlicer(TestingContext context) {
     // MONDRIAN-2081
     assertQueryReturns(context.createConnection(),
       "select non empty [Customers].[USA].[WA].[Spokane].children  on 0, "
@@ -1443,7 +1443,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeVirtualRestrictedSet(TestingContext context) throws Exception {
+  void testNativeVirtualRestrictedSet(TestingContext context) throws Exception {
     String baseSchema = TestUtil.getRawSchema(context);
     String schema = SchemaUtil.getSchema(baseSchema,
       null, null, null, null, null,
@@ -1490,7 +1490,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
   @Disabled //disabled for CI build
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeHonorsRoleRestrictions(TestingContext context) {
+  void testNativeHonorsRoleRestrictions(TestingContext context) {
     // NativeSetEvaluation pushes role restrictions to the where clause
     // (see SqlConstraintUtils.addRoleAccessConstraints) by
     // generating an IN expression based on accessible members.
@@ -1554,7 +1554,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeFilterWithCompoundSlicer(TestingContext context) {
+  void testNativeFilterWithCompoundSlicer(TestingContext context) {
     String mdx =
       "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members},[Measures].[Unit Sales] "
         + "> 1000))'\n"
@@ -1663,7 +1663,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testOverridingCompoundFilter(TestingContext context) {
+  void testOverridingCompoundFilter(TestingContext context) {
     String mdx =
       "WITH MEMBER [Gender].[All Gender].[NoSlicer] AS '([Product].[All Products], [Time].[1997])', solve_order=1000\n "
         + "MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members},[Measures].[Unit Sales] <"
@@ -1716,7 +1716,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeFilterWithCompoundSlicerCJ(TestingContext context) {
+  void testNativeFilterWithCompoundSlicerCJ(TestingContext context) {
     String mdx =
       "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter( {[Store].[Store City].members},[Measures].[Unit Sales]"
         + " > 1000))'\n"
@@ -1741,7 +1741,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testFilterWithDiffLevelCompoundSlicer(TestingContext context) {
+  void testFilterWithDiffLevelCompoundSlicer(TestingContext context) {
     // not supported in native, but detected
     // and skipped to regular evaluation
     String mdx =
@@ -1764,7 +1764,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeFilterWithCompoundSlicer2049(TestingContext context) {
+  void testNativeFilterWithCompoundSlicer2049(TestingContext context) {
     assertQueryReturns(context.createConnection(),
       "with member measures.avgQtrs as 'avg( filter( time.quarter.members, measures.[unit sales] < 200))' "
         + "select measures.avgQtrs * gender.members on 0 from sales where head( product.[product name].members, 3)",
@@ -1783,7 +1783,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeFilterTupleCompoundSlicer1861(TestingContext context) {
+  void testNativeFilterTupleCompoundSlicer1861(TestingContext context) {
     // Using a slicer list instead of tuples causes slicers with
     // tuples where not all combinations of their members are present to
     // fail when nativized.
@@ -1808,7 +1808,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    */
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeSetsCacheClearing(TestingContext context) {
+  void testNativeSetsCacheClearing(TestingContext context) {
     if ( MondrianProperties.instance().ReadAggregates.get()
       && MondrianProperties.instance().UseAggregates.get() ) {
       return;
@@ -1863,7 +1863,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeFilterWithLargeAggSetInSlicer(TestingContext context) {
+  void testNativeFilterWithLargeAggSetInSlicer(TestingContext context) {
     final String query = "with member customers.agg as "
       + "'Aggregate(Except(Customers.[Name].members,    "
       + "{[Customers].[USA].[OR].[Corvallis].[Judy Doolittle]}    ))' "
@@ -1877,7 +1877,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeFilterWithLargeAggSetInSlicerTwoAggs(TestingContext context) {
+  void testNativeFilterWithLargeAggSetInSlicerTwoAggs(TestingContext context) {
     String query = "with \n"
       + "member \n"
       + "[Customers].[agg] as 'Aggregate({[Customers].[Country].Members})'\n"
@@ -1894,7 +1894,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNativeFilterWithLargeAggSetInSlicerCompoundAggregate(TestingContext context) {
+  void testNativeFilterWithLargeAggSetInSlicerCompoundAggregate(TestingContext context) {
     final String query = "WITH member store.agg as "
       + "'Aggregate(CrossJoin(Store.[Store Name].members, Gender.Members))' "
       + "SELECT filter(customers.[name].members, measures.[unit sales] > 100) on 0 "
@@ -1908,7 +1908,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testDimensionUsageWithDifferentNameExecutedNatively(TestingContext context) {
+  void testDimensionUsageWithDifferentNameExecutedNatively(TestingContext context) {
     ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
         "Sales",
         "<DimensionUsage name=\"PurchaseDate\" source=\"Time\" foreignKey=\"time_id\"/>" ));
@@ -1923,7 +1923,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testDimensionUsageExecutedNatively(TestingContext context) {
+  void testDimensionUsageExecutedNatively(TestingContext context) {
     String mdx = ""
       + "with member Measures.q1Sales as '([Time].[1997].[Q1], Measures.[Unit Sales])'\n"
       + "select NonEmptyCrossjoin( [Time].[1997].[Q1], Gender.Gender.members) on 0 \n"
@@ -1936,7 +1936,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testMondrian2575(TestingContext context) {
+  void testMondrian2575(TestingContext context) {
     assertQueriesReturnSimilarResults(context.createConnection(),
       String.format(
         "WITH member [Customers].[AggregatePageMembers] AS \n'Aggregate({[Customers].[USA].[CA].[Altadena].[Amy "
@@ -1954,7 +1954,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testResultLimitInNativeCJ(TestingContext context) {
+  void testResultLimitInNativeCJ(TestingContext context) {
     propSaver.set( MondrianProperties.instance().ResultLimit, 400 );
     assertAxisThrows(context.createConnection(), "NonEmptyCrossjoin({[Product].[All Products].Children}, "
         + "{ [Customers].[Name].members})",

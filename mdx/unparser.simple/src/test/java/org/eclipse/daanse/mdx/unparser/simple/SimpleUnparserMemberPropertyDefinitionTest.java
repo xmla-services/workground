@@ -27,12 +27,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleUnparserMemberPropertyDefinitionTest {
+class SimpleUnparserMemberPropertyDefinitionTest {
 
     private SimpleUnparser unparser = new SimpleUnparser();
 
     @Test
-    public void test1() {
+    void test1() {
 
         MemberPropertyDefinition memberPropertyDefinition = new MemberPropertyDefinitionR(
             new NameObjectIdentifierR("name", ObjectIdentifier.Quoting.UNQUOTED),
@@ -43,7 +43,7 @@ public class SimpleUnparserMemberPropertyDefinitionTest {
     }
 
     @Test
-    public void test2() {
+    void test2() {
 
         MemberPropertyDefinition memberPropertyDefinition = new MemberPropertyDefinitionR(
             new NameObjectIdentifierR("name", ObjectIdentifier.Quoting.QUOTED),
@@ -54,7 +54,7 @@ public class SimpleUnparserMemberPropertyDefinitionTest {
     }
 
     @Test
-    public void test3() {
+    void test3() {
 
         MemberPropertyDefinition memberPropertyDefinition = new MemberPropertyDefinitionR(
             new NameObjectIdentifierR("name", ObjectIdentifier.Quoting.QUOTED),

@@ -23,7 +23,7 @@ import static org.mockito.Mockito.*;
 
 public class CancellationTest extends FoodMartTestCase {
 
-    public void testNonEmptyListCancellation() throws MondrianException {
+    void testNonEmptyListCancellation() throws MondrianException {
         // tests that cancellation/timeout is checked in
         // CrossJoinFunDef.nonEmptyList
         propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 1);
@@ -44,7 +44,7 @@ public class CancellationTest extends FoodMartTestCase {
         verify(exec, times(list.size())).checkCancelOrTimeout();
     }
 
-    public void testMutableCrossJoinCancellation() throws MondrianException {
+    void testMutableCrossJoinCancellation() throws MondrianException {
         // tests that cancellation/timeout is checked in
         // CrossJoinFunDef.mutableCrossJoin
         propSaver.set(propSaver.properties.CheckCancelOrTimeoutInterval, 1);

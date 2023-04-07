@@ -21,7 +21,7 @@ public class CrossJoinArgFactoryTest  extends FoodMartTestCase {
      * test for MONDRIAN-2287 issue. Tests if correct result is returned
      * instead of CCE throwing.
      */
-    public void testCrossJoinExample() {
+    void testCrossJoinExample() {
         String query =
                 "with "
                 + " member [Measures].[aa] as '([Measures].[Store Cost],[Gender].[M])'"

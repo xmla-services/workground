@@ -27,7 +27,7 @@ public class PropertiesTest extends FoodMartTestCase {
     /**
      * Tests existence and values of mandatory member properties.
      */
-    public void testMandatoryMemberProperties() {
+    void testMandatoryMemberProperties() {
         Cube salesCube = getConnection().getSchema().lookupCube("Sales", true);
         SchemaReader scr = salesCube.getSchemaReader(null).withLocus();
         Member member =
@@ -165,7 +165,7 @@ public class PropertiesTest extends FoodMartTestCase {
         }
     }
 
-    public void testGetChildCardinalityPropertyValue() {
+    void testGetChildCardinalityPropertyValue() {
         Cube salesCube = getConnection().getSchema().lookupCube("Sales", true);
         SchemaReader scr = salesCube.getSchemaReader(null);
         Member memberForCardinalityTest =
@@ -182,7 +182,7 @@ public class PropertiesTest extends FoodMartTestCase {
      * Tests the ability of MDX parser to pass requested member properties
      * to Result object.
      */
-    public void testPropertiesMDX() {
+    void testPropertiesMDX() {
         Result result = executeQuery(
             "SELECT {[Customers].[All Customers].[USA].[CA]} DIMENSION PROPERTIES \n"
             + " CATALOG_NAME, SCHEMA_NAME, CUBE_NAME, DIMENSION_UNIQUE_NAME, \n"
@@ -223,7 +223,7 @@ public class PropertiesTest extends FoodMartTestCase {
     /**
      * Tests the ability to project non-standard member properties.
      */
-    public void testMemberProperties() {
+    void testMemberProperties() {
         Result result = executeQuery(
             "SELECT {[Store].Children} DIMENSION PROPERTIES\n"
             + " CATALOG_NAME, PARENT_UNIQUE_NAME, [Store Type], FORMAT_EXP\n"
@@ -238,7 +238,7 @@ public class PropertiesTest extends FoodMartTestCase {
     /**
      * Tests the ability to project non-standard member properties.
      */
-    public void testMemberPropertiesBad() {
+    void testMemberPropertiesBad() {
         Result result = executeQuery(
             "SELECT {[Store].Children} DIMENSION PROPERTIES\n"
             + " CATALOG_NAME, PARENT_UNIQUE_NAME, [Store Type], BAD\n"
@@ -250,7 +250,7 @@ public class PropertiesTest extends FoodMartTestCase {
         assertEquals(4, axesProperties.length);
     }
 
-    public void testMandatoryCellProperties() {
+    void testMandatoryCellProperties() {
         Connection connection = getConnection();
         Query salesCube = connection.parseQuery(
             "select \n"
@@ -303,7 +303,7 @@ public class PropertiesTest extends FoodMartTestCase {
         }
     }
 
-    public void testPropertyDescription() throws Exception {
+    void testPropertyDescription() throws Exception {
         TestContext context = getTestContext().create(
             null,
             "<Cube name=\"Foo\" defaultMeasure=\"Unit Sales\">\n"

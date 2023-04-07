@@ -28,7 +28,7 @@ public class CellKeyTest extends FoodMartTestCase {
         super(name);
     }
 
-    public void testMany() {
+    void testMany() {
         CellKey key = CellKey.Generator.newManyCellKey(5);
 
         assertTrue("CellKey size", key.size() == 5);
@@ -79,7 +79,7 @@ public class CellKeyTest extends FoodMartTestCase {
         assertTrue("CellKey equals", key.equals(copy));
     }
 
-    public void testZero() {
+    void testZero() {
         CellKey key = CellKey.Generator.newCellKey(new int[0]);
         CellKey key2 = CellKey.Generator.newCellKey(new int[0]);
         assertTrue(key == key2); // all 0-dimensional keys have same singleton
@@ -102,7 +102,7 @@ public class CellKeyTest extends FoodMartTestCase {
         assertTrue("CellKey equals", key.equals(copy));
     }
 
-    public void testOne() {
+    void testOne() {
         CellKey key = CellKey.Generator.newCellKey(1);
         assertTrue("CellKey size", key.size() == 1);
 
@@ -147,7 +147,7 @@ public class CellKeyTest extends FoodMartTestCase {
         assertTrue("CellKey equals", key.equals(copy));
     }
 
-    public void testTwo() {
+    void testTwo() {
         CellKey key = CellKey.Generator.newCellKey(2);
 
         assertTrue("CellKey size", key.size() == 2);
@@ -194,7 +194,7 @@ public class CellKeyTest extends FoodMartTestCase {
         assertTrue("CellKey equals", key.equals(copy));
     }
 
-    public void testThree() {
+    void testThree() {
         CellKey key = CellKey.Generator.newCellKey(3);
 
         assertTrue("CellKey size", key.size() == 3);
@@ -242,7 +242,7 @@ public class CellKeyTest extends FoodMartTestCase {
         assertTrue("CellKey equals", key.equals(copy));
     }
 
-    public void testFour() {
+    void testFour() {
         CellKey key = CellKey.Generator.newCellKey(4);
 
         assertTrue("CellKey size", key.size() == 4);
@@ -291,7 +291,7 @@ public class CellKeyTest extends FoodMartTestCase {
         assertTrue("CellKey equals", key.equals(copy));
     }
 
-    public void testCellLookup() {
+    void testCellLookup() {
         if (!isDefaultNullMemberRepresentation()) {
             return;
         }
@@ -361,7 +361,7 @@ public class CellKeyTest extends FoodMartTestCase {
         testContext.assertQueryReturns(query, result);
     }
 
-    public void testSize() {
+    void testSize() {
         for (int i = 1; i < 20; i++) {
             assertEquals(i, CellKey.Generator.newCellKey(new int[i]).size());
             assertEquals(i, CellKey.Generator.newCellKey(i).size());

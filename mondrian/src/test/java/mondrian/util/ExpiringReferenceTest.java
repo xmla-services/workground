@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 public class ExpiringReferenceTest
 {
     @Test
-    public void testSimpleExpiryMode() throws Exception {
+    void testSimpleExpiryMode() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
             new ExpiringReference<Object>(referent, "1s");
@@ -28,7 +28,7 @@ public class ExpiringReferenceTest
     }
 
     @Test
-    public void testExpiryModeReAccess() throws Exception {
+    void testExpiryModeReAccess() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
             new ExpiringReference<Object>(referent, "1s");
@@ -46,7 +46,7 @@ public class ExpiringReferenceTest
     }
 
     @Test
-    public void testExpiryModeReAccessWithEmptyGet() throws Exception {
+    void testExpiryModeReAccessWithEmptyGet() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
             new ExpiringReference<Object>(referent, "1s");
@@ -59,7 +59,7 @@ public class ExpiringReferenceTest
     }
 
     @Test
-    public void testSimpleSoftMode() throws Exception {
+    void testSimpleSoftMode() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
             new ExpiringReference<Object>(referent, "-1s");
@@ -69,7 +69,7 @@ public class ExpiringReferenceTest
     }
 
     @Test
-    public void testSimplePermMode() throws Exception {
+    void testSimplePermMode() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
             new ExpiringReference<Object>(referent, "0s");
@@ -81,7 +81,7 @@ public class ExpiringReferenceTest
     }
 
     @Test
-    public void testPermModeFollowedByNonPermGet() throws Exception {
+    void testPermModeFollowedByNonPermGet() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
             new ExpiringReference<Object>(referent, "0s");

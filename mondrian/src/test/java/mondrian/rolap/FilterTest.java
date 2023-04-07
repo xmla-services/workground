@@ -57,7 +57,7 @@ public class FilterTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testInFilterSimple(TestingContext context) throws Exception {
+  void testInFilterSimple(TestingContext context) throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -83,7 +83,7 @@ public class FilterTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNotInFilterSimple(TestingContext context) throws Exception {
+  void testNotInFilterSimple(TestingContext context) throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -109,7 +109,7 @@ public class FilterTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testInFilterAND(TestingContext context) throws Exception {
+  void testInFilterAND(TestingContext context) throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -137,7 +137,7 @@ public class FilterTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testIsFilterSimple(TestingContext context) throws Exception {
+  void testIsFilterSimple(TestingContext context) throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -163,7 +163,7 @@ public class FilterTest extends BatchTestCase {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testNotIsFilterSimple(TestingContext context) throws Exception {
+  void testNotIsFilterSimple(TestingContext context) throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 

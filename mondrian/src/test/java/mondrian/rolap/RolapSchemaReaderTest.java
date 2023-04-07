@@ -46,7 +46,7 @@ public class RolapSchemaReaderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGetCubesWithNoHrCubes(TestingContext context) {
+    void testGetCubesWithNoHrCubes(TestingContext context) {
         String[] expectedCubes = new String[] {
                 "Sales", "Warehouse", "Warehouse and Sales", "Store",
                 "Sales Ragged", "Sales 2"
@@ -70,7 +70,7 @@ public class RolapSchemaReaderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGetCubesWithNoRole(TestingContext context) {
+    void testGetCubesWithNoRole(TestingContext context) {
         String[] expectedCubes = new String[] {
                 "Sales", "Warehouse", "Warehouse and Sales", "Store",
                 "Sales Ragged", "Sales 2", "HR"
@@ -92,7 +92,7 @@ public class RolapSchemaReaderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGetCubesForCaliforniaManager(TestingContext context) {
+    void testGetCubesForCaliforniaManager(TestingContext context) {
         String[] expectedCubes = new String[] {
                 "Sales"
         };
@@ -114,7 +114,7 @@ public class RolapSchemaReaderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testConnectUseContentChecksum(TestingContext context) {
+    void testConnectUseContentChecksum(TestingContext context) {
     	context.setProperty(RolapConnectionProperties.UseContentChecksum.name(), "true");
         //Util.PropertyList properties =
         //       TestUtil.getConnectionProperties().clone();
@@ -153,7 +153,7 @@ public class RolapSchemaReaderTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGetCubeDimensions(TestingContext context) {
+    void testGetCubeDimensions(TestingContext context) {
         final String timeWeekly =
             hierarchyName("Time", "Weekly");
         final String timeTime =

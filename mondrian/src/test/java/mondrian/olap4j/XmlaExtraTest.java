@@ -32,7 +32,7 @@ public class XmlaExtraTest{
      * the XmlaExtra interface.
      */
     @Test
-     public void testGetDataSourceDoesntLeakPassword() throws Exception {
+     void testGetDataSourceDoesntLeakPassword() throws Exception {
         final List<Map<String, Object>> expectedList =
             new ArrayList<Map<String,Object>>();
         final Map<String, Object> expectedMap =

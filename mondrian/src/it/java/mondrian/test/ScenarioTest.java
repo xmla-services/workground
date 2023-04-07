@@ -26,7 +26,7 @@ public class ScenarioTest extends FoodMartTestCase {
     /**
      * Tests creating a scenario and setting a connection's active scenario.
      */
-    public void testCreateScenario() throws SQLException {
+    void testCreateScenario() throws SQLException {
         final OlapConnection connection =
             getTestContext().getOlap4jConnection();
         try {
@@ -48,7 +48,7 @@ public class ScenarioTest extends FoodMartTestCase {
     /**
      * Tests setting the value of one cell.
      */
-    public void testSetCell() throws SQLException {
+    void testSetCell() throws SQLException {
         final OlapConnection connection =
             getTestContext().getOlap4jConnection();
         try {
@@ -67,7 +67,7 @@ public class ScenarioTest extends FoodMartTestCase {
     /**
      * Tests that setting a cell's value without an active scenario is illegal.
      */
-    public void testSetCellWithoutScenarioFails() throws SQLException {
+    void testSetCellWithoutScenarioFails() throws SQLException {
         final OlapConnection connection =
             getTestContext().getOlap4jConnection();
         try {
@@ -92,7 +92,7 @@ public class ScenarioTest extends FoodMartTestCase {
     /**
      * Tests that setting a calculated member is illegal.
      */
-    public void testSetCellCalcError() throws SQLException {
+    void testSetCellCalcError() throws SQLException {
         final TestContext testContext = TestContext.instance().withScenario();
         final OlapConnection connection = testContext.getOlap4jConnection();
         PreparedOlapStatement pstmt = connection.prepareOlapStatement(
@@ -139,7 +139,7 @@ public class ScenarioTest extends FoodMartTestCase {
     /**
      * Tests that allocation policies that are not supported give an error.
      */
-    public void testUnsupportedAllocationPolicyFails() throws SQLException {
+    void testUnsupportedAllocationPolicyFails() throws SQLException {
         final TestContext testContext = TestContext.instance().withScenario();
         final OlapConnection connection = testContext.getOlap4jConnection();
         final PreparedOlapStatement pstmt = connection.prepareOlapStatement(
@@ -175,14 +175,14 @@ public class ScenarioTest extends FoodMartTestCase {
     /**
      * Tests setting cells by the "equal increment" allocation policy.
      */
-    public void testEqualIncrement() throws SQLException {
+    void testEqualIncrement() throws SQLException {
         assertAllocation(AllocationPolicy.EQUAL_INCREMENT);
     }
 
     /**
      * Tests setting cells by the "equal allocation" allocation policy.
      */
-    public void testEqualAllocation() throws SQLException {
+    void testEqualAllocation() throws SQLException {
         assertAllocation(AllocationPolicy.EQUAL_ALLOCATION);
     }
 
@@ -375,7 +375,7 @@ public class ScenarioTest extends FoodMartTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-815">MONDRIAN-815</a>,
      * "NPE from query if use a scenario and one of the cells is empty/null".
      */
-    public void testBugMondrian815() throws SQLException {
+    void testBugMondrian815() throws SQLException {
         final TestContext testContext =
             TestContext.instance().createSubstitutingCube(
                 "Sales",
@@ -453,7 +453,7 @@ public class ScenarioTest extends FoodMartTestCase {
             TestContext.toString(cellSet2));
     }
 
-    public void testScenarioPropertyBug1496() {
+    void testScenarioPropertyBug1496() {
         // looking up the $scenario property for a non ScenarioCalc member
         // causes class cast exception
         // http://jira.pentaho.com/browse/MONDRIAN-1496

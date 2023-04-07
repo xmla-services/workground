@@ -79,7 +79,7 @@ public class RolapConnectionTest extends TestCase {
         }
     }
 
-    public void testPooledConnectionWithProperties() throws SQLException {
+    void testPooledConnectionWithProperties() throws SQLException {
         Util.PropertyList properties =
             TestContext.instance().getConnectionProperties().clone();
 
@@ -130,7 +130,7 @@ public class RolapConnectionTest extends TestCase {
         }
     }
 
-    public void testNonPooledConnectionWithProperties() {
+    void testNonPooledConnectionWithProperties() {
         Util.PropertyList properties =
             TestContext.instance().getConnectionProperties().clone();
 
@@ -209,7 +209,7 @@ public class RolapConnectionTest extends TestCase {
     /**
      * Tests that the FORMAT function uses the connection's locale.
      */
-    public void testFormatLocale() {
+    void testFormatLocale() {
         String expr = "FORMAT(1234.56, \"#,##.#\")";
         checkLocale("es_ES", expr, "1.234,6", false);
         checkLocale("es_MX", expr, "1,234.6", false);
@@ -219,7 +219,7 @@ public class RolapConnectionTest extends TestCase {
     /**
      * Tests that measures are formatted using the connection's locale.
      */
-    public void testFormatStringLocale() {
+    void testFormatStringLocale() {
         checkLocale("es_ES", "1234.56", "1.234,6", true);
         checkLocale("es_MX", "1234.56", "1,234.6", true);
         checkLocale("en_US", "1234.56", "1,234.6", true);
@@ -254,7 +254,7 @@ public class RolapConnectionTest extends TestCase {
         }
     }
 
-    public void testConnectSansCatalogFails() {
+    void testConnectSansCatalogFails() {
         Util.PropertyList properties =
             TestContext.instance().getConnectionProperties().clone();
         properties.remove(RolapConnectionProperties.Catalog.name());
@@ -282,7 +282,7 @@ public class RolapConnectionTest extends TestCase {
         }
     }
 
-    public void testJndiConnection() throws NamingException {
+    void testJndiConnection() throws NamingException {
         // Cannot guarantee that this test will work if they have chosen to
         // resolve data sources other than by JNDI.
         if (MondrianProperties.instance().DataSourceResolverClass.isSet()) {
@@ -332,7 +332,7 @@ public class RolapConnectionTest extends TestCase {
         assertTrue(lookupCalls.size() > 0);
     }
 
-    public void testDataSourceOverrideUserPass()
+    void testDataSourceOverrideUserPass()
         throws SQLException, NamingException
     {
         // use the datasource property to connect to the database
@@ -480,7 +480,7 @@ public class RolapConnectionTest extends TestCase {
         }
     }
 
-    public void testGetJdbcConnectionWhenJdbcIsNull() {
+    void testGetJdbcConnectionWhenJdbcIsNull() {
         final StringBuilder connectInfo = new StringBuilder();
         Util.PropertyList properties =
             TestContext.instance().getConnectionProperties().clone();
@@ -496,7 +496,7 @@ public class RolapConnectionTest extends TestCase {
         }
     }
 
-    public void testJdbcConnectionString() {
+    void testJdbcConnectionString() {
         final StringBuilder connectInfo = new StringBuilder();
         Map<String, String> connectInfoMap = new HashMap<>();
 
@@ -525,7 +525,7 @@ public class RolapConnectionTest extends TestCase {
         assertEquals(connectInfoMap.get("integratedSecurity"), "true");
     }
 
-    public void testJdbcConnectionStringWithoutDatabase() {
+    void testJdbcConnectionStringWithoutDatabase() {
         final StringBuilder connectInfo = new StringBuilder();
         Util.PropertyList properties =
             TestContext.instance().getConnectionProperties().clone();
@@ -539,7 +539,7 @@ public class RolapConnectionTest extends TestCase {
         assertFalse(connectInfo.toString().contains("databaseName"));
     }
 
-    public void testJdbcConnectionStringWithoutIntegratedSecurity() {
+    void testJdbcConnectionStringWithoutIntegratedSecurity() {
         final StringBuilder connectInfo = new StringBuilder();
         Util.PropertyList properties =
             TestContext.instance().getConnectionProperties().clone();

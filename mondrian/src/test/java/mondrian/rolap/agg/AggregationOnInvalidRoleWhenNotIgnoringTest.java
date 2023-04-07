@@ -69,7 +69,7 @@ public class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void test_ThrowsException_WhenNonIgnoringInvalidMembers(TestingContext context) {
+    void test_ThrowsException_WhenNonIgnoringInvalidMembers(TestingContext context) {
         prepareContext(context);
         try {
             executeAnalyzerQuery(context.createConnection());

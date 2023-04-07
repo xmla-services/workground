@@ -70,7 +70,7 @@ public class QueryTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHasCellPropertyWhenQueryHasCellProperties(TestingContext context) {
+    void testHasCellPropertyWhenQueryHasCellProperties(TestingContext context) {
         beforeTest(context);
         assertTrue(queryWithCellProps.hasCellProperty("Value"));
         assertFalse(queryWithCellProps.hasCellProperty("Language"));
@@ -78,7 +78,7 @@ public class QueryTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testIsCellPropertyEmpty(TestingContext context) {
+    void testIsCellPropertyEmpty(TestingContext context) {
         beforeTest(context);
         assertTrue(queryWithoutCellProps.isCellPropertyEmpty());
     }

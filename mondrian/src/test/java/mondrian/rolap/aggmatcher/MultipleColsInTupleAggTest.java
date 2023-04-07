@@ -63,7 +63,7 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTotal(TestingContext context) throws Exception {
+    void testTotal(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -104,7 +104,7 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTupleSelection(TestingContext context) throws Exception {
+    void testTupleSelection(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -131,7 +131,7 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testNativeFilterWithoutMeasures(TestingContext context) throws Exception {
+    void testNativeFilterWithoutMeasures(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -183,7 +183,7 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testNativeFilterWithoutMeasuresAndLevelWithProps(TestingContext context)
+    void testNativeFilterWithoutMeasuresAndLevelWithProps(TestingContext context)
         throws Exception
     {
         prepareContext(context);
@@ -268,7 +268,7 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testChildSelection(TestingContext context) throws Exception {
+    void testChildSelection(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;

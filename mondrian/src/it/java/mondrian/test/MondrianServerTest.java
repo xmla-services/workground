@@ -35,7 +35,7 @@ public class MondrianServerTest extends TestCase {
     /**
      * Tests an embedded server.
      */
-    public void testEmbedded() {
+    void testEmbedded() {
         TestContext testContext = TestContext.instance();
         final MondrianServer server =
             MondrianServer.forConnection(testContext.getConnection());
@@ -47,7 +47,7 @@ public class MondrianServerTest extends TestCase {
     /**
      * Tests a server with its own repository.
      */
-    public void testStringRepository() throws MalformedURLException {
+    void testStringRepository() throws MalformedURLException {
         final MondrianServer server =
             MondrianServer.createWithRepository(
                 new StringRepositoryContentFinder("foo bar"),
@@ -60,7 +60,7 @@ public class MondrianServerTest extends TestCase {
     /**
      * Tests a server that reads its repository from a file URL.
      */
-    public void testRepository() throws MalformedURLException, SQLException {
+    void testRepository() throws MalformedURLException, SQLException {
         final XmlaTestContext xmlaTestContext = new XmlaTestContext();
         final MondrianServer server =
             MondrianServer.createWithRepository(
@@ -81,7 +81,7 @@ public class MondrianServerTest extends TestCase {
     /**
      * Tests a server that reads its repository from a file URL.
      */
-    public void testRepositoryWithBadCatalog() throws Exception {
+    void testRepositoryWithBadCatalog() throws Exception {
         final XmlaTestContext xmlaTestContext = new XmlaTestContext() {
             Util.PropertyList connectProperties =
                 Util.parseConnectString(getConnectString());

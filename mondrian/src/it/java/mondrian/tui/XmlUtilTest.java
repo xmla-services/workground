@@ -26,7 +26,7 @@ import java.util.Map;
 
 public class XmlUtilTest extends TestCase {
 
-    public void testSelectAsNodesWithEmptyNamespace()
+    void testSelectAsNodesWithEmptyNamespace()
             throws IOException, SAXException, XPathException
     {
         String x = "<doc><foo><bar></bar><baz></baz></foo></doc>";
@@ -40,7 +40,7 @@ public class XmlUtilTest extends TestCase {
         assertEquals("baz", nodes[1].getNodeName());
     }
 
-    public void testSmallWithSingleNamespace()
+    void testSmallWithSingleNamespace()
             throws IOException, SAXException, XPathException
     {
         String x = "<bop:doc xmlns:bop='http://foo.bar.baz'><bop:foo><bop:bar>"
@@ -55,7 +55,7 @@ public class XmlUtilTest extends TestCase {
         assertEquals("bop:baz", nodes[1].getNodeName());
     }
 
-    public void testSelectAsNodesDiscover()
+    void testSelectAsNodesDiscover()
             throws IOException, SAXException, XPathException
     {
         String xml =
@@ -90,7 +90,7 @@ public class XmlUtilTest extends TestCase {
         assertEquals("Discover", nodes[0].getNodeName());
     }
 
-    public void testSelectAsNodes3Namespaces()
+    void testSelectAsNodes3Namespaces()
             throws IOException, SAXException, XPathException
     {
         String soapResp =

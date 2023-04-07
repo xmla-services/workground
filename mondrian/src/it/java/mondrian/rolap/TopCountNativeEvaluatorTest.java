@@ -37,7 +37,7 @@ public class TopCountNativeEvaluatorTest extends FoodMartTestCase {
     }
 
 
-    public void testNonNative_WhenExplicitlyDisabled() throws Exception {
+    void testNonNative_WhenExplicitlyDisabled() throws Exception {
         propSaver.set(propSaver.properties.EnableNativeTopCount, false);
         RolapNativeTopCount nativeTopCount = new RolapNativeTopCount();
 
@@ -47,7 +47,7 @@ public class TopCountNativeEvaluatorTest extends FoodMartTestCase {
             nativeTopCount.createEvaluator(null, null, null));
     }
 
-    public void testNonNative_WhenContextIsInvalid() throws Exception {
+    void testNonNative_WhenContextIsInvalid() throws Exception {
         RolapNativeTopCount nativeTopCount = createTopCountSpy();
         doReturn(false).when(nativeTopCount)
             .isValidContext(any(RolapEvaluator.class));
@@ -67,7 +67,7 @@ public class TopCountNativeEvaluatorTest extends FoodMartTestCase {
      *
      * @see <a href="http://jira.pentaho.com/browse/MONDRIAN-2394">MONDRIAN-2394</a>
      */
-    public void testNonNative_WhenTwoParametersArePassed() throws Exception {
+    void testNonNative_WhenTwoParametersArePassed() throws Exception {
         RolapNativeTopCount nativeTopCount = createTopCountSpy();
         doReturn(true).when(nativeTopCount)
             .isValidContext(any(RolapEvaluator.class));

@@ -29,7 +29,7 @@ public class LocalizingDynamicSchemaProcessorTest
      * replacements. Does not test Mondrian is able to connect with the schema
      * definition.
      */
-    public void testProcessingCatalog() {
+    void testProcessingCatalog() {
         String variable = "%{translate}";
         String translation = "Translate";
         String catalog = "..." + variable + "...";

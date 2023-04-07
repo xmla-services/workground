@@ -119,7 +119,7 @@ private PropertySaver5 propSaver;
   ////////////////////////////////////////////////////////////////////////
 
   @Test
-  public void testListTupleListTupleIterCalc() {
+  void testListTupleListTupleIterCalc() {
     if ( !Util.Retrowoven ) {
       propSaver.set( propSaver.properties.CheckCancelOrTimeoutInterval, 0 );
       CrossJoinFunDef.CrossJoinIterCalc calc =
@@ -158,7 +158,7 @@ private PropertySaver5 propSaver;
   // in CrossJoinFunDef$CrossJoinIterCalc$1$1.forward()
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testCrossJoinIterCalc_IterationCancellationOnForward(TestingContext foodMartContext) {
+  void testCrossJoinIterCalc_IterationCancellationOnForward(TestingContext foodMartContext) {
     propSaver.set( propSaver.properties.CheckCancelOrTimeoutInterval, 1 );
     // Get product members as TupleList
    Connection con= foodMartContext.createConnection();
@@ -223,7 +223,7 @@ private PropertySaver5 propSaver;
   ////////////////////////////////////////////////////////////////////////
 
   @Test
-  public void testImmutableListTupleListTupleListCalc() {
+  void testImmutableListTupleListTupleListCalc() {
     CrossJoinFunDef.ImmutableListCalc calc =
       crossJoinFunDef.new ImmutableListCalc(
         getResolvedFunCall(), null );
@@ -308,7 +308,7 @@ private PropertySaver5 propSaver;
   // Mutable List
   ////////////////////////////////////////////////////////////////////////
   @Test
-  public void testMutableListTupleListTupleListCalc() {
+  void testMutableListTupleListTupleListCalc() {
     CrossJoinFunDef.MutableListCalc calc =
       crossJoinFunDef.new MutableListCalc(
         getResolvedFunCall(), null );
@@ -362,13 +362,13 @@ private PropertySaver5 propSaver;
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-public void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
+void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
 	}
 
   
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testResultLimitWithinCrossjoin(TestingContext foodMartContext) {
+  void testResultLimitWithinCrossjoin(TestingContext foodMartContext) {
     propSaver.set( MondrianProperties.instance().ResultLimit, 1000 );
    Connection connection= foodMartContext.createConnection();
     TestUtil.assertAxisThrows(connection, "Hierarchize(Crossjoin(Union({[Gender].CurrentMember}, [Gender].Children), "

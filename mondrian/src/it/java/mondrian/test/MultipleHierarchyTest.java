@@ -29,7 +29,7 @@ public class MultipleHierarchyTest extends BatchTestCase {
         super(name);
     }
 
-    public void testWeekly() {
+    void testWeekly() {
         if (MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // [Time.Weekly] has an 'all' member, but [Time] does not.
             assertAxisReturns(
@@ -49,7 +49,7 @@ public class MultipleHierarchyTest extends BatchTestCase {
         }
     }
 
-    public void testWeekly2() {
+    void testWeekly2() {
         // When the context is one hierarchy,
         // the current member of other hierarchy must be its default member.
         assertQueryReturns(
@@ -87,7 +87,7 @@ public class MultipleHierarchyTest extends BatchTestCase {
             + "Row #3: [Time].[1997].[Q4]\n");
     }
 
-    public void testMultipleMembersOfSameDimensionInSlicerFails() {
+    void testMultipleMembersOfSameDimensionInSlicerFails() {
         assertQueryThrows(
             "select {[Measures].[Unit Sales]} on columns,\n"
             + " {[Store].children} on rows\n"
@@ -96,7 +96,7 @@ public class MultipleHierarchyTest extends BatchTestCase {
             "Tuple contains more than one member of hierarchy '[Time]'.");
     }
 
-    public void testMembersOfHierarchiesInSameDimensionInSlicer() {
+    void testMembersOfHierarchiesInSameDimensionInSlicer() {
         assertQueryReturns(
             "select {[Measures].[Unit Sales]} on columns,\n"
             + " {[Store].children} on rows\n"
@@ -117,7 +117,7 @@ public class MultipleHierarchyTest extends BatchTestCase {
             + "Row #2: 33,381\n");
     }
 
-    public void testCalcMember() {
+    void testCalcMember() {
         assertQueryReturns(
             "with member [Measures].[Sales to Date] as \n"
             + " ' Sum(PeriodsToDate([Time].[Year], [Time].[Time].CurrentMember), [Measures].[Unit Sales])'\n"
@@ -161,7 +161,7 @@ public class MultipleHierarchyTest extends BatchTestCase {
      * Tests <a href="http://jira.pentaho.com/browse/MONDRIAN-191">
      * bug MONDRIAN-191, "Properties not working with multiple hierarchies"</a>.
      */
-    public void testProperty() {
+    void testProperty() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name=\"NuStore\" foreignKey=\"store_id\">\n"
@@ -299,7 +299,7 @@ public class MultipleHierarchyTest extends BatchTestCase {
      * at compile time. (SSAS detects at run time, and generates a cell error,
      * but this is better.)
      */
-    public void testAmbiguousHierarchyInCalcMember() {
+    void testAmbiguousHierarchyInCalcMember() {
         final String query =
             "with member [Measures].[Time Child Count] as\n"
             + "  [Time].Children.Count\n"
@@ -326,7 +326,7 @@ public class MultipleHierarchyTest extends BatchTestCase {
      * bug MONDRIAN-750, "... multiple hierarchies beneath a single dimension
      * throws exception"</a>.
      */
-    public void testDefaultNamedHierarchy() {
+    void testDefaultNamedHierarchy() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name=\"NuStore\" foreignKey=\"store_id\">\n"
@@ -373,7 +373,7 @@ public class MultipleHierarchyTest extends BatchTestCase {
             + "Row #2: 0\n");
     }
 
-    public void testCalcMemOnMultipleHierarchy() {
+    void testCalcMemOnMultipleHierarchy() {
         // MONDRIAN-1485
         // Mondrian generates multiple queries during getMemberChildren
         // that references the hierarchy as a value in the where clause.

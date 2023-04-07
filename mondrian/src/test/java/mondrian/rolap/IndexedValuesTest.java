@@ -34,7 +34,7 @@ public class IndexedValuesTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testQueryWithIndex(TestingContext context) {
+    void testQueryWithIndex(TestingContext context) {
         final String desiredResult =
             "Axis #0:\n"
             + "{}\n"

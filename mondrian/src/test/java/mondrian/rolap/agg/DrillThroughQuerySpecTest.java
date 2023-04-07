@@ -79,7 +79,7 @@ public class DrillThroughQuerySpecTest {
   }
 
   @Test
-  public void testEmptyColumns() {
+  void testEmptyColumns() {
     List<RolapStar.Column> columns = Collections.emptyList();
     when(starPredicateMock.getConstrainedColumnList())
       .thenReturn(columns);
@@ -89,14 +89,14 @@ public class DrillThroughQuerySpecTest {
   }
 
   @Test
-  public void testOneColumnExists() {
+  void testOneColumnExists() {
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(1))
       .addSelect(isNull(), isNull(), anyString());
   }
 
   @Test
-  public void testTwoColumnsExist() {
+  void testTwoColumnsExist() {
     when(starPredicateMock.getConstrainedColumnList())
       .thenReturn(Arrays.asList(includedColumn, excludedColumn));
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
@@ -105,7 +105,7 @@ public class DrillThroughQuerySpecTest {
   }
 
   @Test
-  public void testColumnsNotIncludedInSelect() {
+  void testColumnsNotIncludedInSelect() {
     when(requestMock.includeInSelect(includedColumn)).thenReturn(false);
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(0))
@@ -118,7 +118,7 @@ public class DrillThroughQuerySpecTest {
   }
 
   @Test
-  public void testColumnsPartiallyIncludedInSelect() {
+  void testColumnsPartiallyIncludedInSelect() {
     when(requestMock.includeInSelect(excludedColumn)).thenReturn(false);
     when(requestMock.includeInSelect(includedColumn)).thenReturn(true);
     when(starPredicateMock.getConstrainedColumnList())
@@ -132,7 +132,7 @@ public class DrillThroughQuerySpecTest {
   // test that returns correct number of columns
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testMdxQuery(TestingContext foodMartContext) throws SQLException {
+  void testMdxQuery(TestingContext foodMartContext) throws SQLException {
     String drillThroughMdx = "DRILLTHROUGH WITH "
         + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Store Type_])' "
         + "SET [*NATIVE_CJ_SET] AS 'GENERATE([*NATIVE_CJ_SET_WITH_SLICER], {([Product].CURRENTMEMBER)})' "

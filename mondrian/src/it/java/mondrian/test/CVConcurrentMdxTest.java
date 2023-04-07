@@ -45,7 +45,7 @@ public class CVConcurrentMdxTest extends FoodMartTestCase {
         props = MondrianProperties.instance();
     }
 
-    public void testConcurrentQueriesInRandomOrder() {
+    void testConcurrentQueriesInRandomOrder() {
         propSaver.set(props.UseAggregates, false);
         propSaver.set(props.ReadAggregates, false);
         propSaver.set(props.DisableCaching, false);
@@ -74,7 +74,7 @@ public class CVConcurrentMdxTest extends FoodMartTestCase {
             3, 100, true, true, true, queryList).size() == 0);
     }
 
-    public void testConcurrentQueriesInRandomOrderOnVirtualCube() {
+    void testConcurrentQueriesInRandomOrderOnVirtualCube() {
         propSaver.set(props.UseAggregates, false);
         propSaver.set(props.ReadAggregates, false);
         propSaver.set(props.DisableCaching, false);
@@ -103,7 +103,7 @@ public class CVConcurrentMdxTest extends FoodMartTestCase {
             3, 100, true, true, true, queryList).size() == 0);
     }
 
-    public void testConcurrentCVQueriesInRandomOrder() {
+    void testConcurrentCVQueriesInRandomOrder() {
         propSaver.set(props.UseAggregates, false);
         propSaver.set(props.ReadAggregates, false);
         propSaver.set(props.DisableCaching, false);

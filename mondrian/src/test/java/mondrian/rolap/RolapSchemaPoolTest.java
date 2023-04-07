@@ -35,7 +35,7 @@ public class RolapSchemaPoolTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBasicSchemaFetch(TestingContext context) {
+    void testBasicSchemaFetch(TestingContext context) {
         RolapSchemaPool schemaPool = RolapSchemaPool.instance();
         schemaPool.clear();
 
@@ -65,7 +65,7 @@ public class RolapSchemaPoolTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchemaFetchCatalogUrlJdbcUuid(TestingContext context) {
+    void testSchemaFetchCatalogUrlJdbcUuid(TestingContext context) {
         RolapSchemaPool schemaPool = RolapSchemaPool.instance();
         schemaPool.clear();
         final String uuid = "UUID-1";
@@ -125,7 +125,7 @@ public class RolapSchemaPoolTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSchemaFetchMd5JdbcUid(TestingContext context) throws IOException {
+    void testSchemaFetchMd5JdbcUid(TestingContext context) throws IOException {
         RolapSchemaPool pool = RolapSchemaPool.instance();
         pool.clear();
         final String uuid = "UUID-1";

@@ -65,7 +65,7 @@ public class RolapStarTest extends FoodMartTestCase {
      * Tests that given a {@link mondrian.olap.MondrianDef.Table}, cloneRelation
      * respects the existing filters.
      */
-    public void testCloneRelationWithFilteredTable() {
+    void testCloneRelationWithFilteredTable() {
       RolapStarForTests rs = getStar("sales");
       MondrianDef.Table original = new MondrianDef.Table();
       original.name = "TestTable";
@@ -86,7 +86,7 @@ public class RolapStarTest extends FoodMartTestCase {
   }
 
    //Below there are tests for mondrian.rolap.RolapStar.ColumnComparator
-   public void testTwoColumnsWithDifferentNamesNotEquals() {
+   void testTwoColumnsWithDifferentNamesNotEquals() {
      RolapStar.ColumnComparator colComparator =
          RolapStar.ColumnComparator.instance;
      Column column1 = getColumnMock("Column1", "Table1");
@@ -95,7 +95,7 @@ public class RolapStarTest extends FoodMartTestCase {
      assertEquals(-1, colComparator.compare(column1, column2));
    }
 
-   public void testTwoColumnsWithEqualsNamesButDifferentTablesNotEquals() {
+   void testTwoColumnsWithEqualsNamesButDifferentTablesNotEquals() {
      RolapStar.ColumnComparator colComparator =
          RolapStar.ColumnComparator.instance;
      Column column1 = getColumnMock("Column1", "Table1");
@@ -104,7 +104,7 @@ public class RolapStarTest extends FoodMartTestCase {
      assertEquals(-1, colComparator.compare(column1, column2));
    }
 
-   public void testTwoColumnsEquals() {
+   void testTwoColumnsEquals() {
      RolapStar.ColumnComparator colComparator =
          RolapStar.ColumnComparator.instance;
      Column column1 = getColumnMock("Column1", "Table1");

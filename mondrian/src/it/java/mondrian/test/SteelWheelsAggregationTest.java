@@ -84,7 +84,7 @@ public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
                 + "</Schema>\n", roles);
     }
 
-    public void testWithAggregation() throws Exception {
+    void testWithAggregation() throws Exception {
         final String schema = getSchemaWith
             (""
             + " <Role name=\"Power User\"> \n"
@@ -107,7 +107,7 @@ public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
             .assertQueryReturns(QUERY, EXPECTED);
     }
 
-    public void testWithAggregationNoRestrictionsOnTopLevel() throws Exception {
+    void testWithAggregationNoRestrictionsOnTopLevel() throws Exception {
         final String schema = getSchemaWith
           (""
           + " <Role name=\"Power User\"> \n"
@@ -129,7 +129,7 @@ public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
           .assertQueryReturns(QUERY, EXPECTED);
     }
 
-    public void testUnionWithAggregation() throws Exception {
+    void testUnionWithAggregation() throws Exception {
         final String schema = getSchemaWith
           (""
             + " <Role name=\"Foo\"> \n"
@@ -162,7 +162,7 @@ public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
           .assertQueryReturns(QUERY, EXPECTED);
     }
 
-    public void testWithAggregationUnionRolesWithSameGrants() throws Exception {
+    void testWithAggregationUnionRolesWithSameGrants() throws Exception {
         final String schema = getSchemaWith
           (""
           + " <Role name=\"Foo\"> \n"

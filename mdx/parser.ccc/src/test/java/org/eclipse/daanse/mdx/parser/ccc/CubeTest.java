@@ -24,76 +24,80 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-public class CubeTest {
+class CubeTest {
 
-    @Nested
-    public class SelectSubcubeClauseNameTest {
-        @ParameterizedTest
-        @ValueSource(strings = { "c", //
-                "cube", // Reserved Word but quoted
-                "with whitespace", "with [inner]", "1", "." })
-        public void testQuoted(String cubeName) throws MdxParserException {
-            String mdx = mdxCubeNameQuoted(cubeName);
+	@Nested
+	class SelectSubcubeClauseNameTest {
+		@ParameterizedTest
+		@ValueSource(strings = { "c", //
+				"cube", // Reserved Word but quoted
+				"with whitespace", "with [inner]", "1", "." })
+		void testQuoted(String cubeName) throws MdxParserException {
+			String mdx = mdxCubeNameQuoted(cubeName);
 
-            SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
-            assertThat(selectStatement).isNotNull();
-            assertThat(selectStatement.selectSubcubeClause()).isNotNull()
-                    .isInstanceOfSatisfying(SelectSubcubeClauseNameR.class, s -> {
-                        assertThat(s.cubeName()).isNotNull()
-                                .satisfies(n -> {
-                                    assertThat(n.name()).isEqualTo(cubeName);
-                                    assertThat(n.quoting()).isEqualByComparingTo(Quoting.QUOTED);
-                                });
-                    });
-        }
+			SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
+			assertThat(selectStatement).isNotNull();
+			assertThat(selectStatement.selectSubcubeClause()).isNotNull()
+					.isInstanceOfSatisfying(SelectSubcubeClauseNameR.class, s -> {
+						assertThat(s.cubeName()).isNotNull().satisfies(n -> {
+							assertThat(n.name()).isEqualTo(cubeName);
+							assertThat(n.quoting()).isEqualByComparingTo(Quoting.QUOTED);
+						});
+					});
+		}
 
-        @ParameterizedTest
-        @ValueSource(strings = { "[]", "[a].[a]" })
-        public void testQuotedFail(String cubeName) throws MdxParserException {
-            String mdx = mdx_selectFromCubeName(cubeName);
+		@ParameterizedTest
+		@ValueSource(strings = { "[]", "[a].[a]" })
+		void testQuotedFail(String cubeName) throws MdxParserException {
+			String mdx = mdx_selectFromCubeName(cubeName);
 
-            assertThrows(MdxParserException.class, () -> new MdxParserWrapper(mdx).parseSelectStatement());
+			MdxParserWrapper mdxParserWrapper = new MdxParserWrapper(mdx);
+			assertThrows(MdxParserException.class, () -> {
+				mdxParserWrapper.parseSelectStatement();
+			});
 
-        }
+		}
 
-        @ParameterizedTest
-        @ValueSource(strings = { "a", "a1", "aAaAaA", "AaAaAaA" })
-        public void testUnquoted(String cubeName) throws MdxParserException {
-            String mdx = mdx_selectFromCubeName(cubeName);
+		@ParameterizedTest
+		@ValueSource(strings = { "a", "a1", "aAaAaA", "AaAaAaA" })
+		void testUnquoted(String cubeName) throws MdxParserException {
+			String mdx = mdx_selectFromCubeName(cubeName);
 
-            SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
-            assertThat(selectStatement).isNotNull();
-            assertThat(selectStatement.selectSubcubeClause()).isNotNull()
-                    .isInstanceOfSatisfying(SelectSubcubeClauseNameR.class, s -> {
-                        assertThat(s.cubeName()).isNotNull()
-                                .satisfies(n -> {
-                                    assertThat(n.name()).isEqualTo(cubeName);
-                                    assertThat(n.quoting()).isEqualByComparingTo(Quoting.UNQUOTED);
-                                });
-                    });
-        }
+			SelectStatement selectStatement = new MdxParserWrapper(mdx).parseSelectStatement();
+			assertThat(selectStatement).isNotNull();
+			assertThat(selectStatement.selectSubcubeClause()).isNotNull()
+					.isInstanceOfSatisfying(SelectSubcubeClauseNameR.class, s -> {
+						assertThat(s.cubeName()).isNotNull().satisfies(n -> {
+							assertThat(n.name()).isEqualTo(cubeName);
+							assertThat(n.quoting()).isEqualByComparingTo(Quoting.UNQUOTED);
+						});
+					});
+		}
 
-        //TODO: check ""
-        @ParameterizedTest
-        @ValueSource(strings = { "", "1", "1 1", "a a", "-", "cube", // Reserved Word
-                "CURRENTCUBE"// Reserved Word
-        })
-        public void testUnquotedFail(String cubeName) throws MdxParserException {
-            String mdx = mdx_selectFromCubeName(cubeName);
+		// TODO: check ""
+		@ParameterizedTest
+		@ValueSource(strings = { "", "1", "1 1", "a a", "-", "cube", // Reserved Word
+				"CURRENTCUBE"// Reserved Word
+		})
+		void testUnquotedFail(String cubeName) throws MdxParserException {
+			String mdx = mdx_selectFromCubeName(cubeName);
 
-            assertThrows(MdxParserException.class, () -> new MdxParserWrapper(mdx).parseSelectStatement());
+			MdxParserWrapper mdxParserWrapper = new MdxParserWrapper(mdx);
+			assertThrows(MdxParserException.class, () -> {
+				mdxParserWrapper.parseSelectStatement();
+			});
 
-            //
-        }
+			//
+		}
 
-        private static String mdxCubeNameQuoted(String cubeName) {
-            cubeName = cubeName.replace("]", "]]");
-            return mdx_selectFromCubeName("[" + cubeName + "]");
-        }
+		private static String mdxCubeNameQuoted(String cubeName) {
+			cubeName = cubeName.replace("]", "]]");
+			return mdx_selectFromCubeName("[" + cubeName + "]");
+		}
 
-        private static String mdx_selectFromCubeName(String cubeName) {
-            return "SELECT FROM " + cubeName;
-        }
-    }
+		private static String mdx_selectFromCubeName(String cubeName) {
+			return "SELECT FROM " + cubeName;
+		}
+	}
 
 }

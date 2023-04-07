@@ -47,7 +47,7 @@ public class RestrictedMemberReaderTest {
   }
 
   @Test
-  public void testGetHierarchy_allAccess() {
+  void testGetHierarchy_allAccess() {
     Schema schema = Mockito.mock(Schema.class);
     Dimension dimension = Mockito.mock(Dimension.class);
     RolapHierarchy hierarchy = Mockito.mock(RolapHierarchy.class);
@@ -70,7 +70,7 @@ public class RestrictedMemberReaderTest {
   }
 
   @Test
-  public void testGetHierarchy_roleAccess() {
+  void testGetHierarchy_roleAccess() {
     RolapHierarchy hierarchy = Mockito.mock(RolapHierarchy.class);
     MemberReader delegateMemberReader = Mockito.mock(MemberReader.class);
     HierarchyAccess roleAccess = Mockito.mock(HierarchyAccess.class);
@@ -86,7 +86,7 @@ public class RestrictedMemberReaderTest {
   }
 
   @Test
-  public void testDefaultMember_allAccess() {
+  void testDefaultMember_allAccess() {
     Schema schema = Mockito.mock(Schema.class);
     Dimension dimension = Mockito.mock(Dimension.class);
     RolapHierarchy hierarchy = Mockito.mock(RolapHierarchy.class);
@@ -112,7 +112,7 @@ public class RestrictedMemberReaderTest {
   }
 
   @Test
-  public void testDefaultMember_roleAccess() {
+  void testDefaultMember_roleAccess() {
     RolapHierarchy hierarchy = Mockito.mock(RolapHierarchy.class);
     MemberReader delegateMemberReader = Mockito.mock(MemberReader.class);
     HierarchyAccess roleAccess = Mockito.mock(HierarchyAccess.class);
@@ -148,7 +148,7 @@ public class RestrictedMemberReaderTest {
   }
 
   @Test
-  public void testDefaultMember_noDefaultMember_roleAccess() {
+  void testDefaultMember_noDefaultMember_roleAccess() {
     RolapHierarchy hierarchy = Mockito.mock(RolapHierarchy.class);
     MemberReader delegateMemberReader = Mockito.mock(MemberReader.class);
     HierarchyAccess roleAccess = Mockito.mock(HierarchyAccess.class);
@@ -184,7 +184,7 @@ public class RestrictedMemberReaderTest {
   }
 
   @Test
-  public void testDefaultMember_multiRoot() {
+  void testDefaultMember_multiRoot() {
     RolapHierarchy hierarchy = Mockito.mock(RolapHierarchy.class);
     MemberReader delegateMemberReader = Mockito.mock(MemberReader.class);
     HierarchyAccess roleAccess = Mockito.mock(HierarchyAccess.class);
@@ -230,7 +230,7 @@ public class RestrictedMemberReaderTest {
   }
 
   @Test
-  public void testDefaultMember_multiRootMeasure() {
+  void testDefaultMember_multiRootMeasure() {
     RolapHierarchy hierarchy = Mockito.mock(RolapHierarchy.class);
     MemberReader delegateMemberReader = Mockito.mock(MemberReader.class);
     HierarchyAccess roleAccess = Mockito.mock(HierarchyAccess.class);
@@ -289,7 +289,7 @@ public class RestrictedMemberReaderTest {
   }
 
   @Test
-  public void testProcessMemberChildren() {
+  void testProcessMemberChildren() {
 
       MemberReader delegateMemberReader = Mockito.mock(MemberReader.class);
       MemberChildrenConstraint constraint = Mockito.mock(MemberChildrenConstraint.class);

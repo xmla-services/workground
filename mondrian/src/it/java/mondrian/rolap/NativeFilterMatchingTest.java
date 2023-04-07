@@ -17,7 +17,7 @@ import mondrian.test.TestContext;
  * Test case for pushing MDX filter conditions down to SQL.
  */
 public class NativeFilterMatchingTest extends BatchTestCase {
-    public void testPositiveMatching() throws Exception {
+    void testPositiveMatching() throws Exception {
         if (!MondrianProperties.instance().EnableNativeFilter.get()) {
             // No point testing these if the native filters
             // are turned off.
@@ -98,7 +98,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
         verifySameNativeAndNot(query, null, getTestContext());
     }
 
-    public void testNegativeMatching() throws Exception {
+    void testNegativeMatching() throws Exception {
         if (!MondrianProperties.instance().EnableNativeFilter.get()) {
              // No point testing these if the native filters
              // are turned off.
@@ -164,7 +164,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
      *
      * @see mondrian.test.DialectTest#testRegularExpressionSqlInjection()
      */
-    public void testMatchBugMondrian983() {
+    void testMatchBugMondrian983() {
         assertQueryReturns(
             "With\n"
             + "Set [*NATIVE_CJ_SET] as 'Filter([*BASE_MEMBERS_Product], Not IsEmpty ([Measures].[Unit Sales]))' \n"
@@ -190,7 +190,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
     }
 
 
-    public void testNativeFilterSameAsNonNative() {
+    void testNativeFilterSameAsNonNative() {
         // http://jira.pentaho.com/browse/MONDRIAN-1694
         // In some cases native filter would includes an unnecessary fact table
         // join which incorrectly eliminated some tuples from the set
@@ -221,7 +221,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
             getTestContext());
     }
 
-    public void testCachedNativeFilter() {
+    void testCachedNativeFilter() {
         // http://jira.pentaho.com/browse/MONDRIAN-1694
 
         // verify that the RolapNativeSet cached values from NON EMPTY context
@@ -236,7 +236,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
             "Filter w/ regex.", getTestContext());
     }
 
-    public void testMatchesWithAccessControl() {
+    void testMatchesWithAccessControl() {
         String dimension =
             "<Dimension name=\"Store2\">\n"
             + "  <Hierarchy hasAll=\"true\" primaryKey=\"store_id\"  >\n"
@@ -287,7 +287,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
             "Filter on partially accessible set of tuples.", context);
     }
 
-    public void testNativeFilterWithCompoundSlicer() {
+    void testNativeFilterWithCompoundSlicer() {
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
         final String mdx =
             "with member measures.avgQtrs as 'avg( filter( time.quarter.members, measures.[unit sales] > 80))' "
@@ -383,7 +383,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
             + "Row #0: \n");
     }
 
-    public void testNativeFilterWithCompoundSlicerWithAggs() {
+    void testNativeFilterWithCompoundSlicerWithAggs() {
         propSaver.set(MondrianProperties.instance().UseAggregates, true);
         propSaver.set(MondrianProperties.instance().ReadAggregates, true);
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
@@ -447,7 +447,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
             + "Row #0: \n");
     }
 
-    public void testNativeFilterWithCompoundSlicer_1() {
+    void testNativeFilterWithCompoundSlicer_1() {
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
         final String mdx =
             "with member [measures].[avgQtrs] as 'count(filter([Customers].[Name].Members, [Measures].[Unit Sales] > 0))' "
@@ -591,7 +591,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
             + "Row #0: 1,281\n");
     }
 
-    public void testNativeFilterWithCompoundSlicer_2() {
+    void testNativeFilterWithCompoundSlicer_2() {
         verifySameNativeAndNot(
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, ([Measures].[Unit Sales] > 1000 OR ( [Measures].[Unit Sales] > 40 AND [Store].[Store City].CurrentMember.Name = \"San Francisco\" ) ) ) )'\n"
             + "SELECT [Measures].[TotalVal] ON 0, [Product].[All Products].Children on 1 FROM [Sales] WHERE {[Time].[1997].[Q1],[Time].[1997].[Q2]}",
@@ -599,7 +599,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
             getTestContext());
     }
 
-    public void testNativeFilterWithCompoundSlicer_3() {
+    void testNativeFilterWithCompoundSlicer_3() {
         verifySameNativeAndNot(
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, [Measures].[Unit Sales] > 1000 ) )'\n"
             + "SELECT [Measures].[TotalVal] ON 0, [Product].[All Products].Children on 1 FROM [Sales] WHERE {[Time].[1997].[Q1],[Time].[1997].[Q2]}",
@@ -607,7 +607,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
             getTestContext());
     }
 
-    public void testNativeFilterWithCompoundSlicer_4() {
+    void testNativeFilterWithCompoundSlicer_4() {
         verifySameNativeAndNot(
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, ([Measures].[Unit Sales] > 1000 OR ( [Measures].[Unit Sales] > 500 AND [Store].[Store City].CurrentMember.Name = \"San Francisco\" ) ) ) )'\n"
             + "SELECT [Measures].[TotalVal] ON 0, [Product].[All Products].Children on 1 FROM [Sales] WHERE {[Time].[1997].[Q1],[Time].[1997].[Q2]}",
@@ -615,7 +615,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
             getTestContext());
     }
 
-    public void testNativeFilterWithCompoundSlicerDifferentProducts() {
+    void testNativeFilterWithCompoundSlicerDifferentProducts() {
         assertQueryReturns(
             "with member measures.avgQtrs as 'count(filter(Customers.[Name].members, [Unit Sales] > 0))' "
             + "select measures.avgQtrs on 0 from sales where ( {[Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer], [Product].[Food].[Baked Goods].[Bread].[Muffins]} )",

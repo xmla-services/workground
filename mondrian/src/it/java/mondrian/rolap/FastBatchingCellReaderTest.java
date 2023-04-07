@@ -78,7 +78,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
         new MyDelegatingInvocationHandler( dialect, supportsGroupingSets ) );
   }
 
-  public void testMissingSubtotalBugMetricFilter() {
+  void testMissingSubtotalBugMetricFilter() {
     assertQueryReturns( "With " + "Set [*NATIVE_CJ_SET] as " + "'NonEmptyCrossJoin({[Time].[Year].[1997]},"
         + "                   NonEmptyCrossJoin({[Product].[All Products].[Drink]},{[Education Level].[All Education Levels].[Bachelors Degree]}))' "
         + "Set [*METRIC_CJ_SET] as 'Filter([*NATIVE_CJ_SET],[Measures].[*Unit Sales_SEL~SUM] > 1000.0)' "
@@ -94,7 +94,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
             + "Row #1: 6,423\n" );
   }
 
-  public void testMissingSubtotalBugMultiLevelMetricFilter() {
+  void testMissingSubtotalBugMultiLevelMetricFilter() {
     assertQueryReturns( "With "
         + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Product],[*BASE_MEMBERS_Education Level])' "
         + "Set [*METRIC_CJ_SET] as 'Filter([*NATIVE_CJ_SET],[Measures].[*Store Cost_SEL~SUM] > 1000.0)' "
@@ -114,31 +114,31 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
             + "Row #0: 6,535.30\n" + "Row #1: 3,860.89\n" );
   }
 
-  public void testShouldUseGroupingFunctionOnPropertyTrueAndOnSupportedDB() {
+  void testShouldUseGroupingFunctionOnPropertyTrueAndOnSupportedDB() {
     propSaver.set( MondrianProperties.instance().EnableGroupingSets, true );
     BatchLoader fbcr = createFbcr( true, salesCube );
     assertTrue( fbcr.shouldUseGroupingFunction() );
   }
 
-  public void testShouldUseGroupingFunctionOnPropertyTrueAndOnNonSupportedDB() {
+  void testShouldUseGroupingFunctionOnPropertyTrueAndOnNonSupportedDB() {
     propSaver.set( MondrianProperties.instance().EnableGroupingSets, true );
     BatchLoader fbcr = createFbcr( false, salesCube );
     assertFalse( fbcr.shouldUseGroupingFunction() );
   }
 
-  public void testShouldUseGroupingFunctionOnPropertyFalseOnSupportedDB() {
+  void testShouldUseGroupingFunctionOnPropertyFalseOnSupportedDB() {
     propSaver.set( MondrianProperties.instance().EnableGroupingSets, false );
     BatchLoader fbcr = createFbcr( true, salesCube );
     assertFalse( fbcr.shouldUseGroupingFunction() );
   }
 
-  public void testShouldUseGroupingFunctionOnPropertyFalseOnNonSupportedDB() {
+  void testShouldUseGroupingFunctionOnPropertyFalseOnNonSupportedDB() {
     propSaver.set( MondrianProperties.instance().EnableGroupingSets, false );
     BatchLoader fbcr = createFbcr( false, salesCube );
     assertFalse( fbcr.shouldUseGroupingFunction() );
   }
 
-  public void testDoesDBSupportGroupingSets() {
+  void testDoesDBSupportGroupingSets() {
     final Dialect dialect = getTestContext().getDialect();
     FastBatchingCellReader fbcr = new FastBatchingCellReader( e, salesCube, aggMgr ) {
       Dialect getDialect() {
@@ -160,7 +160,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     }
   }
 
-  public void testGroupBatchesForNonGroupableBatchesWithSorting() {
+  void testGroupBatchesForNonGroupableBatchesWithSorting() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
     BatchLoader.Batch genderBatch =
         fbcr.new Batch( createRequest( cubeNameSales, measureUnitSales, "customer", "gender", "F" ) );
@@ -175,7 +175,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertEquals( maritalStatusBatch, groupedBatches.get( 1 ).detailedBatch );
   }
 
-  public void testGroupBatchesForNonGroupableBatchesWithConstraints() {
+  void testGroupBatchesForNonGroupableBatchesWithConstraints() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
     List<String[]> compoundMembers = new ArrayList<String[]>();
     compoundMembers.add( new String[] { "USA", "CA" } );
@@ -196,7 +196,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertEquals( maritalStatusBatch, groupedBatches.get( 1 ).detailedBatch );
   }
 
-  public void testGroupBatchesForGroupableBatches() {
+  void testGroupBatchesForGroupableBatches() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
     BatchLoader.Batch genderBatch =
         fbcr.new Batch( createRequest( cubeNameSales, measureUnitSales, "customer", "gender", "F" ) ) {
@@ -220,7 +220,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertTrue( groupedBatches.get( 0 ).summaryBatches.contains( genderBatch ) );
   }
 
-  public void testGroupBatchesForGroupableBatchesAndNonGroupableBatches() {
+  void testGroupBatchesForGroupableBatchesAndNonGroupableBatches() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
     final BatchLoader.Batch group1Agg2 =
         fbcr.new Batch( createRequest( cubeNameSales, measureUnitSales, "customer", "gender", "F" ) ) {
@@ -269,7 +269,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertTrue( groupedBatches.get( 1 ).summaryBatches.contains( group2Agg1 ) );
   }
 
-  public void testGroupBatchesForTwoSetOfGroupableBatches() {
+  void testGroupBatchesForTwoSetOfGroupableBatches() {
     String[] fieldValuesStoreType =
         { "Deluxe Supermarket", "Gourmet Supermarket", "HeadQuarters", "Mid-Size Grocery", "Small Grocery",
           "Supermarket" };
@@ -348,7 +348,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     }
   }
 
-  public void testAddToCompositeBatchForBothBatchesNotPartOfCompositeBatch() {
+  void testAddToCompositeBatchForBothBatchesNotPartOfCompositeBatch() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
     BatchLoader.Batch batch1 =
         fbcr.new Batch( createRequest( cubeNameSales, measureUnitSales, "customer", "country", "F" ) );
@@ -364,7 +364,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertTrue( compositeBatch.summaryBatches.contains( batch2 ) );
   }
 
-  public void testAddToCompositeBatchForDetailedBatchAlreadyPartOfACompositeBatch() {
+  void testAddToCompositeBatchForDetailedBatchAlreadyPartOfACompositeBatch() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
     BatchLoader.Batch detailedBatch =
         fbcr.new Batch( createRequest( cubeNameSales, measureUnitSales, "customer", "country", "F" ) );
@@ -388,7 +388,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertTrue( compositeBatch.summaryBatches.contains( aggBatchAlreadyInComposite ) );
   }
 
-  public void testAddToCompositeBatchForAggregationBatchAlreadyPartOfACompositeBatch() {
+  void testAddToCompositeBatchForAggregationBatchAlreadyPartOfACompositeBatch() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
     BatchLoader.Batch detailedBatch =
         fbcr.new Batch( createRequest( cubeNameSales, measureUnitSales, "customer", "country", "F" ) );
@@ -412,7 +412,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertTrue( compositeBatch.summaryBatches.contains( aggBatchAlreadyInComposite ) );
   }
 
-  public void testAddToCompositeBatchForBothBatchAlreadyPartOfACompositeBatch() {
+  void testAddToCompositeBatchForBothBatchAlreadyPartOfACompositeBatch() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
     BatchLoader.Batch detailedBatch =
         fbcr.new Batch( createRequest( cubeNameSales, measureUnitSales, "customer", "country", "F" ) );
@@ -448,7 +448,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
   /**
    * Tests that can batch for batch with super set of contraint column bit key and all values for additional condition.
    */
-  public void testCanBatchForSuperSet() {
+  void testCanBatchForSuperSet() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
 
     BatchLoader.Batch aggregationBatch =
@@ -466,7 +466,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertFalse( aggregationBatch.canBatch( detailedBatch ) );
   }
 
-  public void testCanBatchForBatchWithConstraint() {
+  void testCanBatchForBatchWithConstraint() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
 
     List<String[]> compoundMembers = new ArrayList<String[]>();
@@ -489,7 +489,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertFalse( aggregationBatch.canBatch( detailedBatch ) );
   }
 
-  public void testCanBatchForBatchWithConstraint2() {
+  void testCanBatchForBatchWithConstraint2() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
 
     List<String[]> compoundMembers1 = new ArrayList<String[]>();
@@ -518,7 +518,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertFalse( aggregationBatch.canBatch( detailedBatch ) );
   }
 
-  public void testCanBatchForBatchWithDistinctCountInDetailedBatch() {
+  void testCanBatchForBatchWithDistinctCountInDetailedBatch() {
     if ( !MondrianProperties.instance().UseAggregates.get() || !MondrianProperties.instance().ReadAggregates.get() ) {
       return;
     }
@@ -538,7 +538,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertFalse( aggregationBatch.canBatch( detailedBatch ) );
   }
 
-  public void testCanBatchForBatchWithDistinctCountInAggregateBatch() {
+  void testCanBatchForBatchWithDistinctCountInAggregateBatch() {
     if ( !MondrianProperties.instance().UseAggregates.get() || !MondrianProperties.instance().ReadAggregates.get() ) {
       return;
     }
@@ -558,7 +558,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertFalse( aggregationBatch.canBatch( detailedBatch ) );
   }
 
-  public void testCanBatchSummaryBatchWithDetailedBatchWithDistinctCount() {
+  void testCanBatchSummaryBatchWithDetailedBatchWithDistinctCount() {
     if ( MondrianProperties.instance().UseAggregates.get() || MondrianProperties.instance().ReadAggregates.get() ) {
       return;
     }
@@ -581,7 +581,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
    * Test that can batch for batch with non superset of constraint column bit key and all values for additional
    * condition.
    */
-  public void testNonSuperSet() {
+  void testNonSuperSet() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
 
     BatchLoader.Batch aggregationBatch =
@@ -602,7 +602,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
    * Tests that can batch for batch with super set of constraint column bit key and NOT all values for additional
    * condition.
    */
-  public void testSuperSetAndNotAllValues() {
+  void testSuperSetAndNotAllValues() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
 
     BatchLoader.Batch aggregationBatch =
@@ -620,7 +620,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertFalse( aggregationBatch.canBatch( detailedBatch ) );
   }
 
-  public void testCanBatchForBatchesFromSameAggregationButDifferentRollupOption() {
+  void testCanBatchForBatchesFromSameAggregationButDifferentRollupOption() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
 
     BatchLoader.Batch batch1 =
@@ -650,7 +650,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
    * Tests that Can Batch For Batch With Super Set Of Constraint Column Bit Key And Different Values For Overlapping
    * Columns.
    */
-  public void testSuperSetDifferentValues() {
+  void testSuperSetDifferentValues() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
 
     BatchLoader.Batch aggregationBatch =
@@ -668,7 +668,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertFalse( aggregationBatch.canBatch( detailedBatch ) );
   }
 
-  public void testCanBatchForBatchWithDifferentAggregationTable() {
+  void testCanBatchForBatchWithDifferentAggregationTable() {
     final Dialect dialect = getTestContext().getDialect();
     final Dialect.DatabaseProduct product = dialect.getDatabaseProduct();
     switch ( product ) {
@@ -699,7 +699,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     }
   }
 
-  public void testCannotBatchTwoBatchesAtTheSameLevel() {
+  void testCannotBatchTwoBatchesAtTheSameLevel() {
     final BatchLoader fbcr = createFbcr( null, salesCube );
 
     BatchLoader.Batch firstBatch =
@@ -716,7 +716,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertFalse( secondBatch.canBatch( firstBatch ) );
   }
 
-  public void testCompositeBatchLoadAggregation() throws Exception {
+  void testCompositeBatchLoadAggregation() throws Exception {
     if ( !getTestContext().getDialect().supportsGroupingSets() ) {
       return;
     }
@@ -785,7 +785,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
    * <code>count(distinct "col1" + "col2"), count(distinct query)</code>, are loaded individually, and separately from
    * the other aggregates.
    */
-  public void testLoadDistinctSqlMeasure() {
+  void testLoadDistinctSqlMeasure() {
     // Some databases cannot handle scalar subqueries inside
     // count(distinct).
     final Dialect dialect = getTestContext().getDialect();
@@ -926,7 +926,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertQuerySql( testContext, query, patterns );
   }
 
-  public void testAggregateDistinctCount() {
+  void testAggregateDistinctCount() {
     // solve_order=1 says to aggregate [CA] and [OR] before computing their
     // sums
     assertQueryReturns(
@@ -943,7 +943,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
    * As {@link #testAggregateDistinctCount()}, but (a) calc member includes members from different levels and (b) also
    * display [unit sales].
    */
-  public void testAggregateDistinctCount2() {
+  void testAggregateDistinctCount2() {
     assertQueryReturns( "WITH MEMBER [Time].[Time].[1997 Q1 plus July] AS\n"
         + " 'AGGREGATE({[Time].[1997].[Q1], [Time].[1997].[Q3].[7]})', solve_order=1\n"
         + "SELECT {[Measures].[Unit Sales], [Measures].[Customer Count]} ON COLUMNS,\n"
@@ -962,7 +962,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
   /**
    * As {@link #testAggregateDistinctCount2()}, but with two calc members simultaneously.
    */
-  public void testAggregateDistinctCount3() {
+  void testAggregateDistinctCount3() {
     assertQueryReturns( "WITH\n"
         + "  MEMBER [Promotion Media].[TV plus Radio] AS 'AGGREGATE({[Promotion Media].[TV], [Promotion Media].[Radio]})', solve_order=1\n"
         + "  MEMBER [Time].[Time].[1997 Q1 plus July] AS 'AGGREGATE({[Time].[1997].[Q1], [Time].[1997].[Q3].[7]})', solve_order=1\n"
@@ -1040,7 +1040,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
    * Distinct count over aggregate member which contains overlapping members. Need to count them twice for rollable
    * measures such as [Unit Sales], but not for distinct-count measures such as [Customer Count].
    */
-  public void testAggregateDistinctCount4() {
+  void testAggregateDistinctCount4() {
     // CA and USA are overlapping members
     final String mdxQuery =
         "WITH\n"
@@ -1068,7 +1068,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
    * Fix a problem when genergating predicates for distinct count aggregate loading and using the aggregate function in
    * the slicer.
    */
-  public void testAggregateDistinctCount5() {
+  void testAggregateDistinctCount5() {
     // make sure tuple optimization will be used
     propSaver.set( propSaver.properties.MaxConstraints, 2 );
 
@@ -1104,7 +1104,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
   }
 
   // Test for multiple members on different levels within the same hierarchy.
-  public void testAggregateDistinctCount6() {
+  void testAggregateDistinctCount6() {
     // CA and USA are overlapping members
     final String mdxQuery =
         "WITH " + " MEMBER [Store].[Select Region] AS "
@@ -1136,7 +1136,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
    * Note: 1785406 is a regression from checkin 9710. Code changes made in 9710 is no longer in use (and removed). So
    * this bug will not occur; however, keeping the test case here to get some coverage for a query with a slicer.
    */
-  public void testDistinctCountBug1785406() {
+  void testDistinctCountBug1785406() {
     String query =
         "With \n" + "Set [*BASE_MEMBERS_Product] as {[Product].[All Products].[Food].[Deli]}\n"
             + "Set [*BASE_MEMBERS_Store] as {[Store].[All Stores].[USA].[WA]}\n"
@@ -1195,7 +1195,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertQuerySql( query, patterns );
   }
 
-  public void testDistinctCountBug1785406_2() {
+  void testDistinctCountBug1785406_2() {
     String query =
         "With " + "Member [Product].[x] as 'Aggregate({Gender.CurrentMember})'\n"
             + "member [Measures].[foo] as '([Product].[x],[Measures].[Customer Count])'\n"
@@ -1232,7 +1232,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     assertQuerySql( query, patterns );
   }
 
-  public void testAggregateDistinctCount2ndParameter() {
+  void testAggregateDistinctCount2ndParameter() {
     // simple case of count distinct measure as second argument to
     // Aggregate(). Should apply distinct-count aggregator (MONDRIAN-2016)
     assertQueryReturns( "with\n" + "  set periods as [Time].[1997].[Q1].[1] : [Time].[1997].[Q4].[10]\n"
@@ -1249,7 +1249,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
             + "Row #2: 3,026\n" + "Row #3: 5,581\n" + "Row #3: 3,261\n" );
   }
 
-  public void testCountDistinctAggWithOtherCountDistinctInContext() {
+  void testCountDistinctAggWithOtherCountDistinctInContext() {
     // tests that Aggregate( <set>, <count-distinct measure>) aggregates
     // the correct measure when a *different* count-distinct measure is
     // in context (MONDRIAN-2128)
@@ -1299,7 +1299,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
             + "Row #0: 3,753\n" );
   }
 
-  public void testContextSetCorrectlyWith2ParamAggregate() {
+  void testContextSetCorrectlyWith2ParamAggregate() {
     // Aggregate with a second parameter may change context. Verify
     // the evaluator is restored. The query below would return
     // the [Unit Sales] value instead of [Store Sales] if context was
@@ -1311,7 +1311,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
             + "{[Store].[cond]}\n" + "Row #0: 565,238.13\n" );
   }
 
-  public void testAggregateDistinctCountInDimensionFilter() {
+  void testAggregateDistinctCountInDimensionFilter() {
     String query =
         "With " + "Set [Products] as '{[Product].[All Products].[Drink], [Product].[All Products].[Food]}' "
             + "Set [States] as '{[Store].[All Stores].[USA].[CA], [Store].[All Stores].[USA].[OR]}' "
@@ -1381,7 +1381,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     }
   }
 
-  public void testInMemoryAggSum() throws Exception {
+  void testInMemoryAggSum() throws Exception {
     // Double arrays
     final Object[] dblSet1 = new Double[] { null, 0.0, 1.1, 2.4 };
     final Object[] dblSet2 = new Double[] { null, null, null };
@@ -1417,7 +1417,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     Assert.assertEquals( 10, RolapAggregator.Sum.aggregate( Arrays.asList( intSet4 ), Dialect.Datatype.Integer ) );
   }
 
-  public void testInMemoryAggMin() throws Exception {
+  void testInMemoryAggMin() throws Exception {
     // Double arrays
     final Object[] dblSet1 = new Double[] { null, 0.0, 1.1, 2.4 };
     final Object[] dblSet2 = new Double[] { null, null, null };
@@ -1453,7 +1453,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
     Assert.assertEquals( 3, RolapAggregator.Min.aggregate( Arrays.asList( intSet4 ), Dialect.Datatype.Integer ) );
   }
 
-  public void testInMemoryAggMax() throws Exception {
+  void testInMemoryAggMax() throws Exception {
     // Double arrays
     final Object[] dblSet1 = new Double[] { null, 0.0, 1.1, 2.4 };
     final Object[] dblSet2 = new Double[] { null, null, null };
@@ -1497,7 +1497,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase {
    *
    * @see <a href="http://jira.pentaho.com/browse/MONDRIAN-2251">Jira issue</a>
    */
-  public void testCellBatchSizeWithUdf() {
+  void testCellBatchSizeWithUdf() {
     propSaver.set( MondrianProperties.instance().CellBatchSize, 1 );
     assertQueryReturns( "select lastnonempty([education level].members, measures.[unit sales]) on 0 from sales",
         "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "{[Education Level].[Partial High School]}\n" + "Row #0: 79,155\n" );

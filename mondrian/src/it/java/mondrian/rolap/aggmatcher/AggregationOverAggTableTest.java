@@ -35,7 +35,7 @@ public class AggregationOverAggTableTest extends AggTableTestCase {
         TestContext.instance().flushSchemaCache();
     }
 
-    public void testAvgMeasureLowestGranularity() throws Exception {
+    void testAvgMeasureLowestGranularity() throws Exception {
         TestContext testContext = ExplicitRecognizerTest.setupMultiColDimCube(
             "",
             "column=\"the_year\"",

@@ -36,7 +36,7 @@ public class FilterTest extends BatchTestCase {
       MondrianProperties.instance().EnableNativeCrossJoin, true );
   }
 
-  public void testInFilterSimple() throws Exception {
+  void testInFilterSimple() throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -60,7 +60,7 @@ public class FilterTest extends BatchTestCase {
     checkNative( 0, 45, query, null, requestFreshConnection );
   }
 
-  public void testNotInFilterSimple() throws Exception {
+  void testNotInFilterSimple() throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -84,7 +84,7 @@ public class FilterTest extends BatchTestCase {
     checkNative( 0, 66, query, null, requestFreshConnection );
   }
 
-  public void testInFilterAND() throws Exception {
+  void testInFilterAND() throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -110,7 +110,7 @@ public class FilterTest extends BatchTestCase {
     checkNative( 0, 88, query, null, requestFreshConnection );
   }
 
-  public void testIsFilterSimple() throws Exception {
+  void testIsFilterSimple() throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -134,7 +134,7 @@ public class FilterTest extends BatchTestCase {
     checkNative( 120, 45, query, null, requestFreshConnection );
   }
 
-  public void testNotIsFilterSimple() throws Exception {
+  void testNotIsFilterSimple() throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -158,7 +158,7 @@ public class FilterTest extends BatchTestCase {
     checkNative( 150, 66, query, null, requestFreshConnection );
   }
 
-  public void testMixedInIsFilters() throws Exception {
+  void testMixedInIsFilters() throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -194,7 +194,7 @@ public class FilterTest extends BatchTestCase {
    *
    * @throws Exception
    */
-  public void testInFilterNonNative() throws Exception {
+  void testInFilterNonNative() throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -213,7 +213,7 @@ public class FilterTest extends BatchTestCase {
     checkNotNative( 45, query );
   }
 
-  public void testTopCountOverInFilter() throws Exception {
+  void testTopCountOverInFilter() throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
     propSaver.set( MondrianProperties.instance().EnableNativeTopCount, true );
@@ -242,7 +242,7 @@ public class FilterTest extends BatchTestCase {
    *
    * @throws Exception
    */
-  public void testNotInFilterKeepNullMember() throws Exception {
+  void testNotInFilterKeepNullMember() throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -300,7 +300,7 @@ public class FilterTest extends BatchTestCase {
    *
    * @throws Exception
    */
-  public void testNotInFilterExcludeNullMember() throws Exception {
+  void testNotInFilterExcludeNullMember() throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -356,7 +356,7 @@ public class FilterTest extends BatchTestCase {
    * Test that null members are included when the filter excludes members that contain multiple levels, but none being
    * null.
    */
-  public void testNotInMultiLevelMemberConstraintNonNullParent() {
+  void testNotInMultiLevelMemberConstraintNonNullParent() {
     if ( MondrianProperties.instance().ReadAggregates.get() ) {
       // If aggregate tables are enabled, generates similar SQL involving
       // agg tables.
@@ -430,7 +430,7 @@ public class FilterTest extends BatchTestCase {
    * Test that null members are included when the filter excludes members that contain multiple levels, but none being
    * null.  The members have the same parent.
    */
-  public void testNotInMultiLevelMemberConstraintNonNullSameParent() {
+  void testNotInMultiLevelMemberConstraintNonNullSameParent() {
     if ( MondrianProperties.instance().ReadAggregates.get() ) {
       // If aggregate tables are enabled, generates similar SQL involving
       // agg tables.
@@ -501,7 +501,7 @@ public class FilterTest extends BatchTestCase {
    * Test that null members are included when the filter explicitly excludes certain members that contain nulls.  The
    * members span multiple levels.
    */
-  public void testNotInMultiLevelMemberConstraintMixedNullNonNullParent() {
+  void testNotInMultiLevelMemberConstraintMixedNullNonNullParent() {
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
     }
@@ -613,7 +613,7 @@ public class FilterTest extends BatchTestCase {
    * Test that null members are included when the filter explicitly excludes a single member that has a null.  The
    * members span multiple levels.
    */
-  public void testNotInMultiLevelMemberConstraintSingleNullParent() {
+  void testNotInMultiLevelMemberConstraintSingleNullParent() {
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
     }
@@ -713,7 +713,7 @@ public class FilterTest extends BatchTestCase {
     assertQuerySql( testContext, query, patterns );
   }
 
-  public void testCachedNativeSetUsingFilters() throws Exception {
+  void testCachedNativeSetUsingFilters() throws Exception {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -754,7 +754,7 @@ public class FilterTest extends BatchTestCase {
     checkNative( 100, 11, query2, null, requestFreshConnection );
   }
 
-  public void testNativeFilter() {
+  void testNativeFilter() {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -776,7 +776,7 @@ public class FilterTest extends BatchTestCase {
   /**
    * Executes a Filter() whose condition contains a calculated member.
    */
-  public void testCmNativeFilter() {
+  void testCmNativeFilter() {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -846,7 +846,7 @@ public class FilterTest extends BatchTestCase {
       requestFreshConnection );
   }
 
-  public void testNonNativeFilterWithNullMeasure() {
+  void testNonNativeFilterWithNullMeasure() {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, false );
     checkNotNative(
@@ -890,7 +890,7 @@ public class FilterTest extends BatchTestCase {
         + "Row #8: \n" );
   }
 
-  public void testNativeFilterWithNullMeasure() {
+  void testNativeFilterWithNullMeasure() {
     // Currently this behaves differently from the non-native evaluation.
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
@@ -926,7 +926,7 @@ public class FilterTest extends BatchTestCase {
     }
   }
 
-  public void testNonNativeFilterWithCalcMember() {
+  void testNonNativeFilterWithCalcMember() {
     // Currently this query cannot run natively
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, false );
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
@@ -955,7 +955,7 @@ public class FilterTest extends BatchTestCase {
   /**
    * Verify that filter with Not IsEmpty(storedMeasure) can be natively evaluated.
    */
-  public void testNativeFilterNonEmpty() {
+  void testNativeFilterNonEmpty() {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, false );
     propSaver.set( MondrianProperties.instance().EnableNativeFilter, true );
 
@@ -981,7 +981,7 @@ public class FilterTest extends BatchTestCase {
    * <a href="http://jira.pentaho.com/browse/MONDRIAN-706">bug MONDRIAN-706,
    * "SQL using hierarchy attribute 'Column Name' instead of 'Column' in the filter"</a>.
    */
-  public void testBugMondrian706() {
+  void testBugMondrian706() {
     propSaver.set(
       MondrianProperties.instance().UseAggregates,
       false );
@@ -1121,7 +1121,7 @@ public class FilterTest extends BatchTestCase {
    * hash code. This resulted in two filters being chained within two different named sets to register a cache element
    * with the same key, even though they were the different because of the added "NOT" keyword.
    */
-  public void testBug779() {
+  void testBug779() {
     final String query1 =
       "With Set [*NATIVE_CJ_SET] as 'Filter([*BASE_MEMBERS_Product], Not IsEmpty ([Measures].[Unit Sales]))' Set "
         + "[*BASE_MEMBERS_Product] as 'Filter([Product].[Product Department].Members,(Ancestor([Product]"
@@ -1194,7 +1194,7 @@ public class FilterTest extends BatchTestCase {
    * a collapsed field on an aggregate table, the dimension table field was referenced as the column expression, causing
    * sql errors.
    */
-  public void testMultiValueInWithNullVals() {
+  void testMultiValueInWithNullVals() {
     // MONDRIAN-1458 - Native exclusion predicate doesn't use agg table
     // when checking for nulls
     TestContext context = getTestContext();

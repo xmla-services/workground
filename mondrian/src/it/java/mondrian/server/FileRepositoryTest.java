@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verify;
 
 public class FileRepositoryTest extends TestCase {
 
-     public void testGetServerInfo_ifGetDataSourceInfoIsCalled() {
+     void testGetServerInfo_ifGetDataSourceInfoIsCalled() {
         final String datasourceNameStub = "DATASOURCE_NAME";
         final String datasourceInfoStub = "DATASOURCE_INFO";
         final String contentStub = "<?xml version=\"1.0\""
@@ -73,7 +73,7 @@ public class FileRepositoryTest extends TestCase {
             databaseInfo.getProperties().containsValue(datasourceInfoStub));
      }
 
-     public void testDiscoverDatasourceLegacyNameMatch() throws Exception {
+     void testDiscoverDatasourceLegacyNameMatch() throws Exception {
          final String contentStub =
              "<?xml version=\"1.0\""
              + " encoding=\"UTF-8\"?>\n"

@@ -43,66 +43,66 @@ public class PropertiesFunctionTest extends FoodMartTestCase {
   // The first hierarchy doesn't have a name. By default, a hierarchy has the same name as its dimension, so the first
   // hierarchy is called "Time".
   // Below the tests for the "Time" hierarchy and dimention.
-  public void testMemberCaptionPropertyOnTimeDimension() {
+  void testMemberCaptionPropertyOnTimeDimension() {
     verifyMemberCaptionPropertyFunction( "[Time].Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, TIME_MEMBER_CAPTION );
   }
 
-  public void testCurrentMemberCaptionPropertyOnTimeDimension() {
+  void testCurrentMemberCaptionPropertyOnTimeDimension() {
     verifyMemberCaptionPropertyFunction( "[Time].CurrentMember.Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, TIME_MEMBER_CAPTION );
   }
 
-  public void testMemberCaptionPropertyOnTimeHierarchy() {
+  void testMemberCaptionPropertyOnTimeHierarchy() {
     verifyMemberCaptionPropertyFunction( "[Time].[Time].Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, TIME_MEMBER_CAPTION );
   }
 
-  public void testCurrentMemberCaptionPropertyOnTimeHierarchy() {
+  void testCurrentMemberCaptionPropertyOnTimeHierarchy() {
     verifyMemberCaptionPropertyFunction( "[Time].[Time].CurrentMember.Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, TIME_MEMBER_CAPTION );
   }
 
-  public void testGenerateWithMemberCaptionPropertyOnTimeDimension() {
+  void testGenerateWithMemberCaptionPropertyOnTimeDimension() {
     verifyGenerateWithMemberCaptionPropertyFunction( "Generate([Time].CurrentMember, [Time].CurrentMember.Properties('MEMBER_CAPTION'))", Category.String, STRING_TYPE, TIME_MEMBER_CAPTION );
   }
 
-  public void testGenerateWithMemberCaptionPropertyOnTimeHierarchy() {
+  void testGenerateWithMemberCaptionPropertyOnTimeHierarchy() {
     verifyGenerateWithMemberCaptionPropertyFunction( "Generate([Time].CurrentMember, [Time].[Time].CurrentMember.Properties('MEMBER_CAPTION'))", Category.String, STRING_TYPE, TIME_MEMBER_CAPTION );
   }
 
   // Below the tests for the "Time.Weekly" hierarchy.
-  public void testMemberCaptionPropertyOnWeeklyHierarchy() {
+  void testMemberCaptionPropertyOnWeeklyHierarchy() {
     verifyMemberCaptionPropertyFunction( "[Time.Weekly].Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, TIME_WEEKLY_MEMBER_CAPTION );
   }
 
-  public void testCurrentMemberCaptionPropertyOnWeeklyHierarchy() {
+  void testCurrentMemberCaptionPropertyOnWeeklyHierarchy() {
     verifyMemberCaptionPropertyFunction( "[Time.Weekly].CurrentMember.Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, TIME_WEEKLY_MEMBER_CAPTION );
   }
 
-  public void testGenerateWithMemberCaptionPropertyOnWeeklyHierarchy() {
+  void testGenerateWithMemberCaptionPropertyOnWeeklyHierarchy() {
     verifyGenerateWithMemberCaptionPropertyFunction( "Generate([Time.Weekly].CurrentMember, [Time.Weekly].CurrentMember.Properties('MEMBER_CAPTION'))", Category.String, STRING_TYPE, TIME_WEEKLY_MEMBER_CAPTION );
   }
 
   // The "Store" dimention in foodmart schema contains only one hierarchy that has no name. So its name is "Store".
   // Below the tests for the "Store" hierarchy and dimention.
-  public void testMemberCaptionPropertyOnStoreDimension() {
+  void testMemberCaptionPropertyOnStoreDimension() {
     verifyMemberCaptionPropertyFunction( "[Store].Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, STORE_MEMBER_CAPTION );
   }
 
-  public void testCurrentMemberCaptionPropertyOnStoreDimension() {
+  void testCurrentMemberCaptionPropertyOnStoreDimension() {
     verifyMemberCaptionPropertyFunction( "[Store].CurrentMember.Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, STORE_MEMBER_CAPTION );
   }
 
-  public void testMemberCaptionPropertyOnStoreHierarchy() {
+  void testMemberCaptionPropertyOnStoreHierarchy() {
     verifyMemberCaptionPropertyFunction( "[Store].[Store].Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, STORE_MEMBER_CAPTION );
   }
 
-  public void testCurrentMemberCaptionPropertyOnStoreHierarchy() {
+  void testCurrentMemberCaptionPropertyOnStoreHierarchy() {
     verifyMemberCaptionPropertyFunction( "[Store].[Store].CurrentMember.Properties('MEMBER_CAPTION')", Category.String, STRING_TYPE, STORE_MEMBER_CAPTION );
   }
 
-  public void testGenerateWithMemberCaptionPropertyOnStoreDimension() {
+  void testGenerateWithMemberCaptionPropertyOnStoreDimension() {
     verifyGenerateWithMemberCaptionPropertyFunction( "Generate([Store].CurrentMember, [Store].CurrentMember.Properties('MEMBER_CAPTION'))", Category.String, STRING_TYPE, STORE_MEMBER_CAPTION );
   }
 
-  public void testGenerateWithMemberCaptionPropertyOnStoreHierarchy() {
+  void testGenerateWithMemberCaptionPropertyOnStoreHierarchy() {
     verifyGenerateWithMemberCaptionPropertyFunction( "Generate([Store].CurrentMember, [Store].[Store].CurrentMember.Properties('MEMBER_CAPTION'))", Category.String, STRING_TYPE, STORE_MEMBER_CAPTION );
   }
 

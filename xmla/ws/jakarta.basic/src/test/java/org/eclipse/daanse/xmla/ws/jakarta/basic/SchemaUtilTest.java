@@ -14,7 +14,7 @@ import jakarta.xml.bind.Marshaller;
 
 public class SchemaUtilTest {
     @Test
-    public void testSchemaGen() throws Exception {
+    void testSchemaGen() throws Exception {
         DiscoverResponse response = new DiscoverResponse();
         Return ret = new Return();
         response.setReturn(ret);

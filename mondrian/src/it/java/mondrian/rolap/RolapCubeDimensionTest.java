@@ -55,12 +55,12 @@ public class RolapCubeDimensionTest extends TestCase {
         highCardinality);
   }
 
-  public void testLookupCube_null() {
+  void testLookupCube_null() {
     RolapCubeDimension rcd = stubRolapCubeDimension(false);
 
     assertEquals(null, rcd.lookupFactCube(null, null));
   }
-  public void testLookupCube_notVirtual() {
+  void testLookupCube_notVirtual() {
     RolapCubeDimension rcd = stubRolapCubeDimension(false);
     MondrianDef.CubeDimension cubeDim = new MondrianDef.Dimension();
     RolapSchema schema = mock(RolapSchema.class);
@@ -70,7 +70,7 @@ public class RolapCubeDimensionTest extends TestCase {
     verify(schema, times(0)).lookupCube(anyString(), anyBoolean());
   }
 
-  public void testLookupCube_noSuchCube() {
+  void testLookupCube_noSuchCube() {
     RolapCubeDimension rcd = stubRolapCubeDimension(false);
     MondrianDef.VirtualCubeDimension cubeDim =
         new MondrianDef.VirtualCubeDimension();
@@ -84,7 +84,7 @@ public class RolapCubeDimensionTest extends TestCase {
     Mockito.verify(schema).lookupCube(cubeName);
   }
 
-  public void testLookupCube_found() {
+  void testLookupCube_found() {
     RolapCubeDimension rcd = stubRolapCubeDimension(false);
     MondrianDef.VirtualCubeDimension cubeDim =
         mock(MondrianDef.VirtualCubeDimension.class);

@@ -53,7 +53,7 @@ public class NativeFilterAgainstAggTableTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testFilteringOnAggregated_ByCount(TestingContext context) {
+    void testFilteringOnAggregated_ByCount(TestingContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-2155
         // Aggregation table can have fact's count value exceeding 1,
         // so that to compute the overall amount of facts it is necessary
@@ -106,7 +106,7 @@ public class NativeFilterAgainstAggTableTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testFilteringOnAggregated_BySum(TestingContext context) {
+    void testFilteringOnAggregated_BySum(TestingContext context) {
         String query = ""
             + "SELECT "
             + "   {FILTER("
@@ -151,7 +151,7 @@ public class NativeFilterAgainstAggTableTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAggTableWithNotAllMeasures(TestingContext context) {
+    void testAggTableWithNotAllMeasures(TestingContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1703
         // If a filter condition contains one or more measures that are
         // not present in the aggregate table, the SQL should omit the

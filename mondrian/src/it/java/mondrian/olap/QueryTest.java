@@ -60,12 +60,12 @@ public class QueryTest extends FoodMartTestCase {
         queryWithoutCellProps = null;
     }
 
-    public void testHasCellPropertyWhenQueryHasCellProperties() {
+    void testHasCellPropertyWhenQueryHasCellProperties() {
         assertTrue(queryWithCellProps.hasCellProperty("Value"));
         assertFalse(queryWithCellProps.hasCellProperty("Language"));
     }
 
-    public void testIsCellPropertyEmpty() {
+    void testIsCellPropertyEmpty() {
         assertTrue(queryWithoutCellProps.isCellPropertyEmpty());
     }
 }

@@ -158,7 +158,7 @@ public class SchemaTest {
     // Tests follow...
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSolveOrderInCalculatedMember(TestingContext context) {
+    void testSolveOrderInCalculatedMember(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             null,
@@ -188,7 +188,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHierarchyDefaultMember(TestingContext context) {
+    void testHierarchyDefaultMember(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Gender with default\" foreignKey=\"customer_id\">\n"
@@ -217,7 +217,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDefaultMemberName(TestingContext context) {
+    void testDefaultMemberName(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Product with no all\" foreignKey=\"product_id\">\n"
@@ -245,7 +245,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHierarchyAbbreviatedDefaultMember(TestingContext context) {
+    void testHierarchyAbbreviatedDefaultMember(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Gender with default\" foreignKey=\"customer_id\">\n"
@@ -270,7 +270,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHierarchyNoLevelsFails(TestingContext context) {
+    void testHierarchyNoLevelsFails(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name='Gender no levels' foreignKey='customer_id'>\n"
@@ -285,7 +285,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHierarchyNonUniqueLevelsFails(TestingContext context) {
+    void testHierarchyNonUniqueLevelsFails(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name='Gender dup levels' foreignKey='customer_id'>\n"
@@ -305,7 +305,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCountMeasure(TestingContext context) {
+    void testCountMeasure(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             null,
@@ -337,7 +337,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHierarchyTableNotFound(TestingContext context) {
+    void testHierarchyTableNotFound(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income3\" foreignKey=\"product_id\">\n"
@@ -356,7 +356,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testPrimaryKeyTableNotFound(TestingContext context) {
+    void testPrimaryKeyTableNotFound(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income4\" foreignKey=\"product_id\">\n"
@@ -372,7 +372,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLevelTableNotFound(TestingContext context) {
+    void testLevelTableNotFound(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income5\" foreignKey=\"product_id\">\n"
@@ -388,7 +388,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHierarchyBadDefaultMember(TestingContext context) {
+    void testHierarchyBadDefaultMember(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Gender with default\" foreignKey=\"customer_id\">\n"
@@ -417,7 +417,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDuplicateTableAlias(TestingContext context) {
+    void testDuplicateTableAlias(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income2\" foreignKey=\"product_id\">\n"
@@ -445,7 +445,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDuplicateTableAliasSameForeignKey(TestingContext context) {
+    void testDuplicateTableAliasSameForeignKey(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income2\" foreignKey=\"customer_id\">\n"
@@ -479,7 +479,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionsShareTable(TestingContext context) {
+    void testDimensionsShareTable(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income2\" foreignKey=\"product_id\">\n"
@@ -647,7 +647,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionsShareTableNativeNonEmptyCrossJoin(TestingContext context) {
+    void testDimensionsShareTableNativeNonEmptyCrossJoin(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income2\" foreignKey=\"product_id\">\n"
@@ -676,7 +676,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionsShareTableSameForeignKeys(TestingContext context) {
+    void testDimensionsShareTableSameForeignKeys(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income2\" foreignKey=\"customer_id\">\n"
@@ -732,7 +732,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSnowflakeHierarchyValidationNotNeeded(TestingContext context) {
+    void testSnowflakeHierarchyValidationNotNeeded(TestingContext context) {
         // this test breaks when using aggregates at the moment
         // due to a known limitation
         if ((MondrianProperties.instance().ReadAggregates.get()
@@ -811,7 +811,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSnowflakeHierarchyValidationNotNeeded2(TestingContext context) {
+    void testSnowflakeHierarchyValidationNotNeeded2(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -883,7 +883,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionsShareJoinTable(TestingContext context) {
+    void testDimensionsShareJoinTable(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -943,7 +943,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionsShareJoinTableOneAlias(TestingContext context) {
+    void testDimensionsShareJoinTableOneAlias(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1002,7 +1002,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionsShareJoinTableTwoAliases(TestingContext context) {
+    void testDimensionsShareJoinTableTwoAliases(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1061,7 +1061,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testTwoAliasesDimensionsShareTable(TestingContext context) {
+    void testTwoAliasesDimensionsShareTable(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1114,7 +1114,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testTwoAliasesDimensionsShareTableSameForeignKeys(TestingContext context) {
+    void testTwoAliasesDimensionsShareTableSameForeignKeys(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1166,7 +1166,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMultipleDimensionUsages(TestingContext context) {
+    void testMultipleDimensionUsages(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1205,7 +1205,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMultipleDimensionHierarchyCaptionUsages(TestingContext context) {
+    void testMultipleDimensionHierarchyCaptionUsages(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1252,7 +1252,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionCreation(TestingContext context) {
+    void testDimensionCreation(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1303,7 +1303,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionUsageLevel(TestingContext context) {
+    void testDimensionUsageLevel(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1363,7 +1363,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAllMemberMultipleDimensionUsages(TestingContext context) {
+    void testAllMemberMultipleDimensionUsages(TestingContext context) {
         propSaver.set(
                 MondrianProperties.instance().SsasCompatibleNaming, true);
         String baseSchema = TestUtil.getRawSchema(context);
@@ -1424,7 +1424,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonAliasedDimensionUsage(TestingContext context) {
+    void testNonAliasedDimensionUsage(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1465,7 +1465,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testViewDegenerateDims(TestingContext context) {
+    void testViewDegenerateDims(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1534,7 +1534,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testViewFactTable(TestingContext context) {
+    void testViewFactTable(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1602,7 +1602,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testViewFactTable2(TestingContext context) {
+    void testViewFactTable2(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -1663,7 +1663,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDeprecatedDistinctCountAggregator(TestingContext context) {
+    void testDeprecatedDistinctCountAggregator(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             null,
@@ -1713,7 +1713,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testInvalidAggregator(TestingContext context) {
+    void testInvalidAggregator(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             null,
@@ -1737,7 +1737,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUnknownUsages(TestingContext context) {
+    void testUnknownUsages(TestingContext context) {
         if (!MondrianProperties.instance().ReadAggregates.get()) {
             return;
         }
@@ -1818,7 +1818,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUnknownUsages1(TestingContext context) {
+    void testUnknownUsages1(TestingContext context) {
         if (!MondrianProperties.instance().ReadAggregates.get()) {
             return;
         }
@@ -1909,7 +1909,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testPropertyFormatter(TestingContext context) {
+    void testPropertyFormatter(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 "  <Dimension name=\"Store2\" foreignKey=\"store_id\">\n"
@@ -1947,7 +1947,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBugMondrian233(TestingContext context) {
+    void testBugMondrian233(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                 null,
@@ -1986,7 +1986,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBugMondrian303(TestingContext context) {
+    void testBugMondrian303(TestingContext context) {
         // In order to reproduce the problem a dimension specifying
         // captionColumn and Properties were required.
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
@@ -2060,7 +2060,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCubeWithOneDimensionOneMeasure(TestingContext context) {
+    void testCubeWithOneDimensionOneMeasure(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -2088,7 +2088,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCubeWithOneDimensionUsageOneMeasure(TestingContext context) {
+    void testCubeWithOneDimensionUsageOneMeasure(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -2115,7 +2115,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCubeHasFact(TestingContext context) {
+    void testCubeHasFact(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -2135,7 +2135,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCubeCaption(TestingContext context) throws SQLException {
+    void testCubeCaption(TestingContext context) throws SQLException {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -2160,7 +2160,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCubeWithNoDimensions(TestingContext context) {
+    void testCubeWithNoDimensions(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -2182,7 +2182,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCubeWithNoMeasuresFails(TestingContext context) {
+    void testCubeWithNoMeasuresFails(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -2205,7 +2205,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCubeWithOneCalcMeasure(TestingContext context) {
+    void testCubeWithOneCalcMeasure(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -2246,7 +2246,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCalcMemberInCube(TestingContext context) {
+    void testCalcMemberInCube(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 null,
@@ -2476,7 +2476,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAggTableSupportOfSharedDims(TestingContext context) {
+    void testAggTableSupportOfSharedDims(TestingContext context) {
         if (Bug.BugMondrian361Fixed) {
             String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -2530,7 +2530,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLevelTableAttributeAsView(TestingContext context) {
+    void testLevelTableAttributeAsView(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -2591,7 +2591,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testInvalidSchemaAccess(TestingContext context) {
+    void testInvalidSchemaAccess(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
@@ -2607,7 +2607,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAllMemberNoStringReplace(TestingContext context) {
+    void testAllMemberNoStringReplace(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -2644,7 +2644,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUnionRole(TestingContext context) {
+    void testUnionRole(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
@@ -2677,7 +2677,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUnionRoleContainsGrants(TestingContext context) {
+    void testUnionRoleContainsGrants(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
@@ -2699,7 +2699,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUnionRoleIllegalForwardRef(TestingContext context) {
+    void testUnionRoleIllegalForwardRef(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null, null, null, null, null,
@@ -2723,7 +2723,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testVirtualCubeNamedSetSupportInSchema(TestingContext context) {
+    void testVirtualCubeNamedSetSupportInSchema(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Warehouse and Sales",
             null, null, null,
@@ -2768,7 +2768,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testVirtualCubeNamedSetSupportInSchemaError(TestingContext context) {
+    void testVirtualCubeNamedSetSupportInSchemaError(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Warehouse and Sales",
             null, null, null,
@@ -2818,7 +2818,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testInvalidRoleError(TestingContext context) {
+    void testInvalidRoleError(TestingContext context) {
         //String schema = TestContext.getRawFoodMartSchema();
         String schema = TestUtil.getRawSchema(context);
         schema =
@@ -2837,7 +2837,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBinaryLevelKey(TestingContext context) {
+    void testBinaryLevelKey(TestingContext context) {
         switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case DERBY:
         case MARIADB:
@@ -2921,7 +2921,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLevelInternalType(TestingContext context) {
+    void testLevelInternalType(TestingContext context) {
         // One of the keys is larger than Integer.MAX_VALUE (2 billion), so
         // will only work if we use long values.
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
@@ -2972,7 +2972,7 @@ public class SchemaTest {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLevelInternalTypeErr(TestingContext context) {
+    void testLevelInternalTypeErr(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Big numbers\" foreignKey=\"promotion_id\">\n"
@@ -3048,7 +3048,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testScdJoin(TestingContext context) {
+    void testScdJoin(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Sales",
                 "  <Dimension name=\"Product truncated\" foreignKey=\"product_id\">\n"
@@ -3117,7 +3117,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBugMondrian482(TestingContext context) {
+    void testBugMondrian482(TestingContext context) {
         // until bug MONDRIAN-495, "Table filter concept does not support
         // dialects." is fixed, this test case only works on MySQL
         if (!Bug.BugMondrian495Fixed
@@ -3209,7 +3209,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBugMondrian355(TestingContext context) {
+    void testBugMondrian355(TestingContext context) {
         checkBugMondrian355(context, "TimeHalfYears");
 
         // make sure that the deprecated name still works
@@ -3276,7 +3276,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCaptionDescriptionAndAnnotation(TestingContext context) {
+    void testCaptionDescriptionAndAnnotation(TestingContext context) {
         final String schemaName = "Description schema";
         final String salesCubeName = "DescSales";
         final String virtualCubeName = "DescWarehouseAndSales";
@@ -3611,7 +3611,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCaption(TestingContext context) {
+    void testCaption(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Gender2\" foreignKey=\"customer_id\">\n"
@@ -3669,7 +3669,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBugMondrian747(TestingContext context) {
+    void testBugMondrian747(TestingContext context) {
         // Test case requires a pecular inline view, and it works on dialects
         // that scalar subqery, viz oracle. I believe that the mondrian code
         // being works in all dialects.
@@ -3887,7 +3887,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBugMondrian463(TestingContext context) {
+    void testBugMondrian463(TestingContext context) {
         if (!MondrianProperties.instance().FilterChildlessSnowflakeMembers
             .get())
         {
@@ -4016,7 +4016,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLeftDeepJoinFails(TestingContext context) {
+    void testLeftDeepJoinFails(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales",
             "<Dimension name='Product3' foreignKey='product_id'>\n"
@@ -4052,7 +4052,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCaptionWithOrdinalColumn(TestingContext context) {
+    void testCaptionWithOrdinalColumn(TestingContext context) {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "HR",
                 "<Dimension name=\"Position\" foreignKey=\"employee_id\">\n"
@@ -4091,7 +4091,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBugMondrian923(TestingContext context) throws Exception {
+    void testBugMondrian923(TestingContext context) throws Exception {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
                 "Warehouse and Sales",
                 null,
@@ -4136,7 +4136,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCubesVisibility(TestingContext context) throws Exception {
+    void testCubesVisibility(TestingContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<Cube name=\"Foo\" visible=\"@REPLACE_ME@\">\n"
@@ -4165,7 +4165,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testVirtualCubesVisibility(TestingContext context) throws Exception {
+    void testVirtualCubesVisibility(TestingContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<VirtualCube name=\"Foo\" defaultMeasure=\"Store Sales\" visible=\"@REPLACE_ME@\">\n"
@@ -4188,7 +4188,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionVisibility(TestingContext context) throws Exception {
+    void testDimensionVisibility(TestingContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<Cube name=\"Foo\">\n"
@@ -4224,7 +4224,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testVirtualDimensionVisibility(TestingContext context) throws Exception {
+    void testVirtualDimensionVisibility(TestingContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<VirtualCube name=\"Foo\" defaultMeasure=\"Store Sales\">\n"
@@ -4254,7 +4254,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDimensionUsageVisibility(TestingContext context) throws Exception {
+    void testDimensionUsageVisibility(TestingContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<Cube name=\"Foo\">\n"
@@ -4294,7 +4294,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHierarchyVisibility(TestingContext context) throws Exception {
+    void testHierarchyVisibility(TestingContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<Cube name=\"Foo\">\n"
@@ -4337,7 +4337,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLevelVisibility(TestingContext context) throws Exception {
+    void testLevelVisibility(TestingContext context) throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<Cube name=\"Foo\">\n"
@@ -4382,7 +4382,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonCollapsedAggregate(TestingContext context) throws Exception {
+    void testNonCollapsedAggregate(TestingContext context) throws Exception {
         if (MondrianProperties.instance().UseAggregates.get() == false
             && MondrianProperties.instance().ReadAggregates.get() == false)
         {
@@ -4451,7 +4451,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonCollapsedAggregateOnNonUniqueLevelFails(TestingContext context)
+    void testNonCollapsedAggregateOnNonUniqueLevelFails(TestingContext context)
         throws Exception
     {
         if (MondrianProperties.instance().UseAggregates.get() == false
@@ -4512,7 +4512,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testTwoNonCollapsedAggregate(TestingContext context) throws Exception {
+    void testTwoNonCollapsedAggregate(TestingContext context) throws Exception {
         if (MondrianProperties.instance().UseAggregates.get() == false
             && MondrianProperties.instance().ReadAggregates.get() == false)
         {
@@ -4739,7 +4739,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCollapsedError(TestingContext context) throws Exception {
+    void testCollapsedError(TestingContext context) throws Exception {
         if (MondrianProperties.instance().UseAggregates.get() == false
             && MondrianProperties.instance().ReadAggregates.get() == false)
         {
@@ -4804,7 +4804,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBugMondrian1047(TestingContext context) {
+    void testBugMondrian1047(TestingContext context) {
         // Test case only works under MySQL, due to how columns are quoted.
         switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case MARIADB:
@@ -4851,7 +4851,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBugMondrian1065(TestingContext context) {
+    void testBugMondrian1065(TestingContext context) {
         // Test case only works under Oracle
         switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case ORACLE:
@@ -4933,7 +4933,7 @@ public class SchemaTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMondrian1390(TestingContext context) throws Exception {
+    void testMondrian1390(TestingContext context) throws Exception {
         Schema schema = context.createConnection().getSchema();
         Cube salesCube = schema.lookupCube("Sales", true);
         SchemaReader sr = salesCube.getSchemaReader(null).withLocus();
@@ -4973,7 +4973,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMondrian1499(TestingContext context) throws Exception {
+    void testMondrian1499(TestingContext context) throws Exception {
         propSaver.set(propSaver.properties.UseAggregates, false);
         propSaver.set(propSaver.properties.ReadAggregates, false);
         withSchema(context,
@@ -5095,7 +5095,7 @@ public class SchemaTest {
     */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMondrian1073(TestingContext context) throws Exception {
+    void testMondrian1073(TestingContext context) throws Exception {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
                     null, CUBES_AB,
@@ -5114,7 +5114,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMultiByteSchemaReadFromFile(TestingContext context) throws IOException {
+    void testMultiByteSchemaReadFromFile(TestingContext context) throws IOException {
         //String rawSchema = TestContext.getRawFoodMartSchema().replace(
         String rawSchema = TestUtil.getRawSchema(context).replace(
             "<Hierarchy hasAll=\"true\" allMemberName=\"All Gender\" primaryKey=\"customer_id\">",
@@ -5147,7 +5147,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBugMonrian2528(TestingContext context) {
+    void testBugMonrian2528(TestingContext context) {
       // Default member [Measures].[Unit Sales] is denied for the current role.
       // Before the fix ClassCastException was thrown on query.
       String baseSchema = TestUtil.getRawSchema(context);
@@ -5200,7 +5200,7 @@ public class SchemaTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMondrian1275(TestingContext context) throws Exception {
+    void testMondrian1275(TestingContext context) throws Exception {
         withSchema(context,
                                 "<?xml version=\"1.0\"?>\n"
                                         + "<Schema name=\"FoodMart\">\n"

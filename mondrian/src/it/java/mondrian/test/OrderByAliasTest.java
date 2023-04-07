@@ -36,7 +36,7 @@ public class OrderByAliasTest extends BatchTestCase {
     super.tearDown();
   }
 
-  public void testSqlInKeyExpression() {
+  void testSqlInKeyExpression() {
     if (TestContext.instance().getDialect().getDatabaseProduct()
         != Dialect.DatabaseProduct.MYSQL
         || !TestContext.instance().getDialect().requiresOrderByAlias())
@@ -76,7 +76,7 @@ public class OrderByAliasTest extends BatchTestCase {
             + "    ISNULL(\"c0\") ASC, \"c0\" ASC"));
   }
 
-  public void testSqlInNameExpression() {
+  void testSqlInNameExpression() {
     if (TestContext.instance().getDialect().getDatabaseProduct()
         != Dialect.DatabaseProduct.MYSQL
         || !TestContext.instance().getDialect().requiresOrderByAlias())
@@ -118,7 +118,7 @@ public class OrderByAliasTest extends BatchTestCase {
             + "    ISNULL(\"c0\") ASC, \"c0\" ASC"));
   }
 
-  public void testSqlInCaptionExpression() {
+  void testSqlInCaptionExpression() {
     if (TestContext.instance().getDialect().getDatabaseProduct()
         != Dialect.DatabaseProduct.MYSQL
         || !TestContext.instance().getDialect().requiresOrderByAlias())
@@ -160,7 +160,7 @@ public class OrderByAliasTest extends BatchTestCase {
             + "    ISNULL(\"c0\") ASC, \"c0\" ASC"));
   }
 
-  public void testSqlInOrdinalExpression() {
+  void testSqlInOrdinalExpression() {
     if (TestContext.instance().getDialect().getDatabaseProduct()
         != Dialect.DatabaseProduct.MYSQL
         || !TestContext.instance().getDialect().requiresOrderByAlias())
@@ -202,7 +202,7 @@ public class OrderByAliasTest extends BatchTestCase {
             + "    ISNULL(\"c1\") ASC, \"c1\" ASC"));
   }
 
-  public void testSqlInParentExpression() {
+  void testSqlInParentExpression() {
     if (TestContext.instance().getDialect().getDatabaseProduct()
         != Dialect.DatabaseProduct.MYSQL
         || !TestContext.instance().getDialect().requiresOrderByAlias())
@@ -267,7 +267,7 @@ public class OrderByAliasTest extends BatchTestCase {
             + "    ISNULL(\"c0\") ASC, \"c0\" ASC"));
   }
 
-  public void testSqlInPropertyExpression() {
+  void testSqlInPropertyExpression() {
     if (TestContext.instance().getDialect().getDatabaseProduct()
         != Dialect.DatabaseProduct.MYSQL
         || !TestContext.instance().getDialect().requiresOrderByAlias())
@@ -307,7 +307,7 @@ public class OrderByAliasTest extends BatchTestCase {
             + "    ISNULL(\"c0\") ASC, \"c0\" ASC"));
   }
 
-  public void testSqlInMeasureExpression() {
+  void testSqlInMeasureExpression() {
     if (TestContext.instance().getDialect().getDatabaseProduct()
         != Dialect.DatabaseProduct.MYSQL
         || !TestContext.instance().getDialect().requiresOrderByAlias())
@@ -347,7 +347,7 @@ public class OrderByAliasTest extends BatchTestCase {
             + "    ISNULL(\"c0\") ASC, \"c0\" ASC"));
   }
 
-  public void testNonEmptyCrossJoin() {
+  void testNonEmptyCrossJoin() {
     if (TestContext.instance().getDialect().getDatabaseProduct()
         != Dialect.DatabaseProduct.MYSQL
         || !TestContext.instance().getDialect().requiresOrderByAlias())
@@ -428,7 +428,7 @@ public class OrderByAliasTest extends BatchTestCase {
             + "    ISNULL(\"c13\") ASC, \"c13\" ASC"));
   }
 
-  public void testVirtualCube() {
+  void testVirtualCube() {
     if (TestContext.instance().getDialect().getDatabaseProduct()
         != Dialect.DatabaseProduct.MYSQL
         || !TestContext.instance().getDialect().requiresOrderByAlias())
