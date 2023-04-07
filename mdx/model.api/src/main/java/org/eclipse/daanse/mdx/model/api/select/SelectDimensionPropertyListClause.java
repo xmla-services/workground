@@ -13,6 +13,8 @@
 */
 package org.eclipse.daanse.mdx.model.api.select;
 
-public interface SelectDimensionPropertyListClause {
+import java.util.List;
 
+public interface SelectDimensionPropertyListClause {
+    List<String> properties();
 }

@@ -21,6 +21,7 @@ import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.Expression;
 import org.eclipse.daanse.mdx.model.api.select.MemberPropertyDefinition;
 import org.eclipse.daanse.mdx.model.api.select.SelectCellPropertyListClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectDimensionPropertyListClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
@@ -215,6 +216,17 @@ public class MdxParserWrapper implements org.eclipse.daanse.mdx.parser.api.MdxPa
     public MemberPropertyDefinition parseMemberPropertyDefinition() throws MdxParserException {
         try {
             return delegate.parseMemberPropertyDefinition();
+
+        } catch (Throwable e) {
+            throw new MdxParserException(e);
+        } finally {
+            dump();
+        }
+    }
+
+    public SelectDimensionPropertyListClause parseSelectDimensionPropertyListClause() throws MdxParserException {
+        try {
+            return delegate.parseSelectDimensionPropertyListClause();
 
         } catch (Throwable e) {
             throw new MdxParserException(e);
