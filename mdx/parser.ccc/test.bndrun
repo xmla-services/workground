@@ -1,5 +1,12 @@
 -tester: biz.aQute.tester.junit-platform
 
+# JaCoCo calculates test coverage    
+-runpath.jacoco:\
+	org.jacoco.agent,\
+	org.jacoco.agent.rt
+
+-runvm.coverage: -javaagent:${repo;org.jacoco.agent.rt}=destfile=${target-dir}/jacoco.exec
+
 -runtrace: true
 -runvm: ${def;argLine}
 
@@ -11,6 +18,7 @@
 -runstartlevel: \
     order=sortbynameversion,\
     begin=-1
+
 
 -runrequires: \
 	bnd.identity;id='org.eclipse.daanse.mdx.parser.api',\
