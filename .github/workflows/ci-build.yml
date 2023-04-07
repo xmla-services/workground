@@ -10,7 +10,7 @@ jobs:
   build:
     name: Artifacts
     runs-on: self-hosted
-    timeout-minutes: 55
+    timeout-minutes: 150
     outputs:
       matrix: ${{ steps.listtest.outputs.matrix }}
     steps:
