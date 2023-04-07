@@ -68,7 +68,7 @@ public class TopCountWithTwoParamsVersusHeadTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void test_States(TestingContext context) throws Exception {
+    void test_States(TestingContext context) throws Exception {
         assertResultsAreEqual(context.createConnection(),
             "States",
             TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_STATES_QUERY);
@@ -76,7 +76,7 @@ public class TopCountWithTwoParamsVersusHeadTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void test_Cities(TestingContext context) throws Exception {
+    void test_Cities(TestingContext context) throws Exception {
         assertResultsAreEqual(context.createConnection(),
             "Cities",
             TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_CITIES_QUERY);
@@ -84,7 +84,7 @@ public class TopCountWithTwoParamsVersusHeadTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void test_ShowsNotMoreThanExist(TestingContext context) {
+    void test_ShowsNotMoreThanExist(TestingContext context) {
         assertResultsAreEqual(context.createConnection(),
             "Not more than exists",
             RESULTS_ARE_SHOWN_NOT_MORE_THAN_EXIST_2_PARAMS_QUERY);
@@ -92,7 +92,7 @@ public class TopCountWithTwoParamsVersusHeadTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void test_DoesNotIgnoreNonEmpty(TestingContext context) {
+    void test_DoesNotIgnoreNonEmpty(TestingContext context) {
         assertResultsAreEqual(context.createConnection(),
             "Does not ignore NON EMPTY",
             NON_EMPTY_IS_NOT_IGNORED_WHEN_TWO_PARAMS_QUERY);

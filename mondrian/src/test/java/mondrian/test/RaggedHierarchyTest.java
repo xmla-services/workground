@@ -62,7 +62,7 @@ public class RaggedHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testChildrenOfRoot(TestingContext context) {
+    void testChildrenOfRoot(TestingContext context) {
         assertRaggedReturns(context.createConnection(),
             "[Store].children",
             "[Store].[Canada]\n"
@@ -74,7 +74,7 @@ public class RaggedHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testChildrenOfUSA(TestingContext context) {
+    void testChildrenOfUSA(TestingContext context) {
         assertRaggedReturns(context.createConnection(),
             "[Store].[USA].children",
             "[Store].[USA].[CA]\n"
@@ -87,7 +87,7 @@ public class RaggedHierarchyTest {
     // Haifa and Tel Aviv
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testChildrenOfIsrael(TestingContext context) {
+    void testChildrenOfIsrael(TestingContext context) {
         assertRaggedReturns(context.createConnection(),
             "[Store].[Israel].children",
             "[Store].[Israel].[Israel].[Haifa]\n"
@@ -109,14 +109,14 @@ public class RaggedHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testParentOfHaifa(TestingContext context) {
+    void testParentOfHaifa(TestingContext context) {
         assertRaggedReturns(context.createConnection(),
             "[Store].[Israel].[Haifa].Parent", "[Store].[Israel]");
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testParentOfVatican(TestingContext context) {
+    void testParentOfVatican(TestingContext context) {
         assertRaggedReturns(context.createConnection(),
             "[Store].[Vatican].Parent", "[Store].[All Stores]");
     }
@@ -124,7 +124,7 @@ public class RaggedHierarchyTest {
     // PrevMember must return something at the same level -- a city
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testPrevMemberOfHaifa(TestingContext context) {
+    void testPrevMemberOfHaifa(TestingContext context) {
         assertRaggedReturns(context.createConnection(),
             "[Store].[Israel].[Haifa].PrevMember",
             "[Store].[Canada].[BC].[Victoria]");
@@ -133,7 +133,7 @@ public class RaggedHierarchyTest {
     // PrevMember must return something at the same level -- a city
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNextMemberOfTelAviv(TestingContext context) {
+    void testNextMemberOfTelAviv(TestingContext context) {
         assertRaggedReturns(context.createConnection(),
             "[Store].[Israel].[Tel Aviv].NextMember",
             "[Store].[Mexico].[DF].[Mexico City]");
@@ -141,7 +141,7 @@ public class RaggedHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNextMemberOfBC(TestingContext context) {
+    void testNextMemberOfBC(TestingContext context) {
         // The next state after BC is Israel, but it's hidden
         assertRaggedReturns(context.createConnection(),
             "[Store].[Canada].[BC].NextMember",
@@ -150,7 +150,7 @@ public class RaggedHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testLead(TestingContext context) {
+    void testLead(TestingContext context) {
         Connection connection = context.createConnection();
         assertRaggedReturns(connection,
             "[Store].[Mexico].[DF].Lead(1)",
@@ -186,7 +186,7 @@ public class RaggedHierarchyTest {
     // The only child of Vatican at state level is hidden
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDescendantsOfVaticanAtStateLevel(TestingContext context) {
+    void testDescendantsOfVaticanAtStateLevel(TestingContext context) {
         assertRaggedReturns(context.createConnection(),
             "Descendants([Store].[Vatican], [Store].[Store State])",
             "");
@@ -194,7 +194,7 @@ public class RaggedHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDescendantsOfRootAtCity(TestingContext context) {
+    void testDescendantsOfRootAtCity(TestingContext context) {
         assertRaggedReturns(context.createConnection(),
             "Descendants([Store], [Store City])",
             "[Store].[Canada].[BC].[Vancouver]\n"
@@ -225,7 +225,7 @@ public class RaggedHierarchyTest {
     // no ancestor at the State level
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAncestorOfHaifa(TestingContext context) {
+    void testAncestorOfHaifa(TestingContext context) {
         assertRaggedReturns(context.createConnection(),
             "Ancestor([Store].[Israel].[Haifa], [Store].[Store State])",
             "");
@@ -233,7 +233,7 @@ public class RaggedHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHierarchize(TestingContext context) {
+    void testHierarchize(TestingContext context) {
         // Haifa and Tel Aviv should appear directly after Israel
         // Vatican should have no children
         // Washington should appear after WA
@@ -400,7 +400,7 @@ public class RaggedHierarchyTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNullMember(TestingContext context) {
+    void testNullMember(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "With \n"
             + " Set [*NATIVE_CJ_SET] as '[*BASE_MEMBERS_Geography]' \n"
@@ -470,7 +470,7 @@ public class RaggedHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHideIfBlankHidesWhitespace(TestingContext context) {
+    void testHideIfBlankHidesWhitespace(TestingContext context) {
         if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
             != DatabaseProduct.ORACLE)
         {
@@ -506,7 +506,7 @@ public class RaggedHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativeFilterWithHideMemberIfBlankOnLeaf(TestingContext context) throws Exception {
+    void testNativeFilterWithHideMemberIfBlankOnLeaf(TestingContext context) throws Exception {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales Ragged",
             "<Dimension name=\"Store\" foreignKey=\"store_id\">\n"
@@ -559,7 +559,7 @@ public class RaggedHierarchyTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativeCJWithHideMemberIfBlankOnLeaf(TestingContext context) throws Exception {
+    void testNativeCJWithHideMemberIfBlankOnLeaf(TestingContext context) throws Exception {
         ((BaseTestContext)context).update(SchemaUpdater.createSubstitutingCube(
             "Sales Ragged",
             "<Dimension name=\"Store\" foreignKey=\"store_id\">\n"

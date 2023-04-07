@@ -96,7 +96,7 @@ public class NonEmptyTest extends BatchTestCase {
     localTestContext = testContext;
   }
 
-  public void testBugMondrian584EnumOrder() {
+  void testBugMondrian584EnumOrder() {
     // The interpreter results include males before females, which is
     // correct because it is consistent with the explicit order present
     // in the query. Native evaluation returns the females before males,
@@ -113,7 +113,7 @@ public class NonEmptyTest extends BatchTestCase {
     }
   }
 
-  public void testBugCantRestrictSlicerToCalcMember() throws Exception {
+  void testBugCantRestrictSlicerToCalcMember() throws Exception {
     TestContext ctx = getTestContext();
     ctx.assertQueryReturns(
       "WITH Member [Time].[Time].[Aggr] AS 'Aggregate({[Time].[1998].[Q1], [Time].[1998].[Q2]})' "
@@ -135,7 +135,7 @@ public class NonEmptyTest extends BatchTestCase {
    * performance is poor because mondrian is doing crossjoins in memory; and the test case throws because the result
    * limit is exceeded.
    */
-  public void testAnalyzerPerformanceIssue() {
+  void testAnalyzerPerformanceIssue() {
     final MondrianProperties mondrianProperties =
       MondrianProperties.instance();
     propSaver.set( mondrianProperties.EnableNativeCrossJoin, true );
@@ -600,7 +600,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #49: 7\n" );
   }
 
-  public void testBug1961163() throws Exception {
+  void testBug1961163() throws Exception {
     assertQueryReturns(
       "with member [Measures].[AvgRevenue] as 'Avg([Store].[Store Name].Members, [Measures].[Store Sales])' "
         + "select NON EMPTY {[Measures].[Store Sales], [Measures].[AvgRevenue]} ON COLUMNS, "
@@ -643,7 +643,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #8: 43,479.86\n" );
   }
 
-  public void testTopCountWithCalcMemberInSlicer() {
+  void testTopCountWithCalcMemberInSlicer() {
     // Internal error: can not restrict SQL to calculated Members
     TestContext ctx = getTestContext();
     ctx.assertQueryReturns(
@@ -665,7 +665,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #2: 3,926\n" );
   }
 
-  public void testTopCountCacheKeyMustIncludeCount() {
+  void testTopCountCacheKeyMustIncludeCount() {
     /**
      * When caching topcount results, the number of elements must
      * be part of the cache key
@@ -703,7 +703,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #2: 8,006\n" );
   }
 
-  public void testStrMeasure() {
+  void testStrMeasure() {
     TestContext ctx = TestContext.instance().create(
       null,
       "<Cube name=\"StrMeasure\"> \n"
@@ -729,7 +729,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #0: TV\n" );
   }
 
-  public void testBug1515302() {
+  void testBug1515302() {
     TestContext ctx = TestContext.instance().create(
       null,
       "<Cube name=\"Bug1515302\"> \n"
@@ -809,7 +809,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Must not use native sql optimization because it chooses the wrong RolapStar in
    * SqlContextConstraint/SqlConstraintUtils.  Test ensures that no exception is thrown.
    */
-  public void testVirtualCube() {
+  void testVirtualCube() {
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       return;
     }
@@ -822,7 +822,7 @@ public class NonEmptyTest extends BatchTestCase {
     c.run();
   }
 
-  public void testVirtualCubeMembers() throws Exception {
+  void testVirtualCubeMembers() throws Exception {
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       return;
     }
@@ -840,7 +840,7 @@ public class NonEmptyTest extends BatchTestCase {
    * verifies that redundant set braces do not prevent native evaluation for example, {[Store].[Store Name].members }
    * and {{[Store Type].[Store Type].members}}
    */
-  public void testNativeCJWithRedundantSetBraces() {
+  void testNativeCJWithRedundantSetBraces() {
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, true );
 
@@ -862,7 +862,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Verifies that CrossJoins with two non native inputs can be natively evaluated.
    */
-  public void testExpandAllNonNativeInputs() {
+  void testExpandAllNonNativeInputs() {
     // This query will not run natively unless the <Dimension>.Children
     // expression is expanded to a member list.
     //
@@ -895,7 +895,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Verifies that CrossJoins with one non native inputs can be natively evaluated.
    */
-  public void testExpandOneNonNativeInput() {
+  void testExpandOneNonNativeInput() {
     // This query will not be evaluated natively unless the Filter
     // expression is expanded to a member list.
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
@@ -924,7 +924,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Check that the ExpandNonNative does not create Joins with input lists containing large number of members.
    */
-  public void testExpandNonNativeResourceLimitFailure() {
+  void testExpandNonNativeResourceLimitFailure() {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, true );
@@ -947,7 +947,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Verify that the presence of All member in all the inputs disables native evaluation, even when ExpandNonNative is
    * true.
    */
-  public void testExpandAllMembersInAllInputs() {
+  void testExpandAllMembersInAllInputs() {
     // This query will not be evaluated natively, even if the Hierarchize
     // expression is expanded to a member list. The reason is that the
     // expanded list contains ALL members.
@@ -974,7 +974,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Verifies that the presence of calculated member in all the inputs disables native evaluation, even when
    * ExpandNonNative is true.
    */
-  public void testExpandCalcMembersInAllInputs() {
+  void testExpandCalcMembersInAllInputs() {
     // This query will not be evaluated natively, even if the Hierarchize
     // expression is expanded to a member list. The reason is that the
     // expanded list contains ALL members.
@@ -1001,7 +1001,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Check that if both inputs to NECJ are either AllMember(currentMember, defaultMember are also AllMember) or
    * Calcculated member native CJ is not used.
    */
-  public void testExpandCalcMemberInputNECJ() {
+  void testExpandCalcMemberInputNECJ() {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     checkNotNative(
       1,
@@ -1025,7 +1025,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Native evaluation is no longer possible after the fix to {@link #testCjEnumCalcMembersBug()} test.
    */
-  public void testExpandCalcMembers() {
+  void testExpandCalcMembers() {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     checkNotNative(
       9,
@@ -1065,7 +1065,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Verify that evaluation is native for expressions with nested non native inputs that preduce MemberList results.
    */
-  public void testExpandNestedNonNativeInputs() {
+  void testExpandNestedNonNativeInputs() {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, true );
@@ -1102,7 +1102,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Verify that a low value for maxConstraints disables native evaluation, even when ExpandNonNative is true.
    */
-  public void testExpandLowMaxConstraints() {
+  void testExpandLowMaxConstraints() {
     propSaver.set( MondrianProperties.instance().MaxConstraints, 2 );
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     checkNotNative(
@@ -1144,7 +1144,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Verify that native evaluation is not enabled if expanded member list will contain members from different levels,
    * even if ExpandNonNative is set.
    */
-  public void testExpandDifferentLevels() {
+  void testExpandDifferentLevels() {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     checkNotNative(
       278,
@@ -1158,7 +1158,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Verify that native evaluation is turned off for tuple inputs, even if ExpandNonNative is set.
    */
-  public void testExpandTupleInputs1() {
+  void testExpandTupleInputs1() {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     checkNotNative(
       1,
@@ -1178,7 +1178,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Verify that native evaluation is turned off for tuple inputs, even if ExpandNonNative is set.
    */
-  public void testExpandTupleInputs2() {
+  void testExpandTupleInputs2() {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     checkNotNative(
       1,
@@ -1198,7 +1198,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Verify that native evaluation is on when ExpendNonNative is set, even if the input list is empty.
    */
-  public void testExpandWithOneEmptyInput() {
+  void testExpandWithOneEmptyInput() {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     boolean requestFreshConnection = true;
     // Query should return empty result.
@@ -1227,7 +1227,7 @@ public class NonEmptyTest extends BatchTestCase {
       requestFreshConnection );
   }
 
-  public void testExpandWithTwoEmptyInputs() {
+  void testExpandWithTwoEmptyInputs() {
     getConnection().getCacheControl( null ).flushSchemaCache();
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     // Query should return empty result.
@@ -1257,7 +1257,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Verify that native MemberLists inputs are subject to SQL constriant limitation. If mondrian.rolap.maxConstraints is
    * set too low, native evaluations will be turned off.
    */
-  public void testEnumLowMaxConstraints() {
+  void testEnumLowMaxConstraints() {
     propSaver.set( MondrianProperties.instance().MaxConstraints, 2 );
     checkNotNative(
       12,
@@ -1309,7 +1309,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Verify that the presence of All member in all the inputs disables native evaluation.
    */
-  public void testAllMembersNECJ1() {
+  void testAllMembersNECJ1() {
     // This query cannot be evaluated natively because of the "All" member.
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, true );
@@ -1328,7 +1328,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Verify that the native evaluation is possible if one input does not contain the All member.
    */
-  public void testAllMembersNECJ2() {
+  void testAllMembersNECJ2() {
     // This query can be evaluated natively because there is at least one
     // non "All" member.
     //
@@ -1363,7 +1363,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * getMembersInLevel where Level = (All)
    */
-  public void testAllLevelMembers() {
+  void testAllLevelMembers() {
     checkNative(
       14,
       14,
@@ -1375,7 +1375,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * enum sets {} containing ALL
    */
-  public void testCjDescendantsEnumAllOnly() {
+  void testCjDescendantsEnumAllOnly() {
     checkNative(
       9,
       9,
@@ -1389,7 +1389,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * checks that crossjoin returns a modifiable copy from cache because its modified during sort
    */
-  public void testResultIsModifyableCopy() {
+  void testResultIsModifyableCopy() {
     checkNative(
       3,
       3,
@@ -1405,7 +1405,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Checks that TopCount is executed natively unless disabled.
    */
-  public void testNativeTopCount() {
+  void testNativeTopCount() {
     switch ( getTestContext().getDialect().getDatabaseProduct() ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
@@ -1432,7 +1432,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Checks that TopCount is executed natively with calculated member.
    */
-  public void testCmNativeTopCount() {
+  void testCmNativeTopCount() {
     switch ( getTestContext().getDialect().getDatabaseProduct() ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
@@ -1455,7 +1455,7 @@ public class NonEmptyTest extends BatchTestCase {
     checkNative( 3, 3, query, null, requestFreshConnection );
   }
 
-  public void testMeasureAndAggregateInSlicer() {
+  void testMeasureAndAggregateInSlicer() {
     assertQueryReturns(
       "with member [Store Type].[All Store Types].[All Types] as 'Aggregate({[Store Type].[All Store Types].[Deluxe "
         + "Supermarket],  "
@@ -1485,7 +1485,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #3: 175\n" );
   }
 
-  public void testMeasureInSlicer() {
+  void testMeasureInSlicer() {
     assertQueryReturns(
       "select NON EMPTY {[Time].[1997]} ON COLUMNS,   "
         + "NON EMPTY [Store].[All Stores].[USA].[CA].Children ON ROWS  "
@@ -1509,7 +1509,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Calc Member in TopCount: this topcount can not be calculated native because its set contains calculated members.
    */
-  public void testCmInTopCount() {
+  void testCmInTopCount() {
     checkNotNative(
       1,
       "with member [Time].[Time].[Jan] as  "
@@ -1521,7 +1521,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Calc member in slicer cannot be executed natively.
    */
-  public void testCmInSlicer() {
+  void testCmInSlicer() {
     checkNotNative(
       3,
       "with member [Time].[Time].[Jan] as  "
@@ -1531,7 +1531,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "where ([Time].[Jan]) " );
   }
 
-  public void testCmInSlicerResults() {
+  void testCmInSlicerResults() {
     assertQueryReturns(
       "with member [Time].[Time].[Jan] as  "
         + "'Aggregate({[Time].[1998].[Q1].[1], [Time].[1997].[Q1].[1]})'  "
@@ -1551,7 +1551,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #2: 4,114\n" );
   }
 
-  public void testSetInSlicerResults() {
+  void testSetInSlicerResults() {
     assertQueryReturns(
       "select NON EMPTY {[Measures].[Unit Sales]} ON columns,  "
         + "NON EMPTY [Product].Children ON rows from [Sales] "
@@ -1570,7 +1570,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #2: 4,114\n" );
   }
 
-  public void testCjMembersMembersMembers() {
+  void testCjMembersMembersMembers() {
     checkNative(
       0,
       67,
@@ -1585,7 +1585,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "  [Time].[1997].[Q1].[1])" );
   }
 
-  public void testCjMembersWithHideIfBlankLeafAndNoAll() {
+  void testCjMembersWithHideIfBlankLeafAndNoAll() {
     setTestContext( TestContext.instance().createSubstitutingCube(
       "Sales",
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -1614,7 +1614,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "  [Time].[1997].[Q1].[1])" );
   }
 
-  public void testCjMembersWithHideIfBlankLeaf() {
+  void testCjMembersWithHideIfBlankLeaf() {
     setTestContext( TestContext.instance().createSubstitutingCube(
       "Sales",
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -1643,7 +1643,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "  [Time].[1997].[Q1].[1])" );
   }
 
-  public void testCjMembersWithHideIfParentsNameLeaf() {
+  void testCjMembersWithHideIfParentsNameLeaf() {
     setTestContext( TestContext.instance().createSubstitutingCube(
       "Sales",
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -1671,7 +1671,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "  [Time].[1997].[Q1].[1])" );
   }
 
-  public void testCjMembersWithHideIfBlankNameAncestor() {
+  void testCjMembersWithHideIfBlankNameAncestor() {
     setTestContext( TestContext.instance().createSubstitutingCube(
       "Sales",
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -1700,7 +1700,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "  [Time].[1997].[Q1].[1])" );
   }
 
-  public void testCjMembersWithHideIfParentsNameAncestor() {
+  void testCjMembersWithHideIfParentsNameAncestor() {
     setTestContext( TestContext.instance().createSubstitutingCube(
       "Sales",
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -1729,7 +1729,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "  [Time].[1997].[Q1].[1])" );
   }
 
-  public void testCjEnumWithHideIfBlankLeaf() {
+  void testCjEnumWithHideIfBlankLeaf() {
     setTestContext( TestContext.instance().createSubstitutingCube(
       "Sales",
       "<Dimension name=\"Product Ragged\" foreignKey=\"product_id\">\n"
@@ -1771,7 +1771,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * use SQL even when all members are known
    */
-  public void testCjEnumEnum() {
+  void testCjEnumEnum() {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -1793,7 +1793,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Set containing only null member should not prevent usage of native.
    */
-  public void testCjNullInEnum() {
+  void testCjNullInEnum() {
     propSaver.set(
       MondrianProperties.instance().IgnoreInvalidMembersDuringQuery,
       true );
@@ -1809,7 +1809,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * enum sets {} containing members from different levels can not be computed natively currently.
    */
-  public void testCjDescendantsEnumAll() {
+  void testCjDescendantsEnumAll() {
     checkNotNative(
       13,
       "select {[Measures].[Unit Sales]} ON COLUMNS, "
@@ -1820,7 +1820,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "where ([Promotions].[All Promotions].[Bag Stuffers])" );
   }
 
-  public void testCjDescendantsEnum() {
+  void testCjDescendantsEnum() {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -1840,7 +1840,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "where ([Promotions].[All Promotions].[Bag Stuffers])" );
   }
 
-  public void testCjEnumChildren() {
+  void testCjEnumChildren() {
     // Make sure maxConstraint settting is high enough
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
@@ -1864,7 +1864,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * {} contains members from different levels, this can not be handled by the current native crossjoin.
    */
-  public void testCjEnumDifferentLevelsChildren() {
+  void testCjEnumDifferentLevelsChildren() {
     // Don't run the test if we're testing expression dependencies.
     // Expression dependencies cause spurious interval calls to
     // 'level.getMembers()' which create false negatives in this test.
@@ -1884,7 +1884,7 @@ public class NonEmptyTest extends BatchTestCase {
     c.run();
   }
 
-  public void testCjDescendantsMembers() {
+  void testCjDescendantsMembers() {
     checkNative(
       0,
       67,
@@ -1897,7 +1897,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "  [Time].[1997].[Q1].[1])" );
   }
 
-  public void testCjMembersDescendants() {
+  void testCjMembersDescendants() {
     checkNative(
       0,
       67,
@@ -1911,7 +1911,7 @@ public class NonEmptyTest extends BatchTestCase {
   }
 
   // testcase for bug MONDRIAN-506
-  public void testCjMembersDescendantsWithNumericArgument() {
+  void testCjMembersDescendantsWithNumericArgument() {
     checkNative(
       0,
       67,
@@ -1924,7 +1924,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "  [Time].[1997].[Q1].[1])" );
   }
 
-  public void testCjChildrenMembers() {
+  void testCjChildrenMembers() {
     checkNative(
       0,
       67,
@@ -1936,7 +1936,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "  [Time].[1997].[Q1].[1])" );
   }
 
-  public void testCjMembersChildren() {
+  void testCjMembersChildren() {
     checkNative(
       0,
       67,
@@ -1948,7 +1948,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "  [Time].[1997].[Q1].[1])" );
   }
 
-  public void testCjMembersMembers() {
+  void testCjMembersMembers() {
     checkNative(
       0,
       67,
@@ -1960,7 +1960,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "  [Time].[1997].[Q1].[1])" );
   }
 
-  public void testCjChildrenChildren() {
+  void testCjChildrenChildren() {
     checkNative(
       3,
       3,
@@ -1977,7 +1977,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Checks that multi-level member list generates compact form of SQL where clause: (1) Use IN list if possible (2)
    * Group members sharing the same parent (3) Only need to compare up to the first unique parent level.
    */
-  public void testMultiLevelMemberConstraintNonNullParent() {
+  void testMultiLevelMemberConstraintNonNullParent() {
     String query =
       "with "
         + "set [Filtered Store City Set] as "
@@ -2079,7 +2079,7 @@ public class NonEmptyTest extends BatchTestCase {
    * possible if there are null values because NULLs in IN lists do not match) (2) Group members sharing the same
    * parent, including parents with NULLs. (3) If parent levels include NULLs, comparision includes any unique level.
    */
-  public void testMultiLevelMemberConstraintNullParent() {
+  void testMultiLevelMemberConstraintNullParent() {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
@@ -2181,7 +2181,7 @@ public class NonEmptyTest extends BatchTestCase {
    * parent, including parents with NULLs. (3) If parent levels include NULLs, comparision includes any unique level.
    * (4) Can handle predicates correctly if the member list contains both NULL and non NULL parent levels.
    */
-  public void testMultiLevelMemberConstraintMixedNullNonNullParent() {
+  void testMultiLevelMemberConstraintMixedNullNonNullParent() {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
@@ -2280,7 +2280,7 @@ public class NonEmptyTest extends BatchTestCase {
    * (3) Only need to compare up to the first unique parent level. (4) Can handle predicates correctly if the member
    * list contains both NULL and non NULL child levels.
    */
-  public void testMultiLevelMemberConstraintWithMixedNullNonNullChild() {
+  void testMultiLevelMemberConstraintWithMixedNullNonNullChild() {
     if ( !isDefaultNullMemberRepresentation() ) {
       return;
     }
@@ -2377,7 +2377,7 @@ public class NonEmptyTest extends BatchTestCase {
     assertQuerySql( testContext, query, patterns );
   }
 
-  public void testNonEmptyUnionQuery() {
+  void testNonEmptyUnionQuery() {
     Result result = executeQuery(
       "select {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} on columns,\n"
         + " NON EMPTY Hierarchize(\n"
@@ -2400,7 +2400,7 @@ public class NonEmptyTest extends BatchTestCase {
    * when Mondrian parses a string like "[Store].[All Stores].[USA].[CA].[San Francisco]" it shall not lookup additional
    * members.
    */
-  public void testLookupMemberCache() {
+  void testLookupMemberCache() {
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       // Dependency testing causes extra SQL reads, and screws up this
       // test.
@@ -2450,7 +2450,7 @@ public class NonEmptyTest extends BatchTestCase {
    * resulted in an SQLException because the year level is numeric and the constant 'Month' in the WHERE condition is
    * not.  Its probably a bug that Mondrian does not take into account [Time].[1997] when looking up [Month].
    */
-  public void testLookupMember() {
+  void testLookupMember() {
     // ok if no exception occurs
     executeQuery(
       "SELECT DESCENDANTS([Time].[1997], [Month]) ON COLUMNS FROM [Sales]" );
@@ -2461,7 +2461,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Non Empty CrossJoin (A,B) gets turned into CrossJoin (Non Empty(A), Non Empty(B)).  Verify that there is no crash
    * when the length of B could be non-zero length before the non empty and 0 after the non empty.
    */
-  public void testNonEmptyCrossJoinList() {
+  void testNonEmptyCrossJoinList() {
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, false );
     boolean oldEnableNativeNonEmpty =
@@ -2479,7 +2479,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * SQL Optimization must be turned off in ragged hierarchies.
    */
-  public void testLookupMember2() {
+  void testLookupMember2() {
     // ok if no exception occurs
     executeQuery(
       "select {[Store].[USA].[Washington]} on columns from [Sales Ragged]" );
@@ -2488,7 +2488,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Make sure that the Crossjoin in [Measures].[CustomerCount] is not evaluated in NON EMPTY context.
    */
-  public void testCalcMemberWithNonEmptyCrossJoin() {
+  void testCalcMemberWithNonEmptyCrossJoin() {
     getConnection().getCacheControl( null ).flushSchemaCache();
     Result result = executeQuery(
       "with member [Measures].[CustomerCount] as \n"
@@ -2504,7 +2504,7 @@ public class NonEmptyTest extends BatchTestCase {
     assertEquals( "10,281", c.getFormattedValue() );
   }
 
-  public void testLevelMembers() {
+  void testLevelMembers() {
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       // Dependency testing causes extra SQL reads, and screws up this
       // test.
@@ -2570,7 +2570,7 @@ public class NonEmptyTest extends BatchTestCase {
     assertTrue( list.contains( member ) );
   }
 
-  public void testLevelMembersWithoutNonEmpty() {
+  void testLevelMembersWithoutNonEmpty() {
     SmartMemberReader smr = getSmartMemberReader( "Customers" );
 
     MemberCacheHelper smrch =
@@ -2635,7 +2635,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Tests that <Dimension>.Members exploits the same optimization as
    * <Level>.Members.
    */
-  public void testDimensionMembers() {
+  void testDimensionMembers() {
     // No query should return more than 20 rows. (1 row at 'all' level,
     // 1 row at nation level, 1 at state level, 20 at city level, and 11
     // at customers level = 34.)
@@ -2653,7 +2653,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Tests non empty children of rolap member
    */
-  public void testMemberChildrenOfRolapMember() {
+  void testMemberChildrenOfRolapMember() {
     TestCase c = new TestCase(
       50,
       4,
@@ -2668,7 +2668,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Tests non empty children of All member
    */
-  public void testMemberChildrenOfAllMember() {
+  void testMemberChildrenOfAllMember() {
     TestCase c = new TestCase(
       50,
       14,
@@ -2681,7 +2681,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Tests non empty children of All member w/o WHERE clause
    */
-  public void testMemberChildrenNoWhere() {
+  void testMemberChildrenNoWhere() {
     // The time dimension is joined because there is no (All) level in the
     // Time hierarchy:
     //
@@ -2714,7 +2714,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Testcase for bug 1379068, which causes no children of [Time].[1997].[Q2] to be found, because it incorrectly
    * constrains on the level's key column rather than name column.
    */
-  public void testMemberChildrenNameCol() {
+  void testMemberChildrenNameCol() {
     // Expression dependency testing casues false negatives.
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       return;
@@ -2737,7 +2737,7 @@ public class NonEmptyTest extends BatchTestCase {
    * <p>This should behave the same as if <code>[member from left
    * hierarchy]</code> was put into the slicer.
    */
-  public void testCrossjoin() {
+  void testCrossjoin() {
     if ( MondrianProperties.instance().TestExpDependencies.get() > 0 ) {
       // Dependency testing causes extra SQL reads, and makes this
       // test fail.
@@ -2761,7 +2761,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Ensures that NON EMPTY Descendants is optimized. Ensures that Descendants as a side effect collects MemberChildren
    * that may be looked up in the cache.
    */
-  public void testNonEmptyDescendants() {
+  void testNonEmptyDescendants() {
     // Don't run the test if we're testing expression dependencies.
     // Expression dependencies cause spurious interval calls to
     // 'level.getMembers()' which create false negatives in this test.
@@ -2832,7 +2832,7 @@ public class NonEmptyTest extends BatchTestCase {
     }
   }
 
-  public void testBug1412384() {
+  void testBug1412384() {
     // Bug 1412384 causes a NPE in SqlConstraintUtils.
     assertQueryReturns(
       "select NON EMPTY {[Time].[1997]} ON COLUMNS,\n"
@@ -2851,7 +2851,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #1: $339,610.90\n" );
   }
 
-  public void testVirtualCubeCrossJoin() {
+  void testVirtualCubeCrossJoin() {
     checkNative(
       18,
       3,
@@ -2862,7 +2862,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "from [Warehouse and Sales]" );
   }
 
-  public void testVirtualCubeNonEmptyCrossJoin() {
+  void testVirtualCubeNonEmptyCrossJoin() {
     checkNative(
       18,
       3,
@@ -2873,7 +2873,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "from [Warehouse and Sales]" );
   }
 
-  public void testVirtualCubeNonEmptyCrossJoin3Args() {
+  void testVirtualCubeNonEmptyCrossJoin3Args() {
     checkNative(
       3,
       3,
@@ -2885,7 +2885,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "from [Warehouse and Sales]" );
   }
 
-  public void testNotNativeVirtualCubeCrossJoin1() {
+  void testNotNativeVirtualCubeCrossJoin1() {
     switch ( getTestContext().getDialect().getDatabaseProduct() ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
@@ -2907,7 +2907,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "from [Warehouse and Sales]" );
   }
 
-  public void testNotNativeVirtualCubeCrossJoin2() {
+  void testNotNativeVirtualCubeCrossJoin2() {
     // native cross join cannot be used due to the range operator
     checkNotNative(
       3,
@@ -2918,7 +2918,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "from [Warehouse and Sales]" );
   }
 
-  public void testNotNativeVirtualCubeCrossJoinUnsupported() {
+  void testNotNativeVirtualCubeCrossJoinUnsupported() {
     switch ( getTestContext().getDialect().getDatabaseProduct() ) {
       case INFOBRIGHT:
         // Hits same Infobright bug as NamedSetTest.testNamedSetOnMember.
@@ -3034,7 +3034,7 @@ public class NonEmptyTest extends BatchTestCase {
     return filteredEventCount;
   }
 
-  public void testVirtualCubeCrossJoinCalculatedMember1() {
+  void testVirtualCubeCrossJoinCalculatedMember1() {
     // calculated member appears in query
     checkNative(
       18,
@@ -3048,7 +3048,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "from [Warehouse and Sales]" );
   }
 
-  public void testVirtualCubeCrossJoinCalculatedMember2() {
+  void testVirtualCubeCrossJoinCalculatedMember2() {
     // calculated member defined in schema
     checkNative(
       18,
@@ -3060,7 +3060,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "from [Warehouse and Sales]" );
   }
 
-  public void testNotNativeVirtualCubeCrossJoinCalculatedMember() {
+  void testNotNativeVirtualCubeCrossJoinCalculatedMember() {
     // native cross join cannot be used due to CurrentMember in the
     // calculated member
     checkNotNative(
@@ -3074,7 +3074,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "from [Warehouse and Sales]" );
   }
 
-  public void testCjEnumCalcMembers() {
+  void testCjEnumCalcMembers() {
     // 3 cross joins -- 2 of the 4 arguments to the cross joins are
     // enumerated sets with calculated members
     // should be non-native due to the fix to testCjEnumCalcMembersBug()
@@ -3108,7 +3108,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "from [Sales]" );
   }
 
-  public void testCjEnumCalcMembersBug() {
+  void testCjEnumCalcMembersBug() {
     // make sure NECJ is forced to be non-native
     // before the fix, the query is natively evaluated and result
     // has empty rows for [Store Type].[All Store Types].[HeadQuarters]
@@ -3152,7 +3152,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #8: 50,236\n" );
   }
 
-  public void testCjEnumEmptyCalcMembers() {
+  void testCjEnumEmptyCalcMembers() {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 3;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -3183,7 +3183,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "from [Sales]" );
   }
 
-  public void testCjUnionEnumCalcMembers() {
+  void testCjUnionEnumCalcMembers() {
     // non-native due to the fix to testCjEnumCalcMembersBug()
     checkNotNative(
       46,
@@ -3206,7 +3206,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Tests the behavior if you have NON EMPTY on both axes, and the default member of a hierarchy is not 'all' or the
    * first child.
    */
-  public void testNonEmptyWithWeirdDefaultMember() {
+  void testNonEmptyWithWeirdDefaultMember() {
     if ( !Bug.BugMondrian229Fixed ) {
       return;
     }
@@ -3252,7 +3252,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #1: 21\n" );
   }
 
-  public void testCrossJoinNamedSets1() {
+  void testCrossJoinNamedSets1() {
     checkNative(
       3,
       3,
@@ -3264,7 +3264,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "on rows from [Sales]" );
   }
 
-  public void testCrossJoinNamedSets2() {
+  void testCrossJoinNamedSets2() {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 3;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -3285,7 +3285,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "[Sales]" );
   }
 
-  public void testCrossJoinSetWithDifferentParents() {
+  void testCrossJoinSetWithDifferentParents() {
     // Verify that only the members explicitly referenced in the set
     // are returned.  Note that different members are referenced in
     // each level in the time dimension.
@@ -3298,7 +3298,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "{[Time].[1997].[Q1], [Time].[1998].[Q2]}) on rows from Sales" );
   }
 
-  public void testCrossJoinSetWithCrossProdMembers() {
+  void testCrossJoinSetWithCrossProdMembers() {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 6;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -3318,7 +3318,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "on rows from Sales" );
   }
 
-  public void testCrossJoinSetWithSameParent() {
+  void testCrossJoinSetWithSameParent() {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -3338,7 +3338,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "on rows from Sales" );
   }
 
-  public void testCrossJoinSetWithUniqueLevel() {
+  void testCrossJoinSetWithUniqueLevel() {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -3358,7 +3358,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "on rows from Sales" );
   }
 
-  public void testCrossJoinMultiInExprAllMember() {
+  void testCrossJoinMultiInExprAllMember() {
     checkNative(
       10,
       10,
@@ -3370,7 +3370,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "on rows from Sales" );
   }
 
-  public void testCrossJoinEvaluatorContext1() {
+  void testCrossJoinEvaluatorContext1() {
     // This test ensures that the proper measure members context is
     // set when evaluating a non-empty cross join.  The context should
     // not include the calculated measure [*TOP_BOTTOM_SET].  If it
@@ -3428,7 +3428,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #9: 29,959.28\n" );
   }
 
-  public void testCrossJoinEvaluatorContext2() {
+  void testCrossJoinEvaluatorContext2() {
     // Make sure maxConstraint settting is high enough
     int minConstraints = 2;
     if ( MondrianProperties.instance().MaxConstraints.get()
@@ -3500,7 +3500,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #2: 100.00%\n" );
   }
 
-  public void testVCNativeCJWithIsEmptyOnMeasure() {
+  void testVCNativeCJWithIsEmptyOnMeasure() {
     // Don't use checkNative method here because in the case where
     // native cross join isn't used, the query causes a stack overflow.
     //
@@ -3532,7 +3532,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #0: 12,395\n" );
   }
 
-  public void testVCNativeCJWithTopPercent() {
+  void testVCNativeCJWithTopPercent() {
     // The reference to [Store Sales] inside the topPercent function
     // should not prevent native cross joins from being used
     checkNative(
@@ -3544,7 +3544,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "[Warehouse and Sales]" );
   }
 
-  public void testVCOrdinalExpression() {
+  void testVCOrdinalExpression() {
     // [Customers].[Name] is an ordinal expression.  Make sure ordering
     // is done on the column corresponding to that expression.
     checkNative(
@@ -3561,7 +3561,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Test for bug #1696772 Modified which calculations are tested for non native, non empty joins
    */
-  public void testNonEmptyWithCalcMeasure() {
+  void testNonEmptyWithCalcMeasure() {
     checkNative(
       15,
       6,
@@ -3596,7 +3596,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "From [Sales]" );
   }
 
-  public void testCalculatedSlicerMember() {
+  void testCalculatedSlicerMember() {
     // This test verifies that members(the FILTER members in the query
     // below) on the slicer are ignored in CrossJoin emptiness check.
     // Otherwise, if they are not ignored, stack over flow will occur
@@ -3629,11 +3629,11 @@ public class NonEmptyTest extends BatchTestCase {
   // slicer is correctly ignored for purposes of evaluating NECJ emptiness,
   // regardless of whether evaluation is native or non-native
 
-  public void testIndependentSlicerMemberNonNative() {
+  void testIndependentSlicerMemberNonNative() {
     checkIndependentSlicerMemberNative( false );
   }
 
-  public void testIndependentSlicerMemberNative() {
+  void testIndependentSlicerMemberNative() {
     checkIndependentSlicerMemberNative( true );
   }
 
@@ -3666,7 +3666,7 @@ public class NonEmptyTest extends BatchTestCase {
     }
   }
 
-  public void testDependentSlicerMemberNonNative() {
+  void testDependentSlicerMemberNonNative() {
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, false );
 
@@ -3689,7 +3689,7 @@ public class NonEmptyTest extends BatchTestCase {
     }
   }
 
-  public void testDependentSlicerMemberNative() {
+  void testDependentSlicerMemberNative() {
     propSaver.set(
       MondrianProperties.instance().EnableNativeCrossJoin, true );
 
@@ -3715,7 +3715,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Tests bug 1791609, "CrossJoin non empty optimizer eliminates calculated member".
    */
-  public void testBug1791609NonEmptyCrossJoinEliminatesCalcMember() {
+  void testBug1791609NonEmptyCrossJoinEliminatesCalcMember() {
     if ( !Bug.BugMondrian328Fixed ) {
       return;
     }
@@ -3816,7 +3816,7 @@ public class NonEmptyTest extends BatchTestCase {
    * MondrianProperties#EnableNativeNonEmpty native} is enabled. Testcase for bug 1722959, "NON EMPTY Level.MEMBERS
    * fails if nonempty.enable=false"
    */
-  public void testNonEmptyLevelMembers() {
+  void testNonEmptyLevelMembers() {
     boolean currentNativeNonEmpty =
       MondrianProperties.instance().EnableNativeNonEmpty.get();
     boolean currentNonEmptyOnAllAxis =
@@ -3920,7 +3920,7 @@ public class NonEmptyTest extends BatchTestCase {
     }
   }
 
-  public void testNonEmptyResults() {
+  void testNonEmptyResults() {
     // This unit test was failing with a NullPointerException in JPivot
     // after the highcardinality feature was added, I've included it
     // here to make sure it continues to work.
@@ -3938,7 +3938,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-412"> MONDRIAN-412, "NON EMPTY and Filter() breaking
    * aggregate calculations"</a>.
    */
-  public void testBugMondrian412() {
+  void testBugMondrian412() {
     TestContext ctx = getTestContext();
     ctx.assertQueryReturns(
       "with member [Measures].[AvgRevenue] as 'Avg([Store].[Store Name].Members, [Measures].[Store Sales])' "
@@ -3981,7 +3981,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #8: 43,479.86\n" );
   }
 
-  public void testNonEmpyOnVirtualCubeWithNonJoiningDimension() {
+  void testNonEmpyOnVirtualCubeWithNonJoiningDimension() {
     assertQueryReturns(
       "select non empty {[Warehouse].[Warehouse name].members} on 0,"
         + "{[Measures].[Units Shipped],[Measures].[Unit Sales]} on 1"
@@ -4033,7 +4033,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #1: \n" );
   }
 
-  public void testNonEmptyOnNonJoiningValidMeasure() {
+  void testNonEmptyOnNonJoiningValidMeasure() {
     assertQueryReturns(
       "with member [Measures].[vm] as 'ValidMeasure([Measures].[Unit Sales])'"
         + "select non empty {[Warehouse].[Warehouse name].members} on 0,"
@@ -4086,7 +4086,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #1: 266,773\n" );
   }
 
-  public void testCrossjoinWithTwoDimensionsJoiningToOppositeBaseCubes() {
+  void testCrossjoinWithTwoDimensionsJoiningToOppositeBaseCubes() {
     // This test formerly expected an empty result set,
     // which is actually inconsistent with SSAS.  Since ValidMeasure forces
     // Warehouse to the [All] level when evaluating the [vm] measure,
@@ -4183,7 +4183,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #1: 135,215\n" );
   }
 
-  public void testCrossjoinWithOneDimensionThatDoesNotJoinToBothBaseCubes() {
+  void testCrossjoinWithOneDimensionThatDoesNotJoinToBothBaseCubes() {
     assertQueryReturns(
       "with member [Measures].[vm] as 'ValidMeasure([Measures].[Units Shipped])'"
         + "select non empty Crossjoin([Store].[Store Name].members, [Gender].[Gender].members) on 0,"
@@ -4275,7 +4275,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #1: 10589.0\n" );
   }
 
-  public void testLeafMembersOfParentChildDimensionAreNativelyEvaluated() {
+  void testLeafMembersOfParentChildDimensionAreNativelyEvaluated() {
     final String query = "SELECT"
       + " NON EMPTY "
       + "Crossjoin("
@@ -4296,7 +4296,7 @@ public class NonEmptyTest extends BatchTestCase {
     checkNative( 50, 5, query );
   }
 
-  public void testNonLeafMembersOfPCDimensionAreNotNativelyEvaluated() {
+  void testNonLeafMembersOfPCDimensionAreNotNativelyEvaluated() {
     final String query = "SELECT"
       + " NON EMPTY "
       + "Crossjoin("
@@ -4315,7 +4315,7 @@ public class NonEmptyTest extends BatchTestCase {
     checkNotNative( 9, query );
   }
 
-  public void testNativeWithOverriddenNullMemberRepAndNullConstraint() {
+  void testNativeWithOverriddenNullMemberRepAndNullConstraint() {
     String preMdx = "SELECT FROM [Sales]";
 
     String mdx =
@@ -4343,7 +4343,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-321"> MONDRIAN-321, "CrossJoin has no nulls when
    * EnableNativeNonEmpty=true"</a>.
    */
-  public void testBugMondrian321() {
+  void testBugMondrian321() {
     assertQueryReturns(
       "WITH SET [#DataSet#] AS 'Crossjoin({Descendants([Customers].[All Customers], 2)}, {[Product].[All Products]})'"
         + " \n"
@@ -4375,7 +4375,7 @@ public class NonEmptyTest extends BatchTestCase {
     );
   }
 
-  public void testNativeCrossjoinWillConstrainUsingArgsFromAllAxes() {
+  void testNativeCrossjoinWillConstrainUsingArgsFromAllAxes() {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     String mdx = "select "
       + "non empty Crossjoin({[Gender].[Gender].[F]},{[Measures].[Unit Sales]}) on 0,"
@@ -4438,7 +4438,7 @@ public class NonEmptyTest extends BatchTestCase {
     assertQuerySql( mdx, new SqlPattern[] { oraclePattern } );
   }
 
-  public void testLevelMembersWillConstrainUsingArgsFromAllAxes() {
+  void testLevelMembersWillConstrainUsingArgsFromAllAxes() {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     String mdx = "select "
       + "non empty Crossjoin({[Gender].[Gender].[F]},{[Measures].[Unit Sales]}) on 0,"
@@ -4483,7 +4483,7 @@ public class NonEmptyTest extends BatchTestCase {
     assertQuerySql( mdx, new SqlPattern[] { oraclePattern } );
   }
 
-  public void testNativeCrossjoinWillExpandFirstLastChild() {
+  void testNativeCrossjoinWillExpandFirstLastChild() {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     String mdx = "select "
       + "non empty Crossjoin({[Gender].firstChild,[Gender].lastChild},{[Measures].[Unit Sales]}) on 0,"
@@ -4546,7 +4546,7 @@ public class NonEmptyTest extends BatchTestCase {
     assertQuerySql( mdx, new SqlPattern[] { pattern } );
   }
 
-  public void testNativeCrossjoinWillExpandLagInNamedSet() {
+  void testNativeCrossjoinWillExpandLagInNamedSet() {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     String mdx =
       "with set [blah] as '{[Gender].lastChild.lag(1),[Gender].[M]}' "
@@ -4611,7 +4611,7 @@ public class NonEmptyTest extends BatchTestCase {
     assertQuerySql( mdx, new SqlPattern[] { pattern } );
   }
 
-  public void testConstrainedMeasureGetsOptimized() {
+  void testConstrainedMeasureGetsOptimized() {
     String mdx =
       "with member [Measures].[unit sales Male] as '([Measures].[Unit Sales],[Gender].[Gender].[M])' "
         + "member [Measures].[unit sales Female] as '([Measures].[Unit Sales],[Gender].[Gender].[F])' "
@@ -4656,7 +4656,7 @@ public class NonEmptyTest extends BatchTestCase {
           sqlOracle.length() ) } );
   }
 
-  public void testNestedMeasureConstraintsGetOptimized() {
+  void testNestedMeasureConstraintsGetOptimized() {
     String mdx =
       "with member [Measures].[unit sales Male] as '([Measures].[Unit Sales],[Gender].[Gender].[M])' "
         + "member [Measures].[unit sales Male Married] as '([Measures].[unit sales Male],[Marital Status].[Marital "
@@ -4714,7 +4714,7 @@ public class NonEmptyTest extends BatchTestCase {
     assertQuerySql( mdx, new SqlPattern[] { pattern } );
   }
 
-  public void testNonUniformNestedMeasureConstraintsGetOptimized() {
+  void testNonUniformNestedMeasureConstraintsGetOptimized() {
     if ( MondrianProperties.instance().UseAggregates.get() ) {
       // This test can't work with aggregates becaused
       // the aggregate table doesn't include member properties.
@@ -4761,7 +4761,7 @@ public class NonEmptyTest extends BatchTestCase {
     assertQuerySql( mdx, new SqlPattern[] { pattern } );
   }
 
-  public void testNonUniformConstraintsAreNotUsedForOptimization() {
+  void testNonUniformConstraintsAreNotUsedForOptimization() {
     String mdx =
       "with member [Measures].[unit sales Male] as '([Measures].[Unit Sales],[Gender].[Gender].[M])' "
         + "member [Measures].[unit sales Married] as '([Measures].[Unit Sales],[Marital Status].[Marital Status].[M])' "
@@ -4789,7 +4789,7 @@ public class NonEmptyTest extends BatchTestCase {
       getTestContext(), mdx, new SqlPattern[] { pattern }, true, false, true );
   }
 
-  public void testMeasureConstraintsInACrossjoinHaveCorrectResults() {
+  void testMeasureConstraintsInACrossjoinHaveCorrectResults() {
     //http://jira.pentaho.com/browse/MONDRIAN-715
     propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
     String mdx =
@@ -4819,7 +4819,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #1: 15,649.64\n" );
   }
 
-  public void testContextAtAllWorksWithConstraint() {
+  void testContextAtAllWorksWithConstraint() {
     TestContext ctx = TestContext.instance().create(
       null,
       "<Cube name=\"onlyGender\"> \n"
@@ -4862,7 +4862,7 @@ public class NonEmptyTest extends BatchTestCase {
    * default measure is calculated, it would have already been removed from
    * the list by removeCalculatedMembers, and thus the assumption was wrong.
    */
-  public void testCalculatedDefaultMeasureOnVirtualCubeNoThrowException() {
+  void testCalculatedDefaultMeasureOnVirtualCubeNoThrowException() {
     propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
     final TestContext context =
       TestContext.instance().withSchema(
@@ -4921,7 +4921,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-734"> MONDRIAN-734, "Exception thrown when creating
    * a "New Analysis View" with JPivot"</a>.
    */
-  public void testExpandNonNativeWithEnableNativeCrossJoin() {
+  void testExpandNonNativeWithEnableNativeCrossJoin() {
     final MondrianProperties mondrianProperties =
       MondrianProperties.instance();
     propSaver.set( mondrianProperties.EnableNativeCrossJoin, true );
@@ -4970,7 +4970,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-695"> MONDRIAN-695, "Unexpected data set may
    * returned when MDX slicer contains multiple dimensions"</a>.
    */
-  public void testNonEmptyCJWithMultiPositionSlicer() {
+  void testNonEmptyCJWithMultiPositionSlicer() {
     final String mdx =
       "select NON EMPTY NonEmptyCrossJoin([Measures].[Sales Count], [Store].[USA].Children) ON COLUMNS, "
         + "       NON EMPTY CrossJoin({[Customers].[All Customers]}, {([Promotions].[Bag Stuffers] : [Promotions]"
@@ -5067,7 +5067,7 @@ public class NonEmptyTest extends BatchTestCase {
     return (RolapEvaluator) ( (RolapResult) res ).getEvaluator( pos );
   }
 
-  public void testFilterChildlessSnowflakeMembers2() {
+  void testFilterChildlessSnowflakeMembers2() {
     if ( MondrianProperties.instance().FilterChildlessSnowflakeMembers.get() ) {
       // If FilterChildlessSnowflakeMembers is true, then
       // [Product].[Drink].[Baking Goods].[Coffee] does not even exist!
@@ -5082,7 +5082,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Axis #1:\n" );
   }
 
-  public void testFilterChildlessSnowflakeMembers() {
+  void testFilterChildlessSnowflakeMembers() {
     propSaver.set(
       MondrianProperties.instance().FilterChildlessSnowflakeMembers,
       false );
@@ -5193,7 +5193,7 @@ public class NonEmptyTest extends BatchTestCase {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-897"> MONDRIAN-897, "ClassCastException in
    * CrossJoinArgFactory.allArgsCheapToExpand when defining a NamedSet as another NamedSet"</a>.
    */
-  public void testBugMondrian897DoubleNamedSetDefinitions() {
+  void testBugMondrian897DoubleNamedSetDefinitions() {
     TestContext ctx = getTestContext();
     ctx.assertQueryReturns(
       "WITH SET [CustomerSet] as {[Customers].[Canada].[BC].[Burnaby].[Alexandra Wellington], [Customers].[USA].[WA]"
@@ -5225,7 +5225,7 @@ public class NonEmptyTest extends BatchTestCase {
    * <p>RolapNativeFilter would force the join to the fact table.
    * Some queries don't need to be joined to it and gain in performance.
    */
-  public void testMondrian1133() {
+  void testMondrian1133() {
     propSaver.set(
       propSaver.properties.UseAggregates,
       false );
@@ -5419,7 +5419,7 @@ public class NonEmptyTest extends BatchTestCase {
    *
    * <p>This one is for agg tables turned on.
    */
-  public void testMondrian1133WithAggs() {
+  void testMondrian1133WithAggs() {
     propSaver.set(
       propSaver.properties.UseAggregates,
       true );
@@ -5603,7 +5603,7 @@ public class NonEmptyTest extends BatchTestCase {
   /**
    * Native CrossJoin with a ranged slicer.
    */
-  public void testNonEmptyAggregateSlicerIsNative() {
+  void testNonEmptyAggregateSlicerIsNative() {
     final String mdx =
       "select NON EMPTY\n"
         + " Crossjoin([Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer].[Portsmouth]\n"
@@ -5770,7 +5770,7 @@ public class NonEmptyTest extends BatchTestCase {
    * <p>An empty set argument to crossjoin caused native evaluation to return
    * an incorrect type which in turn caused the types for each argument to union to be different
    */
-  public void testMondrian1658() {
+  void testMondrian1658() {
     propSaver.set( MondrianProperties.instance().ExpandNonNative, true );
     String mdx =
       "Select\n"
@@ -5796,7 +5796,7 @@ public class NonEmptyTest extends BatchTestCase {
     assertQueryReturns( mdx, expected );
   }
 
-  public void testMondrian2202WithConflictingMemberInSlicer() {
+  void testMondrian2202WithConflictingMemberInSlicer() {
     // Validates correct behavior of the crossjoin optimizer and
     // native non empty when a calculated member should override the
     // slicer context.
@@ -5842,7 +5842,7 @@ public class NonEmptyTest extends BatchTestCase {
   }
 
 
-  public void testMondrian2202WithCrossjoin() {
+  void testMondrian2202WithCrossjoin() {
     // the [overrideContext] measure should have a value for the tuple
     // on rows, given it overrides the time member on the axis.
     assertQueryReturns(
@@ -5873,7 +5873,7 @@ public class NonEmptyTest extends BatchTestCase {
   }
 
 
-  public void testMondrian2202WithLevelMembers() {
+  void testMondrian2202WithLevelMembers() {
     // verifies SqlConstraintFactory.getLevelMembersConstraint() doesn't
     // generate a conflicting constraint.  Since CJAF attempts to collect
     // constraints from all axes, it's possible for it to construct
@@ -5900,7 +5900,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #1: 33,190\n" );
   }
 
-  public void testMondrian2202WithAggTopCountSet() {
+  void testMondrian2202WithAggTopCountSet() {
     // in slicer
     assertQueryReturns(
       "with member measures.top5Prod as "
@@ -5937,7 +5937,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #1: 699\n" );
   }
 
-  public void testMondrian2202WithParameter() {
+  void testMondrian2202WithParameter() {
     assertQueryReturns(
       "WITH "
         + "member measures.[overrideContext] as "
@@ -5968,7 +5968,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #0: 33,101\n" );
   }
 
-  public void testMondrian2202WithFilter() {
+  void testMondrian2202WithFilter() {
     // Validates correct results when a filtered set contains a member
     // overriden by the filter condition.
     // (This worked before the fix for MONDRIAN-2202, since
@@ -5991,7 +5991,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #1: 33,190\n" );
   }
 
-  public void testMondrian2202WithTopCount() {
+  void testMondrian2202WithTopCount() {
     // Validates correct results when a topcount set contains a member
     // overriden by the filter condition.
     // (This worked before the fix for MONDRIAN-2202, since
@@ -6015,7 +6015,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #1: 33,190\n" );
   }
 
-  public void testMondrian2202WithMeasureContainingCJ() {
+  void testMondrian2202WithMeasureContainingCJ() {
     // NECJ nested within a measure expression
     assertQueryReturns(
       "with  "
@@ -6037,7 +6037,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #1: \n" );
   }
 
-  public void testMon2202RunningSum() {
+  void testMon2202RunningSum() {
     assertQueryReturns(
       "WITH\n"
         + "SET [*NATIVE_CJ_SET] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Time_],NONEMPTYCROSSJOIN"
@@ -6102,7 +6102,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #10: 259\n" );
   }
 
-  public void testMon2202AnalyzerTopCount() {
+  void testMon2202AnalyzerTopCount() {
     // will throw an exception if native cj is not used.
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
@@ -6140,7 +6140,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "WHERE ([*CJ_SLICER_AXIS])" );
   }
 
-  public void testMon2202AnalyzerFilter() {
+  void testMon2202AnalyzerFilter() {
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
     assertQueryReturns(
@@ -6211,7 +6211,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #10: 27\n" );
   }
 
-  public void testMon2202AnalyzerPercOfMeasure() {
+  void testMon2202AnalyzerPercOfMeasure() {
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
     assertQueryReturns(
@@ -6292,7 +6292,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #13: 8.06%\n" );
   }
 
-  public void testMon2202AnalyzerRunningSum() {
+  void testMon2202AnalyzerRunningSum() {
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
     assertQueryReturns(
@@ -6383,7 +6383,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #13: 335\n" );
   }
 
-  public void testMon2202SeveralFilteredHierarchiesPlusMeasureFilter() {
+  void testMon2202SeveralFilteredHierarchiesPlusMeasureFilter() {
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
     assertQueryReturns(
@@ -6459,7 +6459,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #8: 3\n" );
   }
 
-  public void testMon2202AnalyzerCompoundMeasureFilterPlusTopCount() {
+  void testMon2202AnalyzerCompoundMeasureFilterPlusTopCount() {
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
     assertQueryReturns(
@@ -6549,7 +6549,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #12: 3\n" );
   }
 
-  public void testNonEmptyCrossJoinCalcMember() {
+  void testNonEmptyCrossJoinCalcMember() {
     assertQueryReturns( new StringBuilder()
         .append( "WITH \n" )
         .append( "MEMBER Measures.Calc AS '[Measures].[Profit] * 2', SOLVE_ORDER=1000\n" )
@@ -6581,7 +6581,7 @@ public class NonEmptyTest extends BatchTestCase {
           + ".26\nRow #29: $29,230.83\nRow #30: $29,230.83\n" ) );
   }
 
-  public void testCrossJoinCalcMember() {
+  void testCrossJoinCalcMember() {
     assertQueryReturns( String.format(
       "WITH \nMEMBER Measures.Calc AS '[Measures].[Profit] * 2', SOLVE_ORDER=1000\nMEMBER Product.Conditional as 'Iif"
         + "(Measures.CurrentMember IS Measures.[Calc], + Measures.CurrentMember, null)', SOLVE_ORDER=2000\nSET [S2] AS "
@@ -6610,7 +6610,7 @@ public class NonEmptyTest extends BatchTestCase {
           + ".26\nRow #29: $29,230.83\nRow #30: $29,230.83\n" ) );
   }
 
-  public void testDefaultMemberNonEmptyContext() {
+  void testDefaultMemberNonEmptyContext() {
     TestContext testContext = TestContext.instance().createSubstitutingCube(
       "Sales",
       "  <Dimension name=\"Store2\"  foreignKey=\"store_id\" >\n"
@@ -6647,7 +6647,7 @@ public class NonEmptyTest extends BatchTestCase {
         + "Row #0: 1\n" );
   }
 
-  public void testCalcMeasureInVirtualCubeWithoutBaseComponents() {
+  void testCalcMeasureInVirtualCubeWithoutBaseComponents() {
     // http://jira.pentaho.com/browse/ANALYZER-3630
     propSaver.set( MondrianProperties.instance().EnableNativeNonEmpty, true );
     final TestContext context =

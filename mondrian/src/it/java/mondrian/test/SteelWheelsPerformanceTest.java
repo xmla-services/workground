@@ -44,7 +44,7 @@ public class SteelWheelsPerformanceTest extends TestCase {
      * tons of filters and sort to test the performance
      * of some bug fixes before/after.
      */
-    public void testComplexFilters() throws Exception {
+    void testComplexFilters() throws Exception {
         if (!LOGGER.isDebugEnabled()) {
             return;
         }

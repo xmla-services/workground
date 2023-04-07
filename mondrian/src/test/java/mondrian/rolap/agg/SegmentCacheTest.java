@@ -41,7 +41,7 @@ public class SegmentCacheTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCompoundPredicatesCollision(TestingContext context) {
+    void testCompoundPredicatesCollision(TestingContext context) {
         String query =
             "SELECT [Gender].[All Gender] ON 0, [MEASURES].[CUSTOMER COUNT] ON 1 FROM SALES";
         String query2 =
@@ -72,7 +72,7 @@ public class SegmentCacheTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)	
-    public void testSegmentCacheEvents(TestingContext context) throws Exception {
+    void testSegmentCacheEvents(TestingContext context) throws Exception {
         SegmentCache mockCache = new MockSegmentCache();
         SegmentCacheWorker testWorker =
             new SegmentCacheWorker(mockCache, null);

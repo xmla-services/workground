@@ -50,7 +50,7 @@ public class AccessControlTest extends FoodMartTestCase {
         super(name);
     }
 
-    public void testSchemaReader() {
+    void testSchemaReader() {
         final TestContext testContext = getTestContext();
         final Connection connection = testContext.getConnection();
         Schema schema = connection.getSchema();
@@ -64,7 +64,7 @@ public class AccessControlTest extends FoodMartTestCase {
         assertNotNull(schemaReader2);
     }
 
-    public void testGrantDimensionNone() {
+    void testGrantDimensionNone() {
         final TestContext context = getTestContext().withFreshConnection();
         final Connection connection = context.getConnection();
         RoleImpl role = ((RoleImpl) connection.getRole()).makeMutableClone();
@@ -84,7 +84,7 @@ public class AccessControlTest extends FoodMartTestCase {
             "MDX object '[Gender]' not found in cube 'Sales'");
     }
 
-    public void testRestrictMeasures() {
+    void testRestrictMeasures() {
         final TestContext testContext = TestContext.instance().create(
             null, null, null, null, null,
             "<Role name=\"Role1\">\n"
@@ -137,7 +137,7 @@ public class AccessControlTest extends FoodMartTestCase {
     /**Test for
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-2603">MONDRIAN-2603</a>
      */
-    public void testRestrictMeasuresHierarchy_InTwoRoles() {
+    void testRestrictMeasuresHierarchy_InTwoRoles() {
       String schema =
           "<Schema name=\"FoodMart.DimAndMeasure.Role\">\n"
           + " <Dimension name=\"WarehouseShared\">\n"
@@ -241,7 +241,7 @@ public class AccessControlTest extends FoodMartTestCase {
       }
   }
 
-    public void testRestrictLevelsAnalyzer3283() {
+    void testRestrictLevelsAnalyzer3283() {
         String dimensionsDef =
             "    <Dimension visible=\"true\" foreignKey=\"customer_id\" highCardinality=\"false\" name=\"Customers\">\n"
             + "      <Hierarchy visible=\"true\" hasAll=\"true\" allMemberName=\"All Customers\" primaryKey=\"customer_id\">\n"
@@ -351,7 +351,7 @@ public class AccessControlTest extends FoodMartTestCase {
         assertEquals(3, hierarchyAccess.getBottomLevelDepth());
     }
 
-    public void testRoleMemberAccessNonExistentMemberFails() {
+    void testRoleMemberAccessNonExistentMemberFails() {
         final TestContext testContext = TestContext.instance().create(
             null, null, null, null, null,
             "<Role name=\"Role1\">\n"
@@ -369,7 +369,7 @@ public class AccessControlTest extends FoodMartTestCase {
             "Member '[Store].[USA].[Non Existent]' not found");
     }
 
-    public void testRoleMemberAccess() {
+    void testRoleMemberAccess() {
         final Connection connection = getRestrictedConnection();
         // because CA has access
         assertMemberAccess(connection, Access.CUSTOM, "[Store].[USA]");
@@ -465,7 +465,7 @@ public class AccessControlTest extends FoodMartTestCase {
         return role.getAccessDetails(hierarchy);
     }
 
-    public void testGrantHierarchy1a() {
+    void testGrantHierarchy1a() {
         // assert: can access Mexico (explicitly granted)
         // assert: can not access Canada (explicitly denied)
         // assert: can access USA (rule 3 - parent of allowed member San
@@ -475,7 +475,7 @@ public class AccessControlTest extends FoodMartTestCase {
             "[Store].[Mexico]\n" + "[Store].[USA]");
     }
 
-    public void testGrantHierarchy1aAllMembers() {
+    void testGrantHierarchy1aAllMembers() {
         // assert: can access Mexico (explicitly granted)
         // assert: can not access Canada (explicitly denied)
         // assert: can access USA (rule 3 - parent of allowed member San
@@ -485,7 +485,7 @@ public class AccessControlTest extends FoodMartTestCase {
             "[Store].[Mexico]\n" + "[Store].[USA]");
     }
 
-    public void testGrantHierarchy1b() {
+    void testGrantHierarchy1b() {
         // can access Mexico (explicitly granted) which is the first accessible
         // one
         getRestrictedTestContext().assertAxisReturns(
@@ -493,14 +493,14 @@ public class AccessControlTest extends FoodMartTestCase {
             "[Store].[Mexico]");
     }
 
-    public void testGrantHierarchy1c() {
+    void testGrantHierarchy1c() {
         // the root element is All Customers
         getRestrictedTestContext().assertAxisReturns(
             "[Customers].defaultMember",
             "[Customers].[Canada].[BC]");
     }
 
-    public void testGrantHierarchy2() {
+    void testGrantHierarchy2() {
         // assert: can access California (parent of allowed member)
         final TestContext testContext = getRestrictedTestContext();
         testContext.assertAxisReturns(
@@ -515,7 +515,7 @@ public class AccessControlTest extends FoodMartTestCase {
             + "[Store].[USA].[CA].[San Francisco]");
     }
 
-    public void testGrantHierarchy3() {
+    void testGrantHierarchy3() {
         // assert: can not access Washington (child of denied member)
         final TestContext testContext = getRestrictedTestContext();
         testContext.assertAxisThrows("[Store].[USA].[WA]", "not found");
@@ -529,14 +529,14 @@ public class AccessControlTest extends FoodMartTestCase {
         };
     }
 
-    public void testGrantHierarchy4() {
+    void testGrantHierarchy4() {
         // assert: can not access Oregon (rule 1 - order matters)
         final TestContext testContext = getRestrictedTestContext();
         testContext.assertAxisThrows(
             "[Store].[USA].[OR].children", "not found");
     }
 
-    public void testGrantHierarchy5() {
+    void testGrantHierarchy5() {
         // assert: can not access All (above top level)
         final TestContext testContext = getRestrictedTestContext();
         testContext.assertAxisThrows("[Store].[All Stores]", "not found");
@@ -580,14 +580,14 @@ public class AccessControlTest extends FoodMartTestCase {
             + "[Store].[USA].[CA].[San Francisco].[Store 14]");
     }
 
-    public void testGrantHierarchy6() {
+    void testGrantHierarchy6() {
         // assert: parent if at top level is null
         getRestrictedTestContext().assertAxisReturns(
             "[Customers].[USA].[CA].parent",
             "");
     }
 
-    public void testGrantHierarchy7() {
+    void testGrantHierarchy7() {
         // assert: members above top level do not exist
         final TestContext testContext = getRestrictedTestContext();
         testContext.assertAxisThrows(
@@ -595,7 +595,7 @@ public class AccessControlTest extends FoodMartTestCase {
             "MDX object '[Customers].[Canada]' not found in cube 'Sales'");
     }
 
-    public void testGrantHierarchy8() {
+    void testGrantHierarchy8() {
         // assert: can not access Catherine Abel in San Francisco (below bottom
         // level)
         final TestContext testContext = getRestrictedTestContext();
@@ -610,7 +610,7 @@ public class AccessControlTest extends FoodMartTestCase {
         Assert.assertEquals(122, axis.getPositions().size());
     }
 
-    public void testGrantHierarchy8AllMembers() {
+    void testGrantHierarchy8AllMembers() {
         // assert: can not access Catherine Abel in San Francisco (below bottom
         // level)
         final TestContext testContext = getRestrictedTestContext();
@@ -629,7 +629,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * Tests for Mondrian BUG 1201 - Native Rollups did not handle
      * access-control with more than one member where granted access=all
      */
-    public void testBugMondrian_1201_MultipleMembersInRoleAccessControl() {
+    void testBugMondrian_1201_MultipleMembersInRoleAccessControl() {
         String test_1201_Roles =
             "<Role name=\"Role1\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -744,7 +744,7 @@ public class AccessControlTest extends FoodMartTestCase {
             + "Row #2: 10,319\n");
     }
 
-    public void testBugMondrian_2586_RaggedDimMembersShouldBeVisible() {
+    void testBugMondrian_2586_RaggedDimMembersShouldBeVisible() {
       String raggedUser =
           "<Role name=\"Sales Ragged\">\n"
           + "  <SchemaGrant access=\"none\">\n"
@@ -777,7 +777,7 @@ public class AccessControlTest extends FoodMartTestCase {
 
 
 
-    public void testBugMondrian_1201_CacheAwareOfRoleAccessControl() {
+    void testBugMondrian_1201_CacheAwareOfRoleAccessControl() {
         String test_1201_Roles =
             "<Role name=\"Role1\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -856,7 +856,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * Tests for Mondrian BUG 1127 - Native Top Count was not taking into
      * account user roles
      */
-    public void testBugMondrian1127OneSlicerOnly() {
+    void testBugMondrian1127OneSlicerOnly() {
         final TestContext testContext = getRestrictedTestContext();
         testContext.assertQueryReturns(
             "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, \n"
@@ -897,7 +897,7 @@ public class AccessControlTest extends FoodMartTestCase {
     }
 
 
-    public void testBugMondrian1127MultipleSlicers() {
+    void testBugMondrian1127MultipleSlicers() {
         final TestContext testContext = getRestrictedTestContext();
         testContext.assertQueryReturns(
             "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, \n"
@@ -943,7 +943,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * Tests that we only aggregate over SF, LA, even when called from
      * functions.
      */
-    public void testGrantHierarchy9() {
+    void testGrantHierarchy9() {
         // Analysis services doesn't allow aggregation within calculated
         // measures, so use the following query to generate the results:
         //
@@ -973,7 +973,7 @@ public class AccessControlTest extends FoodMartTestCase {
             + "Row #1: 7,329\n");
     }
 
-    public void testGrantHierarchyA() {
+    void testGrantHierarchyA() {
         final TestContext tc = new RestrictedTestContext();
         // assert: totals for USA include missing cells
         tc.assertQueryReturns(
@@ -1026,7 +1026,7 @@ public class AccessControlTest extends FoodMartTestCase {
             "'[Store]' not found in cube 'Sales'");
     }
 
-    public void testNoAccessToCube() {
+    void testNoAccessToCube() {
         final TestContext tc = new RestrictedTestContext();
         tc.assertQueryThrows("select from [HR]", "MDX cube 'HR' not found");
     }
@@ -1156,7 +1156,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * Basic test of partial rollup policy. [USA] = [OR] + [WA], not
      * the usual [CA] + [OR] + [WA].
      */
-    public void testRollupPolicyBasic() {
+    void testRollupPolicyBasic() {
         getRollupTestContext().assertQueryReturns(
             "select {[Store].[USA], [Store].[USA].Children} on 0\n"
             + "from [Sales]",
@@ -1176,7 +1176,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * children of [All Stores] are visible, but one grandchild is not.
      * Normally the total is 266,773.
      */
-    public void testRollupPolicyAll() {
+    void testRollupPolicyAll() {
         getRollupTestContext().assertExprReturns(
             "([Store].[All Stores])",
             "192,025");
@@ -1186,7 +1186,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * Access [Store].[All Stores] implicitly as it is the default member
      * of the [Stores] hierarchy.
      */
-    public void testRollupPolicyAllAsDefault() {
+    void testRollupPolicyAllAsDefault() {
         getRollupTestContext().assertExprReturns(
             "([Store])",
             "192,025");
@@ -1196,7 +1196,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * Access [Store].[All Stores] via the Parent relationship (to check
      * that this doesn't circumvent access control).
      */
-    public void testRollupPolicyAllAsParent() {
+    void testRollupPolicyAllAsParent() {
         getRollupTestContext().assertExprReturns(
             "([Store].[USA].Parent)",
             "192,025");
@@ -1209,7 +1209,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * "Mondrian doesn't restrict dimension members when dimension isn't
      * included"</a>.
      */
-    public void testUnusedAccessControlledDimension() {
+    void testUnusedAccessControlledDimension() {
         getRollupTestContext().assertQueryReturns(
             "select [Gender].Children on 0 from [Sales]",
             "Axis #0:\n"
@@ -1233,7 +1233,7 @@ public class AccessControlTest extends FoodMartTestCase {
     /**
      * Tests that members below bottom level are regarded as visible.
      */
-    public void testRollupBottomLevel() {
+    void testRollupBottomLevel() {
         rollupPolicyBottom(
             Role.RollupPolicy.FULL, "74,748", "36,759", "266,773");
         rollupPolicyBottom(
@@ -1314,7 +1314,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * Tests that a bad value for the rollupPolicy attribute gives the
      * appropriate error.
      */
-    public void testRollupPolicyNegative() {
+    void testRollupPolicyNegative() {
         final TestContext testContext =
             TestContext.instance().create(
                 null, null, null, null, null,
@@ -1337,7 +1337,7 @@ public class AccessControlTest extends FoodMartTestCase {
     /**
      * Tests where all children are visible but a grandchild is not.
      */
-    public void testRollupPolicyGreatGrandchildInvisible() {
+    void testRollupPolicyGreatGrandchildInvisible() {
         rollupPolicyGreatGrandchildInvisible(
             Role.RollupPolicy.FULL, "266,773", "74,748");
         rollupPolicyGreatGrandchildInvisible(
@@ -1379,7 +1379,7 @@ public class AccessControlTest extends FoodMartTestCase {
     /**
      * Tests where two hierarchies are simultaneously access-controlled.
      */
-    public void testRollupPolicySimultaneous() {
+    void testRollupPolicySimultaneous() {
 //         note that v2 is different for full vs partial, v3 is the same
         rollupPolicySimultaneous(
             Role.RollupPolicy.FULL, "266,773", "74,748", "25,635");
@@ -1437,7 +1437,7 @@ public class AccessControlTest extends FoodMartTestCase {
 
     // todo: performance test where 1 of 1000 children is not visible
 
-    public void testUnionRole() {
+    void testUnionRole() {
         final TestContext testContext =
             TestContext.instance().create(
                 null, null, null, null, null,
@@ -1604,7 +1604,7 @@ public class AccessControlTest extends FoodMartTestCase {
         checkQuery(testContext.withRole("Role1,Role2"), mdx);
     }
 
-    public void testUnionOfUnionRole() {
+    void testUnionOfUnionRole() {
         String roleDefs =
             "<Role name=\"USA manager\">\n"
             + "  <SchemaGrant access=\"none\">\n"
@@ -1660,7 +1660,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * This is a test for
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-1384">MONDRIAN-1384</a>
      */
-    public void testUnionRoleHasInaccessibleDescendants() throws Exception {
+    void testUnionRoleHasInaccessibleDescendants() throws Exception {
         final TestContext testContext =
             TestContext.instance().create(
                 null, null, null, null, null,
@@ -1703,7 +1703,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * Union of roles would sometimes return levels which should be restricted
      * by ACL.
      */
-    public void testRoleUnionWithLevelRestrictions()  throws Exception {
+    void testRoleUnionWithLevelRestrictions()  throws Exception {
         final TestContext testContext =
             TestContext.instance().create(
                 null, null, null, null, null,
@@ -1780,7 +1780,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * Testcase for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-369">
      * MONDRIAN-369, "Non Empty Crossjoin fails to enforce role access".
      */
-    public void testNonEmptyAccess() {
+    void testNonEmptyAccess() {
         final TestContext testContext =
             TestContext.instance().create(
                 null, null, null, null, null,
@@ -1824,7 +1824,7 @@ public class AccessControlTest extends FoodMartTestCase {
         checkQuery(testContext, mdx2);
     }
 
-    public void testNonEmptyAccessLevelMembers() {
+    void testNonEmptyAccessLevelMembers() {
         final TestContext testContext = TestContext.instance().create(
             null,
             null,
@@ -1876,7 +1876,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * MONDRIAN-406, "Rollup policy doesn't work for members
      * that are implicitly visible"</a>.
      */
-    public void testGoodman() {
+    void testGoodman() {
         final String query = "select {[Measures].[Unit Sales]} ON COLUMNS,\n"
             + "Hierarchize(Union(Union(Union({[Store].[All Stores]},"
             + " [Store].[All Stores].Children),"
@@ -1994,7 +1994,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * Access-control elements for hierarchies with
      * same name in different cubes could not be distinguished.
      */
-    public void testBugMondrian402() {
+    void testBugMondrian402() {
         final TestContext testContext =
             TestContext.instance().create(
                 null, null, null, null, null,
@@ -2018,7 +2018,7 @@ public class AccessControlTest extends FoodMartTestCase {
             "Store");
     }
 
-    public void testPartialRollupParentChildHierarchy() {
+    void testPartialRollupParentChildHierarchy() {
         final TestContext testContext = TestContext.instance().create(
             null, null, null, null, null,
             "<Role name=\"Buggy Role\">\n"
@@ -2070,7 +2070,7 @@ public class AccessControlTest extends FoodMartTestCase {
         checkQuery(testContext, mdx2);
     }
 
-    public void testParentChildUserDefinedRole()
+    void testParentChildUserDefinedRole()
     {
         TestContext testContext = getTestContext().withCube("HR");
 
@@ -2132,7 +2132,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * on a members returned in a result set. JPivot calls that method but
      * Mondrian normally does not.
      */
-    public void testBugBiserver1574() {
+    void testBugBiserver1574() {
         final TestContext testContext =
             TestContext.instance().create(
                 null, null, null, null, null, BiServer1574Role1)
@@ -2159,7 +2159,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * when apply Hierarchize function to tuples on a hierarchy with
      * partial-rollup.
      */
-    public void testBugMondrian435() {
+    void testBugMondrian435() {
         final TestContext testContext =
             TestContext.instance().create(
                 null, null, null, null, null, BiServer1574Role1)
@@ -2300,7 +2300,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * MONDRIAN-436, "SubstitutingMemberReader.getMemberBuilder gives
      * UnsupportedOperationException"</a>.
      */
-    public void testBugMondrian436() {
+    void testBugMondrian436() {
         propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
         propSaver.set(propSaver.properties.EnableNativeFilter, true);
         propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
@@ -2366,7 +2366,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-456">
      * MONDRIAN-456, "Roles and virtual cubes"</a>.
      */
-    public void testVirtualCube() {
+    void testVirtualCube() {
         TestContext testContext = TestContext.instance().create(
             null, null, null, null, null,
             "<Role name=\"VCRole\">\n"
@@ -2419,7 +2419,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * http://jira.pentaho.com/browse/BISERVER-2491
      * rollupPolicy=partial and queries to upper members don't work
      */
-    public void testBugBiserver2491() {
+    void testBugBiserver2491() {
         final String BiServer2491Role2 =
             "<Role name=\"role2\">"
             + " <SchemaGrant access=\"none\">"
@@ -2477,7 +2477,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-622">MONDRIAN-622,
      * "Poor performance with large union role"</a>.
      */
-    public void testBugMondrian622() {
+    void testBugMondrian622() {
         StringBuilder buf = new StringBuilder();
         StringBuilder buf2 = new StringBuilder();
         final String cubeName = "Sales with multiple customers";
@@ -2566,7 +2566,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * "Incorrect handling of child/parent relationship with hierarchy
      * grants"</a>.
      */
-    public void testBugMondrian694() {
+    void testBugMondrian694() {
         final TestContext testContext =
             TestContext.instance().create(
                 null, null, null, null, null,
@@ -2652,7 +2652,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * ignoreInvalidMembers=true, should ignore grants with invalid
      * members"</a>.
      */
-    public void testBugMondrian722() {
+    void testBugMondrian722() {
         propSaver.set(
             MondrianProperties.instance().IgnoreInvalidMembers,
             true);
@@ -2700,7 +2700,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * "Report returns stack trace when turning on subtotals on a hierarchy with
      * top level hidden"</a>.
      */
-    public void testCalcMemberLevel() {
+    void testCalcMemberLevel() {
         checkCalcMemberLevel(getTestContext());
         checkCalcMemberLevel(
             TestContext.instance().create(
@@ -2721,7 +2721,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * by name, thus granting implicit access to all cubes which have
      * a dimension with the same name.
      */
-    public void testBugMondrian568() {
+    void testBugMondrian568() {
         final TestContext testContext =
             TestContext.instance().create(
                 null, null, null, null, null,
@@ -2786,7 +2786,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-935">MONDRIAN-935,
      * "no results when some level members in a member grant have no data"</a>.
      */
-    public void testBugMondrian935() {
+    void testBugMondrian935() {
         final TestContext testContext =
             TestContext.instance().create(
                 null, null, null, null, null,
@@ -2822,7 +2822,7 @@ public class AccessControlTest extends FoodMartTestCase {
             + "Row #1: 73,178\n");
     }
 
-    public void testDimensionGrant() throws Exception {
+    void testDimensionGrant() throws Exception {
         final TestContext context = TestContext.instance().create(
             null, null, null, null, null,
             "<Role name=\"Role1\">\n"
@@ -2953,7 +2953,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * and use the correct rollup policy on the parent member to generate
      * correct SQL.
      */
-    public void testMondrian1030() throws Exception {
+    void testMondrian1030() throws Exception {
         final String mdx1 =
             "With\n"
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Customers],[*BASE_MEMBERS_Product])'\n"
@@ -3140,7 +3140,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * <p>Example. A query on USA where only Los-Angeles is accessible would
      * return the values for California instead of only LA.
      */
-    public void testBugMondrian1030_2() {
+    void testBugMondrian1030_2() {
         TestContext.instance().create(
             null, null, null, null, null,
             "<Role name=\"Bacon\">\n"
@@ -3173,7 +3173,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * rather than unique name. When using the partial rollup policy, the
      * members are wrapped, so identity checks would fail.
      */
-    public void testMondrian1091() throws Exception {
+    void testMondrian1091() throws Exception {
         final TestContext testContext = TestContext.instance().create(
             null, null, null, null, null,
             "<Role name=\"Role1\">\n"
@@ -3239,7 +3239,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * <p>Enhancements made to the SmartRestrictedMemberReader were causing
      * security leaks between roles and potential class cast exceptions.
      */
-    public void testMondrian1259() throws Exception {
+    void testMondrian1259() throws Exception {
         final String mdx =
             "select non empty {[Store].Members} on columns from [Sales]";
         final TestContext testContext = TestContext.instance().create(
@@ -3310,7 +3310,7 @@ public class AccessControlTest extends FoodMartTestCase {
             + "Row #0: 41,580\n");
     }
 
-    public void testMondrian1295() throws Exception {
+    void testMondrian1295() throws Exception {
         final String mdx =
             "With\n"
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Time],[*BASE_MEMBERS_Product])'\n"
@@ -3375,7 +3375,7 @@ public class AccessControlTest extends FoodMartTestCase {
                 + "Row #0: 74,748\n");
     }
 
-    public void testMondrian936() throws Exception {
+    void testMondrian936() throws Exception {
         final TestContext testContext = TestContext.instance().create(
             null, null, null, null, null,
             "<Role name=\"test\">\n"
@@ -3448,7 +3448,7 @@ public class AccessControlTest extends FoodMartTestCase {
         assertTrue(valueAggMember.equals(valueSlicerAgg));
     }
 
-    public void testMondrian1434() {
+    void testMondrian1434() {
         String roleDef =
             "<Role name=\"dev\">"
             + "    <SchemaGrant access=\"all\">"
@@ -3499,7 +3499,7 @@ public class AccessControlTest extends FoodMartTestCase {
      * would swap the {@link LimitedRollupMember} for the regular all member
      * of the hierarchy, effectively removing security constraints.
      */
-    public void testMondrian1486() throws Exception {
+    void testMondrian1486() throws Exception {
         final String mdx =
             "With\n"
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Gender],[*BASE_MEMBERS_Marital Status])'\n"
@@ -3540,7 +3540,7 @@ public class AccessControlTest extends FoodMartTestCase {
             + "Row #1: 66,222\n");
     }
 
-    public void testRollupPolicyWithNative() {
+    void testRollupPolicyWithNative() {
         // Verifies limited role-restricted results using
         // all variations of rollup policy
         // Also verifies consistent results with a non-all default member.
@@ -3673,7 +3673,7 @@ public class AccessControlTest extends FoodMartTestCase {
     }
 
 
-    public void testValidMeasureWithRestrictedCubes() {
+    void testValidMeasureWithRestrictedCubes() {
         //http://jira.pentaho.com/browse/MONDRIAN-1616
         final String roleDefs =
             "<Role name=\"noBaseCubes\">\n"

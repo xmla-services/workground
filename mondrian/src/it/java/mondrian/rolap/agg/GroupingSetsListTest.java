@@ -51,7 +51,7 @@ public class GroupingSetsListTest extends TestCase {
     groupingSetList = createGroupingSetList();
   }
 
-  public void testNewGroupingSetsList_RollupColumnsFoundCorrectly() {
+  void testNewGroupingSetsList_RollupColumnsFoundCorrectly() {
     testObject = new GroupingSetsList(groupingSetList);
     assertNotNull(testObject);
     assertSame(groupingSetList, testObject.getGroupingSets());

@@ -50,57 +50,57 @@ public class MySqlDialect3Test {
     }
 
     @Test
-    public void testAllowsRegularExpressionInWhereClause() {
+    void testAllowsRegularExpressionInWhereClause() {
         assertTrue(dialect.allowsRegularExpressionInWhereClause());
     }
 
     @Test
-    public void testGenerateRegularExpression_InvalidRegex() throws Exception {
+    void testGenerateRegularExpression_InvalidRegex() throws Exception {
         assertNull(dialect.generateRegularExpression("table.column", "(a"), "Invalid regex should be ignored");
     }
 
     @Test
-    public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
+    void testGenerateRegularExpression_CaseInsensitive() throws Exception {
         String sql = dialect.generateRegularExpression("table.column", "(?i)|(?u).*a.*").toString();
         assertEquals("table.column IS NOT NULL AND UPPER(table.column) REGEXP '.*A.*'", sql);
     }
 
     @Test
-    public void testGenerateRegularExpression_CaseSensitive() throws Exception {
+    void testGenerateRegularExpression_CaseSensitive() throws Exception {
         String sql = dialect.generateRegularExpression("table.column", ".*a.*").toString();
         assertEquals("table.column IS NOT NULL AND table.column REGEXP '.*a.*'", sql);
     }
 
     @Test
-    public void testQuoteBooleanLiteral_True() throws Exception {
+    void testQuoteBooleanLiteral_True() throws Exception {
         assertEquals(0, buf.length());
         dialect.quoteBooleanLiteral(buf, BOOLEAN_LITERAL_TRUE);
         assertEquals(BOOLEAN_LITERAL_TRUE, buf.toString());
     }
 
     @Test
-    public void testQuoteBooleanLiteral_False() throws Exception {
+    void testQuoteBooleanLiteral_False() throws Exception {
         assertEquals(0, buf.length());
         dialect.quoteBooleanLiteral(buf, BOOLEAN_LITERAL_FALSE);
         assertEquals(BOOLEAN_LITERAL_FALSE, buf.toString());
     }
 
     @Test
-    public void testQuoteBooleanLiteral_One() throws Exception {
+    void testQuoteBooleanLiteral_One() throws Exception {
         assertEquals(0, buf.length());
         dialect.quoteBooleanLiteral(buf, BOOLEAN_LITERAL_ONE);
         assertEquals(BOOLEAN_LITERAL_ONE, buf.toString());
     }
 
     @Test
-    public void testQuoteBooleanLiteral_Zero() throws Exception {
+    void testQuoteBooleanLiteral_Zero() throws Exception {
         assertEquals(0, buf.length());
         dialect.quoteBooleanLiteral(buf, BOOLEAN_LITERAL_ZERO);
         assertEquals(BOOLEAN_LITERAL_ZERO, buf.toString());
     }
 
     @Test
-    public void testQuoteBooleanLiteral_TrowsException() throws Exception {
+    void testQuoteBooleanLiteral_TrowsException() throws Exception {
         assertEquals(0, buf.length());
         try {
             dialect.quoteBooleanLiteral(buf, ILLEGAL_BOOLEAN_LITERAL);

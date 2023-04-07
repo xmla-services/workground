@@ -26,7 +26,7 @@ public class CurrentDateMemberUdfTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testCurrentDateMemberUdf(TestingContext context) {
+    void testCurrentDateMemberUdf(TestingContext context) {
 		Connection connection=context.createConnection();
 		//TODO: context redesign
 		//Assertions.fail("Handle comment , Context redesign nedded");
@@ -61,7 +61,7 @@ public class CurrentDateMemberUdfTest {
     */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testGetReturnType(TestingContext context) {
+    void testGetReturnType(TestingContext context) {
 		Connection connection=context.createConnection();
         String query = "WITH MEMBER [Time].[YTD] AS SUM( YTD(CurrentDateMember"
              + "([Time], '[\"Time\"]\\.[yyyy]\\.[Qq].[m]', EXACT)), Measures.[Unit Sales]) SELECT Time.YTD on 0 FROM sales";

@@ -118,7 +118,7 @@ public class DialectTest extends TestCase {
     return connection;
   }
 
-  public void testDialectVsDatabaseProduct() throws SQLException {
+  void testDialectVsDatabaseProduct() throws SQLException {
     final Dialect dialect = getDialect();
     final Dialect.DatabaseProduct databaseProduct =
       dialect.getDatabaseProduct();
@@ -196,7 +196,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testAllowsCompoundCountDistinct() {
+  void testAllowsCompoundCountDistinct() {
     String sql =
       dialectize(
         "select count(distinct [customer_id], [product_id])\n"
@@ -244,7 +244,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testAllowsCountDistinct() {
+  void testAllowsCountDistinct() {
     String sql1 =
       dialectize(
         "select count(distinct [customer_id]) from [foodmart.sales_fact_1997]" );
@@ -268,7 +268,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testAllowsMultipleCountDistinct() {
+  void testAllowsMultipleCountDistinct() {
     // multiple distinct-counts
     String sql1 =
       dialectize(
@@ -307,7 +307,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testAllowsDdl() {
+  void testAllowsDdl() {
     int phase = 0;
     SQLException e = null;
     Statement stmt = null;
@@ -348,7 +348,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testAllowsFromQuery() {
+  void testAllowsFromQuery() {
     String sql =
       dialectize(
         "select * from (select * from [foodmart.sales_fact_1997]) as [x]" );
@@ -359,7 +359,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testRequiresFromQueryAlias() {
+  void testRequiresFromQueryAlias() {
     if ( getDialect().requiresAliasForFromQuery() ) {
       assertTrue( getDialect().allowsFromQuery() );
     }
@@ -403,7 +403,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testRequiresOrderByAlias() {
+  void testRequiresOrderByAlias() {
     String sql =
       dialectize(
         "SELECT [unit_sales]\n"
@@ -426,7 +426,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testAllowsOrderByAlias() {
+  void testAllowsOrderByAlias() {
     String sql =
       dialectize(
         "SELECT [unit_sales] as [x],\n"
@@ -448,7 +448,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testRequiresUnionOrderByOrdinal() {
+  void testRequiresUnionOrderByOrdinal() {
     final String sql;
     switch ( getDialect().getDatabaseProduct() ) {
       default:
@@ -485,7 +485,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testRequiresUnionOrderByExprToBeInSelectClause() {
+  void testRequiresUnionOrderByExprToBeInSelectClause() {
     String sql =
       dialectize(
         "SELECT [unit_sales], [store_sales]\n"
@@ -534,7 +534,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testSupportsGroupByExpressions() {
+  void testSupportsGroupByExpressions() {
     String sql =
       dialectize(
         "SELECT sum([unit_sales] + 3) + 8\n"
@@ -560,7 +560,7 @@ public class DialectTest extends TestCase {
   /**
    * Tests that the {@link mondrian.spi.Dialect#supportsGroupingSets()} dialect property is accurate.
    */
-  public void testAllowsGroupingSets() {
+  void testAllowsGroupingSets() {
     String sql =
       dialectize(
         "SELECT [customer_id],\n"
@@ -612,7 +612,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testSupportsMultiValueInExpr() {
+  void testSupportsMultiValueInExpr() {
     String sql =
       dialectize(
         "SELECT [unit_sales]\n"
@@ -652,7 +652,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testDateLiteralString() {
+  void testDateLiteralString() {
     // verify correct construction of the date literal string.
     // With Oracle this can get interesting, because depending on the
     // driver version the string may be a DATE or a TIMESTAMP.
@@ -711,7 +711,7 @@ public class DialectTest extends TestCase {
   }
 
 
-  public void testBigInt() {
+  void testBigInt() {
     if ( getDialect().getDatabaseProduct()
       != Dialect.DatabaseProduct.VERTICA ) {
       // currently only checks VERTICA
@@ -817,7 +817,7 @@ public class DialectTest extends TestCase {
   }
 
 
-  public void testResultSetConcurrency() {
+  void testResultSetConcurrency() {
     int[] Types = {
       ResultSet.TYPE_FORWARD_ONLY,
       ResultSet.TYPE_SCROLL_INSENSITIVE,
@@ -869,7 +869,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testGenerateInline() throws SQLException {
+  void testGenerateInline() throws SQLException {
     final List<String> typeList = Arrays.asList( "String", "Numeric" );
     final List<String> nameList = Arrays.asList( "x", "y" );
     assertInline(
@@ -905,7 +905,7 @@ public class DialectTest extends TestCase {
    * last
    * in both cases.
    */
-  public void testForceNullCollation() throws SQLException {
+  void testForceNullCollation() throws SQLException {
     checkForceNullCollation( true, true );
     checkForceNullCollation( false, true );
     checkForceNullCollation( true, false );
@@ -1172,7 +1172,7 @@ public class DialectTest extends TestCase {
   /**
    * Unit test for {@link Dialect#allowsSelectNotInGroupBy}.
    */
-  public void testAllowsSelectNotInGroupBy() throws SQLException {
+  void testAllowsSelectNotInGroupBy() throws SQLException {
     Dialect dialect = getDialect();
     String sql =
       "select "
@@ -1244,7 +1244,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testHavingRequiresAlias() throws Exception {
+  void testHavingRequiresAlias() throws Exception {
     Dialect dialect = getDialect();
     StringBuilder sb =
       new StringBuilder(
@@ -1274,7 +1274,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testAllowsRegularExpressionInWhereClause() throws Exception {
+  void testAllowsRegularExpressionInWhereClause() throws Exception {
     Dialect dialect = getDialect();
     if ( dialect.allowsRegularExpressionInWhereClause() ) {
       assertNotNull(
@@ -1311,7 +1311,7 @@ public class DialectTest extends TestCase {
    * http://jira.pentaho.com/browse/MONDRIAN-1057</a> Some dialects are not removing the \Q and \E markers if they are
    * in the middle of the regexp.
    */
-  public void testComplexRegularExpression() throws Exception {
+  void testComplexRegularExpression() throws Exception {
     final String regexp =
       "(?i).*\\QJeanne\\E.*|.*\\QSheri\\E.*|.*\\QJonathan\\E.*|.*\\QJewel\\E.*";
     Dialect dialect = getDialect();
@@ -1348,7 +1348,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testRegularExpressionSqlInjection() throws SQLException {
+  void testRegularExpressionSqlInjection() throws SQLException {
     // bug mondrian-983
     // We know that mysql's dialect can handle this regex
     Throwable throwable = null;
@@ -1393,7 +1393,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testRegularExpressionSqlInjection_Slash() throws SQLException {
+  void testRegularExpressionSqlInjection_Slash() throws SQLException {
     // On mysql, this gives error:
     //   Got error 'repetition-operator operand invalid' from regexp
     //
@@ -1492,7 +1492,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testOracleTypeMapQuirks() throws SQLException {
+  void testOracleTypeMapQuirks() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect oracleDialect = new OracleDialect();
 
@@ -1573,7 +1573,7 @@ public class DialectTest extends TestCase {
         0 ) == BestFitColumnType.OBJECT );
   }
 
-  public void testPostgresGreenplumTypeMapQuirks() throws SQLException {
+  void testPostgresGreenplumTypeMapQuirks() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect greenplumDialect =
       TestContext.getFakeDialect( Dialect.DatabaseProduct.GREENPLUM );
@@ -1589,7 +1589,7 @@ public class DialectTest extends TestCase {
         0 ) == BestFitColumnType.OBJECT );
   }
 
-  public void testSnowflakeTypeMapQuirks() throws SQLException {
+  void testSnowflakeTypeMapQuirks() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect greenplumDialect =
       TestContext.getFakeDialect( Dialect.DatabaseProduct.SNOWFLAKE );
@@ -1605,7 +1605,7 @@ public class DialectTest extends TestCase {
         0 ) == BestFitColumnType.DECIMAL );
   }
 
-  public void testNetezzaTypeMapQuirks() throws SQLException {
+  void testNetezzaTypeMapQuirks() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect netezzaDialect =
       TestContext.getFakeDialect( Dialect.DatabaseProduct.NETEZZA );
@@ -1631,7 +1631,7 @@ public class DialectTest extends TestCase {
         0 ) == BestFitColumnType.DOUBLE );
   }
 
-  public void testMonetDBTypeMapQuirks() throws SQLException {
+  void testMonetDBTypeMapQuirks() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect monetDbDialect =
       TestContext.getFakeDialect( Dialect.DatabaseProduct.MONETDB );
@@ -1647,7 +1647,7 @@ public class DialectTest extends TestCase {
         0 ) == BestFitColumnType.DOUBLE );
   }
 
-  public void testJdbcDialectTypeMap() throws SQLException {
+  void testJdbcDialectTypeMap() throws SQLException {
     MockResultSetMetadata mockResultSetMeta = new MockResultSetMetadata();
     Dialect postgresDialect = new JdbcDialectImpl();
     assertTrue(
@@ -1672,7 +1672,7 @@ public class DialectTest extends TestCase {
         0 ) == BestFitColumnType.INT );
   }
 
-  public void testMonetBooleanColumn() throws SQLException {
+  void testMonetBooleanColumn() throws SQLException {
     ResultSetMetaData resultSet = new MockResultSetMetadata()
       .withColumnType( Types.BOOLEAN ).build();
     MonetDbDialect monetDbDialect = new MonetDbDialect();
@@ -1680,7 +1680,7 @@ public class DialectTest extends TestCase {
     assertEquals( BestFitColumnType.OBJECT, type );
   }
 
-  public void testHiveTimestampQuoteLiteral() throws SQLException {
+  void testHiveTimestampQuoteLiteral() throws SQLException {
     /*MONDRIAN-2208*/
     Dialect hiveDbDialect =
       TestContext.getFakeDialect( Dialect.DatabaseProduct.HIVE );
@@ -1691,7 +1691,7 @@ public class DialectTest extends TestCase {
       "cast( '2014-10-29 10:27:55.12' as timestamp )", buf.toString() );
   }
 
-  public void testQuoteIdentifierForDividedByDot() {
+  void testQuoteIdentifierForDividedByDot() {
     final String TABLE_NAME = "table.one";
     final String FIELD_NAME = "field.one";
     String q = getDialect().getQuoteIdentifierString();
@@ -1762,7 +1762,7 @@ public class DialectTest extends TestCase {
     }
   }
 
-  public void testMondrian2253() throws SQLException {
+  void testMondrian2253() throws SQLException {
     String expected = "    1 ASC";
     // "1" is supposed to be a column number
     String expr = "1";

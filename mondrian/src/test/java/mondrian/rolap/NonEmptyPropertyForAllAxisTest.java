@@ -52,7 +52,7 @@ public class NonEmptyPropertyForAllAxisTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonEmptyForAllAxesWithPropertySet(TestingContext context) {
+    void testNonEmptyForAllAxesWithPropertySet(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, true);
         final String MDX_QUERY =
@@ -104,7 +104,7 @@ public class NonEmptyPropertyForAllAxisTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonEmptyForAllAxesWithOutPropertySet(TestingContext context) {
+    void testNonEmptyForAllAxesWithOutPropertySet(TestingContext context) {
         final String MDX_QUERY =
             "SELECT {customers.USA.CA.[Santa Cruz].[Brian Merlo]} on 0, "
             + "[product].[product category].members on 1 FROM [sales]";
@@ -229,7 +229,7 @@ public class NonEmptyPropertyForAllAxisTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSlicerAxisDoesNotGetNonEmptyApplied(TestingContext context) {
+    void testSlicerAxisDoesNotGetNonEmptyApplied(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, true);
         String mdxQuery = "select from [Sales]\n"

@@ -37,23 +37,23 @@ public class PostgreSqlDialectTest {
     }
 
     @Test
-    public void testAllowsRegularExpressionInWhereClause() {
+    void testAllowsRegularExpressionInWhereClause() {
         assertTrue(dialect.allowsRegularExpressionInWhereClause());
     }
 
     @Test
-    public void testGenerateRegularExpression_InvalidRegex() throws Exception {
+    void testGenerateRegularExpression_InvalidRegex() throws Exception {
         assertNull(dialect.generateRegularExpression("table.column", "(a"), "Invalid regex should be ignored");
     }
 
     @Test
-    public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
+    void testGenerateRegularExpression_CaseInsensitive() throws Exception {
         String sql = dialect.generateRegularExpression("table.column", "(?i)|(?u).*a.*").toString();
         assertEquals("cast(table.column as text) is not null and cast(table.column as text) ~ '(?i).*a.*'", sql);
     }
 
     @Test
-    public void testGenerateRegularExpression_CaseSensitive() throws Exception {
+    void testGenerateRegularExpression_CaseSensitive() throws Exception {
         String sql = dialect.generateRegularExpression("table.column", ".*a.*").toString();
         assertEquals("cast(table.column as text) is not null and cast(table.column as text) ~ '.*a.*'", sql);
     }

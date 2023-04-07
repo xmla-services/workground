@@ -44,19 +44,19 @@ public class XmlaDimensionPropertiesTest extends XmlaBaseTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOneHierarchyProperties(TestingContext context) throws Exception {
+    void testOneHierarchyProperties(TestingContext context) throws Exception {
         executeTest(context.createConnection(), "HR");
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testTwoHierarchiesProperties(TestingContext context) throws Exception {
+    void testTwoHierarchiesProperties(TestingContext context) throws Exception {
         executeTest(context.createConnection(),"HR");
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMondrian2342(TestingContext context) throws Exception {
+    void testMondrian2342(TestingContext context) throws Exception {
         executeTest(context.createConnection(), "Sales");
     }
 

@@ -21,12 +21,12 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleUnparserSelectCellPropertyListClauseTest {
+class SimpleUnparserSelectCellPropertyListClauseTest {
 
     private SimpleUnparser unparser = new SimpleUnparser();
 
     @Test
-    public void test1() {
+    void test1() {
         SelectCellPropertyListClause selectCellPropertyListClause =
             new SelectCellPropertyListClauseR(List.of("BACK_COLOR", "FORE_COLOR"), true);
 
@@ -35,7 +35,7 @@ public class SimpleUnparserSelectCellPropertyListClauseTest {
     }
 
     @Test
-    public void test2() {
+    void test2() {
         SelectCellPropertyListClause selectCellPropertyListClause =
             new SelectCellPropertyListClauseR(List.of("BACK_COLOR", "FORE_COLOR"), false);
 

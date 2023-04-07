@@ -62,7 +62,7 @@ public class Base64Test
     }
 
     @Test
-    public void testStreams() throws Exception
+    void testStreams() throws Exception
     {
         for (int i = 0; i < 100; ++i) {
             runStreamTest(i);
@@ -76,7 +76,7 @@ public class Base64Test
     }
 
     @Test
-    public void testSimple()
+    void testSimple()
     {
         String s =
             "Man is distinguished, not only by his reason, but by this "

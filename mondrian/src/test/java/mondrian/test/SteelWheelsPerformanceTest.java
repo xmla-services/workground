@@ -41,7 +41,7 @@ public class SteelWheelsPerformanceTest extends SteelWheelsTestCase {
     @ParameterizedTest
     @DisabledIfSystemProperty(named = "tempIgnoreStrageTests",matches = "true")
     @ContextSource(propertyUpdater = AppandSteelWheelsCatalogAsFile.class, dataloader = SteelWheelsDataLoader.class)
-    public void testComplexFilters(TestingContext context) throws Exception {
+    void testComplexFilters(TestingContext context) throws Exception {
         if (!LOGGER.isDebugEnabled()) {
             return;
         }

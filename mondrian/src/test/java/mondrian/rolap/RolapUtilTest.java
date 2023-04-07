@@ -41,7 +41,7 @@ public class RolapUtilTest {
   private Relation fact;
 
   @Test
-  public void testMakeRolapStarKeyUnmodifiable() throws Exception {
+  void testMakeRolapStarKeyUnmodifiable() throws Exception {
     try {
       fact = SchemaUtil.parse(getFactTableWithSQLFilter(), TableImpl.class);
       List<String> polapStarKey = RolapUtil.makeRolapStarKey(FACT_NAME);
@@ -56,7 +56,7 @@ public class RolapUtilTest {
   }
 
   @Test
-  public void testMakeRolapStarKey_ByFactTableName() throws Exception {
+  void testMakeRolapStarKey_ByFactTableName() throws Exception {
     fact = SchemaUtil.parse(getFactTableWithSQLFilter(), TableImpl.class);
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(FACT_NAME);
     assertNotNull(polapStarKey);
@@ -65,7 +65,7 @@ public class RolapUtilTest {
   }
 
   @Test
-  public void testMakeRolapStarKey_FactTableWithSQLFilter() throws Exception {
+  void testMakeRolapStarKey_FactTableWithSQLFilter() throws Exception {
     fact = SchemaUtil.parse(getFactTableWithSQLFilter(), TableImpl.class);
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(fact);
     assertNotNull(polapStarKey);
@@ -76,7 +76,7 @@ public class RolapUtilTest {
   }
 
   @Test
-  public void testMakeRolapStarKey_FactTableWithEmptyFilter()
+  void testMakeRolapStarKey_FactTableWithEmptyFilter()
       throws Exception {
     fact = SchemaUtil.parse(getFactTableWithEmptySQLFilter(), TableImpl.class);
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(fact);
@@ -86,7 +86,7 @@ public class RolapUtilTest {
   }
 
   @Test
-  public void testMakeRolapStarKey_FactTableWithoutSQLFilter()
+  void testMakeRolapStarKey_FactTableWithoutSQLFilter()
       throws Exception {
     fact = SchemaUtil.parse(getFactTableWithoutSQLFilter(), TableImpl.class);
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(fact);
@@ -96,7 +96,7 @@ public class RolapUtilTest {
   }
 
   @Test
-  public void testMakeRolapStarKey_FactRelation() throws Exception {
+  void testMakeRolapStarKey_FactRelation() throws Exception {
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(
         getFactRelationMock());
     assertNotNull(polapStarKey);

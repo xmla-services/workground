@@ -107,7 +107,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
         return "";
     }
 
-    public void testDefaultRecognition() {
+    void testDefaultRecognition() {
         String sqlMysql = ""
                 + "select\n"
                 + "    `agg_c_6_fact_csv_2016`.`the_year` as `c0`,\n"
@@ -126,7 +126,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
         verifySameAggAndNot(QUERY, getAggSchema(null), sqlMysql);
     }
 
-    public void testAggName() {
+    void testAggName() {
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"fact_count\"/>\n"
@@ -159,7 +159,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
         verifySameAggAndNot(QUERY, getAggSchema(agg), aggSql);
     }
 
-    public void testFactColumnNotExists() {
+    void testFactColumnNotExists() {
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"fact_count\"/>\n"
@@ -185,7 +185,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
         }
     }
 
-    public void testMeasureFactColumnUpperCase() {
+    void testMeasureFactColumnUpperCase() {
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"fact_count\"/>\n"
@@ -219,7 +219,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
         assertQuerySql(QUERY, getAggSchema(agg), aggSql);
     }
 
-    public void testMeasureFactColumnNotExist() {
+    void testMeasureFactColumnNotExist() {
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"fact_count\"/>\n"
@@ -253,7 +253,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
         assertQuerySql(QUERY, getAggSchema(agg), aggSql);
     }
 
-    public void testWithoutMeasureFactColumnElement() {
+    void testWithoutMeasureFactColumnElement() {
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"fact_count\"/>\n"
@@ -284,7 +284,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
         assertQuerySql(QUERY, getAggSchema(agg), aggSql);
     }
 
-    public void testMeasureFactColumnAndAggFactCountNotExist() {
+    void testMeasureFactColumnAndAggFactCountNotExist() {
         String agg = ""
                 + "<AggName name=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"not_exist\"/>\n"
@@ -310,7 +310,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
         }
     }
 
-    public void testAggNameDifferentColumnNames() {
+    void testAggNameDifferentColumnNames() {
         String agg = ""
                 + "<AggExclude name=\"agg_c_6_fact_csv_2016\" />"
                 + "<AggName name=\"agg_csv_different_column_names\">\n"
@@ -344,7 +344,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
         verifySameAggAndNot(QUERY, getAggSchema(agg), aggSql);
     }
 
-    public void testAggDivideByZero() {
+    void testAggDivideByZero() {
         String agg = ""
                 + "<AggExclude name=\"agg_c_6_fact_csv_2016\" />"
                 + "<AggName name=\"agg_csv_divide_by_zero\">\n"
@@ -390,7 +390,7 @@ public class AggMeasureFactCountTest extends CsvDBTestCase {
         testContext.assertQueryReturns(QUERY, result);
     }
 
-    public void testAggPattern() {
+    void testAggPattern() {
         String agg = ""
                 + "<AggPattern pattern=\"agg_c_6_fact_csv_2016\">\n"
                 + "    <AggFactCount column=\"fact_count\"/>\n"

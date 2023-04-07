@@ -69,34 +69,34 @@ public class NumberSqlCompilerTest {
     }
 
     @Test
-    public void testRejectsNonLiteral() {
+    void testRejectsNonLiteral() {
         Exp exp = new TypeWrapperExp(new NullType());
         assertNull(compiler.compile(exp));
     }
 
     @Test
-    public void testAcceptsNumeric() {
+    void testAcceptsNumeric() {
         Exp exp = Literal.create(BigDecimal.ONE);
         assertNotNull(compiler.compile(exp));
     }
 
     @Test
-    public void testAcceptsString_Int() {
+    void testAcceptsString_Int() {
         checkAcceptsString("1");
     }
 
     @Test
-    public void testAcceptsString_Negative() {
+    void testAcceptsString_Negative() {
         checkAcceptsString("-1");
     }
 
     @Test
-    public void testAcceptsString_ExplicitlyPositive() {
+    void testAcceptsString_ExplicitlyPositive() {
         checkAcceptsString("+1.01");
     }
 
     @Test
-    public void testAcceptsString_NoIntegerPart() {
+    void testAcceptsString_NoIntegerPart() {
         checkAcceptsString("-.00001");
     }
 
@@ -107,32 +107,32 @@ public class NumberSqlCompilerTest {
 
 
     @Test
-    public void testRejectsString_SelectStatement() {
+    void testRejectsString_SelectStatement() {
         checkRejectsString("(select 100)");
     }
 
     @Test
-    public void testRejectsString_NaN() {
+    void testRejectsString_NaN() {
         checkRejectsString("NaN");
     }
 
     @Test
-    public void testRejectsString_Infinity() {
+    void testRejectsString_Infinity() {
         checkRejectsString("Infinity");
     }
 
     @Test
-    public void testRejectsString_TwoDots() {
+    void testRejectsString_TwoDots() {
         checkRejectsString("1.0.");
     }
 
     @Test
-    public void testRejectsString_OnlyDot() {
+    void testRejectsString_OnlyDot() {
         checkRejectsString(".");
     }
 
     @Test
-    public void testRejectsString_DoubleNegation() {
+    void testRejectsString_DoubleNegation() {
         checkRejectsString("--1.0");
     }
 

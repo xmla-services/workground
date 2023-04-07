@@ -56,7 +56,7 @@ public class DrillThroughExcludeFilterTest extends FoodMartTestCase {
 
     // Test for VirtualCube DrillThrough with exclude filter
     // on level not present in report
-    public void testDrillThroughExcludeFilter() throws Exception    {
+    void testDrillThroughExcludeFilter() throws Exception    {
         int expectedDrillThroughCountForCell0 = 3773;
         int expectedDrillThroughCountForCell1 = 78120;
 

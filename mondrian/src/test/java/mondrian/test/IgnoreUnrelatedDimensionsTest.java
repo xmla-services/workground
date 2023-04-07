@@ -134,7 +134,7 @@ public class IgnoreUnrelatedDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTotalingOnCrossJoinOfJoiningAndNonJoiningDimensions(TestingContext context) {
+    void testTotalingOnCrossJoinOfJoiningAndNonJoiningDimensions(TestingContext context) {
     	prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "WITH MEMBER [Measures].[Unit Sales VM] AS "
@@ -156,7 +156,7 @@ public class IgnoreUnrelatedDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testVMShouldNotPushUpAggMemberDefinedOnNonJoiningDimension(TestingContext context) {
+    void testVMShouldNotPushUpAggMemberDefinedOnNonJoiningDimension(TestingContext context) {
     	prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "WITH MEMBER [Measures].[Total Sales] AS "
@@ -179,7 +179,7 @@ public class IgnoreUnrelatedDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testAggMemberDefinedOnNonJoiningDimensionWithNonAllDefltMember(TestingContext context)
+    void testAggMemberDefinedOnNonJoiningDimensionWithNonAllDefltMember(TestingContext context)
     {
         // Gender dim to have Gender.F as default member
         String baseSchema = TestUtil.getRawSchema(context);
@@ -211,7 +211,7 @@ public class IgnoreUnrelatedDimensionsTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testIgnoreUnrelatedDimsOnSlicer(TestingContext context) {
+    void testIgnoreUnrelatedDimsOnSlicer(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
             true);
@@ -233,7 +233,7 @@ public class IgnoreUnrelatedDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testIgnoreUnrelatedDimsOnCompoundSlicer(TestingContext context) {
+    void testIgnoreUnrelatedDimsOnCompoundSlicer(TestingContext context) {
         // MONDRIAN-2072
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
@@ -258,7 +258,7 @@ public class IgnoreUnrelatedDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testRelatedAndUnrelatedDimsOnCompoundSlicer(TestingContext context) {
+    void testRelatedAndUnrelatedDimsOnCompoundSlicer(TestingContext context) {
         // MONDRIAN-2072
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
@@ -286,7 +286,7 @@ public class IgnoreUnrelatedDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testPartiallyRelatedMeasureWithCompoundSlicer(TestingContext context) {
+    void testPartiallyRelatedMeasureWithCompoundSlicer(TestingContext context) {
         // MONDRIAN-2072
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
@@ -336,7 +336,7 @@ public class IgnoreUnrelatedDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testNonJoiningDimWithMeasureInCompoundSlicer(TestingContext context) {
+    void testNonJoiningDimWithMeasureInCompoundSlicer(TestingContext context) {
         // MONDRIAN-2072
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
@@ -356,7 +356,7 @@ public class IgnoreUnrelatedDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTotalingForValidAndNonValidMeasuresWithJoiningDimensions(TestingContext context) {
+    void testTotalingForValidAndNonValidMeasuresWithJoiningDimensions(TestingContext context) {
     	prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "WITH MEMBER [Measures].[Unit Sales VM] AS "
@@ -380,7 +380,7 @@ public class IgnoreUnrelatedDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTotalingWhenIgnoreUnrelatedDimensionsPropertyIsTrue(TestingContext context) {
+    void testTotalingWhenIgnoreUnrelatedDimensionsPropertyIsTrue(TestingContext context) {
     	prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "WITH MEMBER [Measures].[Unit Sales VM] AS "
@@ -439,7 +439,7 @@ public class IgnoreUnrelatedDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTotalingOnNonJoiningDimension(TestingContext context) {
+    void testTotalingOnNonJoiningDimension(TestingContext context) {
     	prepareContext(context);
         assertQueryReturns(context.createConnection(),
             "WITH MEMBER [Measures].[Unit Sales VM] AS "
@@ -517,7 +517,7 @@ public class IgnoreUnrelatedDimensionsTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testUnrelatedDimPropOverridesIgnoreMeasure(TestingContext context) {
+    void testUnrelatedDimPropOverridesIgnoreMeasure(TestingContext context) {
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
             true);

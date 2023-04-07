@@ -101,7 +101,7 @@ public class MemoryMonitorTest {
 
 /*
 Does not work without the notify on add feature.
-    public void testZeroUsage() throws Exception {
+    void testZeroUsage() throws Exception {
         if (Util.PreJdk15 || !enabled) {
             return;
         }
@@ -128,7 +128,7 @@ Does not work without the notify on add feature.
     }
 */
     @Test
-    public void testDeltaUsage() throws Exception {
+    void testDeltaUsage() throws Exception {
         if (!enabled) {
             return;
         }
@@ -170,7 +170,7 @@ Does not work without the notify on add feature.
     }
 /*
 Does not work without the notify on add feature.
-    public void testUpdatePercent() throws Exception {
+    void testUpdatePercent() throws Exception {
         if (Util.PreJdk15 || !enabled) {
             return;
         }

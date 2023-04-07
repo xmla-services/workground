@@ -54,7 +54,7 @@ public class RolapDimensionTest extends PropertyRestoringTestCase {
     level.levelType = "Regular";
   }
 
-  public void testHierarchyRelation() {
+  void testHierarchyRelation() {
     MondrianDef.Relation hierarchyTable = Mockito
             .mock(MondrianDef.Relation.class);
     hierarchy.relation = hierarchyTable;
@@ -67,7 +67,7 @@ public class RolapDimensionTest extends PropertyRestoringTestCase {
   /**
    * Check that hierarchy.relation is not set to cube.fact
    */
-  public void testHierarchyRelationNotSet() {
+  void testHierarchyRelationNotSet() {
     new RolapDimension(schema, cube, xmlDimension, xmlCubeDimension);
 
     assertNotNull(hierarchy);

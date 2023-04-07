@@ -49,7 +49,7 @@ public class ObjectPoolTest{
     }
 
     @Test
-    public void testString() throws Exception {
+    void testString() throws Exception {
         ObjectPool<String> strings = new ObjectPool<String>();
         int nos = 100000;
         String[] ss1 = genStringsArray(nos);
@@ -97,7 +97,7 @@ public class ObjectPoolTest{
     }
 
     @Test
-    public void testKeyValue() throws Exception {
+    void testKeyValue() throws Exception {
         ObjectPool<KeyValue> op = new ObjectPool<KeyValue>();
         int nos = 100000;
         KeyValue[] kv1 = genKeyValueArray(nos);
@@ -139,7 +139,7 @@ public class ObjectPoolTest{
      * measures performance.
      */
     @Test
-    public void testLarge() {
+    void testLarge() {
         // Some typical results (2.4 GHz Intel dual-core).
 
         // Key type:        Integer               String

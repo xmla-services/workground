@@ -41,7 +41,7 @@ public class BlockingHashMapTest{
      *
      */
     @Test
-    public void testBlockingHashMap() throws InterruptedException {
+    void testBlockingHashMap() throws InterruptedException {
         BlockingHashMap<Integer, Integer> map =
             new BlockingHashMap<Integer, Integer>(100);
 

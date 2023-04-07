@@ -76,7 +76,7 @@ public class CVConcurrentMdxTest {
 
 
     @Test
-    public void testConcurrentQueriesInRandomOrder() {
+    void testConcurrentQueriesInRandomOrder() {
         propSaver.set(props.UseAggregates, false);
         propSaver.set(props.ReadAggregates, false);
         propSaver.set(props.DisableCaching, false);
@@ -107,7 +107,7 @@ public class CVConcurrentMdxTest {
     }
 
     @Test
-    public void testConcurrentQueriesInRandomOrderOnVirtualCube() {
+    void testConcurrentQueriesInRandomOrderOnVirtualCube() {
         propSaver.set(props.UseAggregates, false);
         propSaver.set(props.ReadAggregates, false);
         propSaver.set(props.DisableCaching, false);
@@ -138,7 +138,7 @@ public class CVConcurrentMdxTest {
     }
 
     @Test
-    public void testConcurrentCVQueriesInRandomOrder() {
+    void testConcurrentCVQueriesInRandomOrder() {
         propSaver.set(props.UseAggregates, false);
         propSaver.set(props.ReadAggregates, false);
         propSaver.set(props.DisableCaching, false);

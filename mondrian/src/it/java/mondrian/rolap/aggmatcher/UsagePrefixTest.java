@@ -70,7 +70,7 @@ public class UsagePrefixTest extends AggTableTestCase {
         return "";
     }
 
-    public void testUsagePrefix() throws Exception {
+    void testUsagePrefix() throws Exception {
         if (!isApplicable()) {
             return;
         }
@@ -100,7 +100,7 @@ public class UsagePrefixTest extends AggTableTestCase {
     }
 
 
-    public void testUsagePrefixTwoDims() throws Exception {
+    void testUsagePrefixTwoDims() throws Exception {
         if (!isApplicable()) {
             return;
         }

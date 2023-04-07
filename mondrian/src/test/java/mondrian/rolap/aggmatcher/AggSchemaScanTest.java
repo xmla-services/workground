@@ -44,7 +44,7 @@ public class AggSchemaScanTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testAggScanPropertiesEmptySchema(TestingContext context) throws Exception {
+  void testAggScanPropertiesEmptySchema(TestingContext context) throws Exception {
     final RolapConnection rolapConn = (RolapConnection) context.createConnection();
     final DataSource dataSource = rolapConn.getDataSource();
     Connection sqlConnection = null;
@@ -73,7 +73,7 @@ public class AggSchemaScanTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-  public void testAggScanPropertiesPopulatedSchema(TestingContext context) throws Exception {
+  void testAggScanPropertiesPopulatedSchema(TestingContext context) throws Exception {
     final RolapConnection rolapConn = (RolapConnection) context.createConnection();
     final DataSource dataSource = rolapConn.getDataSource();
     Connection sqlConnection = null;

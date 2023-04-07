@@ -22,7 +22,7 @@ import java.io.IOException;
  */
 public class NullMemberRepresentationTest extends FoodMartTestCase {
 
-    public void testClosingPeriodMemberLeafWithCustomNullRepresentation() {
+    void testClosingPeriodMemberLeafWithCustomNullRepresentation() {
         assertQueryReturns(
             "with member [Measures].[Foo] as ' ClosingPeriod().uniquename '\n"
             + "select {[Measures].[Foo]} on columns,\n"
@@ -46,7 +46,7 @@ public class NullMemberRepresentationTest extends FoodMartTestCase {
             + "");
     }
 
-    public void testItemMemberWithCustomNullMemberRepresentation()
+    void testItemMemberWithCustomNullMemberRepresentation()
         throws IOException
     {
         assertExprReturns(
@@ -57,7 +57,7 @@ public class NullMemberRepresentationTest extends FoodMartTestCase {
             "[Time].[" + getNullMemberRepresentation() + "]");
     }
 
-    public void testNullMemberWithCustomRepresentation() throws IOException {
+    void testNullMemberWithCustomRepresentation() throws IOException {
         assertExprReturns(
             "[Gender].[All Gender].Parent.UniqueName",
             "[Gender].[" + getNullMemberRepresentation() + "]");

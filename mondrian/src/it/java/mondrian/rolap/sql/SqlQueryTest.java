@@ -59,7 +59,7 @@ public class SqlQueryTest extends BatchTestCase {
         prop.WarnIfNoPatternForDialect.set(origWarnIfNoPatternForDialect);
     }
 
-    public void testToStringForSingleGroupingSetSql() {
+    void testToStringForSingleGroupingSetSql() {
         if (!isGroupingSetsSupported()) {
             return;
         }
@@ -105,7 +105,7 @@ public class SqlQueryTest extends BatchTestCase {
     }
 
 
-    public void testOrderBy() throws SQLException {
+    void testOrderBy() throws SQLException {
         // Test with requireAlias = true
         assertEquals(
             "\norder by\n"
@@ -155,7 +155,7 @@ public class SqlQueryTest extends BatchTestCase {
         return sql.replaceAll("\\r", "");
     }
 
-    public void testToStringForForcedIndexHint() {
+    void testToStringForForcedIndexHint() {
         Map<String, String> hints = new HashMap<String, String>();
         hints.put("force_index", "myIndex");
 
@@ -247,7 +247,7 @@ public class SqlQueryTest extends BatchTestCase {
     }
 
 
-    public void testPredicatesAreOptimizedWhenPropertyIsTrue() {
+    void testPredicatesAreOptimizedWhenPropertyIsTrue() {
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             // Sql pattner will be different if using aggregate tables.
             // This test cover predicate generation so it's sufficient to
@@ -289,7 +289,7 @@ public class SqlQueryTest extends BatchTestCase {
         assertSqlEqualsOptimzePredicates(true, mdx, sqlPatterns);
     }
 
-    public void testTableNameIsIncludedWithParentChildQuery() {
+    void testTableNameIsIncludedWithParentChildQuery() {
         String sql =
             "select `employee`.`employee_id` as `c0`, "
             + "`employee`.`full_name` as `c1`, "
@@ -326,7 +326,7 @@ public class SqlQueryTest extends BatchTestCase {
         assertQuerySql(mdx, sqlPatterns);
     }
 
-    public void testPredicatesAreNotOptimizedWhenPropertyIsFalse() {
+    void testPredicatesAreNotOptimizedWhenPropertyIsFalse() {
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             // Sql pattner will be different if using aggregate tables.
             // This test cover predicate generation so it's sufficient to
@@ -369,7 +369,7 @@ public class SqlQueryTest extends BatchTestCase {
         assertSqlEqualsOptimzePredicates(false, mdx, sqlPatterns);
     }
 
-    public void testPredicatesAreOptimizedWhenAllTheMembersAreIncluded() {
+    void testPredicatesAreOptimizedWhenAllTheMembersAreIncluded() {
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             // Sql pattner will be different if using aggregate tables.
             // This test cover predicate generation so it's sufficient to
@@ -427,7 +427,7 @@ public class SqlQueryTest extends BatchTestCase {
         }
     }
 
-    public void testToStringForGroupingSetSqlWithEmptyGroup() {
+    void testToStringForGroupingSetSqlWithEmptyGroup() {
         if (!isGroupingSetsSupported()) {
             return;
         }
@@ -475,7 +475,7 @@ public class SqlQueryTest extends BatchTestCase {
         }
     }
 
-    public void testToStringForMultipleGroupingSetsSql() {
+    void testToStringForMultipleGroupingSetsSql() {
         if (!isGroupingSetsSupported()) {
             return;
         }
@@ -540,7 +540,7 @@ public class SqlQueryTest extends BatchTestCase {
      * <p>Mondrian only generates SQL DOUBLE values in a special format for
      * LucidDB; therefore, this test is a no-op on other databases.
      */
-    public void testDoubleInList() {
+    void testDoubleInList() {
         final Dialect dialect = getTestContext().getDialect();
         if (dialect.getDatabaseProduct() != Dialect.DatabaseProduct.LUCIDDB) {
             return;
@@ -639,7 +639,7 @@ public class SqlQueryTest extends BatchTestCase {
      * "UPPER(`store`.`store_country`) = UPPER('Time.Weekly')" from being
      * generated.
      */
-    public void testInvalidSqlMemberLookup() {
+    void testInvalidSqlMemberLookup() {
         String sqlMySql =
             "select `store`.`store_type` as `c0` from `store` as `store` "
             + "where UPPER(`store`.`store_type`) = UPPER('Time.Weekly') "
@@ -670,7 +670,7 @@ public class SqlQueryTest extends BatchTestCase {
      * not considering the approxRowCount property. It is fixed and
      * this test will ensure it won't happen again.
      */
-    public void testApproxRowCountOverridesCount() {
+    void testApproxRowCountOverridesCount() {
         final String cubeSchema =
             "<Cube name=\"ApproxTest\"> \n"
             + "  <Table name=\"sales_fact_1997\"/> \n"
@@ -717,7 +717,7 @@ public class SqlQueryTest extends BatchTestCase {
             true);
     }
 
-    public void testLimitedRollupMemberRetrievableFromCache() throws Exception {
+    void testLimitedRollupMemberRetrievableFromCache() throws Exception {
         final String mdx =
             "select NON EMPTY { [Store].[Store].[Store State].members } on 0 from [Sales]";
         final TestContext context =
@@ -769,7 +769,7 @@ public class SqlQueryTest extends BatchTestCase {
      *
      * <p>Avg Aggregates need to be computed in SQL to get correct values.
      */
-    public void testAvgAggregator() {
+    void testAvgAggregator() {
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         TestContext context = getTestContext().createSubstitutingCube(
             "Sales",

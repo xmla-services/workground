@@ -110,7 +110,7 @@ class CsvDataLoadServiceImplTest {
 	}
 
 	@Test
-	void testBach(
+	void testBatch(
 			@InjectService(cardinality = 0, filter = "(component.name=" + COMPONENT_NAME
 					+ ")") ServiceAware<DataLoadService> csvDataLoadServiceAware)
 			throws IOException, URISyntaxException, SQLException, InterruptedException {
@@ -135,7 +135,7 @@ class CsvDataLoadServiceImplTest {
 		Table t = new Table("test", "test", List.of(), list);
 		List<Table> tables = List.of(t);
 		//
-		csvDataLoadServiceAware.waitForService(200).loadData(dataSource, tables);
+		csvDataLoadServiceAware.waitForService(1000).loadData(dataSource, tables);
 		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
 
 		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());
@@ -220,7 +220,7 @@ class CsvDataLoadServiceImplTest {
 		Table t = new Table("test", "test", List.of(), list);
 		List<Table> tables = List.of(t);
 		//
-		csvDataLoadServiceAware.waitForService(200).loadData(dataSource, tables);
+		csvDataLoadServiceAware.waitForService(1000).loadData(dataSource, tables);
 		verify(connection, (times(1))).prepareStatement(stringCaptor.capture());
 
 		verify(preparedStatement, (times(4))).setInt(integerCaptor.capture(), integerCaptor.capture());

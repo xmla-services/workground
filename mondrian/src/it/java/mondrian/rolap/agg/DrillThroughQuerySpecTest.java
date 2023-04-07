@@ -67,7 +67,7 @@ public class DrillThroughQuerySpecTest extends TestCase {
         (requestMock, starPredicateMock, new ArrayList<OlapElement> (), false);
   }
 
-  public void testEmptyColumns() {
+  void testEmptyColumns() {
     List<RolapStar.Column> columns = Collections.emptyList();
     when(starPredicateMock.getConstrainedColumnList())
       .thenReturn(columns);
@@ -76,13 +76,13 @@ public class DrillThroughQuerySpecTest extends TestCase {
       .addSelect(anyString(), any(BestFitColumnType.class), anyString());
   }
 
-  public void testOneColumnExists() {
+  void testOneColumnExists() {
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(1))
       .addSelect(anyString(), any(BestFitColumnType.class), anyString());
   }
 
-  public void testTwoColumnsExist() {
+  void testTwoColumnsExist() {
     when(starPredicateMock.getConstrainedColumnList())
       .thenReturn(Arrays.asList(includedColumn, excludedColumn));
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
@@ -90,7 +90,7 @@ public class DrillThroughQuerySpecTest extends TestCase {
       .addSelect(anyString(), any(BestFitColumnType.class), anyString());
   }
 
-  public void testColumnsNotIncludedInSelect() {
+  void testColumnsNotIncludedInSelect() {
     when(requestMock.includeInSelect(includedColumn)).thenReturn(false);
     drillThroughQuerySpec.extraPredicates(sqlQueryMock);
     verify(sqlQueryMock, times(0))
@@ -102,7 +102,7 @@ public class DrillThroughQuerySpecTest extends TestCase {
       .addSelect(anyString(), any(BestFitColumnType.class), anyString());
   }
 
-  public void testColumnsPartiallyIncludedInSelect() {
+  void testColumnsPartiallyIncludedInSelect() {
     when(requestMock.includeInSelect(excludedColumn)).thenReturn(false);
     when(requestMock.includeInSelect(includedColumn)).thenReturn(true);
     when(starPredicateMock.getConstrainedColumnList())
@@ -114,7 +114,7 @@ public class DrillThroughQuerySpecTest extends TestCase {
   }
 
   // test that returns correct number of columns
-  public void testMdxQuery() throws SQLException {
+  void testMdxQuery() throws SQLException {
     String drillThroughMdx = "DRILLTHROUGH WITH "
         + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Product_],[*BASE_MEMBERS__Store Type_])' "
         + "SET [*NATIVE_CJ_SET] AS 'GENERATE([*NATIVE_CJ_SET_WITH_SLICER], {([Product].CURRENTMEMBER)})' "

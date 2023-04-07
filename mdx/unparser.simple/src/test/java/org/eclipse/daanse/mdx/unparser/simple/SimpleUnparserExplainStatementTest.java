@@ -36,12 +36,12 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleUnparserExplainStatementTest {
+class SimpleUnparserExplainStatementTest {
 
     private SimpleUnparser unparser = new SimpleUnparser();
 
     @Test
-    public void test1() {
+    void test1() {
 
         SelectQueryClause selectQueryClause =
             new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,
@@ -69,7 +69,7 @@ public class SimpleUnparserExplainStatementTest {
     }
 
     @Test
-    public void test2() {
+    void test2() {
 
         SelectQueryClause selectQueryClause =
             new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,

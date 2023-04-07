@@ -15,7 +15,7 @@ import junit.framework.TestCase;
 
 public class FormatterCreateContextTest extends TestCase {
 
-    public void testElementDataShouldSupersedeAttributeData() {
+    void testElementDataShouldSupersedeAttributeData() {
         MondrianDef.ElementFormatter elementData =
             new MondrianDef.PropertyFormatter();
         elementData.className = "elementClassName";

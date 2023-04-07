@@ -28,7 +28,7 @@ public class RaggedHierarchyTest extends FoodMartTestCase {
 
     // ~ The tests ------------------------------------------------------------
 
-    public void testChildrenOfRoot() {
+    void testChildrenOfRoot() {
         assertRaggedReturns(
             "[Store].children",
             "[Store].[Canada]\n"
@@ -38,7 +38,7 @@ public class RaggedHierarchyTest extends FoodMartTestCase {
             + "[Store].[Vatican]");
     }
 
-    public void testChildrenOfUSA() {
+    void testChildrenOfUSA() {
         assertRaggedReturns(
             "[Store].[USA].children",
             "[Store].[USA].[CA]\n"
@@ -49,7 +49,7 @@ public class RaggedHierarchyTest extends FoodMartTestCase {
 
     // Israel has one real child, which is hidden, and which has children
     // Haifa and Tel Aviv
-    public void testChildrenOfIsrael() {
+    void testChildrenOfIsrael() {
         assertRaggedReturns(
             "[Store].[Israel].children",
             "[Store].[Israel].[Israel].[Haifa]\n"
@@ -65,38 +65,38 @@ public class RaggedHierarchyTest extends FoodMartTestCase {
             "[Store].[Vatican].[Vatican].[null].[Store 17]");
     }
 
-    public void testParentOfHaifa() {
+    void testParentOfHaifa() {
         assertRaggedReturns(
             "[Store].[Israel].[Haifa].Parent", "[Store].[Israel]");
     }
 
-    public void testParentOfVatican() {
+    void testParentOfVatican() {
         assertRaggedReturns(
             "[Store].[Vatican].Parent", "[Store].[All Stores]");
     }
 
     // PrevMember must return something at the same level -- a city
-    public void testPrevMemberOfHaifa() {
+    void testPrevMemberOfHaifa() {
         assertRaggedReturns(
             "[Store].[Israel].[Haifa].PrevMember",
             "[Store].[Canada].[BC].[Victoria]");
     }
 
     // PrevMember must return something at the same level -- a city
-    public void testNextMemberOfTelAviv() {
+    void testNextMemberOfTelAviv() {
         assertRaggedReturns(
             "[Store].[Israel].[Tel Aviv].NextMember",
             "[Store].[Mexico].[DF].[Mexico City]");
     }
 
-    public void testNextMemberOfBC() {
+    void testNextMemberOfBC() {
         // The next state after BC is Israel, but it's hidden
         assertRaggedReturns(
             "[Store].[Canada].[BC].NextMember",
             "[Store].[Mexico].[DF]");
     }
 
-    public void testLead() {
+    void testLead() {
         assertRaggedReturns(
             "[Store].[Mexico].[DF].Lead(1)",
             "[Store].[Mexico].[Guerrero]");
@@ -127,13 +127,13 @@ public class RaggedHierarchyTest extends FoodMartTestCase {
     }
 
     // The only child of Vatican at state level is hidden
-    public void testDescendantsOfVaticanAtStateLevel() {
+    void testDescendantsOfVaticanAtStateLevel() {
         assertRaggedReturns(
             "Descendants([Store].[Vatican], [Store].[Store State])",
             "");
     }
 
-    public void testDescendantsOfRootAtCity() {
+    void testDescendantsOfRootAtCity() {
         assertRaggedReturns(
             "Descendants([Store], [Store City])",
             "[Store].[Canada].[BC].[Vancouver]\n"
@@ -162,13 +162,13 @@ public class RaggedHierarchyTest extends FoodMartTestCase {
     }
 
     // no ancestor at the State level
-    public void testAncestorOfHaifa() {
+    void testAncestorOfHaifa() {
         assertRaggedReturns(
             "Ancestor([Store].[Israel].[Haifa], [Store].[Store State])",
             "");
     }
 
-    public void testHierarchize() {
+    void testHierarchize() {
         // Haifa and Tel Aviv should appear directly after Israel
         // Vatican should have no children
         // Washington should appear after WA
@@ -329,7 +329,7 @@ public class RaggedHierarchyTest extends FoodMartTestCase {
      * <p>Cause was that ancestor yielded a null member, which was a RolapMember
      * but Order required it to be a RolapCubeMember.
      */
-    public void testNullMember() {
+    void testNullMember() {
         assertQueryReturns(
             "With \n"
             + " Set [*NATIVE_CJ_SET] as '[*BASE_MEMBERS_Geography]' \n"
@@ -397,7 +397,7 @@ public class RaggedHierarchyTest extends FoodMartTestCase {
             + "Row #22: 0\n");
     }
 
-    public void testHideIfBlankHidesWhitespace() {
+    void testHideIfBlankHidesWhitespace() {
         if (TestContext.instance().getDialect().getDatabaseProduct()
             != Dialect.DatabaseProduct.ORACLE)
         {
@@ -432,7 +432,7 @@ public class RaggedHierarchyTest extends FoodMartTestCase {
             + "Row #0: 135,215\n");
     }
 
-    public void testNativeFilterWithHideMemberIfBlankOnLeaf() throws Exception {
+    void testNativeFilterWithHideMemberIfBlankOnLeaf() throws Exception {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales Ragged",
             "<Dimension name=\"Store\" foreignKey=\"store_id\">\n"
@@ -483,7 +483,7 @@ public class RaggedHierarchyTest extends FoodMartTestCase {
             + "Row #11: 23,591\n");
     }
 
-    public void testNativeCJWithHideMemberIfBlankOnLeaf() throws Exception {
+    void testNativeCJWithHideMemberIfBlankOnLeaf() throws Exception {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales Ragged",
             "<Dimension name=\"Store\" foreignKey=\"store_id\">\n"

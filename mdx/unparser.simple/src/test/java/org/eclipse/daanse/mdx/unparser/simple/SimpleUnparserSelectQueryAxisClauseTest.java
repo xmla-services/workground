@@ -27,11 +27,11 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleUnparserSelectQueryAxisClauseTest {
+class SimpleUnparserSelectQueryAxisClauseTest {
     private SimpleUnparser unparser = new SimpleUnparser();
 
     @Test
-    public void test1() {
+    void test1() {
         SelectQueryAxisClause selectQueryAxisClause =
             new SelectQueryAxisClauseR(
                 false,
@@ -51,7 +51,7 @@ public class SimpleUnparserSelectQueryAxisClauseTest {
     }
 
     @Test
-    public void test2() {
+    void test2() {
         SelectQueryAxisClause selectQueryAxisClause =
             new SelectQueryAxisClauseR(
                 false,

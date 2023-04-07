@@ -136,7 +136,7 @@ public class DefaultRuleTest {
     //
 
     @Test
-    public void testTableNameDefault() {
+    void testTableNameDefault() {
         final String tag = "default";
         final String factTableName = "FACT_TABLE";
 
@@ -159,7 +159,7 @@ public class DefaultRuleTest {
     }
 
     @Test
-    public void testTableNameBBBB() {
+    void testTableNameBBBB() {
         final String tag = "bbbb";
         final String factTableName = "FACT_TABLE";
 
@@ -176,7 +176,7 @@ public class DefaultRuleTest {
     }
 
     @Test
-    public void testTableNameCCCCBAD() {
+    void testTableNameCCCCBAD() {
         final String tag = "cccc";
         final String basename = "WAREHOUSE";
         final String factTableName = "RF_" + basename + "_TABLE";
@@ -197,7 +197,7 @@ public class DefaultRuleTest {
     }
 
     @Test
-    public void testTableNameCCCCGOOD() {
+    void testTableNameCCCCGOOD() {
         final String tag = "cccc";
         final String basename = "WAREHOUSE";
         final String factTableName = "RF_" + basename + "_TABLE";
@@ -215,7 +215,7 @@ public class DefaultRuleTest {
     }
 
     @Test
-    public void testFactCountDefault() {
+    void testFactCountDefault() {
         final String tag = "default";
         Recognizer.Matcher matcher = getFactCountMatcher(tag);
 
@@ -231,7 +231,7 @@ public class DefaultRuleTest {
     }
 
     @Test
-    public void testFactCountBBBB() {
+    void testFactCountBBBB() {
         final String tag = "bbbb";
         Recognizer.Matcher matcher = getFactCountMatcher(tag);
 
@@ -247,7 +247,7 @@ public class DefaultRuleTest {
     }
 
     @Test
-    public void testFactCountCCCC() {
+    void testFactCountCCCC() {
         final String tag = "cccc";
         Recognizer.Matcher matcher = getFactCountMatcher(tag);
 
@@ -263,7 +263,7 @@ public class DefaultRuleTest {
     }
 
     @Test
-    public void testForeignKeyDefault() {
+    void testForeignKeyDefault() {
         final String tag = "default";
         final String foreignKeyName = "foo_key";
         Recognizer.Matcher matcher = getForeignKeyMatcher(tag, foreignKeyName);
@@ -276,7 +276,7 @@ public class DefaultRuleTest {
     }
 
     @Test
-    public void testForeignKeyBBBB() {
+    void testForeignKeyBBBB() {
         final String tag = "bbbb";
         final String foreignKeyName = "fk_ham_n_eggs";
         Recognizer.Matcher matcher = getForeignKeyMatcher(tag, foreignKeyName);
@@ -295,7 +295,7 @@ public class DefaultRuleTest {
                 charcase="exact" />
 */
     @Test
-    public void testForeignKeyCCCC() {
+    void testForeignKeyCCCC() {
         final String tag = "cccc";
         final String foreignKeyName1 = "fk_toast";
         final String foreignKeyName2 = "FK_TOAST";
@@ -321,7 +321,7 @@ public class DefaultRuleTest {
     }
 
     @Test
-    public void testLevelDefaultOne() {
+    void testLevelDefaultOne() {
         final String tag = "default";
         final String usagePrefix = null;
         final String hierarchyName = "Time";
@@ -339,7 +339,7 @@ public class DefaultRuleTest {
     }
 
     @Test
-    public void testLevelDefaultTwo() {
+    void testLevelDefaultTwo() {
         final String tag = "default";
         final String usagePrefix = "boo_";
         final String hierarchyName = "Time";
@@ -360,7 +360,7 @@ public class DefaultRuleTest {
     }
 
     @Test
-    public void testLevelBBBB() {
+    void testLevelBBBB() {
         final String tag = "bbbb";
         final String usagePrefix = "boo_";
         final String hierarchyName = "Time.Period";
@@ -373,7 +373,7 @@ public class DefaultRuleTest {
     }
 
     @Test
-    public void testMeasureDefault() {
+    void testMeasureDefault() {
         final String tag = "default";
         final String measureName = "Total Sales";
         final String measureColumnName = "sales";

@@ -51,7 +51,7 @@ public class MemberCacheHelperTest extends TestCase {
         MockitoAnnotations.initMocks(this);
     }
 
-    public void testRoundtripChildrenUsingChildByNameConstraint() {
+    void testRoundtripChildrenUsingChildByNameConstraint() {
         List<String> childNames = fillChildren(children, 3);
         when(childByNameConstraint.getChildNames()).thenReturn(childNames);
 
@@ -64,7 +64,7 @@ public class MemberCacheHelperTest extends TestCase {
         assertEquals(children, retrievedChildren);
     }
 
-    public void testCachedByDefaultConstraint() {
+    void testCachedByDefaultConstraint() {
         List<String> childNames = fillChildren(children, 5);
         when(childByNameConstraint.getChildNames()).thenReturn(childNames);
 
@@ -82,7 +82,7 @@ public class MemberCacheHelperTest extends TestCase {
         assertEquals(children, retrievedChildren);
     }
 
-    public void testOnlyRequestedChildrenRetrieved() {
+    void testOnlyRequestedChildrenRetrieved() {
         // tests retrieval of a subset of children from
         // the cache with keyed with DefaultMemberChildrenConstraint
         List<String> childNames = fillChildren(children, 5);
@@ -109,11 +109,11 @@ public class MemberCacheHelperTest extends TestCase {
             children.subList(FROM, TO), retrievedChildren);
     }
 
-    public void testMissingChildrenNotRetrievedDefaultConst() {
+    void testMissingChildrenNotRetrievedDefaultConst() {
         runMissingChildrenNotRetrievedTest(defMemChildrenConstraint);
     }
 
-    public void testMissingChildrenNotRetrievedChildByName() {
+    void testMissingChildrenNotRetrievedChildByName() {
         runMissingChildrenNotRetrievedTest(childByNameConstraint);
     }
 
@@ -137,7 +137,7 @@ public class MemberCacheHelperTest extends TestCase {
     }
 
 
-    public void testRemoveChildMemberPresentInNamedChildrenMap() {
+    void testRemoveChildMemberPresentInNamedChildrenMap() {
         List<String> childNames = fillChildren(children, 3);
         when(childByNameConstraint.getChildNames()).thenReturn(
             childNames.subList(1, 3));

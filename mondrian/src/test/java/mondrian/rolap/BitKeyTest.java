@@ -33,7 +33,7 @@ public class BitKeyTest {
      *
      */
 	@Test
-    public void testBadSize() {
+    void testBadSize() {
         int size = -1;
         boolean gotException = false;
         BitKey bitKey = null;
@@ -59,7 +59,7 @@ public class BitKeyTest {
      * Test that non-negative sizes do not throw IllegalArgumentException
      */
 	@Test
-    public void testGoodSize() {
+    void testGoodSize() {
         int size = 0;
         boolean gotException = false;
         BitKey bitKey = null;
@@ -94,7 +94,7 @@ public class BitKeyTest {
      * Test that the implementation object returned is expected type.
      */
 	@Test
-    public void testSizeTypes() {
+    void testSizeTypes() {
         int size = 0;
         BitKey bitKey = BitKey.Factory.makeBitKey(size);
         assertTrue(
@@ -148,7 +148,7 @@ public class BitKeyTest {
      * Test for equals and not equals
      */
 	@Test
-    public void testEquals() {
+    void testEquals() {
         int[][] positionsArray0 = {
             new int[] { 0, 1, 2, 3, },
             new int[] { 3, 17, 33, 63 },
@@ -186,7 +186,7 @@ public class BitKeyTest {
     }
 
 	@Test
-    public void testHashCode() {
+    void testHashCode() {
         BitKey small = BitKey.Factory.makeBitKey(10);
         BitKey mid = BitKey.Factory.makeBitKey(70);
         BitKey big255 = BitKey.Factory.makeBitKey(255);
@@ -235,7 +235,7 @@ public class BitKeyTest {
      * Test for not equals and not equals
      */
 	@Test
-    public void testNotEquals() {
+    void testNotEquals() {
         int[] positions0 = {
             0, 1, 2, 3, 4
         };
@@ -287,7 +287,7 @@ public class BitKeyTest {
      * Test that after clear the internal values are 0.
      */
 	@Test
-    public void testClear() {
+    void testClear() {
         BitKey bitKey_0 = BitKey.Factory.makeBitKey(0);
         BitKey bitKey_64 = BitKey.Factory.makeBitKey(64);
         BitKey bitKey_128 = BitKey.Factory.makeBitKey(128);
@@ -342,7 +342,7 @@ public class BitKeyTest {
     }
 
 	@Test
-    public void testNewBitKeyIsTheSameAsAClearedBitKey() {
+    void testNewBitKeyIsTheSameAsAClearedBitKey() {
         BitKey bitKey = BitKey.Factory.makeBitKey(8);
         bitKey.set(1);
         assertFalse(BitKey.Factory.makeBitKey(8).equals(bitKey));
@@ -351,7 +351,7 @@ public class BitKeyTest {
     }
 
 	@Test
-    public void testEmptyCopyCreatesBitKeyOfTheSameSize() {
+    void testEmptyCopyCreatesBitKeyOfTheSameSize() {
         BitKey bitKey = BitKey.Factory.makeBitKey(8);
         assertEquals(bitKey, bitKey.emptyCopy());
     }
@@ -360,7 +360,7 @@ public class BitKeyTest {
      * This test is one BitKey is a subset of another.
      */
 	@Test
-    public void testIsSuperSetOf() {
+    void testIsSuperSetOf() {
         int size0 = 20;
         int[] positions0 = {
             0, 2, 3, 4, 23, 30
@@ -421,7 +421,7 @@ public class BitKeyTest {
      * Tests the 'or' operation on BitKeys
      */
 	@Test
-    public void testOr() {
+    void testOr() {
         doTestOp(
             new Checker() {
                 public void check(
@@ -450,7 +450,7 @@ public class BitKeyTest {
      * Tests the 'nor' operation on BitKeys
      */
 	@Test
-    public void testOrNot() {
+    void testOrNot() {
         doTestOp(
             new Checker() {
                 public void check(
@@ -479,7 +479,7 @@ public class BitKeyTest {
      * Tests the 'and' operation on BitKeys
      */
 	@Test
-    public void testAnd() {
+    void testAnd() {
         doTestOp(
             new Checker() {
                 public void check(
@@ -509,7 +509,7 @@ public class BitKeyTest {
      * Tests the {@link BitKey#andNot(BitKey)} operation.
      */
 	@Test
-    public void testAndNot() {
+    void testAndNot() {
         doTestOp(
             new Checker() {
                 public void check(
@@ -539,7 +539,7 @@ public class BitKeyTest {
      * Tests the 'intersects' operation on BitKeys
      */
 	@Test
-    public void testIntersects() {
+    void testIntersects() {
         doTestOp(
             new Checker() {
                 public void check(
@@ -565,7 +565,7 @@ public class BitKeyTest {
      * Tests the {@link BitKey#toBitSet()} method.
      */
 	@Test
-    public void testToBitSet() {
+    void testToBitSet() {
         doTestOp(
             new Checker() {
                 public void check(
@@ -589,7 +589,7 @@ public class BitKeyTest {
      * Tests the 'compareTo' operation on BitKeys
      */
 	@Test
-    public void testCompareTo() {
+    void testCompareTo() {
         doTestOp(
             new Checker() {
                 public void check(
@@ -680,7 +680,7 @@ public class BitKeyTest {
     }
 
 	@Test
-    public void testCreateFromBitSet() {
+    void testCreateFromBitSet() {
         final BitSet bitSet = new BitSet(72);
         bitSet.set(2);
         bitSet.set(3);
@@ -697,7 +697,7 @@ public class BitKeyTest {
     }
 
 	@Test
-    public void testIsEmpty() {
+    void testIsEmpty() {
         BitKey small = BitKey.Factory.makeBitKey(3);
         assertTrue(small.isEmpty());
         small.set(2);
@@ -724,7 +724,7 @@ public class BitKeyTest {
     }
 
 	@Test
-    public void testIterator() {
+    void testIterator() {
 /*
         printBitPositions(0);
         printBitPositions(1);
@@ -894,7 +894,7 @@ public class BitKeyTest {
     }
 
 	@Test
-    public void testCompareUnsigned() {
+    void testCompareUnsigned() {
         assertEquals(0, BitKey.AbstractBitKey.compareUnsigned(0, 0));
         assertEquals(0, BitKey.AbstractBitKey.compareUnsigned(10, 10));
         assertEquals(0, BitKey.AbstractBitKey.compareUnsigned(-3, -3));
@@ -909,7 +909,7 @@ public class BitKeyTest {
     }
 
 	@Test
-    public void testCompareUnsignedLongArrays() {
+    void testCompareUnsignedLongArrays() {
         // empty arrays are equal
         assertEquals(
             0,

@@ -37,7 +37,7 @@ public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
             .flushSchemaCache();
     }
 
-    public void testNoTotalsForCompdMeasureWithComponentsHavingNonJoiningDims()
+    void testNoTotalsForCompdMeasureWithComponentsHavingNonJoiningDims()
     {
         assertQueryReturns(
             "with member [Measures].[Total Sales] as "
@@ -54,7 +54,7 @@ public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
             + "Row #0: 7,913,333.82\n");
     }
 
-    public void testNonJoiningDimsWhenAggFunctionIsUsedOrNotUsed() {
+    void testNonJoiningDimsWhenAggFunctionIsUsedOrNotUsed() {
         final String query = "WITH\n"
                              + "MEMBER [Measures].[Total Sales] AS "
                              + "'[Measures].[Store Sales] + [Measures].[Warehouse Sales]'\n"
@@ -101,7 +101,7 @@ public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
             + "Row #1: 762,009.02\n");
     }
 
-    public void testNonJoiningDimForAMemberDefinedOnJoiningDim() {
+    void testNonJoiningDimForAMemberDefinedOnJoiningDim() {
         assertQueryReturns(
             "WITH\n"
             + "MEMBER [Measures].[Total Sales] AS '[Measures].[Store Sales] + "
@@ -125,7 +125,7 @@ public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
             + "Row #0: 196,770.89\n");
     }
 
-    public void testNonJoiningDimWithNumericIif() {
+    void testNonJoiningDimWithNumericIif() {
         assertQueryReturns(
             "WITH\n"
             + "MEMBER [Measures].[Total Sales] AS "
@@ -155,7 +155,7 @@ public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
             + "Row #1: 196,770.89\n");
     }
 
-    public void testNonJoiningDimAtMemberValueCalcMultipleScenarios() {
+    void testNonJoiningDimAtMemberValueCalcMultipleScenarios() {
         assertQueryReturns(
             "WITH\n"
             + "MEMBER [Measures].[Total Sales] AS "
@@ -198,7 +198,7 @@ public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
             + "Row #3: 196,770.89\n");
     }
 
-    public void testNonJoiningDimAtTupleValueCalcMultipleScenarios() {
+    void testNonJoiningDimAtTupleValueCalcMultipleScenarios() {
         assertQueryReturns(
             "WITH\n"
             + "MEMBER [Measures].[Total Sales] AS "
@@ -254,7 +254,7 @@ public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
             + "Row #5: 196,770.89\n");
     }
 
-    public void testNoTotalsForCompoundMeasureWithNonJoiningDimAtAllLevel() {
+    void testNoTotalsForCompoundMeasureWithNonJoiningDimAtAllLevel() {
         assertQueryReturns(
             "with member [Measures].[Total Sales] as "
             + "'[Measures].[Store Sales]'"
@@ -271,7 +271,7 @@ public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
             + "Row #0: 3,956,666.91\n");
     }
 
-    public void testNoTotalForMeasureWithCrossJoinOfJoiningAndNonJoiningDims() {
+    void testNoTotalForMeasureWithCrossJoinOfJoiningAndNonJoiningDims() {
         assertQueryReturns(
             "with member [Product].x as "
             + "'sum({Product.members}  * {Gender.members})' "
@@ -283,7 +283,7 @@ public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
             + "Axis #2:\n");
     }
 
-    public void testShouldTotalAMeasureWithAllJoiningDimensions() {
+    void testShouldTotalAMeasureWithAllJoiningDimensions() {
         assertQueryReturns(
             "with member [Product].x as "
             + "'sum({Product.members})' "
@@ -300,7 +300,7 @@ public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
             + "Row #0: 1,377,396.213\n");
     }
 
-    public void testShouldNotTotalAMeasureWithANonJoiningDimension() {
+    void testShouldNotTotalAMeasureWithANonJoiningDimension() {
         assertQueryReturns(
             "with member [Gender].x as 'sum({Gender.members})'"
             + "select "
@@ -314,7 +314,7 @@ public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
     }
 
     // base cube is null for calc measure
-    public void testGetMeasureCubeForCalcMeasureDoesNotThrowCastException() {
+    void testGetMeasureCubeForCalcMeasureDoesNotThrowCastException() {
         getTestContext().assertQueryReturns(
             "WITH MEMBER [Measures].[My Profit] AS "
             + "'Measures.[Profit]', SOLVE_ORDER = 3000 "

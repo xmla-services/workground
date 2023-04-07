@@ -53,7 +53,7 @@ public class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
     }
 
 
-    public void test_ThrowsException_WhenNonIgnoringInvalidMembers() {
+    void test_ThrowsException_WhenNonIgnoringInvalidMembers() {
         try {
             executeAnalyzerQuery(createContext());
         } catch (Exception e) {

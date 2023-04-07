@@ -91,7 +91,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGroupingSetsWithAggregateOverDefaultMember(TestingContext context) {
+    void testGroupingSetsWithAggregateOverDefaultMember(TestingContext context) {
         pripareContext(context);
         // testcase for MONDRIAN-705
         Connection connection = context.createConnection();
@@ -120,7 +120,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGroupingSetForSingleColumnConstraint(TestingContext context) {
+    void testGroupingSetForSingleColumnConstraint(TestingContext context) {
         pripareContext(context);
         propSaver.set(prop.DisableCaching, false);
         Connection connection = context.createConnection();
@@ -205,7 +205,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
     }
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNotUsingGroupingSetWhenGroupUsesDifferentAggregateTable(TestingContext context) {
+    void testNotUsingGroupingSetWhenGroupUsesDifferentAggregateTable(TestingContext context) {
         pripareContext(context);
         if (!(prop.UseAggregates.get()
               && prop.ReadAggregates.get()))
@@ -251,7 +251,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNotUsingGroupingSet(TestingContext context) {
+    void testNotUsingGroupingSet(TestingContext context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
@@ -301,7 +301,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGroupingSetForMultipleMeasureAndSingleConstraint(TestingContext context) {
+    void testGroupingSetForMultipleMeasureAndSingleConstraint(TestingContext context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
@@ -368,7 +368,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGroupingSetForASummaryCanBeGroupedWith2DetailBatch(TestingContext context) {
+    void testGroupingSetForASummaryCanBeGroupedWith2DetailBatch(TestingContext context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
@@ -441,7 +441,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGroupingSetForMultipleColumnConstraint(TestingContext context) {
+    void testGroupingSetForMultipleColumnConstraint(TestingContext context) {
         pripareContext(context);
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
@@ -588,7 +588,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBug2004202(TestingContext context) {
+    void testBug2004202(TestingContext context) {
         pripareContext(context);
         assertQueryReturns(context.createConnection(),
             "with member store.allbutwallawalla as\n"

@@ -79,7 +79,7 @@ public class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testSimpleEnum(TestingContext context) {
+    void testSimpleEnum(TestingContext context) {
         assertContains(
             "Resolved map omitted one or more members",
             batchResolve(context,
@@ -125,7 +125,7 @@ public class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testCalcMemsNotResolved(TestingContext context) {
+    void testCalcMemsNotResolved(TestingContext context) {
         assertFalse(
             batchResolve(context,
                 "with member time.foo as '1' member time.bar as '2' "
@@ -141,7 +141,7 @@ public class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testLevelReferenceHandled(TestingContext context) {
+    void testLevelReferenceHandled(TestingContext context) {
         // make sure ["Week", 1997] don't get batched as children of
         // [Time.Weekly].[All]
         batchResolve(context,
@@ -164,7 +164,7 @@ public class IdBatchResolverTest  {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testPhysMemsResolvedWhenCalcsMixedIn(TestingContext context) {
+    void testPhysMemsResolvedWhenCalcsMixedIn(TestingContext context) {
         assertContains(
             "Resolved map omitted one or more members",
             batchResolve(context,
@@ -195,7 +195,7 @@ public class IdBatchResolverTest  {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testAnalyzerFilterMdx(TestingContext context) {
+    void testAnalyzerFilterMdx(TestingContext context) {
         assertContains(
             "Resolved map omitted one or more members",
             batchResolve(context,
@@ -250,7 +250,7 @@ public class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testSetWithNullMember(TestingContext context) {
+    void testSetWithNullMember(TestingContext context) {
         assertContains(
             "Resolved map omitted one or more members",
             batchResolve(context,
@@ -288,7 +288,7 @@ public class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMultiHierarchyNonSSAS(TestingContext context) {
+    void testMultiHierarchyNonSSAS(TestingContext context) {
         propSaver.set(propSaver.properties.SsasCompatibleNaming, false);
         assertContains(
             "Resolved map omitted one or more members",
@@ -327,7 +327,7 @@ public class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMultiHierarchySSAS(TestingContext context) {
+    void testMultiHierarchySSAS(TestingContext context) {
         propSaver.set(propSaver.properties.SsasCompatibleNaming, true);
         assertContains(
             "Resolved map omitted one or more members",
@@ -367,7 +367,7 @@ public class IdBatchResolverTest  {
     }
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testParentChild(TestingContext context) {
+    void testParentChild(TestingContext context) {
         // P-C resolution will not result in consolidated SQL, but it should
         // still correctly identify children and attempt to resolve them
         // together.

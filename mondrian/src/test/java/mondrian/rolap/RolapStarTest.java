@@ -78,7 +78,7 @@ public class RolapStarTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCloneRelationWithFilteredTable(TestingContext context) {
+    void testCloneRelationWithFilteredTable(TestingContext context) {
       RolapStarForTests rs = getStar(context.createConnection(), "sales");
       TableImpl original = new TableImpl();
       original.setName("TestTable");
@@ -100,7 +100,7 @@ public class RolapStarTest {
 
    //Below there are tests for mondrian.rolap.RolapStar.ColumnComparator
    @Test
-   public void testTwoColumnsWithDifferentNamesNotEquals() {
+   void testTwoColumnsWithDifferentNamesNotEquals() {
      RolapStar.ColumnComparator colComparator =
          RolapStar.ColumnComparator.instance;
      Column column1 = getColumnMock("Column1", "Table1");
@@ -110,7 +110,7 @@ public class RolapStarTest {
    }
 
    @Test
-   public void testTwoColumnsWithEqualsNamesButDifferentTablesNotEquals() {
+   void testTwoColumnsWithEqualsNamesButDifferentTablesNotEquals() {
      RolapStar.ColumnComparator colComparator =
          RolapStar.ColumnComparator.instance;
      Column column1 = getColumnMock("Column1", "Table1");
@@ -120,7 +120,7 @@ public class RolapStarTest {
    }
 
    @Test
-   public void testTwoColumnsEquals() {
+   void testTwoColumnsEquals() {
      RolapStar.ColumnComparator colComparator =
          RolapStar.ColumnComparator.instance;
      Column column1 = getColumnMock("Column1", "Table1");

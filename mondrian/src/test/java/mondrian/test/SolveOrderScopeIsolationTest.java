@@ -116,7 +116,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAllSolveOrderModesHandled(TestingContext context)    
+    void testAllSolveOrderModesHandled(TestingContext context)    
     {
         for (SolveOrderMode mode : SolveOrderMode.values()) {
             switch (mode) {
@@ -131,7 +131,7 @@ public class SolveOrderScopeIsolationTest {
         }
     }
 
-    public void testSetSolveOrderMode()
+    void testSetSolveOrderMode()
     {
         setSolveOrderMode(ABSOLUTE);
         assertEquals(ABSOLUTE, getSolveOrderMode());
@@ -142,7 +142,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOverrideCubeMemberDoesNotHappenAbsolute(TestingContext context) {
+    void testOverrideCubeMemberDoesNotHappenAbsolute(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -175,7 +175,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOverrideCubeMemberDoesNotHappenScoped(TestingContext context) {
+    void testOverrideCubeMemberDoesNotHappenScoped(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -248,7 +248,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCubeMemberEvalBeforeQueryMemberAbsolute(TestingContext context) {
+    void testCubeMemberEvalBeforeQueryMemberAbsolute(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "WITH MEMBER [Customers].USAByWA AS\n"
@@ -283,7 +283,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCubeMemberEvalBeforeQueryMemberScoped(TestingContext context) {
+    void testCubeMemberEvalBeforeQueryMemberScoped(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "WITH MEMBER [Customers].USAByWA AS\n"
@@ -308,7 +308,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOverrideCubeMemberInTupleDoesNotHappenAbsolute(TestingContext context) {
+    void testOverrideCubeMemberInTupleDoesNotHappenAbsolute(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -341,7 +341,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOverrideCubeMemberInTupleDoesNotHappenScoped(TestingContext context) {
+    void testOverrideCubeMemberInTupleDoesNotHappenScoped(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -374,7 +374,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testConditionalCubeMemberEvalBeforeOtherMembersAbsolute(TestingContext context) {
+    void testConditionalCubeMemberEvalBeforeOtherMembersAbsolute(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -408,7 +408,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testConditionalCubeMemberEvalBeforeOtherMembersScoped(TestingContext context) {
+    void testConditionalCubeMemberEvalBeforeOtherMembersScoped(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -442,7 +442,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOverrideCubeMemberUsingStrToMemberDoesNotHappenAbsolute(TestingContext context) {
+    void testOverrideCubeMemberUsingStrToMemberDoesNotHappenAbsolute(TestingContext context) {
         prepareContext(context);
         final String mdx =
             "with\n"
@@ -476,7 +476,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOverrideCubeMemberUsingStrToMemberDoesNotHappenScoped(TestingContext context) {
+    void testOverrideCubeMemberUsingStrToMemberDoesNotHappenScoped(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "with\n"
@@ -517,7 +517,7 @@ public class SolveOrderScopeIsolationTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAggregateMemberEvalAfterOtherMembersAbsolute(TestingContext context) {
+    void testAggregateMemberEvalAfterOtherMembersAbsolute(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -562,7 +562,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAggregateMemberEvalAfterOtherMembersScoped(TestingContext context) {
+    void testAggregateMemberEvalAfterOtherMembersScoped(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -614,7 +614,7 @@ public class SolveOrderScopeIsolationTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testConditionalAggregateMemberEvalAfterOtherMembersAbsolute(TestingContext context) {
+    void testConditionalAggregateMemberEvalAfterOtherMembersAbsolute(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -658,7 +658,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testConditionalAggregateMemberEvalAfterOtherMembersScoped(TestingContext context) {
+    void testConditionalAggregateMemberEvalAfterOtherMembersScoped(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -709,7 +709,7 @@ public class SolveOrderScopeIsolationTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testStrToMemberReturningAggEvalAfterOtherMembersAbsolute(TestingContext context) {
+    void testStrToMemberReturningAggEvalAfterOtherMembersAbsolute(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -750,7 +750,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testStrToMemberReturningAggEvalAfterOtherMembersScoped(TestingContext context) {
+    void testStrToMemberReturningAggEvalAfterOtherMembersScoped(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "With\n"
@@ -791,7 +791,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void test2LevelOfOverrideCubeMemberDoesNotHappenAbsolute(TestingContext context) {
+    void test2LevelOfOverrideCubeMemberDoesNotHappenAbsolute(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "With member gender.override1 as 'gender.maleMinusFemale',\n"
@@ -834,7 +834,7 @@ public class SolveOrderScopeIsolationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void test2LevelOfOverrideCubeMemberDoesNotHappenScoped(TestingContext context) {
+    void test2LevelOfOverrideCubeMemberDoesNotHappenScoped(TestingContext context) {
     	prepareContext(context);
         final String mdx =
             "With member gender.override1 as 'gender.maleMinusFemale',\n"

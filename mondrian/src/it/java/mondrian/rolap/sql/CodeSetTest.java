@@ -54,7 +54,7 @@ public class CodeSetTest extends TestCase {
    *
    * @throws Exception
    */
-  public void testSucces_CodeSetContainsOnlyCodeForPostgresDialect()
+  void testSucces_CodeSetContainsOnlyCodeForPostgresDialect()
     throws Exception
     {
     PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
@@ -80,7 +80,7 @@ public class CodeSetTest extends TestCase {
    *
    * @throws Exception
    */
-  public void testSucces_CodeSetContainsCodeForBothPostgresAndGenericDialects()
+  void testSucces_CodeSetContainsCodeForBothPostgresAndGenericDialects()
     throws Exception
     {
     PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
@@ -134,7 +134,7 @@ public class CodeSetTest extends TestCase {
    *
    * @throws Exception
    */
-  public void testSucces_CodeSetContainsOnlyCodeForGenericlDialect()
+  void testSucces_CodeSetContainsOnlyCodeForGenericlDialect()
     throws Exception
     {
     PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(
@@ -159,7 +159,7 @@ public class CodeSetTest extends TestCase {
    *
    * @throws Exception
    */
-  public void testMondrianExceptionThrown_WhenCodeSetContainsNOCodeForDialect()
+  void testMondrianExceptionThrown_WhenCodeSetContainsNOCodeForDialect()
     throws Exception
     {
     PostgreSqlDialect postgreSqlDialect = new PostgreSqlDialect(

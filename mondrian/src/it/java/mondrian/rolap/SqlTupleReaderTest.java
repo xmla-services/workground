@@ -39,7 +39,7 @@ import static org.mockito.Mockito.eq;
 public class SqlTupleReaderTest extends TestCase {
 
 
-  public void testAddLevelMemberSql() throws Exception {
+  void testAddLevelMemberSql() throws Exception {
     TupleConstraint constraint = mock( TupleConstraint.class );
     SqlQuery sqlQuery = mock( SqlQuery.class, Answers.RETURNS_MOCKS.get() );
     RolapCube baseCube = mock( RolapCube.class );

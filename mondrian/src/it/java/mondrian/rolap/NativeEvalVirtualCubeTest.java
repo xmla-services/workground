@@ -18,7 +18,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
   /**
    * Both dims fully join to the applicable base cube.
    */
-  public void testSimpleFullyJoiningCJ() {
+  void testSimpleFullyJoiningCJ() {
     verifySameNativeAndNot(
         "select {measures.[unit sales], measures.[warehouse sales]} on 0, "
         + " nonemptycrossjoin( Gender.Gender.members, product.[product category].members) on 1 "
@@ -26,7 +26,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         "", getTestContext());
   }
 
-  public void testPartiallyJoiningCJ() {
+  void testPartiallyJoiningCJ() {
     String query = "select measures.[warehouse sales] on 0, "
       + " NON EMPTY Crossjoin ( Gender.gender.members, product.[product category].members) on 1 "
       + " from [warehouse and sales]";
@@ -44,7 +44,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
   /**
    * Both dims fully join to one of the applicable base cubes.
    */
-  public void testOneFullyJoiningCube() {
+  void testOneFullyJoiningCube() {
     verifySameNativeAndNot(
         "select {measures.[unit sales], measures.[warehouse sales]} on 0, "
         + " nonemptycrossjoin( Gender.Gender.members, product.[product category].members) on 1 "
@@ -52,7 +52,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         "", getTestContext());
   }
 
-  public void testNoApplicableCube() {
+  void testNoApplicableCube() {
     verifySameNativeAndNot(
         "select {measures.[unit sales]} on 0, "
         + " nonemptycrossjoin( Gender.Gender.members, [Warehouse].[All Warehouses].children) on 1 "
@@ -65,7 +65,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
    * even though Gender does not
    * apply to [Warehouse Sales]
    */
-  public void testShouldBeFullyJoiningCJ() {
+  void testShouldBeFullyJoiningCJ() {
     verifySameNativeAndNot(
         "select measures.[warehouse Sales] on 0, "
         + " nonemptycrossjoin( Gender.[All Gender], "
@@ -75,7 +75,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
   }
 
 
-  public void testMeasureChangesContextOfInapplicableDimension() {
+  void testMeasureChangesContextOfInapplicableDimension() {
       verifySameNativeAndNot(
           "with member [Measures].[allW] as \n"
           + "'([Measures].[Unit Sales], [Warehouse].[All Warehouses])'\n"
@@ -87,7 +87,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
           + "from [Warehouse and Sales]", "", getTestContext());
   }
 
-  public void testMeasureChangesContextOfApplicableDimension() {
+  void testMeasureChangesContextOfApplicableDimension() {
     String query =
         "with member [Measures].[allW] as \n"
         + "'([Measures].[Warehouse Sales], [Warehouse].[All Warehouses])'\n"
@@ -125,7 +125,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "Row #0: 37,612.366\n");
   }
 
-  public void testNECJWithValidMeasureAndInapplicableDimension() {
+  void testNECJWithValidMeasureAndInapplicableDimension() {
     // with this query the crossjoin optimizer also causes issues if
     // evaluated non-natively- so both
     // native on/off will give same results, but wrong unless cjoptimizer
@@ -166,7 +166,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "Row #0: 50,236\n");
   }
 
-  public void testDisjointDimensionCJ() {
+  void testDisjointDimensionCJ() {
     // No fully joining dimensions.
     assertQueryReturns(
         "with member measures.vmWS as 'ValidMeasure(measures.[Warehouse Sales])'"
@@ -202,7 +202,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "Row #1: 100,120.976\n");
   }
 
-  public void testWarehouseForcedToAllLevel() {
+  void testWarehouseForcedToAllLevel() {
     verifySameNativeAndNot(
         "with member [Measures].[validUS] as \n"
         + "'ValidMeasure([Measures].[Unit Sales])'\n"
@@ -214,7 +214,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "from [Warehouse and Sales]", "", getTestContext());
   }
 
-  public void testMdxCJOfApplicableAndNonApplicable() {
+  void testMdxCJOfApplicableAndNonApplicable() {
     assertQueryReturns(
         "WITH\n"
         + "MEMBER Measures.[ValidM Unit Sales] as 'ValidMeasure([Measures].[Unit Sales])' "
@@ -251,7 +251,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "Row #5: 135,215\n");
   }
 
-  public void testAllMemberTupleInapplicableDim() {
+  void testAllMemberTupleInapplicableDim() {
     assertQueryReturns(
         "WITH\n"
         + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Warehouse_],"
@@ -299,7 +299,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "Row #5: 135,215\n");
   }
 
-  public void testIntermixedDimensionGroupings() {
+  void testIntermixedDimensionGroupings() {
     // crossjoin places intermixes applicable and inapplicable
     // attributes, which
     // this verifies that the projected crossjoin is in the correct order,
@@ -327,7 +327,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "Row #0: 68,755\n");
   }
 
-  public void testCachedShouldNotBeUsed() {
+  void testCachedShouldNotBeUsed() {
     // First query doesn't use a measure like ValidMeasure, so results in an
     // empty tuples set being cached.  The second query should not reuse the
     // cache results from the first query, since it *does* use VM.
@@ -349,7 +349,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
         + "Row #0: 135,215\n");
   }
 
-  public void testShouldUseCache() {
+  void testShouldUseCache() {
     // verify cache does get used for applicable grouped target tuple queries
     propSaver.set(propSaver.properties.GenerateFormattedSql, true);
     String mySqlGenderQuery = "select\n"
@@ -390,7 +390,7 @@ public class NativeEvalVirtualCubeTest extends BatchTestCase {
    * "readTuples and cardinality queries sent twice to the database
    * when using Virtual Cube (Not cached)"</a>.
    */
-  public void testTupleQueryShouldBeCachedForVirtualCube() {
+  void testTupleQueryShouldBeCachedForVirtualCube() {
     propSaver.set(propSaver.properties.GenerateFormattedSql, true);
     String mySqlMembersQuery =
             "select\n"

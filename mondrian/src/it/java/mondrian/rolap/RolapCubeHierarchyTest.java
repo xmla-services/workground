@@ -24,7 +24,7 @@ import static org.mockito.Mockito.doReturn;
 
 public class RolapCubeHierarchyTest extends FoodMartTestCase {
 
-  public void testMONDRIAN2535() {
+  void testMONDRIAN2535() {
     assertQueryReturns(
         "Select\n"
         + "  [Customers].children on rows,\n"
@@ -47,7 +47,7 @@ public class RolapCubeHierarchyTest extends FoodMartTestCase {
         + "Row #2: 285,011.92\n");
   }
 
-  public void testInit_NoFactCube() {
+  void testInit_NoFactCube() {
     RolapCubeDimension cubeDimension = mock(RolapCubeDimension.class);
     RolapCube cubeDimension_cube = mock(RolapCube.class);
     boolean cubeDimension_cube_isVirtual = true;
@@ -91,7 +91,7 @@ public class RolapCubeHierarchyTest extends FoodMartTestCase {
     assertEquals("If factCube is not specified", true, rch.isUsingCubeFact());
   }
 
-  public void testInit_FactCube_NoFactTable() {
+  void testInit_FactCube_NoFactTable() {
     RolapCubeDimension cubeDimension = mock(RolapCubeDimension.class);
     RolapCube cubeDimension_cube = mock(RolapCube.class);
     boolean cubeDimension_cube_isVirtual = true;
@@ -133,7 +133,7 @@ public class RolapCubeHierarchyTest extends FoodMartTestCase {
     assertEquals(true, rch.isUsingCubeFact());
   }
 
-  public void testInit_FactCube_FactTableDiffers() {
+  void testInit_FactCube_FactTableDiffers() {
     RolapCubeDimension cubeDimension = mock(RolapCubeDimension.class);
     RolapCube cubeDimension_cube = mock(RolapCube.class);
     boolean cubeDimension_cube_isVirtual = true;
@@ -184,7 +184,7 @@ public class RolapCubeHierarchyTest extends FoodMartTestCase {
     assertEquals(false, rch.isUsingCubeFact());
   }
 
-  public void testInit_FactCube_FactTableEquals() {
+  void testInit_FactCube_FactTableEquals() {
     RolapCubeDimension cubeDimension = mock(RolapCubeDimension.class);
     RolapCube cubeDimension_cube = mock(RolapCube.class);
     boolean cubeDimension_cube_isVirtual = true;

@@ -38,7 +38,7 @@ public class NamedSetTest extends FoodMartTestCase {
     /**
      * Set defined in query according measures, hence context-dependent.
      */
-    public void testNamedSet() {
+    void testNamedSet() {
         assertQueryReturns(
             "WITH\n"
             + "    SET [Top Sellers]\n"
@@ -82,7 +82,7 @@ public class NamedSetTest extends FoodMartTestCase {
     /**
      * Set defined on top of calc member.
      */
-    public void testNamedSetOnMember() {
+    void testNamedSetOnMember() {
         switch (getTestContext().getDialect().getDatabaseProduct()) {
         case INFOBRIGHT:
             // Mondrian generates 'select ... sum(warehouse_sales) -
@@ -125,7 +125,7 @@ public class NamedSetTest extends FoodMartTestCase {
     /**
      * Set defined by explicit tlist in query.
      */
-    public void testNamedSetAsList() {
+    void testNamedSetAsList() {
         assertQueryReturns(
             "WITH SET [ChardonnayChablis] AS\n"
             + "   '{[Product].[All Products].[Drink].[Alcoholic Beverages].[Beer and Wine].[Wine].[Good].[Good Chardonnay],\n"
@@ -172,7 +172,7 @@ public class NamedSetTest extends FoodMartTestCase {
     /**
      * Set defined using filter expression.
      */
-    public void testIntrinsic() {
+    void testIntrinsic() {
         assertQueryReturns(
             "WITH SET [ChardonnayChablis] AS\n"
             + "   'Filter([Product].Members, (InStr(1, [Product].CurrentMember.Name, \"chardonnay\") <> 0) OR (InStr(1, [Product].CurrentMember.Name, \"chablis\") <> 0))'\n"
@@ -288,7 +288,7 @@ public class NamedSetTest extends FoodMartTestCase {
     /**
      * Tests a named set defined in a query which consists of tuples.
      */
-    public void testNamedSetCrossJoin() {
+    void testNamedSetCrossJoin() {
         assertQueryReturns(
             "WITH\n"
             + "    SET [Store Types by Country]\n"
@@ -333,7 +333,7 @@ public class NamedSetTest extends FoodMartTestCase {
     /**
      * Set used inside expression (Crossjoin).
      */
-    public void testNamedSetUsedInCrossJoin() {
+    void testNamedSetUsedInCrossJoin() {
         assertQueryReturns(
             "WITH\n"
             + "  SET [TopMedia] AS 'TopCount([Promotion Media].children, 5, [Measures].[Store Sales])' \n"
@@ -393,7 +393,7 @@ public class NamedSetTest extends FoodMartTestCase {
             + "Row #14: 229\n");
     }
 
-    public void testAggOnCalcMember() {
+    void testAggOnCalcMember() {
         assertQueryReturns(
             "WITH\n"
             + "  SET [TopMedia] AS 'TopCount([Promotion Media].children, 5, [Measures].[Store Sales])' \n"
@@ -419,7 +419,7 @@ public class NamedSetTest extends FoodMartTestCase {
             + "Row #2: 6,111.74\n");
     }
 
-    public void testContextSensitiveNamedSet() {
+    void testContextSensitiveNamedSet() {
         // For reference.
         assertQueryReturns(
             "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n"
@@ -567,7 +567,7 @@ public class NamedSetTest extends FoodMartTestCase {
             + "Row #3: 5,583.81\n");
     }
 
-    public void testOrderedNamedSet() {
+    void testOrderedNamedSet() {
         // From http://www.developersdex.com
         assertQueryReturns(
             "WITH SET [SET1] AS\n"
@@ -670,7 +670,7 @@ public class NamedSetTest extends FoodMartTestCase {
             + "Row #4: 5\n");
     }
 
-    public void testGenerate() {
+    void testGenerate() {
         assertQueryReturns(
             "with \n"
             + "  member [Measures].[DateName] as \n"
@@ -706,7 +706,7 @@ public class NamedSetTest extends FoodMartTestCase {
             + "Row #1: Q1 and Q2\n");
     }
 
-    public void testNamedSetAgainstCube() {
+    void testNamedSetAgainstCube() {
         final TestContext tc =
             getTestContext().withSchemaProcessor(
                 NamedSetsInCubeProcessor.class);
@@ -780,7 +780,7 @@ public class NamedSetTest extends FoodMartTestCase {
             + "Row #1: 25,635\n");
     }
 
-    public void testNamedSetAgainstSchema() {
+    void testNamedSetAgainstSchema() {
         final TestContext tc =
             getTestContext().withSchemaProcessor(
                 NamedSetsInCubeAndSchemaProcessor.class);
@@ -803,7 +803,7 @@ public class NamedSetTest extends FoodMartTestCase {
             "MDX object '[Top Ukrainian Cities]' not found in cube 'Sales'");
     }
 
-    public void testBadNamedSet() {
+    void testBadNamedSet() {
         final TestContext tc = TestContext.instance().create(
             null,
             null,
@@ -817,7 +817,7 @@ public class NamedSetTest extends FoodMartTestCase {
             + "FROM [Sales]", "Named set 'Bad' has bad formula");
     }
 
-    public void testNamedSetMustBeSet() {
+    void testNamedSetMustBeSet() {
         Result result;
         String queryString;
         String pattern;
@@ -882,7 +882,7 @@ public class NamedSetTest extends FoodMartTestCase {
         Util.discard(result);
     }
 
-    public void testNamedSetsMixedWithCalcMembers()
+    void testNamedSetsMixedWithCalcMembers()
     {
         final TestContext tc =
             getTestContext().withSchemaProcessor(
@@ -940,7 +940,7 @@ public class NamedSetTest extends FoodMartTestCase {
             + "Row #11: $1,166.0\n");
     }
 
-    public void testNamedSetAndUnion() {
+    void testNamedSetAndUnion() {
         assertQueryReturns(
             "with set [Set Education Level] as\n"
             + "   '{([Education Level].[All Education Levels].[Bachelors Degree]),\n"
@@ -976,7 +976,7 @@ public class NamedSetTest extends FoodMartTestCase {
     /**
      * Tests that named sets never depend on anything.
      */
-    public void testNamedSetDependencies() {
+    void testNamedSetDependencies() {
         final TestContext tc =
             getTestContext().withSchemaProcessor(
                 NamedSetsInCubeProcessor.class);
@@ -987,7 +987,7 @@ public class NamedSetTest extends FoodMartTestCase {
      * Test csae for bug 1971080, "hierarchize(named set) causes attempt to
      * sort immutable list".
      */
-    public void testHierarchizeNamedSetImmutable() {
+    void testHierarchizeNamedSetImmutable() {
         getTestContext().flushSchemaCache();
         assertQueryReturns(
             "with set necj as\n"
@@ -1013,7 +1013,7 @@ public class NamedSetTest extends FoodMartTestCase {
             + "Row #4: 89\n");
     }
 
-    public void testCurrentAndCurrentOrdinal() {
+    void testCurrentAndCurrentOrdinal() {
         assertQueryReturns(
             "with set [Gender Marital Status] as\n"
             + " [Gender].members * [Marital Status].members\n"
@@ -1073,7 +1073,7 @@ public class NamedSetTest extends FoodMartTestCase {
     }
 
 
-    public void testNamedSetWithCompoundSlicer() {
+    void testNamedSetWithCompoundSlicer() {
         // MONDRIAN-1654
         final String mdx = "with set [FilteredNamedSet] as "
             + "'Filter([Customers].[Name].Members, "
@@ -1109,7 +1109,7 @@ public class NamedSetTest extends FoodMartTestCase {
      * range in the WHERE clause. Current Mondrian behavior appears to be
      * correct.
      */
-    public void testNamedSetRangeInSlicer() {
+    void testNamedSetRangeInSlicer() {
         String expected =
             "Axis #0:\n"
             + "{[Time].[1997].[Q1].[1]}\n"
@@ -1180,7 +1180,7 @@ public class NamedSetTest extends FoodMartTestCase {
             expected);
     }
 
-    public void testMondrian2424() {
+    void testMondrian2424() {
         assertQueryReturns(
                 "WITH SET Gender as '[Gender].[Gender].members' \n" +
                         "select {Gender} ON 0 from [Sales]",
@@ -1203,7 +1203,7 @@ public class NamedSetTest extends FoodMartTestCase {
      * MONDRIAN-1203, "Error 'Failed to load all aggregations after 10 passes'
      * while evaluating composite slicer"</a>.</p>
      */
-    public void testNamedSetRangeInSlicerPrimed() {
+    void testNamedSetRangeInSlicerPrimed() {
         new CompoundSlicerTest().testBugMondrian899();
         testNamedSetRangeInSlicer();
     }

@@ -114,7 +114,7 @@ public class UdfTest extends FoodMartTestCase {
 
     // ~ Tests follow ----------------------------------------------------------
 
-    public void testSanity() {
+    void testSanity() {
         // sanity check, make sure the schema is loading correctly
         assertQueryReturns(
             "SELECT {[Measures].[Store Sqft]} ON COLUMNS, {[Store Type]} ON ROWS FROM [Store]",
@@ -127,7 +127,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Row #0: 571,596\n");
     }
 
-    public void testFun() {
+    void testFun() {
         assertQueryReturns(
             "WITH MEMBER [Measures].[Sqft Plus One] AS 'PlusOne([Measures].[Store Sqft])'\n"
             + "SELECT {[Measures].[Sqft Plus One]} ON COLUMNS, \n"
@@ -163,7 +163,7 @@ public class UdfTest extends FoodMartTestCase {
      *
      * @throws SQLException on error
      */
-    public void testFunWithProfiling() throws SQLException {
+    void testFunWithProfiling() throws SQLException {
         OlapConnection connection = null;
         OlapStatement statement = null;
         CellSet x = null;
@@ -180,7 +180,7 @@ public class UdfTest extends FoodMartTestCase {
         }
     }
 
-    public void testLastNonEmpty() {
+    void testLastNonEmpty() {
         assertQueryReturns(
             "WITH MEMBER [Measures].[Last Unit Sales] AS \n"
             + " '([Measures].[Unit Sales], \n"
@@ -255,7 +255,7 @@ public class UdfTest extends FoodMartTestCase {
      * So the query soon exceeds the {@link MondrianProperties#MaxEvalDepth}
      * property.
      */
-    public void testLastNonEmptyBig() {
+    void testLastNonEmptyBig() {
         assertQueryReturns(
             "with\n"
             + "     member\n"
@@ -274,7 +274,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Axis #2:\n");
     }
 
-    public void testBadFun() {
+    void testBadFun() {
         final TestContext tc = udfTestContext(
             "<UserDefinedFunction name=\"BadPlusOne\" className=\""
             + BadPlusOneUdf.class.getName()
@@ -290,7 +290,7 @@ public class UdfTest extends FoodMartTestCase {
         }
     }
 
-    public void testGenericFun() {
+    void testGenericFun() {
         final TestContext tc = udfTestContext(
             "<UserDefinedFunction name=\"GenericPlusOne\" className=\""
             + PlusOrMinusOneUdf.class.getName()
@@ -302,7 +302,7 @@ public class UdfTest extends FoodMartTestCase {
         tc.assertExprReturns("GenericMinusOne(3)", "2");
     }
 
-    public void testComplexFun() {
+    void testComplexFun() {
         assertQueryReturns(
             "WITH MEMBER [Measures].[InverseNormal] AS 'InverseNormal([Measures].[Grocery Sqft] / [Measures].[Store Sqft])', FORMAT_STRING = \"0.000\"\n"
             + "SELECT {[Measures].[InverseNormal]} ON COLUMNS, \n"
@@ -328,7 +328,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Row #5: 0.504\n");
     }
 
-    public void testException() {
+    void testException() {
         Result result = executeQuery(
             "WITH MEMBER [Measures].[InverseNormal] "
             + " AS 'InverseNormal([Measures].[Store Sqft] / [Measures].[Grocery Sqft])',"
@@ -354,7 +354,7 @@ public class UdfTest extends FoodMartTestCase {
             cell.getValue().toString());
     }
 
-    public void testCurrentDateString()
+    void testCurrentDateString()
     {
         String actual = executeExpr("CurrentDateString(\"Ddd mmm dd yyyy\")");
         Date currDate = new Date();
@@ -365,7 +365,7 @@ public class UdfTest extends FoodMartTestCase {
         assertEquals(expected, actual);
     }
 
-    public void testCurrentDateMemberBefore() {
+    void testCurrentDateMemberBefore() {
         assertQueryReturns(
             "SELECT { CurrentDateMember([Time].[Time], "
             + "\"[Ti\\me]\\.[yyyy]\\.[Qq]\\.[m]\", BEFORE)} "
@@ -377,7 +377,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Row #0: \n");
     }
 
-    public void testCurrentDateMemberBeforeUsingQuotes()
+    void testCurrentDateMemberBeforeUsingQuotes()
     {
         assertAxisReturns(
             MondrianProperties.instance().SsasCompatibleNaming.get()
@@ -388,7 +388,7 @@ public class UdfTest extends FoodMartTestCase {
             "[Time].[1998].[Q4].[12]");
     }
 
-    public void testCurrentDateMemberAfter()
+    void testCurrentDateMemberAfter()
     {
         // CurrentDateMember will return null member since the latest date in
         // FoodMart is from '98
@@ -401,7 +401,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Axis #1:\n");
     }
 
-    public void testCurrentDateMemberExact()
+    void testCurrentDateMemberExact()
     {
         // CurrentDateMember will return null member since the latest date in
         // FoodMart is from '98; apply a function on the return value to
@@ -415,7 +415,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Axis #1:\n");
     }
 
-    public void testCurrentDateMemberNoFindArg()
+    void testCurrentDateMemberNoFindArg()
     {
         // CurrentDateMember will return null member since the latest date in
         // FoodMart is from '98
@@ -428,7 +428,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Axis #1:\n");
     }
 
-    public void testCurrentDateMemberHierarchy() {
+    void testCurrentDateMemberHierarchy() {
         final String query =
             MondrianProperties.instance().SsasCompatibleNaming.get()
                 ? "SELECT { CurrentDateMember([Time.Weekly], "
@@ -446,7 +446,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Row #0: \n");
     }
 
-    public void testCurrentDateMemberHierarchyNullReturn() {
+    void testCurrentDateMemberHierarchyNullReturn() {
         // CurrentDateMember will return null member since the latest date in
         // FoodMart is from '98; note that first arg is a hierarchy rather
         // than a dimension
@@ -459,7 +459,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Axis #1:\n");
     }
 
-    public void testCurrentDateMemberRealAfter() {
+    void testCurrentDateMemberRealAfter() {
         // omit formatting characters from the format so the current date
         // is hard-coded to actual value in the database so we can test the
         // after logic
@@ -474,7 +474,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Row #0: 66,291\n");
     }
 
-    public void testCurrentDateMemberRealExact1() {
+    void testCurrentDateMemberRealExact1() {
         // omit formatting characters from the format so the current date
         // is hard-coded to actual value in the database so we can test the
         // exact logic
@@ -489,7 +489,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Row #0: 266,773\n");
     }
 
-    public void testCurrentDateMemberRealExact2() {
+    void testCurrentDateMemberRealExact2() {
         // omit formatting characters from the format so the current date
         // is hard-coded to actual value in the database so we can test the
         // exact logic
@@ -504,7 +504,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Row #0: 21,081\n");
     }
 
-    public void testCurrentDateMemberPrev() {
+    void testCurrentDateMemberPrev() {
         // apply a function on the result of the UDF
         assertQueryReturns(
             "SELECT { CurrentDateMember([Time].[Time], "
@@ -517,7 +517,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Row #0: \n");
     }
 
-    public void testCurrentDateLag() {
+    void testCurrentDateLag() {
         // Also, try a different style of quoting, because single quote followed
         // by double quote (used in other examples) is difficult to read.
         assertQueryReturns(
@@ -541,7 +541,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Row #3: \n");
     }
 
-    public void testMatches() {
+    void testMatches() {
         assertQueryReturns(
             "SELECT {[Measures].[Org Salary]} ON COLUMNS, "
             + "Filter({[Employees].MEMBERS}, "
@@ -568,7 +568,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Row #6: \n");
     }
 
-    public void testNotMatches() {
+    void testNotMatches() {
         assertQueryReturns(
             "SELECT {[Measures].[Store Sales]} ON COLUMNS, "
             + "Filter({[Store Type].MEMBERS}, "
@@ -592,7 +592,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Row #4: 319,210.04\n");
     }
 
-    public void testIn() {
+    void testIn() {
         assertQueryReturns(
             "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
             + "FILTER([Product].[Product Family].MEMBERS, "
@@ -611,7 +611,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Row #1: 50,236\n");
     }
 
-    public void testNotIn() {
+    void testNotIn() {
         assertQueryReturns(
             "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
             + "FILTER([Product].[Product Family].MEMBERS, "
@@ -628,7 +628,7 @@ public class UdfTest extends FoodMartTestCase {
             + "Row #0: 191,940\n");
     }
 
-    public void testChildMemberIn() {
+    void testChildMemberIn() {
         assertQueryReturns(
             "SELECT {[Measures].[Store Sales]} ON COLUMNS, "
             + "{[Store].[Store Name].MEMBERS} ON ROWS "
@@ -711,7 +711,7 @@ public class UdfTest extends FoodMartTestCase {
      * of {@link mondrian.olap.fun.FunDefBase#getResultType}, which simply
      * guesses based on the type of the first argument.
      */
-    public void testNonGuessableReturnType() {
+    void testNonGuessableReturnType() {
         TestContext tc = udfTestContext(
             "<UserDefinedFunction name=\"StringMult\" className=\""
             + StringMultUdf.class.getName()
@@ -727,7 +727,7 @@ public class UdfTest extends FoodMartTestCase {
      * ClassCastException because it was evaluating to a member, whereas the
      * member should have been evaluated to a scalar.
      */
-    public void testUdfToString() {
+    void testUdfToString() {
         TestContext tc = udfTestContext(
             "<UserDefinedFunction name=\"StringMult\" className=\""
             + StringMultUdf.class.getName()
@@ -755,7 +755,7 @@ public class UdfTest extends FoodMartTestCase {
      * <p>Also tests applying a UDF to arguments of coercible type. In this
      * case, applies f(member,dimension) to args(member,hierarchy).
      */
-    public void testAnotherMemberFun() {
+    void testAnotherMemberFun() {
         final TestContext tc = udfTestContext(
             "<UserDefinedFunction name=\"PlusOne\" className=\""
             + PlusOneUdf.class.getName() + "\"/>\n"
@@ -779,7 +779,7 @@ public class UdfTest extends FoodMartTestCase {
     }
 
 
-    public void testCachingCurrentDate() {
+    void testCachingCurrentDate() {
         assertQueryReturns(
             "SELECT {filter([Time].[Month].Members, "
             + "[Time].[Time].CurrentMember in {CurrentDateMember([Time]"
@@ -805,7 +805,7 @@ public class UdfTest extends FoodMartTestCase {
      * "UDF expecting List gets anonymous
      * mondrian.rolap.RolapNamedSetEvaluator$1 instead"</a>.
      */
-    public void testListUdf() {
+    void testListUdf() {
         checkListUdf(ReverseFunction.class);
         checkListUdf(ReverseIterableFunction.class);
     }
@@ -853,7 +853,7 @@ public class UdfTest extends FoodMartTestCase {
     /**
      * Tests that a non-static function gives an error.
      */
-    public void testNonStaticUdfFails() {
+    void testNonStaticUdfFails() {
         TestContext tc = udfTestContext(
             "<UserDefinedFunction name=\"Reverse2\" className=\""
             + ReverseFunctionNotStatic.class.getName()
@@ -871,7 +871,7 @@ public class UdfTest extends FoodMartTestCase {
      * Mondrian leaves it as a member, does not try to evaluate it to a scalar
      * value.
      */
-    public void testMemberUdfDoesNotEvaluateToScalar() {
+    void testMemberUdfDoesNotEvaluateToScalar() {
         TestContext tc = udfTestContext(
             "<UserDefinedFunction name=\"MemberName\" className=\""
             + MemberNameFunction.class.getName()
@@ -883,7 +883,7 @@ public class UdfTest extends FoodMartTestCase {
     /**
      * Unit test that ensures that a UDF has either a script or a className.
      */
-    public void testUdfNeitherScriptNorClassname() {
+    void testUdfNeitherScriptNorClassname() {
         TestContext tc = udfTestContext(
             "<UserDefinedFunction name='StringMult'/>\n");
         tc.assertQueryThrows(
@@ -895,7 +895,7 @@ public class UdfTest extends FoodMartTestCase {
      * Unit test that ensures that a UDF does not have both a script
      * and a className.
      */
-    public void testUdfBothScriptAndClassname() {
+    void testUdfBothScriptAndClassname() {
         TestContext tc = udfTestContext(
             "<UserDefinedFunction name='StringMult' className='foo'>\n"
             + " <Script>bar</Script>\n"
@@ -908,7 +908,7 @@ public class UdfTest extends FoodMartTestCase {
     /**
      * Unit test that ensures that a UDF has either a script or a className.
      */
-    public void testUdfScriptBadLanguage() {
+    void testUdfScriptBadLanguage() {
         TestContext tc = udfTestContext(
             "<UserDefinedFunction name='StringMult'>\n"
             + " <Script language='bad'>bar</Script>\n"
@@ -921,7 +921,7 @@ public class UdfTest extends FoodMartTestCase {
     /**
      * Unit test for a UDF defined in JavaScript.
      */
-    public void testScriptUdf() {
+    void testScriptUdf() {
         TestContext tc = udfTestContext(
             "<UserDefinedFunction name='StringMult'>\n"
             + "  <Script language='JavaScript'>\n"
@@ -963,7 +963,7 @@ public class UdfTest extends FoodMartTestCase {
      * Unit test for a UDF defined in JavaScript, this time the factorial
      * function. We also use 'CDATA' section to mask the '&lt;' symbol.
      */
-    public void testScriptUdfFactorial() {
+    void testScriptUdfFactorial() {
 
         TestContext tc = udfTestContext(
             "<UserDefinedFunction name='Factorial'>\n"
@@ -993,7 +993,7 @@ public class UdfTest extends FoodMartTestCase {
     /**
      * Unit test that we get a nice error if a script UDF contains an error.
      */
-    public void testScriptUdfInvalid() {
+    void testScriptUdfInvalid() {
         TestContext tc = udfTestContext(
             "<UserDefinedFunction name='Factorial'>\n"
             + "  <Script language='JavaScript'><![CDATA[\n"
@@ -1025,7 +1025,7 @@ public class UdfTest extends FoodMartTestCase {
      * Unit test for a cell formatter defined in the old way -- a 'formatter'
      * attribute of a Measure element.
      */
-    public void testCellFormatter() {
+    void testCellFormatter() {
         // Note that
         //   formatString="Standard"
         // is ignored.
@@ -1051,7 +1051,7 @@ public class UdfTest extends FoodMartTestCase {
      * As {@link #testCellFormatter()}, but using new-style nested
      * CellFormatter element.
      */
-    public void testCellFormatterNested() {
+    void testCellFormatterNested() {
         // Note that
         //   formatString="Standard"
         // is ignored.
@@ -1078,7 +1078,7 @@ public class UdfTest extends FoodMartTestCase {
     /**
      * As {@link #testCellFormatterNested()}, but using a script.
      */
-    public void testCellFormatterScript() {
+    void testCellFormatterScript() {
         TestContext tc = measureTestContext(
             "<Measure name='Unit Sales Foo Bar' column='unit_sales'\n"
             + "    aggregator='sum' formatString='Standard'>\n"
@@ -1108,7 +1108,7 @@ public class UdfTest extends FoodMartTestCase {
      * Unit test for a cell formatter defined against a calculated member,
      * using the old syntax (a member property called "CELL_FORMATTER").
      */
-    public void testCellFormatterOnCalcMember() {
+    void testCellFormatterOnCalcMember() {
         TestContext tc = calcMemberTestContext(
             "<CalculatedMember\n"
             + "  name='Unit Sales Foo Bar'\n"
@@ -1135,7 +1135,7 @@ public class UdfTest extends FoodMartTestCase {
      * Unit test for a cell formatter defined against a calculated member,
      * using the new syntax (a nested CellFormatter element).
      */
-    public void testCellFormatterOnCalcMemberNested() {
+    void testCellFormatterOnCalcMemberNested() {
         TestContext tc = calcMemberTestContext(
             "<CalculatedMember\n"
             + "  name='Unit Sales Foo Bar'\n"
@@ -1162,7 +1162,7 @@ public class UdfTest extends FoodMartTestCase {
      * Unit test for a cell formatter defined against a calculated member,
      * using a script.
      */
-    public void testCellFormatterOnCalcMemberScript() {
+    void testCellFormatterOnCalcMemberScript() {
         TestContext tc = calcMemberTestContext(
             "<CalculatedMember\n"
             + "  name='Unit Sales Foo Bar'\n"
@@ -1191,7 +1191,7 @@ public class UdfTest extends FoodMartTestCase {
      * Unit test for a member formatter defined in the old way -- a 'formatter'
      * attribute of a Measure element.
      */
-    public void testMemberFormatter() {
+    void testMemberFormatter() {
         TestContext tc = TestContext.instance().createSubstitutingCube(
             "Sales",
             "  <Dimension name='Promotion Media2' foreignKey='promotion_id'>\n"
@@ -1212,7 +1212,7 @@ public class UdfTest extends FoodMartTestCase {
      * As {@link #testMemberFormatter()}, but using new-style nested
      * memberFormatter element.
      */
-    public void testMemberFormatterNested() {
+    void testMemberFormatterNested() {
         TestContext tc = TestContext.instance().createSubstitutingCube(
             "Sales",
             "  <Dimension name='Promotion Media2' foreignKey='promotion_id'>\n"
@@ -1234,7 +1234,7 @@ public class UdfTest extends FoodMartTestCase {
     /**
      * As {@link #testMemberFormatterNested()}, but using a script.
      */
-    public void testMemberFormatterScript() {
+    void testMemberFormatterScript() {
         TestContext tc = TestContext.instance().createSubstitutingCube(
             "Sales",
             "  <Dimension name='Promotion Media2' foreignKey='promotion_id'>\n"
@@ -1261,7 +1261,7 @@ public class UdfTest extends FoodMartTestCase {
      *
      * @throws java.sql.SQLException on error
      */
-    public void testPropertyFormatter() throws SQLException {
+    void testPropertyFormatter() throws SQLException {
         TestContext tc = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name='Promotions2' foreignKey='promotion_id'>\n"
@@ -1292,7 +1292,7 @@ public class UdfTest extends FoodMartTestCase {
      *
      * @throws java.sql.SQLException on error
      */
-    public void testPropertyFormatterNested() throws SQLException {
+    void testPropertyFormatterNested() throws SQLException {
         TestContext tc = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name='Promotions2' foreignKey='promotion_id'>\n"
@@ -1324,7 +1324,7 @@ public class UdfTest extends FoodMartTestCase {
      *
      * @throws java.sql.SQLException on error
      */
-    public void testPropertyFormatterScript() throws SQLException {
+    void testPropertyFormatterScript() throws SQLException {
         TestContext tc = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name='Promotions2' foreignKey='promotion_id'>\n"
@@ -1364,7 +1364,7 @@ public class UdfTest extends FoodMartTestCase {
      * It checks that the MDC logging context is passed through all the
      * threads.
      */
-    public void testMdc() {
+    void testMdc() {
         final TestContext context =
             udfTestContext(
                 "<UserDefinedFunction name=\"Mdc\" className=\""

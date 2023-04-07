@@ -60,12 +60,12 @@ public class AggStarTest {
 
 
   @Test
-  public void testSizeIntegerOverflow() {
+  void testSizeIntegerOverflow() {
     assertEquals(BIG_NUMBER.longValue(), aggStar.getSize());
   }
 
   @Test
-  public void testVolumeIntegerOverflow() {
+  void testVolumeIntegerOverflow() {
     propSaver.set(propSaver.properties.ChooseAggregateByVolume, true);
     assertEquals(BIG_NUMBER.longValue(), aggStar.getSize());
   }

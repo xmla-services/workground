@@ -20,7 +20,7 @@ import mondrian.olap.MondrianDef;
 public class FormatterCreateContextTest {
 
 	@Test
-    public void testElementDataShouldSupersedeAttributeData() {
+    void testElementDataShouldSupersedeAttributeData() {
         ElementFormatterImpl elementData =
             new ElementFormatterImpl();
         elementData.setClassName("elementClassName");

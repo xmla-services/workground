@@ -55,7 +55,7 @@ public class CacheTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testNQueriesWaitingForSameSegmentRepeat(TestingContext foodMartContext)
+    void testNQueriesWaitingForSameSegmentRepeat(TestingContext foodMartContext)
         throws ExecutionException, InterruptedException
     {
 		Connection connection = foodMartContext.createConnection();

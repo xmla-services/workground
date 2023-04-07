@@ -34,7 +34,7 @@ public class PrimeFinderTest{
     }
 
     @Test
-    public void testOne() {
+    void testOne() {
         assertStatistics(
             1000,
             1000,
@@ -45,7 +45,7 @@ public class PrimeFinderTest{
     }
 
     @Test
-    public void testTwo() {
+    void testTwo() {
         assertStatistics(
             200,
             1000,
@@ -56,7 +56,7 @@ public class PrimeFinderTest{
     }
 
     @Test
-    public void testThree() {
+    void testThree() {
         assertStatistics(
             16,
             1000,
@@ -74,7 +74,7 @@ public class PrimeFinderTest{
     // disabled because it takes a LONG time
     @Test
     @Disabled
-    public void testFour() {
+    void testFour() {
         assertStatistics(1000, Integer.MAX_VALUE, "");
     }
 }

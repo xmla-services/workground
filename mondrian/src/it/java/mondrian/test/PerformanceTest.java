@@ -55,7 +55,7 @@ public class PerformanceTest extends FoodMartTestCase {
    * <a href="http://jira.pentaho.com/browse/MONDRIAN-550">
    * Bug MONDRIAN-550, "Performance bug with NON EMPTY and large axes"</a>.
    */
-  public void testBugMondrian550() {
+  void testBugMondrian550() {
     final TestContext testContext = getBugMondrian550Schema();
     final Statistician statistician =
       new Statistician( "testBugMondrian550" );
@@ -92,7 +92,7 @@ public class PerformanceTest extends FoodMartTestCase {
   /**
    * As {@link #testBugMondrian550()} but with tuples on the rows axis.
    */
-  public void testBugMondrian550Tuple() {
+  void testBugMondrian550Tuple() {
     final TestContext testContext = getBugMondrian550Schema();
     final Statistician statistician =
       new Statistician( "testBugMondrian550Tuple" );
@@ -158,7 +158,7 @@ public class PerformanceTest extends FoodMartTestCase {
    * with
    * ResultStyle.LIST, 99+ seconds with ITERABLE (on DELL Latitude D630).
    */
-  public void testMondrianBug641() {
+  void testMondrianBug641() {
     if ( !Bug.BugMondrian641Fixed ) {
       return;
     }
@@ -177,7 +177,7 @@ public class PerformanceTest extends FoodMartTestCase {
   /**
    * Tests performance when an MDX query contains a very large explicit set.
    */
-  public void testVeryLargeExplicitSet() {
+  void testVeryLargeExplicitSet() {
     final TestContext testContext = getTestContext();
     final Statistician[] statisticians = {
       // jdk1.6 mackerel access main old    5,000 ms
@@ -309,7 +309,7 @@ public class PerformanceTest extends FoodMartTestCase {
    * Bug MONDRIAN-639, "RolapNamedSetEvaluator anon classes implement Iterable, causing performance regression from 2.4
    * in FunUtil.count()"</a>.
    */
-  public void testBugMondrian639() {
+  void testBugMondrian639() {
     // unknown revision before fix mac-mini 233,000 ms
     // unknown revision after fix mac-mini    4,500 ms
     // jdk1.6 marmalade 3.2 14036             1,821 1,702 ms
@@ -352,7 +352,7 @@ public class PerformanceTest extends FoodMartTestCase {
    * getNonAllMembers.
    * The performance boost gets more significant as the schema size grows.
    */
-  public void testBigResultsWithBigSchemaPerforms() {
+  void testBigResultsWithBigSchemaPerforms() {
     if ( !LOGGER.isDebugEnabled() ) {
       return;
     }
@@ -411,7 +411,7 @@ public class PerformanceTest extends FoodMartTestCase {
    * <li>mondrian     14770 marmite   mysql  jdk1.7 &gt; 30 minutes
    * </ul>
    */
-  public void testInMemoryCalc() {
+  void testInMemoryCalc() {
     if ( !LOGGER.isDebugEnabled() ) {
       // Test is too expensive to run as part of standard regress.
       // Take 10h on hudson (MySQL)!!!
@@ -489,7 +489,7 @@ public class PerformanceTest extends FoodMartTestCase {
    * <a href="http://jira.pentaho.com/browse/MONDRIAN-843">
    * Bug MONDRIAN-843, where Filter is inefficient.</a>
    */
-  public void testBugMondrian843() {
+  void testBugMondrian843() {
     // On my core i7 laptop:
     // takes 2.5 seconds before bug fixed
     // takes 0.4 seconds after bug fixed
@@ -516,7 +516,7 @@ public class PerformanceTest extends FoodMartTestCase {
    * <a href="http://jira.pentaho.com/browse/MONDRIAN-981">MONDRIAN-981,
    * "Poor performance when >=2 hierarchies are access-controlled with rollupPolicy=partial"</a>.
    */
-  public void testBugMondrian981() {
+  void testBugMondrian981() {
     if ( !LOGGER.isDebugEnabled() ) {
       // Too slow to run as part of standard regress until bug is fixed.
       return;
@@ -580,7 +580,7 @@ public class PerformanceTest extends FoodMartTestCase {
    * "Slicer size is exponentially inflating the cell requests"</a>. This case just checks correctness; a similar case
    * in {@link PerformanceTest} checks performance.
    */
-  public void testBugMondrian1242() {
+  void testBugMondrian1242() {
     final TestContext testContext = getTestContext().create(
       null, null, null, null,
       "<UserDefinedFunction name=\"StringMult\" className=\""
@@ -657,7 +657,7 @@ public class PerformanceTest extends FoodMartTestCase {
    *     is the best, with N + L log L + comparisons</li>
    * </ul>
    */
-  public void testStablePartialSort() {
+  void testStablePartialSort() {
     final int N = 1000000; // should be 1M in checked-in code
     final int limit = 10;  // should be 10 in checked-in code
     final int runCount = 10;

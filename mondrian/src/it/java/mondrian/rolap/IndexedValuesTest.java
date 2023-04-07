@@ -32,7 +32,7 @@ public class IndexedValuesTest extends FoodMartTestCase {
         super();
     }
 
-    public void testQueryWithIndex() {
+    void testQueryWithIndex() {
         final String desiredResult =
             "Axis #0:\n"
             + "{}\n"

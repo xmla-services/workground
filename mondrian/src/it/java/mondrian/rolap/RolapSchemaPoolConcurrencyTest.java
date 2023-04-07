@@ -72,7 +72,7 @@ public class RolapSchemaPoolConcurrencyTest extends TestCase
     }
 
 
-    public void testTwentyAdders() throws Exception {
+    void testTwentyAdders() throws Exception {
         final int cycles = 500;
         final int addersAmount = 10 * 2;
 
@@ -92,7 +92,7 @@ public class RolapSchemaPoolConcurrencyTest extends TestCase
     }
 
 
-    public void testTenAddersAndFiveRemovers() throws Exception {
+    void testTenAddersAndFiveRemovers() throws Exception {
         final int cycles = 200;
         final int removersAmount = 5;
         final int addersAmount = removersAmount * 2;
@@ -123,7 +123,7 @@ public class RolapSchemaPoolConcurrencyTest extends TestCase
     }
 
 
-    public void testTwentySimpleGetters() throws Exception {
+    void testTwentySimpleGetters() throws Exception {
         final int cycles = 1000;
         final int actorsAmount = 20;
 
@@ -149,7 +149,7 @@ public class RolapSchemaPoolConcurrencyTest extends TestCase
     }
 
 
-    public void testFourAddersTwoRemoversTenGetters() throws Exception {
+    void testFourAddersTwoRemoversTenGetters() throws Exception {
         final int addingCycles = 200;
         final int removersAmount = 2;
         final int addersAmount = removersAmount * 2;

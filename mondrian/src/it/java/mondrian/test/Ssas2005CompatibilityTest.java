@@ -188,7 +188,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "</Schema>").withCube("Warehouse and Sales");
     }
 
-    public void testUniqueName() {
+    void testUniqueName() {
         // TODO:
         // Unique mmbers:
         // [Time].[Time2].[Year2].[1997]
@@ -200,7 +200,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
         // [Currency].[Currency].&[1]
     }
 
-    public void testDimensionDotHierarchyAmbiguous() {
+    void testDimensionDotHierarchyAmbiguous() {
         // If there is a dimension, hierarchy, level with the same name X,
         // then [X].[X] might reasonably resolve to hierarchy or the level.
         // SSAS resolves to hierarchy, old mondrian resolves to level.
@@ -258,7 +258,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
         }
     }
 
-    public void testHierarchyLevelsFunction() {
+    void testHierarchyLevelsFunction() {
         if (!IMPLEMENTED) {
             return;
         }
@@ -272,7 +272,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "7");
     }
 
-    public void testDimensionDotHierarchyDotLevelDotMembers() {
+    void testDimensionDotHierarchyDotLevelDotMembers() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -284,7 +284,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testDimensionDotHierarchyDotLevel() {
+    void testDimensionDotHierarchyDotLevel() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -319,7 +319,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "Row #0: 124,366\n");
     }
 
-    public void testNamingDimensionDotLevel() {
+    void testNamingDimensionDotLevel() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -346,7 +346,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "Row #0: [Time].[Time By Week].[Year2]\n");
     }
 
-    public void testNamingDimensionDotLevel2() {
+    void testNamingDimensionDotLevel2() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -362,7 +362,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testNamingDimensionDotLevelNotUnique() {
+    void testNamingDimensionDotLevelNotUnique() {
         if (!IMPLEMENTED) {
             return;
         }
@@ -381,7 +381,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testDimensionMembersOnSingleHierarchyDimension() {
+    void testDimensionMembersOnSingleHierarchyDimension() {
         // [dimension].members for a dimension with one hierarchy
         // (and no attributes)
         // SSAS2005 succeeds
@@ -423,7 +423,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "Row #0: 3,607\n");
     }
 
-    public void testMultipleHierarchyRequiresQualification() {
+    void testMultipleHierarchyRequiresQualification() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -445,7 +445,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
      * with multiple hierarchies without specifying hierarchy.
      * Based on {@link mondrian.test.BasicQueryTest#testHalfYears()}.
      */
-    public void testCalcMemberAmbiguousHierarchy() {
+    void testCalcMemberAmbiguousHierarchy() {
         String mdx =
             "WITH MEMBER [Measures].[ProfitPercent] AS\n"
             + "     '([Measures].[Store Sales]-[Measures].[Store Cost])/"
@@ -503,7 +503,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
     }
 
     // TODO:
-    public void testUnqualifiedHierarchy() {
+    void testUnqualifiedHierarchy() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -533,7 +533,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
      * Tests that time functions such as Ytd behave correctly when there are
      * multiple time hierarchies.
      */
-    public void testYtd() {
+    void testYtd() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -555,7 +555,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "{[Product].[Products].[Non-Consumable]}\n");
     }
 
-    public void testAxesOutOfOrder() {
+    void testAxesOutOfOrder() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -578,7 +578,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "Row #0: 50,236\n");
     }
 
-    public void testDimensionMembersRequiresHierarchyQualification() {
+    void testDimensionMembersRequiresHierarchyQualification() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -593,7 +593,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "The 'Time' dimension contains more than one hierarchy, therefore the hierarchy must be explicitly specified.");
     }
 
-    public void testDimensionMemberRequiresHierarchyQualification() {
+    void testDimensionMemberRequiresHierarchyQualification() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -657,7 +657,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "Row #0: 6,697\n");
     }
 
-    public void testImplicitCurrentMemberRequiresHierarchyQualification() {
+    void testImplicitCurrentMemberRequiresHierarchyQualification() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -682,7 +682,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "Row #0: 266,773\n");
     }
 
-    public void testUnqualifiedHierarchyCurrentMember() {
+    void testUnqualifiedHierarchyCurrentMember() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -693,7 +693,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testCannotDistinguishMdxFromSql() {
+    void testCannotDistinguishMdxFromSql() {
         // Cannot tell whether statement is MDX or SQL
         // SSAS2005 gives error:
         //   Parser: The statement dialect could not be resolved due
@@ -704,7 +704,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "Syntax error at line 2, column 1, token 'from'");
     }
 
-    public void testNamingDimensionAttr() {
+    void testNamingDimensionAttr() {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -714,7 +714,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "select [Store].[Store Manager].Members on 0 from [Warehouse and Sales]");
     }
 
-    public void testNamingDimensionAttrVsLevel() {
+    void testNamingDimensionAttrVsLevel() {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -727,7 +727,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testAttrHierarchyMemberParent() {
+    void testAttrHierarchyMemberParent() {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -739,7 +739,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testAttrHierarchyMemberChildren() {
+    void testAttrHierarchyMemberChildren() {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -750,7 +750,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testAttrHierarchyAllMemberChildren() {
+    void testAttrHierarchyAllMemberChildren() {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -761,7 +761,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testAttrHierarchyMemberLevel() {
+    void testAttrHierarchyMemberLevel() {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -773,7 +773,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testAttrHierarchyUniqueName() {
+    void testAttrHierarchyUniqueName() {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -784,7 +784,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testMemberAddressedByLevelAndKey() {
+    void testMemberAddressedByLevelAndKey() {
         if (!MEMBER_NAMING_IMPL) {
             return;
         }
@@ -795,7 +795,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testMemberAddressedByCompoundKey() {
+    void testMemberAddressedByCompoundKey() {
         if (!MEMBER_NAMING_IMPL) {
             return;
         }
@@ -806,7 +806,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testMemberAddressedByPartialCompoundKey() {
+    void testMemberAddressedByPartialCompoundKey() {
         if (!MEMBER_NAMING_IMPL) {
             return;
         }
@@ -817,7 +817,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testMemberAddressedByNonUniqueName() {
+    void testMemberAddressedByNonUniqueName() {
         if (!MEMBER_NAMING_IMPL) {
             return;
         }
@@ -829,7 +829,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testMemberAddressedByLevelAndCompoundKey() {
+    void testMemberAddressedByLevelAndCompoundKey() {
         if (!MEMBER_NAMING_IMPL) {
             return;
         }
@@ -840,7 +840,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testMemberAddressedByLevelAndName() {
+    void testMemberAddressedByLevelAndName() {
         if (!MEMBER_NAMING_IMPL) {
             return;
         }
@@ -852,7 +852,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testFoo31() {
+    void testFoo31() {
         // [dimension].[member name]
         // returns [Product].[Products].[Product Department].[Dairy]
         // note that there are members
@@ -865,7 +865,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testFoo32() {
+    void testFoo32() {
         if (!IMPLEMENTED) {
             return;
         }
@@ -881,7 +881,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testNamingAttrVsLevel() {
+    void testNamingAttrVsLevel() {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -899,7 +899,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]", "xxxxx");
     }
 
-    public void testUnqualifiedLevel() {
+    void testUnqualifiedLevel() {
         if (!IMPLEMENTED) {
             return;
         }
@@ -910,7 +910,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testDimensionAsScalarExpression() {
+    void testDimensionAsScalarExpression() {
         if (!IMPLEMENTED) {
             return;
         }
@@ -924,7 +924,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testDimensionWithMultipleHierarchiesDotParent() {
+    void testDimensionWithMultipleHierarchiesDotParent() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -938,7 +938,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "therefore the hierarchy must be explicitly specified.");
     }
 
-    public void testDimensionDotHierarchyInBrackets() {
+    void testDimensionDotHierarchyInBrackets() {
         // [dimension.hierarchy] is valid
         // SSAS2005 succeeds
         runQ(
@@ -951,7 +951,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
      * Occurs when dimension and hierarchy have the same name and are used with
      * [name.name].
      */
-    public void testDimensionDotHierarchySameNameInBrackets() {
+    void testDimensionDotHierarchySameNameInBrackets() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Store Type 2\" foreignKey=\"store_id\">"
@@ -981,7 +981,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "Row #0: 150,555\n");
     }
 
-    public void testDimensionDotLevelDotHierarchyInBrackets() {
+    void testDimensionDotLevelDotHierarchyInBrackets() {
         // [dimension.hierarchy.level]
         // SSAS2005 gives error:
         //   Query (1, 8) The dimension '[Time.Time2.Quarter]' was not
@@ -993,7 +993,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "MDX object '[Time.Time2.Quarter]' not found in cube 'Warehouse and Sales'");
     }
 
-    public void testDimensionDotInvalidHierarchyInBrackets() {
+    void testDimensionDotInvalidHierarchyInBrackets() {
         // invalid hierarchy name
         // SSAS2005 gives error:
         //  Query (1, 9) The dimension '[Time.Time By Week55]' was not
@@ -1005,7 +1005,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "MDX object '[Time.Time By Week55]' not found in cube 'Warehouse and Sales'");
     }
 
-    public void testDimensionDotDimensionInBrackets() {
+    void testDimensionDotDimensionInBrackets() {
         // [dimension.dimension] is invalid.  SSAS2005 gives similar
         // error to above.  (The Time dimension has hierarchies called
         // [Time2] and [Time By Day]. but no hierarchy [Time].)
@@ -1015,7 +1015,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "MDX object '[Time.Time]' not found in cube 'Warehouse and Sales'");
     }
 
-    public void testDimensionDotHierarchyDotNonExistentLevel() {
+    void testDimensionDotHierarchyDotNonExistentLevel() {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1033,7 +1033,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testDimensionDotHierarchyDotLevelMembers() {
+    void testDimensionDotHierarchyDotLevelMembers() {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1043,7 +1043,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testDupHierarchyOnAxes() {
+    void testDupHierarchyOnAxes() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1061,7 +1061,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "Hierarchy '[Product].[Products]' appears in more than one independent axis.");
     }
 
-    public void testDimensionOnAxis() {
+    void testDimensionOnAxis() {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1070,7 +1070,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
         runQ("select [Product] on 0 from [Warehouse and Sales]");
     }
 
-    public void testDimensionDotHierarchyOnAxis() {
+    void testDimensionDotHierarchyOnAxis() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1082,7 +1082,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testHierarchiesFromSameDimensionOnAxes() {
+    void testHierarchiesFromSameDimensionOnAxes() {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1095,7 +1095,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
     }
 
     // TODO:
-    public void testDifferentHierarchiesFromSameDimensionOnAxes() {
+    void testDifferentHierarchiesFromSameDimensionOnAxes() {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1110,7 +1110,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
     }
 
     // TODO:
-    public void testDifferentHierarchiesFromSameDimensionInCrossjoin() {
+    void testDifferentHierarchiesFromSameDimensionInCrossjoin() {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1121,7 +1121,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testHierarchyUsedTwiceInCrossjoin() {
+    void testHierarchyUsedTwiceInCrossjoin() {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1136,7 +1136,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testAttributeHierarchyUsedTwiceInCrossjoin() {
+    void testAttributeHierarchyUsedTwiceInCrossjoin() {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -1153,7 +1153,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testFoo50() {
+    void testFoo50() {
         if (!ATTR_HIER_IMPL) {
             return;
         }
@@ -1165,7 +1165,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testQuoteInStringInQuotedFormula() {
+    void testQuoteInStringInQuotedFormula() {
         // Quoted formulas vs. unquoted formulas
         // Single quote in string
         // SSAS2005 returns 5
@@ -1180,7 +1180,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "Row #0: 5\n");
     }
 
-    public void testQuoteInStringInUnquotedFormula() {
+    void testQuoteInStringInUnquotedFormula() {
         // SSAS2005 returns 6
         assertQueryReturns(
             "with member [Measures].[Foo] as len(\"can''t\")\n"
@@ -1193,7 +1193,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "Row #0: 6\n");
     }
 
-    public void testMemberIdentifiedByDimensionAndKey() {
+    void testMemberIdentifiedByDimensionAndKey() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1207,7 +1207,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testDimensionHierarchyKey() {
+    void testDimensionHierarchyKey() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1220,7 +1220,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testCompoundKey() {
+    void testCompoundKey() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1239,7 +1239,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "Row #0: 26,796\n");
     }
 
-    public void testCompoundKeySyntaxError() {
+    void testCompoundKeySyntaxError() {
         // without [] fails on SSAS (syntax error because a number)
         assertQueryThrows(
             "select [Measures].[Unit Sales] on 0,\n"
@@ -1248,7 +1248,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "mondrian.parser.TokenMgrError: Lexical error at line 2, column 36.  Encountered: \"4\" (52), after : \"&\"");
     }
 
-    public void testCompoundKeyStringBad() {
+    void testCompoundKeyStringBad() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1279,7 +1279,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "Wrong number of values in member key; &Q3&[1997]&ABC has 3 values, whereas level's key has 2 columns [time_by_day.quarter, time_by_day.the_year].");
     }
 
-    public void testCompoundKeyString() {
+    void testCompoundKeyString() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1305,7 +1305,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
      * {@link MondrianProperties#SsasCompatibleNaming}. Mondrian-3 had this
      * functionality.</p>
      */
-    public void testNameAfterKey() {
+    void testNameAfterKey() {
         assertQueryReturns(
             "select [Measures].[Unit Sales] on 0,\n"
             + TestContext.hierarchyName("Store", "Stores")
@@ -1326,7 +1326,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
      * Tests a member where a name segment {@code [Store 14]} occurs after a
      * composite key segment {@code &amp;[San Francisco]&amp;CA}.
      */
-    public void testNameAfterCompositeKey() {
+    void testNameAfterCompositeKey() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1343,7 +1343,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "Row #0: 2,117\n");
     }
 
-    public void testCompoundKeyAll() {
+    void testCompoundKeyAll() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1358,7 +1358,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "Wrong number of values in member key; &All has 1 values, whereas level's key has 0 columns [].");
     }
 
-    public void testCompoundKeyParent() {
+    void testCompoundKeyParent() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1369,7 +1369,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
                 "[Store].[Stores].[USA].[CA]");
     }
 
-    public void testCompoundKeyNull() {
+    void testCompoundKeyNull() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1389,7 +1389,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "Row #0: 39,329\n");
     }
 
-    public void testFoo56() {
+    void testFoo56() {
         if (!IMPLEMENTED) {
             return;
         }
@@ -1400,7 +1400,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testKeyNonExistent() {
+    void testKeyNonExistent() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1434,7 +1434,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "MDX object '[Time].[Time2].[Quarter].&Q5&[1997]' not found in cube 'Warehouse and Sales'");
     }
 
-    public void testAxesLabelsOutOfSequence() {
+    void testAxesLabelsOutOfSequence() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1452,7 +1452,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "Row #0: 266,773\n");
     }
 
-    public void testAxisLabelsNotContiguousFails() {
+    void testAxisLabelsNotContiguousFails() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1467,7 +1467,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "specified, and cannot contain gaps. Axis 0 (COLUMNS) is missing.");
     }
 
-    public void testLotsOfAxes() {
+    void testLotsOfAxes() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
         }
@@ -1485,7 +1485,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "from [Warehouse and Sales]");
     }
 
-    public void testOnAxesFails() {
+    void testOnAxesFails() {
         // axes(n) is not an acceptable alternative to axis(n)
         // SSAS gives:
         //   Query (1, 35) Parser: The syntax for 'axes' is incorrect.
@@ -1495,7 +1495,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "Syntax error at line 1, column 35, token 'axes'");
     }
 
-    public void testOnExpression() {
+    void testOnExpression() {
         // SSAS gives syntax error
         assertQueryThrows(
             "select [Measures].[Unit Sales] on 0 + 1\n"
@@ -1503,7 +1503,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "Syntax error at line 1, column 37, token '+'");
     }
 
-    public void testOnFractionFails() {
+    void testOnFractionFails() {
         // SSAS gives syntax error
         assertQueryThrows(
             "select [Measures].[Unit Sales] on 0.4\n"
@@ -1512,7 +1512,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + " integer, but it was 0.4.");
     }
 
-    public void testAxisFunction() {
+    void testAxisFunction() {
         // AXIS(n) function as expression
         // SSAS succeeds
         if (!AXIS_IMPL) {
@@ -1526,7 +1526,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             + "FROM [Warehouse and Sales]");
     }
 
-    public void testAxisAppliedToExpr() {
+    void testAxisAppliedToExpr() {
         // Axis applied to an expression ('3 - 2' in place of '1' above).
         // SSAS succeeds.
         // When we implement Axis, it may be acceptable for Mondrian to fail in
@@ -1543,7 +1543,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "xxx");
     }
 
-    public void testAxisFunctionReferencesPreviousAxis() {
+    void testAxisFunctionReferencesPreviousAxis() {
         // reference axis 0 while computing axis 1
         // SSAS succeeds
         if (!AXIS_IMPL) {
@@ -1558,7 +1558,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "xxx");
     }
 
-    public void testAxisFunctionReferencesSameAxisFails() {
+    void testAxisFunctionReferencesSameAxisFails() {
         // reference axis 1 while computing axis 1, not ok
         // SSAS gives:
         //   Infinite recursion detected. The loop of dependencies is: AXISDEMO
@@ -1575,7 +1575,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "xxx");
     }
 
-    public void testAxisFunctionReferencesSameAxisZeroFails() {
+    void testAxisFunctionReferencesSameAxisZeroFails() {
         // reference axis 0 while computing axis 0, not ok
         // SSAS gives:
         //   Infinite recursion detected. The loop of dependencies is: AXISDEMO
@@ -1592,7 +1592,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "xxx");
     }
 
-    public void testAxisFunctionReferencesLaterAxis() {
+    void testAxisFunctionReferencesLaterAxis() {
         // reference axis 1 while computing axis 0, ok
         // The SSAS online doc says:
         //    An axis can reference only a prior axis. For example, Axis(0) must
@@ -1611,7 +1611,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "xxx");
     }
 
-    public void testAxisFunctionReferencesSameAxisInlineFails() {
+    void testAxisFunctionReferencesSameAxisInlineFails() {
         // If we inline the member, SSAS runs out of memory.
         // SSAS gives error:
         //   Memory error: Allocation failure : The paging file is too small for
@@ -1627,7 +1627,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
             "xxx cyclic something");
     }
 
-    public void testCrossjoinMember() {
+    void testCrossjoinMember() {
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             // Can't resolve [Products] under old mondrian
             return;
@@ -1650,7 +1650,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
      * both in SSAS compatible mode and in regular mode.
      * @throws SQLException If the test fails.
      */
-    public void testCanHaveMemberWithSameNameAsLevel() throws SQLException {
+    void testCanHaveMemberWithSameNameAsLevel() throws SQLException {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
              "<Dimension name=\"SameName\" foreignKey=\"customer_id\">\n"
@@ -1706,7 +1706,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
         }
     }
 
-    public void testMemberNameSortCaseSensitivity()
+    void testMemberNameSortCaseSensitivity()
     {
         // In SSAS, "MacDougal" occurs between "Maccietto" and "Macha". This
         // would not occur if sort was case-sensitive.
@@ -1763,7 +1763,7 @@ public class Ssas2005CompatibilityTest extends FoodMartTestCase {
      * SSAS can resolve root members of a hierarchy even if not qualified
      * by hierarchy, and even if the dimension has more than one hierarchy.
      */
-    public void testRootMembers() {
+    void testRootMembers() {
         // for member defined in the database
         final String timeByWeek =
             TestContext.hierarchyName("Time", "Time By Week");

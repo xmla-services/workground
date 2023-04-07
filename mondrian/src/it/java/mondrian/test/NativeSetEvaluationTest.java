@@ -169,7 +169,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
   /**
    * Simple enumerated aggregate.
    */
-  public void testNativeTopCountWithAggFlatSet() {
+  void testNativeTopCountWithAggFlatSet() {
     // Note: changed mdx and expected as a part of the fix for MONDRIAN-2202
     // Formerly the aggregate set and measures used a conflicting hierarchy,
     // which is not a safe scenario for nativization.
@@ -208,7 +208,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
   /**
    * Same as above, but using a named set
    */
-  public void testNativeTopCountWithAggMemberNamedSet() {
+  void testNativeTopCountWithAggMemberNamedSet() {
     final boolean useAgg =
       MondrianProperties.instance().UseAggregates.get()
         && MondrianProperties.instance().ReadAggregates.get();
@@ -239,7 +239,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     assertQueryReturns( mdx, NativeTopCountWithAgg.result );
   }
 
-  public void testNativeFilterWithAggDescendants() {
+  void testNativeFilterWithAggDescendants() {
     final boolean useAgg =
       MondrianProperties.instance().UseAggregates.get()
         && MondrianProperties.instance().ReadAggregates.get();
@@ -346,7 +346,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-1426"> Mondrian-1426:</a> Native top count support
    * for Member expressions in Calculated member slicer
    */
-  public void testNativeTopCountWithMemberOnlySlicer() {
+  void testNativeTopCountWithMemberOnlySlicer() {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final boolean useAggregates =
       MondrianProperties.instance().UseAggregates.get()
@@ -447,7 +447,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-1430"> Mondrian-1430:</a> Native top count support
    * for + and tuple (Parentheses) expressions in Calculated member slicer
    */
-  public void testNativeTopCountWithParenthesesMemberSlicer() {
+  void testNativeTopCountWithParenthesesMemberSlicer() {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
 
     final boolean useAggregates =
@@ -549,7 +549,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-1430"> Mondrian-1430:</a> Native top count support
    * for + and tuple (Parentheses) expressions in Calculated member slicer
    */
-  public void testNativeTopCountWithMemberSumSlicer() {
+  void testNativeTopCountWithMemberSumSlicer() {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final boolean useAggregates =
       MondrianProperties.instance().UseAggregates.get()
@@ -650,7 +650,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
   /**
    * Aggregate with default measure and TopCount without measure argument.
    */
-  public void testAggTCNoExplicitMeasure() {
+  void testAggTCNoExplicitMeasure() {
     propSaver.set( propSaver.properties.GenerateFormattedSql, true );
     final String mdx =
       "WITH\n"
@@ -671,7 +671,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         + "Row #0: 6,838\n" );
   }
 
-  public void testAggTCTwoArg() {
+  void testAggTCTwoArg() {
     // will throw an error if native eval is not used
     propSaver.set(
       propSaver.properties.AlertNativeEvaluationUnsupported, "ERROR" );
@@ -700,7 +700,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         + "Row #0: 13,573\n" );
   }
 
-  public void testAggTCTwoArgWithCrossjoinedSet() {
+  void testAggTCTwoArgWithCrossjoinedSet() {
     if ( !MondrianProperties.instance().EnableNativeTopCount.get() ) {
       return;
     }
@@ -717,7 +717,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     }
   }
 
-  public void testAggTCTwoArgWithCalcMemPresent() {
+  void testAggTCTwoArgWithCalcMemPresent() {
     if ( !MondrianProperties.instance().EnableNativeTopCount.get() ) {
       return;
     }
@@ -739,7 +739,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    * Crossjoin that uses same dimension as slicer but is independent from it, evaluated via a named set. No loop should
    * happen here.
    */
-  public void testCJSameDimAsSlicerNamedSet() {
+  void testCJSameDimAsSlicerNamedSet() {
     String mdx =
       "WITH\n"
         + "SET ST AS 'TopCount([Store Type].[Store Type].CurrentMember, 5)'\n"
@@ -764,7 +764,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
   /**
    * Test evaluation loop detection still works after changes to make it more permissable.
    */
-  public void testLoopDetection() {
+  void testLoopDetection() {
     // Note that this test will fail if the query below is executed
     // non-natively, or if the level.members expressions are replaced
     // with enumerated sets.
@@ -789,7 +789,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
   /**
    * Check if getSlicerMembers in native evaluation context doesn't break the results as in MONDRIAN-1187
    */
-  public void testSlicerTuplesPartialCrossJoin() {
+  void testSlicerTuplesPartialCrossJoin() {
     final String mdx =
       "with\n"
         + "set TSET as {NonEmptyCrossJoin({[Time].[1997].[Q1], [Time].[1997].[Q2]}, {[Store Type].[Supermarket]}),\n"
@@ -821,7 +821,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
   /**
    * Same as before but without combinations missing in the crossjoin
    */
-  public void testSlicerTuplesFullCrossJoin() {
+  void testSlicerTuplesFullCrossJoin() {
     if ( !MondrianProperties.instance().EnableNativeCrossJoin.get()
       && !Bug.BugMondrian2452Fixed ) {
       // The NonEmptyCrossJoin in the TSET named set below returns
@@ -861,7 +861,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    * Now that some native evaluation is supporting aggregated members, we need to push that logic down to the AggStar
    * selection
    */
-  public void testTopCountWithAggregatedMemberAggStar() {
+  void testTopCountWithAggregatedMemberAggStar() {
     propSaver.set(
       propSaver.properties.UseAggregates,
       true );
@@ -942,7 +942,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    * Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-1291"> Mondrian-1291:</a> NPE on native set with at
    * least two elements and two all members for same dimension in slicer
    */
-  public void testMultipleAllWithInExpr() {
+  void testMultipleAllWithInExpr() {
     // set up three hierarchies on same dimension
     final String multiHierarchyCube =
       " <Cube name=\"3StoreHCube\">\n"
@@ -1004,7 +1004,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
   }
 
 
-  public void testCompoundSlicerNativeEval() {
+  void testCompoundSlicerNativeEval() {
     // MONDRIAN-1404
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -1090,7 +1090,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         + "Row #0: 1\n" );
   }
 
-  public void testSnowflakeDimInSlicerBug1407() {
+  void testSnowflakeDimInSlicerBug1407() {
     // MONDRIAN-1407
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -1185,7 +1185,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         + "Row #0: 324\n" );
   }
 
-  public void testCompoundSlicerNonUniqueMemberNames1413() {
+  void testCompoundSlicerNonUniqueMemberNames1413() {
     // MONDRIAN-1413
     propSaver.set(
       propSaver.properties.GenerateFormattedSql,
@@ -1280,7 +1280,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
   }
 
 
-  public void testConstraintCacheIncludesMultiPositionSlicer() {
+  void testConstraintCacheIncludesMultiPositionSlicer() {
     // MONDRIAN-2081
     assertQueryReturns(
       "select non empty [Customers].[USA].[WA].[Spokane].children  on 0, "
@@ -1359,7 +1359,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    * <p>The baseCube was taken out of the evaluator instead of being passed
    * by the caller, which caused the star column not to be found for the level to evaluate natively as part of the set.
    */
-  public void testNativeVirtualRestrictedSet() throws Exception {
+  void testNativeVirtualRestrictedSet() throws Exception {
     final TestContext ctx = getTestContext().create(
       null, null, null, null, null,
       "  <Role name=\"F-MIS-BE-CLIENT\">\n"
@@ -1400,7 +1400,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         + "From [Warehouse and Sales]\n" );
   }
 
-  public void testNativeHonorsRoleRestrictions() {
+  void testNativeHonorsRoleRestrictions() {
     // NativeSetEvaluation pushes role restrictions to the where clause
     // (see SqlConstraintUtils.addRoleAccessConstraints) by
     // generating an IN expression based on accessible members.
@@ -1454,7 +1454,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         && MondrianProperties.instance().ReadAggregates.get();
   }
 
-  public void testNativeFilterWithCompoundSlicer() {
+  void testNativeFilterWithCompoundSlicer() {
     String mdx =
       "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members},[Measures].[Unit Sales] "
         + "> 1000))'\n"
@@ -1560,7 +1560,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
   /**
    * This test demonstrates complex interaction between member calcs and a compound slicer
    */
-  public void testOverridingCompoundFilter() {
+  void testOverridingCompoundFilter() {
     String mdx =
       "WITH MEMBER [Gender].[All Gender].[NoSlicer] AS '([Product].[All Products], [Time].[1997])', solve_order=1000\n "
         + "MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members},[Measures].[Unit Sales] <"
@@ -1611,7 +1611,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         + "Row #1: 128,901\n" );
   }
 
-  public void testNativeFilterWithCompoundSlicerCJ() {
+  void testNativeFilterWithCompoundSlicerCJ() {
     String mdx =
       "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter( {[Store].[Store City].members},[Measures].[Unit Sales]"
         + " > 1000))'\n"
@@ -1634,7 +1634,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         + "Row #1: 17,044\n" );
   }
 
-  public void testFilterWithDiffLevelCompoundSlicer() {
+  void testFilterWithDiffLevelCompoundSlicer() {
     // not supported in native, but detected
     // and skipped to regular evaluation
     String mdx =
@@ -1655,7 +1655,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         + "Row #1: 10,950\n" );
   }
 
-  public void testNativeFilterWithCompoundSlicer2049() {
+  void testNativeFilterWithCompoundSlicer2049() {
     assertQueryReturns(
       "with member measures.avgQtrs as 'avg( filter( time.quarter.members, measures.[unit sales] < 200))' "
         + "select measures.avgQtrs * gender.members on 0 from sales where head( product.[product name].members, 3)",
@@ -1672,7 +1672,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
         + "Row #0: 53\n" );
   }
 
-  public void testNativeFilterTupleCompoundSlicer1861() {
+  void testNativeFilterTupleCompoundSlicer1861() {
     // Using a slicer list instead of tuples causes slicers with
     // tuples where not all combinations of their members are present to
     // fail when nativized.
@@ -1695,7 +1695,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    *
    * @see <a href="http://jira.pentaho.com/browse/MONDRIAN-2366">Jira issue</a>
    */
-  public void testNativeSetsCacheClearing() {
+  void testNativeSetsCacheClearing() {
     if ( MondrianProperties.instance().ReadAggregates.get()
       && MondrianProperties.instance().UseAggregates.get() ) {
       return;
@@ -1748,7 +1748,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     }
   }
 
-  public void testNativeFilterWithLargeAggSetInSlicer() {
+  void testNativeFilterWithLargeAggSetInSlicer() {
     final String query = "with member customers.agg as "
       + "'Aggregate(Except(Customers.[Name].members,    "
       + "{[Customers].[USA].[OR].[Corvallis].[Judy Doolittle]}    ))' "
@@ -1760,7 +1760,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     verifySameNativeAndNot( query, message, getTestContext() );
   }
 
-  public void testNativeFilterWithLargeAggSetInSlicerTwoAggs() {
+  void testNativeFilterWithLargeAggSetInSlicerTwoAggs() {
     String query = "with \n"
       + "member \n"
       + "[Customers].[agg] as 'Aggregate({[Customers].[Country].Members})'\n"
@@ -1775,7 +1775,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     verifySameNativeAndNot( query, message, getTestContext() );
   }
 
-  public void testNativeFilterWithLargeAggSetInSlicerCompoundAggregate() {
+  void testNativeFilterWithLargeAggSetInSlicerCompoundAggregate() {
     final String query = "WITH member store.agg as "
       + "'Aggregate(CrossJoin(Store.[Store Name].members, Gender.Members))' "
       + "SELECT filter(customers.[name].members, measures.[unit sales] > 100) on 0 "
@@ -1787,7 +1787,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     verifySameNativeAndNot( query, message, getTestContext() );
   }
 
-  public void testDimensionUsageWithDifferentNameExecutedNatively() {
+  void testDimensionUsageWithDifferentNameExecutedNatively() {
     TestContext testContext = getTestContext()
       .createSubstitutingCube(
         "Sales",
@@ -1801,7 +1801,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     checkNative( mdx, result, testContext );
   }
 
-  public void testDimensionUsageExecutedNatively() {
+  void testDimensionUsageExecutedNatively() {
     TestContext testContext = getTestContext();
     String mdx = ""
       + "with member Measures.q1Sales as '([Time].[1997].[Q1], Measures.[Unit Sales])'\n"
@@ -1812,7 +1812,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
     checkNative( mdx, result );
   }
 
-  public void testMondrian2575() {
+  void testMondrian2575() {
     assertQueriesReturnSimilarResults(
       String.format(
         "WITH member [Customers].[AggregatePageMembers] AS \n'Aggregate({[Customers].[USA].[CA].[Altadena].[Amy "
@@ -1829,7 +1829,7 @@ public class NativeSetEvaluationTest extends BatchTestCase {
       getTestContext().withFreshConnection() );
   }
 
-  public void testResultLimitInNativeCJ() {
+  void testResultLimitInNativeCJ() {
     propSaver.set( MondrianProperties.instance().ResultLimit, 400 );
     assertAxisThrows( "NonEmptyCrossjoin({[Product].[All Products].Children}, "
         + "{ [Customers].[Name].members})",

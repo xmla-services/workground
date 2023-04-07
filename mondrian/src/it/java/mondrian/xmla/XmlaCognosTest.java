@@ -70,7 +70,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
         return content;
     }
 
-    public void testCognosMDXSuiteHR_001() throws Exception {
+    void testCognosMDXSuiteHR_001() throws Exception {
         Dialect dialect = TestContext.instance().getDialect();
         switch (dialect.getDatabaseProduct()) {
         case DERBY:
@@ -80,7 +80,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
         executeMDX();
     }
 
-//    public void testCognosMDXSuiteHR_002() throws Exception {
+//    void testCognosMDXSuiteHR_002() throws Exception {
 //        Dialect dialect = TestContext.instance().getDialect();
 //        switch (dialect.getDatabaseProduct()) {
 //        case DERBY:
@@ -90,41 +90,41 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteSales_001() throws Exception {
+//    void testCognosMDXSuiteSales_001() throws Exception {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteSales_002() throws Exception {
+//    void testCognosMDXSuiteSales_002() throws Exception {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteSales_003() throws Exception {
+//    void testCognosMDXSuiteSales_003() throws Exception {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteSales_004() throws Exception {
+//    void testCognosMDXSuiteSales_004() throws Exception {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_003()
+//    void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_003()
 //        throws Exception
 //    {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_005()
+//    void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_005()
 //        throws Exception
 //    {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_006()
+//    void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_006()
 //        throws Exception
 //    {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_007()
+//    void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_007()
 //        throws Exception
 //    {
 //        executeMDX();
@@ -144,7 +144,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_013()
+//    void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_013()
 //        throws Exception
 //    {
 //        executeMDX();
@@ -157,63 +157,63 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_015()
+//    void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_015()
 //        throws Exception
 //    {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_016()
+//    void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_016()
 //        throws Exception
 //    {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_017()
+//    void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_017()
 //        throws Exception
 //    {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_020()
+//    void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_020()
 //        throws Exception
 //    {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_021()
+//    void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_021()
 //        throws Exception
 //    {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_024()
+//    void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_024()
 //        throws Exception
 //    {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_028()
+//    void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_028()
 //        throws Exception
 //    {
 //        executeMDX();
 //    }
 
-//    public void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_029()
+//    void testCognosMDXSuiteConvertedAdventureWorksToFoodMart_029()
 //        throws Exception
 //    {
 //        executeMDX();
 //    }
 
-//    public void testDimensionPropertyForPercentageIssue() throws Exception {
+//    void testDimensionPropertyForPercentageIssue() throws Exception {
 //        executeMDX();
 //    }
 
-//    public void testNegativeSolveOrder() throws Exception {
+//    void testNegativeSolveOrder() throws Exception {
 //        executeMDX();
 //    }
 
-//    public void testNonEmptyWithCognosCalcOneLiteral() throws Exception {
+//    void testNonEmptyWithCognosCalcOneLiteral() throws Exception {
 //        final BooleanProperty enableNonEmptyOnAllAxes =
 //                MondrianProperties.instance().EnableNonEmptyOnAllAxis;
 //        boolean nonEmptyAllAxesCurrentState = enableNonEmptyOnAllAxes.get();
@@ -238,23 +238,23 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
 
 
 
-//    public void testCellProperties() throws Exception {
+//    void testCellProperties() throws Exception {
 //        executeMDX();
 //    }
 
-//    public void testCrossJoin() throws Exception {
+//    void testCrossJoin() throws Exception {
 //        executeMDX();
 //    }
 
-//    public void testWithFilterOn3rdAxis() throws Exception {
+//    void testWithFilterOn3rdAxis() throws Exception {
 //        executeMDX();
 //    }
 
-//    public void testWithSorting() throws Exception {
+//    void testWithSorting() throws Exception {
 //        executeMDX();
 //    }
 
-//    public void testWithFilter() throws Exception {
+//    void testWithFilter() throws Exception {
 //        if (getTestContext().getDialect().getDatabaseProduct()
 //            == Dialect.DatabaseProduct.ACCESS)
 //        {
@@ -267,7 +267,7 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
 //        executeMDX();
 //    }
 
-//    public void testWithAggregation() throws Exception {
+//    void testWithAggregation() throws Exception {
 //        executeMDX();
 //    }
 

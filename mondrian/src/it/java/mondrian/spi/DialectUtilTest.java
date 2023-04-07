@@ -13,20 +13,20 @@ import junit.framework.TestCase;
 
 public class DialectUtilTest extends TestCase {
 
-  public void testCleanUnicodeAwareCaseFlag_InputNull() {
+  void testCleanUnicodeAwareCaseFlag_InputNull() {
     String inputExpression = null;
     String cleaned = DialectUtil.cleanUnicodeAwareCaseFlag( inputExpression );
     assertNull( cleaned );
   }
 
-  public void testCleanUnicodeAwareCaseFlag_InputContainsFlag() {
+  void testCleanUnicodeAwareCaseFlag_InputContainsFlag() {
     String inputExpression = "(?i)|(?u).*ａ.*";
     String expectedExpression = "(?i).*ａ.*";
     String cleaned = DialectUtil.cleanUnicodeAwareCaseFlag( inputExpression );
     assertEquals( expectedExpression, cleaned );
   }
 
-  public void testCleanUnicodeAwareCaseFlag_InputNotContainsFlag() {
+  void testCleanUnicodeAwareCaseFlag_InputNotContainsFlag() {
     String inputExpression = "(?i).*ａ.*";
     String expectedExpression = "(?i).*ａ.*";
     String cleaned = DialectUtil.cleanUnicodeAwareCaseFlag( inputExpression );

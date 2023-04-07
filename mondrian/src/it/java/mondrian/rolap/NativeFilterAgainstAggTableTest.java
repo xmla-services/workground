@@ -26,7 +26,7 @@ public class NativeFilterAgainstAggTableTest extends BatchTestCase {
         propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
     }
 
-    public void testFilteringOnAggregated_ByCount() {
+    void testFilteringOnAggregated_ByCount() {
         // http://jira.pentaho.com/browse/MONDRIAN-2155
         // Aggregation table can have fact's count value exceeding 1,
         // so that to compute the overall amount of facts it is necessary
@@ -77,7 +77,7 @@ public class NativeFilterAgainstAggTableTest extends BatchTestCase {
         doTestFilteringOnAggregatedBy("COUNT", query, expectedResult);
     }
 
-    public void testFilteringOnAggregated_BySum() {
+    void testFilteringOnAggregated_BySum() {
         String query = ""
             + "SELECT "
             + "   {FILTER("
@@ -120,7 +120,7 @@ public class NativeFilterAgainstAggTableTest extends BatchTestCase {
     }
 
 
-    public void testAggTableWithNotAllMeasures() {
+    void testAggTableWithNotAllMeasures() {
         // http://jira.pentaho.com/browse/MONDRIAN-1703
         // If a filter condition contains one or more measures that are
         // not present in the aggregate table, the SQL should omit the

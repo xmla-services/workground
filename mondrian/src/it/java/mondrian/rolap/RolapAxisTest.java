@@ -32,7 +32,7 @@ public class RolapAxisTest extends FoodMartTestCase {
         super(name);
     }
 
-    public void testMemberArrayList() {
+    void testMemberArrayList() {
         TupleList list = TupleCollections.createList(3);
         list.add(
             Arrays.<Member>asList(

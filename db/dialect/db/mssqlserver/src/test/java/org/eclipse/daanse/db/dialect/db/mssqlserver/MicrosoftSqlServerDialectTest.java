@@ -49,35 +49,35 @@ public class MicrosoftSqlServerDialectTest {
     }
 
     @Test
-    public void testQuoteBooleanLiteral_True() throws Exception {
+    void testQuoteBooleanLiteral_True() throws Exception {
         assertEquals(0, buf.length());
         dialect.quoteBooleanLiteral(buf, BOOLEAN_LITERAL_TRUE);
         assertEquals(Util.singleQuoteString(BOOLEAN_LITERAL_TRUE), buf.toString());
     }
 
     @Test
-    public void testQuoteBooleanLiteral_False() throws Exception {
+    void testQuoteBooleanLiteral_False() throws Exception {
         assertEquals(0, buf.length());
         dialect.quoteBooleanLiteral(buf, BOOLEAN_LITERAL_FALSE);
         assertEquals(Util.singleQuoteString(BOOLEAN_LITERAL_FALSE), buf.toString());
     }
 
     @Test
-    public void testQuoteBooleanLiteral_One() throws Exception {
+    void testQuoteBooleanLiteral_One() throws Exception {
         assertEquals(0, buf.length());
         dialect.quoteBooleanLiteral(buf, BOOLEAN_LITERAL_ONE);
         assertEquals(Util.singleQuoteString(BOOLEAN_LITERAL_ONE), buf.toString());
     }
 
     @Test
-    public void testQuoteBooleanLiteral_Zero() throws Exception {
+    void testQuoteBooleanLiteral_Zero() throws Exception {
         assertEquals(0, buf.length());
         dialect.quoteBooleanLiteral(buf, BOOLEAN_LITERAL_ZERO);
         assertEquals(Util.singleQuoteString(BOOLEAN_LITERAL_ZERO), buf.toString());
     }
 
     @Test
-    public void testQuoteBooleanLiteral_TrowsException() throws Exception {
+    void testQuoteBooleanLiteral_TrowsException() throws Exception {
         assertEquals(0, buf.length());
         try {
             dialect.quoteBooleanLiteral(buf, ILLEGAL_BOOLEAN_LITERAL);

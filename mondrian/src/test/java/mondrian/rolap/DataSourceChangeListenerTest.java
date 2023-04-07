@@ -76,7 +76,7 @@ public class DataSourceChangeListenerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDataSourceChangeListenerPlugin(TestingContext context) {
+    void testDataSourceChangeListenerPlugin(TestingContext context) {
         final MondrianProperties properties = MondrianProperties.instance();
         if (properties.TestExpDependencies.get() > 0) {
             // Dependency testing produces side-effects in the cache.

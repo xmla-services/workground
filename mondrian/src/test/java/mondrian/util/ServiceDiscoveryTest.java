@@ -29,7 +29,7 @@ import mondrian.spi.UserDefinedFunction;
 public class ServiceDiscoveryTest{
 
   @org.junit.jupiter.api.Test
-  public void testGetImplementor() throws Exception {
+  void testGetImplementor() throws Exception {
     ServiceDiscovery<UserDefinedFunction> userDefinedFunctionServiceDiscovery =
         ServiceDiscovery.forClass( UserDefinedFunction.class );
     assertNotNull( userDefinedFunctionServiceDiscovery );

@@ -38,10 +38,10 @@ public class SimpleUnparserSelectWithClauseTest {
     private SimpleUnparser unparser = new SimpleUnparser();
 
     @Nested
-    public class CreateSetBodyClauseTest {
+    class CreateSetBodyClauseTest {
 
         @Test
-        public void testCreateSetBodyClause() {
+        void testCreateSetBodyClause() {
             NameObjectIdentifier nameObjectIdentifier = new NameObjectIdentifierR("MySet",
                 ObjectIdentifier.Quoting.UNQUOTED);
 
@@ -74,10 +74,10 @@ public class SimpleUnparserSelectWithClauseTest {
     }
 
     @Nested
-    public class CreateMemberBodyClauseTest {
+    class CreateMemberBodyClauseTest {
 
         @Test
-        public void testCreateMemberBodyClause() {
+        void testCreateMemberBodyClause() {
             CreateMemberBodyClause createMemberBodyClause =
                 new CreateMemberBodyClauseR(
                     new CompoundIdR(List.of(
@@ -92,7 +92,7 @@ public class SimpleUnparserSelectWithClauseTest {
         }
 
         @Test
-        public void testCreateMemberBodyClauseWithMemberPropertyDefinition() {
+        void testCreateMemberBodyClauseWithMemberPropertyDefinition() {
             CreateMemberBodyClause createMemberBodyClause =
                 new CreateMemberBodyClauseR(
                     new CompoundIdR(List.of(

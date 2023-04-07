@@ -29,20 +29,20 @@ public class VerticaDialectTest extends TestCase {
     dialect = new VerticaDialect( connection );
   }
 
-  public void testAllowsRegularExpressionInWhereClause() {
+  void testAllowsRegularExpressionInWhereClause() {
     assertTrue( dialect.allowsRegularExpressionInWhereClause() );
   }
 
-  public void testGenerateRegularExpression_InvalidRegex() throws Exception {
+  void testGenerateRegularExpression_InvalidRegex() throws Exception {
     assertNull( "Invalid regex should be ignored", dialect.generateRegularExpression( "table.column", "(a" ) );
   }
 
-  public void testGenerateRegularExpression_CaseInsensitive() throws Exception {
+  void testGenerateRegularExpression_CaseInsensitive() throws Exception {
     String sql = dialect.generateRegularExpression( "table.column", "(?is)|(?u).*a.*" );
     assertEquals( " REGEXP_LIKE ( CAST (table.column AS VARCHAR), '.*a.*', 'in')", sql );
   }
 
-  public void testGenerateRegularExpression_CaseSensitive() throws Exception {
+  void testGenerateRegularExpression_CaseSensitive() throws Exception {
     String sql = dialect.generateRegularExpression( "table.column", ".*a.*" );
     assertEquals( " REGEXP_LIKE ( CAST (table.column AS VARCHAR), '.*a.*')", sql );
   }

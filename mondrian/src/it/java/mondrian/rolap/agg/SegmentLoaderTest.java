@@ -73,7 +73,7 @@ public class SegmentLoaderTest extends BatchTestCase {
         cacheMgr = null;
     }
 
-    public void testRollup() throws Exception {
+    void testRollup() throws Exception {
         for (boolean rollup : new Boolean[] {true, false}) {
             PrintWriter pw = new PrintWriter(System.out);
             getConnection().getCacheControl(pw).flushSchemaCache();
@@ -109,7 +109,7 @@ public class SegmentLoaderTest extends BatchTestCase {
         }
     }
 
-    public void testLoadWithMockResultsForLoadingSummaryAndDetailedSegments()
+    void testLoadWithMockResultsForLoadingSummaryAndDetailedSegments()
         throws ExecutionException, InterruptedException
     {
         GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender();
@@ -189,7 +189,7 @@ public class SegmentLoaderTest extends BatchTestCase {
      * Tests load with mock results for loading summary and detailed
      * segments with null in rollup column.
      */
-    public void testLoadWithWithNullInRollupColumn()
+    void testLoadWithWithNullInRollupColumn()
         throws ExecutionException, InterruptedException
     {
         GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender();
@@ -302,7 +302,7 @@ public class SegmentLoaderTest extends BatchTestCase {
         };
     }
 
-    public void testLoadWithMockResultsForLoadingOnlyDetailedSegments()
+    void testLoadWithMockResultsForLoadingOnlyDetailedSegments()
         throws ExecutionException, InterruptedException
     {
         GroupingSet groupingSetsInfo = getDefaultGroupingSet();
@@ -419,7 +419,7 @@ public class SegmentLoaderTest extends BatchTestCase {
                 measureUnitSales);
     }
 
-    public void testProcessDataForSettingNullAxis()
+    void testProcessDataForSettingNullAxis()
         throws SQLException
     {
         GroupingSet groupingSetsInfo = getDefaultGroupingSet();
@@ -460,7 +460,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     }
 
     // PDI-16150
-    public void testProcessBinaryData()
+    void testProcessBinaryData()
             throws SQLException
     {
         GroupingSet groupingSetsInfo = getDefaultGroupingSet();
@@ -508,7 +508,7 @@ public class SegmentLoaderTest extends BatchTestCase {
 
     }
 
-    public void testProcessDataForNonGroupingSetsScenario()
+    void testProcessDataForNonGroupingSetsScenario()
         throws SQLException
     {
         GroupingSet groupingSetsInfo = getDefaultGroupingSet();
@@ -635,7 +635,7 @@ public class SegmentLoaderTest extends BatchTestCase {
         }
     }
 
-    public void testGetGroupingBitKey() throws SQLException {
+    void testGetGroupingBitKey() throws SQLException {
         Object[] data = {
             "1997", "Food", "Deli", "M", "6047", 0, 0, 0, 0
         };
@@ -668,7 +668,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             new SegmentLoader(cacheMgr).getRollupBitKey(4, rowList, 5));
     }
 
-    public void testGroupingSetsUtilForMissingGroupingBitKeys() {
+    void testGroupingSetsUtilForMissingGroupingBitKeys() {
         List<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
         groupingSets.add(getDefaultGroupingSet());
         groupingSets.add(getGroupingSetRollupOnGender());
@@ -710,7 +710,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             cubeNameSales, measureUnitSales);
     }
 
-    public void testGroupingSetsUtilSetsDetailForRollupColumns() {
+    void testGroupingSetsUtilSetsDetailForRollupColumns() {
         RolapStar.Measure measure = getMeasure(cubeNameSales, measureUnitSales);
         RolapStar star = measure.getStar();
         RolapStar.Column year = star.lookupColumn(tableTime, fieldYear);
@@ -796,7 +796,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             measureUnitSales);
     }
 
-    public void testGroupingSetsUtilSetsForDetailForRollupColumns() {
+    void testGroupingSetsUtilSetsForDetailForRollupColumns() {
         RolapStar.Measure measure = getMeasure(cubeNameSales, measureUnitSales);
         RolapStar star = measure.getStar();
         RolapStar.Column year = star.lookupColumn(tableTime, fieldYear);
@@ -841,7 +841,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             .getRollupColumns().isEmpty());
     }
 
-    public void testGroupingSetsUtilSetsForGroupingFunctionIndex() {
+    void testGroupingSetsUtilSetsForGroupingFunctionIndex() {
         List<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
         groupingSets.add(getDefaultGroupingSet());
         groupingSets.add(getGroupingSetRollupOnProductDepartment());
@@ -866,7 +866,7 @@ public class SegmentLoaderTest extends BatchTestCase {
         assertEquals(3, detail.findGroupingFunctionIndex(0));
     }
 
-    public void testGetGroupingColumnsList() {
+    void testGetGroupingColumnsList() {
         GroupingSet groupingSetsInfo = getDefaultGroupingSet();
 
         GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender();

@@ -26,7 +26,7 @@ public class ParallelTest extends FoodMartTestCase {
         super(name);
     }
 
-    public void testParallelSchemaFlush() {
+    void testParallelSchemaFlush() {
         // 5 threads, 8 cycles each, flush cache 1/10 of the time
         checkSchemaFlush(5, 8, 10);
     }

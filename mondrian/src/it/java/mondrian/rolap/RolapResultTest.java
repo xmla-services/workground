@@ -83,7 +83,7 @@ public class RolapResultTest extends AggTableTestCase {
         super.tearDown();
     }
 
-    public void testAll() throws Exception {
+    void testAll() throws Exception {
         if (!isApplicable()) {
             return;
         }
@@ -107,7 +107,7 @@ public class RolapResultTest extends AggTableTestCase {
 */
     }
 
-    public void testD1() throws Exception {
+    void testD1() throws Exception {
         if (!isApplicable()) {
             return;
         }
@@ -137,7 +137,7 @@ Axis #2:
         assertEquals(resultString, RESULTS);
     }
 
-    public void testD2() throws Exception {
+    void testD2() throws Exception {
         if (!isApplicable()) {
             return;
         }
@@ -280,7 +280,7 @@ Axis #2:
             + "</Cube>";
     }
 
-    public void testNonAllPromotionMembers() {
+    void testNonAllPromotionMembers() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Promotions2\" foreignKey=\"promotion_id\">\n"

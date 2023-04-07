@@ -45,7 +45,7 @@ public class MondrianServerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testEmbedded(TestingContext context) {
+    void testEmbedded(TestingContext context) {
         final MondrianServer server =
             MondrianServer.forConnection(context.createConnection());
         final int id = server.getId();
@@ -57,7 +57,7 @@ public class MondrianServerTest {
      * Tests a server with its own repository.
      */
     @Test
-    public void testStringRepository() throws MalformedURLException {
+    void testStringRepository() throws MalformedURLException {
         final MondrianServer server =
             MondrianServer.createWithRepository(
                 new StringRepositoryContentFinder("foo bar"),
@@ -73,7 +73,7 @@ public class MondrianServerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testRepository(TestingContext context) throws MalformedURLException, SQLException {
+    void testRepository(TestingContext context) throws MalformedURLException, SQLException {
         final XmlaTestContext xmlaTestContext = new XmlaTestContext();
         final MondrianServer server =
             MondrianServer.createWithRepository(
@@ -97,7 +97,7 @@ public class MondrianServerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testRepositoryWithBadCatalog(TestingContext context) throws Exception {
+    void testRepositoryWithBadCatalog(TestingContext context) throws Exception {
         final XmlaTestContext xmlaTestContext = new XmlaTestContext() {
             Util.PropertyList connectProperties =
                 Util.parseConnectString(context.createConnection().getConnectString());

@@ -50,7 +50,7 @@ public class CellKeyTest  {
     }
 
     @Test
-    public void testMany() {
+    void testMany() {
         CellKey key = CellKey.Generator.newManyCellKey(5);
 
         assertTrue(key.size() == 5, "CellKey size");
@@ -102,7 +102,7 @@ public class CellKeyTest  {
     }
 
     @Test
-    public void testZero() {
+    void testZero() {
         CellKey key = CellKey.Generator.newCellKey(new int[0]);
         CellKey key2 = CellKey.Generator.newCellKey(new int[0]);
         assertTrue(key == key2); // all 0-dimensional keys have same singleton
@@ -126,7 +126,7 @@ public class CellKeyTest  {
     }
 
     @Test
-    public void testOne() {
+    void testOne() {
         CellKey key = CellKey.Generator.newCellKey(1);
         assertTrue(key.size() == 1, "CellKey size");
 
@@ -172,7 +172,7 @@ public class CellKeyTest  {
     }
 
     @Test
-    public void testTwo() {
+    void testTwo() {
         CellKey key = CellKey.Generator.newCellKey(2);
 
         assertTrue(key.size() == 2, "CellKey size");
@@ -220,7 +220,7 @@ public class CellKeyTest  {
     }
 
     @Test
-    public void testThree() {
+    void testThree() {
         CellKey key = CellKey.Generator.newCellKey(3);
 
         assertTrue(key.size() == 3, "CellKey size");
@@ -269,7 +269,7 @@ public class CellKeyTest  {
     }
 
     @Test
-    public void testFour() {
+    void testFour() {
         CellKey key = CellKey.Generator.newCellKey(4);
 
         assertTrue(key.size() == 4, "CellKey size");
@@ -320,7 +320,7 @@ public class CellKeyTest  {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCellLookup(TestingContext context) {
+    void testCellLookup(TestingContext context) {
         if (!isDefaultNullMemberRepresentation()) {
             return;
         }
@@ -390,7 +390,7 @@ public class CellKeyTest  {
         assertQueryReturns(context.createConnection(), query, result);
     }
 
-    public void testSize() {
+    void testSize() {
         for (int i = 1; i < 20; i++) {
             assertEquals(i, CellKey.Generator.newCellKey(new int[i]).size());
             assertEquals(i, CellKey.Generator.newCellKey(i).size());

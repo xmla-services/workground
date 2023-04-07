@@ -50,7 +50,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testPositiveMatching(TestingContext context) throws Exception {
+    void testPositiveMatching(TestingContext context) throws Exception {
         if (!MondrianProperties.instance().EnableNativeFilter.get()) {
             // No point testing these if the native filters
             // are turned off.
@@ -134,7 +134,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNegativeMatching(TestingContext context) throws Exception {
+    void testNegativeMatching(TestingContext context) throws Exception {
         if (!MondrianProperties.instance().EnableNativeFilter.get()) {
              // No point testing these if the native filters
              // are turned off.
@@ -202,7 +202,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMatchBugMondrian983(TestingContext context) {
+    void testMatchBugMondrian983(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "With\n"
             + "Set [*NATIVE_CJ_SET] as 'Filter([*BASE_MEMBERS_Product], Not IsEmpty ([Measures].[Unit Sales]))' \n"
@@ -229,7 +229,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativeFilterSameAsNonNative(TestingContext context) {
+    void testNativeFilterSameAsNonNative(TestingContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1694
         // In some cases native filter would includes an unnecessary fact table
         // join which incorrectly eliminated some tuples from the set
@@ -262,7 +262,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCachedNativeFilter(TestingContext context) {
+    void testCachedNativeFilter(TestingContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1694
 
         // verify that the RolapNativeSet cached values from NON EMPTY context
@@ -280,7 +280,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMatchesWithAccessControl(TestingContext context) {
+    void testMatchesWithAccessControl(TestingContext context) {
         String dimension =
             "<Dimension name=\"Store2\">\n"
             + "  <Hierarchy hasAll=\"true\" primaryKey=\"store_id\"  >\n"
@@ -337,7 +337,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativeFilterWithCompoundSlicer(TestingContext context) {
+    void testNativeFilterWithCompoundSlicer(TestingContext context) {
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
         final String mdx =
             "with member measures.avgQtrs as 'avg( filter( time.quarter.members, measures.[unit sales] > 80))' "
@@ -435,7 +435,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativeFilterWithCompoundSlicerWithAggs(TestingContext context) {
+    void testNativeFilterWithCompoundSlicerWithAggs(TestingContext context) {
         propSaver.set(MondrianProperties.instance().UseAggregates, true);
         propSaver.set(MondrianProperties.instance().ReadAggregates, true);
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
@@ -503,7 +503,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativeFilterWithCompoundSlicer_1(TestingContext context) {
+    void testNativeFilterWithCompoundSlicer_1(TestingContext context) {
         propSaver.set(MondrianProperties.instance().GenerateFormattedSql, true);
         final String mdx =
             "with member [measures].[avgQtrs] as 'count(filter([Customers].[Name].Members, [Measures].[Unit Sales] > 0))' "
@@ -649,7 +649,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativeFilterWithCompoundSlicer_2(TestingContext context) {
+    void testNativeFilterWithCompoundSlicer_2(TestingContext context) {
         verifySameNativeAndNot(context.createConnection(),
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, ([Measures].[Unit Sales] > 1000 OR ( [Measures].[Unit Sales] > 40 AND [Store].[Store City].CurrentMember.Name = \"San Francisco\" ) ) ) )'\n"
             + "SELECT [Measures].[TotalVal] ON 0, [Product].[All Products].Children on 1 FROM [Sales] WHERE {[Time].[1997].[Q1],[Time].[1997].[Q2]}",
@@ -658,7 +658,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativeFilterWithCompoundSlicer_3(TestingContext context) {
+    void testNativeFilterWithCompoundSlicer_3(TestingContext context) {
         verifySameNativeAndNot(context.createConnection(),
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, [Measures].[Unit Sales] > 1000 ) )'\n"
             + "SELECT [Measures].[TotalVal] ON 0, [Product].[All Products].Children on 1 FROM [Sales] WHERE {[Time].[1997].[Q1],[Time].[1997].[Q2]}",
@@ -667,7 +667,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativeFilterWithCompoundSlicer_4(TestingContext context) {
+    void testNativeFilterWithCompoundSlicer_4(TestingContext context) {
         verifySameNativeAndNot(context.createConnection(),
             "WITH MEMBER [Measures].[TotalVal] AS 'Aggregate(Filter({[Store].[Store City].members}, ([Measures].[Unit Sales] > 1000 OR ( [Measures].[Unit Sales] > 500 AND [Store].[Store City].CurrentMember.Name = \"San Francisco\" ) ) ) )'\n"
             + "SELECT [Measures].[TotalVal] ON 0, [Product].[All Products].Children on 1 FROM [Sales] WHERE {[Time].[1997].[Q1],[Time].[1997].[Q2]}",
@@ -676,7 +676,7 @@ public class NativeFilterMatchingTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNativeFilterWithCompoundSlicerDifferentProducts(TestingContext context) {
+    void testNativeFilterWithCompoundSlicerDifferentProducts(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "with member measures.avgQtrs as 'count(filter(Customers.[Name].members, [Unit Sales] > 0))' "
             + "select measures.avgQtrs on 0 from sales where ( {[Product].[Drink].[Alcoholic Beverages].[Beer and Wine].[Beer], [Product].[Food].[Baked Goods].[Bread].[Muffins]} )",

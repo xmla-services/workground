@@ -32,7 +32,7 @@ public class AggSchemaScanTest extends FoodMartTestCase {
   }
 
 
-  public void testAggScanPropertiesEmptySchema() throws Exception {
+  void testAggScanPropertiesEmptySchema() throws Exception {
 
     final RolapConnection rolapConn = (RolapConnection) getConnection();
     final DataSource dataSource = rolapConn.getDataSource();
@@ -60,7 +60,7 @@ public class AggSchemaScanTest extends FoodMartTestCase {
   }
 
 
-  public void testAggScanPropertiesPopulatedSchema() throws Exception {
+  void testAggScanPropertiesPopulatedSchema() throws Exception {
 
     final RolapConnection rolapConn = (RolapConnection) getConnection();
     final DataSource dataSource = rolapConn.getDataSource();

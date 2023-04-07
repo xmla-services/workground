@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 public class PidTest {
 
     @Test
-    public void testPidNotChanged() throws Exception {
+    void testPidNotChanged() throws Exception {
         assertThat(BasicContext.class.getName()).isSameAs(BasicContext.PID);
     }
 }

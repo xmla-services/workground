@@ -30,7 +30,7 @@ public class I18nTest extends FoodMartTestCase {
     public static final char EA = '\u00e9'; // e acute
     public static final char UC = '\u00FB'; // u circumflex
 
-    public void testFormat() {
+    void testFormat() {
         // Make sure Util is loaded, so that the LocaleFormatFactory gets
         // registered.
         Util.discard(Util.nl);
@@ -62,19 +62,19 @@ public class I18nTest extends FoodMartTestCase {
         assertEquals("Samstag, Januar 22, 2005", dateFormat.format(date));
     }
 
-    public void testAutoFrench() {
+    void testAutoFrench() {
         // Create a connection in French.
         String localeName = "fr_FR";
         String resultString = "12" + Nbsp + "345,67";
         assertFormatNumber(localeName, resultString);
     }
 
-    public void testAutoSpanish() {
+    void testAutoSpanish() {
         // Format a number in (Peninsular) spanish.
         assertFormatNumber("es", "12.345,67");
     }
 
-    public void testAutoMexican() {
+    void testAutoMexican() {
         // Format a number in Mexican spanish.
         assertFormatNumber("es_MX", "12,345.67");
     }

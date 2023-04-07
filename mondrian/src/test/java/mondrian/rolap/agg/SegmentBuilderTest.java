@@ -94,7 +94,7 @@ public class SegmentBuilderTest {
     }
 
     @Test
-    public void testRollupWithNullAxisVals() {
+    void testRollupWithNullAxisVals() {
         // Perform two rollups.  One with two columns each containing 3 values.
         // The second with two columns containing 2 values + null.
         // The rolled up values should be equal in the two cases.
@@ -124,7 +124,7 @@ public class SegmentBuilderTest {
     }
 
     @Test
-    public void testRollupWithMixOfNullAxisValues() {
+    void testRollupWithMixOfNullAxisValues() {
         // constructed segment has 3 columns:
         //    2 values in the first
         //    2 values + null in the second and third
@@ -153,7 +153,7 @@ public class SegmentBuilderTest {
     }
 
     @Test
-    public void testRollup2ColumnsWithMixOfNullAxisValues() {
+    void testRollup2ColumnsWithMixOfNullAxisValues() {
         // constructed segment has 3 columns:
         //    2 values in the first
         //    2 values + null in the second and third
@@ -190,7 +190,7 @@ public class SegmentBuilderTest {
     }
 
     @Test
-    public void testMultiSegRollupWithMixOfNullAxisValues() {
+    void testMultiSegRollupWithMixOfNullAxisValues() {
         // rolls up 2 segments.
         // Segment 1 has 3 columns:
         //    2 values in the first
@@ -263,7 +263,7 @@ public class SegmentBuilderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNullMemberOffset(TestingContext context) {
+    void testNullMemberOffset(TestingContext context) {
         // verifies that presence of a null member does not cause
         // offsets to be incorrect for a Segment rollup.
         // First query loads the cache with a segment that can fulfill the
@@ -304,7 +304,7 @@ public class SegmentBuilderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNullMemberOffset2ColRollup(TestingContext context) {
+    void testNullMemberOffset2ColRollup(TestingContext context) {
         // verifies that presence of a null member does not cause
         // offsets to be incorrect for a Segment rollup involving 2
         // columns.  This tests a case where
@@ -349,7 +349,7 @@ public class SegmentBuilderTest {
     }
 
     @Test
-    public void testSegmentBodyIterator() {
+    void testSegmentBodyIterator() {
         // checks that cell key coordinates are generated correctly
         // when a null member is present.
         List<Pair<SortedSet<Comparable>, Boolean>> axes =
@@ -379,7 +379,7 @@ public class SegmentBuilderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSparseRollup(TestingContext context) {
+    void testSparseRollup(TestingContext context) {
         // functional test for a case that causes OOM if rollup creates
         // a dense segment.
         // This takes several seconds to run
@@ -411,7 +411,7 @@ public class SegmentBuilderTest {
     }
 
     @Test
-    public void testRollupWithIntOverflowPossibility() {
+    void testRollupWithIntOverflowPossibility() {
         // rolling up a segment that would cause int overflow if
         // rolled up to a dense segment
         // MONDRIAN-1377
@@ -430,7 +430,7 @@ public class SegmentBuilderTest {
     }
 
     @Test
-    public void testRollupWithOOMPossibility() {
+    void testRollupWithOOMPossibility() {
         // rolling up a segment that would cause OOM if
         // rolled up to a dense segment
         // MONDRIAN-1377
@@ -448,7 +448,7 @@ public class SegmentBuilderTest {
     }
 
     @Test
-    public void testRollupShouldBeDense() {
+    void testRollupShouldBeDense() {
         // Fewer than 1000 column values in rolled up segment.
         Pair<SegmentHeader, SegmentBody> rollup =
             SegmentBuilder.rollup(
@@ -472,7 +472,7 @@ public class SegmentBuilderTest {
     }
 
     @Test
-    public void testRollupWithDenseIntBody() {
+    void testRollupWithDenseIntBody() {
       //
       //  We have the following data:
       //
@@ -528,7 +528,7 @@ public class SegmentBuilderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOverlappingSegments(TestingContext context) {
+    void testOverlappingSegments(TestingContext context) {
         // MONDRIAN-2107
         // The segments created by the first 2 queries below overlap on
         //  [1997].[Q1].[1].  The rollup of these two segments should not
@@ -583,7 +583,7 @@ public class SegmentBuilderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonOverlappingRollupWithUnconstrainedColumn(TestingContext context) {
+    void testNonOverlappingRollupWithUnconstrainedColumn(TestingContext context) {
         // MONDRIAN-2107
         // The two segments loaded by the 1st 2 queries will have predicates
         // optimized for Name.  Prior to the fix for 2107 this would
@@ -625,7 +625,7 @@ public class SegmentBuilderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNonOverlappingRollupWithUnconstrainedColumnAndHasNull(TestingContext context) {
+    void testNonOverlappingRollupWithUnconstrainedColumnAndHasNull(TestingContext context) {
         // MONDRIAN-2107
         // Creates 10 segments, one for each city, with various sets
         // of [Store Sqft].  Some contain NULL, some do not.
@@ -669,7 +669,7 @@ public class SegmentBuilderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBadRollupCausesGreaterThan12Iterations(TestingContext context) {
+    void testBadRollupCausesGreaterThan12Iterations(TestingContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
         // The first two queries populate the cache with segments
         // capable of being rolled up to fulfill the 3rd query.
@@ -699,7 +699,7 @@ public class SegmentBuilderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSameRollupRegardlessOfSegmentOrderWithEmptySegmentBody(TestingContext context) {
+    void testSameRollupRegardlessOfSegmentOrderWithEmptySegmentBody(TestingContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
         // rollup of segments {A, B} should produce the same resulting segment
         // regardless of whether rollup processes them in the order A,B or B,A.
@@ -744,7 +744,7 @@ public class SegmentBuilderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSameRollupRegardlessOfSegmentOrderWithData(TestingContext context) {
+    void testSameRollupRegardlessOfSegmentOrderWithData(TestingContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
         // Tests a wildcarded segment rolled up w/ a seg containing a single
         // val.  Both segments are associated w/ non empty results.
@@ -780,7 +780,7 @@ public class SegmentBuilderTest {
     	segmentCache.getSegmentHeaders().stream().forEach(it -> segmentCache.remove(it));
 	}
 
-    public void testSameRollupRegardlessOfSegmentOrderNoWildcards(TestingContext context) {
+    void testSameRollupRegardlessOfSegmentOrderNoWildcards(TestingContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
         // Tests 2 segments, each w/ no wildcarded values.
         runRollupTest(context.createConnection(),
@@ -807,7 +807,7 @@ public class SegmentBuilderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSameRollupRegardlessOfSegmentOrderThreeSegs(TestingContext context) {
+    void testSameRollupRegardlessOfSegmentOrderThreeSegs(TestingContext context) {
         // http://jira.pentaho.com/browse/MONDRIAN-1729
         // Tests 3 segments, each w/ no wildcarded values.
     	context.createConnection().getCacheControl(null).flushSchemaCache();
@@ -837,13 +837,13 @@ public class SegmentBuilderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSegmentCreationForBoolean_True(TestingContext context) {
+    void testSegmentCreationForBoolean_True(TestingContext context) {
         doTestSegmentCreationForBoolean(context.createConnection(), true);
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testSegmentCreationForBoolean_False(TestingContext context) {
+    void testSegmentCreationForBoolean_False(TestingContext context) {
         doTestSegmentCreationForBoolean(context.createConnection(),false);
     }
 
@@ -1112,7 +1112,7 @@ public class SegmentBuilderTest {
     return new TreeSet<Comparable>(list);
   }
 
-  public void testRollupWithNonUniqueColumns() {
+  void testRollupWithNonUniqueColumns() {
       Pair<SegmentHeader, SegmentBody> rollup =
           SegmentBuilder.rollup(
               makeSegmentMap(

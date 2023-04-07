@@ -33,7 +33,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
         return getTestContext();
     }
 
-    public void testExplicitAggExtraColsRequiringJoin() throws SQLException {
+    void testExplicitAggExtraColsRequiringJoin() throws SQLException {
         TestContext testContext = setupMultiColDimCube(
             "    <AggName name=\"agg_g_ms_pcat_sales_fact_1997\">\n"
             + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
@@ -108,7 +108,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `agg_g_ms_pcat_sales_fact_1997`.`gender`"));
     }
 
-    public void testExplicitForeignKey() {
+    void testExplicitForeignKey() {
         TestContext testContext = setupMultiColDimCube(
             "    <AggName name=\"agg_c_14_sales_fact_1997\">\n"
             + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
@@ -206,7 +206,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
     }
 
 
-    public void testExplicitAggOrdinalOnAggTable() throws SQLException {
+    void testExplicitAggOrdinalOnAggTable() throws SQLException {
         TestContext testContext = setupMultiColDimCube(
             "    <AggName name=\"exp_agg_test\">\n"
             + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
@@ -258,7 +258,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
                     + "    ISNULL(`exp_agg_test`.`gender`) ASC, `exp_agg_test`.`gender` ASC")));
     }
 
-    public void testExplicitAggCaptionOnAggTable() throws SQLException {
+    void testExplicitAggCaptionOnAggTable() throws SQLException {
         TestContext testContext = setupMultiColDimCube(
             "    <AggName name=\"exp_agg_test\">\n"
             + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
@@ -310,7 +310,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
                     + "    ISNULL(`exp_agg_test`.`gender`) ASC, `exp_agg_test`.`gender` ASC")));
     }
 
-    public void testExplicitAggNameColumnOnAggTable() throws SQLException {
+    void testExplicitAggNameColumnOnAggTable() throws SQLException {
         TestContext testContext = setupMultiColDimCube(
             "    <AggName name=\"exp_agg_test\">\n"
             + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
@@ -367,7 +367,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
     }
 
 
-    public void testExplicitAggPropertiesOnAggTable() throws SQLException {
+    void testExplicitAggPropertiesOnAggTable() throws SQLException {
         TestContext testContext = setupMultiColDimCube(
             "    <AggName name=\"exp_agg_test_distinct_count\">\n"
             + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
@@ -465,7 +465,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
     }
 
 
-    public void testCountDistinctAllowableRollup() throws SQLException {
+    void testCountDistinctAllowableRollup() throws SQLException {
         TestContext testContext = setupMultiColDimCube(
             "    <AggName name=\"exp_agg_test_distinct_count\">\n"
             + "        <AggFactCount column=\"FACT_COUNT\"/>\n"
@@ -548,7 +548,7 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
                 + "    `exp_agg_test_distinct_count`.`store_name`"));
     }
 
-    public void testCountDisallowedRollup() throws SQLException {
+    void testCountDisallowedRollup() throws SQLException {
         TestContext testContext = setupMultiColDimCube(
             "    <AggName name=\"exp_agg_test_distinct_count\">\n"
             + "        <AggFactCount column=\"FACT_COUNT\"/>\n"

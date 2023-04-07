@@ -55,7 +55,7 @@ public class DefaultRecognizerTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDefaultRecognizerWithFactAlias(TestingContext context) {
+    void testDefaultRecognizerWithFactAlias(TestingContext context) {
         Connection connection = context.createConnection();
         flushSchemaCache(connection);
         final String cube =
@@ -117,7 +117,7 @@ public class DefaultRecognizerTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testTupleReaderWithDistinctCountMeasureInContext(TestingContext context) {
+    void testTupleReaderWithDistinctCountMeasureInContext(TestingContext context) {
         Connection connection = context.createConnection();
         flushSchemaCache(connection);        
         // Validates that if a distinct count measure is in context

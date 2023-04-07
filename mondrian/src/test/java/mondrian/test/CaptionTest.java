@@ -43,7 +43,7 @@ public class CaptionTest{
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMeasureCaption(TestingContext context) {
+    void testMeasureCaption(TestingContext context) {
         withSchemaProcessor(context, MyFoodmart.class);
         final Connection monConnection =
                 context.createConnection();
@@ -64,7 +64,7 @@ public class CaptionTest{
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDimCaption(TestingContext context) {
+    void testDimCaption(TestingContext context) {
         withSchemaProcessor(context, MyFoodmart.class);
         final Connection monConnection =
                 context.createConnection();
@@ -86,7 +86,7 @@ public class CaptionTest{
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDimCaptionShared(TestingContext context) {
+    void testDimCaptionShared(TestingContext context) {
         String mdxQuery =
                 "SELECT {[Measures].[Unit Sales]} ON COLUMNS, "
                         + "{[Store Size in SQFT].[All Store Size in SQFTs]} ON ROWS "
@@ -115,7 +115,7 @@ public class CaptionTest{
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testLevelCaptionExpression(TestingContext context) {
+    void testLevelCaptionExpression(TestingContext context) {
 
         switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
             case ACCESS:

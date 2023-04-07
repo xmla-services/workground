@@ -28,26 +28,26 @@ import java.util.List;
  * @author efine
  */
 public class VisualTotalsTest extends TestCase {
-    public void testSubstituteEmpty() {
+    void testSubstituteEmpty() {
         final String actual = VisualTotalsFunDef.substitute("", "anything");
         final String expected = "";
         assertEquals(expected, actual);
     }
 
-    public void testSubstituteOneStarOnly() {
+    void testSubstituteOneStarOnly() {
         final String actual = VisualTotalsFunDef.substitute("*", "anything");
         final String expected = "anything";
         assertEquals(expected, actual);
     }
 
-    public void testSubstituteOneStarBegin() {
+    void testSubstituteOneStarBegin() {
         final String actual =
             VisualTotalsFunDef.substitute("* is the word.", "Grease");
         final String expected = "Grease is the word.";
         assertEquals(expected, actual);
     }
 
-    public void testSubstituteOneStarEnd() {
+    void testSubstituteOneStarEnd() {
         final String actual =
             VisualTotalsFunDef.substitute(
                 "Lies, damned lies, and *!", "statistics");
@@ -55,13 +55,13 @@ public class VisualTotalsTest extends TestCase {
         assertEquals(expected, actual);
     }
 
-    public void testSubstituteTwoStars() {
+    void testSubstituteTwoStars() {
         final String actual = VisualTotalsFunDef.substitute("**", "anything");
         final String expected = "*";
         assertEquals(expected, actual);
     }
 
-    public void testSubstituteCombined() {
+    void testSubstituteCombined() {
         final String actual =
             VisualTotalsFunDef.substitute(
                 "*: see small print**** for *", "disclaimer");
@@ -75,7 +75,7 @@ public class VisualTotalsTest extends TestCase {
      *
      * @throws java.sql.SQLException on error
      */
-    public void testDrillthroughVisualTotal() throws SQLException {
+    void testDrillthroughVisualTotal() throws SQLException {
         CellSet cellSet =
             TestContext.instance().executeOlap4jQuery(
                 "select {[Measures].[Unit Sales]} on columns, "
@@ -111,7 +111,7 @@ public class VisualTotalsTest extends TestCase {
      *
      * @throws java.sql.SQLException on error
      */
-    public void testVisualTotalCaptionBug() throws SQLException {
+    void testVisualTotalCaptionBug() throws SQLException {
         CellSet cellSet =
             TestContext.instance().executeOlap4jQuery(
                 "select {[Measures].[Unit Sales]} on columns, "
@@ -137,7 +137,7 @@ public class VisualTotalsTest extends TestCase {
      *
      * @throws java.sql.SQLException on error
      */
-    public void testVisualTotalsAggregatedMemberBug() throws SQLException {
+    void testVisualTotalsAggregatedMemberBug() throws SQLException {
         CellSet cellSet =
             TestContext.instance().executeOlap4jQuery(
                 " with  member [Gender].[YTD] as 'AGGREGATE(YTD(),[Gender].[M])'" 

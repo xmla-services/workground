@@ -39,10 +39,10 @@ public class SimpleUnparserSelectSubCubeClauseTest {
     private SimpleUnparser unparser = new SimpleUnparser();
 
     @Nested
-    public class SelectSubCubeClauseNameTestTest {
+    class SelectSubCubeClauseNameTestTest {
 
         @Test
-        public void testUnQuoted() {
+        void testUnQuoted() {
             NameObjectIdentifier cubeName = new NameObjectIdentifierR("subCube", ObjectIdentifier.Quoting.UNQUOTED);
             SelectSubcubeClause selectSubcubeClauseName = new SelectSubcubeClauseNameR(cubeName);
             assertThat(unparser.unparseSelectSubcubeClause(selectSubcubeClauseName)).asString()
@@ -50,7 +50,7 @@ public class SimpleUnparserSelectSubCubeClauseTest {
         }
 
         @Test
-        public void testQuoted() {
+        void testQuoted() {
             NameObjectIdentifier cubeName = new NameObjectIdentifierR("subCube", ObjectIdentifier.Quoting.QUOTED);
             SelectSubcubeClause selectSubcubeClauseName = new SelectSubcubeClauseNameR(cubeName);
             assertThat(unparser.unparseSelectSubcubeClause(selectSubcubeClauseName)).asString()
@@ -59,10 +59,10 @@ public class SimpleUnparserSelectSubCubeClauseTest {
     }
 
     @Nested
-    public class SelectSubCubeClauseStatementTest {
+    class SelectSubCubeClauseStatementTest {
 
         @Test
-        public void testSingleSubCube() {
+        void testSingleSubCube() {
             String mdx = " ( \r\n  SELECT \r\n{[Date],[Calendar],[Calendar Year],&[2001]} ON COLUMNS FROM \r\n[Adventure Works]\r\n ) \r\n";
             SelectSubcubeClauseStatement selectSubcubeClauseStatement =
                 new SelectSubcubeClauseStatementR(
@@ -85,7 +85,7 @@ public class SimpleUnparserSelectSubCubeClauseTest {
         }
 
         @Test
-        public void testMultiSubCube() {
+        void testMultiSubCube() {
             String mdx =
                 " ( \r\n  SELECT \r\n{[Date],[Calendar],[Calendar Year],&[2001]} ON COLUMNS FROM \r\n ( \r\n  SELECT \r\n{test} ON COLUMNS FROM \r\n[cube]\r\n ) \r\n\r\n ) \r\n";
             SelectSubcubeClauseStatement selectSubcubeClauseStatement =

@@ -283,7 +283,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
 
     // ~ Test methods ----------------------------------------------------------
 
-    public void testIsSupportedExpressionForCalculatedMember() {
+    void testIsSupportedExpressionForCalculatedMember() {
         Assert.assertEquals(
             "null expression",
             false,
@@ -389,7 +389,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
                 aggregateExpr));
     }
 
-    public void testIsSupportedCalculatedMember() {
+    void testIsSupportedCalculatedMember() {
         Member member = Mockito.mock(Member.class);
         Assert.assertEquals(false, member.isCalculated());
         Assert.assertEquals(
@@ -412,7 +412,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
             true, SqlConstraintUtils.isSupportedCalculatedMember(member));
     }
 
-    public void testReplaceCompoundSlicerPlaceholder() {
+    void testReplaceCompoundSlicerPlaceholder() {
         final TestContext testContext = TestContext.instance();
         final Connection connection = testContext.getConnection();
 
@@ -447,7 +447,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
         Assert.assertSame(expectedMember, r);
     }
 
-    public void testExpandSupportedCalculatedMember_notCalculated() {
+    void testExpandSupportedCalculatedMember_notCalculated() {
         // init
         Evaluator evaluator = Mockito.mock(Evaluator.class);
 
@@ -465,7 +465,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
     }
 
 
-    public void testExpandSupportedCalculatedMember_calculated_unsupported() {
+    void testExpandSupportedCalculatedMember_calculated_unsupported() {
         Evaluator evaluator = Mockito.mock(Evaluator.class);
 
         Member member = makeUnsupportedCalculatedMember("0");
@@ -481,7 +481,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
         Assert.assertSame(member, r.get(0));
     }
 
-    public void testExpandSupportedCalculatedMember_calculated_memberExpr() {
+    void testExpandSupportedCalculatedMember_calculated_memberExpr() {
         Evaluator evaluator = Mockito.mock(Evaluator.class);
 
         Member resultMember = makeNoncalculatedMember("0");
@@ -498,7 +498,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
         Assert.assertSame(resultMember, r.get(0));
     }
 
-    public void testExpandSupportedCalculatedMember_calculated_aggregate() {
+    void testExpandSupportedCalculatedMember_calculated_aggregate() {
         Evaluator evaluator = Mockito.mock(Evaluator.class);
 
         Member endMember0 = Mockito.mock(Member.class);
@@ -556,7 +556,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
         assertSameContent("",  aggregatedMembers, r);
     }
 
-    public void testExpandSupportedCalculatedMember_calculated_parentheses() {
+    void testExpandSupportedCalculatedMember_calculated_parentheses() {
         Evaluator evaluator = Mockito.mock(Evaluator.class);
 
         Member resultMember = Mockito.mock(Member.class);
@@ -574,7 +574,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
         Assert.assertSame(resultMember, r.get(0));
     }
 
-    public void testExpandSupportedCalculatedMembers() {
+    void testExpandSupportedCalculatedMembers() {
         Evaluator evaluator = Mockito.mock(Evaluator.class);
 
         Member endMember0 = Mockito.mock(Member.class);
@@ -627,7 +627,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
     }
 
     // test with a placeholder member
-    public void testExpandSupportedCalculatedMembers2() {
+    void testExpandSupportedCalculatedMembers2() {
       final TestContext testContext = TestContext.instance();
       final Connection connection = testContext.getConnection();
 
@@ -671,7 +671,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
     /**
      * calculation test for disjoint tuples
      */
-    public void testGetSetFromCalculatedMember() {
+    void testGetSetFromCalculatedMember() {
         List<Member> listColumn1 = new ArrayList<Member>();
         List<Member> listColumn2 = new ArrayList<Member>();
 
@@ -697,7 +697,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
     /**
      * calculation test for disjoint tuples
      */
-    public void testGetSetFromCalculatedMember_disjoint() {
+    void testGetSetFromCalculatedMember_disjoint() {
         final int ARITY = 2;
 
         List<Member> listColumn1 = new ArrayList<Member>();
@@ -786,7 +786,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
         return constraint;
     }
 
-    public void testRemoveCalculatedAndDefaultMembers() {
+    void testRemoveCalculatedAndDefaultMembers() {
         Hierarchy hierarchy = mock(Hierarchy.class);
 
         // create members
@@ -824,7 +824,7 @@ public class SqlConstraintUtilsTest extends FoodMartTestCase {
         return mock;
     }
 
-    public void testConstrainLevel(){
+    void testConstrainLevel(){
 
         final RolapCubeLevel level = mock( RolapCubeLevel.class);
         final RolapCube baseCube = mock(RolapCube.class);

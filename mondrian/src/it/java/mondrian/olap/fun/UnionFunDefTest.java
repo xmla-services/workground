@@ -46,7 +46,7 @@ public class UnionFunDefTest extends FoodMartTestCase {
    *
    * Tuples are gotten from customer attachments.
    */
-  public void testMondrian2250() {
+  void testMondrian2250() {
     Member[] dates = new Member[4];
     for (int i = 25; i < 29; i++) {
       dates[i - 25] =
@@ -118,7 +118,7 @@ public class UnionFunDefTest extends FoodMartTestCase {
     assertEquals(40, tupleList.size());
   }
 
-  public void testArity4TupleUnion() {
+  void testArity4TupleUnion() {
     String tupleSet =
         "CrossJoin( [Customers].[USA].Children,"
         + " CrossJoin( Time.[1997].children, { (Gender.F, [Marital Status].M ) }) ) ";
@@ -139,7 +139,7 @@ public class UnionFunDefTest extends FoodMartTestCase {
     assertAxisReturns("Union( " + tupleSet + ", " + tupleSet + ")", expected);
   }
 
-  public void testArity5TupleUnion() {
+  void testArity5TupleUnion() {
     String tupleSet = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].lastChild, "
         + "CrossJoin ([Education Level].children,{ (Gender.F, [Marital Status].M ) })) )";
@@ -155,7 +155,7 @@ public class UnionFunDefTest extends FoodMartTestCase {
     assertAxisReturns("Union( " + tupleSet + ", " + tupleSet + ")", expected);
   }
 
-  public void testArity5TupleUnionAll() {
+  void testArity5TupleUnionAll() {
     String tupleSet = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1998].firstChild, "
         + "CrossJoin ([Education Level].members,{ (Gender.F, [Marital Status].M ) })) )";
@@ -174,7 +174,7 @@ public class UnionFunDefTest extends FoodMartTestCase {
         expected + "\n" + expected);
   }
 
-  public void testArity6TupleUnion() {
+  void testArity6TupleUnion() {
     String tupleSet1 = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].firstChild, "
         + "CrossJoin ([Education Level].lastChild,"
@@ -207,7 +207,7 @@ public class UnionFunDefTest extends FoodMartTestCase {
         tupleSet2Expected);
   }
 
-  public void testArity6TupleUnionAll() {
+  void testArity6TupleUnionAll() {
     String tupleSet1 = "CrossJoin( [Customers].[Canada].Children, "
         + "CrossJoin( [Time].[1997].firstChild, "
         + "CrossJoin ([Education Level].lastChild,"

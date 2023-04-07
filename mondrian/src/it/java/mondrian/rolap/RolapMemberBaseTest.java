@@ -72,7 +72,7 @@ public class RolapMemberBaseTest extends TestCase {
      * When the property formatted value is requested,
      * then property formatter should be used to return the value.
      */
-    public void testShouldUsePropertyFormatterWhenPropertyValuesAreRequested() {
+    void testShouldUsePropertyFormatterWhenPropertyValuesAreRequested() {
         RolapProperty property1 = mock(RolapProperty.class);
         RolapProperty property2 = mock(RolapProperty.class);
         when(property1.getName()).thenReturn(PROPERTY_NAME_1);
@@ -108,7 +108,7 @@ public class RolapMemberBaseTest extends TestCase {
      * then member formatter should be used
      * to return the formatted caption value.
      */
-    public void testShouldUseMemberFormatterForCaption() {
+    void testShouldUseMemberFormatterForCaption() {
         MemberFormatter memberFormatter = mock(MemberFormatter.class);
         when(level.getMemberFormatter()).thenReturn(memberFormatter);
         when(memberFormatter.formatMember(rolapMemberBase))
@@ -127,7 +127,7 @@ public class RolapMemberBaseTest extends TestCase {
      * When caption is requested,
      * then member key should be returned.
      */
-    public void testShouldNotFailIfMemberFormatterIsNotPresent() {
+    void testShouldNotFailIfMemberFormatterIsNotPresent() {
         String caption = rolapMemberBase.getCaption();
 
         assertEquals(String.valueOf(Integer.MAX_VALUE), caption);
@@ -140,7 +140,7 @@ public class RolapMemberBaseTest extends TestCase {
      * When caption raw value is requested,
      * then member key should be returned.
      */
-    public void testShouldReturnMemberKeyIfNoCaptionValueAndNoNamePresent() {
+    void testShouldReturnMemberKeyIfNoCaptionValueAndNoNamePresent() {
         Object captionValue = rolapMemberBase.getCaptionValue();
 
         assertNotNull(captionValue);
@@ -154,7 +154,7 @@ public class RolapMemberBaseTest extends TestCase {
      * When caption raw value is requested,
      * then member name should be returned.
      */
-    public void testShouldReturnMemberNameIfCaptionValueIsNotPresent() {
+    void testShouldReturnMemberNameIfCaptionValueIsNotPresent() {
         rolapMemberBase.setProperty(Property.NAME.name, MEMBER_NAME);
 
         Object captionValue = rolapMemberBase.getCaptionValue();
@@ -170,7 +170,7 @@ public class RolapMemberBaseTest extends TestCase {
      * When caption raw value is requested,
      * then the caption value should be returned.
      */
-    public void testShouldReturnCaptionValueIfPresent() {
+    void testShouldReturnCaptionValueIfPresent() {
         rolapMemberBase.setCaptionValue(Integer.MIN_VALUE);
 
         Object captionValue = rolapMemberBase.getCaptionValue();

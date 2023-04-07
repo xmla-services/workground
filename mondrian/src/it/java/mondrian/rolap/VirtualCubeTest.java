@@ -47,7 +47,7 @@ public class VirtualCubeTest extends BatchTestCase {
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-163">
      * MONDRIAN-163, "VirtualCube SegmentArrayQuerySpec.addMeasure assert"</a>.
      */
-    public void testNoTimeDimension() {
+    void testNoTimeDimension() {
         TestContext testContext = TestContext.instance().create(
             null,
             null,
@@ -62,7 +62,7 @@ public class VirtualCubeTest extends BatchTestCase {
         checkXxx(testContext);
     }
 
-    public void testCalculatedMeasureAsDefaultMeasureInVC() {
+    void testCalculatedMeasureAsDefaultMeasureInVC() {
         TestContext testContext = TestContext.instance().create(
             null,
             null,
@@ -84,7 +84,7 @@ public class VirtualCubeTest extends BatchTestCase {
         assertQueriesReturnSimilarResults(query1, query2, testContext);
     }
 
-    public void testDefaultMeasureInVCForIncorrectMeasureName() {
+    void testDefaultMeasureInVCForIncorrectMeasureName() {
         TestContext testContext = TestContext.instance().create(
             null,
             null,
@@ -107,7 +107,7 @@ public class VirtualCubeTest extends BatchTestCase {
         assertQueriesReturnSimilarResults(query1, query2, testContext);
     }
 
-    public void testVirtualCubeMeasureInvalidCubeName() {
+    void testVirtualCubeMeasureInvalidCubeName() {
         TestContext testContext = TestContext.instance().create(
             null,
             null,
@@ -126,7 +126,7 @@ public class VirtualCubeTest extends BatchTestCase {
             "Cube 'Bad cube' not found");
     }
 
-    public void testDefaultMeasureInVCForCaseSensitivity() {
+    void testDefaultMeasureInVCForCaseSensitivity() {
         TestContext testContext = TestContext.instance().create(
             null,
             null,
@@ -159,7 +159,7 @@ public class VirtualCubeTest extends BatchTestCase {
         }
     }
 
-    public void testWithTimeDimension() {
+    void testWithTimeDimension() {
         TestContext testContext = TestContext.instance().create(
             null,
             null,
@@ -200,7 +200,7 @@ public class VirtualCubeTest extends BatchTestCase {
      * Query a virtual cube that contains a non-conforming dimension that
      * does not have ALL as its default member.
      */
-    public void testNonDefaultAllMember() {
+    void testNonDefaultAllMember() {
         // Create a virtual cube with a non-conforming dimension (Warehouse)
         // that does not have ALL as its default member.
         TestContext testContext = createContextWithNonDefaultAllMember();
@@ -236,7 +236,7 @@ public class VirtualCubeTest extends BatchTestCase {
             + "Row #1: \n");
     }
 
-    public void testNonDefaultAllMember2() {
+    void testNonDefaultAllMember2() {
         TestContext testContext = createContextWithNonDefaultAllMember();
         testContext.assertQueryReturns(
             "select { measures.[unit sales] } on 0 \n"
@@ -301,7 +301,7 @@ public class VirtualCubeTest extends BatchTestCase {
             null, null, null);
     }
 
-    public void testMemberVisibility() {
+    void testMemberVisibility() {
         TestContext testContext = TestContext.instance().create(
             null,
             null,
@@ -379,7 +379,7 @@ public class VirtualCubeTest extends BatchTestCase {
      * <p>Without caching of format string, the query returns green for all
      * styles.
      */
-    public void testFormatStringExpressionCubeNoCache() {
+    void testFormatStringExpressionCubeNoCache() {
         TestContext testContext = TestContext.instance().create(
             null,
             null,
@@ -426,7 +426,7 @@ public class VirtualCubeTest extends BatchTestCase {
             + "Row #2: |1.5|style=red\n");
     }
 
-    public void testCalculatedMeasure() {
+    void testCalculatedMeasure() {
         // calculated measures reference measures defined in the base cube
         assertQueryReturns(
             "select\n"
@@ -446,7 +446,7 @@ public class VirtualCubeTest extends BatchTestCase {
             + "Row #0: $2.21\n");
     }
 
-    public void testLostData() {
+    void testLostData() {
         assertQueryReturns(
             "select {[Time].[Time].Members} on columns,\n"
             + " {[Product].Children} on rows\n"
@@ -616,7 +616,7 @@ public class VirtualCubeTest extends BatchTestCase {
      * Tests a calc measure which combines a measures from the Sales cube with a
      * measures from the Warehouse cube.
      */
-    public void testCalculatedMeasureAcrossCubes() {
+    void testCalculatedMeasureAcrossCubes() {
         assertQueryReturns(
             "with member [Measures].[Shipped per Ordered] as ' [Measures].[Units Shipped] / [Measures].[Unit Sales] ', format_string='#.00%'\n"
             + " member [Measures].[Profit per Unit Shipped] as ' [Measures].[Profit] / [Measures].[Units Shipped] '\n"
@@ -700,7 +700,7 @@ public class VirtualCubeTest extends BatchTestCase {
     /**
      * Tests a calc member defined in the cube.
      */
-    public void testCalculatedMemberInSchema() {
+    void testCalculatedMemberInSchema() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Warehouse and Sales",
             null,
@@ -758,7 +758,7 @@ public class VirtualCubeTest extends BatchTestCase {
             + "Row #11: 68.8%\n");
     }
 
-    public void testAllMeasureMembers() {
+    void testAllMeasureMembers() {
         // result should exclude measures that are not explicitly defined
         // in the virtual cube (e.g., [Profit last Period])
         assertQueryReturns(
@@ -804,7 +804,7 @@ public class VirtualCubeTest extends BatchTestCase {
      * Test a virtual cube where one of the dimensions contains an
      * ordinalColumn property
      */
-    public void testOrdinalColumn() {
+    void testOrdinalColumn() {
         TestContext testContext = TestContext.instance().create(
             null,
             null,
@@ -846,7 +846,7 @@ public class VirtualCubeTest extends BatchTestCase {
             + "Row #8: $5,145.96\n");
     }
 
-    public void testDefaultMeasureProperty() {
+    void testDefaultMeasureProperty() {
         TestContext testContext = TestContext.instance().create(
             null,
             null,
@@ -878,7 +878,7 @@ public class VirtualCubeTest extends BatchTestCase {
      * Native sets referencing different base cubes do not share the cached
      * result.
      */
-    public void testNativeSetCaching() {
+    void testNativeSetCaching() {
         // Only need to run this against one db to verify caching
         // behavior is correct.
         final Dialect dialect = getTestContext().getDialect();
@@ -997,7 +997,7 @@ public class VirtualCubeTest extends BatchTestCase {
      * MONDRIAN-322, "cube.getStar() throws NullPointerException"</a>.
      * Happens when you aggregate distinct-count measures in a virtual cube.
      */
-    public void testBugMondrian322() {
+    void testBugMondrian322() {
         final TestContext testContext = TestContext.instance().create(
             null,
             null,
@@ -1033,7 +1033,7 @@ public class VirtualCubeTest extends BatchTestCase {
             + "Row #0: 5,581\n");
     }
 
-    public void testBugMondrian322a() {
+    void testBugMondrian322a() {
         final TestContext testContext = TestContext.instance().create(
             null,
             null,
@@ -1062,7 +1062,7 @@ public class VirtualCubeTest extends BatchTestCase {
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-352">
      * MONDRIAN-352, "Caption is not set on RolapVirtualCubeMesure"</a>.
      */
-    public void testVirtualCubeMeasureCaption() {
+    void testVirtualCubeMeasureCaption() {
         TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"TestStore\">\n"
@@ -1100,7 +1100,7 @@ public class VirtualCubeTest extends BatchTestCase {
      * Test that RolapCubeLevel is used correctly in the context of virtual
      * cube.
      */
-    public void testRolapCubeLevelInVirtualCube() {
+    void testRolapCubeLevelInVirtualCube() {
         String query1 =
             "With "
             + "Set [*NATIVE_CJ_SET] as 'NonEmptyCrossJoin([*BASE_MEMBERS_Warehouse],[*BASE_MEMBERS_Time])' "
@@ -1160,7 +1160,7 @@ public class VirtualCubeTest extends BatchTestCase {
      * Tests that the logic to apply non empty context constraint in virtual
      * cube is correct.  The joins shouldn't be cartesian product.
      */
-    public void testNonEmptyCJConstraintOnVirtualCube() {
+    void testNonEmptyCJConstraintOnVirtualCube() {
         if (!MondrianProperties.instance().EnableNativeCrossJoin.get()) {
             // Generated SQL is different if NonEmptyCrossJoin is evaluated in
             // memory.
@@ -1369,7 +1369,7 @@ public class VirtualCubeTest extends BatchTestCase {
      * Tests that the logic to apply non empty context constraint in virtual
      * cube is correct.  The joins shouldn't be cartesian product.
      */
-    public void testNonEmptyConstraintOnVirtualCubeWithCalcMeasure() {
+    void testNonEmptyConstraintOnVirtualCubeWithCalcMeasure() {
         if (!MondrianProperties.instance().EnableNativeNonEmpty.get()) {
             // Generated SQL is different if NON EMPTY is evaluated in memory.
             return;
@@ -1501,7 +1501,7 @@ public class VirtualCubeTest extends BatchTestCase {
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-902">
      * MONDRIAN-902, "mondrian populating the same members on both axes"</a>.
      */
-    public void testBugMondrian902() {
+    void testBugMondrian902() {
         Result result = executeQuery(
             "SELECT\n"
             + "NON EMPTY CrossJoin(\n"
@@ -1541,7 +1541,7 @@ public class VirtualCubeTest extends BatchTestCase {
      * previous not null result)
      * </ul></p>
      */
-    public void testVirtualCubeRecursiveMember() {
+    void testVirtualCubeRecursiveMember() {
       final String schema = "<Schema name=\"FoodMart\">"
           + "<Dimension type=\"TimeDimension\" highCardinality=\"false\" name=\"Time\">"
           + "<Hierarchy visible=\"true\" hasAll=\"false\" primaryKey=\"time_id\">"
@@ -1602,7 +1602,7 @@ public class VirtualCubeTest extends BatchTestCase {
       context.assertQueryReturns(query, expected);
     }
 
-    public void testCrossjoinOptimizerWithVirtualCube() {
+    void testCrossjoinOptimizerWithVirtualCube() {
         final TestContext context =
             TestContext.instance().createSubstitutingCube(
                 "Warehouse and Sales",

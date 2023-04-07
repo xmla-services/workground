@@ -56,14 +56,14 @@ public class RolapCubeDimensionTest {
   }
 
   @Test
-  public void testLookupCube_null() {
+  void testLookupCube_null() {
     RolapCubeDimension rcd = stubRolapCubeDimension(false);
 
     assertEquals(null, rcd.lookupFactCube(null, null));
   }
 
   @Test
-  public void testLookupCube_notVirtual() {
+  void testLookupCube_notVirtual() {
     RolapCubeDimension rcd = stubRolapCubeDimension(false);
     PrivateDimensionImpl cubeDim = new PrivateDimensionImpl();
     RolapSchema schema = mock(RolapSchema.class);
@@ -74,7 +74,7 @@ public class RolapCubeDimensionTest {
   }
 
   @Test
-  public void testLookupCube_noSuchCube() {
+  void testLookupCube_noSuchCube() {
     RolapCubeDimension rcd = stubRolapCubeDimension(false);
     VirtualCubeDimensionImpl cubeDim =
         new VirtualCubeDimensionImpl();
@@ -89,7 +89,7 @@ public class RolapCubeDimensionTest {
   }
 
   @Test
-  public void testLookupCube_found() {
+  void testLookupCube_found() {
     RolapCubeDimension rcd = stubRolapCubeDimension(false);
     VirtualCubeDimensionImpl cubeDim = new VirtualCubeDimensionImpl();
     RolapSchema schema = mock(RolapSchema.class);

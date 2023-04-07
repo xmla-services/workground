@@ -118,7 +118,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void test01(TestingContext context) {
+    void test01(TestingContext context) {
         helperTest(context, false);
     }
 
@@ -128,7 +128,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMemberPropertiesAndSlicer(TestingContext context) {
+    void testMemberPropertiesAndSlicer(TestingContext context) {
         helperTestExpect(context, true);
     }
 
@@ -138,7 +138,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMdschemaPropertiesMember(TestingContext context) {
+    void testMdschemaPropertiesMember(TestingContext context) {
         helperTest(context, true);
     }
 
@@ -150,7 +150,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMdschemaPropertiesCell(TestingContext context) {
+    void testMdschemaPropertiesCell(TestingContext context) {
         helperTest(context, true);
     }
 
@@ -161,7 +161,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testUniqueName(TestingContext context) {
+    void testUniqueName(TestingContext context) {
         Connection connection = context.createConnection();
         assertQueryReturns(connection,
             "WITH MEMBER [Store].[XL_PT0] AS 'strtomember(\"[Store].[USA].[CA]\").UniqueName' SELECT {[Store].[XL_PT0]} ON 0 FROM \n"
@@ -195,7 +195,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCellInfo(TestingContext context) {
+    void testCellInfo(TestingContext context) {
         helperTest(context, true);
     }
 
@@ -206,7 +206,7 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBugMondrian761(TestingContext context) {
+    void testBugMondrian761(TestingContext context) {
         helperTest(context, false);
     }
 }

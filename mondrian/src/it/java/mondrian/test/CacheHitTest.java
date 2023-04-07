@@ -36,7 +36,7 @@ public class CacheHitTest extends FoodMartTestCase {
      *
      * @throws Exception on error
      */
-    public void testSmallSetSequential() throws Exception {
+    void testSmallSetSequential() throws Exception {
         TestSuite suite = new TestSuite();
         suite.addTest(PartialCacheTest.suite());
         suite.addTest(MultiLevelTest.suite());
@@ -55,7 +55,7 @@ public class CacheHitTest extends FoodMartTestCase {
      *
      * @throws Exception on error
      */
-    public void testSmallSetRandom() throws Exception {
+    void testSmallSetRandom() throws Exception {
         TestSuite suite = new TestSuite();
         suite.addTest(PartialCacheTest.suite());
         suite.addTest(MultiLevelTest.suite());
@@ -74,7 +74,7 @@ public class CacheHitTest extends FoodMartTestCase {
      *
      * @throws Exception on error
      */
-    public void testSmallSetVCSequential() throws Exception {
+    void testSmallSetVCSequential() throws Exception {
         TestSuite suite = new TestSuite();
         suite.addTest(PartialCacheVCTest.suite());
         suite.addTest(MultiLevelVCTest.suite());
@@ -93,7 +93,7 @@ public class CacheHitTest extends FoodMartTestCase {
      *
      * @throws Exception on error
      */
-    public void testSmallSetVCRandom() throws Exception {
+    void testSmallSetVCRandom() throws Exception {
         TestSuite suite = new TestSuite();
         suite.addTest(PartialCacheVCTest.suite());
         suite.addTest(MultiLevelVCTest.suite());
@@ -113,7 +113,7 @@ public class CacheHitTest extends FoodMartTestCase {
      *
      * @throws Exception on error
      */
-    public void testBigSetRandom() throws Exception {
+    void testBigSetRandom() throws Exception {
         TestSuite suite = new TestSuite();
         suite.addTest(MemHungryTest.suite());
         suite.addTest(PartialCacheTest.suite());

@@ -253,7 +253,7 @@ public class NonCollapsedAggTest extends AggTableTestCase {
             null, getCubeDescription(), null, null, null, null);
     }
 
-    public void testSingleJoin() throws Exception {
+    void testSingleJoin() throws Exception {
         if (!isApplicable()) {
             return;
         }
@@ -277,7 +277,7 @@ public class NonCollapsedAggTest extends AggTableTestCase {
             + "Row #1: 121\n");
     }
 
-    public void testComplexJoin() throws Exception {
+    void testComplexJoin() throws Exception {
         if (!isApplicable()) {
             return;
         }
@@ -316,7 +316,7 @@ public class NonCollapsedAggTest extends AggTableTestCase {
             + "Row #1: 121\n");
     }
 
-    public void testComplexJoinDefaultRecognizer() throws Exception {
+    void testComplexJoinDefaultRecognizer() throws Exception {
         if (!isApplicable()) {
             return;
         }
@@ -354,7 +354,7 @@ public class NonCollapsedAggTest extends AggTableTestCase {
             + "Row #1: 122\n");
     }
 
-    public void testSsasCompatNamingInAgg() throws Exception {
+    void testSsasCompatNamingInAgg() throws Exception {
         // MONDRIAN-1085
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
             return;
@@ -380,7 +380,7 @@ public class NonCollapsedAggTest extends AggTableTestCase {
     /**
      * Test case for cast exception on min/max of an integer measure
      */
-    public void testMondrian1325() {
+    void testMondrian1325() {
         final String query1 =
             "SELECT\n"
             + "{ Measures.[Bogus Number]} on 0,\n"

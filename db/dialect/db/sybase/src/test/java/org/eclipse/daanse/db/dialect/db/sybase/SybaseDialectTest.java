@@ -34,7 +34,7 @@ public class SybaseDialectTest{
      * Is assumed SybaseDialect methods are called.
      */
     @Test
-    public void testQuoteDateLiteral() {
+    void testQuoteDateLiteral() {
         String input = "1997-01-03 00:00:00.0";
 
         doCallRealMethod().when(sybaseDialectMock).quoteDateLiteral(

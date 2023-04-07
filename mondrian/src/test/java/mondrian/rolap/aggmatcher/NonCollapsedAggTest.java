@@ -267,7 +267,7 @@ public class NonCollapsedAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testSingleJoin(TestingContext context) throws Exception {
+    void testSingleJoin(TestingContext context) throws Exception {
     	super.prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -294,7 +294,7 @@ public class NonCollapsedAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testComplexJoin(TestingContext context) throws Exception {
+    void testComplexJoin(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -336,7 +336,7 @@ public class NonCollapsedAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testComplexJoinDefaultRecognizer(TestingContext context) throws Exception {
+    void testComplexJoinDefaultRecognizer(TestingContext context) throws Exception {
         prepareContext(context);
         if (!isApplicable(context.createConnection())) {
             return;
@@ -375,7 +375,7 @@ public class NonCollapsedAggTest extends AggTableTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testSsasCompatNamingInAgg(TestingContext context) throws Exception {
+    void testSsasCompatNamingInAgg(TestingContext context) throws Exception {
         prepareContext(context);
         // MONDRIAN-1085
         if (!MondrianProperties.instance().SsasCompatibleNaming.get()) {
@@ -406,7 +406,7 @@ public class NonCollapsedAggTest extends AggTableTestCase {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testMondrian1325(TestingContext context) {
+    void testMondrian1325(TestingContext context) {
         prepareContext(context);
         final String query1 =
             "SELECT\n"

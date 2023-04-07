@@ -42,7 +42,7 @@ public class DataSourceChangeListenerTest extends BatchTestCase {
      * Tests whether the data source plugin is able to tell mondrian
      * to read the hierarchy and aggregates again.
      */
-    public void testDataSourceChangeListenerPlugin() {
+    void testDataSourceChangeListenerPlugin() {
         final MondrianProperties properties = MondrianProperties.instance();
         if (properties.TestExpDependencies.get() > 0) {
             // Dependency testing produces side-effects in the cache.

@@ -20,7 +20,7 @@ import mondrian.test.FoodMartTestCase;
  * @since Sep 21, 2006
  */
 public class SortTest extends FoodMartTestCase {
-  public void testFoo() {
+  void testFoo() {
     // Check that each value compares according to its position in the total
     // order. For example, NaN compares greater than
     // Double.NEGATIVE_INFINITY, -34.5, -0.001, 0, 0.00000567, 1, 3.14;
@@ -49,7 +49,7 @@ public class SortTest extends FoodMartTestCase {
     }
   }
 
-  public void testOrderDesc() {
+  void testOrderDesc() {
     // In MSAS, NULLs collate last (or almost last, along with +inf and
     // NaN) whereas in Mondrian NULLs collate least (that is, before -inf).
     assertQueryReturns(
@@ -98,7 +98,7 @@ public class SortTest extends FoodMartTestCase {
         + "Row #12: \n" );
   }
 
-  public void testOrderAndRank() {
+  void testOrderAndRank() {
     assertQueryReturns(
       "with "
         + "   member [Measures].[Foo] as '\n"
@@ -164,7 +164,7 @@ public class SortTest extends FoodMartTestCase {
   }
 
 
-  public void testListTuplesExceedsCellEvalLimit() {
+  void testListTuplesExceedsCellEvalLimit() {
     // cell eval performed within the sort, so cycles to retrieve all cells.
     propSaver.set( MondrianProperties.instance().CellBatchSize, 2 );
     assertAxisReturns(
@@ -197,7 +197,7 @@ public class SortTest extends FoodMartTestCase {
   }
 
 
-  public void testNonBreakingAscendingComparator() {
+  void testNonBreakingAscendingComparator() {
     // more than one non-breaking sortkey, where first is ascending
     assertAxisReturns(
       "ORDER(GENERATE(CROSSJOIN({[Customers].[USA].[WA].Children},{[Product].[Food]}),\n"
@@ -229,7 +229,7 @@ public class SortTest extends FoodMartTestCase {
   }
 
 
-  public void testMultiLevelBrkSort() {
+  void testMultiLevelBrkSort() {
     // first 2 sort keys depend on Customers hierarchy only.
     // 3rd requires both Customer and Product
     assertQueryReturns( "WITH\n"
@@ -279,7 +279,7 @@ public class SortTest extends FoodMartTestCase {
       + "Row #4: 4\n" );
   }
 
-  public void testAttributesWithShowsRowsColumnsWithMeasureData() {
+  void testAttributesWithShowsRowsColumnsWithMeasureData() {
     // Sort on Attributes with Shows rows/columns with measure data.   Most common use case.
     assertQueryReturns( "WITH\n"
       + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Store_],NONEMPTYCROSSJOIN"
@@ -342,7 +342,7 @@ public class SortTest extends FoodMartTestCase {
       + "Row #9: 3\n" );
   }
 
-  public void testSortOnMeasureWithShowRowsColumnsWithMeasureData() {
+  void testSortOnMeasureWithShowRowsColumnsWithMeasureData() {
     assertQueryReturns( "WITH\n"
       + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS 'NONEMPTYCROSSJOIN([*BASE_MEMBERS__Education Level_],NONEMPTYCROSSJOIN"
       + "([*BASE_MEMBERS__Product_],NONEMPTYCROSSJOIN([*BASE_MEMBERS__Yearly Income_],NONEMPTYCROSSJOIN"
@@ -408,7 +408,7 @@ public class SortTest extends FoodMartTestCase {
       + "Row #9: 3\n" );
   }
 
-  public void testSortOnAttributesWithShowsRowsColumnsWithMeasureAndCalculatedMeasureData() {
+  void testSortOnAttributesWithShowsRowsColumnsWithMeasureAndCalculatedMeasureData() {
     assertQueryReturns( "WITH\n"
       + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS '[*BASE_MEMBERS__Store Type_]'\n"
       + "SET [*NATIVE_CJ_SET] AS 'CROSSJOIN([*BASE_MEMBERS__Education Level_],CROSSJOIN([*BASE_MEMBERS__Product_],"
@@ -457,7 +457,7 @@ public class SortTest extends FoodMartTestCase {
       + "Row #6: 3\n" );
   }
 
-  public void testSortOnMeasureWithShowsRowsColumnsWithShowAllEvenBlank() {
+  void testSortOnMeasureWithShowsRowsColumnsWithShowAllEvenBlank() {
     assertQueryReturns( "WITH\n"
       + "SET [*NATIVE_CJ_SET_WITH_SLICER] AS '[*BASE_MEMBERS__Store Type_]'\n"
       + "SET [*NATIVE_CJ_SET] AS 'CROSSJOIN([*BASE_MEMBERS__Education Level_],CROSSJOIN([*BASE_MEMBERS__Product_],"

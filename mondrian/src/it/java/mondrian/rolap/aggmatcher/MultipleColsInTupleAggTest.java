@@ -42,7 +42,7 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
         return "multiple_cols_in_tuple_agg.csv";
     }
 
-    public void testTotal() throws Exception {
+    void testTotal() throws Exception {
         if (!isApplicable()) {
             return;
         }
@@ -80,7 +80,7 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
         assertTrue(av.equals(av1));
     }
 
-    public void testTupleSelection() throws Exception {
+    void testTupleSelection() throws Exception {
         if (!isApplicable()) {
             return;
         }
@@ -104,7 +104,7 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
             + "Row #0: 15\n");
     }
 
-    public void testNativeFilterWithoutMeasures() throws Exception {
+    void testNativeFilterWithoutMeasures() throws Exception {
         if (!isApplicable()) {
             return;
         }
@@ -153,7 +153,7 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
             + "Row #0: 18\n");
     }
 
-    public void testNativeFilterWithoutMeasuresAndLevelWithProps()
+    void testNativeFilterWithoutMeasuresAndLevelWithProps()
         throws Exception
     {
         if (!isApplicable()) {
@@ -236,7 +236,7 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
                 .getPropertyValue("Product Color"));
     }
 
-    public void testChildSelection() throws Exception {
+    void testChildSelection() throws Exception {
         if (!isApplicable()) {
             return;
         }

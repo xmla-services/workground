@@ -105,7 +105,7 @@ public class DrillThroughTest extends FoodMartTestCase {
 
     // ~ Tests ================================================================
 
-    public void testTrivialCalcMemberDrillThrough() {
+    void testTrivialCalcMemberDrillThrough() {
         Result result = executeQuery(
             "WITH MEMBER [Measures].[Formatted Unit Sales]"
             + " AS '[Measures].[Unit Sales]', FORMAT_STRING='$#,###.000'\n"
@@ -199,7 +199,7 @@ public class DrillThroughTest extends FoodMartTestCase {
         assertEquals(calcCell.getDrillThroughCount(), 7978);
     }
 
-    public void testTrivialCalcMemberNotMeasure() {
+    void testTrivialCalcMemberNotMeasure() {
         // [Product].[My Food] is trivial because it maps to a single member.
         // First, on ROWS axis.
         Result result = executeQuery(
@@ -262,7 +262,7 @@ public class DrillThroughTest extends FoodMartTestCase {
         assertFalse(cell.canDrillThrough());
     }
 
-    public void testDrillthroughCompoundSlicer() {
+    void testDrillthroughCompoundSlicer() {
         // Tests a case associated with
         // http://jira.pentaho.com/browse/MONDRIAN-1587
         // hsqldb was failing with SQL that included redundant parentheses
@@ -300,7 +300,7 @@ public class DrillThroughTest extends FoodMartTestCase {
             cell.getDrillThroughSQL(false), 3584);
     }
 
-    public void testDrillThrough() {
+    void testDrillThrough() {
         Result result = executeQuery(
             "WITH MEMBER [Measures].[Price] AS '[Measures].[Store Sales] / ([Measures].[Store Sales], [Time].[Time].PrevMember)'\n"
             + "SELECT {[Measures].[Unit Sales], [Measures].[Price]} on columns,\n"
@@ -363,7 +363,7 @@ public class DrillThroughTest extends FoodMartTestCase {
         return null;
     }
 
-    public void testDrillThrough2() {
+    void testDrillThrough2() {
         Result result = executeQuery(
             "WITH MEMBER [Measures].[Price] AS '[Measures].[Store Sales] / ([Measures].[Unit Sales], [Time].[Time].PrevMember)'\n"
             + "SELECT {[Measures].[Unit Sales], [Measures].[Price]} on columns,\n"
@@ -486,7 +486,7 @@ public class DrillThroughTest extends FoodMartTestCase {
         assertNull(sql);
     }
 
-    public void testDrillThrough3() {
+    void testDrillThrough3() {
         Result result = executeQuery(
             "select {[Measures].[Unit Sales], [Measures].[Store Cost], [Measures].[Store Sales]} ON COLUMNS, \n"
             + "Hierarchize(Union(Union(Crossjoin({[Promotion Media].[All Media]}, {[Product].[All Products]}), \n"
@@ -620,7 +620,7 @@ public class DrillThroughTest extends FoodMartTestCase {
      * constraint to be added to the WHERE clause; after the fix, we do
      * not constrain on the member at all.
      */
-    public void testDrillThroughBugMondrian180() {
+    void testDrillThroughBugMondrian180() {
         Result result = executeQuery(
             "with set [Date Range] as '{[Time].[1997].[Q1], [Time].[1997].[Q2]}'\n"
             + "member [Time].[Time].[Date Range] as 'Aggregate([Date Range])'\n"
@@ -752,7 +752,7 @@ public class DrillThroughTest extends FoodMartTestCase {
      * Tests that proper SQL is being generated for a Measure specified
      * as an expression.
      */
-    public void testDrillThroughMeasureExp() {
+    void testDrillThroughMeasureExp() {
         Result result = executeQuery(
             "SELECT {[Measures].[Promotion Sales]} on columns,\n"
             + " {[Product].Children} on rows\n"
@@ -808,7 +808,7 @@ public class DrillThroughTest extends FoodMartTestCase {
      * columns with the same name. Related to bug 1592556, "XMLA Drill through
      * bug".
      */
-    public void testDrillThroughDupKeys() {
+    void testDrillThroughDupKeys() {
          // Note here that the type on the Store Id level is Integer or
          // Numeric. The default, of course, would be String.
          //
@@ -863,7 +863,7 @@ public class DrillThroughTest extends FoodMartTestCase {
         getTestContext().assertSqlEquals(expectedSql, sql, 0);
     }
 
-    public void testDrillThroughDupKeysAndMeasure() throws Exception {
+    void testDrillThroughDupKeysAndMeasure() throws Exception {
         if (!getTestContext().getDialect().getDatabaseProduct()
             .equals(Dialect.DatabaseProduct.MYSQL))
         {
@@ -935,7 +935,7 @@ public class DrillThroughTest extends FoodMartTestCase {
            1);
    }
 
-    public void testDrillThroughDupKeysAndMeasure_2() throws Exception {
+    void testDrillThroughDupKeysAndMeasure_2() throws Exception {
         TestContext testContext = TestContext.instance().withSchema(
             "<Schema name=\"dsad\">\n"
             + "  <Dimension name=\"Frozen sqft\">\n"
@@ -1010,7 +1010,7 @@ public class DrillThroughTest extends FoodMartTestCase {
     /**
      * Tests that cells in a virtual cube say they can be drilled through.
      */
-    public void testDrillThroughVirtualCube() {
+    void testDrillThroughVirtualCube() {
         Result result = executeQuery(
             "select Crossjoin([Customers].[All Customers].[USA].[OR].Children, {[Measures].[Unit Sales]}) ON COLUMNS, "
             + " [Gender].[All Gender].Children ON ROWS"
@@ -1060,7 +1060,7 @@ public class DrillThroughTest extends FoodMartTestCase {
      * This tests for bug 1438285, "nameColumn cannot be column in level
      * definition".
      */
-    public void testBug1438285() {
+    void testBug1438285() {
         final Dialect dialect = getTestContext().getDialect();
         if (dialect.getDatabaseProduct() == Dialect.DatabaseProduct.TERADATA) {
             // On default Teradata express instance there isn't enough spool
@@ -1211,7 +1211,7 @@ public class DrillThroughTest extends FoodMartTestCase {
      *
      * @throws Exception on error
      */
-    public void testTruncateLevelName() throws Exception {
+    void testTruncateLevelName() throws Exception {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Education Level2\" foreignKey=\"customer_id\">\n"
@@ -1261,7 +1261,7 @@ public class DrillThroughTest extends FoodMartTestCase {
         }
     }
 
-    public void testDrillThroughExprs() {
+    void testDrillThroughExprs() {
         assertCanDrillThrough(
             true,
             "Sales",
@@ -1320,7 +1320,7 @@ public class DrillThroughTest extends FoodMartTestCase {
             "([Time].[1997].[Q1], [Measures].[Unit Sales])");
     }
 
-    public void testDrillthroughMaxRows() throws SQLException {
+    void testDrillthroughMaxRows() throws SQLException {
         assertMaxRows("", 29);
         assertMaxRows("maxrows 1000", 29);
         assertMaxRows("maxrows 0", 29);
@@ -1350,7 +1350,7 @@ public class DrillThroughTest extends FoodMartTestCase {
         resultSet.close();
     }
 
-    public void testDrillthroughNegativeMaxRowsFails() throws SQLException {
+    void testDrillthroughNegativeMaxRowsFails() throws SQLException {
         try {
             final ResultSet resultSet = getTestContext().executeStatement(
                 "DRILLTHROUGH MAXROWS -3\n"
@@ -1364,7 +1364,7 @@ public class DrillThroughTest extends FoodMartTestCase {
         }
     }
 
-    public void testDrillThroughCalculatedMemberMeasure() {
+    void testDrillThroughCalculatedMemberMeasure() {
         try {
             final ResultSet resultSet = getTestContext().executeStatement(
                 "DRILLTHROUGH\n"
@@ -1380,7 +1380,7 @@ public class DrillThroughTest extends FoodMartTestCase {
         }
     }
 
-    public void testDrillThroughNotDrillableFails() {
+    void testDrillThroughNotDrillableFails() {
         try {
             final ResultSet resultSet = getTestContext().executeStatement(
                 "DRILLTHROUGH\n"
@@ -1430,7 +1430,7 @@ public class DrillThroughTest extends FoodMartTestCase {
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-752">
      * MONDRIAN-752, "cell.getDrillCount returns 0".
      */
-    public void testDrillThroughOneAxis() {
+    void testDrillThroughOneAxis() {
         Result result = executeQuery(
             "SELECT [Measures].[Unit Sales] on 0\n"
             + "from Sales");
@@ -1445,7 +1445,7 @@ public class DrillThroughTest extends FoodMartTestCase {
      * MONDRIAN-751, "Drill SQL does not include slicer members in WHERE
      * clause".
      */
-    public void testDrillThroughCalcMemberInSlicer() {
+    void testDrillThroughCalcMemberInSlicer() {
         Result result = executeQuery(
             "WITH MEMBER [Product].[Aggregate Food Drink] AS \n"
             + " Aggregate({[Product].[Food], [Product].[Drink]})\n"
@@ -1462,7 +1462,7 @@ public class DrillThroughTest extends FoodMartTestCase {
     /**
      * Test case for MONDRIAN-791.
      */
-    public void testDrillThroughMultiPositionCompoundSlicer() {
+    void testDrillThroughMultiPositionCompoundSlicer() {
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
         // A query with a simple multi-position compound slicer
         Result result =
@@ -1744,7 +1744,7 @@ public class DrillThroughTest extends FoodMartTestCase {
         getTestContext().assertSqlEquals(expectedSql, sql, 27402);
     }
 
-    public void testDrillthroughDisable() {
+    void testDrillthroughDisable() {
         propSaver.set(
             MondrianProperties.instance().EnableDrillThrough,
             true);
@@ -1782,7 +1782,7 @@ public class DrillThroughTest extends FoodMartTestCase {
      * Tests that dialects that require alias in order by are correctly quoted
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-1983">MONDRIAN-1983</a>.
      */
-    public void testColumnAliasQuotedInOrderBy() throws Exception {
+    void testColumnAliasQuotedInOrderBy() throws Exception {
         Result result = executeQuery(
             "WITH\n"
             + "SET [*NATIVE_CJ_SET] AS 'FILTER([*BASE_MEMBERS__Customers_], NOT ISEMPTY ([Measures].[Unit Sales]))'\n"
@@ -1871,7 +1871,7 @@ public class DrillThroughTest extends FoodMartTestCase {
         getTestContext().assertSqlEquals(expectedSql, sql, 11);
     }
 
-    public void testDrillthroughVirtualCubeWithReturnClause()
+    void testDrillthroughVirtualCubeWithReturnClause()
         throws SQLException
     {
         // Validates that a RETURN clause including a mix of applicable
@@ -1931,7 +1931,7 @@ public class DrillThroughTest extends FoodMartTestCase {
         }
     }
 
-    public void testDrillThroughWithReturnClause_ReturnsNameColumn()
+    void testDrillThroughWithReturnClause_ReturnsNameColumn()
         throws SQLException
     {
         ResultSet rs = null;
@@ -1984,7 +1984,7 @@ public class DrillThroughTest extends FoodMartTestCase {
         }
     }
 
-    public void testDrillThroughWithReturnClause_ReturnsNoNameColumn()
+    void testDrillThroughWithReturnClause_ReturnsNoNameColumn()
             throws SQLException
     {
         ResultSet rs = null;
@@ -2030,7 +2030,7 @@ public class DrillThroughTest extends FoodMartTestCase {
     * "Drill-through filtering not working properly
     * when level is used as filter"</a>.
     */
-    public void testMultipleFilterByLevel_NoDuplicatedColumnsInResult()
+    void testMultipleFilterByLevel_NoDuplicatedColumnsInResult()
         throws SQLException
     {
         String[] expectedColumnValues = {"Gourmet Supermarket",

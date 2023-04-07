@@ -70,7 +70,7 @@ public class NamedSetTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSet(TestingContext context) {
+    void testNamedSet(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "WITH\n"
             + "    SET [Top Sellers]\n"
@@ -116,7 +116,7 @@ public class NamedSetTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetOnMember(TestingContext context) {
+    void testNamedSetOnMember(TestingContext context) {
         switch (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())) {
         case INFOBRIGHT:
             // Mondrian generates 'select ... sum(warehouse_sales) -
@@ -161,7 +161,7 @@ public class NamedSetTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetAsList(TestingContext context) {
+    void testNamedSetAsList(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "WITH SET [ChardonnayChablis] AS\n"
             + "   '{[Product].[All Products].[Drink].[Alcoholic Beverages].[Beer and Wine].[Wine].[Good].[Good Chardonnay],\n"
@@ -210,7 +210,7 @@ public class NamedSetTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testIntrinsic(TestingContext context) {
+    void testIntrinsic(TestingContext context) {
     	propSaver.set( MondrianProperties.instance().CaseSensitiveMdxInstr, true);
         assertQueryReturns(context.createConnection(),
             "WITH SET [ChardonnayChablis] AS\n"
@@ -329,7 +329,7 @@ public class NamedSetTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetCrossJoin(TestingContext context) {
+    void testNamedSetCrossJoin(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "WITH\n"
             + "    SET [Store Types by Country]\n"
@@ -379,7 +379,7 @@ public class NamedSetTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetUsedInCrossJoin(TestingContext context) {
+    void testNamedSetUsedInCrossJoin(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "WITH\n"
             + "  SET [TopMedia] AS 'TopCount([Promotion Media].children, 5, [Measures].[Store Sales])' \n"
@@ -441,7 +441,7 @@ public class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testAggOnCalcMember(TestingContext context) {
+    void testAggOnCalcMember(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "WITH\n"
             + "  SET [TopMedia] AS 'TopCount([Promotion Media].children, 5, [Measures].[Store Sales])' \n"
@@ -469,7 +469,7 @@ public class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testContextSensitiveNamedSet(TestingContext context) {
+    void testContextSensitiveNamedSet(TestingContext context) {
         // For reference.
         assertQueryReturns(context.createConnection(),
             "SELECT {[Measures].[Unit Sales]} ON COLUMNS,\n"
@@ -619,7 +619,7 @@ public class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testOrderedNamedSet(TestingContext context) {
+    void testOrderedNamedSet(TestingContext context) {
         // From http://www.developersdex.com
         assertQueryReturns(context.createConnection(),
             "WITH SET [SET1] AS\n"
@@ -724,7 +724,7 @@ public class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testGenerate(TestingContext context) {
+    void testGenerate(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "with \n"
             + "  member [Measures].[DateName] as \n"
@@ -762,7 +762,7 @@ public class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetAgainstCube(TestingContext context) {
+    void testNamedSetAgainstCube(TestingContext context) {
 
         withSchemaProcessor(context,
                 NamedSetsInCubeProcessor.class);
@@ -839,7 +839,7 @@ public class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetAgainstSchema(TestingContext context) {
+    void testNamedSetAgainstSchema(TestingContext context) {
     	Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
         withSchemaProcessor(context,
         		NamedSetTest.NamedSetsInCubeAndSchemaProcessor.class);
@@ -865,7 +865,7 @@ public class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testBadNamedSet(TestingContext context) {
+    void testBadNamedSet(TestingContext context) {
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
             null,
@@ -883,7 +883,7 @@ public class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetMustBeSet(TestingContext context) {
+    void testNamedSetMustBeSet(TestingContext context) {
         Result result;
         String queryString;
         String pattern;
@@ -950,7 +950,7 @@ public class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetsMixedWithCalcMembers(TestingContext context)
+    void testNamedSetsMixedWithCalcMembers(TestingContext context)
     {
 
         withSchemaProcessor(context,
@@ -1010,7 +1010,7 @@ public class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetAndUnion(TestingContext context) {
+    void testNamedSetAndUnion(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "with set [Set Education Level] as\n"
             + "   '{([Education Level].[All Education Levels].[Bachelors Degree]),\n"
@@ -1048,7 +1048,7 @@ public class NamedSetTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetDependencies(TestingContext context) {
+    void testNamedSetDependencies(TestingContext context) {
         withSchemaProcessor(context,
                 NamedSetsInCubeProcessor.class);
         assertSetExprDependsOn(context.createConnection(), "[Top CA Cities]", "{}");
@@ -1060,7 +1060,7 @@ public class NamedSetTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testHierarchizeNamedSetImmutable(TestingContext context) {
+    void testHierarchizeNamedSetImmutable(TestingContext context) {
         Connection connection = context.createConnection();
         flushSchemaCache(connection);
         assertQueryReturns(connection,
@@ -1089,7 +1089,7 @@ public class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testCurrentAndCurrentOrdinal(TestingContext context) {
+    void testCurrentAndCurrentOrdinal(TestingContext context) {
         assertQueryReturns(context.createConnection(),
             "with set [Gender Marital Status] as\n"
             + " [Gender].members * [Marital Status].members\n"
@@ -1150,7 +1150,7 @@ public class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetWithCompoundSlicer(TestingContext context) {
+    void testNamedSetWithCompoundSlicer(TestingContext context) {
         // MONDRIAN-1654
         final String mdx = "with set [FilteredNamedSet] as "
             + "'Filter([Customers].[Name].Members, "
@@ -1188,7 +1188,7 @@ public class NamedSetTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetRangeInSlicer(TestingContext context) {
+    void testNamedSetRangeInSlicer(TestingContext context) {
         String expected =
             "Axis #0:\n"
             + "{[Time].[1997].[Q1].[1]}\n"
@@ -1262,7 +1262,7 @@ public class NamedSetTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testMondrian2424(TestingContext context) {
+    void testMondrian2424(TestingContext context) {
         propSaver.set(
                 MondrianProperties.instance().SsasCompatibleNaming, false);
         assertQueryReturns(context.createConnection(),
@@ -1289,7 +1289,7 @@ public class NamedSetTest {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testNamedSetRangeInSlicerPrimed(TestingContext context) {
+    void testNamedSetRangeInSlicerPrimed(TestingContext context) {
         new CompoundSlicerTest().testBugMondrian899(context);
         testNamedSetRangeInSlicer(context);
     }

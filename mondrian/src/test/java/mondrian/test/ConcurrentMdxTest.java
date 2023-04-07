@@ -1278,7 +1278,7 @@ public class ConcurrentMdxTest {
 
 
     @Test
-    public void testConcurrentValidatingQueriesInRandomOrder() {
+    void testConcurrentValidatingQueriesInRandomOrder() {
         propSaver.set(props.UseAggregates, false);
         propSaver.set(props.ReadAggregates, false);
         propSaver.set(props.DisableCaching, false);
@@ -1306,7 +1306,7 @@ public class ConcurrentMdxTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testFlushingDoesNotCauseDeadlock(TestingContext context) throws Exception {
+    void testFlushingDoesNotCauseDeadlock(TestingContext context) throws Exception {
         // Create a seeded deterministic random generator.
         final long seed = new Random().nextLong();
         LOGGER.debug("Test seed: " + seed);

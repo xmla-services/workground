@@ -39,7 +39,7 @@ public class ArrayTupleListTest {
   private ArrayTupleList list;
 
   @Test
-  public void testGrowListBeyondInitialCapacity() {
+  void testGrowListBeyondInitialCapacity() {
     propSaver.set( MondrianProperties.instance().ResultLimit, 0 );
     list = new ArrayTupleList( 2, 10 );
     addMockTuplesToList( list, 50 );
@@ -52,7 +52,7 @@ public class ArrayTupleListTest {
   }
 
   @Test
-  public void testAttemptToGrowBeyondResultLimit() {
+  void testAttemptToGrowBeyondResultLimit() {
     propSaver.set( MondrianProperties.instance().ResultLimit, 30 );
     list = new ArrayTupleList( 2, 10 );
     try {

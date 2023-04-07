@@ -217,7 +217,7 @@ public class XmlaTest extends TestCase {
      * Non diff-based unit tests for XML/A support.
      */
     public static class OtherTest extends TestCase {
-        public void testEncodeElementName() {
+        void testEncodeElementName() {
             final XmlaUtil.ElementNameEncoder encoder =
                 XmlaUtil.ElementNameEncoder.INSTANCE;
 
@@ -237,7 +237,7 @@ public class XmlaTest extends TestCase {
         /**
          * Unit test for {@link XmlaUtil#chooseResponseMimeType(String)}.
          */
-        public void testAccept() {
+        void testAccept() {
             // simple
             assertEquals(
                 Enumeration.ResponseMimeType.SOAP,

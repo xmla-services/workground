@@ -72,7 +72,7 @@ public class DynamicDatasourceXmlaServletTest {
     private static final String DATASOURCE_2_NAME = "DATASOURCENAME2";
 
     @Test
-    public void testFlushObsoleteCatalogsForNewCatalog() throws Exception {
+    void testFlushObsoleteCatalogsForNewCatalog() throws Exception {
         DataSourcesConfig.DataSources newDataSources =
             getDataSources(CATALOG_0_DEFINITION, CATALOG_1_DEFINITION);
         final MockDynamicContentFinder finder =
@@ -84,7 +84,7 @@ public class DynamicDatasourceXmlaServletTest {
     }
 
     @Test
-    public void testFlushObsoleteCatalogsForUpdateCatalog() throws Exception {
+    void testFlushObsoleteCatalogsForUpdateCatalog() throws Exception {
         DataSourcesConfig.DataSources newDataSources =
             getDataSources(CATALOG_0_UPDATED_DEFINITION);
         final MockDynamicContentFinder finder =
@@ -96,7 +96,7 @@ public class DynamicDatasourceXmlaServletTest {
     }
 
     @Test
-    public void testFlushObsoleteCatalogsForUnchangedCatalog() throws Exception
+    void testFlushObsoleteCatalogsForUnchangedCatalog() throws Exception
     {
         DataSourcesConfig.DataSources newDataSources =
             getDataSources(CATALOG_0_DEFINITION, CATALOG_1_DEFINITION);
@@ -109,7 +109,7 @@ public class DynamicDatasourceXmlaServletTest {
     }
 
     @Test
-    public void testFlushObsoleteCatalogsForDeletedCatalog() throws Exception {
+    void testFlushObsoleteCatalogsForDeletedCatalog() throws Exception {
         DataSourcesConfig.DataSources newDataSources =
             getDataSources(CATALOG_1_DEFINITION);
         final MockDynamicContentFinder finder =
@@ -121,7 +121,7 @@ public class DynamicDatasourceXmlaServletTest {
     }
     
     @Test
-    public void testMergeDataSourcesForAlteringCatalogAcrossDataSources()
+    void testMergeDataSourcesForAlteringCatalogAcrossDataSources()
         throws Exception
     {
         DataSourcesConfig.DataSources newDataSources =
@@ -143,7 +143,7 @@ public class DynamicDatasourceXmlaServletTest {
     }
     
     @Test
-    public void testAreCatalogsEqual() throws Exception {
+    void testAreCatalogsEqual() throws Exception {
         DataSourcesConfig.DataSources newDataSources =
             getDataSources(
                 CATALOG_0_DEFINITION,
@@ -229,7 +229,7 @@ public class DynamicDatasourceXmlaServletTest {
     }
 
     @Test
-    public void testReloadDataSources() throws Exception {
+    void testReloadDataSources() throws Exception {
         DataSourcesConfig.DataSources ds1 =
             getDataSources(CATALOG_0_DEFINITION, CATALOG_1_DEFINITION);
         DataSourcesConfig.DataSources ds2 =
@@ -274,7 +274,7 @@ public class DynamicDatasourceXmlaServletTest {
     }
 
     @Test
-    public void testAutoReloadDataSources() throws Exception {
+    void testAutoReloadDataSources() throws Exception {
         DataSourcesConfig.DataSources ds1 =
             getDataSources(CATALOG_0_DEFINITION, CATALOG_1_DEFINITION);
         DataSourcesConfig.DataSources ds2 =

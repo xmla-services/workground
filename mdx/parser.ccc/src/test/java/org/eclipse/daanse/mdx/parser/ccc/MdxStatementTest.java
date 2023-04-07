@@ -13,6 +13,12 @@
 */
 package org.eclipse.daanse.mdx.parser.ccc;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.eclipse.daanse.mdx.parser.ccc.SelectQueryAxisClauseTest.checkSelectQueryAxisClause1;
+import static org.eclipse.daanse.mdx.parser.ccc.SelectQueryAxisClauseTest.checkSelectQueryAxisClause2;
+import static org.eclipse.daanse.mdx.parser.ccc.SelectSlicerAxisClauseTest.checkSelectSlicerAxisClause1;
+import static org.eclipse.daanse.mdx.parser.ccc.SelectSubCubeClauseTest.SelectSubCubeClauseNameTest.checkSelectSubcubeClauseName;
+
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
@@ -23,48 +29,41 @@ import org.eclipse.daanse.mdx.model.record.SelectStatementR;
 import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.eclipse.daanse.mdx.parser.ccc.SelectQueryAxisClauseTest.checkSelectQueryAxisClause1;
-import static org.eclipse.daanse.mdx.parser.ccc.SelectQueryAxisClauseTest.checkSelectQueryAxisClause2;
-import static org.eclipse.daanse.mdx.parser.ccc.SelectSlicerAxisClauseTest.checkSelectSlicerAxisClause1;
-import static org.eclipse.daanse.mdx.parser.ccc.SelectSubCubeClauseTest.SelectSubCubeClauseNameTest.checkSelectSubcubeClauseName;
+class MdxStatementTest {
 
-public class MdxStatementTest {
+	@Test
+	void testTypeSelectStatement() throws MdxParserException {
+		String mdx = """
+				SELECT [Customer].[Gender].[Gender].Membmers ON COLUMNS,
+				         {[Customer].[Customer].[Aaron A. Allen],
+				          [Customer].[Customer].[Abigail Clark]} ON ROWS
+				   FROM [Adventure Works]
+				   WHERE [Measures].[Internet Sales Amount]
+				""";
 
-    @Test
-    public void testTypeSelectStatement() throws MdxParserException {
-        String mdx = """
-                SELECT [Customer].[Gender].[Gender].Membmers ON COLUMNS,
-                         {[Customer].[Customer].[Aaron A. Allen],
-                          [Customer].[Customer].[Abigail Clark]} ON ROWS
-                   FROM [Adventure Works]
-                   WHERE [Measures].[Internet Sales Amount]
-                """;
+		MdxStatement clause = new MdxParserWrapper(mdx).parseMdxStatement();
+		assertThat(clause).isNotNull().isInstanceOf(SelectStatementR.class);
+		SelectStatement selectStatement = (SelectStatement) clause;
 
-        MdxStatement clause = new MdxParserWrapper(mdx).parseMdxStatement();
-        assertThat(clause).isNotNull()
-                .isInstanceOf(SelectStatementR.class);
-        SelectStatement selectStatement = (SelectStatement) clause;
+		assertThat(selectStatement.selectWithClauses()).isNotNull().isEmpty();
 
-        assertThat(selectStatement.selectWithClauses()).isNotNull().hasSize(0);
+		assertThat(selectStatement.selectQueryClause()).isNotNull().isInstanceOf(SelectQueryAxesClause.class);
+		SelectQueryAxesClause selectQueryAxesClause = (SelectQueryAxesClause) selectStatement.selectQueryClause();
+		assertThat(selectQueryAxesClause.selectQueryAxisClauses()).isNotNull().hasSize(2);
+		SelectQueryAxisClause selectQueryAxisClause1 = selectQueryAxesClause.selectQueryAxisClauses().get(0);
+		SelectQueryAxisClause selectQueryAxisClause2 = selectQueryAxesClause.selectQueryAxisClauses().get(1);
 
-        assertThat(selectStatement.selectQueryClause()).isNotNull().isInstanceOf(SelectQueryAxesClause.class);
-        SelectQueryAxesClause selectQueryAxesClause = (SelectQueryAxesClause) selectStatement.selectQueryClause();
-        assertThat(selectQueryAxesClause.selectQueryAxisClauses()).isNotNull().hasSize(2);
-        SelectQueryAxisClause selectQueryAxisClause1 = selectQueryAxesClause.selectQueryAxisClauses().get(0);
-        SelectQueryAxisClause selectQueryAxisClause2 = selectQueryAxesClause.selectQueryAxisClauses().get(1);
+		checkSelectQueryAxisClause1(selectQueryAxisClause1);
+		checkSelectQueryAxisClause2(selectQueryAxisClause2);
 
-        checkSelectQueryAxisClause1(selectQueryAxisClause1);
-        checkSelectQueryAxisClause2(selectQueryAxisClause2);
+		assertThat(selectStatement.selectSubcubeClause()).isNotNull().isInstanceOf(SelectSubcubeClauseName.class);
+		checkSelectSubcubeClauseName((SelectSubcubeClauseName) selectStatement.selectSubcubeClause(), "Adventure Works",
+				ObjectIdentifier.Quoting.QUOTED);
 
-        assertThat(selectStatement.selectSubcubeClause()).isNotNull().isInstanceOf(SelectSubcubeClauseName.class);
-        checkSelectSubcubeClauseName((SelectSubcubeClauseName) selectStatement.selectSubcubeClause(),
-            "Adventure Works", ObjectIdentifier.Quoting.QUOTED);
+		assertThat(selectStatement.selectSlicerAxisClause()).isPresent();
+		checkSelectSlicerAxisClause1(selectStatement.selectSlicerAxisClause().get());
 
-        assertThat(selectStatement.selectSlicerAxisClause()).isPresent();
-        checkSelectSlicerAxisClause1(selectStatement.selectSlicerAxisClause().get());
-
-        assertThat(selectStatement.selectCellPropertyListClause()).isNotPresent();
-    }
+		assertThat(selectStatement.selectCellPropertyListClause()).isNotPresent();
+	}
 
 }

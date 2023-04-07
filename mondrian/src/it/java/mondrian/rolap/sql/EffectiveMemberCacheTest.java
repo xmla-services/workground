@@ -24,7 +24,7 @@ public class EffectiveMemberCacheTest extends BatchTestCase {
         propSaver.set(propSaver.properties.EnableNativeNonEmpty, true);
     }
 
-    public void testCachedLevelMembers() {
+    void testCachedLevelMembers() {
         // verify query for specific members can be fulfilled by members cached
         // from a level members query.
         String sql = "select\n"
@@ -58,7 +58,7 @@ public class EffectiveMemberCacheTest extends BatchTestCase {
         );
     }
 
-    public void testCachedChildMembers() {
+    void testCachedChildMembers() {
         // verify query for specific members can be fulfilled by members cached
         // from a child members query.
         String sql = "select\n"
@@ -93,7 +93,7 @@ public class EffectiveMemberCacheTest extends BatchTestCase {
         );
     }
 
-    public void testLevelPreCacheThreshold() {
+    void testLevelPreCacheThreshold() {
         // [Store Type] members cardinality falls well below
         // LevelPreCacheThreshold.  All members should be loaded, not
         // just the 2 referenced.
@@ -119,7 +119,7 @@ public class EffectiveMemberCacheTest extends BatchTestCase {
             });
     }
 
-    public void testLevelPreCacheThresholdDisabled() {
+    void testLevelPreCacheThresholdDisabled() {
         // with LevelPreCacheThreshold set to 0, we should not load
         // all [store type] members, we should only retrieve the 2
         // specified.
@@ -148,7 +148,7 @@ public class EffectiveMemberCacheTest extends BatchTestCase {
             });
     }
 
-    public void testLevelPreCacheThresholdParentDegenerate() {
+    void testLevelPreCacheThresholdParentDegenerate() {
         // we should avoid pulling all deg members, regardless of cardinality.
         // The cost of doing full scans of the fact table is assumed
         // to be too high.

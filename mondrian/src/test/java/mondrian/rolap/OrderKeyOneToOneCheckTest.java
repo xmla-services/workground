@@ -81,7 +81,7 @@ class OrderKeyOneToOneCheckTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testMemberSource(TestingContext context) {
+  void testMemberSource(TestingContext context) {
     String mdx =
             "with member [Measures].[Count Month] as 'Count(Descendants(Time.CurrentMember, [Time].[Month]))' \n"
                     + "select [Measures].[Count Month] on 0,\n"
@@ -103,7 +103,7 @@ class OrderKeyOneToOneCheckTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testSqlReader(TestingContext context) {
+  void testSqlReader(TestingContext context) {
     String mdx = ""
             + "select [Time].[Quarter].Members on 0"
             + "from [Sales]";

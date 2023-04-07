@@ -20,7 +20,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
     /**
      * Sanity check, that enumerates the Measures dimension.
      */
-    public void testMeasures() {
+    void testMeasures() {
         TestContext testContext = getTestContext();
         if (!testContext.databaseIsValid()) {
             return;
@@ -32,7 +32,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + "[Measures].[Fact Count]");
     }
 
-    public void testMondrian1273() {
+    void testMondrian1273() {
         final String schema =
             "<Schema name=\"SteelWheels\">\n"
             + "  <Cube name=\"SteelWheelsSales\" cache=\"true\" enabled=\"true\">\n"
@@ -209,7 +209,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * was not found but [Markets].[All Markets].[JAPAN] was OK.
      * (We've since dropped 'All Xxx' from member unique names.)
      */
-    public void testMarkets() {
+    void testMarkets() {
         TestContext testContext = getTestContext();
         if (!testContext.databaseIsValid()) {
             return;
@@ -282,7 +282,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-755">
      * MONDRIAN-755, "Getting drillthrough count results in exception"</a>.
      */
-    public void testBugMondrian755() {
+    void testBugMondrian755() {
         TestContext testContext = getTestContext();
         if (!testContext.databaseIsValid()) {
             return;
@@ -357,7 +357,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      *
      * @see #testBugMondrian805() duplicate bug MONDRIAN-805
      */
-    public void testBugMondrian756() {
+    void testBugMondrian756() {
         TestContext testContext0 = getTestContext();
         if (!testContext0.databaseIsValid()) {
             return;
@@ -401,7 +401,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      *
      * @see #testBugMondrian805() duplicate bug MONDRIAN-805
      */
-    public void testBugMondrian756b() {
+    void testBugMondrian756b() {
         final TestContext testContext0 = getTestContext();
         if (!testContext0.databaseIsValid()) {
             return;
@@ -427,7 +427,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * bug <a href="http://jira.pentaho.com/browse/MONDRIAN-805">MONDRIAN-805,
      * "Two dimensions with hasAll=false fail"</a>.
      */
-    public void testBugMondrian805() {
+    void testBugMondrian805() {
         final TestContext testContext0 = getTestContext();
         if (!testContext0.databaseIsValid()) {
             return;
@@ -472,7 +472,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + "Row #0: 596\n");
     }
 
-    public void testMondrianBug476_770_957() throws Exception {
+    void testMondrianBug476_770_957() throws Exception {
         final TestContext context =
             SteelWheelsTestCase.createContext(
                 TestContext.instance(),
@@ -634,7 +634,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + "Row #9: 6,107.0\n");
     }
 
-    public void testBugMondrian935() {
+    void testBugMondrian935() {
         final TestContext testContext = getTestContext();
         if (!testContext.databaseIsValid()) {
             return;
@@ -684,7 +684,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      *
      * @throws Exception on error
      */
-    public void testPropertyWithParameterOfTimestampType() throws Exception {
+    void testPropertyWithParameterOfTimestampType() throws Exception {
         final TestContext testContext = getTestContext();
         if (!testContext.databaseIsValid()) {
             return;
@@ -736,7 +736,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * only execute one SQL query, basically, "select year_id from time group by
      * year_id order by year_id". It should definitely not join to fact table.
      */
-    public void testEsr1587() {
+    void testEsr1587() {
         final TestContext testContext = getTestContext();
         if (!testContext.databaseIsValid()) {
             return;
@@ -757,7 +757,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + "Row #0: 0\n" + "Row #0: 0\n");
     }
 
-    public void testMondrian1133() {
+    void testMondrian1133() {
         if (!getTestContext().databaseIsValid()) {
             return;
         }
@@ -786,7 +786,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * I've also created a bunch of tests with null keys and I sort them
      * every which way to verify the correct ordering.
      */
-    public void testMondrian1197() {
+    void testMondrian1197() {
         final TestContext testContext = getTestContext();
 
         if (!testContext.databaseIsValid()) {
@@ -1226,7 +1226,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * results. This was because of a confusion of the ordering of null
      * keys.
      */
-    public void testRangeSortWithNullKeys() {
+    void testRangeSortWithNullKeys() {
         if (!getTestContext().databaseIsValid()) {
             return;
         }
@@ -1299,7 +1299,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * java.lang.Integer cannot be cast to java.lang.Double
      * keys.
      */
-    public void testBug1285() {
+    void testBug1285() {
         if (!getTestContext().databaseIsValid()) {
             return;
         }
@@ -1387,7 +1387,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + "Row #7: 2\n");
     }
 
-    public void testDoubleValueCanBeRankedAmongIntegers() {
+    void testDoubleValueCanBeRankedAmongIntegers() {
         if (!getTestContext().databaseIsValid()) {
             return;
         }
@@ -1426,7 +1426,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * Member Unique Name is incorrect for a calculated member on a shared
      * dimension whose name is different from the dimension it is based on.
      */
-    public void testMondrian1360() {
+    void testMondrian1360() {
         TestContext testContext = getTestContext().withSchema(
             "<Schema name=\"SteelWheels\">\n"
             + "    <Dimension type=\"StandardDimension\" highCardinality=\"false\" name=\"Product\">\n"
@@ -1538,7 +1538,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      *
      * Invalid filter SQL generated on numeric column
      */
-    public void testMondrian1464() {
+    void testMondrian1464() {
         if (!getTestContext().databaseIsValid()) {
             return;
         }
@@ -1573,7 +1573,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      *
      * On .Members in NonEmpty, with mondrian.native.nonempty.enabled=true
      */
-    public void testMondrian1252() throws Exception {
+    void testMondrian1252() throws Exception {
         if (!getTestContext().databaseIsValid()) {
             return;
         }
@@ -1687,7 +1687,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      *
      * Compound slicer getting applied to CurrentDateMember
      */
-    public void testMondrian1750() throws Exception {
+    void testMondrian1750() throws Exception {
         TestContext testContext = getTestContext();
         if (!testContext.databaseIsValid()) {
             return;
@@ -1724,7 +1724,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + "Row #4: 6,447\n");
     }
 
-    public void testMondrian2411_1() throws Exception {
+    void testMondrian2411_1() throws Exception {
         if (!getTestContext().databaseIsValid()) {
             return;
         }
@@ -2007,7 +2007,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + "Row #97: 4,235.63\n");
     }
 
-    public void testMondrian2411_2() throws Exception {
+    void testMondrian2411_2() throws Exception {
         if (!getTestContext().databaseIsValid()) {
             return;
         }
@@ -2290,7 +2290,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
             + "Row #0: 1,701.95\n");
     }
 
-    public void testMondrian2411_3() throws Exception {
+    void testMondrian2411_3() throws Exception {
         // Tests an admin query followed by a user query, but both are wrapped
         // with a no-op role in a union.
         if (!getTestContext().databaseIsValid()
@@ -2597,7 +2597,7 @@ public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
      * this tests the fix for
      * http://jira.pentaho.com/browse/Mondrian-2652
      */
-    public void testMondrian2652() {
+    void testMondrian2652() {
         // Check if there is a valid SteelWheels database.
         TestContext testContext = getTestContext();
         if (!testContext.databaseIsValid()) {

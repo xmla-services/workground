@@ -70,7 +70,7 @@ public class RolapConnectionTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testPooledConnectionWithProperties(TestingContext context) throws SQLException {
+    void testPooledConnectionWithProperties(TestingContext context) throws SQLException {
         Util.PropertyList properties = baseProperties(context);
 
         // Only the JDBC-ODBC bridge gives the error necessary for this
@@ -129,7 +129,7 @@ public class RolapConnectionTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testNonPooledConnectionWithProperties(TestingContext context) {
+    void testNonPooledConnectionWithProperties(TestingContext context) {
         Util.PropertyList properties =baseProperties(context);
 
         // Only the JDBC-ODBC bridge gives the error necessary for this
@@ -213,7 +213,7 @@ public class RolapConnectionTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testFormatLocale(TestingContext context) {
+    void testFormatLocale(TestingContext context) {
         String expr = "FORMAT(1234.56, \"#,##.#\")";
         checkLocale(context, "es_ES", expr, "1.234,6", false);
         checkLocale(context, "es_MX", expr, "1,234.6", false);
@@ -225,7 +225,7 @@ public class RolapConnectionTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testFormatStringLocale(TestingContext context) {
+    void testFormatStringLocale(TestingContext context) {
         checkLocale(context, "es_ES", "1234.56", "1.234,6", true);
         checkLocale(context, "es_MX", "1234.56", "1,234.6", true);
         checkLocale(context, "en_US", "1234.56", "1,234.6", true);
@@ -266,7 +266,7 @@ public class RolapConnectionTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testConnectSansCatalogFails(TestingContext context) {
+    void testConnectSansCatalogFails(TestingContext context) {
         Util.PropertyList properties =baseProperties(context);
         properties.remove(RolapConnectionProperties.Catalog.name());
         properties.remove(RolapConnectionProperties.CatalogContent.name());
@@ -295,7 +295,7 @@ public class RolapConnectionTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testGetJdbcConnectionWhenJdbcIsNull(TestingContext context) {
+    void testGetJdbcConnectionWhenJdbcIsNull(TestingContext context) {
         final StringBuilder connectInfo = new StringBuilder();
         Util.PropertyList properties =
            baseProperties(context);

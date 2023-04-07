@@ -34,12 +34,12 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleUnparserDrillthroughStatement {
+class SimpleUnparserDrillthroughStatementTest {
 
     private SimpleUnparser unparser = new SimpleUnparser();
 
     @Test
-    public void test() {
+    void test() {
 
         SelectQueryClause selectQueryClause =
             new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,

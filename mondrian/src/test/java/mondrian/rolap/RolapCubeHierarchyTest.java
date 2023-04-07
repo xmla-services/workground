@@ -35,7 +35,7 @@ public class RolapCubeHierarchyTest {
 
   @ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-  public void testMONDRIAN2535(TestingContext context) {
+  void testMONDRIAN2535(TestingContext context) {
     assertQueryReturns(context.createConnection(),
         "Select\n"
         + "  [Customers].children on rows,\n"
@@ -59,7 +59,7 @@ public class RolapCubeHierarchyTest {
   }
 
   @Test
-  public void testInit_NoFactCube() {
+  void testInit_NoFactCube() {
     RolapCubeDimension cubeDimension = mock(RolapCubeDimension.class);
     RolapCube cubeDimension_cube = mock(RolapCube.class);
     boolean cubeDimension_cube_isVirtual = true;
@@ -107,7 +107,7 @@ public class RolapCubeHierarchyTest {
   }
 
   @Test
-  public void testInit_FactCube_NoFactTable() {
+  void testInit_FactCube_NoFactTable() {
     RolapCubeDimension cubeDimension = mock(RolapCubeDimension.class);
     RolapCube cubeDimension_cube = mock(RolapCube.class);
     boolean cubeDimension_cube_isVirtual = true;
@@ -153,7 +153,7 @@ public class RolapCubeHierarchyTest {
   }
 
   @Test
-  public void testInit_FactCube_FactTableDiffers() {
+  void testInit_FactCube_FactTableDiffers() {
     RolapCubeDimension cubeDimension = mock(RolapCubeDimension.class);
     RolapCube cubeDimension_cube = mock(RolapCube.class);
     boolean cubeDimension_cube_isVirtual = true;
@@ -208,7 +208,7 @@ public class RolapCubeHierarchyTest {
   }
 
   @Test
-  public void testInit_FactCube_FactTableEquals() {
+  void testInit_FactCube_FactTableEquals() {
     RolapCubeDimension cubeDimension = mock(RolapCubeDimension.class);
     RolapCube cubeDimension_cube = mock(RolapCube.class);
     boolean cubeDimension_cube_isVirtual = true;

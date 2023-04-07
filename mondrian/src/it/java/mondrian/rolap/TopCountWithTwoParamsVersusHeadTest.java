@@ -56,25 +56,25 @@ public class TopCountWithTwoParamsVersusHeadTest extends BatchTestCase {
     }
 
 
-    public void test_States() throws Exception {
+    void test_States() throws Exception {
         assertResultsAreEqual(
             "States",
             TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_STATES_QUERY);
     }
 
-    public void test_Cities() throws Exception {
+    void test_Cities() throws Exception {
         assertResultsAreEqual(
             "Cities",
             TOPCOUNT_MIMICS_HEAD_WHEN_TWO_PARAMS_CITIES_QUERY);
     }
 
-    public void test_ShowsNotMoreThanExist() {
+    void test_ShowsNotMoreThanExist() {
         assertResultsAreEqual(
             "Not more than exists",
             RESULTS_ARE_SHOWN_NOT_MORE_THAN_EXIST_2_PARAMS_QUERY);
     }
 
-    public void test_DoesNotIgnoreNonEmpty() {
+    void test_DoesNotIgnoreNonEmpty() {
         assertResultsAreEqual(
             "Does not ignore NON EMPTY",
             NON_EMPTY_IS_NOT_IGNORED_WHEN_TWO_PARAMS_QUERY);

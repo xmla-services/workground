@@ -33,17 +33,17 @@ public class CellPropertyTest{
     }
 
     @Test
-    public void testIsNameEquals() {
+    void testIsNameEquals() {
         assertTrue(cellProperty.isNameEquals("Format_String"));
     }
 
     @Test
-    public void testIsNameEqualsDoesCaseInsensitiveMatch() {
+    void testIsNameEqualsDoesCaseInsensitiveMatch() {
         assertTrue(cellProperty.isNameEquals("format_string"));
     }
 
     @Test
-    public void testIsNameEqualsParameterShouldNotBeQuoted() {
+    void testIsNameEqualsParameterShouldNotBeQuoted() {
         assertFalse(cellProperty.isNameEquals("[Format_String]"));
     }
 

@@ -116,7 +116,7 @@ public class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testRollup(TestingContext context) {
+    void testRollup(TestingContext context) {
         prepareContext(context);
         for (boolean rollup : new Boolean[] {true, false}) {
             PrintWriter pw = new PrintWriter(System.out);
@@ -157,7 +157,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testLoadWithMockResultsForLoadingSummaryAndDetailedSegments(TestingContext context) throws ExecutionException, InterruptedException {
+    void testLoadWithMockResultsForLoadingSummaryAndDetailedSegments(TestingContext context) throws ExecutionException, InterruptedException {
         prepareContext(context);
         GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender(context.createConnection());
 
@@ -239,7 +239,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testLoadWithWithNullInRollupColumn(TestingContext context) throws ExecutionException, InterruptedException {
+    void testLoadWithWithNullInRollupColumn(TestingContext context) throws ExecutionException, InterruptedException {
         prepareContext(context);
         GroupingSet groupableSetsInfo = getGroupingSetRollupOnGender(context.createConnection());
 
@@ -356,7 +356,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testLoadWithMockResultsForLoadingOnlyDetailedSegments(TestingContext context) throws ExecutionException,
+    void testLoadWithMockResultsForLoadingOnlyDetailedSegments(TestingContext context) throws ExecutionException,
             InterruptedException {
         prepareContext(context);
         GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
@@ -476,7 +476,7 @@ public class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testProcessDataForSettingNullAxis(TestingContext context)
+    void testProcessDataForSettingNullAxis(TestingContext context)
         throws SQLException
     {
         prepareContext(context);
@@ -520,7 +520,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     // PDI-16150
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testProcessBinaryData(TestingContext context)
+    void testProcessBinaryData(TestingContext context)
             throws SQLException
     {
         prepareContext(context);
@@ -571,7 +571,7 @@ public class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testProcessDataForNonGroupingSetsScenario(TestingContext context)
+    void testProcessDataForNonGroupingSetsScenario(TestingContext context)
         throws SQLException
     {
         prepareContext(context);
@@ -702,7 +702,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     @Disabled //has not been fixed during creating Daanse project
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testGetGroupingBitKey(TestingContext context) throws SQLException {
+    void testGetGroupingBitKey(TestingContext context) throws SQLException {
         prepareContext(context);
         Object[] data = {
             "1997", "Food", "Deli", "M", "6047", 0, 0, 0, 0
@@ -738,7 +738,7 @@ public class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testGroupingSetsUtilForMissingGroupingBitKeys(TestingContext context) {
+    void testGroupingSetsUtilForMissingGroupingBitKeys(TestingContext context) {
         prepareContext(context);
         List<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
         groupingSets.add(getDefaultGroupingSet(context.createConnection()));
@@ -783,7 +783,7 @@ public class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testGroupingSetsUtilSetsDetailForRollupColumns(TestingContext context) {
+    void testGroupingSetsUtilSetsDetailForRollupColumns(TestingContext context) {
         prepareContext(context);
         RolapStar.Measure measure = getMeasure(context.createConnection(), cubeNameSales, measureUnitSales);
         RolapStar star = measure.getStar();
@@ -872,7 +872,7 @@ public class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testGroupingSetsUtilSetsForDetailForRollupColumns(TestingContext context) {
+    void testGroupingSetsUtilSetsForDetailForRollupColumns(TestingContext context) {
         prepareContext(context);
         RolapStar.Measure measure = getMeasure(context.createConnection(), cubeNameSales, measureUnitSales);
         RolapStar star = measure.getStar();
@@ -920,7 +920,7 @@ public class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testGroupingSetsUtilSetsForGroupingFunctionIndex(TestingContext context) {
+    void testGroupingSetsUtilSetsForGroupingFunctionIndex(TestingContext context) {
         prepareContext(context);
         List<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
         groupingSets.add(getDefaultGroupingSet(context.createConnection()));
@@ -948,7 +948,7 @@ public class SegmentLoaderTest extends BatchTestCase {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testGetGroupingColumnsList(TestingContext context) {
+    void testGetGroupingColumnsList(TestingContext context) {
         prepareContext(context);
         GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
 

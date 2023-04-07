@@ -39,21 +39,21 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  */
 public class VisualTotalsTest {
 	@Test
-    public void testSubstituteEmpty() {
+    void testSubstituteEmpty() {
         final String actual = VisualTotalsFunDef.substitute("", "anything");
         final String expected = "";
         assertEquals(expected, actual);
     }
 
 	@Test
-    public void testSubstituteOneStarOnly() {
+    void testSubstituteOneStarOnly() {
         final String actual = VisualTotalsFunDef.substitute("*", "anything");
         final String expected = "anything";
         assertEquals(expected, actual);
     }
 
 	@Test
-    public void testSubstituteOneStarBegin() {
+    void testSubstituteOneStarBegin() {
         final String actual =
             VisualTotalsFunDef.substitute("* is the word.", "Grease");
         final String expected = "Grease is the word.";
@@ -61,7 +61,7 @@ public class VisualTotalsTest {
     }
 
 	@Test
-    public void testSubstituteOneStarEnd() {
+    void testSubstituteOneStarEnd() {
         final String actual =
             VisualTotalsFunDef.substitute(
                 "Lies, damned lies, and *!", "statistics");
@@ -70,14 +70,14 @@ public class VisualTotalsTest {
     }
 
 	@Test
-    public void testSubstituteTwoStars() {
+    void testSubstituteTwoStars() {
         final String actual = VisualTotalsFunDef.substitute("**", "anything");
         final String expected = "*";
         assertEquals(expected, actual);
     }
 
 	@Test
-    public void testSubstituteCombined() {
+    void testSubstituteCombined() {
         final String actual =
             VisualTotalsFunDef.substitute(
                 "*: see small print**** for *", "disclaimer");
@@ -93,7 +93,7 @@ public class VisualTotalsTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDrillthroughVisualTotal(TestingContext foodMartContext) throws SQLException {
+    void testDrillthroughVisualTotal(TestingContext foodMartContext) throws SQLException {
         OlapConnection conn = foodMartContext.createOlap4jConnection();
         CellSet cellSet =
     		TestUtil.executeOlap4jQuery(conn,
@@ -132,7 +132,7 @@ public class VisualTotalsTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testVisualTotalCaptionBug(TestingContext foodMartContext) throws SQLException {        
+    void testVisualTotalCaptionBug(TestingContext foodMartContext) throws SQLException {        
         CellSet cellSet =
     		TestUtil.executeOlap4jQuery(foodMartContext.createOlap4jConnection(),
                 "select {[Measures].[Unit Sales]} on columns, "
@@ -160,7 +160,7 @@ public class VisualTotalsTest {
      */
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testVisualTotalsAggregatedMemberBug(TestingContext foodMartContext) throws SQLException {        
+    void testVisualTotalsAggregatedMemberBug(TestingContext foodMartContext) throws SQLException {        
         CellSet cellSet =
     		TestUtil.executeOlap4jQuery(foodMartContext.createOlap4jConnection(),
                 " with  member [Gender].[YTD] as 'AGGREGATE(YTD(),[Gender].[M])'" 

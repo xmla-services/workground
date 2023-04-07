@@ -23,15 +23,15 @@ import java.util.Properties;
  */
 public class XmlaDimensionPropertiesTest extends XmlaBaseTestCase {
 
-    public void testOneHierarchyProperties() throws Exception {
+    void testOneHierarchyProperties() throws Exception {
         executeTest("HR");
     }
 
-    public void testTwoHierarchiesProperties() throws Exception {
+    void testTwoHierarchiesProperties() throws Exception {
         executeTest("HR");
     }
 
-    public void testMondrian2342() throws Exception {
+    void testMondrian2342() throws Exception {
         executeTest("Sales");
     }
 

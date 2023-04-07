@@ -1247,7 +1247,7 @@ public class ConcurrentMdxTest extends FoodMartTestCase {
     };
     private int count = 0;
 
-    public void testConcurrentValidatingQueriesInRandomOrder() {
+    void testConcurrentValidatingQueriesInRandomOrder() {
         propSaver.set(props.UseAggregates, false);
         propSaver.set(props.ReadAggregates, false);
         propSaver.set(props.DisableCaching, false);
@@ -1273,7 +1273,7 @@ public class ConcurrentMdxTest extends FoodMartTestCase {
             .size() == 0);
     }
 
-    public void testFlushingDoesNotCauseDeadlock() throws Exception {
+    void testFlushingDoesNotCauseDeadlock() throws Exception {
         // Create a seeded deterministic random generator.
         final long seed = new Random().nextLong();
         LOGGER.debug("Test seed: " + seed);

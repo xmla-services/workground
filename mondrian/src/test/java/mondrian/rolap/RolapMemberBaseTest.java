@@ -76,7 +76,7 @@ public class RolapMemberBaseTest {
      * then property formatter should be used to return the value.
      */
     @Test
-    public void testShouldUsePropertyFormatterWhenPropertyValuesAreRequested() {
+    void testShouldUsePropertyFormatterWhenPropertyValuesAreRequested() {
         RolapProperty property1 = mock(TestPublicRolapProperty.class);
         RolapProperty property2 = mock(TestPublicRolapProperty.class);
         when(property1.getName()).thenReturn(PROPERTY_NAME_1);
@@ -113,7 +113,7 @@ public class RolapMemberBaseTest {
      * to return the formatted caption value.
      */
     @Test
-    public void testShouldUseMemberFormatterForCaption() {
+    void testShouldUseMemberFormatterForCaption() {
         MemberFormatter memberFormatter = mock(MemberFormatter.class);
         when(level.getMemberFormatter()).thenReturn(memberFormatter);
         when(memberFormatter.formatMember(rolapMemberBase))
@@ -133,7 +133,7 @@ public class RolapMemberBaseTest {
      * then member key should be returned.
      */
     @Test
-    public void testShouldNotFailIfMemberFormatterIsNotPresent() {
+    void testShouldNotFailIfMemberFormatterIsNotPresent() {
         String caption = rolapMemberBase.getCaption();
 
         assertEquals(String.valueOf(Integer.MAX_VALUE), caption);
@@ -147,7 +147,7 @@ public class RolapMemberBaseTest {
      * then member key should be returned.
      */
     @Test
-    public void testShouldReturnMemberKeyIfNoCaptionValueAndNoNamePresent() {
+    void testShouldReturnMemberKeyIfNoCaptionValueAndNoNamePresent() {
         Object captionValue = rolapMemberBase.getCaptionValue();
 
         assertNotNull(captionValue);
@@ -162,7 +162,7 @@ public class RolapMemberBaseTest {
      * then member name should be returned.
      */
     @Test
-    public void testShouldReturnMemberNameIfCaptionValueIsNotPresent() {
+    void testShouldReturnMemberNameIfCaptionValueIsNotPresent() {
         rolapMemberBase.setProperty(Property.NAME.name, MEMBER_NAME);
 
         Object captionValue = rolapMemberBase.getCaptionValue();
@@ -179,7 +179,7 @@ public class RolapMemberBaseTest {
      * then the caption value should be returned.
      */
     @Test
-    public void testShouldReturnCaptionValueIfPresent() {
+    void testShouldReturnCaptionValueIfPresent() {
         rolapMemberBase.setCaptionValue(Integer.MIN_VALUE);
 
         Object captionValue = rolapMemberBase.getCaptionValue();

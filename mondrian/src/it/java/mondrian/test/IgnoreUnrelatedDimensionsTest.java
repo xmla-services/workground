@@ -109,7 +109,7 @@ public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
             null);
     }
 
-    public void testTotalingOnCrossJoinOfJoiningAndNonJoiningDimensions() {
+    void testTotalingOnCrossJoinOfJoiningAndNonJoiningDimensions() {
         assertQueryReturns(
             "WITH MEMBER [Measures].[Unit Sales VM] AS "
             + "'ValidMeasure([Measures].[Unit Sales])', SOLVE_ORDER = 3000 "
@@ -128,7 +128,7 @@ public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
             + "Row #0: 266,773\n");
     }
 
-    public void testVMShouldNotPushUpAggMemberDefinedOnNonJoiningDimension() {
+    void testVMShouldNotPushUpAggMemberDefinedOnNonJoiningDimension() {
         assertQueryReturns(
             "WITH MEMBER [Measures].[Total Sales] AS "
             + "'ValidMeasure(Measures.[Warehouse Sales]) + [Measures].[Unit Sales]',"
@@ -148,7 +148,7 @@ public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
             + "Row #0: 30,405.602\n");
     }
 
-    public void testAggMemberDefinedOnNonJoiningDimensionWithNonAllDefltMember()
+    void testAggMemberDefinedOnNonJoiningDimensionWithNonAllDefltMember()
     {
         // Gender dim to have Gender.F as default member
         final TestContext context = TestContext.instance().create(
@@ -176,7 +176,7 @@ public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
      * Without a fix for MONDRIAN-1837, this result of the following query
      * would be empty.
      */
-    public void testIgnoreUnrelatedDimsOnSlicer() {
+    void testIgnoreUnrelatedDimsOnSlicer() {
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
             true);
@@ -194,7 +194,7 @@ public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
     }
 
 
-    public void testIgnoreUnrelatedDimsOnCompoundSlicer() {
+    void testIgnoreUnrelatedDimsOnCompoundSlicer() {
         // MONDRIAN-2072
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
@@ -215,7 +215,7 @@ public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
             + "Row #0: 196,770.888\n");
     }
 
-    public void testRelatedAndUnrelatedDimsOnCompoundSlicer() {
+    void testRelatedAndUnrelatedDimsOnCompoundSlicer() {
         // MONDRIAN-2072
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
@@ -239,7 +239,7 @@ public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
             + "Row #0: 157,935.834\n");
     }
 
-    public void testPartiallyRelatedMeasureWithCompoundSlicer() {
+    void testPartiallyRelatedMeasureWithCompoundSlicer() {
         // MONDRIAN-2072
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
@@ -285,7 +285,7 @@ public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
             + "Row #0: 157,936\n");
     }
 
-    public void testNonJoiningDimWithMeasureInCompoundSlicer() {
+    void testNonJoiningDimWithMeasureInCompoundSlicer() {
         // MONDRIAN-2072
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
@@ -302,7 +302,7 @@ public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
             + "196,770.888");
     }
 
-    public void testTotalingForValidAndNonValidMeasuresWithJoiningDimensions() {
+    void testTotalingForValidAndNonValidMeasuresWithJoiningDimensions() {
         assertQueryReturns(
             "WITH MEMBER [Measures].[Unit Sales VM] AS "
             + "'ValidMeasure([Measures].[Unit Sales])',"
@@ -323,7 +323,7 @@ public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
             + "Row #0: 225,627.23\n");
     }
 
-    public void testTotalingWhenIgnoreUnrelatedDimensionsPropertyIsTrue() {
+    void testTotalingWhenIgnoreUnrelatedDimensionsPropertyIsTrue() {
         assertQueryReturns(
             "WITH MEMBER [Measures].[Unit Sales VM] AS "
             + "'ValidMeasure([Measures].[Unit Sales])', SOLVE_ORDER = 3000 "
@@ -379,7 +379,7 @@ public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
             + "Row #6: 266,773\n");
     }
 
-    public void testTotalingOnNonJoiningDimension() {
+    void testTotalingOnNonJoiningDimension() {
         assertQueryReturns(
             "WITH MEMBER [Measures].[Unit Sales VM] AS "
             + "'ValidMeasure([Measures].[Unit Sales])', SOLVE_ORDER =3000"
@@ -454,7 +454,7 @@ public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
             + "Row #6: 0.27\n");
     }
 
-    public void testUnrelatedDimPropOverridesIgnoreMeasure() {
+    void testUnrelatedDimPropOverridesIgnoreMeasure() {
         propSaver.set(
             MondrianProperties.instance().IgnoreMeasureForNonJoiningDimension,
             true);

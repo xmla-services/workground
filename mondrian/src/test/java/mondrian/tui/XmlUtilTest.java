@@ -28,7 +28,7 @@ import mondrian.xmla.XmlaConstants;
 public class XmlUtilTest{
 
 	@Test
-    public void testSelectAsNodesWithEmptyNamespace()
+    void testSelectAsNodesWithEmptyNamespace()
             throws IOException, SAXException, XPathException
     {
         String x = "<doc><foo><bar></bar><baz></baz></foo></doc>";
@@ -43,7 +43,7 @@ public class XmlUtilTest{
     }
 
 	@Test
-    public void testSmallWithSingleNamespace()
+    void testSmallWithSingleNamespace()
             throws IOException, SAXException, XPathException
     {
         String x = "<bop:doc xmlns:bop='http://foo.bar.baz'><bop:foo><bop:bar>"
@@ -59,7 +59,7 @@ public class XmlUtilTest{
     }
 
 	@Test
-    public void testSelectAsNodesDiscover()
+    void testSelectAsNodesDiscover()
             throws IOException, SAXException, XPathException
     {
         String xml =
@@ -95,7 +95,7 @@ public class XmlUtilTest{
     }
 
 	@Test
-    public void testSelectAsNodes3Namespaces()
+    void testSelectAsNodes3Namespaces()
             throws IOException, SAXException, XPathException
     {
         String soapResp =

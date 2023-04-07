@@ -25,7 +25,7 @@ public class RolapNativeSqlInjectionTest extends FoodMartTestCase {
         propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
     }
 
-    public void testMondrian2436() {
+    void testMondrian2436() {
         String mdxQuery = ""
             + "select {[Measures].[Store Sales]} on columns, "
             + "filter([Customers].[Name].Members, (([Measures].[Store Sales]) > '(select 1000)')) on rows "

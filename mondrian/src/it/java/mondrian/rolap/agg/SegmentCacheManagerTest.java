@@ -38,7 +38,7 @@ public class SegmentCacheManagerTest extends TestCase {
     MockitoAnnotations.initMocks( this );
   }
 
-  public void testCommandExecution() throws InterruptedException {
+  void testCommandExecution() throws InterruptedException {
     CountDownLatch latch = new CountDownLatch( 1 );
     SegmentCacheManager man = new SegmentCacheManager( mondrianServer );
     man.execute( new MockCommand( latch::countDown ) );
@@ -47,7 +47,7 @@ public class SegmentCacheManagerTest extends TestCase {
     assertEquals( latch.getCount(), 0 );
   }
 
-  public void testShutdownEndOfQueue() throws InterruptedException {
+  void testShutdownEndOfQueue() throws InterruptedException {
     BlockingQueue execResults = new ArrayBlockingQueue( 10 );
     SegmentCacheManager man = new SegmentCacheManager( mondrianServer );
     // add 10 commands to the exec queue
@@ -65,7 +65,7 @@ public class SegmentCacheManagerTest extends TestCase {
 
   }
 
-  public void testShutdownMiddleOfQueue() throws InterruptedException {
+  void testShutdownMiddleOfQueue() throws InterruptedException {
     BlockingQueue<Object> execResults = new ArrayBlockingQueue( 20 );
 
     SegmentCacheManager man = new SegmentCacheManager( mondrianServer );

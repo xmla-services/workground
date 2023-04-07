@@ -394,7 +394,7 @@ System.out.println("password=" + password);
     /////////////////////////////////////////////////////////////////////////
 
     // junk rather than xml
-    public void testJunk() throws Exception {
+    void testJunk() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -409,7 +409,7 @@ System.out.println("password=" + password);
     }
 
     // bad soap envolope element tag
-    public void testBadXml01() throws Exception {
+    void testBadXml01() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -424,7 +424,7 @@ System.out.println("password=" + password);
     }
 
     // bad soap namespace
-    public void testBadXml02() throws Exception {
+    void testBadXml02() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -442,7 +442,7 @@ System.out.println("password=" + password);
     // bad action
     /////////////////////////////////////////////////////////////////////////
 
-    public void testBadAction01() throws Exception {
+    void testBadAction01() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -456,7 +456,7 @@ System.out.println("password=" + password);
         doTest(expectedFault);
     }
 
-    public void testBadAction02() throws Exception {
+    void testBadAction02() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -470,7 +470,7 @@ System.out.println("password=" + password);
         doTest(expectedFault);
     }
 
-    public void testBadAction03() throws Exception {
+    void testBadAction03() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -487,7 +487,7 @@ System.out.println("password=" + password);
     /////////////////////////////////////////////////////////////////////////
     // bad soap structure
     /////////////////////////////////////////////////////////////////////////
-    public void testBadSoap01() throws Exception {
+    void testBadSoap01() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -501,7 +501,7 @@ System.out.println("password=" + password);
         doTest(expectedFault);
     }
 
-    public void testBadSoap02() throws Exception {
+    void testBadSoap02() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -520,7 +520,7 @@ System.out.println("password=" + password);
     /////////////////////////////////////////////////////////////////////////
 
     // no authorization field in header
-    public void testAuth01() throws Exception {
+    void testAuth01() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -539,7 +539,7 @@ System.out.println("password=" + password);
     }
 
     // the user/password is not base64 encode and no ':' character
-    public void testAuth02() throws Exception {
+    void testAuth02() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -572,7 +572,7 @@ System.out.println("password=" + password);
     }
 
     // this should work
-    public void testAuth03() throws Exception {
+    void testAuth03() throws Exception {
         Fault expectedFault = null;
 
         doAuthorization = true;
@@ -614,7 +614,7 @@ System.out.println("DO IT AGAIN");
     }
 
     // fail: bad user name
-    public void testAuth04() throws Exception {
+    void testAuth04() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -657,7 +657,7 @@ System.out.println("DO IT AGAIN");
     }
 
     // fail: bad password
-    public void testAuth05() throws Exception {
+    void testAuth05() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -700,7 +700,7 @@ System.out.println("DO IT AGAIN");
     }
 
     // bad header
-    public void testBadHeader01() throws Exception {
+    void testBadHeader01() throws Exception {
         // remember, errors in headers do not have detail sections
         Fault expectedFault =
             new Fault(
@@ -715,7 +715,7 @@ System.out.println("DO IT AGAIN");
     }
 
     // bad body
-    public void testBadBody01() throws Exception {
+    void testBadBody01() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -729,7 +729,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody02() throws Exception {
+    void testBadBody02() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -743,7 +743,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody03() throws Exception {
+    void testBadBody03() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -757,7 +757,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody04() throws Exception {
+    void testBadBody04() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -771,7 +771,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody05() throws Exception {
+    void testBadBody05() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -785,7 +785,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody06() throws Exception {
+    void testBadBody06() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -799,7 +799,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody07() throws Exception {
+    void testBadBody07() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -813,7 +813,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody08() throws Exception {
+    void testBadBody08() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -827,7 +827,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody09() throws Exception {
+    void testBadBody09() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -841,7 +841,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody10() throws Exception {
+    void testBadBody10() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -855,7 +855,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody11() throws Exception {
+    void testBadBody11() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -869,7 +869,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody12() throws Exception {
+    void testBadBody12() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -883,7 +883,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody13() throws Exception {
+    void testBadBody13() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -898,7 +898,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody14() throws Exception {
+    void testBadBody14() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(
@@ -913,7 +913,7 @@ System.out.println("DO IT AGAIN");
         doTest(expectedFault);
     }
 
-    public void testBadBody15() throws Exception {
+    void testBadBody15() throws Exception {
         Fault expectedFault =
             new Fault(
                 XmlaException.formatFaultCode(

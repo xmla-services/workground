@@ -107,7 +107,7 @@ public class SchemaTest extends FoodMartTestCase {
 
     // Tests follow...
 
-    public void testSolveOrderInCalculatedMember() {
+    void testSolveOrderInCalculatedMember() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             null,
@@ -135,7 +135,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Row #0: $7.52\n");
     }
 
-    public void testHierarchyDefaultMember() {
+    void testHierarchyDefaultMember() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Gender with default\" foreignKey=\"customer_id\">\n"
@@ -162,7 +162,7 @@ public class SchemaTest extends FoodMartTestCase {
      * <a href="http://forums.pentaho.com/showthread.php?p=190737">Pentaho
      * forum post 'wrong unique name for default member when hasAll=false'</a>.
      */
-    public void testDefaultMemberName() {
+    void testDefaultMemberName() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Product with no all\" foreignKey=\"product_id\">\n"
@@ -188,7 +188,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Row #0: 4,400\n");
     }
 
-    public void testHierarchyAbbreviatedDefaultMember() {
+    void testHierarchyAbbreviatedDefaultMember() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Gender with default\" foreignKey=\"customer_id\">\n"
@@ -211,7 +211,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Row #0: 131,558\n");
     }
 
-    public void testHierarchyNoLevelsFails() {
+    void testHierarchyNoLevelsFails() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "  <Dimension name='Gender no levels' foreignKey='customer_id'>\n"
@@ -224,7 +224,7 @@ public class SchemaTest extends FoodMartTestCase {
             "Hierarchy '[Gender no levels]' must have at least one level.");
     }
 
-    public void testHierarchyNonUniqueLevelsFails() {
+    void testHierarchyNonUniqueLevelsFails() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "  <Dimension name='Gender dup levels' foreignKey='customer_id'>\n"
@@ -242,7 +242,7 @@ public class SchemaTest extends FoodMartTestCase {
     /**
      * Tests a measure based on 'count'.
      */
-    public void testCountMeasure() {
+    void testCountMeasure() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             null,
@@ -272,7 +272,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Tests that an error occurs if a hierarchy is based on a non-existent
      * table.
      */
-    public void testHierarchyTableNotFound() {
+    void testHierarchyTableNotFound() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income3\" foreignKey=\"product_id\">\n"
@@ -289,7 +289,7 @@ public class SchemaTest extends FoodMartTestCase {
             "Internal error: while building member cache");
     }
 
-    public void testPrimaryKeyTableNotFound() {
+    void testPrimaryKeyTableNotFound() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income4\" foreignKey=\"product_id\">\n"
@@ -303,7 +303,7 @@ public class SchemaTest extends FoodMartTestCase {
             "no table 'customer_not_found' found in hierarchy [Yearly Income4]");
     }
 
-    public void testLevelTableNotFound() {
+    void testLevelTableNotFound() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income5\" foreignKey=\"product_id\">\n"
@@ -317,7 +317,7 @@ public class SchemaTest extends FoodMartTestCase {
             "Table 'customer_not_found' not found");
     }
 
-    public void testHierarchyBadDefaultMember() {
+    void testHierarchyBadDefaultMember() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Gender with default\" foreignKey=\"customer_id\">\n"
@@ -344,7 +344,7 @@ public class SchemaTest extends FoodMartTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-236">
      * Bug MONDRIAN-236, "Mondrian generates invalid SQL"</a>.
      */
-    public void testDuplicateTableAlias() {
+    void testDuplicateTableAlias() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income2\" foreignKey=\"product_id\">\n"
@@ -370,7 +370,7 @@ public class SchemaTest extends FoodMartTestCase {
      * what is the expected result?  Also, in this case, they share the same
      * table without an alias, and the system doesn't complain.
      */
-    public void testDuplicateTableAliasSameForeignKey() {
+    void testDuplicateTableAliasSameForeignKey() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income2\" foreignKey=\"customer_id\">\n"
@@ -402,7 +402,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Without the table alias, generates SQL which is missing a join condition.
      * See {@link #testDuplicateTableAlias()}.
      */
-    public void testDimensionsShareTable() {
+    void testDimensionsShareTable() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income2\" foreignKey=\"product_id\">\n"
@@ -568,7 +568,7 @@ public class SchemaTest extends FoodMartTestCase {
      * native non empty cross join sql generation returns empty query.
      * note that this works when native cross join is disabled
      */
-    public void testDimensionsShareTableNativeNonEmptyCrossJoin() {
+    void testDimensionsShareTableNativeNonEmptyCrossJoin() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income2\" foreignKey=\"product_id\">\n"
@@ -595,7 +595,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Tests two dimensions using same table with same foreign key
      * one table uses an alias.
      */
-    public void testDimensionsShareTableSameForeignKeys() {
+    void testDimensionsShareTableSameForeignKeys() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name=\"Yearly Income2\" foreignKey=\"customer_id\">\n"
@@ -649,7 +649,7 @@ public class SchemaTest extends FoodMartTestCase {
      * first hierarchy. tables are auto-aliased as necessary to guarantee
      * unique joins to the fact table.
      */
-    public void testSnowflakeHierarchyValidationNotNeeded() {
+    void testSnowflakeHierarchyValidationNotNeeded() {
         // this test breaks when using aggregates at the moment
         // due to a known limitation
         if ((MondrianProperties.instance().ReadAggregates.get()
@@ -725,7 +725,7 @@ public class SchemaTest extends FoodMartTestCase {
      * first hierarchy. tables from first and second hierarchy should contain
      * the same join aliases to the fact table.
      */
-    public void testSnowflakeHierarchyValidationNotNeeded2() {
+    void testSnowflakeHierarchyValidationNotNeeded2() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"AliasedDimensionsTesting\" defaultMeasure=\"Supply Time\">\n"
@@ -794,7 +794,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Tests two dimensions using same table (via different join paths).
      * both using a table alias.
      */
-    public void testDimensionsShareJoinTable() {
+    void testDimensionsShareJoinTable() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"AliasedDimensionsTesting\" defaultMeasure=\"Supply Time\">\n"
@@ -851,7 +851,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Tests two dimensions using same table (via different join paths).
      * both using a table alias.
      */
-    public void testDimensionsShareJoinTableOneAlias() {
+    void testDimensionsShareJoinTableOneAlias() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"AliasedDimensionsTesting\" defaultMeasure=\"Supply Time\">\n"
@@ -907,7 +907,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Tests two dimensions using same table (via different join paths).
      * both using a table alias.
      */
-    public void testDimensionsShareJoinTableTwoAliases() {
+    void testDimensionsShareJoinTableTwoAliases() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"AliasedDimensionsTesting\" defaultMeasure=\"Supply Time\">\n"
@@ -963,7 +963,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Tests two dimensions using same table (via different join paths).
      * both using a table alias.
      */
-    public void testTwoAliasesDimensionsShareTable() {
+    void testTwoAliasesDimensionsShareTable() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"AliasedDimensionsTesting\" defaultMeasure=\"Supply Time\">\n"
@@ -1013,7 +1013,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Tests two dimensions using same table with same foreign key.
      * both using a table alias.
      */
-    public void testTwoAliasesDimensionsShareTableSameForeignKeys() {
+    void testTwoAliasesDimensionsShareTableSameForeignKeys() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"AliasedDimensionsTesting\" defaultMeasure=\"Supply Time\">\n"
@@ -1062,7 +1062,7 @@ public class SchemaTest extends FoodMartTestCase {
     /**
      * Test Multiple DimensionUsages on same Dimension.
      */
-    public void testMultipleDimensionUsages() {
+    void testMultipleDimensionUsages() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"Sales Two Dimensions\">\n"
@@ -1098,7 +1098,7 @@ public class SchemaTest extends FoodMartTestCase {
     /**
      * Test Multiple DimensionUsages on same Dimension.
      */
-    public void testMultipleDimensionHierarchyCaptionUsages() {
+    void testMultipleDimensionHierarchyCaptionUsages() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"Sales Two Dimensions\">\n"
@@ -1142,7 +1142,7 @@ public class SchemaTest extends FoodMartTestCase {
      * This test verifies that the createDimension() API call is working
      * correctly.
      */
-    public void testDimensionCreation() {
+    void testDimensionCreation() {
         final TestContext testContext = TestContext.instance().create(
             null,
 
@@ -1189,7 +1189,7 @@ public class SchemaTest extends FoodMartTestCase {
     /**
      * Test DimensionUsage level attribute
      */
-    public void testDimensionUsageLevel() {
+    void testDimensionUsageLevel() {
         final TestContext testContext = TestContext.instance().create(
             null,
 
@@ -1246,7 +1246,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Test to verify naming of all member with
      * dimension usage name is different then source name
      */
-    public void testAllMemberMultipleDimensionUsages() {
+    void testAllMemberMultipleDimensionUsages() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"Sales Two Sales Dimensions\">\n"
@@ -1302,7 +1302,7 @@ public class SchemaTest extends FoodMartTestCase {
      * This test displays an informative error message if someone uses
      * an unaliased name instead of an aliased name
      */
-    public void testNonAliasedDimensionUsage() {
+    void testNonAliasedDimensionUsage() {
         final TestContext testContext = TestContext.instance().create(
             null,
 
@@ -1340,7 +1340,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Tests a cube whose fact table is a &lt;View&gt; element as well as a
      * degenerate dimension.
      */
-    public void testViewDegenerateDims() {
+    void testViewDegenerateDims() {
         final TestContext testContext = TestContext.instance().create(
             null,
 
@@ -1406,7 +1406,7 @@ public class SchemaTest extends FoodMartTestCase {
     /**
      * Tests a cube whose fact table is a &lt;View&gt; element.
      */
-    public void testViewFactTable() {
+    void testViewFactTable() {
         final TestContext testContext = TestContext.instance().create(
             null,
 
@@ -1471,7 +1471,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Tests a cube whose fact table is a &lt;View&gt; element, and which
      * has dimensions based on the fact table.
      */
-    public void testViewFactTable2() {
+    void testViewFactTable2() {
         final TestContext testContext = TestContext.instance().create(
             null,
             // Similar to "Store" cube in FoodMart.xml.
@@ -1528,7 +1528,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Measure@aggregator attribute still works. The preferred value these days
      * is "distinct-count".
      */
-    public void testDeprecatedDistinctCountAggregator() {
+    void testDeprecatedDistinctCountAggregator() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             null,
@@ -1576,7 +1576,7 @@ public class SchemaTest extends FoodMartTestCase {
     /**
      * Tests that an invalid aggregator causes an error.
      */
-    public void testInvalidAggregator() {
+    void testInvalidAggregator() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             null,
@@ -1598,7 +1598,7 @@ public class SchemaTest extends FoodMartTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-291">
      * Bug MONDRIAN-291, "'unknown usage' messages"</a>.
      */
-    public void testUnknownUsages() {
+    void testUnknownUsages() {
         if (!MondrianProperties.instance().ReadAggregates.get()) {
             return;
         }
@@ -1677,7 +1677,7 @@ public class SchemaTest extends FoodMartTestCase {
             sw.toString());
     }
 
-    public void testUnknownUsages1() {
+    void testUnknownUsages1() {
         if (!MondrianProperties.instance().ReadAggregates.get()) {
             return;
         }
@@ -1766,7 +1766,7 @@ public class SchemaTest extends FoodMartTestCase {
             sw.toString());
     }
 
-    public void testPropertyFormatter() {
+    void testPropertyFormatter() {
         final TestContext testContext =
             TestContext.instance().createSubstitutingCube(
                 "Sales",
@@ -1803,7 +1803,7 @@ public class SchemaTest extends FoodMartTestCase {
      * probably the same: when measures are registered in a star, they should
      * be qualified by cube name.
      */
-    public void testBugMondrian233() {
+    void testBugMondrian233() {
         final TestContext testContext =
             TestContext.instance().create(
                 null,
@@ -1840,7 +1840,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-303">
      * MONDRIAN-303, "Property column shifting when use captionColumn"</a>.
      */
-    public void testBugMondrian303() {
+    void testBugMondrian303() {
         // In order to reproduce the problem a dimension specifying
         // captionColumn and Properties were required.
         TestContext testContext = TestContext.instance().createSubstitutingCube(
@@ -1912,7 +1912,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Row #12: Supermarket\n");
     }
 
-    public void testCubeWithOneDimensionOneMeasure() {
+    void testCubeWithOneDimensionOneMeasure() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"OneDim\" defaultMeasure=\"Unit Sales\">\n"
@@ -1936,7 +1936,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Row #0: 266,773\n");
     }
 
-    public void testCubeWithOneDimensionUsageOneMeasure() {
+    void testCubeWithOneDimensionUsageOneMeasure() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"OneDimUsage\" defaultMeasure=\"Unit Sales\">\n"
@@ -1959,7 +1959,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Row #0: 50,236\n");
     }
 
-    public void testCubeHasFact() {
+    void testCubeHasFact() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"Cube with caption\" caption=\"Cube with name\"/>\n",
@@ -1975,7 +1975,7 @@ public class SchemaTest extends FoodMartTestCase {
             "Must specify fact table of cube 'Cube with caption'");
     }
 
-    public void testCubeCaption() throws SQLException {
+    void testCubeCaption() throws SQLException {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"Cube with caption\" caption=\"Cube with name\">"
@@ -1996,7 +1996,7 @@ public class SchemaTest extends FoodMartTestCase {
         assertEquals("Warehouse and Sales with name", cube2.getCaption());
     }
 
-    public void testCubeWithNoDimensions() {
+    void testCubeWithNoDimensions() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"NoDim\" defaultMeasure=\"Unit Sales\">\n"
@@ -2014,7 +2014,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Row #0: 266,773\n");
     }
 
-    public void testCubeWithNoMeasuresFails() {
+    void testCubeWithNoMeasuresFails() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"NoMeasures\">\n"
@@ -2033,7 +2033,7 @@ public class SchemaTest extends FoodMartTestCase {
         testContext.assertSimpleQuery();
     }
 
-    public void testCubeWithOneCalcMeasure() {
+    void testCubeWithOneCalcMeasure() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"OneCalcMeasure\">\n"
@@ -2070,7 +2070,7 @@ public class SchemaTest extends FoodMartTestCase {
      * "Ability to define non-measure calculated members in a cube under a
      * specifc parent"</a>.
      */
-    public void testCalcMemberInCube() {
+    void testCalcMemberInCube() {
         final TestContext testContext =
             TestContext.instance().createSubstitutingCube(
                 "Sales",
@@ -2305,7 +2305,7 @@ public class SchemaTest extends FoodMartTestCase {
     /**
      * this test triggers an exception out of the aggregate table manager
      */
-    public void testAggTableSupportOfSharedDims() {
+    void testAggTableSupportOfSharedDims() {
         if (Bug.BugMondrian361Fixed) {
             final TestContext testContext = TestContext.instance().create(
                 null,
@@ -2355,7 +2355,7 @@ public class SchemaTest extends FoodMartTestCase {
     /**
      * Verifies that RolapHierarchy.tableExists() supports views.
      */
-    public void testLevelTableAttributeAsView() {
+    void testLevelTableAttributeAsView() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"GenderCube\">\n"
@@ -2413,7 +2413,7 @@ public class SchemaTest extends FoodMartTestCase {
                 result.getAxes()[0].getPositions()));
     }
 
-    public void testInvalidSchemaAccess() {
+    void testInvalidSchemaAccess() {
         final TestContext testContext = TestContext.instance().create(
             null, null, null, null, null,
             "<Role name=\"Role1\">\n"
@@ -2427,7 +2427,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Legal values: {all, custom, none, all_dimensions}");
     }
 
-    public void testAllMemberNoStringReplace() {
+    void testAllMemberNoStringReplace() {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"Sales Special Time\">\n"
@@ -2461,7 +2461,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Row #0: 266,773\n");
     }
 
-    public void testUnionRole() {
+    void testUnionRole() {
         final TestContext testContext = TestContext.instance().create(
             null, null, null, null, null,
             "<Role name=\"Role1\">\n"
@@ -2489,7 +2489,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "266,773");
     }
 
-    public void testUnionRoleContainsGrants() {
+    void testUnionRoleContainsGrants() {
         final TestContext testContext = TestContext.instance().create(
             null, null, null, null, null,
             "<Role name=\"Role1\">\n"
@@ -2506,7 +2506,7 @@ public class SchemaTest extends FoodMartTestCase {
             "select from [Sales]", "Union role must not contain grants");
     }
 
-    public void testUnionRoleIllegalForwardRef() {
+    void testUnionRoleIllegalForwardRef() {
         final TestContext testContext = TestContext.instance().create(
             null, null, null, null, null,
             "<Role name=\"Role1\">\n"
@@ -2525,7 +2525,7 @@ public class SchemaTest extends FoodMartTestCase {
             "select from [Sales]", "Unknown role 'Role2'");
     }
 
-    public void testVirtualCubeNamedSetSupportInSchema() {
+    void testVirtualCubeNamedSetSupportInSchema() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Warehouse and Sales",
             null, null, null,
@@ -2568,7 +2568,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Row #0: 192,025\n");
     }
 
-    public void testVirtualCubeNamedSetSupportInSchemaError() {
+    void testVirtualCubeNamedSetSupportInSchemaError() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Warehouse and Sales",
             null, null, null,
@@ -2614,7 +2614,7 @@ public class SchemaTest extends FoodMartTestCase {
         assertContains(exceptionList, "todo xxxxx");
     }
 
-    public void testInvalidRoleError() {
+    void testInvalidRoleError() {
         String schema = TestContext.getRawFoodMartSchema();
         schema =
             schema.replaceFirst(
@@ -2631,7 +2631,7 @@ public class SchemaTest extends FoodMartTestCase {
      * MONDRIAN-413, "RolapMember causes ClassCastException in compare()"</a>,
      * caused by binary column value.
      */
-    public void testBinaryLevelKey() {
+    void testBinaryLevelKey() {
         switch (TestContext.instance().getDialect().getDatabaseProduct()) {
         case DERBY:
         case MARIADB:
@@ -2713,7 +2713,7 @@ public class SchemaTest extends FoodMartTestCase {
      * <p>See bug <a href="http://jira.pentaho.com/browse/MONDRIAN-896">
      * MONDRIAN-896, "Oracle integer columns overflow if value &gt;>2^31"</a>.
      */
-    public void testLevelInternalType() {
+    void testLevelInternalType() {
         // One of the keys is larger than Integer.MAX_VALUE (2 billion), so
         // will only work if we use long values.
         TestContext testContext = TestContext.instance().createSubstitutingCube(
@@ -2761,7 +2761,7 @@ public class SchemaTest extends FoodMartTestCase {
     /**
      * Negative test for Level@internalType attribute.
      */
-    public void testLevelInternalTypeErr() {
+    void testLevelInternalTypeErr() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Big numbers\" foreignKey=\"promotion_id\">\n"
@@ -2833,7 +2833,7 @@ public class SchemaTest extends FoodMartTestCase {
      * table snowflake, and the table nearer to the fact table is not used by
      * any level.
      */
-    public void testScdJoin() {
+    void testScdJoin() {
         final TestContext testContext =
             TestContext.instance().createSubstitutingCube(
                 "Sales",
@@ -2899,7 +2899,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Test case for bug <a href="http://jira.pentaho.com/browse/MONDRIAN-482">
      * MONDRIAN-482, "ClassCastException when obtaining RolapCubeLevel"</a>.
      */
-    public void testBugMondrian482() {
+    void testBugMondrian482() {
         // until bug MONDRIAN-495, "Table filter concept does not support
         // dialects." is fixed, this test case only works on MySQL
         if (!Bug.BugMondrian495Fixed
@@ -2988,7 +2988,7 @@ public class SchemaTest extends FoodMartTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-355">Bug MONDRIAN-355,
      * "adding hours/mins as levelType for level of type Dimension"</a>.
      */
-    public void testBugMondrian355() {
+    void testBugMondrian355() {
         checkBugMondrian355("TimeHalfYears");
 
         // make sure that the deprecated name still works
@@ -3053,7 +3053,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Test for descriptions, captions and annotations of various schema
      * elements.
      */
-    public void testCaptionDescriptionAndAnnotation() {
+    void testCaptionDescriptionAndAnnotation() {
         final String schemaName = "Description schema";
         final String salesCubeName = "DescSales";
         final String virtualCubeName = "DescWarehouseAndSales";
@@ -3386,7 +3386,7 @@ public class SchemaTest extends FoodMartTestCase {
         }
     }
 
-    public void testCaption() {
+    void testCaption() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "  <Dimension name=\"Gender2\" foreignKey=\"customer_id\">\n"
@@ -3442,7 +3442,7 @@ public class SchemaTest extends FoodMartTestCase {
      * MONDRIAN-747, "When joining a shared dimension into a cube at a level
      * other than its leaf level, Mondrian gives wrong results"</a>.
      */
-    public void testBugMondrian747() {
+    void testBugMondrian747() {
         // Test case requires a pecular inline view, and it works on dialects
         // that scalar subqery, viz oracle. I believe that the mondrian code
         // being works in all dialects.
@@ -3658,7 +3658,7 @@ public class SchemaTest extends FoodMartTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-463">
      * MONDRIAN-463, "Snowflake dimension with 3-way join."</a>.
      */
-    public void testBugMondrian463() {
+    void testBugMondrian463() {
         if (!MondrianProperties.instance().FilterChildlessSnowflakeMembers
             .get())
         {
@@ -3785,7 +3785,7 @@ public class SchemaTest extends FoodMartTestCase {
      * The correct way to use a join is right-deep, that is (Join A (Join B C)).
      * Same schema as {@link #testBugMondrian463}, except left-deep.
      */
-    public void testLeftDeepJoinFails() {
+    void testLeftDeepJoinFails() {
         TestContext testContext = TestContext.instance().createSubstitutingCube(
             "Sales",
             "<Dimension name='Product3' foreignKey='product_id'>\n"
@@ -3819,7 +3819,7 @@ public class SchemaTest extends FoodMartTestCase {
     /**
      * Test for MONDRIAN-943 and MONDRIAN-465.
      */
-    public void testCaptionWithOrdinalColumn() {
+    void testCaptionWithOrdinalColumn() {
         final TestContext tc =
             TestContext.instance().createSubstitutingCube(
                 "HR",
@@ -3857,7 +3857,7 @@ public class SchemaTest extends FoodMartTestCase {
      * which was done at cube init time when resolving the calculated members
      * of the base cubes.
      */
-    public void testBugMondrian923() throws Exception {
+    void testBugMondrian923() throws Exception {
         TestContext context =
             TestContext.instance().createSubstitutingCube(
                 "Warehouse and Sales",
@@ -3901,7 +3901,7 @@ public class SchemaTest extends FoodMartTestCase {
         fail("Didn't find measures in sales cube.");
     }
 
-    public void testCubesVisibility() throws Exception {
+    void testCubesVisibility() throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<Cube name=\"Foo\" visible=\"@REPLACE_ME@\">\n"
@@ -3927,7 +3927,7 @@ public class SchemaTest extends FoodMartTestCase {
         }
     }
 
-    public void testVirtualCubesVisibility() throws Exception {
+    void testVirtualCubesVisibility() throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<VirtualCube name=\"Foo\" defaultMeasure=\"Store Sales\" visible=\"@REPLACE_ME@\">\n"
@@ -3947,7 +3947,7 @@ public class SchemaTest extends FoodMartTestCase {
         }
     }
 
-    public void testDimensionVisibility() throws Exception {
+    void testDimensionVisibility() throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<Cube name=\"Foo\">\n"
@@ -3980,7 +3980,7 @@ public class SchemaTest extends FoodMartTestCase {
         }
     }
 
-    public void testVirtualDimensionVisibility() throws Exception {
+    void testVirtualDimensionVisibility() throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<VirtualCube name=\"Foo\" defaultMeasure=\"Store Sales\">\n"
@@ -4007,7 +4007,7 @@ public class SchemaTest extends FoodMartTestCase {
         }
     }
 
-    public void testDimensionUsageVisibility() throws Exception {
+    void testDimensionUsageVisibility() throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<Cube name=\"Foo\">\n"
@@ -4044,7 +4044,7 @@ public class SchemaTest extends FoodMartTestCase {
         }
     }
 
-    public void testHierarchyVisibility() throws Exception {
+    void testHierarchyVisibility() throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<Cube name=\"Foo\">\n"
@@ -4084,7 +4084,7 @@ public class SchemaTest extends FoodMartTestCase {
         }
     }
 
-    public void testLevelVisibility() throws Exception {
+    void testLevelVisibility() throws Exception {
         for (Boolean testValue : new Boolean[] {true, false}) {
             String cubeDef =
                 "<Cube name=\"Foo\">\n"
@@ -4126,7 +4126,7 @@ public class SchemaTest extends FoodMartTestCase {
         }
     }
 
-    public void testNonCollapsedAggregate() throws Exception {
+    void testNonCollapsedAggregate() throws Exception {
         if (MondrianProperties.instance().UseAggregates.get() == false
             && MondrianProperties.instance().ReadAggregates.get() == false)
         {
@@ -4192,7 +4192,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Row #2: 50,236\n");
     }
 
-    public void testNonCollapsedAggregateOnNonUniqueLevelFails()
+    void testNonCollapsedAggregateOnNonUniqueLevelFails()
         throws Exception
     {
         if (MondrianProperties.instance().UseAggregates.get() == false
@@ -4250,7 +4250,7 @@ public class SchemaTest extends FoodMartTestCase {
             "mondrian.olap.MondrianException: Mondrian Error:Too many errors, '1', while loading/reloading aggregates.");
     }
 
-    public void testTwoNonCollapsedAggregate() throws Exception {
+    void testTwoNonCollapsedAggregate() throws Exception {
         if (MondrianProperties.instance().UseAggregates.get() == false
             && MondrianProperties.instance().ReadAggregates.get() == false)
         {
@@ -4474,7 +4474,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Row #74: 2,140\n");
     }
 
-    public void testCollapsedError() throws Exception {
+    void testCollapsedError() throws Exception {
         if (MondrianProperties.instance().UseAggregates.get() == false
             && MondrianProperties.instance().ReadAggregates.get() == false)
         {
@@ -4536,7 +4536,7 @@ public class SchemaTest extends FoodMartTestCase {
      * "IllegalArgumentException when cube has closure tables and many
      * levels"</a>.
      */
-    public void testBugMondrian1047() {
+    void testBugMondrian1047() {
         // Test case only works under MySQL, due to how columns are quoted.
         switch (TestContext.instance().getDialect().getDatabaseProduct()) {
         case MARIADB:
@@ -4582,7 +4582,7 @@ public class SchemaTest extends FoodMartTestCase {
      * Incorrect data column is used in the WHERE clause of the SQL when
      * using Oracle DB</a>.
      */
-    public void testBugMondrian1065() {
+    void testBugMondrian1065() {
         // Test case only works under Oracle
         switch (TestContext.instance().getDialect().getDatabaseProduct()) {
         case ORACLE:
@@ -4662,7 +4662,7 @@ public class SchemaTest extends FoodMartTestCase {
      * directly would return the null members at the end, since it was
      * using TupleReader#readTuples instead of TupleReader#readMembers.
      */
-    public void testMondrian1390() throws Exception {
+    void testMondrian1390() throws Exception {
         Schema schema = getConnection().getSchema();
         Cube salesCube = schema.lookupCube("Sales", true);
         SchemaReader sr = salesCube.getSchemaReader(null).withLocus();
@@ -4700,7 +4700,7 @@ public class SchemaTest extends FoodMartTestCase {
             members.toString());
     }
 
-    public void testMondrian1499() throws Exception {
+    void testMondrian1499() throws Exception {
         propSaver.set(propSaver.properties.UseAggregates, false);
         propSaver.set(propSaver.properties.ReadAggregates, false);
         final TestContext woAlias =
@@ -4821,7 +4821,7 @@ public class SchemaTest extends FoodMartTestCase {
     * <a href="http://jira.pentaho.com/browse/MONDRIAN-1073">MONDRIAN-1073,
     * "Two cubes operating on same fact table gives wrong WHERE clause"</a>.
     */
-    public void testMondrian1073() throws Exception {
+    void testMondrian1073() throws Exception {
         final String schema = TestContext.instance()
                 .getSchema(
                     null, CUBES_AB,
@@ -4839,7 +4839,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Row #0: 22\n");
   }
 
-    public void testMultiByteSchemaReadFromFile() throws IOException {
+    void testMultiByteSchemaReadFromFile() throws IOException {
         String rawSchema = TestContext.getRawFoodMartSchema().replace(
             "<Hierarchy hasAll=\"true\" allMemberName=\"All Gender\" primaryKey=\"customer_id\">",
             "<Hierarchy name=\"地域\" hasAll=\"true\" allMemberName=\"All Gender\" primaryKey=\"customer_id\">");
@@ -4867,7 +4867,7 @@ public class SchemaTest extends FoodMartTestCase {
             + "Row #0: 135,215\n");
     }
 
-    public void testBugMonrian2528() {
+    void testBugMonrian2528() {
       // Default member [Measures].[Unit Sales] is denied for the current role.
       // Before the fix ClassCastException was thrown on query.
       final TestContext testContext = TestContext.instance().create(
@@ -4914,7 +4914,7 @@ public class SchemaTest extends FoodMartTestCase {
 );
   }
 
-    public void testMondrian1275() throws Exception {
+    void testMondrian1275() throws Exception {
         final TestContext tc =
                 getTestContext()
                         .withSchema(

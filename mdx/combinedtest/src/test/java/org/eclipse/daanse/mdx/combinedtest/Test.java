@@ -21,7 +21,7 @@ import org.eclipse.daanse.mdx.unparser.simple.SimpleUnparser;
 public class Test {
 
     @org.junit.jupiter.api.Test
-    public void testdefault() throws MdxParserException {
+    void testdefault() throws MdxParserException {
         String MDX = """
                 //<SELECT WITH clause>
                 WITH

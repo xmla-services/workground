@@ -30,7 +30,7 @@ public class FilteredIterableTest{
     }
 
     @Test
-    public void testEmptyList() throws Exception {
+    void testEmptyList() throws Exception {
         final List<Integer> base = new ArrayList<Integer>();
         for (int i = 0; i < 10; i++) {
             base.add(i);
@@ -50,7 +50,7 @@ public class FilteredIterableTest{
     }
 
     @Test
-    public void testGetter() throws Exception {
+    void testGetter() throws Exception {
         final List<Integer> base = new ArrayList<Integer>();
         for (int i = 0; i < 10; i++) {
             base.add(i);
@@ -70,7 +70,7 @@ public class FilteredIterableTest{
     }
 
     @Test
-    public void test2Elements() throws Exception {
+    void test2Elements() throws Exception {
         final List<Integer> base = new ArrayList<Integer>();
         for (int i = 0; i < 2; i++) {
             base.add(i);

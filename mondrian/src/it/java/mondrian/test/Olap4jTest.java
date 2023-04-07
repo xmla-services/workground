@@ -55,7 +55,7 @@ public class Olap4jTest extends FoodMartTestCase {
      *
      * @throws java.sql.SQLException on error
      */
-    public void testSameMemberByVariousMeans() throws SQLException {
+    void testSameMemberByVariousMeans() throws SQLException {
         Random random = new Random();
         for (int i = 0; i < 20; i++) {
             int n = random.nextInt(7);
@@ -126,7 +126,7 @@ public class Olap4jTest extends FoodMartTestCase {
         }
     }
 
-    public void testAnnotation() throws SQLException {
+    void testAnnotation() throws SQLException {
       
       final OlapConnection connection =
             getTestContext().getOlap4jConnection();
@@ -145,7 +145,7 @@ public class Olap4jTest extends FoodMartTestCase {
         assertEquals("Ventes", map.get("caption.fr_FR"));
     }
     
-    public void testLevelDataType() throws SQLException {
+    void testLevelDataType() throws SQLException {
   
         final OlapConnection connection = getTestContext().getOlap4jConnection();
         Cube cube = connection.getOlapSchema().getCubes().get( "Sales" );
@@ -161,7 +161,7 @@ public class Olap4jTest extends FoodMartTestCase {
     }
 
 
-    public void testFormatString() throws SQLException {
+    void testFormatString() throws SQLException {
         final OlapConnection connection =
             getTestContext().getOlap4jConnection();
         final CellSet cellSet =
@@ -190,7 +190,7 @@ public class Olap4jTest extends FoodMartTestCase {
      *
      * @throws SQLException on error
      */
-    public void testLevelProperties() throws SQLException {
+    void testLevelProperties() throws SQLException {
         final OlapConnection connection =
             getTestContext().getOlap4jConnection();
         final CellSet cellSet =
@@ -219,7 +219,7 @@ public class Olap4jTest extends FoodMartTestCase {
         return null;
     }
 
-    public void testCellProperties() throws SQLException {
+    void testCellProperties() throws SQLException {
         final OlapConnection connection =
             getTestContext().getOlap4jConnection();
         final CellSet cellSet =
@@ -262,7 +262,7 @@ public class Olap4jTest extends FoodMartTestCase {
      *
      * @throws SQLException on error
      */
-    public void testLimit() throws SQLException {
+    void testLimit() throws SQLException {
         propSaver.set(MondrianProperties.instance().IterationLimit, 11);
         String queryString =
             "With Set [*NATIVE_CJ_SET] as "
@@ -291,7 +291,7 @@ public class Olap4jTest extends FoodMartTestCase {
         }
     }
 
-    public void testCloseOnCompletion() throws Exception {
+    void testCloseOnCompletion() throws Exception {
         if (Util.JdbcVersion < 0x0401) {
             // Statement.closeOnCompletion added in JDBC 4.1 / JDK 1.7.
             return;
@@ -344,7 +344,7 @@ public class Olap4jTest extends FoodMartTestCase {
         method.invoke(statement);
     }
 
-    public void testDrillThrough() throws Exception {
+    void testDrillThrough() throws Exception {
         final OlapConnection connection =
             getTestContext().getOlap4jConnection();
         final OlapStatement statement = connection.createStatement();
@@ -405,7 +405,7 @@ public class Olap4jTest extends FoodMartTestCase {
      * <a href="http://jira.pentaho.com/browse/MONDRIAN-1204">MONDRIAN-1204,
      * "Olap4j's method toOlap4j throws NPE if we have a function"</a>.
      */
-    public void testBugMondrian1204() throws SQLException {
+    void testBugMondrian1204() throws SQLException {
         final OlapConnection connection =
             TestContext.instance().getOlap4jConnection();
         final String mdx =
@@ -438,7 +438,7 @@ public class Olap4jTest extends FoodMartTestCase {
      * "Statement.cancel() during fact query leads to permanent segment
      * lock"</a>.
      */
-    public void testBugMondrian1217() throws SQLException {
+    void testBugMondrian1217() throws SQLException {
         // The checked-in version does nothing. Uncomment one of the following
         // lines to stress the system in a dev environment.
         if (false) {
@@ -549,7 +549,7 @@ public class Olap4jTest extends FoodMartTestCase {
      * the hierarchy didn't have a all member and the default member
      * was not explicitly set.
      */
-    public void testMondrian1353() throws Exception {
+    void testMondrian1353() throws Exception {
         final TestContext testContext = TestContext.instance().create(
             null,
             "<Cube name=\"Mondrian1353\">\n"
@@ -583,7 +583,7 @@ public class Olap4jTest extends FoodMartTestCase {
      * Same as {@link SchemaTest#testMondrian1390()} but this time
      * with olap4j.
      */
-    public void testMondrian1390() throws Exception {
+    void testMondrian1390() throws Exception {
         final List<Member> members =
             getTestContext().getOlap4jConnection()
                 .getOlapSchema()
@@ -624,7 +624,7 @@ public class Olap4jTest extends FoodMartTestCase {
      *
      * @throws java.sql.SQLException on error
      */
-    public void testCalcMemberInCube() throws SQLException {
+    void testCalcMemberInCube() throws SQLException {
         final OlapConnection testContext =
             TestContext.instance().createSubstitutingCube(
                 "Sales",
@@ -680,7 +680,7 @@ public class Olap4jTest extends FoodMartTestCase {
      * <p>An empty case statement in RolapMemberBase was breaking when the
      * visibility property was asked instead of delegating to isVisible().
      */
-    public void testMondrian1967() throws Exception {
+    void testMondrian1967() throws Exception {
         assertTrue(
                 getTestContext().getOlap4jConnection()
                         .getOlapSchema()

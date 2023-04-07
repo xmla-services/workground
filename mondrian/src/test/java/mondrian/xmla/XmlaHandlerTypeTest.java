@@ -59,7 +59,7 @@ public class XmlaHandlerTypeTest  {
     };
 
     @Test
-    public void testMarshalledValueType() {
+    void testMarshalledValueType() {
         // run through the tests once with no hint, then again with
         // the hint value.
         for (TestVal val : typeTests) {
@@ -82,7 +82,7 @@ public class XmlaHandlerTypeTest  {
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
-    public void testDatatypeConsistency(TestingContext context) throws SQLException {
+    void testDatatypeConsistency(TestingContext context) throws SQLException {
         // MDX cast expressions
         String[] castedTypes = {
             "Cast(1 as String)",

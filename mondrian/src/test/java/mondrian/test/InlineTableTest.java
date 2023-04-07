@@ -35,7 +35,7 @@ public class InlineTableTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testInlineTable(TestingContext context) {
+    void testInlineTable(TestingContext context) {
         final String cubeName = "Sales_inline";
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -88,7 +88,7 @@ public class InlineTableTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testInlineTableInSharedDim(TestingContext context) {
+    void testInlineTableInSharedDim(TestingContext context) {
         final String cubeName = "Sales_inline_shared";
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,
@@ -144,7 +144,7 @@ public class InlineTableTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testInlineTableSnowflake(TestingContext context) {
+    void testInlineTableSnowflake(TestingContext context) {
         if (getDatabaseProduct(getDialect(context.createConnection()).getDialectName())
             == DatabaseProduct.INFOBRIGHT)
         {
@@ -217,7 +217,7 @@ public class InlineTableTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testInlineTableDate(TestingContext context) {
+    void testInlineTableDate(TestingContext context) {
         final String cubeName = "Sales_Inline_Date";
         String baseSchema = TestUtil.getRawSchema(context);
         String schema = SchemaUtil.getSchema(baseSchema,

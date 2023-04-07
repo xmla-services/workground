@@ -39,7 +39,7 @@ public class CompatibilityTest extends FoodMartTestCase {
     /**
      * Cube names are case insensitive.
      */
-    public void testCubeCase() {
+    void testCubeCase() {
         String queryFrom = "select {[Measures].[Unit Sales]} on columns from ";
         String result =
             "Axis #0:\n"
@@ -57,7 +57,7 @@ public class CompatibilityTest extends FoodMartTestCase {
     /**
      * Brackets around cube names are optional.
      */
-    public void testCubeBrackets() {
+    void testCubeBrackets() {
         String queryFrom = "select {[Measures].[Unit Sales]} on columns from ";
         String result =
             "Axis #0:\n"
@@ -75,7 +75,7 @@ public class CompatibilityTest extends FoodMartTestCase {
     /**
      * See how we are at diagnosing reserved words.
      */
-    public void testReservedWord() {
+    void testReservedWord() {
         assertAxisThrows(
             "with member [Measures].ordinal as '1'\n"
             + " select {[Measures].ordinal} on columns from Sales",
@@ -93,7 +93,7 @@ public class CompatibilityTest extends FoodMartTestCase {
     /**
      * Dimension names are case insensitive.
      */
-    public void testDimensionCase() {
+    void testDimensionCase() {
         checkAxis("[Measures].[Unit Sales]", "[Measures].[Unit Sales]");
         checkAxis("[Measures].[Unit Sales]", "[MEASURES].[Unit Sales]");
         checkAxis("[Measures].[Unit Sales]", "[mEaSuReS].[Unit Sales]");
@@ -108,7 +108,7 @@ public class CompatibilityTest extends FoodMartTestCase {
     /**
      * Brackets around dimension names are optional.
      */
-    public void testDimensionBrackets() {
+    void testDimensionBrackets() {
         checkAxis("[Measures].[Unit Sales]", "Measures.[Unit Sales]");
         checkAxis("[Measures].[Unit Sales]", "MEASURES.[Unit Sales]");
         checkAxis("[Measures].[Unit Sales]", "mEaSuReS.[Unit Sales]");
@@ -123,7 +123,7 @@ public class CompatibilityTest extends FoodMartTestCase {
     /**
      * Member names are case insensitive.
      */
-    public void testMemberCase() {
+    void testMemberCase() {
         checkAxis("[Measures].[Unit Sales]", "[Measures].[UNIT SALES]");
         checkAxis("[Measures].[Unit Sales]", "[Measures].[uNiT sAlEs]");
         checkAxis("[Measures].[Unit Sales]", "[Measures].[unit sales]");
@@ -147,7 +147,7 @@ public class CompatibilityTest extends FoodMartTestCase {
     /**
      * Calculated member names are case insensitive.
      */
-    public void testCalculatedMemberCase() {
+    void testCalculatedMemberCase() {
         propSaver.set(MondrianProperties.instance().CaseSensitive, false);
         assertQueryReturns(
             "with member [Measures].[CaLc] as '1'\n"
@@ -178,7 +178,7 @@ public class CompatibilityTest extends FoodMartTestCase {
     /**
      * Solve order is case insensitive.
      */
-    public void testSolveOrderCase() {
+    void testSolveOrderCase() {
         checkSolveOrder("SOLVE_ORDER");
         checkSolveOrder("SoLvE_OrDeR");
         checkSolveOrder("solve_order");
@@ -206,7 +206,7 @@ public class CompatibilityTest extends FoodMartTestCase {
     /**
      * Brackets around member names are optional.
      */
-    public void testMemberBrackets() {
+    void testMemberBrackets() {
         checkAxis("[Measures].[Profit]", "[Measures].Profit");
         checkAxis("[Measures].[Profit]", "[Measures].pRoFiT");
         checkAxis("[Measures].[Profit]", "[Measures].PROFIT");
@@ -230,7 +230,7 @@ public class CompatibilityTest extends FoodMartTestCase {
      * Hierarchy names of the form [Dim].[Hier], [Dim.Hier], and
      * Dim.Hier are accepted.
      */
-    public void testHierarchyNames() {
+    void testHierarchyNames() {
         checkAxis("[Customers].[All Customers]", "[Customers].[All Customers]");
         checkAxis(
             "[Customers].[All Customers]",
@@ -259,7 +259,7 @@ public class CompatibilityTest extends FoodMartTestCase {
      * Tests that a #null member on a Hiearchy Level of type String can
      * still be looked up when case sensitive is off.
      */
-    public void testCaseInsensitiveNullMember() {
+    void testCaseInsensitiveNullMember() {
         final Dialect dialect = getTestContext().getDialect();
         if (dialect.getDatabaseProduct() == Dialect.DatabaseProduct.LUCIDDB) {
             // TODO jvs 29-Nov-2006:  LucidDB is strict about
@@ -327,7 +327,7 @@ public class CompatibilityTest extends FoodMartTestCase {
      * Tests that data in Hierarchy.Level attribute "nameColumn" can be null.
      * This will map to the #null memeber.
      */
-    public void testNullNameColumn() {
+    void testNullNameColumn() {
         switch (getTestContext().getDialect().getDatabaseProduct()) {
         case LUCIDDB:
             // TODO jvs 29-Nov-2006:  See corresponding comment in
@@ -407,7 +407,7 @@ public class CompatibilityTest extends FoodMartTestCase {
      * such as MySQL, NULLs naturally come before other values, so we have to
      * generate a modified ORDER BY clause.
       */
-    public void testNullCollation() {
+    void testNullCollation() {
         if (!getTestContext().getDialect().supportsGroupByExpressions()) {
             // Derby does not support expressions in the GROUP BY clause,
             // therefore this testing strategy of using an expression for the
@@ -486,7 +486,7 @@ public class CompatibilityTest extends FoodMartTestCase {
      * that you run the test once with mondrian.olap.case.sensitive=true,
      * and once with mondrian.olap.case.sensitive=false.
      */
-    public void testPropertyCaseSensitivity() {
+    void testPropertyCaseSensitivity() {
         boolean caseSensitive = props.CaseSensitive.get();
 
         // A user-defined property of a member.
@@ -532,7 +532,7 @@ public class CompatibilityTest extends FoodMartTestCase {
         }
     }
 
-    public void testWithDimensionPrefix() {
+    void testWithDimensionPrefix() {
         assertAxisWithDimensionPrefix(true);
         assertAxisWithDimensionPrefix(false);
     }
@@ -547,7 +547,7 @@ public class CompatibilityTest extends FoodMartTestCase {
         assertAxisReturns("[Store].[All Stores].[USA]", "[Store].[USA]");
     }
 
-    public void testWithNoDimensionPrefix() {
+    void testWithNoDimensionPrefix() {
         propSaver.set(
             props.NeedDimensionPrefix,
             false);

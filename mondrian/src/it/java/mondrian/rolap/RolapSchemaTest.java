@@ -80,7 +80,7 @@ public class RolapSchemaTest extends PropertyRestoringTestCase {
     }
 
 
-    public void testCreateUnionRole_ThrowsException_WhenSchemaGrantsExist() {
+    void testCreateUnionRole_ThrowsException_WhenSchemaGrantsExist() {
         MondrianDef.Role role = new MondrianDef.Role();
         role.schemaGrants =
             new MondrianDef.SchemaGrant[] {new MondrianDef.SchemaGrant()};
@@ -96,7 +96,7 @@ public class RolapSchemaTest extends PropertyRestoringTestCase {
         fail("Should fail if union and schema grants exist simultaneously");
     }
 
-    public void testCreateUnionRole_ThrowsException_WhenRoleNameIsUnknown() {
+    void testCreateUnionRole_ThrowsException_WhenRoleNameIsUnknown() {
         final String roleName = "non-existing role name";
         MondrianDef.RoleUsage usage = new MondrianDef.RoleUsage();
         usage.roleName = roleName;
@@ -116,7 +116,7 @@ public class RolapSchemaTest extends PropertyRestoringTestCase {
     }
 
 
-    public void testHandleSchemaGrant() {
+    void testHandleSchemaGrant() {
         RolapSchema schema = createSchema();
         schema = spy(schema);
         doNothing().when(schema)
@@ -137,7 +137,7 @@ public class RolapSchemaTest extends PropertyRestoringTestCase {
     }
 
 
-    public void testHandleCubeGrant_ThrowsException_WhenCubeIsUnknown() {
+    void testHandleCubeGrant_ThrowsException_WhenCubeIsUnknown() {
         RolapSchema schema = createSchema();
         schema = spy(schema);
         doReturn(null).when(schema).lookupCube(anyString());
@@ -155,7 +155,7 @@ public class RolapSchemaTest extends PropertyRestoringTestCase {
         fail("Should fail if cube is unknown");
     }
 
-    public void testHandleCubeGrant_GrantsCubeDimensionsAndHierarchies() {
+    void testHandleCubeGrant_GrantsCubeDimensionsAndHierarchies() {
         RolapSchema schema = createSchema();
         schema = spy(schema);
         doNothing().when(schema)
@@ -201,15 +201,15 @@ public class RolapSchemaTest extends PropertyRestoringTestCase {
     }
 
 
-    public void testHandleHierarchyGrant_ValidMembers() {
+    void testHandleHierarchyGrant_ValidMembers() {
         doTestHandleHierarchyGrant(Access.CUSTOM, Access.ALL);
     }
 
-    public void testHandleHierarchyGrant_NoValidMembers() {
+    void testHandleHierarchyGrant_NoValidMembers() {
         doTestHandleHierarchyGrant(Access.NONE, null);
     }
 
-    public void testEmptyRolapStarRegistryCreatedForTheNewSchema()
+    void testEmptyRolapStarRegistryCreatedForTheNewSchema()
         throws Exception {
       RolapSchema schema = createSchema();
       RolapStarRegistry rolapStarRegistry = schema.getRolapStarRegistry();
@@ -217,7 +217,7 @@ public class RolapSchemaTest extends PropertyRestoringTestCase {
       assertTrue(rolapStarRegistry.getStars().isEmpty());
     }
 
-    public void testGetOrCreateStar_StarCreatedAndUsed()
+    void testGetOrCreateStar_StarCreatedAndUsed()
         throws Exception {
       //Create the test fact
       MondrianDef.Relation fact =
@@ -245,7 +245,7 @@ public class RolapSchemaTest extends PropertyRestoringTestCase {
       assertEquals(expectedStar, rolapStarRegistry.getStar(rolapStarKey));
     }
 
-    public void testGetStarFromRegistryByStarKey() throws Exception {
+    void testGetStarFromRegistryByStarKey() throws Exception {
       //Create the test fact
       MondrianDef.Relation fact =
           new MondrianDef.Table(wrapStrSources(getFactTableWithSQLFilter()));
@@ -260,7 +260,7 @@ public class RolapSchemaTest extends PropertyRestoringTestCase {
       assertSame(rlStarMock, actualStar);
     }
 
-    public void testGetStarFromRegistryByFactTableName() throws Exception {
+    void testGetStarFromRegistryByFactTableName() throws Exception {
       //Create the test fact
       MondrianDef.Relation fact =
           new MondrianDef.Table(wrapStrSources(getFactTable()));

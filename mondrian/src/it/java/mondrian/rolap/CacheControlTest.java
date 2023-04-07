@@ -252,7 +252,7 @@ public class CacheControlTest extends FoodMartTestCase {
      * Tests creation of a cell region against an abstract implementation of
      * {@link CacheControl}.
      */
-    public void testCreateCellRegion() {
+    void testCreateCellRegion() {
         // Execute a query.
         final TestContext testContext = getTestContext();
         final RolapConnection connection =
@@ -266,7 +266,7 @@ public class CacheControlTest extends FoodMartTestCase {
     /**
      * Creates a cell region, runs a query, then flushes the cache.
      */
-    public void testNormalize2() {
+    void testNormalize2() {
         // Execute a query.
         final TestContext testContext = getTestContext();
 
@@ -294,7 +294,7 @@ public class CacheControlTest extends FoodMartTestCase {
     /**
      * Creates a cell region, runs a query, then flushes the cache.
      */
-    public void testFlush() {
+    void testFlush() {
         assertQueryReturns(
             "SELECT {[Product].[Product Department].MEMBERS} ON AXIS(0),\n"
             + "{{[Gender].[Gender].MEMBERS}, {[Gender].[All Gender]}} ON AXIS(1)\n"
@@ -445,7 +445,7 @@ public class CacheControlTest extends FoodMartTestCase {
     /**
      * Creates a partial cell region, runs a query, then flushes the cache.
      */
-    public void testPartialFlush() {
+    void testPartialFlush() {
         if (MondrianProperties.instance().DisableCaching.get()) {
             return;
         }
@@ -512,7 +512,7 @@ public class CacheControlTest extends FoodMartTestCase {
      * <p>SegmentCacheIndexImpl.intersects was not comparing the
      * header column values to those of the cache region.
      */
-    public void testPartialFlush_2() throws Exception {
+    void testPartialFlush_2() throws Exception {
         if (MondrianProperties.instance().DisableCaching.get()) {
             return;
         }
@@ -548,7 +548,7 @@ public class CacheControlTest extends FoodMartTestCase {
      * Creates a partial cell region over a range, runs a query, then flushes
      * the cache.
      */
-    public void testPartialFlushRange() {
+    void testPartialFlushRange() {
         if (MondrianProperties.instance().DisableCaching.get()) {
             return;
         }
@@ -871,7 +871,7 @@ public class CacheControlTest extends FoodMartTestCase {
      * A number of negative tests, trying to do invalid things with cache
      * flushing and getting errors.
      */
-    public void testNegative() {
+    void testNegative() {
         final TestContext testContext = getTestContext();
         final Connection connection = testContext.getConnection();
         final Cube salesCube = connection.getSchema().lookupCube("Sales", true);
@@ -1016,7 +1016,7 @@ public class CacheControlTest extends FoodMartTestCase {
     /**
      * Tests crossjoin of regions, {@link CacheControl#createCrossjoinRegion}.
      */
-    public void testCrossjoin() {
+    void testCrossjoin() {
         final TestContext testContext = getTestContext();
         final Connection connection = testContext.getConnection();
         final Cube salesCube = connection.getSchema().lookupCube("Sales", true);
@@ -1126,7 +1126,7 @@ public class CacheControlTest extends FoodMartTestCase {
      * Tests the algorithm which converts a cache region specification into
      * normal form.
      */
-    public void testNormalize() {
+    void testNormalize() {
         // Create
         // Union(
         //    Crossjoin(
@@ -1196,7 +1196,7 @@ public class CacheControlTest extends FoodMartTestCase {
      * "Cache flush for region that is not necessarily populated results in
      * NullPointerException"</a>.
      */
-    public void testFlushNonPrimedContent() throws Exception {
+    void testFlushNonPrimedContent() throws Exception {
         final TestContext testContext = getTestContext();
         flushCache(testContext);
         final CacheControl cacheControl = testContext.getCacheControl();
@@ -1214,7 +1214,7 @@ public class CacheControlTest extends FoodMartTestCase {
         cacheControl.flush(flushRegion);
     }
 
-    public void testMondrian1094() throws Exception {
+    void testMondrian1094() throws Exception {
         final String query =
             "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, \n"
             + "NON EMPTY {[Store].[All Stores].Children} ON ROWS \n"

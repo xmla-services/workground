@@ -45,7 +45,7 @@ public class I18nTest {
     public static final char UC = '\u00FB'; // u circumflex
 
     @Test
-    public void testFormat() {
+    void testFormat() {
         // Make sure Util is loaded, so that the LocaleFormatFactory gets
         // registered.
         Util.discard(Util.nl);
@@ -79,7 +79,7 @@ public class I18nTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testAutoFrench(TestingContext context) {
+    void testAutoFrench(TestingContext context) {
         // Create a connection in French.
         String localeName = "fr_FR";
         String resultString = "12" + Nbsp + "345,67";
@@ -88,14 +88,14 @@ public class I18nTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testAutoSpanish(TestingContext context) {
+    void testAutoSpanish(TestingContext context) {
         // Format a number in (Peninsular) spanish.
         assertFormatNumber(context, "es", "12.345,67");
     }
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testAutoMexican(TestingContext context) {
+    void testAutoMexican(TestingContext context) {
         // Format a number in Mexican spanish.
         assertFormatNumber(context, "es_MX", "12,345.67");
     }

@@ -39,7 +39,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * Query that simulates a compound slicer by creating a calculated member
      * that aggregates over a set and places it in the WHERE clause.
      */
-    public void testSimulatedCompoundSlicer() {
+    void testSimulatedCompoundSlicer() {
         assertQueryReturns(
             "with\n"
             + "  member [Measures].[Price per Unit] as\n"
@@ -120,7 +120,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * <p>Test case for <a href="http://jira.pentaho.com/browse/MONDRIAN-637">
      * Bug MONDRIAN-637, "Using Except in the slicer makes no sense"</a>.
      */
-    public void testCompoundSlicerExcept() {
+    void testCompoundSlicerExcept() {
         final String expected =
             "Axis #0:\n"
             + "{[Promotion Media].[Bulk Mail]}\n"
@@ -199,7 +199,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
             + "Row #2: 131,164\n");
     }
 
-    public void testCompoundSlicerWithCellFormatter() {
+    void testCompoundSlicerWithCellFormatter() {
         String xmlMeasure =
             "<Measure name='Unit Sales Foo Bar' column='unit_sales'\n"
             + "    aggregator='sum' formatString='Standard' formatter='"
@@ -228,7 +228,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
     }
 
 
-    public void testMondrian1226() {
+    void testMondrian1226() {
         assertQueryReturns(
             "with set a as '([Time].[1997].[Q1] : [Time].[1997].[Q2])'\n"
             +    "member Time.x as Aggregate(a,[Measures].[Store Sales])\n"
@@ -297,7 +297,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * Tests a query with a compond slicer over tuples. (Multiple rows, each
      * of which has multiple members.)
      */
-    public void testCompoundSlicerOverTuples() {
+    void testCompoundSlicerOverTuples() {
         // reference query
         assertQueryReturns(
             "select [Measures].[Unit Sales] on 0,\n"
@@ -377,7 +377,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
     /**
      * Tests that if the slicer contains zero members, all cells are null.
      */
-    public void testEmptySetSlicerReturnsNull() {
+    void testEmptySetSlicerReturnsNull() {
         assertQueryReturns(
             "select [Measures].[Unit Sales] on 0,\n"
             + "[Product].Children on 1\n"
@@ -399,7 +399,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * Tests that if the slicer is calculated using an expression and contains
      * zero members, all cells are null.
      */
-    public void testEmptySetSlicerViaExpressionReturnsNull() {
+    void testEmptySetSlicerViaExpressionReturnsNull() {
         assertQueryReturns(
             "select [Measures].[Unit Sales] on 0,\n"
             + "[Product].Children on 1\n"
@@ -421,7 +421,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * Test case for a basic query with more than one member of the same
      * hierarchy in the WHERE clause.
      */
-    public void testCompoundSlicer() {
+    void testCompoundSlicer() {
         // Reference query.
         assertQueryReturns(
             "select [Measures].[Unit Sales] on 0,\n"
@@ -623,7 +623,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * Slicer that is a member expression that evaluates to null.
      * SSAS 2005 allows this, and returns null cells.
      */
-    public void testSlicerContainsNullMember() {
+    void testSlicerContainsNullMember() {
         assertQueryReturns(
             "select [Measures].[Unit Sales] on 0,\n"
             + "[Gender].Members on 1\n"
@@ -646,7 +646,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * SSAS 2005 allows this, and returns null cells; Mondrian currently gives
      * an error.
      */
-    public void testSlicerContainsLiteralNull() {
+    void testSlicerContainsLiteralNull() {
         final String mdx =
             "select [Measures].[Unit Sales] on 0,\n"
             + "[Gender].Members on 1\n"
@@ -672,7 +672,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * that makes it a null tuple, and it is eliminated from the list.
      * SSAS 2005 allows this, and returns null cells.
      */
-    public void testSlicerContainsPartiallyNullMember() {
+    void testSlicerContainsPartiallyNullMember() {
         assertQueryReturns(
             "select [Measures].[Unit Sales] on 0,\n"
             + "[Gender].Members on 1\n"
@@ -693,7 +693,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
     /**
      * Compound slicer with distinct-count measure.
      */
-    public void testCompoundSlicerWithDistinctCount() {
+    void testCompoundSlicerWithDistinctCount() {
         // Reference query.
         assertQueryReturns(
             "select [Measures].[Customer Count] on 0,\n"
@@ -743,7 +743,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * Bug MONDRIAN-675,
      * "Allow rollup of measures based on AVG aggregate function"</a>.
      */
-    public void testRollupAvg() {
+    void testRollupAvg() {
         final TestContext testContext =
             TestContext.instance().createSubstitutingCube(
                 "Sales",
@@ -788,7 +788,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * Bug MONDRIAN-899,
      * "Order() function does not work properly together with WHERE clause"</a>.
      */
-    public void testBugMondrian899() {
+    void testBugMondrian899() {
         final String expected =
             "Axis #0:\n"
             + "{[Time].[1997].[Q1].[2]}\n"
@@ -883,7 +883,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
     }
 
     // similar to MONDRIAN-899 testcase
-    public void testTopCount() {
+    void testTopCount() {
         assertQueryReturns(
             "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, \n"
             + "  TopCount([Customers].[USA].[WA].[Spokane].Children, 10, [Measures].[Unit Sales]) ON ROWS \n"
@@ -918,7 +918,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
     }
 
 
-    public void testTopCountAllSlicers() {
+    void testTopCountAllSlicers() {
         assertQueryReturns(
             "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS, \n"
             + "  TopCount([Customers].[USA].[WA].[Spokane].Children, 10, [Measures].[Unit Sales]) ON ROWS \n"
@@ -957,7 +957,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * This version puts the range in a calculated member.
      */
 
-    public void testTopCountWithAggregatedMemberCMRange() {
+    void testTopCountWithAggregatedMemberCMRange() {
         assertQueryReturns(
             "with set TO_AGGREGATE as '([Time].[1997].[Q1] : [Time].[1997].[Q2])'\n"
             + "member Time.x as Aggregate(TO_AGGREGATE, [Measures].[Store Sales])\n"
@@ -988,7 +988,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * Test case for the support of native top count with aggregated measures
      * feeding the range directly to aggregate.
      */
-    public void testTopCountWithAggregatedMember2() {
+    void testTopCountWithAggregatedMember2() {
         assertQueryReturns(
             "with\n"
             + "member Time.x as Aggregate([Time].[1997].[Q1] : [Time].[1997].[Q2], [Measures].[Store Sales])\n"
@@ -1019,7 +1019,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * Test case for the support of native top count with aggregated measures
      * using enumerated members in a calculated member.
      */
-    public void testTopCountWithAggregatedMemberEnumCMSet() {
+    void testTopCountWithAggregatedMemberEnumCMSet() {
         assertQueryReturns(
             "with set TO_AGGREGATE as '{[Time].[1997].[Q1] , [Time].[1997].[Q2]}'\n"
             + "member Time.x as Aggregate(TO_AGGREGATE, [Measures].[Store Sales])\n"
@@ -1050,7 +1050,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * Test case for the support of native top count with aggregated measures
      * using enumerated members.
      */
-    public void testTopCountWithAggregatedMemberEnumSet() {
+    void testTopCountWithAggregatedMemberEnumSet() {
         assertQueryReturns(
             "with\n"
             + "member Time.x as Aggregate({[Time].[1997].[Q1] , [Time].[1997].[Q2]}, [Measures].[Store Sales])\n"
@@ -1081,7 +1081,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * Test case for the support of native top count with aggregated measures
      * using yet another different format, slightly different results
      */
-    public void testTopCountWithAggregatedMember5() {
+    void testTopCountWithAggregatedMember5() {
         assertQueryReturns(
             "with\n"
             + "member Time.x as Aggregate([Time].[1997].[Q1] : [Time].[1997].[Q2], [Measures].[Store Sales])\n"
@@ -1114,7 +1114,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * We'll execute 2 queries to make sure Time.x is not member of the cache
      * key.
      */
-    public void testTopCountWithAggregatedMemberCacheKey() {
+    void testTopCountWithAggregatedMemberCacheKey() {
         assertQueryReturns(
             "with\n"
             + "member Time.x as Aggregate({[Time].[1997].[Q1] , [Time].[1997].[Q2]}, [Measures].[Store Sales])\n"
@@ -1172,7 +1172,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
      * Bug MONDRIAN-900,
      * "Filter() function works incorrectly together with WHERE clause"</a>.
      */
-    public void testBugMondrian900() {
+    void testBugMondrian900() {
         assertQueryReturns(
             "select NON EMPTY {[Measures].[Unit Sales]} ON COLUMNS,\n"
             + "  Tail(Filter([Customers].[Name].Members, ([Measures].[Unit Sales] IS EMPTY)), 3) ON ROWS \n"
@@ -1197,7 +1197,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
 
 
 
-    public void testSlicerWithCalcMembers() throws Exception {
+    void testSlicerWithCalcMembers() throws Exception {
         final TestContext testContext = TestContext.instance();
         //2 calc mems
         testContext.assertQueryReturns(
@@ -1263,7 +1263,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
             + "$181,141.98");
     }
 
-    public void testCompoundSlicerAndNamedSet() {
+    void testCompoundSlicerAndNamedSet() {
         getTestContext().assertQueryReturns(
             "WITH SET [aSet] as 'Filter( Except([Store].[Store Country].Members, [Store].[Store Country].[Canada]), Measures.[Store Sales] > 0)'\n"
             + "SELECT\n"
@@ -1281,7 +1281,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
             + "Row #0: 5,895\n");
     }
 
-    public void testDistinctCountMeasureInSlicer() {
+    void testDistinctCountMeasureInSlicer() {
         assertQueryReturns(
             "select gender.members on 0 "
             + "from sales where "
@@ -1299,7 +1299,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
             + "Row #0: 2,162\n");
     }
 
-    public void testDistinctCountWithAggregateMembersAndCompSlicer() {
+    void testDistinctCountWithAggregateMembersAndCompSlicer() {
         assertQueryReturns(
             "with member time.agg as 'Aggregate({Time.[1997].Q1, Time.[1997].Q2})' "
             + "member Store.agg as 'Aggregate(Head(Store.[USA].children,2))' "
@@ -1315,7 +1315,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
             + "Row #0: 450\n");
     }
 
-    public void testVirtualCubeWithCountDistinctUnsatisfiable() {
+    void testVirtualCubeWithCountDistinctUnsatisfiable() {
         virtualCubeWithDC().assertQueryReturns(
             "select {measures.[Customer Count], "
             + "measures.[Unit Sales by Customer]} on 0 from [warehouse and sales] "
@@ -1333,7 +1333,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
             + "Row #0: \n");
     }
 
-    public void testVirtualCubeWithCountDistinctSatisfiable() {
+    void testVirtualCubeWithCountDistinctSatisfiable() {
         virtualCubeWithDC().assertQueryReturns(
             "select {measures.[Customer Count], "
             + "measures.[Unit Sales by Customer]} on 0 from [warehouse and sales] "
@@ -1351,7 +1351,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
             + "Row #0: 29\n");
     }
 
-    public void testVirtualCubeWithCountDistinctPartiallySatisfiable() {
+    void testVirtualCubeWithCountDistinctPartiallySatisfiable() {
         virtualCubeWithDC().assertQueryReturns(
             "select {measures.[Warehouse Sales], "
             + "measures.[Unit Sales by Customer]} on 0 from [warehouse and sales] "
@@ -1384,7 +1384,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
             + "</CalculatedMember>",
             null, "Warehouse Sales");
     }
-    public void testCompoundSlicerWithComplexAggregation() {
+    void testCompoundSlicerWithComplexAggregation() {
       virtualCubeWithDC().assertQueryReturns(
           "with\n"
           + "member time.agg as 'Aggregate( { ( Gender.F, Time.[1997].Q1), (Gender.M, Time.[1997].Q2) })'\n"
@@ -1399,7 +1399,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
           + "Row #0: 2,990\n"); // 5,881
     }
 
-    public void testCompoundAggCalcMemberInSlicer1() {
+    void testCompoundAggCalcMemberInSlicer1() {
         String query = "WITH member store.agg as "
                 + "'Aggregate(CrossJoin(Store.[Store Name].members, Gender.F))' "
                 + "SELECT filter(customers.[name].members, measures.[unit sales] > 100) on 0 "
@@ -1411,7 +1411,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
             getTestContext());
     }
 
-    public void testCompoundAggCalcMemberInSlicer2() {
+    void testCompoundAggCalcMemberInSlicer2() {
         String query = "WITH member store.agg as "
                 + "'Aggregate({ ([Product].[Product Family].[Drink], Time.[1997].[Q1]), ([Product].[Product Family].[Food], Time.[1997].[Q2]) }))' "
                 + "SELECT filter(customers.[name].members, measures.[unit sales] > 100) on 0 "
@@ -1423,7 +1423,7 @@ public class CompoundSlicerTest extends FoodMartTestCase {
             getTestContext());
     }
 
-    public void testNativeFilterWithNullMember() {
+    void testNativeFilterWithNullMember() {
         // The [Store Sqft] attribute include a null member.  This member should not be excluded
         // by the filter function in this query.
         verifySameNativeAndNot( "WITH\n"

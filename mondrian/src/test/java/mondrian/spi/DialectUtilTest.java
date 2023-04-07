@@ -17,14 +17,14 @@ import org.junit.jupiter.api.Test;
 public class DialectUtilTest{
 
   @Test
-  public void testCleanUnicodeAwareCaseFlag_InputNull() {
+  void testCleanUnicodeAwareCaseFlag_InputNull() {
     String inputExpression = null;
     String cleaned = DialectUtil.cleanUnicodeAwareCaseFlag( inputExpression );
     assertNull( cleaned );
   }
 
   @Test
-  public void testCleanUnicodeAwareCaseFlag_InputContainsFlag() {
+  void testCleanUnicodeAwareCaseFlag_InputContainsFlag() {
     String inputExpression = "(?i)|(?u).*ａ.*";
     String expectedExpression = "(?i).*ａ.*";
     String cleaned = DialectUtil.cleanUnicodeAwareCaseFlag( inputExpression );
@@ -32,7 +32,7 @@ public class DialectUtilTest{
   }
 
   @Test
-  public void testCleanUnicodeAwareCaseFlag_InputNotContainsFlag() {
+  void testCleanUnicodeAwareCaseFlag_InputNotContainsFlag() {
     String inputExpression = "(?i).*ａ.*";
     String expectedExpression = "(?i).*ａ.*";
     String cleaned = DialectUtil.cleanUnicodeAwareCaseFlag( inputExpression );

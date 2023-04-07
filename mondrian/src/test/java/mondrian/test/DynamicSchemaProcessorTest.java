@@ -66,7 +66,7 @@ public class DynamicSchemaProcessorTest
      * definition.
      */
     @Test
-    public void testDSPBasics() {
+    void testDSPBasics() {
         DynamicSchemaProcessor dsp = new BaseDsp();
         Util.PropertyList dummy = new Util.PropertyList();
         String processedSchema = "";
@@ -85,7 +85,7 @@ public class DynamicSchemaProcessorTest
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testFoodmartDsp(TestingContext context) {
+    void testFoodmartDsp(TestingContext context) {
         withSchemaProcessor(context, BaseDsp.class);
         final Connection monConnection = context.createConnection();
         assertEquals(monConnection.getSchema().getName(), "REPLACEME");
@@ -123,7 +123,7 @@ public class DynamicSchemaProcessorTest
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testProviderTestDSP(TestingContext context) {
+    void testProviderTestDSP(TestingContext context) {
         withSchemaProcessor(context, ProviderTestDSP.class);
         Connection monConnection = context.createConnection();
         assertEquals(monConnection.getSchema().getName(), "mondrian");
@@ -152,7 +152,7 @@ public class DynamicSchemaProcessorTest
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testDBInfoDSP(TestingContext context) {
+    void testDBInfoDSP(TestingContext context) {
         withSchemaProcessor(context, FoodMartCatalogDsp.class);
         final Connection monConnection = context.createConnection();
         assertEquals(monConnection.getSchema().getName(), "FoodmartFoundInCatalogProperty");
@@ -186,7 +186,7 @@ public class DynamicSchemaProcessorTest
      */
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
-    public void testCheckJdbcPropertyDsp(TestingContext context) {
+    void testCheckJdbcPropertyDsp(TestingContext context) {
         withSchemaProcessor(context, CheckJdbcPropertyDsp.class);
         Connection monConnection = context.createConnection();
         assertEquals(monConnection.getSchema().getName(), CheckJdbcPropertyDsp.RETURNTRUESTRING);

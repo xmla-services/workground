@@ -162,7 +162,7 @@ public class PartialSortTest{
 
   // validate the predicate isPartiallySorted()
   @Test
-  public void testPredicate1() {
+  void testPredicate1() {
     int errct = 0;
     int size = 10 * 1000;
     int[] vec = new int[ size ];
@@ -232,7 +232,7 @@ public class PartialSortTest{
 
   // same as testPredicate() but boxed
   @Test
-  public void testPredicate2() {
+  void testPredicate2() {
     int errct = 0;
     int size = 10 * 1000;
     Integer[] vec = new Integer[ size ];
@@ -302,7 +302,7 @@ public class PartialSortTest{
   }
 
   @Test
-  public void testQuick() {
+  void testQuick() {
     final int length = 40;
     final int limit = 4;
     Integer[] vec = newRandomIntegers( length, 0, length );
@@ -312,7 +312,7 @@ public class PartialSortTest{
   }
 
   @Test
-  public void testOnAlreadySorted() {
+  void testOnAlreadySorted() {
     final int length = 200;
     final int limit = 8;
     Integer[] vec = new Integer[ length ];
@@ -325,7 +325,7 @@ public class PartialSortTest{
   }
 
   @Test
-  public void testOnAlreadyReverseSorted() {
+  void testOnAlreadyReverseSorted() {
     final int length = 200;
     final int limit = 8;
     Integer[] vec = new Integer[ length ];
@@ -370,7 +370,7 @@ public class PartialSortTest{
 
   // test correctness
   @Test
-  public void testOnRandomIntegers() {
+  void testOnRandomIntegers() {
     randomIntegerTests( 100, 20 );
     randomIntegerTests( 50000, 10 );
     randomIntegerTests( 50000, 500 );
@@ -379,7 +379,7 @@ public class PartialSortTest{
 
   // test with large vector
   @Test
-  public void testOnManyRandomIntegers() {
+  void testOnManyRandomIntegers() {
     randomIntegerTests( 1000 * 1000, 5000 );
     randomIntegerTests( 1000 * 1000, 10 );
   }
@@ -445,7 +445,7 @@ public class PartialSortTest{
   }
 
   @Test
-  public void testPredicateIsStablySorted() {
+  void testPredicateIsStablySorted() {
     Item[] vec = newPartlySortedItems( 24, 4, false );
     assertTrue( Item.isStablySorted( vec, 4, false ) );
     assertFalse( Item.isStablySorted( vec, 4, true ) );
@@ -462,7 +462,7 @@ public class PartialSortTest{
 
 
   @Test
-  public void testStableQuick() {
+  void testStableQuick() {
     final int length = 40;
     final int limit = 4;
     Item[] vec = newRandomItems( length, 0, length );
@@ -503,7 +503,7 @@ public class PartialSortTest{
   }
 
   @Test
-  public void testStableOnRandomItems() {
+  void testStableOnRandomItems() {
     randomItemTests( 100, 20 );
     randomItemTests( 50000, 10 );
     randomItemTests( 50000, 500 );
@@ -557,7 +557,7 @@ public class PartialSortTest{
 
   // compare speed on different sizes of input
   @Test
-  public void testSpeed() {
+  void testSpeed() {
     if ( !LOGGER.isDebugEnabled() ) {
       return;
     }

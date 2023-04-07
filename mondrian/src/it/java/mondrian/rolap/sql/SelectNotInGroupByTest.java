@@ -132,7 +132,7 @@ public class SelectNotInGroupByTest extends BatchTestCase {
         + "    ISNULL(`store`.`store_name`), `store`.`store_name` ASC\n";
 
 
-    public void testDependentPropertySkipped() {
+    void testDependentPropertySkipped() {
         // Property group by should be skipped only if dialect supports it
         String sqlpat;
         if (dialectAllowsSelectNotInGroupBy()) {
@@ -155,7 +155,7 @@ public class SelectNotInGroupByTest extends BatchTestCase {
         assertQuerySqlOrNot(tc, queryCubeA, sqlPatterns, false, false, true);
     }
 
-    public void testIndependentPropertyNotSkipped() {
+    void testIndependentPropertyNotSkipped() {
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
                 Dialect.DatabaseProduct.MYSQL,
@@ -174,7 +174,7 @@ public class SelectNotInGroupByTest extends BatchTestCase {
         assertQuerySqlOrNot(tc, queryCubeA, sqlPatterns, false, false, true);
     }
 
-    public void testGroupBySkippedIfUniqueLevel() {
+    void testGroupBySkippedIfUniqueLevel() {
         // If unique level is included and all properties are level
         // dependent, then group by can be skipped regardless of dialect
         SqlPattern[] sqlPatterns = {
@@ -195,7 +195,7 @@ public class SelectNotInGroupByTest extends BatchTestCase {
         assertQuerySqlOrNot(tc, queryCubeA, sqlPatterns, false, false, true);
     }
 
-    public void testGroupByNotSkippedIfIndependentProperty() {
+    void testGroupByNotSkippedIfIndependentProperty() {
         SqlPattern[] sqlPatterns = {
             new SqlPattern(
                 Dialect.DatabaseProduct.MYSQL,

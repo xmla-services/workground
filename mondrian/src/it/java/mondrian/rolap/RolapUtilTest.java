@@ -33,7 +33,7 @@ public class RolapUtilTest extends TestCase {
   private static final String FACT_NAME = "order_fact";
   private MondrianDef.Relation fact;
 
-  public void testMakeRolapStarKeyUnmodifiable() throws Exception {
+  void testMakeRolapStarKeyUnmodifiable() throws Exception {
     try {
       fact = new MondrianDef.Table(
           wrapStrSources(getFactTableWithSQLFilter()));
@@ -48,7 +48,7 @@ public class RolapUtilTest extends TestCase {
     }
   }
 
-  public void testMakeRolapStarKey_ByFactTableName() throws Exception {
+  void testMakeRolapStarKey_ByFactTableName() throws Exception {
     fact = new MondrianDef.Table(wrapStrSources(getFactTableWithSQLFilter()));
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(FACT_NAME);
     assertNotNull(polapStarKey);
@@ -56,7 +56,7 @@ public class RolapUtilTest extends TestCase {
     assertEquals(FACT_NAME, polapStarKey.get(0));
   }
 
-  public void testMakeRolapStarKey_FactTableWithSQLFilter() throws Exception {
+  void testMakeRolapStarKey_FactTableWithSQLFilter() throws Exception {
     fact = new MondrianDef.Table(wrapStrSources(getFactTableWithSQLFilter()));
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(fact);
     assertNotNull(polapStarKey);
@@ -66,7 +66,7 @@ public class RolapUtilTest extends TestCase {
     assertEquals(FILTER_QUERY, polapStarKey.get(2));
   }
 
-  public void testMakeRolapStarKey_FactTableWithEmptyFilter()
+  void testMakeRolapStarKey_FactTableWithEmptyFilter()
       throws Exception {
     fact = new MondrianDef.Table(wrapStrSources(
         getFactTableWithEmptySQLFilter()));
@@ -76,7 +76,7 @@ public class RolapUtilTest extends TestCase {
     assertEquals(TABLE_ALIAS, polapStarKey.get(0));
   }
 
-  public void testMakeRolapStarKey_FactTableWithoutSQLFilter()
+  void testMakeRolapStarKey_FactTableWithoutSQLFilter()
       throws Exception {
     fact = new MondrianDef.Table(wrapStrSources(
         getFactTableWithoutSQLFilter()));
@@ -86,7 +86,7 @@ public class RolapUtilTest extends TestCase {
     assertEquals(TABLE_ALIAS, polapStarKey.get(0));
   }
 
-  public void testMakeRolapStarKey_FactRelation() throws Exception {
+  void testMakeRolapStarKey_FactRelation() throws Exception {
     List<String> polapStarKey = RolapUtil.makeRolapStarKey(
         getFactRelationMock());
     assertNotNull(polapStarKey);
