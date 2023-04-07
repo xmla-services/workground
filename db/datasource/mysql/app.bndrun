@@ -4,7 +4,6 @@
 
 -runtrace: true
 
-#-tester: biz.aQute.tester.junit-platform
 
 -runsystemcapabilities: ${native_capability}
 

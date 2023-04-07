@@ -1,5 +1,12 @@
 -tester: biz.aQute.tester.junit-platform
 
+# JaCoCo calculates test coverage    
+-runpath.jacoco:\
+	org.jacoco.agent,\
+	org.jacoco.agent.rt
+
+-runvm.coverage: -javaagent:${repo;org.jacoco.agent.rt}=destfile=${target-dir}/jacoco.exec
+
 -runtrace: true
 -runvm: ${def;argLine}
 
@@ -8,8 +15,7 @@
 	org.osgi.service.http.port=8090
 	
 
-port                              :   17290
--runproperties.local.agent        :   osgi.fx.agent.port=0.0.0.0:${port}
+
 
 -runrequires: \
 	bnd.identity;id='com.sun.xml.ws.jaxws-rt',\
