@@ -43,6 +43,7 @@ import java.util.Optional;
 import java.util.concurrent.CancellationException;
 
 import org.eclipse.daanse.mdx.model.api.DrillthroughStatement;
+import org.eclipse.daanse.mdx.model.api.ExplainStatement;
 import org.eclipse.daanse.mdx.model.api.MdxStatement;
 import org.eclipse.daanse.mdx.model.api.ReturnItem;
 import org.eclipse.daanse.mdx.model.api.SelectStatement;
@@ -72,6 +73,7 @@ import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
 import org.eclipse.daanse.mdx.model.api.select.SelectWithClause;
 import org.eclipse.daanse.mdx.model.record.DrillthroughStatementR;
+import org.eclipse.daanse.mdx.model.record.ExplainStatementR;
 import org.eclipse.daanse.mdx.model.record.ReturnItemR;
 import org.eclipse.daanse.mdx.model.record.SelectStatementR;
 import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
@@ -453,6 +455,21 @@ DrillthroughStatement parseDrillthroughStatement :
   }
 ;
 
+ExplainStatement parseExplainStatement :
+{
+  MdxStatement mdxStatement = null;
+}
+  < EXPLAIN > < PLAN> < FOR >
+  (
+    mdxStatement = parseSelectStatement
+    |
+    mdxStatement = parseDrillthroughStatement
+  )
+  {
+    return new ExplainStatementR(mdxStatement);
+  }
+;
+
 
 List < ReturnItem > parseReturnItems :
 {
@@ -674,10 +691,11 @@ SelectCellPropertyListClause parseSelectCellPropertyListClause :
   String property=null;
   boolean cell=false;
 }
-  (< CELL >)?
-   {
-    cell=true;
-   }
+  (< CELL >
+     {
+      cell=true;
+     }
+  )?
    < PROPERTIES > <ID>
     {
       cellProperties.add(getToken(0).getImage());
@@ -1507,5 +1525,4 @@ SelectQueryAxisClause parseSelectQueryAxisClause :
     return new SelectQueryAxisClauseR(nonEmpty, expression, axis, selectDimensionPropertyListClause);
   }
 ;
-
 

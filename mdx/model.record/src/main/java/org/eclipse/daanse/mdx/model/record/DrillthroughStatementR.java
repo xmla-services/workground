@@ -20,9 +20,10 @@ import org.eclipse.daanse.mdx.model.api.SelectStatement;
 import java.util.List;
 import java.util.Optional;
 
-public record DrillthroughStatementR(Optional<Integer> maxRows,
-                                     Optional<Integer> firstRowSet,
-                                     SelectStatement selectStatement,
-                                     List<ReturnItem> returnItems) implements DrillthroughStatement {
+public record DrillthroughStatementR(
+    Optional<Integer> maxRows,
+    Optional<Integer> firstRowSet,
+    SelectStatement selectStatement,
+    List<ReturnItem> returnItems) implements DrillthroughStatement {
 
 }

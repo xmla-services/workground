@@ -312,13 +312,13 @@ public class ExpressionTest {
             checkArgument((CallExpressionR) clause, 1, "arg2");
         }
 
-        private void checkArgument(CallExpressionR clause, int index, String arg) {
+        public static void checkArgument(CallExpression clause, int index, String arg) {
             assertThat(clause.expressions().get(index)).isInstanceOf(CompoundIdR.class);
-            CompoundIdR compoundId = (CompoundIdR) (clause.expressions().get(index));
+            CompoundId compoundId = (CompoundId) (clause.expressions().get(index));
             checkCompoundId(compoundId, 1, 0, arg);
         }
 
-        private void checkCompoundId(CompoundIdR compoundId, int size, int index, String arg) {
+        private static void checkCompoundId(CompoundId compoundId, int size, int index, String arg) {
             assertThat(compoundId.objectIdentifiers()).isNotNull().hasSize(size);
             assertThat(compoundId.objectIdentifiers().get(0)).isInstanceOf(NameObjectIdentifier.class);
             assertThat(((NameObjectIdentifier) (compoundId.objectIdentifiers().get(index))).name()).isEqualTo(arg);
@@ -414,7 +414,7 @@ public class ExpressionTest {
         }
 
         @Test
-        public void testSymbolLiteral1() throws MdxParserException {
+        public void testSymbolLiteral1() {
             assertThrows(MdxParserException.class, () -> new MdxParserWrapper("cast(a, \"the_date\" as DATE)").parseExpression());
         }
 

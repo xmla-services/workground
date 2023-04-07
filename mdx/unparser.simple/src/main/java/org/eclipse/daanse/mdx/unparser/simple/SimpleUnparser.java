@@ -1,16 +1,16 @@
 /*
-* Copyright (c) 2023 Contributors to the Eclipse Foundation.
-*
-* This program and the accompanying materials are made
-* available under the terms of the Eclipse Public License 2.0
-* which is available at https://www.eclipse.org/legal/epl-2.0/
-*
-* SPDX-License-Identifier: EPL-2.0
-*
-* Contributors:
-*   SmartCity Jena - initial
-*   Stefan Bischof (bipolis.org) - initial
-*/
+ * Copyright (c) 2023 Contributors to the Eclipse Foundation.
+ *
+ * This program and the accompanying materials are made
+ * available under the terms of the Eclipse Public License 2.0
+ * which is available at https://www.eclipse.org/legal/epl-2.0/
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   SmartCity Jena - initial
+ *   Stefan Bischof (bipolis.org) - initial
+ */
 package org.eclipse.daanse.mdx.unparser.simple;
 
 import java.util.List;
@@ -95,15 +95,15 @@ public class SimpleUnparser implements UnParser {
     @Modified
     public void modifies(Map<String, Object> configMap) {
         this.config = Converters.standardConverter()
-                .convert(configMap)
-                .to(Config.class);
+            .convert(configMap)
+            .to(Config.class);
 
     }
 
     public StringBuilder unparseSelectStatement(SelectStatement selectStatement) {
         StringBuilder sb = new StringBuilder();
         if (!selectStatement.selectWithClauses()
-                .isEmpty()) {
+            .isEmpty()) {
             sb = sb.append("WITH ");
             sb = sb.append(unparseSelectWithClauses(selectStatement.selectWithClauses()));
             sb = sb.append(" ");
@@ -140,8 +140,8 @@ public class SimpleUnparser implements UnParser {
         sb.append("PROPERTIES ");
 
         String properties = clause.properties()
-                .stream()
-                .collect(Collectors.joining("\r\n, "));
+            .stream()
+            .collect(Collectors.joining("\r\n, "));
         sb.append(properties);
         return sb;
     }
@@ -194,21 +194,15 @@ public class SimpleUnparser implements UnParser {
 
         StringBuilder sb = new StringBuilder();
         switch (nameObjectIdentifier.quoting()) {
-        case KEY ->
+            case KEY -> sb.append("&")
+                .append(nameObjectIdentifier.name());
 
-            sb.append("&")
-                    .append(nameObjectIdentifier.name());
+            case QUOTED -> sb.append("[")
+                .append(nameObjectIdentifier.name()
+                    .replace("]", "]]"))
+                .append("]");
 
-        case QUOTED ->
-
-            sb.append("[")
-                    .append(nameObjectIdentifier.name()
-                            .replace("]", "]]"))
-                    .append("]");
-
-        case UNQUOTED ->
-
-            sb.append(nameObjectIdentifier.name());
+            case UNQUOTED -> sb.append(nameObjectIdentifier.name());
 
         }
 
@@ -239,10 +233,10 @@ public class SimpleUnparser implements UnParser {
     private StringBuilder unparseSelectQueryAxesClause(SelectQueryAxesClause clause) {
 
         String ret = clause.selectQueryAxisClauses()
-                .stream()
-                .map(s -> unparseSelectQueryAxisClause(s))
-                .map(Object::toString)
-                .collect(Collectors.joining("\r\n,"));
+            .stream()
+            .map(s -> unparseSelectQueryAxisClause(s))
+            .map(Object::toString)
+            .collect(Collectors.joining("\r\n,"));
         return new StringBuilder(ret);
     }
 
@@ -296,21 +290,21 @@ public class SimpleUnparser implements UnParser {
         StringBuilder sb = new StringBuilder();
 
         String s = koi.nameObjectIdentifiers()
-                .stream()
-                .map(k -> unparseNameObjectIdentifier(k))
-                .map(Object::toString)
-                .collect(Collectors.joining("&"));
+            .stream()
+            .map(k -> unparseNameObjectIdentifier(k))
+            .map(Object::toString)
+            .collect(Collectors.joining("&"));
 
         sb.append("&")
-                .append(s);
+            .append(s);
         return sb;
     }
 
     private StringBuilder unparseCompoundId(CompoundId compoundId) {
         String s = compoundId.objectIdentifiers()
-                .stream()
-                .map(o -> unparseObjectIdentifier(o))
-                .collect(Collectors.joining("."));
+            .stream()
+            .map(o -> unparseObjectIdentifier(o))
+            .collect(Collectors.joining("."));
         return new StringBuilder(s);
     }
 
@@ -346,7 +340,7 @@ public class SimpleUnparser implements UnParser {
 
     private StringBuilder unparseNumericLiteral(NumericLiteral numericLiteral) {
         return new StringBuilder(numericLiteral.value()
-                .toString());
+            .toString());
 
     }
 
@@ -368,63 +362,63 @@ public class SimpleUnparser implements UnParser {
             expressionText = unparseExpressions(expressions);
         }
         switch (callExpression.type()) {
-        case Braces -> sb.append("{")
+            case Braces -> sb.append("{")
                 .append(expressionText)
                 .append("}");
-        case Cast -> sb.append("CAST(")
+            case Cast -> sb.append("CAST(")
                 .append(expressionText.replace(",", " AS "))
                 .append(")");
-        case Empty -> sb.append("");
-        case Function -> sb.append(name)
+            case Empty -> sb.append("");
+            case Function -> sb.append(name)
                 .append("(")
                 .append(expressionText)
                 .append(")");
-        case Internal -> sb.append("$")
+            case Internal -> sb.append("$")
                 .append(expressionText);
-        case Method -> sb.append(object).append(".")
+            case Method -> sb.append(object).append(".")
                 .append(name)
                 .append("(")
                 .append(expressionText)
                 .append(")");
-        case Parentheses -> sb.append("(")
+            case Parentheses -> sb.append("(")
                 .append(expressionText)
                 .append(")");
-        case Property -> sb.append(expressionText)
+            case Property -> sb.append(expressionText)
                 .append(".")
                 .append(name);
-        case PropertyAmpersAndQuoted -> sb.append(expressionText).append(".[&")
+            case PropertyAmpersAndQuoted -> sb.append(expressionText).append(".[&")
                 .append(name)
                 .append("]");
-        case PropertyQuoted -> sb.append(expressionText).append(".&")
+            case PropertyQuoted -> sb.append(expressionText).append(".&")
                 .append(name)
                 .append("");
-        case Term_Case -> {
-            int size = expressions.size();
-            sb.append("CASE ");
-            sb.append(unparseExpression(expressions.get(0)));
+            case Term_Case -> {
+                int size = expressions.size();
+                sb.append("CASE ");
+                sb.append(unparseExpression(expressions.get(0)));
 
-            for (int i = 1; i < size - 1; i++) {
-                sb.append(" WHEN ");
-                sb.append(unparseExpression(expressions.get(i)));
+                for (int i = 1; i < size - 1; i++) {
+                    sb.append(" WHEN ");
+                    sb.append(unparseExpression(expressions.get(i)));
+
+                }
+
+                sb.append(" THEN ");
+                sb.append(unparseExpression(expressions.get(size - 1)));
+                sb.append(" END ");
 
             }
+            case Term_Infix -> {
+                sb.append(unparseExpression(expressions.get(0)));
+                sb.append(" ");
+                sb.append(name);
+                sb.append(" ");
+                sb.append(unparseExpression(expressions.get(1)));
+            }
+            case Term_Postfix -> sb.append(expressionText).append(" ").append(name);
+            case Term_Prefix -> sb.append(name).append(" ").append(expressionText);
 
-            sb.append(" THEN ");
-            sb.append(unparseExpression(expressions.get(size - 1)));
-            sb.append(" END ");
-
-        }
-        case Term_Infix -> {
-            sb.append(unparseExpression(expressions.get(0)));
-            sb.append(" ");
-            sb.append(name);
-            sb.append(" ");
-            sb.append(unparseExpression(expressions.get(1)));
-        }
-        case Term_Postfix -> sb.append(expressionText).append(" ").append(name);
-        case Term_Prefix -> sb.append(name).append(" ").append(expressionText);
-
-        default -> sb.append(":xxx");
+            default -> sb.append(":xxx");
         }
 
         return sb;
@@ -432,9 +426,9 @@ public class SimpleUnparser implements UnParser {
 
     private String unparseExpressions(List<Expression> expressions) {
         return expressions.stream()
-                .map(e -> unparseExpression(e))
-                .map(Object::toString)
-                .collect(Collectors.joining(","));
+            .map(e -> unparseExpression(e))
+            .map(Object::toString)
+            .collect(Collectors.joining(","));
     }
 
     private StringBuilder unparseSelectQueryAsteriskClause(SelectQueryAsteriskClause clause) {
@@ -444,9 +438,9 @@ public class SimpleUnparser implements UnParser {
     public StringBuilder unparseSelectWithClauses(List<SelectWithClause> clauses) {
 
         String s = clauses.stream()
-                .map(swc -> unparseSelectWithClause(swc))
-                .map(Object::toString)
-                .collect(Collectors.joining("\r\n "));
+            .map(swc -> unparseSelectWithClause(swc))
+            .map(Object::toString)
+            .collect(Collectors.joining("\r\n "));
         return new StringBuilder(s);
 
     }
@@ -477,17 +471,17 @@ public class SimpleUnparser implements UnParser {
         sb.append("MEMBER ");
 
         sb.append(unparseCompoundId(clause.compoundId()))
-                .append(" AS ")
-                .append(unparseExpression(clause.expression()));
+            .append(" AS ")
+            .append(unparseExpression(clause.expression()));
 
         if (!clause.memberPropertyDefinitions()
-                .isEmpty()) {
+            .isEmpty()) {
             sb.append(" ");
 
             String ret = clause.memberPropertyDefinitions()
-                    .stream()
-                    .map(mpd -> unparseMemberPropertyDefinition(mpd))
-                    .collect(Collectors.joining("\r\n,", ",\r\n ", ""));
+                .stream()
+                .map(mpd -> unparseMemberPropertyDefinition(mpd))
+                .collect(Collectors.joining("\r\n,", ",\r\n ", ""));
             sb.append(ret);
         }
 
@@ -495,7 +489,7 @@ public class SimpleUnparser implements UnParser {
 
     }
 
-    private StringBuilder unparseMemberPropertyDefinition(MemberPropertyDefinition mpd) {
+    public StringBuilder unparseMemberPropertyDefinition(MemberPropertyDefinition mpd) {
 
         StringBuilder sb = new StringBuilder();
         sb.append(unparseObjectIdentifier(mpd.objectIdentifier()));
@@ -509,8 +503,8 @@ public class SimpleUnparser implements UnParser {
         StringBuilder sb = new StringBuilder();
         sb.append("SET ");
         sb.append(unparseCompoundId(clause.compoundId()))
-                .append(" AS ")
-                .append(unparseExpression(clause.expression()));
+            .append(" AS ")
+            .append(unparseExpression(clause.expression()));
 
         return sb;
 
@@ -552,9 +546,13 @@ public class SimpleUnparser implements UnParser {
         return sb;
     }
 
-
     public StringBuilder unparseExplainStatement(ExplainStatement selectStatement) {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("EXPLAIN PLAN FOR");
+        if (selectStatement.mdxStatement() != null) {
+            sb.append("\r\n ").append(unparseMdxStatement(selectStatement.mdxStatement()));
+        }
+        return sb;
     }
 
     public StringBuilder unparseDMVStatement(DMVStatement selectStatement) {
@@ -586,7 +584,7 @@ public class SimpleUnparser implements UnParser {
 
     public StringBuilder unparseAxis(Axis axis) {
         StringBuilder sb = new StringBuilder().append(axis.named() ? axis.name()
-                .toUpperCase() : axis.ordinal());
+            .toUpperCase() : axis.ordinal());
         return sb;
 
     }

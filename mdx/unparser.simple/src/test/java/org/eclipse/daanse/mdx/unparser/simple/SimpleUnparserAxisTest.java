@@ -13,17 +13,31 @@
  */
 package org.eclipse.daanse.mdx.unparser.simple;
 
+import org.eclipse.daanse.mdx.model.api.SelectStatement;
+import org.eclipse.daanse.mdx.model.api.expression.CallExpression;
 import org.eclipse.daanse.mdx.model.api.expression.NameObjectIdentifier;
+import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier;
 import org.eclipse.daanse.mdx.model.api.expression.ObjectIdentifier.Quoting;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSlicerAxisClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseName;
 import org.eclipse.daanse.mdx.model.api.select.SelectSubcubeClauseStatement;
 import org.eclipse.daanse.mdx.model.record.SelectStatementR;
+import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
+import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
+import org.eclipse.daanse.mdx.model.record.expression.KeyObjectIdentifierR;
+import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.select.AxisR;
+import org.eclipse.daanse.mdx.model.record.select.SelectDimensionPropertyListClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxesClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxisClauseR;
+import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,26 +48,59 @@ public class SimpleUnparserAxisTest {
 
     private SimpleUnparser unparser = new SimpleUnparser();
 
-    private @Test void testSelectStatement() throws Exception {
-        SelectStatementR selectStatement = new SelectStatementR(null, null, null, null, null);
+    @Test
+    void testSelectStatement() throws Exception {
+        SelectQueryClause selectQueryClause =
+            new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,
+                new CallExpressionR("{}",
+                    CallExpression.Type.Braces,
+                    List.of(
+                        new NameObjectIdentifierR("Date", ObjectIdentifier.Quoting.QUOTED),
+                        new NameObjectIdentifierR("Calendar", ObjectIdentifier.Quoting.QUOTED),
+                        new NameObjectIdentifierR("Calendar Year", ObjectIdentifier.Quoting.QUOTED),
+                        new KeyObjectIdentifierR(List.of(new NameObjectIdentifierR("2001",
+                            ObjectIdentifier.Quoting.QUOTED)))
+                    )),
+                new AxisR(0, true),
+                new SelectDimensionPropertyListClauseR())));
+        SelectStatement selectStatement = new SelectStatementR(List.of(), selectQueryClause,
+            new SelectSubcubeClauseNameR(new NameObjectIdentifierR("Adventure Works", ObjectIdentifier.Quoting.QUOTED)),
+            Optional.ofNullable(null), Optional.ofNullable(null));
         assertThat(unparser.unparseSelectStatement(selectStatement)).asString()
-                .isEqualTo("TODO");
+            .isEqualTo("SELECT {[Date],[Calendar],[Calendar Year],&[2001]} ON COLUMNS FROM [Adventure Works]");
     }
 
     @Test
-    void testSelectSubcubeClause() throws Exception {
+    void testSelectSubcubeClause() {
         SelectSubcubeClauseName selectStatementName = selectSubcubeClauseName("c", Quoting.QUOTED);
         assertThat(unparser.unparseSelectSubcubeClause(selectStatementName)).asString()
-                .isEqualTo("[c]");
+            .isEqualTo("[c]");
+        SelectQueryAxisClause selectQueryAxisClause =
+            new SelectQueryAxisClauseR(
+                false,
+                new CallExpressionR("Membmers",
+                    CallExpression.Type.Property,
+                    List.of(new CompoundIdR(List.of(
+                        new NameObjectIdentifierR("Customer", ObjectIdentifier.Quoting.QUOTED),
+                        new NameObjectIdentifierR("Gender", ObjectIdentifier.Quoting.QUOTED),
+                        new NameObjectIdentifierR("Gender", ObjectIdentifier.Quoting.QUOTED)
+                    )))
+                ),
+                new AxisR(0, true),
+                null);
+        SelectQueryAxesClause selectQueryAxesClause = new SelectQueryAxesClauseR(List.of(selectQueryAxisClause));
 
-        SelectSubcubeClauseStatement selectStatementsStatement = selectStatementsStatement(null, selectStatementName,
-                Optional.ofNullable(null));
+        SelectSubcubeClauseStatement selectStatementsStatement = selectStatementsStatement(selectQueryAxesClause,
+            selectStatementName,
+            Optional.ofNullable(null));
         assertThat(unparser.unparseSelectSubcubeClause(selectStatementsStatement)).asString()
-                .isEqualTo("todo");
+            .isEqualTo(" ( \r\n  SELECT \r\n[Customer].[Gender].[Gender].Membmers ON COLUMNS FROM \r\n[c]\r\n ) \r\n");
     }
 
-    private SelectSubcubeClauseStatement selectStatementsStatement(SelectQueryClause selectQueryClause,
-            SelectSubcubeClause selectSubcubeClause, Optional<SelectSlicerAxisClause> selectSlicerAxisClause) {
+    private SelectSubcubeClauseStatement selectStatementsStatement(
+        SelectQueryClause selectQueryClause,
+        SelectSubcubeClause selectSubcubeClause, Optional<SelectSlicerAxisClause> selectSlicerAxisClause
+    ) {
         SelectSubcubeClauseStatement sscs = mock(SelectSubcubeClauseStatement.class);
 
         when(sscs.selectQueryClause()).thenReturn(selectQueryClause);
@@ -69,21 +116,21 @@ public class SimpleUnparserAxisTest {
         // "cube"-> Reserved Word but quoted
 
         assertThat(unparser.unparseSelectSubcubeClauseName(selectSubcubeClauseName("c", Quoting.UNQUOTED))).asString()
-                .isEqualTo("c");
+            .isEqualTo("c");
         assertThat(unparser.unparseSelectSubcubeClauseName(selectSubcubeClauseName("c", Quoting.QUOTED))).asString()
-                .isEqualTo("[c]");
+            .isEqualTo("[c]");
         assertThat(unparser.unparseSelectSubcubeClauseName(selectSubcubeClauseName("cube", Quoting.QUOTED))).asString()
-                .isEqualTo("[cube]");
+            .isEqualTo("[cube]");
         assertThat(unparser.unparseSelectSubcubeClauseName(selectSubcubeClauseName("with whitespace", Quoting.QUOTED)))
-                .asString()
-                .isEqualTo("[with whitespace]");
+            .asString()
+            .isEqualTo("[with whitespace]");
         assertThat(unparser.unparseSelectSubcubeClauseName(selectSubcubeClauseName("with [inner]", Quoting.QUOTED)))
-                .asString()
-                .isEqualTo("[with [inner]]]");
+            .asString()
+            .isEqualTo("[with [inner]]]");
         assertThat(unparser.unparseSelectSubcubeClauseName(selectSubcubeClauseName("1", Quoting.QUOTED))).asString()
-                .isEqualTo("[1]");
+            .isEqualTo("[1]");
         assertThat(unparser.unparseSelectSubcubeClauseName(selectSubcubeClauseName(".", Quoting.QUOTED))).asString()
-                .isEqualTo("[.]");
+            .isEqualTo("[.]");
 
     }
 
@@ -104,13 +151,6 @@ public class SimpleUnparserAxisTest {
     }
 
     @Test
-    void testSelectSubcubeClauseStatement() throws Exception {
-//        assertThat(unparser.unparse(selectStatement)).asString()
-//                .isEqualTo("TODO");
-
-    }
-
-    @Test
     void testAxis() throws Exception {
 
         AxisR axis_M2 = new AxisR(-2, false);
@@ -123,21 +163,21 @@ public class SimpleUnparserAxisTest {
         AxisR axis_5 = new AxisR(5, false);
 
         assertThat(unparser.unparseAxis(axis_M2)).asString()
-                .isEqualTo("-2");
+            .isEqualTo("-2");
         assertThat(unparser.unparseAxis(axis_M1)).asString()
-                .isEqualTo("-1");
+            .isEqualTo("-1");
         assertThat(unparser.unparseAxis(axis_0)).asString()
-                .isEqualTo("0");
+            .isEqualTo("0");
         assertThat(unparser.unparseAxis(axis_1)).asString()
-                .isEqualTo("1");
+            .isEqualTo("1");
         assertThat(unparser.unparseAxis(axis_2)).asString()
-                .isEqualTo("2");
+            .isEqualTo("2");
         assertThat(unparser.unparseAxis(axis_3)).asString()
-                .isEqualTo("3");
+            .isEqualTo("3");
         assertThat(unparser.unparseAxis(axis_4)).asString()
-                .isEqualTo("4");
+            .isEqualTo("4");
         assertThat(unparser.unparseAxis(axis_5)).asString()
-                .isEqualTo("5");
+            .isEqualTo("5");
     }
 
     @Test
@@ -153,21 +193,21 @@ public class SimpleUnparserAxisTest {
         AxisR axis_named_5 = new AxisR(5, true);
 
         assertThat(unparser.unparseAxis(axis_named_M2)).asString()
-                .isEqualTo("NONE");
+            .isEqualTo("NONE");
         assertThat(unparser.unparseAxis(axis_named_M1)).asString()
-                .isEqualTo("SLICER");
+            .isEqualTo("SLICER");
         assertThat(unparser.unparseAxis(axis_named_0)).asString()
-                .isEqualTo("COLUMNS");
+            .isEqualTo("COLUMNS");
         assertThat(unparser.unparseAxis(axis_named_1)).asString()
-                .isEqualTo("ROWS");
+            .isEqualTo("ROWS");
         assertThat(unparser.unparseAxis(axis_named_2)).asString()
-                .isEqualTo("PAGES");
+            .isEqualTo("PAGES");
         assertThat(unparser.unparseAxis(axis_named_3)).asString()
-                .isEqualTo("CHAPTERS");
+            .isEqualTo("CHAPTERS");
         assertThat(unparser.unparseAxis(axis_named_4)).asString()
-                .isEqualTo("SECTIONS");
+            .isEqualTo("SECTIONS");
         assertThat(unparser.unparseAxis(axis_named_5)).asString()
-                .isEqualTo("AXIS(5)");
+            .isEqualTo("AXIS(5)");
 
     }
 
