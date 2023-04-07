@@ -22,7 +22,6 @@ import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
 import org.eclipse.daanse.mdx.model.record.expression.KeyObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.select.AxisR;
-import org.eclipse.daanse.mdx.model.record.select.SelectDimensionPropertyListClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxesClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxisClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
@@ -77,7 +76,7 @@ public class SimpleUnparserSelectSubCubeClauseTest {
                                 new KeyObjectIdentifierR(List.of(new NameObjectIdentifierR("2001", ObjectIdentifier.Quoting.QUOTED)))
                             )),
                         new AxisR(0, true),
-                        new SelectDimensionPropertyListClauseR()))),
+                        null))),
                     new SelectSubcubeClauseNameR(new NameObjectIdentifierR("Adventure Works", ObjectIdentifier.Quoting.QUOTED)),
                     Optional.ofNullable(null));
 
@@ -101,7 +100,7 @@ public class SimpleUnparserSelectSubCubeClauseTest {
                                 new KeyObjectIdentifierR(List.of(new NameObjectIdentifierR("2001", ObjectIdentifier.Quoting.QUOTED)))
                             )),
                         new AxisR(0, true),
-                        new SelectDimensionPropertyListClauseR()))),
+                        null))),
 
                     new SelectSubcubeClauseStatementR(
                         new SelectQueryAxesClauseR(List.of(new SelectQueryAxisClauseR(false,
@@ -111,7 +110,7 @@ public class SimpleUnparserSelectSubCubeClauseTest {
                                     new NameObjectIdentifierR("test", ObjectIdentifier.Quoting.UNQUOTED)
                                 )),
                             new AxisR(0, true),
-                            new SelectDimensionPropertyListClauseR()))),
+                            null))),
                         new SelectSubcubeClauseNameR(new NameObjectIdentifierR("cube", ObjectIdentifier.Quoting.QUOTED)),
                         Optional.ofNullable(null)),
                     Optional.ofNullable(null));

@@ -43,6 +43,7 @@ import org.eclipse.daanse.mdx.model.api.select.CreateSetBodyClause;
 import org.eclipse.daanse.mdx.model.api.select.MeasureBodyClause;
 import org.eclipse.daanse.mdx.model.api.select.MemberPropertyDefinition;
 import org.eclipse.daanse.mdx.model.api.select.SelectCellPropertyListClause;
+import org.eclipse.daanse.mdx.model.api.select.SelectDimensionPropertyListClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAsteriskClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxesClause;
 import org.eclipse.daanse.mdx.model.api.select.SelectQueryAxisClause;
@@ -137,12 +138,20 @@ public class SimpleUnparser implements UnParser {
 
             sb.append("CELL ");
         }
-        sb.append("PROPERTIES ");
+        sb.append(unparseProperties(clause.properties()));
+        return sb;
+    }
 
-        String properties = clause.properties()
-            .stream()
-            .collect(Collectors.joining("\r\n, "));
-        sb.append(properties);
+    public StringBuilder unparseProperties(List<String> propertyList) {
+        StringBuilder sb = new StringBuilder();
+        if (propertyList != null && !propertyList.isEmpty()) {
+            sb.append("PROPERTIES ");
+
+            String properties = propertyList
+                .stream()
+                .collect(Collectors.joining("\r\n, "));
+            sb.append(properties);
+        }
         return sb;
     }
 
@@ -563,6 +572,13 @@ public class SimpleUnparser implements UnParser {
     public StringBuilder unparseMdxRefreshStatement(RefreshStatement selectStatement) {
         return null;
 
+    }
+
+    public StringBuilder unparseSelectDimensionPropertyListClause(SelectDimensionPropertyListClause clause) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("DIMENSION");
+        sb.append("\r\n ").append(unparseProperties(clause.properties()));
+        return sb;
     }
 
     @Override

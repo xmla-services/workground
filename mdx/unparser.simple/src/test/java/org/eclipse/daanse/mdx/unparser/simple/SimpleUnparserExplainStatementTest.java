@@ -26,7 +26,6 @@ import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
 import org.eclipse.daanse.mdx.model.record.expression.KeyObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.select.AxisR;
-import org.eclipse.daanse.mdx.model.record.select.SelectDimensionPropertyListClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxesClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxisClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectSubcubeClauseNameR;
@@ -56,7 +55,7 @@ public class SimpleUnparserExplainStatementTest {
                             ObjectIdentifier.Quoting.QUOTED)))
                     )),
                 new AxisR(0, true),
-                new SelectDimensionPropertyListClauseR())));
+                null)));
         SelectStatement selectStatement = new SelectStatementR(List.of(), selectQueryClause,
             new SelectSubcubeClauseNameR(new NameObjectIdentifierR("Adventure Works", ObjectIdentifier.Quoting.QUOTED)),
             Optional.ofNullable(null), Optional.ofNullable(null));
@@ -84,7 +83,7 @@ public class SimpleUnparserExplainStatementTest {
                             ObjectIdentifier.Quoting.QUOTED)))
                     )),
                 new AxisR(0, true),
-                new SelectDimensionPropertyListClauseR())));
+                null)));
         SelectStatement selectStatement = new SelectStatementR(List.of(), selectQueryClause,
             new SelectSubcubeClauseNameR(new NameObjectIdentifierR("Adventure Works", ObjectIdentifier.Quoting.QUOTED)),
             Optional.ofNullable(null), Optional.ofNullable(null));

@@ -20,7 +20,6 @@ import org.eclipse.daanse.mdx.model.record.expression.CallExpressionR;
 import org.eclipse.daanse.mdx.model.record.expression.CompoundIdR;
 import org.eclipse.daanse.mdx.model.record.expression.NameObjectIdentifierR;
 import org.eclipse.daanse.mdx.model.record.select.AxisR;
-import org.eclipse.daanse.mdx.model.record.select.SelectDimensionPropertyListClauseR;
 import org.eclipse.daanse.mdx.model.record.select.SelectQueryAxisClauseR;
 import org.junit.jupiter.api.Test;
 
@@ -72,7 +71,7 @@ public class SimpleUnparserSelectQueryAxisClauseTest {
                     )
                 ),
                 new AxisR(1, true),
-                new SelectDimensionPropertyListClauseR());
+                null);
 
         assertThat(unparser.unparseSelectQueryAxisClause(selectQueryAxisClause)).asString()
             .isEqualTo("{[Customer].[Customer].[Aaron A. Allen],[Customer].[Customer].[Abigail Clark]} ON ROWS");

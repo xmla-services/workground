@@ -1445,13 +1445,22 @@ CreateSetBodyClause parseCreateSetBodyClause :
 
 
 SelectDimensionPropertyListClause parseSelectDimensionPropertyListClause :
-  (< DIMENSION >)? < PROPERTIES >
-  parseIdentifier
+  (< DIMENSION >)?
+  {
+    List < String > cellProperties = new LinkedList < String > ();
+  }
+  < PROPERTIES > <ID>
+  {
+    cellProperties.add(getToken(0).getImage());
+  }
   (
-    < COMMA > parseIdentifier
+    < COMMA > <ID>
+    {
+          cellProperties.add(getToken(0).getImage());
+    }
   )*
   {
-    return new SelectDimensionPropertyListClauseR();
+    return new SelectDimensionPropertyListClauseR(cellProperties);
   }
 ;
 
