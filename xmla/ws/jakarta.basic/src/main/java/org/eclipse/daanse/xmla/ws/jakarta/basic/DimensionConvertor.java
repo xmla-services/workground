@@ -13,6 +13,20 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.BindingConvertor.convertBinding;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertErrorConfiguration;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertAttributePermissionList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertProactiveCaching;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertTranslationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.DataItemConvertor.convertDataItem;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.DataItemConvertor.convertDataItemList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.MiningModelConvertor.convertAttributeTranslationList;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.engine300.AttributeHierarchyProcessingState;
 import org.eclipse.daanse.xmla.api.engine300.DimensionAttributeVisualizationProperties;
 import org.eclipse.daanse.xmla.api.engine300.HierarchyVisualizationProperties;
@@ -21,7 +35,6 @@ import org.eclipse.daanse.xmla.api.engine300_300.Relationship;
 import org.eclipse.daanse.xmla.api.engine300_300.RelationshipEnd;
 import org.eclipse.daanse.xmla.api.engine300_300.RelationshipEndTranslation;
 import org.eclipse.daanse.xmla.api.engine300_300.Relationships;
-import org.eclipse.daanse.xmla.api.xmla.Annotation;
 import org.eclipse.daanse.xmla.api.xmla.AttributeRelationship;
 import org.eclipse.daanse.xmla.api.xmla.Dimension;
 import org.eclipse.daanse.xmla.api.xmla.DimensionAttribute;
@@ -32,7 +45,6 @@ import org.eclipse.daanse.xmla.api.xmla.Hierarchy;
 import org.eclipse.daanse.xmla.api.xmla.Level;
 import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
 import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
-import org.eclipse.daanse.xmla.api.xmla.Translation;
 import org.eclipse.daanse.xmla.api.xmla.UnknownMemberEnumType;
 import org.eclipse.daanse.xmla.model.record.engine300.DimensionAttributeVisualizationPropertiesR;
 import org.eclipse.daanse.xmla.model.record.engine300.HierarchyVisualizationPropertiesR;
@@ -48,23 +60,10 @@ import org.eclipse.daanse.xmla.model.record.xmla.DimensionR;
 import org.eclipse.daanse.xmla.model.record.xmla.HierarchyR;
 import org.eclipse.daanse.xmla.model.record.xmla.LevelR;
 
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.BindingConvertor.convertBinding;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertErrorConfiguration;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertAttributePermissionList;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertProactiveCaching;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertTranslationList;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.DataItemConvertor.convertDataItem;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.DataItemConvertor.convertDataItemList;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.MiningModelConvertor.convertAttributeTranslationList;
-
 public class DimensionConvertor {
+
+	private DimensionConvertor() {
+	}
 
     public static Dimension convertDimension(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Dimension dimension) {
         if (dimension != null) {
@@ -117,9 +116,9 @@ public class DimensionConvertor {
 
     private static List<Hierarchy> convertHierarchyList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Hierarchy> list) {
         if (list != null) {
-            return list.stream().map(DimensionConvertor::convertHierarchy).collect(Collectors.toList());
+            return list.stream().map(DimensionConvertor::convertHierarchy).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static Hierarchy convertHierarchy(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Hierarchy hierarchy) {
@@ -156,9 +155,9 @@ public class DimensionConvertor {
 
     private static List<Level> convertLevelList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Level> list) {
         if (list != null) {
-            return list.stream().map(DimensionConvertor::convertLevel).collect(Collectors.toList());
+            return list.stream().map(DimensionConvertor::convertLevel).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static Level convertLevel(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Level level) {
@@ -177,9 +176,9 @@ public class DimensionConvertor {
 
     private static List<DimensionPermission> convertDimensionPermissionList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DimensionPermission> list) {
         if (list != null) {
-            return list.stream().map(DimensionConvertor::convertDimensionPermission).collect(Collectors.toList());
+            return list.stream().map(DimensionConvertor::convertDimensionPermission).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static DimensionPermission convertDimensionPermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DimensionPermission dimensionPermission) {
@@ -206,9 +205,9 @@ public class DimensionConvertor {
 
     private static List<DimensionAttribute> convertDimensionAttributeList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DimensionAttribute> list) {
         if (list != null) {
-            return list.stream().map(DimensionConvertor::convertDimensionAttribute).collect(Collectors.toList());
+            return list.stream().map(DimensionConvertor::convertDimensionAttribute).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static DimensionAttribute convertDimensionAttribute(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DimensionAttribute dimensionAttribute) {
@@ -265,9 +264,9 @@ public class DimensionConvertor {
 
     private static List<AttributeRelationship> convertAttributeRelationshipList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AttributeRelationship> list) {
         if (list != null) {
-            return list.stream().map(DimensionConvertor::convertAttributeRelationship).collect(Collectors.toList());
+            return list.stream().map(DimensionConvertor::convertAttributeRelationship).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static AttributeRelationship convertAttributeRelationship(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AttributeRelationship attributeRelationship) {
@@ -340,9 +339,9 @@ public class DimensionConvertor {
 
     private static List<Relationship> convertRelationshipList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.Relationship> list) {
         if (list != null) {
-            return list.stream().map(DimensionConvertor::convertRelationship).collect(Collectors.toList());
+            return list.stream().map(DimensionConvertor::convertRelationship).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static Relationship convertRelationship(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.Relationship relationship) {
@@ -370,9 +369,9 @@ public class DimensionConvertor {
 
     private static List<String> convertRelationshipEndAttributes(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.RelationshipEnd.Attributes attributes) {
         if (attributes != null && attributes.getAttribute() != null) {
-            return attributes.getAttribute().stream().map(i -> i.getAttributeID()).collect(Collectors.toList());
+            return attributes.getAttribute().stream().map(i -> i.getAttributeID()).toList();
         }
-        return null;
+        return List.of();
 
     }
 
@@ -392,9 +391,9 @@ public class DimensionConvertor {
 
     private static List<RelationshipEndTranslation> convertRelationshipEndTranslationList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.RelationshipEndTranslation> list) {
         if (list != null) {
-            return list.stream().map(DimensionConvertor::convertRelationshipEndTranslation).collect(Collectors.toList());
+            return list.stream().map(DimensionConvertor::convertRelationshipEndTranslation).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static RelationshipEndTranslation convertRelationshipEndTranslation(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.RelationshipEndTranslation relationshipEndTranslation) {

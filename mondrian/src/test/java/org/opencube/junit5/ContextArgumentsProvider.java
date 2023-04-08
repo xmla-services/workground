@@ -224,7 +224,7 @@ public class ContextArgumentsProvider implements ArgumentsProvider, AnnotationCo
 				}
 			}
 			return aaa;
-		}).flatMap(Collection::stream).collect(Collectors.toList());
+		}).flatMap(Collection::stream).toList();
 		return args;
 	}
 

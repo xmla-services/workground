@@ -1,6 +1,10 @@
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
-import jakarta.xml.bind.JAXBElement;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
+
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.engine300_300.XEvent;
 import org.eclipse.daanse.xmla.api.xmla.AndOrType;
 import org.eclipse.daanse.xmla.api.xmla.AndOrTypeEnum;
@@ -25,13 +29,12 @@ import org.eclipse.daanse.xmla.model.record.xmla.NotTypeR;
 import org.eclipse.daanse.xmla.model.record.xmla.TraceFilterR;
 import org.eclipse.daanse.xmla.model.record.xmla.TraceR;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
+import jakarta.xml.bind.JAXBElement;
 
 public class TraceConvertor {
+
+	private TraceConvertor() {
+	}
     public static Trace convertTrace(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Trace trace) {
         if (trace != null) {
             return new TraceR(trace.getName(),
@@ -87,9 +90,9 @@ public class TraceConvertor {
 
     private static List<AndOrTypeEnum> convertAndOrTypeEnumList(List<JAXBElement<?>> list) {
         if (list != null) {
-            return list.stream().map(TraceConvertor::convertAndOrTypeEnum).collect(Collectors.toList());
+            return list.stream().map(TraceConvertor::convertAndOrTypeEnum).toList();
         }
-        return null;
+        return List.of();
 
     }
 
@@ -128,9 +131,9 @@ public class TraceConvertor {
 
     private static List<Event> convertEventList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Event> list) {
         if (list != null) {
-            return list.stream().map(TraceConvertor::convertEvent).collect(Collectors.toList());
+            return list.stream().map(TraceConvertor::convertEvent).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static Event convertEvent(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Event event) {
@@ -190,8 +193,8 @@ public class TraceConvertor {
 
     public static List<Trace> convertTraceList(List <org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Trace> list) {
         if (list != null) {
-            return list.stream().map(TraceConvertor::convertTrace).collect(Collectors.toList());
+            return list.stream().map(TraceConvertor::convertTrace).toList();
         }
-        return null;
+        return List.of();
     }
 }

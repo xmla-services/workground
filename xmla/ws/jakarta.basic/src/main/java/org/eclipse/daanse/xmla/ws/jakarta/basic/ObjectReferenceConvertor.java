@@ -18,6 +18,9 @@ import org.eclipse.daanse.xmla.model.record.xmla.ObjectReferenceR;
 
 public class ObjectReferenceConvertor {
 
+	private ObjectReferenceConvertor() {
+	}
+
     public static ObjectReference convertObjectReference(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ObjectReference parentObject) {
         if (parentObject != null) {
             return new ObjectReferenceR(parentObject.getServerID(),

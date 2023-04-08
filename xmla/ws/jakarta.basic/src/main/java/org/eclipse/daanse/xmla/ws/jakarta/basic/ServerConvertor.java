@@ -13,14 +13,6 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
-import org.eclipse.daanse.xmla.api.xmla.Server;
-import org.eclipse.daanse.xmla.api.xmla.ServerProperty;
-import org.eclipse.daanse.xmla.model.record.xmla.ServerPropertyR;
-import org.eclipse.daanse.xmla.model.record.xmla.ServerR;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.DatabaseConvertor.convertAssemblyList;
@@ -28,7 +20,17 @@ import static org.eclipse.daanse.xmla.ws.jakarta.basic.DatabaseConvertor.convert
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.RoleConvertor.convertRoleList;
 import static org.eclipse.daanse.xmla.ws.jakarta.basic.TraceConvertor.convertTraceList;
 
+import java.util.List;
+
+import org.eclipse.daanse.xmla.api.xmla.Server;
+import org.eclipse.daanse.xmla.api.xmla.ServerProperty;
+import org.eclipse.daanse.xmla.model.record.xmla.ServerPropertyR;
+import org.eclipse.daanse.xmla.model.record.xmla.ServerR;
+
 public class ServerConvertor {
+
+	private ServerConvertor() {
+	}
     public static Server convertServer(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Server server) {
         if (server != null) {
             return new ServerR(server.getName(),
@@ -56,9 +58,9 @@ public class ServerConvertor {
 
     private static List<ServerProperty> convertServerPropertyList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ServerProperty> list) {
         if (list != null) {
-            return list.stream().map(ServerConvertor::convertServerProperty).collect(Collectors.toList());
+            return list.stream().map(ServerConvertor::convertServerProperty).toList();
         }
-        return null;
+        return List.of();
 
     }
 

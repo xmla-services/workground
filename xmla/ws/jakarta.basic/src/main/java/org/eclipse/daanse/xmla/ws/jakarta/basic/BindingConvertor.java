@@ -13,6 +13,13 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertDuration;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
+
+import java.math.BigInteger;
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.AttributeBindingTypeEnum;
 import org.eclipse.daanse.xmla.api.xmla.Binding;
 import org.eclipse.daanse.xmla.api.xmla.FiscalYearNameEnum;
@@ -56,185 +63,153 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TimeAttributeBinding;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TimeBinding;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.UserDefinedGroupBinding;
 
-import java.math.BigInteger;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertDuration;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
-
 public class BindingConvertor {
 
-    public static Binding convertBinding(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Binding source) {
-        if (source != null) {
-            if (source instanceof ColumnBinding) {
-                ColumnBinding s = (ColumnBinding) source;
-                return new ColumnBindingR(s.getTableID(),
-                    s.getColumnID());
-            }
+	private BindingConvertor() {
+	}
 
-            if (source instanceof RowBinding) {
-                RowBinding s = (RowBinding) source;
-                return new RowBindingR(s.getTableID());
+	public static Binding convertBinding(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Binding source) {
+		if (source == null) {
+			return null;
+		}
+		if (source instanceof ColumnBinding b) {
+			return new ColumnBindingR(b.getTableID(), b.getColumnID());
+		}
 
-            }
-            if (source instanceof DataSourceViewBinding) {
-                DataSourceViewBinding s = (DataSourceViewBinding) source;
-                return new DataSourceViewBindingR(s.getDataSourceViewID());
-            }
-            if (source instanceof AttributeBinding) {
-                AttributeBinding s = (AttributeBinding) source;
-                return new AttributeBindingR(s.getAttributeID(),
-                    AttributeBindingTypeEnum.fromValue(s.getType()),
-                    Optional.ofNullable(s.getOrdinal()));
+		if (source instanceof RowBinding b) {
+			return new RowBindingR(b.getTableID());
 
-            }
-            if (source instanceof UserDefinedGroupBinding) {
-                UserDefinedGroupBinding s = (UserDefinedGroupBinding) source;
-                return new UserDefinedGroupBindingR(s.getAttributeID(),
-                    Optional.ofNullable(convertUserDefinedGroupBindingGroups(s.getGroups())));
+		}
+		if (source instanceof DataSourceViewBinding b) {
+			return new DataSourceViewBindingR(b.getDataSourceViewID());
+		}
+		if (source instanceof AttributeBinding b) {
+			return new AttributeBindingR(b.getAttributeID(), AttributeBindingTypeEnum.fromValue(b.getType()),
+					Optional.ofNullable(b.getOrdinal()));
 
-            }
-            if (source instanceof MeasureBinding) {
-                MeasureBinding s = (MeasureBinding) source;
-                return new MeasureBindingR(s.getMeasureID());
+		}
+		if (source instanceof UserDefinedGroupBinding b) {
+			return new UserDefinedGroupBindingR(b.getAttributeID(),
+					Optional.ofNullable(convertUserDefinedGroupBindingGroups(b.getGroups())));
 
-            }
-            if (source instanceof CubeAttributeBinding) {
-                CubeAttributeBinding s = (CubeAttributeBinding) source;
-                return new CubeAttributeBindingR(s.getCubeID(),
-                    s.getCubeDimensionID(),
-                    s.getAttributeID(),
-                    AttributeBindingTypeEnum.fromValue(s.getType()),
-                    Optional.ofNullable(convertCubeAttributeBindingOrdinal(s.getOrdinal())));
+		}
+		if (source instanceof MeasureBinding b) {
+			return new MeasureBindingR(b.getMeasureID());
 
-            }
-            if (source instanceof DimensionBinding) {
-                DimensionBinding s = (DimensionBinding) source;
-                return new DimensionBindingR(s.getDataSourceID(),
-                    s.getDimensionID(),
-                    Optional.ofNullable(PersistenceEnum.fromValue(s.getPersistence())),
-                    Optional.ofNullable(RefreshPolicyEnum.fromValue(s.getRefreshPolicy())),
-                    Optional.ofNullable(convertDuration(s.getRefreshInterval())));
+		}
+		if (source instanceof CubeAttributeBinding b) {
+			return new CubeAttributeBindingR(b.getCubeID(), b.getCubeDimensionID(), b.getAttributeID(),
+					AttributeBindingTypeEnum.fromValue(b.getType()),
+					Optional.ofNullable(convertCubeAttributeBindingOrdinal(b.getOrdinal())));
 
-            }
-            if (source instanceof CubeDimensionBinding) {
-                CubeDimensionBinding s = (CubeDimensionBinding) source;
-                return new CubeDimensionBindingR(s.getDataSourceID(),
-                    s.getCubeID(),
-                    s.getCubeDimensionID(),
-                    Optional.ofNullable(s.getFilter()));
+		}
+		if (source instanceof DimensionBinding b) {
+			return new DimensionBindingR(b.getDataSourceID(), b.getDimensionID(),
+					Optional.ofNullable(PersistenceEnum.fromValue(b.getPersistence())),
+					Optional.ofNullable(RefreshPolicyEnum.fromValue(b.getRefreshPolicy())),
+					Optional.ofNullable(convertDuration(b.getRefreshInterval())));
 
-            }
-            if (source instanceof MeasureGroupBinding) {
-                MeasureGroupBinding s = (MeasureGroupBinding) source;
-                return new MeasureGroupBindingR(s.getDataSourceID(),
-                    s.getCubeID(),
-                    s.getMeasureGroupID(),
-                    Optional.ofNullable(PersistenceEnum.fromValue(s.getPersistence())),
-                    Optional.ofNullable(RefreshPolicyEnum.fromValue(s.getRefreshPolicy())),
-                    Optional.ofNullable(convertDuration(s.getRefreshInterval())),
-                    Optional.ofNullable(s.getFilter()));
+		}
+		if (source instanceof CubeDimensionBinding b) {
+			return new CubeDimensionBindingR(b.getDataSourceID(), b.getCubeID(), b.getCubeDimensionID(),
+					Optional.ofNullable(b.getFilter()));
 
-            }
-            if (source instanceof MeasureGroupDimensionBinding) {
-                MeasureGroupDimensionBinding s = (MeasureGroupDimensionBinding) source;
-                return new MeasureGroupDimensionBindingR(s.getCubeDimensionID());
+		}
+		if (source instanceof MeasureGroupBinding b) {
+			return new MeasureGroupBindingR(b.getDataSourceID(), b.getCubeID(), b.getMeasureGroupID(),
+					Optional.ofNullable(PersistenceEnum.fromValue(b.getPersistence())),
+					Optional.ofNullable(RefreshPolicyEnum.fromValue(b.getRefreshPolicy())),
+					Optional.ofNullable(convertDuration(b.getRefreshInterval())), Optional.ofNullable(b.getFilter()));
 
-            }
-            if (source instanceof TimeBinding) {
-                TimeBinding s = (TimeBinding) source;
-                return new TimeBindingR(convertToInstant(s.getCalendarStartDate()),
-                    convertToInstant(s.getCalendarEndDate()),
-                    Optional.ofNullable(s.getFirstDayOfWeek()),
-                    Optional.ofNullable(s.getCalendarLanguage()),
-                    Optional.ofNullable(s.getFiscalFirstMonth()),
-                    Optional.ofNullable(s.getFiscalFirstDayOfMonth()),
-                    Optional.ofNullable(FiscalYearNameEnum.fromValue(s.getFiscalYearName())),
-                    Optional.ofNullable(s.getReportingFirstMonth()),
-                    Optional.ofNullable(s.getReportingFirstWeekOfMonth()),
-                    Optional.ofNullable(ReportingWeekToMonthPatternEnum.fromValue(s.getReportingWeekToMonthPattern())),
-                    Optional.ofNullable(s.getManufacturingFirstMonth()),
-                    Optional.ofNullable(s.getManufacturingFirstWeekOfMonth()),
-                    Optional.ofNullable(s.getManufacturingExtraMonthQuarter()));
+		}
+		if (source instanceof MeasureGroupDimensionBinding b) {
+			return new MeasureGroupDimensionBindingR(b.getCubeDimensionID());
 
-            }
-            if (source instanceof TimeAttributeBinding) {
-                TimeAttributeBinding s = (TimeAttributeBinding) source;
-                return new TimeAttributeBindingR();
+		}
+		if (source instanceof TimeBinding b) {
+			return new TimeBindingR(convertToInstant(b.getCalendarStartDate()),
+					convertToInstant(b.getCalendarEndDate()), Optional.ofNullable(b.getFirstDayOfWeek()),
+					Optional.ofNullable(b.getCalendarLanguage()), Optional.ofNullable(b.getFiscalFirstMonth()),
+					Optional.ofNullable(b.getFiscalFirstDayOfMonth()),
+					Optional.ofNullable(FiscalYearNameEnum.fromValue(b.getFiscalYearName())),
+					Optional.ofNullable(b.getReportingFirstMonth()),
+					Optional.ofNullable(b.getReportingFirstWeekOfMonth()),
+					Optional.ofNullable(ReportingWeekToMonthPatternEnum.fromValue(b.getReportingWeekToMonthPattern())),
+					Optional.ofNullable(b.getManufacturingFirstMonth()),
+					Optional.ofNullable(b.getManufacturingFirstWeekOfMonth()),
+					Optional.ofNullable(b.getManufacturingExtraMonthQuarter()));
 
-            }
-            if (source instanceof InheritedBinding) {
-                InheritedBinding s = (InheritedBinding) source;
-                return new InheritedBindingR();
+		}
+		if (source instanceof TimeAttributeBinding b) {
+			// TODO: handle b
+			return new TimeAttributeBindingR();
 
-            }
-            if (source instanceof CalculatedMeasureBinding) {
-                CalculatedMeasureBinding s = (CalculatedMeasureBinding) source;
-                return new CalculatedMeasureBindingR(s.getMeasureName());
+		}
+		if (source instanceof InheritedBinding b) {
+			// TODO: handle b
+			return new InheritedBindingR();
 
-            }
-            if (source instanceof RowNumberBinding) {
-                RowNumberBinding s = (RowNumberBinding) source;
-                return new RowNumberBindingR();
+		}
+		if (source instanceof CalculatedMeasureBinding b) {
+			return new CalculatedMeasureBindingR(b.getMeasureName());
 
-            }
-            if (source instanceof ExpressionBinding) {
-                ExpressionBinding s = (ExpressionBinding) source;
-                return new ExpressionBindingR(s.getExpression());
+		}
+		if (source instanceof RowNumberBinding b) {
+			// TODO: handle rowNumberBinding
+			return new RowNumberBindingR();
 
-            }
-        }
-        return null;
-    }
+		}
+		if (source instanceof ExpressionBinding b) {
+			return new ExpressionBindingR(b.getExpression());
 
-    public static List<Binding> convertBindingList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Binding> list) {
-        if (list != null) {
-            return list.stream().map(BindingConvertor::convertBinding).collect(Collectors.toList());
-        }
-        return null;
-    }
+		}
+		return null;
+	}
 
-    private static List<BigInteger> convertCubeAttributeBindingOrdinal(
-        CubeAttributeBinding.Ordinal ordinal
-    ) {
-        if (ordinal != null) {
-            return ordinal.getOrdinal();
-        }
-        return null;
+	public static List<Binding> convertBindingList(
+			List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Binding> list) {
+		if (list == null) {
+			return List.of();
+		}
+		return list.stream().map(BindingConvertor::convertBinding).toList();
+	}
 
-    }
+	private static List<BigInteger> convertCubeAttributeBindingOrdinal(CubeAttributeBinding.Ordinal ordinal) {
+		if (ordinal == null) {
+			return List.of();
+		}
+		return ordinal.getOrdinal();
 
-    private static List<Group> convertUserDefinedGroupBindingGroups(
-        UserDefinedGroupBinding.Groups groups
-    ) {
-        if (groups != null) {
-            return convertGroupList(groups.getGroup());
-        }
-        return null;
-    }
+	}
 
-    private static List<Group> convertGroupList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Group> groupList) {
-        if (groupList != null) {
-            return groupList.stream().map(BindingConvertor::convertGroup).collect(Collectors.toList());
-        }
-        return null;
+	private static List<Group> convertUserDefinedGroupBindingGroups(UserDefinedGroupBinding.Groups groups) {
+		if (groups == null) {
+			return List.of();
+		}
+		return convertGroupList(groups.getGroup());
+	}
 
-    }
+	private static List<Group> convertGroupList(
+			List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Group> groupList) {
+		if (groupList == null) {
+			return List.of();
+		}
+		return groupList.stream().map(BindingConvertor::convertGroup).toList();
 
-    private static Group convertGroup(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Group group) {
-        if (group != null) {
-            return new GroupR(group.getName(),
-                Optional.ofNullable(convertGroupMembers(group.getMembers())));
-        }
-        return null;
-    }
+	}
 
-    private static List<String> convertGroupMembers(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Group.Members members) {
-        if (members != null) {
-            return members.getMember();
-        }
-        return null;
-    }
+	private static Group convertGroup(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Group group) {
+		if (group == null) {
+			return null;
+		}
+		return new GroupR(group.getName(), Optional.ofNullable(convertGroupMembers(group.getMembers())));
+	}
+
+	private static List<String> convertGroupMembers(
+			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Group.Members members) {
+		if (members == null) {
+			return List.of();
+		}
+		return members.getMember();
+	}
 }

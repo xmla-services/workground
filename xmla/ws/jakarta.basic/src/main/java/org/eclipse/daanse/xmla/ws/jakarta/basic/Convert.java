@@ -13,7 +13,16 @@
 */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
-import jakarta.xml.bind.JAXBException;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertCancel;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertClearCache;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertException;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertMessages;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.common.enums.ActionTypeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.AuthenticationModeEnum;
 import org.eclipse.daanse.xmla.api.common.enums.ColumnOlapTypeEnum;
@@ -188,9 +197,9 @@ import org.eclipse.daanse.xmla.model.record.execute.ExecuteParameterR;
 import org.eclipse.daanse.xmla.model.record.execute.alter.AlterRequestR;
 import org.eclipse.daanse.xmla.model.record.execute.cancel.CancelRequestR;
 import org.eclipse.daanse.xmla.model.record.execute.clearcache.ClearCacheRequestR;
+import org.eclipse.daanse.xmla.model.record.execute.statement.StatementRequestR;
 import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
 import org.eclipse.daanse.xmla.model.record.xmla.StatementR;
-import org.eclipse.daanse.xmla.model.record.execute.statement.StatementRequestR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Discover;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DiscoverResponse;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Execute;
@@ -230,21 +239,14 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSche
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_rowset.mdschema.MdSchemaSetsResponseRowXml;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xsd.Schema;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertCancel;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertClearCache;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertException;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertMessages;
+import jakarta.xml.bind.JAXBException;
 
 public class Convert {
+
+	private Convert() {
+	}
     private static Optional<Integer> localeIdentifier(PropertyList propertyList) {
-        Optional<Integer> oLocaleIdentifier = Optional.ofNullable(propertyList.getLocaleIdentifier());
-        return oLocaleIdentifier;
+        return Optional.ofNullable(propertyList.getLocaleIdentifier());
     }
 
     private static Optional<Content> content(PropertyList propertyList) {
@@ -256,13 +258,11 @@ public class Convert {
     }
 
     private static Optional<String> catalog(PropertyList propertyList) {
-        Optional<String> catalog = Optional.ofNullable(propertyList.getCatalog());
-        return catalog;
+        return Optional.ofNullable(propertyList.getCatalog());
     }
 
     private static Optional<String> dataSourceInfo(PropertyList propertyList) {
-        Optional<String> dataSourceInfo = Optional.ofNullable(propertyList.getDataSourceInfo());
-        return dataSourceInfo;
+        return Optional.ofNullable(propertyList.getDataSourceInfo());
     }
 
     private static Optional<Format> format(PropertyList propertyList) {
@@ -318,7 +318,6 @@ public class Convert {
 
     public static DiscoverPropertiesRequest fromDiscoverProperties(Discover requestWs) {
 
-        System.out.println(requestWs);
         PropertiesR properties = discoverProperties(propertyList(requestWs));
         DiscoverPropertiesRestrictionsR restrictions = discoverPropertiesRestrictions(requestWs);
 
@@ -944,18 +943,17 @@ public class Convert {
             .ifPresent(row::setObject);
         apiRow.caption()
             .ifPresent(row::setCaption);
-        if (apiRow.parameterInfo().isPresent()) {
-            row.setParameterInfo(apiRow.parameterInfo().get().stream().map(i -> {
-                ParameterInfoXml result  = new ParameterInfoXml();
-                result.setName(i.name());
-                result.setDescription(i.description());
-                result.setOptional(i.optional());
-                result.setRepeatable(i.repeatable());
-                result.setRepeatGroup(i.repeatGroup());
-                return result;
-                //TODO
-            }).collect(Collectors.toList()));
-        }
+        
+		apiRow.parameterInfo().ifPresent(parameterInfos -> row.setParameterInfo(parameterInfos.stream().map(i -> {
+			ParameterInfoXml result = new ParameterInfoXml();
+			result.setName(i.name());
+			result.setDescription(i.description());
+			result.setOptional(i.optional());
+			result.setRepeatable(i.repeatable());
+			result.setRepeatGroup(i.repeatGroup());
+			return result;
+		}).toList()));
+ 
         apiRow.directQueryPushable()
             .ifPresent(i -> row.setDirectQueryPushable(
                 org.eclipse.daanse.xmla.ws.jakarta.model.xmla.enums.DirectQueryPushableEnum.fromValue(i.getValue())));
@@ -1611,13 +1609,13 @@ public class Convert {
             .ifPresent(row::setDimensionIsFactDimension);
         apiRow.dimensionGranularity()
             .ifPresent(row::setDimensionGranularity);
-        if (apiRow.dimensionPath().isPresent()) {
-            row.setDimensionPath(apiRow.dimensionPath().get().stream().map(i -> {
-                MeasureGroupDimensionXml result  = new MeasureGroupDimensionXml();
-                result.setMeasureGroupDimension(i.measureGroupDimension());
-                return result;
-            }).collect(Collectors.toList()));
-        }
+        
+		apiRow.dimensionPath().ifPresent(mgDimensions -> row.setDimensionPath(mgDimensions.stream().map(i -> {
+			MeasureGroupDimensionXml result = new MeasureGroupDimensionXml();
+			result.setMeasureGroupDimension(i.measureGroupDimension());
+			return result;
+		}).toList())
+		);
 
         return row;
     }
@@ -2335,7 +2333,7 @@ public class Convert {
         return ret;
     }
 
-    private static Return getReturn(List<Row> rows, Class cl) throws JAXBException, IOException {
+    private static Return getReturn(List<Row> rows, Class<?> cl) throws JAXBException, IOException {
         Schema schema = SchemaUtil.generateSchema("urn:schemas-microsoft-com:xml-analysis:rowset",
             cl);
         Return r = new Return();
@@ -2346,13 +2344,13 @@ public class Convert {
         return r;
     }
 
-    private static List<ExecuteParameter> parameters(Execute requestWs) {
-        if (requestWs.getParameters() != null) {
-            return requestWs.getParameters().getParameter()
-                .stream().map(i -> new ExecuteParameterR(i.getName(), i.getValue()))
-                .collect(Collectors.toList());
-        }
-        return null;
-    }
+	private static List<ExecuteParameter> parameters(Execute requestWs) {
+		if (requestWs.getParameters() != null) {
+			return requestWs.getParameters().getParameter().stream()
+					.map(i -> new ExecuteParameterR(i.getName(), i.getValue())).map(ExecuteParameter.class::cast)
+					.toList();
+		}
+		return List.of();
+	}
 
 }

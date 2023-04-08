@@ -97,8 +97,7 @@ public class MsXmlAnalysisSoap {
             @WebParam(name = "Authenticate", targetNamespace = "http://schemas.microsoft.com/analysisservices/2003/ext", partName = "parameters") Authenticate authenticate) {
 
         wsContext.getUserPrincipal();
-        AuthenticateResponse ar = wsAdapter.authenticate(authenticate);
-        return ar;
+        return wsAdapter.authenticate(authenticate);
     }
 
     @WebMethod(operationName = "Discover", action = "urn:schemas-microsoft-com:xml-analysis:Discover")
@@ -110,8 +109,7 @@ public class MsXmlAnalysisSoap {
             @WebParam(name = "BeginSession", targetNamespace = "urn:schemas-microsoft-com:xml-analysis", header = true) BeginSession beginSession,
             @WebParam(name = "EndSession", targetNamespace = "urn:schemas-microsoft-com:xml-analysis", header = true) EndSession endSession) {
 
-        DiscoverResponse discoverResponse = wsAdapter.discover(parameters, session, beginSession, endSession);
-        return discoverResponse;
+        return wsAdapter.discover(parameters, session, beginSession, endSession);
     }
 
     @WebMethod(operationName = "Execute", action = "urn:schemas-microsoft-com:xml-analysis:Execute")
@@ -123,8 +121,7 @@ public class MsXmlAnalysisSoap {
             @WebParam(name = "BeginSession", targetNamespace = "urn:schemas-microsoft-com:xml-analysis", header = true) BeginSession beginSession,
             @WebParam(name = "EndSession", targetNamespace = "urn:schemas-microsoft-com:xml-analysis", header = true) EndSession endSession) {
 
-        ExecuteResponse response = wsAdapter.execute(parameters, session, beginSession, endSession);
-        return response;
+        return wsAdapter.execute(parameters, session, beginSession, endSession);
     }
 
 }

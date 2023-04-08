@@ -13,17 +13,20 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
+
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Permission;
 import org.eclipse.daanse.xmla.api.xmla.ReadDefinitionEnum;
 import org.eclipse.daanse.xmla.api.xmla.ReadWritePermissionEnum;
 import org.eclipse.daanse.xmla.model.record.xmla.PermissionR;
 
-import java.util.Optional;
-
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
-
 public class PermissionConvertor {
+
+	private PermissionConvertor() {
+	}
     public static Permission convertPermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Permission permission) {
         if (permission != null) {
             return new PermissionR(permission.getName(),

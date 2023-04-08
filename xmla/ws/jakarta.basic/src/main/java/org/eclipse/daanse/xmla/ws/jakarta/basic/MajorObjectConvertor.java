@@ -13,6 +13,27 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertDataSource;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertDataSourceView;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertCube;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertMdxScript;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertMeasureGroup;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertPartition;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertPerspective;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.DatabaseConvertor.convertDatabase;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.DimensionConvertor.convertDimension;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.MiningModelConvertor.convertMiningModel;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.MiningStructureConvertor.convertMiningStructure;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.PermissionConvertor.convertPermission;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.RoleConvertor.convertRole;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ServerConvertor.convertServer;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.TraceConvertor.convertTrace;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.engine.ImpersonationInfo;
 import org.eclipse.daanse.xmla.api.xmla.Aggregation;
 import org.eclipse.daanse.xmla.api.xmla.AggregationAttribute;
@@ -47,30 +68,10 @@ import org.eclipse.daanse.xmla.model.record.xmla.AggregationR;
 import org.eclipse.daanse.xmla.model.record.xmla.AssemblyR;
 import org.eclipse.daanse.xmla.model.record.xmla.MajorObjectR;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertDataSource;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertDataSourceView;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertCube;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertCubeDimension;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertMdxScript;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertMeasureGroup;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertPartition;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertPerspective;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.DatabaseConvertor.convertDatabase;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.DimensionConvertor.convertDimension;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.MiningModelConvertor.convertMiningModel;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.MiningStructureConvertor.convertMiningStructure;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.PermissionConvertor.convertPermission;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.RoleConvertor.convertRole;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ServerConvertor.convertServer;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.TraceConvertor.convertTrace;
-
 public class MajorObjectConvertor {
+
+	private MajorObjectConvertor() {
+	}
 
     public static MajorObject convertMajorObject(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MajorObject objectDefinition) {
         AggregationDesign aggregationDesign = convertAggregationDesign(objectDefinition.getAggregationDesign());
@@ -137,7 +138,7 @@ public class MajorObjectConvertor {
 
     private static AggregationDesign convertAggregationDesign(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesign aggregationDesign) {
         if (aggregationDesign != null) {
-            AggregationDesign res = new AggregationDesignR(aggregationDesign.getName(),
+            return new AggregationDesignR(aggregationDesign.getName(),
                 Optional.ofNullable(aggregationDesign.getID()),
                 Optional.ofNullable(convertToInstant(aggregationDesign.getCreatedTimestamp())),
                 Optional.ofNullable(convertToInstant(aggregationDesign.getLastSchemaUpdate())),
@@ -148,7 +149,6 @@ public class MajorObjectConvertor {
                 Optional.ofNullable(convertAggregationDesignDimensions(aggregationDesign.getDimensions())),
                 Optional.ofNullable(convertAggregationDesignAggregations(aggregationDesign.getAggregations())),
                 Optional.ofNullable(aggregationDesign.getEstimatedPerformanceGain()));
-            return res;
         }
         return null;
     }
@@ -157,14 +157,14 @@ public class MajorObjectConvertor {
         if (dimensions != null) {
             return convertAggregationDesignDimensionList(dimensions.getDimension());
         }
-        return null;
+        return List.of();
     }
 
     private static List<AggregationDesignDimension> convertAggregationDesignDimensionList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesignDimension> dimensionList) {
         if (dimensionList != null) {
-            return dimensionList.stream().map(MajorObjectConvertor::convertAggregationDesignDimension).collect(Collectors.toList());
+            return dimensionList.stream().map(MajorObjectConvertor::convertAggregationDesignDimension).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static AggregationDesignDimension convertAggregationDesignDimension(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesignDimension aggregationDesignDimension) {
@@ -182,14 +182,14 @@ public class MajorObjectConvertor {
         if (attributes != null) {
             return convertAggregationDesignAttributeList(attributes.getAttribute());
         }
-        return null;
+        return List.of();
     }
 
     private static List<AggregationDesignAttribute> convertAggregationDesignAttributeList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesignAttribute> attributeList) {
         if (attributeList != null) {
-            return attributeList.stream().map(MajorObjectConvertor::convertAggregationDesignAttribute).collect(Collectors.toList());
+            return attributeList.stream().map(MajorObjectConvertor::convertAggregationDesignAttribute).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static AggregationDesignAttribute convertAggregationDesignAttribute(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDesignAttribute aggregationDesignAttribute) {
@@ -205,14 +205,14 @@ public class MajorObjectConvertor {
         if (aggregations != null) {
             return convertAggregationList(aggregations.getAggregation());
         }
-        return null;
+        return List.of();
     }
 
     private static List<Aggregation> convertAggregationList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Aggregation> aggregationList) {
         if (aggregationList != null) {
-            return aggregationList.stream().map(MajorObjectConvertor::convertAggregation).collect(Collectors.toList());
+            return aggregationList.stream().map(MajorObjectConvertor::convertAggregation).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static Aggregation convertAggregation(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Aggregation aggregation) {
@@ -231,14 +231,14 @@ public class MajorObjectConvertor {
         if (dimensions != null) {
             return convertAggregationDimensionList(dimensions.getDimension());
         }
-        return null;
+        return List.of();
     }
 
     private static List<AggregationDimension> convertAggregationDimensionList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDimension> dimensionList) {
         if (dimensionList != null) {
-            return dimensionList.stream().map(MajorObjectConvertor::convertAggregationDimension).collect(Collectors.toList());
+            return dimensionList.stream().map(MajorObjectConvertor::convertAggregationDimension).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static AggregationDimension convertAggregationDimension(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationDimension aggregationDimension) {
@@ -255,14 +255,14 @@ public class MajorObjectConvertor {
         if (attributes != null) {
             return convertAggregationAttributeList(attributes.getAttribute());
         }
-        return null;
+        return List.of();
     }
 
     private static List<AggregationAttribute> convertAggregationAttributeList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationAttribute> attributeList) {
         if (attributeList != null) {
-            return attributeList.stream().map(MajorObjectConvertor::convertAggregationAttribute).collect(Collectors.toList());
+            return attributeList.stream().map(MajorObjectConvertor::convertAggregationAttribute).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static AggregationAttribute convertAggregationAttribute(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AggregationAttribute aggregationAttribute) {

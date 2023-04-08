@@ -13,19 +13,21 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Member;
 import org.eclipse.daanse.xmla.api.xmla.Role;
 import org.eclipse.daanse.xmla.model.record.xmla.MemberR;
 import org.eclipse.daanse.xmla.model.record.xmla.RoleR;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
-
 public class RoleConvertor {
+
+	private RoleConvertor() {
+	}
 
     public static Role convertRole(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Role role) {
         if (role != null) {
@@ -42,9 +44,9 @@ public class RoleConvertor {
 
     private static List<Member> convertMemberList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Member> list) {
         if (list != null) {
-            return list.stream().map(RoleConvertor::convertMember).collect(Collectors.toList());
+            return list.stream().map(RoleConvertor::convertMember).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static Member convertMember(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Member member) {
@@ -57,8 +59,8 @@ public class RoleConvertor {
 
     public static List<Role> convertRoleList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Role> list) {
         if (list != null) {
-            return list.stream().map(RoleConvertor::convertRole).collect(Collectors.toList());
+            return list.stream().map(RoleConvertor::convertRole).toList();
         }
-        return null;
+        return List.of();
     }
 }

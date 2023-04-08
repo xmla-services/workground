@@ -13,26 +13,28 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.BindingConvertor.convertBinding;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import org.eclipse.daanse.xmla.api.xmla.DataItemFormatEnum;
 import org.eclipse.daanse.xmla.api.xmla.InvalidXmlCharacterEnum;
 import org.eclipse.daanse.xmla.api.xmla.NullProcessingEnum;
 import org.eclipse.daanse.xmla.model.record.xmla.DataItemR;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.BindingConvertor.convertBinding;
-
 public class DataItemConvertor {
+
+	private DataItemConvertor() {
+	}
 
     public static List<DataItem> convertDataItemList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataItem> keyColumnList) {
         if (keyColumnList != null) {
-            return keyColumnList.stream().map(DataItemConvertor::convertDataItem).collect(Collectors.toList());
+            return keyColumnList.stream().map(DataItemConvertor::convertDataItem).toList();
         }
-        return null;
+        return List.of();
     }
 
     public static DataItem convertDataItem(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataItem source) {

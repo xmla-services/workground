@@ -70,7 +70,7 @@ public class DbCreatorServiceImpl implements DbCreatorService {
             t.getSchema(),
             t.getName(),
             t.getConstraint().values().stream().toList(),
-            t.getColumns().values().stream().toList())).collect(Collectors.toList());
+            t.getColumns().values().stream().toList())).toList();
         return new DBStructure(schemaName, tList);
     }
 

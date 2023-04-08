@@ -13,23 +13,27 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
-import org.eclipse.daanse.xmla.api.exception.StartEnd;
-import org.eclipse.daanse.xmla.api.exception.Type;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertException;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertMessages;
+
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.eclipse.daanse.xmla.api.mddataset.CellInfoItem;
 import org.eclipse.daanse.xmla.api.mddataset.Value;
 import org.eclipse.daanse.xmla.api.msxmla.MemberRef;
 import org.eclipse.daanse.xmla.api.msxmla.MembersLookup;
 import org.eclipse.daanse.xmla.api.msxmla.NormTuple;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine200.WarningColumn;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine200.WarningLocationObject;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine200.WarningMeasure;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.msxmla.NormTupleSet;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.msxmla.NormTuplesType;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_exception.ErrorType;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_exception.Exception;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_exception.MessageLocation;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_exception.Messages;
-import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_exception.WarningType;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_mddataset.Axes;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_mddataset.AxesInfo;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_mddataset.Axis;
@@ -53,22 +57,10 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_mddataset.Union;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.Serializable;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertException;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertMessages;
-
 public class MdDataSetConvertor {
+
+	private MdDataSetConvertor() {
+	}
 
     public static final String NAME = "name";
     public static final String TYPE = "type";
@@ -104,9 +96,9 @@ public class MdDataSetConvertor {
 
     private static List<CellType> convertCellTypeList(List<org.eclipse.daanse.xmla.api.mddataset.CellType> cellTypeList) {
         if (cellTypeList != null) {
-            return cellTypeList.stream().map(MdDataSetConvertor::convertCellType).collect(Collectors.toList());
+            return cellTypeList.stream().map(MdDataSetConvertor::convertCellType).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static CellType convertCellType(org.eclipse.daanse.xmla.api.mddataset.CellType cellType) {
@@ -131,9 +123,9 @@ public class MdDataSetConvertor {
 
     private static List<CellTypeError> convertCellTypeErrorList(List<org.eclipse.daanse.xmla.api.mddataset.CellTypeError> errorList) {
         if (errorList != null) {
-            return errorList.stream().map(MdDataSetConvertor::convertCellTypeError).collect(Collectors.toList());
+            return errorList.stream().map(MdDataSetConvertor::convertCellTypeError).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static CellTypeError convertCellTypeError(org.eclipse.daanse.xmla.api.mddataset.CellTypeError cellTypeError) {
@@ -148,9 +140,9 @@ public class MdDataSetConvertor {
 
     private static List<Element> convertElementList(List<CellInfoItem> anyList) {
         if (anyList != null) {
-            return anyList.stream().map(MdDataSetConvertor::convertElement).collect(Collectors.toList());
+            return anyList.stream().map(MdDataSetConvertor::convertElement).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static Element convertElement(CellInfoItem cellInfoItem) {
@@ -161,9 +153,9 @@ public class MdDataSetConvertor {
                     .newDocument();
                 Element element = document.createElement(cellInfoItem.tagName());
                 element.setAttribute(NAME, cellInfoItem.name());
-                if (cellInfoItem.type() != null && cellInfoItem.type().isPresent()) {
-                    element.setAttribute(TYPE, cellInfoItem.type().get());
-                }
+                
+				cellInfoItem.type().ifPresent(type -> element.setAttribute(TYPE, type));
+
                 return element;
             } catch (ParserConfigurationException e) {
                 throw new RuntimeException(e);
@@ -195,9 +187,9 @@ public class MdDataSetConvertor {
 
     private static List<OlapInfoCube> convertOlapInfoCubeList(List<org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube> cubeList) {
         if (cubeList != null) {
-            return cubeList.stream().map(MdDataSetConvertor::convertOlapInfoCube).collect(Collectors.toList());
+            return cubeList.stream().map(MdDataSetConvertor::convertOlapInfoCube).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static OlapInfoCube convertOlapInfoCube(org.eclipse.daanse.xmla.api.mddataset.OlapInfoCube olapInfoCube) {
@@ -245,9 +237,9 @@ public class MdDataSetConvertor {
 
     private static List<AxisInfo> convertAxisInfoList(List<org.eclipse.daanse.xmla.api.mddataset.AxisInfo> axisInfoList) {
         if (axisInfoList != null) {
-            return axisInfoList.stream().map(MdDataSetConvertor::convertAxisInfo).collect(Collectors.toList());
+            return axisInfoList.stream().map(MdDataSetConvertor::convertAxisInfo).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static AxisInfo convertAxisInfo(org.eclipse.daanse.xmla.api.mddataset.AxisInfo axisInfo) {
@@ -262,9 +254,9 @@ public class MdDataSetConvertor {
 
     private static List<HierarchyInfo> convertHierarchyInfoList(List<org.eclipse.daanse.xmla.api.mddataset.HierarchyInfo> hierarchyInfoList) {
         if (hierarchyInfoList != null) {
-            return hierarchyInfoList.stream().map(MdDataSetConvertor::convertHierarchyInfo).collect(Collectors.toList());
+            return hierarchyInfoList.stream().map(MdDataSetConvertor::convertHierarchyInfo).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static HierarchyInfo convertHierarchyInfo(org.eclipse.daanse.xmla.api.mddataset.HierarchyInfo hierarchyInfo) {
@@ -288,9 +280,9 @@ public class MdDataSetConvertor {
 
     private static List<Axis> convertAxisList(List<org.eclipse.daanse.xmla.api.mddataset.Axis> axisList) {
         if (axisList != null) {
-            return axisList.stream().map(MdDataSetConvertor::convertAxis).collect(Collectors.toList());
+            return axisList.stream().map(MdDataSetConvertor::convertAxis).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static Axis convertAxis(org.eclipse.daanse.xmla.api.mddataset.Axis axis) {
@@ -305,42 +297,37 @@ public class MdDataSetConvertor {
 
     private static List<Object> convertSetTypeList(List<org.eclipse.daanse.xmla.api.mddataset.Type> setTypeList) {
         if (setTypeList != null) {
-            return setTypeList.stream().map(MdDataSetConvertor::convertSetType).collect(Collectors.toList());
+            return setTypeList.stream().map(MdDataSetConvertor::convertSetType).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static Object convertSetType(org.eclipse.daanse.xmla.api.mddataset.Type type) {
         if (type != null) {
-            if (type instanceof org.eclipse.daanse.xmla.api.mddataset.MembersType) {
-                org.eclipse.daanse.xmla.api.mddataset.MembersType mt = (org.eclipse.daanse.xmla.api.mddataset.MembersType) type;
+            if (type instanceof org.eclipse.daanse.xmla.api.mddataset.MembersType mt) {
                 MembersType res = new MembersType();
                 res.setHierarchy(mt.hierarchy());
                 res.setMember(convertMemberTypeList(mt.member()));
                 return res;
             }
-            if (type instanceof org.eclipse.daanse.xmla.api.mddataset.TuplesType) {
-                org.eclipse.daanse.xmla.api.mddataset.TuplesType tt = (org.eclipse.daanse.xmla.api.mddataset.TuplesType) type;
+            if (type instanceof org.eclipse.daanse.xmla.api.mddataset.TuplesType tt) {
                 TuplesType res = new TuplesType();
                 res.setTuple(convertTupleTypeList(tt.tuple()));
                 return res;
             }
-            if (type instanceof org.eclipse.daanse.xmla.api.mddataset.SetListType) {
-                org.eclipse.daanse.xmla.api.mddataset.SetListType st = (org.eclipse.daanse.xmla.api.mddataset.SetListType) type;
+            if (type instanceof org.eclipse.daanse.xmla.api.mddataset.SetListType st) {
                 SetListType res = new SetListType();
                 res.setSize(st.size());
                 res.setSetType(convertSetTypeList(st.setType()));
                 return res;
             }
-            if (type instanceof org.eclipse.daanse.xmla.api.mddataset.NormTupleSet) {
-                org.eclipse.daanse.xmla.api.mddataset.NormTupleSet nts = (org.eclipse.daanse.xmla.api.mddataset.NormTupleSet) type;
+            if (type instanceof org.eclipse.daanse.xmla.api.mddataset.NormTupleSet nts) {
                 NormTupleSet res = new NormTupleSet();
                 res.setMembersLookup(convertMembersLookup(nts.membersLookup()));
                 res.setNormTuples(convertNormTuplesType(nts.normTuples()));
                 return res;
             }
-            if (type instanceof org.eclipse.daanse.xmla.api.mddataset.Union) {
-                org.eclipse.daanse.xmla.api.mddataset.Union u = (org.eclipse.daanse.xmla.api.mddataset.Union) type;
+            if (type instanceof org.eclipse.daanse.xmla.api.mddataset.Union u) {
                 Union res = new Union();
                 res.setSetType(convertSetTypeList(u.setType()));
                 return res;
@@ -360,9 +347,9 @@ public class MdDataSetConvertor {
 
     private static List<NormTuplesType.NormTuple> convertNormTupleList(List<NormTuple> normTupleList) {
         if (normTupleList != null) {
-            return normTupleList.stream().map(MdDataSetConvertor::convertNormTuple).collect(Collectors.toList());
+            return normTupleList.stream().map(MdDataSetConvertor::convertNormTuple).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static NormTuplesType.NormTuple convertNormTuple(NormTuple normTuple) {
@@ -376,9 +363,9 @@ public class MdDataSetConvertor {
 
     private static List<NormTuplesType.NormTuple.MemberRef> convertMemberRefList(List<MemberRef> memberRefList) {
         if (memberRefList != null) {
-            return memberRefList.stream().map(MdDataSetConvertor::convertMemberRef).collect(Collectors.toList());
+            return memberRefList.stream().map(MdDataSetConvertor::convertMemberRef).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static NormTuplesType.NormTuple.MemberRef convertMemberRef(MemberRef memberRef) {
@@ -402,9 +389,9 @@ public class MdDataSetConvertor {
 
     private static List<TupleType> convertTupleTypeList(List<org.eclipse.daanse.xmla.api.mddataset.TupleType> tupleTypeList) {
         if (tupleTypeList != null) {
-            return tupleTypeList.stream().map(MdDataSetConvertor::convertTupleType).collect(Collectors.toList());
+            return tupleTypeList.stream().map(MdDataSetConvertor::convertTupleType).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static TupleType convertTupleType(org.eclipse.daanse.xmla.api.mddataset.TupleType tupleType) {
@@ -418,9 +405,9 @@ public class MdDataSetConvertor {
 
     private static List<MemberType> convertMemberTypeList(List<org.eclipse.daanse.xmla.api.mddataset.MemberType> memberTypeList) {
         if (memberTypeList != null) {
-            return memberTypeList.stream().map(MdDataSetConvertor::convertMemberType).collect(Collectors.toList());
+            return memberTypeList.stream().map(MdDataSetConvertor::convertMemberType).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static MemberType convertMemberType(org.eclipse.daanse.xmla.api.mddataset.MemberType memberType) {
