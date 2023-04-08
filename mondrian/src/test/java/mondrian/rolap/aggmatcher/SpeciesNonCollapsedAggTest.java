@@ -70,7 +70,8 @@ public class SpeciesNonCollapsedAggTest extends AggTableTestCase {
         + "</Schema>";
 
 
-    @BeforeEach
+    @Override
+	@BeforeEach
     public void beforeEach() {
         super.beforeEach();
         final MondrianProperties props = MondrianProperties.instance();
@@ -79,22 +80,26 @@ public class SpeciesNonCollapsedAggTest extends AggTableTestCase {
         //super.getConnection().getCacheControl(null).flushSchemaCache();
     }
 
-    @AfterEach
+    @Override
+	@AfterEach
     public void afterEach() {
         propSaver.reset();
     }
 
-    protected String getFileName() {
+    @Override
+	protected String getFileName() {
         return "species_schema.csv";
     }
 
 
-    protected void prepareContext(TestingContext context) {
+    @Override
+	protected void prepareContext(TestingContext context) {
         super.prepareContext(context);
         TestUtil.withSchema(context, ANIMAL_SCHEMA);
     }
 
-    protected String getCubeDescription() {
+    @Override
+	protected String getCubeDescription() {
         return "";
     }
 

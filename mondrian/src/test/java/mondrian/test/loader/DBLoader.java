@@ -283,7 +283,8 @@ public abstract class DBLoader {
     }
 
     static final RowStream EMPTY_ROW_STREAM = new RowStream() {
-        public Iterator<Row> iterator() {
+        @Override
+		public Iterator<Row> iterator() {
             List<Row> list = Collections.emptyList();
             return list.iterator();
         }
@@ -420,7 +421,8 @@ public abstract class DBLoader {
         public RowDefault(Object[] values) {
             this.values = values;
         }
-        public Object[] values() {
+        @Override
+		public Object[] values() {
             return this.values;
         }
     }

@@ -39,11 +39,13 @@ public class SqlStatementExecuteEvent extends SqlStatementEvent {
         this.executeNanos = executeNanos;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuilder("SqlStatementExecuteEvent(").append(sqlStatementId).append(")").toString();
     }
 
-    public <T> T accept(Visitor<T> visitor) {
+    @Override
+	public <T> T accept(Visitor<T> visitor) {
         return visitor.visit(this);
     }
 }

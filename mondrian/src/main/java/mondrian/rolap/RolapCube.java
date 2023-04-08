@@ -1051,11 +1051,13 @@ public class RolapCube extends CubeBase {
         return false;
     }
 
-    protected Logger getLogger() {
+    @Override
+	protected Logger getLogger() {
         return LOGGER;
     }
 
-    public Map<String, Object> getMetadata() {
+    @Override
+	public Map<String, Object> getMetadata() {
         return metadata;
     }
 
@@ -1248,7 +1250,8 @@ public class RolapCube extends CubeBase {
                 conn,
                 "RolapCube.resolveCalcMembers",
                 new Locus.Action<Query>() {
-                    public Query execute() {
+                    @Override
+					public Query execute() {
                         final Query queryExp =
                             conn.parseQuery(queryString);
                         queryExp.resolve();
@@ -1607,14 +1610,16 @@ public class RolapCube extends CubeBase {
         }
     }
 
-    public RolapSchema getSchema() {
+    @Override
+	public RolapSchema getSchema() {
         return schema;
     }
 
     /**
      * Returns the named sets of this cube.
      */
-    public NamedSet[] getNamedSets() {
+    @Override
+	public NamedSet[] getNamedSets() {
         NamedSet[] namedSetsArray = new NamedSet[namedSetList.size()];
         for (int i = 0; i < namedSetList.size(); i++) {
             namedSetsArray[i] = namedSetList.get(i).getNamedSet();
@@ -1638,7 +1643,8 @@ public class RolapCube extends CubeBase {
         return schemaReader;
     }
 
-    public SchemaReader getSchemaReader(Role role) {
+    @Override
+	public SchemaReader getSchemaReader(Role role) {
         if (role == null) {
             return getSchemaReader();
         } else {
@@ -2719,7 +2725,8 @@ public class RolapCube extends CubeBase {
         }
     }
 
-    public Member[] getMembersForQuery(String query, List<Member> calcMembers) {
+    @Override
+	public Member[] getMembersForQuery(String query, List<Member> calcMembers) {
         throw new UnsupportedOperationException();
     }
 
@@ -2747,7 +2754,8 @@ public class RolapCube extends CubeBase {
      * @param tuple array of members
      * @return Set of dimensions that do not exist (non joining) in this cube
      */
-    public Set<Dimension> nonJoiningDimensions(Member[] tuple) {
+    @Override
+	public Set<Dimension> nonJoiningDimensions(Member[] tuple) {
         Set<Dimension> otherDims = new HashSet<Dimension>();
         for (Member member : tuple) {
             if (!member.isCalculated()) {
@@ -2766,7 +2774,8 @@ public class RolapCube extends CubeBase {
      * cube
      * @return Set of dimensions that do not exist (non joining) in this cube
      */
-    public Set<Dimension> nonJoiningDimensions(Set<Dimension> otherDims) {
+    @Override
+	public Set<Dimension> nonJoiningDimensions(Set<Dimension> otherDims) {
         Dimension[] baseCubeDimensions = getDimensions();
         Set<String>  baseCubeDimNames = new HashSet<String>();
         for (Dimension baseCubeDimension : baseCubeDimensions) {
@@ -2781,7 +2790,8 @@ public class RolapCube extends CubeBase {
         return nonJoiningDimensions;
     }
 
-    public List<Member> getMeasures() {
+    @Override
+	public List<Member> getMeasures() {
         Level measuresLevel = dimensions[0].getHierarchies()[0].getLevels()[0];
         return getSchemaReader().getLevelMembers(measuresLevel, true);
     }
@@ -2945,7 +2955,8 @@ public class RolapCube extends CubeBase {
         return lookupChild(schemaReader, s, MatchType.EXACT);
     }
 
-    public OlapElement lookupChild(
+    @Override
+	public OlapElement lookupChild(
         SchemaReader schemaReader, Id.Segment s, MatchType matchType)
     {
         if (!(s instanceof Id.NameSegment)) {
@@ -3079,7 +3090,8 @@ public class RolapCube extends CubeBase {
         }
     }
 
-    public Member createCalculatedMember(String xml) {
+    @Override
+	public Member createCalculatedMember(String xml) {
         org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMember xmlCalcMember;
         try {
             final Parser xmlParser = XOMUtil.createDefaultParser();
@@ -3224,14 +3236,16 @@ public class RolapCube extends CubeBase {
             assert role != null : "precondition: role != null";
         }
 
-        public List<Member> getLevelMembers(
+        @Override
+		public List<Member> getLevelMembers(
                 Level level,
                 boolean includeCalculated)
         {
             return getLevelMembers(level, includeCalculated, null);
         }
 
-        public List<Member> getLevelMembers(
+        @Override
+		public List<Member> getLevelMembers(
             Level level,
             boolean includeCalculated,
             Evaluator context)
@@ -3243,7 +3257,8 @@ public class RolapCube extends CubeBase {
             return members;
         }
 
-        public Member getCalculatedMember(List<Id.Segment> nameParts) {
+        @Override
+		public Member getCalculatedMember(List<Id.Segment> nameParts) {
             final String uniqueName = Util.implode(nameParts);
             for (Formula formula : calculatedMemberList) {
                 final String formulaUniqueName =
@@ -3257,7 +3272,8 @@ public class RolapCube extends CubeBase {
             return null;
         }
 
-        public NamedSet getNamedSet(List<Id.Segment> segments) {
+        @Override
+		public NamedSet getNamedSet(List<Id.Segment> segments) {
             if (segments.size() == 1) {
                 Id.Segment segment = segments.get(0);
                 for (Formula namedSet : namedSetList) {
@@ -3269,7 +3285,8 @@ public class RolapCube extends CubeBase {
             return super.getNamedSet(segments);
         }
 
-        public List<Member> getCalculatedMembers(Hierarchy hierarchy) {
+        @Override
+		public List<Member> getCalculatedMembers(Hierarchy hierarchy) {
             ArrayList<Member> list = new ArrayList<Member>();
 
             if (getRole().getAccess(hierarchy) == Access.NONE) {
@@ -3284,7 +3301,8 @@ public class RolapCube extends CubeBase {
             return list;
         }
 
-        public List<Member> getCalculatedMembers(Level level) {
+        @Override
+		public List<Member> getCalculatedMembers(Level level) {
             List<Member> list = new ArrayList<Member>();
 
             if (getRole().getAccess(level) == Access.NONE) {
@@ -3299,7 +3317,8 @@ public class RolapCube extends CubeBase {
             return list;
         }
 
-        public List<Member> getCalculatedMembers() {
+        @Override
+		public List<Member> getCalculatedMembers() {
 //            List<Member> list =
 //                roleToAccessibleCalculatedMembers.get(getRole());
 //            if (list == null) {
@@ -3330,13 +3349,15 @@ public class RolapCube extends CubeBase {
             return list;
         }
 
-        public SchemaReader withoutAccessControl() {
+        @Override
+		public SchemaReader withoutAccessControl() {
             assert getClass() == RolapCubeSchemaReader.class
                 : new StringBuilder("Derived class ").append(getClass()).append(" must override method").toString();
             return RolapCube.this.getSchemaReader();
         }
 
-        public Member getMemberByUniqueName(
+        @Override
+		public Member getMemberByUniqueName(
             List<Id.Segment> uniqueNameParts,
             boolean failIfNotFound,
             MatchType matchType)
@@ -3365,11 +3386,13 @@ public class RolapCube extends CubeBase {
             }
         }
 
-        public Cube getCube() {
+        @Override
+		public Cube getCube() {
             return RolapCube.this;
         }
 
-        public List<NameResolver.Namespace> getNamespaces() {
+        @Override
+		public List<NameResolver.Namespace> getNamespaces() {
             final List<NameResolver.Namespace> list =
                 new ArrayList<NameResolver.Namespace>();
             list.add(this);
@@ -3377,7 +3400,8 @@ public class RolapCube extends CubeBase {
             return list;
         }
 
-        public OlapElement lookupChild(
+        @Override
+		public OlapElement lookupChild(
             OlapElement parent,
             IdentifierSegment segment,
             MatchType matchType)
@@ -3386,7 +3410,8 @@ public class RolapCube extends CubeBase {
             return lookupChild(parent, segment);
         }
 
-        public OlapElement lookupChild(
+        @Override
+		public OlapElement lookupChild(
             OlapElement parent,
             IdentifierSegment segment)
         {
@@ -3463,7 +3488,8 @@ public class RolapCube extends CubeBase {
             this.calcMembersSeen = new ArrayList<RolapCalculatedMember>();
         }
 
-        public Object visit(MemberExpr memberExpr)
+        @Override
+		public Object visit(MemberExpr memberExpr)
         {
             Member member = memberExpr.getMember();
             if (member instanceof RolapCalculatedMember) {
@@ -3527,7 +3553,8 @@ public class RolapCube extends CubeBase {
 
     public static class CubeComparator implements Comparator<RolapCube>
     {
-        public int compare(RolapCube c1, RolapCube c2)
+        @Override
+		public int compare(RolapCube c1, RolapCube c2)
         {
             return c1.getName().compareTo(c2.getName());
         }
@@ -3546,7 +3573,8 @@ public class RolapCube extends CubeBase {
     static Exp createDummyExp(final Calc calc) {
         return new ResolvedFunCall(
             new FunDefBase("dummy", null, "fn") {
-                public Calc compileCall(
+                @Override
+				public Calc compileCall(
                     ResolvedFunCall call, ExpCompiler compiler)
                 {
                     return calc;

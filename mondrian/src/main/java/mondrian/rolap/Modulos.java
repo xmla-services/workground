@@ -72,10 +72,13 @@ public interface Modulos {
             this.modulos = new int[lengths.length + 1];
             this.modulos[0] = 1;
         }
-        public abstract int[] getCellPos(int cellOrdinal);
-        public abstract int getCellOrdinal(int[] pos);
+        @Override
+		public abstract int[] getCellPos(int cellOrdinal);
+        @Override
+		public abstract int getCellOrdinal(int[] pos);
 
-        public String toString() {
+        @Override
+		public String toString() {
             StringBuilder buf = new StringBuilder();
             buf.append('(');
             for (int i = 0; i < modulos.length; i++) {
@@ -93,10 +96,12 @@ public interface Modulos {
         private Zero(final Axis[] axes) {
             super(axes);
         }
-        public final int[] getCellPos(final int cellOrdinal) {
+        @Override
+		public final int[] getCellPos(final int cellOrdinal) {
             return pos;
         }
-        public final int getCellOrdinal(final int[] pos) {
+        @Override
+		public final int getCellOrdinal(final int[] pos) {
             return 0;
         }
     }
@@ -106,12 +111,14 @@ public interface Modulos {
 
             this.modulos[1] = axes[0].getPositions().size();
         }
-        public final int[] getCellPos(final int cellOrdinal) {
+        @Override
+		public final int[] getCellPos(final int cellOrdinal) {
             return new int[] {
                 (cellOrdinal % this.modulos[1])
             };
         }
-        public final int getCellOrdinal(final int[] pos) {
+        @Override
+		public final int getCellOrdinal(final int[] pos) {
             return (pos[0] * modulos[0]);
         }
     }
@@ -124,14 +131,16 @@ public interface Modulos {
             modulo *= axes[1].getPositions().size();
             this.modulos[2] = modulo;
         }
-        public final int[] getCellPos(final int cellOrdinal) {
+        @Override
+		public final int[] getCellPos(final int cellOrdinal) {
             final int[] modulos = this.modulos;
             return new int[] {
                 (cellOrdinal % modulos[1]),
                 (cellOrdinal % modulos[2]) / modulos[1]
             };
         }
-        public final int getCellOrdinal(final int[] pos) {
+        @Override
+		public final int getCellOrdinal(final int[] pos) {
             final int[] modulos = this.modulos;
             return (pos[0] * modulos[0])
                 + (pos[1] * modulos[1]);
@@ -148,7 +157,8 @@ public interface Modulos {
             modulo *= axes[2].getPositions().size();
             this.modulos[3] = modulo;
         }
-        public final int[] getCellPos(final int cellOrdinal) {
+        @Override
+		public final int[] getCellPos(final int cellOrdinal) {
             final int[] modulos = this.modulos;
             return new int[] {
                 (cellOrdinal % modulos[1]),
@@ -156,7 +166,8 @@ public interface Modulos {
                 (cellOrdinal % modulos[3]) / modulos[2]
             };
         }
-        public final int getCellOrdinal(final int[] pos) {
+        @Override
+		public final int getCellOrdinal(final int[] pos) {
             final int[] modulos = this.modulos;
             return (pos[0] * modulos[0])
                 + (pos[1] * modulos[1])
@@ -182,7 +193,8 @@ public interface Modulos {
                 this.modulos[i + 1] = modulo;
             }
         }
-        public int[] getCellPos(final int cellOrdinal) {
+        @Override
+		public int[] getCellPos(final int cellOrdinal) {
             final int[] modulos = this.modulos;
             final int size = modulos.length - 1;
             final int[] pos = new int[size];
@@ -191,7 +203,8 @@ public interface Modulos {
             }
             return pos;
         }
-        public int getCellOrdinal(final int[] pos) {
+        @Override
+		public int getCellOrdinal(final int[] pos) {
             final int[] modulos = this.modulos;
             final int size = modulos.length - 1;
             int ordinal = 0;

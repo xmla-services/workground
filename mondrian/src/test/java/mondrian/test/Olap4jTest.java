@@ -427,7 +427,8 @@ public class Olap4jTest {
             Executors.newSingleThreadExecutor();
         executor.execute(
             new Runnable() {
-                public void run() {
+                @Override
+				public void run() {
                     try {
                         ResultSetMetaData metaData = resultSet.getMetaData();
                         results.add("background " + metaData.getColumnCount());
@@ -442,7 +443,8 @@ public class Olap4jTest {
         // error saying that the statement has been closed.
         executor.execute(
             new Runnable() {
-                public void run() {
+                @Override
+				public void run() {
                     try {
                         try {
                             Thread.sleep(1000);
@@ -533,7 +535,8 @@ public class Olap4jTest {
 
             final Thread thread = new Thread(
                 new Runnable() {
-                    public void run() {
+                    @Override
+					public void run() {
                         final Random random = new Random();
                         while (!finished.get()) {
                             try {

@@ -62,19 +62,23 @@ public class ArraySortedSet<E extends Comparable<E>>
         this.end = end;
     }
 
-    public Iterator<E> iterator() {
+    @Override
+	public Iterator<E> iterator() {
         return asList().iterator();
     }
 
-    public int size() {
+    @Override
+	public int size() {
         return end - start;
     }
 
-    public Comparator<? super E> comparator() {
+    @Override
+	public Comparator<? super E> comparator() {
         return null;
     }
 
-    public SortedSet<E> subSet(E fromElement, E toElement) {
+    @Override
+	public SortedSet<E> subSet(E fromElement, E toElement) {
         int from = Util.binarySearch(values, start, end, fromElement);
         if (from < 0) {
             from = - (from + 1);
@@ -86,7 +90,8 @@ public class ArraySortedSet<E extends Comparable<E>>
         return subset(from, to);
     }
 
-    public SortedSet<E> headSet(E toElement) {
+    @Override
+	public SortedSet<E> headSet(E toElement) {
         int to = Util.binarySearch(values, start, end, toElement);
         if (to < 0) {
             to = - (to + 1);
@@ -94,7 +99,8 @@ public class ArraySortedSet<E extends Comparable<E>>
         return subset(start, to);
     }
 
-    public SortedSet<E> tailSet(E fromElement) {
+    @Override
+	public SortedSet<E> tailSet(E fromElement) {
         int from = Util.binarySearch(values, start, end, fromElement);
         if (from < 0) {
             from = - (from + 1);
@@ -118,7 +124,8 @@ public class ArraySortedSet<E extends Comparable<E>>
         return list;
     }
 
-    public E first() {
+    @Override
+	public E first() {
         try {
             return values[start];
         } catch (ArrayIndexOutOfBoundsException e) {
@@ -126,7 +133,8 @@ public class ArraySortedSet<E extends Comparable<E>>
         }
     }
 
-    public E last() {
+    @Override
+	public E last() {
         try {
             return values[end - 1];
         } catch (ArrayIndexOutOfBoundsException e) {

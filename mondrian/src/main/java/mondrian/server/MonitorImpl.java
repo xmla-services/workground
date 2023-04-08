@@ -121,7 +121,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
     // all servers.
   }
 
-  public void sendEvent( Event event ) {
+  @Override
+public void sendEvent( Event event ) {
     // The implementation does not need to take any locks.
     try {
       if ( Thread.interrupted() ) {
@@ -137,21 +138,25 @@ class MonitorImpl implements Monitor, MonitorMXBean {
     }
   }
 
-  public ServerInfo getServer() {
+  @Override
+public ServerInfo getServer() {
     return (ServerInfo) execute( new ServerCommand() );
   }
 
-  public List<ConnectionInfo> getConnections() {
+  @Override
+public List<ConnectionInfo> getConnections() {
     // noinspection unchecked
     return (List<ConnectionInfo>) execute( new ConnectionsCommand() );
   }
 
-  public List<StatementInfo> getStatements() {
+  @Override
+public List<StatementInfo> getStatements() {
     // noinspection unchecked
     return (List<StatementInfo>) execute( new StatementsCommand() );
   }
 
-  public List<SqlStatementInfo> getSqlStatements() {
+  @Override
+public List<SqlStatementInfo> getSqlStatements() {
     // noinspection unchecked
     return (List<SqlStatementInfo>) execute( new SqlStatementsCommand() );
   }
@@ -177,31 +182,36 @@ class MonitorImpl implements Monitor, MonitorMXBean {
   }
 
   static class StatementsCommand extends Command {
-    public <T> T accept( Visitor<T> visitor ) {
+    @Override
+	public <T> T accept( Visitor<T> visitor ) {
       return ( (CommandVisitor<T>) visitor ).visit( this );
     }
   }
 
   static class SqlStatementsCommand extends Command {
-    public <T> T accept( Visitor<T> visitor ) {
+    @Override
+	public <T> T accept( Visitor<T> visitor ) {
       return ( (CommandVisitor<T>) visitor ).visit( this );
     }
   }
 
   static class ConnectionsCommand extends Command {
-    public <T> T accept( Visitor<T> visitor ) {
+    @Override
+	public <T> T accept( Visitor<T> visitor ) {
       return ( (CommandVisitor<T>) visitor ).visit( this );
     }
   }
 
   static class ServerCommand extends Command {
-    public <T> T accept( Visitor<T> visitor ) {
+    @Override
+	public <T> T accept( Visitor<T> visitor ) {
       return ( (CommandVisitor<T>) visitor ).visit( this );
     }
   }
 
   static class ShutdownCommand extends Command {
-    public <T> T accept( Visitor<T> visitor ) {
+    @Override
+	public <T> T accept( Visitor<T> visitor ) {
       return ( (CommandVisitor<T>) visitor ).visit( this );
     }
   }
@@ -388,7 +398,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
           private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
           private static final long serialVersionUID = 1L;
 
-          protected boolean removeEldestEntry( Map.Entry<Integer, MutableConnectionInfo> e ) {
+          @Override
+		protected boolean removeEldestEntry( Map.Entry<Integer, MutableConnectionInfo> e ) {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
                 RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("ConnectionInfo(").append(e.getKey())
@@ -408,7 +419,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
           private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
           private static final long serialVersionUID = 1L;
 
-          protected boolean removeEldestEntry( Map.Entry<Long, MutableSqlStatementInfo> e ) {
+          @Override
+		protected boolean removeEldestEntry( Map.Entry<Long, MutableSqlStatementInfo> e ) {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
                 RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("StatementInfo(").append(e.getKey())
@@ -426,7 +438,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
           private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
           private static final long serialVersionUID = 1L;
 
-          protected boolean removeEldestEntry( Map.Entry<Long, MutableStatementInfo> e ) {
+          @Override
+		protected boolean removeEldestEntry( Map.Entry<Long, MutableStatementInfo> e ) {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
                 RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("StatementInfo(").append(e.getKey())
@@ -444,7 +457,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
           private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
           private static final long serialVersionUID = 1L;
 
-          protected boolean removeEldestEntry( Map.Entry<Long, MutableExecutionInfo> e ) {
+          @Override
+		protected boolean removeEldestEntry( Map.Entry<Long, MutableExecutionInfo> e ) {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
                 RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("ExecutionInfo(").append(e.getKey())
@@ -466,7 +480,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
           private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
           private static final long serialVersionUID = 1L;
 
-          protected boolean removeEldestEntry( Map.Entry<Long, MutableExecutionInfo> e ) {
+          @Override
+		protected boolean removeEldestEntry( Map.Entry<Long, MutableExecutionInfo> e ) {
             if ( size() > maxSize ) {
               if ( RolapUtil.MONITOR_LOGGER.isTraceEnabled() ) {
                 RolapUtil.MONITOR_LOGGER.trace( new StringBuilder("Retired ExecutionInfo(").append(e.getKey())
@@ -491,7 +506,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       return null;
     }
 
-    public Object visit( ConnectionStartEvent event ) {
+    @Override
+	public Object visit( ConnectionStartEvent event ) {
       final MutableConnectionInfo conn = new MutableConnectionInfo( event.stack );
       connectionMap.put( event.connectionId, conn );
       foo( conn, event );
@@ -508,7 +524,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       ++conn.startCount;
     }
 
-    public Object visit( ConnectionEndEvent event ) {
+    @Override
+	public Object visit( ConnectionEndEvent event ) {
       final MutableConnectionInfo conn = connectionMap.remove( event.connectionId );
       if ( conn == null ) {
         return missing( event );
@@ -526,7 +543,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       ++conn.endCount;
     }
 
-    public Object visit( StatementStartEvent event ) {
+    @Override
+	public Object visit( StatementStartEvent event ) {
       final MutableConnectionInfo conn = connectionMap.get( event.connectionId );
       if ( conn == null ) {
         return missing( event );
@@ -547,7 +565,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       ++stmt.startCount;
     }
 
-    public Object visit( StatementEndEvent event ) {
+    @Override
+	public Object visit( StatementEndEvent event ) {
       final MutableStatementInfo stmt = statementMap.remove( event.statementId );
       if ( stmt == null ) {
         return missing( event );
@@ -566,7 +585,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       ++stmt.endCount;
     }
 
-    public Object visit( ExecutionStartEvent event ) {
+    @Override
+	public Object visit( ExecutionStartEvent event ) {
       MutableStatementInfo stmt = statementMap.get( event.statementId );
       if ( stmt == null ) {
         return missing( event );
@@ -590,7 +610,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       ++exec.startCount;
     }
 
-    public Object visit( ExecutionPhaseEvent event ) {
+    @Override
+	public Object visit( ExecutionPhaseEvent event ) {
       final MutableExecutionInfo exec = executionMap.get( event.executionId );
       if ( exec == null ) {
         return missing( event );
@@ -611,7 +632,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       exec.cellCachePendingCountDelta = event.pendingCount;
     }
 
-    public Object visit( ExecutionEndEvent event ) {
+    @Override
+	public Object visit( ExecutionEndEvent event ) {
       final MutableExecutionInfo exec = executionMap.remove( event.executionId );
       if ( exec == null ) {
         return missing( event );
@@ -648,7 +670,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       exec.expCacheMissCount += event.expCacheMissCount;
     }
 
-    public Object visit( CellCacheSegmentCreateEvent event ) {
+    @Override
+	public Object visit( CellCacheSegmentCreateEvent event ) {
       MutableExecutionInfo exec = executionMap.get( event.executionId );
       if ( exec == null ) {
         // Cache events can sometimes arrive after the execution has
@@ -685,7 +708,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       }
     }
 
-    public Object visit( CellCacheSegmentDeleteEvent event ) {
+    @Override
+	public Object visit( CellCacheSegmentDeleteEvent event ) {
       final MutableExecutionInfo exec = executionMap.get( event.executionId );
       if ( exec == null ) {
         return missing( event );
@@ -708,7 +732,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       }
     }
 
-    public Object visit( SqlStatementStartEvent event ) {
+    @Override
+	public Object visit( SqlStatementStartEvent event ) {
       final MutableStatementInfo stmt = statementMap.get( event.getStatementId() );
       if ( stmt == null ) {
         return missing( event );
@@ -732,7 +757,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       sql.cellRequestCount += event.cellRequestCount;
     }
 
-    public Object visit( SqlStatementExecuteEvent event ) {
+    @Override
+	public Object visit( SqlStatementExecuteEvent event ) {
       final MutableSqlStatementInfo sql = sqlStatementMap.get( event.sqlStatementId );
       if ( sql == null ) {
         return missing( event );
@@ -748,7 +774,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       sql.executeNanos += event.executeNanos;
     }
 
-    public Object visit( SqlStatementEndEvent event ) {
+    @Override
+	public Object visit( SqlStatementEndEvent event ) {
       final MutableSqlStatementInfo sql = sqlStatementMap.remove( event.sqlStatementId );
       if ( sql == null ) {
         return missing( event );
@@ -768,7 +795,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       sql.rowFetchCount += event.rowFetchCount;
     }
 
-    public Object visit( ConnectionsCommand connectionsCommand ) {
+    @Override
+	public Object visit( ConnectionsCommand connectionsCommand ) {
       List<ConnectionInfo> list = new ArrayList<ConnectionInfo>();
       for ( MutableConnectionInfo info : connectionMap.values() ) {
         list.add( info.fix() );
@@ -776,11 +804,13 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       return list;
     }
 
-    public Object visit( ServerCommand serverCommand ) {
+    @Override
+	public Object visit( ServerCommand serverCommand ) {
       return server.fix();
     }
 
-    public Object visit( SqlStatementsCommand command ) {
+    @Override
+	public Object visit( SqlStatementsCommand command ) {
       List<SqlStatementInfo> list = new ArrayList<SqlStatementInfo>();
       for ( MutableSqlStatementInfo info : sqlStatementMap.values() ) {
         list.add( info.fix() );
@@ -788,7 +818,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       return list;
     }
 
-    public Object visit( StatementsCommand command ) {
+    @Override
+	public Object visit( StatementsCommand command ) {
       List<StatementInfo> list = new ArrayList<StatementInfo>();
       for ( MutableStatementInfo info : statementMap.values() ) {
         list.add( info.fix() );
@@ -796,7 +827,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
       return list;
     }
 
-    public Object visit( ShutdownCommand command ) {
+    @Override
+	public Object visit( ShutdownCommand command ) {
       return "Shutdown succeeded";
     }
   }
@@ -809,7 +841,8 @@ class MonitorImpl implements Monitor, MonitorMXBean {
 
     private final BlockingHashMap<Command, Object> responseMap = new BlockingHashMap<Command, Object>( 1000 );
 
-    public void run() {
+    @Override
+	public void run() {
       try {
         for ( ;; ) {
           try {

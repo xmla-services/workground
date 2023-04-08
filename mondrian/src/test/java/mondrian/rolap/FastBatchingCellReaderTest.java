@@ -196,7 +196,8 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     prepareContext(context);
     final Dialect dialect = getDialect(context.createConnection());
     FastBatchingCellReader fbcr = new FastBatchingCellReader( e, salesCube, aggMgr ) {
-      Dialect getDialect() {
+      @Override
+	Dialect getDialect() {
         return dialect;
       }
     };
@@ -266,14 +267,16 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     Connection connection = context.createConnection();
     BatchLoader.Batch genderBatch =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "gender", "F" ) ) {
-          boolean canBatch( BatchLoader.Batch other ) {
+          @Override
+		boolean canBatch( BatchLoader.Batch other ) {
             return false;
           }
         };
     BatchLoader.Batch superBatch =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, new String[0], new String[0],
             new String[0] ) ) {
-          boolean canBatch( BatchLoader.Batch batch ) {
+          @Override
+		boolean canBatch( BatchLoader.Batch batch ) {
             return true;
           }
         };
@@ -294,33 +297,38 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     Connection connection = context.createConnection();
     final BatchLoader.Batch group1Agg2 =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "gender", "F" ) ) {
-          boolean canBatch( BatchLoader.Batch batch ) {
+          @Override
+		boolean canBatch( BatchLoader.Batch batch ) {
             return false;
           }
         };
     final BatchLoader.Batch group1Agg1 =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "country", "F" ) ) {
-          boolean canBatch( BatchLoader.Batch batch ) {
+          @Override
+		boolean canBatch( BatchLoader.Batch batch ) {
             return batch.equals( group1Agg2 );
           }
         };
     BatchLoader.Batch group1Detailed =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, new String[0], new String[0],
             new String[0] ) ) {
-          boolean canBatch( BatchLoader.Batch batch ) {
+          @Override
+		boolean canBatch( BatchLoader.Batch batch ) {
             return batch.equals( group1Agg1 );
           }
         };
 
     final BatchLoader.Batch group2Agg1 =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "education", "F" ) ) {
-          boolean canBatch( BatchLoader.Batch batch ) {
+          @Override
+		boolean canBatch( BatchLoader.Batch batch ) {
             return false;
           }
         };
     BatchLoader.Batch group2Detailed =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "yearly_income", "" ) ) {
-          boolean canBatch( BatchLoader.Batch batch ) {
+          @Override
+		boolean canBatch( BatchLoader.Batch batch ) {
             return batch.equals( group2Agg1 );
           }
         };
@@ -873,12 +881,14 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
         new SegmentCacheManager.Command<Void>() {
           private final Locus locus = Locus.peek();
 
-          public Void call() throws Exception {
+          @Override
+		public Void call() throws Exception {
             compositeBatch.load( segmentFutures );
             return null;
           }
 
-          public Locus getLocus() {
+          @Override
+		public Locus getLocus() {
             return locus;
           }
         } );
@@ -1543,7 +1553,8 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
       this.supportsGroupingSets = supportsGroupingSets;
     }
 
-    protected Object getTarget() {
+    @Override
+	protected Object getTarget() {
       return dialect;
     }
 

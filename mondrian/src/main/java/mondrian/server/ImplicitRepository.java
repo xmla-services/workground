@@ -35,7 +35,8 @@ public class ImplicitRepository implements Repository {
         super();
     }
 
-    public List<String> getCatalogNames(
+    @Override
+	public List<String> getCatalogNames(
         RolapConnection connection,
         String databaseName)
     {
@@ -46,7 +47,8 @@ public class ImplicitRepository implements Repository {
                 connection.getSchema().getName());
     }
 
-    public List<String> getDatabaseNames(RolapConnection connection)
+    @Override
+	public List<String> getDatabaseNames(RolapConnection connection)
     {
         // In an implicit repository, we assume that there is a single
         // database, a single catalog and a single schema.
@@ -55,7 +57,8 @@ public class ImplicitRepository implements Repository {
                 connection.getSchema().getName());
     }
 
-    public Map<String, RolapSchema> getRolapSchemas(
+    @Override
+	public Map<String, RolapSchema> getRolapSchemas(
         RolapConnection connection,
         String databaseName,
         String catalogName)
@@ -65,7 +68,8 @@ public class ImplicitRepository implements Repository {
         return Collections.singletonMap(schema.getName(), schema);
     }
 
-    public OlapConnection getConnection(
+    @Override
+	public OlapConnection getConnection(
         MondrianServer server,
         String databaseName,
         String catalogName,
@@ -78,7 +82,8 @@ public class ImplicitRepository implements Repository {
         throw new UnsupportedOperationException();
     }
 
-    public List<Map<String, Object>> getDatabases(
+    @Override
+	public List<Map<String, Object>> getDatabases(
         RolapConnection connection)
     {
         return Collections.singletonList(
@@ -92,7 +97,8 @@ public class ImplicitRepository implements Repository {
                 "AuthenticationMode", "Unauthenticated"));
     }
 
-    public void shutdown() {
+    @Override
+	public void shutdown() {
         // ignore.
     }
 }

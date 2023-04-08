@@ -98,13 +98,16 @@ public class JdbcSchema {
     public static class StdFactory implements Factory {
         StdFactory() {
         }
-        public JdbcSchema makeDB(DataSource dataSource) {
+        @Override
+		public JdbcSchema makeDB(DataSource dataSource) {
             return new JdbcSchema(dataSource);
         }
-        public void clearDB(JdbcSchema db) {
+        @Override
+		public void clearDB(JdbcSchema db) {
             // NoOp
         }
-        public void removeDB(JdbcSchema db) {
+        @Override
+		public void removeDB(JdbcSchema db) {
             // NoOp
         }
     }
@@ -498,7 +501,8 @@ public class JdbcSchema {
                     return aggregator;
                 }
 
-                public String toString() {
+                @Override
+				public String toString() {
                     StringWriter sw = new StringWriter(64);
                     PrintWriter pw = new PrintWriter(sw);
                     print(pw, "");
@@ -761,7 +765,8 @@ public class JdbcSchema {
                         this.usageType = columnType;
                     }
 
-                    public boolean hasNext() {
+                    @Override
+					public boolean hasNext() {
                         while (usageIter.hasNext()) {
                             Usage usage = usageIter.next();
                             if (usage.getUsageType() == this.usageType) {
@@ -773,11 +778,13 @@ public class JdbcSchema {
                         return false;
                     }
 
-                    public Usage next() {
+                    @Override
+					public Usage next() {
                         return nextUsage;
                     }
 
-                    public void remove() {
+                    @Override
+					public void remove() {
                         usageIter.remove();
                     }
                 }
@@ -796,7 +803,8 @@ public class JdbcSchema {
                 return usage;
             }
 
-            public String toString() {
+            @Override
+			public String toString() {
                 StringWriter sw = new StringWriter(256);
                 PrintWriter pw = new PrintWriter(sw);
                 print(pw, "");
@@ -953,7 +961,8 @@ public class JdbcSchema {
                     this.columnType = columnType;
                 }
 
-                public boolean hasNext() {
+                @Override
+				public boolean hasNext() {
                     while (true) {
                         while ((usageIter == null) || ! usageIter.hasNext()) {
                             if (! columnIter.hasNext()) {
@@ -970,10 +979,12 @@ public class JdbcSchema {
                         }
                     }
                 }
-                public JdbcSchema.Table.Column.Usage next() {
+                @Override
+				public JdbcSchema.Table.Column.Usage next() {
                     return nextObject;
                 }
-                public void remove() {
+                @Override
+				public void remove() {
                     usageIter.remove();
                 }
             }
@@ -1027,7 +1038,8 @@ public class JdbcSchema {
             return tableType;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             StringWriter sw = new StringWriter(256);
             PrintWriter pw = new PrintWriter(sw);
             print(pw, "");
@@ -1252,7 +1264,8 @@ public class JdbcSchema {
         return getTablesMap().get(tableName);
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         StringWriter sw = new StringWriter(256);
         PrintWriter pw = new PrintWriter(sw);
         print(pw, "");

@@ -18,7 +18,8 @@ import mondrian.spi.CatalogLocator;
  * @author Julian Hyde
  */
 public class IdentityCatalogLocator implements CatalogLocator {
-    public String locate(String catalogPath) {
+    @Override
+	public String locate(String catalogPath) {
         return catalogPath;
     }
 }

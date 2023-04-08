@@ -251,7 +251,8 @@ public class DelegatingExpCompiler implements ExpCompiler {
             return e.accept(visitor);
         }
 
-        public void explain(PrintWriter pw) {
+        @Override
+		public void explain(PrintWriter pw) {
             if (e instanceof QueryPart) {
                 ((QueryPart) e).explain(pw);
             } else {

@@ -138,7 +138,8 @@ public class QueryTiming {
     p.duration += duration;
   }
 
-  public synchronized String toString() {
+  @Override
+public synchronized String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append( "Query Timing (Cumulative):" );
     for ( Map.Entry<String, DurationCount> entry : timings.entrySet() ) {

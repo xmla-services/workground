@@ -47,14 +47,16 @@ public class SqlStatisticsProvider implements StatisticsProvider {
         this.dialect = dialect;
     }
 
-    public long getTableCardinality(String catalog, String schema, String table) {
+    @Override
+	public long getTableCardinality(String catalog, String schema, String table) {
         StringBuilder stringBuilder = new StringBuilder("select count(*) from ");
         dialect.quoteIdentifier(stringBuilder, catalog, schema, table);
         final String sql = stringBuilder.toString();
         return query(sql);
     }
 
-    public long getQueryCardinality(String sql) {
+    @Override
+	public long getQueryCardinality(String sql) {
         final StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("select count(*) from (")
                 .append(sql)
@@ -71,7 +73,8 @@ public class SqlStatisticsProvider implements StatisticsProvider {
         return query(countSql);
     }
 
-    public long getColumnCardinality(String catalog, String schema, String table, String column) {
+    @Override
+	public long getColumnCardinality(String catalog, String schema, String table, String column) {
         final Optional<String> oSql = generateColumnCardinalitySql(dialect, schema, table, column);
 
         return oSql.map(this::query)

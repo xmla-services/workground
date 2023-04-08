@@ -32,7 +32,8 @@ import mondrian.test.DiffRepository;
  */
 public class OrderTest extends ClearViewBase {
 
-    public DiffRepository getDiffRepos() {
+    @Override
+	public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }
 
@@ -40,7 +41,8 @@ public class OrderTest extends ClearViewBase {
         return DiffRepository.lookup(OrderTest.class);
     }
 
-    @ParameterizedTest
+    @Override
+	@ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void runTest(TestingContext context) {
         DiffRepository diffRepos = getDiffRepos();

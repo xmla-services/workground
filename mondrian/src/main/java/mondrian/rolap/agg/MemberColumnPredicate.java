@@ -36,11 +36,13 @@ public class MemberColumnPredicate extends ValueColumnPredicate {
     }
 
     // for debug
-    public String toString() {
+    @Override
+	public String toString() {
         return member.getUniqueName();
     }
 
-    public List<RolapStar.Column> getConstrainedColumnList() {
+    @Override
+	public List<RolapStar.Column> getConstrainedColumnList() {
         return super.getConstrainedColumnList();
     }
 
@@ -53,7 +55,8 @@ public class MemberColumnPredicate extends ValueColumnPredicate {
         return member;
     }
 
-    public boolean equals(Object other) {
+    @Override
+	public boolean equals(Object other) {
         if (!(other instanceof MemberColumnPredicate)) {
             return false;
         }
@@ -61,15 +64,18 @@ public class MemberColumnPredicate extends ValueColumnPredicate {
         return member.equals(that.getMember());
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return member.hashCode();
     }
 
-    public void describe(StringBuilder buf) {
+    @Override
+	public void describe(StringBuilder buf) {
         buf.append(member.getUniqueName());
     }
 
-    public StarColumnPredicate cloneWithColumn(RolapStar.Column column) {
+    @Override
+	public StarColumnPredicate cloneWithColumn(RolapStar.Column column) {
         return new MemberColumnPredicate(column, member);
     }
 }

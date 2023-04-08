@@ -53,7 +53,8 @@ public class SlotFuture<V> implements Future<V> {
      * <p>The SlotFuture does not know which thread is computing the result
      * and therefore the {@code mayInterruptIfRunning} parameter is ignored.</p>
      */
-    public boolean cancel(boolean mayInterruptIfRunning) {
+    @Override
+	public boolean cancel(boolean mayInterruptIfRunning) {
         stateLock.writeLock().lock();
         try {
             if (!done) {
@@ -69,7 +70,8 @@ public class SlotFuture<V> implements Future<V> {
         }
     }
 
-    public boolean isCancelled() {
+    @Override
+	public boolean isCancelled() {
         stateLock.readLock().lock();
         try {
             return cancelled;
@@ -78,7 +80,8 @@ public class SlotFuture<V> implements Future<V> {
         }
     }
 
-    public boolean isDone() {
+    @Override
+	public boolean isDone() {
         stateLock.readLock().lock();
         try {
             return done || cancelled || throwable != null;
@@ -87,7 +90,8 @@ public class SlotFuture<V> implements Future<V> {
         }
     }
 
-    public V get() throws ExecutionException, InterruptedException {
+    @Override
+	public V get() throws ExecutionException, InterruptedException {
         // Wait for a put, fail or cancel
         dataGate.await();
 
@@ -99,7 +103,8 @@ public class SlotFuture<V> implements Future<V> {
         return value;
     }
 
-    public V get(long timeout, TimeUnit unit)
+    @Override
+	public V get(long timeout, TimeUnit unit)
         throws ExecutionException, InterruptedException, TimeoutException
     {
         // Wait for a put, fail or cancel

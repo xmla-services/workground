@@ -416,7 +416,8 @@ abstract class Rowset implements XmlaConstants {
                     Collections.singletonList(wildcard.pattern));
             final Matcher matcher = Pattern.compile(regexp).matcher("");
             return new Predicate<E>() {
-                public boolean test(E element) {
+                @Override
+				public boolean test(E element) {
                     V value = getter.apply(element);
                     return matcher.reset(String.valueOf(value)).matches();
                 }
@@ -424,7 +425,8 @@ abstract class Rowset implements XmlaConstants {
         } else if (restriction instanceof List) {
             final List<V> requiredValues = (List) restriction;
             return new Predicate<E>() {
-                public boolean test(E element) {
+                @Override
+				public boolean test(E element) {
                     if (element == null) {
                         return requiredValues.contains("");
                     }
@@ -491,7 +493,8 @@ abstract class Rowset implements XmlaConstants {
             properties.get(PropertyDefinition.Catalog.name());
         if (catalogName != null) {
             return new Predicate< Catalog>() {
-                public boolean test(Catalog catalog) {
+                @Override
+				public boolean test(Catalog catalog) {
                     return catalog.getName().equals(catalogName);
                 }
             };

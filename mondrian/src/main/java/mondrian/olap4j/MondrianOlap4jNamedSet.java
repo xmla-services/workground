@@ -39,11 +39,13 @@ public class MondrianOlap4jNamedSet
         this.namedSet = namedSet;
     }
 
-    public Cube getCube() {
+    @Override
+	public Cube getCube() {
         return olap4jCube;
     }
 
-    public ParseTreeNode getExpression() {
+    @Override
+	public ParseTreeNode getExpression() {
         final MondrianOlap4jConnection olap4jConnection =
             olap4jCube.olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData
                 .olap4jConnection;
@@ -54,31 +56,37 @@ public class MondrianOlap4jNamedSet
         return this.namedSet;
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return namedSet.getName();
     }
 
-    public String getUniqueName() {
+    @Override
+	public String getUniqueName() {
         return namedSet.getUniqueName();
     }
 
-    public String getCaption() {
+    @Override
+	public String getCaption() {
         return namedSet.getLocalized(
             OlapElement.LocalizedProperty.CAPTION,
             olap4jCube.olap4jSchema.getLocale());
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return namedSet.getLocalized(
             OlapElement.LocalizedProperty.DESCRIPTION,
             olap4jCube.olap4jSchema.getLocale());
     }
 
-    public boolean isVisible() {
+    @Override
+	public boolean isVisible() {
         return namedSet.isVisible();
     }
 
-    protected OlapElement getOlapElement() {
+    @Override
+	protected OlapElement getOlapElement() {
         return namedSet;
     }
 }

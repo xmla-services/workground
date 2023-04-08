@@ -425,7 +425,8 @@ public class IdBatchResolverTest  {
         Collections.sort(
             items, new Comparator<Id.NameSegment>()
         {
-            public int compare(Id.NameSegment o1, Id.NameSegment o2) {
+            @Override
+			public int compare(Id.NameSegment o1, Id.NameSegment o2) {
                 return o1.getName().compareTo(o2.getName());
             }
         });
@@ -445,7 +446,8 @@ public class IdBatchResolverTest  {
                 resolvedIdents.keySet(),
                 new Transformer()
                 {
-                    public Object transform(Object o) {
+                    @Override
+					public Object transform(Object o) {
                         return o.toString();
                     }
                 }));

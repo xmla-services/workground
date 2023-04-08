@@ -93,7 +93,8 @@ public class Format {
      */
     private static final Map<String, Format> cache =
         new LinkedHashMap<String, Format>() {
-            public boolean removeEldestEntry(Map.Entry<String, Format> entry) {
+            @Override
+			public boolean removeEldestEntry(Map.Entry<String, Format> entry) {
                 return size() > CacheLimit;
             }
         };
@@ -321,7 +322,8 @@ public class Format {
             this.javaFormat = new JavaFormat(locale.locale);
         }
 
-        void formatNull(StringBuilder buf) {
+        @Override
+		void formatNull(StringBuilder buf) {
             if (formats.length >= 4 && formats[3] != null) {
                 formats[3].format(0, buf);
             } else {
@@ -329,7 +331,8 @@ public class Format {
             }
         }
 
-        void format(double n, StringBuilder buf) {
+        @Override
+		void format(double n, StringBuilder buf) {
             int i;
             if (n == 0
                 && formats.length >= 3
@@ -393,7 +396,8 @@ public class Format {
             formats[i].format(n, buf);
         }
 
-        void format(long n, StringBuilder buf) {
+        @Override
+		void format(long n, StringBuilder buf) {
             int i;
             if (n == 0
                 && formats.length >= 3
@@ -457,12 +461,14 @@ public class Format {
             formats[i].format(n, buf);
         }
 
-        void format(String s, StringBuilder buf) {
+        @Override
+		void format(String s, StringBuilder buf) {
             // since it is not a number, ignore all format strings
             buf.append(s);
         }
 
-        void format(Calendar calendar, StringBuilder buf) {
+        @Override
+		void format(Calendar calendar, StringBuilder buf) {
             // We're passing a date to a numeric format string. Convert it to
             // the number of days since 1900.
             BigDecimal bigDecimal = daysSince1900(calendar);
@@ -521,23 +527,28 @@ public class Format {
             this.s = s;
         }
 
-        void format(double d, StringBuilder buf) {
+        @Override
+		void format(double d, StringBuilder buf) {
             buf.append(s);
         }
 
-        void format(long n, StringBuilder buf) {
+        @Override
+		void format(long n, StringBuilder buf) {
             buf.append(s);
         }
 
-        void format(String str, StringBuilder buf) {
+        @Override
+		void format(String str, StringBuilder buf) {
             buf.append(s);
         }
 
-        void format(Date date, StringBuilder buf) {
+        @Override
+		void format(Date date, StringBuilder buf) {
             buf.append(s);
         }
 
-        void format(Calendar calendar, StringBuilder buf) {
+        @Override
+		void format(Calendar calendar, StringBuilder buf) {
             buf.append(s);
         }
     }
@@ -558,37 +569,43 @@ public class Format {
             assert formats.length >= 2;
         }
 
-        void format(double v, StringBuilder buf) {
+        @Override
+		void format(double v, StringBuilder buf) {
             for (int i = 0; i < formats.length; i++) {
                 formats[i].format(v, buf);
             }
         }
 
-        void format(long v, StringBuilder buf) {
+        @Override
+		void format(long v, StringBuilder buf) {
             for (int i = 0; i < formats.length; i++) {
                 formats[i].format(v, buf);
             }
         }
 
-        void format(String v, StringBuilder buf) {
+        @Override
+		void format(String v, StringBuilder buf) {
             for (int i = 0; i < formats.length; i++) {
                 formats[i].format(v, buf);
             }
         }
 
-        void format(Date v, StringBuilder buf) {
+        @Override
+		void format(Date v, StringBuilder buf) {
             for (int i = 0; i < formats.length; i++) {
                 formats[i].format(v, buf);
             }
         }
 
-        void format(Calendar v, StringBuilder buf) {
+        @Override
+		void format(Calendar v, StringBuilder buf) {
             for (int i = 0; i < formats.length; i++) {
                 formats[i].format(v, buf);
             }
         }
 
-        boolean isApplicableTo(double n) {
+        @Override
+		boolean isApplicableTo(double n) {
             for (int i = 0; i < formats.length; i++) {
                 if (!formats[i].isApplicableTo(n)) {
                     return false;
@@ -621,27 +638,32 @@ public class Format {
         // No need to override format(Object,PrintWriter) or
         // format(Date,PrintWriter).
 
-        void format(double d, StringBuilder buf) {
+        @Override
+		void format(double d, StringBuilder buf) {
             // NOTE (jhyde, 2006/12/1): We'd use
             // NumberFormat(double,StringBuilder,FieldPosition) if it existed.
             buf.append(numberFormat.format(d));
         }
 
-        void format(BigDecimal d, StringBuilder buf) {
+        @Override
+		void format(BigDecimal d, StringBuilder buf) {
             buf.append(numberFormat.format(d));
         }
 
-        void format(long n, StringBuilder buf) {
+        @Override
+		void format(long n, StringBuilder buf) {
             // NOTE (jhyde, 2006/12/1): We'd use
             // NumberFormat(long,StringBuilder,FieldPosition) if it existed.
             buf.append(numberFormat.format(n));
         }
 
-        void format(String s, StringBuilder buf) {
+        @Override
+		void format(String s, StringBuilder buf) {
             buf.append(s);
         }
 
-        void format(Calendar calendar, StringBuilder buf) {
+        @Override
+		void format(Calendar calendar, StringBuilder buf) {
             // NOTE (jhyde, 2006/12/1): We'd use
             // NumberFormat(Date,StringBuilder,FieldPosition) if it existed.
             buf.append(dateFormat.format(calendar.getTime()));
@@ -663,19 +685,23 @@ public class Format {
             this.token = token;
         }
 
-        void format(double d, StringBuilder buf) {
+        @Override
+		void format(double d, StringBuilder buf) {
             buf.append(token);
         }
 
-        void format(long n, StringBuilder buf) {
+        @Override
+		void format(long n, StringBuilder buf) {
             buf.append(token);
         }
 
-        void format(String s, StringBuilder buf) {
+        @Override
+		void format(String s, StringBuilder buf) {
             buf.append(token);
         }
 
-        void format(Calendar calendar, StringBuilder buf) {
+        @Override
+		void format(Calendar calendar, StringBuilder buf) {
             buf.append(token);
         }
     }
@@ -819,7 +845,8 @@ public class Format {
             }
         }
 
-        FormatType getFormatType() {
+        @Override
+		FormatType getFormatType() {
             return FormatType.NUMERIC;
         }
 
@@ -839,7 +866,8 @@ public class Format {
             return count;
         }
 
-        void format(double n, StringBuilder buf)
+        @Override
+		void format(double n, StringBuilder buf)
         {
             MondrianFloatingDecimal fd = new MondrianFloatingDecimal(n);
             shift(fd, decimalShift);
@@ -865,7 +893,8 @@ public class Format {
                 getThousandSeparatorPositions());
         }
 
-        boolean isApplicableTo(double n) {
+        @Override
+		boolean isApplicableTo(double n) {
             if (n >= 0) {
                 return true;
             }
@@ -893,7 +922,8 @@ public class Format {
             return false;
         }
 
-        void format(long n, StringBuilder buf)
+        @Override
+		void format(long n, StringBuilder buf)
         {
             MondrianFloatingDecimal fd =
                 new MondrianFloatingDecimal(n);
@@ -939,7 +969,8 @@ public class Format {
             this.twelveHourClock = twelveHourClock;
         }
 
-        FormatType getFormatType() {
+        @Override
+		FormatType getFormatType() {
             return FormatType.DATE;
         }
 
@@ -948,7 +979,8 @@ public class Format {
             this.twelveHourClock = twelveHourClock;
         }
 
-        void format(Calendar calendar, StringBuilder buf)
+        @Override
+		void format(Calendar calendar, StringBuilder buf)
         {
             format(code, calendar, buf);
         }
@@ -1301,7 +1333,8 @@ public class Format {
             buf.append(s);
         }
 
-        void format(double d, StringBuilder buf) {
+        @Override
+		void format(double d, StringBuilder buf) {
             final int x = buf.length();
             javaFormat.format(d, buf);
             String s = buf.substring(x);
@@ -1309,7 +1342,8 @@ public class Format {
             format(s, buf);
         }
 
-        void format(long n, StringBuilder buf) {
+        @Override
+		void format(long n, StringBuilder buf) {
             final int x = buf.length();
             javaFormat.format(n, buf);
             String s = buf.substring(x);
@@ -1317,7 +1351,8 @@ public class Format {
             format(s, buf);
         }
 
-        void format(Date date, StringBuilder buf) {
+        @Override
+		void format(Date date, StringBuilder buf) {
             final int x = buf.length();
             javaFormat.format(date, buf);
             String s = buf.substring(x);
@@ -1325,7 +1360,8 @@ public class Format {
             format(s, buf);
         }
 
-        void format(Calendar calendar, StringBuilder buf) {
+        @Override
+		void format(Calendar calendar, StringBuilder buf) {
             final int x = buf.length();
             javaFormat.format(calendar, buf);
             String s = buf.substring(x);
@@ -3213,7 +3249,8 @@ public class Format {
     private static class DummyDecimalFormat extends DecimalFormat {
         private FieldPosition pos;
 
-        public StringBuffer format(
+        @Override
+		public StringBuffer format(
             double number,
             StringBuffer result,
             FieldPosition fieldPosition)

@@ -706,7 +706,8 @@ public class CaptionTest{
                         + "</Role>\n"
                         + "</Schema>";
 
-        public String processSchema(
+        @Override
+		public String processSchema(
                 String schemaUrl,
                 Util.PropertyList properties) throws Exception
         {

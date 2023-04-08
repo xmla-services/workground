@@ -228,7 +228,8 @@ public class TupleListTest {
             (RolapConnection)connection,
             "testDelegatingTupleListSlice",
             new Locus.Action<Void>() {
-                public Void execute() {
+                @Override
+				public Void execute() {
                     // Unit test
                     final Member genderFMember = xxx(connection, "[Gender].[F]");
                     final Member storeUsaMember = xxx(connection, "[Store].[USA]");

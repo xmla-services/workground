@@ -35,15 +35,18 @@ public class ObjectPoolTest{
             this.key = key;
             this.value = value;
         }
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             return (int)(key ^ (key >>> 32));
         }
-        public boolean equals(Object o) {
+        @Override
+		public boolean equals(Object o) {
             return (o instanceof KeyValue)
                 ? (((KeyValue) o).key == this.key)
                 : false;
         }
-        public String toString() {
+        @Override
+		public String toString() {
             return value.toString();
         }
     }

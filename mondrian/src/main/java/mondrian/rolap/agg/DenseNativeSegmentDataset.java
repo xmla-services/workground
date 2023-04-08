@@ -43,7 +43,8 @@ abstract class DenseNativeSegmentDataset extends DenseSegmentDataset {
         this.nullValues = nullValues;
     }
 
-    public boolean isNull(CellKey key) {
+    @Override
+	public boolean isNull(CellKey key) {
         int offset = key.getOffset(axisMultipliers);
         return isNull(offset);
     }

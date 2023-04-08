@@ -89,15 +89,18 @@ public abstract class FunTableImpl implements FunTable {
         return new Pair<String, Syntax>(name.toUpperCase(), syntax);
     }
 
-    public List<String> getReservedWords() {
+    @Override
+	public List<String> getReservedWords() {
         return reservedWordList;
     }
 
-    public boolean isReserved(String s) {
+    @Override
+	public boolean isReserved(String s) {
         return reservedWordSet.contains(s.toUpperCase());
     }
 
-    public List<Resolver> getResolvers() {
+    @Override
+	public List<Resolver> getResolvers() {
         final List<Resolver> list = new ArrayList<Resolver>();
         for (List<Resolver> resolvers : mapNameToResolvers.values()) {
             list.addAll(resolvers);
@@ -105,15 +108,18 @@ public abstract class FunTableImpl implements FunTable {
         return list;
     }
 
-    public boolean isProperty(String s) {
+    @Override
+	public boolean isProperty(String s) {
         return propertyWords.contains(s.toUpperCase());
     }
 
-    public List<FunInfo> getFunInfoList() {
+    @Override
+	public List<FunInfo> getFunInfoList() {
         return funInfoList;
     }
 
-    public List<Resolver> getResolvers(String name, Syntax syntax) {
+    @Override
+	public List<Resolver> getResolvers(String name, Syntax syntax) {
         Pair<String, Syntax> key = FunTableImpl.makeResolverKey(name, syntax);
         List<Resolver> resolvers = mapNameToResolvers.get(key);
         if (resolvers == null) {
@@ -136,11 +142,13 @@ public abstract class FunTableImpl implements FunTable {
         private final Set<String> reservedWords = new HashSet<String>();
         private final Set<String> propertyWords = new HashSet<String>();
 
-        public void define(FunDef funDef) {
+        @Override
+		public void define(FunDef funDef) {
             define(new SimpleResolver(funDef));
         }
 
-        public void define(Resolver resolver) {
+        @Override
+		public void define(Resolver resolver) {
             funInfoList.add(FunInfo.make(resolver));
             if (resolver.getSyntax() == Syntax.Property) {
                 propertyWords.add(resolver.getName().toUpperCase());
@@ -152,11 +160,13 @@ public abstract class FunTableImpl implements FunTable {
             }
         }
 
-        public void define(FunInfo funInfo) {
+        @Override
+		public void define(FunInfo funInfo) {
             funInfoList.add(funInfo);
         }
 
-        public void defineReserved(String s) {
+        @Override
+		public void defineReserved(String s) {
             reservedWords.add(s.toUpperCase());
         }
 
@@ -188,7 +198,8 @@ public abstract class FunTableImpl implements FunTable {
             // Sort lists by signature (skipping singleton lists)
             final Comparator<Resolver> comparator =
                 new Comparator<Resolver>() {
-                    public int compare(Resolver o1, Resolver o2) {
+                    @Override
+					public int compare(Resolver o1, Resolver o2) {
                         return o1.getSignature().compareTo(o2.getSignature());
                     }
                 };

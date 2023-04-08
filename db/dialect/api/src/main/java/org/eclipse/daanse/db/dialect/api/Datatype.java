@@ -14,7 +14,8 @@ package org.eclipse.daanse.db.dialect.api;
  */
 public enum Datatype {
     String {
-        public void quoteValue(
+        @Override
+		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
         {
             dialect.quoteStringLiteral(buf, value);
@@ -22,31 +23,36 @@ public enum Datatype {
     },
 
     Numeric {
-        public void quoteValue(
+        @Override
+		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
         {
             dialect.quoteNumericLiteral(buf, value);
         }
 
-        public boolean isNumeric() {
+        @Override
+		public boolean isNumeric() {
             return true;
         }
     },
 
     Integer {
-        public void quoteValue(
+        @Override
+		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
         {
             dialect.quoteNumericLiteral(buf, value);
         }
 
-        public boolean isNumeric() {
+        @Override
+		public boolean isNumeric() {
             return true;
         }
     },
 
     Boolean {
-        public void quoteValue(
+        @Override
+		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
         {
             dialect.quoteBooleanLiteral(buf, value);
@@ -54,7 +60,8 @@ public enum Datatype {
     },
 
     Date {
-        public void quoteValue(
+        @Override
+		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
         {
             dialect.quoteDateLiteral(buf, value);
@@ -62,7 +69,8 @@ public enum Datatype {
     },
 
     Time {
-        public void quoteValue(
+        @Override
+		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
         {
             dialect.quoteTimeLiteral(buf, value);
@@ -70,7 +78,8 @@ public enum Datatype {
     },
 
     Timestamp {
-        public void quoteValue(
+        @Override
+		public void quoteValue(
             StringBuilder buf, Dialect dialect, String value)
         {
             dialect.quoteTimestampLiteral(buf, value);

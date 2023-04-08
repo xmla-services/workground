@@ -64,28 +64,33 @@ public class CompletedFuture<V> implements Future<V> {
         return new CompletedFuture<T>(null, new ExecutionException(e));
     }
 
-    public boolean cancel(boolean mayInterruptIfRunning) {
+    @Override
+	public boolean cancel(boolean mayInterruptIfRunning) {
         // could not be cancelled, because already completed
         return false;
     }
 
-    public boolean isCancelled() {
+    @Override
+	public boolean isCancelled() {
         // completed before could be cancelled
         return false;
     }
 
-    public boolean isDone() {
+    @Override
+	public boolean isDone() {
         return true;
     }
 
-    public V get() throws ExecutionException {
+    @Override
+	public V get() throws ExecutionException {
         if (exception != null) {
             throw exception;
         }
         return value;
     }
 
-    public V get(long timeout, TimeUnit unit) throws ExecutionException {
+    @Override
+	public V get(long timeout, TimeUnit unit) throws ExecutionException {
         return get();
     }
 }

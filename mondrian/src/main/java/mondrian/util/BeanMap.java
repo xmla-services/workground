@@ -61,16 +61,19 @@ public class BeanMap extends AbstractMap<String, Object> {
                 final Iterator<BeanField> fieldIterator =
                     info.fields.iterator();
                 return new Iterator<Entry<String, Object>>() {
-                    public boolean hasNext() {
+                    @Override
+					public boolean hasNext() {
                         return fieldIterator.hasNext();
                     }
 
-                    public Entry<String, Object> next() {
+                    @Override
+					public Entry<String, Object> next() {
                         final BeanField field = fieldIterator.next();
                         return Pair.of(field.name(), field.value(o));
                     }
 
-                    public void remove() {
+                    @Override
+					public void remove() {
                         throw new UnsupportedOperationException();
                     }
                 };
@@ -100,11 +103,13 @@ public class BeanMap extends AbstractMap<String, Object> {
                 }
                 fields.add(
                     new BeanField() {
-                        public String name() {
+                        @Override
+						public String name() {
                             return field.getName();
                         }
 
-                        public Object value(Object o) {
+                        @Override
+						public Object value(Object o) {
                             try {
                                 return field.get(o);
                             } catch (IllegalAccessException e) {

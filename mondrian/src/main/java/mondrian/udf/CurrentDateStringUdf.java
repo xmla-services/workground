@@ -31,7 +31,8 @@ import mondrian.util.Format;
 @ServiceProvider(value = UserDefinedFunction.class)
 public class CurrentDateStringUdf implements UserDefinedFunction {
 
-    public Object execute(Evaluator evaluator, Argument[] arguments) {
+    @Override
+	public Object execute(Evaluator evaluator, Argument[] arguments) {
         Object arg = arguments[0].evaluateScalar(evaluator);
 
         final Locale locale = Locale.getDefault();
@@ -40,27 +41,33 @@ public class CurrentDateStringUdf implements UserDefinedFunction {
         return format.format(currDate);
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return "Returns the current date formatted as specified by the format parameter.";
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return "CurrentDateString";
     }
 
-    public Type[] getParameterTypes() {
+    @Override
+	public Type[] getParameterTypes() {
         return new Type[] { new StringType() };
     }
 
-    public String[] getReservedWords() {
+    @Override
+	public String[] getReservedWords() {
         return null;
     }
 
-    public Type getReturnType(Type[] parameterTypes) {
+    @Override
+	public Type getReturnType(Type[] parameterTypes) {
         return new StringType();
     }
 
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
         return Syntax.Function;
     }
 

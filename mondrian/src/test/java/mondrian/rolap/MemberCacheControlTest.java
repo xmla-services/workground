@@ -1063,7 +1063,8 @@ public class MemberCacheControlTest {
                     storeHierarchy.getAllMember(), true);
             final Runnable storeFlusher =
                 new Runnable() {
-                    public void run() {
+                    @Override
+					public void run() {
                         cacheControl.flush(storeMemberSet);
                     }
                 };
@@ -1078,7 +1079,8 @@ public class MemberCacheControlTest {
                     storeYucatanMember, true);
             final Runnable storeYucatanFlusher =
                 new Runnable() {
-                    public void run() {
+                    @Override
+					public void run() {
                         cacheControl.flush(storeYucatanMemberSet);
                     }
                 };
@@ -1086,7 +1088,8 @@ public class MemberCacheControlTest {
             checkFlushHierarchy(
                 sw, true, storeFlusher,
                 new Runnable() {
-                    public void run() {
+                    @Override
+					public void run() {
                         // Check that <Member>.Children uses cache when applied
                         // to an 'all' member.
                         assertAxisReturns(context.createConnection(),
@@ -1099,7 +1102,8 @@ public class MemberCacheControlTest {
             checkFlushHierarchy(
                 sw, true, storeFlusher,
                 new Runnable() {
-                    public void run() {
+                    @Override
+					public void run() {
                         // Check that <Member>.Children uses cache when applied
                         // to regular member.
                         assertAxisReturns(context.createConnection(),
@@ -1117,7 +1121,8 @@ public class MemberCacheControlTest {
             checkFlushHierarchy(
                 sw, false, storeYucatanFlusher,
                 new Runnable() {
-                    public void run() {
+                    @Override
+					public void run() {
                         // Check that <Member>.Children uses cache when applied
                         // to regular member.
                         assertAxisReturns(context.createConnection(),
@@ -1132,7 +1137,8 @@ public class MemberCacheControlTest {
 
             checkFlushHierarchy(
                 sw, true, storeFlusher, new Runnable() {
-                    public void run() {
+                    @Override
+					public void run() {
                         // Check that <Hierarchy>.Members uses cache.
                         assertExprReturns(context.createConnection(),
                             "Count([Store].Members)", "63");
@@ -1140,7 +1146,8 @@ public class MemberCacheControlTest {
                 });
             checkFlushHierarchy(
                 sw, true, storeFlusher, new Runnable() {
-                    public void run() {
+                    @Override
+					public void run() {
                         // Check that <Level>.Members uses cache.
                         assertExprReturns(context.createConnection(),
                             "Count([Store].[Store Name].Members)", "25");
@@ -1159,7 +1166,8 @@ public class MemberCacheControlTest {
                     timeHierarchy.getAllMember(), true);
             final Runnable timeFlusher =
                 new Runnable() {
-                    public void run() {
+                    @Override
+					public void run() {
                         cacheControl.flush(timeMemberSet);
                     }
                 };
@@ -1167,7 +1175,8 @@ public class MemberCacheControlTest {
             checkFlushHierarchy(
                 sw, true, timeFlusher,
                 new Runnable() {
-                    public void run() {
+                    @Override
+					public void run() {
                         // Check that <Level>.Members uses cache.
                         assertExprReturns(context.createConnection(),
                             "Count([Time].[Month].Members)",
@@ -1177,7 +1186,8 @@ public class MemberCacheControlTest {
             checkFlushHierarchy(
                 sw, true, timeFlusher,
                 new Runnable() {
-                    public void run() {
+                    @Override
+					public void run() {
                         // Check that <Level>.Members uses cache.
                         assertAxisReturns(context.createConnection(),
                             "[Time].[1997].[Q2].Children",

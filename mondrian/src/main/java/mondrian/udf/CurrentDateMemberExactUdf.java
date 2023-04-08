@@ -47,18 +47,21 @@ public class CurrentDateMemberExactUdf extends CurrentDateMemberUdf {
         + "namely the Visual Basic format strings. "
         + "See http://www.apostate.com/programming/vb-format.html.";
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return CURRENT_DATE_MEMBER_EXACT_UDF_DESCRIPTION;
     }
 
-    public Type[] getParameterTypes() {
+    @Override
+	public Type[] getParameterTypes() {
         return new Type[] {
             new HierarchyType(null, null),
             new StringType()
         };
     }
 
-    public String[] getReservedWords() {
+    @Override
+	public String[] getReservedWords() {
         return null;
     }
 }

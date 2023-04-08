@@ -1526,27 +1526,33 @@ public class UdfTest {
      * A simple user-defined function which adds one to its argument.
      */
     public static class PlusOneUdf implements UserDefinedFunction {
-        public String getName() {
+        @Override
+		public String getName() {
             return "PlusOne";
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "Returns its argument plus one";
         }
 
-        public Syntax getSyntax() {
+        @Override
+		public Syntax getSyntax() {
             return Syntax.Function;
         }
 
-        public Type getReturnType(Type[] parameterTypes) {
+        @Override
+		public Type getReturnType(Type[] parameterTypes) {
             return new NumericType();
         }
 
-        public Type[] getParameterTypes() {
+        @Override
+		public Type[] getParameterTypes() {
             return new Type[] {new NumericType()};
         }
 
-        public Object execute(Evaluator evaluator, Argument[] arguments) {
+        @Override
+		public Object execute(Evaluator evaluator, Argument[] arguments) {
             final Object argValue = arguments[0].evaluateScalar(evaluator);
             if (argValue instanceof Number) {
                 return ((Number) argValue).doubleValue() + 1.0;
@@ -1558,7 +1564,8 @@ public class UdfTest {
             }
         }
 
-        public String[] getReservedWords() {
+        @Override
+		public String[] getReservedWords() {
             return null;
         }
     }
@@ -1573,11 +1580,13 @@ public class UdfTest {
             this.name = name;
         }
 
-        public String getName() {
+        @Override
+		public String getName() {
             return name;
         }
 
-        public Type getReturnType(Type[] parameterTypes) {
+        @Override
+		public Type getReturnType(Type[] parameterTypes) {
             // Will cause error.
             return null;
         }
@@ -1599,33 +1608,40 @@ public class UdfTest {
             this.name = name;
         }
 
-        public String getName() {
+        @Override
+		public String getName() {
             return name;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return
                 "A user-defined function which, depending on its given name, "
                 + "either addsone to, or subtracts one from, its argument";
         }
 
-        public Syntax getSyntax() {
+        @Override
+		public Syntax getSyntax() {
             return Syntax.Function;
         }
 
-        public Type getReturnType(Type[] parameterTypes) {
+        @Override
+		public Type getReturnType(Type[] parameterTypes) {
             return new NumericType();
         }
 
-        public String[] getReservedWords() {
+        @Override
+		public String[] getReservedWords() {
             return null;
         }
 
-        public Type[] getParameterTypes() {
+        @Override
+		public Type[] getParameterTypes() {
             return new Type[] {new NumericType()};
         }
 
-        public Object execute(Evaluator evaluator, Argument[] arguments) {
+        @Override
+		public Object execute(Evaluator evaluator, Argument[] arguments) {
             final Object argValue = arguments[0].evaluateScalar(evaluator);
             if (argValue instanceof Number) {
                 return ((Number) argValue).doubleValue()
@@ -1645,29 +1661,35 @@ public class UdfTest {
      * (integer).
      */
     public static class StringMultUdf implements UserDefinedFunction {
-        public String getName() {
+        @Override
+		public String getName() {
             return "StringMult";
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "Returns N copies of its string argument";
         }
 
-        public Syntax getSyntax() {
+        @Override
+		public Syntax getSyntax() {
             return Syntax.Function;
         }
 
-        public Type getReturnType(Type[] parameterTypes) {
+        @Override
+		public Type getReturnType(Type[] parameterTypes) {
             return new StringType();
         }
 
-        public Type[] getParameterTypes() {
+        @Override
+		public Type[] getParameterTypes() {
             return new Type[] {
                 new NumericType(), new StringType()
             };
         }
 
-        public Object execute(Evaluator evaluator, Argument[] arguments) {
+        @Override
+		public Object execute(Evaluator evaluator, Argument[] arguments) {
             final Object argValue = arguments[0].evaluateScalar(evaluator);
             int n;
             if (argValue instanceof Number) {
@@ -1695,7 +1717,8 @@ public class UdfTest {
             return buf.toString();
         }
 
-        public String[] getReservedWords() {
+        @Override
+		public String[] getReservedWords() {
             return null;
         }
     }
@@ -1706,26 +1729,31 @@ public class UdfTest {
      * hierarchy).
      */
     public static class AnotherMemberErrorUdf implements UserDefinedFunction {
-        public String getName() {
+        @Override
+		public String getName() {
             return "AnotherMemberError";
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "Returns default member from hierarchy, "
                 + "specified as a second parameter. "
                 + "First parameter - any member from any hierarchy";
         }
 
-        public Syntax getSyntax() {
+        @Override
+		public Syntax getSyntax() {
             return Syntax.Function;
         }
 
-        public Type getReturnType(Type[] parameterTypes) {
+        @Override
+		public Type getReturnType(Type[] parameterTypes) {
             HierarchyType hierType = (HierarchyType) parameterTypes[1];
             return MemberType.forType(hierType);
         }
 
-        public Type[] getParameterTypes() {
+        @Override
+		public Type[] getParameterTypes() {
             return new Type[] {
                 // The first argument must be a member.
                 MemberType.Unknown,
@@ -1734,7 +1762,8 @@ public class UdfTest {
             };
         }
 
-        public Object execute(Evaluator evaluator, Argument[] arguments) {
+        @Override
+		public Object execute(Evaluator evaluator, Argument[] arguments) {
             // Simply ignore first parameter
             Member member = (Member)arguments[0].evaluate(evaluator);
             Util.discard(member);
@@ -1742,7 +1771,8 @@ public class UdfTest {
             return hierarchy.getDefaultMember();
         }
 
-        public String[] getReservedWords() {
+        @Override
+		public String[] getReservedWords() {
             return null;
         }
     }
@@ -1751,7 +1781,8 @@ public class UdfTest {
      * Function that reverses a list of members.
      */
     public static class ReverseFunction implements UserDefinedFunction {
-        public Object execute(Evaluator eval, Argument[] args) {
+        @Override
+		public Object execute(Evaluator eval, Argument[] args) {
             // Note: must call Argument.evaluateList. If we call
             // Argument.evaluate we may get an Iterable.
             List<?> list = args[0].evaluateList(eval);
@@ -1762,27 +1793,33 @@ public class UdfTest {
             return list;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "Reverses the order of a set";
         }
 
-        public String getName() {
+        @Override
+		public String getName() {
             return "Reverse";
         }
 
-        public Type[] getParameterTypes() {
+        @Override
+		public Type[] getParameterTypes() {
             return new Type[] {new SetType(MemberType.Unknown)};
         }
 
-        public String[] getReservedWords() {
+        @Override
+		public String[] getReservedWords() {
             return null;
         }
 
-        public Type getReturnType(Type[] arg0) {
+        @Override
+		public Type getReturnType(Type[] arg0) {
             return arg0[0];
         }
 
-        public Syntax getSyntax() {
+        @Override
+		public Syntax getSyntax() {
             return Syntax.Function;
         }
     }
@@ -1798,7 +1835,8 @@ public class UdfTest {
      * members.
      */
     public static class ReverseIterableFunction extends ReverseFunction {
-        public Object execute(Evaluator eval, Argument[] args) {
+        @Override
+		public Object execute(Evaluator eval, Argument[] args) {
             // Note: must call Argument.evaluateList. If we call
             // Argument.evaluate we may get an Iterable.
             Iterable iterable = args[0].evaluateIterable(eval);
@@ -1815,32 +1853,39 @@ public class UdfTest {
      * Function that takes a member and returns a name.
      */
     public static class MemberNameFunction implements UserDefinedFunction {
-        public Object execute(Evaluator eval, Argument[] args) {
+        @Override
+		public Object execute(Evaluator eval, Argument[] args) {
             Member member = (Member) args[0].evaluate(eval);
             return member.getName();
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "Returns the name of a member";
         }
 
-        public String getName() {
+        @Override
+		public String getName() {
             return "MemberName";
         }
 
-        public Type[] getParameterTypes() {
+        @Override
+		public Type[] getParameterTypes() {
             return new Type[] {MemberType.Unknown};
         }
 
-        public String[] getReservedWords() {
+        @Override
+		public String[] getReservedWords() {
             return null;
         }
 
-        public Type getReturnType(Type[] arg0) {
+        @Override
+		public Type getReturnType(Type[] arg0) {
             return new StringType();
         }
 
-        public Syntax getSyntax() {
+        @Override
+		public Syntax getSyntax() {
             return Syntax.Function;
         }
     }
@@ -1850,7 +1895,8 @@ public class UdfTest {
      * with "foo" and suffixed with "bar".
      */
     public static class FooBarMemberFormatter implements MemberFormatter {
-        public String formatMember(Member member) {
+        @Override
+		public String formatMember(Member member) {
             return "foo" + member.getName() + "bar";
         }
     }
@@ -1860,7 +1906,8 @@ public class UdfTest {
      * with "foo" and suffixed with "bar".
      */
     public static class FooBarCellFormatter implements CellFormatter {
-        public String formatCell(Object value) {
+        @Override
+		public String formatCell(Object value) {
             return "foo" + value + "bar";
         }
     }
@@ -1870,7 +1917,8 @@ public class UdfTest {
      * property, then the value, prefixed with "foo" and suffixed with "bar".
      */
     public static class FooBarPropertyFormatter implements PropertyFormatter {
-        public String formatProperty(
+        @Override
+		public String formatProperty(
             Member member, String propertyName, Object propertyValue)
         {
             return "foo" + member.getName() + "/" + propertyName + "/"

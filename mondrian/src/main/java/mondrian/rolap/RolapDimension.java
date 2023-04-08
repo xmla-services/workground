@@ -172,7 +172,8 @@ class RolapDimension extends DimensionBase {
         }
     }
 
-    protected Logger getLogger() {
+    @Override
+	protected Logger getLogger() {
         return LOGGER;
     }
 
@@ -216,15 +217,18 @@ class RolapDimension extends DimensionBase {
      * <p>In this case, the expression is a dimension, so the hierarchy is the
      * dimension's default hierarchy (its first).
      */
-    public Hierarchy getHierarchy() {
+    @Override
+	public Hierarchy getHierarchy() {
         return hierarchies[0];
     }
 
-    public Schema getSchema() {
+    @Override
+	public Schema getSchema() {
         return schema;
     }
 
-    public Map<String, Object> getMetadata() {
+    @Override
+	public Map<String, Object> getMetadata() {
         return metaData;
     }
 

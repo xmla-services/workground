@@ -52,7 +52,8 @@ class HeadTailFunDef extends FunDefBase {
         head = dummyFunDef.getName().equals("Head");
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final ListCalc listCalc =
             compiler.compileList(call.getArg(0));
         final IntegerCalc integerCalc =
@@ -63,7 +64,8 @@ class HeadTailFunDef extends FunDefBase {
             return new AbstractListCalc(
             		call.getFunName(),call.getType(), new Calc[] {listCalc, integerCalc})
             {
-                public TupleList evaluateList(Evaluator evaluator) {
+                @Override
+				public TupleList evaluateList(Evaluator evaluator) {
                     final int savepoint = evaluator.savepoint();
                     try {
                         evaluator.setNonEmpty(false);
@@ -79,7 +81,8 @@ class HeadTailFunDef extends FunDefBase {
             return new AbstractListCalc(
             		call.getFunName(),call.getType(), new Calc[] {listCalc, integerCalc})
             {
-                public TupleList evaluateList(Evaluator evaluator) {
+                @Override
+				public TupleList evaluateList(Evaluator evaluator) {
                     final int savepoint = evaluator.savepoint();
                     try {
                         evaluator.setNonEmpty(false);

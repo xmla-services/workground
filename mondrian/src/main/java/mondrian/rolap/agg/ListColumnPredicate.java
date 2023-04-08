@@ -98,7 +98,8 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         return children;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         // Don't use the default list hashcode because we want a hash code
         // that's not order dependent
         if (hashValue == 0) {
@@ -114,7 +115,8 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         return hashValue;
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (obj instanceof ListColumnPredicate) {
             ListColumnPredicate that = (ListColumnPredicate) obj;
             return this.children.equals(that.children);
@@ -123,7 +125,8 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         }
     }
 
-    public void values(Collection<Object> collection) {
+    @Override
+	public void values(Collection<Object> collection) {
         if (values != null) {
             collection.addAll(values);
         } else {
@@ -133,7 +136,8 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         }
     }
 
-    public boolean evaluate(Object value) {
+    @Override
+	public boolean evaluate(Object value) {
         for (StarColumnPredicate childPredicate : children) {
             if (childPredicate.evaluate(value)) {
                 return true;
@@ -142,7 +146,8 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         return false;
     }
 
-    public boolean equalConstraint(StarPredicate that) {
+    @Override
+	public boolean equalConstraint(StarPredicate that) {
         boolean isEqual =
             that instanceof ListColumnPredicate
             && getConstrainedColumnBitKey().equals(
@@ -197,7 +202,8 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         return isEqual;
     }
 
-    public void describe(StringBuilder buf) {
+    @Override
+	public void describe(StringBuilder buf) {
         buf.append("={");
         for (int j = 0; j < children.size(); j++) {
             if (j > 0) {
@@ -208,7 +214,8 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         buf.append('}');
     }
 
-    public Overlap intersect(StarColumnPredicate predicate) {
+    @Override
+	public Overlap intersect(StarColumnPredicate predicate) {
         int matchCount = 0;
         for (StarColumnPredicate flushPredicate : children) {
             final Overlap r2 = flushPredicate.intersect(predicate);
@@ -234,7 +241,8 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         }
     }
 
-    public boolean mightIntersect(StarPredicate other) {
+    @Override
+	public boolean mightIntersect(StarPredicate other) {
         if (other instanceof LiteralStarPredicate) {
             return ((LiteralStarPredicate) other).getValue();
         }
@@ -256,7 +264,8 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         throw Util.newInternal("unknown constraint type " + other);
     }
 
-    public StarColumnPredicate minus(StarPredicate predicate) {
+    @Override
+	public StarColumnPredicate minus(StarPredicate predicate) {
         assert predicate != null;
         if (predicate instanceof LiteralStarPredicate) {
             LiteralStarPredicate literalStarPredicate =
@@ -289,7 +298,8 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         }
     }
 
-    public StarColumnPredicate orColumn(StarColumnPredicate predicate) {
+    @Override
+	public StarColumnPredicate orColumn(StarColumnPredicate predicate) {
         assert predicate.getConstrainedColumn() == getConstrainedColumn();
         if (predicate instanceof ListColumnPredicate) {
             ListColumnPredicate that = (ListColumnPredicate) predicate;
@@ -309,13 +319,15 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         }
     }
 
-    public StarColumnPredicate cloneWithColumn(RolapStar.Column column) {
+    @Override
+	public StarColumnPredicate cloneWithColumn(RolapStar.Column column) {
         return new ListColumnPredicate(
             column,
             cloneListWithColumn(column, children));
     }
 
-    public void toSql(SqlQuery sqlQuery, StringBuilder buf) {
+    @Override
+	public void toSql(SqlQuery sqlQuery, StringBuilder buf) {
         List<StarColumnPredicate> predicates = getPredicates();
         if (predicates.size() == 1) {
             predicates.get(0).toSql(sqlQuery, buf);

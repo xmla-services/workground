@@ -37,7 +37,8 @@ public class MemorySegmentCache implements SegmentCache {
     private final List<SegmentCacheListener> listeners =
         new CopyOnWriteArrayList<SegmentCacheListener>();
 
-    public SegmentBody get(SegmentHeader header) {
+    @Override
+	public SegmentBody get(SegmentHeader header) {
         final SoftReference<SegmentBody> ref = map.get(header);
         if (ref == null) {
             return null;
@@ -62,11 +63,13 @@ public class MemorySegmentCache implements SegmentCache {
         return true;
     }
 
-    public List<SegmentHeader> getSegmentHeaders() {
+    @Override
+	public List<SegmentHeader> getSegmentHeaders() {
         return new ArrayList<SegmentHeader>(map.keySet());
     }
 
-    public boolean put(final SegmentHeader header, SegmentBody body) {
+    @Override
+	public boolean put(final SegmentHeader header, SegmentBody body) {
         // REVIEW: What's the difference between returning false
         // and throwing an exception?
         assert header != null;
@@ -74,13 +77,16 @@ public class MemorySegmentCache implements SegmentCache {
         map.put(header, new SoftReference<SegmentBody>(body));
         fireSegmentCacheEvent(
             new SegmentCache.SegmentCacheListener.SegmentCacheEvent() {
-                public boolean isLocal() {
+                @Override
+				public boolean isLocal() {
                     return true;
                 }
-                public SegmentHeader getSource() {
+                @Override
+				public SegmentHeader getSource() {
                     return header;
                 }
-                public EventType getEventType() {
+                @Override
+				public EventType getEventType() {
                     return SegmentCacheListener.SegmentCacheEvent
                         .EventType.ENTRY_CREATED;
                 }
@@ -88,19 +94,23 @@ public class MemorySegmentCache implements SegmentCache {
         return true; // success
     }
 
-    public boolean remove(final SegmentHeader header) {
+    @Override
+	public boolean remove(final SegmentHeader header) {
         final boolean result =
             map.remove(header) != null;
         if (result) {
             fireSegmentCacheEvent(
                 new SegmentCache.SegmentCacheListener.SegmentCacheEvent() {
-                    public boolean isLocal() {
+                    @Override
+					public boolean isLocal() {
                         return true;
                     }
-                    public SegmentHeader getSource() {
+                    @Override
+					public SegmentHeader getSource() {
                         return header;
                     }
-                    public EventType getEventType() {
+                    @Override
+					public EventType getEventType() {
                         return
                             SegmentCacheListener.SegmentCacheEvent
                                 .EventType.ENTRY_DELETED;
@@ -110,20 +120,24 @@ public class MemorySegmentCache implements SegmentCache {
         return result;
     }
 
-    public void tearDown() {
+    @Override
+	public void tearDown() {
         map.clear();
         listeners.clear();
     }
 
-    public void addListener(SegmentCacheListener listener) {
+    @Override
+	public void addListener(SegmentCacheListener listener) {
         listeners.add(listener);
     }
 
-    public void removeListener(SegmentCacheListener listener) {
+    @Override
+	public void removeListener(SegmentCacheListener listener) {
         listeners.remove(listener);
     }
 
-    public boolean supportsRichIndex() {
+    @Override
+	public boolean supportsRichIndex() {
         return true;
     }
 

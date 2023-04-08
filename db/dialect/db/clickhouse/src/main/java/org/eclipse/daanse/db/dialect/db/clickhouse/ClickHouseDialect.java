@@ -39,7 +39,8 @@ public class ClickHouseDialect extends JdbcDialectImpl {
     protected boolean isSupportedProduct(String productName, String productVersion) {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
-    public boolean requiresDrillthroughMaxRowsInLimit() {
+    @Override
+	public boolean requiresDrillthroughMaxRowsInLimit() {
         return true;
     }
 

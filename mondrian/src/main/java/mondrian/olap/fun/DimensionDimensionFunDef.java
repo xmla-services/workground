@@ -35,7 +35,8 @@ class DimensionDimensionFunDef extends FunDefBase {
             "pdd");
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
     {
         Dimension dimension =
             ((DimensionExpr) call.getArg(0)).getDimension();

@@ -30,23 +30,27 @@ public class IteratorIterable<E> implements Iterable<E> {
     public IteratorIterable(final Iterator<E> iterator) {
         this.recordingIterator =
             new Iterator<E>() {
-                public boolean hasNext() {
+                @Override
+				public boolean hasNext() {
                     return iterator.hasNext();
                 }
 
-                public E next() {
+                @Override
+				public E next() {
                     final E e = iterator.next();
                     list.add(e);
                     return e;
                 }
 
-                public void remove() {
+                @Override
+				public void remove() {
                     throw new UnsupportedOperationException();
                 }
             };
     }
 
-    public Iterator<E> iterator() {
+    @Override
+	public Iterator<E> iterator() {
         // Return an iterator over the union of (1) the list, (2) the rest
         // of the iterator. The second part writes elements to the list as
         // it returns them.
@@ -58,15 +62,18 @@ public class IteratorIterable<E> implements Iterable<E> {
             new Iterator<E>() {
                 int i = 0;
 
-                public boolean hasNext() {
+                @Override
+				public boolean hasNext() {
                     return i < list.size();
                 }
 
-                public E next() {
+                @Override
+				public E next() {
                     return list.get(i++);
                 }
 
-                public void remove() {
+                @Override
+				public void remove() {
                     throw new UnsupportedOperationException();
                 }
             },

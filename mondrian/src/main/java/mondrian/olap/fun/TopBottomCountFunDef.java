@@ -53,7 +53,8 @@ class TopBottomCountFunDef extends FunDefBase {
       "TopCount(<Set>, <Count>[, <Numeric Expression>])",
       "Returns a specified number of items from the top of a set, optionally ordering the set first.",
       new String[] { "fxxnn", "fxxn" } ) {
-      protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+      @Override
+	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
         return new TopBottomCountFunDef( dummyFunDef, true );
       }
     };
@@ -64,7 +65,8 @@ class TopBottomCountFunDef extends FunDefBase {
       "BottomCount(<Set>, <Count>[, <Numeric Expression>])",
       "Returns a specified number of items from the bottom of a set, optionally ordering the set first.",
       new String[] { "fxxnn", "fxxn" } ) {
-      protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+      @Override
+	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
         return new TopBottomCountFunDef( dummyFunDef, false );
       }
     };
@@ -75,7 +77,8 @@ class TopBottomCountFunDef extends FunDefBase {
 
   }
 
-  public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
+  @Override
+public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     // Compile the member list expression. Ask for a mutable list, because
     // we're going to sort it later.
     final ListCalc listCalc =
@@ -90,7 +93,8 @@ class TopBottomCountFunDef extends FunDefBase {
     return new AbstractListCalc(
     		call.getFunName(),call.getType(),
       new Calc[] { listCalc, integerCalc, orderCalc } ) {
-      public TupleList evaluateList( Evaluator evaluator ) {
+      @Override
+	public TupleList evaluateList( Evaluator evaluator ) {
         // Use a native evaluator, if more efficient.
         // TODO: Figure this out at compile time.
         SchemaReader schemaReader = evaluator.getSchemaReader();
@@ -180,7 +184,8 @@ class TopBottomCountFunDef extends FunDefBase {
         }
       }
 
-      public boolean dependsOn( Hierarchy hierarchy ) {
+      @Override
+	public boolean dependsOn( Hierarchy hierarchy ) {
         return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
       }
 

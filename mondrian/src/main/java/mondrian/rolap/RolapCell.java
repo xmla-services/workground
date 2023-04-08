@@ -95,42 +95,51 @@ public class RolapCell implements Cell {
         this.ci = ci;
     }
 
-    public List<Integer> getCoordinateList() {
+    @Override
+	public List<Integer> getCoordinateList() {
         return new AbstractList<Integer>() {
-            public Integer get(int index) {
+            @Override
+			public Integer get(int index) {
                 return pos[index];
             }
 
-            public int size() {
+            @Override
+			public int size() {
                 return pos.length;
             }
         };
     }
 
-    public Object getValue() {
+    @Override
+	public Object getValue() {
         if (ci.value == Util.nullValue) {
             return null;
         }
         return ci.value;
     }
 
-    public String getCachedFormatString() {
+    @Override
+	public String getCachedFormatString() {
         return ci.formatString;
     }
 
-    public String getFormattedValue() {
+    @Override
+	public String getFormattedValue() {
         return ci.getFormatValue();
     }
 
-    public boolean isNull() {
+    @Override
+	public boolean isNull() {
         return (ci.value == Util.nullValue);
     }
 
-    public boolean isError() {
+    @Override
+	public boolean isError() {
         return (ci.value instanceof Throwable);
     }
 
-    public String getDrillThroughSQL(
+    @Override
+	public String getDrillThroughSQL(
         boolean extendedContext)
     {
         return getDrillThroughSQL(
@@ -187,7 +196,8 @@ public class RolapCell implements Cell {
             false);
     }
 
-    public int getDrillThroughCount() {
+    @Override
+	public int getDrillThroughCount() {
         final Member[] currentMembers = getMembersForDrillThrough();
         // Create a StarPredicate to represent the compound
         // slicer (if necessary)
@@ -378,7 +388,8 @@ public class RolapCell implements Cell {
      *
      * @return true if can drill through
      */
-    public boolean canDrillThrough() {
+    @Override
+	public boolean canDrillThrough() {
         if (!MondrianProperties.instance()
             .EnableDrillThrough.get())
         {
@@ -568,7 +579,8 @@ public class RolapCell implements Cell {
                 null);
     }
 
-    public Object getPropertyValue(String propertyName) {
+    @Override
+	public Object getPropertyValue(String propertyName) {
         final boolean matchCase =
             MondrianProperties.instance().CaseSensitive.get();
         Property property = Property.lookup(propertyName, matchCase);
@@ -659,11 +671,13 @@ public class RolapCell implements Cell {
         }
     }
 
-    public Member getContextMember(Hierarchy hierarchy) {
+    @Override
+	public Member getContextMember(Hierarchy hierarchy) {
         return result.getMember(pos, hierarchy);
     }
 
-    public void setValue(
+    @Override
+	public void setValue(
         Scenario scenario,
         Object newValue,
         AllocationPolicy allocationPolicy,
@@ -739,12 +753,14 @@ public class RolapCell implements Cell {
         DrillThroughVisitor() {
         }
 
-        public Object visit(MemberExpr memberExpr) {
+        @Override
+		public Object visit(MemberExpr memberExpr) {
             handleMember(memberExpr.getMember());
             return null;
         }
 
-        public Object visit(ResolvedFunCall call) {
+        @Override
+		public Object visit(ResolvedFunCall call) {
             final FunDef def = call.getFunDef();
             final Exp[] args = call.getArgs();
             final String name = def.getName();
@@ -789,50 +805,61 @@ public class RolapCell implements Cell {
             }
         }
 
-        public Object visit(NamedSetExpr namedSetExpr) {
+        @Override
+		public Object visit(NamedSetExpr namedSetExpr) {
             throw Util.newInternal("not valid here: " + namedSetExpr);
         }
 
-        public Object visit(Literal literal) {
+        @Override
+		public Object visit(Literal literal) {
             return null; // literals are drillable
         }
 
-        public Object visit(Query query) {
+        @Override
+		public Object visit(Query query) {
             throw Util.newInternal("not valid here: " + query);
         }
 
-        public Object visit(QueryAxis queryAxis) {
+        @Override
+		public Object visit(QueryAxis queryAxis) {
             throw Util.newInternal("not valid here: " + queryAxis);
         }
 
-        public Object visit(Formula formula) {
+        @Override
+		public Object visit(Formula formula) {
             throw Util.newInternal("not valid here: " + formula);
         }
 
-        public Object visit(UnresolvedFunCall call) {
+        @Override
+		public Object visit(UnresolvedFunCall call) {
             throw Util.newInternal("expected resolved expression");
         }
 
-        public Object visit(Id id) {
+        @Override
+		public Object visit(Id id) {
             throw Util.newInternal("expected resolved expression");
         }
 
-        public Object visit(ParameterExpr parameterExpr) {
+        @Override
+		public Object visit(ParameterExpr parameterExpr) {
             // Not valid in general; might contain complex expression
             throw bomb;
         }
 
-        public Object visit(DimensionExpr dimensionExpr) {
+        @Override
+		public Object visit(DimensionExpr dimensionExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }
 
-        public Object visit(HierarchyExpr hierarchyExpr) {
+        @Override
+		public Object visit(HierarchyExpr hierarchyExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }
 
-        public Object visit(LevelExpr levelExpr) {
+        @Override
+		public Object visit(LevelExpr levelExpr) {
             // Not valid in general; might be part of complex expression
             throw bomb;
         }

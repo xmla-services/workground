@@ -424,7 +424,8 @@ public class BitKeyTest {
     void testOr() {
         doTestOp(
             new Checker() {
-                public void check(
+                @Override
+				public void check(
                     int size0, int[] positions0, int size1, int[] positions1)
                 {
                     BitKey bitKey0 = makeAndSet(size0, positions0);
@@ -453,7 +454,8 @@ public class BitKeyTest {
     void testOrNot() {
         doTestOp(
             new Checker() {
-                public void check(
+                @Override
+				public void check(
                     int size0, int[] positions0, int size1, int[] positions1)
                 {
                     BitKey bitKey0 = makeAndSet(size0, positions0);
@@ -482,7 +484,8 @@ public class BitKeyTest {
     void testAnd() {
         doTestOp(
             new Checker() {
-                public void check(
+                @Override
+				public void check(
                     int size0, int[] positions0, int size1, int[] positions1)
                 {
                     BitKey bitKey0 = makeAndSet(size0, positions0);
@@ -512,7 +515,8 @@ public class BitKeyTest {
     void testAndNot() {
         doTestOp(
             new Checker() {
-                public void check(
+                @Override
+				public void check(
                     int size0, int[] positions0, int size1, int[] positions1)
                 {
                     BitKey bitKey0 = makeAndSet(size0, positions0);
@@ -542,7 +546,8 @@ public class BitKeyTest {
     void testIntersects() {
         doTestOp(
             new Checker() {
-                public void check(
+                @Override
+				public void check(
                     int size0, int[] positions0, int size1, int[] positions1)
                 {
                     BitKey bitKey0 = makeAndSet(size0, positions0);
@@ -568,7 +573,8 @@ public class BitKeyTest {
     void testToBitSet() {
         doTestOp(
             new Checker() {
-                public void check(
+                @Override
+				public void check(
                     int size0, int[] positions0, int size1, int[] positions1)
                 {
                     BitKey bitKey0 = makeAndSet(size0, positions0);
@@ -592,7 +598,8 @@ public class BitKeyTest {
     void testCompareTo() {
         doTestOp(
             new Checker() {
-                public void check(
+                @Override
+				public void check(
                     int size0, int[] positions0, int size1, int[] positions1)
                 {
                     BitKey bitKey0 = makeAndSet(size0, positions0);

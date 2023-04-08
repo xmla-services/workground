@@ -137,11 +137,13 @@ public class BUG_1541077 extends AggTableTestCase {
         assertTrue(v.equals(v1));
     }
 
-    protected String getFileName() {
+    @Override
+	protected String getFileName() {
         return BUG_1541077;
     }
 
-    protected String getCubeDescription() {
+    @Override
+	protected String getCubeDescription() {
         return "<Cube name='Cheques'>\n"
                + "<Table name='cheques'>\n"
                + "<AggName name='agg_lp_xxx_cheques'>\n"

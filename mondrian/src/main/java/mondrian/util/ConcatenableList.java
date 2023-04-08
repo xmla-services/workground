@@ -46,13 +46,15 @@ public class ConcatenableList<T> extends AbstractList<T> {
         this.plainList = null;
     }
 
-    public <T2> T2[] toArray(T2[] a) {
+    @Override
+	public <T2> T2[] toArray(T2[] a) {
         consolidate();
         //noinspection unchecked,SuspiciousToArrayCall
         return (T2[]) plainList.toArray((Object []) a);
     }
 
-    public Object[] toArray() {
+    @Override
+	public Object[] toArray() {
         consolidate();
         return plainList.toArray();
     }
@@ -73,7 +75,8 @@ public class ConcatenableList<T> extends AbstractList<T> {
         }
     }
 
-    public boolean addAll(final Collection<? extends T> collection) {
+    @Override
+	public boolean addAll(final Collection<? extends T> collection) {
         if (this.plainList == null) {
             final List<T> list = (List<T>) collection;
             return this.lists.add(list);
@@ -85,7 +88,8 @@ public class ConcatenableList<T> extends AbstractList<T> {
         }
     }
 
-    public T get(final int index) {
+    @Override
+	public T get(final int index) {
         if (this.plainList == null) {
             if (index == 0) {
                 this.getIterator = this.iterator();
@@ -145,7 +149,8 @@ public class ConcatenableList<T> extends AbstractList<T> {
         }
     }
 
-    public boolean add(final T t) {
+    @Override
+	public boolean add(final T t) {
         if (this.plainList == null) {
             return this.lists.add(Collections.singletonList(t));
         } else {
@@ -153,7 +158,8 @@ public class ConcatenableList<T> extends AbstractList<T> {
         }
     }
 
-    public void add(final int index, final T t) {
+    @Override
+	public void add(final int index, final T t) {
         if (this.plainList == null) {
             throw new UnsupportedOperationException();
         } else {
@@ -161,7 +167,8 @@ public class ConcatenableList<T> extends AbstractList<T> {
         }
     }
 
-    public T set(final int index, final T t) {
+    @Override
+	public T set(final int index, final T t) {
         if (this.plainList == null) {
             throw new UnsupportedOperationException();
         } else {
@@ -169,7 +176,8 @@ public class ConcatenableList<T> extends AbstractList<T> {
         }
     }
 
-    public int size() {
+    @Override
+	public int size() {
         if (this.plainList == null) {
             // REVIEW: Consider consolidating here. As it stands, this loop is
             // expensive if called often on a lot of small lists. Amortized cost
@@ -184,13 +192,15 @@ public class ConcatenableList<T> extends AbstractList<T> {
         }
     }
 
-    public Iterator<T> iterator() {
+    @Override
+	public Iterator<T> iterator() {
         if (this.plainList == null) {
             return new Iterator<T>() {
                 private final Iterator<List<T>> listsIt = lists.iterator();
                 private Iterator<T> currentListIt;
 
-                public boolean hasNext() {
+                @Override
+				public boolean hasNext() {
                     if (currentListIt == null) {
                         if (listsIt.hasNext()) {
                             currentListIt = listsIt.next().iterator();
@@ -214,7 +224,8 @@ public class ConcatenableList<T> extends AbstractList<T> {
                     return currentListIt.hasNext();
                 }
 
-                public T next() {
+                @Override
+				public T next() {
                     if (!hasNext()) {
                         throw new NoSuchElementException();
                     } else {
@@ -222,7 +233,8 @@ public class ConcatenableList<T> extends AbstractList<T> {
                     }
                 }
 
-                public void remove() {
+                @Override
+				public void remove() {
                     throw new UnsupportedOperationException();
                 }
             };
@@ -231,7 +243,8 @@ public class ConcatenableList<T> extends AbstractList<T> {
         }
     }
 
-    public boolean isEmpty() {
+    @Override
+	public boolean isEmpty() {
         if (this.plainList != null) {
             return this.plainList.isEmpty();
         }
@@ -247,12 +260,14 @@ public class ConcatenableList<T> extends AbstractList<T> {
         }
     }
 
-    public void clear() {
+    @Override
+	public void clear() {
         this.plainList = null;
         this.lists.clear();
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return this.hashCode;
     }
 }

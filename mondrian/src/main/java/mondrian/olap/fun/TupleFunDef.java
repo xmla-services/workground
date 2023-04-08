@@ -57,19 +57,23 @@ public class TupleFunDef extends FunDefBase {
         this.argTypes = argTypes;
     }
 
-    public int getReturnCategory() {
+    @Override
+	public int getReturnCategory() {
         return Category.Tuple;
     }
 
-    public int[] getParameterCategories() {
+    @Override
+	public int[] getParameterCategories() {
         return argTypes;
     }
 
-    public void unparse(Exp[] args, PrintWriter pw) {
+    @Override
+	public void unparse(Exp[] args, PrintWriter pw) {
         ExpBase.unparseList(pw, args, "(", ", ", ")");
     }
 
-    public Type getResultType(Validator validator, Exp[] args) {
+    @Override
+	public Type getResultType(Validator validator, Exp[] args) {
         // _Tuple(<Member1>[,<MemberI>]...), which is written
         // (<Member1>[,<MemberI>]...), has type [Hie1] x ... x [HieN].
         //
@@ -88,7 +92,8 @@ public class TupleFunDef extends FunDefBase {
         }
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final Exp[] args = call.getArgs();
         final MemberCalc[] memberCalcs = new MemberCalc[args.length];
         for (int i = 0; i < args.length; i++) {
@@ -105,7 +110,8 @@ public class TupleFunDef extends FunDefBase {
             this.memberCalcs = memberCalcs;
         }
 
-        public Member[] evaluateTuple(Evaluator evaluator) {
+        @Override
+		public Member[] evaluateTuple(Evaluator evaluator) {
             final Member[] members = new Member[memberCalcs.length];
             for (int i = 0; i < members.length; i++) {
                 final Member member =
@@ -128,7 +134,8 @@ public class TupleFunDef extends FunDefBase {
             super("()", null, null, Syntax.Parentheses);
         }
 
-        public FunDef resolve(
+        @Override
+		public FunDef resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)

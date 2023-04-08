@@ -24,7 +24,8 @@ public interface Hierarchy extends OlapElement, MetaElement {
     /**
      * Returns the dimension this hierarchy belongs to.
      */
-    Dimension getDimension();
+    @Override
+	Dimension getDimension();
     /**
      * Returns the levels in this hierarchy.
      *
@@ -78,7 +79,8 @@ public interface Hierarchy extends OlapElement, MetaElement {
      *
      * @return Unique name of hierarchy.
      */
-    String getUniqueNameSsas();
+    @Deprecated
+	String getUniqueNameSsas();
 
     String getDisplayFolder();
 }

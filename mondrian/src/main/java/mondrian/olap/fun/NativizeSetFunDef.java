@@ -123,7 +123,8 @@ public class NativizeSetFunDef extends FunDefBase {
         NativizeSetFunDef.LOGGER.debug("---- NativizeSetFunDef constructor");
     }
 
-    public Exp createCall(Validator validator, Exp[] args) {
+    @Override
+	public Exp createCall(Validator validator, Exp[] args) {
         NativizeSetFunDef.LOGGER.debug("NativizeSetFunDef createCall");
         ResolvedFunCall call =
             (ResolvedFunCall) super.createCall(validator, args);
@@ -131,7 +132,8 @@ public class NativizeSetFunDef extends FunDefBase {
         return call;
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         NativizeSetFunDef.LOGGER.debug("NativizeSetFunDef compileCall");
         Exp funArg = call.getArg(0);
 
@@ -222,24 +224,29 @@ public class NativizeSetFunDef extends FunDefBase {
             this.nativeEnabled = nativeEnabled;
         }
 
-        public Object evaluate(final Evaluator evaluator) {
+        @Override
+		public Object evaluate(final Evaluator evaluator) {
             evaluator.setNativeEnabled(nativeEnabled);
             return parent.evaluate(evaluator);
         }
 
-        public boolean dependsOn(final Hierarchy hierarchy) {
+        @Override
+		public boolean dependsOn(final Hierarchy hierarchy) {
             return parent.dependsOn(hierarchy);
         }
 
-        public Type getType() {
+        @Override
+		public Type getType() {
             return parent.getType();
         }
 
-        public void accept(final CalcWriter calcWriter) {
+        @Override
+		public void accept(final CalcWriter calcWriter) {
             parent.accept(calcWriter);
         }
 
-        public ResultStyle getResultStyle() {
+        @Override
+		public ResultStyle getResultStyle() {
             return parent.getResultStyle();
         }
 
@@ -249,7 +256,8 @@ public class NativizeSetFunDef extends FunDefBase {
          * Default implementation just does 'instanceof TargetClass'. Subtypes
          * that are wrappers should override.
          */
-        public boolean isWrapperFor(Class<?> iface) {
+        @Override
+		public boolean isWrapperFor(Class<?> iface) {
             return iface.isInstance(this);
         }
 
@@ -259,7 +267,8 @@ public class NativizeSetFunDef extends FunDefBase {
          * Default implementation just casts to TargetClass.
          * Subtypes that are wrappers should override.
          */
-        public <T> T unwrap(Class<T> iface) {
+        @Override
+		public <T> T unwrap(Class<T> iface) {
             return iface.cast(this);
         }
     }
@@ -276,7 +285,8 @@ public class NativizeSetFunDef extends FunDefBase {
             return (IterCalc) parent;
         }
 
-        public TupleIterable evaluateIterable(Evaluator evaluator) {
+        @Override
+		public TupleIterable evaluateIterable(Evaluator evaluator) {
             evaluator.setNativeEnabled(nativeEnabled);
             return parent().evaluateIterable(evaluator);
         }
@@ -294,12 +304,14 @@ public class NativizeSetFunDef extends FunDefBase {
             return (ListCalc) parent;
         }
 
-        public TupleList evaluateList(Evaluator evaluator) {
+        @Override
+		public TupleList evaluateList(Evaluator evaluator) {
             evaluator.setNativeEnabled(nativeEnabled);
             return parent().evaluateList(evaluator);
         }
 
-        public TupleIterable evaluateIterable(Evaluator evaluator) {
+        @Override
+		public TupleIterable evaluateIterable(Evaluator evaluator) {
             return evaluateList(evaluator);
         }
     }
@@ -326,7 +338,8 @@ public class NativizeSetFunDef extends FunDefBase {
             this.originalExp = originalExp;
         }
 
-        public TupleList evaluateList(Evaluator evaluator) {
+        @Override
+		public TupleList evaluateList(Evaluator evaluator) {
             return computeTuples(evaluator);
         }
 
@@ -1265,7 +1278,8 @@ public class NativizeSetFunDef extends FunDefBase {
             return list.get(cursor).get(col);
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return new StringBuilder("[").append(from).append(" : ").append(to).append("]").toString();
         }
 
@@ -1348,7 +1362,8 @@ public class NativizeSetFunDef extends FunDefBase {
             return new Iterable<Range>() {
                 final int rangeCol = col;
 
-                public Iterator<Range> iterator() {
+                @Override
+				public Iterator<Range> iterator() {
                     return new RangeIterator(parent, rangeCol);
                 }
             };
@@ -1356,22 +1371,26 @@ public class NativizeSetFunDef extends FunDefBase {
 
         public Iterable<Member> getMembers(final int col) {
             return new Iterable<Member>() {
-                public Iterator<Member> iterator() {
+                @Override
+				public Iterator<Member> iterator() {
                     return new Iterator<Member>() {
                         private int cursor = from;
 
-                        public boolean hasNext() {
+                        @Override
+						public boolean hasNext() {
                             return cursor < to;
                         }
 
-                        public Member next() {
+                        @Override
+						public Member next() {
                             if (!hasNext()) {
                                 throw new NoSuchElementException();
                             }
                             return getMember(cursor++, col);
                         }
 
-                        public void remove() {
+                        @Override
+						public void remove() {
                             throw new UnsupportedOperationException();
                         }
                     };
@@ -1393,7 +1412,8 @@ public class NativizeSetFunDef extends FunDefBase {
             precomputed = next(parent.from);
         }
 
-        public boolean hasNext() {
+        @Override
+		public boolean hasNext() {
             return precomputed != null;
         }
 
@@ -1403,7 +1423,8 @@ public class NativizeSetFunDef extends FunDefBase {
                 : parent.subRangeStartingAt(cursor, col);
         }
 
-        public Range next() {
+        @Override
+		public Range next() {
             if (precomputed == null) {
                 throw new NoSuchElementException();
             }
@@ -1412,7 +1433,8 @@ public class NativizeSetFunDef extends FunDefBase {
             return it;
         }
 
-        public void remove() {
+        @Override
+		public void remove() {
             throw new UnsupportedOperationException();
         }
     }
@@ -1461,7 +1483,8 @@ public class NativizeSetFunDef extends FunDefBase {
             return curr;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return new StringBuilder().append(index).append(":")
                 .append(commands.toString().replaceAll("=null", "").replaceAll("=", " "))
                     .append(" ").toString();

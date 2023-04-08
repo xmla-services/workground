@@ -36,38 +36,46 @@ abstract class ArrayMemberSource implements MemberSource {
         this.hierarchy = hierarchy;
         this.members = members;
     }
-    public RolapHierarchy getHierarchy() {
+    @Override
+	public RolapHierarchy getHierarchy() {
         return hierarchy;
     }
-    public boolean setCache(MemberCache cache) {
+    @Override
+	public boolean setCache(MemberCache cache) {
         return false; // we do not support cache writeback
     }
-    public List<RolapMember> getMembers() {
+    @Override
+	public List<RolapMember> getMembers() {
         return members;
     }
-    public int getMemberCount() {
+    @Override
+	public int getMemberCount() {
         return members.size();
     }
 
-    public List<RolapMember> getRootMembers() {
+    @Override
+	public List<RolapMember> getRootMembers() {
         return Collections.emptyList();
     }
 
-    public void getMemberChildren(
+    @Override
+	public void getMemberChildren(
         RolapMember parentMember,
         List<RolapMember> children)
     {
         // there are no children
     }
 
-    public void getMemberChildren(
+    @Override
+	public void getMemberChildren(
         List<RolapMember> parentMembers,
         List<RolapMember> children)
     {
         // there are no children
     }
 
-    public RolapMember lookupMember(
+    @Override
+	public RolapMember lookupMember(
         List<Id.Segment> uniqueNameParts,
         boolean failIfNotFound)
     {

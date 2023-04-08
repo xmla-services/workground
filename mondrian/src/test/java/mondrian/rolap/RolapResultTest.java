@@ -202,11 +202,13 @@ Axis #2:
 
 
 
-    protected String getFileName() {
+    @Override
+	protected String getFileName() {
         return RolapResultTest;
     }
 
-    protected String getCubeDescription() {
+    @Override
+	protected String getCubeDescription() {
         return
             "<Cube name='FTAll'>\n"
             + "<Table name='FT1' />\n"

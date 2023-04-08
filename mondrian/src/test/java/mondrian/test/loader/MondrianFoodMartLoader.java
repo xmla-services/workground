@@ -435,7 +435,8 @@ public class MondrianFoodMartLoader {
             final Condition<String> tableFilter;
             if (include != null || exclude != null) {
                 tableFilter = new Condition<String>() {
-                    public boolean test(String tableName) {
+                    @Override
+					public boolean test(String tableName) {
                         if (include != null) {
                             if (!include.matcher(tableName).matches()) {
                                 return false;
@@ -456,7 +457,8 @@ public class MondrianFoodMartLoader {
                 };
             } else {
                 tableFilter = new Condition<String>() {
-                    public boolean test(String s) {
+                    @Override
+					public boolean test(String s) {
                         return true;
                     }
                 };

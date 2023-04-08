@@ -47,11 +47,13 @@ public class SqlStatementEndEvent extends SqlStatementEvent {
         this.throwable = throwable;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuilder("SqlStatementEndEvent(").append(sqlStatementId).append(")").toString();
     }
 
-    public <T> T accept(Visitor<T> visitor) {
+    @Override
+	public <T> T accept(Visitor<T> visitor) {
         return visitor.visit(this);
     }
 }

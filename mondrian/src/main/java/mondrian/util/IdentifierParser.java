@@ -119,7 +119,8 @@ public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
             super(schemaReader, cube, hierarchyList);
         }
 
-        public void memberComplete() {
+        @Override
+		public void memberComplete() {
             super.memberComplete();
             if (memberList.size() >= hierarchyList.size()) {
                 throw Util.newInternal("expected ')");
@@ -130,7 +131,8 @@ public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
             segmentList.clear();
         }
 
-        public void tupleComplete() {
+        @Override
+		public void tupleComplete() {
             if (memberList.size() < hierarchyList.size()) {
                 throw Util.newInternal("too few members");
             }
@@ -150,7 +152,8 @@ public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
             tupleList = new ArrayTupleList(hierarchyList.size());
         }
 
-        public void tupleComplete() {
+        @Override
+		public void tupleComplete() {
             super.tupleComplete();
             if (!FunUtil.tupleContainsNullMember(memberList)) {
                 tupleList.add(memberList);
@@ -171,7 +174,8 @@ public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
             super(schemaReader, cube, Collections.singletonList(hierarchy));
         }
 
-        public void memberComplete() {
+        @Override
+		public void memberComplete() {
             final Member member = resolveMember(hierarchyList.get(0));
             if (!member.isNull()) {
                 memberList.add(member);

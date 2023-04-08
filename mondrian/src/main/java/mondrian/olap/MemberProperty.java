@@ -28,7 +28,8 @@ public class MemberProperty extends QueryPart {
         this.exp = exp;
     }
 
-    protected Object clone() {
+    @Override
+	protected Object clone() {
         return new MemberProperty(name, (Exp) exp.clone());
     }
 
@@ -52,11 +53,13 @@ public class MemberProperty extends QueryPart {
         return name;
     }
 
-    public Object[] getChildren() {
+    @Override
+	public Object[] getChildren() {
         return new Exp[] {exp};
     }
 
-    public void unparse(PrintWriter pw) {
+    @Override
+	public void unparse(PrintWriter pw) {
         pw.print(new StringBuilder(name).append(" = ").toString());
         exp.unparse(pw);
     }

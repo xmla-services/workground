@@ -91,7 +91,8 @@ public class AggregationManager extends RolapAggregationManager {
      *   {@link mondrian.olap.MondrianServer#forConnection(mondrian.olap.Connection)},
      *   passing in a null connection if you absolutely must.
      */
-    public static synchronized AggregationManager instance() {
+    @Deprecated
+	public static synchronized AggregationManager instance() {
         return
             MondrianServer.forId(null).getAggregationManager();
     }
@@ -144,7 +145,8 @@ public class AggregationManager extends RolapAggregationManager {
         final PrintWriter pw)
     {
         return new CacheControlImpl(connection) {
-            protected void flushNonUnion(final CellRegion region) {
+            @Override
+			protected void flushNonUnion(final CellRegion region) {
                 SegmentCacheManager segmentCacheManager = getCacheMgr(connection);
                 final SegmentCacheManager.FlushResult result =
                     segmentCacheManager.execute(
@@ -163,7 +165,8 @@ public class AggregationManager extends RolapAggregationManager {
                 }
             }
 
-            public void flush(final CellRegion region) {
+            @Override
+			public void flush(final CellRegion region) {
                 if (pw != null) {
                     pw.println("Cache state before flush:");
                     printCacheState(pw, region);
@@ -177,23 +180,27 @@ public class AggregationManager extends RolapAggregationManager {
                 }
             }
 
-            public void trace(final String message) {
+            @Override
+			public void trace(final String message) {
                 if (pw != null) {
                     pw.println(message);
                 }
             }
 
-            public boolean isTraceEnabled() {
+            @Override
+			public boolean isTraceEnabled() {
                 return pw != null;
             }
         };
     }
 
-    public Object getCellFromCache(CellRequest request) {
+    @Override
+	public Object getCellFromCache(CellRequest request) {
         return getCellFromCache(request, null);
     }
 
-    public Object getCellFromCache(CellRequest request, PinSet pinSet) {
+    @Override
+	public Object getCellFromCache(CellRequest request, PinSet pinSet) {
         // NOTE: This method used to check both local (thread/statement) cache
         // and global cache (segments in JVM, shared between statements). Now it
         // only looks in local cache. This can be done without acquiring any
@@ -209,7 +216,8 @@ public class AggregationManager extends RolapAggregationManager {
         return measure.getStar().getCellFromAllCaches(request, rolapConnection);
     }
 
-    public String getDrillThroughSql(
+    @Override
+	public String getDrillThroughSql(
         final DrillThroughCellRequest request,
         final StarPredicate starPredicateSlicer,
         List<OlapElement> fields,
@@ -549,7 +557,8 @@ System.out.println(buf.toString());
         return setParentsBitKey(star, levelBitKey, parent.getBitPosition());
     }
 
-    public PinSet createPinSet() {
+    @Override
+	public PinSet createPinSet() {
         return new PinSetImpl();
     }
 

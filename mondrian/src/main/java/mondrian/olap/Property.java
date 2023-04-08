@@ -160,7 +160,8 @@ public class Property extends EnumeratedValues.BasicValue {
      * @deprecated Property is not used and will be removed in mondrian-4.0;
      * use {@link mondrian.olap.SchemaReader#getParentChildContributingChildren}
      */
-    public static final Property CONTRIBUTING_CHILDREN =
+    @Deprecated
+	public static final Property CONTRIBUTING_CHILDREN =
         new Property(
             "$contributingChildren", Datatype.TYPE_OTHER,
             CONTRIBUTING_CHILDREN_ORDINAL, true, false, false, null);

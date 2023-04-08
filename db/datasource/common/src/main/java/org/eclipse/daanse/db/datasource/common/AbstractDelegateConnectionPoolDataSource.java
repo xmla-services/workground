@@ -28,39 +28,48 @@ public abstract class AbstractDelegateConnectionPoolDataSource<D extends Connect
 
     protected abstract D delegate();
 
-    public PooledConnection getPooledConnection() throws SQLException {
+    @Override
+	public PooledConnection getPooledConnection() throws SQLException {
         return delegate().getPooledConnection();
     }
 
-    public PooledConnection getPooledConnection(String user, String password) throws SQLException {
+    @Override
+	public PooledConnection getPooledConnection(String user, String password) throws SQLException {
         return delegate().getPooledConnection(user, password);
     }
 
-    public PrintWriter getLogWriter() throws SQLException {
+    @Override
+	public PrintWriter getLogWriter() throws SQLException {
         return delegate().getLogWriter();
     }
 
-    public void setLogWriter(PrintWriter out) throws SQLException {
+    @Override
+	public void setLogWriter(PrintWriter out) throws SQLException {
         delegate().setLogWriter(out);
     }
 
-    public void setLoginTimeout(int seconds) throws SQLException {
+    @Override
+	public void setLoginTimeout(int seconds) throws SQLException {
         delegate().setLoginTimeout(seconds);
     }
 
-    public int getLoginTimeout() throws SQLException {
+    @Override
+	public int getLoginTimeout() throws SQLException {
         return delegate().getLoginTimeout();
     }
 
-    public PooledConnectionBuilder createPooledConnectionBuilder() throws SQLException {
+    @Override
+	public PooledConnectionBuilder createPooledConnectionBuilder() throws SQLException {
         return delegate().createPooledConnectionBuilder();
     }
 
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    @Override
+	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
         return delegate().getParentLogger();
     }
 
-    public ShardingKeyBuilder createShardingKeyBuilder() throws SQLException {
+    @Override
+	public ShardingKeyBuilder createShardingKeyBuilder() throws SQLException {
         return delegate().createShardingKeyBuilder();
     }
 

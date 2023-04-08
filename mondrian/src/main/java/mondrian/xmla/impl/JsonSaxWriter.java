@@ -54,16 +54,19 @@ class JsonSaxWriter implements SaxWriter {
         this.outputStream = outputStream;
     }
 
-    public void startDocument() {
+    @Override
+	public void startDocument() {
         stack.push(new Frame(null));
     }
 
-    public void endDocument() {
+    @Override
+	public void endDocument() {
         stack.pop();
         flush();
     }
 
-    public void startSequence(String name, String subName) {
+    @Override
+	public void startSequence(String name, String subName) {
         comma();
         buf.append(indentString);
         if (name == null) {
@@ -84,7 +87,8 @@ class JsonSaxWriter implements SaxWriter {
         indent();
     }
 
-    public void endSequence() {
+    @Override
+	public void endSequence() {
         assert stack.peek() != null : "not in sequence";
         stack.pop();
         outdent();
@@ -94,7 +98,8 @@ class JsonSaxWriter implements SaxWriter {
         buf.append("]");
     }
 
-    public void startElement(String name) {
+    @Override
+	public void startElement(String name) {
         comma();
         buf.append(indentString);
         if (stack.peek().name != null) {
@@ -111,7 +116,8 @@ class JsonSaxWriter implements SaxWriter {
         indent();
     }
 
-    public void startElement(String name, Object... attrs) {
+    @Override
+	public void startElement(String name, Object... attrs) {
         startElement(name);
 //        startElement(name);
 //        for (int i = 0; i < attrs.length;) {
@@ -130,7 +136,8 @@ class JsonSaxWriter implements SaxWriter {
 //        stack.peek().ordinal = attrs.length / 2;
     }
 
-    public void endElement() {
+    @Override
+	public void endElement() {
         Frame prev = stack.pop();
         assert prev.name == null
             : new StringBuilder("Ended an element, but in sequence ").append(prev.name).toString();
@@ -140,20 +147,24 @@ class JsonSaxWriter implements SaxWriter {
         buf.append("}");
     }
 
-    public void element(String name, Object... attrs) {
+    @Override
+	public void element(String name, Object... attrs) {
         startElement(name, attrs);
         endElement();
     }
 
-    public void characters(String data) {
+    @Override
+	public void characters(String data) {
         value(data);
     }
 
-    public void characters(Object data) {
+    @Override
+	public void characters(Object data) {
         throw new UnsupportedOperationException();
     }
 
-    public void textElement(String name, Object data) {
+    @Override
+	public void textElement(String name, Object data) {
         comma();
         buf.append(indentString);
         Util.quoteForMdx(buf, name);
@@ -161,15 +172,18 @@ class JsonSaxWriter implements SaxWriter {
         value(data);
     }
 
-    public void completeBeforeElement(String tagName) {
+    @Override
+	public void completeBeforeElement(String tagName) {
         throw new UnsupportedOperationException();
     }
 
-    public void verbatim(String text) {
+    @Override
+	public void verbatim(String text) {
         throw new UnsupportedOperationException();
     }
 
-    public void flush() {
+    @Override
+	public void flush() {
         try {
             outputStream.write(buf.toString().substring(1).getBytes());
         } catch (IOException e) {

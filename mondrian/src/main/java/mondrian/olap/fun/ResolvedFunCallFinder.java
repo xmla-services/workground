@@ -35,7 +35,8 @@ public class ResolvedFunCallFinder
         found = false;
     }
 
-    public Object visit(ResolvedFunCall funCall)
+    @Override
+	public Object visit(ResolvedFunCall funCall)
     {
         if (funCall == call) {
             found = true;
@@ -43,7 +44,8 @@ public class ResolvedFunCallFinder
         return null;
     }
 
-    public Object visit(MemberExpr memberExpr) {
+    @Override
+	public Object visit(MemberExpr memberExpr) {
         Member member = memberExpr.getMember();
         if (member.isCalculated()) {
             if (activeMembers.add(member)) {

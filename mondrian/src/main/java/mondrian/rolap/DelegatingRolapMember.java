@@ -38,31 +38,38 @@ public class DelegatingRolapMember extends RolapMemberBase {
         this.member = member;
     }
 
-    public RolapLevel getLevel() {
+    @Override
+	public RolapLevel getLevel() {
         return member.getLevel();
     }
 
-    public Object getKey() {
+    @Override
+	public Object getKey() {
         return member.getKey();
     }
 
-    public RolapMember getParentMember() {
+    @Override
+	public RolapMember getParentMember() {
         return member.getParentMember();
     }
 
-    public RolapHierarchy getHierarchy() {
+    @Override
+	public RolapHierarchy getHierarchy() {
         return member.getHierarchy();
     }
 
-    public String getParentUniqueName() {
+    @Override
+	public String getParentUniqueName() {
         return member.getParentUniqueName();
     }
 
-    public MemberType getMemberType() {
+    @Override
+	public MemberType getMemberType() {
         return member.getMemberType();
     }
 
-    public boolean isParentChildLeaf() {
+    @Override
+	public boolean isParentChildLeaf() {
         return member.isParentChildLeaf();
     }
 
@@ -71,23 +78,28 @@ public class DelegatingRolapMember extends RolapMemberBase {
         return member.isParentChildPhysicalMember();
     }
 
-    public void setName(String name) {
+    @Override
+	public void setName(String name) {
         member.setName(name);
     }
 
-    public boolean isAll() {
+    @Override
+	public boolean isAll() {
         return member.isAll();
     }
 
-    public boolean isMeasure() {
+    @Override
+	public boolean isMeasure() {
         return member.isMeasure();
     }
 
-    public boolean isNull() {
+    @Override
+	public boolean isNull() {
         return member.isNull();
     }
 
-    public boolean isChildOrEqualTo(Member member2) {
+    @Override
+	public boolean isChildOrEqualTo(Member member2) {
         if (member2 instanceof DelegatingRolapMember) {
             return member
                     .isChildOrEqualTo(((DelegatingRolapMember) member2).member);
@@ -96,110 +108,136 @@ public class DelegatingRolapMember extends RolapMemberBase {
         }
     }
 
-    public boolean isCalculated() {
+    @Override
+	public boolean isCalculated() {
         return member.isCalculated();
     }
 
-    public boolean isEvaluated() {
+    @Override
+	public boolean isEvaluated() {
         return member.isEvaluated();
     }
 
-    public int getSolveOrder() {
+    @Override
+	public int getSolveOrder() {
         return member.getSolveOrder();
     }
 
-    public Exp getExpression() {
+    @Override
+	public Exp getExpression() {
         return member.getExpression();
     }
 
-    public List<Member> getAncestorMembers() {
+    @Override
+	public List<Member> getAncestorMembers() {
         return member.getAncestorMembers();
     }
 
-    public boolean isCalculatedInQuery() {
+    @Override
+	public boolean isCalculatedInQuery() {
         return member.isCalculatedInQuery();
     }
 
-    public Object getPropertyValue(String propertyName) {
+    @Override
+	public Object getPropertyValue(String propertyName) {
         return member.getPropertyValue(propertyName);
     }
 
-    public Object getPropertyValue(String propertyName, boolean matchCase) {
+    @Override
+	public Object getPropertyValue(String propertyName, boolean matchCase) {
         return member.getPropertyValue(propertyName, matchCase);
     }
 
-    public String getPropertyFormattedValue(String propertyName) {
+    @Override
+	public String getPropertyFormattedValue(String propertyName) {
         return member.getPropertyFormattedValue(propertyName);
     }
 
-    public void setProperty(String name, Object value) {
+    @Override
+	public void setProperty(String name, Object value) {
         member.setProperty(name, value);
     }
 
-    public Property[] getProperties() {
+    @Override
+	public Property[] getProperties() {
         return member.getProperties();
     }
 
-    public int getOrdinal() {
+    @Override
+	public int getOrdinal() {
         return member.getOrdinal();
     }
 
-    public Comparable getOrderKey() {
+    @Override
+	public Comparable getOrderKey() {
         return member.getOrderKey();
     }
 
-    public boolean isHidden() {
+    @Override
+	public boolean isHidden() {
         return member.isHidden();
     }
 
-    public int getDepth() {
+    @Override
+	public int getDepth() {
         return member.getDepth();
     }
 
-    public Member getDataMember() {
+    @Override
+	public Member getDataMember() {
         return member.getDataMember();
     }
 
-    @SuppressWarnings({"unchecked"})
+    @Override
+	@SuppressWarnings({"unchecked"})
     public int compareTo(Object o) {
         return member.compareTo(o);
     }
 
-    public String getUniqueName() {
+    @Override
+	public String getUniqueName() {
         return member.getUniqueName();
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return member.getName();
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return member.getDescription();
     }
 
-    public OlapElement lookupChild(
+    @Override
+	public OlapElement lookupChild(
         SchemaReader schemaReader, Id.Segment s, MatchType matchType)
     {
         return member.lookupChild(schemaReader, s, matchType);
     }
 
-    public Map<String, Object> getMetadata()  {
+    @Override
+	public Map<String, Object> getMetadata()  {
         return member.getMetadata();
     }
 
-    public String getQualifiedName() {
+    @Override
+	public String getQualifiedName() {
         return member.getQualifiedName();
     }
 
-    public String getCaption() {
+    @Override
+	public String getCaption() {
         return member.getCaption();
     }
 
-    public Dimension getDimension() {
+    @Override
+	public Dimension getDimension() {
         return member.getDimension();
     }
 
-    public boolean isAllMember() {
+    @Override
+	public boolean isAllMember() {
         return member.isAllMember();
     }
 }

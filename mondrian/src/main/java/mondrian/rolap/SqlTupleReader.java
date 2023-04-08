@@ -156,7 +156,8 @@ public class SqlTupleReader implements TupleReader {
       this.cache = memberBuilder.getMemberCache();
     }
 
-    public void open() {
+    @Override
+	public void open() {
       levels = (RolapLevel[]) level.getHierarchy().getLevels();
       setList( new ArrayList<RolapMember>() );
       levelDepth = level.getDepth();
@@ -172,7 +173,8 @@ public class SqlTupleReader implements TupleReader {
       }
     }
 
-    int internalAddRow( SqlStatement stmt, int column )
+    @Override
+	int internalAddRow( SqlStatement stmt, int column )
       throws SQLException {
       RolapMember member = null;
       if ( getCurrMember() != null ) {
@@ -316,7 +318,8 @@ public class SqlTupleReader implements TupleReader {
       return column;
     }
 
-    public List<Member> close() {
+    @Override
+	public List<Member> close() {
       synchronized ( cacheLock ) {
         return internalClose();
       }
@@ -371,18 +374,21 @@ public class SqlTupleReader implements TupleReader {
     this.constraint = constraint;
   }
 
-  public void incrementEmptySets() {
+  @Override
+public void incrementEmptySets() {
     emptySets++;
   }
 
-  public void addLevelMembers(
+  @Override
+public void addLevelMembers(
     RolapLevel level,
     MemberBuilder memberBuilder,
     List<RolapMember> srcMembers ) {
     targets.add( new Target( level, memberBuilder, srcMembers ) );
   }
 
-  public Object getCacheKey() {
+  @Override
+public Object getCacheKey() {
     List<Object> key = new ArrayList<Object>();
     key.add( constraint.getCacheKey() );
     key.add( SqlTupleReader.class );
@@ -569,7 +575,8 @@ public class SqlTupleReader implements TupleReader {
     }
   }
 
-  public TupleList readMembers(
+  @Override
+public TupleList readMembers(
     Context context,
     TupleList partialResult,
     List<List<RolapMember>> newPartialResult ) {
@@ -628,7 +635,8 @@ public class SqlTupleReader implements TupleReader {
     return n;
   }
 
-  public TupleList readTuples(
+  @Override
+public TupleList readTuples(
     Context context,
     TupleList partialResult,
     List<List<RolapMember>> newPartialResult ) {

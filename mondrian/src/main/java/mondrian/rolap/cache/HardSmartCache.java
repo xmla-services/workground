@@ -22,27 +22,33 @@ import java.util.Map;
 public class HardSmartCache <K, V> extends SmartCacheImpl<K, V> {
     Map<K, V> cache = new HashMap<K, V>();
 
-    public V putImpl(K key, V value) {
+    @Override
+	public V putImpl(K key, V value) {
         return cache.put(key, value);
     }
 
-    public V getImpl(K key) {
+    @Override
+	public V getImpl(K key) {
         return cache.get(key);
     }
 
-    public V removeImpl(K key) {
+    @Override
+	public V removeImpl(K key) {
         return cache.remove(key);
     }
 
-    public void clearImpl() {
+    @Override
+	public void clearImpl() {
         cache.clear();
     }
 
-    public int sizeImpl() {
+    @Override
+	public int sizeImpl() {
         return cache.size();
     }
 
-    public Iterator<Map.Entry<K, V>> iteratorImpl() {
+    @Override
+	public Iterator<Map.Entry<K, V>> iteratorImpl() {
         return cache.entrySet().iterator();
     }
 }

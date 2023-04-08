@@ -650,19 +650,23 @@ public class SegmentBuilder {
             this.cellCount = cellCount;
         }
 
-        public void describe(StringBuilder buf) {
+        @Override
+		public void describe(StringBuilder buf) {
             // TODO
         }
 
-        public int getArity() {
+        @Override
+		public int getArity() {
             return header.getConstrainedColumns().size();
         }
 
-        public int getCellCount() {
+        @Override
+		public int getCellCount() {
             return cellCount;
         }
 
-        public boolean wouldContain(Object[] keys) {
+        @Override
+		public boolean wouldContain(Object[] keys) {
             assert keys.length == header.getConstrainedColumns().size();
             for (int i = 0; i < keys.length; i++) {
                 final SegmentColumn excl =
@@ -678,11 +682,13 @@ public class SegmentBuilder {
             return false;
         }
 
-        public ExcludedRegion get(int index) {
+        @Override
+		public ExcludedRegion get(int index) {
             return this;
         }
 
-        public int size() {
+        @Override
+		public int size() {
             return 1;
         }
     }
@@ -846,7 +852,8 @@ public class SegmentBuilder {
             this.request = request;
         }
 
-        public SegmentWithData convert(
+        @Override
+		public SegmentWithData convert(
             SegmentHeader header,
             SegmentBody body)
         {
@@ -891,7 +898,8 @@ public class SegmentBuilder {
             this.compoundPredicateList = compoundPredicateList;
         }
 
-        public SegmentWithData convert(
+        @Override
+		public SegmentWithData convert(
             SegmentHeader header,
             SegmentBody body)
         {

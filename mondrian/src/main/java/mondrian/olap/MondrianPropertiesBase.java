@@ -70,7 +70,8 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
         this.propertySource = propertySource;
     }
 
-    public boolean triggersAreEnabled() {
+    @Override
+	public boolean triggersAreEnabled() {
         return ((MondrianProperties) this).EnableTriggers.get();
     }
 
@@ -118,7 +119,8 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
             this.lastModified = 0;
         }
 
-        public InputStream openStream() {
+        @Override
+		public InputStream openStream() {
             try {
                 this.lastModified = file.lastModified();
                 return new FileInputStream(file);
@@ -129,12 +131,14 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
             }
         }
 
-        public boolean isStale() {
+        @Override
+		public boolean isStale() {
             return file.exists()
                    && file.lastModified() > this.lastModified;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return new StringBuilder("file=").append(file.getAbsolutePath())
                    .append(" (exists=").append(file.exists()).append(")").toString();
         }
@@ -162,7 +166,8 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
             }
         }
 
-        public InputStream openStream() {
+        @Override
+		public InputStream openStream() {
             try {
                 final URLConnection connection = getConnection();
                 this.lastModified = connection.getLastModified();
@@ -174,12 +179,14 @@ public abstract class MondrianPropertiesBase extends TriggerableProperties {
             }
         }
 
-        public boolean isStale() {
+        @Override
+		public boolean isStale() {
             final long lastModified = getConnection().getLastModified();
             return lastModified > this.lastModified;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return url.toExternalForm();
         }
     }

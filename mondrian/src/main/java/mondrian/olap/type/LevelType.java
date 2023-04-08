@@ -84,12 +84,14 @@ public class LevelType implements Type {
             level);
     }
 
-    public boolean usesDimension(Dimension dimension, boolean definitely) {
+    @Override
+	public boolean usesDimension(Dimension dimension, boolean definitely) {
         return this.dimension == dimension
             || (!definitely && this.dimension == null);
     }
 
-    public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
+    @Override
+	public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
         return this.hierarchy == hierarchy
             || (!definitely
                 && this.hierarchy == null
@@ -97,27 +99,33 @@ public class LevelType implements Type {
                     || this.dimension == hierarchy.getDimension()));
     }
 
-    public Dimension getDimension() {
+    @Override
+	public Dimension getDimension() {
         return dimension;
     }
 
-    public Hierarchy getHierarchy() {
+    @Override
+	public Hierarchy getHierarchy() {
         return hierarchy;
     }
 
-    public Level getLevel() {
+    @Override
+	public Level getLevel() {
         return level;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return digest;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return digest.hashCode();
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (obj instanceof LevelType) {
             LevelType that = (LevelType) obj;
             return Objects.equals(this.level, that.level)
@@ -127,7 +135,8 @@ public class LevelType implements Type {
         return false;
     }
 
-    public Type computeCommonType(Type type, int[] conversionCount) {
+    @Override
+	public Type computeCommonType(Type type, int[] conversionCount) {
         if (!(type instanceof LevelType)) {
             return null;
         }
@@ -156,7 +165,8 @@ public class LevelType implements Type {
         return LevelType.Unknown;
     }
 
-    public boolean isInstance(Object value) {
+    @Override
+	public boolean isInstance(Object value) {
         return value instanceof Level
             && (level == null
                 || value.equals(level))
@@ -166,7 +176,8 @@ public class LevelType implements Type {
                 || ((Level) value).getDimension().equals(dimension));
     }
 
-    public int getArity() {
+    @Override
+	public int getArity() {
         return 1;
     }
 }

@@ -22,7 +22,8 @@ public record ExpressionViewR(List<SQLR> sql,
                               String table,
                               String name) implements ExpressionView {
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (!(obj instanceof ExpressionView)) {
             return false;
         }

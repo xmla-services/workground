@@ -109,7 +109,8 @@ public class TableImpl implements Table {
         this.alias = value;
     }
 
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         if (o instanceof Table) {
             Table that = (Table) o;
             return this.name.equals(that.name()) &&
@@ -120,12 +121,14 @@ public class TableImpl implements Table {
         }
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return (schema == null) ?
             name :
             new StringBuilder(schema).append(".").append(name).toString();
     }
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return toString().hashCode();
     }
 }

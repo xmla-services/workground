@@ -112,7 +112,8 @@ public class RolapCubeDimension extends RolapDimension {
         return cube;
     }
 
-    public Schema getSchema() {
+    @Override
+	public Schema getSchema() {
         return rolapDimension.getSchema();
     }
 
@@ -121,7 +122,8 @@ public class RolapCubeDimension extends RolapDimension {
         return cubeOrdinal;
     }
 
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
@@ -136,27 +138,31 @@ public class RolapCubeDimension extends RolapDimension {
         return getUniqueName().equals(that.getUniqueName());
     }
 
-    RolapCubeHierarchy newHierarchy(
+    @Override
+	RolapCubeHierarchy newHierarchy(
         String subName, boolean hasAll, RolapHierarchy closureFor)
     {
         throw new UnsupportedOperationException();
     }
 
-    public String getCaption() {
+    @Override
+	public String getCaption() {
         if (caption != null) {
             return caption;
         }
         return this.name;
     }
 
-    public void setCaption(String caption) {
+    @Override
+	public void setCaption(String caption) {
         if (true) {
             throw new UnsupportedOperationException();
         }
         rolapDimension.setCaption(caption);
     }
 
-    public DimensionType getDimensionType() {
+    @Override
+	public DimensionType getDimensionType() {
         return rolapDimension.getDimensionType();
     }
 

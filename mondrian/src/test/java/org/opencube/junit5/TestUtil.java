@@ -1155,7 +1155,8 @@ public class TestUtil {
 	     */
 	    static Iterable<org.olap4j.Cell> cellIter( final CellSet cellSet ) {
 	      return new Iterable<org.olap4j.Cell>() {
-	        public Iterator<org.olap4j.Cell> iterator() {
+	        @Override
+			public Iterator<org.olap4j.Cell> iterator() {
 	          int[] axisDimensions = new int[ cellSet.getAxes().size() ];
 	          int k = 0;
 	          for ( CellSetAxis axis : cellSet.getAxes() ) {
@@ -1164,19 +1165,23 @@ public class TestUtil {
 	          final CoordinateIterator
 	            coordIter = new CoordinateIterator( axisDimensions );
 	          return new Iterator<org.olap4j.Cell>() {
-	            public boolean hasNext() {
+	            @Override
+				public boolean hasNext() {
 	              return coordIter.hasNext();
 	            }
 
-	            public org.olap4j.Cell next() {
+	            @Override
+				public org.olap4j.Cell next() {
 	              final int[] ints = coordIter.next();
 	              final List<Integer> list =
 	                new AbstractList<Integer>() {
-	                  public Integer get( int index ) {
+	                  @Override
+					public Integer get( int index ) {
 	                    return ints[ index ];
 	                  }
 
-	                  public int size() {
+	                  @Override
+					public int size() {
 	                    return ints.length;
 	                  }
 	                };
@@ -1184,7 +1189,8 @@ public class TestUtil {
 	                list );
 	            }
 
-	            public void remove() {
+	            @Override
+				public void remove() {
 	              throw new UnsupportedOperationException();
 	            }
 	          };
@@ -2060,6 +2066,7 @@ public class TestUtil {
 			return s.startsWith(t);
 		}
 
+		@Override
 		public void onExecuteQuery(String sql) {
 			if (matchTrigger(sql)) {
 				throw new Bomb(sql);

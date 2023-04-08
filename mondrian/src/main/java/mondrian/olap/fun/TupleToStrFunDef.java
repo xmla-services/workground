@@ -38,12 +38,14 @@ class TupleToStrFunDef extends FunDefBase {
         super("TupleToStr", "Constructs a string from a tuple.", "fSt");
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         if (TypeUtil.couldBeMember(call.getArg(0).getType())) {
             final MemberCalc memberCalc =
                     compiler.compileMember(call.getArg(0));
             return new AbstractStringCalc(call.getFunName(),call.getType(), new Calc[] {memberCalc}) {
-                public String evaluateString(Evaluator evaluator) {
+                @Override
+				public String evaluateString(Evaluator evaluator) {
                     final Member member =
                             memberCalc.evaluateMember(evaluator);
                     if (member.isNull()) {
@@ -58,7 +60,8 @@ class TupleToStrFunDef extends FunDefBase {
             final TupleCalc tupleCalc =
                     compiler.compileTuple(call.getArg(0));
             return new AbstractStringCalc(call.getFunName(),call.getType(), new Calc[] {tupleCalc}) {
-                public String evaluateString(Evaluator evaluator) {
+                @Override
+				public String evaluateString(Evaluator evaluator) {
                     final Member[] members =
                             tupleCalc.evaluateTuple(evaluator);
                     if (members == null) {

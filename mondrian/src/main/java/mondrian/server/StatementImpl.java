@@ -63,7 +63,8 @@ public abstract class StatementImpl implements Statement {
         this.id = SEQ.getAndIncrement();
     }
 
-    public synchronized void start(Execution execution) {
+    @Override
+	public synchronized void start(Execution execution) {
         if (this.execution != null) {
             throw new AssertionError();
         }
@@ -78,7 +79,8 @@ public abstract class StatementImpl implements Statement {
         }
     }
 
-    public synchronized void cancel() throws SQLException {
+    @Override
+	public synchronized void cancel() throws SQLException {
         if (execution == null) {
             // There is no current execution. Flag that we need to cancel as
             // soon as we start execution.
@@ -88,7 +90,8 @@ public abstract class StatementImpl implements Statement {
         }
     }
 
-    public synchronized void end(Execution execution) {
+    @Override
+	public synchronized void end(Execution execution) {
         if (execution == null
             || execution != this.execution)
         {
@@ -99,23 +102,28 @@ public abstract class StatementImpl implements Statement {
         execution.end();
     }
 
-    public void enableProfiling(ProfileHandler profileHandler) {
+    @Override
+	public void enableProfiling(ProfileHandler profileHandler) {
         this.profileHandler = profileHandler;
     }
 
-    public ProfileHandler getProfileHandler() {
+    @Override
+	public ProfileHandler getProfileHandler() {
         return profileHandler;
     }
 
-    public void setQueryTimeoutMillis(long timeoutMillis) {
+    @Override
+	public void setQueryTimeoutMillis(long timeoutMillis) {
         this.queryTimeout = timeoutMillis;
     }
 
-    public long getQueryTimeoutMillis() {
+    @Override
+	public long getQueryTimeoutMillis() {
         return queryTimeout;
     }
 
-    public void checkCancelOrTimeout() {
+    @Override
+	public void checkCancelOrTimeout() {
         final Execution execution0 = execution;
         if (execution0 == null) {
             return;
@@ -123,31 +131,38 @@ public abstract class StatementImpl implements Statement {
         execution0.checkCancelOrTimeout();
     }
 
-    public SchemaReader getSchemaReader() {
+    @Override
+	public SchemaReader getSchemaReader() {
         return getMondrianConnection().getSchemaReader().withLocus();
     }
 
-    public RolapSchema getSchema() {
+    @Override
+	public RolapSchema getSchema() {
         return getMondrianConnection().getSchema();
     }
 
-    public Object getProperty(String name) {
+    @Override
+	public Object getProperty(String name) {
         return getMondrianConnection().getProperty(name);
     }
 
-    public Query getQuery() {
+    @Override
+	public Query getQuery() {
         return query;
     }
 
-    public void setQuery(Query query) {
+    @Override
+	public void setQuery(Query query) {
         this.query = query;
     }
 
-    public Execution getCurrentExecution() {
+    @Override
+	public Execution getCurrentExecution() {
         return execution;
     }
 
-    public long getId() {
+    @Override
+	public long getId() {
         return id;
     }
 }

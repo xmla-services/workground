@@ -41,22 +41,26 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
         this.constrainedColumn = constrainedColumn;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         final StringBuilder buf = new StringBuilder();
         buf.append(genericExpression(constrainedColumn.getExpression()));
         describe(buf);
         return buf.toString();
     }
 
-    public RolapStar.Column getConstrainedColumn() {
+    @Override
+	public RolapStar.Column getConstrainedColumn() {
         return constrainedColumn;
     }
 
-    public List<RolapStar.Column> getConstrainedColumnList() {
+    @Override
+	public List<RolapStar.Column> getConstrainedColumnList() {
         return Collections.singletonList(constrainedColumn);
     }
 
-    public BitKey getConstrainedColumnBitKey() {
+    @Override
+	public BitKey getConstrainedColumnBitKey() {
         // Check whether constrainedColumn are null.
         // Example: FastBatchingCellReaderTest.testAggregateDistinctCount5().
         if (constrainedColumnBitKey == null
@@ -71,16 +75,19 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
         return constrainedColumnBitKey;
     }
 
-    public boolean evaluate(List<Object> valueList) {
+    @Override
+	public boolean evaluate(List<Object> valueList) {
         assert valueList.size() == 1;
         return evaluate(valueList.get(0));
     }
 
-    public boolean equalConstraint(StarPredicate that) {
+    @Override
+	public boolean equalConstraint(StarPredicate that) {
         return false;
     }
 
-    public StarPredicate or(StarPredicate predicate) {
+    @Override
+	public StarPredicate or(StarPredicate predicate) {
         if (predicate instanceof StarColumnPredicate) {
             StarColumnPredicate starColumnPredicate =
                 (StarColumnPredicate) predicate;
@@ -96,7 +103,8 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
         return new OrPredicate(list);
     }
 
-    public StarColumnPredicate orColumn(StarColumnPredicate predicate) {
+    @Override
+	public StarColumnPredicate orColumn(StarColumnPredicate predicate) {
         assert predicate.getConstrainedColumn() == getConstrainedColumn();
         if (predicate instanceof ListColumnPredicate) {
             ListColumnPredicate that = (ListColumnPredicate) predicate;
@@ -118,14 +126,16 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
         }
     }
 
-    public StarPredicate and(StarPredicate predicate) {
+    @Override
+	public StarPredicate and(StarPredicate predicate) {
         final List<StarPredicate> list = new ArrayList<StarPredicate>(2);
         list.add(this);
         list.add(predicate);
         return new AndPredicate(list);
     }
 
-    public void toSql(SqlQuery sqlQuery, StringBuilder buf) {
+    @Override
+	public void toSql(SqlQuery sqlQuery, StringBuilder buf) {
         throw Util.needToImplement(this);
     }
 

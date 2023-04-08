@@ -130,11 +130,13 @@ public class SegmentHeader implements Serializable {
         return hash;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return hashCode;
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (!(obj instanceof SegmentHeader)) {
             return false;
         }
@@ -259,7 +261,8 @@ public class SegmentHeader implements Serializable {
                 new ArrayList<SegmentColumn>(newRegions.values()));
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return this.getDescription();
     }
 
@@ -369,7 +372,8 @@ public class SegmentHeader implements Serializable {
         Collections.sort(
             sortedRegions,
             new Comparator<SegmentColumn>() {
-                public int compare(SegmentColumn o1, SegmentColumn o2) {
+                @Override
+				public int compare(SegmentColumn o1, SegmentColumn o2) {
                     return o1.columnExpression.compareTo(o2.columnExpression);
                 }
             });
@@ -388,7 +392,8 @@ public class SegmentHeader implements Serializable {
         Collections.sort(
             sortedColumns,
             new Comparator<SegmentColumn>() {
-                public int compare(SegmentColumn o1, SegmentColumn o2) {
+                @Override
+				public int compare(SegmentColumn o1, SegmentColumn o2) {
                     return o1.columnExpression.compareTo(o2.columnExpression);
                 }
             });

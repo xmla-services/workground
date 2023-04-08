@@ -88,15 +88,18 @@ public class XmlaTabularTest extends XmlaBaseTestCase {
             connection);
     }
 
-    protected DiffRepository getDiffRepos() {
+    @Override
+	protected DiffRepository getDiffRepos() {
         return DiffRepository.lookup(XmlaTabularTest.class);
     }
 
-    protected Class<? extends XmlaRequestCallback> getServletCallbackClass() {
+    @Override
+	protected Class<? extends XmlaRequestCallback> getServletCallbackClass() {
         return null;
     }
 
-    protected String getSessionId(Action action) {
+    @Override
+	protected String getSessionId(Action action) {
         return null;
     }
 }

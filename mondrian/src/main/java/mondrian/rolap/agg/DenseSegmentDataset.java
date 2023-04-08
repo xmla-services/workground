@@ -54,12 +54,14 @@ abstract class DenseSegmentDataset implements SegmentDataset {
         return axisMultipliers;
     }
 
-    public final double getBytes() {
+    @Override
+	public final double getBytes() {
         // assume a slot, key, and value are each 4 bytes
         return getSize() * 12;
     }
 
-    public Iterator<Map.Entry<CellKey, Object>> iterator() {
+    @Override
+	public Iterator<Map.Entry<CellKey, Object>> iterator() {
         return new DenseSegmentDatasetIterator();
     }
 
@@ -89,15 +91,18 @@ outer:
         return offset;
     }
 
-    public Object getObject(CellKey pos) {
+    @Override
+	public Object getObject(CellKey pos) {
         throw new UnsupportedOperationException();
     }
 
-    public int getInt(CellKey pos) {
+    @Override
+	public int getInt(CellKey pos) {
         throw new UnsupportedOperationException();
     }
 
-    public double getDouble(CellKey pos) {
+    @Override
+	public double getDouble(CellKey pos) {
         throw new UnsupportedOperationException();
     }
 
@@ -124,11 +129,13 @@ outer:
             ordinals[ordinals.length - 1] = -1;
         }
 
-        public boolean hasNext() {
+        @Override
+		public boolean hasNext() {
             return i < last;
         }
 
-        public Map.Entry<CellKey, Object> next() {
+        @Override
+		public Map.Entry<CellKey, Object> next() {
             ++i;
             int k = ordinals.length - 1;
             while (k >= 0) {
@@ -144,22 +151,26 @@ outer:
         }
 
         // implement Iterator
-        public void remove() {
+        @Override
+		public void remove() {
             throw new UnsupportedOperationException();
         }
 
         // implement Entry
-        public CellKey getKey() {
+        @Override
+		public CellKey getKey() {
             return CellKey.Generator.newCellKey(ordinals);
         }
 
         // implement Entry
-        public Object getValue() {
+        @Override
+		public Object getValue() {
             return getObject(i);
         }
 
         // implement Entry
-        public Object setValue(Object value) {
+        @Override
+		public Object setValue(Object value) {
             throw new UnsupportedOperationException();
         }
     }

@@ -76,7 +76,8 @@ public class DerbyDialect extends JdbcDialectImpl {
         return false;
     }
 
-    public boolean allowsFieldAs() {
+    @Override
+	public boolean allowsFieldAs() {
         return false;
     }
 

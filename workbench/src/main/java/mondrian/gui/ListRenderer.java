@@ -31,7 +31,8 @@ class ListRenderer implements ListCellRenderer {
 
     // Override of getListCellRendererComponent.
     // This is called by the AWT event thread to paint components.
-    public Component getListCellRendererComponent(
+    @Override
+	public Component getListCellRendererComponent(
         JList list,
         Object value,
         int index,

@@ -92,7 +92,8 @@ public class JdbcExplorer
         return updater;
     }
 
-    public void treeWillExpand(TreeExpansionEvent event)
+    @Override
+	public void treeWillExpand(TreeExpansionEvent event)
         throws ExpandVetoException
     {
         // The children are lazy loaded
@@ -138,7 +139,8 @@ public class JdbcExplorer
         }
     }
 
-    public void treeWillCollapse(TreeExpansionEvent arg0)
+    @Override
+	public void treeWillCollapse(TreeExpansionEvent arg0)
         throws ExpandVetoException
     {
     }
@@ -177,7 +179,8 @@ public class JdbcExplorer
             this.columnInfo = columnInfo;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             if (type == NodeType.ROOT) {
                 return workbench.getResourceConverter().getFormattedString(
                     "jdbcExplorer.root.name",

@@ -75,10 +75,12 @@ public class XmlaErrorTest extends XmlaBaseTestCase
         Callback() {
         }
 
-        public void init(ServletConfig servletConfig) throws ServletException {
+        @Override
+		public void init(ServletConfig servletConfig) throws ServletException {
         }
 
-        public boolean processHttpHeader(
+        @Override
+		public boolean processHttpHeader(
             HttpServletRequest request,
             HttpServletResponse response,
             Map<String, Object> context) throws Exception
@@ -165,7 +167,8 @@ System.out.println("password=" + password);
          }
 
 
-        public void preAction(
+        @Override
+		public void preAction(
             HttpServletRequest request,
             Element[] requestSoapParts,
             Map<String, Object> context) throws Exception
@@ -175,11 +178,13 @@ System.out.println("password=" + password);
                 getSessionId("XmlaExcelXPTest", Action.CREATE));
         }
 
-        public String generateSessionId(Map<String, Object> context) {
+        @Override
+		public String generateSessionId(Map<String, Object> context) {
             return (String) context.get(MY_SESSION_ID);
         }
 
-        public void postAction(
+        @Override
+		public void postAction(
             HttpServletRequest request,
             HttpServletResponse response,
             byte[][] responseSoapParts,
@@ -317,7 +322,8 @@ System.out.println("password=" + password);
             return errorDesc;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return
             "faultCode=" + faultCode + ", faultString=" + faultString
             + ", faultActor=" + faultActor + ", errorNS=" + errorNS
@@ -379,11 +385,13 @@ System.out.println("password=" + password);
         tearDown();
     }
 
-    protected DiffRepository getDiffRepos() {
+    @Override
+	protected DiffRepository getDiffRepos() {
         return DiffRepository.lookup(XmlaErrorTest.class);
     }
 
-    protected Class<? extends XmlaRequestCallback> getServletCallbackClass() {
+    @Override
+	protected Class<? extends XmlaRequestCallback> getServletCallbackClass() {
         return Callback.class;
     }
 
@@ -1108,7 +1116,8 @@ System.out.println("expectedFault=" + expectedFault);
         }
     }
 
-    protected String getSessionId(Action action) {
+    @Override
+	protected String getSessionId(Action action) {
         return getSessionId("XmlaExcelXPTest", action);
     }
 }

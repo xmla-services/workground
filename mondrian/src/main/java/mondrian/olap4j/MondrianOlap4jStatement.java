@@ -78,7 +78,8 @@ abstract class MondrianOlap4jStatement
 
     // implement Statement
 
-    public ResultSet executeQuery(String mdx) throws SQLException {
+    @Override
+	public ResultSet executeQuery(String mdx) throws SQLException {
         return executeQuery2(mdx, false, null, null);
     }
 
@@ -158,11 +159,13 @@ abstract class MondrianOlap4jStatement
         return sw.toString();
     }
 
-    public int executeUpdate(String sql) throws SQLException {
+    @Override
+	public int executeUpdate(String sql) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public synchronized void close() {
+    @Override
+	public synchronized void close() {
         if (!closed) {
             closed = true;
             olap4jConnection.mondrianServer.removeStatement(this);
@@ -174,27 +177,33 @@ abstract class MondrianOlap4jStatement
         }
     }
 
-    public int getMaxFieldSize() throws SQLException {
+    @Override
+	public int getMaxFieldSize() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void setMaxFieldSize(int max) throws SQLException {
+    @Override
+	public void setMaxFieldSize(int max) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getMaxRows() throws SQLException {
+    @Override
+	public int getMaxRows() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void setMaxRows(int max) throws SQLException {
+    @Override
+	public void setMaxRows(int max) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void setEscapeProcessing(boolean enable) throws SQLException {
+    @Override
+	public void setEscapeProcessing(boolean enable) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getQueryTimeout() throws SQLException {
+    @Override
+	public int getQueryTimeout() throws SQLException {
         long timeoutSeconds = getQueryTimeoutMillis() / 1000;
         if (timeoutSeconds > Integer.MAX_VALUE) {
             return Integer.MAX_VALUE;
@@ -206,7 +215,8 @@ abstract class MondrianOlap4jStatement
         return (int) timeoutSeconds;
     }
 
-    public void setQueryTimeout(int seconds) throws SQLException {
+    @Override
+	public void setQueryTimeout(int seconds) throws SQLException {
         if (seconds < 0) {
             throw olap4jConnection.helper.createException(
                 "illegal timeout value " + seconds);
@@ -214,29 +224,35 @@ abstract class MondrianOlap4jStatement
         setQueryTimeoutMillis(seconds * 1000);
     }
 
-    public synchronized void cancel() throws SQLException {
+    @Override
+	public synchronized void cancel() throws SQLException {
         if (openCellSet != null) {
             openCellSet.cancel();
         }
     }
 
-    public SQLWarning getWarnings() throws SQLException {
+    @Override
+	public SQLWarning getWarnings() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void clearWarnings() throws SQLException {
+    @Override
+	public void clearWarnings() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void setCursorName(String name) throws SQLException {
+    @Override
+	public void setCursorName(String name) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean execute(String sql) throws SQLException {
+    @Override
+	public boolean execute(String sql) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public ResultSet getResultSet() throws SQLException {
+    @Override
+	public ResultSet getResultSet() throws SQLException {
         // NOTE: cell set becomes visible in this member while
         // executeOlapQueryInternal is still in progress, and before it has
         // finished executing. Its internal state may not be ready for API
@@ -246,117 +262,142 @@ abstract class MondrianOlap4jStatement
         return openCellSet;
     }
 
-    public int getUpdateCount() throws SQLException {
+    @Override
+	public int getUpdateCount() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean getMoreResults() throws SQLException {
+    @Override
+	public boolean getMoreResults() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void setFetchDirection(int direction) throws SQLException {
+    @Override
+	public void setFetchDirection(int direction) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getFetchDirection() throws SQLException {
+    @Override
+	public int getFetchDirection() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void setFetchSize(int rows) throws SQLException {
+    @Override
+	public void setFetchSize(int rows) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getFetchSize() throws SQLException {
+    @Override
+	public int getFetchSize() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getResultSetConcurrency() throws SQLException {
+    @Override
+	public int getResultSetConcurrency() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getResultSetType() throws SQLException {
+    @Override
+	public int getResultSetType() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void addBatch(String sql) throws SQLException {
+    @Override
+	public void addBatch(String sql) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void clearBatch() throws SQLException {
+    @Override
+	public void clearBatch() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int[] executeBatch() throws SQLException {
+    @Override
+	public int[] executeBatch() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public OlapConnection getConnection() {
+    @Override
+	public OlapConnection getConnection() {
         return olap4jConnection;
     }
 
-    public boolean getMoreResults(int current) throws SQLException {
+    @Override
+	public boolean getMoreResults(int current) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public ResultSet getGeneratedKeys() throws SQLException {
+    @Override
+	public ResultSet getGeneratedKeys() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int executeUpdate(
+    @Override
+	public int executeUpdate(
         String sql, int autoGeneratedKeys) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public int executeUpdate(
+    @Override
+	public int executeUpdate(
         String sql, int columnIndexes[]) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public int executeUpdate(
+    @Override
+	public int executeUpdate(
         String sql, String columnNames[]) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public boolean execute(
+    @Override
+	public boolean execute(
         String sql, int autoGeneratedKeys) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public boolean execute(
+    @Override
+	public boolean execute(
         String sql, int columnIndexes[]) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public boolean execute(
+    @Override
+	public boolean execute(
         String sql, String columnNames[]) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public int getResultSetHoldability() throws SQLException {
+    @Override
+	public int getResultSetHoldability() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean isClosed() throws SQLException {
+    @Override
+	public boolean isClosed() throws SQLException {
         return closed;
     }
 
-    public void setPoolable(boolean poolable) throws SQLException {
+    @Override
+	public void setPoolable(boolean poolable) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean isPoolable() throws SQLException {
+    @Override
+	public boolean isPoolable() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
     // implement Wrapper
 
-    public <T> T unwrap(Class<T> iface) throws SQLException {
+    @Override
+	public <T> T unwrap(Class<T> iface) throws SQLException {
         if (iface.isInstance(this)) {
             return iface.cast(this);
         }
@@ -364,13 +405,15 @@ abstract class MondrianOlap4jStatement
             new StringBuilder("does not implement '").append(iface).append("'").toString());
     }
 
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    @Override
+	public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return iface.isInstance(this);
     }
 
     // implement OlapStatement
 
-    public CellSet executeOlapQuery(final String mdx) throws OlapException {
+    @Override
+	public CellSet executeOlapQuery(final String mdx) throws OlapException {
         final Pair<Query, MondrianOlap4jCellSetMetaData> pair = parseQuery(mdx);
         return executeOlapQueryInternal(pair.left, pair.right);
     }
@@ -385,7 +428,8 @@ abstract class MondrianOlap4jStatement
                 mondrianConnection,
                 "Parsing query",
                 new Locus.Action<Pair<Query, MondrianOlap4jCellSetMetaData>>() {
-                    public Pair<Query, MondrianOlap4jCellSetMetaData> execute()
+                    @Override
+					public Pair<Query, MondrianOlap4jCellSetMetaData> execute()
                     {
                         final Query query =
                             (Query) mondrianConnection.parseStatement(
@@ -459,14 +503,16 @@ abstract class MondrianOlap4jStatement
         super.start(openCellSet);
     }
 
-    public CellSet executeOlapQuery(SelectNode selectNode)
+    @Override
+	public CellSet executeOlapQuery(SelectNode selectNode)
         throws OlapException
     {
         final String mdx = toString(selectNode);
         return executeOlapQuery(mdx);
     }
 
-    public void addListener(
+    @Override
+	public void addListener(
         CellSetListener.Granularity granularity,
         CellSetListener cellSetListener) throws OlapException
     {
@@ -489,7 +535,8 @@ abstract class MondrianOlap4jStatement
         return sw.toString();
     }
 
-    public RolapConnection getMondrianConnection() {
+    @Override
+	public RolapConnection getMondrianConnection() {
         try {
             return olap4jConnection.getMondrianConnection();
         } catch (OlapException e) {

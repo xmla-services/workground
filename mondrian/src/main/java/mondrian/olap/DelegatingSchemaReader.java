@@ -54,58 +54,71 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
         this.schemaReader = schemaReader;
     }
 
-    public RolapSchema getSchema() {
+    @Override
+	public RolapSchema getSchema() {
         return schemaReader.getSchema();
     }
 
-    public Role getRole() {
+    @Override
+	public Role getRole() {
         return schemaReader.getRole();
     }
 
-    public Cube getCube() {
+    @Override
+	public Cube getCube() {
         return schemaReader.getCube();
     }
 
-    public List<Dimension> getCubeDimensions(Cube cube) {
+    @Override
+	public List<Dimension> getCubeDimensions(Cube cube) {
         return schemaReader.getCubeDimensions(cube);
     }
 
-    public List<Hierarchy> getDimensionHierarchies(Dimension dimension) {
+    @Override
+	public List<Hierarchy> getDimensionHierarchies(Dimension dimension) {
         return schemaReader.getDimensionHierarchies(dimension);
     }
 
-    public List<Member> getHierarchyRootMembers(Hierarchy hierarchy) {
+    @Override
+	public List<Member> getHierarchyRootMembers(Hierarchy hierarchy) {
         return schemaReader.getHierarchyRootMembers(hierarchy);
     }
 
-    public Member getMemberParent(Member member) {
+    @Override
+	public Member getMemberParent(Member member) {
         return schemaReader.getMemberParent(member);
     }
 
-    public Member substitute(Member member) {
+    @Override
+	public Member substitute(Member member) {
         return schemaReader.substitute(member);
     }
 
-    public List<Member> getMemberChildren(Member member) {
+    @Override
+	public List<Member> getMemberChildren(Member member) {
         return schemaReader.getMemberChildren(member);
     }
 
-    public List<Member> getMemberChildren(List<Member> members) {
+    @Override
+	public List<Member> getMemberChildren(List<Member> members) {
         return schemaReader.getMemberChildren(members);
     }
 
-    public void getParentChildContributingChildren(
+    @Override
+	public void getParentChildContributingChildren(
         Member dataMember, Hierarchy hierarchy, List<Member> list)
     {
         schemaReader.getParentChildContributingChildren(
             dataMember, hierarchy, list);
     }
 
-    public int getMemberDepth(Member member) {
+    @Override
+	public int getMemberDepth(Member member) {
         return schemaReader.getMemberDepth(member);
     }
 
-    public final Member getMemberByUniqueName(
+    @Override
+	public final Member getMemberByUniqueName(
         List<Id.Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
@@ -113,7 +126,8 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
             uniqueNameParts, failIfNotFound, MatchType.EXACT);
     }
 
-    public Member getMemberByUniqueName(
+    @Override
+	public Member getMemberByUniqueName(
         List<Id.Segment> uniqueNameParts,
         boolean failIfNotFound,
         MatchType matchType)
@@ -122,7 +136,8 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
             uniqueNameParts, failIfNotFound, matchType);
     }
 
-    public final OlapElement lookupCompound(
+    @Override
+	public final OlapElement lookupCompound(
         OlapElement parent, List<Id.Segment> names,
         boolean failIfNotFound, int category)
     {
@@ -130,7 +145,8 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
             parent, names, failIfNotFound, category, MatchType.EXACT);
     }
 
-    public final OlapElement lookupCompound(
+    @Override
+	public final OlapElement lookupCompound(
         OlapElement parent,
         List<Id.Segment> names,
         boolean failIfNotFound,
@@ -154,7 +170,8 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
             matchType);
     }
 
-    public List<NameResolver.Namespace> getNamespaces() {
+    @Override
+	public List<NameResolver.Namespace> getNamespaces() {
         return schemaReader.getNamespaces();
     }
 
@@ -166,15 +183,18 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
             parent, names, failIfNotFound, category, matchType);
     }
 
-    public Member getCalculatedMember(List<Id.Segment> nameParts) {
+    @Override
+	public Member getCalculatedMember(List<Id.Segment> nameParts) {
         return schemaReader.getCalculatedMember(nameParts);
     }
 
-    public NamedSet getNamedSet(List<Id.Segment> nameParts) {
+    @Override
+	public NamedSet getNamedSet(List<Id.Segment> nameParts) {
         return schemaReader.getNamedSet(nameParts);
     }
 
-    public void getMemberRange(
+    @Override
+	public void getMemberRange(
         Level level,
         Member startMember,
         Member endMember,
@@ -183,136 +203,164 @@ public abstract class DelegatingSchemaReader implements SchemaReader {
         schemaReader.getMemberRange(level, startMember, endMember, list);
     }
 
-    public Member getLeadMember(Member member, int n) {
+    @Override
+	public Member getLeadMember(Member member, int n) {
         return schemaReader.getLeadMember(member, n);
     }
 
-    public int compareMembersHierarchically(Member m1, Member m2) {
+    @Override
+	public int compareMembersHierarchically(Member m1, Member m2) {
         return schemaReader.compareMembersHierarchically(m1, m2);
     }
 
-    public OlapElement getElementChild(OlapElement parent, Id.Segment name) {
+    @Override
+	public OlapElement getElementChild(OlapElement parent, Id.Segment name) {
         return getElementChild(parent, name, MatchType.EXACT);
     }
 
-    public OlapElement getElementChild(
+    @Override
+	public OlapElement getElementChild(
         OlapElement parent, Id.Segment name, MatchType matchType)
     {
         return schemaReader.getElementChild(parent, name, matchType);
     }
 
-    public List<Member> getLevelMembers(
+    @Override
+	public List<Member> getLevelMembers(
             Level level, boolean includeCalculated, Evaluator context)
     {
         return schemaReader.getLevelMembers(level, includeCalculated, context);
     }
 
-    public List<Member> getLevelMembers(
+    @Override
+	public List<Member> getLevelMembers(
         Level level, boolean includeCalculated)
     {
         return getLevelMembers(level, includeCalculated, null);
     }
 
-    public List<Level> getHierarchyLevels(Hierarchy hierarchy) {
+    @Override
+	public List<Level> getHierarchyLevels(Hierarchy hierarchy) {
         return schemaReader.getHierarchyLevels(hierarchy);
     }
 
-    public Member getHierarchyDefaultMember(Hierarchy hierarchy) {
+    @Override
+	public Member getHierarchyDefaultMember(Hierarchy hierarchy) {
         return schemaReader.getHierarchyDefaultMember(hierarchy);
     }
 
-    public boolean isDrillable(Member member) {
+    @Override
+	public boolean isDrillable(Member member) {
         return schemaReader.isDrillable(member);
     }
 
-    public boolean isVisible(Member member) {
+    @Override
+	public boolean isVisible(Member member) {
         return schemaReader.isVisible(member);
     }
 
-    public Cube[] getCubes() {
+    @Override
+	public Cube[] getCubes() {
         return schemaReader.getCubes();
     }
 
-    public List<Member> getCalculatedMembers(Hierarchy hierarchy) {
+    @Override
+	public List<Member> getCalculatedMembers(Hierarchy hierarchy) {
         return schemaReader.getCalculatedMembers(hierarchy);
     }
 
-    public List<Member> getCalculatedMembers(Level level) {
+    @Override
+	public List<Member> getCalculatedMembers(Level level) {
         return schemaReader.getCalculatedMembers(level);
     }
 
-    public List<Member> getCalculatedMembers() {
+    @Override
+	public List<Member> getCalculatedMembers() {
         return schemaReader.getCalculatedMembers();
     }
 
-    public int getChildrenCountFromCache(Member member) {
+    @Override
+	public int getChildrenCountFromCache(Member member) {
         return schemaReader.getChildrenCountFromCache(member);
     }
 
-    public int getLevelCardinality(
+    @Override
+	public int getLevelCardinality(
         Level level, boolean approximate, boolean materialize)
     {
         return schemaReader.getLevelCardinality(
             level, approximate, materialize);
     }
 
-    public List<Member> getLevelMembers(Level level, Evaluator context) {
+    @Override
+	public List<Member> getLevelMembers(Level level, Evaluator context) {
         return schemaReader.getLevelMembers(level, context);
     }
 
-    public List<Member> getMemberChildren(Member member, Evaluator context) {
+    @Override
+	public List<Member> getMemberChildren(Member member, Evaluator context) {
         return schemaReader.getMemberChildren(member, context);
     }
 
-    public List<Member> getMemberChildren(
+    @Override
+	public List<Member> getMemberChildren(
         List<Member> members, Evaluator context)
     {
         return schemaReader.getMemberChildren(members, context);
     }
 
-    public void getMemberAncestors(Member member, List<Member> ancestorList) {
+    @Override
+	public void getMemberAncestors(Member member, List<Member> ancestorList) {
         schemaReader.getMemberAncestors(member, ancestorList);
     }
 
-    public Member lookupMemberChildByName(
+    @Override
+	public Member lookupMemberChildByName(
         Member member, Id.Segment memberName, MatchType matchType)
     {
         return schemaReader.lookupMemberChildByName(
             member, memberName, matchType);
     }
 
-    public List<Member> lookupMemberChildrenByNames(
+    @Override
+	public List<Member> lookupMemberChildrenByNames(
         Member parent, List<Id.NameSegment> childNames, MatchType matchType)
     {
         return schemaReader.lookupMemberChildrenByNames(
             parent, childNames, matchType);
     }
 
-    public NativeEvaluator getNativeSetEvaluator(
+    @Override
+	public NativeEvaluator getNativeSetEvaluator(
         FunDef fun, Exp[] args, Evaluator evaluator, Calc calc)
     {
         return schemaReader.getNativeSetEvaluator(fun, args, evaluator, calc);
     }
 
-    public Parameter getParameter(String name) {
+    @Override
+	public Parameter getParameter(String name) {
         return schemaReader.getParameter(name);
     }
 
-    public DataSource getDataSource() {
+    @Override
+	public DataSource getDataSource() {
         return schemaReader.getDataSource();
     }
 
-    public SchemaReader withoutAccessControl() {
+    @Override
+	public SchemaReader withoutAccessControl() {
         return schemaReader.withoutAccessControl();
     }
 
-    public SchemaReader withLocus() {
+    @Override
+	public SchemaReader withLocus() {
         return RolapUtil.locusSchemaReader(
             schemaReader.getSchema().getInternalConnection(),
             this);
     }
 
-    public Map<? extends Member, Access> getMemberChildrenWithDetails(
+    @Override
+	public Map<? extends Member, Access> getMemberChildrenWithDetails(
         Member member,
         Evaluator evaluator)
     {

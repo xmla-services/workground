@@ -282,7 +282,8 @@ public class Util extends XOMUtil {
         final ThreadFactory factory =
             new ThreadFactory() {
                 private final AtomicInteger counter = new AtomicInteger(0);
-                public Thread newThread(Runnable r) {
+                @Override
+				public Thread newThread(Runnable r) {
                     final Thread t =
                         Executors.defaultThreadFactory().newThread(r);
                     t.setDaemon(true);
@@ -337,7 +338,8 @@ public class Util extends XOMUtil {
             maxNbThreads,
             new ThreadFactory() {
                 final AtomicInteger counter = new AtomicInteger(0);
-                public Thread newThread(Runnable r) {
+                @Override
+				public Thread newThread(Runnable r) {
                     final Thread thread =
                         Executors.defaultThreadFactory().newThread(r);
                     thread.setDaemon(true);
@@ -353,7 +355,8 @@ public class Util extends XOMUtil {
      *
      * @deprecated Will be removed in 4.0
      */
-    public static String mdxEncodeString(String st) {
+    @Deprecated
+	public static String mdxEncodeString(String st) {
         StringBuilder retString = new StringBuilder(st.length() + 20);
         for (int i = 0; i < st.length(); i++) {
             char c = st.charAt(i);
@@ -1281,7 +1284,8 @@ public class Util extends XOMUtil {
      *
      * @deprecated
      */
-    public static <T> T deprecated(T reason) {
+    @Deprecated
+	public static <T> T deprecated(T reason) {
         throw new UnsupportedOperationException(reason.toString());
     }
 
@@ -1291,7 +1295,8 @@ public class Util extends XOMUtil {
      *
      * @deprecated
      */
-    public static <T> T deprecated(T reason, boolean fail) {
+    @Deprecated
+	public static <T> T deprecated(T reason, boolean fail) {
         if (fail) {
             throw new UnsupportedOperationException(reason.toString());
         } else {
@@ -1791,11 +1796,13 @@ public class Util extends XOMUtil {
     private static Id.KeySegment convert(final KeySegment keySegment) {
         return new Id.KeySegment(
             new AbstractList<Id.NameSegment>() {
-                public Id.NameSegment get(int index) {
+                @Override
+				public Id.NameSegment get(int index) {
                     return convert(keySegment.getKeyParts().get(index));
                 }
 
-                public int size() {
+                @Override
+				public int size() {
                     return keySegment.getKeyParts().size();
                 }
             });
@@ -1839,7 +1846,8 @@ public class Util extends XOMUtil {
             return iterable;
         }
         return new Iterable<T>() {
-            public Iterator<T> iterator() {
+            @Override
+			public Iterator<T> iterator() {
                 return new Iterator<T>() {
                     final Iterator<T> iterator = iterable.iterator();
                     T next;
@@ -1859,17 +1867,20 @@ public class Util extends XOMUtil {
                         return false;
                     }
 
-                    public boolean hasNext() {
+                    @Override
+					public boolean hasNext() {
                         return hasNext;
                     }
 
-                    public T next() {
+                    @Override
+					public T next() {
                         T t = next;
                         hasNext = moveToNext();
                         return t;
                     }
 
-                    public void remove() {
+                    @Override
+					public void remove() {
                         throw new UnsupportedOperationException();
                     }
                 };
@@ -1900,11 +1911,13 @@ public class Util extends XOMUtil {
         final List<Id.Segment> segments)
     {
         return new AbstractList<IdentifierSegment>() {
-            public IdentifierSegment get(int index) {
+            @Override
+			public IdentifierSegment get(int index) {
                 return toOlap4j(segments.get(index));
             }
 
-            public int size() {
+            @Override
+			public int size() {
                 return segments.size();
             }
         };
@@ -1922,11 +1935,13 @@ public class Util extends XOMUtil {
     private static KeySegment toOlap4j(final Id.KeySegment keySegment) {
         return new KeySegment(
             new AbstractList<NameSegment>() {
-                public NameSegment get(int index) {
+                @Override
+				public NameSegment get(int index) {
                     return toOlap4j(keySegment.subSegmentList.get(index));
                 }
 
-                public int size() {
+                @Override
+				public int size() {
                     return keySegment.subSegmentList.size();
                 }
             });
@@ -2036,55 +2051,68 @@ public class Util extends XOMUtil {
     public static <T> Set<T> newIdentityHashSetFake() {
         final HashMap<T, Boolean> map = new HashMap<T, Boolean>();
         return new Set<T>() {
-            public int size() {
+            @Override
+			public int size() {
                 return map.size();
             }
 
-            public boolean isEmpty() {
+            @Override
+			public boolean isEmpty() {
                 return map.isEmpty();
             }
 
-            public boolean contains(Object o) {
+            @Override
+			public boolean contains(Object o) {
                 return map.containsKey(o);
             }
 
-            public Iterator<T> iterator() {
+            @Override
+			public Iterator<T> iterator() {
                 return map.keySet().iterator();
             }
 
-            public Object[] toArray() {
+            @Override
+			public Object[] toArray() {
                 return map.keySet().toArray();
             }
 
-            public <T> T[] toArray(T[] a) {
+            @Override
+			public <T> T[] toArray(T[] a) {
                 return map.keySet().toArray(a);
             }
 
-            public boolean add(T t) {
+            @Override
+			public boolean add(T t) {
                 return map.put(t, Boolean.TRUE) == null;
             }
 
-            public boolean remove(Object o) {
+            @Override
+			public boolean remove(Object o) {
                 return map.remove(o) == Boolean.TRUE;
             }
 
-            public boolean containsAll(Collection<?> c) {
+            @Override
+			public boolean containsAll(Collection<?> c) {
                 return map.keySet().containsAll(c);
             }
 
-            public boolean addAll(Collection<? extends T> c) {
+            @Override
+			public boolean addAll(Collection<? extends T> c) {
                 throw new UnsupportedOperationException();
             }
 
-            public boolean retainAll(Collection<?> c) {
+            @Override
+			public boolean retainAll(Collection<?> c) {
                 throw new UnsupportedOperationException();
             }
 
-            public boolean removeAll(Collection<?> c) {
+            @Override
+			public boolean removeAll(Collection<?> c) {
                 throw new UnsupportedOperationException();
             }
 
-            public void clear() {
+            @Override
+			public void clear() {
                 map.clear();
             }
         };
@@ -2256,7 +2284,8 @@ public class Util extends XOMUtil {
     }
 
     public static class ErrorCellValue {
-        public String toString() {
+        @Override
+		public String toString() {
             return "#ERR";
         }
     }
@@ -2567,7 +2596,8 @@ public class Util extends XOMUtil {
             return found;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             StringBuilder sb = new StringBuilder(64);
             for (int i = 0, n = list.size(); i < n; i++) {
                 Pair<String, String> pair = list.get(i);
@@ -2603,7 +2633,8 @@ public class Util extends XOMUtil {
             return sb.toString();
         }
 
-        public Iterator<Pair<String, String>> iterator() {
+        @Override
+		public Iterator<Pair<String, String>> iterator() {
             return list.iterator();
         }
     }
@@ -2958,7 +2989,8 @@ public class Util extends XOMUtil {
      *  {@link mondrian.server.monitor.ServerInfo#sqlStatementExecuteNanos};
      *  will be removed in 4.0.
      */
-    public static long dbTimeMillis() {
+    @Deprecated
+	public static long dbTimeMillis() {
         return databaseMillis;
     }
 
@@ -2967,7 +2999,8 @@ public class Util extends XOMUtil {
      *
      * @deprecated Will be removed in 4.0.
      */
-    public static void addDatabaseTime(long millis) {
+    @Deprecated
+	public static void addDatabaseTime(long millis) {
         databaseMillis += millis;
     }
 
@@ -2979,7 +3012,8 @@ public class Util extends XOMUtil {
      *
      * @deprecated Will be removed in 4.0.
      */
-    public static long nonDbTimeMillis() {
+    @Deprecated
+	public static long nonDbTimeMillis() {
         final long systemMillis = System.currentTimeMillis();
         return systemMillis - databaseMillis;
     }
@@ -2990,31 +3024,39 @@ public class Util extends XOMUtil {
      */
     public static Validator createSimpleValidator(final FunTable funTable) {
         return new Validator() {
-            public Query getQuery() {
+            @Override
+			public Query getQuery() {
                 return null;
             }
 
-            public SchemaReader getSchemaReader() {
+            @Override
+			public SchemaReader getSchemaReader() {
                 throw new UnsupportedOperationException();
             }
 
-            public Exp validate(Exp exp, boolean scalar) {
+            @Override
+			public Exp validate(Exp exp, boolean scalar) {
                 return exp;
             }
 
-            public void validate(ParameterExpr parameterExpr) {
+            @Override
+			public void validate(ParameterExpr parameterExpr) {
             }
 
-            public void validate(MemberProperty memberProperty) {
+            @Override
+			public void validate(MemberProperty memberProperty) {
             }
 
-            public void validate(QueryAxis axis) {
+            @Override
+			public void validate(QueryAxis axis) {
             }
 
-            public void validate(Formula formula) {
+            @Override
+			public void validate(Formula formula) {
             }
 
-            public FunDef getDef(Exp[] args, String name, Syntax syntax) {
+            @Override
+			public FunDef getDef(Exp[] args, String name, Syntax syntax) {
                 // Very simple resolution. Assumes that there is precisely
                 // one resolver (i.e. no overloading) and no argument
                 // conversions are necessary.
@@ -3028,11 +3070,13 @@ public class Util extends XOMUtil {
                 return def;
             }
 
-            public boolean alwaysResolveFunDef() {
+            @Override
+			public boolean alwaysResolveFunDef() {
                 return false;
             }
 
-            public boolean canConvert(
+            @Override
+			public boolean canConvert(
                 int ordinal, Exp fromExp,
                 int to,
                 List<Resolver.Conversion> conversions)
@@ -3040,15 +3084,18 @@ public class Util extends XOMUtil {
                 return true;
             }
 
-            public boolean requiresExpression() {
+            @Override
+			public boolean requiresExpression() {
                 return false;
             }
 
-            public FunTable getFunTable() {
+            @Override
+			public FunTable getFunTable() {
                 return funTable;
             }
 
-            public Parameter createOrLookupParam(
+            @Override
+			public Parameter createOrLookupParam(
                 boolean definition,
                 String name,
                 Type type,
@@ -3278,7 +3325,8 @@ public class Util extends XOMUtil {
      */
     public static Map<String, String> toMap(final Properties properties) {
         return new AbstractMap<String, String>() {
-            @SuppressWarnings({"unchecked"})
+            @Override
+			@SuppressWarnings({"unchecked"})
             public Set<Entry<String, String>> entrySet() {
                 return (Set) properties.entrySet();
             }
@@ -3420,7 +3468,8 @@ public class Util extends XOMUtil {
             && !(iterable instanceof Iterable))
         {
             return new Iterable<T>() {
-                public Iterator<T> iterator() {
+                @Override
+				public Iterator<T> iterator() {
                     return ((Collection<T>) iterable).iterator();
                 }
             };
@@ -3807,67 +3856,83 @@ public class Util extends XOMUtil {
             return Arrays.asList((T[]) toArray());
         }
 
-        public Iterator<T> iterator() {
+        @Override
+		public Iterator<T> iterator() {
             return asArrayList().iterator();
         }
 
-        public ListIterator<T> listIterator() {
+        @Override
+		public ListIterator<T> listIterator() {
             return asArrayList().listIterator();
         }
 
-        public boolean isEmpty() {
+        @Override
+		public boolean isEmpty() {
             return false;
         }
 
-        public boolean add(Object t) {
+        @Override
+		public boolean add(Object t) {
             throw new UnsupportedOperationException();
         }
 
-        public boolean addAll(Collection<? extends T> c) {
+        @Override
+		public boolean addAll(Collection<? extends T> c) {
             throw new UnsupportedOperationException();
         }
 
-        public boolean addAll(int index, Collection<? extends T> c) {
+        @Override
+		public boolean addAll(int index, Collection<? extends T> c) {
             throw new UnsupportedOperationException();
         }
 
-        public boolean removeAll(Collection<?> c) {
+        @Override
+		public boolean removeAll(Collection<?> c) {
             throw new UnsupportedOperationException();
         }
 
-        public boolean retainAll(Collection<?> c) {
+        @Override
+		public boolean retainAll(Collection<?> c) {
             throw new UnsupportedOperationException();
         }
 
-        public void clear() {
+        @Override
+		public void clear() {
             throw new UnsupportedOperationException();
         }
 
-        public T set(int index, Object element) {
+        @Override
+		public T set(int index, Object element) {
             throw new UnsupportedOperationException();
         }
 
-        public void add(int index, Object element) {
+        @Override
+		public void add(int index, Object element) {
             throw new UnsupportedOperationException();
         }
 
-        public T remove(int index) {
+        @Override
+		public T remove(int index) {
             throw new UnsupportedOperationException();
         }
 
-        public ListIterator<T> listIterator(int index) {
+        @Override
+		public ListIterator<T> listIterator(int index) {
             return asArrayList().listIterator(index);
         }
 
-        public List<T> subList(int fromIndex, int toIndex) {
+        @Override
+		public List<T> subList(int fromIndex, int toIndex) {
             return asArrayList().subList(fromIndex, toIndex);
         }
 
-        public boolean contains(Object o) {
+        @Override
+		public boolean contains(Object o) {
             return indexOf(o) >= 0;
         }
 
-        public boolean containsAll(Collection<?> c) {
+        @Override
+		public boolean containsAll(Collection<?> c) {
             Iterator<?> e = c.iterator();
             while (e.hasNext()) {
                 if (!contains(e.next())) {
@@ -3877,7 +3942,8 @@ public class Util extends XOMUtil {
             return true;
         }
 
-        public boolean remove(Object o) {
+        @Override
+		public boolean remove(Object o) {
             throw new UnsupportedOperationException();
         }
     }
@@ -3908,11 +3974,13 @@ public class Util extends XOMUtil {
             assert t1 != null;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return new StringBuilder("[").append(t0).append(", ").append(t1).append("]").toString();
         }
 
-        public T get(int index) {
+        @Override
+		public T get(int index) {
             switch (index) {
             case 0:
                 return t0;
@@ -3923,11 +3991,13 @@ public class Util extends XOMUtil {
             }
         }
 
-        public int size() {
+        @Override
+		public int size() {
             return 2;
         }
 
-        public boolean equals(Object o) {
+        @Override
+		public boolean equals(Object o) {
             if (o instanceof Flat2List) {
                 Flat2List that = (Flat2List) o;
                 return Objects.equals(this.t0, that.t0)
@@ -3936,14 +4006,16 @@ public class Util extends XOMUtil {
             return Arrays.asList(t0, t1).equals(o);
         }
 
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             int h = 1;
             h = h * 31 + t0.hashCode();
             h = h * 31 + t1.hashCode();
             return h;
         }
 
-        public int indexOf(Object o) {
+        @Override
+		public int indexOf(Object o) {
             if (t0.equals(o)) {
                 return 0;
             }
@@ -3953,7 +4025,8 @@ public class Util extends XOMUtil {
             return -1;
         }
 
-        public int lastIndexOf(Object o) {
+        @Override
+		public int lastIndexOf(Object o) {
             if (t1.equals(o)) {
                 return 1;
             }
@@ -3963,14 +4036,16 @@ public class Util extends XOMUtil {
             return -1;
         }
 
-        @SuppressWarnings({"unchecked"})
+        @Override
+		@SuppressWarnings({"unchecked"})
         public <T2> T2[] toArray(T2[] a) {
             a[0] = (T2) t0;
             a[1] = (T2) t1;
             return a;
         }
 
-        public Object[] toArray() {
+        @Override
+		public Object[] toArray() {
             return new Object[] {t0, t1};
         }
     }
@@ -4004,11 +4079,13 @@ public class Util extends XOMUtil {
             assert t2 != null;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return new StringBuilder("[").append(t0).append(", ").append(t1).append(", ").append(t2).append("]").toString();
         }
 
-        public T get(int index) {
+        @Override
+		public T get(int index) {
             switch (index) {
             case 0:
                 return t0;
@@ -4021,11 +4098,13 @@ public class Util extends XOMUtil {
             }
         }
 
-        public int size() {
+        @Override
+		public int size() {
             return 3;
         }
 
-        public boolean equals(Object o) {
+        @Override
+		public boolean equals(Object o) {
             if (o instanceof Flat3List) {
                 Flat3List that = (Flat3List) o;
                 return Objects.equals(this.t0, that.t0)
@@ -4035,7 +4114,8 @@ public class Util extends XOMUtil {
             return o.equals(this);
         }
 
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             int h = 1;
             h = h * 31 + t0.hashCode();
             h = h * 31 + t1.hashCode();
@@ -4043,7 +4123,8 @@ public class Util extends XOMUtil {
             return h;
         }
 
-        public int indexOf(Object o) {
+        @Override
+		public int indexOf(Object o) {
             if (t0.equals(o)) {
                 return 0;
             }
@@ -4056,7 +4137,8 @@ public class Util extends XOMUtil {
             return -1;
         }
 
-        public int lastIndexOf(Object o) {
+        @Override
+		public int lastIndexOf(Object o) {
             if (t2.equals(o)) {
                 return 2;
             }
@@ -4069,7 +4151,8 @@ public class Util extends XOMUtil {
             return -1;
         }
 
-        @SuppressWarnings({"unchecked"})
+        @Override
+		@SuppressWarnings({"unchecked"})
         public <T2> T2[] toArray(T2[] a) {
             a[0] = (T2) t0;
             a[1] = (T2) t1;
@@ -4077,7 +4160,8 @@ public class Util extends XOMUtil {
             return a;
         }
 
-        public Object[] toArray() {
+        @Override
+		public Object[] toArray() {
             return new Object[] {t0, t1, t2};
         }
     }
@@ -4111,7 +4195,8 @@ public class Util extends XOMUtil {
             final Iterable<? extends Reference<T2>> referenceIterable)
         {
             return new Iterable<T2>() {
-                public Iterator<T2> iterator() {
+                @Override
+				public Iterator<T2> iterator() {
                     return new GcIterator<T2>(referenceIterable.iterator());
                 }
             };
@@ -4129,17 +4214,20 @@ public class Util extends XOMUtil {
             hasNext = false;
         }
 
-        public boolean hasNext() {
+        @Override
+		public boolean hasNext() {
             return hasNext;
         }
 
-        public T next() {
+        @Override
+		public T next() {
             final T next1 = next;
             moveToNext();
             return next1;
         }
 
-        public void remove() {
+        @Override
+		public void remove() {
             throw new UnsupportedOperationException();
         }
     }
@@ -4173,7 +4261,8 @@ public class Util extends XOMUtil {
         private SqlNullSafeComparator() {
         }
 
-        public int compare(Comparable o1, Comparable o2) {
+        @Override
+		public int compare(Comparable o1, Comparable o2) {
             if (o1 == RolapUtil.sqlNullValue) {
                 return -1;
             }
@@ -4258,30 +4347,37 @@ public class Util extends XOMUtil {
             super();
             this.list = Collections.unmodifiableList(list);
         }
-        public Set<Entry<K, V>> entrySet() {
+        @Override
+		public Set<Entry<K, V>> entrySet() {
             return new AbstractSet<Entry<K, V>>() {
-                public Iterator<Entry<K, V>>
+                @Override
+				public Iterator<Entry<K, V>>
                     iterator()
                 {
                     return new Iterator<Entry<K, V>>() {
                         private int pt = 0;
-                        public void remove() {
+                        @Override
+						public void remove() {
                             throw new UnsupportedOperationException();
                         }
-                        @SuppressWarnings("unchecked")
+                        @Override
+						@SuppressWarnings("unchecked")
                         public Entry<K, V> next() {
                             return new AbstractMapEntry(
                                 list.get(pt++), null) {};
                         }
-                        public boolean hasNext() {
+                        @Override
+						public boolean hasNext() {
                             return pt < list.size();
                         }
                     };
                 }
-                public int size() {
+                @Override
+				public int size() {
                     return list.size();
                 }
-                public boolean contains(Object o) {
+                @Override
+				public boolean contains(Object o) {
                     if (o instanceof Entry) {
                         if (list.contains(((Entry) o).getKey())) {
                             return true;
@@ -4291,39 +4387,50 @@ public class Util extends XOMUtil {
                 }
             };
         }
-        public Set<K> keySet() {
+        @Override
+		public Set<K> keySet() {
             return new AbstractSet<K>() {
-                public Iterator<K> iterator() {
+                @Override
+				public Iterator<K> iterator() {
                     return new Iterator<K>() {
                         private int pt = -1;
-                        public void remove() {
+                        @Override
+						public void remove() {
                             throw new UnsupportedOperationException();
                         }
-                        public K next() {
+                        @Override
+						public K next() {
                             return list.get(++pt);
                         }
-                        public boolean hasNext() {
+                        @Override
+						public boolean hasNext() {
                             return pt < list.size();
                         }
                     };
                 }
-                public int size() {
+                @Override
+				public int size() {
                     return list.size();
                 }
-                public boolean contains(Object o) {
+                @Override
+				public boolean contains(Object o) {
                     return list.contains(o);
                 }
             };
         }
-        public Collection<V> values() {
+        @Override
+		public Collection<V> values() {
             return new AbstractList<V>() {
-                public V get(int index) {
+                @Override
+				public V get(int index) {
                     return null;
                 }
-                public int size() {
+                @Override
+				public int size() {
                     return list.size();
                 }
-                public boolean contains(Object o) {
+                @Override
+				public boolean contains(Object o) {
                     if (o == null && size() > 0) {
                         return true;
                     } else {
@@ -4332,13 +4439,16 @@ public class Util extends XOMUtil {
                 }
             };
         }
-        public V get(Object key) {
+        @Override
+		public V get(Object key) {
             return null;
         }
-        public boolean containsKey(Object key) {
+        @Override
+		public boolean containsKey(Object key) {
             return list.contains(key);
         }
-        public boolean containsValue(Object o) {
+        @Override
+		public boolean containsValue(Object o) {
             if (o == null && size() > 0) {
                 return true;
             } else {

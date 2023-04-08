@@ -27,47 +27,58 @@ public abstract class AbstractDelegateDataSource<D extends DataSource> implement
 
     protected abstract D delegate();
 
-    public <T> T unwrap(Class<T> iface) throws SQLException {
+    @Override
+	public <T> T unwrap(Class<T> iface) throws SQLException {
         return delegate().unwrap(iface);
     }
 
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    @Override
+	public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return delegate().isWrapperFor(iface);
     }
 
-    public Connection getConnection() throws SQLException {
+    @Override
+	public Connection getConnection() throws SQLException {
         return delegate().getConnection();
     }
 
-    public Connection getConnection(String username, String password) throws SQLException {
+    @Override
+	public Connection getConnection(String username, String password) throws SQLException {
         return delegate().getConnection(username, password);
     }
 
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    @Override
+	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
         return delegate().getParentLogger();
     }
 
-    public PrintWriter getLogWriter() throws SQLException {
+    @Override
+	public PrintWriter getLogWriter() throws SQLException {
         return delegate().getLogWriter();
     }
 
-    public void setLogWriter(PrintWriter out) throws SQLException {
+    @Override
+	public void setLogWriter(PrintWriter out) throws SQLException {
         delegate().setLogWriter(out);
     }
 
-    public void setLoginTimeout(int seconds) throws SQLException {
+    @Override
+	public void setLoginTimeout(int seconds) throws SQLException {
         delegate().setLoginTimeout(seconds);
     }
 
-    public int getLoginTimeout() throws SQLException {
+    @Override
+	public int getLoginTimeout() throws SQLException {
         return delegate().getLoginTimeout();
     }
 
-    public ConnectionBuilder createConnectionBuilder() throws SQLException {
+    @Override
+	public ConnectionBuilder createConnectionBuilder() throws SQLException {
         return delegate().createConnectionBuilder();
     }
 
-    public ShardingKeyBuilder createShardingKeyBuilder() throws SQLException {
+    @Override
+	public ShardingKeyBuilder createShardingKeyBuilder() throws SQLException {
         return delegate().createShardingKeyBuilder();
     }
 }

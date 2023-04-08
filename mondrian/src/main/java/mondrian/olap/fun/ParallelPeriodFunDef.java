@@ -50,7 +50,8 @@ class ParallelPeriodFunDef extends FunDefBase {
         super(dummyFunDef);
     }
 
-    public Type getResultType(Validator validator, Exp[] args) {
+    @Override
+	public Type getResultType(Validator validator, Exp[] args) {
         if (args.length == 0) {
             // With no args, the default implementation cannot
             // guess the hierarchy, so we supply the Time
@@ -63,7 +64,8 @@ class ParallelPeriodFunDef extends FunDefBase {
         return super.getResultType(validator, args);
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         // Member defaults to [Time].currentmember
         Exp[] args = call.getArgs();
 
@@ -111,7 +113,8 @@ class ParallelPeriodFunDef extends FunDefBase {
         		call.getFunName(),call.getType(),
             new Calc[] {memberCalc, lagValueCalc, ancestorLevelCalc})
         {
-            public Member evaluateMember(Evaluator evaluator) {
+            @Override
+			public Member evaluateMember(Evaluator evaluator) {
                 Member member;
                 int lagValue = lagValueCalc.evaluateInteger(evaluator);
                 Level ancestorLevel;

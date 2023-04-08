@@ -54,17 +54,20 @@ class PropertiesFunDef extends FunDefBase {
         super(name, signature, description, syntax, returnType, parameterTypes);
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final MemberCalc memberCalc = compiler.compileMember(call.getArg(0));
         final StringCalc stringCalc = compiler.compileString(call.getArg(1));
         return new GenericCalc(call.getFunName(),call.getType()) {
-            public Object evaluate(Evaluator evaluator) {
+            @Override
+			public Object evaluate(Evaluator evaluator) {
                 return PropertiesFunDef.properties(
                     memberCalc.evaluateMember(evaluator),
                         stringCalc.evaluateString(evaluator));
             }
 
-            public Calc[] getCalcs() {
+            @Override
+			public Calc[] getCalcs() {
                 return new Calc[] {memberCalc, stringCalc};
             }
         };
@@ -118,7 +121,8 @@ class PropertiesFunDef extends FunDefBase {
             return true;
         }
 
-        public FunDef resolve(
+        @Override
+		public FunDef resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -180,7 +184,8 @@ class PropertiesFunDef extends FunDefBase {
             }
         }
 
-        public boolean requiresExpression(int k) {
+        @Override
+		public boolean requiresExpression(int k) {
             return true;
         }
     }

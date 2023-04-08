@@ -238,7 +238,8 @@ public class RolapStar {
 
     private final ThreadLocal<Bar> localBars =
         new ThreadLocal<Bar>() {
-            protected Bar initialValue() {
+            @Override
+			protected Bar initialValue() {
                 return new Bar();
             }
         };
@@ -808,7 +809,8 @@ public class RolapStar {
         return query.toString().trim();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         StringWriter sw = new StringWriter(256);
         PrintWriter pw = new PrintWriter(sw);
         print(pw, "", true);
@@ -862,7 +864,8 @@ public class RolapStar {
     public static class Column {
         public static final Comparator<Column> COMPARATOR =
             new Comparator<Column>() {
-                public int compare(
+                @Override
+				public int compare(
                     Column object1,
                     Column object2)
                 {
@@ -972,7 +975,8 @@ public class RolapStar {
                 0);
         }
 
-        public boolean equals(Object obj) {
+        @Override
+		public boolean equals(Object obj) {
             if (! (obj instanceof RolapStar.Column)) {
                 return false;
             }
@@ -985,7 +989,8 @@ public class RolapStar {
                 && other.name.equals(this.name);
         }
 
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             int h = name.hashCode();
             h = Util.hash(h, table);
             return h;
@@ -1091,7 +1096,8 @@ public class RolapStar {
                 && predicate.getConstrainedColumn() == null)
             {
                 Column column = new Column(datatype) {
-                    public String generateExprString(SqlQuery query) {
+                    @Override
+					public String generateExprString(SqlQuery query) {
                         return expr;
                     }
                 };
@@ -1103,7 +1109,8 @@ public class RolapStar {
             return buf.toString();
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             StringWriter sw = new StringWriter(256);
             PrintWriter pw = new PrintWriter(sw);
             print(pw, "");
@@ -1220,7 +1227,8 @@ public class RolapStar {
             return aggregator;
         }
 
-        public boolean equals(Object o) {
+        @Override
+		public boolean equals(Object o) {
             if (! (o instanceof RolapStar.Measure)) {
                 return false;
             }
@@ -1238,13 +1246,15 @@ public class RolapStar {
             return (that.aggregator == this.aggregator);
         }
 
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             int h = super.hashCode();
             h = Util.hash(h, aggregator);
             return h;
         }
 
-        public void print(PrintWriter pw, String prefix) {
+        @Override
+		public void print(PrintWriter pw, String prefix) {
             SqlQuery sqlQuery = getSqlQuery();
             pw.print(prefix);
             pw.print(getName());
@@ -1850,18 +1860,21 @@ public class RolapStar {
             return (relation == null);
         }
 
-        public boolean equals(Object obj) {
+        @Override
+		public boolean equals(Object obj) {
             if (!(obj instanceof Table)) {
                 return false;
             }
             Table other = (Table) obj;
             return getAlias().equals(other.getAlias());
         }
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             return getAlias().hashCode();
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             StringWriter sw = new StringWriter(256);
             PrintWriter pw = new PrintWriter(sw);
             print(pw, "");
@@ -1960,11 +1973,13 @@ public class RolapStar {
             return new StringBuilder(RolapStar.generateExprString(left, query)).append(" = ")
                 .append(RolapStar.generateExprString(right, query)).toString();
         }
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             return left.hashCode() ^ right.hashCode();
         }
 
-        public boolean equals(Object obj) {
+        @Override
+		public boolean equals(Object obj) {
             if (!(obj instanceof Condition)) {
                 return false;
             }
@@ -1973,7 +1988,8 @@ public class RolapStar {
                 && this.right.equals(that.right);
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             StringWriter sw = new StringWriter(256);
             PrintWriter pw = new PrintWriter(sw);
             print(pw, "");
@@ -2071,7 +2087,8 @@ public class RolapStar {
          * If the names of the columns do not differ,
          * compare the tables to which the columns belong
          */
-        public int compare(Column o1, Column o2) {
+        @Override
+		public int compare(Column o1, Column o2) {
           int result = o1.getName().compareTo(o2.getName());
           if (result == 0) {
             result =

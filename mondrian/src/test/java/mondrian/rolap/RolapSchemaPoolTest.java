@@ -202,7 +202,8 @@ public class RolapSchemaPoolTest {
     public static class NotReallyDynamicSchemaProcessor
         implements DynamicSchemaProcessor
     {
-        public String processSchema(String schemaUrl, PropertyList connectInfo)
+        @Override
+		public String processSchema(String schemaUrl, PropertyList connectInfo)
             throws Exception
         {
             return Util.readVirtualFileAsString(schemaUrl);

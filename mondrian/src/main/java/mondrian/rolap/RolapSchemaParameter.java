@@ -61,35 +61,43 @@ public class RolapSchemaParameter implements Parameter, ParameterCompilable {
         return schema;
     }
 
-    public boolean isModifiable() {
+    @Override
+	public boolean isModifiable() {
         return modifiable;
     }
 
-    public Scope getScope() {
+    @Override
+	public Scope getScope() {
         return Scope.Schema;
     }
 
-    public Type getType() {
+    @Override
+	public Type getType() {
         return type;
     }
 
-    public Exp getDefaultExp() {
+    @Override
+	public Exp getDefaultExp() {
         throw new UnsupportedOperationException();
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return name;
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return description;
     }
 
-    public Object getValue() {
+    @Override
+	public Object getValue() {
         return value;
     }
 
-    public void setValue(Object value) {
+    @Override
+	public void setValue(Object value) {
         if (!modifiable) {
             throw MondrianResource.instance().ParameterIsNotModifiable.ex(
                 getName(), getScope().name());
@@ -98,11 +106,13 @@ public class RolapSchemaParameter implements Parameter, ParameterCompilable {
         this.value = value;
     }
 
-    public boolean isSet() {
+    @Override
+	public boolean isSet() {
         return assigned;
     }
 
-    public void unsetValue() {
+    @Override
+	public void unsetValue() {
         if (!modifiable) {
             throw MondrianResource.instance().ParameterIsNotModifiable.ex(
                 getName(), getScope().name());
@@ -111,7 +121,8 @@ public class RolapSchemaParameter implements Parameter, ParameterCompilable {
         value = null;
     }
 
-    public Calc compile(ExpCompiler compiler) {
+    @Override
+	public Calc compile(ExpCompiler compiler) {
         // Parse and compile the expression for the default value.
         Exp defaultExp = compiler.getValidator()
             .getQuery()
@@ -123,11 +134,13 @@ public class RolapSchemaParameter implements Parameter, ParameterCompilable {
         // Generate a program which looks at the assigned value first,
         // and if it is not set, returns the default expression.
         return new GenericCalc("GenericCalc",defaultExp.getType()) {
-            public Calc[] getCalcs() {
+            @Override
+			public Calc[] getCalcs() {
                 return new Calc[] {defaultCalc};
             }
 
-            public Object evaluate(Evaluator evaluator) {
+            @Override
+			public Object evaluate(Evaluator evaluator) {
                 if (value != null) {
                     return value;
                 }

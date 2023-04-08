@@ -413,15 +413,18 @@ public class XmlUtil {
             return (this.errors != null);
         }
 
-        public void warning(SAXParseException exception) throws SAXException {
+        @Override
+		public void warning(SAXParseException exception) throws SAXException {
             addError(new ErrorInfo(SEVERITY_WARNING, exception));
         }
 
-        public void error(SAXParseException exception) throws SAXException {
+        @Override
+		public void error(SAXParseException exception) throws SAXException {
             addError(new ErrorInfo(SEVERITY_ERROR, exception));
         }
 
-        public void fatalError(SAXParseException exception)
+        @Override
+		public void fatalError(SAXParseException exception)
             throws SAXException
         {
             addError(new ErrorInfo(SEVERITY_FATAL_ERROR, exception));
@@ -716,7 +719,8 @@ public class XmlUtil {
         public Resolver(InputSource source) {
             this.source = source;
         }
-        public InputSource resolveEntity(
+        @Override
+		public InputSource resolveEntity(
             String publicId,
             String systemId)
             throws SAXException, IOException

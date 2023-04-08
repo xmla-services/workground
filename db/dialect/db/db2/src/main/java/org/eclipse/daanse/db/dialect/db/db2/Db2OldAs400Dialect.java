@@ -45,13 +45,15 @@ public class Db2OldAs400Dialect extends Db2Dialect {
         return SUPPORTED_PRODUCT_NAME.equalsIgnoreCase(productVersion);
     }
 
-    public boolean allowsFromQuery() {
+    @Override
+	public boolean allowsFromQuery() {
         // Older versions of AS400 do not allow FROM
         // subqueries in the FROM clause.
         return false;
     }
 
-    public boolean allowsFieldAs() {
+    @Override
+	public boolean allowsFieldAs() {
         return false;
     }
 

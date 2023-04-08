@@ -47,7 +47,8 @@ public class AbstractAggregateFunDef extends FunDefBase {
         super(dummyFunDef);
     }
 
-    protected Exp validateArg(
+    @Override
+	protected Exp validateArg(
         Validator validator, Exp[] args, int i, int category)
     {
         // If expression cache is enabled, wrap first expression (the set)

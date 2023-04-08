@@ -59,7 +59,8 @@ public abstract class AbstractQuerySpec implements QuerySpec {
         return getStar().getSqlQuery();
     }
 
-    public RolapStar getStar() {
+    @Override
+	public RolapStar getStar() {
         return star;
     }
 
@@ -187,7 +188,8 @@ public abstract class AbstractQuerySpec implements QuerySpec {
         return false;
     }
 
-    public Pair<String, List<BestFitColumnType>> generateSqlQuery() {
+    @Override
+	public Pair<String, List<BestFitColumnType>> generateSqlQuery() {
         SqlQuery sqlQuery = newSqlQuery();
 
         int k = getDistinctMeasureCount();

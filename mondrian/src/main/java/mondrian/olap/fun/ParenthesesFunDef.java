@@ -42,7 +42,8 @@ public class ParenthesesFunDef extends FunDefBase {
             new int[] {argType});
         this.argType = argType;
     }
-    public void unparse(Exp[] args, PrintWriter pw) {
+    @Override
+	public void unparse(Exp[] args, PrintWriter pw) {
         if (args.length != 1) {
             ExpBase.unparseList(pw, args, "(", ",", ")");
         } else {
@@ -53,12 +54,14 @@ public class ParenthesesFunDef extends FunDefBase {
         }
     }
 
-    public Type getResultType(Validator validator, Exp[] args) {
+    @Override
+	public Type getResultType(Validator validator, Exp[] args) {
         Util.assertTrue(args.length == 1);
         return args[0].getType();
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         return compiler.compile(call.getArg(0));
     }
 }

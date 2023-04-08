@@ -36,7 +36,8 @@ public class CellProperty extends QueryPart {
         return name.equalsIgnoreCase(Util.quoteMdxIdentifier(propertyName));
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return name;
     }
 }

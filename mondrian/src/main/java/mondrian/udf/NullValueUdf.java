@@ -26,31 +26,38 @@ import mondrian.spi.UserDefinedFunction;
 @ServiceProvider(value = UserDefinedFunction.class)
 public class NullValueUdf implements UserDefinedFunction {
 
-    public String getName() {
+    @Override
+	public String getName() {
         return "NullValue";
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return "Returns the null value";
     }
 
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
         return Syntax.Function;
     }
 
-    public Type getReturnType(Type[] parameterTypes) {
+    @Override
+	public Type getReturnType(Type[] parameterTypes) {
         return new NumericType();
     }
 
-    public Type[] getParameterTypes() {
+    @Override
+	public Type[] getParameterTypes() {
         return new Type[0];
     }
 
-    public Object execute(Evaluator evaluator, Argument[] arguments) {
+    @Override
+	public Object execute(Evaluator evaluator, Argument[] arguments) {
         return Util.nullValue;
     }
 
-    public String[] getReservedWords() {
+    @Override
+	public String[] getReservedWords() {
         // This function does not require any reserved words.
         return null;
     }

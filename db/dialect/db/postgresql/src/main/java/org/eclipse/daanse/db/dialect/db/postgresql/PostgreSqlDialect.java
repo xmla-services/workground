@@ -70,7 +70,8 @@ public class PostgreSqlDialect extends JdbcDialectImpl {
         return true;
     }
 
-    public StringBuilder generateRegularExpression(String source, String javaRegex) {
+    @Override
+	public StringBuilder generateRegularExpression(String source, String javaRegex) {
         try {
             Pattern.compile(javaRegex);
         } catch (PatternSyntaxException e) {

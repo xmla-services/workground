@@ -74,7 +74,8 @@ public class BlockingHashMapTest{
             this.map = response;
         }
 
-        public void run() {
+        @Override
+		public void run() {
             try {
                 Thread.sleep(random.nextInt(SLEEP_TIME));
                 map.put(key, value);
@@ -94,7 +95,8 @@ public class BlockingHashMapTest{
             this.map = map;
         }
 
-        public void run() {
+        @Override
+		public void run() {
             try {
                 Thread.sleep(random.nextInt(SLEEP_TIME));
                 Integer val = map.get(key);

@@ -96,7 +96,8 @@ public class JdbcTreeModel implements javax.swing.tree.TreeModel {
      * @see     #removeTreeModelListener
      *
      */
-    public void addTreeModelListener(TreeModelListener l) {
+    @Override
+	public void addTreeModelListener(TreeModelListener l) {
         treeModelListeners.add(l);
     }
 
@@ -112,7 +113,8 @@ public class JdbcTreeModel implements javax.swing.tree.TreeModel {
      * @return  the child of <code>parent</code> at index <code>index</code>
      *
      */
-    public Object getChild(Object parent, int index) {
+    @Override
+	public Object getChild(Object parent, int index) {
         if (parent instanceof Node) {
             return ((Node)parent).children.get(index);
         }
@@ -129,7 +131,8 @@ public class JdbcTreeModel implements javax.swing.tree.TreeModel {
      * @return  the number of children of the node <code>parent</code>
      *
      */
-    public int getChildCount(Object parent) {
+    @Override
+	public int getChildCount(Object parent) {
         if (parent instanceof Node) {
             return ((Node)parent).children.size();
         }
@@ -146,7 +149,8 @@ public class JdbcTreeModel implements javax.swing.tree.TreeModel {
      *    <code>child</code> or <code>parent</code> are <code>null</code>
      *
      */
-    public int getIndexOfChild(Object parent, Object child) {
+    @Override
+	public int getIndexOfChild(Object parent, Object child) {
         if (parent instanceof Node) {
             return ((Node)parent).children.indexOf(child);
         }
@@ -160,7 +164,8 @@ public class JdbcTreeModel implements javax.swing.tree.TreeModel {
      * @return  the root of the tree
      *
      */
-    public Object getRoot() {
+    @Override
+	public Object getRoot() {
         return root;
     }
 
@@ -175,7 +180,8 @@ public class JdbcTreeModel implements javax.swing.tree.TreeModel {
      * @return  true if <code>node</code> is a leaf
      *
      */
-    public boolean isLeaf(Object node) {
+    @Override
+	public boolean isLeaf(Object node) {
         return getChildCount(node) == 0;
     }
 
@@ -186,7 +192,8 @@ public class JdbcTreeModel implements javax.swing.tree.TreeModel {
      * @param   l       the listener to remove
      *
      */
-    public void removeTreeModelListener(TreeModelListener l) {
+    @Override
+	public void removeTreeModelListener(TreeModelListener l) {
         treeModelListeners.remove(l);
     }
 
@@ -199,7 +206,8 @@ public class JdbcTreeModel implements javax.swing.tree.TreeModel {
      * @param newValue the new value from the TreeCellEditor
      *
      */
-    public void valueForPathChanged(TreePath path, Object newValue) {
+    @Override
+	public void valueForPathChanged(TreePath path, Object newValue) {
     }
 
     class Node {
@@ -216,7 +224,8 @@ public class JdbcTreeModel implements javax.swing.tree.TreeModel {
             children = new ArrayList();
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return name;
         }
     }

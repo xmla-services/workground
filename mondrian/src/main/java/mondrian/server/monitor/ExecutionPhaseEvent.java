@@ -61,7 +61,8 @@ public class ExecutionPhaseEvent extends ExecutionEvent {
             .append(phase).append(")").toString();
     }
 
-    public <T> T accept(Visitor<T> visitor) {
+    @Override
+	public <T> T accept(Visitor<T> visitor) {
         return visitor.visit(this);
     }
 }

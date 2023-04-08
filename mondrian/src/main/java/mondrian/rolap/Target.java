@@ -56,14 +56,16 @@ public class Target extends TargetBase {
         this.cache = memberBuilder.getMemberCache();
     }
 
-    public void open() {
+    @Override
+	public void open() {
         levels = (RolapLevel[]) level.getHierarchy().getLevels();
         setList(new ArrayList<RolapMember>());
         levelDepth = level.getDepth();
         parentChild = level.isParentChild();
     }
 
-    int internalAddRow(SqlStatement stmt, int column)
+    @Override
+	int internalAddRow(SqlStatement stmt, int column)
         throws SQLException
     {
         RolapMember member = null;
@@ -126,7 +128,8 @@ public class Target extends TargetBase {
         return column;
     }
 
-    public List<Member> close() {
+    @Override
+	public List<Member> close() {
         final boolean asList = this.constraint.getEvaluator() != null
             && this.constraint.getEvaluator().getQuery().getResultStyle()
             == ResultStyle.LIST;
@@ -141,7 +144,8 @@ public class Target extends TargetBase {
             /**
              * Performs a load of the whole result set.
              */
-            public int size() {
+            @Override
+			public int size() {
                 while (this.moreRows) {
                     this.moreRows = sqlTupleReader.readNextTuple();
                     if (limit > 0 && !asList && getList().size() > limit) {
@@ -155,7 +159,8 @@ public class Target extends TargetBase {
                 return getList().size();
             }
 
-            public RolapMember get(final int idx) {
+            @Override
+			public RolapMember get(final int idx) {
                 if (asList) {
                     return getList().get(idx);
                 }
@@ -218,7 +223,8 @@ public class Target extends TargetBase {
                 }
             }
 
-            public RolapMember set(final int i, final RolapMember e) {
+            @Override
+			public RolapMember set(final int i, final RolapMember e) {
                 if (asList) {
                     return getList().set(i, e);
                 } else {
@@ -226,7 +232,8 @@ public class Target extends TargetBase {
                 }
             }
 
-            public boolean isEmpty() {
+            @Override
+			public boolean isEmpty() {
                 try {
                     get(0);
                     return false;
@@ -235,15 +242,18 @@ public class Target extends TargetBase {
                 }
             }
 
-            public int hashCode() {
+            @Override
+			public int hashCode() {
                 return Target.this.hashCode();
             }
 
-            public Iterator<RolapMember> iterator() {
+            @Override
+			public Iterator<RolapMember> iterator() {
                 return new Iterator<RolapMember>() {
                     private int cursor = 0;
 
-                    public boolean hasNext() {
+                    @Override
+					public boolean hasNext() {
                         try {
                             get(cursor);
                             return true;
@@ -252,11 +262,13 @@ public class Target extends TargetBase {
                         }
                     }
 
-                    public RolapMember next() {
+                    @Override
+					public RolapMember next() {
                         return get(cursor++);
                     }
 
-                    public void remove() {
+                    @Override
+					public void remove() {
                         throw new UnsupportedOperationException();
                     }
                 };

@@ -104,7 +104,8 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
         throw new UnsupportedOperationException();
     }
 
-    public EnumeratedValues<V> clone() {
+    @Override
+	public EnumeratedValues<V> clone() {
         EnumeratedValues clone;
         try {
             clone = (EnumeratedValues) super.clone();
@@ -339,22 +340,26 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
             this.description = description;
         }
 
-        public String getName() {
+        @Override
+		public String getName() {
             return name;
         }
 
-        public int getOrdinal() {
+        @Override
+		public int getOrdinal() {
             return ordinal;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return description;
         }
 
         /**
          * Returns the value's name.
          */
-        public String toString() {
+        @Override
+		public String toString() {
             return name;
         }
 
@@ -365,7 +370,8 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
          *   <code>value.name_.equals(s)</code> rather than
          *   <code>value.equals(s)</code>, didn't you?
          */
-        public boolean equals(String s) {
+        @Deprecated
+		public boolean equals(String s) {
             return super.equals(s);
         }
 

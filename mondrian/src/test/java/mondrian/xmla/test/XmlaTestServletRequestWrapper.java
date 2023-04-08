@@ -87,11 +87,13 @@ public class XmlaTestServletRequestWrapper extends HttpServletRequestWrapper {
         servletInStream = new XmlaTestServletInputStream(request);
     }
 
-    public String getContentType() {
+    @Override
+	public String getContentType() {
         return "text/xml";
     }
 
-    public ServletInputStream getInputStream() {
+    @Override
+	public ServletInputStream getInputStream() {
         return servletInStream;
     }
 
@@ -103,45 +105,55 @@ public class XmlaTestServletRequestWrapper extends HttpServletRequestWrapper {
             bais = new ByteArrayInputStream(source.getBytes());
         }
 
-        public int readLine(byte[] arg0, int arg1, int arg2)
+        @Override
+		public int readLine(byte[] arg0, int arg1, int arg2)
             throws IOException
         {
             return bais.read(arg0, arg1, arg2);
         }
 
-        public int available() throws IOException {
+        @Override
+		public int available() throws IOException {
             return bais.available();
         }
 
-        public void close() throws IOException {
+        @Override
+		public void close() throws IOException {
             bais.close();
         }
 
-        public synchronized void mark(int readlimit) {
+        @Override
+		public synchronized void mark(int readlimit) {
             bais.mark(readlimit);
         }
 
-        public boolean markSupported() {
+        @Override
+		public boolean markSupported() {
             return bais.markSupported();
         }
 
-        public int read() throws IOException {
+        @Override
+		public int read() throws IOException {
             return bais.read();
         }
 
-        public int read(byte[] b, int off, int len) throws IOException {
+        @Override
+		public int read(byte[] b, int off, int len) throws IOException {
             return bais.read(b, off, len);
         }
 
-        public int read(byte[] b) throws IOException {
+        @Override
+		public int read(byte[] b) throws IOException {
             return bais.read(b);
         }
 
-        public synchronized void reset() throws IOException {
+        @Override
+		public synchronized void reset() throws IOException {
              bais.reset();
         }
 
-        public long skip(long n) throws IOException {
+        @Override
+		public long skip(long n) throws IOException {
             return bais.skip(n);
         }
     }

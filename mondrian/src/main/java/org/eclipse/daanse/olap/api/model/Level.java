@@ -39,7 +39,8 @@ public interface Level extends OlapElement, MetaElement {
      * the depth of its level.
      */
     int getDepth();
-    Hierarchy getHierarchy();
+    @Override
+	Hierarchy getHierarchy();
 
     Level getChildLevel();
     Level getParentLevel();

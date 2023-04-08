@@ -48,7 +48,8 @@ class CaseTestFunDef extends FunDefBase {
         super(dummyFunDef);
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final Exp[] args = call.getArgs();
         final BooleanCalc[] conditionCalcs =
                 new BooleanCalc[args.length / 2];
@@ -70,7 +71,8 @@ class CaseTestFunDef extends FunDefBase {
         final Calc[] calcs = calcList.toArray(new Calc[calcList.size()]);
 
         return new GenericCalc(call.getFunName(),call.getType()) {
-            public Object evaluate(Evaluator evaluator) {
+            @Override
+			public Object evaluate(Evaluator evaluator) {
                 for (int i = 0; i < conditionCalcs.length; i++) {
                     if (conditionCalcs[i].evaluateBoolean(evaluator)) {
                         return exprCalcs[i].evaluate(evaluator);
@@ -79,7 +81,8 @@ class CaseTestFunDef extends FunDefBase {
                 return defaultCalc.evaluate(evaluator);
             }
 
-            public Calc[] getCalcs() {
+            @Override
+			public Calc[] getCalcs() {
                 return calcs;
             }
         };
@@ -94,7 +97,8 @@ class CaseTestFunDef extends FunDefBase {
                 Syntax.Case);
         }
 
-        public FunDef resolve(
+        @Override
+		public FunDef resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -133,7 +137,8 @@ class CaseTestFunDef extends FunDefBase {
             return new CaseTestFunDef(dummy);
         }
 
-        public boolean requiresExpression(int k) {
+        @Override
+		public boolean requiresExpression(int k) {
             return true;
         }
     }

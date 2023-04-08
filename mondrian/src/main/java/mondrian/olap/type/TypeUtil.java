@@ -561,17 +561,20 @@ public class TypeUtil {
             this.e = e;
         }
 
-        public int getCost() {
+        @Override
+		public int getCost() {
             return cost;
         }
 
-        public void checkValid() {
+        @Override
+		public void checkValid() {
             if (e != null) {
                 throw e;
             }
         }
 
-        public void apply(Validator validator, List<Exp> args) {
+        @Override
+		public void apply(Validator validator, List<Exp> args) {
             final Exp arg = args.get(ordinal);
             switch (from) {
             case Category.Member:
@@ -593,7 +596,8 @@ public class TypeUtil {
         }
 
         // for debug
-        public String toString() {
+        @Override
+		public String toString() {
             return new StringBuilder("Conversion(from=").append(Category.instance().getName(from))
                 .append(", to=").append(Category.instance().getName(to))
                 .append(", ordinal=")

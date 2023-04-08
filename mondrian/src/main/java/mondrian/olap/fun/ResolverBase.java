@@ -39,31 +39,38 @@ abstract class ResolverBase implements Resolver {
         this.syntax = syntax;
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return name;
     }
 
-    public String getSignature() {
+    @Override
+	public String getSignature() {
         return signature;
     }
 
-    public FunDef getRepresentativeFunDef() {
+    @Override
+	public FunDef getRepresentativeFunDef() {
         return null;
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return description;
     }
 
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
         return syntax;
     }
 
-    public boolean requiresExpression(int k) {
+    @Override
+	public boolean requiresExpression(int k) {
         return false;
     }
 
-    public String[] getReservedWords() {
+    @Override
+	public String[] getReservedWords() {
         return FunUtil.emptyStringArray;
     }
 }

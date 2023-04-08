@@ -122,7 +122,8 @@ public class SchemaPropertyCellEditor
         al = new ActionListener() {
             boolean all = true;
 
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 if (e.getActionCommand().equals("comboBoxChanged")
                     && listEditor.getSelectedIndex() == 0)
                 {   // 0 index refers to less or more options
@@ -139,7 +140,8 @@ public class SchemaPropertyCellEditor
                 // as 'dirty'.
                 SwingUtilities.invokeLater(
                     new Runnable() {
-                        public void run() {
+                        @Override
+						public void run() {
                             if (listEditor.isDisplayable()) {
                                 listEditor.setPopupVisible(true);
                             }
@@ -153,7 +155,8 @@ public class SchemaPropertyCellEditor
 
         editor.addMouseListener(
             new MouseAdapter() {
-                public void mousePressed(MouseEvent e) {
+                @Override
+				public void mousePressed(MouseEvent e) {
                     if (listEditor.isDisplayable()) {
                         listEditor.setPopupVisible(true);
                     }
@@ -162,13 +165,15 @@ public class SchemaPropertyCellEditor
 
         editor.addKeyListener(
             new KeyAdapter() {
-                public void keyPressed(KeyEvent e) {
+                @Override
+				public void keyPressed(KeyEvent e) {
                     if (listEditor.isDisplayable()) {
                         listEditor.setPopupVisible(true);
                     }
                 }
 
-                public void keyReleased(KeyEvent e) {
+                @Override
+				public void keyReleased(KeyEvent e) {
                     // listEditor.setSelectedItem(
                     //   ((JTextComponent) e.getSource()).getText());
                     if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -227,7 +232,8 @@ public class SchemaPropertyCellEditor
         return relation;
     }
 
-    public Component getTableCellEditorComponent(
+    @Override
+	public Component getTableCellEditorComponent(
         final JTable table,
         Object value,
         boolean isSelected,
@@ -1122,7 +1128,8 @@ public class SchemaPropertyCellEditor
      *
      * @param l the CellEditorListener
      */
-    public void addCellEditorListener(CellEditorListener l) {
+    @Override
+	public void addCellEditorListener(CellEditorListener l) {
         listeners.add(l);
     }
 
@@ -1130,7 +1137,8 @@ public class SchemaPropertyCellEditor
      * Tells the editor to cancel editing and not accept any partially
      * edited value.
      */
-    public void cancelCellEditing() {
+    @Override
+	public void cancelCellEditing() {
         if (activeEditor != null) {
             activeEditor.setVisible(false);
             fireEditingCancelled();
@@ -1142,7 +1150,8 @@ public class SchemaPropertyCellEditor
      *
      * @return the value contained in the editor
      */
-    public Object getCellEditorValue() {
+    @Override
+	public Object getCellEditorValue() {
         if (activeEditor == stringEditor) {
             return stringEditor.getText();
         } else if (activeEditor == booleanEditor) {
@@ -1186,7 +1195,8 @@ public class SchemaPropertyCellEditor
      * @return true if editing can be started
      * @see #shouldSelectCell
      */
-    public boolean isCellEditable(EventObject anEvent) {
+    @Override
+	public boolean isCellEditable(EventObject anEvent) {
         return true;
     }
 
@@ -1195,7 +1205,8 @@ public class SchemaPropertyCellEditor
      *
      * @param l the CellEditorListener
      */
-    public void removeCellEditorListener(CellEditorListener l) {
+    @Override
+	public void removeCellEditorListener(CellEditorListener l) {
         listeners.remove(l);
     }
 
@@ -1216,7 +1227,8 @@ public class SchemaPropertyCellEditor
      *         otherwise returns false
      * @see #isCellEditable
      */
-    public boolean shouldSelectCell(EventObject anEvent) {
+    @Override
+	public boolean shouldSelectCell(EventObject anEvent) {
         return true;
     }
 
@@ -1228,7 +1240,8 @@ public class SchemaPropertyCellEditor
      *
      * @return true if editing was stopped; false otherwise
      */
-    public boolean stopCellEditing() {
+    @Override
+	public boolean stopCellEditing() {
         if (activeEditor != null) {
             /* save the nested table as well */
             if (activeEditor == tableEditor) {

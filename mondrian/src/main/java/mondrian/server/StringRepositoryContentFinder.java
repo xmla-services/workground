@@ -24,11 +24,13 @@ public class StringRepositoryContentFinder
         this.content = content;
     }
 
-    public String getContent() {
+    @Override
+	public String getContent() {
         return content;
     }
 
-    public void shutdown() {
+    @Override
+	public void shutdown() {
         // nothing to do
     }
 }

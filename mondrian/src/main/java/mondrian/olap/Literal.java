@@ -105,7 +105,8 @@ public class Literal extends ExpBase {
      *
      * @deprecated Use {@link #create(java.math.BigDecimal)}
      */
-    public static Literal create(Double d) {
+    @Deprecated
+	public static Literal create(Double d) {
         return new Literal(Category.Numeric, new BigDecimal(d));
     }
 
@@ -114,7 +115,8 @@ public class Literal extends ExpBase {
      *
      * @deprecated Use {@link #create(java.math.BigDecimal)}
      */
-    public static Literal create(Integer i) {
+    @Deprecated
+	public static Literal create(Integer i) {
         return new Literal(Category.Numeric, new BigDecimal(i));
     }
 
@@ -134,11 +136,13 @@ public class Literal extends ExpBase {
         return new Literal(Category.Numeric, d);
     }
 
-    public Literal clone() {
+    @Override
+	public Literal clone() {
         return this;
     }
 
-    public void unparse(PrintWriter pw) {
+    @Override
+	public void unparse(PrintWriter pw) {
         switch (category) {
         case Category.Symbol:
         case Category.Numeric:
@@ -155,11 +159,13 @@ public class Literal extends ExpBase {
         }
     }
 
-    public int getCategory() {
+    @Override
+	public int getCategory() {
         return category;
     }
 
-    public Type getType() {
+    @Override
+	public Type getType() {
         switch (category) {
         case Category.Symbol:
             return new SymbolType();
@@ -174,15 +180,18 @@ public class Literal extends ExpBase {
         }
     }
 
-    public Exp accept(Validator validator) {
+    @Override
+	public Exp accept(Validator validator) {
         return this;
     }
 
-    public Calc accept(ExpCompiler compiler) {
+    @Override
+	public Calc accept(ExpCompiler compiler) {
         return new ConstantCalc(getType(), o);
     }
 
-    public Object accept(MdxVisitor visitor) {
+    @Override
+	public Object accept(MdxVisitor visitor) {
         return visitor.visit(this);
     }
 

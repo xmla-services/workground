@@ -53,11 +53,13 @@ public class TupleType implements Type {
         digest = buf.toString();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return digest;
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (obj instanceof TupleType) {
             TupleType that = (TupleType) obj;
             return Arrays.equals(this.elementTypes, that.elementTypes);
@@ -66,11 +68,13 @@ public class TupleType implements Type {
         }
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return digest.hashCode();
     }
 
-    public boolean usesDimension(Dimension dimension, boolean definitely) {
+    @Override
+	public boolean usesDimension(Dimension dimension, boolean definitely) {
         for (Type elementType : elementTypes) {
             if (elementType.usesDimension(dimension, definitely)) {
                 return true;
@@ -79,7 +83,8 @@ public class TupleType implements Type {
         return false;
     }
 
-    public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
+    @Override
+	public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
         for (Type elementType : elementTypes) {
             if (elementType.usesHierarchy(hierarchy, definitely)) {
                 return true;
@@ -97,19 +102,23 @@ public class TupleType implements Type {
         return hierarchies;
     }
 
-    public int getArity() {
+    @Override
+	public int getArity() {
         return elementTypes.length;
     }
 
-    public Dimension getDimension() {
+    @Override
+	public Dimension getDimension() {
         throw new UnsupportedOperationException();
     }
 
-    public Hierarchy getHierarchy() {
+    @Override
+	public Hierarchy getHierarchy() {
         throw new UnsupportedOperationException();
     }
 
-    public Level getLevel() {
+    @Override
+	public Level getLevel() {
         throw new UnsupportedOperationException();
     }
 
@@ -126,7 +135,8 @@ public class TupleType implements Type {
         return new ScalarType();
     }
 
-    public Type computeCommonType(Type type, int[] conversionCount) {
+    @Override
+	public Type computeCommonType(Type type, int[] conversionCount) {
         if (type instanceof ScalarType) {
             return getValueType().computeCommonType(type, conversionCount);
         }
@@ -141,7 +151,8 @@ public class TupleType implements Type {
         return commonTupleType(type, conversionCount);
     }
 
-    public boolean isInstance(Object value) {
+    @Override
+	public boolean isInstance(Object value) {
         if (!(value instanceof Object[])) {
             return false;
         }

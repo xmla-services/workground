@@ -40,14 +40,16 @@ public class CoalesceEmptyFunDef extends FunDefBase {
         super(resolverBase,  type, types);
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final Exp[] args = call.getArgs();
         final Calc[] calcs = new Calc[args.length];
         for (int i = 0; i < args.length; i++) {
             calcs[i] = compiler.compileScalar(args[i], true);
         }
         return new GenericCalc(call.getFunName(),call.getType()) {
-            public Object evaluate(Evaluator evaluator) {
+            @Override
+			public Object evaluate(Evaluator evaluator) {
                 for (Calc calc : calcs) {
                     final Object o = calc.evaluate(evaluator);
                     if (o != null) {
@@ -57,7 +59,8 @@ public class CoalesceEmptyFunDef extends FunDefBase {
                 return null;
             }
 
-            public Calc[] getCalcs() {
+            @Override
+			public Calc[] getCalcs() {
                 return calcs;
             }
         };
@@ -72,7 +75,8 @@ public class CoalesceEmptyFunDef extends FunDefBase {
                     Syntax.Function);
         }
 
-        public FunDef resolve(
+        @Override
+		public FunDef resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -98,7 +102,8 @@ public class CoalesceEmptyFunDef extends FunDefBase {
             return null;
         }
 
-        public boolean requiresExpression(int k) {
+        @Override
+		public boolean requiresExpression(int k) {
             return true;
         }
     }

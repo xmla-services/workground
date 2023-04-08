@@ -53,7 +53,8 @@ public class CastFunDef extends FunDefBase {
         super(dummyFunDef);
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final Type targetType = call.getType();
         final Exp arg = call.getArg(0);
         final Calc calc = compiler.compileScalar(arg, false);
@@ -126,7 +127,8 @@ public class CastFunDef extends FunDefBase {
                 "Converts values to another type.", Syntax.Cast);
         }
 
-        public FunDef resolve(
+        @Override
+		public FunDef resolve(
             Exp[] args, Validator validator, List<Conversion> conversions)
         {
             if (args.length != 2) {
@@ -167,11 +169,13 @@ public class CastFunDef extends FunDefBase {
             this.targetCategory = TypeUtil.typeToCategory(targetType);
         }
 
-        public Calc[] getCalcs() {
+        @Override
+		public Calc[] getCalcs() {
             return new Calc[] {calc};
         }
 
-        public Object evaluate(Evaluator evaluator) {
+        @Override
+		public Object evaluate(Evaluator evaluator) {
             switch (targetCategory) {
             case Category.String:
                 return evaluateString(evaluator);
@@ -188,7 +192,8 @@ public class CastFunDef extends FunDefBase {
             }
         }
 
-        public String evaluateString(Evaluator evaluator) {
+        @Override
+		public String evaluateString(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             if (o == null) {
                 return null;
@@ -196,17 +201,20 @@ public class CastFunDef extends FunDefBase {
             return String.valueOf(o);
         }
 
-        public int evaluateInteger(Evaluator evaluator) {
+        @Override
+		public int evaluateInteger(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             return CastFunDef.toInt(o, targetType);
         }
 
-        public double evaluateDouble(Evaluator evaluator) {
+        @Override
+		public double evaluateDouble(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             return CastFunDef.toDouble(o, targetType);
         }
 
-        public boolean evaluateBoolean(Evaluator evaluator) {
+        @Override
+		public boolean evaluateBoolean(Evaluator evaluator) {
             final Object o = calc.evaluate(evaluator);
             return CastFunDef.toBoolean(o, targetType);
         }

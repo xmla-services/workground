@@ -127,7 +127,8 @@ abstract class AntTestBase
             this.out = out;
         }
 
-        public void run() {
+        @Override
+		public void run() {
             byte[] buf = new byte[1000];
             int x;
             try {
@@ -142,7 +143,8 @@ abstract class AntTestBase
             }
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return baos.toString();
         }
     }

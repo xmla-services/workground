@@ -81,7 +81,8 @@ class DescendantsFunDef extends FunDefBase {
     super( dummyFunDef );
   }
 
-  public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+  @Override
+public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Type type0 = call.getArg( 0 ).getType();
     if ( type0 instanceof SetType ) {
       final SetType setType = (SetType) type0;
@@ -149,7 +150,8 @@ class DescendantsFunDef extends FunDefBase {
           : null;
       return new AbstractListCalc(
         call.getFunName(),call.getType(), new Calc[] { memberCalc, depthCalc } ) {
-        public TupleList evaluateList( Evaluator evaluator ) {
+        @Override
+		public TupleList evaluateList( Evaluator evaluator ) {
           final Member member = memberCalc.evaluateMember( evaluator );
           List<Member> result = new ArrayList<Member>();
           int depth = -1;
@@ -173,7 +175,8 @@ class DescendantsFunDef extends FunDefBase {
       final Flag flag1 = flag;
       return new AbstractListCalc(
     		  call.getFunName(),call.getType(), new Calc[] { memberCalc, depthCalc } ) {
-        public TupleList evaluateList( Evaluator evaluator ) {
+        @Override
+		public TupleList evaluateList( Evaluator evaluator ) {
           final Member member = memberCalc.evaluateMember( evaluator );
           List<Member> result = new ArrayList<Member>();
           final int depth = depthCalc.evaluateInteger( evaluator );
@@ -195,7 +198,8 @@ class DescendantsFunDef extends FunDefBase {
       final Flag flag2 = flag;
       return new AbstractListCalc(
     		  call.getFunName(),call.getType(), new Calc[] { memberCalc, levelCalc } ) {
-        public TupleList evaluateList( Evaluator evaluator ) {
+        @Override
+		public TupleList evaluateList( Evaluator evaluator ) {
           final Evaluator context =
             evaluator.isNonEmpty() ? evaluator : null;
           final Member member = memberCalc.evaluateMember( evaluator );

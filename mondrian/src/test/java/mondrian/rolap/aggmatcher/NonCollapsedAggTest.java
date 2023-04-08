@@ -242,7 +242,8 @@ public class NonCollapsedAggTest extends AggTableTestCase {
             + "   <Measure name=\"Unit Sales\" column=\"unit_sales\" aggregator=\"sum\" formatString=\"Standard\" />\n"
             + "</Cube>\n";
 
-    protected String getFileName() {
+    @Override
+	protected String getFileName() {
         return "non_collapsed_agg_test.csv";
     }
 
@@ -252,7 +253,8 @@ public class NonCollapsedAggTest extends AggTableTestCase {
     }
 
 
-    protected void prepareContext(TestingContext context) {
+    @Override
+	protected void prepareContext(TestingContext context) {
         try {
             super.prepareContext(context);
             String baseSchema = TestUtil.getRawSchema(context);

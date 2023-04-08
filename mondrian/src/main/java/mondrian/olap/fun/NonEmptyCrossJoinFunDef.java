@@ -49,13 +49,15 @@ public class NonEmptyCrossJoinFunDef extends CrossJoinFunDef {
         super(dummyFunDef);
     }
 
-    public Calc compileCall(final ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(final ResolvedFunCall call, ExpCompiler compiler) {
         final ListCalc listCalc1 = compiler.compileList(call.getArg(0));
         final ListCalc listCalc2 = compiler.compileList(call.getArg(1));
         return new AbstractListCalc(
         		call.getFunName(),call.getType(), new Calc[] {listCalc1, listCalc2}, false)
         {
-            public TupleList evaluateList(Evaluator evaluator) {
+            @Override
+			public TupleList evaluateList(Evaluator evaluator) {
                 SchemaReader schemaReader = evaluator.getSchemaReader();
 
                 // Evaluate the arguments in non empty mode, but remove from
@@ -109,7 +111,8 @@ public class NonEmptyCrossJoinFunDef extends CrossJoinFunDef {
                 }
             }
 
-            public boolean dependsOn(Hierarchy hierarchy) {
+            @Override
+			public boolean dependsOn(Hierarchy hierarchy) {
                 if (super.dependsOn(hierarchy)) {
                     return true;
                 }

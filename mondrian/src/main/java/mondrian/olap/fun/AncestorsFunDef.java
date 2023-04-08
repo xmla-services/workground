@@ -50,11 +50,13 @@ class AncestorsFunDef extends FunDefBase {
         super(dummyFunDef);
     }
 
-    public int getReturnCategory() {
+    @Override
+	public int getReturnCategory() {
         return Category.Set;
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final MemberCalc memberCalc =
             compiler.compileMember(call.getArg(0));
         final Type type1 = call.getArg(1).getType();
@@ -64,7 +66,8 @@ class AncestorsFunDef extends FunDefBase {
             return new AbstractListCalc(
             		call.getFunName(),call.getType(), new Calc[] {memberCalc, levelCalc})
             {
-                public TupleList evaluateList(Evaluator evaluator) {
+                @Override
+				public TupleList evaluateList(Evaluator evaluator) {
                     Level level = levelCalc.evaluateLevel(evaluator);
                     Member member = memberCalc.evaluateMember(evaluator);
                     int distance =
@@ -83,7 +86,8 @@ class AncestorsFunDef extends FunDefBase {
             return new AbstractListCalc(
             		call.getFunName(),call.getType(), new Calc[] {memberCalc, distanceCalc})
             {
-                public TupleList evaluateList(Evaluator evaluator) {
+                @Override
+				public TupleList evaluateList(Evaluator evaluator) {
                     Member member = memberCalc.evaluateMember(evaluator);
                     int distance = distanceCalc.evaluateInteger(evaluator);
                     List<Member> ancestors = new ArrayList<Member>();

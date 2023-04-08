@@ -52,7 +52,8 @@ public class SchemaTreeModel extends DefaultTreeModel {
      * @param parent a node in the tree, obtained from this data source
      * @return the child of <code>parent</code> at index <code>index</code>
      */
-    public Object getChild(Object parent, int index) {
+    @Override
+	public Object getChild(Object parent, int index) {
         return getChildList(parent).get(index);
     }
 
@@ -276,7 +277,8 @@ public class SchemaTreeModel extends DefaultTreeModel {
      * @param parent a node in the tree, obtained from this data source
      * @return the number of children of the node <code>parent</code>
      */
-    public int getChildCount(Object parent) {
+    @Override
+	public int getChildCount(Object parent) {
         return getChildList(parent).size();
     }
 
@@ -290,7 +292,8 @@ public class SchemaTreeModel extends DefaultTreeModel {
      * @return the index of the child in the parent, or -1 if either
      *         <code>child</code> or <code>parent</code> are <code>null</code>
      */
-    public int getIndexOfChild(Object parent, Object child) {
+    @Override
+	public int getIndexOfChild(Object parent, Object child) {
         if (parent == null) {
             return -1;
         }
@@ -330,7 +333,8 @@ public class SchemaTreeModel extends DefaultTreeModel {
      *
      * @return the root of the tree
      */
-    public Object getRoot() {
+    @Override
+	public Object getRoot() {
         return schema;
     }
 
@@ -345,11 +349,13 @@ public class SchemaTreeModel extends DefaultTreeModel {
      * @param node a node in the tree, obtained from this data source
      * @return true if <code>node</code> is a leaf
      */
-    public boolean isLeaf(Object node) {
+    @Override
+	public boolean isLeaf(Object node) {
         return getChildCount(node) == 0;
     }
 
-    public void valueForPathChanged(TreePath path, Object newValue) {
+    @Override
+	public void valueForPathChanged(TreePath path, Object newValue) {
         //super.valueForPathChanged(path, newValue);
     }
 

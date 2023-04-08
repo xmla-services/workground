@@ -66,11 +66,13 @@ public class CmdRunnerTest {
             super(options, out);
         }
 
-        public void commandLoop(Reader in, boolean interactive) {
+        @Override
+		public void commandLoop(Reader in, boolean interactive) {
             super.commandLoop(in, interactive);
         }
 
-        public Connection getConnection() {
+        @Override
+		public Connection getConnection() {
             return CmdRunnerTest.this.connection;
         }
     }

@@ -47,7 +47,8 @@ public class PropertyTableModel extends javax.swing.table.AbstractTableModel {
         target = t;
     }
 
-    public String getColumnName(int i) {
+    @Override
+	public String getColumnName(int i) {
         if (i == 0) {
             return workbench.getResourceConverter().getString(
                 "propertyTableModel.attribute", "Attribute");
@@ -71,7 +72,8 @@ public class PropertyTableModel extends javax.swing.table.AbstractTableModel {
         }
     }
 
-    public boolean isCellEditable(int row, int col) {
+    @Override
+	public boolean isCellEditable(int row, int col) {
         if (col == 1) {
             Object cellObj = getValueAt(row, col);
             if (cellObj instanceof MondrianGuiDef.Join) {
@@ -92,7 +94,8 @@ public class PropertyTableModel extends javax.swing.table.AbstractTableModel {
      * @return the number of columns in the model
      * @see #getRowCount
      */
-    public int getColumnCount() {
+    @Override
+	public int getColumnCount() {
         return 2; //that's 'Property' and 'Value'
     }
 
@@ -105,7 +108,8 @@ public class PropertyTableModel extends javax.swing.table.AbstractTableModel {
      * @return the number of rows in the model
      * @see #getColumnCount
      */
-    public int getRowCount() {
+    @Override
+	public int getRowCount() {
         return propertyNames.length;
     }
 
@@ -117,7 +121,8 @@ public class PropertyTableModel extends javax.swing.table.AbstractTableModel {
      * @param columnIndex the column whose value is to be queried
      * @return the value Object at the specified cell
      */
-    public Object getValueAt(int rowIndex, int columnIndex) {
+    @Override
+	public Object getValueAt(int rowIndex, int columnIndex) {
         if (columnIndex == 0) {
             return propertyNames[rowIndex];
         } else {
@@ -182,7 +187,8 @@ public class PropertyTableModel extends javax.swing.table.AbstractTableModel {
         }
     }
 
-    public void setValueAt(Object value, int rowIndex, int columnIndex) {
+    @Override
+	public void setValueAt(Object value, int rowIndex, int columnIndex) {
         setErrorMsg(null);
         try {
             String pName = propertyNames[rowIndex];

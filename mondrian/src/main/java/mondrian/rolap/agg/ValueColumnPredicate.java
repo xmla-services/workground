@@ -55,18 +55,21 @@ public class ValueColumnPredicate
         return value;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return String.valueOf(value);
     }
 
-    public boolean equalConstraint(StarPredicate that) {
+    @Override
+	public boolean equalConstraint(StarPredicate that) {
         return that instanceof ValueColumnPredicate
             && getConstrainedColumnBitKey().equals(
                 that.getConstrainedColumnBitKey())
             && this.value.equals(((ValueColumnPredicate) that).value);
     }
 
-    public int compareTo(Object o) {
+    @Override
+	public int compareTo(Object o) {
         ValueColumnPredicate that = (ValueColumnPredicate) o;
         int columnBitKeyComp =
             getConstrainedColumnBitKey().compareTo(
@@ -89,7 +92,8 @@ public class ValueColumnPredicate
         }
     }
 
-    public boolean equals(Object other) {
+    @Override
+	public boolean equals(Object other) {
         if (!(other instanceof ValueColumnPredicate)) {
             return false;
         }
@@ -109,7 +113,8 @@ public class ValueColumnPredicate
         }
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         int hashCode = getConstrainedColumnBitKey().hashCode();
 
         if (value != null) {
@@ -119,27 +124,33 @@ public class ValueColumnPredicate
         return hashCode;
     }
 
-    public void values(Collection<Object> collection) {
+    @Override
+	public void values(Collection<Object> collection) {
         collection.add(value);
     }
 
-    public boolean evaluate(Object value) {
+    @Override
+	public boolean evaluate(Object value) {
         return this.value.equals(value);
     }
 
-    public void describe(StringBuilder buf) {
+    @Override
+	public void describe(StringBuilder buf) {
         buf.append(value);
     }
 
-    public Overlap intersect(StarColumnPredicate predicate) {
+    @Override
+	public Overlap intersect(StarColumnPredicate predicate) {
         throw new UnsupportedOperationException();
     }
 
-    public boolean mightIntersect(StarPredicate other) {
+    @Override
+	public boolean mightIntersect(StarPredicate other) {
         return ((StarColumnPredicate) other).evaluate(value);
     }
 
-    public StarColumnPredicate minus(StarPredicate predicate) {
+    @Override
+	public StarColumnPredicate minus(StarPredicate predicate) {
         assert predicate != null;
         if (((StarColumnPredicate) predicate).evaluate(value)) {
             return LiteralStarPredicate.FALSE;
@@ -148,11 +159,13 @@ public class ValueColumnPredicate
         }
     }
 
-    public StarColumnPredicate cloneWithColumn(RolapStar.Column column) {
+    @Override
+	public StarColumnPredicate cloneWithColumn(RolapStar.Column column) {
         return new ValueColumnPredicate(column, value);
     }
 
-    public void toSql(SqlQuery sqlQuery, StringBuilder buf) {
+    @Override
+	public void toSql(SqlQuery sqlQuery, StringBuilder buf) {
         final RolapStar.Column column = getConstrainedColumn();
         String expr = column.generateExprString(sqlQuery);
         buf.append(expr);

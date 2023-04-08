@@ -41,7 +41,8 @@ class CorrelationFunDef extends AbstractAggregateFunDef {
         super(dummyFunDef);
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final ListCalc listCalc =
             compiler.compileList(call.getArg(0));
         final Calc calc1 =
@@ -53,7 +54,8 @@ class CorrelationFunDef extends AbstractAggregateFunDef {
         return new AbstractDoubleCalc(
         		call.getFunName(),call.getType(), new Calc[] {listCalc, calc1, calc2})
         {
-            public double evaluateDouble(Evaluator evaluator) {
+            @Override
+			public double evaluateDouble(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);
@@ -67,7 +69,8 @@ class CorrelationFunDef extends AbstractAggregateFunDef {
                 }
             }
 
-            public boolean dependsOn(Hierarchy hierarchy) {
+            @Override
+			public boolean dependsOn(Hierarchy hierarchy) {
                 return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
             }
         };

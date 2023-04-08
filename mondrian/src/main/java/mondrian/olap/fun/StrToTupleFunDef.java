@@ -55,13 +55,15 @@ class StrToTupleFunDef extends FunDefBase {
             Syntax.Function, Category.Tuple, parameterTypes);
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final StringCalc stringCalc = compiler.compileString(call.getArg(0));
         Type elementType = call.getType();
         if (elementType instanceof MemberType) {
             final Hierarchy hierarchy = elementType.getHierarchy();
             return new AbstractMemberCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
-                public Member evaluateMember(Evaluator evaluator) {
+                @Override
+				public Member evaluateMember(Evaluator evaluator) {
                     String string = stringCalc.evaluateString(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
@@ -74,7 +76,8 @@ class StrToTupleFunDef extends FunDefBase {
             TupleType tupleType = (TupleType) elementType;
             final List<Hierarchy> hierarchies = tupleType.getHierarchies();
             return new AbstractTupleCalc(call.getFunName(),call.getType(), new Calc[] {stringCalc}) {
-                public Member[] evaluateTuple(Evaluator evaluator) {
+                @Override
+				public Member[] evaluateTuple(Evaluator evaluator) {
                     String string = stringCalc.evaluateString(evaluator);
                     if (string == null) {
                         throw FunUtil.newEvalException(
@@ -86,7 +89,8 @@ class StrToTupleFunDef extends FunDefBase {
         }
     }
 
-    public Exp createCall(Validator validator, Exp[] args) {
+    @Override
+	public Exp createCall(Validator validator, Exp[] args) {
         final int argCount = args.length;
         if (argCount <= 1) {
             throw MondrianResource.instance().MdxFuncArgumentsNum.ex(getName());
@@ -109,7 +113,8 @@ class StrToTupleFunDef extends FunDefBase {
         return super.createCall(validator, args);
     }
 
-    public Type getResultType(Validator validator, Exp[] args) {
+    @Override
+	public Type getResultType(Validator validator, Exp[] args) {
         switch (args.length) {
         case 1:
             // This is a call to the standard version of StrToTuple,
@@ -154,7 +159,8 @@ class StrToTupleFunDef extends FunDefBase {
                 Syntax.Function);
         }
 
-        public FunDef resolve(
+        @Override
+		public FunDef resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -184,7 +190,8 @@ class StrToTupleFunDef extends FunDefBase {
             return new StrToTupleFunDef(argTypes);
         }
 
-        public FunDef getRepresentativeFunDef() {
+        @Override
+		public FunDef getRepresentativeFunDef() {
             return new StrToTupleFunDef(new int[] {Category.String});
         }
     }

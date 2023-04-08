@@ -196,7 +196,8 @@ public class SchemaExplorer
 
             listEditor.addItemListener(
                 new ItemListener() {
-                    public void itemStateChanged(ItemEvent e) {
+                    @Override
+					public void itemStateChanged(ItemEvent e) {
                         tree.stopEditing();
                         TreePath tpath = tree.getSelectionPath();
                         if (tpath != null) {
@@ -254,7 +255,8 @@ public class SchemaExplorer
         // propertyTable includes changeSelection and processKeyEvent
         // processing for keyboard navigation
         propertyTable = new JTable() {
-            public void changeSelection(
+            @Override
+			public void changeSelection(
                 int rowIndex, int columnIndex, boolean toggle, boolean extend)
             {
                 if (columnIndex == 0) {
@@ -280,7 +282,8 @@ public class SchemaExplorer
                 super.changeSelection(rowIndex, columnIndex, toggle, extend);
             }
 
-            public void processKeyEvent(KeyEvent e) {
+            @Override
+			public void processKeyEvent(KeyEvent e) {
                 int kcode = e.getKeyCode();
                 if (kcode == KeyEvent.VK_UP || kcode == KeyEvent.VK_DOWN) {
                     int row = propertyTable.getSelectedRow();
@@ -348,11 +351,13 @@ public class SchemaExplorer
                 Class[] types = {String.class, Object.class};
                 boolean[] canEdit = {false, true};
 
-                public Class getColumnClass(int columnIndex) {
+                @Override
+				public Class getColumnClass(int columnIndex) {
                     return types[columnIndex];
                 }
 
-                public boolean isCellEditable(int rowIndex, int columnIndex) {
+                @Override
+				public boolean isCellEditable(int rowIndex, int columnIndex) {
                     return canEdit[columnIndex];
                 }
             });
@@ -396,7 +401,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.arrowButtonUp.title", "Arrow button up"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 arrowButtonUpAction(e);
             }
         };
@@ -404,7 +410,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.arrowButtonDown.title", "Arrow button down"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 arrowButtonDownAction(e);
             }
         };
@@ -453,7 +460,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addCube.title", "Add Cube"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addCube(e);
             }
         };
@@ -461,7 +469,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addParameter.title", "Add Parameter"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addParameter(e);
             }
         };
@@ -470,7 +479,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addDimension.title", "Add Dimension"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addDimension(e);
             }
         };
@@ -479,7 +489,8 @@ public class SchemaExplorer
                 "schemaExplorer.addDimensionUsage.title",
                 "Add Dimension Usage"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addDimensionUsage(e);
             }
         };
@@ -487,7 +498,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addHierarchy.title", "Add Hierarchy"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addHierarchy(e);
             }
         };
@@ -495,7 +507,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addNamedSet.title", "Add Named Set"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addNamedSet(e);
             }
         };
@@ -503,7 +516,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addMeasure.title", "Add Measure"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addMeasure(e);
             }
         };
@@ -512,7 +526,8 @@ public class SchemaExplorer
                 "schemaExplorer.addCalculatedMember.title",
                 "Add Calculated Member"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addCalculatedMember(e);
             }
         };
@@ -521,7 +536,8 @@ public class SchemaExplorer
                 "schemaExplorer.addUserDefinedFunction.title",
                 "Add User Defined Function"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addUserDefinedFunction(e);
             }
         };
@@ -530,7 +546,8 @@ public class SchemaExplorer
                 "schemaExplorer.addScript.title",
                 "Add Script"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addScript(e);
             }
         };
@@ -539,7 +556,8 @@ public class SchemaExplorer
                 "schemaExplorer.addCellFormatter.title",
                 "Add Cell Formatter"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addCellFormatter(e);
             }
         };
@@ -548,7 +566,8 @@ public class SchemaExplorer
                 "schemaExplorer.addPropertyFormatter.title",
                 "Add Property Formatter"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addPropertyFormatter(e);
             }
         };
@@ -557,7 +576,8 @@ public class SchemaExplorer
                 "schemaExplorer.addMemberFormatter.title",
                 "Add Member Formatter"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addMemberFormatter(e);
             }
         };
@@ -565,7 +585,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addRole.title", "Add Role"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addRole(e);
             }
         };
@@ -573,7 +594,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addSchemaGrant.title", "Add Schema Grant"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addSchemaGrant(e);
             }
         };
@@ -581,7 +603,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addCubeGrant.title", "Add Cube Grant"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addCubeGrant(e);
             }
         };
@@ -590,7 +613,8 @@ public class SchemaExplorer
                 "schemaExplorer.addDimensionGrant.title",
                 "Add Dimension Grant"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addDimensionGrant(e);
             }
         };
@@ -599,7 +623,8 @@ public class SchemaExplorer
                 "schemaExplorer.addHierarchyGrant.title",
                 "Add Hierarchy Grant"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addHierarchyGrant(e);
             }
         };
@@ -607,7 +632,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addMemberGrant.title", "Add Member Grant"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addMemberGrant(e);
             }
         };
@@ -615,7 +641,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addAnnotations.title", "Add Annotations"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addAnnotations(e);
             }
         };
@@ -623,7 +650,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addAnnotation.title", "Add Annotation"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addAnnotation(e);
             }
         };
@@ -632,7 +660,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addLevel.title", "Add Level"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addLevel(e);
             }
         };
@@ -640,7 +669,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addClosure.title", "Add Closure"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addClosure(e);
             }
         };
@@ -648,7 +678,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addKeyExpression.title", "Add Key Expression"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addKeyExp(e);
             }
         };
@@ -657,7 +688,8 @@ public class SchemaExplorer
                 "schemaExplorer.addNameExpression.title",
                 "Add Name Expression"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addNameExp(e);
             }
         };
@@ -666,7 +698,8 @@ public class SchemaExplorer
                 "schemaExplorer.addOrdinalExpression.title",
                 "Add Ordinal Expression"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addOrdinalExp(e);
             }
         };
@@ -675,7 +708,8 @@ public class SchemaExplorer
                 "schemaExplorer.addCaptionExpression.title",
                 "Add Caption Expression"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addCaptionExp(e);
             }
         };
@@ -684,7 +718,8 @@ public class SchemaExplorer
                 "schemaExplorer.addParentExpression.title",
                 "Add Parent Expression"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addParentExp(e);
             }
         };
@@ -693,7 +728,8 @@ public class SchemaExplorer
                 "schemaExplorer.addMeasureExpression.title",
                 "Add Measure Expression"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addMeasureExp(e);
             }
         };
@@ -701,7 +737,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addFormula.title", "Add Formula"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addFormula(e);
             }
         };
@@ -709,7 +746,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addSQL.title", "Add SQL"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addSQL(e);
             }
         };
@@ -717,7 +755,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addTable.title", "Add Table"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addTable(e);
             }
         };
@@ -725,7 +764,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addJoin.title", "Add Join"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addJoin(e);
             }
         };
@@ -733,7 +773,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addView.title", "Add View"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addView(e);
             }
         };
@@ -741,7 +782,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addInlineTable.title", "Add Inline Table"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addInlineTable(e);
             }
         };
@@ -751,7 +793,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.moveLevelUp.title", "Move Up"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 moveLevelUp(e);
             }
         };
@@ -760,7 +803,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.moveLevelDown.title", "Move Down"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 moveLevelDown(e);
             }
         };
@@ -770,7 +814,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addProperty.title", "Add Property"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addProperty(e);
             }
         };
@@ -780,7 +825,8 @@ public class SchemaExplorer
                 "schemaExplorer.addCalculatedMemberProperty.title",
                 "Add Calculated Member Property"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addCalculatedMemberProperty(e);
             }
         };
@@ -789,7 +835,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addVirtualCube.title", "Add Virtual Cube"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addVirtualCube(e);
             }
         };
@@ -798,7 +845,8 @@ public class SchemaExplorer
                 "schemaExplorer.addVirtualCubeDimension.title",
                 "Add Virtual Cube Dimension"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addVirtualCubeDimension(e);
             }
         };
@@ -807,7 +855,8 @@ public class SchemaExplorer
                 "schemaExplorer.addVirtualCubeMeasure.title",
                 "Add Virtual Cube Measure"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addVirtualCubeMeasure(e);
             }
         };
@@ -817,7 +866,8 @@ public class SchemaExplorer
                 "schemaExplorer.addAggregatePattern.title",
                 "Add Aggregate Pattern"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addAggPattern(e);
             }
         };
@@ -826,7 +876,8 @@ public class SchemaExplorer
                 "schemaExplorer.addAggregateExcludeTable.title",
                 "Add Aggregate Exclude Table"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addAggExclude(e);
             }
         };
@@ -834,7 +885,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.addAggregateName.title", "Add Aggregate Name"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addAggName(e);
             }
         };
@@ -843,7 +895,8 @@ public class SchemaExplorer
                 "schemaExplorer.addAggregateIgnoreColumn.title",
                 "Add Aggregate Ignore Column"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addAggIgnoreColumn(e);
             }
         };
@@ -852,7 +905,8 @@ public class SchemaExplorer
                 "schemaExplorer.addAggregateForeignKey.title",
                 "Add Aggregate Foreign Key"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addAggForeignKey(e);
             }
         };
@@ -861,7 +915,8 @@ public class SchemaExplorer
                 "schemaExplorer.addAggregateMeasure.title",
                 "Add Aggregate Measure"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addAggMeasure(e);
             }
         };
@@ -870,7 +925,8 @@ public class SchemaExplorer
                 "schemaExplorer.addAggregateLevel.title",
                 "Add Aggregate Level"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addAggLevel(e);
             }
         };
@@ -879,7 +935,8 @@ public class SchemaExplorer
                 "schemaExplorer.addAggregateLevelProperty.title",
                 "Add Aggregate Level Property"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addAggLevelProperty(e);
             }
         };
@@ -888,7 +945,8 @@ public class SchemaExplorer
                 "schemaExplorer.addAggregateFactCount.title",
                 "Add Aggregate Fact Count"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addAggFactCount(e);
             }
         };
@@ -897,7 +955,8 @@ public class SchemaExplorer
                         "schemaExplorer.addAggregateMeasureFactCount.title",
                         "Add Aggregate Measure Fact Count"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 addAggMeasureFactCount(e);
             }
         };
@@ -906,7 +965,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.actionDelete.title", "Delete"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 delete(e);
             }
         };
@@ -915,7 +975,8 @@ public class SchemaExplorer
             getResourceConverter().getString(
                 "schemaExplorer.actionEdit.title", "EditMode"))
         {
-            public void actionPerformed(ActionEvent e) {
+            @Override
+			public void actionPerformed(ActionEvent e) {
                 editMode(e);
             }
         };
@@ -1161,7 +1222,8 @@ public class SchemaExplorer
         tree.addMouseListener(new PopupTrigger());
         tree.addKeyListener(
             new KeyAdapter() {
-                public void keyPressed(KeyEvent e) {
+                @Override
+				public void keyPressed(KeyEvent e) {
 //                    keytext=Delete
 //                    keycode=127
 //                    keytext=NumPad .
@@ -4141,7 +4203,8 @@ public class SchemaExplorer
      *
      * @param e the event that characterizes the change.
      */
-    public void valueChanged(TreeSelectionEvent e) {
+    @Override
+	public void valueChanged(TreeSelectionEvent e) {
         if (propertyTable.isEditing() && (lastSelected != e.getPath()
             .getLastPathComponent()))
         {
@@ -4685,14 +4748,16 @@ public class SchemaExplorer
     /**
      * @see javax.swing.event.CellEditorListener#editingCanceled(ChangeEvent)
      */
-    public void editingCanceled(ChangeEvent e) {
+    @Override
+	public void editingCanceled(ChangeEvent e) {
         updater.update();
     }
 
     /**
      * @see javax.swing.event.CellEditorListener#editingStopped(ChangeEvent)
      */
-    public void editingStopped(ChangeEvent e) {
+    @Override
+	public void editingStopped(ChangeEvent e) {
         setDirty(true);
         if (!dirtyFlag || ((PropertyTableModel) propertyTable
             .getModel()).target instanceof MondrianGuiDef.Schema)
@@ -4722,11 +4787,13 @@ public class SchemaExplorer
         // and mouseReleased
         // for proper cross-platform functionality.
 
-        public void mousePressed(MouseEvent e) {
+        @Override
+		public void mousePressed(MouseEvent e) {
             showMenu(e);
         }
 
-        public void mouseReleased(MouseEvent e) {
+        @Override
+		public void mouseReleased(MouseEvent e) {
             showMenu(e);
         }
 

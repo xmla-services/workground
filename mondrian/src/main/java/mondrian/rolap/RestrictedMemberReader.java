@@ -68,12 +68,14 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         }
     }
 
-    public boolean setCache(MemberCache cache) {
+    @Override
+	public boolean setCache(MemberCache cache) {
         // Don't support cache-writeback. It would confuse the cache!
         return false;
     }
 
-    public RolapMember getLeadMember(RolapMember member, int n) {
+    @Override
+	public RolapMember getLeadMember(RolapMember member, int n) {
         int i = 0;
         int increment = 1;
         if (n < 0) {
@@ -92,7 +94,8 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         return member;
     }
 
-    public void getMemberChildren(
+    @Override
+	public void getMemberChildren(
         RolapMember parentMember,
         List<RolapMember> children)
     {
@@ -101,7 +104,8 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         getMemberChildren(parentMember, children, constraint);
     }
 
-    public Map<? extends Member, Access> getMemberChildren(
+    @Override
+	public Map<? extends Member, Access> getMemberChildren(
         RolapMember parentMember,
         List<RolapMember> children,
         MemberChildrenConstraint constraint)
@@ -112,7 +116,8 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         return processMemberChildren(fullChildren, children, constraint);
     }
 
-    public void getMemberChildren(
+    @Override
+	public void getMemberChildren(
         List<RolapMember> parentMembers,
         List<RolapMember> children)
     {
@@ -121,7 +126,8 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         getMemberChildren(parentMembers, children, constraint);
     }
 
-    public Map<? extends Member, Access> getMemberChildren(
+    @Override
+	public Map<? extends Member, Access> getMemberChildren(
         List<RolapMember> parentMembers,
         List<RolapMember> children,
         MemberChildrenConstraint constraint)
@@ -212,7 +218,8 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         return true;
     }
 
-    public List<RolapMember> getRootMembers() {
+    @Override
+	public List<RolapMember> getRootMembers() {
         int topLevelDepth = hierarchyAccess.getTopLevelDepth();
         if (topLevelDepth > 0) {
             RolapLevel topLevel =
@@ -229,7 +236,8 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         return super.getRootMembers();
     }
 
-    public List<RolapMember> getMembersInLevel(
+    @Override
+	public List<RolapMember> getMembersInLevel(
         RolapLevel level)
     {
         TupleConstraint constraint =
@@ -237,7 +245,8 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         return getMembersInLevel(level, constraint);
     }
 
-    public List<RolapMember> getMembersInLevel(
+    @Override
+	public List<RolapMember> getMembersInLevel(
         RolapLevel level, TupleConstraint constraint)
     {
         if (hierarchyAccess != null) {
@@ -257,7 +266,8 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         return filteredMembers;
     }
 
-    public RolapMember getDefaultMember() {
+    @Override
+	public RolapMember getDefaultMember() {
         RolapMember defaultMember =
             (RolapMember) getHierarchy().getDefaultMember();
         if (defaultMember != null) {
@@ -308,7 +318,8 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         }
     }
 
-    public RolapMember getMemberParent(RolapMember member) {
+    @Override
+	public RolapMember getMemberParent(RolapMember member) {
         RolapMember parentMember = member.getParentMember();
         // Skip over hidden parents.
         while (parentMember != null && parentMember.isHidden()) {

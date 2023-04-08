@@ -34,7 +34,8 @@ public class MemberHierarchyFunDef extends FunDefBase {
         super("Hierarchy", "Returns a member's hierarchy.", "phm");
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final MemberCalc memberCalc =
                 compiler.compileMember(call.getArg(0));
         return new CalcImpl(call.getType(), memberCalc);
@@ -48,7 +49,8 @@ public class MemberHierarchyFunDef extends FunDefBase {
             this.memberCalc = memberCalc;
         }
 
-        public Hierarchy evaluateHierarchy(Evaluator evaluator) {
+        @Override
+		public Hierarchy evaluateHierarchy(Evaluator evaluator) {
             Member member = memberCalc.evaluateMember(evaluator);
             return member.getHierarchy();
         }

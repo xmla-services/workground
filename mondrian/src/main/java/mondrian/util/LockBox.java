@@ -225,7 +225,8 @@ public class LockBox {
             this.moniker = moniker;
         }
 
-        public Object getValue() {
+        @Override
+		public Object getValue() {
             final Object value = lockBox.map.get(this);
             if (value == null) {
                 throw new RuntimeException(
@@ -234,11 +235,13 @@ public class LockBox {
             return unwrap(value);
         }
 
-        public String getMoniker() {
+        @Override
+		public String getMoniker() {
             return moniker;
         }
 
-        public boolean isRegistered() {
+        @Override
+		public boolean isRegistered() {
             return lockBox.map.containsKey(this);
         }
     }

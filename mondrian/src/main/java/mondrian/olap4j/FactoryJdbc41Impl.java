@@ -28,7 +28,8 @@ import mondrian.rolap.RolapConnection;
  * @author jhyde
  */
 class FactoryJdbc41Impl implements Factory {
-    public Connection newConnection(
+    @Override
+	public Connection newConnection(
         MondrianOlap4jDriver driver,
         String url,
         Properties info, Context context)
@@ -37,7 +38,8 @@ class FactoryJdbc41Impl implements Factory {
         return new MondrianOlap4jConnectionJdbc41(this, driver, url, info, context);
     }
 
-    public EmptyResultSet newEmptyResultSet(
+    @Override
+	public EmptyResultSet newEmptyResultSet(
         MondrianOlap4jConnection olap4jConnection)
     {
         List<String> headerList = Collections.emptyList();
@@ -46,7 +48,8 @@ class FactoryJdbc41Impl implements Factory {
             olap4jConnection, headerList, rowList);
     }
 
-    public ResultSet newFixedResultSet(
+    @Override
+	public ResultSet newFixedResultSet(
         MondrianOlap4jConnection olap4jConnection,
         List<String> headerList,
         List<List<Object>> rowList)
@@ -55,19 +58,22 @@ class FactoryJdbc41Impl implements Factory {
             olap4jConnection, headerList, rowList);
     }
 
-    public MondrianOlap4jCellSet newCellSet(
+    @Override
+	public MondrianOlap4jCellSet newCellSet(
         MondrianOlap4jStatement olap4jStatement)
     {
         return new MondrianOlap4jCellSetJdbc41(olap4jStatement);
     }
 
-    public MondrianOlap4jStatement newStatement(
+    @Override
+	public MondrianOlap4jStatement newStatement(
         MondrianOlap4jConnection olap4jConnection)
     {
         return new MondrianOlap4jStatementJdbc41(olap4jConnection);
     }
 
-    public MondrianOlap4jPreparedStatement newPreparedStatement(
+    @Override
+	public MondrianOlap4jPreparedStatement newPreparedStatement(
         String mdx,
         MondrianOlap4jConnection olap4jConnection)
         throws OlapException
@@ -75,7 +81,8 @@ class FactoryJdbc41Impl implements Factory {
         return new MondrianOlap4jPreparedStatementJdbc41(olap4jConnection, mdx);
     }
 
-    public MondrianOlap4jDatabaseMetaData newDatabaseMetaData(
+    @Override
+	public MondrianOlap4jDatabaseMetaData newDatabaseMetaData(
         MondrianOlap4jConnection olap4jConnection,
         RolapConnection mondrianConnection)
     {
@@ -96,14 +103,16 @@ class FactoryJdbc41Impl implements Factory {
             super(olap4jConnection, headerList, rowList);
         }
 
-        public <T> T getObject(
+        @Override
+		public <T> T getObject(
             int columnIndex,
             Class<T> type) throws SQLException
         {
             throw new UnsupportedOperationException();
         }
 
-        public <T> T getObject(
+        @Override
+		public <T> T getObject(
             String columnLabel,
             Class<T> type) throws SQLException
         {
@@ -123,18 +132,21 @@ class FactoryJdbc41Impl implements Factory {
             super(factory, driver, url, info, context);
         }
 
-        public void abort(Executor executor) throws SQLException {
+        @Override
+		public void abort(Executor executor) throws SQLException {
             throw new UnsupportedOperationException();
         }
 
-        public void setNetworkTimeout(
+        @Override
+		public void setNetworkTimeout(
             Executor executor,
             int milliseconds) throws SQLException
         {
             throw new UnsupportedOperationException();
         }
 
-        public int getNetworkTimeout() throws SQLException
+        @Override
+		public int getNetworkTimeout() throws SQLException
         {
             throw new UnsupportedOperationException();
         }
@@ -149,14 +161,16 @@ class FactoryJdbc41Impl implements Factory {
             super(olap4jStatement);
         }
 
-        public <T> T getObject(
+        @Override
+		public <T> T getObject(
             int columnIndex,
             Class<T> type) throws SQLException
         {
             throw new UnsupportedOperationException();
         }
 
-        public <T> T getObject(
+        @Override
+		public <T> T getObject(
             String columnLabel,
             Class<T> type) throws SQLException
         {
@@ -173,11 +187,13 @@ class FactoryJdbc41Impl implements Factory {
             super(olap4jConnection);
         }
 
-        public void closeOnCompletion() throws SQLException {
+        @Override
+		public void closeOnCompletion() throws SQLException {
             closeOnCompletion = true;
         }
 
-        public boolean isCloseOnCompletion() throws SQLException {
+        @Override
+		public boolean isCloseOnCompletion() throws SQLException {
             return closeOnCompletion;
         }
     }
@@ -193,11 +209,13 @@ class FactoryJdbc41Impl implements Factory {
             super(olap4jConnection, mdx);
         }
 
-        public void closeOnCompletion() throws SQLException {
+        @Override
+		public void closeOnCompletion() throws SQLException {
             closeOnCompletion = true;
         }
 
-        public boolean isCloseOnCompletion() throws SQLException {
+        @Override
+		public boolean isCloseOnCompletion() throws SQLException {
             return closeOnCompletion;
         }
     }
@@ -212,7 +230,8 @@ class FactoryJdbc41Impl implements Factory {
             super(olap4jConnection, mondrianConnection);
         }
 
-        public ResultSet getPseudoColumns(
+        @Override
+		public ResultSet getPseudoColumns(
             String catalog,
             String schemaPattern,
             String tableNamePattern,
@@ -221,7 +240,8 @@ class FactoryJdbc41Impl implements Factory {
             throw new UnsupportedOperationException();
         }
 
-        public boolean generatedKeyAlwaysReturned() throws SQLException {
+        @Override
+		public boolean generatedKeyAlwaysReturned() throws SQLException {
             throw new UnsupportedOperationException();
         }
     }

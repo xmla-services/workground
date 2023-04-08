@@ -50,7 +50,8 @@ public class InfobrightDialect extends MySqlDialect {
         return false;
     }
 
-    public boolean allowsCompoundCountDistinct() {
+    @Override
+	public boolean allowsCompoundCountDistinct() {
         return false;
     }
 

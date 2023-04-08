@@ -53,7 +53,8 @@ class CovarianceFunDef extends FunDefBase {
         this.biased = dummyFunDef.getName().equals("Covariance");
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final ListCalc listCalc =
             compiler.compileList(call.getArg(0));
         final Calc calc1 =
@@ -64,7 +65,8 @@ class CovarianceFunDef extends FunDefBase {
             : new ValueCalc(call.getType());
         return new AbstractDoubleCalc(call.getFunName(),call.getType(), new Calc[] {listCalc, calc1, calc2})
         {
-            public double evaluateDouble(Evaluator evaluator) {
+            @Override
+			public double evaluateDouble(Evaluator evaluator) {
                 TupleList memberList = listCalc.evaluateList(evaluator);
                 final int savepoint = evaluator.savepoint();
                 try {
@@ -82,7 +84,8 @@ class CovarianceFunDef extends FunDefBase {
                 }
             }
 
-            public boolean dependsOn(Hierarchy hierarchy) {
+            @Override
+			public boolean dependsOn(Hierarchy hierarchy) {
                 return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
             }
         };

@@ -153,7 +153,8 @@ public class QueryPanel extends javax.swing.JPanel {
         final JPanel qpanel = this;
         schemaList.addItemListener(
             new ItemListener() {
-                public void itemStateChanged(ItemEvent e) {
+                @Override
+				public void itemStateChanged(ItemEvent e) {
                 }
             });
         connectButton.setText(
@@ -161,7 +162,8 @@ public class QueryPanel extends javax.swing.JPanel {
                 "queryPanel.connect.title", "Connect"));
         connectButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     connectButtonActionPerformed(evt);
                 }
             });
@@ -177,7 +179,8 @@ public class QueryPanel extends javax.swing.JPanel {
                 "queryPanel.execute.title", "Execute"));
         executeButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     executeButtonActionPerformed(evt);
                 }
             });
@@ -198,11 +201,13 @@ public class QueryPanel extends javax.swing.JPanel {
                 // and mouseReleased
                 // for proper cross-platform functionality.
 
-                public void mousePressed(MouseEvent e) {
+                @Override
+				public void mousePressed(MouseEvent e) {
                     checkPopupTrigger(e);
                 }
 
-                public void mouseReleased(MouseEvent e) {
+                @Override
+				public void mouseReleased(MouseEvent e) {
                     checkPopupTrigger(e);
                 }
 

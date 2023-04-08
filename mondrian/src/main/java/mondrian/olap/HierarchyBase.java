@@ -120,52 +120,63 @@ public abstract class HierarchyBase
     }
 
     // implement MdxElement
-    public String getUniqueName() {
+    @Override
+	public String getUniqueName() {
         return uniqueName;
     }
 
-    public String getUniqueNameSsas() {
+    @Override
+	public String getUniqueNameSsas() {
         return Util.makeFqName(dimension, name);
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return name;
     }
 
-    public String getQualifiedName() {
+    @Override
+	public String getQualifiedName() {
         return MondrianResource.instance().MdxHierarchyName.str(
             getUniqueName());
     }
 
     public abstract boolean isRagged();
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return description;
     }
 
-    public Dimension getDimension() {
+    @Override
+	public Dimension getDimension() {
         return dimension;
     }
 
-    public Level[] getLevels() {
+    @Override
+	public Level[] getLevels() {
         return levels;
     }
 
-    public Hierarchy getHierarchy() {
+    @Override
+	public Hierarchy getHierarchy() {
         return this;
     }
 
-    public boolean hasAll() {
+    @Override
+	public boolean hasAll() {
         return hasAll;
     }
 
-    public boolean equals(OlapElement mdxElement) {
+    @Override
+	public boolean equals(OlapElement mdxElement) {
         // Use object identity, because a private hierarchy can have the same
         // name as a public hierarchy.
         return (this == mdxElement);
     }
 
-    public OlapElement lookupChild(
+    @Override
+	public OlapElement lookupChild(
         SchemaReader schemaReader,
         Id.Segment s,
         MatchType matchType)

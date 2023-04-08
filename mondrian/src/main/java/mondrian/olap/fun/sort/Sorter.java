@@ -977,18 +977,21 @@ public class Sorter {
       this.i = i;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
       return Util.hash( i, t );
     }
 
-    public boolean equals( Object obj ) {
+    @Override
+	public boolean equals( Object obj ) {
       return this == obj
         || obj instanceof ObjIntPair
         && this.i == ( (ObjIntPair) obj ).i
         && Objects.equals( this.t, ( (ObjIntPair) obj ).t );
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
       return new StringBuilder("<").append(t).append(", ").append(i).append(">").toString();
     }
   }

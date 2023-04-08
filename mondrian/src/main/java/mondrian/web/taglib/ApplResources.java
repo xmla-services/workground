@@ -70,12 +70,14 @@ public class ApplResources implements Listener.ApplicationContext {
     }
 
     // implement ApplicationContext
-    public void init(ServletContextEvent event) {
+    @Override
+	public void init(ServletContextEvent event) {
         this.context = event.getServletContext();
         context.setAttribute(ATTRNAME, this);
     }
 
-    public void destroy(ServletContextEvent ev) {
+    @Override
+	public void destroy(ServletContextEvent ev) {
     }
 
 

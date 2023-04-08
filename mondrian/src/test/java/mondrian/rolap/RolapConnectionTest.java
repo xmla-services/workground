@@ -50,12 +50,14 @@ public class RolapConnectionTest {
         if (!NamingManager.hasInitialContextFactoryBuilder()) {
             NamingManager.setInitialContextFactoryBuilder(
                 new InitialContextFactoryBuilder() {
-                    public InitialContextFactory createInitialContextFactory(
+                    @Override
+					public InitialContextFactory createInitialContextFactory(
                         Hashtable<?, ?> environment)
                         throws NamingException
                     {
                         return new InitialContextFactory() {
-                            public javax.naming.Context getInitialContext(
+                            @Override
+							public javax.naming.Context getInitialContext(
                                 Hashtable<?, ?> environment)
                                 throws NamingException
                             {

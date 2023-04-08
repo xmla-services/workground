@@ -169,7 +169,8 @@ public final class ScenarioImpl implements Scenario {
                 allocationPolicy));
     }
 
-    public String getId() {
+    @Override
+	public String getId() {
         return Integer.toString(id);
     }
 
@@ -491,7 +492,8 @@ public final class ScenarioImpl implements Scenario {
             return scenario;
         }
 
-        public Object evaluate(Evaluator evaluator) {
+        @Override
+		public Object evaluate(Evaluator evaluator) {
             // Evaluate current member in the given scenario by expanding in
             // terms of the writeback cells.
 

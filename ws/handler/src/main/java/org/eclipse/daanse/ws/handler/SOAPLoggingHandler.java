@@ -65,22 +65,26 @@ public class SOAPLoggingHandler implements SOAPHandler<SOAPMessageContext> {
 
     private Logger logger = LoggerFactory.getLogger(SOAPLoggingHandler.class);
 
-    public Set<QName> getHeaders() {
+    @Override
+	public Set<QName> getHeaders() {
         return null;
     }
 
-    public boolean handleMessage(SOAPMessageContext smc) {
+    @Override
+	public boolean handleMessage(SOAPMessageContext smc) {
         logOut(smc);
         return true;
     }
 
-    public boolean handleFault(SOAPMessageContext smc) {
+    @Override
+	public boolean handleFault(SOAPMessageContext smc) {
         logOut(smc);
         return true;
     }
 
     // nothing to clean up
-    public void close(MessageContext messageContext) {
+    @Override
+	public void close(MessageContext messageContext) {
     }
 
     /*

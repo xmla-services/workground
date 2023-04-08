@@ -17,6 +17,7 @@ public interface VirtualCubeDimension extends  CubeDimension{
 
     String cubeName();
 
-    String name();
+    @Override
+	String name();
 
 }

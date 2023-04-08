@@ -81,7 +81,8 @@ public interface Evaluator {
      * @deprecated Use {@link #savepoint()} followed by
      *   {@link #setContext(Member[])}; will be removed in mondrian-4
      */
-    Evaluator push(Member[] members);
+    @Deprecated
+	Evaluator push(Member[] members);
 
     /**
      * Creates a new Evaluator with the same context as this evaluator.
@@ -120,7 +121,8 @@ public interface Evaluator {
      * @deprecated Use {@link #savepoint()} followed by
      *   {@link #setContext(Member)}; will be removed in mondrian-4
      */
-    Evaluator push(Member member);
+    @Deprecated
+	Evaluator push(Member member);
 
     /**
      * Creates a new evaluator with the same state except nonEmpty property
@@ -132,7 +134,8 @@ public interface Evaluator {
      * @deprecated Use {@link #savepoint()} followed by
      *     {@link #setNonEmpty(boolean)}; will be removed in mondrian-4
      */
-    Evaluator push(boolean nonEmpty);
+    @Deprecated
+	Evaluator push(boolean nonEmpty);
 
     /**
      * Creates a new evaluator with the same state except nonEmpty
@@ -146,7 +149,8 @@ public interface Evaluator {
      *     {@link #setNonEmpty(boolean)} and
      *     {@link #setNativeEnabled(boolean)}; will be removed in mondrian-4.
      */
-    Evaluator push(boolean nonEmpty, boolean nativeEnabled);
+    @Deprecated
+	Evaluator push(boolean nonEmpty, boolean nativeEnabled);
 
     /**
      * Restores previous evaluator.
@@ -276,14 +280,16 @@ public interface Evaluator {
      *
      * @deprecated Will be removed in mondrian-4
      */
-    int getDepth();
+    @Deprecated
+	int getDepth();
 
     /**
      * Returns parent evaluator.
      *
      * @deprecated Will be removed in mondrian-4
      */
-    Evaluator getParent();
+    @Deprecated
+	Evaluator getParent();
 
     /**
      * Returns the connection's locale.

@@ -72,14 +72,16 @@ public class RolapProperty extends Property {
         return exp;
     }
 
-    public PropertyFormatter getFormatter() {
+    @Override
+	public PropertyFormatter getFormatter() {
         return formatter;
     }
 
     /**
      * @return Returns the caption.
      */
-    public String getCaption() {
+    @Override
+	public String getCaption() {
         if (caption == null) {
             return getName();
         }

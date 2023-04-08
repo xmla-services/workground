@@ -61,11 +61,13 @@ public abstract class ListPredicate implements StarPredicate {
         columns = new ArrayList<RolapStar.Column>(columnSet);
     }
 
-    public List<RolapStar.Column> getConstrainedColumnList() {
+    @Override
+	public List<RolapStar.Column> getConstrainedColumnList() {
         return columns;
     }
 
-    public BitKey getConstrainedColumnBitKey() {
+    @Override
+	public BitKey getConstrainedColumnBitKey() {
         if (columnBitKey == null) {
             for (StarPredicate predicate : children) {
                 if (columnBitKey == null) {
@@ -84,7 +86,8 @@ public abstract class ListPredicate implements StarPredicate {
         return children;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         // Don't use the default list hashcode because we want a hash code
         // that's not order dependent
         if (hashValue == 0) {
@@ -100,7 +103,8 @@ public abstract class ListPredicate implements StarPredicate {
         return hashValue;
     }
 
-    public boolean equalConstraint(StarPredicate that) {
+    @Override
+	public boolean equalConstraint(StarPredicate that) {
         boolean isEqual =
             that instanceof ListPredicate
             && getConstrainedColumnBitKey().equals(
@@ -159,11 +163,13 @@ public abstract class ListPredicate implements StarPredicate {
         return isEqual;
     }
 
-    public StarPredicate minus(StarPredicate predicate) {
+    @Override
+	public StarPredicate minus(StarPredicate predicate) {
         throw Util.needToImplement(this);
     }
 
-    public void toSql(SqlQuery sqlQuery, StringBuilder buf) {
+    @Override
+	public void toSql(SqlQuery sqlQuery, StringBuilder buf) {
         if (children.size() == 1) {
             children.get(0).toSql(sqlQuery, buf);
         } else {
@@ -181,7 +187,8 @@ public abstract class ListPredicate implements StarPredicate {
 
     protected abstract String getOp();
 
-    public void describe(StringBuilder buf) {
+    @Override
+	public void describe(StringBuilder buf) {
         buf.append(getOp()).append("(");
         int k = 0;
         for (StarPredicate child : children) {
@@ -194,7 +201,8 @@ public abstract class ListPredicate implements StarPredicate {
     }
 
 
-    public String toString() {
+    @Override
+	public String toString() {
         final StringBuilder buf = new StringBuilder();
         describe(buf);
         return buf.toString();

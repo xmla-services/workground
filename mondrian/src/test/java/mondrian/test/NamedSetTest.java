@@ -1301,7 +1301,8 @@ public class NamedSetTest {
     public static class NamedSetsInCubeProcessor
         extends FilterDynamicSchemaProcessor
     {
-        public String filter(
+        @Override
+		public String filter(
             String schemaUrl,
             Util.PropertyList connectInfo,
             InputStream stream) throws Exception
@@ -1325,7 +1326,8 @@ public class NamedSetTest {
     public static class NamedSetsInCubeAndSchemaProcessor
         extends FilterDynamicSchemaProcessor
     {
-        protected String filter(
+        @Override
+		protected String filter(
             String schemaUrl,
             Util.PropertyList connectInfo,
             InputStream stream) throws Exception
@@ -1364,7 +1366,8 @@ public class NamedSetTest {
     public static class MixedNamedSetSchemaProcessor
         extends FilterDynamicSchemaProcessor
     {
-        protected String filter(
+        @Override
+		protected String filter(
             String schemaUrl,
             Util.PropertyList connectInfo,
             InputStream stream) throws Exception

@@ -3654,7 +3654,8 @@ public class SchemaTest {
             throw new RuntimeException("oops");
         }
 
-        public String formatProperty(
+        @Override
+		public String formatProperty(
             Member member, String propertyName, Object propertyValue)
         {
             return null;

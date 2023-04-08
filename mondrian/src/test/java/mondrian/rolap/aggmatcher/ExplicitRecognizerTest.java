@@ -33,7 +33,8 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
 	      ContextArgumentsProvider.dockerWasChanged = true;
 	}
 
-    @BeforeEach
+    @Override
+	@BeforeEach
     public void beforeEach() {
         super.beforeEach();
         propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
@@ -42,7 +43,8 @@ public class ExplicitRecognizerTest extends AggTableTestCase {
         //TestContext.instance().flushSchemaCache();
     }
 
-    @AfterEach
+    @Override
+	@AfterEach
     public void afterEach() {
         propSaver.reset();
     }

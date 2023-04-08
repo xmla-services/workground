@@ -1499,10 +1499,12 @@ public class UtilTestCase{
                         "BACON!!"))
                 {
                     private static final long serialVersionUID = 1L;
-                    public String get(int index) {
+                    @Override
+					public String get(int index) {
                         throw new BaconationException();
                     }
-                    public Iterator<String> iterator() {
+                    @Override
+					public Iterator<String> iterator() {
                         throw new BaconationException();
                     }
                 });

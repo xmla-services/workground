@@ -92,7 +92,8 @@ class MemberExcludeConstraint implements TupleConstraint {
         }
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuilder("MemberExcludeConstraint(").append(excludes).append(")").toString();
     }
 
@@ -102,7 +103,8 @@ class MemberExcludeConstraint implements TupleConstraint {
     }
 
 
-    public MemberChildrenConstraint getMemberChildrenConstraint(
+    @Override
+	public MemberChildrenConstraint getMemberChildrenConstraint(
         RolapMember parent)
     {
         return DefaultMemberChildrenConstraint.instance();

@@ -89,7 +89,8 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
     private final Map<String, SessionInfo> sessionInfos =
         new HashMap<String, SessionInfo>();
 
-    public void init(ServletConfig servletConfig) throws ServletException {
+    @Override
+	public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
         this.domFactory = getDocumentBuilderFactory();
         this.requireAuthenticatedSessions =
@@ -114,7 +115,8 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         return factory;
     }
 
-    protected void unmarshallSoapMessage(
+    @Override
+	protected void unmarshallSoapMessage(
         HttpServletRequest request,
         Element[] requestSoapParts)
         throws XmlaException
@@ -252,7 +254,8 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
      *
      * <p>We also handle the Security element.</p>
      */
-    protected void handleSoapHeader(
+    @Override
+	protected void handleSoapHeader(
         HttpServletResponse response,
         Element[] requestSoapParts,
         byte[][] responseSoapParts,
@@ -505,7 +508,8 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         return sessionId;
     }
 
-    protected void handleSoapBody(
+    @Override
+	protected void handleSoapBody(
         HttpServletResponse response,
         Element[] requestSoapParts,
         byte[][] responseSoapParts,
@@ -588,7 +592,8 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         }
     }
 
-    protected void marshallSoapMessage(
+    @Override
+	protected void marshallSoapMessage(
         HttpServletResponse response,
         byte[][] responseSoapParts,
         Enumeration.ResponseMimeType responseMimeType)
@@ -735,7 +740,8 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
      * This produces a SOAP 1.1 version Fault element - not a 1.2 version.
      *
      */
-    protected void handleFault(
+    @Override
+	protected void handleFault(
         HttpServletResponse response,
         byte[][] responseSoapParts,
         Phase phase,

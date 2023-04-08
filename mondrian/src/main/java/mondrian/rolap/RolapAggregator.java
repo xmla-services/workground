@@ -32,11 +32,13 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
   private static int index = 0;
 
   public static final RolapAggregator Sum = new RolapAggregator( "sum", index++, false ) {
-    public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
+    @Override
+	public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
       return FunUtil.sum( evaluator, members, exp );
     }
 
-    public boolean supportsFastAggregates( Datatype dataType ) {
+    @Override
+	public boolean supportsFastAggregates( Datatype dataType ) {
       switch ( dataType ) {
         case Integer:
         case Numeric:
@@ -46,7 +48,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       }
     };
 
-    public Object aggregate( List<Object> rawData, Datatype datatype ) {
+    @Override
+	public Object aggregate( List<Object> rawData, Datatype datatype ) {
       assert rawData.size() > 0;
       switch ( datatype ) {
         case Integer:
@@ -82,21 +85,25 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
   };
 
   public static final RolapAggregator Count = new RolapAggregator( "count", index++, false ) {
-    public Aggregator getRollup() {
+    @Override
+	public Aggregator getRollup() {
       return Sum;
     }
 
-    public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
+    @Override
+	public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
       return FunUtil.count( evaluator, members, false );
     }
   };
 
   public static final RolapAggregator Min = new RolapAggregator( "min", index++, false ) {
-    public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
+    @Override
+	public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
       return FunUtil.min( evaluator, members, exp );
     }
 
-    public boolean supportsFastAggregates( Datatype dataType ) {
+    @Override
+	public boolean supportsFastAggregates( Datatype dataType ) {
       switch ( dataType ) {
         case Integer:
         case Numeric:
@@ -106,7 +113,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       }
     };
 
-    public Object aggregate( List<Object> rawData, Datatype datatype ) {
+    @Override
+	public Object aggregate( List<Object> rawData, Datatype datatype ) {
       assert rawData.size() > 0;
       switch ( datatype ) {
         case Integer:
@@ -133,11 +141,13 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
   };
 
   public static final RolapAggregator Max = new RolapAggregator( "max", index++, false ) {
-    public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
+    @Override
+	public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
       return FunUtil.max( evaluator, members, exp );
     }
 
-    public boolean supportsFastAggregates( Datatype dataType ) {
+    @Override
+	public boolean supportsFastAggregates( Datatype dataType ) {
       switch ( dataType ) {
         case Integer:
         case Numeric:
@@ -147,7 +157,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       }
     };
 
-    public Object aggregate( List<Object> rawData, Datatype datatype ) {
+    @Override
+	public Object aggregate( List<Object> rawData, Datatype datatype ) {
       assert rawData.size() > 0;
       switch ( datatype ) {
         case Integer:
@@ -175,31 +186,37 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
   };
 
   public static final RolapAggregator Avg = new RolapAggregator( "avg", index++, false ) {
-    public Aggregator getRollup() {
+    @Override
+	public Aggregator getRollup() {
       return new RolapAggregator( "avg", index, false ) {
-        public Object aggregate( Evaluator evaluator, TupleList members, Calc calc ) {
+        @Override
+		public Object aggregate( Evaluator evaluator, TupleList members, Calc calc ) {
           return FunUtil.avg( evaluator, members, calc );
         }
       };
     }
 
-    public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
+    @Override
+	public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
       return FunUtil.avg( evaluator, members, exp );
     }
   };
 
   public static final RolapAggregator DistinctCount = new RolapAggregator( "distinct-count", index++, true ) {
-    public Aggregator getRollup() {
+    @Override
+	public Aggregator getRollup() {
       // Distinct counts cannot always be rolled up, when they can,
       // it's using Sum.
       return Sum;
     }
 
-    public RolapAggregator getNonDistinctAggregator() {
+    @Override
+	public RolapAggregator getNonDistinctAggregator() {
       return Count;
     }
 
-    public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
+    @Override
+	public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
       throw new UnsupportedOperationException();
     }
 
@@ -236,7 +253,8 @@ public abstract class RolapAggregator extends EnumeratedValues.BasicValue implem
       this.factCountExpr = factCountExpr;
     }
 
-    public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
+    @Override
+	public Object aggregate( Evaluator evaluator, TupleList members, Calc exp ) {
       throw new UnsupportedOperationException();
     }
 

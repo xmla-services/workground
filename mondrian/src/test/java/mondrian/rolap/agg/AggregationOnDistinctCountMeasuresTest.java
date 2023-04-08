@@ -1650,7 +1650,8 @@ public class AggregationOnDistinctCountMeasuresTest {
             Execution.NONE,
             "AggregationOnDistinctCountMeasuresTest",
             new Locus.Action<TupleList>() {
-                public TupleList execute() {
+                @Override
+				public TupleList execute() {
                     return AggregateFunDef.AggregateCalc.optimizeChildren(
                         memberList, schemaReader, salesCube, null);
                 }
@@ -1665,7 +1666,8 @@ public class AggregationOnDistinctCountMeasuresTest {
             Execution.NONE,
             "AggregationOnDistinctCountMeasuresTest",
             new Locus.Action<TupleList>() {
-                public TupleList execute()
+                @Override
+				public TupleList execute()
                 {
                     return CrossJoinFunDef.mutableCrossJoin(
                         list1, list2);

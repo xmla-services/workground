@@ -63,7 +63,8 @@ class FilterFunDef extends FunDefBase {
             "fxxb");
     }
 
-    public Calc compileCall(final ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(final ResolvedFunCall call, ExpCompiler compiler) {
         // Ignore the caller's priority. We prefer to return iterable, because
         // it makes NamedSet.CurrentOrdinal work.
         List<ResultStyle> styles = compiler.getAcceptableResultStyles();
@@ -129,7 +130,8 @@ class FilterFunDef extends FunDefBase {
             this.call=call;
         }
 
-        public TupleIterable evaluateIterable(Evaluator evaluator) {
+        @Override
+		public TupleIterable evaluateIterable(Evaluator evaluator) {
             evaluator.getTiming().markStart(FilterFunDef.TIMING_NAME);
             try {
                 // Use a native evaluator, if more efficient.
@@ -151,7 +153,8 @@ class FilterFunDef extends FunDefBase {
 
         protected abstract TupleIterable makeIterable(Evaluator evaluator);
 
-        public boolean dependsOn(Hierarchy hierarchy) {
+        @Override
+		public boolean dependsOn(Hierarchy hierarchy) {
             return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
         }
     }
@@ -163,7 +166,8 @@ class FilterFunDef extends FunDefBase {
             assert calcs[1] instanceof BooleanCalc;
         }
 
-        protected TupleIterable makeIterable(Evaluator evaluator) {
+        @Override
+		protected TupleIterable makeIterable(Evaluator evaluator) {
             evaluator.getTiming().markStart(FilterFunDef.TIMING_NAME);
             final int savepoint = evaluator.savepoint();
             try {
@@ -205,7 +209,8 @@ class FilterFunDef extends FunDefBase {
             assert calcs[1] instanceof BooleanCalc;
         }
 
-        protected TupleIterable makeIterable(Evaluator evaluator) {
+        @Override
+		protected TupleIterable makeIterable(Evaluator evaluator) {
             Calc[] calcs = getCalcs();
             ListCalc lcalc = (ListCalc) calcs[0];
             BooleanCalc bcalc = (BooleanCalc) calcs[1];
@@ -244,7 +249,8 @@ class FilterFunDef extends FunDefBase {
             assert calcs[1] instanceof BooleanCalc;
         }
 
-        protected TupleIterable makeIterable(Evaluator evaluator) {
+        @Override
+		protected TupleIterable makeIterable(Evaluator evaluator) {
             Calc[] calcs = getCalcs();
             IterCalc icalc = (IterCalc) calcs[0];
             final BooleanCalc bcalc = (BooleanCalc) calcs[1];
@@ -256,11 +262,13 @@ class FilterFunDef extends FunDefBase {
             final Evaluator evaluator2 = evaluator.push();
             evaluator2.setNonEmpty(false);
             return new AbstractTupleIterable(iterable.getArity()) {
-                public TupleCursor tupleCursor() {
+                @Override
+				public TupleCursor tupleCursor() {
                     return new AbstractTupleCursor(iterable.getArity()) {
                         final TupleCursor cursor = iterable.tupleCursor();
 
-                        public boolean forward() {
+                        @Override
+						public boolean forward() {
                             int currentIteration = 0;
                             Execution execution = Locus.peek().execution;
                             while (cursor.forward()) {
@@ -274,7 +282,8 @@ class FilterFunDef extends FunDefBase {
                             return false;
                         }
 
-                        public List<Member> current() {
+                        @Override
+						public List<Member> current() {
                             return cursor.current();
                         }
                     };
@@ -319,7 +328,8 @@ class FilterFunDef extends FunDefBase {
             this.call=call;
         }
 
-        public TupleList evaluateList(Evaluator evaluator) {
+        @Override
+		public TupleList evaluateList(Evaluator evaluator) {
             // Use a native evaluator, if more efficient.
             // TODO: Figure this out at compile time.
             SchemaReader schemaReader = evaluator.getSchemaReader();
@@ -335,7 +345,8 @@ class FilterFunDef extends FunDefBase {
         }
         protected abstract TupleList makeList(Evaluator evaluator);
 
-        public boolean dependsOn(Hierarchy hierarchy) {
+        @Override
+		public boolean dependsOn(Hierarchy hierarchy) {
             return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
         }
     }
@@ -347,7 +358,8 @@ class FilterFunDef extends FunDefBase {
             assert calcs[1] instanceof BooleanCalc;
         }
 
-        protected TupleList makeList(Evaluator evaluator) {
+        @Override
+		protected TupleList makeList(Evaluator evaluator) {
             Calc[] calcs = getCalcs();
             ListCalc lcalc = (ListCalc) calcs[0];
             BooleanCalc bcalc = (BooleanCalc) calcs[1];
@@ -385,7 +397,8 @@ class FilterFunDef extends FunDefBase {
             assert calcs[1] instanceof BooleanCalc;
         }
 
-        protected TupleList makeList(Evaluator evaluator) {
+        @Override
+		protected TupleList makeList(Evaluator evaluator) {
             evaluator.getTiming().markStart(FilterFunDef.TIMING_NAME);
             final int savepoint = evaluator.savepoint();
             try {

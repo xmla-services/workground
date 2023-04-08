@@ -38,7 +38,8 @@ public class GlobalFunTable extends FunTableImpl {
     private GlobalFunTable() {
     }
 
-    public void defineFunctions(Builder builder) {
+    @Override
+	public void defineFunctions(Builder builder) {
         final FunTable builtinFunTable = BuiltinFunTable.instance();
         final List<String> reservedWords = builtinFunTable.getReservedWords();
         for (String reservedWord : reservedWords) {

@@ -27,7 +27,8 @@ public class MdxParserValidatorImpl implements MdxParserValidator {
     public MdxParserValidatorImpl() {
     }
 
-    public QueryPart parseInternal(
+    @Override
+	public QueryPart parseInternal(
         Statement statement,
         String queryString,
         boolean debug,
@@ -39,7 +40,8 @@ public class MdxParserValidatorImpl implements MdxParserValidator {
             statement, queryString, debug, funTable, strictValidation);
     }
 
-    public Exp parseExpression(
+    @Override
+	public Exp parseExpression(
         Statement statement,
         String queryString,
         boolean debug,

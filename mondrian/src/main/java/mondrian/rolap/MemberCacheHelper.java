@@ -87,7 +87,8 @@ public class MemberCacheHelper implements MemberCache {
         }
     }
 
-    public RolapMember getMember(
+    @Override
+	public RolapMember getMember(
         Object key,
         boolean mustCheckCacheStatus)
     {
@@ -99,17 +100,20 @@ public class MemberCacheHelper implements MemberCache {
 
 
     // implement MemberCache
-    public Object putMember(Object key, RolapMember value) {
+    @Override
+	public Object putMember(Object key, RolapMember value) {
         return mapKeyToMember.put(key, value);
     }
 
     // implement MemberCache
-    public Object makeKey(RolapMember parent, Object key) {
+    @Override
+	public Object makeKey(RolapMember parent, Object key) {
         return new MemberKey(parent, key);
     }
 
     // implement MemberCache
-    public RolapMember getMember(Object key) {
+    @Override
+	public RolapMember getMember(Object key) {
         return getMember(key, true);
     }
 
@@ -134,7 +138,8 @@ public class MemberCacheHelper implements MemberCache {
         putChildren(level, constraint, members);
     }
 
-    public void putChildren(
+    @Override
+	public void putChildren(
         RolapLevel level,
         TupleConstraint constraint,
         List<RolapMember> members)
@@ -142,7 +147,8 @@ public class MemberCacheHelper implements MemberCache {
         mapLevelToMembers.put(level, constraint, members);
     }
 
-    public List<RolapMember> getChildrenFromCache(
+    @Override
+	public List<RolapMember> getChildrenFromCache(
         RolapMember member,
         MemberChildrenConstraint constraint)
     {
@@ -174,7 +180,8 @@ public class MemberCacheHelper implements MemberCache {
         filter(
             children, new Predicate()
             {
-                public boolean evaluate(Object member) {
+                @Override
+				public boolean evaluate(Object member) {
                     return childNames.contains(
                         ((RolapMember) member).getName());
                 }
@@ -196,7 +203,8 @@ public class MemberCacheHelper implements MemberCache {
     }
 
 
-    public void putChildren(
+    @Override
+	public void putChildren(
         RolapMember member,
         MemberChildrenConstraint constraint,
         List<RolapMember> children)
@@ -230,7 +238,8 @@ public class MemberCacheHelper implements MemberCache {
         }
     }
 
-    public List<RolapMember> getLevelMembersFromCache(
+    @Override
+	public List<RolapMember> getLevelMembersFromCache(
         RolapLevel level,
         TupleConstraint constraint)
     {
@@ -262,12 +271,14 @@ public class MemberCacheHelper implements MemberCache {
         changeListener = listener;
     }
 
-    public boolean isMutable()
+    @Override
+	public boolean isMutable()
     {
         return true;
     }
 
-    public synchronized RolapMember removeMember(Object key)
+    @Override
+	public synchronized RolapMember removeMember(Object key)
     {
         // Flush entries from the level-to-members map
         // for member's level and all child levels.
@@ -281,7 +292,8 @@ public class MemberCacheHelper implements MemberCache {
             new SmartCache.SmartCacheTask
                 <Pair<RolapLevel, Object>, List<RolapMember>>()
             {
-                public void execute(
+                @Override
+				public void execute(
                     Iterator<Entry<Pair
                         <RolapLevel, Object>, List<RolapMember>>> iterator)
                 {
@@ -315,7 +327,8 @@ public class MemberCacheHelper implements MemberCache {
             new SmartCache.SmartCacheTask
                 <Pair<RolapMember, Object>, List<RolapMember>>()
             {
-                public void execute(
+                @Override
+				public void execute(
                     Iterator<Entry
                         <Pair<RolapMember, Object>, List<RolapMember>>> iter)
                 {
@@ -357,7 +370,8 @@ public class MemberCacheHelper implements MemberCache {
             new SmartCache.SmartCacheTask<RolapMember,
                 Collection<RolapMember>>()
             {
-            public void execute(
+            @Override
+			public void execute(
                 Iterator<Entry<RolapMember, Collection<RolapMember>>> iterator)
             {
                 while (iterator.hasNext()) {
@@ -375,7 +389,8 @@ public class MemberCacheHelper implements MemberCache {
             return mapKeyToMember.put(key, null);
         }
 
-    public RolapMember removeMemberAndDescendants(Object key) {
+    @Override
+	public RolapMember removeMemberAndDescendants(Object key) {
         // Can use mapMemberToChildren recursively. No need to update inferior
         // lists of children. Do need to update inferior lists of level-peers.
         return null; // STUB

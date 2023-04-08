@@ -28,7 +28,8 @@ import mondrian.spi.StatisticsProvider;
  */
 public class SqlStatisticsProvider implements StatisticsProvider {
 
-    public long getTableCardinality(
+    @Override
+	public long getTableCardinality(
         Context context,
         String catalog,
         String schema,
@@ -61,7 +62,8 @@ public class SqlStatisticsProvider implements StatisticsProvider {
         }
     }
 
-    public long getQueryCardinality(
+    @Override
+	public long getQueryCardinality(
         Context context,
         String sql,
         Execution execution)
@@ -101,7 +103,8 @@ public class SqlStatisticsProvider implements StatisticsProvider {
         }
     }
 
-    public long getColumnCardinality(
+    @Override
+	public long getColumnCardinality(
         Context context,
         String catalog,
         String schema,

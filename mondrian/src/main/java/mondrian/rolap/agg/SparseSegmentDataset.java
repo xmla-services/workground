@@ -56,24 +56,29 @@ class SparseSegmentDataset implements SegmentDataset {
         this.values = values;
     }
 
-    public Object getObject(CellKey pos) {
+    @Override
+	public Object getObject(CellKey pos) {
         return values.get(pos);
     }
 
-    public boolean isNull(CellKey pos) {
+    @Override
+	public boolean isNull(CellKey pos) {
         // cf exists -- calls values.containsKey
         return values.get(pos) == null;
     }
 
-    public int getInt(CellKey pos) {
+    @Override
+	public int getInt(CellKey pos) {
         throw new UnsupportedOperationException();
     }
 
-    public double getDouble(CellKey pos) {
+    @Override
+	public double getDouble(CellKey pos) {
         throw new UnsupportedOperationException();
     }
 
-    public boolean exists(CellKey pos) {
+    @Override
+	public boolean exists(CellKey pos) {
         return values.containsKey(pos);
     }
 
@@ -81,31 +86,37 @@ class SparseSegmentDataset implements SegmentDataset {
         values.put(key, value);
     }
 
-    public Iterator<Map.Entry<CellKey, Object>> iterator() {
+    @Override
+	public Iterator<Map.Entry<CellKey, Object>> iterator() {
         return values.entrySet().iterator();
     }
 
-    public double getBytes() {
+    @Override
+	public double getBytes() {
         // assume a slot, key, and value are each 4 bytes
         return values.size() * 12;
     }
 
-    public void populateFrom(int[] pos, SegmentDataset data, CellKey key) {
+    @Override
+	public void populateFrom(int[] pos, SegmentDataset data, CellKey key) {
         values.put(CellKey.Generator.newCellKey(pos), data.getObject(key));
     }
 
-    public void populateFrom(
+    @Override
+	public void populateFrom(
         int[] pos, SegmentLoader.RowList rowList, int column)
     {
         final Object o = rowList.getObject(column);
         put(CellKey.Generator.newCellKey(pos), o);
     }
 
-    public BestFitColumnType getType() {
+    @Override
+	public BestFitColumnType getType() {
         return BestFitColumnType.OBJECT;
     }
 
-    public SegmentBody createSegmentBody(
+    @Override
+	public SegmentBody createSegmentBody(
         List<Pair<SortedSet<Comparable>, Boolean>> axes)
     {
         return new SparseSegmentBody(

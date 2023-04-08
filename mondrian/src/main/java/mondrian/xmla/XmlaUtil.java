@@ -319,7 +319,8 @@ way too noisy
 
         final XmlaHandler.ConnectionFactory connectionFactory =
             new XmlaHandler.ConnectionFactory() {
-                public OlapConnection getConnection(
+                @Override
+				public OlapConnection getConnection(
                     String catalog, String schema, String roleName,
                     Properties props)
                     throws SQLException
@@ -327,7 +328,8 @@ way too noisy
                     return connection;
                 }
 
-                public Map<String, Object>
+                @Override
+				public Map<String, Object>
                 getPreConfiguredDiscoverDatasourcesResponse()
                 {
                     // This method should not be used by the olap4j xmla
@@ -337,31 +339,38 @@ way too noisy
                 }
             };
         final XmlaRequest request = new XmlaRequest() {
-            public Method getMethod() {
+            @Override
+			public Method getMethod() {
                 return Method.DISCOVER;
             }
 
-            public Map<String, String> getProperties() {
+            @Override
+			public Map<String, String> getProperties() {
                 return Collections.emptyMap();
             }
 
-            public Map<String, Object> getRestrictions() {
+            @Override
+			public Map<String, Object> getRestrictions() {
                 return restrictionMap;
             }
 
-            public String getStatement() {
+            @Override
+			public String getStatement() {
                 return null;
             }
 
-            public String getRoleName() {
+            @Override
+			public String getRoleName() {
                 return null;
             }
 
-            public String getRequestType() {
+            @Override
+			public String getRequestType() {
                 throw new UnsupportedOperationException();
             }
 
-            public boolean isDrillThrough() {
+            @Override
+			public boolean isDrillThrough() {
                 throw new UnsupportedOperationException();
             }
 
@@ -369,15 +378,18 @@ way too noisy
                 throw new UnsupportedOperationException();
             }
 
-            public String getUsername() {
+            @Override
+			public String getUsername() {
                 return null;
             }
 
-            public String getPassword() {
+            @Override
+			public String getPassword() {
                 return null;
             }
 
-            public String getSessionId() {
+            @Override
+			public String getSessionId() {
                 return null;
             }
         };

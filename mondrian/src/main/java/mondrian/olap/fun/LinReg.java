@@ -161,7 +161,8 @@ public abstract class LinReg extends FunDefBase {
             VarianceFunDef.class);
 
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final ListCalc listCalc = compiler.compileList(call.getArg(0));
         final DoubleCalc yCalc = compiler.compileDouble(call.getArg(1));
         final DoubleCalc xCalc =
@@ -233,7 +234,8 @@ public abstract class LinReg extends FunDefBase {
             this.variance = variance;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return new StringBuilder("LinReg.Value: slope of ")
                 .append(slope)
                 .append(" and an intercept of ").append(intercept)
@@ -274,7 +276,8 @@ public abstract class LinReg extends FunDefBase {
             super(funDef, LinReg.Point);
         }
 
-        public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+        @Override
+		public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
             final DoubleCalc xPointCalc =
                 compiler.compileDouble(call.getArg(0));
             final ListCalc listCalc = compiler.compileList(call.getArg(1));
@@ -308,7 +311,8 @@ public abstract class LinReg extends FunDefBase {
             this.xCalc = xCalc;
         }
 
-        public double evaluateDouble(Evaluator evaluator) {
+        @Override
+		public double evaluateDouble(Evaluator evaluator) {
             double xPoint = xPointCalc.evaluateDouble(evaluator);
             Value value = LinReg.process(evaluator, listCalc, yCalc, xCalc);
             if (value == null) {
@@ -609,7 +613,8 @@ public abstract class LinReg extends FunDefBase {
             this.regType = regType;
         }
 
-        public double evaluateDouble(Evaluator evaluator) {
+        @Override
+		public double evaluateDouble(Evaluator evaluator) {
             Value value = LinReg.process(evaluator, listCalc, yCalc, xCalc);
             if (value == null) {
                 return FunUtil.DoubleNull;

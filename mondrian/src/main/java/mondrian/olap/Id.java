@@ -49,21 +49,25 @@ public class Id
         }
     }
 
-    public Id clone() {
+    @Override
+	public Id clone() {
         // This is immutable, so no need to clone.
         return this;
     }
 
-    public int getCategory() {
+    @Override
+	public int getCategory() {
         return Category.Unknown;
     }
 
-    public Type getType() {
+    @Override
+	public Type getType() {
         // Can't give the type until we have resolved.
         throw new UnsupportedOperationException();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         final StringBuilder buf = new StringBuilder();
         Util.quoteMdxIdentifier(segments, buf);
         return buf.toString();
@@ -99,7 +103,8 @@ public class Id
         return new Id(newSegments);
     }
 
-    public Exp accept(Validator validator) {
+    @Override
+	public Exp accept(Validator validator) {
         if (segments.size() == 1) {
             final Segment s = segments.get(0);
             if (s.quoting == Quoting.UNQUOTED) {
@@ -123,11 +128,13 @@ public class Id
         return element.accept(validator);
     }
 
-    public Object accept(MdxVisitor visitor) {
+    @Override
+	public Object accept(MdxVisitor visitor) {
         return visitor.visit(this);
     }
 
-    public void unparse(PrintWriter pw) {
+    @Override
+	public void unparse(PrintWriter pw) {
         pw.print(toString());
     }
 
@@ -150,7 +157,8 @@ public class Id
             this.quoting = quoting;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             final StringBuilder buf = new StringBuilder();
             toString(buf);
             return buf.toString();
@@ -229,7 +237,8 @@ public class Id
             this(name, Quoting.QUOTED);
         }
 
-        public boolean equals(final Object o) {
+        @Override
+		public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -240,7 +249,8 @@ public class Id
             return that.name.equals(this.name);
         }
 
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             return name.hashCode();
         }
 
@@ -248,11 +258,13 @@ public class Id
             return name;
         }
 
-        public List<NameSegment> getKeyParts() {
+        @Override
+		public List<NameSegment> getKeyParts() {
             return null;
         }
 
-        public void toString(StringBuilder buf) {
+        @Override
+		public void toString(StringBuilder buf) {
             switch (quoting) {
             case UNQUOTED:
                 buf.append(name);
@@ -265,7 +277,8 @@ public class Id
             }
         }
 
-        public boolean matches(String name) {
+        @Override
+		public boolean matches(String name) {
             switch (quoting) {
             case UNQUOTED:
                 return Util.equalName(this.name, name);
@@ -312,7 +325,8 @@ public class Id
                         new NameSegment[subSegmentList.size()]));
         }
 
-        public boolean equals(final Object o) {
+        @Override
+		public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
@@ -323,22 +337,26 @@ public class Id
             return this.subSegmentList.equals(that.subSegmentList);
         }
 
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             return subSegmentList.hashCode();
         }
 
-        public void toString(StringBuilder buf) {
+        @Override
+		public void toString(StringBuilder buf) {
             for (NameSegment segment : subSegmentList) {
                 buf.append('&');
                 segment.toString(buf);
             }
         }
 
-        public List<NameSegment> getKeyParts() {
+        @Override
+		public List<NameSegment> getKeyParts() {
             return subSegmentList;
         }
 
-        public boolean matches(String name) {
+        @Override
+		public boolean matches(String name) {
             return false;
         }
     }

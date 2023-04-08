@@ -83,23 +83,28 @@ public class DefaultXmlaRequest
         this.sessionId = sessionId;
     }
 
-    public String getSessionId() {
+    @Override
+	public String getSessionId() {
         return sessionId;
     }
 
-    public String getUsername() {
+    @Override
+	public String getUsername() {
         return username;
     }
 
-    public String getPassword() {
+    @Override
+	public String getPassword() {
         return password;
     }
 
-    public Method getMethod() {
+    @Override
+	public Method getMethod() {
         return method;
     }
 
-    public Map<String, String> getProperties() {
+    @Override
+	public Map<String, String> getProperties() {
         return properties;
     }
 
@@ -107,7 +112,8 @@ public class DefaultXmlaRequest
         return parameters;
     }
 
-    public Map<String, Object> getRestrictions() {
+    @Override
+	public Map<String, Object> getRestrictions() {
         if (method != Method.DISCOVER) {
             throw new IllegalStateException(
                 "Only METHOD_DISCOVER has restrictions");
@@ -115,7 +121,8 @@ public class DefaultXmlaRequest
         return restrictions;
     }
 
-    public String getStatement() {
+    @Override
+	public String getStatement() {
         if (method != Method.EXECUTE) {
             throw new IllegalStateException(
                 "Only METHOD_EXECUTE has statement");
@@ -123,7 +130,8 @@ public class DefaultXmlaRequest
         return statement;
     }
 
-    public String getRoleName() {
+    @Override
+	public String getRoleName() {
         return roleName;
     }
 
@@ -131,7 +139,8 @@ public class DefaultXmlaRequest
         return this.command;
     }
 
-    public String getRequestType() {
+    @Override
+	public String getRequestType() {
         if (method != Method.DISCOVER) {
             throw new IllegalStateException(
                 "Only METHOD_DISCOVER has requestType");
@@ -139,7 +148,8 @@ public class DefaultXmlaRequest
         return requestType;
     }
 
-    public boolean isDrillThrough() {
+    @Override
+	public boolean isDrillThrough() {
         if (method != Method.EXECUTE) {
             throw new IllegalStateException(
                 "Only METHOD_EXECUTE determines drillthrough");

@@ -61,11 +61,13 @@ public class HeaderEntryAppenderHandler implements SOAPHandler<SOAPMessageContex
 
     }
 
-    public Set<QName> getHeaders() {
+    @Override
+	public Set<QName> getHeaders() {
         return null;
     }
 
-    public boolean handleMessage(SOAPMessageContext context) {
+    @Override
+	public boolean handleMessage(SOAPMessageContext context) {
         Boolean outbound = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
         if (outbound) {
@@ -84,10 +86,12 @@ public class HeaderEntryAppenderHandler implements SOAPHandler<SOAPMessageContex
         return true;
     }
 
-    public boolean handleFault(SOAPMessageContext context) {
+    @Override
+	public boolean handleFault(SOAPMessageContext context) {
         return true;
     }
 
-    public void close(MessageContext context) {
+    @Override
+	public void close(MessageContext context) {
     }
 }

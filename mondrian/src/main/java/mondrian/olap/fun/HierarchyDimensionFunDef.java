@@ -38,7 +38,8 @@ public class HierarchyDimensionFunDef extends FunDefBase {
             "pdh");
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final HierarchyCalc hierarchyCalc =
                 compiler.compileHierarchy(call.getArg(0));
         return new CalcImpl(call.getType(), hierarchyCalc);
@@ -52,7 +53,8 @@ public class HierarchyDimensionFunDef extends FunDefBase {
             this.hierarchyCalc = hierarchyCalc;
         }
 
-        public Dimension evaluateDimension(Evaluator evaluator) {
+        @Override
+		public Dimension evaluateDimension(Evaluator evaluator) {
             Hierarchy hierarchy =
                     hierarchyCalc.evaluateHierarchy(evaluator);
             return hierarchy.getDimension();

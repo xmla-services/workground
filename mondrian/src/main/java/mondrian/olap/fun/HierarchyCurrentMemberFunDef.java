@@ -45,7 +45,8 @@ public class HierarchyCurrentMemberFunDef extends FunDefBase {
     super( "CurrentMember", "Returns the current member along a hierarchy during an iteration.", "pmh" );
   }
 
-  public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+  @Override
+public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final HierarchyCalc hierarchyCalc = compiler.compileHierarchy( call.getArg( 0 ) );
     final Hierarchy hierarchy = hierarchyCalc.getType().getHierarchy();
     if ( hierarchy != null ) {
@@ -66,17 +67,20 @@ public class HierarchyCurrentMemberFunDef extends FunDefBase {
       this.hierarchyCalc = hierarchyCalc;
     }
 
-    protected String getName() {
+    @Override
+	protected String getName() {
       return "CurrentMember";
     }
 
-    public Member evaluateMember( Evaluator evaluator ) {
+    @Override
+	public Member evaluateMember( Evaluator evaluator ) {
       Hierarchy hierarchy = hierarchyCalc.evaluateHierarchy( evaluator );
       HierarchyCurrentMemberFunDef.validateSlicerMembers( hierarchy, evaluator );
       return evaluator.getContext( hierarchy );
     }
 
-    public boolean dependsOn( Hierarchy hierarchy ) {
+    @Override
+	public boolean dependsOn( Hierarchy hierarchy ) {
       return hierarchyCalc.getType().usesHierarchy( hierarchy, false );
     }
   }
@@ -95,20 +99,24 @@ public class HierarchyCurrentMemberFunDef extends FunDefBase {
       this.hierarchy = (RolapHierarchy) hierarchy;
     }
 
-    protected String getName() {
+    @Override
+	protected String getName() {
       return "CurrentMemberFixed";
     }
 
-    public Member evaluateMember( Evaluator evaluator ) {
+    @Override
+	public Member evaluateMember( Evaluator evaluator ) {
       HierarchyCurrentMemberFunDef.validateSlicerMembers( hierarchy, evaluator );
       return evaluator.getContext( hierarchy );
     }
 
-    public boolean dependsOn( Hierarchy hierarchy ) {
+    @Override
+	public boolean dependsOn( Hierarchy hierarchy ) {
       return this.hierarchy == hierarchy;
     }
 
-    public void collectArguments( Map<String, Object> arguments ) {
+    @Override
+	public void collectArguments( Map<String, Object> arguments ) {
       arguments.put( "hierarchy", hierarchy );
       super.collectArguments( arguments );
     }

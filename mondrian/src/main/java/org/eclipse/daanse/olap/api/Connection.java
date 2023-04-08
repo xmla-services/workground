@@ -77,7 +77,8 @@ public interface Connection {
      * mondrian-4.0. It operates by internally creating a statement. Better
      * to use olap4j and explicitly create a statement.
      */
-    Result execute(Query query);
+    @Deprecated
+	Result execute(Query query);
     
     Statement createStatement();
 

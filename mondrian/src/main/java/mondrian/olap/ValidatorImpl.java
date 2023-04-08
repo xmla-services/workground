@@ -67,7 +67,8 @@ abstract class ValidatorImpl implements Validator {
         resolvedNodes.putAll(resolvedIdentifiers);
     }
 
-    public Exp validate(Exp exp, boolean scalar) {
+    @Override
+	public Exp validate(Exp exp, boolean scalar) {
         Exp resolved;
         try {
             resolved = (Exp) resolvedNodes.get(exp);
@@ -108,7 +109,8 @@ abstract class ValidatorImpl implements Validator {
         return resolved;
     }
 
-    public void validate(ParameterExpr parameterExpr) {
+    @Override
+	public void validate(ParameterExpr parameterExpr) {
         ParameterExpr resolved =
             (ParameterExpr) resolvedNodes.get(parameterExpr);
         if (resolved != null) {
@@ -125,7 +127,8 @@ abstract class ValidatorImpl implements Validator {
         }
     }
 
-    public void validate(MemberProperty memberProperty) {
+    @Override
+	public void validate(MemberProperty memberProperty) {
         MemberProperty resolved =
             (MemberProperty) resolvedNodes.get(memberProperty);
         if (resolved != null) {
@@ -141,7 +144,8 @@ abstract class ValidatorImpl implements Validator {
         }
     }
 
-    public void validate(QueryAxis axis) {
+    @Override
+	public void validate(QueryAxis axis) {
         final QueryAxis resolved = (QueryAxis) resolvedNodes.get(axis);
         if (resolved != null) {
             return; // already resolved
@@ -156,7 +160,8 @@ abstract class ValidatorImpl implements Validator {
         }
     }
 
-    public void validate(Formula formula) {
+    @Override
+	public void validate(Formula formula) {
         final Formula resolved = (Formula) resolvedNodes.get(formula);
         if (resolved != null) {
             return; // already resolved
@@ -171,7 +176,8 @@ abstract class ValidatorImpl implements Validator {
         }
     }
 
-    public FunDef getDef(
+    @Override
+	public FunDef getDef(
         Exp[] args,
         String funName,
         Syntax syntax)
@@ -241,7 +247,8 @@ abstract class ValidatorImpl implements Validator {
         return matchDef;
     }
 
-    public boolean alwaysResolveFunDef() {
+    @Override
+	public boolean alwaysResolveFunDef() {
         return false;
     }
 
@@ -255,7 +262,8 @@ abstract class ValidatorImpl implements Validator {
         return cost;
     }
 
-    public boolean canConvert(
+    @Override
+	public boolean canConvert(
         int ordinal, Exp fromExp, int to, List<Resolver.Conversion> conversions)
     {
         return TypeUtil.canConvert(
@@ -265,7 +273,8 @@ abstract class ValidatorImpl implements Validator {
             conversions);
     }
 
-    public boolean requiresExpression() {
+    @Override
+	public boolean requiresExpression() {
         return requiresExpression(stack.size() - 1);
     }
 
@@ -345,11 +354,13 @@ abstract class ValidatorImpl implements Validator {
         return true;
     }
 
-    public FunTable getFunTable() {
+    @Override
+	public FunTable getFunTable() {
         return funTable;
     }
 
-    public Parameter createOrLookupParam(
+    @Override
+	public Parameter createOrLookupParam(
         boolean definition,
         String name,
         Type type,

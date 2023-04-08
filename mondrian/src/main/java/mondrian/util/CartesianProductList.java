@@ -113,11 +113,13 @@ public class CartesianProductList<T>
             }
         }
 
-        public boolean hasNext() {
+        @Override
+		public boolean hasNext() {
             return hasNext;
         }
 
-        public List<T> next() {
+        @Override
+		public List<T> next() {
             @SuppressWarnings({"unchecked"})
             List<T> result = Util.flatListCopy(elements);
             moveToNext();
@@ -140,7 +142,8 @@ public class CartesianProductList<T>
             hasNext = false;
         }
 
-        public void remove() {
+        @Override
+		public void remove() {
             throw new UnsupportedOperationException();
         }
     }

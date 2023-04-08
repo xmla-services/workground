@@ -292,7 +292,8 @@ public class RolapSchema implements Schema {
         flushJdbcSchema();
     }
 
-    protected void finalize() throws Throwable {
+    @Override
+	protected void finalize() throws Throwable {
         try {
             super.finalize();
             // Only clear the JDBC cache to prevent leaks.
@@ -305,7 +306,8 @@ public class RolapSchema implements Schema {
         }
     }
 
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         if (!(o instanceof RolapSchema)) {
             return false;
         }
@@ -313,7 +315,8 @@ public class RolapSchema implements Schema {
         return other.key.equals(key);
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return key.hashCode();
     }
 
@@ -470,11 +473,13 @@ public class RolapSchema implements Schema {
         schemaLoadDate = new Date();
     }
 
-    public Date getSchemaLoadDate() {
+    @Override
+	public Date getSchemaLoadDate() {
         return schemaLoadDate;
     }
 
-    public List<Exception> getWarnings() {
+    @Override
+	public List<Exception> getWarnings() {
         return Collections.unmodifiableList(warningList);
     }
 
@@ -486,7 +491,8 @@ public class RolapSchema implements Schema {
         return xmlSchema;
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         Util.assertPostcondition(name != null, "return != null");
         Util.assertPostcondition(name.length() > 0, "return.length() > 0");
         return name;
@@ -496,7 +502,8 @@ public class RolapSchema implements Schema {
      * Returns this schema instance unique ID.
      * @return A string representing the schema ID.
      */
-    public String getId() {
+    @Override
+	public String getId() {
         return this.id;
     }
 
@@ -508,7 +515,8 @@ public class RolapSchema implements Schema {
         return key;
     }
 
-    public Map<String, Object> getMetadata() {
+    @Override
+	public Map<String, Object> getMetadata() {
         return metadata;
     }
 
@@ -880,7 +888,8 @@ public class RolapSchema implements Schema {
         throw Util.newError(new StringBuilder("Bad value access='").append(accessString).append("'").toString());
     }
 
-    public Dimension createDimension(Cube cube, String xml) {
+    @Override
+	public Dimension createDimension(Cube cube, String xml) {
         org.eclipse.daanse.olap.rolap.dbmapper.model.api.CubeDimension xmlDimension;
         try {
             final Parser xmlParser = XOMUtil.createDefaultParser();
@@ -908,7 +917,8 @@ public class RolapSchema implements Schema {
         return ((RolapCube) cube).createDimension(xmlDimension, xmlSchema);
     }
 
-    public Cube createCube(String xml) {
+    @Override
+	public Cube createCube(String xml) {
         RolapCube cube;
         try {
             final Parser xmlParser = XOMUtil.createDefaultParser();
@@ -949,7 +959,8 @@ public class RolapSchema implements Schema {
         return RolapSchemaPool.instance().contains(rolapSchema);
     }
 
-    public Cube lookupCube(final String cube, final boolean failIfNotFound) {
+    @Override
+	public Cube lookupCube(final String cube, final boolean failIfNotFound) {
         RolapCube mdxCube = lookupCube(cube);
         if (mdxCube == null && failIfNotFound) {
             throw MondrianResource.instance().MdxCubeNotFound.ex(cube);
@@ -1029,13 +1040,15 @@ public class RolapSchema implements Schema {
             cube);
     }
 
-    public boolean removeCube(final String cubeName) {
+    @Override
+	public boolean removeCube(final String cubeName) {
         final RolapCube cube =
             mapNameToCube.remove(Util.normalizeName(cubeName));
         return cube != null;
     }
 
-    public Cube[] getCubes() {
+    @Override
+	public Cube[] getCubes() {
         Collection<RolapCube> cubes = mapNameToCube.values();
         return cubes.toArray(new RolapCube[cubes.size()]);
     }
@@ -1044,7 +1057,8 @@ public class RolapSchema implements Schema {
         return new ArrayList<RolapCube>(mapNameToCube.values());
     }
 
-    public Hierarchy[] getSharedHierarchies() {
+    @Override
+	public Hierarchy[] getSharedHierarchies() {
         Collection<RolapHierarchy> hierarchies =
             mapSharedHierarchyNameToHierarchy.values();
         return hierarchies.toArray(new RolapHierarchy[hierarchies.size()]);
@@ -1069,7 +1083,8 @@ public class RolapSchema implements Schema {
         return null;
     }
 
-    public Role lookupRole(final String role) {
+    @Override
+	public Role lookupRole(final String role) {
         return mapNameToRole.get(role);
     }
 
@@ -1077,11 +1092,13 @@ public class RolapSchema implements Schema {
         return mapNameToRole.keySet();
     }
 
-    public FunTable getFunTable() {
+    @Override
+	public FunTable getFunTable() {
         return funTable;
     }
 
-    public Parameter[] getParameters() {
+    @Override
+	public Parameter[] getParameters() {
         return parameterList.toArray(
             new Parameter[parameterList.size()]);
     }
@@ -1127,7 +1144,8 @@ public class RolapSchema implements Schema {
         } else {
             udfFactory =
                 new UdfResolver.UdfFactory() {
-                    public UserDefinedFunction create() {
+                    @Override
+					public UserDefinedFunction create() {
                         return Scripts.userDefinedFunction(script, name);
                     }
                 };
@@ -1313,7 +1331,8 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
         }
     }
 
-    public SchemaReader getSchemaReader() {
+    @Override
+	public SchemaReader getSchemaReader() {
         return new RolapSchemaReader(context,defaultRole, this).withLocus();
     }
 
@@ -1435,7 +1454,8 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
             udfFactoryList = new ArrayList<UdfResolver.UdfFactory>(udfs);
         }
 
-        public void defineFunctions(Builder builder) {
+        @Override
+		public void defineFunctions(Builder builder) {
             final FunTable globalFunTable = GlobalFunTable.instance();
             for (String reservedWord : globalFunTable.getReservedWords()) {
                 builder.defineReserved(reservedWord);

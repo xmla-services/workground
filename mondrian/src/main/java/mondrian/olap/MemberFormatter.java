@@ -21,5 +21,6 @@ package mondrian.olap;
  * @author hhaas
  * @since 6 October, 2004
  */
+@Deprecated
 public interface MemberFormatter extends mondrian.spi.MemberFormatter {
 }

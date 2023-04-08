@@ -38,16 +38,19 @@ class RolapMemberCalculation implements RolapCalculation {
         assert member.isEvaluated();
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return member.hashCode();
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         return obj instanceof RolapMemberCalculation
             && member == ((RolapMemberCalculation) obj).member;
     }
 
-    public void setContextIn(RolapEvaluator evaluator) {
+    @Override
+	public void setContextIn(RolapEvaluator evaluator) {
         final RolapMember defaultMember =
             evaluator.root.defaultMembers[getHierarchyOrdinal()];
 
@@ -57,24 +60,29 @@ class RolapMemberCalculation implements RolapCalculation {
         evaluator.setExpanding(member);
     }
 
-    public int getSolveOrder() {
+    @Override
+	public int getSolveOrder() {
         return solveOrder;
     }
 
-    public int getHierarchyOrdinal() {
+    @Override
+	public int getHierarchyOrdinal() {
         return member.getHierarchy().getOrdinalInCube();
     }
 
-    public Calc getCompiledExpression(RolapEvaluatorRoot root) {
+    @Override
+	public Calc getCompiledExpression(RolapEvaluatorRoot root) {
         final Exp exp = member.getExpression();
         return root.getCompiled(exp, true, null);
     }
 
-    public boolean isCalculatedInQuery() {
+    @Override
+	public boolean isCalculatedInQuery() {
         return member.isCalculatedInQuery();
     }
 
-    public boolean containsAggregateFunction() {
+    @Override
+	public boolean containsAggregateFunction() {
         // searching for agg functions is expensive, so cache result
         if (containsAggregateFunction == null) {
             containsAggregateFunction =

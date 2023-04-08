@@ -91,11 +91,13 @@ public class Checkin_7634 extends CsvDBTestCase {
         assertEquals(resultString1, resultString2);
     }
 
-    protected String getFileName() {
+    @Override
+	protected String getFileName() {
         return CHECKIN_7634;
     }
 
-    protected String getCubeDescription() {
+    @Override
+	protected String getCubeDescription() {
         // defines [Product].[Class2] as default (implicit) member
         return
             "<Cube name='Checkin_7634'>\n"

@@ -49,11 +49,13 @@ public abstract class AbstractMemoryMonitor
             this.listener = listener;
             this.threshold = threshold;
         }
-        public boolean equals(final Object other) {
+        @Override
+		public boolean equals(final Object other) {
             return (other instanceof Entry)
                 && (listener == ((Entry) other).listener);
         }
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             return listener.hashCode();
         }
     }
@@ -107,11 +109,13 @@ public abstract class AbstractMemoryMonitor
         return MondrianProperties.instance().MemoryMonitorThreshold.get();
     }
 
-    public boolean addListener(final Listener listener) {
+    @Override
+	public boolean addListener(final Listener listener) {
         return addListener(listener, getDefaultThresholdPercentage());
     }
 
-    public boolean addListener(Listener listener, int percentage) {
+    @Override
+	public boolean addListener(Listener listener, int percentage) {
         getLogger().info("addListener enter");
         try {
 
@@ -164,7 +168,8 @@ public abstract class AbstractMemoryMonitor
         }
     }
 
-    public void updateListenerThreshold(Listener listener, int percentage) {
+    @Override
+	public void updateListenerThreshold(Listener listener, int percentage) {
         getLogger().info("updateListenerThreshold enter");
         try {
 
@@ -221,7 +226,8 @@ public abstract class AbstractMemoryMonitor
         }
     }
 
-    public boolean removeListener(Listener listener) {
+    @Override
+	public boolean removeListener(Listener listener) {
         getLogger().info("removeListener enter");
         try {
             boolean result = false;
@@ -250,7 +256,8 @@ public abstract class AbstractMemoryMonitor
         }
     }
 
-    public void removeAllListener() {
+    @Override
+	public void removeAllListener() {
         getLogger().info("removeAllListener enter");
         try {
             listeners.clear();
@@ -345,7 +352,8 @@ public abstract class AbstractMemoryMonitor
         return convertThresholdToPercentage(getUsedMemory());
     }
 
-    public void resetFromTest() {
+    @Override
+	public void resetFromTest() {
         long lowThreshold = generateLowThreshold();
         notifyNewLowThreshold(lowThreshold);
     }

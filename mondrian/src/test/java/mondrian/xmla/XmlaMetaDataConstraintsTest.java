@@ -52,7 +52,8 @@ public class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
     }
 
 
-    protected Map<String, String> getCatalogNameUrls(Connection connection) {
+    @Override
+	protected Map<String, String> getCatalogNameUrls(Connection connection) {
         if (catalogNameUrls == null) {
             catalogNameUrls = new TreeMap<String, String>();
             String connectString = connection.getConnectString();
@@ -105,7 +106,8 @@ public class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
         return catalogNameUrls;
     }
 
-    protected String filterConnectString(String original) {
+    @Override
+	protected String filterConnectString(String original) {
         PropertyList props = Util.parseConnectString(original);
         if (props.get(RolapConnectionProperties.Catalog.name()) != null) {
             props.remove(RolapConnectionProperties.Catalog.name());
@@ -190,15 +192,18 @@ public class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
         }
     }
 
-    protected DiffRepository getDiffRepos() {
+    @Override
+	protected DiffRepository getDiffRepos() {
         return DiffRepository.lookup(XmlaMetaDataConstraintsTest.class);
     }
 
-    protected Class<? extends XmlaRequestCallback> getServletCallbackClass() {
+    @Override
+	protected Class<? extends XmlaRequestCallback> getServletCallbackClass() {
         return null;
     }
 
-    protected String getSessionId(Action action) {
+    @Override
+	protected String getSessionId(Action action) {
         throw new UnsupportedOperationException();
     }
 }

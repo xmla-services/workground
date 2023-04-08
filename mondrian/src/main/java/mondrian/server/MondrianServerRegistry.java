@@ -110,16 +110,20 @@ public class MondrianServerRegistry {
             }
         }
         return new MondrianServer.MondrianVersion() {
-            public String getVersionString() {
+            @Override
+			public String getVersionString() {
                 return sb.toString();
             }
-            public String getProductName() {
+            @Override
+			public String getProductName() {
                 return MondrianServerVersion.NAME;
             }
-            public int getMinorVersion() {
+            @Override
+			public int getMinorVersion() {
                 return MondrianServerVersion.MINOR_VERSION;
             }
-            public int getMajorVersion() {
+            @Override
+			public int getMajorVersion() {
                 return MondrianServerVersion.MAJOR_VERSION;
             }
             public int getSchemaVersion() {

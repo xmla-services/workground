@@ -138,13 +138,15 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
         return request.includeInSelect(measure);
     }
 
-    public int getMeasureCount() {
+    @Override
+	public int getMeasureCount() {
         return request.getDrillThroughMeasures().size() > 0
             ? request.getDrillThroughMeasures().size()
             : 1;
     }
 
-    public RolapStar.Measure getMeasure(final int i) {
+    @Override
+	public RolapStar.Measure getMeasure(final int i) {
         return request.getDrillThroughMeasures().size() > 0
             ? request.getDrillThroughMeasures().get(i)
             : request.getMeasure();
@@ -165,7 +167,8 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
         return false;
     }
 
-    public String getMeasureAlias(final int i) {
+    @Override
+	public String getMeasureAlias(final int i) {
         String alias =
             request.getDrillThroughMeasures().size() > 0
                 ? request.getDrillThroughMeasures().get(i).getName()
@@ -180,22 +183,26 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
         return maybe;
     }
 
-    public RolapStar.Column[] getColumns() {
+    @Override
+	public RolapStar.Column[] getColumns() {
         return request.getConstrainedColumns();
     }
 
-    public String getColumnAlias(final int i) {
+    @Override
+	public String getColumnAlias(final int i) {
         return columnNames.get(i);
     }
 
-    public StarColumnPredicate getColumnPredicate(final int i) {
+    @Override
+	public StarColumnPredicate getColumnPredicate(final int i) {
         final StarColumnPredicate constr = request.getValueAt(i);
         return (constr == null)
             ? LiteralStarPredicate.TRUE
             : constr;
     }
 
-    public Pair<String, List<BestFitColumnType>> generateSqlQuery() {
+    @Override
+	public Pair<String, List<BestFitColumnType>> generateSqlQuery() {
         SqlQuery sqlQuery = newSqlQuery();
         nonDistinctGenerateSql(sqlQuery);
         appendInapplicableFields(sqlQuery);
@@ -220,7 +227,8 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
         }
     }
 
-    protected void addMeasure(final int i, final SqlQuery sqlQuery) {
+    @Override
+	protected void addMeasure(final int i, final SqlQuery sqlQuery) {
         RolapStar.Measure measure = getMeasure(i);
 
         if (!isPartOfSelect(measure)) {
@@ -236,19 +244,23 @@ class DrillThroughQuerySpec extends AbstractQuerySpec {
         }
     }
 
-    protected boolean isAggregate() {
+    @Override
+	protected boolean isAggregate() {
         return false;
     }
 
-    protected boolean isOrdered() {
+    @Override
+	protected boolean isOrdered() {
         return true;
     }
 
-    protected List<StarPredicate> getPredicateList() {
+    @Override
+	protected List<StarPredicate> getPredicateList() {
         return listOfStarPredicates;
     }
 
-    protected void extraPredicates(SqlQuery sqlQuery) {
+    @Override
+	protected void extraPredicates(SqlQuery sqlQuery) {
         super.extraPredicates(sqlQuery);
 
         if (countOnly) {

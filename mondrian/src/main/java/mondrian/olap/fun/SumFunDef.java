@@ -43,7 +43,8 @@ class SumFunDef extends AbstractAggregateFunDef {
     super( dummyFunDef );
   }
 
-  public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+  @Override
+public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     // What is the desired type to use to get the underlying values
     for ( ResultStyle r : compiler.getAcceptableResultStyles() ) {
       Calc calc;
@@ -95,7 +96,8 @@ class SumFunDef extends AbstractAggregateFunDef {
 
   protected Calc genIterCalc( final ResolvedFunCall call, final IterCalc iterCalc, final Calc calc ) {
     return new AbstractDoubleCalc( call.getFunName(),call.getType(), new Calc[] { iterCalc, calc } ) {
-      public double evaluateDouble( Evaluator evaluator ) {
+      @Override
+	public double evaluateDouble( Evaluator evaluator ) {
         evaluator.getTiming().markStart( SumFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {
@@ -107,7 +109,8 @@ class SumFunDef extends AbstractAggregateFunDef {
         }
       }
 
-      public boolean dependsOn( Hierarchy hierarchy ) {
+      @Override
+	public boolean dependsOn( Hierarchy hierarchy ) {
         return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
       }
     };
@@ -115,7 +118,8 @@ class SumFunDef extends AbstractAggregateFunDef {
 
   protected Calc genListCalc( final ResolvedFunCall call, final ListCalc listCalc, final Calc calc ) {
     return new AbstractDoubleCalc( call.getFunName(),call.getType(), new Calc[] { listCalc, calc } ) {
-      public double evaluateDouble( Evaluator evaluator ) {
+      @Override
+	public double evaluateDouble( Evaluator evaluator ) {
         evaluator.getTiming().markStart( SumFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {
@@ -128,7 +132,8 @@ class SumFunDef extends AbstractAggregateFunDef {
         }
       }
 
-      public boolean dependsOn( Hierarchy hierarchy ) {
+      @Override
+	public boolean dependsOn( Hierarchy hierarchy ) {
         return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
       }
     };

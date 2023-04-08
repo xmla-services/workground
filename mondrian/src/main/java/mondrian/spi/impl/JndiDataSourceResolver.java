@@ -28,7 +28,8 @@ public class JndiDataSourceResolver implements DataSourceResolver {
     public JndiDataSourceResolver() {
     }
 
-    public DataSource lookup(String dataSourceName) throws NamingException {
+    @Override
+	public DataSource lookup(String dataSourceName) throws NamingException {
         return (DataSource) new InitialContext().lookup(dataSourceName);
     }
 }

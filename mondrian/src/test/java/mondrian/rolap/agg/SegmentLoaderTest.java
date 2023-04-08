@@ -167,7 +167,8 @@ public class SegmentLoaderTest extends BatchTestCase {
         groupingSets.add(groupingSetsInfo);
         groupingSets.add(groupableSetsInfo);
         SegmentLoader loader = new SegmentLoader(cacheMgr) {
-            SqlStatement createExecuteSql(
+            @Override
+			SqlStatement createExecuteSql(
                 int cellRequestCount,
                 final GroupingSetsList groupingSetsList,
                 List<StarPredicate> compoundPredicateList)
@@ -249,7 +250,8 @@ public class SegmentLoaderTest extends BatchTestCase {
         groupingSets.add(groupingSetsInfo);
         groupingSets.add(groupableSetsInfo);
         SegmentLoader loader = new SegmentLoader(cacheMgr) {
-            SqlStatement createExecuteSql(
+            @Override
+			SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
                 List<StarPredicate> compoundPredicateList)
@@ -284,7 +286,8 @@ public class SegmentLoaderTest extends BatchTestCase {
         groupingSets.add(groupingSetsInfo);
         groupingSets.add(groupableSetsInfo);
         SegmentLoader loader = new SegmentLoader(cacheMgr) {
-            SqlStatement createExecuteSql(
+            @Override
+			SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
                 List<StarPredicate> compoundPredicateList)
@@ -295,7 +298,8 @@ public class SegmentLoaderTest extends BatchTestCase {
                     getData(true));
             }
 
-            boolean useSparse(boolean sparse, int n, RowList rows) {
+            @Override
+			boolean useSparse(boolean sparse, int n, RowList rows) {
                 return true;
             }
         };
@@ -364,7 +368,8 @@ public class SegmentLoaderTest extends BatchTestCase {
             new ArrayList<GroupingSet>();
         groupingSets.add(groupingSetsInfo);
         SegmentLoader loader = new SegmentLoader(cacheMgr) {
-            SqlStatement createExecuteSql(
+            @Override
+			SqlStatement createExecuteSql(
                 int cellRequestCount,
                 GroupingSetsList groupingSetsList,
                 List<StarPredicate> compoundPredicateList)
@@ -1088,7 +1093,8 @@ public class SegmentLoaderTest extends BatchTestCase {
             row = -1;
         }
 
-        protected Object getTarget() {
+        @Override
+		protected Object getTarget() {
             return null;
         }
 

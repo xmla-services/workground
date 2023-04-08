@@ -53,7 +53,8 @@ public class SchemaTreeCellRenderer
         this(null, null);
     }
 
-    public Component getTreeCellRendererComponent(
+    @Override
+	public Component getTreeCellRendererComponent(
         JTree tree,
         Object value,
         boolean sel,

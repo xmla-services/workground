@@ -52,11 +52,13 @@ public class MockSegmentCache implements SegmentCache {
         return cache.containsKey(header);
     }
 
-    public SegmentBody get(SegmentHeader header) {
+    @Override
+	public SegmentBody get(SegmentHeader header) {
         return cache.get(header);
     }
 
-    public boolean put(
+    @Override
+	public boolean put(
         final SegmentHeader header,
         final SegmentBody body)
     {
@@ -100,13 +102,16 @@ public class MockSegmentCache implements SegmentCache {
         fireSegmentCacheEvent(
             new SegmentCacheListener.SegmentCacheEvent()
             {
-                public boolean isLocal() {
+                @Override
+				public boolean isLocal() {
                     return true;
                 }
-                public SegmentHeader getSource() {
+                @Override
+				public SegmentHeader getSource() {
                     return header;
                 }
-                public EventType getEventType() {
+                @Override
+				public EventType getEventType() {
                     return
                         EventType.ENTRY_CREATED;
                 }
@@ -129,13 +134,16 @@ public class MockSegmentCache implements SegmentCache {
             fireSegmentCacheEvent(
                 new SegmentCacheListener.SegmentCacheEvent()
                 {
-                    public boolean isLocal() {
+                    @Override
+					public boolean isLocal() {
                         return true;
                     }
-                    public SegmentHeader getSource() {
+                    @Override
+					public SegmentHeader getSource() {
                         return header;
                     }
-                    public EventType getEventType() {
+                    @Override
+					public EventType getEventType() {
                         return
                             EventType.ENTRY_DELETED;
                     }
@@ -144,22 +152,27 @@ public class MockSegmentCache implements SegmentCache {
         return true;
     }
 
-    public List<SegmentHeader> getSegmentHeaders() {
+    @Override
+	public List<SegmentHeader> getSegmentHeaders() {
         return new ArrayList<SegmentHeader>(cache.keySet());
     }
 
-    public boolean remove(final SegmentHeader header) {
+    @Override
+	public boolean remove(final SegmentHeader header) {
         cache.remove(header);
         fireSegmentCacheEvent(
             new SegmentCacheListener.SegmentCacheEvent()
             {
-                public boolean isLocal() {
+                @Override
+				public boolean isLocal() {
                     return true;
                 }
-                public SegmentHeader getSource() {
+                @Override
+				public SegmentHeader getSource() {
                     return header;
                 }
-                public EventType getEventType() {
+                @Override
+				public EventType getEventType() {
                     return
                         EventType.ENTRY_DELETED;
                 }
@@ -167,20 +180,24 @@ public class MockSegmentCache implements SegmentCache {
         return true;
     }
 
-    public void tearDown() {
+    @Override
+	public void tearDown() {
         listeners.clear();
         cache.clear();
     }
 
-    public void addListener(SegmentCacheListener listener) {
+    @Override
+	public void addListener(SegmentCacheListener listener) {
         listeners.add(listener);
     }
 
-    public void removeListener(SegmentCacheListener listener) {
+    @Override
+	public void removeListener(SegmentCacheListener listener) {
         listeners.remove(listener);
     }
 
-    public boolean supportsRichIndex() {
+    @Override
+	public boolean supportsRichIndex() {
         return true;
     }
 

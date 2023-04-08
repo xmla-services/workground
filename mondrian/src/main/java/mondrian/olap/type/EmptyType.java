@@ -30,7 +30,8 @@ public class EmptyType extends ScalarType
         super("<EMPTY>");
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         return obj instanceof EmptyType;
     }
 }

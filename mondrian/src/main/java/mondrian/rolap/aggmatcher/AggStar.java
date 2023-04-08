@@ -543,7 +543,8 @@ public class AggStar {
                 buf.append(getExpression(right, query));
                 return buf.toString();
             }
-            public String toString() {
+            @Override
+			public String toString() {
                 StringWriter sw = new StringWriter(128);
                 PrintWriter pw = new PrintWriter(sw);
                 print(pw, "");
@@ -691,7 +692,8 @@ public class AggStar {
             }
 
 
-            public String toString() {
+            @Override
+			public String toString() {
                 StringWriter sw = new StringWriter(256);
                 PrintWriter pw = new PrintWriter(sw);
                 print(pw, "");
@@ -1046,7 +1048,8 @@ public class AggStar {
             }
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             StringWriter sw = new StringWriter(256);
             PrintWriter pw = new PrintWriter(sw);
             print(pw, "");
@@ -1138,7 +1141,8 @@ public class AggStar {
                 return (RolapAggregator) rollup;
             }
 
-            public void print(final PrintWriter pw, final String prefix) {
+            @Override
+			public void print(final PrintWriter pw, final String prefix) {
                 SqlQuery sqlQuery = getSqlQuery();
                 pw.print(prefix);
                 pw.print(getName());
@@ -1188,19 +1192,23 @@ public class AggStar {
             this.numberOfRows = numberOfRows;
         }
 
-        public Table getParent() {
+        @Override
+		public Table getParent() {
             return null;
         }
 
-        public boolean hasParent() {
+        @Override
+		public boolean hasParent() {
             return false;
         }
 
-        public boolean hasJoinCondition() {
+        @Override
+		public boolean hasJoinCondition() {
             return false;
         }
 
-        public Table.JoinCondition getJoinCondition() {
+        @Override
+		public Table.JoinCondition getJoinCondition() {
             return null;
         }
 
@@ -1474,7 +1482,8 @@ public class AggStar {
                             AggStar.this.star.getColumn(bitPos).getDatatype(),
                             bitPos)
                         {
-                            public Table getTable() {
+                            @Override
+							public Table getTable() {
                                 return finalColumnTable;
                             }
                         });
@@ -1484,7 +1493,8 @@ public class AggStar {
             }
         }
 
-        public void print(final PrintWriter pw, final String prefix) {
+        @Override
+		public void print(final PrintWriter pw, final String prefix) {
             pw.print(prefix);
             pw.println("Table:");
             String subprefix = new StringBuilder(prefix).append("  ").toString();
@@ -1588,19 +1598,23 @@ public class AggStar {
             this.joinCondition = joinCondition;
         }
 
-        public Table getParent() {
+        @Override
+		public Table getParent() {
             return parent;
         }
 
-        public boolean hasParent() {
+        @Override
+		public boolean hasParent() {
             return true;
         }
 
-        public boolean hasJoinCondition() {
+        @Override
+		public boolean hasJoinCondition() {
             return true;
         }
 
-        public Table.JoinCondition getJoinCondition() {
+        @Override
+		public Table.JoinCondition getJoinCondition() {
             return joinCondition;
         }
 
@@ -1615,7 +1629,8 @@ public class AggStar {
             }
         }
 
-        public void print(final PrintWriter pw, final String prefix) {
+        @Override
+		public void print(final PrintWriter pw, final String prefix) {
             pw.print(prefix);
             pw.println("Table:");
             String subprefix = new StringBuilder(prefix).append("  ").toString();
@@ -1647,7 +1662,8 @@ public class AggStar {
         }
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         StringWriter sw = new StringWriter(256);
         PrintWriter pw = new PrintWriter(sw);
         print(pw, "");

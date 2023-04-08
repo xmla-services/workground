@@ -70,7 +70,8 @@ class RolapAllCubeMember
         }
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return name;
     }
 

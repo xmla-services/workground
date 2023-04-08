@@ -45,7 +45,8 @@ public class CalculatedChildFunDef extends FunDefBase {
             "mmmS");
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final MemberCalc memberCalc = compiler.compileMember(call.getArg(0));
         final StringCalc stringCalc = compiler.compileString(call.getArg(1));
 
@@ -53,7 +54,8 @@ public class CalculatedChildFunDef extends FunDefBase {
         		call.getFunName(),call.getType(),
             new Calc[] {memberCalc, stringCalc})
         {
-            public Member evaluateMember(Evaluator evaluator) {
+            @Override
+			public Member evaluateMember(Evaluator evaluator) {
                 Member member = memberCalc.evaluateMember(evaluator);
                 String name = stringCalc.evaluateString(evaluator);
                 return getCalculatedChild(member, name, evaluator);

@@ -68,23 +68,28 @@ public abstract class MultiResolver implements Resolver {
         }
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return name;
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return description;
     }
 
-    public String getSignature() {
+    @Override
+	public String getSignature() {
         return signature;
     }
 
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
         return syntax;
     }
 
-    public String[] getReservedWords() {
+    @Override
+	public String[] getReservedWords() {
         return FunUtil.emptyStringArray;
     }
 
@@ -92,11 +97,13 @@ public abstract class MultiResolver implements Resolver {
         return signatures;
     }
 
-    public FunDef getRepresentativeFunDef() {
+    @Override
+	public FunDef getRepresentativeFunDef() {
         return null;
     }
 
-    public FunDef resolve(
+    @Override
+	public FunDef resolve(
         Exp[] args,
         Validator validator,
         List<Conversion> conversions)
@@ -122,7 +129,8 @@ outer:
         return null;
     }
 
-    public boolean requiresExpression(int k) {
+    @Override
+	public boolean requiresExpression(int k) {
         for (String signature : signatures) {
             int[] parameterTypes = FunUtil.decodeParameterCategories(signature);
             if ((k < parameterTypes.length)

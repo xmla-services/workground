@@ -47,7 +47,8 @@ public class SmartIncrementalCache<K, V extends Collection> {
             .execute(
                 new SmartCache.SmartCacheTask
                     <K, V>() {
-                    public void execute(Iterator<Map.Entry<K, V>> iterator) {
+                    @Override
+					public void execute(Iterator<Map.Entry<K, V>> iterator) {
                         // iterator is ignored,
                         // we're updating a single entry and
                         // we have the key.

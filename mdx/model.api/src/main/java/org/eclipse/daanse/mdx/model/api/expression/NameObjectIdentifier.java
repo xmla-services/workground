@@ -16,6 +16,7 @@ package org.eclipse.daanse.mdx.model.api.expression;
 public non-sealed interface NameObjectIdentifier extends ObjectIdentifier {
     String name();
 
-    Quoting quoting();
+    @Override
+	Quoting quoting();
 
 }

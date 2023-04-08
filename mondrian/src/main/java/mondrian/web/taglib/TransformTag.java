@@ -46,7 +46,8 @@ public class TransformTag extends TagSupport {
     public TransformTag() {
     }
 
-    public int doEndTag() throws javax.servlet.jsp.JspException {
+    @Override
+	public int doEndTag() throws javax.servlet.jsp.JspException {
         try {
             ApplResources ar =
                 ApplResources.getInstance(pageContext.getServletContext());

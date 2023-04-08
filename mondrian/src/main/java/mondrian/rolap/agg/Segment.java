@@ -140,11 +140,13 @@ public class Segment {
     this.excludedRegions = excludedRegions;
     this.compoundPredicateList = compoundPredicateList;
     final List<BitKey> compoundPredicateBitKeys = compoundPredicateList == null ? null : new AbstractList<BitKey>() {
-      public BitKey get( int index ) {
+      @Override
+	public BitKey get( int index ) {
         return compoundPredicateList.get( index ).getConstrainedColumnBitKey();
       }
 
-      public int size() {
+      @Override
+	public int size() {
         return compoundPredicateList.size();
       }
     };
@@ -221,7 +223,8 @@ public class Segment {
     return buf.toString();
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     if ( this.desc == null ) {
       StringBuilder buf = new StringBuilder( 64 );
       describe( buf, false );

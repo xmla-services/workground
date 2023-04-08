@@ -63,7 +63,8 @@ public class InlineTableImpl implements InlineTable {
         this.alias = alias;
     }
 
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         if (o instanceof InlineTable) {
             InlineTable that = (InlineTable) o;
             return alias().equals(that.alias());
@@ -72,11 +73,13 @@ public class InlineTableImpl implements InlineTable {
         }
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return "<inline data>";
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return toString().hashCode();
     }
 }

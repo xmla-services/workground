@@ -62,7 +62,8 @@ public class CurrentDateMemberUdf implements UserDefinedFunction {
 
     private Object resultDateMember = null;
 
-    public Object execute(Evaluator evaluator, Argument[] arguments) {
+    @Override
+	public Object execute(Evaluator evaluator, Argument[] arguments) {
         if (resultDateMember != null) {
             return resultDateMember;
         }
@@ -110,15 +111,18 @@ public class CurrentDateMemberUdf implements UserDefinedFunction {
         return evaluator.getQueryStartTime();
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return CURRENT_DATE_MEMBER_UDF_DESCRIPTION;
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return "CurrentDateMember";
     }
 
-    public Type[] getParameterTypes() {
+    @Override
+	public Type[] getParameterTypes() {
         return new Type[] {
             new HierarchyType(null, null),
             new StringType(),
@@ -126,7 +130,8 @@ public class CurrentDateMemberUdf implements UserDefinedFunction {
         };
     }
 
-    public String[] getReservedWords() {
+    @Override
+	public String[] getReservedWords() {
         return new String[] {
             "EXACT",
             "BEFORE",
@@ -134,13 +139,15 @@ public class CurrentDateMemberUdf implements UserDefinedFunction {
         };
     }
 
-    public Type getReturnType(Type[] parameterTypes) {
+    @Override
+	public Type getReturnType(Type[] parameterTypes) {
         Hierarchy hierarchy =  parameterTypes[0].getHierarchy();
         return (hierarchy == null) ? MemberType.Unknown : MemberType
             .forHierarchy(hierarchy);
     }
 
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
         return Syntax.Function;
     }
 }

@@ -71,7 +71,8 @@ class XtdFunDef extends FunDefBase {
     this.levelType = levelType;
   }
 
-  public Type getResultType( Validator validator, Exp[] args ) {
+  @Override
+public Type getResultType( Validator validator, Exp[] args ) {
     if ( args.length == 0 ) {
       // With no args, the default implementation cannot
       // guess the hierarchy.
@@ -103,12 +104,14 @@ class XtdFunDef extends FunDefBase {
     }
   }
 
-  public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+  @Override
+public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Level level = getLevel( compiler.getEvaluator() );
     switch ( call.getArgCount() ) {
       case 0:
         return new AbstractListCalc( call.getFunName(),call.getType(), new Calc[0] ) {
-          public TupleList evaluateList( Evaluator evaluator ) {
+          @Override
+		public TupleList evaluateList( Evaluator evaluator ) {
             evaluator.getTiming().markStart( XtdFunDef.TIMING_NAME );
             try {
               return new UnaryTupleList( FunUtil.periodsToDate( evaluator, level, null ) );
@@ -117,14 +120,16 @@ class XtdFunDef extends FunDefBase {
             }
           }
 
-          public boolean dependsOn( Hierarchy hierarchy ) {
+          @Override
+		public boolean dependsOn( Hierarchy hierarchy ) {
             return hierarchy.getDimension().getDimensionType() == mondrian.olap.DimensionType.TimeDimension;
           }
         };
       default:
         final MemberCalc memberCalc = compiler.compileMember( call.getArg( 0 ) );
         return new AbstractListCalc( call.getFunName(),call.getType(), new Calc[] { memberCalc } ) {
-          public TupleList evaluateList( Evaluator evaluator ) {
+          @Override
+		public TupleList evaluateList( Evaluator evaluator ) {
             evaluator.getTiming().markStart( XtdFunDef.TIMING_NAME );
             try {
               return new UnaryTupleList( FunUtil.periodsToDate( evaluator, level, memberCalc.evaluateMember( evaluator ) ) );
@@ -145,7 +150,8 @@ class XtdFunDef extends FunDefBase {
       this.levelType = levelType;
     }
 
-    protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+    @Override
+	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
       return new XtdFunDef( dummyFunDef, levelType );
     }
   }
