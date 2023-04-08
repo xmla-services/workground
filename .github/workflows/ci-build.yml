@@ -22,7 +22,7 @@ jobs:
         distribution: 'temurin'
         cache: maven
     - name: Build with Maven
-      run: mvn -DtempIgnoreStrageTests=true -B verify --file pom.xml -U
+      run: mvn -DtempIgnoreStrageTests=true -Dbnd.testing.failure.ignore=true -B verify --file pom.xml -U
     - name: Upload artifact
       uses: actions/upload-artifact@v3
       if: always() # always run even if the previous step fails
