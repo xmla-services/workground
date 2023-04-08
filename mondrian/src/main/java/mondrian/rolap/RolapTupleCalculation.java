@@ -67,7 +67,8 @@ class RolapTupleCalculation implements RolapCalculation {
         return calc.toString();
     }
 
-    public void setContextIn(RolapEvaluator evaluator) {
+    @Override
+	public void setContextIn(RolapEvaluator evaluator) {
         // Restore default member for each hierarchy
         // in the tuple.
         for (RolapHierarchy hierarchy : hierarchyList) {
@@ -80,23 +81,28 @@ class RolapTupleCalculation implements RolapCalculation {
         evaluator.removeCalculation(this, true);
     }
 
-    public int getSolveOrder() {
+    @Override
+	public int getSolveOrder() {
         return Integer.MIN_VALUE;
     }
 
-    public int getHierarchyOrdinal() {
+    @Override
+	public int getHierarchyOrdinal() {
         throw new UnsupportedOperationException();
     }
 
-    public Calc getCompiledExpression(RolapEvaluatorRoot root) {
+    @Override
+	public Calc getCompiledExpression(RolapEvaluatorRoot root) {
         return calc;
     }
 
-    public boolean containsAggregateFunction() {
+    @Override
+	public boolean containsAggregateFunction() {
         return false;
     }
 
-    public boolean isCalculatedInQuery() {
+    @Override
+	public boolean isCalculatedInQuery() {
         return true;
     }
 }

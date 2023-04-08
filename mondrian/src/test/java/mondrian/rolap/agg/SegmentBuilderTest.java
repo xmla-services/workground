@@ -559,7 +559,8 @@ public class SegmentBuilderTest {
         RolapUtil.setHook(
             new RolapUtil.ExecuteQueryHook()
         {
-            public void onExecuteQuery(String sql) {
+            @Override
+			public void onExecuteQuery(String sql) {
                 //  We shouldn't see a sum of unit_sales in SQL if using rollup.
                 assertFalse(
                         sql.matches(".*sum\\([^ ]+unit_sales.*"),
@@ -610,7 +611,8 @@ public class SegmentBuilderTest {
         RolapUtil.setHook(
             new RolapUtil.ExecuteQueryHook()
         {
-            public void onExecuteQuery(String sql) {
+            @Override
+			public void onExecuteQuery(String sql) {
                 //  We shouldn't see a sum of unit_sales in SQL if using rollup.
                 assertFalse(
                         sql.matches(".*sum\\([^ ]+unit_sales.*"),
@@ -654,7 +656,8 @@ public class SegmentBuilderTest {
         RolapUtil.setHook(
             new RolapUtil.ExecuteQueryHook()
         {
-            public void onExecuteQuery(String sql) {
+            @Override
+			public void onExecuteQuery(String sql) {
                 //  We shouldn't see a sum of unit_sales in SQL if using rollup.
                 assertFalse(
                         sql.matches(".*sum\\([^ ]+unit_sales.*"),
@@ -965,14 +968,16 @@ public class SegmentBuilderTest {
         List<SegmentHeader> headers = cache.getSegmentHeaders();
         Map<SegmentHeader, SegmentBody> testMap =
             new HashMap<SegmentHeader, SegmentBody>() {
-            public Set<Entry<SegmentHeader, SegmentBody>> entrySet() {
+            @Override
+			public Set<Entry<SegmentHeader, SegmentBody>> entrySet() {
                 List<Entry<SegmentHeader, SegmentBody>> list =
                     new ArrayList<Entry<SegmentHeader, SegmentBody>>();
                 list.addAll(super.entrySet());
                 Collections.sort(
                     list,
                     new Comparator<Entry<SegmentHeader, SegmentBody>>() {
-                        public int compare(
+                        @Override
+						public int compare(
                             Entry<SegmentHeader, SegmentBody> o1,
                             Entry<SegmentHeader, SegmentBody> o2)
                         {
@@ -987,13 +992,15 @@ public class SegmentBuilderTest {
                 orderedSet.addAll(list);
                 return orderedSet;
             }
-            public Set<SegmentHeader> keySet() {
+            @Override
+			public Set<SegmentHeader> keySet() {
                 List<SegmentHeader> list = new ArrayList<SegmentHeader>();
                 list.addAll(super.keySet());
                 Collections.sort(
                     list,
                     new Comparator<SegmentHeader>() {
-                        public int compare(
+                        @Override
+						public int compare(
                             SegmentHeader o1,
                             SegmentHeader o2)
                         {

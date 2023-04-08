@@ -61,7 +61,8 @@ public class JTreeUpdater
         }
     }
 
-    public void treeExpanded(TreeExpansionEvent treeExpansionEvent) {
+    @Override
+	public void treeExpanded(TreeExpansionEvent treeExpansionEvent) {
         TreePath expandedPath = treeExpansionEvent.getPath();
 
         // remove all ancestors of eventpath from expandedpaths set.
@@ -79,7 +80,8 @@ public class JTreeUpdater
         expandedTreePaths.add(expandedPath);
     }
 
-    public void treeCollapsed(TreeExpansionEvent treeExpansionEvent) {
+    @Override
+	public void treeCollapsed(TreeExpansionEvent treeExpansionEvent) {
         TreePath collapsedPath = treeExpansionEvent.getPath();
         expandedTreePaths.remove(collapsedPath);
 
@@ -97,7 +99,8 @@ public class JTreeUpdater
         }
     }
 
-    public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
+    @Override
+	public void valueChanged(TreeSelectionEvent treeSelectionEvent) {
         if (this.tree.getSelectionPaths() != null
             && this.tree.getSelectionPaths().length > 0)
         {

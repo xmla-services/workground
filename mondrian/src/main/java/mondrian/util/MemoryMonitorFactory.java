@@ -131,7 +131,8 @@ public final class MemoryMonitorFactory
      *
      * @return class name or null.
      */
-    protected String getClassName() {
+    @Override
+	protected String getClassName() {
         return getThreadLocalClassName();
     }
 
@@ -140,7 +141,8 @@ public final class MemoryMonitorFactory
      *
      * @return <code>MemoryMonitorFactory</code> property name
      */
-    protected StringProperty getStringProperty() {
+    @Override
+	protected StringProperty getStringProperty() {
         return MondrianProperties.instance().MemoryMonitorClass;
     }
 
@@ -160,7 +162,8 @@ public final class MemoryMonitorFactory
      * @throws CreationException if the <code>MemoryMonitor</code> can not be
      * created.
      */
-    protected MemoryMonitor getDefault(
+    @Override
+	protected MemoryMonitor getDefault(
         Class[] parameterTypes,
         Object[] parameterValues)
         throws CreationException

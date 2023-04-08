@@ -44,20 +44,23 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
         ContextArgumentsProvider.dockerWasChanged = true;
     }
 
-    @BeforeEach
+    @Override
+	@BeforeEach
     public void beforeEach() {
         super.beforeEach();
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
     }
 
-    @AfterEach
+    @Override
+	@AfterEach
     public void afterEach() {
         propSaver.reset();
     }
 
 
 
-    protected String getFileName() {
+    @Override
+	protected String getFileName() {
         return "multiple_cols_in_tuple_agg.csv";
     }
 
@@ -289,7 +292,8 @@ public class MultipleColsInTupleAggTest extends AggTableTestCase {
             + "Row #1: 15\n");
     }
 
-    protected String getCubeDescription() {
+    @Override
+	protected String getCubeDescription() {
         return "<Cube name='Fact'>\n"
            + "<Table name='fact'>\n"
            + " <AggName name='test_lp_xxx_fact'>\n"

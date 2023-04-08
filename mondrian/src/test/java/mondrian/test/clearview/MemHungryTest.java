@@ -31,7 +31,8 @@ import mondrian.test.DiffRepository;
 @Disabled //disabled for CI build
 public class MemHungryTest extends ClearViewBase {
 
-    public DiffRepository getDiffRepos() {
+    @Override
+	public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }
 
@@ -39,7 +40,8 @@ public class MemHungryTest extends ClearViewBase {
         return DiffRepository.lookup(MemHungryTest.class);
     }
 
-    @Disabled //disabled for CI build
+    @Override
+	@Disabled //disabled for CI build
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     protected void runTest(TestingContext context) {

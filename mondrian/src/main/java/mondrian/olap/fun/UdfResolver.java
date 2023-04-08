@@ -59,15 +59,18 @@ public class UdfResolver implements Resolver {
         this.udf = factory.create();
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return udf.getName();
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return udf.getDescription();
     }
 
-    public String getSignature() {
+    @Override
+	public String getSignature() {
         Type[] parameterTypes = udf.getParameterTypes();
         int[] parameterCategories = new int[parameterTypes.length];
         for (int i = 0; i < parameterCategories.length; i++) {
@@ -81,11 +84,13 @@ public class UdfResolver implements Resolver {
             parameterCategories);
     }
 
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
         return udf.getSyntax();
     }
 
-    public FunDef getRepresentativeFunDef() {
+    @Override
+	public FunDef getRepresentativeFunDef() {
         Type[] parameterTypes = udf.getParameterTypes();
         int[] parameterCategories = new int[parameterTypes.length];
         for (int i = 0; i < parameterCategories.length; i++) {
@@ -95,7 +100,8 @@ public class UdfResolver implements Resolver {
         return new UdfFunDef(parameterCategories, returnType);
     }
 
-    public FunDef resolve(
+    @Override
+	public FunDef resolve(
         Exp[] args,
         Validator validator,
         List<Conversion> conversions)
@@ -127,11 +133,13 @@ public class UdfResolver implements Resolver {
         return new UdfFunDef(parameterCategories, returnType);
     }
 
-    public boolean requiresExpression(int k) {
+    @Override
+	public boolean requiresExpression(int k) {
         return false;
     }
 
-    public String[] getReservedWords() {
+    @Override
+	public String[] getReservedWords() {
         final String[] reservedWords = udf.getReservedWords();
         return reservedWords == null ? UdfResolver.emptyStringArray : reservedWords;
     }
@@ -151,11 +159,13 @@ public class UdfResolver implements Resolver {
             this.returnType = returnType;
         }
 
-        public Type getResultType(Validator validator, Exp[] args) {
+        @Override
+		public Type getResultType(Validator validator, Exp[] args) {
             return returnType;
         }
 
-        public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+        @Override
+		public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
             final Exp[] args = call.getArgs();
             Calc[] calcs = new Calc[args.length];
             UserDefinedFunction.Argument[] expCalcs =
@@ -211,11 +221,13 @@ public class UdfResolver implements Resolver {
             this.args = args;
         }
 
-        public Calc[] getCalcs() {
+        @Override
+		public Calc[] getCalcs() {
             return calcs;
         }
 
-        public Object evaluate(Evaluator evaluator) {
+        @Override
+		public Object evaluate(Evaluator evaluator) {
             try {
                 return udf.execute(evaluator, args);
             } catch (CellRequestQuantumExceededException e) {
@@ -228,7 +240,8 @@ public class UdfResolver implements Resolver {
             }
         }
 
-        public boolean dependsOn(Hierarchy hierarchy) {
+        @Override
+		public boolean dependsOn(Hierarchy hierarchy) {
             // Be pessimistic. This effectively disables expression caching.
             return true;
         }
@@ -252,7 +265,8 @@ public class UdfResolver implements Resolver {
             this.args = args;
         }
 
-        public TupleList evaluateList(Evaluator evaluator) {
+        @Override
+		public TupleList evaluateList(Evaluator evaluator) {
             final List list = (List) udf.execute(evaluator, args);
 
             // If arity is 1, assume they have returned a list of members.
@@ -324,26 +338,31 @@ public class UdfResolver implements Resolver {
             this.iterCalc = iterCalc;
         }
 
-        public Type getType() {
+        @Override
+		public Type getType() {
             return calc.getType();
         }
 
-        public Object evaluate(Evaluator evaluator) {
+        @Override
+		public Object evaluate(Evaluator evaluator) {
             return adapt(calc.evaluate(evaluator));
         }
 
-        public Object evaluateScalar(Evaluator evaluator) {
+        @Override
+		public Object evaluateScalar(Evaluator evaluator) {
             return scalarCalc.evaluate(evaluator);
         }
 
-        public List evaluateList(Evaluator eval) {
+        @Override
+		public List evaluateList(Evaluator eval) {
             if (listCalc == null) {
                 throw new RuntimeException("Expression is not a set");
             }
             return adaptList(listCalc.evaluateList(eval));
         }
 
-        public Iterable evaluateIterable(Evaluator eval) {
+        @Override
+		public Iterable evaluateIterable(Evaluator eval) {
             if (iterCalc == null) {
                 throw new RuntimeException("Expression is not a set");
             }
@@ -429,7 +448,8 @@ public class UdfResolver implements Resolver {
             assert clazz != null;
         }
 
-        public UserDefinedFunction create() {
+        @Override
+		public UserDefinedFunction create() {
             return Util.createUdf(clazz, name);
         }
     }

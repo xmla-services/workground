@@ -128,7 +128,8 @@ public class CancellationTest {
             return Locus.execute(
                 execution, "CancellationTest",
                 new Locus.Action<TupleList>() {
-                    public TupleList execute() {
+                    @Override
+					public TupleList execute() {
                         return CrossJoinFunDef.mutableCrossJoin(list1, list2);
                     }
                 });
@@ -139,7 +140,8 @@ public class CancellationTest {
             super(dummyFunDef);
         }
 
-        public TupleList nonEmptyList(
+        @Override
+		public TupleList nonEmptyList(
             Evaluator evaluator,
             TupleList list,
             ResolvedFunCall call)

@@ -94,17 +94,21 @@ public abstract class MemberBase
     this.level = null;
   }
 
-  public String getQualifiedName() {
+  @Override
+public String getQualifiedName() {
     return MondrianResource.instance().MdxMemberName.str( getUniqueName() );
   }
 
-  public abstract String getName();
+  @Override
+public abstract String getName();
 
-  public String getUniqueName() {
+  @Override
+public String getUniqueName() {
     return uniqueName;
   }
 
-  public String getCaption() {
+  @Override
+public String getCaption() {
     // if there is a member formatter for the members level,
     //  we will call this interface to provide the display string
     MemberFormatter mf = getLevel().getMemberFormatter();
@@ -119,55 +123,67 @@ public abstract class MemberBase
       : getName();
   }
 
-  public String getParentUniqueName() {
+  @Override
+public String getParentUniqueName() {
     return parentMember == null
       ? null
       : parentMember.getUniqueName();
   }
 
-  public Dimension getDimension() {
+  @Override
+public Dimension getDimension() {
     return level.getDimension();
   }
 
-  public Hierarchy getHierarchy() {
+  @Override
+public Hierarchy getHierarchy() {
     return level.getHierarchy();
   }
 
-  public Level getLevel() {
+  @Override
+public Level getLevel() {
     return level;
   }
 
-  public MemberType getMemberType() {
+  @Override
+public MemberType getMemberType() {
     return MEMBER_TYPE_VALUES[ flags & FLAG_TYPE_MASK ];
   }
 
-  public String getDescription() {
+  @Override
+public String getDescription() {
     return (String) getPropertyValue( Property.DESCRIPTION.name );
   }
 
-  public boolean isMeasure() {
+  @Override
+public boolean isMeasure() {
     return ( flags & FLAG_MEASURE ) != 0;
   }
 
-  public boolean isAll() {
+  @Override
+public boolean isAll() {
     return ( flags & FLAG_ALL ) != 0;
   }
 
-  public boolean isNull() {
+  @Override
+public boolean isNull() {
     return ( flags & FLAG_NULL ) != 0;
   }
 
-  public boolean isCalculated() {
+  @Override
+public boolean isCalculated() {
     return ( flags & FLAG_CALCULATED ) != 0;
   }
 
-  public boolean isEvaluated() {
+  @Override
+public boolean isEvaluated() {
     // should just call isCalculated(), but called in tight loops
     // and too many subclass implementations for jit to inline properly?
     return ( flags & FLAG_CALCULATED ) != 0;
   }
 
-  public OlapElement lookupChild(
+  @Override
+public OlapElement lookupChild(
     SchemaReader schemaReader,
     Id.Segment childName,
     MatchType matchType ) {
@@ -176,12 +192,14 @@ public abstract class MemberBase
   }
 
   // implement Member
-  public Member getParentMember() {
+  @Override
+public Member getParentMember() {
     return parentMember;
   }
 
   // implement Member
-  public boolean isChildOrEqualTo( Member member ) {
+  @Override
+public boolean isChildOrEqualTo( Member member ) {
     // REVIEW: Using uniqueName to calculate ancestry seems inefficient,
     //   because we can't afford to store every member's unique name, so
     //   we want to compute it on the fly
@@ -231,7 +249,8 @@ public abstract class MemberBase
     return isCalculatedInQuery() || memberType == MemberType.FORMULA;
   }
 
-  public int getSolveOrder() {
+  @Override
+public int getSolveOrder() {
     return -1;
   }
 
@@ -242,12 +261,14 @@ public abstract class MemberBase
    *
    * @post (return ! = null) == (isCalculated())
    */
-  public Exp getExpression() {
+  @Override
+public Exp getExpression() {
     return null;
   }
 
   // implement Member
-  public List<Member> getAncestorMembers() {
+  @Override
+public List<Member> getAncestorMembers() {
     final SchemaReader schemaReader =
       getDimension().getSchema().getSchemaReader();
     final ArrayList<Member> ancestorList = new ArrayList<Member>();
@@ -258,38 +279,46 @@ public abstract class MemberBase
   /**
    * Returns the ordinal of this member within its hierarchy. The default implementation returns -1.
    */
-  public int getOrdinal() {
+  @Override
+public int getOrdinal() {
     return -1;
   }
 
   /**
    * Returns the order key of this member among its siblings. The default implementation returns null.
    */
-  public Comparable getOrderKey() {
+  @Override
+public Comparable getOrderKey() {
     return null;
   }
 
-  public boolean isHidden() {
+  @Override
+public boolean isHidden() {
     return false;
   }
 
-  public Member getDataMember() {
+  @Override
+public Member getDataMember() {
     return null;
   }
 
-  public String getPropertyFormattedValue( String propertyName ) {
+  @Override
+public String getPropertyFormattedValue( String propertyName ) {
     return getPropertyValue( propertyName ).toString();
   }
 
-  public boolean isParentChildPhysicalMember() {
+  @Override
+public boolean isParentChildPhysicalMember() {
     return false;
   }
 
-  public boolean isParentChildLeaf() {
+  @Override
+public boolean isParentChildLeaf() {
     return false;
   }
 
-  public boolean isOnSameHierarchyChain( Member otherMember ) {
+  @Override
+public boolean isOnSameHierarchyChain( Member otherMember ) {
     return ( (MemberBase) otherMember ).isOnSameHierarchyChainInternal( this );
   }
 

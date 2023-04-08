@@ -35,17 +35,20 @@ import mondrian.xmla.XmlaRequestCallback;
 public abstract class AuthenticatingXmlaRequestCallback
     implements XmlaRequestCallback
 {
-    public String generateSessionId(Map<String, Object> context) {
+    @Override
+	public String generateSessionId(Map<String, Object> context) {
         // We don't want to override the session ID generation algorithm.
         return null;
     }
 
-    public void init(ServletConfig servletConfig) throws ServletException {
+    @Override
+	public void init(ServletConfig servletConfig) throws ServletException {
         // Nothing to initialize here. Subclasses can override
         // this if they wish.
     }
 
-    public void postAction(
+    @Override
+	public void postAction(
         HttpServletRequest request,
         HttpServletResponse response,
         byte[][] responseSoapParts,
@@ -55,7 +58,8 @@ public abstract class AuthenticatingXmlaRequestCallback
         return;
     }
 
-    public void preAction(
+    @Override
+	public void preAction(
         HttpServletRequest request,
         Element[] requestSoapParts,
         Map<String, Object> context)
@@ -118,7 +122,8 @@ public abstract class AuthenticatingXmlaRequestCallback
                 + reason));
     }
 
-    public boolean processHttpHeader(
+    @Override
+	public boolean processHttpHeader(
         HttpServletRequest request,
         HttpServletResponse response,
         Map<String, Object> context)

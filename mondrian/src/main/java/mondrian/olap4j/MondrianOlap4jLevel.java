@@ -57,16 +57,19 @@ class MondrianOlap4jLevel
         this.level = level;
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         return obj instanceof MondrianOlap4jLevel
             && level.equals(((MondrianOlap4jLevel) obj).level);
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return level.hashCode();
     }
 
-    public int getDepth() {
+    @Override
+	public int getDepth() {
         return level.getDepth() - getDepthOffset();
     }
 
@@ -81,19 +84,23 @@ class MondrianOlap4jLevel
         return accessDetails.getTopLevelDepth();
     }
 
-    public Hierarchy getHierarchy() {
+    @Override
+	public Hierarchy getHierarchy() {
         return new MondrianOlap4jHierarchy(olap4jSchema, level.getHierarchy());
     }
 
-    public Dimension getDimension() {
+    @Override
+	public Dimension getDimension() {
         return new MondrianOlap4jDimension(olap4jSchema, level.getDimension());
     }
 
-    public boolean isCalculated() {
+    @Override
+	public boolean isCalculated() {
         return false;
     }
 
-    public Type getLevelType() {
+    @Override
+	public Type getLevelType() {
         if (level.isAll()) {
             return Type.ALL;
         }
@@ -126,7 +133,8 @@ class MondrianOlap4jLevel
         }
     }
 
-    public NamedList<Property> getProperties() {
+    @Override
+	public NamedList<Property> getProperties() {
         return getProperties(true);
     }
 
@@ -141,7 +149,8 @@ class MondrianOlap4jLevel
      */
     NamedList<Property> getProperties(boolean includeStandard) {
         final NamedList<Property> list = new ArrayNamedListImpl<Property>() {
-            public String getName(Object property) {
+            @Override
+			public String getName(Object property) {
                 return ((Property)property).getName();
             }
         };
@@ -158,7 +167,8 @@ class MondrianOlap4jLevel
         return list;
     }
 
-    public List<Member> getMembers() throws OlapException {
+    @Override
+	public List<Member> getMembers() throws OlapException {
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
         final RolapConnection mondrianConnection =
@@ -167,18 +177,21 @@ class MondrianOlap4jLevel
             mondrianConnection,
             "Reading members of level",
             new Locus.Action<List<Member>>() {
-                public List<Member> execute() {
+                @Override
+				public List<Member> execute() {
                     final mondrian.olap.SchemaReader schemaReader =
                         mondrianConnection.getSchemaReader().withLocus();
                     final List<org.eclipse.daanse.olap.api.model.Member> levelMembers =
                         schemaReader.getLevelMembers(level, true);
                     return new AbstractList<Member>() {
-                        public Member get(int index) {
+                        @Override
+						public Member get(int index) {
                             return olap4jConnection.toOlap4j(
                                 levelMembers.get(index));
                         }
 
-                        public int size() {
+                        @Override
+						public int size() {
                             return levelMembers.size();
                         }
                     };
@@ -186,35 +199,42 @@ class MondrianOlap4jLevel
             });
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return level.getName();
     }
 
-    public String getUniqueName() {
+    @Override
+	public String getUniqueName() {
         return level.getUniqueName();
     }
 
-    public String getCaption() {
+    @Override
+	public String getCaption() {
         return level.getLocalized(
             OlapElement.LocalizedProperty.CAPTION,
             olap4jSchema.getLocale());
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return level.getLocalized(
             OlapElement.LocalizedProperty.DESCRIPTION,
             olap4jSchema.getLocale());
     }
 
-    public int getCardinality() {
+    @Override
+	public int getCardinality() {
         return level.getApproxRowCount();
     }
 
-    public boolean isVisible() {
+    @Override
+	public boolean isVisible() {
         return level.isVisible();
     }
 
-    protected OlapElement getOlapElement() {
+    @Override
+	protected OlapElement getOlapElement() {
         return level;
     }
 }

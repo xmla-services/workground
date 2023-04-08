@@ -2973,15 +2973,18 @@ public class NonEmptyTest extends BatchTestCase {
     RolapNativeRegistry reg = getRegistry( con );
     reg.setListener(
       new Listener()  {
-        @ParameterizedTest
+        @Override
+		@ParameterizedTest
   @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
   public void foundEvaluator( NativeEvent e ) {
         }
 
-        public void foundInCache( TupleEvent e ) {
+        @Override
+		public void foundInCache( TupleEvent e ) {
         }
 
-        public void executingSql( TupleEvent e ) {
+        @Override
+		public void executingSql( TupleEvent e ) {
           fail( "expected caching" );
         }
       } );

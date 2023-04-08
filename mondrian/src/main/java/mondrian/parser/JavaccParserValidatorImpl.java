@@ -43,7 +43,8 @@ public class JavaccParserValidatorImpl implements MdxParserValidator {
         this.factory = factory;
     }
 
-    public QueryPart parseInternal(
+    @Override
+	public QueryPart parseInternal(
         Statement statement,
         String queryString,
         boolean debug,
@@ -65,7 +66,8 @@ public class JavaccParserValidatorImpl implements MdxParserValidator {
         }
     }
 
-    public Exp parseExpression(
+    @Override
+	public Exp parseExpression(
         Statement statement,
         String queryString,
         boolean debug,

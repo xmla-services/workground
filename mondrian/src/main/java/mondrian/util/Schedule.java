@@ -415,7 +415,8 @@ class OnceTimeSchedule implements TimeSchedule {
         this.time = time;
     }
 
-    public Calendar nextOccurrence(Calendar after, boolean strict) {
+    @Override
+	public Calendar nextOccurrence(Calendar after, boolean strict) {
         if (after == null) {
             return time;
         }
@@ -454,7 +455,8 @@ class DailyDateSchedule implements DateSchedule {
             begin == null ? ScheduleUtil.epochDay : begin);
     }
 
-    public Calendar nextOccurrence(Calendar day, boolean strict) {
+    @Override
+	public Calendar nextOccurrence(Calendar day, boolean strict) {
         day = (Calendar) day.clone();
         if (strict) {
             day.add(Calendar.DATE, 1);
@@ -493,7 +495,8 @@ class WeeklyDateSchedule implements DateSchedule {
             "weekly schedule has bad bits set: " + daysOfWeekBitmap);
     }
 
-    public Calendar nextOccurrence(Calendar earliest, boolean strict) {
+    @Override
+	public Calendar nextOccurrence(Calendar earliest, boolean strict) {
         earliest = (Calendar) earliest.clone();
         if (strict) {
             earliest.add(Calendar.DATE, 1);
@@ -542,7 +545,8 @@ class MonthlyByDayDateSchedule implements DateSchedule {
             "monthly schedule has bad bits set: " + daysOfMonthBitmap);
     }
 
-    public Calendar nextOccurrence(Calendar earliest, boolean strict) {
+    @Override
+	public Calendar nextOccurrence(Calendar earliest, boolean strict) {
         earliest = (Calendar) earliest.clone();
         if (strict) {
             earliest.add(Calendar.DATE, 1);
@@ -620,7 +624,8 @@ class MonthlyByWeekDateSchedule implements DateSchedule {
             + weeksOfMonthBitmap);
     }
 
-    public Calendar nextOccurrence(Calendar earliest, boolean strict) {
+    @Override
+	public Calendar nextOccurrence(Calendar earliest, boolean strict) {
         earliest = (Calendar) earliest.clone();
         if (strict) {
             earliest.add(Calendar.DATE, 1);

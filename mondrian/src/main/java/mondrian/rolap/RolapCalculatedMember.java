@@ -57,12 +57,14 @@ public class RolapCalculatedMember extends RolapMemberBase {
     }
 
     // override RolapMember
-    public int getSolveOrder() {
+    @Override
+	public int getSolveOrder() {
         final Number solveOrder = formula.getSolveOrder();
         return solveOrder == null ? 0 : solveOrder.intValue();
     }
 
-    public Object getPropertyValue(String propertyName, boolean matchCase) {
+    @Override
+	public Object getPropertyValue(String propertyName, boolean matchCase) {
         if (Util.equal(propertyName, Property.FORMULA.name, matchCase)) {
             return formula;
         } else if (Util.equal(
@@ -76,18 +78,21 @@ public class RolapCalculatedMember extends RolapMemberBase {
         }
     }
 
-    protected boolean computeCalculated(final MemberType memberType) {
+    @Override
+	protected boolean computeCalculated(final MemberType memberType) {
         return true;
     }
 
-    public boolean isCalculatedInQuery() {
+    @Override
+	public boolean isCalculatedInQuery() {
         final String memberScope =
             (String) getPropertyValue(Property.MEMBER_SCOPE.name);
         return memberScope == null
             || memberScope.equals("QUERY");
     }
 
-    public Exp getExpression() {
+    @Override
+	public Exp getExpression() {
         return formula.getExpression();
     }
 

@@ -241,11 +241,13 @@ public class RolapLevel extends LevelBase {
         this.hideMemberCondition = hideMemberCondition;
     }
 
-    public RolapHierarchy getHierarchy() {
+    @Override
+	public RolapHierarchy getHierarchy() {
         return (RolapHierarchy) hierarchy;
     }
 
-    public Map<String, Object> getMetadata() {
+    @Override
+	public Map<String, Object> getMetadata() {
         return metadata;
     }
 
@@ -261,7 +263,8 @@ public class RolapLevel extends LevelBase {
         }
     }
 
-    protected Logger getLogger() {
+    @Override
+	protected Logger getLogger() {
         return LOGGER;
     }
 
@@ -480,11 +483,13 @@ public class RolapLevel extends LevelBase {
         }
     }
 
-    public final boolean isAll() {
+    @Override
+	public final boolean isAll() {
         return (flags & FLAG_ALL) != 0;
     }
 
-    public boolean areMembersUnique() {
+    @Override
+	public boolean areMembersUnique() {
         return (depth == 0) || (depth == 1) && hierarchy.hasAll();
     }
 
@@ -492,15 +497,18 @@ public class RolapLevel extends LevelBase {
         return ExpressionUtil.getTableAlias(keyExp);
     }
 
-    public RolapProperty[] getProperties() {
+    @Override
+	public RolapProperty[] getProperties() {
         return properties;
     }
 
-    public Property[] getInheritedProperties() {
+    @Override
+	public Property[] getInheritedProperties() {
         return inheritedProperties;
     }
 
-    public int getApproxRowCount() {
+    @Override
+	public int getApproxRowCount() {
         return approxRowCount;
     }
 
@@ -547,7 +555,8 @@ public class RolapLevel extends LevelBase {
         return lookupChild(schemaReader, name, MatchType.EXACT);
     }
 
-    public OlapElement lookupChild(
+    @Override
+	public OlapElement lookupChild(
         SchemaReader schemaReader, Id.Segment name, MatchType matchType)
     {
         if (name instanceof Id.KeySegment) {
@@ -569,10 +578,12 @@ public class RolapLevel extends LevelBase {
                         .append(" values, whereas level's key has ").append(keyExps.size())
                         .append(" columns ")
                         .append(new AbstractList<String>() {
-                            public String get(int index) {
+                            @Override
+							public String get(int index) {
                                 return genericExpression(keyExps.get(index));
                             }
-                            public int size() {
+                            @Override
+							public int size() {
                             return keyExps.size();
                         }})
                         .append(".").toString());

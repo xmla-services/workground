@@ -59,7 +59,8 @@ class DenseIntSegmentBody extends AbstractSegmentBody {
         return nullValues;
     }
 
-    protected int getSize() {
+    @Override
+	protected int getSize() {
         return values.length;
     }
 
@@ -68,7 +69,8 @@ class DenseIntSegmentBody extends AbstractSegmentBody {
         return values.length - nullValues.cardinality();
     }
 
-    protected Object getObject(int i) {
+    @Override
+	protected Object getObject(int i) {
         int value = values[i];
         if (value == 0 && nullValues.get(i)) {
             return null;

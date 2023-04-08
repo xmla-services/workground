@@ -580,7 +580,8 @@ public class CmdRunner {
             return runQuery(
                 queryString,
                 new Function<CellSet,String>() {
-                    public String apply(CellSet param) {
+                    @Override
+					public String apply(CellSet param) {
                         StringWriter stringWriter = new StringWriter();
                         PrintWriter printWriter = new PrintWriter(stringWriter);
                         new RectangularCellSetFormatter(false)

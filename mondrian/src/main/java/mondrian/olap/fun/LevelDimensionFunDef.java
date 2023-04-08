@@ -35,12 +35,14 @@ class LevelDimensionFunDef extends FunDefBase {
             "Returns the dimension that contains a specified level.", "pdl");
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
     {
         final LevelCalc levelCalc =
             compiler.compileLevel(call.getArg(0));
         return new AbstractDimensionCalc(call.getFunName(),call.getType(), new Calc[] {levelCalc}) {
-            public Dimension evaluateDimension(Evaluator evaluator) {
+            @Override
+			public Dimension evaluateDimension(Evaluator evaluator) {
                 Level level =  levelCalc.evaluateLevel(evaluator);
                 return level.getDimension();
             }

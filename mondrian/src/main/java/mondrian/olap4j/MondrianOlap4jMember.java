@@ -57,20 +57,24 @@ public class MondrianOlap4jMember
         this.member = mondrianMember;
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         return obj instanceof MondrianOlap4jMember
             && member.equals(((MondrianOlap4jMember) obj).member);
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return member.hashCode();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return getUniqueName();
     }
 
-    public NamedList<MondrianOlap4jMember> getChildMembers()
+    @Override
+	public NamedList<MondrianOlap4jMember> getChildMembers()
         throws OlapException
     {
         final RolapConnection conn =
@@ -81,29 +85,34 @@ public class MondrianOlap4jMember
                 conn,
                 "MondrianOlap4jMember.getChildMembers",
                 new Locus.Action<List<org.eclipse.daanse.olap.api.model.Member>>() {
-                    public List<org.eclipse.daanse.olap.api.model.Member> execute() {
+                    @Override
+					public List<org.eclipse.daanse.olap.api.model.Member> execute() {
                         return
                             conn.getSchemaReader()
                                 .getMemberChildren(member);
                     }
                 });
         return new AbstractNamedList<MondrianOlap4jMember>() {
-            public String getName(Object member) {
+            @Override
+			public String getName(Object member) {
                 return ((MondrianOlap4jMember)member).getName();
             }
 
-            public MondrianOlap4jMember get(int index) {
+            @Override
+			public MondrianOlap4jMember get(int index) {
                 return new MondrianOlap4jMember(
                     olap4jSchema, children.get(index));
             }
 
-            public int size() {
+            @Override
+			public int size() {
                 return children.size();
             }
         };
     }
 
-    public int getChildMemberCount() throws OlapException {
+    @Override
+	public int getChildMemberCount() throws OlapException {
         final RolapConnection conn =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData
                 .olap4jConnection.getMondrianConnection();
@@ -112,7 +121,8 @@ public class MondrianOlap4jMember
                 conn,
                 "MondrianOlap4jMember.getChildMemberCount",
                 new Locus.Action<Integer>() {
-                    public Integer execute() {
+                    @Override
+					public Integer execute() {
                         return
                             conn.getSchemaReader()
                                 .getMemberChildren(member).size();
@@ -120,7 +130,8 @@ public class MondrianOlap4jMember
                 });
     }
 
-    public MondrianOlap4jMember getParentMember() {
+    @Override
+	public MondrianOlap4jMember getParentMember() {
         final org.eclipse.daanse.olap.api.model.Member parentMember = member.getParentMember();
         if (parentMember == null) {
             return null;
@@ -133,7 +144,8 @@ public class MondrianOlap4jMember
                 conn,
                 "MondrianOlap4jMember.getParentMember",
                 new Locus.Action<Boolean>() {
-                    public Boolean execute() {
+                    @Override
+					public Boolean execute() {
                         return
                             conn.getSchemaReader()
                                 .isVisible(parentMember);
@@ -145,45 +157,55 @@ public class MondrianOlap4jMember
         return new MondrianOlap4jMember(olap4jSchema, parentMember);
     }
 
-    public Level getLevel() {
+    @Override
+	public Level getLevel() {
         return new MondrianOlap4jLevel(olap4jSchema, member.getLevel());
     }
 
-    public Hierarchy getHierarchy() {
+    @Override
+	public Hierarchy getHierarchy() {
         return new MondrianOlap4jHierarchy(
             olap4jSchema, member.getHierarchy());
     }
 
-    public Dimension getDimension() {
+    @Override
+	public Dimension getDimension() {
         return new MondrianOlap4jDimension(
             olap4jSchema, member.getDimension());
     }
 
-    public Type getMemberType() {
+    @Override
+	public Type getMemberType() {
         return Type.valueOf(member.getMemberType().name());
     }
 
-    public boolean isAll() {
+    @Override
+	public boolean isAll() {
         return member.isAll();
     }
 
-    public boolean isChildOrEqualTo(Member member) {
+    @Override
+	public boolean isChildOrEqualTo(Member member) {
         throw new UnsupportedOperationException();
     }
 
-    public boolean isCalculated() {
+    @Override
+	public boolean isCalculated() {
         return getMemberType() == Type.FORMULA;
     }
 
-    public int getSolveOrder() {
+    @Override
+	public int getSolveOrder() {
         return member.getSolveOrder();
     }
 
-    public ParseTreeNode getExpression() {
+    @Override
+	public ParseTreeNode getExpression() {
         throw new UnsupportedOperationException();
     }
 
-    public List<Member> getAncestorMembers() {
+    @Override
+	public List<Member> getAncestorMembers() {
         final List<Member> list = new ArrayList<Member>();
         MondrianOlap4jMember m = getParentMember();
         while (m != null) {
@@ -193,44 +215,53 @@ public class MondrianOlap4jMember
         return list;
     }
 
-    public boolean isCalculatedInQuery() {
+    @Override
+	public boolean isCalculatedInQuery() {
         return member.isCalculatedInQuery();
     }
 
-    public Object getPropertyValue(Property property) {
+    @Override
+	public Object getPropertyValue(Property property) {
         return member.getPropertyValue(property.getName());
     }
 
-    public String getPropertyFormattedValue(Property property) {
+    @Override
+	public String getPropertyFormattedValue(Property property) {
         return member.getPropertyFormattedValue(property.getName());
     }
 
-    public void setProperty(Property property, Object value)
+    @Override
+	public void setProperty(Property property, Object value)
         throws OlapException
     {
         member.setProperty(property.getName(), value);
     }
 
-    public NamedList<Property> getProperties() {
+    @Override
+	public NamedList<Property> getProperties() {
         return getLevel().getProperties();
     }
 
-    public int getOrdinal() {
+    @Override
+	public int getOrdinal() {
         final Number ordinal =
             (Number) member.getPropertyValue(
                 Property.StandardMemberProperty.MEMBER_ORDINAL.getName());
         return ordinal.intValue();
     }
 
-    public boolean isHidden() {
+    @Override
+	public boolean isHidden() {
         return member.isHidden();
     }
 
-    public int getDepth() {
+    @Override
+	public int getDepth() {
         return member.getDepth();
     }
 
-    public Member getDataMember() {
+    @Override
+	public Member getDataMember() {
         final org.eclipse.daanse.olap.api.model.Member dataMember = member.getDataMember();
         if (dataMember == null) {
             return null;
@@ -238,28 +269,34 @@ public class MondrianOlap4jMember
         return new MondrianOlap4jMember(olap4jSchema, dataMember);
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return member.getName();
     }
 
-    public String getUniqueName() {
+    @Override
+	public String getUniqueName() {
         return member.getUniqueName();
     }
 
-    public String getCaption() {
+    @Override
+	public String getCaption() {
         return member.getCaption();
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return member.getDescription();
     }
 
-    public boolean isVisible() {
+    @Override
+	public boolean isVisible() {
         return (Boolean) member.getPropertyValue(
             mondrian.olap.Property.VISIBLE.getName());
     }
 
-    protected OlapElement getOlapElement() {
+    @Override
+	protected OlapElement getOlapElement() {
         return member;
     }
 

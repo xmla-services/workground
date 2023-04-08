@@ -188,7 +188,8 @@ public class MemberCacheHelperTest {
             // here's a workaround.
             when(member.compareTo(any(RolapMember.class))).thenAnswer(
                 new Answer<Object>() {
-                    public Object answer(InvocationOnMock invocation)
+                    @Override
+					public Object answer(InvocationOnMock invocation)
                         throws Throwable
                     {
                         return  ((RolapMember)invocation.getMock()).getName()

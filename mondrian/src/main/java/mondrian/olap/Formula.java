@@ -94,7 +94,8 @@ public class Formula extends QueryPart {
         assert !(isMember && mdxSet != null);
     }
 
-    public Object clone() {
+    @Override
+	public Object clone() {
         return new Formula(
             isMember,
             id,
@@ -292,7 +293,8 @@ public class Formula extends QueryPart {
         }
     }
 
-    public Object[] getChildren() {
+    @Override
+	public Object[] getChildren() {
         Object[] children = new Object[1 + memberProperties.length];
         children[0] = exp;
         System.arraycopy(
@@ -301,7 +303,8 @@ public class Formula extends QueryPart {
         return children;
     }
 
-    public void unparse(PrintWriter pw)
+    @Override
+	public void unparse(PrintWriter pw)
     {
         if (isMember) {
             pw.print("member ");
@@ -572,7 +575,8 @@ public class Formula extends QueryPart {
             this.validator = validator;
         }
 
-        public Object visit(MemberExpr memberExpr) {
+        @Override
+		public Object visit(MemberExpr memberExpr) {
             Member member = memberExpr.getMember();
             returnFormula(member);
             if (member.isCalculated()

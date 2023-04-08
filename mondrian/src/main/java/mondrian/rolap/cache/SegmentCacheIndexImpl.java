@@ -117,7 +117,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
             request.getCompoundPredicateStrings());
     }
 
-    public List<SegmentHeader> locate(
+    @Override
+	public List<SegmentHeader> locate(
         String schemaName,
         ByteString schemaChecksum,
         String cubeName,
@@ -187,7 +188,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         return list;
     }
 
-    public void add(
+    @Override
+	public void add(
         SegmentHeader header,
         SegmentBuilder.SegmentConverter converter,
         boolean loading)
@@ -250,7 +252,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         }
     }
 
-    public void update(
+    @Override
+	public void update(
         SegmentHeader oldHeader,
         SegmentHeader newHeader)
     {
@@ -281,7 +284,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         fuzzyFactInfo.headerList.add(newHeader);
     }
 
-    public void loadSucceeded(SegmentHeader header, SegmentBody body) {
+    @Override
+	public void loadSucceeded(SegmentHeader header, SegmentBody body) {
         checkThread();
 
         final HeaderInfo headerInfo = headerMap.get(header);
@@ -304,7 +308,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         headerInfo.clients.clear();
     }
 
-    public void loadFailed(SegmentHeader header, Throwable throwable) {
+    @Override
+	public void loadFailed(SegmentHeader header, Throwable throwable) {
         checkThread();
 
         final HeaderInfo headerInfo = headerMap.get(header);
@@ -321,7 +326,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         headerInfo.clients.clear();
     }
 
-    public void remove(SegmentHeader header) {
+    @Override
+	public void remove(SegmentHeader header) {
         checkThread();
 
         if (LOGGER.isTraceEnabled()) {
@@ -432,7 +438,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         return true;
     }
 
-    public List<SegmentHeader> intersectRegion(
+    @Override
+	public List<SegmentHeader> intersectRegion(
         String schemaName,
         ByteString schemaChecksum,
         String cubeName,
@@ -504,7 +511,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         return false;
     }
 
-    public void printCacheState(PrintWriter pw) {
+    @Override
+	public void printCacheState(PrintWriter pw) {
         checkThread();
         final List<List<SegmentHeader>> values =
             new ArrayList<List<SegmentHeader>>(
@@ -512,7 +520,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         Collections.sort(
             values,
             new Comparator<List<SegmentHeader>>() {
-                public int compare(
+                @Override
+				public int compare(
                     List<SegmentHeader> o1,
                     List<SegmentHeader> o2)
                 {
@@ -532,7 +541,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
             Collections.sort(
                 headerList,
                 new Comparator<SegmentHeader>() {
-                    public int compare(SegmentHeader o1, SegmentHeader o2) {
+                    @Override
+					public int compare(SegmentHeader o1, SegmentHeader o2) {
                         return o1.getUniqueID().compareTo(o2.getUniqueID());
                     }
                 });
@@ -542,7 +552,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         }
     }
 
-    public Future<SegmentBody> getFuture(Execution exec, SegmentHeader header) {
+    @Override
+	public Future<SegmentBody> getFuture(Execution exec, SegmentHeader header) {
         checkThread();
         HeaderInfo hi = headerMap.get(header);
         if (!hi.clients.contains(exec)) {
@@ -551,16 +562,19 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         return hi.slot;
     }
 
-    public void linkSqlStatement(SegmentHeader header, Statement stmt) {
+    @Override
+	public void linkSqlStatement(SegmentHeader header, Statement stmt) {
         checkThread();
         headerMap.get(header).stmt = stmt;
     }
 
-    public boolean contains(SegmentHeader header) {
+    @Override
+	public boolean contains(SegmentHeader header) {
         return headerMap.containsKey(header);
     }
 
-    public void cancel(Execution exec) {
+    @Override
+	public void cancel(Execution exec) {
         checkThread();
         List<SegmentHeader> toRemove = new ArrayList<SegmentHeader>();
         for (Entry<SegmentHeader, HeaderInfo> entry : headerMap.entrySet()) {
@@ -593,7 +607,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         }
     }
 
-    public SegmentBuilder.SegmentConverter getConverter(
+    @Override
+	public SegmentBuilder.SegmentConverter getConverter(
         String schemaName,
         ByteString schemaChecksum,
         String cubeName,
@@ -617,7 +632,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         return factInfo.converter;
     }
 
-    public void setConverter(
+    @Override
+	public void setConverter(
         String schemaName,
         ByteString schemaChecksum,
         String cubeName,
@@ -724,7 +740,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
             measureName);
     }
 
-    public List<List<SegmentHeader>> findRollupCandidates(
+    @Override
+	public List<List<SegmentHeader>> findRollupCandidates(
         String schemaName,
         ByteString schemaChecksum,
         String cubeName,
@@ -1041,7 +1058,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
     private static class FactInfo {
         private static final PartiallyOrderedSet.Ordering<BitKey> ORDERING =
             new PartiallyOrderedSet.Ordering<BitKey>() {
-                public boolean lessThan(BitKey e1, BitKey e2) {
+                @Override
+				public boolean lessThan(BitKey e1, BitKey e2) {
                     return e2.isSuperSetOf(e1);
                 }
             };

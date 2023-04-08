@@ -63,7 +63,8 @@ public record AxisR(int ordinal,
         return axis == SLICER;
     }
 
-    public String name() {
+    @Override
+	public String name() {
 
         if (this.ordinal == -2) {
             return "None";

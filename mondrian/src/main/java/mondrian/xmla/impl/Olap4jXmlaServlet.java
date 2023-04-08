@@ -255,7 +255,8 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
             this.discoverDatasourcesResponse = discoverDatasourcesResponse;
         }
 
-        public OlapConnection getConnection(
+        @Override
+		public OlapConnection getConnection(
             String catalog,
             String schema,
             String roleName,
@@ -323,7 +324,8 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
             return createDelegatingOlapConnection(connection, olapConnection);
         }
 
-        public Map<String, Object> getPreConfiguredDiscoverDatasourcesResponse()
+        @Override
+		public Map<String, Object> getPreConfiguredDiscoverDatasourcesResponse()
         {
             return discoverDatasourcesResponse;
         }
@@ -412,7 +414,8 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
             olapConnection.getClass().getClassLoader(),
             new Class[] {OlapConnection.class},
             new InvocationHandler() {
-                public Object invoke(
+                @Override
+				public Object invoke(
                     Object proxy,
                     Method method,
                     Object[] args)

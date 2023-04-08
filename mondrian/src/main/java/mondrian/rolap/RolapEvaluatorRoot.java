@@ -82,7 +82,8 @@ class RolapEvaluatorRoot {
    *          statement
    * @deprecated
    */
-  public RolapEvaluatorRoot( Statement statement ) {
+  @Deprecated
+public RolapEvaluatorRoot( Statement statement ) {
     this( statement, null );
   }
 
@@ -170,7 +171,8 @@ class RolapEvaluatorRoot {
       this.resultStyle = resultStyle;
     }
 
-    public boolean equals( Object other ) {
+    @Override
+	public boolean equals( Object other ) {
       if ( this == other ) {
         return true;
       }
@@ -182,7 +184,8 @@ class RolapEvaluatorRoot {
           otherKey.exp );
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
       if ( hashCode != Integer.MIN_VALUE ) {
         return hashCode;
       } else {

@@ -157,7 +157,8 @@ public class SegmentLoader {
       this.compoundPredicateList = compoundPredicateList;
     }
 
-    public Map<Segment, SegmentWithData> call() throws Exception {
+    @Override
+	public Map<Segment, SegmentWithData> call() throws Exception {
       mdc.setContextMap();
       Locus.push( locus );
       try {
@@ -362,11 +363,13 @@ public class SegmentLoader {
         final SegmentHeader header = segmentWithData.getHeader();
         final SegmentBody body =
             segmentWithData.getData().createSegmentBody( new AbstractList<Pair<SortedSet<Comparable>, Boolean>>() {
-              public Pair<SortedSet<Comparable>, Boolean> get( int index ) {
+              @Override
+			public Pair<SortedSet<Comparable>, Boolean> get( int index ) {
                 return segmentWithData.axes[index].getValuesAndIndicator();
               }
 
-              public int size() {
+              @Override
+			public int size() {
                 return segmentWithData.axes.length;
               }
             } );
@@ -460,9 +463,11 @@ public class SegmentLoader {
     // in the index. We don't want to cancel SQL statements that are shared
     // across threads unless it is safe.
     final Consumer<Statement>  callbackWithCaching = new Consumer<Statement> () {
-      public void accept( final Statement stmt ) {
+      @Override
+	public void accept( final Statement stmt ) {
         cacheMgr.execute( new SegmentCacheManager.Command<Void>() {
-          public Void call() throws Exception {
+          @Override
+		public Void call() throws Exception {
             boolean atLeastOneActive = false;
             for ( Segment seg : groupingSetsList.getDefaultSegments() ) {
               final SegmentCacheIndex index = cacheMgr.getIndexRegistry().getIndex( seg.star );
@@ -484,7 +489,8 @@ public class SegmentLoader {
             return null;
           }
 
-          public Locus getLocus() {
+          @Override
+		public Locus getLocus() {
             return locus;
           }
         } );
@@ -494,7 +500,8 @@ public class SegmentLoader {
     // When using no cache, we register the SQL statement directly
     // with the execution instance for cleanup.
     final Consumer<Statement> callbackNoCaching = new Consumer<Statement>() {
-        public void accept(final Statement stmt) {
+        @Override
+		public void accept(final Statement stmt) {
             locus.execution.registerStatement(locus, stmt);
         }
     };
@@ -817,11 +824,13 @@ public class SegmentLoader {
 
     abstract mondrian.spi.SegmentColumn getHeader();
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
       return getHeader().hashCode();
     }
 
-    public boolean equals( Object obj ) {
+    @Override
+	public boolean equals( Object obj ) {
       return getHeader().equals( obj );
     }
   }
@@ -900,11 +909,13 @@ public class SegmentLoader {
 
     public List<BestFitColumnType> getTypes() {
       return new AbstractList<BestFitColumnType>() {
-        public BestFitColumnType get( int index ) {
+        @Override
+		public BestFitColumnType get( int index ) {
           return columns[index].type;
         }
 
-        public int size() {
+        @Override
+		public int size() {
           return columns.length;
         }
       };
@@ -1052,27 +1063,33 @@ public class SegmentLoader {
         objects = new Object[size];
       }
 
-      protected int getCapacity() {
+      @Override
+	protected int getCapacity() {
         return objects.length;
       }
 
-      public boolean isNull( int row ) {
+      @Override
+	public boolean isNull( int row ) {
         return objects[row] == null;
       }
 
-      public void resize( int newSize ) {
+      @Override
+	public void resize( int newSize ) {
         objects = Util.copyOf( objects, newSize );
       }
 
-      public void populateFrom( int row, ResultSet resultSet ) throws SQLException {
+      @Override
+	public void populateFrom( int row, ResultSet resultSet ) throws SQLException {
         objects[row] = resultSet.getObject( ordinal + 1 );
       }
 
-      public void setObject( int row, Object value ) {
+      @Override
+	public void setObject( int row, Object value ) {
         objects[row] = value;
       }
 
-      public Object getObject( int row ) {
+      @Override
+	public Object getObject( int row ) {
         return objects[row];
       }
     }
@@ -1084,7 +1101,8 @@ public class SegmentLoader {
         super( ordinal, type );
       }
 
-      public void setNull( int row, boolean b ) {
+      @Override
+	public void setNull( int row, boolean b ) {
         getNullIndicators().set( row, b );
       }
 
@@ -1104,34 +1122,41 @@ public class SegmentLoader {
         ints = new int[size];
       }
 
-      public void resize( int newSize ) {
+      @Override
+	public void resize( int newSize ) {
         ints = Util.copyOf( ints, newSize );
       }
 
-      public void populateFrom( int row, ResultSet resultSet ) throws SQLException {
+      @Override
+	public void populateFrom( int row, ResultSet resultSet ) throws SQLException {
         int i = ints[row] = resultSet.getInt( ordinal + 1 );
         if ( i == 0 ) {
           getNullIndicators().set( row, resultSet.wasNull() );
         }
       }
 
-      public void setInt( int row, int value ) {
+      @Override
+	public void setInt( int row, int value ) {
         ints[row] = value;
       }
 
-      public int getInt( int row ) {
+      @Override
+	public int getInt( int row ) {
         return ints[row];
       }
 
-      public boolean isNull( int row ) {
+      @Override
+	public boolean isNull( int row ) {
         return ints[row] == 0 && nullIndicators != null && nullIndicators.get( row );
       }
 
-      protected int getCapacity() {
+      @Override
+	protected int getCapacity() {
         return ints.length;
       }
 
-      public Integer getObject( int row ) {
+      @Override
+	public Integer getObject( int row ) {
         return isNull( row ) ? null : ints[row];
       }
     }
@@ -1144,18 +1169,21 @@ public class SegmentLoader {
         longs = new long[size];
       }
 
-      public void resize( int newSize ) {
+      @Override
+	public void resize( int newSize ) {
         longs = Util.copyOf( longs, newSize );
       }
 
-      public void populateFrom( int row, ResultSet resultSet ) throws SQLException {
+      @Override
+	public void populateFrom( int row, ResultSet resultSet ) throws SQLException {
         long i = longs[row] = resultSet.getLong( ordinal + 1 );
         if ( i == 0 ) {
           getNullIndicators().set( row, resultSet.wasNull() );
         }
       }
 
-      public void setLong( int row, long value ) {
+      @Override
+	public void setLong( int row, long value ) {
         longs[row] = value;
       }
 
@@ -1163,15 +1191,18 @@ public class SegmentLoader {
         return longs[row];
       }
 
-      public boolean isNull( int row ) {
+      @Override
+	public boolean isNull( int row ) {
         return longs[row] == 0 && nullIndicators != null && nullIndicators.get( row );
       }
 
-      protected int getCapacity() {
+      @Override
+	protected int getCapacity() {
         return longs.length;
       }
 
-      public Long getObject( int row ) {
+      @Override
+	public Long getObject( int row ) {
         return isNull( row ) ? null : longs[row];
       }
     }
@@ -1184,34 +1215,41 @@ public class SegmentLoader {
         doubles = new double[size];
       }
 
-      public void resize( int newSize ) {
+      @Override
+	public void resize( int newSize ) {
         doubles = Util.copyOf( doubles, newSize );
       }
 
-      public void populateFrom( int row, ResultSet resultSet ) throws SQLException {
+      @Override
+	public void populateFrom( int row, ResultSet resultSet ) throws SQLException {
         double d = doubles[row] = resultSet.getDouble( ordinal + 1 );
         if ( d == 0d ) {
           getNullIndicators().set( row, resultSet.wasNull() );
         }
       }
 
-      public void setDouble( int row, double value ) {
+      @Override
+	public void setDouble( int row, double value ) {
         doubles[row] = value;
       }
 
-      public double getDouble( int row ) {
+      @Override
+	public double getDouble( int row ) {
         return doubles[row];
       }
 
-      protected int getCapacity() {
+      @Override
+	protected int getCapacity() {
         return doubles.length;
       }
 
-      public boolean isNull( int row ) {
+      @Override
+	public boolean isNull( int row ) {
         return doubles[row] == 0d && nullIndicators != null && nullIndicators.get( row );
       }
 
-      public Double getObject( int row ) {
+      @Override
+	public Double getObject( int row ) {
         return isNull( row ) ? null : doubles[row];
       }
     }
@@ -1227,7 +1265,8 @@ public class SegmentLoader {
       assert Comparable.class.isAssignableFrom( Boolean.class );
     }
 
-    public int compare( Object o1, Object o2 ) {
+    @Override
+	public int compare( Object o1, Object o2 ) {
       if ( o1 instanceof Boolean ) {
         boolean b1 = (Boolean) o1;
         if ( o2 instanceof Boolean ) {

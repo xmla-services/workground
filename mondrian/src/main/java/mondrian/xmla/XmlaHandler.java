@@ -1908,11 +1908,13 @@ public class XmlaHandler {
             }
         }
 
-        public void close() {
+        @Override
+		public void close() {
             // no resources to close
         }
 
-        public void unparse(SaxWriter writer) throws SAXException {
+        @Override
+		public void unparse(SaxWriter writer) throws SAXException {
             // write total count row if enabled
             if (totalCount >= 0) {
                 String countStr = Integer.toString(totalCount);
@@ -1957,7 +1959,8 @@ public class XmlaHandler {
          *
          * @param writer Writer
          */
-        public void metadata(SaxWriter writer) {
+        @Override
+		public void metadata(SaxWriter writer) {
             writer.startElement(
                 "xsd:schema",
                 "xmlns:xsd", NS_XSD,
@@ -2237,7 +2240,8 @@ public class XmlaHandler {
             this.cellSet = cellSet;
         }
 
-        public void close() throws SQLException {
+        @Override
+		public void close() throws SQLException {
             cellSet.getStatement().getConnection().close();
         }
 
@@ -2246,35 +2250,43 @@ public class XmlaHandler {
             final String name)
         {
             return new Property() {
-                public Datatype getDatatype() {
+                @Override
+				public Datatype getDatatype() {
                     return property.getDatatype();
                 }
 
-                public Set<TypeFlag> getType() {
+                @Override
+				public Set<TypeFlag> getType() {
                     return property.getType();
                 }
 
-                public ContentType getContentType() {
+                @Override
+				public ContentType getContentType() {
                     return property.getContentType();
                 }
 
-                public String getName() {
+                @Override
+				public String getName() {
                     return name;
                 }
 
-                public String getUniqueName() {
+                @Override
+				public String getUniqueName() {
                     return property.getUniqueName();
                 }
 
-                public String getCaption() {
+                @Override
+				public String getCaption() {
                     return property.getCaption();
                 }
 
-                public String getDescription() {
+                @Override
+				public String getDescription() {
                     return property.getDescription();
                 }
 
-                public boolean isVisible() {
+                @Override
+				public boolean isVisible() {
                     return property.isVisible();
                 }
             };
@@ -2324,7 +2336,8 @@ public class XmlaHandler {
             }
         }
 
-        public void unparse(SaxWriter writer)
+        @Override
+		public void unparse(SaxWriter writer)
             throws SAXException, OlapException, SQLException
         {
             olapInfo(writer);
@@ -2332,7 +2345,8 @@ public class XmlaHandler {
             cellData(writer);
         }
 
-        public void metadata(SaxWriter writer) {
+        @Override
+		public void metadata(SaxWriter writer) {
             writer.verbatim(MD_DATA_SET_XML_SCHEMA);
         }
 
@@ -2732,7 +2746,8 @@ public class XmlaHandler {
                             rolapConnection,
                             "MondrianOlap4jMember.getChildMembers",
                             new Locus.Action<List<org.eclipse.daanse.olap.api.model.Member>>() {
-                                public List<org.eclipse.daanse.olap.api.model.Member> execute() {
+                                @Override
+								public List<org.eclipse.daanse.olap.api.model.Member> execute() {
                                     return
                                             statement.getQuery().getSchemaReader(true).getMemberChildren(members);
                                 }
@@ -3058,7 +3073,8 @@ public class XmlaHandler {
             super(name);
         }
 
-        public void metadata(SaxWriter writer) {
+        @Override
+		public void metadata(SaxWriter writer) {
             writer.element(
                 "xsd:element",
                 "minOccurs", 0,
@@ -3066,7 +3082,8 @@ public class XmlaHandler {
                 "sql:field", name);
         }
 
-        public void write(
+        @Override
+		public void write(
             SaxWriter writer, Cell cell, Member[] members)
         {
             if (cell.isNull()) {
@@ -3115,7 +3132,8 @@ public class XmlaHandler {
             this.memberOrdinal = memberOrdinal;
         }
 
-        public void metadata(SaxWriter writer) {
+        @Override
+		public void metadata(SaxWriter writer) {
             writer.element(
                 "xsd:element",
                 "minOccurs", 0,
@@ -3124,7 +3142,8 @@ public class XmlaHandler {
                 "type", XSD_STRING);
         }
 
-        public void write(
+        @Override
+		public void write(
             SaxWriter writer, Cell cell, Member[] members) throws OlapException
         {
             Member member = members[memberOrdinal];
@@ -3260,7 +3279,8 @@ public class XmlaHandler {
                     new ColumnHandler[columnHandlerList.size()]);
         }
 
-        public void metadata(SaxWriter writer) {
+        @Override
+		public void metadata(SaxWriter writer) {
             writer.startElement(
                 "xsd:schema",
                 "xmlns:xsd", NS_XSD,
@@ -3315,7 +3335,8 @@ public class XmlaHandler {
             writer.endElement(); // xsd:schema
         }
 
-        public void unparse(SaxWriter writer)
+        @Override
+		public void unparse(SaxWriter writer)
             throws SAXException, OlapException
         {
             if (empty) {
@@ -3699,11 +3720,13 @@ public class XmlaHandler {
             this.ints = ints;
         }
 
-        public Integer get(int index) {
+        @Override
+		public Integer get(int index) {
             return ints[index];
         }
 
-        public int size() {
+        @Override
+		public int size() {
             return ints.length;
         }
     }
@@ -3885,7 +3908,8 @@ public class XmlaHandler {
      * Connections based on mondrian's olap4j driver can do better.
      */
     private static class XmlaExtraImpl implements XmlaExtra {
-        public ResultSet executeDrillthrough(
+        @Override
+		public ResultSet executeDrillthrough(
             OlapStatement olapStatement,
             String mdx,
             boolean advanced,
@@ -3895,19 +3919,23 @@ public class XmlaHandler {
             return olapStatement.executeQuery(mdx);
         }
 
-        public void setPreferList(OlapConnection connection) {
+        @Override
+		public void setPreferList(OlapConnection connection) {
             // ignore
         }
 
-        public Date getSchemaLoadDate(Schema schema) {
+        @Override
+		public Date getSchemaLoadDate(Schema schema) {
             return new Date();
         }
 
-        public int getLevelCardinality(Level level) {
+        @Override
+		public int getLevelCardinality(Level level) {
             return level.getCardinality();
         }
 
-        public void getSchemaFunctionList(
+        @Override
+		public void getSchemaFunctionList(
             List<FunctionDefinition> funDefs,
             Schema schema,
             Predicate<String> functionFilter)
@@ -3915,7 +3943,8 @@ public class XmlaHandler {
             // no function definitions
         }
 
-        public int getHierarchyCardinality(Hierarchy hierarchy) {
+        @Override
+		public int getHierarchyCardinality(Hierarchy hierarchy) {
             int cardinality = 0;
             for (Level level : hierarchy.getLevels()) {
                 cardinality += level.getCardinality();
@@ -3923,54 +3952,66 @@ public class XmlaHandler {
             return cardinality;
         }
 
-        public int getHierarchyStructure(Hierarchy hierarchy) {
+        @Override
+		public int getHierarchyStructure(Hierarchy hierarchy) {
             return 0;
         }
 
-        public boolean isHierarchyParentChild(Hierarchy hierarchy) {
+        @Override
+		public boolean isHierarchyParentChild(Hierarchy hierarchy) {
             return false;
         }
 
-        public int getMeasureAggregator(Member member) {
+        @Override
+		public int getMeasureAggregator(Member member) {
             return RowsetDefinition.MdschemaMeasuresRowset
                 .MDMEASURE_AGGR_UNKNOWN;
         }
 
-        public String getMeasureDisplayFolder(Member member) {
+        @Override
+		public String getMeasureDisplayFolder(Member member) {
             return "";
         }
 
-        public void checkMemberOrdinal(Member member) {
+        @Override
+		public void checkMemberOrdinal(Member member) {
             // nothing to do
         }
 
-        public boolean shouldReturnCellProperty(
+        @Override
+		public boolean shouldReturnCellProperty(
             CellSet cellSet, Property cellProperty, boolean evenEmpty)
         {
             return true;
         }
 
-        public List<String> getSchemaRoleNames(Schema schema) {
+        @Override
+		public List<String> getSchemaRoleNames(Schema schema) {
             return Collections.emptyList();
         }
 
-        public String getSchemaId(Schema schema) {
+        @Override
+		public String getSchemaId(Schema schema) {
             return schema.getName();
         }
 
-        public String getCubeType(Cube cube) {
+        @Override
+		public String getCubeType(Cube cube) {
             return RowsetDefinition.MdschemaCubesRowset.MD_CUBTYPE_CUBE;
         }
 
-        public boolean isLevelUnique(Level level) {
+        @Override
+		public boolean isLevelUnique(Level level) {
             return false;
         }
 
-        public List<Property> getLevelProperties(Level level) {
+        @Override
+		public List<Property> getLevelProperties(Level level) {
             return level.getProperties();
         }
 
-        public boolean isPropertyInternal(Property property) {
+        @Override
+		public boolean isPropertyInternal(Property property) {
             return
                 property instanceof Property.StandardMemberProperty
                 && ((Property.StandardMemberProperty) property).isInternal()
@@ -3978,7 +4019,8 @@ public class XmlaHandler {
                 && ((Property.StandardCellProperty) property).isInternal();
         }
 
-        public List<Map<String, Object>> getDataSources(
+        @Override
+		public List<Map<String, Object>> getDataSources(
             OlapConnection connection) throws OlapException
         {
             Database olapDb = connection.getOlapDatabase();
@@ -3995,29 +4037,35 @@ public class XmlaHandler {
                     "AuthenticationMode", modes));
         }
 
-        public Map<String, Object> getAnnotationMap(MetadataElement element) {
+        @Override
+		public Map<String, Object> getAnnotationMap(MetadataElement element) {
             return Collections.emptyMap();
         }
 
-        public boolean canDrillThrough(Cell cell) {
+        @Override
+		public boolean canDrillThrough(Cell cell) {
             return false;
         }
 
-        public int getDrillThroughCount(Cell cell) {
+        @Override
+		public int getDrillThroughCount(Cell cell) {
             return -1;
         }
 
-        public void flushSchemaCache(OlapConnection conn) {
+        @Override
+		public void flushSchemaCache(OlapConnection conn) {
             // no op.
         }
 
-        public Object getMemberKey(Member m) throws OlapException {
+        @Override
+		public Object getMemberKey(Member m) throws OlapException {
             return
                 m.getPropertyValue(
                     Property.StandardMemberProperty.MEMBER_KEY);
         }
 
-        public Object getOrderKey(Member m) throws OlapException {
+        @Override
+		public Object getOrderKey(Member m) throws OlapException {
             return m.getOrdinal();
         }
     }

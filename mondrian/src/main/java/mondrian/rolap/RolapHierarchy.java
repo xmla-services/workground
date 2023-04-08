@@ -373,15 +373,18 @@ public class RolapHierarchy extends HierarchyBase {
         return map;
     }
 
-    protected Logger getLogger() {
+    @Override
+	protected Logger getLogger() {
         return LOGGER;
     }
 
-    public String getDisplayFolder() {
+    @Override
+	public String getDisplayFolder() {
         return this.displayFolder;
     }
 
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
@@ -398,7 +401,8 @@ public class RolapHierarchy extends HierarchyBase {
         }
     }
 
-    protected int computeHashCode() {
+    @Override
+	protected int computeHashCode() {
         return super.computeHashCode()
             ^ (sharedHierarchyName == null
                 ? 0
@@ -467,7 +471,8 @@ public class RolapHierarchy extends HierarchyBase {
         return memberReader;
     }
 
-    public Map<String, Object> getMetadata() {
+    @Override
+	public Map<String, Object> getMetadata() {
         return metadata;
     }
 
@@ -557,7 +562,8 @@ public class RolapHierarchy extends HierarchyBase {
         return xmlHierarchy;
     }
 
-    public Member getDefaultMember() {
+    @Override
+	public Member getDefaultMember() {
         // use lazy initialization to get around bootstrap issues
         if (defaultMember == null) {
             List<RolapMember> rootMembers = memberReader.getRootMembers();
@@ -587,7 +593,8 @@ public class RolapHierarchy extends HierarchyBase {
         return defaultMember;
     }
 
-    public Member getNullMember() {
+    @Override
+	public Member getNullMember() {
         // use lazy initialization to get around bootstrap issues
         if (nullMember == null) {
             nullMember = new RolapNullMember(nullLevel);
@@ -598,11 +605,13 @@ public class RolapHierarchy extends HierarchyBase {
     /**
      * Returns the 'all' member.
      */
-    public RolapMember getAllMember() {
+    @Override
+	public RolapMember getAllMember() {
         return allMember;
     }
 
-    public Member createMember(
+    @Override
+	public Member createMember(
         Member parent,
         Level level,
         String name,
@@ -927,7 +936,8 @@ public class RolapHierarchy extends HierarchyBase {
                     new AbstractListCalc(
                          "AbstractListCalc1",setType, new Calc[0])
                     {
-                        public TupleList evaluateList(
+                        @Override
+						public TupleList evaluateList(
                             Evaluator evaluator)
                         {
                             return
@@ -936,7 +946,8 @@ public class RolapHierarchy extends HierarchyBase {
                                         evaluator, hierarchyAccess, null));
                         }
 
-                        public boolean dependsOn(Hierarchy hierarchy) {
+                        @Override
+						public boolean dependsOn(Hierarchy hierarchy) {
                             return true;
                         }
                     };
@@ -946,14 +957,16 @@ public class RolapHierarchy extends HierarchyBase {
                 final Exp partialExp =
                     new ResolvedFunCall(
                         new FunDefBase("$x", "x", "In") {
-                            public Calc compileCall(
+                            @Override
+							public Calc compileCall(
                                 ResolvedFunCall call,
                                 ExpCompiler compiler)
                             {
                                 return partialCalc;
                             }
 
-                            public void unparse(Exp[] args, PrintWriter pw) {
+                            @Override
+							public void unparse(Exp[] args, PrintWriter pw) {
                                 pw.print("$RollupAccessibleChildren()");
                             }
                         },
@@ -966,13 +979,15 @@ public class RolapHierarchy extends HierarchyBase {
                 Exp hiddenExp =
                     new ResolvedFunCall(
                         new FunDefBase("$x", "x", "In") {
-                            public Calc compileCall(
+                            @Override
+							public Calc compileCall(
                                 ResolvedFunCall call, ExpCompiler compiler)
                             {
                                 return new ConstantCalc(returnType, null);
                             }
 
-                            public void unparse(Exp[] args, PrintWriter pw) {
+                            @Override
+							public void unparse(Exp[] args, PrintWriter pw) {
                                 pw.print("$RollupAccessibleChildren()");
                             }
                         },
@@ -1047,7 +1062,8 @@ public class RolapHierarchy extends HierarchyBase {
      * A hierarchy is ragged if it contains one or more levels with hidden
      * members.
      */
-    public boolean isRagged() {
+    @Override
+	public boolean isRagged() {
         for (Level level : levels) {
             if (((RolapLevel) level).getHideMemberCondition()
                 != RolapLevel.HideMemberCondition.Never)
@@ -1314,7 +1330,8 @@ public class RolapHierarchy extends HierarchyBase {
             super(parent, level, name, formula);
         }
 
-        public synchronized void setProperty(String name, Object value) {
+        @Override
+		public synchronized void setProperty(String name, Object value) {
             if (name.equals(Property.CELL_FORMATTER.getName())) {
                 String cellFormatterClass = (String) value;
                 FormatterCreateContext formatterContext =
@@ -1340,7 +1357,8 @@ public class RolapHierarchy extends HierarchyBase {
             super.setProperty(name, value);
         }
 
-        public RolapResult.ValueFormatter getFormatter() {
+        @Override
+		public RolapResult.ValueFormatter getFormatter() {
             return cellFormatter;
         }
 
@@ -1384,28 +1402,34 @@ public class RolapHierarchy extends HierarchyBase {
             this.exp = exp;
         }
 
-        public boolean equals(Object o) {
+        @Override
+		public boolean equals(Object o) {
             return o instanceof LimitedRollupMember
                 && ((LimitedRollupMember) o).member.equals(member);
         }
 
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             return member.hashCode();
         }
 
-        public Exp getExpression() {
+        @Override
+		public Exp getExpression() {
             return exp;
         }
 
-        protected boolean computeCalculated(final MemberType memberType) {
+        @Override
+		protected boolean computeCalculated(final MemberType memberType) {
             return true;
         }
 
-        public boolean isCalculated() {
+        @Override
+		public boolean isCalculated() {
             return false;
         }
 
-        public boolean isEvaluated() {
+        @Override
+		public boolean isEvaluated() {
             return true;
         }
 
@@ -1444,7 +1468,8 @@ public class RolapHierarchy extends HierarchyBase {
             this.exp = exp;
         }
 
-        public Map<? extends Member, Access> getMemberChildren(
+        @Override
+		public Map<? extends Member, Access> getMemberChildren(
             RolapMember member,
             List<RolapMember> memberChildren,
             MemberChildrenConstraint constraint)
@@ -1455,7 +1480,8 @@ public class RolapHierarchy extends HierarchyBase {
                 constraint);
         }
 
-        public Map<? extends Member, Access> getMemberChildren(
+        @Override
+		public Map<? extends Member, Access> getMemberChildren(
             List<RolapMember> parentMembers,
             List<RolapMember> children,
             MemberChildrenConstraint constraint)
@@ -1498,7 +1524,8 @@ public class RolapHierarchy extends HierarchyBase {
             }
         }
 
-        public RolapMember substitute(final RolapMember member) {
+        @Override
+		public RolapMember substitute(final RolapMember member) {
             if (member == null) {
                 return null;
             }
@@ -1539,19 +1566,23 @@ public class RolapHierarchy extends HierarchyBase {
      * hierarchy in question.
      */
     private class DummyElement implements OlapElement {
-        public String getUniqueName() {
+        @Override
+		public String getUniqueName() {
             throw new UnsupportedOperationException();
         }
 
-        public String getName() {
+        @Override
+		public String getName() {
             return "$";
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             throw new UnsupportedOperationException();
         }
 
-        public OlapElement lookupChild(
+        @Override
+		public OlapElement lookupChild(
             SchemaReader schemaReader,
             Id.Segment s,
             MatchType matchType)
@@ -1575,27 +1606,33 @@ public class RolapHierarchy extends HierarchyBase {
             return null;
         }
 
-        public String getQualifiedName() {
+        @Override
+		public String getQualifiedName() {
             throw new UnsupportedOperationException();
         }
 
-        public String getCaption() {
+        @Override
+		public String getCaption() {
             throw new UnsupportedOperationException();
         }
 
-        public Hierarchy getHierarchy() {
+        @Override
+		public Hierarchy getHierarchy() {
             throw new UnsupportedOperationException();
         }
 
-        public Dimension getDimension() {
+        @Override
+		public Dimension getDimension() {
             throw new UnsupportedOperationException();
         }
 
-        public boolean isVisible() {
+        @Override
+		public boolean isVisible() {
             throw new UnsupportedOperationException();
         }
 
-        public String getLocalized(LocalizedProperty prop, Locale locale) {
+        @Override
+		public String getLocalized(LocalizedProperty prop, Locale locale) {
             throw new UnsupportedOperationException();
         }
     }

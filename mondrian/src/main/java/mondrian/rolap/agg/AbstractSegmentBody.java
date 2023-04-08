@@ -46,23 +46,29 @@ abstract class AbstractSegmentBody implements SegmentBody {
         }
     }
 
-    public SortedSet<Comparable>[] getAxisValueSets() {
+    @Override
+	public SortedSet<Comparable>[] getAxisValueSets() {
         return axisValueSets;
     }
 
-    public boolean[] getNullAxisFlags() {
+    @Override
+	public boolean[] getNullAxisFlags() {
         return nullAxisFlags;
     }
 
-    public Map<CellKey, Object> getValueMap() {
+    @Override
+	public Map<CellKey, Object> getValueMap() {
         return new AbstractMap<CellKey, Object>() {
-            public Set<Entry<CellKey, Object>> entrySet() {
+            @Override
+			public Set<Entry<CellKey, Object>> entrySet() {
                 return new AbstractSet<Entry<CellKey, Object>>() {
-                    public Iterator<Entry<CellKey, Object>> iterator() {
+                    @Override
+					public Iterator<Entry<CellKey, Object>> iterator() {
                         return new SegmentBodyIterator();
                     }
 
-                    public int size() {
+                    @Override
+					public int size() {
                         return getEffectiveSize();
                     }
                 };
@@ -70,12 +76,14 @@ abstract class AbstractSegmentBody implements SegmentBody {
         };
     }
 
-    public Object getValueArray() {
+    @Override
+	public Object getValueArray() {
         throw new UnsupportedOperationException(
             "This method is only supported for dense segments");
     }
 
-    public BitSet getNullValueIndicators() {
+    @Override
+	public BitSet getNullValueIndicators() {
         throw new UnsupportedOperationException(
             "This method is only supported for dense segments of native values");
     }
@@ -118,11 +126,13 @@ abstract class AbstractSegmentBody implements SegmentBody {
             moveToNext();
         }
 
-        public boolean hasNext() {
+        @Override
+		public boolean hasNext() {
             return hasNext;
         }
 
-        public Map.Entry<CellKey, Object> next() {
+        @Override
+		public Map.Entry<CellKey, Object> next() {
             Pair<CellKey, Object> o =
                 Pair.of(CellKey.Generator.newCellKey(ordinals), next);
             moveToNext();
@@ -157,7 +167,8 @@ abstract class AbstractSegmentBody implements SegmentBody {
             }
         }
 
-        public void remove() {
+        @Override
+		public void remove() {
             throw new UnsupportedOperationException();
         }
     }

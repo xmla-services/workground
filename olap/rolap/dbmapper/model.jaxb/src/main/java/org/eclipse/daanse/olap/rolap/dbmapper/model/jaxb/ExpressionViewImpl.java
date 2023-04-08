@@ -63,7 +63,8 @@ public class ExpressionViewImpl implements ExpressionView {
             return h;
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (!(obj instanceof ExpressionView)) {
             return false;
         }

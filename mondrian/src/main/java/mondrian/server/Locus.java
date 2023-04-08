@@ -23,7 +23,8 @@ public class Locus {
 
     private static final ThreadLocal<ArrayStack<Locus>> THREAD_LOCAL =
         new ThreadLocal<ArrayStack<Locus>>() {
-            protected ArrayStack<Locus> initialValue() {
+            @Override
+			protected ArrayStack<Locus> initialValue() {
                 return new ArrayStack<Locus>();
             }
         };

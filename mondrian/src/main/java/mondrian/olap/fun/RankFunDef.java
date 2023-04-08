@@ -61,7 +61,8 @@ public class RankFunDef extends FunDefBase {
     super( dummyFunDef );
   }
 
-  public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+  @Override
+public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     switch ( call.getArgCount() ) {
       case 2:
         return compileCall2( call, compiler );
@@ -118,7 +119,8 @@ public class RankFunDef extends FunDefBase {
       this.listCalc = listCalc;
     }
 
-    public int evaluateInteger( Evaluator evaluator ) {
+    @Override
+	public int evaluateInteger( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
         // Get member or tuple.
@@ -161,7 +163,8 @@ public class RankFunDef extends FunDefBase {
       this.listCalc = listCalc;
     }
 
-    public int evaluateInteger( Evaluator evaluator ) {
+    @Override
+	public int evaluateInteger( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
 
@@ -205,7 +208,8 @@ public class RankFunDef extends FunDefBase {
       this.cacheDescriptor = cacheDescriptor;
     }
 
-    public int evaluateInteger( Evaluator evaluator ) {
+    @Override
+	public int evaluateInteger( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
         Member[] members = tupleCalc.evaluateTuple( evaluator );
@@ -290,7 +294,8 @@ public class RankFunDef extends FunDefBase {
       this.cacheDescriptor = cacheDescriptor;
     }
 
-    public int evaluateInteger( Evaluator evaluator ) {
+    @Override
+	public int evaluateInteger( Evaluator evaluator ) {
       evaluator.getTiming().markStart( RankFunDef.TIMING_NAME );
       try {
         Member member = memberCalc.evaluateMember( evaluator );
@@ -393,11 +398,13 @@ public class RankFunDef extends FunDefBase {
       this.keyCalc = keyCalc;
     }
 
-    public boolean dependsOn( Hierarchy hierarchy ) {
+    @Override
+	public boolean dependsOn( Hierarchy hierarchy ) {
       return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
     }
 
-    public Object evaluate( Evaluator evaluator ) {
+    @Override
+	public Object evaluate( Evaluator evaluator ) {
       // Save the state of the evaluator.
       final int savepoint = evaluator.savepoint();
       RuntimeException exception = null;
@@ -615,7 +622,8 @@ public class RankFunDef extends FunDefBase {
       this.tuple = tuple;
     }
 
-    public Object evaluate( Evaluator evaluator ) {
+    @Override
+	public Object evaluate( Evaluator evaluator ) {
       // Construct an array containing the value of the expression
       // for each member.
       TupleList tupleList = listCalc.evaluateList( evaluator );

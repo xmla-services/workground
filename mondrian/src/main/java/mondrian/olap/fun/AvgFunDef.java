@@ -40,12 +40,14 @@ class AvgFunDef extends AbstractAggregateFunDef {
     super( dummyFunDef );
   }
 
-  public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+  @Override
+public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final ListCalc listCalc = compiler.compileList( call.getArg( 0 ) );
     final Calc calc =
         call.getArgCount() > 1 ? compiler.compileScalar( call.getArg( 1 ), true ) : new ValueCalc( call.getType() );
     return new AbstractDoubleCalc( call.getFunName(),call.getType(), new Calc[] { listCalc, calc } ) {
-      public double evaluateDouble( Evaluator evaluator ) {
+      @Override
+	public double evaluateDouble( Evaluator evaluator ) {
         evaluator.getTiming().markStart( AvgFunDef.TIMING_NAME );
         final int savepoint = evaluator.savepoint();
         try {
@@ -58,7 +60,8 @@ class AvgFunDef extends AbstractAggregateFunDef {
         }
       }
 
-      public boolean dependsOn( Hierarchy hierarchy ) {
+      @Override
+	public boolean dependsOn( Hierarchy hierarchy ) {
         return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
       }
     };

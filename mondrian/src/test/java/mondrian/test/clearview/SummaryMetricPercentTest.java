@@ -31,7 +31,8 @@ import mondrian.util.Bug;
  */
 public class SummaryMetricPercentTest extends ClearViewBase {
 
-    public DiffRepository getDiffRepos() {
+    @Override
+	public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }
 
@@ -40,7 +41,8 @@ public class SummaryMetricPercentTest extends ClearViewBase {
     }
 
 
-    @ParameterizedTest
+    @Override
+	@ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     protected void runTest(TestingContext context) {
         DiffRepository diffRepos = getDiffRepos();

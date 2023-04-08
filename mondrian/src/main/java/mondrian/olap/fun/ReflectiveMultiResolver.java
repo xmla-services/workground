@@ -57,7 +57,8 @@ public class ReflectiveMultiResolver extends MultiResolver {
         this.reservedWords = reservedWords;
     }
 
-    protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
+    @Override
+	protected FunDef createFunDef(Exp[] args, FunDef dummyFunDef) {
         try {
             return (FunDef) constructor.newInstance(new Object[] {dummyFunDef});
         } catch (InstantiationException e) {
@@ -72,7 +73,8 @@ public class ReflectiveMultiResolver extends MultiResolver {
         }
     }
 
-    public String[] getReservedWords() {
+    @Override
+	public String[] getReservedWords() {
         if (reservedWords != null) {
             return reservedWords;
         }

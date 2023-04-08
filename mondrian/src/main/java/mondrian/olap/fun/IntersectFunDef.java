@@ -53,7 +53,8 @@ class IntersectFunDef extends FunDefBase
         super(dummyFunDef);
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final String literalArg = FunUtil.getLiteralArg(call, 2, "", IntersectFunDef.ReservedWords);
         final boolean all = literalArg.equalsIgnoreCase("ALL");
         final int arity = call.getType().getArity();
@@ -63,7 +64,8 @@ class IntersectFunDef extends FunDefBase
         return new AbstractListCalc(
         		call.getFunName(),call.getType(), new Calc[] {listCalc1, listCalc2})
         {
-            public TupleList evaluateList(Evaluator evaluator) {
+            @Override
+			public TupleList evaluateList(Evaluator evaluator) {
                 TupleList leftList =
                     listCalc1.evaluateList(evaluator);
                 if (leftList.isEmpty()) {
@@ -185,11 +187,13 @@ class IntersectFunDef extends FunDefBase
             super(initialCapacity);
         }
 
-        public E getKey(E e) {
+        @Override
+		public E getKey(E e) {
             return super.get(e);
         }
 
-        public boolean add(E e) {
+        @Override
+		public boolean add(E e) {
             return super.put(e, e) == null;
         }
     }

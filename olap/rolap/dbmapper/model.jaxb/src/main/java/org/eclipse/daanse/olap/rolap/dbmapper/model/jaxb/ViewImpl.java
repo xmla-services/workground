@@ -63,7 +63,8 @@ public class ViewImpl implements View {
         this.alias = value;
     }
 
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         if (o instanceof View) {
             View that = (View) o;
             if (!Objects.equals(alias(), that.alias())) {
@@ -85,7 +86,8 @@ public class ViewImpl implements View {
         }
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return sql.get(0).content;
     }
 }

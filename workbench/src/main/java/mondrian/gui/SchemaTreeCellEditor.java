@@ -42,7 +42,8 @@ public class SchemaTreeCellEditor
         myClassLoader = this.getClass().getClassLoader();
     }
 
-    public Component getTreeCellEditorComponent(
+    @Override
+	public Component getTreeCellEditorComponent(
         JTree tree,
         Object value,
         boolean isSelected,
@@ -66,7 +67,8 @@ public class SchemaTreeCellEditor
         }
     }
 
-    public boolean isCellEditable(EventObject event) {
+    @Override
+	public boolean isCellEditable(EventObject event) {
         return false;
     }
 
@@ -77,11 +79,13 @@ public class SchemaTreeCellEditor
         }
     }
 
-    public void addCellEditorListener(CellEditorListener l) {
+    @Override
+	public void addCellEditorListener(CellEditorListener l) {
         listeners.add(l);
     }
 
-    public void removeCellEditorListener(CellEditorListener l) {
+    @Override
+	public void removeCellEditorListener(CellEditorListener l) {
         listeners.remove(l);
     }
 
@@ -132,7 +136,8 @@ public class SchemaTreeCellEditor
         }
     }
 
-    public boolean stopCellEditing() {
+    @Override
+	public boolean stopCellEditing() {
         boolean retValue;
 
         setValueAt(super.tree);

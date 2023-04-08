@@ -53,7 +53,8 @@ public class Triple<T0, T1, T2>
         return new Triple<T0, T1, T2>(v0, v1, v2);
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (obj instanceof Triple) {
             //noinspection unchecked
             Triple<T0, T1, T2> pair = (Triple) obj;
@@ -64,7 +65,8 @@ public class Triple<T0, T1, T2>
         return false;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         int k0 = (v0 == null) ? 0 : v0.hashCode();
         int k1 = (v1 == null) ? 0 : v1.hashCode();
         int k2 = (v2 == null) ? 0 : v2.hashCode();
@@ -72,7 +74,8 @@ public class Triple<T0, T1, T2>
     }
 
 
-    public int compareTo(Triple<T0, T1, T2> that) {
+    @Override
+	public int compareTo(Triple<T0, T1, T2> that) {
         int c = compare((Comparable) this.v0, (Comparable)that.v0);
         if (c == 0) {
             c = compare((Comparable) this.v1, (Comparable)that.v1);
@@ -83,7 +86,8 @@ public class Triple<T0, T1, T2>
         return c;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuilder("<").append(v0).append(", ").append(v1).append(", ").append(v2).append(">").toString();
     }
 
@@ -123,19 +127,23 @@ public class Triple<T0, T1, T2>
         final Iterable<Triple<T0, T1, T2>> iterable)
     {
         return new Iterable<T0>() {
-            public Iterator<T0> iterator() {
+            @Override
+			public Iterator<T0> iterator() {
                 final Iterator<Triple<T0, T1, T2>> iterator =
                     iterable.iterator();
                 return new Iterator<T0>() {
-                    public boolean hasNext() {
+                    @Override
+					public boolean hasNext() {
                         return iterator.hasNext();
                     }
 
-                    public T0 next() {
+                    @Override
+					public T0 next() {
                         return iterator.next().v0;
                     }
 
-                    public void remove() {
+                    @Override
+					public void remove() {
                         iterator.remove();
                     }
                 };
@@ -156,19 +164,23 @@ public class Triple<T0, T1, T2>
         final Iterable<Triple<T0, T1, T2>> iterable)
     {
         return new Iterable<T1>() {
-            public Iterator<T1> iterator() {
+            @Override
+			public Iterator<T1> iterator() {
                 final Iterator<Triple<T0, T1, T2>> iterator =
                     iterable.iterator();
                 return new Iterator<T1>() {
-                    public boolean hasNext() {
+                    @Override
+					public boolean hasNext() {
                         return iterator.hasNext();
                     }
 
-                    public T1 next() {
+                    @Override
+					public T1 next() {
                         return iterator.next().v1;
                     }
 
-                    public void remove() {
+                    @Override
+					public void remove() {
                         iterator.remove();
                     }
                 };
@@ -188,19 +200,23 @@ public class Triple<T0, T1, T2>
         final Iterable<Triple<T0, T1, T2>> iterable)
     {
         return new Iterable<T2>() {
-            public Iterator<T2> iterator() {
+            @Override
+			public Iterator<T2> iterator() {
                 final Iterator<Triple<T0, T1, T2>> iterator =
                     iterable.iterator();
                 return new Iterator<T2>() {
-                    public boolean hasNext() {
+                    @Override
+					public boolean hasNext() {
                         return iterator.hasNext();
                     }
 
-                    public T2 next() {
+                    @Override
+					public T2 next() {
                         return iterator.next().v2;
                     }
 
-                    public void remove() {
+                    @Override
+					public void remove() {
                         iterator.remove();
                     }
                 };

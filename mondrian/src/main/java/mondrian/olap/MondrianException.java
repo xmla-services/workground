@@ -36,11 +36,13 @@ public class MondrianException extends RuntimeException {
         super(message, cause);
     }
 
-    public String getLocalizedMessage() {
+    @Override
+	public String getLocalizedMessage() {
         return getMessage();
     }
 
-    public String getMessage() {
+    @Override
+	public String getMessage() {
         return "Mondrian Error:" + super.getMessage();
     }
 }

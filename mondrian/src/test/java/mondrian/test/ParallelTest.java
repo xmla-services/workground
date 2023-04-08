@@ -60,7 +60,8 @@ public class ParallelTest {
         Thread[] threads = new Thread[count];
         for (int i = 0; i < count; i++) {
             workers[i] = new Worker() {
-                public void runSafe() {
+                @Override
+				public void runSafe() {
                     for (int i = 0; i < cycleCount; ++i) {
                         cycle(connection);
                         try {
@@ -106,7 +107,8 @@ public class ParallelTest {
     private static abstract class Worker implements Runnable {
         Throwable throwable;
 
-        public void run() {
+        @Override
+		public void run() {
             try {
                 runSafe();
             } catch (Throwable e) {

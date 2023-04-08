@@ -78,7 +78,8 @@ public class FileRepository implements Repository {
                 TimeUnit.MILLISECONDS);
         executorService.scheduleWithFixedDelay(
             new Runnable() {
-                public void run() {
+                @Override
+				public void run() {
                     Iterator<FileRepository> instanceIt = instances.iterator();
                     while ( instanceIt.hasNext() ) {
                         FileRepository next = instanceIt.next();
@@ -114,7 +115,8 @@ public class FileRepository implements Repository {
         }
     }
 
-    public List<Map<String, Object>> getDatabases(
+    @Override
+	public List<Map<String, Object>> getDatabases(
         RolapConnection connection)
     {
         final List<Map<String, Object>> propsList =
@@ -125,7 +127,8 @@ public class FileRepository implements Repository {
         return propsList;
     }
 
-    public OlapConnection getConnection(
+    @Override
+	public OlapConnection getConnection(
         MondrianServer server,
         String databaseName,
         String catalogName,
@@ -244,7 +247,8 @@ public class FileRepository implements Repository {
       return ((OlapWrapper) connection).unwrap(OlapConnection.class);
     }
 
-    public void shutdown() {
+    @Override
+	public void shutdown() {
         if(!shutdown.getAndSet(true)) {
             instances.remove(this);
             repositoryContentFinder.shutdown();
@@ -328,7 +332,8 @@ public class FileRepository implements Repository {
         }
     }
 
-    public List<String> getCatalogNames(
+    @Override
+	public List<String> getCatalogNames(
         RolapConnection connection,
         String databaseName)
     {
@@ -337,14 +342,16 @@ public class FileRepository implements Repository {
                 .catalogMap.keySet());
     }
 
-    public List<String> getDatabaseNames(
+    @Override
+	public List<String> getDatabaseNames(
         RolapConnection connection)
     {
         return new ArrayList<String>(
             getServerInfo().datasourceMap.keySet());
     }
 
-    public Map<String, RolapSchema> getRolapSchemas(
+    @Override
+	public Map<String, RolapSchema> getRolapSchemas(
         RolapConnection connection,
         String databaseName,
         String catalogName)

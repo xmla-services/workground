@@ -27,7 +27,8 @@ public class StringScanner extends Scanner {
     }
 
     // Override Scanner.getChar().
-    protected int getChar() {
+    @Override
+	protected int getChar() {
         return (i >= s.length())
             ? -1
             : s.charAt(i++);

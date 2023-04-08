@@ -64,7 +64,8 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
       "DrilldownLevelTop(Set_Expression, Count [, [Level_Expression][, Numeric_Expression]])",
       "Drills down the topmost members of a set, at a specified level, to one level below.",
       new String[] { "fxxn", "fxxnl", "fxxnln", "fxxnen" } ) {
-      protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+      @Override
+	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
         return new DrilldownLevelTopBottomFunDef( dummyFunDef, true );
       }
     };
@@ -75,7 +76,8 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
       "DrilldownLevelBottom(Set_Expression, Count [, [Level_Expression][, Numeric_Expression]])",
       "Drills down the bottommost members of a set, at a specified level, to one level below.",
       new String[] { "fxxn", "fxxnl", "fxxnln", "fxxnen" } ) {
-      protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+      @Override
+	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
         return new DrilldownLevelTopBottomFunDef( dummyFunDef, false );
       }
     };
@@ -87,7 +89,8 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
     this.top = top;
   }
 
-  public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
+  @Override
+public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     // Compile the member list expression. Ask for a mutable list, because
     // we're going to insert members into it later.
     final ListCalc listCalc =
@@ -107,7 +110,8 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
     return new AbstractListCalc(
     		call.getFunName(),call.getType(),
       new Calc[] { listCalc, integerCalc, orderCalc } ) {
-      public TupleList evaluateList( Evaluator evaluator ) {
+      @Override
+	public TupleList evaluateList( Evaluator evaluator ) {
         // Use a native evaluator, if more efficient.
         // TODO: Figure this out at compile time.
         SchemaReader schemaReader = evaluator.getSchemaReader();
@@ -171,7 +175,8 @@ class DrilldownLevelTopBottomFunDef extends FunDefBase {
         return new UnaryTupleList( result );
       }
 
-      public boolean dependsOn( Hierarchy hierarchy ) {
+      @Override
+	public boolean dependsOn( Hierarchy hierarchy ) {
         return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
       }
     };

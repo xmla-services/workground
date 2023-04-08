@@ -66,7 +66,8 @@ class ExplicitRecognizer extends Recognizer {
     /**
      * Get the Matcher to be used to match columns to be ignored.
      */
-    protected Recognizer.Matcher getIgnoreMatcher() {
+    @Override
+	protected Recognizer.Matcher getIgnoreMatcher() {
         return getTableDef().getIgnoreMatcher();
     }
 
@@ -74,7 +75,8 @@ class ExplicitRecognizer extends Recognizer {
      * Get the Matcher to be used to match the column which is the fact count
      * column.
      */
-    protected Recognizer.Matcher getFactCountMatcher() {
+    @Override
+	protected Recognizer.Matcher getFactCountMatcher() {
         return getTableDef().getFactCountMatcher();
     }
 
@@ -100,7 +102,8 @@ class ExplicitRecognizer extends Recognizer {
      *
      * @return number of measures created.
      */
-    protected int checkMeasures() {
+    @Override
+	protected int checkMeasures() {
         msgRecorder.pushContextName("ExplicitRecognizer.checkMeasures");
         try {
             int measureColumnCounts = 0;
@@ -225,7 +228,8 @@ class ExplicitRecognizer extends Recognizer {
      * dimension.  If found, look for a column in the aggregate table with that
      * name and make a foreign key usage.
      */
-    protected int matchForeignKey(
+    @Override
+	protected int matchForeignKey(
         final JdbcSchema.Table.Column.Usage factUsage)
     {
         JdbcSchema.Table.Column factColumn = factUsage.getColumn();
@@ -261,7 +265,8 @@ class ExplicitRecognizer extends Recognizer {
      * through the aggregate table's columns for one with that name and make a
      * level usage for the column.
      */
-    protected void matchLevels(
+    @Override
+	protected void matchLevels(
         final Hierarchy hierarchy,
         final HierarchyUsage hierarchyUsage)
     {
@@ -452,7 +457,8 @@ class ExplicitRecognizer extends Recognizer {
         Collections.sort(
             levelMatches,
             new Comparator<Pair<RolapLevel, ExplicitRules.TableDef.Level>>() {
-                public int compare(
+                @Override
+				public int compare(
                     Pair<RolapLevel, ExplicitRules.TableDef.Level> o1,
                     Pair<RolapLevel, ExplicitRules.TableDef.Level> o2)
                 {
@@ -464,7 +470,8 @@ class ExplicitRecognizer extends Recognizer {
         Collections.sort(
             aggLevels,
             new Comparator<ExplicitRules.TableDef.Level>() {
-                public int compare(
+                @Override
+				public int compare(
                     ExplicitRules.TableDef.Level o1,
                     ExplicitRules.TableDef.Level o2)
                 {
@@ -475,7 +482,8 @@ class ExplicitRecognizer extends Recognizer {
             });
     }
 
-    protected String getFactCountColumnName
+    @Override
+	protected String getFactCountColumnName
             (final JdbcSchema.Table.Column.Usage aggUsage) {
         String measureName = aggUsage.getColumn().getName();
         Map<String, String> measuresFactCount = tableDef.getMeasuresFactCount();

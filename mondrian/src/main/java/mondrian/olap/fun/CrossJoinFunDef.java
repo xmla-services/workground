@@ -90,7 +90,8 @@ public class CrossJoinFunDef extends FunDefBase {
     super( dummyFunDef );
   }
 
-  public Type getResultType( Validator validator, Exp[] args ) {
+  @Override
+public Type getResultType( Validator validator, Exp[] args ) {
     // CROSSJOIN(<Set1>,<Set2>) has type [Hie1] x [Hie2].
     List<MemberType> list = new ArrayList<MemberType>();
     for ( Exp arg : args ) {
@@ -139,7 +140,8 @@ public class CrossJoinFunDef extends FunDefBase {
     }
   }
 
-  public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
+  @Override
+public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     // What is the desired return type?
     for ( ResultStyle r : compiler.getAcceptableResultStyles() ) {
       switch ( r ) {
@@ -227,7 +229,8 @@ public class CrossJoinFunDef extends FunDefBase {
       this.call=call;
     }
 
-    public TupleIterable evaluateIterable( Evaluator evaluator ) {
+    @Override
+	public TupleIterable evaluateIterable( Evaluator evaluator ) {
 
       // Use a native evaluator, if more efficient.
       // TODO: Figure this out at compile time.
@@ -272,7 +275,8 @@ public class CrossJoinFunDef extends FunDefBase {
       // iterate across it1 and for each member iterate across it2
 
       return new AbstractTupleIterable( it1.getArity() + it2.getArity() ) {
-        public TupleCursor tupleCursor() {
+        @Override
+		public TupleCursor tupleCursor() {
           return new AbstractTupleCursor( getArity() ) {
             final TupleCursor i1 = it1.tupleCursor();
             final int arity1 = i1.getArity();
@@ -282,7 +286,8 @@ public class CrossJoinFunDef extends FunDefBase {
             long currentIteration = 0;
             Execution execution = Locus.peek().execution;
 
-            public boolean forward() {
+            @Override
+			public boolean forward() {
               if ( i2.forward() ) {
                 return true;
               }
@@ -296,7 +301,8 @@ public class CrossJoinFunDef extends FunDefBase {
               return false;
             }
 
-            public List<Member> current() {
+            @Override
+			public List<Member> current() {
               i1.currentToArray( members, 0 );
               i2.currentToArray( members, arity1 );
               return Util.flatList( members );
@@ -407,7 +413,8 @@ public class CrossJoinFunDef extends FunDefBase {
       this.call=call;
     }
 
-    public TupleList evaluateList( Evaluator evaluator ) {
+    @Override
+	public TupleList evaluateList( Evaluator evaluator ) {
       // Use a native evaluator, if more efficient.
       // TODO: Figure this out at compile time.
       SchemaReader schemaReader = evaluator.getSchemaReader();
@@ -450,7 +457,8 @@ public class CrossJoinFunDef extends FunDefBase {
       super( call, calcs, false );
     }
 
-    protected TupleList makeList( final TupleList l1, final TupleList l2 ) {
+    @Override
+	protected TupleList makeList( final TupleList l1, final TupleList l2 ) {
       final int arity = l1.getArity() + l2.getArity();
       return new DelegatingTupleList( arity, new AbstractList<List<Member>>() {
         final List<List<List<Member>>> lists = Arrays.<List<List<Member>>> asList( l1, l2 );
@@ -520,7 +528,8 @@ public class CrossJoinFunDef extends FunDefBase {
       super( call, calcs, true );
     }
 
-    @SuppressWarnings( { "unchecked" } )
+    @Override
+	@SuppressWarnings( { "unchecked" } )
     protected TupleList makeList( final TupleList l1, final TupleList l2 ) {
       final int arity = l1.getArity() + l2.getArity();
       final List<Member> members = new ArrayList<Member>( arity * l1.size() * l2.size() );
@@ -659,7 +668,8 @@ public class CrossJoinFunDef extends FunDefBase {
       this.finder = new ResolvedFunCallFinder( crossJoinCall );
     }
 
-    public Object visit( ParameterExpr parameterExpr ) {
+    @Override
+	public Object visit( ParameterExpr parameterExpr ) {
       final Parameter parameter = parameterExpr.getParameter();
       final Type type = parameter.getType();
       if ( type instanceof mondrian.olap.type.MemberType ) {
@@ -673,7 +683,8 @@ public class CrossJoinFunDef extends FunDefBase {
       return null;
     }
 
-    public Object visit( MemberExpr memberExpr ) {
+    @Override
+	public Object visit( MemberExpr memberExpr ) {
       Member member = memberExpr.getMember();
       process( member );
       return null;
@@ -1029,7 +1040,8 @@ public class CrossJoinFunDef extends FunDefBase {
               mondrian.olap.Syntax.Function);
     }
 
-    public FunDef resolve(
+    @Override
+	public FunDef resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -1061,7 +1073,8 @@ public class CrossJoinFunDef extends FunDefBase {
         "ixmm" } );
     }
 
-    public FunDef resolve( Exp[] args, Validator validator, List<Conversion> conversions ) {
+    @Override
+	public FunDef resolve( Exp[] args, Validator validator, List<Conversion> conversions ) {
       // This function only applies in contexts which require a set.
       // Elsewhere, "*" is the multiplication operator.
       // This means that [Measures].[Unit Sales] * [Gender].[M] is
@@ -1072,7 +1085,8 @@ public class CrossJoinFunDef extends FunDefBase {
       return super.resolve( args, validator, conversions );
     }
 
-    protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+    @Override
+	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
       return new CrossJoinFunDef( dummyFunDef );
     }
   }

@@ -414,21 +414,25 @@ public class SqlConstraintUtils {
       table.addToFrom( sqlQuery, false, true );
       // create a delegate to use the aggregated column's expression
       return new Column( aggColumn.getDatatype() ) {
-        public String generateExprString( SqlQuery query ) {
+        @Override
+		public String generateExprString( SqlQuery query ) {
           // used by predicates for sql generation
           return aggColumn.generateExprString( query );
         }
 
-        public int getBitPosition() {
+        @Override
+		public int getBitPosition() {
           // this is the same as the one in RolapStar.Column
           return aggColumn.getBitPosition();
         }
 
-        public Table getTable() {
+        @Override
+		public Table getTable() {
           return column.getTable();
         }
 
-        public RolapStar getStar() {
+        @Override
+		public RolapStar getStar() {
           return column.getStar();
         }
       };
@@ -861,7 +865,8 @@ public class SqlConstraintUtils {
 
   static List<Member> removeCalculatedMembers( List<Member> members ) {
     return new FilteredIterableList<Member>( members, new FilteredIterableList.Filter<Member>() {
-      public boolean accept( final Member m ) {
+      @Override
+	public boolean accept( final Member m ) {
         return !m.isCalculated() || m.isParentChildPhysicalMember();
       }
     } );

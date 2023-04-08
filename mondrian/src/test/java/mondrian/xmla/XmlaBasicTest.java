@@ -93,11 +93,13 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
     }
 
 
-    protected DiffRepository getDiffRepos() {
+    @Override
+	protected DiffRepository getDiffRepos() {
         return DiffRepository.lookup(XmlaBasicTest.class);
     }
 
-    protected Class<? extends XmlaRequestCallback> getServletCallbackClass() {
+    @Override
+	protected Class<? extends XmlaRequestCallback> getServletCallbackClass() {
         return null;
     }
 
@@ -1009,27 +1011,33 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
             public RR() {
             }
 
-            public Access getAccess(Cube cube) {
+            @Override
+			public Access getAccess(Cube cube) {
                 return Access.ALL;
             }
 
-            public Access getAccess(NamedSet set) {
+            @Override
+			public Access getAccess(NamedSet set) {
                 return Access.ALL;
             }
 
-            public boolean canAccess(OlapElement olapElement) {
+            @Override
+			public boolean canAccess(OlapElement olapElement) {
                 return true;
             }
 
-            public Access getAccess(Schema schema) {
+            @Override
+			public Access getAccess(Schema schema) {
                 return Access.ALL;
             }
 
-            public Access getAccess(Dimension dimension) {
+            @Override
+			public Access getAccess(Dimension dimension) {
                 return Access.ALL;
             }
 
-            public Access getAccess(Hierarchy hierarchy) {
+            @Override
+			public Access getAccess(Hierarchy hierarchy) {
                 String mname = "[Customers]";
                 if (hierarchy.getUniqueName().equals(mname)) {
                     return Access.CUSTOM;
@@ -1038,11 +1046,13 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
                 }
             }
 
-            public HierarchyAccess getAccessDetails(Hierarchy hierarchy) {
+            @Override
+			public HierarchyAccess getAccessDetails(Hierarchy hierarchy) {
                 String hname = "[Customers]";
                 if (hierarchy.getUniqueName().equals(hname)) {
                     return new HierarchyAccess() {
-                        public Access getAccess(Member member) {
+                        @Override
+						public Access getAccess(Member member) {
                             String mname =
                                 "[Customers].[Mexico]";
                             //Members inherit access from their parents. If you deny access to California, you won't be able to see San Francisco.
@@ -1054,19 +1064,23 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
                             }
                         }
 
-                        public int getTopLevelDepth() {
+                        @Override
+						public int getTopLevelDepth() {
                             return 0;
                         }
 
-                        public int getBottomLevelDepth() {
+                        @Override
+						public int getBottomLevelDepth() {
                             return 4;
                         }
 
-                        public RollupPolicy getRollupPolicy() {
+                        @Override
+						public RollupPolicy getRollupPolicy() {
                             return RollupPolicy.FULL;
                         }
 
-                        public boolean hasInaccessibleDescendants(
+                        @Override
+						public boolean hasInaccessibleDescendants(
                             Member member)
                         {
                             return false;
@@ -1078,11 +1092,13 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
                 }
             }
 
-            public Access getAccess(Level level) {
+            @Override
+			public Access getAccess(Level level) {
                 return Access.ALL;
             }
 
-            public Access getAccess(Member member) {
+            @Override
+			public Access getAccess(Member member) {
                 String mname = "[Customers].[All Customers]";
                 if (member.getUniqueName().equals(mname)) {
                     return Access.ALL;
@@ -1182,7 +1198,8 @@ public class XmlaBasicTest extends XmlaBaseTestCase {
             expectedDoc, content, null, true);
     }
 
-    protected String getSessionId(Action action) {
+    @Override
+	protected String getSessionId(Action action) {
         throw new UnsupportedOperationException();
     }
 }

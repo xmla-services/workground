@@ -68,7 +68,8 @@ public class UsagePrefixTest extends AggTableTestCase {
             + "</Cube>"
             + "</Schema>";
 
-    protected String getCubeDescription() {
+    @Override
+	protected String getCubeDescription() {
         return "";
     }
 
@@ -154,7 +155,8 @@ public class UsagePrefixTest extends AggTableTestCase {
     }
 
 
-    protected String getFileName() {
+    @Override
+	protected String getFileName() {
         return MONDRIAN_595_CSV;
     }
 

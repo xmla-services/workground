@@ -29,7 +29,8 @@ public class AggregationOverAggTableTest extends AggTableTestCase {
         return "aggregation-over-agg-table.csv";
     }
 
-    @BeforeEach
+    @Override
+	@BeforeEach
     public void beforeEach() {
         super.beforeEach();
         propSaver.set(propSaver.properties.EnableNativeCrossJoin, true);
@@ -37,12 +38,14 @@ public class AggregationOverAggTableTest extends AggTableTestCase {
         propSaver.set(propSaver.properties.GenerateFormattedSql, true);
     }
 
-    @AfterEach
+    @Override
+	@AfterEach
     public void afterEach() {
         propSaver.reset();
     }
 
-    protected String getCubeDescription() {
+    @Override
+	protected String getCubeDescription() {
         return null;
     }
 

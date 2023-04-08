@@ -54,7 +54,8 @@ public interface Member extends OlapElement, Comparable, MetaElement {
 
   Level getLevel();
 
-  Hierarchy getHierarchy();
+  @Override
+Hierarchy getHierarchy();
 
   /**
    * Returns name of parent member, or empty string (not null) if we are the root.
@@ -142,7 +143,8 @@ public interface Member extends OlapElement, Comparable, MetaElement {
    *
    * @deprecated Use {@link SchemaReader#getMemberAncestors(Member, java.util.List)}.
    */
-  List<Member> getAncestorMembers();
+  @Deprecated
+List<Member> getAncestorMembers();
 
   /**
    * Returns whether this member is computed from a {@code WITH MEMBER} clause in an MDX query.

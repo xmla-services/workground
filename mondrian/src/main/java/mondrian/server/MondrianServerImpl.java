@@ -222,7 +222,8 @@ class MondrianServerImpl
         }
     }
 
-    public int getId() {
+    @Override
+	public int getId() {
         return id;
     }
 
@@ -234,15 +235,18 @@ class MondrianServerImpl
         return this.shepherd;
     }
 
-    public List<String> getKeywords() {
+    @Override
+	public List<String> getKeywords() {
         return KEYWORD_LIST;
     }
 
-    public LockBox getLockBox() {
+    @Override
+	public LockBox getLockBox() {
         return lockBox;
     }
 
-    public AggregationManager getAggregationManager() {
+    @Override
+	public AggregationManager getAggregationManager() {
         if (shutdown) {
             throw new MondrianException("Server already shutdown.");
         }
@@ -279,7 +283,8 @@ class MondrianServerImpl
             this, databaseName, catalogName, roleName, props);
     }
 
-    public List<String> getCatalogNames(
+    @Override
+	public List<String> getCatalogNames(
         RolapConnection connection)
     {
         if (shutdown) {
@@ -293,7 +298,8 @@ class MondrianServerImpl
                 repository.getDatabaseNames(connection).get(0));
     }
 
-    public List<Map<String, Object>> getDatabases(
+    @Override
+	public List<Map<String, Object>> getDatabases(
         RolapConnection connection)
     {
         if (shutdown) {
@@ -424,14 +430,16 @@ class MondrianServerImpl
                 statement.getId()));
     }
 
-    public Monitor getMonitor() {
+    @Override
+	public Monitor getMonitor() {
         if (shutdown) {
             throw new MondrianException("Server already shutdown.");
         }
         return monitor;
     }
 
-    public Map<String, RolapSchema> getRolapSchemas(
+    @Override
+	public Map<String, RolapSchema> getRolapSchemas(
         RolapConnection connection,
         String catalogName)
     {
@@ -447,7 +455,8 @@ class MondrianServerImpl
                 catalogName);
     }
 
-    public Map<String, Object> getPreConfiguredDiscoverDatasourcesResponse() {
+    @Override
+	public Map<String, Object> getPreConfiguredDiscoverDatasourcesResponse() {
         // No pre-configured response; XMLA servlet will connect to get
         // data source info.
         return null;
@@ -475,7 +484,8 @@ class MondrianServerImpl
         }
     }
 
-    public List<Statement> getStatements(String sessionId) {
+    @Override
+	public List<Statement> getStatements(String sessionId) {
         List<Statement> result = new ArrayList<Statement>();
         for(Statement statement: statementMap.values()) {
             if(statement.getMondrianConnection().getConnectInfo().get("sessionId").equals(sessionId)) {

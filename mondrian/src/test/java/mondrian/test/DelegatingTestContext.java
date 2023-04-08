@@ -29,15 +29,18 @@ public class DelegatingTestContext extends FoodmartTestContextImpl {
         this.context = context;
     }
 
-    public Util.PropertyList getConnectionProperties() {
+    @Override
+	public Util.PropertyList getConnectionProperties() {
         return context.getConnectionProperties();
     }
 
-    public String getDefaultCubeName() {
+    @Override
+	public String getDefaultCubeName() {
         return context.getDefaultCubeName();
     }
 
-    public PrintWriter getWriter() {
+    @Override
+	public PrintWriter getWriter() {
         return context.getWriter();
     }
 }

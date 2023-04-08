@@ -74,7 +74,8 @@ class GenerateFunDef extends FunDefBase {
         super(dummyFunDef);
     }
 
-    public Type getResultType(Validator validator, Exp[] args) {
+    @Override
+	public Type getResultType(Validator validator, Exp[] args) {
         final Type type = args[1].getType();
         if (type instanceof StringType || type instanceof NumericType) {
             // Generate(<Set>, <String>[, <String>])
@@ -85,7 +86,8 @@ class GenerateFunDef extends FunDefBase {
         }
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final IterCalc iterCalc = compiler.compileIter(call.getArg(0));
         if (call.getArg(1).getType() instanceof StringType
                 || call.getArg(1).getType() instanceof NumericType) {
@@ -140,7 +142,8 @@ class GenerateFunDef extends FunDefBase {
             this.all = all;
         }
 
-        public TupleList evaluateList(Evaluator evaluator) {
+        @Override
+		public TupleList evaluateList(Evaluator evaluator) {
             final int savepoint = evaluator.savepoint();
             try {
                 evaluator.setNonEmpty(false);
@@ -194,7 +197,8 @@ class GenerateFunDef extends FunDefBase {
             }
         }
 
-        public boolean dependsOn(Hierarchy hierarchy) {
+        @Override
+		public boolean dependsOn(Hierarchy hierarchy) {
             return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
         }
     }
@@ -216,7 +220,8 @@ class GenerateFunDef extends FunDefBase {
             this.sepCalc = sepCalc;
         }
 
-        public String evaluateString(Evaluator evaluator) {
+        @Override
+		public String evaluateString(Evaluator evaluator) {
             final int savepoint = evaluator.savepoint();
             try {
                 StringBuilder buf = new StringBuilder();
@@ -245,7 +250,8 @@ class GenerateFunDef extends FunDefBase {
             }
         }
 
-        public boolean dependsOn(Hierarchy hierarchy) {
+        @Override
+		public boolean dependsOn(Hierarchy hierarchy) {
             return AbstractCalc.anyDependsButFirst(getCalcs(), hierarchy);
         }
     }

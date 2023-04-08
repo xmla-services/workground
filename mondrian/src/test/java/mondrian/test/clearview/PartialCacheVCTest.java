@@ -30,7 +30,8 @@ import mondrian.test.DiffRepository;
  */
 public class PartialCacheVCTest extends ClearViewBase {
 
-    public DiffRepository getDiffRepos() {
+    @Override
+	public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }
 
@@ -39,7 +40,8 @@ public class PartialCacheVCTest extends ClearViewBase {
     }
 
 
-    @Tag("cacheHitSuit1Test")
+    @Override
+	@Tag("cacheHitSuit1Test")
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     protected void runTest(TestingContext context) {

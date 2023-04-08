@@ -66,11 +66,13 @@ class MondrianOlap4jSchema
         this.schema = schema;
     }
 
-    public Catalog getCatalog() {
+    @Override
+	public Catalog getCatalog() {
         return olap4jCatalog;
     }
 
-    public NamedList<Cube> getCubes() throws OlapException {
+    @Override
+	public NamedList<Cube> getCubes() throws OlapException {
         NamedList<MondrianOlap4jCube> list =
             new NamedListImpl<MondrianOlap4jCube>();
         final MondrianOlap4jConnection olap4jConnection =
@@ -84,13 +86,15 @@ class MondrianOlap4jSchema
         return Olap4jUtil.cast(list);
     }
 
-    public NamedList<Dimension> getSharedDimensions() throws OlapException {
+    @Override
+	public NamedList<Dimension> getSharedDimensions() throws OlapException {
         final MondrianOlap4jConnection olap4jConnection =
             olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
         final SortedSet<MondrianOlap4jDimension> dimensions =
             new TreeSet<MondrianOlap4jDimension>(
                 new Comparator<MondrianOlap4jDimension>() {
-                    public int compare(
+                    @Override
+					public int compare(
                         MondrianOlap4jDimension o1,
                         MondrianOlap4jDimension o2)
                     {
@@ -111,11 +115,13 @@ class MondrianOlap4jSchema
         return Olap4jUtil.cast(list);
     }
 
-    public Collection<Locale> getSupportedLocales() throws OlapException {
+    @Override
+	public Collection<Locale> getSupportedLocales() throws OlapException {
         return Collections.emptyList();
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return schemaName;
     }
 
@@ -129,7 +135,8 @@ class MondrianOlap4jSchema
         return olap4jCatalog.olap4jDatabase.getOlapConnection().getLocale();
     }
 
-    protected OlapElement getOlapElement() {
+    @Override
+	protected OlapElement getOlapElement() {
         return null;
     }
 }

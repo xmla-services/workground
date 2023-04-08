@@ -115,7 +115,8 @@ public class I18n {
         Collections.sort(
             supportedLocales,
             new Comparator<Object>() {
-                public int compare(Object lhs, Object rhs) {
+                @Override
+				public int compare(Object lhs, Object rhs) {
                     String ls = ((Locale) lhs).getDisplayLanguage();
                     String rs = ((Locale) rhs).getDisplayLanguage();
 

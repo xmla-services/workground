@@ -61,7 +61,8 @@ public class RolapNativeFilter extends RolapNativeSet {
      * Overriding isJoinRequired() for native filters because we have to force a join to the fact table if the filter
      * expression references a measure.
      */
-    protected boolean isJoinRequired() {
+    @Override
+	protected boolean isJoinRequired() {
       // Use a visitor and check all member expressions.
       // If any of them is a measure, we will have to
       // force the join to the fact table. If it is something
@@ -70,7 +71,8 @@ public class RolapNativeFilter extends RolapNativeSet {
       // join when we call RolapNativeSet.isJoinRequired().
       final AtomicBoolean mustJoin = new AtomicBoolean( false );
       filterExpr.accept( new MdxVisitorImpl() {
-        public Object visit( MemberExpr memberExpr ) {
+        @Override
+		public Object visit( MemberExpr memberExpr ) {
           if ( memberExpr.getMember().isMeasure() ) {
             mustJoin.set( true );
             return null;
@@ -81,7 +83,8 @@ public class RolapNativeFilter extends RolapNativeSet {
       return mustJoin.get() || ( getEvaluator().isNonEmpty() && super.isJoinRequired() );
     }
 
-    public void addConstraint( SqlQuery sqlQuery, RolapCube baseCube, AggStar aggStar ) {
+    @Override
+	public void addConstraint( SqlQuery sqlQuery, RolapCube baseCube, AggStar aggStar ) {
       // Use aggregate table to generate filter condition
       RolapNativeSql sql = new RolapNativeSql( sqlQuery, aggStar, getEvaluator(), args[0].getLevel() );
       StringBuilder filterSql = sql.generateFilterCondition( filterExpr );
@@ -133,7 +136,8 @@ public class RolapNativeFilter extends RolapNativeSet {
       tr.addLevelMembers( level, mb, null );
     }
 
-    public Object getCacheKey() {
+    @Override
+	public Object getCacheKey() {
       List<Object> key = new ArrayList<Object>();
       key.add( super.getCacheKey() );
       // Note required to use string in order for caching to work
@@ -150,11 +154,13 @@ public class RolapNativeFilter extends RolapNativeSet {
     }
   }
 
-  protected boolean restrictMemberTypes() {
+  @Override
+protected boolean restrictMemberTypes() {
     return true;
   }
 
-  NativeEvaluator createEvaluator( RolapEvaluator evaluator, FunDef fun, Exp[] args ) {
+  @Override
+NativeEvaluator createEvaluator( RolapEvaluator evaluator, FunDef fun, Exp[] args ) {
     if ( !isEnabled() ) {
       return null;
     }

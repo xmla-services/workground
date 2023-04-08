@@ -59,40 +59,48 @@ public class CacheFunDef extends FunDefBase {
         XOMUtil.discard(type);
     }
 
-    public void unparse(Exp[] args, PrintWriter pw) {
+    @Override
+	public void unparse(Exp[] args, PrintWriter pw) {
         args[0].unparse(pw);
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final Exp exp = call.getArg(0);
         final ExpCacheDescriptor cacheDescriptor =
                 new ExpCacheDescriptor(exp, compiler);
         if (call.getType() instanceof SetType) {
             return new GenericIterCalc(call.getFunName(),call.getType()) {
-                public Object evaluate(Evaluator evaluator) {
+                @Override
+				public Object evaluate(Evaluator evaluator) {
                     return evaluator.getCachedResult(cacheDescriptor);
                 }
 
-                public Calc[] getCalcs() {
+                @Override
+				public Calc[] getCalcs() {
                     return new Calc[] {cacheDescriptor.getCalc()};
                 }
 
-                public ResultStyle getResultStyle() {
+                @Override
+				public ResultStyle getResultStyle() {
                     // cached lists are immutable
                     return ResultStyle.LIST;
                 }
             };
         } else {
             return new GenericCalc(call.getFunName(),call.getType()) {
-                public Object evaluate(Evaluator evaluator) {
+                @Override
+				public Object evaluate(Evaluator evaluator) {
                     return evaluator.getCachedResult(cacheDescriptor);
                 }
 
-                public Calc[] getCalcs() {
+                @Override
+				public Calc[] getCalcs() {
                     return new Calc[] {cacheDescriptor.getCalc()};
                 }
 
-                public ResultStyle getResultStyle() {
+                @Override
+				public ResultStyle getResultStyle() {
                     return ResultStyle.VALUE;
                 }
             };
@@ -104,7 +112,8 @@ public class CacheFunDef extends FunDefBase {
             super(CacheFunDef.NAME, CacheFunDef.SIGNATURE, CacheFunDef.DESCRIPTION, CacheFunDef.SYNTAX);
         }
 
-        public FunDef resolve(
+        @Override
+		public FunDef resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -120,7 +129,8 @@ public class CacheFunDef extends FunDefBase {
                 category, type);
         }
 
-        public boolean requiresExpression(int k) {
+        @Override
+		public boolean requiresExpression(int k) {
             return false;
         }
     }

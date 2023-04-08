@@ -290,7 +290,8 @@ public class PropertiesR implements Properties {
         return applicationContext;
     }
 
-    public Optional<AxisFormat> axisFormat() {
+    @Override
+	public Optional<AxisFormat> axisFormat() {
         return axisFormat;
     }
 
@@ -298,7 +299,8 @@ public class PropertiesR implements Properties {
         return beginRange;
     }
 
-    public Optional<String> catalog() {
+    @Override
+	public Optional<String> catalog() {
         return catalog;
     }
 
@@ -314,7 +316,8 @@ public class PropertiesR implements Properties {
         return commitTimeout;
     }
 
-    public Optional<Content> content() {
+    @Override
+	public Optional<Content> content() {
         return content;
     }
 
@@ -326,7 +329,8 @@ public class PropertiesR implements Properties {
         return customData;
     }
 
-    public Optional<String> dataSourceInfo() {
+    @Override
+	public Optional<String> dataSourceInfo() {
         return dataSourceInfo;
     }
 
@@ -562,7 +566,8 @@ public class PropertiesR implements Properties {
         return forceCommitTimeout;
     }
 
-    public Optional<Format> format() {
+    @Override
+	public Optional<Format> format() {
         return format;
     }
 
@@ -570,7 +575,8 @@ public class PropertiesR implements Properties {
         return impactAnalysis;
     }
 
-    public Optional<Integer> localeIdentifier() {
+    @Override
+	public Optional<Integer> localeIdentifier() {
         return localeIdentifier;
     }
 

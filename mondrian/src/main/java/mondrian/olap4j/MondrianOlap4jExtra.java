@@ -62,7 +62,8 @@ import mondrian.xmla.XmlaHandler;
 class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
     static final MondrianOlap4jExtra INSTANCE = new MondrianOlap4jExtra();
 
-    public ResultSet executeDrillthrough(
+    @Override
+	public ResultSet executeDrillthrough(
         OlapStatement olapStatement,
         String mdx,
         boolean advanced,
@@ -76,15 +77,18 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
             rowCountSlot);
     }
 
-    public void setPreferList(OlapConnection connection) {
+    @Override
+	public void setPreferList(OlapConnection connection) {
         ((MondrianOlap4jConnection) connection).setPreferList(true);
     }
 
-    public Date getSchemaLoadDate(Schema schema) {
+    @Override
+	public Date getSchemaLoadDate(Schema schema) {
         return ((MondrianOlap4jSchema) schema).schema.getSchemaLoadDate();
     }
 
-    public int getLevelCardinality(Level level) throws OlapException {
+    @Override
+	public int getLevelCardinality(Level level) throws OlapException {
         if (level instanceof MondrianOlap4jLevel) {
             // Improved implementation if the provider is mondrian.
             final MondrianOlap4jLevel olap4jLevel = (MondrianOlap4jLevel) level;
@@ -99,7 +103,8 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         }
     }
 
-    public void getSchemaFunctionList(
+    @Override
+	public void getSchemaFunctionList(
         List<FunctionDefinition> funDefs,
         Schema schema,
         Predicate<String> functionFilter)
@@ -180,7 +185,8 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         }
     }
 
-    public int getHierarchyCardinality(Hierarchy hierarchy)
+    @Override
+	public int getHierarchyCardinality(Hierarchy hierarchy)
         throws OlapException
     {
         final MondrianOlap4jHierarchy olap4jHierarchy =
@@ -193,13 +199,15 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
             schemaReader, olap4jHierarchy.hierarchy);
     }
 
-    public int getHierarchyStructure(Hierarchy hierarchy) {
+    @Override
+	public int getHierarchyStructure(Hierarchy hierarchy) {
         final MondrianOlap4jHierarchy olap4jHierarchy =
             (MondrianOlap4jHierarchy) hierarchy;
         return ((HierarchyBase) olap4jHierarchy.hierarchy).isRagged() ? 1 : 0;
     }
 
-    public boolean isHierarchyParentChild(Hierarchy hierarchy) {
+    @Override
+	public boolean isHierarchyParentChild(Hierarchy hierarchy) {
         Level nonAllFirstLevel = hierarchy.getLevels().get(0);
         if (nonAllFirstLevel.getLevelType() == Level.Type.ALL) {
             nonAllFirstLevel = hierarchy.getLevels().get(1);
@@ -209,13 +217,15 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         return ((RolapLevel) olap4jLevel.level).isParentChild();
     }
 
-    public String getMeasureDisplayFolder(Member member) {
+    @Override
+	public String getMeasureDisplayFolder(Member member) {
         MondrianOlap4jMeasure olap4jMeasure =
                 (MondrianOlap4jMeasure) member;
         return olap4jMeasure.getDisplayFolder();
     }
 
-    public int getMeasureAggregator(Member member) {
+    @Override
+	public int getMeasureAggregator(Member member) {
         MondrianOlap4jMeasure olap4jMeasure =
             (MondrianOlap4jMeasure) member;
         Object aggProp =
@@ -244,7 +254,8 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         }
     }
 
-    public void checkMemberOrdinal(Member member) throws OlapException {
+    @Override
+	public void checkMemberOrdinal(Member member) throws OlapException {
         if (member.getOrdinal() == -1) {
             MondrianOlap4jMember olap4jMember =
                 (MondrianOlap4jMember) member;
@@ -256,7 +267,8 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         }
     }
 
-    public boolean shouldReturnCellProperty(
+    @Override
+	public boolean shouldReturnCellProperty(
         CellSet cellSet,
         org.olap4j.metadata.Property cellProperty,
         boolean evenEmpty)
@@ -269,18 +281,21 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
             || query.hasCellProperty(cellProperty.getName());
     }
 
-    public List<String> getSchemaRoleNames(Schema schema) {
+    @Override
+	public List<String> getSchemaRoleNames(Schema schema) {
         MondrianOlap4jSchema olap4jSchema = (MondrianOlap4jSchema) schema;
         // TODO: this returns ALL roles, no the current user's roles
         return new ArrayList<String>(
             ((RolapSchema) olap4jSchema.schema).roleNames());
     }
 
-    public String getSchemaId(Schema schema) {
+    @Override
+	public String getSchemaId(Schema schema) {
         return ((MondrianOlap4jSchema)schema).schema.getId();
     }
 
-    public String getCubeType(Cube cube) {
+    @Override
+	public String getCubeType(Cube cube) {
         return
             (cube instanceof MondrianOlap4jCube)
             && ((RolapCube) ((MondrianOlap4jCube) cube).cube).isVirtual()
@@ -288,24 +303,28 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
                 : RowsetDefinition.MdschemaCubesRowset.MD_CUBTYPE_CUBE;
     }
 
-    public boolean isLevelUnique(Level level) {
+    @Override
+	public boolean isLevelUnique(Level level) {
         MondrianOlap4jLevel olap4jLevel = (MondrianOlap4jLevel) level;
         return (olap4jLevel.level instanceof RolapLevel)
             && ((RolapLevel) olap4jLevel.level).isUnique();
     }
 
-    public List<org.olap4j.metadata.Property> getLevelProperties(Level level) {
+    @Override
+	public List<org.olap4j.metadata.Property> getLevelProperties(Level level) {
         MondrianOlap4jLevel olap4jLevel = (MondrianOlap4jLevel) level;
         return olap4jLevel.getProperties(false);
     }
 
-    public boolean isPropertyInternal(org.olap4j.metadata.Property property) {
+    @Override
+	public boolean isPropertyInternal(org.olap4j.metadata.Property property) {
         MondrianOlap4jProperty olap4jProperty =
             (MondrianOlap4jProperty) property;
         return olap4jProperty.property.isInternal();
     }
 
-    public List<Map<String, Object>> getDataSources(OlapConnection connection)
+    @Override
+	public List<Map<String, Object>> getDataSources(OlapConnection connection)
         throws OlapException
     {
         MondrianOlap4jConnection olap4jConnection =
@@ -339,7 +358,8 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         return databases;
     }
 
-    public Map<String, Object> getAnnotationMap(MetadataElement element)
+    @Override
+	public Map<String, Object> getAnnotationMap(MetadataElement element)
         throws SQLException
     {
         if (element instanceof OlapWrapper) {
@@ -358,15 +378,18 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         return Collections.emptyMap();
     }
 
-    public boolean canDrillThrough(Cell cell) {
+    @Override
+	public boolean canDrillThrough(Cell cell) {
         return ((MondrianOlap4jCell)cell).cell.canDrillThrough();
     }
 
-    public int getDrillThroughCount(Cell cell) {
+    @Override
+	public int getDrillThroughCount(Cell cell) {
         return ((MondrianOlap4jCell)cell).cell.getDrillThroughCount();
     }
 
-    public void flushSchemaCache(OlapConnection conn) throws OlapException {
+    @Override
+	public void flushSchemaCache(OlapConnection conn) throws OlapException {
         try {
             RolapConnection rConn = conn.unwrap(RolapConnection.class);
             rConn.getCacheControl(null).flushSchema(
@@ -376,7 +399,8 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         }
     }
 
-    public Object getMemberKey(Member m) throws OlapException {
+    @Override
+	public Object getMemberKey(Member m) throws OlapException {
         try {
             return ((MondrianOlap4jMember)m)
                 .unwrap(RolapMemberBase.class).getKey();
@@ -385,7 +409,8 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         }
     }
 
-    public Object getOrderKey(Member m) throws OlapException {
+    @Override
+	public Object getOrderKey(Member m) throws OlapException {
         try {
             return ((MondrianOlap4jMember)m)
                 .unwrap(RolapMemberBase.class).getOrderKey();
@@ -394,7 +419,8 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
         }
     }
 
-    public String getLevelDataType( Level level ) {
+    @Override
+	public String getLevelDataType( Level level ) {
         MondrianOlap4jLevel olap4jLevel = (MondrianOlap4jLevel) level;
         if ( olap4jLevel.level instanceof RolapLevel ) {
             return ( (RolapLevel) olap4jLevel.level ).getDatatype().name();

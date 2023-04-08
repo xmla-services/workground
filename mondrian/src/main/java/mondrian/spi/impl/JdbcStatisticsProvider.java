@@ -29,7 +29,8 @@ import mondrian.spi.StatisticsProvider;
 public class JdbcStatisticsProvider implements StatisticsProvider {
     private static final Logger LOG =
         LoggerFactory.getLogger(JdbcStatisticsProvider.class);
-    public long getTableCardinality(
+    @Override
+	public long getTableCardinality(
         Context context,
         String catalog,
         String schema,
@@ -77,7 +78,8 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
         }
     }
 
-    public long getQueryCardinality(
+    @Override
+	public long getQueryCardinality(
         Context context,
         String sql,
         Execution execution)
@@ -86,7 +88,8 @@ public class JdbcStatisticsProvider implements StatisticsProvider {
         return -1;
     }
 
-    public long getColumnCardinality(
+    @Override
+	public long getColumnCardinality(
         Context context,
         String catalog,
         String schema,

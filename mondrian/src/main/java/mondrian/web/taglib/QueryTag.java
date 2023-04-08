@@ -44,7 +44,8 @@ public class QueryTag extends BodyTagSupport {
     public QueryTag() {
     }
 
-    public int doAfterBody() throws JspException {
+    @Override
+	public int doAfterBody() throws JspException {
         try {
             ApplResources ar =
                 ApplResources.getInstance(pageContext.getServletContext());

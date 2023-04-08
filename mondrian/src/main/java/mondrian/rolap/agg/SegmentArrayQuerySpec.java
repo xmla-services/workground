@@ -85,19 +85,23 @@ class SegmentArrayQuerySpec extends AbstractQuerySpec {
         return true;
     }
 
-    public int getMeasureCount() {
+    @Override
+	public int getMeasureCount() {
         return segments.size();
     }
 
-    public RolapStar.Measure getMeasure(final int i) {
+    @Override
+	public RolapStar.Measure getMeasure(final int i) {
         return segments.get(i).measure;
     }
 
-    public String getMeasureAlias(final int i) {
+    @Override
+	public String getMeasureAlias(final int i) {
         return "m" + Integer.toString(i);
     }
 
-    public RolapStar.Column[] getColumns() {
+    @Override
+	public RolapStar.Column[] getColumns() {
         return segment0.getColumns();
     }
 
@@ -106,15 +110,18 @@ class SegmentArrayQuerySpec extends AbstractQuerySpec {
      *
      * @see mondrian.rolap.sql.SqlQuery#addOrderBy
      */
-    public String getColumnAlias(final int i) {
+    @Override
+	public String getColumnAlias(final int i) {
         return "c" + Integer.toString(i);
     }
 
-    public StarColumnPredicate getColumnPredicate(final int i) {
+    @Override
+	public StarColumnPredicate getColumnPredicate(final int i) {
         return segment0.predicates[i];
     }
 
-    protected List<StarPredicate> getPredicateList() {
+    @Override
+	protected List<StarPredicate> getPredicateList() {
         if (compoundPredicateList == null) {
             return super.getPredicateList();
         } else {
@@ -122,14 +129,16 @@ class SegmentArrayQuerySpec extends AbstractQuerySpec {
         }
     }
 
-    protected void addGroupingFunction(SqlQuery sqlQuery) {
+    @Override
+	protected void addGroupingFunction(SqlQuery sqlQuery) {
         List<RolapStar.Column> list = groupingSetsList.getRollupColumns();
         for (RolapStar.Column column : list) {
             sqlQuery.addGroupingFunction(column.generateExprString(sqlQuery));
         }
     }
 
-    protected void addGroupingSets(
+    @Override
+	protected void addGroupingSets(
         SqlQuery sqlQuery,
         Map<String, String> groupingSetsAliases)
     {
@@ -150,7 +159,8 @@ class SegmentArrayQuerySpec extends AbstractQuerySpec {
         }
     }
 
-    protected boolean isAggregate() {
+    @Override
+	protected boolean isAggregate() {
         return true;
     }
 }

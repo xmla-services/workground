@@ -46,7 +46,8 @@ public class ColumnImpl implements Column {
         return table;
     }
 
-    public  void setTable(String table) {
+    @Override
+	public  void setTable(String table) {
         this.table = table;
     }
 
@@ -59,11 +60,13 @@ public class ColumnImpl implements Column {
         this.name = name;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return name().hashCode() ^ (table()==null ? 0 : table().hashCode());
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
             if (!(obj instanceof Column)) {
                 return false;
             }

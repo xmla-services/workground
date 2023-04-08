@@ -320,148 +320,182 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         return url.startsWith(CONNECT_STRING_PREFIX);
     }
 
-    public OlapStatement createStatement() {
+    @Override
+	public OlapStatement createStatement() {
         final MondrianOlap4jStatement statement =
             factory.newStatement(this);
         mondrianServer.addStatement(statement);
         return statement;
     }
 
-    public ScenarioImpl createScenario() throws OlapException {
+    @Override
+	public ScenarioImpl createScenario() throws OlapException {
         return getMondrianConnection().createScenario();
     }
 
-    public void setScenario(Scenario scenario) throws OlapException {
+    @Override
+	public void setScenario(Scenario scenario) throws OlapException {
         getMondrianConnection().setScenario(scenario);
     }
 
-    public Scenario getScenario() throws OlapException {
+    @Override
+	public Scenario getScenario() throws OlapException {
         return getMondrianConnection().getScenario();
     }
 
-    public PreparedStatement prepareStatement(String sql) throws SQLException {
+    @Override
+	public PreparedStatement prepareStatement(String sql) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public CallableStatement prepareCall(String sql) throws SQLException {
+    @Override
+	public CallableStatement prepareCall(String sql) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public String nativeSQL(String sql) throws SQLException {
+    @Override
+	public String nativeSQL(String sql) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void setAutoCommit(boolean autoCommit) throws SQLException {
+    @Override
+	public void setAutoCommit(boolean autoCommit) throws SQLException {
         this.autoCommit = autoCommit;
     }
 
-    public boolean getAutoCommit() throws SQLException {
+    @Override
+	public boolean getAutoCommit() throws SQLException {
         return autoCommit;
     }
 
-    public void commit() throws SQLException {
+    @Override
+	public void commit() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void rollback() throws SQLException {
+    @Override
+	public void rollback() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void close() throws SQLException {
+    @Override
+	public void close() throws SQLException {
         if (isClosed.get() == false) {
             mondrianConnection.close();
             isClosed.set(true);
         }
     }
 
-    public boolean isClosed() throws SQLException {
+    @Override
+	public boolean isClosed() throws SQLException {
         return isClosed.get();
     }
 
-    public OlapDatabaseMetaData getMetaData() {
+    @Override
+	public OlapDatabaseMetaData getMetaData() {
         return olap4jDatabaseMetaData;
     }
 
-    public void setReadOnly(boolean readOnly) throws SQLException {
+    @Override
+	public void setReadOnly(boolean readOnly) throws SQLException {
         this.readOnly = readOnly;
     }
 
-    public boolean isReadOnly() throws SQLException {
+    @Override
+	public boolean isReadOnly() throws SQLException {
         return readOnly;
     }
 
-    public void setSchema(String schemaName) throws OlapException {
+    @Override
+	public void setSchema(String schemaName) throws OlapException {
         // no op.
     }
 
-    public String getSchema() throws OlapException {
+    @Override
+	public String getSchema() throws OlapException {
         return olap4jSchema.getName();
     }
 
-    public Schema getOlapSchema() throws OlapException {
+    @Override
+	public Schema getOlapSchema() throws OlapException {
         return olap4jSchema;
     }
 
-    public NamedList<Schema> getOlapSchemas() throws OlapException {
+    @Override
+	public NamedList<Schema> getOlapSchemas() throws OlapException {
         return getOlapCatalog().getSchemas();
     }
 
-    public void setCatalog(String catalogName) throws OlapException {
+    @Override
+	public void setCatalog(String catalogName) throws OlapException {
         // no op
     }
 
-    public String getCatalog() throws OlapException {
+    @Override
+	public String getCatalog() throws OlapException {
         return olap4jSchema.olap4jCatalog.getName();
     }
 
-    public Catalog getOlapCatalog() throws OlapException {
+    @Override
+	public Catalog getOlapCatalog() throws OlapException {
         return olap4jSchema.olap4jCatalog;
     }
 
-    public NamedList<Catalog> getOlapCatalogs() throws OlapException {
+    @Override
+	public NamedList<Catalog> getOlapCatalogs() throws OlapException {
         return getOlapDatabase().getCatalogs();
     }
 
-    public void setDatabase(String databaseName) throws OlapException {
+    @Override
+	public void setDatabase(String databaseName) throws OlapException {
         // no op.
     }
 
-    public String getDatabase() throws OlapException {
+    @Override
+	public String getDatabase() throws OlapException {
         return getOlapDatabase().getName();
     }
 
-    public Database getOlapDatabase() throws OlapException {
+    @Override
+	public Database getOlapDatabase() throws OlapException {
         // It is assumed that Mondrian supports only a single
         // database.
         return this.olap4jDatabases.get(0);
     }
 
-    public NamedList<Database> getOlapDatabases() throws OlapException {
+    @Override
+	public NamedList<Database> getOlapDatabases() throws OlapException {
         return Olap4jUtil.cast(this.olap4jDatabases);
     }
 
-    public void setTransactionIsolation(int level) throws SQLException {
+    @Override
+	public void setTransactionIsolation(int level) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getTransactionIsolation() throws SQLException {
+    @Override
+	public int getTransactionIsolation() throws SQLException {
         return TRANSACTION_NONE;
     }
 
-    public SQLWarning getWarnings() throws SQLException {
+    @Override
+	public SQLWarning getWarnings() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void clearWarnings() throws SQLException {
+    @Override
+	public void clearWarnings() throws SQLException {
     }
 
-    public Statement createStatement(
+    @Override
+	public Statement createStatement(
         int resultSetType, int resultSetConcurrency) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public PreparedStatement prepareStatement(
+    @Override
+	public PreparedStatement prepareStatement(
         String sql,
         int resultSetType,
         int resultSetConcurrency) throws SQLException
@@ -469,7 +503,8 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         throw new UnsupportedOperationException();
     }
 
-    public CallableStatement prepareCall(
+    @Override
+	public CallableStatement prepareCall(
         String sql,
         int resultSetType,
         int resultSetConcurrency) throws SQLException
@@ -477,39 +512,48 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         throw new UnsupportedOperationException();
     }
 
-    public Map<String, Class<?>> getTypeMap() throws SQLException {
+    @Override
+	public Map<String, Class<?>> getTypeMap() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
+    @Override
+	public void setTypeMap(Map<String, Class<?>> map) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void setHoldability(int holdability) throws SQLException {
+    @Override
+	public void setHoldability(int holdability) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getHoldability() throws SQLException {
+    @Override
+	public int getHoldability() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Savepoint setSavepoint() throws SQLException {
+    @Override
+	public Savepoint setSavepoint() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Savepoint setSavepoint(String name) throws SQLException {
+    @Override
+	public Savepoint setSavepoint(String name) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void rollback(Savepoint savepoint) throws SQLException {
+    @Override
+	public void rollback(Savepoint savepoint) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void releaseSavepoint(Savepoint savepoint) throws SQLException {
+    @Override
+	public void releaseSavepoint(Savepoint savepoint) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Statement createStatement(
+    @Override
+	public Statement createStatement(
         int resultSetType,
         int resultSetConcurrency,
         int resultSetHoldability) throws SQLException
@@ -517,7 +561,8 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         throw new UnsupportedOperationException();
     }
 
-    public PreparedStatement prepareStatement(
+    @Override
+	public PreparedStatement prepareStatement(
         String sql,
         int resultSetType,
         int resultSetConcurrency,
@@ -526,7 +571,8 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         throw new UnsupportedOperationException();
     }
 
-    public CallableStatement prepareCall(
+    @Override
+	public CallableStatement prepareCall(
         String sql,
         int resultSetType,
         int resultSetConcurrency,
@@ -535,19 +581,22 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         throw new UnsupportedOperationException();
     }
 
-    public PreparedStatement prepareStatement(
+    @Override
+	public PreparedStatement prepareStatement(
         String sql, int autoGeneratedKeys) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public PreparedStatement prepareStatement(
+    @Override
+	public PreparedStatement prepareStatement(
         String sql, int columnIndexes[]) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public PreparedStatement prepareStatement(
+    @Override
+	public PreparedStatement prepareStatement(
         String sql, String columnNames[]) throws SQLException
     {
         throw new UnsupportedOperationException();
@@ -555,7 +604,8 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
 
     // implement Wrapper
 
-    public <T> T unwrap(Class<T> iface) throws SQLException {
+    @Override
+	public <T> T unwrap(Class<T> iface) throws SQLException {
         if (iface.isInstance(this)) {
             return iface.cast(this);
         } else if (iface.isInstance(mondrianConnection)) {
@@ -567,14 +617,16 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         throw helper.createException(new StringBuilder("does not implement '").append(iface).append("'").toString());
     }
 
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    @Override
+	public boolean isWrapperFor(Class<?> iface) throws SQLException {
         return iface.isInstance(this)
             || iface.isInstance(mondrianConnection);
     }
 
     // implement OlapConnection
 
-    public PreparedOlapStatement prepareOlapStatement(
+    @Override
+	public PreparedOlapStatement prepareOlapStatement(
         String mdx)
         throws OlapException
     {
@@ -584,13 +636,16 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         return preparedStatement;
     }
 
-    public MdxParserFactory getParserFactory() {
+    @Override
+	public MdxParserFactory getParserFactory() {
         return new MdxParserFactory() {
-            public MdxParser createMdxParser(OlapConnection connection) {
+            @Override
+			public MdxParser createMdxParser(OlapConnection connection) {
                 return new DefaultMdxParserImpl();
             }
 
-            public MdxValidator createMdxValidator(OlapConnection connection) {
+            @Override
+			public MdxValidator createMdxValidator(OlapConnection connection) {
                 return new MondrianOlap4jMdxValidator(connection);
             }
         };
@@ -717,15 +772,18 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         final List<Member> memberList)
     {
         return new AbstractNamedList<MondrianOlap4jMember>() {
-            public String getName(Object olap4jMember) {
+            @Override
+			public String getName(Object olap4jMember) {
                 return ((MondrianOlap4jMember)olap4jMember).getName();
             }
 
-            public MondrianOlap4jMember get(int index) {
+            @Override
+			public MondrianOlap4jMember get(int index) {
                 return toOlap4j(memberList.get(index));
             }
 
-            public int size() {
+            @Override
+			public int size() {
                 return memberList.size();
             }
         };
@@ -751,15 +809,18 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         return new MondrianToOlap4jNodeConverter(this).toOlap4j(query);
     }
 
-    public void setLocale(Locale locale) {
+    @Override
+	public void setLocale(Locale locale) {
         mondrianConnection.setLocale(locale);
     }
 
-    public Locale getLocale() {
+    @Override
+	public Locale getLocale() {
         return mondrianConnection.getLocale();
     }
 
-    public void setRoleName(String roleName) throws OlapException {
+    @Override
+	public void setRoleName(String roleName) throws OlapException {
         if (roleName == null) {
             final RolapConnection connection1 = getMondrianConnection();
             final Role role = Util.createRootRole(connection1.getSchema());
@@ -824,7 +885,8 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         connection1.setRole(role);
     }
 
-    public String getRoleName() {
+    @Override
+	public String getRoleName() {
         return roleName;
     }
 
@@ -842,7 +904,8 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         return roleNames;
     }
 
-    public List<String> getAvailableRoleNames() throws OlapException {
+    @Override
+	public List<String> getAvailableRoleNames() throws OlapException {
         return UnmodifiableArrayList.of(
             getMondrianConnection().getSchema().roleNames());
     }
@@ -983,7 +1046,8 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             this.connection = (MondrianOlap4jConnection) connection;
         }
 
-        public SelectNode validateSelect(SelectNode selectNode)
+        @Override
+		public SelectNode validateSelect(SelectNode selectNode)
             throws OlapException
         {
             try {

@@ -49,7 +49,8 @@ public class ByteString implements Comparable<ByteString>, Serializable {
             && Arrays.equals(bytes, ((ByteString) obj).bytes);
     }
 
-    public int compareTo(ByteString that) {
+    @Override
+	public int compareTo(ByteString that) {
         final byte[] v1 = bytes;
         final byte[] v2 = that.bytes;
         final int n = Math.min(v1.length, v2.length);

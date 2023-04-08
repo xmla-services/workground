@@ -151,7 +151,8 @@ public class ExplainPlanTest {
     // Plan after execution, including profiling.
     final ArrayList<String> strings = new ArrayList<String>();
     ( (mondrian.server.Statement) statement ).enableProfiling( new ProfileHandler() {
-      public void explain( String plan, QueryTiming timing ) {
+      @Override
+	public void explain( String plan, QueryTiming timing ) {
         strings.add( plan );
         strings.add( String.valueOf( timing ) );
       }
@@ -401,7 +402,8 @@ public class ExplainPlanTest {
 
     final ArrayList<String> strings = new ArrayList<String>();
     ( (mondrian.server.Statement) statement ).enableProfiling( new ProfileHandler() {
-      public void explain( String plan, QueryTiming timing ) {
+      @Override
+	public void explain( String plan, QueryTiming timing ) {
         strings.add( plan );
         strings.add( String.valueOf( timing ) );
       }

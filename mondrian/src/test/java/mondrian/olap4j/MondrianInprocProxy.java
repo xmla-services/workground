@@ -61,7 +61,8 @@ public class MondrianInprocProxy
         this.urlString = urlString.substring("jdbc:mondrian:".length());
     }
 
-    public byte[] get(
+    @Override
+	public byte[] get(
         XmlaOlap4jServerInfos infos,
         String request)
     {
@@ -74,19 +75,22 @@ public class MondrianInprocProxy
         }
     }
 
-    public Future<byte[]> submit(
+    @Override
+	public Future<byte[]> submit(
         final XmlaOlap4jServerInfos infos,
         final String request)
     {
         return this.executor.submit(
             new Callable<byte[]>() {
-                public byte[] call() throws Exception {
+                @Override
+				public byte[] call() throws Exception {
                     return get(infos, request);
                 }
             });
     }
 
-    public String getEncodingCharsetName() {
+    @Override
+	public String getEncodingCharsetName() {
         return "UTF-8";
     }
 }

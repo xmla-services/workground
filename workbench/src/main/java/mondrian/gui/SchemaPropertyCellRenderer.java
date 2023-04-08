@@ -149,7 +149,8 @@ public class SchemaPropertyCellRenderer
         return booleanRenderer;
     }
 
-    public Component getTableCellRendererComponent(
+    @Override
+	public Component getTableCellRendererComponent(
         JTable table,
         Object value,
         boolean isSelected,

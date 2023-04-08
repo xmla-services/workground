@@ -75,15 +75,18 @@ public interface AxisOrdinal {
         public static AxisOrdinal forLogicalOrdinal(final int ordinal) {
             if (ordinal + 2 > SECTIONS.ordinal()) {
                 return new AxisOrdinal() {
-                    public String name() {
+                    @Override
+					public String name() {
                         return new StringBuilder("AXIS(").append(ordinal).append(")").toString();
                     }
 
-                    public int logicalOrdinal() {
+                    @Override
+					public int logicalOrdinal() {
                         return ordinal;
                     }
 
-                    public boolean isFilter() {
+                    @Override
+					public boolean isFilter() {
                         return false;
                     }
                 };
@@ -92,11 +95,13 @@ public interface AxisOrdinal {
             }
         }
 
-        public int logicalOrdinal() {
+        @Override
+		public int logicalOrdinal() {
             return ordinal() - 2;
         }
 
-        public boolean isFilter() {
+        @Override
+		public boolean isFilter() {
             return this == SLICER;
         }
     }

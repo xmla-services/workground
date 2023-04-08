@@ -54,14 +54,16 @@ class AsFunDef extends FunDefBase {
         this.scopedNamedSet = scopedNamedSet;
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         // Argument 0, the definition of the set, has been resolved since the
         // scoped named set was created. Implicit conversions, like converting
         // a member to a set, have been performed. Use the new expression.
         scopedNamedSet.setExp(call.getArg(0));
 
         return new AbstractIterCalc(call.getFunName(),call.getType(), new Calc[0]) {
-            public TupleIterable evaluateIterable(
+            @Override
+			public TupleIterable evaluateIterable(
                 Evaluator evaluator)
             {
                 final Evaluator.NamedSetEvaluator namedSetEvaluator =
@@ -76,7 +78,8 @@ class AsFunDef extends FunDefBase {
             super("AS", null, null, Syntax.Infix);
         }
 
-        public FunDef resolve(
+        @Override
+		public FunDef resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)

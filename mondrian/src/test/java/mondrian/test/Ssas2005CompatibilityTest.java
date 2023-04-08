@@ -2026,7 +2026,8 @@ public class Ssas2005CompatibilityTest {
 
         private PropertySaver5 propSaver;
 
-        @BeforeEach
+        @Override
+		@BeforeEach
         public void beforeEach() {
             propSaver = new PropertySaver5();
             propSaver.set(
@@ -2034,7 +2035,8 @@ public class Ssas2005CompatibilityTest {
                     false);
         }
 
-        @AfterEach
+        @Override
+		@AfterEach
         public void afterEach() {
             propSaver.reset();
         }
@@ -2050,7 +2052,8 @@ public class Ssas2005CompatibilityTest {
 
         private PropertySaver5 propSaver;
 
-        @BeforeEach
+        @Override
+		@BeforeEach
         public void beforeEach() {
         	RolapSchemaPool.instance().clear();
             propSaver = new PropertySaver5();
@@ -2059,7 +2062,8 @@ public class Ssas2005CompatibilityTest {
                     true);
         }
 
-        @AfterEach
+        @Override
+		@AfterEach
         public void afterEach() {
             propSaver.reset();
         }

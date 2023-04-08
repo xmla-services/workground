@@ -3495,7 +3495,8 @@ public class BasicQueryTest {
     queries.addAll( Arrays.asList( sampleQueries ) );
     queries.addAll( taglibQueries );
     TestCaseForker threaded = new TestCaseForker( this, timeoutMs, threadCount, new ChooseRunnable() {
-      public void run( int i ) {
+      @Override
+	public void run( int i ) {
         for ( int j = 0; j < iterationCount; j++ ) {
           int queryIndex = ( i * 2 + j ) % queries.size();
           try {
@@ -4372,7 +4373,8 @@ public class BasicQueryTest {
       // Schedule timer to cancel after waitMillis
       Timer timer = new Timer( true );
       TimerTask task = new TimerTask() {
-        public void run() {
+        @Override
+		public void run() {
           Thread thread = Thread.currentThread();
           thread.setName( "CancelThread" );
           try {
@@ -5196,27 +5198,33 @@ public class BasicQueryTest {
    * A simple user-defined function which adds one to its argument, but sleeps 1 ms before doing so.
    */
   public static class SleepUdf implements UserDefinedFunction {
-    public String getName() {
+    @Override
+	public String getName() {
       return "SleepUdf";
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
       return "Returns its argument plus one but sleeps 1 ms first";
     }
 
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
       return Syntax.Function;
     }
 
-    public Type getReturnType( Type[] parameterTypes ) {
+    @Override
+	public Type getReturnType( Type[] parameterTypes ) {
       return new NumericType();
     }
 
-    public Type[] getParameterTypes() {
+    @Override
+	public Type[] getParameterTypes() {
       return new Type[] { new NumericType() };
     }
 
-    public Object execute( Evaluator evaluator, Argument[] arguments ) {
+    @Override
+	public Object execute( Evaluator evaluator, Argument[] arguments ) {
       final Object argValue = arguments[0].evaluateScalar( evaluator );
       if ( argValue instanceof Number ) {
         try {
@@ -5233,7 +5241,8 @@ public class BasicQueryTest {
       }
     }
 
-    public String[] getReservedWords() {
+    @Override
+	public String[] getReservedWords() {
       return null;
     }
   }
@@ -5241,27 +5250,33 @@ public class BasicQueryTest {
   public static class CountConcurrentUdf implements UserDefinedFunction {
     private static AtomicInteger count = new AtomicInteger();
 
-    public String getName() {
+    @Override
+	public String getName() {
       return "CountConcurrentUdf";
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
       return "Counts the current number of threads using this thing.";
     }
 
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
       return Syntax.Function;
     }
 
-    public Type getReturnType( Type[] parameterTypes ) {
+    @Override
+	public Type getReturnType( Type[] parameterTypes ) {
       return new NumericType();
     }
 
-    public Type[] getParameterTypes() {
+    @Override
+	public Type[] getParameterTypes() {
       return new Type[] {};
     }
 
-    public Object execute( Evaluator evaluator, Argument[] arguments ) {
+    @Override
+	public Object execute( Evaluator evaluator, Argument[] arguments ) {
       try {
         count.incrementAndGet();
         Thread.sleep( 10000 );
@@ -5277,7 +5292,8 @@ public class BasicQueryTest {
       return count.get();
     }
 
-    public String[] getReservedWords() {
+    @Override
+	public String[] getReservedWords() {
       return null;
     }
   }
@@ -5344,7 +5360,8 @@ public class BasicQueryTest {
         "select {TopCount([Customers].Members, 10, [Measures].[Unit Sales])} on columns from [Sales]";
 
     final ExecutorService es = Executors.newCachedThreadPool( new ThreadFactory() {
-      public Thread newThread( Runnable r ) {
+      @Override
+	public Thread newThread( Runnable r ) {
         final Thread thread = Executors.defaultThreadFactory().newThread( r );
         thread.setName( "mondrian.test.BasicQueryTest.testConcurrentStatementRun" );
         thread.setDaemon( true );
@@ -5355,7 +5372,8 @@ public class BasicQueryTest {
     final OlapStatement stmt = olapConnection.createStatement();
 
     es.submit( new Callable<CellSet>() {
-      public CellSet call() throws Exception {
+      @Override
+	public CellSet call() throws Exception {
         return stmt.executeOlapQuery( mdxQuery );
       }
     } );
@@ -5364,7 +5382,8 @@ public class BasicQueryTest {
     Thread.sleep( 100 );
 
     es.submit( new Callable<CellSet>() {
-      public CellSet call() throws Exception {
+      @Override
+	public CellSet call() throws Exception {
         return stmt.executeOlapQuery( mdxQuery );
       }
     } ).get();
@@ -5511,7 +5530,8 @@ public class BasicQueryTest {
             + "SELECT {[Measures].[CountyThigny]} ON COLUMNS,\n" + "  {[Product].members} ON ROWS\n" + "FROM [Sales]";
 
     final ExecutorService es = Executors.newCachedThreadPool( new ThreadFactory() {
-      public Thread newThread( Runnable r ) {
+      @Override
+	public Thread newThread( Runnable r ) {
         final Thread thread = Executors.defaultThreadFactory().newThread( r );
         thread.setName( "mondrian.test.BasicQueryTest.testConcurrentStatementRun_2" );
         thread.setDaemon( true );
@@ -5521,12 +5541,14 @@ public class BasicQueryTest {
 
     // Submit a query twice.
     Future<Result> task1 = es.submit( new Callable<Result>() {
-      public Result call() throws Exception {
+      @Override
+	public Result call() throws Exception {
         return executeQuery(context.createConnection(), query );
       }
     } );
     Future<Result> task2 = es.submit( new Callable<Result>() {
-      public Result call() throws Exception {
+      @Override
+	public Result call() throws Exception {
         return executeQuery(context.createConnection(), query );
       }
     } );
@@ -5592,7 +5614,8 @@ public class BasicQueryTest {
     // The exception should appear on thread 1 and thread 2
     // should succeed.
     runMondrian1506(context, new Mondrian1506Lambda() {
-      public void run( ExecutorService exec, Query q1, AtomicBoolean fail, AtomicBoolean success, Runnable r1,
+      @Override
+	public void run( ExecutorService exec, Query q1, AtomicBoolean fail, AtomicBoolean success, Runnable r1,
           Runnable r2 ) throws Exception {
         flushSchemaCache(context.createConnection());
 
@@ -5633,7 +5656,8 @@ public class BasicQueryTest {
     // Second test. Launch one query. Cancel and start another one right
     // after the call to cancel() returns. Same result as test 1.
     runMondrian1506(context, new Mondrian1506Lambda() {
-      public void run( ExecutorService exec, Query q1, AtomicBoolean fail, AtomicBoolean success, Runnable r1,
+      @Override
+	public void run( ExecutorService exec, Query q1, AtomicBoolean fail, AtomicBoolean success, Runnable r1,
           Runnable r2 ) throws Exception {
         flushSchemaCache(context.createConnection());
 
@@ -5688,7 +5712,8 @@ public class BasicQueryTest {
     // A service to execute stuff in the background.
     final ExecutorService exec =
         Util.getExecutorService( 2, 2, 1000, "BasicQueryTest.testMondrian1506", new RejectedExecutionHandler() {
-          public void rejectedExecution( Runnable r, ThreadPoolExecutor executor ) {
+          @Override
+		public void rejectedExecution( Runnable r, ThreadPoolExecutor executor ) {
             throw new RuntimeException();
           }
         } );
@@ -5703,7 +5728,8 @@ public class BasicQueryTest {
     final AtomicBoolean success = new AtomicBoolean( false );
 
     final Runnable r1 = new Runnable() {
-      public void run() {
+      @Override
+	public void run() {
         try {
           connection.execute( q1 );
         } catch ( Throwable t ) {
@@ -5712,7 +5738,8 @@ public class BasicQueryTest {
       }
     };
     final Runnable r2 = new Runnable() {
-      public void run() {
+      @Override
+	public void run() {
         try {
           connection.execute( q2 );
           success.set( true );
@@ -6111,7 +6138,8 @@ public class BasicQueryTest {
       for (int i = 0; i < threads.length; i++) {
         final int threadIndex = i;
         threads[i] = new Thread(threadGroup, "thread #" + threadIndex) {
-          public void run() {
+          @Override
+		public void run() {
             try {
               chooseRunnable.run(threadIndex);
             } catch (Throwable e) {

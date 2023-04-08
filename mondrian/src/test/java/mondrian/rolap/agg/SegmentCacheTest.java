@@ -97,7 +97,8 @@ public class SegmentCacheTest {
             new ArrayList<SegmentHeader>();
         final SegmentCache.SegmentCacheListener listener =
             new SegmentCache.SegmentCacheListener() {
-                public void handle(SegmentCacheEvent e) {
+                @Override
+				public void handle(SegmentCacheEvent e) {
                     switch (e.getEventType()) {
                     case ENTRY_CREATED:
                         createdHeaders.add(e.getSource());

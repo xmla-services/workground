@@ -63,6 +63,7 @@ public class SchemaUtil {
 			this.context = context;
 		}
 
+		@Override
 		public Result createOutput(String namespaceURI, String suggestedFileName) throws IOException {
 			System.out.println("Generate schema for " + namespaceURI + " with suggested name " + suggestedFileName);
 			try {

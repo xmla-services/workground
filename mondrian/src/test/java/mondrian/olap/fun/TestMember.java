@@ -38,124 +38,154 @@ public class TestMember implements Member {
     this.identifer = identifer;
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return identifer;
   }
 
-  public int compareTo( Object o ) {
+  @Override
+public int compareTo( Object o ) {
     TestMember other = (TestMember) o;
     return this.identifer.compareTo( other.identifer );
   }
 
-  public Member getParentMember() {
+  @Override
+public Member getParentMember() {
     throw new UnsupportedOperationException();
   }
 
-  public Level getLevel() {
+  @Override
+public Level getLevel() {
     throw new UnsupportedOperationException();
   }
 
-  public Hierarchy getHierarchy() {
+  @Override
+public Hierarchy getHierarchy() {
     throw new UnsupportedOperationException();
   }
 
-  public String getParentUniqueName() {
+  @Override
+public String getParentUniqueName() {
     throw new UnsupportedOperationException();
   }
 
-  public MemberType getMemberType() {
+  @Override
+public MemberType getMemberType() {
     throw new UnsupportedOperationException();
   }
 
-  public boolean isParentChildLeaf() {
+  @Override
+public boolean isParentChildLeaf() {
     return false;
   }
 
-  public boolean isParentChildPhysicalMember() {
+  @Override
+public boolean isParentChildPhysicalMember() {
     return false;
   }
 
-  public void setName( String name ) {
+  @Override
+public void setName( String name ) {
     throw new UnsupportedOperationException();
   }
 
-  public boolean isAll() {
+  @Override
+public boolean isAll() {
     return false;
   }
 
-  public boolean isMeasure() {
+  @Override
+public boolean isMeasure() {
     throw new UnsupportedOperationException();
   }
 
-  public boolean isNull() {
+  @Override
+public boolean isNull() {
     return true;
   }
 
-  public boolean isChildOrEqualTo( Member member ) {
+  @Override
+public boolean isChildOrEqualTo( Member member ) {
     throw new UnsupportedOperationException();
   }
 
-  public boolean isCalculated() {
+  @Override
+public boolean isCalculated() {
     throw new UnsupportedOperationException();
   }
 
-  public boolean isEvaluated() {
+  @Override
+public boolean isEvaluated() {
     throw new UnsupportedOperationException();
   }
 
-  public int getSolveOrder() {
+  @Override
+public int getSolveOrder() {
     throw new UnsupportedOperationException();
   }
 
-  public Exp getExpression() {
+  @Override
+public Exp getExpression() {
     throw new UnsupportedOperationException();
   }
 
-  public List<Member> getAncestorMembers() {
+  @Override
+public List<Member> getAncestorMembers() {
     throw new UnsupportedOperationException();
   }
 
-  public boolean isCalculatedInQuery() {
+  @Override
+public boolean isCalculatedInQuery() {
     throw new UnsupportedOperationException();
   }
 
-  public Object getPropertyValue( String propertyName ) {
+  @Override
+public Object getPropertyValue( String propertyName ) {
     throw new UnsupportedOperationException();
   }
 
-  public Object getPropertyValue( String propertyName, boolean matchCase ) {
+  @Override
+public Object getPropertyValue( String propertyName, boolean matchCase ) {
     throw new UnsupportedOperationException();
   }
 
-  public String getPropertyFormattedValue( String propertyName ) {
+  @Override
+public String getPropertyFormattedValue( String propertyName ) {
     throw new UnsupportedOperationException();
   }
 
-  public void setProperty( String name, Object value ) {
+  @Override
+public void setProperty( String name, Object value ) {
     throw new UnsupportedOperationException();
   }
 
-  public Property[] getProperties() {
+  @Override
+public Property[] getProperties() {
     throw new UnsupportedOperationException();
   }
 
-  public int getOrdinal() {
+  @Override
+public int getOrdinal() {
     throw new UnsupportedOperationException();
   }
 
-  public Comparable getOrderKey() {
+  @Override
+public Comparable getOrderKey() {
     throw new UnsupportedOperationException();
   }
 
-  public boolean isHidden() {
+  @Override
+public boolean isHidden() {
     throw new UnsupportedOperationException();
   }
 
-  public int getDepth() {
+  @Override
+public int getDepth() {
     throw new UnsupportedOperationException();
   }
 
-  public Member getDataMember() {
+  @Override
+public Member getDataMember() {
     throw new UnsupportedOperationException();
   }
 
@@ -163,40 +193,49 @@ public class TestMember implements Member {
     throw new UnsupportedOperationException();
   }
 
-  public String getUniqueName() {
+  @Override
+public String getUniqueName() {
     throw new UnsupportedOperationException();
   }
 
-  public String getName() {
+  @Override
+public String getName() {
     throw new UnsupportedOperationException();
   }
 
-  public String getDescription() {
+  @Override
+public String getDescription() {
     throw new UnsupportedOperationException();
   }
 
-  public OlapElement lookupChild(
+  @Override
+public OlapElement lookupChild(
     SchemaReader schemaReader, Id.Segment s, MatchType matchType ) {
     throw new UnsupportedOperationException();
   }
 
-  public String getQualifiedName() {
+  @Override
+public String getQualifiedName() {
     throw new UnsupportedOperationException();
   }
 
-  public String getCaption() {
+  @Override
+public String getCaption() {
     throw new UnsupportedOperationException();
   }
 
-  public String getLocalized( LocalizedProperty prop, Locale locale ) {
+  @Override
+public String getLocalized( LocalizedProperty prop, Locale locale ) {
     throw new UnsupportedOperationException();
   }
 
-  public boolean isVisible() {
+  @Override
+public boolean isVisible() {
     throw new UnsupportedOperationException();
   }
 
-  public Dimension getDimension() {
+  @Override
+public Dimension getDimension() {
     return new MockDimension();
   }
 
@@ -208,69 +247,85 @@ public class TestMember implements Member {
   }
 
   private static class MockDimension implements Dimension {
-    public Hierarchy[] getHierarchies() {
+    @Override
+	public Hierarchy[] getHierarchies() {
       throw new UnsupportedOperationException();
     }
 
-    public boolean isMeasures() {
+    @Override
+	public boolean isMeasures() {
       throw new UnsupportedOperationException();
     }
 
-    public DimensionType getDimensionType() {
+    @Override
+	public DimensionType getDimensionType() {
       throw new UnsupportedOperationException();
     }
 
-    public Schema getSchema() {
+    @Override
+	public Schema getSchema() {
       throw new UnsupportedOperationException();
     }
 
-    public boolean isHighCardinality() {
+    @Override
+	public boolean isHighCardinality() {
       return false;
     }
 
-    public String getUniqueName() {
+    @Override
+	public String getUniqueName() {
       throw new UnsupportedOperationException();
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
       throw new UnsupportedOperationException();
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
       throw new UnsupportedOperationException();
     }
 
-    public boolean isVisible() {
+    @Override
+	public boolean isVisible() {
       throw new UnsupportedOperationException();
     }
 
-    public OlapElement lookupChild(
+    @Override
+	public OlapElement lookupChild(
       SchemaReader schemaReader,
       Id.Segment s, MatchType matchType ) {
       throw new UnsupportedOperationException();
     }
 
-    public String getQualifiedName() {
+    @Override
+	public String getQualifiedName() {
       throw new UnsupportedOperationException();
     }
 
-    public String getCaption() {
+    @Override
+	public String getCaption() {
       throw new UnsupportedOperationException();
     }
 
-    public String getLocalized( LocalizedProperty prop, Locale locale ) {
+    @Override
+	public String getLocalized( LocalizedProperty prop, Locale locale ) {
       throw new UnsupportedOperationException();
     }
 
-    public Hierarchy getHierarchy() {
+    @Override
+	public Hierarchy getHierarchy() {
       throw new UnsupportedOperationException();
     }
 
-    public Dimension getDimension() {
+    @Override
+	public Dimension getDimension() {
       throw new UnsupportedOperationException();
     }
 
-    public Map<String, Object> getMetadata() {
+    @Override
+	public Map<String, Object> getMetadata() {
       throw new UnsupportedOperationException();
     }
 

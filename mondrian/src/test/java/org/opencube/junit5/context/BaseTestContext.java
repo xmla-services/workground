@@ -104,6 +104,7 @@ public class BaseTestContext implements TestingContext {
 		return ((OlapWrapper) connection).unwrap(OlapConnection.class);
 	}
 
+	@Override
 	public String getJDBCConnectString() {
 
 		// may exist better ways

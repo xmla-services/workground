@@ -143,7 +143,8 @@ public class FastBatchingCellReader implements CellReader {
                 : MondrianProperties.instance().CellBatchSize.get();
     }
 
-    public Object get(RolapEvaluator evaluator) {
+    @Override
+	public Object get(RolapEvaluator evaluator) {
         final CellRequest request =
             RolapAggregationManager.makeRequest(evaluator);
 
@@ -186,7 +187,8 @@ public class FastBatchingCellReader implements CellReader {
         return RolapUtil.valueNotReadyException;
     }
 
-    public int getMissCount() {
+    @Override
+	public int getMissCount() {
         return missCount;
     }
 
@@ -214,7 +216,8 @@ public class FastBatchingCellReader implements CellReader {
      * are pending batches to load or if {@link #setDirty(boolean)} has been
      * called.
      */
-    public boolean isDirty() {
+    @Override
+	public boolean isDirty() {
         return dirty || !cellRequests.isEmpty();
     }
 
@@ -368,7 +371,8 @@ public class FastBatchingCellReader implements CellReader {
                     final Locus locus = Locus.peek();
                     cacheMgr.execute(
                         new SegmentCacheManager.Command<Void>() {
-                            public Void call() throws Exception {
+                            @Override
+							public Void call() throws Exception {
                                 SegmentCacheIndex index =
                                     cacheMgr.getIndexRegistry()
                                     .getIndex(segmentWithData.getStar());
@@ -383,7 +387,8 @@ public class FastBatchingCellReader implements CellReader {
                                     segmentWithData.getHeader(), body);
                                 return null;
                             }
-                            public Locus getLocus() {
+                            @Override
+							public Locus getLocus() {
                                 return locus;
                             }
                         });
@@ -1040,12 +1045,14 @@ class BatchLoader {
             this.cellRequests = cellRequests;
         }
 
-        public LoadBatchResponse call() {
+        @Override
+		public LoadBatchResponse call() {
             return new BatchLoader(locus, cacheMgr, dialect, cube)
                 .load(cellRequests);
         }
 
-        public Locus getLocus() {
+        @Override
+		public Locus getLocus() {
             return locus;
         }
     }
@@ -1206,7 +1213,8 @@ class BatchLoader {
             batchKey = new AggregationKey(request);
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             if (string == null) {
                 final StringBuilder buf = new StringBuilder();
                 buf.append("Batch {\n")
@@ -1768,7 +1776,8 @@ class BatchLoader {
         static final CompositeBatchComparator instance =
             new CompositeBatchComparator();
 
-        public int compare(CompositeBatch o1, CompositeBatch o2) {
+        @Override
+		public int compare(CompositeBatch o1, CompositeBatch o2) {
             return BatchComparator.instance.compare(
                 o1.detailedBatch,
                 o2.detailedBatch);
@@ -1781,7 +1790,8 @@ class BatchLoader {
         private BatchComparator() {
         }
 
-        public int compare(
+        @Override
+		public int compare(
             Batch o1, Batch o2)
         {
             if (o1.columns.length != o2.columns.length) {
@@ -1830,7 +1840,8 @@ class BatchLoader {
         private ValueColumnConstraintComparator() {
         }
 
-        public int compare(
+        @Override
+		public int compare(
             ValueColumnPredicate o1,
             ValueColumnPredicate o2)
         {

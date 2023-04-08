@@ -42,7 +42,8 @@ public abstract class OlapElementBase
 
     protected abstract Logger getLogger();
 
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         return (o == this)
            || ((o instanceof OlapElement)
                && equals((OlapElement) o));
@@ -54,7 +55,8 @@ public abstract class OlapElementBase
            && getUniqueName().equalsIgnoreCase(mdxElement.getUniqueName());
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         if (hash == 0) {
             hash = computeHashCode();
         }
@@ -70,11 +72,13 @@ public abstract class OlapElementBase
         return (getClass().hashCode() << 8) ^ getUniqueName().hashCode();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return getUniqueName();
     }
 
-    public Object clone() {
+    @Override
+	public Object clone() {
         return this;
     }
 
@@ -82,7 +86,8 @@ public abstract class OlapElementBase
      * Returns the display name of this catalog element.
      * If no caption is defined, the name is returned.
      */
-    public String getCaption() {
+    @Override
+	public String getCaption() {
         if (caption != null) {
             return caption;
         } else {
@@ -97,11 +102,13 @@ public abstract class OlapElementBase
         this.caption = caption;
     }
 
-    public boolean isVisible() {
+    @Override
+	public boolean isVisible() {
         return visible;
     }
 
-    public String getLocalized(LocalizedProperty prop, Locale locale) {
+    @Override
+	public String getLocalized(LocalizedProperty prop, Locale locale) {
         if (this instanceof MetaElement) {
             MetaElement metaElement = (MetaElement) this;
             final Map<String, Object> metaMap = metaElement.getMetadata();

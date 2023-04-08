@@ -27,15 +27,18 @@ public class WorkbenchTreeModelPath implements TreeModelPath {
         this.treePath = treePath;
     }
 
-    public Object getPathComponent(int element) {
+    @Override
+	public Object getPathComponent(int element) {
         return treePath.getPathComponent(element);
     }
 
-    public int getPathCount() {
+    @Override
+	public int getPathCount() {
         return treePath.getPathCount();
     }
 
-    public boolean isEmpty() {
+    @Override
+	public boolean isEmpty() {
         return treePath == null || treePath.getPathCount() == 0;
     }
 

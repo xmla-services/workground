@@ -49,7 +49,8 @@ public class ColumnR implements Column {
         return genericExpression;
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (!(obj instanceof Column)) {
             return false;
         }
@@ -58,7 +59,8 @@ public class ColumnR implements Column {
             Objects.equals(table(), that.table());
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return name().hashCode() ^ (table()==null ? 0 : table().hashCode());
     }
 }

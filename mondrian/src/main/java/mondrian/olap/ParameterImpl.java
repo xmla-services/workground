@@ -45,40 +45,49 @@ public class ParameterImpl
         Object value;
         boolean assigned;
 
-        public Object getCachedDefaultValue() {
+        @Override
+		public Object getCachedDefaultValue() {
             throw new UnsupportedOperationException();
         }
 
-        public Calc getDefaultValueCalc() {
+        @Override
+		public Calc getDefaultValueCalc() {
             throw new UnsupportedOperationException();
         }
 
-        public int getIndex() {
+        @Override
+		public int getIndex() {
             throw new UnsupportedOperationException();
         }
 
-        public Parameter getParameter() {
+        @Override
+		public Parameter getParameter() {
             return ParameterImpl.this;
         }
 
-        public Object getParameterValue() {
+        @Override
+		public Object getParameterValue() {
             return value;
         }
 
-        public boolean isParameterSet() {
+        @Override
+		public boolean isParameterSet() {
             return assigned;
         }
 
-        public void unsetParameterValue() {
+        @Override
+		public void unsetParameterValue() {
             this.assigned = false;
             this.value = null;
         }
 
-        public void setCachedDefaultValue(Object value) {
+        @Override
+		public void setCachedDefaultValue(Object value) {
             throw new UnsupportedOperationException();
         }
 
-        public void setParameterValue(Object value, boolean assigned) {
+        @Override
+		public void setParameterValue(Object value, boolean assigned) {
             this.assigned = true;
             this.value = value;
 
@@ -105,23 +114,28 @@ public class ParameterImpl
             || type instanceof MemberType;
     }
 
-    public Scope getScope() {
+    @Override
+	public Scope getScope() {
         return Scope.Statement;
     }
 
-    public Type getType() {
+    @Override
+	public Type getType() {
         return type;
     }
 
-    public Exp getDefaultExp() {
+    @Override
+	public Exp getDefaultExp() {
         return defaultExp;
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return name;
     }
 
-    public Object getValue() {
+    @Override
+	public Object getValue() {
         if (slot == null) {
             // query has not been resolved yet, so it's not possible for the
             // parameter to have a value
@@ -132,20 +146,24 @@ public class ParameterImpl
         }
     }
 
-    public void setValue(Object value) {
+    @Override
+	public void setValue(Object value) {
         slot.setParameterValue(convert(value), true);
     }
 
-    public boolean isSet() {
+    @Override
+	public boolean isSet() {
         return slot != null
             && slot.isParameterSet();
     }
 
-    public void unsetValue() {
+    @Override
+	public void unsetValue() {
         slot.unsetParameterValue();
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return description;
     }
 
@@ -159,7 +177,8 @@ public class ParameterImpl
      * Returns whether this parameter is equal to another, based upon name,
      * type and value
      */
-    public boolean equals(Object other) {
+    @Override
+	public boolean equals(Object other) {
         if (!(other instanceof ParameterImpl)) {
             return false;
         }
@@ -168,14 +187,16 @@ public class ParameterImpl
             && that.defaultExp.equals(this.defaultExp);
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return Util.hash(getName().hashCode(), defaultExp.hashCode());
     }
 
     /**
      * Returns whether the parameter can be modified.
      */
-    public boolean isModifiable() {
+    @Override
+	public boolean isModifiable() {
         return true;
     }
 
@@ -198,7 +219,8 @@ public class ParameterImpl
         this.defaultExp = defaultExp;
     }
 
-    public Calc compile(ExpCompiler compiler) {
+    @Override
+	public Calc compile(ExpCompiler compiler) {
         final ParameterSlot slot = compiler.registerParameter(this);
         if (this.slot != null) {
             // save previous value
@@ -267,7 +289,8 @@ public class ParameterImpl
             this.slot = slot;
         }
 
-        public Object evaluate(Evaluator evaluator) {
+        @Override
+		public Object evaluate(Evaluator evaluator) {
             Object value = evaluator.getParameterValue(slot);
             if (!slot.isParameterSet()) {
                 // save value if not set (setting the default value)
@@ -300,7 +323,8 @@ public class ParameterImpl
             this.slot = slot;
         }
 
-        public TupleList evaluateList(Evaluator evaluator) {
+        @Override
+		public TupleList evaluateList(Evaluator evaluator) {
             TupleList value = (TupleList) evaluator.getParameterValue(slot);
             if (!slot.isParameterSet()) {
                 // save value if not set (setting the default value)

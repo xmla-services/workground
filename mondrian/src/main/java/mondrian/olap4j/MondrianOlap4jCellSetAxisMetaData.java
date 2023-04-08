@@ -90,12 +90,14 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
         }
     }
 
-    public Axis getAxisOrdinal() {
+    @Override
+	public Axis getAxisOrdinal() {
         return Axis.Factory.forOrdinal(
             queryAxis.getAxisOrdinal().logicalOrdinal());
     }
 
-    public List<Hierarchy> getHierarchies() {
+    @Override
+	public List<Hierarchy> getHierarchies() {
         return getHierarchiesNonFilter();
     }
 
@@ -120,7 +122,8 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
         return hierarchyList;
     }
 
-    public List<Property> getProperties() {
+    @Override
+	public List<Property> getProperties() {
         return propertyList;
     }
 }

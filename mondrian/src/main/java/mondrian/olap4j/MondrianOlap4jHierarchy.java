@@ -47,21 +47,25 @@ public class MondrianOlap4jHierarchy
         this.hierarchy = hierarchy;
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         return obj instanceof MondrianOlap4jHierarchy
             && hierarchy.equals(((MondrianOlap4jHierarchy) obj).hierarchy);
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return hierarchy.hashCode();
     }
 
-    public Dimension getDimension() {
+    @Override
+	public Dimension getDimension() {
         return new MondrianOlap4jDimension(
             olap4jSchema, hierarchy.getDimension());
     }
 
-    public NamedList<Level> getLevels() {
+    @Override
+	public NamedList<Level> getLevels() {
         final NamedList<MondrianOlap4jLevel> list =
             new NamedListImpl<MondrianOlap4jLevel>();
         final MondrianOlap4jConnection olap4jConnection =
@@ -77,11 +81,13 @@ public class MondrianOlap4jHierarchy
         return Olap4jUtil.cast(list);
     }
 
-    public boolean hasAll() {
+    @Override
+	public boolean hasAll() {
         return hierarchy.hasAll();
     }
 
-    public Member getDefaultMember() throws OlapException {
+    @Override
+	public Member getDefaultMember() throws OlapException {
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
         final mondrian.olap.SchemaReader schemaReader =
@@ -92,7 +98,8 @@ public class MondrianOlap4jHierarchy
                 schemaReader.getHierarchyDefaultMember(hierarchy));
     }
 
-    public NamedList<Member> getRootMembers() throws OlapException {
+    @Override
+	public NamedList<Member> getRootMembers() throws OlapException {
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
         final List<org.eclipse.daanse.olap.api.model.Member> levelMembers =
@@ -102,35 +109,42 @@ public class MondrianOlap4jHierarchy
                     hierarchy.getLevels()[0], true);
 
         return new AbstractNamedList<Member>() {
-            public String getName(Object member) {
+            @Override
+			public String getName(Object member) {
                 return ((Member)member).getName();
             }
 
-            public Member get(int index) {
+            @Override
+			public Member get(int index) {
                 return olap4jConnection.toOlap4j(levelMembers.get(index));
             }
 
-            public int size() {
+            @Override
+			public int size() {
                 return levelMembers.size();
             }
         };
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return hierarchy.getName();
     }
 
-    public String getUniqueName() {
+    @Override
+	public String getUniqueName() {
         return hierarchy.getUniqueName();
     }
 
-    public String getCaption() {
+    @Override
+	public String getCaption() {
         return hierarchy.getLocalized(
             OlapElement.LocalizedProperty.CAPTION,
             olap4jSchema.getLocale());
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return hierarchy.getLocalized(
             OlapElement.LocalizedProperty.DESCRIPTION,
             olap4jSchema.getLocale());
@@ -140,11 +154,13 @@ public class MondrianOlap4jHierarchy
         return hierarchy.getDisplayFolder();
     }
 
-    public boolean isVisible() {
+    @Override
+	public boolean isVisible() {
         return hierarchy.isVisible();
     }
 
-    protected OlapElement getOlapElement() {
+    @Override
+	protected OlapElement getOlapElement() {
         return hierarchy;
     }
 

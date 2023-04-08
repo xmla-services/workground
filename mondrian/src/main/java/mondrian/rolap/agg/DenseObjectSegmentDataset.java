@@ -52,7 +52,8 @@ class DenseObjectSegmentDataset extends DenseSegmentDataset {
         this.values = values;
     }
 
-    public Object getObject(CellKey key) {
+    @Override
+	public Object getObject(CellKey key) {
         if (values.length == 0) {
             // No values means they are all null.
             // We can't call isNull because we risk going into a SOE. Besides,
@@ -63,7 +64,8 @@ class DenseObjectSegmentDataset extends DenseSegmentDataset {
         return values[offset];
     }
 
-    public boolean isNull(CellKey pos) {
+    @Override
+	public boolean isNull(CellKey pos) {
         if (values.length == 0) {
             // No values means they are all null.
             return true;
@@ -71,22 +73,26 @@ class DenseObjectSegmentDataset extends DenseSegmentDataset {
         return getObject(pos) != null;
     }
 
-    public boolean exists(CellKey pos) {
+    @Override
+	public boolean exists(CellKey pos) {
         return getObject(pos) != null;
     }
 
-    public void populateFrom(int[] pos, SegmentDataset data, CellKey key) {
+    @Override
+	public void populateFrom(int[] pos, SegmentDataset data, CellKey key) {
         values[getOffset(pos)] = data.getObject(key);
     }
 
-    public void populateFrom(
+    @Override
+	public void populateFrom(
         int[] pos, SegmentLoader.RowList rowList, int column)
     {
         int offset = getOffset(pos);
         values[offset] = rowList.getObject(column);
     }
 
-    public BestFitColumnType getType() {
+    @Override
+	public BestFitColumnType getType() {
         return BestFitColumnType.OBJECT;
     }
 
@@ -95,15 +101,18 @@ class DenseObjectSegmentDataset extends DenseSegmentDataset {
         values[offset] = value;
     }
 
-    protected Object getObject(int i) {
+    @Override
+	protected Object getObject(int i) {
         return values[i];
     }
 
-    protected int getSize() {
+    @Override
+	protected int getSize() {
         return values.length;
     }
 
-    public SegmentBody createSegmentBody(
+    @Override
+	public SegmentBody createSegmentBody(
         List<Pair<SortedSet<Comparable>, Boolean>> axes)
     {
         return new DenseObjectSegmentBody(

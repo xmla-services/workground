@@ -55,19 +55,22 @@ public class DimensionType implements Type {
         return new DimensionType(type.getDimension());
     }
 
-    public boolean usesDimension(Dimension dimension, boolean definitely) {
+    @Override
+	public boolean usesDimension(Dimension dimension, boolean definitely) {
         // REVIEW: Should be '!definitely'?
         return this.dimension == dimension
             || (definitely && this.dimension == null);
     }
 
-    public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
+    @Override
+	public boolean usesHierarchy(Hierarchy hierarchy, boolean definitely) {
         // If hierarchy belongs to this type's dimension, we might use it.
         return hierarchy.getDimension() == this.dimension
             && !definitely;
     }
 
-    public Hierarchy getHierarchy() {
+    @Override
+	public Hierarchy getHierarchy() {
         return dimension == null
             ? null
             : dimension.getHierarchies().length > 1
@@ -84,19 +87,23 @@ public class DimensionType implements Type {
       return null;
     }
 
-    public Level getLevel() {
+    @Override
+	public Level getLevel() {
         return null;
     }
 
-    public Dimension getDimension() {
+    @Override
+	public Dimension getDimension() {
         return dimension;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return digest.hashCode();
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (obj instanceof DimensionType) {
             DimensionType that = (DimensionType) obj;
             return Objects.equals(this.getDimension(), that.getDimension());
@@ -104,11 +111,13 @@ public class DimensionType implements Type {
         return false;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return digest;
     }
 
-    public Type computeCommonType(Type type, int[] conversionCount) {
+    @Override
+	public Type computeCommonType(Type type, int[] conversionCount) {
         if (conversionCount != null && type instanceof HierarchyType) {
             HierarchyType hierarchyType = (HierarchyType) type;
             if (Objects.equals(hierarchyType.getDimension(), dimension)) {
@@ -130,13 +139,15 @@ public class DimensionType implements Type {
         return DimensionType.Unknown;
     }
 
-    public boolean isInstance(Object value) {
+    @Override
+	public boolean isInstance(Object value) {
         return value instanceof Dimension
             && (dimension == null
                 || value.equals(dimension));
     }
 
-    public int getArity() {
+    @Override
+	public int getArity() {
         return 1;
     }
 }

@@ -37,7 +37,8 @@ public abstract class ExpBase
     protected ExpBase() {
     }
 
-    public abstract Exp clone();
+    @Override
+	public abstract Exp clone();
 
     public static void unparseList(
         PrintWriter pw,
@@ -64,7 +65,8 @@ public abstract class ExpBase
         return types;
     }
 
-    public Calc accept(ExpCompiler compiler) {
+    @Override
+	public Calc accept(ExpCompiler compiler) {
         throw new UnsupportedOperationException(this.toString());
     }
 }

@@ -47,7 +47,8 @@ public class UnionFunDef extends FunDefBase {
         super(dummyFunDef);
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         String allString = FunUtil.getLiteralArg(call, 2, "DISTINCT", UnionFunDef.ReservedWords);
         final boolean all = allString.equalsIgnoreCase("ALL");
         // todo: do at validate time
@@ -57,7 +58,8 @@ public class UnionFunDef extends FunDefBase {
         final ListCalc listCalc1 =
             compiler.compileList(call.getArg(1));
         return new AbstractListCalc(call.getFunName(),call.getType(), new Calc[] {listCalc0, listCalc1}) {
-            public TupleList evaluateList(Evaluator evaluator) {
+            @Override
+			public TupleList evaluateList(Evaluator evaluator) {
                 TupleList list0 = listCalc0.evaluateList(evaluator);
                 TupleList list1 = listCalc1.evaluateList(evaluator);
                 return union(list0, list1, all);

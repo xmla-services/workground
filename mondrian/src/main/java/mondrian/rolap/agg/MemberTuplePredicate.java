@@ -93,12 +93,14 @@ public class MemberTuplePredicate implements StarPredicate {
         };
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return this.columnList.hashCode() * 31
             + Arrays.hashCode(this.bounds) * 31;
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (obj instanceof MemberTuplePredicate) {
             MemberTuplePredicate that =
                 (MemberTuplePredicate) obj;
@@ -144,27 +146,33 @@ public class MemberTuplePredicate implements StarPredicate {
      *
      * @return List of constrained columns
      */
-    public List<RolapStar.Column> getConstrainedColumnList() {
+    @Override
+	public List<RolapStar.Column> getConstrainedColumnList() {
         return columnList;
     }
 
-    public BitKey getConstrainedColumnBitKey() {
+    @Override
+	public BitKey getConstrainedColumnBitKey() {
         return columnBitKey;
     }
 
-    public boolean equalConstraint(StarPredicate that) {
+    @Override
+	public boolean equalConstraint(StarPredicate that) {
         throw new UnsupportedOperationException();
     }
 
-    public StarPredicate minus(StarPredicate predicate) {
+    @Override
+	public StarPredicate minus(StarPredicate predicate) {
         throw new UnsupportedOperationException();
     }
 
-    public StarPredicate or(StarPredicate predicate) {
+    @Override
+	public StarPredicate or(StarPredicate predicate) {
         throw new UnsupportedOperationException();
     }
 
-    public StarPredicate and(StarPredicate predicate) {
+    @Override
+	public StarPredicate and(StarPredicate predicate) {
         throw new UnsupportedOperationException();
     }
 
@@ -174,7 +182,8 @@ public class MemberTuplePredicate implements StarPredicate {
      * @param valueList List of values, one for each constrained column
      * @return Whether constraint holds for given set of values
      */
-    public boolean evaluate(List<Object> valueList) {
+    @Override
+	public boolean evaluate(List<Object> valueList) {
         for (Bound bound : bounds) {
             for (int k = 0; k < bound.values.length; ++k) {
                 Object value = valueList.get(k);
@@ -219,7 +228,8 @@ public class MemberTuplePredicate implements StarPredicate {
         return true;
     }
 
-    public void describe(StringBuilder buf) {
+    @Override
+	public void describe(StringBuilder buf) {
         int k = 0;
         for (Bound bound : bounds) {
             if (k++ > 0) {
@@ -289,14 +299,16 @@ public class MemberTuplePredicate implements StarPredicate {
         }
 
 
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             int h = member.hashCode();
             h = h * 31 + Arrays.hashCode(values);
             h = h * 31 + Arrays.hashCode(relOps);
             return h;
         }
 
-        public boolean equals(Object obj) {
+        @Override
+		public boolean equals(Object obj) {
             if (obj instanceof Bound) {
                 Bound that = (Bound) obj;
                 return this.member.equals(that.member)
@@ -308,7 +320,8 @@ public class MemberTuplePredicate implements StarPredicate {
         }
     }
 
-    public void toSql(SqlQuery sqlQuery, StringBuilder buf) {
+    @Override
+	public void toSql(SqlQuery sqlQuery, StringBuilder buf) {
         throw Util.needToImplement(this);
     }
 }

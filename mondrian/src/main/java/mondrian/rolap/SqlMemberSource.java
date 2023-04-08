@@ -90,18 +90,21 @@ class SqlMemberSource
     }
 
     // implement MemberSource
-    public RolapHierarchy getHierarchy() {
+    @Override
+	public RolapHierarchy getHierarchy() {
         return hierarchy;
     }
 
     // implement MemberSource
-    public boolean setCache(MemberCache cache) {
+    @Override
+	public boolean setCache(MemberCache cache) {
         this.cache = cache;
         return true; // yes, we support cache writeback
     }
 
     // implement MemberSource
-    public int getMemberCount() {
+    @Override
+	public int getMemberCount() {
         RolapLevel[] levels = (RolapLevel[]) hierarchy.getLevels();
         int count = 0;
         for (RolapLevel level : levels) {
@@ -110,15 +113,18 @@ class SqlMemberSource
         return count;
     }
 
-    public RolapMember substitute(RolapMember member) {
+    @Override
+	public RolapMember substitute(RolapMember member) {
         return member;
     }
 
-    public RolapMember desubstitute(RolapMember member) {
+    @Override
+	public RolapMember desubstitute(RolapMember member) {
         return member;
     }
 
-    public RolapMember getMemberByKey(
+    @Override
+	public RolapMember getMemberByKey(
         RolapLevel level,
         List<Comparable> keyValues)
     {
@@ -154,14 +160,16 @@ class SqlMemberSource
         }
     }
 
-    public RolapMember lookupMember(
+    @Override
+	public RolapMember lookupMember(
         List<Id.Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         throw new UnsupportedOperationException();
     }
 
-    public int getLevelMemberCount(RolapLevel level) {
+    @Override
+	public int getLevelMemberCount(RolapLevel level) {
         if (level.isAll()) {
             return 1;
         }
@@ -335,7 +343,8 @@ class SqlMemberSource
     }
 
 
-    public List<RolapMember> getMembers() {
+    @Override
+	public List<RolapMember> getMembers() {
         return getMembers(context);
     }
 
@@ -537,7 +546,8 @@ RME is this right
     }
 
     // implement MemberReader
-    public List<RolapMember> getMembersInLevel(
+    @Override
+	public List<RolapMember> getMembersInLevel(
         RolapLevel level)
     {
         TupleConstraint constraint =
@@ -545,7 +555,8 @@ RME is this right
         return getMembersInLevel(level, constraint);
     }
 
-    public List<RolapMember> getMembersInLevel(
+    @Override
+	public List<RolapMember> getMembersInLevel(
         RolapLevel level,
         TupleConstraint constraint)
     {
@@ -571,16 +582,19 @@ RME is this right
         return Util.cast(tupleList.slice(0));
     }
 
-    public MemberCache getMemberCache() {
+    @Override
+	public MemberCache getMemberCache() {
         return cache;
     }
 
-    public Object getMemberCacheLock() {
+    @Override
+	public Object getMemberCacheLock() {
         return cache;
     }
 
     // implement MemberSource
-    public List<RolapMember> getRootMembers() {
+    @Override
+	public List<RolapMember> getRootMembers() {
         return getMembersInLevel((RolapLevel) hierarchy.getLevels()[0]);
     }
 
@@ -881,7 +895,8 @@ RME is this right
         return levelCollapsed;
     }
 
-    public void getMemberChildren(
+    @Override
+	public void getMemberChildren(
         List<RolapMember> parentMembers,
         List<RolapMember> children)
     {
@@ -890,7 +905,8 @@ RME is this right
         getMemberChildren(parentMembers, children, constraint);
     }
 
-    public Map<? extends Member, Access> getMemberChildren(
+    @Override
+	public Map<? extends Member, Access> getMemberChildren(
         List<RolapMember> parentMembers,
         List<RolapMember> children,
         MemberChildrenConstraint mcc)
@@ -915,7 +931,8 @@ RME is this right
         return Util.toNullValuesMap(children);
     }
 
-    public void getMemberChildren(
+    @Override
+	public void getMemberChildren(
         RolapMember parentMember,
         List<RolapMember> children)
     {
@@ -924,7 +941,8 @@ RME is this right
         getMemberChildren(parentMember, children, constraint);
     }
 
-    public Map<? extends Member, Access> getMemberChildren(
+    @Override
+	public Map<? extends Member, Access> getMemberChildren(
         RolapMember parentMember,
         List<RolapMember> children,
         MemberChildrenConstraint constraint)
@@ -1092,7 +1110,8 @@ RME is this right
         }
     }
 
-    public RolapMember makeMember(
+    @Override
+	public RolapMember makeMember(
         RolapMember parentMember,
         RolapLevel childLevel,
         Object value,
@@ -1156,7 +1175,8 @@ RME is this right
         return member;
     }
 
-    public RolapMember allMember() {
+    @Override
+	public RolapMember allMember() {
         final RolapHierarchy rolapHierarchy =
             hierarchy instanceof RolapCubeHierarchy
                 ? ((RolapCubeHierarchy) hierarchy).getRolapHierarchy()
@@ -1379,11 +1399,13 @@ RME is this right
     }
 
     // implement MemberReader
-    public RolapMember getLeadMember(RolapMember member, int n) {
+    @Override
+	public RolapMember getLeadMember(RolapMember member, int n) {
         throw new UnsupportedOperationException();
     }
 
-    public void getMemberRange(
+    @Override
+	public void getMemberRange(
         RolapLevel level,
         RolapMember startMember,
         RolapMember endMember,
@@ -1392,7 +1414,8 @@ RME is this right
         throw new UnsupportedOperationException();
     }
 
-    public int compare(
+    @Override
+	public int compare(
         RolapMember m1,
         RolapMember m2,
         boolean siblingsAreEqual)
@@ -1401,16 +1424,19 @@ RME is this right
     }
 
 
-    public TupleReader.MemberBuilder getMemberBuilder() {
+    @Override
+	public TupleReader.MemberBuilder getMemberBuilder() {
         return this;
     }
 
-    public RolapMember getDefaultMember() {
+    @Override
+	public RolapMember getDefaultMember() {
         // we expected the CacheMemberReader to implement this
         throw new UnsupportedOperationException();
     }
 
-    public RolapMember getMemberParent(RolapMember member) {
+    @Override
+	public RolapMember getMemberParent(RolapMember member) {
         throw new UnsupportedOperationException();
     }
 
@@ -1440,7 +1466,8 @@ RME is this right
                 : 0;
         }
 
-        public Member getDataMember() {
+        @Override
+		public Member getDataMember() {
             return dataMember;
         }
 
@@ -1448,11 +1475,13 @@ RME is this right
          * @return the members's depth
          * @see org.eclipse.daanse.olap.api.model.Member#getDepth()
          */
-        public int getDepth() {
+        @Override
+		public int getDepth() {
             return depth;
         }
 
-        public int getOrdinal() {
+        @Override
+		public int getOrdinal() {
             return dataMember.getOrdinal();
         }
     }
@@ -1477,11 +1506,13 @@ RME is this right
             super(parentMember, childLevel, value, dataMember);
         }
 
-        protected boolean computeCalculated(final MemberType memberType) {
+        @Override
+		protected boolean computeCalculated(final MemberType memberType) {
             return true;
         }
 
-        public Exp getExpression() {
+        @Override
+		public Exp getExpression() {
             return getHierarchy().getAggregateChildrenExpression();
         }
 
@@ -1529,7 +1560,8 @@ RME is this right
          * @param source {@inheritDoc}
          * @return {@inheritDoc}
          */
-        public Map<Object, Object> create(SqlMemberSource source) {
+        @Override
+		public Map<Object, Object> create(SqlMemberSource source) {
             return null;
         }
     }
@@ -1572,12 +1604,14 @@ RME is this right
             super(ValuePoolFactory.class);
         }
 
-        protected StringProperty getStringProperty() {
+        @Override
+		protected StringProperty getStringProperty() {
             return MondrianProperties.instance()
                .SqlMemberSourceValuePoolFactoryClass;
         }
 
-        protected ValuePoolFactory getDefault(
+        @Override
+		protected ValuePoolFactory getDefault(
             Class[] parameterTypes,
             Object[] parameterValues)
             throws CreationException

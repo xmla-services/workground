@@ -27,39 +27,48 @@ public abstract class AbstractDelegateXADataSource<D extends XADataSource> imple
 
     protected abstract D delegate();
 
-    public XAConnection getXAConnection() throws SQLException {
+    @Override
+	public XAConnection getXAConnection() throws SQLException {
         return delegate().getXAConnection();
     }
 
-    public XAConnection getXAConnection(String user, String password) throws SQLException {
+    @Override
+	public XAConnection getXAConnection(String user, String password) throws SQLException {
         return delegate().getXAConnection(user, password);
     }
 
-    public PrintWriter getLogWriter() throws SQLException {
+    @Override
+	public PrintWriter getLogWriter() throws SQLException {
         return delegate().getLogWriter();
     }
 
-    public void setLogWriter(PrintWriter out) throws SQLException {
+    @Override
+	public void setLogWriter(PrintWriter out) throws SQLException {
         delegate().setLogWriter(out);
     }
 
-    public void setLoginTimeout(int seconds) throws SQLException {
+    @Override
+	public void setLoginTimeout(int seconds) throws SQLException {
         delegate().setLoginTimeout(seconds);
     }
 
-    public int getLoginTimeout() throws SQLException {
+    @Override
+	public int getLoginTimeout() throws SQLException {
         return delegate().getLoginTimeout();
     }
 
-    public XAConnectionBuilder createXAConnectionBuilder() throws SQLException {
+    @Override
+	public XAConnectionBuilder createXAConnectionBuilder() throws SQLException {
         return delegate().createXAConnectionBuilder();
     }
 
-    public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+    @Override
+	public Logger getParentLogger() throws SQLFeatureNotSupportedException {
         return delegate().getParentLogger();
     }
 
-    public ShardingKeyBuilder createShardingKeyBuilder() throws SQLException {
+    @Override
+	public ShardingKeyBuilder createShardingKeyBuilder() throws SQLException {
         return delegate().createShardingKeyBuilder();
     }
 

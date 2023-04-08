@@ -43,7 +43,8 @@ class AncestorFunDef extends FunDefBase {
         super(dummyFunDef);
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final MemberCalc memberCalc =
             compiler.compileMember(call.getArg(0));
         final Type type1 = call.getArg(1).getType();
@@ -53,7 +54,8 @@ class AncestorFunDef extends FunDefBase {
             return new AbstractMemberCalc(
                 call.getFunName(),call.getType(), new Calc[] {memberCalc, levelCalc})
             {
-                public Member evaluateMember(Evaluator evaluator) {
+                @Override
+				public Member evaluateMember(Evaluator evaluator) {
                     Level level = levelCalc.evaluateLevel(evaluator);
                     Member member = memberCalc.evaluateMember(evaluator);
                     int distance =
@@ -67,7 +69,8 @@ class AncestorFunDef extends FunDefBase {
             return new AbstractMemberCalc(
             		call.getFunName(),call.getType(), new Calc[] {memberCalc, distanceCalc})
             {
-                public Member evaluateMember(Evaluator evaluator) {
+                @Override
+				public Member evaluateMember(Evaluator evaluator) {
                     int distance = distanceCalc.evaluateInteger(evaluator);
                     Member member = memberCalc.evaluateMember(evaluator);
                     return FunUtil.ancestor(evaluator, member, distance, null);

@@ -87,12 +87,14 @@ public class ResultStyleCompiler extends DelegatingExpCompiler {
         super(generateCompiler(evaluator, validator, resultStyles));
     }
 
-    public Calc compile(Exp exp) {
+    @Override
+	public Calc compile(Exp exp) {
         List<ResultStyle> resultStyles = getAcceptableResultStyles();
         return compileAs(exp, null, resultStyles);
     }
 
-    public Calc compileAs(
+    @Override
+	public Calc compileAs(
         Exp exp,
         Type resultType,
         List<ResultStyle> resultStyles)
@@ -176,11 +178,13 @@ public class ResultStyleCompiler extends DelegatingExpCompiler {
             this.cnt = counter++;
         }
 
-        public boolean isWrapperFor(Class<?> iface) {
+        @Override
+		public boolean isWrapperFor(Class<?> iface) {
             return iface.isInstance(this);
         }
 
-        public <T> T unwrap(Class<T> iface) {
+        @Override
+		public <T> T unwrap(Class<T> iface) {
             return iface.cast(this);
         }
 
@@ -209,7 +213,8 @@ public class ResultStyleCompiler extends DelegatingExpCompiler {
             throw new AssertionError("MultiCalc.finalEval: MISS");
         }
 
-        public Object evaluate(Evaluator evaluator) {
+        @Override
+		public Object evaluate(Evaluator evaluator) {
             // We have to make copies of the Evaluator because of
             // the single test: NonEmptyTest.testVCNativeCJWithTopPercent
             Evaluator eval1 = evaluator.push();
@@ -232,19 +237,23 @@ public class ResultStyleCompiler extends DelegatingExpCompiler {
             return (onlyMutableList) ? valueMList : valueIter;
         }
 
-        public boolean dependsOn(Hierarchy hierarchy) {
+        @Override
+		public boolean dependsOn(Hierarchy hierarchy) {
             return calcIter.dependsOn(hierarchy);
         }
 
-        public Type getType() {
+        @Override
+		public Type getType() {
             return calcIter.getType();
         }
 
-        public void accept(CalcWriter calcWriter) {
+        @Override
+		public void accept(CalcWriter calcWriter) {
             calcIter.accept(calcWriter);
         }
 
-        public ResultStyle getResultStyle() {
+        @Override
+		public ResultStyle getResultStyle() {
             return calcIter.getResultStyle();
         }
 

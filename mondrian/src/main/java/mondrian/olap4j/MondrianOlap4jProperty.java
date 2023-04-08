@@ -89,7 +89,8 @@ class MondrianOlap4jProperty implements IMondrianOlap4jProperty, Named {
         this.level = level;
     }
 
-    public Datatype getDatatype() {
+    @Override
+	public Datatype getDatatype() {
         switch (property.getType()) {
         case TYPE_BOOLEAN:
             return Datatype.BOOLEAN;
@@ -108,39 +109,47 @@ class MondrianOlap4jProperty implements IMondrianOlap4jProperty, Named {
         }
     }
 
-    public Set<TypeFlag> getType() {
+    @Override
+	public Set<TypeFlag> getType() {
         return property.isCellProperty()
             ? TypeFlag.CELL_TYPE_FLAG
             : TypeFlag.MEMBER_TYPE_FLAG;
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return property.name;
     }
 
-    public String getUniqueName() {
+    @Override
+	public String getUniqueName() {
         return property.name;
     }
 
-    public String getCaption() {
+    @Override
+	public String getCaption() {
         // todo: i18n
         return property.getCaption();
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         // todo: i18n
         return property.getDescription();
     }
 
-    public boolean isVisible() {
+    @Override
+	public boolean isVisible() {
         return !property.isInternal();
     }
 
-    public ContentType getContentType() {
+    @Override
+	public ContentType getContentType() {
         return ContentType.REGULAR;
     }
 
-    public org.eclipse.daanse.olap.api.model.Level getLevel() {
+    @Override
+	public org.eclipse.daanse.olap.api.model.Level getLevel() {
         return level;
     }
 

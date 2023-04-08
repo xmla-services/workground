@@ -69,7 +69,8 @@ public class NativeSetEvaluationTest extends BatchTestCase {
    * @param mdxQuery MDX query
    * @param patterns Set of patterns for expected SQL statements
    */
-  protected void assertQuerySql(Connection connection,
+  @Override
+protected void assertQuerySql(Connection connection,
     String mdxQuery,
           SqlPattern[] patterns ) {
     assertQuerySqlOrNot(

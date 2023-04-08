@@ -110,7 +110,8 @@ public interface Statement {
      * @deprecated This method will be removed in mondrian-4.0; use
      *   {@link mondrian.server.Execution#checkCancelOrTimeout()}
      */
-    void checkCancelOrTimeout();
+    @Deprecated
+	void checkCancelOrTimeout();
 
     /**
      * Issues a cancel request on this statement.

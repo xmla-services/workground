@@ -149,19 +149,23 @@ public class RolapBaseCubeMeasure
         setProperty(Property.DATATYPE.name, datatype.getValue());
     }
 
-    public Expression getMondrianDefExpression() {
+    @Override
+	public Expression getMondrianDefExpression() {
         return expression;
     }
 
-    public RolapAggregator getAggregator() {
+    @Override
+	public RolapAggregator getAggregator() {
         return aggregator;
     }
 
-    public RolapCube getCube() {
+    @Override
+	public RolapCube getCube() {
         return cube;
     }
 
-    public RolapResult.ValueFormatter getFormatter() {
+    @Override
+	public RolapResult.ValueFormatter getFormatter() {
         return formatter;
     }
 
@@ -170,7 +174,8 @@ public class RolapBaseCubeMeasure
             new RolapResult.CellFormatterValueFormatter(cellFormatter);
     }
 
-    public Object getStarMeasure() {
+    @Override
+	public Object getStarMeasure() {
         return starMeasure;
     }
 

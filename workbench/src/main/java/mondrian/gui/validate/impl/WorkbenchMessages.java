@@ -31,7 +31,8 @@ public class WorkbenchMessages implements Messages {
         this.i18n = i18n;
     }
 
-    public String getFormattedString(
+    @Override
+	public String getFormattedString(
         String stringId,
         String defaultValue,
         Object... args)
@@ -39,7 +40,8 @@ public class WorkbenchMessages implements Messages {
         return i18n.getFormattedString(stringId, defaultValue, args);
     }
 
-    public String getString(String stringID, String defaultValue) {
+    @Override
+	public String getString(String stringID, String defaultValue) {
         return i18n.getString(stringID, defaultValue);
     }
 }

@@ -262,15 +262,18 @@ public class RolapCubeHierarchy extends RolapHierarchy {
         return cubeLevels;
     }
 
-    public String getAllMemberName() {
+    @Override
+	public String getAllMemberName() {
         return rolapHierarchy.getAllMemberName();
     }
 
-    public String getSharedHierarchyName() {
+    @Override
+	public String getSharedHierarchyName() {
         return rolapHierarchy.getSharedHierarchyName();
     }
 
-    public String getAllLevelName() {
+    @Override
+	public String getAllLevelName() {
         return rolapHierarchy.getAllLevelName();
     }
 
@@ -286,7 +289,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
         return rolapHierarchy;
     }
 
-    public final int getOrdinalInCube() {
+    @Override
+	public final int getOrdinalInCube() {
         return ordinal;
     }
 
@@ -324,7 +328,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
         }
     }
 
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
@@ -337,11 +342,13 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             && getUniqueName().equals(that.getUniqueName());
     }
 
-    protected int computeHashCode() {
+    @Override
+	protected int computeHashCode() {
         return Util.hash(super.computeHashCode(), this.cubeDimension.cube);
     }
 
-    public Member createMember(
+    @Override
+	public Member createMember(
         Member parent,
         Level level,
         String name,
@@ -376,7 +383,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
     }
 
 
-    public boolean tableExists(String tableName) {
+    @Override
+	public boolean tableExists(String tableName) {
         return rolapHierarchy.tableExists(tableName);
     }
 
@@ -387,12 +395,14 @@ public class RolapCubeHierarchy extends RolapHierarchy {
      *
      * @return rolap cube hierarchy relation
      */
-    public RelationOrJoin getRelation() {
+    @Override
+	public RelationOrJoin getRelation() {
         return currentRelation;
     }
 
     // override with stricter return type; make final, important for performance
-    public final RolapCubeMember getDefaultMember() {
+    @Override
+	public final RolapCubeMember getDefaultMember() {
         if (currentDefaultMember == null) {
             reader.getRootMembers();
             currentDefaultMember =
@@ -421,7 +431,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
         return reader.lookupCubeMember(parent, rolapMember, level);
     }
 
-    public Member getNullMember() {
+    @Override
+	public Member getNullMember() {
         // use lazy initialization to get around bootstrap issues
         if (currentNullMember == null) {
             currentNullMember =
@@ -436,19 +447,23 @@ public class RolapCubeHierarchy extends RolapHierarchy {
     /**
      * Returns the 'all' member.
      */
-    public RolapCubeMember getAllMember() {
+    @Override
+	public RolapCubeMember getAllMember() {
         return currentAllMember;
     }
 
-    public void setMemberReader(MemberReader memberReader) {
+    @Override
+	public void setMemberReader(MemberReader memberReader) {
         rolapHierarchy.setMemberReader(memberReader);
     }
 
-    public MemberReader getMemberReader() {
+    @Override
+	public MemberReader getMemberReader() {
         return reader;
     }
 
-    public void setDefaultMember(Member defaultMeasure) {
+    @Override
+	public void setDefaultMember(Member defaultMeasure) {
         // refactor this!
         rolapHierarchy.setDefaultMember(defaultMeasure);
 
@@ -463,7 +478,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                 level);
     }
 
-    void init(CubeDimension xmlDimension) {
+    @Override
+	void init(CubeDimension xmlDimension) {
         // first init shared hierarchy
         rolapHierarchy.init(xmlDimension);
         // second init cube hierarchy
@@ -601,22 +617,26 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             cubeSource.setCache(getMemberCache());
         }
 
-        public MemberBuilder getMemberBuilder() {
+        @Override
+		public MemberBuilder getMemberBuilder() {
             return this.cubeSource;
         }
 
-        public MemberCacheHelper getRolapCubeMemberCacheHelper() {
+        @Override
+		public MemberCacheHelper getRolapCubeMemberCacheHelper() {
             return rolapCubeCacheHelper;
         }
 
-        public List<RolapMember> getRootMembers() {
+        @Override
+		public List<RolapMember> getRootMembers() {
             if (rootMembers == null) {
                 rootMembers = getMembersInLevel(cubeLevels[0]);
             }
             return rootMembers;
         }
 
-        protected void readMemberChildren(
+        @Override
+		protected void readMemberChildren(
             List<RolapMember> parentMembers,
             List<RolapMember> children,
             MemberChildrenConstraint constraint)
@@ -719,7 +739,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             }
         }
 
-        public Map<? extends Member, Access> getMemberChildren(
+        @Override
+		public Map<? extends Member, Access> getMemberChildren(
             List<RolapMember> parentMembers,
             List<RolapMember> children,
             MemberChildrenConstraint constraint)
@@ -749,7 +770,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
         }
 
 
-        public List<RolapMember> getMembersInLevel(
+        @Override
+		public List<RolapMember> getMembersInLevel(
             RolapLevel level,
             TupleConstraint constraint)
         {
@@ -838,7 +860,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             }
         }
 
-        public RolapCubeMember lookupCubeMember(
+        @Override
+		public RolapCubeMember lookupCubeMember(
             RolapCubeMember parent,
             RolapMember member,
             RolapCubeLevel level)
@@ -882,11 +905,13 @@ public class RolapCubeHierarchy extends RolapHierarchy {
           }
         }
 
-        public int getMemberCount() {
+        @Override
+		public int getMemberCount() {
             return rolapHierarchy.getMemberReader().getMemberCount();
         }
 
-        protected void checkCacheStatus() {
+        @Override
+		protected void checkCacheStatus() {
             synchronized (cacheHelper) {
                 // if necessary, flush all caches:
                 //   - shared SmartMemberReader RolapMember cache
@@ -960,19 +985,23 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             cubeSource.setCache(rolapCubeCacheHelper);
         }
 
-        public MemberBuilder getMemberBuilder() {
+        @Override
+		public MemberBuilder getMemberBuilder() {
             return this.cubeSource;
         }
 
-        public MemberCacheHelper getRolapCubeMemberCacheHelper() {
+        @Override
+		public MemberCacheHelper getRolapCubeMemberCacheHelper() {
             return rolapCubeCacheHelper;
         }
 
-        public List<RolapMember> getRootMembers() {
+        @Override
+		public List<RolapMember> getRootMembers() {
             return getMembersInLevel(cubeLevels[0]);
         }
 
-        protected void readMemberChildren(
+        @Override
+		protected void readMemberChildren(
             List<RolapMember> parentMembers,
             List<RolapMember> children,
             MemberChildrenConstraint constraint)
@@ -1044,7 +1073,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             }
         }
 
-        public Map<? extends Member, Access> getMemberChildren(
+        @Override
+		public Map<? extends Member, Access> getMemberChildren(
             List<RolapMember> parentMembers,
             List<RolapMember> children,
             MemberChildrenConstraint constraint)
@@ -1063,7 +1093,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
         }
 
 
-        public List<RolapMember> getMembersInLevel(
+        @Override
+		public List<RolapMember> getMembersInLevel(
             final RolapLevel level,
             TupleConstraint constraint)
         {
@@ -1087,25 +1118,31 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                 }
 
                 return new UnsupportedList<RolapMember>() {
-                    public RolapMember get(final int index) {
+                    @Override
+					public RolapMember get(final int index) {
                         return mutate(list.get(index));
                     }
 
-                    public int size() {
+                    @Override
+					public int size() {
                         return list.size();
                     }
 
-                    public Iterator<RolapMember> iterator() {
+                    @Override
+					public Iterator<RolapMember> iterator() {
                         final Iterator<RolapMember> it = list.iterator();
                         return new Iterator<RolapMember>() {
-                            public boolean hasNext() {
+                            @Override
+							public boolean hasNext() {
                                 return it.hasNext();
                             }
-                            public RolapMember next() {
+                            @Override
+							public RolapMember next() {
                                 return mutate(it.next());
                             }
 
-                            public void remove() {
+                            @Override
+							public void remove() {
                                 throw new UnsupportedOperationException();
                             }
                         };
@@ -1126,7 +1163,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                 };
         }
 
-        public RolapCubeMember lookupCubeMember(
+        @Override
+		public RolapCubeMember lookupCubeMember(
             RolapCubeMember parent,
             RolapMember member,
             RolapCubeLevel level)
@@ -1140,7 +1178,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             return new RolapCubeMember(parent, member, level);
         }
 
-        public int getMemberCount() {
+        @Override
+		public int getMemberCount() {
             return rolapHierarchy.getMemberReader().getMemberCount();
         }
     }
@@ -1163,7 +1202,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             this.memberCacheLock = memberCacheLock;
         }
 
-        public RolapMember makeMember(
+        @Override
+		public RolapMember makeMember(
             RolapMember parentMember,
             RolapLevel childLevel,
             Object value,
@@ -1195,7 +1235,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                     member, childCubeLevel);
         }
 
-        public MemberCache getMemberCache() {
+        @Override
+		public MemberCache getMemberCache() {
             // this is a special cache used solely for rolapcubemembers
             return memberSourceCacheHelper;
         }
@@ -1204,11 +1245,13 @@ public class RolapCubeHierarchy extends RolapHierarchy {
          * use the same lock in the RolapCubeMemberSource as the
          * RolapCubeHiearchyMemberReader to avoid deadlocks
          */
-        public Object getMemberCacheLock() {
+        @Override
+		public Object getMemberCacheLock() {
             return memberCacheLock;
         }
 
-        public RolapMember allMember() {
+        @Override
+		public RolapMember allMember() {
             return getHierarchy().getAllMember();
         }
     }

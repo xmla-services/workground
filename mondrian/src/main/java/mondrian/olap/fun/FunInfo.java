@@ -168,7 +168,8 @@ public class FunInfo implements Comparable<FunInfo> {
         return this.parameterTypes;
     }
 
-    public int compareTo(FunInfo fi) {
+    @Override
+	public int compareTo(FunInfo fi) {
         int c = this.name.compareTo(fi.name);
         if (c != 0) {
             return c;
@@ -180,7 +181,8 @@ public class FunInfo implements Comparable<FunInfo> {
         return pc.compareTo(otherPc);
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (obj instanceof FunInfo) {
             final FunInfo that = (FunInfo) obj;
             if (!name.equals(that.name)) {
@@ -194,7 +196,8 @@ public class FunInfo implements Comparable<FunInfo> {
         }
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         int h = name.hashCode();
         final List<Object> pcList = FunInfo.toList(this.getParameterCategories());
         return Util.hash(h, pcList);

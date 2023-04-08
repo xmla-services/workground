@@ -123,13 +123,16 @@ public class DefaultRules {
         // Trigger since it is a singleton and is never removed.
         Trigger trigger =
             new Trigger() {
-                public boolean isPersistent() {
+                @Override
+				public boolean isPersistent() {
                     return true;
                 }
-                public int phase() {
+                @Override
+				public int phase() {
                     return Trigger.PRIMARY_PHASE;
                 }
-                public void execute(Property property, String value) {
+                @Override
+				public void execute(Property property, String value) {
                     synchronized (DefaultRules.class) {
                         DefaultRules oldInstance = DefaultRules.instance;
                         DefaultRules.instance = null;
@@ -339,7 +342,8 @@ public class DefaultRules {
             DefaultDef.IgnoreMap ignoreMatch = rule.getIgnoreMap();
             if (ignoreMatch == null) {
                 ignoreMatcherMap = new Recognizer.Matcher() {
-                    public boolean matches(String name) {
+                    @Override
+					public boolean matches(String name) {
                         return false;
                     }
                 };

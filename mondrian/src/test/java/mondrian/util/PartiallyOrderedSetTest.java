@@ -34,7 +34,8 @@ public class PartiallyOrderedSetTest {
 
     static final PartiallyOrderedSet.Ordering<String> stringSubsetOrdering =
         new PartiallyOrderedSet.Ordering<String>() {
-            public boolean lessThan(String e1, String e2) {
+            @Override
+			public boolean lessThan(String e1, String e2) {
                 // e1 < e2 if every char in e1 is also in e2
                 for (int i = 0; i < e1.length(); i++) {
                     if (e2.indexOf(e1.charAt(i)) < 0) {
@@ -49,7 +50,8 @@ public class PartiallyOrderedSetTest {
     // etc.
     static final PartiallyOrderedSet.Ordering<Integer> isDivisor =
         new PartiallyOrderedSet.Ordering<Integer>() {
-            public boolean lessThan(Integer e1, Integer e2) {
+            @Override
+			public boolean lessThan(Integer e1, Integer e2) {
                 return e2 % e1 == 0;
             }
         };
@@ -57,14 +59,16 @@ public class PartiallyOrderedSetTest {
     // Bottom is 1, parents are primes, etc.
     static final PartiallyOrderedSet.Ordering<Integer> isDivisorInverse =
         new PartiallyOrderedSet.Ordering<Integer>() {
-            public boolean lessThan(Integer e1, Integer e2) {
+            @Override
+			public boolean lessThan(Integer e1, Integer e2) {
                 return e1 % e2 == 0;
             }
         };
 
     static final PartiallyOrderedSet.Ordering<Integer> isDivisorWithNulls =
       new PartiallyOrderedSet.Ordering<Integer>() {
-          public boolean lessThan(Integer e1, Integer e2) {
+          @Override
+		public boolean lessThan(Integer e1, Integer e2) {
               if (e1 == null || e2 == null) {
                   return true;
               }
@@ -76,7 +80,8 @@ public class PartiallyOrderedSetTest {
     // 12 (1100), 10 (1010) and 6 (0110).
     static final PartiallyOrderedSet.Ordering<Integer> isBitSubset =
         new PartiallyOrderedSet.Ordering<Integer>() {
-            public boolean lessThan(Integer e1, Integer e2) {
+            @Override
+			public boolean lessThan(Integer e1, Integer e2) {
                 return (e2 & e1) == e2;
             }
         };
@@ -85,7 +90,8 @@ public class PartiallyOrderedSetTest {
     // 12 (1100), 10 (1010) and 6 (0110).
     static final PartiallyOrderedSet.Ordering<Integer> isBitSuperset =
         new PartiallyOrderedSet.Ordering<Integer>() {
-            public boolean lessThan(Integer e1, Integer e2) {
+            @Override
+			public boolean lessThan(Integer e1, Integer e2) {
                 return (e2 & e1) == e1;
             }
         };

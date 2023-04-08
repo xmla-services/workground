@@ -59,12 +59,14 @@ class DenseIntSegmentDataset extends DenseNativeSegmentDataset {
         this.values = values;
     }
 
-    public int getInt(CellKey key) {
+    @Override
+	public int getInt(CellKey key) {
         int offset = key.getOffset(axisMultipliers);
         return values[offset];
     }
 
-    public Object getObject(CellKey pos) {
+    @Override
+	public Object getObject(CellKey pos) {
         if (values.length == 0) {
             // No values means they are all null.
             // We can't call isNull because we risk going into a SOE. Besides,
@@ -75,7 +77,8 @@ class DenseIntSegmentDataset extends DenseNativeSegmentDataset {
         return getObject(offset);
     }
 
-    protected Integer getObject(int offset) {
+    @Override
+	protected Integer getObject(int offset) {
         final int value = values[offset];
         if (value == 0 && isNull(offset)) {
             return null;
@@ -83,11 +86,13 @@ class DenseIntSegmentDataset extends DenseNativeSegmentDataset {
         return value;
     }
 
-    public boolean exists(CellKey pos) {
+    @Override
+	public boolean exists(CellKey pos) {
         return true;
     }
 
-    public void populateFrom(int[] pos, SegmentDataset data, CellKey key) {
+    @Override
+	public void populateFrom(int[] pos, SegmentDataset data, CellKey key) {
         final int offset = getOffset(pos);
         final int value = values[offset] = data.getInt(key);
         if (value != 0 || !data.isNull(key)) {
@@ -95,7 +100,8 @@ class DenseIntSegmentDataset extends DenseNativeSegmentDataset {
         }
     }
 
-    public void populateFrom(
+    @Override
+	public void populateFrom(
         int[] pos, SegmentLoader.RowList rowList, int column)
     {
         int offset = getOffset(pos);
@@ -105,7 +111,8 @@ class DenseIntSegmentDataset extends DenseNativeSegmentDataset {
         }
     }
 
-    public BestFitColumnType getType() {
+    @Override
+	public BestFitColumnType getType() {
         return BestFitColumnType.INT;
     }
 
@@ -123,11 +130,13 @@ class DenseIntSegmentDataset extends DenseNativeSegmentDataset {
         values[k] = o;
     }
 
-    protected int getSize() {
+    @Override
+	protected int getSize() {
         return values.length;
     }
 
-    public SegmentBody createSegmentBody(
+    @Override
+	public SegmentBody createSegmentBody(
         List<Pair<SortedSet<Comparable>, Boolean>> axes)
     {
         return new DenseIntSegmentBody(

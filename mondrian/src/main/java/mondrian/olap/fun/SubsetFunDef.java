@@ -39,7 +39,8 @@ class SubsetFunDef extends FunDefBase {
         super(dummyFunDef);
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final ListCalc listCalc =
             compiler.compileList(call.getArg(0));
         final IntegerCalc startCalc =
@@ -51,7 +52,8 @@ class SubsetFunDef extends FunDefBase {
         return new AbstractListCalc(
         		call.getFunName(),call.getType(), new Calc[] {listCalc, startCalc, countCalc})
         {
-            public TupleList evaluateList(Evaluator evaluator) {
+            @Override
+			public TupleList evaluateList(Evaluator evaluator) {
                 final int savepoint = evaluator.savepoint();
                 try {
                     evaluator.setNonEmpty(false);

@@ -56,15 +56,18 @@ public class UtilCompatibleJdk15 implements UtilCompatible {
      * @param d input double
      * @return BigDecimal
      */
-    public BigDecimal makeBigDecimalFromDouble(double d) {
+    @Override
+	public BigDecimal makeBigDecimalFromDouble(double d) {
         return new BigDecimal(d, MathContext.DECIMAL64);
     }
 
-    public String quotePattern(String s) {
+    @Override
+	public String quotePattern(String s) {
         return Pattern.quote(s);
     }
 
-    @SuppressWarnings("unchecked")
+    @Override
+	@SuppressWarnings("unchecked")
     public <T> T getAnnotation(
         Method method, String annotationClassName, T defaultValue)
     {
@@ -91,11 +94,13 @@ public class UtilCompatibleJdk15 implements UtilCompatible {
         return defaultValue;
     }
 
-    public String generateUuidString() {
+    @Override
+	public String generateUuidString() {
         return UUID.randomUUID().toString();
     }
 
-    public <T> T compileScript(
+    @Override
+	public <T> T compileScript(
         Class<T> iface,
         String script,
         String engineName)
@@ -104,27 +109,33 @@ public class UtilCompatibleJdk15 implements UtilCompatible {
             "Scripting not supported until Java 1.6");
     }
 
-    public <T> void threadLocalRemove(ThreadLocal<T> threadLocal) {
+    @Override
+	public <T> void threadLocalRemove(ThreadLocal<T> threadLocal) {
         threadLocal.remove();
     }
 
-    public Util.MemoryInfo getMemoryInfo() {
+    @Override
+	public Util.MemoryInfo getMemoryInfo() {
         return new Util.MemoryInfo() {
             protected final MemoryPoolMXBean TENURED_POOL =
                 findTenuredGenPool();
 
-            public Util.MemoryInfo.Usage get() {
+            @Override
+			public Util.MemoryInfo.Usage get() {
                 final MemoryUsage memoryUsage = TENURED_POOL.getUsage();
                 return new Usage() {
-                    public long getUsed() {
+                    @Override
+					public long getUsed() {
                         return memoryUsage.getUsed();
                     }
 
-                    public long getCommitted() {
+                    @Override
+					public long getCommitted() {
                         return memoryUsage.getCommitted();
                     }
 
-                    public long getMax() {
+                    @Override
+					public long getMax() {
                         return memoryUsage.getMax();
                     }
                 };
@@ -132,7 +143,8 @@ public class UtilCompatibleJdk15 implements UtilCompatible {
         };
     }
 
-    public Timer newTimer(String name, boolean isDaemon) {
+    @Override
+	public Timer newTimer(String name, boolean isDaemon) {
         return new Timer(name, isDaemon);
     }
 
@@ -145,7 +157,8 @@ public class UtilCompatibleJdk15 implements UtilCompatible {
         throw new AssertionError("Could not find tenured space");
     }
 
-    public void cancelStatement(Statement stmt) {
+    @Override
+	public void cancelStatement(Statement stmt) {
         try {
             stmt.cancel();
         } catch (Throwable t) {
@@ -171,11 +184,13 @@ public class UtilCompatibleJdk15 implements UtilCompatible {
         }
     }
 
-    public <T> Set<T> newIdentityHashSet() {
+    @Override
+	public <T> Set<T> newIdentityHashSet() {
         return Util.newIdentityHashSetFake();
     }
 
-    public <T extends Comparable<T>> int binarySearch(
+    @Override
+	public <T extends Comparable<T>> int binarySearch(
         T[] ts, int start, int end, T t)
     {
         final int i = Collections.binarySearch(

@@ -203,7 +203,8 @@ public class BatchTestCase{
             ((RolapConnection)connection),
             "BatchTestCase.getGroupingSet",
             new Locus.Action<GroupingSet>() {
-                public GroupingSet execute() {
+                @Override
+				public GroupingSet execute() {
                     final RolapCube cube = getCube(connection, cubeName);
                     final BatchLoader fbcr =
                         new BatchLoader(
@@ -819,14 +820,17 @@ public class BatchTestCase{
         RolapNativeRegistry reg = getRegistry(con);
         reg.setListener(
             new Listener() {
-                public void foundEvaluator(NativeEvent e) {
+                @Override
+				public void foundEvaluator(NativeEvent e) {
                     fail("should not be executed native");
                 }
 
-                public void foundInCache(TupleEvent e) {
+                @Override
+				public void foundInCache(TupleEvent e) {
                 }
 
-                public void executingSql(TupleEvent e) {
+                @Override
+				public void executingSql(TupleEvent e) {
                 }
             });
 
@@ -1135,7 +1139,8 @@ public class BatchTestCase{
             return s.startsWith(t);
         }
 
-        public void onExecuteQuery(String sql) {
+        @Override
+		public void onExecuteQuery(String sql) {
             if (matchTrigger(sql)) {
                 throw new Bomb(sql);
             }
@@ -1232,15 +1237,18 @@ public class BatchTestCase{
             this.foundInCache = foundInCache;
         }
 
-        public void foundEvaluator(NativeEvent e) {
+        @Override
+		public void foundEvaluator(NativeEvent e) {
             this.foundEvaluator = true;
         }
 
-        public void foundInCache(TupleEvent e) {
+        @Override
+		public void foundInCache(TupleEvent e) {
             this.foundInCache = true;
         }
 
-        public void executingSql(TupleEvent e) {
+        @Override
+		public void executingSql(TupleEvent e) {
             this.executeSql = true;
         }
     }

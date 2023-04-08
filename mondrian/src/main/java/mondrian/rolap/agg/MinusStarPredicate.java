@@ -49,7 +49,8 @@ public class MinusStarPredicate extends AbstractColumnPredicate {
     }
 
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (obj instanceof MinusStarPredicate) {
             MinusStarPredicate that = (MinusStarPredicate) obj;
             return this.plus.equals(that.plus)
@@ -59,16 +60,19 @@ public class MinusStarPredicate extends AbstractColumnPredicate {
         }
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return plus.hashCode() * 31
             + minus.hashCode();
     }
 
-    public RolapStar.Column getConstrainedColumn() {
+    @Override
+	public RolapStar.Column getConstrainedColumn() {
         return plus.getConstrainedColumn();
     }
 
-    public void values(Collection<Object> collection) {
+    @Override
+	public void values(Collection<Object> collection) {
         Set<Object> plusValues = new HashSet<Object>();
         plus.values(plusValues);
         List<Object> minusValues = new ArrayList<Object>();
@@ -77,27 +81,32 @@ public class MinusStarPredicate extends AbstractColumnPredicate {
         collection.addAll(plusValues);
     }
 
-    public boolean evaluate(Object value) {
+    @Override
+	public boolean evaluate(Object value) {
         return plus.evaluate(value)
             && !minus.evaluate(value);
     }
 
-    public void describe(StringBuilder buf) {
+    @Override
+	public void describe(StringBuilder buf) {
         buf.append("(").append(plus).append(" - ").append(minus).append(")");
     }
 
-    public Overlap intersect(StarColumnPredicate predicate) {
+    @Override
+	public Overlap intersect(StarColumnPredicate predicate) {
         throw new UnsupportedOperationException();
     }
 
-    public boolean mightIntersect(StarPredicate other) {
+    @Override
+	public boolean mightIntersect(StarPredicate other) {
         // Approximately, this constraint might intersect if it intersects
         // with the 'plus' side. It's possible that the 'minus' side might
         // wipe out all of those intersections, but we don't consider that.
         return plus.mightIntersect(other);
     }
 
-    public StarColumnPredicate minus(StarPredicate predicate) {
+    @Override
+	public StarColumnPredicate minus(StarPredicate predicate) {
         assert predicate != null;
         if (predicate instanceof ValueColumnPredicate) {
             ValueColumnPredicate valuePredicate =
@@ -150,7 +159,8 @@ public class MinusStarPredicate extends AbstractColumnPredicate {
             (StarColumnPredicate) predicate);
     }
 
-    public StarColumnPredicate cloneWithColumn(RolapStar.Column column) {
+    @Override
+	public StarColumnPredicate cloneWithColumn(RolapStar.Column column) {
         return new MinusStarPredicate(
             plus.cloneWithColumn(column),
             minus.cloneWithColumn(column));

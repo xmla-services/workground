@@ -44,7 +44,8 @@ class DescendantsConstraint implements TupleConstraint {
         this.mcc = mcc;
     }
 
-    public void addConstraint(
+    @Override
+	public void addConstraint(
         SqlQuery sqlQuery,
         RolapCube baseCube,
         AggStar aggStar)
@@ -52,7 +53,8 @@ class DescendantsConstraint implements TupleConstraint {
         mcc.addMemberConstraint(sqlQuery, baseCube, aggStar, parentMembers);
     }
 
-    public void addLevelConstraint(
+    @Override
+	public void addLevelConstraint(
         SqlQuery sqlQuery,
         RolapCube baseCube,
         AggStar aggStar,
@@ -61,7 +63,8 @@ class DescendantsConstraint implements TupleConstraint {
         mcc.addLevelConstraint(sqlQuery, baseCube, aggStar, level);
     }
 
-    public MemberChildrenConstraint getMemberChildrenConstraint(
+    @Override
+	public MemberChildrenConstraint getMemberChildrenConstraint(
         RolapMember parent)
     {
         return mcc;
@@ -72,11 +75,13 @@ class DescendantsConstraint implements TupleConstraint {
      *
      * <p>This implementation returns null, because descendants is not cached.
      */
-    public Object getCacheKey() {
+    @Override
+	public Object getCacheKey() {
         return null;
     }
 
-    public Evaluator getEvaluator() {
+    @Override
+	public Evaluator getEvaluator() {
         return null;
     }
 

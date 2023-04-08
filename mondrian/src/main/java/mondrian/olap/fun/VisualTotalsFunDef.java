@@ -58,7 +58,8 @@ public class VisualTotalsFunDef extends FunDefBase {
         super(dummyFunDef);
     }
 
-    protected Exp validateArg(
+    @Override
+	protected Exp validateArg(
         Validator validator, Exp[] args, int i, int category)
     {
         final Exp validatedArg =
@@ -76,7 +77,8 @@ public class VisualTotalsFunDef extends FunDefBase {
         return validatedArg;
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final ListCalc listCalc = compiler.compileList(call.getArg(0));
         final StringCalc stringCalc =
             call.getArgCount() > 1
@@ -100,7 +102,8 @@ public class VisualTotalsFunDef extends FunDefBase {
             this.stringCalc = stringCalc;
         }
 
-        public TupleList evaluateList(Evaluator evaluator) {
+        @Override
+		public TupleList evaluateList(Evaluator evaluator) {
             final List<Member> list =
                 listCalc.evaluateList(evaluator).slice(0);
             final List<Member> resultList = new ArrayList<Member>(list);
@@ -269,11 +272,13 @@ public class VisualTotalsFunDef extends FunDefBase {
             return caption;
         }
 
-        protected boolean computeCalculated(final MemberType memberType) {
+        @Override
+		protected boolean computeCalculated(final MemberType memberType) {
             return true;
         }
 
-        public int getSolveOrder() {
+        @Override
+		public int getSolveOrder() {
             // high solve order, so it is expanded after other calculations
             // REVIEW: 99...really?? I've seen many queries with higher SO.
             // I don't think we should be abusing arbitrary constants
@@ -281,7 +286,8 @@ public class VisualTotalsFunDef extends FunDefBase {
             return 99;
         }
 
-        public Exp getExpression() {
+        @Override
+		public Exp getExpression() {
             return exp;
         }
 
@@ -315,15 +321,18 @@ public class VisualTotalsFunDef extends FunDefBase {
                 });
         }
 
-        public int getOrdinal() {
+        @Override
+		public int getOrdinal() {
             return member.getOrdinal();
         }
 
-        public Member getDataMember() {
+        @Override
+		public Member getDataMember() {
             return member;
         }
 
-        public String getQualifiedName() {
+        @Override
+		public String getQualifiedName() {
             throw new UnsupportedOperationException();
         }
 
@@ -331,7 +340,8 @@ public class VisualTotalsFunDef extends FunDefBase {
             return member;
         }
 
-        public Object getPropertyValue(String propertyName, boolean matchCase) {
+        @Override
+		public Object getPropertyValue(String propertyName, boolean matchCase) {
             Property property = Property.lookup(propertyName, matchCase);
             if (property == null) {
                 return null;

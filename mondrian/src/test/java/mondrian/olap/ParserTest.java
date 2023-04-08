@@ -1092,7 +1092,8 @@ public class ParserTest {
                 strictValidation);
         }
 
-        public Query makeQuery(
+        @Override
+		public Query makeQuery(
             Statement statement,
             Formula[] formulae,
             QueryAxis[] axes,
@@ -1109,7 +1110,8 @@ public class ParserTest {
             return null;
         }
 
-        public DrillThrough makeDrillThrough(
+        @Override
+		public DrillThrough makeDrillThrough(
             Query query,
             int maxRowCount,
             int firstRowOrdinal,
@@ -1122,32 +1124,37 @@ public class ParserTest {
             return null;
         }
 
-        public CalculatedFormula makeCalculatedFormula(
+        @Override
+		public CalculatedFormula makeCalculatedFormula(
                 String cubeName,
                 Formula e)
         {
             return null;
         }
 
-        public Explain makeExplain(QueryPart query) {
+        @Override
+		public Explain makeExplain(QueryPart query) {
             this.explain = true;
             return null;
         }
 
-        public Refresh makeRefresh(
+        @Override
+		public Refresh makeRefresh(
                 String cubeName)
         {
             return null;
         }
 
-        public Update makeUpdate(
+        @Override
+		public Update makeUpdate(
                 String cubeName,
                 List<Update.UpdateClause> list)
         {
             return null;
         }
 
-        public DmvQuery makeDmvQuery(
+        @Override
+		public DmvQuery makeDmvQuery(
                 String tableName,
                 List<String> columns,
                 Exp whereExpression)
@@ -1155,7 +1162,8 @@ public class ParserTest {
             return null;
         }
 
-        public TransactionCommand makeTransactionCommand(
+        @Override
+		public TransactionCommand makeTransactionCommand(
                 TransactionCommand.Command c)
         {
             return null;

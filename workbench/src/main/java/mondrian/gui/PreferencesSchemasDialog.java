@@ -49,7 +49,8 @@ public class PreferencesSchemasDialog extends JDialog {
         setLayout(new java.awt.GridBagLayout());
         addWindowListener(
             new WindowAdapter() {
-                public void windowClosing(WindowEvent evt) {
+                @Override
+				public void windowClosing(WindowEvent evt) {
                     closeDialog(evt);
                 }
             });
@@ -72,7 +73,8 @@ public class PreferencesSchemasDialog extends JDialog {
                 "Cancel"));
         cancelButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     closeDialog(evt);
                 }
             });
@@ -91,7 +93,8 @@ public class PreferencesSchemasDialog extends JDialog {
                 "OK"));
         okButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     acceptButtonActionPerformed(evt);
                 }
             });
@@ -190,11 +193,13 @@ public class PreferencesSchemasDialog extends JDialog {
             Class[] types = {Boolean.class, String.class};
             boolean[] canEdit = {true, false};
 
-            public Class getColumnClass(int columnIndex) {
+            @Override
+			public Class getColumnClass(int columnIndex) {
                 return types[columnIndex];
             }
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
+            @Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit[columnIndex];
             }
         };

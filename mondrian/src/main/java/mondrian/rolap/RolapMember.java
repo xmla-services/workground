@@ -22,10 +22,14 @@ import org.eclipse.daanse.olap.api.model.Member;
  */
 public interface RolapMember extends Member, RolapCalculation {
     Object getKey();
-    RolapMember getParentMember();
-    RolapHierarchy getHierarchy();
-    RolapLevel getLevel();
+    @Override
+	RolapMember getParentMember();
+    @Override
+	RolapHierarchy getHierarchy();
+    @Override
+	RolapLevel getLevel();
 
     /** @deprecated will be removed in mondrian-4.0 */
-    boolean isAllMember();
+    @Deprecated
+	boolean isAllMember();
 }

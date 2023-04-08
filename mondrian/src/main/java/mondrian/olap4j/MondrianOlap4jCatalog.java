@@ -67,7 +67,8 @@ class MondrianOlap4jCatalog
         }
     }
 
-    public NamedList<Schema> getSchemas() throws OlapException {
+    @Override
+	public NamedList<Schema> getSchemas() throws OlapException {
         final NamedList<MondrianOlap4jSchema> list =
             new NamedListImpl<MondrianOlap4jSchema>();
         for (Map.Entry<String, RolapSchema> entry : schemaMap.entrySet()) {
@@ -92,19 +93,23 @@ class MondrianOlap4jCatalog
         return Olap4jUtil.cast(list);
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return name;
     }
 
-    public OlapDatabaseMetaData getMetaData() {
+    @Override
+	public OlapDatabaseMetaData getMetaData() {
         return olap4jDatabaseMetaData;
     }
 
-    public Database getDatabase() {
+    @Override
+	public Database getDatabase() {
         return olap4jDatabase;
     }
 
-    protected OlapElement getOlapElement() {
+    @Override
+	protected OlapElement getOlapElement() {
         return null;
     }
 }

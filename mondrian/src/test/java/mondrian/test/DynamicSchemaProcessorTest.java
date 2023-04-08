@@ -102,7 +102,8 @@ public class DynamicSchemaProcessorTest
 
         public BaseDsp() {}
 
-        public String processSchema(
+        @Override
+		public String processSchema(
                 String schemaUrl,
                 Util.PropertyList connectInfo)
                 throws Exception
@@ -137,7 +138,8 @@ public class DynamicSchemaProcessorTest
      *
      */
     public static class ProviderTestDSP extends BaseDsp {
-        public String processSchema(
+        @Override
+		public String processSchema(
                 String schemaUrl,
                 Util.PropertyList connectInfo)
                 throws Exception
@@ -166,7 +168,8 @@ public class DynamicSchemaProcessorTest
      *
      */
     public static class FoodMartCatalogDsp extends BaseDsp {
-        public String processSchema(
+        @Override
+		public String processSchema(
                 String schemaUrl,
                 Util.PropertyList connectInfo)
                 throws Exception
@@ -204,7 +207,8 @@ public class DynamicSchemaProcessorTest
         public static String RETURNTRUESTRING = "true";
         public static String RETURNFALSESTRING = "false";
 
-        public String processSchema(
+        @Override
+		public String processSchema(
                 String schemaUrl,
                 Util.PropertyList connectInfo)
                 throws Exception

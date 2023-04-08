@@ -18,5 +18,6 @@ package mondrian.olap;
  * exists for temporary backwards compatibility and will be removed
  * in mondrian-4.0.
  */
+@Deprecated
 public interface PropertyFormatter extends mondrian.spi.PropertyFormatter {
 }

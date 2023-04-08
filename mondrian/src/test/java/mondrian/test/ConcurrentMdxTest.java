@@ -1321,7 +1321,8 @@ public class ConcurrentMdxTest {
         for (int i = 0; i < 700; i++) {
             for (final QueryAndResult mdxQuery : mdxQueries) {
                 executorService.submit(
-                    new Runnable() { public void run() {
+                    new Runnable() { @Override
+					public void run() {
                         OlapStatement statement = null;
                         try {
                             // Throttle a bit (randomly)

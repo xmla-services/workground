@@ -67,11 +67,13 @@ public final class ResolvedFunCall extends ExpBase implements FunCall {
         this.returnType = returnType;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return Util.unparse(this);
     }
 
-    @SuppressWarnings({"CloneDoesntCallSuperClone"})
+    @Override
+	@SuppressWarnings({"CloneDoesntCallSuperClone"})
     public ResolvedFunCall clone() {
         return new ResolvedFunCall(
             funDef, ExpBase.cloneArray(args), returnType);
@@ -85,7 +87,8 @@ public final class ResolvedFunCall extends ExpBase implements FunCall {
      *             The first Exp is at index <code>0</code>.
      * @see #getArgs()
      */
-    public Exp getArg(int index) {
+    @Override
+	public Exp getArg(int index) {
         return args[index];
     }
 
@@ -96,7 +99,8 @@ public final class ResolvedFunCall extends ExpBase implements FunCall {
      *
      * @return the array of expressions
      */
-    public Exp[] getArgs() {
+    @Override
+	public Exp[] getArgs() {
         return args;
     }
 
@@ -106,19 +110,23 @@ public final class ResolvedFunCall extends ExpBase implements FunCall {
      * @return number of arguments.
      * @see #getArgs()
      */
-    public final int getArgCount() {
+    @Override
+	public final int getArgCount() {
         return args.length;
     }
 
-    public String getFunName() {
+    @Override
+	public String getFunName() {
         return funDef.getName();
     }
 
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
         return funDef.getSyntax();
     }
 
-    public Object[] getChildren() {
+    @Override
+	public Object[] getChildren() {
         return args;
     }
 
@@ -131,15 +139,18 @@ public final class ResolvedFunCall extends ExpBase implements FunCall {
         return funDef;
     }
 
-    public final int getCategory() {
+    @Override
+	public final int getCategory() {
         return funDef.getReturnCategory();
     }
 
-    public final Type getType() {
+    @Override
+	public final Type getType() {
         return returnType;
     }
 
-    public Exp accept(Validator validator) {
+    @Override
+	public Exp accept(Validator validator) {
         // even though the function has already been validated, we need
         // to walk through the arguments to determine which measures are
         // referenced
@@ -150,15 +161,18 @@ public final class ResolvedFunCall extends ExpBase implements FunCall {
         return this;
     }
 
-    public void unparse(PrintWriter pw) {
+    @Override
+	public void unparse(PrintWriter pw) {
         funDef.unparse(args, pw);
     }
 
-    public Calc accept(ExpCompiler compiler) {
+    @Override
+	public Calc accept(ExpCompiler compiler) {
         return funDef.compileCall(this, compiler);
     }
 
-    public Object accept(MdxVisitor visitor) {
+    @Override
+	public Object accept(MdxVisitor visitor) {
         final Object o = visitor.visit(this);
         if (visitor.shouldVisitChildren()) {
             // visit the call's arguments

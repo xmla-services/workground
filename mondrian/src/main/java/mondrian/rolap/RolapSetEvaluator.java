@@ -69,7 +69,8 @@ class RolapSetEvaluator
         this.exp = exp;
     }
 
-    public TupleIterable evaluateTupleIterable() {
+    @Override
+	public TupleIterable evaluateTupleIterable() {
         ensureList();
         return list;
     }
@@ -177,20 +178,24 @@ class RolapSetEvaluator
         return result.toString();
     }
 
-    public int currentOrdinal() {
+    @Override
+	public int currentOrdinal() {
         return currentOrdinal;
     }
 
-    public void onPosition(int index) {
+    @Override
+	public void onPosition(int index) {
         this.currentOrdinal = index;
     }
 
-    public Member[] currentTuple() {
+    @Override
+	public Member[] currentTuple() {
         final List<Member> tuple = list.get(currentOrdinal);
         return tuple.toArray(new Member[tuple.size()]);
     }
 
-    public Member currentMember() {
+    @Override
+	public Member currentMember() {
         return list.get(0, currentOrdinal);
     }
 }

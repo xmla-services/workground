@@ -52,7 +52,8 @@ public class IifFunDef extends FunDefBase {
         super(name, description, flags);
     }
 
-    public Type getResultType(Validator validator, Exp[] args) {
+    @Override
+	public Type getResultType(Validator validator, Exp[] args) {
         // This is messy. We have already decided which variant of Iif to use,
         // and that involves some upcasts. For example, Iif(b, n, NULL) resolves
         // to the type of n. We don't want to throw it away and take the most
@@ -78,7 +79,8 @@ public class IifFunDef extends FunDefBase {
         }
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final BooleanCalc booleanCalc =
             compiler.compileBoolean(call.getArg(0));
         final Calc calc1 =
@@ -89,31 +91,36 @@ public class IifFunDef extends FunDefBase {
                 call.getArg(2), call.getType(), ResultStyle.ANY_LIST);
         if (call.getType() instanceof SetType) {
             return new GenericIterCalc(call.getFunName(),call.getType()) {
-                public Object evaluate(Evaluator evaluator) {
+                @Override
+				public Object evaluate(Evaluator evaluator) {
                     final boolean b =
                         booleanCalc.evaluateBoolean(evaluator);
                     Calc calc = b ? calc1 : calc2;
                     return calc.evaluate(evaluator);
                 }
 
-                public Calc[] getCalcs() {
+                @Override
+				public Calc[] getCalcs() {
                     return new Calc[] {booleanCalc, calc1, calc2};
                 }
 
-                public ResultStyle getResultStyle() {
+                @Override
+				public ResultStyle getResultStyle() {
                     return calc1.getResultStyle();
               }
             };
         } else {
             return new GenericCalc(call.getFunName(),call.getType()) {
-                public Object evaluate(Evaluator evaluator) {
+                @Override
+				public Object evaluate(Evaluator evaluator) {
                     final boolean b =
                         booleanCalc.evaluateBoolean(evaluator);
                     Calc calc = b ? calc1 : calc2;
                     return calc.evaluate(evaluator);
                 }
 
-                public Calc[] getCalcs() {
+                @Override
+				public Calc[] getCalcs() {
                     return new Calc[] {booleanCalc, calc1, calc2};
                 }
             };
@@ -126,14 +133,16 @@ public class IifFunDef extends FunDefBase {
         "Returns one of two string values determined by a logical test.",
         "fSbSS")
     {
-        public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+        @Override
+		public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
             final BooleanCalc booleanCalc =
                 compiler.compileBoolean(call.getArg(0));
             final StringCalc calc1 = compiler.compileString(call.getArg(1));
             final StringCalc calc2 = compiler.compileString(call.getArg(2));
             return new AbstractStringCalc(
             		call.getFunName(),call.getType(), new Calc[] {booleanCalc, calc1, calc2}) {
-                public String evaluateString(Evaluator evaluator) {
+                @Override
+				public String evaluateString(Evaluator evaluator) {
                     final boolean b =
                         booleanCalc.evaluateBoolean(evaluator);
                     StringCalc calc = b ? calc1 : calc2;
@@ -150,21 +159,24 @@ public class IifFunDef extends FunDefBase {
             "Returns one of two numeric values determined by a logical test.",
             "fnbnn")
         {
-            public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+            @Override
+			public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
             {
                 final BooleanCalc booleanCalc =
                     compiler.compileBoolean(call.getArg(0));
                 final Calc calc1 = compiler.compileScalar(call.getArg(1), true);
                 final Calc calc2 = compiler.compileScalar(call.getArg(2), true);
                 return new GenericCalc(call.getFunName(),call.getType()) {
-                    public Object evaluate(Evaluator evaluator) {
+                    @Override
+					public Object evaluate(Evaluator evaluator) {
                         final boolean b =
                             booleanCalc.evaluateBoolean(evaluator);
                         Calc calc = b ? calc1 : calc2;
                         return calc.evaluate(evaluator);
                     }
 
-                    public Calc[] getCalcs() {
+                    @Override
+					public Calc[] getCalcs() {
                         return new Calc[] {booleanCalc, calc1, calc2};
                     }
                 };
@@ -178,21 +190,24 @@ public class IifFunDef extends FunDefBase {
             "Returns one of two tuples determined by a logical test.",
             "ftbtt")
         {
-            public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
+            @Override
+			public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler)
             {
                 final BooleanCalc booleanCalc =
                     compiler.compileBoolean(call.getArg(0));
                 final Calc calc1 = compiler.compileTuple(call.getArg(1));
                 final Calc calc2 = compiler.compileTuple(call.getArg(2));
                 return new GenericCalc(call.getFunName(),call.getType()) {
-                    public Object evaluate(Evaluator evaluator) {
+                    @Override
+					public Object evaluate(Evaluator evaluator) {
                         final boolean b =
                             booleanCalc.evaluateBoolean(evaluator);
                         Calc calc = b ? calc1 : calc2;
                         return calc.evaluate(evaluator);
                     }
 
-                    public Calc[] getCalcs() {
+                    @Override
+					public Calc[] getCalcs() {
                         return new Calc[] {booleanCalc, calc1, calc2};
                     }
                 };
@@ -205,7 +220,8 @@ public class IifFunDef extends FunDefBase {
         "Returns boolean determined by a logical test.",
         "fbbbb")
     {
-        public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+        @Override
+		public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
             final BooleanCalc booleanCalc =
                 compiler.compileBoolean(call.getArg(0));
             final BooleanCalc booleanCalc1 =
@@ -214,7 +230,8 @@ public class IifFunDef extends FunDefBase {
                 compiler.compileBoolean(call.getArg(2));
             Calc[] calcs = {booleanCalc, booleanCalc1, booleanCalc2};
             return new AbstractBooleanCalc(call.getFunName(),call.getType(), calcs) {
-                public boolean evaluateBoolean(Evaluator evaluator) {
+                @Override
+				public boolean evaluateBoolean(Evaluator evaluator) {
                     final boolean condition =
                         booleanCalc.evaluateBoolean(evaluator);
                     if (condition) {

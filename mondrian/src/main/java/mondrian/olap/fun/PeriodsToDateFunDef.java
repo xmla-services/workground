@@ -50,7 +50,8 @@ class PeriodsToDateFunDef extends FunDefBase {
     super( dummyFunDef );
   }
 
-  public Type getResultType( Validator validator, Exp[] args ) {
+  @Override
+public Type getResultType( Validator validator, Exp[] args ) {
     if ( args.length == 0 ) {
       // With no args, the default implementation cannot
       // guess the hierarchy.
@@ -74,14 +75,16 @@ class PeriodsToDateFunDef extends FunDefBase {
     return super.getResultType( validator, args );
   }
 
-  public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+  @Override
+public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final LevelCalc levelCalc = call.getArgCount() > 0 ? compiler.compileLevel( call.getArg( 0 ) ) : null;
     final MemberCalc memberCalc = call.getArgCount() > 1 ? compiler.compileMember( call.getArg( 1 ) ) : null;
     final RolapHierarchy timeHierarchy =
         levelCalc == null ? ( (RolapCube) compiler.getEvaluator().getCube() ).getTimeHierarchy( getName() ) : null;
 
     return new AbstractListCalc( call.getFunName(),call.getType(), new Calc[] { levelCalc, memberCalc } ) {
-      public TupleList evaluateList( Evaluator evaluator ) {
+      @Override
+	public TupleList evaluateList( Evaluator evaluator ) {
         evaluator.getTiming().markStart( PeriodsToDateFunDef.TIMING_NAME );
         try {
           final Member member;
@@ -103,7 +106,8 @@ class PeriodsToDateFunDef extends FunDefBase {
         }
       }
 
-      public boolean dependsOn( Hierarchy hierarchy ) {
+      @Override
+	public boolean dependsOn( Hierarchy hierarchy ) {
         if ( super.dependsOn( hierarchy ) ) {
           return true;
         }

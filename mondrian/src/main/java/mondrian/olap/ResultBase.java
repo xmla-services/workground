@@ -51,22 +51,26 @@ public abstract class ResultBase implements Result {
 
     protected abstract Logger getLogger();
 
-    public Query getQuery() {
+    @Override
+	public Query getQuery() {
         return statement.getQuery();
     }
 
     // implement Result
-    public Axis[] getAxes() {
+    @Override
+	public Axis[] getAxes() {
         return axes;
     }
 
     // implement Result
-    public Axis getSlicerAxis() {
+    @Override
+	public Axis getSlicerAxis() {
         return slicerAxis;
     }
 
     // implement Result
-    public void print(PrintWriter pw) {
+    @Override
+	public void print(PrintWriter pw) {
         for (int i = -1; i < axes.length; i++) {
             pw.println(new StringBuilder("Axis #").append(i + 1).append(":").toString());
             printAxis(pw, i < 0 ? slicerAxis : axes[i]);
@@ -156,6 +160,7 @@ public abstract class ResultBase implements Result {
     return execution;
   }
 
-  public void close() {
+  @Override
+public void close() {
   }
 }

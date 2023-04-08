@@ -85,7 +85,8 @@ public abstract class AbstractRecorder implements MessageRecorder {
     /**
      * Resets this MessageRecorder.
      */
-    public void clear() {
+    @Override
+	public void clear() {
         errorMsgCount = 0;
         warningMsgCount = 0;
         infoMsgCount = 0;
@@ -94,23 +95,28 @@ public abstract class AbstractRecorder implements MessageRecorder {
         this.startTime = System.currentTimeMillis();
     }
 
-    public long getStartTimeMillis() {
+    @Override
+	public long getStartTimeMillis() {
         return this.startTime;
     }
 
-    public long getRunTimeMillis() {
+    @Override
+	public long getRunTimeMillis() {
         return (System.currentTimeMillis() - this.startTime);
     }
 
-    public boolean hasInformation() {
+    @Override
+	public boolean hasInformation() {
         return (infoMsgCount > 0);
     }
 
-    public boolean hasWarnings() {
+    @Override
+	public boolean hasWarnings() {
         return (warningMsgCount > 0);
     }
 
-    public boolean hasErrors() {
+    @Override
+	public boolean hasErrors() {
         return (errorMsgCount > 0);
     }
 
@@ -126,7 +132,8 @@ public abstract class AbstractRecorder implements MessageRecorder {
         return errorMsgCount;
     }
 
-    public String getContext() {
+    @Override
+	public String getContext() {
         // heavy weight
         if (contextMsgCache == null) {
             final StringBuilder buf = new StringBuilder();
@@ -142,19 +149,22 @@ public abstract class AbstractRecorder implements MessageRecorder {
         return contextMsgCache;
     }
 
-    public void pushContextName(final String name) {
+    @Override
+	public void pushContextName(final String name) {
         // light weight
         contexts.add(name);
         contextMsgCache = null;
     }
 
-    public void popContextName() {
+    @Override
+	public void popContextName() {
         // light weight
         contexts.remove(contexts.size() - 1);
         contextMsgCache = null;
     }
 
-    public void throwRTException() throws RecorderException {
+    @Override
+	public void throwRTException() throws RecorderException {
         if (hasErrors()) {
             final String errorMsg =
                 MondrianResource.instance().ForceMessageRecorderError.str(
@@ -164,25 +174,29 @@ public abstract class AbstractRecorder implements MessageRecorder {
         }
     }
 
-    public void reportError(final Exception ex)
+    @Override
+	public void reportError(final Exception ex)
         throws RecorderException
     {
         reportError(ex, null);
     }
 
-    public void reportError(final Exception ex, final Object info)
+    @Override
+	public void reportError(final Exception ex, final Object info)
         throws RecorderException
     {
         reportError(ex.toString(), info);
     }
 
-    public void reportError(final String msg)
+    @Override
+	public void reportError(final String msg)
         throws RecorderException
     {
         reportError(msg, null);
     }
 
-    public void reportError(final String msg, final Object info)
+    @Override
+	public void reportError(final String msg, final Object info)
         throws RecorderException
     {
         errorMsgCount++;
@@ -197,20 +211,24 @@ public abstract class AbstractRecorder implements MessageRecorder {
         }
     }
 
-    public void reportWarning(final String msg) {
+    @Override
+	public void reportWarning(final String msg) {
         reportWarning(msg, null);
     }
 
-    public void reportWarning(final String msg, final Object info) {
+    @Override
+	public void reportWarning(final String msg, final Object info) {
         warningMsgCount++;
         recordMessage(msg, info, MsgType.WARN);
     }
 
-    public void reportInfo(final String msg) {
+    @Override
+	public void reportInfo(final String msg) {
         reportInfo(msg, null);
     }
 
-    public void reportInfo(final String msg, final Object info) {
+    @Override
+	public void reportInfo(final String msg, final Object info) {
         infoMsgCount++;
         recordMessage(msg, info, MsgType.INFO);
     }

@@ -160,7 +160,8 @@ public abstract class SubstitutingMemberReader extends DelegatingMemberReader {
             memberReader.lookupMember(uniqueNameParts, failIfNotFound));
     }
 
-    public Map<? extends Member, Access> getMemberChildren(
+    @Override
+	public Map<? extends Member, Access> getMemberChildren(
         RolapMember member,
         List<RolapMember> children,
         MemberChildrenConstraint constraint)
@@ -171,7 +172,8 @@ public abstract class SubstitutingMemberReader extends DelegatingMemberReader {
             constraint);
     }
 
-    public Map<? extends Member, Access> getMemberChildren(
+    @Override
+	public Map<? extends Member, Access> getMemberChildren(
         List<RolapMember> parentMembers,
         List<RolapMember> children,
         MemberChildrenConstraint constraint)
@@ -246,15 +248,18 @@ public abstract class SubstitutingMemberReader extends DelegatingMemberReader {
     private class SubstitutingMemberBuilder
         implements TupleReader.MemberBuilder
     {
-        public MemberCache getMemberCache() {
+        @Override
+		public MemberCache getMemberCache() {
             return memberReader.getMemberBuilder().getMemberCache();
         }
 
-        public Object getMemberCacheLock() {
+        @Override
+		public Object getMemberCacheLock() {
             return memberReader.getMemberBuilder().getMemberCacheLock();
         }
 
-        public RolapMember makeMember(
+        @Override
+		public RolapMember makeMember(
             RolapMember parentMember,
             RolapLevel childLevel,
             Object value,
@@ -276,7 +281,8 @@ public abstract class SubstitutingMemberReader extends DelegatingMemberReader {
                     column));
         }
 
-        public RolapMember allMember() {
+        @Override
+		public RolapMember allMember() {
             return substitute(memberReader.getHierarchy().getAllMember());
         }
     }

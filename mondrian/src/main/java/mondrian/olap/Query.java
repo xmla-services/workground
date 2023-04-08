@@ -273,7 +273,8 @@ public class Query extends QueryPart {
         {
             statement.enableProfiling(
                 new ProfileHandler() {
-                    public void explain(String plan, QueryTiming timing) {
+                    @Override
+					public void explain(String plan, QueryTiming timing) {
                         if (timing != null) {
                             plan += "\n" + timing;
                         }
@@ -293,7 +294,8 @@ public class Query extends QueryPart {
      *
      * @deprecated This method will be removed in mondrian-4.0
      */
-    public void setQueryTimeoutMillis(long queryTimeoutMillis) {
+    @Deprecated
+	public void setQueryTimeoutMillis(long queryTimeoutMillis) {
         statement.setQueryTimeoutMillis(queryTimeoutMillis);
     }
 
@@ -429,11 +431,13 @@ public class Query extends QueryPart {
      * @deprecated Please use {@link #clone}; this method will be removed in
      * mondrian-4.0
      */
-    public Query safeClone() {
+    @Deprecated
+	public Query safeClone() {
         return clone();
     }
 
-    @SuppressWarnings({
+    @Override
+	@SuppressWarnings({
         "CloneDoesntCallSuperClone",
         "CloneDoesntDeclareCloneNotSupportedException"
     })
@@ -462,7 +466,8 @@ public class Query extends QueryPart {
      *
      * @deprecated This method is deprecated and will be removed in mondrian-4.0
      */
-    public void cancel() {
+    @Deprecated
+	public void cancel() {
         try {
             statement.cancel();
         } catch (SQLException e) {
@@ -480,7 +485,8 @@ public class Query extends QueryPart {
      *
      * @deprecated This method will be removed in mondrian-4.0
      */
-    public void checkCancelOrTimeout() {
+    @Deprecated
+	public void checkCancelOrTimeout() {
         final Execution execution0 = statement.getCurrentExecution();
         if (execution0 == null) {
             return;
@@ -495,7 +501,8 @@ public class Query extends QueryPart {
      * @deprecated Use {@link Execution#getStartTime}. This method is deprecated
      *   and will be removed in mondrian-4.0
      */
-    public long getQueryStartTime() {
+    @Deprecated
+	public long getQueryStartTime() {
         final Execution currentExecution = statement.getCurrentExecution();
         return currentExecution == null
             ? 0
@@ -819,7 +826,8 @@ public class Query extends QueryPart {
         }
     }
 
-    public void unparse(PrintWriter pw) {
+    @Override
+	public void unparse(PrintWriter pw) {
         if (formulas != null) {
             for (int i = 0; i < formulas.length; i++) {
                 if (i == 0) {
@@ -855,12 +863,14 @@ public class Query extends QueryPart {
     }
 
     /** Returns the MDX query string. */
-    public String toString() {
+    @Override
+	public String toString() {
         resolve();
         return Util.unparse(this);
     }
 
-    public Object[] getChildren() {
+    @Override
+	public Object[] getChildren() {
         // Chidren are axes, slicer, and formulas (in that order, to be
         // consistent with replaceChild).
         List<QueryPart> list = new ArrayList<QueryPart>();
@@ -963,7 +973,8 @@ public class Query extends QueryPart {
             new Execution(statement, 0),
             "Query.quickParse",
             new Locus.Action<Object>() {
-                public Object execute() {
+                @Override
+				public Object execute() {
                     return quickParse(
                         parameterName, param.getType(), value, Query.this);
                 }
@@ -1621,7 +1632,8 @@ public class Query extends QueryPart {
      *
      * @deprecated This method will be removed in mondrian-4.0.
      */
-    public void close() {
+    @Deprecated
+	public void close() {
         if (ownStatement) {
             statement.close();
         }
@@ -1660,12 +1672,14 @@ public class Query extends QueryPart {
             this.query = query;
         }
 
-        public SchemaReader withoutAccessControl() {
+        @Override
+		public SchemaReader withoutAccessControl() {
             return new QuerySchemaReader(
                 schemaReader.withoutAccessControl(), query);
         }
 
-        public Member getMemberByUniqueName(
+        @Override
+		public Member getMemberByUniqueName(
             List<Id.Segment> uniqueNameParts,
             boolean failIfNotFound,
             MatchType matchType)
@@ -1703,7 +1717,8 @@ public class Query extends QueryPart {
             return getLevelMembers(level, false, context);
         }
 
-        public List<Member> getLevelMembers(
+        @Override
+		public List<Member> getLevelMembers(
             Level level,
             boolean includeCalculated,
             Evaluator context)
@@ -1729,25 +1744,29 @@ public class Query extends QueryPart {
             return members;
         }
 
-        public List<Member> getMemberChildren(Member member) {
+        @Override
+		public List<Member> getMemberChildren(Member member) {
             //Must be RolapMember, not LimitedRollupMember
             Member rolapMember = query.getRolapMember(member);
             return query.getSubcubeMembers(super.getMemberChildren(rolapMember), false);
         }
 
-        public List<Member> getMemberChildren(List<Member> members) {
+        @Override
+		public List<Member> getMemberChildren(List<Member> members) {
             //Must be RolapMember, not LimitedRollupMember
             List<Member> rolapMembers = query.getRolapMembers(members);
             return query.getSubcubeMembers(super.getMemberChildren(rolapMembers), false);
         }
 
-        public List<Member> getMemberChildren(Member member, Evaluator context) {
+        @Override
+		public List<Member> getMemberChildren(Member member, Evaluator context) {
             //Must be RolapMember, not LimitedRollupMember
             Member rolapMember = query.getRolapMember(member);
             return query.getSubcubeMembers(super.getMemberChildren(rolapMember, context), false);
         }
 
-        public List<Member> getMemberChildren(
+        @Override
+		public List<Member> getMemberChildren(
                 List<Member> members, Evaluator context)
         {
             //Must be RolapMember, not LimitedRollupMember
@@ -1755,7 +1774,8 @@ public class Query extends QueryPart {
             return query.getSubcubeMembers(super.getMemberChildren(rolapMembers, context), false);
         }
 
-        public Map<? extends Member, Access> getMemberChildrenWithDetails(
+        @Override
+		public Map<? extends Member, Access> getMemberChildrenWithDetails(
                 Member member,
                 Evaluator evaluator)
         {
@@ -1773,7 +1793,8 @@ public class Query extends QueryPart {
             return newMembers;
         }
 
-        public Member getCalculatedMember(List<Id.Segment> nameParts) {
+        @Override
+		public Member getCalculatedMember(List<Id.Segment> nameParts) {
             for (final Formula formula : query.formulas) {
                 if (!formula.isMember()) {
                     continue;
@@ -1795,7 +1816,8 @@ public class Query extends QueryPart {
 
 
 
-        public List<Member> getCalculatedMembers(Hierarchy hierarchy) {
+        @Override
+		public List<Member> getCalculatedMembers(Hierarchy hierarchy) {
             List<Member> result = new ArrayList<Member>();
             // Add calculated members in the cube.
             final List<Member> calculatedMembers =
@@ -1810,7 +1832,8 @@ public class Query extends QueryPart {
             return result;
         }
 
-        public List<Member> getCalculatedMembers(Level level) {
+        @Override
+		public List<Member> getCalculatedMembers(Level level) {
             List<Member> hierarchyMembers =
                 getCalculatedMembers(level.getHierarchy());
             List<Member> result = new ArrayList<Member>();
@@ -1822,16 +1845,19 @@ public class Query extends QueryPart {
             return result;
         }
 
-        public List<Member> getCalculatedMembers() {
+        @Override
+		public List<Member> getCalculatedMembers() {
             return query.getDefinedMembers();
         }
 
-        public OlapElement getElementChild(OlapElement parent, Id.Segment s)
+        @Override
+		public OlapElement getElementChild(OlapElement parent, Id.Segment s)
         {
             return getElementChild(parent, s, MatchType.EXACT);
         }
 
-        public OlapElement getElementChild(
+        @Override
+		public OlapElement getElementChild(
             OlapElement parent,
             Id.Segment s,
             MatchType matchType)
@@ -1921,14 +1947,16 @@ public class Query extends QueryPart {
             return olapElement;
         }
 
-        public NamedSet getNamedSet(List<Id.Segment> nameParts) {
+        @Override
+		public NamedSet getNamedSet(List<Id.Segment> nameParts) {
             if (nameParts.size() != 1) {
                 return null;
             }
             return query.lookupNamedSet(nameParts.get(0));
         }
 
-        public Parameter getParameter(String name) {
+        @Override
+		public Parameter getParameter(String name) {
             // Look for a parameter defined in the query.
             for (Parameter parameter : query.parameters) {
                 if (parameter.getName().equals(name)) {
@@ -1950,7 +1978,8 @@ public class Query extends QueryPart {
             return super.getParameter(name);
         }
 
-        public OlapElement lookupChild(
+        @Override
+		public OlapElement lookupChild(
             OlapElement parent,
             IdentifierSegment segment,
             MatchType matchType)
@@ -1959,7 +1988,8 @@ public class Query extends QueryPart {
             return lookupChild(parent, segment);
         }
 
-        public OlapElement lookupChild(
+        @Override
+		public OlapElement lookupChild(
             OlapElement parent,
             IdentifierSegment segment)
         {
@@ -1993,12 +2023,14 @@ public class Query extends QueryPart {
             return null;
         }
 
-        public Member getHierarchyDefaultMember(Hierarchy hierarchy) {
+        @Override
+		public Member getHierarchyDefaultMember(Hierarchy hierarchy) {
             Member member = super.getHierarchyDefaultMember(hierarchy);
             return query.getSubcubeMember(member, true);
         }
 
-        public List<NameResolver.Namespace> getNamespaces() {
+        @Override
+		public List<NameResolver.Namespace> getNamespaces() {
             final List<NameResolver.Namespace> list =
                 new ArrayList<NameResolver.Namespace>();
             list.add(this);
@@ -2014,11 +2046,13 @@ public class Query extends QueryPart {
             super(name, defaultValue, "Connection property", new StringType());
         }
 
-        public Scope getScope() {
+        @Override
+		public Scope getScope() {
             return Scope.Connection;
         }
 
-        public void setValue(Object value) {
+        @Override
+		public void setValue(Object value) {
             throw MondrianResource.instance().ParameterIsNotModifiable.ex(
                 getName(), getScope().name());
         }
@@ -2056,21 +2090,25 @@ public class Query extends QueryPart {
             this.schemaReader = new ScopedSchemaReader(this, true);
         }
 
-        public SchemaReader getSchemaReader() {
+        @Override
+		public SchemaReader getSchemaReader() {
             return schemaReader;
         }
 
-        protected void defineParameter(Parameter param) {
+        @Override
+		protected void defineParameter(Parameter param) {
             final String name = param.getName();
             query.parameters.add(param);
             query.parametersByName.put(name, param);
         }
 
-        public Query getQuery() {
+        @Override
+		public Query getQuery() {
             return query;
         }
 
-        public boolean alwaysResolveFunDef() {
+        @Override
+		public boolean alwaysResolveFunDef() {
             return alwaysResolveFunDef;
         }
 
@@ -2108,14 +2146,16 @@ public class Query extends QueryPart {
             this.accessControlled = accessControlled;
         }
 
-        public SchemaReader withoutAccessControl() {
+        @Override
+		public SchemaReader withoutAccessControl() {
             if (!accessControlled) {
                 return this;
             }
             return new ScopedSchemaReader(queryValidator, false);
         }
 
-        public List<NameResolver.Namespace> getNamespaces() {
+        @Override
+		public List<NameResolver.Namespace> getNamespaces() {
             final List<NameResolver.Namespace> list =
                 new ArrayList<NameResolver.Namespace>();
             list.add(this);
@@ -2145,7 +2185,8 @@ public class Query extends QueryPart {
                 parent, names, failIfNotFound, category, matchType);
         }
 
-        public OlapElement lookupChild(
+        @Override
+		public OlapElement lookupChild(
             OlapElement parent,
             IdentifierSegment segment,
             MatchType matchType)
@@ -2154,7 +2195,8 @@ public class Query extends QueryPart {
             return lookupChild(parent, segment);
         }
 
-        public OlapElement lookupChild(
+        @Override
+		public OlapElement lookupChild(
             OlapElement parent,
             IdentifierSegment segment)
         {
@@ -2186,19 +2228,23 @@ public class Query extends QueryPart {
             this.expr = expr;
         }
 
-        public String getName() {
+        @Override
+		public String getName() {
             return name;
         }
 
-        public String getNameUniqueWithinQuery() {
+        @Override
+		public String getNameUniqueWithinQuery() {
             return new StringBuilder().append(System.identityHashCode(this)).toString();
         }
 
-        public boolean isDynamic() {
+        @Override
+		public boolean isDynamic() {
             return true;
         }
 
-        public Exp getExp() {
+        @Override
+		public Exp getExp() {
             return expr;
         }
 
@@ -2206,19 +2252,23 @@ public class Query extends QueryPart {
             this.expr = expr;
         }
 
-        public void setName(String newName) {
+        @Override
+		public void setName(String newName) {
             throw new UnsupportedOperationException();
         }
 
-        public Type getType() {
+        @Override
+		public Type getType() {
             return expr.getType();
         }
 
-        public Map<String, Object> getMetadata()  {
+        @Override
+		public Map<String, Object> getMetadata()  {
             return Map.of();
         }
 
-        public NamedSet validate(Validator validator) {
+        @Override
+		public NamedSet validate(Validator validator) {
             Exp newExpr = expr.accept(validator);
             final Type type = newExpr.getType();
             if (type instanceof MemberType
@@ -2233,41 +2283,50 @@ public class Query extends QueryPart {
             return this;
         }
 
-        public String getUniqueName() {
+        @Override
+		public String getUniqueName() {
             return name;
         }
 
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             throw new UnsupportedOperationException();
         }
 
-        public OlapElement lookupChild(
+        @Override
+		public OlapElement lookupChild(
             SchemaReader schemaReader, Id.Segment s, MatchType matchType)
         {
             throw new UnsupportedOperationException();
         }
 
-        public String getQualifiedName() {
+        @Override
+		public String getQualifiedName() {
             throw new UnsupportedOperationException();
         }
 
-        public String getCaption() {
+        @Override
+		public String getCaption() {
             throw new UnsupportedOperationException();
         }
 
-        public boolean isVisible() {
+        @Override
+		public boolean isVisible() {
             throw new UnsupportedOperationException();
         }
 
-        public Hierarchy getHierarchy() {
+        @Override
+		public Hierarchy getHierarchy() {
             throw new UnsupportedOperationException();
         }
 
-        public Dimension getDimension() {
+        @Override
+		public Dimension getDimension() {
             throw new UnsupportedOperationException();
         }
 
-        public String getLocalized(LocalizedProperty prop, Locale locale) {
+        @Override
+		public String getLocalized(LocalizedProperty prop, Locale locale) {
             throw new UnsupportedOperationException();
         }
 
@@ -2277,7 +2336,8 @@ public class Query extends QueryPart {
      * Visitor that locates and registers parameters.
      */
     private class ParameterFinder extends MdxVisitorImpl {
-        public Object visit(ParameterExpr parameterExpr) {
+        @Override
+		public Object visit(ParameterExpr parameterExpr) {
             Parameter parameter = parameterExpr.getParameter();
             if (!parameters.contains(parameter)) {
                 parameters.add(parameter);
@@ -2286,7 +2346,8 @@ public class Query extends QueryPart {
             return null;
         }
 
-        public Object visit(UnresolvedFunCall call) {
+        @Override
+		public Object visit(UnresolvedFunCall call) {
             if (call.getFunName().equals("Parameter")) {
                 // Is there already a parameter with this name?
                 String parameterName =
@@ -2322,12 +2383,14 @@ public class Query extends QueryPart {
             return super.visit(queryAxis);
         }
 
-        public Object visit(UnresolvedFunCall call) {
+        @Override
+		public Object visit(UnresolvedFunCall call) {
             registerAliasArgs(call);
             return super.visit(call);
         }
 
-        public Object visit(ResolvedFunCall call) {
+        @Override
+		public Object visit(ResolvedFunCall call) {
             registerAliasArgs(call);
             return super.visit(call);
         }

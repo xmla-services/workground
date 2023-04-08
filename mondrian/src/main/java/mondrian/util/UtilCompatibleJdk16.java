@@ -41,7 +41,8 @@ public class UtilCompatibleJdk16 extends UtilCompatibleJdk15 {
     private static final Logger LOGGER =
         LoggerFactory.getLogger(Util.class);
 
-    public <T> T compileScript(
+    @Override
+	public <T> T compileScript(
         Class<T> iface,
         String script,
         String engineName)
@@ -96,7 +97,8 @@ public class UtilCompatibleJdk16 extends UtilCompatibleJdk15 {
             new IdentityHashMap<T, Boolean>());
     }
 
-    public <T extends Comparable<T>> int binarySearch(
+    @Override
+	public <T extends Comparable<T>> int binarySearch(
         T[] ts, int start, int end, T t)
     {
         return Arrays.binarySearch(

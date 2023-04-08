@@ -377,7 +377,8 @@ public class Workbench extends javax.swing.JFrame {
                         "workbench.menu.delete", "Delete"))
                 {
                     private static final long serialVersionUID = 1L;
-                    public void actionPerformed(ActionEvent e) {
+                    @Override
+					public void actionPerformed(ActionEvent e) {
                         JInternalFrame jf = desktopPane.getSelectedFrame();
                         if (jf != null && jf.getContentPane()
                             .getComponent(0) instanceof SchemaExplorer)
@@ -401,7 +402,8 @@ public class Workbench extends javax.swing.JFrame {
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(
             new WindowAdapter() {
-                public void windowClosing(WindowEvent evt) {
+                @Override
+				public void windowClosing(WindowEvent evt) {
                     storeWorkbenchProperties();
                     storeDatabaseMeta();
                     closeAllSchemaFrames(true);
@@ -416,7 +418,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.newSchema", "Schema"));
         newSchemaMenuItem2.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     newSchemaMenuItemActionPerformed(evt);
                 }
             });
@@ -426,7 +429,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.newQuery", "MDX Query"));
         newQueryMenuItem2.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     newQueryMenuItemActionPerformed(evt);
                 }
             });
@@ -437,7 +441,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.newJDBC", "JDBC Explorer"));
         newJDBCExplorerMenuItem2.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     newJDBCExplorerMenuItemActionPerformed(evt);
                 }
             });
@@ -462,7 +467,8 @@ public class Workbench extends javax.swing.JFrame {
         toolbarNewButton.setBorderPainted(false);
         toolbarNewButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
+                @Override
+				public void actionPerformed(ActionEvent e) {
                     toolbarNewPopupMenu.show(
                         jPanel2, 0, jPanel2.getSize().height);
                 }
@@ -480,7 +486,8 @@ public class Workbench extends javax.swing.JFrame {
         toolbarNewArrowButton.setBorderPainted(false);
         toolbarNewArrowButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
+                @Override
+				public void actionPerformed(ActionEvent e) {
                     toolbarNewPopupMenu.show(
                         jPanel2, 0, jPanel2.getSize().height);
                 }
@@ -500,7 +507,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.toolbar.open", "Open"));
         toolbarOpenButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     openMenuItemActionPerformed(evt);
                 }
             });
@@ -517,7 +525,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.toolbar.save", "Save"));
         toolbarSaveButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     saveMenuItemActionPerformed(evt);
                 }
             });
@@ -533,7 +542,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.toolbar.saveAs", "Save As"));
         toolbarSaveAsButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     saveAsMenuItemActionPerformed(evt);
                 }
             });
@@ -552,7 +562,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.toolbar.connection", "Connection"));
         toolbarPreferencesButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     connectionButtonActionPerformed(evt);
                 }
             });
@@ -575,7 +586,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.newSchema", "Schema"));
         newSchemaMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     newSchemaMenuItemActionPerformed(evt);
                 }
             });
@@ -587,7 +599,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.newQuery", "MDX Query"));
         newQueryMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     newQueryMenuItemActionPerformed(evt);
                 }
             });
@@ -599,7 +612,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.newJDBC", "JDBC Explorer"));
         newJDBCExplorerMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     newJDBCExplorerMenuItemActionPerformed(evt);
                 }
             });
@@ -613,7 +627,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.open", "Open"));
         openMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     openMenuItemActionPerformed(evt);
                 }
             });
@@ -625,7 +640,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.save", "Save"));
         saveMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     saveMenuItemActionPerformed(evt);
                 }
             });
@@ -637,7 +653,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.saveAsDot", "Save As ..."));
         saveAsMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     saveAsMenuItemActionPerformed(evt);
                 }
             });
@@ -650,7 +667,8 @@ public class Workbench extends javax.swing.JFrame {
         lastUsed1MenuItem.setText(getWorkbenchProperty("lastUsed1"));
         lastUsed1MenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     lastUsed1MenuItemActionPerformed(evt);
                 }
             });
@@ -659,7 +677,8 @@ public class Workbench extends javax.swing.JFrame {
         lastUsed2MenuItem.setText(getWorkbenchProperty("lastUsed2"));
         lastUsed2MenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     lastUsed2MenuItemActionPerformed(evt);
                 }
             });
@@ -668,7 +687,8 @@ public class Workbench extends javax.swing.JFrame {
         lastUsed3MenuItem.setText(getWorkbenchProperty("lastUsed3"));
         lastUsed3MenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     lastUsed3MenuItemActionPerformed(evt);
                 }
             });
@@ -677,7 +697,8 @@ public class Workbench extends javax.swing.JFrame {
         lastUsed4MenuItem.setText(getWorkbenchProperty("lastUsed4"));
         lastUsed4MenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     lastUsed4MenuItemActionPerformed(evt);
                 }
             });
@@ -691,7 +712,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.exit", "Exit"));
         exitMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     exitMenuItemActionPerformed(evt);
                 }
             });
@@ -732,7 +754,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.viewXML", "View XML"));
         viewXmlMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     viewXMLMenuItemActionPerformed(evt);
                 }
             });
@@ -746,7 +769,8 @@ public class Workbench extends javax.swing.JFrame {
             "workbench.menu.connection", "Connection"));
         preferencesMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     connectionButtonActionPerformed(evt);
                 }
             });
@@ -758,7 +782,8 @@ public class Workbench extends javax.swing.JFrame {
         requireSchemaCheckboxMenuItem.setSelected(requireSchema);
         requireSchemaCheckboxMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent e) {
+                @Override
+				public void actionPerformed(ActionEvent e) {
                     requireSchemaActionPerformed(e);
                 }
             });
@@ -778,7 +803,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.cascadeWindows", "Cascade Windows"));
         cascadeMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     cascadeMenuItemActionPerformed(evt);
                 }
             });
@@ -789,7 +815,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.tileWindows", "Tile Windows"));
         tileMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     tileMenuItemActionPerformed(evt);
                 }
             });
@@ -800,7 +827,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.closeAll", "Close All"));
         closeAllMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     closeAllMenuItemActionPerformed(evt);
                 }
             });
@@ -811,7 +839,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.minimizeAll", "Minimize All"));
         minimizeMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     minimizeMenuItemActionPerformed(evt);
                 }
             });
@@ -822,7 +851,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.maximizeAll", "Maximize All"));
         maximizeMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     maximizeMenuItemActionPerformed(evt);
                 }
             });
@@ -834,7 +864,8 @@ public class Workbench extends javax.swing.JFrame {
                 "workbench.menu.about", "About"));
         aboutMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     aboutMenuItemActionPerformed(evt);
                 }
             });
@@ -1168,7 +1199,8 @@ public class Workbench extends javax.swing.JFrame {
                     Integer.toString(windowMenuMapIndex++)));
             jdbcMenuItem.addActionListener(
                 new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
+                    @Override
+					public void actionPerformed(ActionEvent evt) {
                         try {
                             if (jf.isIcon()) {
                                 jf.setIcon(false);
@@ -1183,7 +1215,8 @@ public class Workbench extends javax.swing.JFrame {
 
             jf.addInternalFrameListener(
                 new InternalFrameAdapter() {
-                    public void internalFrameClosing(InternalFrameEvent e) {
+                    @Override
+					public void internalFrameClosing(InternalFrameEvent e) {
                         jdbcWindows.remove(jf);
                         jf.dispose();
                         // follow this by removing file from schemaWindowMap
@@ -1392,7 +1425,8 @@ public class Workbench extends javax.swing.JFrame {
                 Integer.toString(windowMenuMapIndex)));
         queryMenuItem.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     try {
                         if (jf.isIcon()) {
                             jf.setIcon(false);
@@ -1411,7 +1445,8 @@ public class Workbench extends javax.swing.JFrame {
 
         jf.addInternalFrameListener(
             new InternalFrameAdapter() {
-                public void internalFrameClosing(InternalFrameEvent e) {
+                @Override
+				public void internalFrameClosing(InternalFrameEvent e) {
                     mdxWindows.remove(jf);
                     jf.dispose();
                     // follow this by removing file from schemaWindowMap
@@ -1849,7 +1884,8 @@ public class Workbench extends javax.swing.JFrame {
             schemaMenuItem.setText(windowMenuMapIndex++ + " " + file.getName());
             schemaMenuItem.addActionListener(
                 new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
+                    @Override
+					public void actionPerformed(ActionEvent evt) {
                         try {
                             if (schemaFrame.isIcon()) {
                                 schemaFrame.setIcon(false);
@@ -1880,7 +1916,8 @@ public class Workbench extends javax.swing.JFrame {
 
             schemaFrame.addInternalFrameListener(
                 new InternalFrameAdapter() {
-                    public void internalFrameClosing(InternalFrameEvent e) {
+                    @Override
+					public void internalFrameClosing(InternalFrameEvent e) {
                         if (schemaFrame.getContentPane()
                             .getComponent(0) instanceof SchemaExplorer)
                         {
@@ -1905,7 +1942,8 @@ public class Workbench extends javax.swing.JFrame {
             schemaFrame.setFocusable(true);
             schemaFrame.addFocusListener(
                 new FocusAdapter() {
-                    public void focusGained(FocusEvent e) {
+                    @Override
+					public void focusGained(FocusEvent e) {
                         if (schemaFrame.getContentPane()
                             .getComponent(0) instanceof SchemaExplorer)
                         {
@@ -1918,7 +1956,8 @@ public class Workbench extends javax.swing.JFrame {
                         }
                     }
 
-                    public void focusLost(FocusEvent e) {
+                    @Override
+					public void focusLost(FocusEvent e) {
                         if (schemaFrame.getContentPane()
                             .getComponent(0) instanceof SchemaExplorer)
                         {
@@ -1944,12 +1983,14 @@ public class Workbench extends javax.swing.JFrame {
             jfc.setFileSelectionMode(JFileChooser.FILES_ONLY);
             jfc.setFileFilter(
                 new javax.swing.filechooser.FileFilter() {
-                    public boolean accept(File pathname) {
+                    @Override
+					public boolean accept(File pathname) {
                         return pathname.getName().toLowerCase().endsWith(".xml")
                                || pathname.isDirectory();
                     }
 
-                    public String getDescription() {
+                    @Override
+					public String getDescription() {
                         return getResourceConverter().getString(
                             "workbench.open.schema.file.type",
                             "Mondrian Schema files (*.xml)");

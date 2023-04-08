@@ -63,7 +63,8 @@ public class RoleImpl implements Role {
     public RoleImpl() {
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         // Although this code isn't entirely thread safe, it is good enough.
         // The implementations of Role are not expected to be thread safe,
         // but are only to be immutable once isMutable() returns true.
@@ -82,7 +83,8 @@ public class RoleImpl implements Role {
         return hash;
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (obj == null) {
             return false;
         }
@@ -93,7 +95,8 @@ public class RoleImpl implements Role {
         return r.hashCache.equals(this.hashCache);
     }
 
-    protected RoleImpl clone() {
+    @Override
+	protected RoleImpl clone() {
         RoleImpl role = new RoleImpl();
         role.mutable = mutable;
         role.schemaGrants.putAll(schemaGrants);
@@ -156,7 +159,8 @@ public class RoleImpl implements Role {
         hash = 0;
     }
 
-    public Access getAccess(Schema schema) {
+    @Override
+	public Access getAccess(Schema schema) {
         assert schema != null;
         final Access schemaAccess = schemaGrants.get(schema);
         if (schemaAccess == null) {
@@ -213,7 +217,8 @@ public class RoleImpl implements Role {
         hash = 0;
     }
 
-    public Access getAccess(Cube cube) {
+    @Override
+	public Access getAccess(Cube cube) {
         assert cube != null;
         // Check for explicit rules.
         // Both 'custom' and 'all' are good enough
@@ -272,7 +277,8 @@ public class RoleImpl implements Role {
         hash = 0;
     }
 
-    public Access getAccess(Dimension dimension) {
+    @Override
+	public Access getAccess(Dimension dimension) {
         assert dimension != null;
         // Check for explicit rules.
         Access access = getDimensionGrant(dimension);
@@ -462,7 +468,8 @@ public class RoleImpl implements Role {
         hash = 0;
     }
 
-    public Access getAccess(Hierarchy hierarchy) {
+    @Override
+	public Access getAccess(Hierarchy hierarchy) {
         assert hierarchy != null;
         HierarchyAccessImpl hierarchyAccess = hierarchyGrants.get(hierarchy);
         if (hierarchyAccess != null) {
@@ -488,7 +495,8 @@ public class RoleImpl implements Role {
         return Access.NONE;
     }
 
-    public HierarchyAccess getAccessDetails(Hierarchy hierarchy) {
+    @Override
+	public HierarchyAccess getAccessDetails(Hierarchy hierarchy) {
         Util.assertPrecondition(hierarchy != null, "hierarchy != null");
         if (hierarchyGrants.containsKey(hierarchy)) {
             return hierarchyGrants.get(hierarchy);
@@ -516,7 +524,8 @@ public class RoleImpl implements Role {
             RollupPolicy.HIDDEN);
     }
 
-    public Access getAccess(Level level) {
+    @Override
+	public Access getAccess(Level level) {
         assert level != null;
         HierarchyAccessImpl hierarchyAccess =
                 hierarchyGrants.get(level.getHierarchy());
@@ -596,7 +605,8 @@ public class RoleImpl implements Role {
         hash = 0;
     }
 
-    public Access getAccess(Member member) {
+    @Override
+	public Access getAccess(Member member) {
         assert member != null;
         // Always allow access to calculated members.
         if (member.isCalculatedInQuery()) {
@@ -619,7 +629,8 @@ public class RoleImpl implements Role {
         return access;
     }
 
-    public Access getAccess(NamedSet set) {
+    @Override
+	public Access getAccess(NamedSet set) {
         Util.assertPrecondition(set != null, "set != null");
         // TODO Named sets cannot be secured at the moment.
         LOGGER.trace(
@@ -627,7 +638,8 @@ public class RoleImpl implements Role {
         return Access.ALL;
     }
 
-    public boolean canAccess(OlapElement olapElement) {
+    @Override
+	public boolean canAccess(OlapElement olapElement) {
         Util.assertPrecondition(olapElement != null, "olapElement != null");
         if (olapElement instanceof Member) {
             return getAccess((Member) olapElement) != Access.NONE;
@@ -720,7 +732,8 @@ public class RoleImpl implements Role {
                 : bottomLevel;
         }
 
-        public HierarchyAccess clone() {
+        @Override
+		public HierarchyAccess clone() {
             HierarchyAccessImpl hierarchyAccess =
                 new HierarchyAccessImpl(
                     role, hierarchy, access, topLevel,
@@ -847,11 +860,13 @@ public class RoleImpl implements Role {
             }
         }
 
-        public Access getAccess() {
+        @Override
+		public Access getAccess() {
             return access;
         }
 
-        public Access getAccess(Member member) {
+        @Override
+		public Access getAccess(Member member) {
             if (this.access != Access.CUSTOM) {
                 return this.access;
             }
@@ -945,15 +960,18 @@ public class RoleImpl implements Role {
             return Access.NONE;
         }
 
-        public final int getTopLevelDepth() {
+        @Override
+		public final int getTopLevelDepth() {
             return topLevel.getDepth();
         }
 
-        public final int getBottomLevelDepth() {
+        @Override
+		public final int getBottomLevelDepth() {
             return bottomLevel.getDepth();
         }
 
-        public RollupPolicy getRollupPolicy() {
+        @Override
+		public RollupPolicy getRollupPolicy() {
             return rollupPolicy;
         }
 
@@ -961,7 +979,8 @@ public class RoleImpl implements Role {
          * Tells whether a given member has some of its children being
          * restricted by the access controls of this role instance.
          */
-        public boolean hasInaccessibleDescendants(Member member) {
+        @Override
+		public boolean hasInaccessibleDescendants(Member member) {
             for (MemberAccess access : memberGrants.values()) {
                 switch (access.access) {
                 case NONE:
@@ -1030,7 +1049,8 @@ public class RoleImpl implements Role {
             return false;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return
                 new StringBuilder("MemberAccess{")
                     .append(member.getUniqueName())
@@ -1059,27 +1079,33 @@ public class RoleImpl implements Role {
             this.hierarchyAccess = hierarchyAccess;
         }
 
-        public Access getAccess(Member member) {
+        @Override
+		public Access getAccess(Member member) {
             return hierarchyAccess.getAccess(member);
         }
 
-        public int getTopLevelDepth() {
+        @Override
+		public int getTopLevelDepth() {
             return hierarchyAccess.getTopLevelDepth();
         }
 
-        public int getBottomLevelDepth() {
+        @Override
+		public int getBottomLevelDepth() {
             return hierarchyAccess.getBottomLevelDepth();
         }
 
-        public RollupPolicy getRollupPolicy() {
+        @Override
+		public RollupPolicy getRollupPolicy() {
             return hierarchyAccess.getRollupPolicy();
         }
 
-        public boolean hasInaccessibleDescendants(Member member) {
+        @Override
+		public boolean hasInaccessibleDescendants(Member member) {
             return hierarchyAccess.hasInaccessibleDescendants(member);
         }
 
-        public Access getAccess() {
+        @Override
+		public Access getAccess() {
             if (hierarchyAccess instanceof AllHierarchyAccess) {
                 return ((AllHierarchyAccess) hierarchyAccess).getAccess();
             }

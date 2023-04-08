@@ -26,15 +26,18 @@ public class WorkbenchTreeModel implements TreeModel {
         this.schemaTreeModel = schemaTreeModel;
     }
 
-    public Object getChild(Object parent, int index) {
+    @Override
+	public Object getChild(Object parent, int index) {
         return schemaTreeModel.getChild(parent, index);
     }
 
-    public int getChildCount(Object parent) {
+    @Override
+	public int getChildCount(Object parent) {
         return schemaTreeModel.getChildCount(parent);
     }
 
-    public Object getRoot() {
+    @Override
+	public Object getRoot() {
         return schemaTreeModel.getRoot();
     }
 

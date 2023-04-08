@@ -30,7 +30,8 @@ public class Listener implements ServletContextListener {
     public Listener() {
     }
 
-    public void contextInitialized(ServletContextEvent event) {
+    @Override
+	public void contextInitialized(ServletContextEvent event) {
         Class clazz;
         try {
             clazz = Class.forName("mondrian.web.taglib.ApplResources");
@@ -53,7 +54,8 @@ public class Listener implements ServletContextListener {
         applicationContext.init(event);
     }
 
-    public void contextDestroyed(ServletContextEvent event) {
+    @Override
+	public void contextDestroyed(ServletContextEvent event) {
         if (applicationContext != null) {
             applicationContext.destroy(event);
         }

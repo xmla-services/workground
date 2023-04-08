@@ -61,7 +61,8 @@ class DefaultRecognizer extends Recognizer {
     /**
      * Get the Matcher to be used to match columns to be ignored.
      */
-    protected Recognizer.Matcher getIgnoreMatcher() {
+    @Override
+	protected Recognizer.Matcher getIgnoreMatcher() {
         return getRules().getIgnoreMatcher();
     }
 
@@ -69,7 +70,8 @@ class DefaultRecognizer extends Recognizer {
      * Get the Matcher to be used to match the column which is the fact count
      * column.
      */
-    protected Recognizer.Matcher getFactCountMatcher() {
+    @Override
+	protected Recognizer.Matcher getFactCountMatcher() {
         return getRules().getFactCountMatcher();
     }
 
@@ -113,7 +115,8 @@ class DefaultRecognizer extends Recognizer {
      *
      * @return number of measures created.
      */
-    protected int checkMeasures() {
+    @Override
+	protected int checkMeasures() {
         msgRecorder.pushContextName("DefaultRecognizer.checkMeasures");
 
         try {
@@ -172,7 +175,8 @@ class DefaultRecognizer extends Recognizer {
      * that matches a foreign key usage is created (thought if more than one is
      * created its is an error which is handled in the calling code.
      */
-    protected int matchForeignKey(JdbcSchema.Table.Column.Usage factUsage) {
+    @Override
+	protected int matchForeignKey(JdbcSchema.Table.Column.Usage factUsage) {
         JdbcSchema.Table.Column factColumn = factUsage.getColumn();
 
         // search to see if any of the aggTable's columns match
@@ -202,7 +206,8 @@ class DefaultRecognizer extends Recognizer {
      * expression.  The aggregate table columns are search for the first match
      * and, if found, a level usage is created for that column.
      */
-    protected void matchLevels(
+    @Override
+	protected void matchLevels(
         final Hierarchy hierarchy,
         final HierarchyUsage hierarchyUsage)
     {
@@ -244,7 +249,8 @@ class DefaultRecognizer extends Recognizer {
             Collections.sort(
                 levelMatches,
                 new Comparator<Pair<RolapLevel, JdbcSchema.Table.Column>>() {
-                    public int compare(
+                    @Override
+					public int compare(
                         Pair<RolapLevel, Column> o1,
                         Pair<RolapLevel, Column> o2)
                     {

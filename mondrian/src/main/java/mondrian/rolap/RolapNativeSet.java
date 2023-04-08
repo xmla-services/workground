@@ -110,11 +110,13 @@ public abstract class RolapNativeSet extends RolapNative {
      * <p>If there is a crossjoin, we need to join the fact table - even if
      * the evaluator context is empty.
      */
-    protected boolean isJoinRequired() {
+    @Override
+	protected boolean isJoinRequired() {
       return args.length > 1 || super.isJoinRequired();
     }
 
-    public void addConstraint(
+    @Override
+	public void addConstraint(
       SqlQuery sqlQuery,
       RolapCube baseCube,
       AggStar aggStar ) {
@@ -147,7 +149,8 @@ public abstract class RolapNativeSet extends RolapNative {
      * Returns null to prevent the member/childern from being cached. There exists no valid MemberChildrenConstraint
      * that would fetch those children that were extracted as a side effect from evaluating a non empty crossjoin
      */
-    public MemberChildrenConstraint getMemberChildrenConstraint(
+    @Override
+	public MemberChildrenConstraint getMemberChildrenConstraint(
       RolapMember parent ) {
       return null;
     }
@@ -155,7 +158,8 @@ public abstract class RolapNativeSet extends RolapNative {
     /**
      * returns a key to cache the result
      */
-    public Object getCacheKey() {
+    @Override
+	public Object getCacheKey() {
       List<Object> key = new ArrayList<Object>();
       key.add( super.getCacheKey() );
       // only add args that will be retrieved through native sql;
@@ -196,7 +200,8 @@ public abstract class RolapNativeSet extends RolapNative {
       this.completeWithNullValues = completeWithNullValues;
     }
 
-    public Object execute( ResultStyle desiredResultStyle ) {
+    @Override
+	public Object execute( ResultStyle desiredResultStyle ) {
       switch ( desiredResultStyle ) {
         case ITERABLE:
           for ( CrossJoinArg arg : this.args ) {
@@ -347,7 +352,8 @@ public abstract class RolapNativeSet extends RolapNative {
 
     private Predicate needsFilterPredicate() {
       return new Predicate() {
-        public boolean evaluate( Object o ) {
+        @Override
+		public boolean evaluate( Object o ) {
           Member member = (Member) o;
           return isRaggedLevel( member.getLevel() )
             || isCustomAccess( member.getHierarchy() );
@@ -381,7 +387,8 @@ public abstract class RolapNativeSet extends RolapNative {
     private Predicate memberInaccessiblePredicate() {
       if ( constraint.getEvaluator() != null ) {
         return new Predicate() {
-          public boolean evaluate( Object o ) {
+          @Override
+		public boolean evaluate( Object o ) {
             Role role =
               constraint
                 .getEvaluator().getSchemaReader().getRole();
@@ -391,7 +398,8 @@ public abstract class RolapNativeSet extends RolapNative {
         };
       }
       return new Predicate() {
-        public boolean evaluate( Object o ) {
+        @Override
+		public boolean evaluate( Object o ) {
           return ( (Member) o ).isHidden();
         }
       };
@@ -400,7 +408,8 @@ public abstract class RolapNativeSet extends RolapNative {
     private Predicate tupleAccessiblePredicate(
       final Predicate memberInaccessible ) {
       return new Predicate() {
-        @SuppressWarnings( "unchecked" )
+        @Override
+		@SuppressWarnings( "unchecked" )
         public boolean evaluate( Object o ) {
           return !exists( (List<Member>) o, memberInaccessible );
         }
@@ -465,7 +474,8 @@ public abstract class RolapNativeSet extends RolapNative {
   /**
    * disable garbage collection for test
    */
-  @SuppressWarnings( { "unchecked", "rawtypes" } )
+  @Override
+@SuppressWarnings( { "unchecked", "rawtypes" } )
   void useHardCache( boolean hard ) {
     if ( hard ) {
       cache = new HardSmartCache();
@@ -543,7 +553,8 @@ public abstract class RolapNativeSet extends RolapNative {
       super( schemaReader );
     }
 
-    public synchronized MemberReader getMemberReader( Hierarchy hierarchy ) {
+    @Override
+	public synchronized MemberReader getMemberReader( Hierarchy hierarchy ) {
       MemberReader memberReader = hierarchyReaders.get( hierarchy );
       if ( memberReader == null ) {
         memberReader =

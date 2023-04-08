@@ -133,7 +133,8 @@ public class CsvDBLoader extends DBLoader {
         return this.inputFile;
     }
 
-    public Table[] getTables() throws Exception {
+    @Override
+	public Table[] getTables() throws Exception {
         initialize();
 
         if (this.inputDirectory != null) {
@@ -155,7 +156,8 @@ public class CsvDBLoader extends DBLoader {
             final Pattern pat = Pattern.compile(this.inputDirectoryRegex);
             files = this.inputDirectory.listFiles(
                 new FilenameFilter() {
-                    public boolean accept(File dir, String name) {
+                    @Override
+					public boolean accept(File dir, String name) {
                         return pat.matcher(name).matches();
                     }
                 }
@@ -202,7 +204,8 @@ public class CsvDBLoader extends DBLoader {
         void add(Row row) {
             this.list.add(row);
         }
-        public Iterator<Row> iterator() {
+        @Override
+		public Iterator<Row> iterator() {
             return this.list.iterator();
         }
     }
@@ -212,10 +215,12 @@ public class CsvDBLoader extends DBLoader {
         CsvLoaderRowStream(CsvLoader csvloader) {
             this.csvloader = csvloader;
         }
-        public Iterator<Row> iterator() {
+        @Override
+		public Iterator<Row> iterator() {
             return new Iterator<Row>() {
                 String[] line;
-                public boolean hasNext() {
+                @Override
+				public boolean hasNext() {
                     try {
                         boolean hasNext =
                             CsvLoaderRowStream.this.csvloader.hasNextLine();
@@ -237,14 +242,16 @@ public class CsvDBLoader extends DBLoader {
                     }
                     return false;
                 }
-                public Row next() {
+                @Override
+				public Row next() {
                     return new RowDefault(line);
 /*
                     return new RowDefault(
                         CsvLoaderRowStream.this.csvloader.nextLine());
 */
                 }
-                public void remove() {
+                @Override
+				public void remove() {
                 }
             };
         }
@@ -651,7 +658,8 @@ if (value0.startsWith("# ")) {
         return list.toArray(new Column[list.size()]);
     }
 
-    protected void check() throws Exception {
+    @Override
+	protected void check() throws Exception {
         super.check();
 
         if (this.inputDirectory != null) {

@@ -50,7 +50,8 @@ public class HighCardSqlTupleReader extends SqlTupleReader {
     super( constraint );
   }
 
-  public void addLevelMembers(
+  @Override
+public void addLevelMembers(
     final RolapLevel level,
     final MemberBuilder memberBuilder,
     final List<RolapMember> srcMembers ) {
@@ -58,7 +59,8 @@ public class HighCardSqlTupleReader extends SqlTupleReader {
       level, memberBuilder, srcMembers, constraint, this ) );
   }
 
-  protected void prepareTuples(
+  @Override
+protected void prepareTuples(
     final Context context,
     final TupleList partialResult,
     final List<List<RolapMember>> newPartialResult,
@@ -134,7 +136,8 @@ public class HighCardSqlTupleReader extends SqlTupleReader {
     }
   }
 
-  public TupleList readMembers(
+  @Override
+public TupleList readMembers(
     final Context context,
     final TupleList partialResult,
     final List<List<RolapMember>> newPartialResult ) {
@@ -146,7 +149,8 @@ public class HighCardSqlTupleReader extends SqlTupleReader {
       targets.get( 0 ).close() );
   }
 
-  public TupleList readTuples(
+  @Override
+public TupleList readTuples(
     final Context context,
     final TupleList partialResult,
     final List<List<RolapMember>> newPartialResult ) {
@@ -195,15 +199,18 @@ public class HighCardSqlTupleReader extends SqlTupleReader {
     return this.moreRows;
   }
 
-  public void setMaxRows( int maxRows ) {
+  @Override
+public void setMaxRows( int maxRows ) {
     this.maxRows = maxRows;
   }
 
-  public int getMaxRows() {
+  @Override
+public int getMaxRows() {
     return maxRows;
   }
 
-  Collection<RolapCube> getBaseCubeCollection( final Query query ) {
+  @Override
+Collection<RolapCube> getBaseCubeCollection( final Query query ) {
     return query.getBaseCubes();
   }
 }

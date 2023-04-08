@@ -655,7 +655,8 @@ public class SqlQuery {
         }
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
         buf.setLength(0);
         toBuffer(buf, "");
@@ -922,7 +923,8 @@ public class SqlQuery {
          * @return whether element was added, per
          * {@link java.util.Collection#add(Object)}
          */
-        public boolean add(final String element) {
+        @Override
+		public boolean add(final String element) {
             if (allowDups || !contains(element)) {
                 return super.add(element);
             }

@@ -136,7 +136,8 @@ Does not work without the notify on add feature.
             boolean wasNotified = false;
             Listener() {
             }
-            public void memoryUsageNotification(long used, long max) {
+            @Override
+			public void memoryUsageNotification(long used, long max) {
                 wasNotified = true;
             }
         }
@@ -212,14 +213,16 @@ Does not work without the notify on add feature.
     public static class TestMM extends NotificationMemoryMonitor {
         public TestMM() {
         }
-        public int getDefaultThresholdPercentage() {
+        @Override
+		public int getDefaultThresholdPercentage() {
             return THRESHOLD_PERCENTAGE;
         }
     }
     public static class TestMM2 extends NotificationMemoryMonitor {
         public TestMM2() {
         }
-        public int getDefaultThresholdPercentage() {
+        @Override
+		public int getDefaultThresholdPercentage() {
             return 98;
         }
     }
@@ -243,7 +246,8 @@ Does not work without the notify on add feature.
             boolean wasNotified = false;
             Listener() {
             }
-            public void memoryUsageNotification(long used, long max) {
+            @Override
+			public void memoryUsageNotification(long used, long max) {
                 wasNotified = true;
             }
         }

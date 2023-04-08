@@ -134,7 +134,8 @@ public class PreferencesDialog extends javax.swing.JDialog {
                 "preferences.pane.title", "Database Connection"));
         addWindowListener(
             new WindowAdapter() {
-                public void windowClosing(WindowEvent evt) {
+                @Override
+				public void windowClosing(WindowEvent evt) {
                     closeDialog(evt);
                 }
             });
@@ -254,7 +255,8 @@ public class PreferencesDialog extends javax.swing.JDialog {
                 "Select Schemas"));
         selectSchemasButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     selectSchemasButtonActionPerformed(evt);
                 }
             });
@@ -306,7 +308,8 @@ public class PreferencesDialog extends javax.swing.JDialog {
                 "preferences.testButton.title", "Test Connection"));
         testButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     testButtonActionPerformed(evt);
                 }
             });
@@ -324,7 +327,8 @@ public class PreferencesDialog extends javax.swing.JDialog {
                 "Cancel"));
         cancelButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     cancelButtonActionPerformed(evt);
                 }
             });
@@ -342,7 +346,8 @@ public class PreferencesDialog extends javax.swing.JDialog {
                 "Accept"));
         acceptButton.addActionListener(
             new ActionListener() {
-                public void actionPerformed(ActionEvent evt) {
+                @Override
+				public void actionPerformed(ActionEvent evt) {
                     acceptButtonActionPerformed(evt);
                 }
             });

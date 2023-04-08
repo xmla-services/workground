@@ -82,7 +82,8 @@ class TopBottomPercentSumFunDef extends FunDefBase {
     this.percent = percent;
   }
 
-  public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+  @Override
+public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final ListCalc listCalc =
       compiler.compileList( call.getArg( 0 ), true );
     final DoubleCalc doubleCalc = compiler.compileDouble( call.getArg( 1 ) );
@@ -103,7 +104,8 @@ class TopBottomPercentSumFunDef extends FunDefBase {
       this.percent = percent;
     }
 
-    protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
+    @Override
+	protected FunDef createFunDef( Exp[] args, FunDef dummyFunDef ) {
       return new TopBottomPercentSumFunDef( dummyFunDef, top, percent );
     }
   }
@@ -124,7 +126,8 @@ class TopBottomPercentSumFunDef extends FunDefBase {
       this.calc = calc;
     }
 
-    public TupleList evaluateList( Evaluator evaluator ) {
+    @Override
+	public TupleList evaluateList( Evaluator evaluator ) {
       TupleList list = listCalc.evaluateList( evaluator );
       double target = doubleCalc.evaluateDouble( evaluator );
       if ( list.isEmpty() ) {
@@ -182,7 +185,8 @@ class TopBottomPercentSumFunDef extends FunDefBase {
       return list;
     }
 
-    public boolean dependsOn( Hierarchy hierarchy ) {
+    @Override
+	public boolean dependsOn( Hierarchy hierarchy ) {
       return AbstractCalc.anyDependsButFirst( getCalcs(), hierarchy );
     }
   }

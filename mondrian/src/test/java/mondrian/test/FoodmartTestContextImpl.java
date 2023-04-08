@@ -684,7 +684,8 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
    */
   static Iterable<Cell> cellIter( final Result result ) {
     return new Iterable<Cell>() {
-      public Iterator<Cell> iterator() {
+      @Override
+	public Iterator<Cell> iterator() {
         int[] axisDimensions = new int[ result.getAxes().length ];
         int k = 0;
         for ( Axis axis : result.getAxes() ) {
@@ -693,16 +694,19 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
         final CoordinateIterator
           coordIter = new CoordinateIterator( axisDimensions );
         return new Iterator<Cell>() {
-          public boolean hasNext() {
+          @Override
+		public boolean hasNext() {
             return coordIter.hasNext();
           }
 
-          public Cell next() {
+          @Override
+		public Cell next() {
             final int[] ints = coordIter.next();
             return result.getCell( ints );
           }
 
-          public void remove() {
+          @Override
+		public void remove() {
             throw new UnsupportedOperationException();
           }
         };
@@ -715,7 +719,8 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
    */
   static Iterable<org.olap4j.Cell> cellIter( final CellSet cellSet ) {
     return new Iterable<org.olap4j.Cell>() {
-      public Iterator<org.olap4j.Cell> iterator() {
+      @Override
+	public Iterator<org.olap4j.Cell> iterator() {
         int[] axisDimensions = new int[ cellSet.getAxes().size() ];
         int k = 0;
         for ( CellSetAxis axis : cellSet.getAxes() ) {
@@ -724,19 +729,23 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
         final CoordinateIterator
           coordIter = new CoordinateIterator( axisDimensions );
         return new Iterator<org.olap4j.Cell>() {
-          public boolean hasNext() {
+          @Override
+		public boolean hasNext() {
             return coordIter.hasNext();
           }
 
-          public org.olap4j.Cell next() {
+          @Override
+		public org.olap4j.Cell next() {
             final int[] ints = coordIter.next();
             final List<Integer> list =
               new AbstractList<Integer>() {
-                public Integer get( int index ) {
+                @Override
+				public Integer get( int index ) {
                   return ints[ index ];
                 }
 
-                public int size() {
+                @Override
+				public int size() {
                   return ints.length;
                 }
               };
@@ -744,7 +753,8 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
               list );
           }
 
-          public void remove() {
+          @Override
+		public void remove() {
             throw new UnsupportedOperationException();
           }
         };
@@ -1352,7 +1362,8 @@ public void assertMatchesVerbose(
     return new DelegatingTestContext( this ) {
       OlapConnection connection;
 
-      public OlapConnection getOlap4jConnection() throws SQLException {
+      @Override
+	public OlapConnection getOlap4jConnection() throws SQLException {
         if ( connection == null ) {
           connection = super.getOlap4jConnection();
           connection.setScenario(
@@ -1797,7 +1808,8 @@ public void assertExprDependsOn( String expr, String hierList ) {
    */
   public TestContext withProperties( final Util.PropertyList properties ) {
     return new DelegatingTestContext( this ) {
-      public Util.PropertyList getConnectionProperties() {
+      @Override
+	public Util.PropertyList getConnectionProperties() {
         return properties;
       }
     };
@@ -1889,7 +1901,8 @@ public void assertExprDependsOn( String expr, String hierList ) {
       RolapConnectionProperties.Role.name(),
       roleName );
     return new DelegatingTestContext( this ) {
-      public Util.PropertyList getConnectionProperties() {
+      @Override
+	public Util.PropertyList getConnectionProperties() {
         return properties;
       }
     };
@@ -1904,7 +1917,8 @@ public void assertExprDependsOn( String expr, String hierList ) {
    */
   public final TestContext withCube( final String cubeName ) {
     return new DelegatingTestContext( this ) {
-      public String getDefaultCubeName() {
+      @Override
+	public String getDefaultCubeName() {
         return cubeName;
       }
     };
@@ -1918,7 +1932,8 @@ public void assertExprDependsOn( String expr, String hierList ) {
    */
   public final TestContext withConnection( final Connection connection ) {
     return new DelegatingTestContext( this ) {
-      public Connection getConnection() {
+      @Override
+	public Connection getConnection() {
         return connection;
       }
 
@@ -2064,7 +2079,8 @@ public boolean databaseIsValid() {
     public static final ThreadLocal<String> THREAD_RESULT =
       new ThreadLocal<String>();
 
-    protected String filter(
+    @Override
+	protected String filter(
       String schemaUrl,
       Util.PropertyList connectInfo,
       InputStream stream ) throws Exception {
@@ -2082,7 +2098,8 @@ public boolean databaseIsValid() {
    */
   public static class HighCardDynamicSchemaProcessor
     extends FilterDynamicSchemaProcessor {
-    protected String filter(
+    @Override
+	protected String filter(
       String schemaUrl, Util.PropertyList connectInfo, InputStream stream )
       throws Exception {
       String s = super.filter( schemaUrl, connectInfo, stream );

@@ -150,7 +150,8 @@ public interface BitKey
      * positions returned by the iterator are in the order, from
      * smallest to largest, as they are set in the BitKey.
      */
-    Iterator<Integer> iterator();
+    @Override
+	Iterator<Integer> iterator();
 
     /**
      * Returns the index of the first bit that is set to <code>true</code>
@@ -285,7 +286,8 @@ public interface BitKey
             return (int)i & 0x7f;
         }
 
-        public final void set(int pos, boolean value) {
+        @Override
+		public final void set(int pos, boolean value) {
             if (value) {
                 set(pos);
             } else {
@@ -455,7 +457,8 @@ public interface BitKey
             this.bits = bits;
         }
 
-        public void set(int pos) {
+        @Override
+		public void set(int pos) {
             if (pos < 64) {
                 bits |= bit(pos);
             } else {
@@ -464,19 +467,23 @@ public interface BitKey
             }
         }
 
-        public boolean get(int pos) {
+        @Override
+		public boolean get(int pos) {
             return pos < 64 && ((bits & bit(pos)) != 0);
         }
 
-        public void clear(int pos) {
+        @Override
+		public void clear(int pos) {
             bits &= ~bit(pos);
         }
 
-        public void clear() {
+        @Override
+		public void clear() {
             bits = 0;
         }
 
-        public int cardinality() {
+        @Override
+		public int cardinality() {
             return bitCount(bits);
         }
 
@@ -492,7 +499,8 @@ public interface BitKey
             this.bits &= bits;
         }
 
-        public BitKey or(BitKey bitKey) {
+        @Override
+		public BitKey or(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 final BitKey.Small other = (BitKey.Small) bitKey;
                 final BitKey.Small bk = (BitKey.Small) copy();
@@ -515,7 +523,8 @@ public interface BitKey
             throw createException(bitKey);
         }
 
-        public BitKey orNot(BitKey bitKey) {
+        @Override
+		public BitKey orNot(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 final BitKey.Small other = (BitKey.Small) bitKey;
                 final BitKey.Small bk = (BitKey.Small) copy();
@@ -538,7 +547,8 @@ public interface BitKey
             throw createException(bitKey);
         }
 
-        public BitKey and(BitKey bitKey) {
+        @Override
+		public BitKey and(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 final BitKey.Small other = (BitKey.Small) bitKey;
                 final BitKey.Small bk = (BitKey.Small) copy();
@@ -561,7 +571,8 @@ public interface BitKey
             throw createException(bitKey);
         }
 
-        public BitKey andNot(BitKey bitKey) {
+        @Override
+		public BitKey andNot(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 final BitKey.Small other = (BitKey.Small) bitKey;
                 final BitKey.Small bk = (BitKey.Small) copy();
@@ -588,7 +599,8 @@ public interface BitKey
             this.bits &= ~bits;
         }
 
-        public boolean isSuperSetOf(BitKey bitKey) {
+        @Override
+		public boolean isSuperSetOf(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 BitKey.Small other = (BitKey.Small) bitKey;
                 return ((this.bits | other.bits) == this.bits);
@@ -614,7 +626,8 @@ public interface BitKey
             return false;
         }
 
-        public boolean intersects(BitKey bitKey) {
+        @Override
+		public boolean intersects(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 BitKey.Small other = (BitKey.Small) bitKey;
                 return (this.bits & other.bits) != 0;
@@ -630,7 +643,8 @@ public interface BitKey
             return false;
         }
 
-        public BitSet toBitSet() {
+        @Override
+		public BitSet toBitSet() {
             final BitSet bitSet = new BitSet(64);
             long x = bits;
             int pos = 0;
@@ -650,11 +664,13 @@ public interface BitKey
          * with in a couple of hours.
          *
          */
-        public Iterator<Integer> iterator() {
+        @Override
+		public Iterator<Integer> iterator() {
             return new Iterator<Integer>() {
                 int pos = -1;
                 long bits = Small.this.bits;
-                public boolean hasNext() {
+                @Override
+				public boolean hasNext() {
                     if (bits == 0) {
                         return false;
                     }
@@ -692,16 +708,19 @@ public interface BitKey
                     bits = bits >>> (p + 1);
                     return true;
                 }
-                public Integer next() {
+                @Override
+				public Integer next() {
                     return Integer.valueOf(pos);
                 }
-                public void remove() {
+                @Override
+				public void remove() {
                     throw new UnsupportedOperationException("remove");
                 }
             };
         }
 
-        public int nextSetBit(int fromIndex) {
+        @Override
+		public int nextSetBit(int fromIndex) {
             if (fromIndex < 0) {
                 throw new IndexOutOfBoundsException(
                     "fromIndex < 0: " + fromIndex);
@@ -716,7 +735,8 @@ public interface BitKey
             return -1;
         }
 
-        public boolean equals(Object o) {
+        @Override
+		public boolean equals(Object o) {
             if (this == o) {
                 return true;
             }
@@ -744,11 +764,13 @@ public interface BitKey
             return false;
         }
 
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             return (int)(1234L ^ bits ^ (bits >>> 32));
         }
 
-        public int compareTo(BitKey bitKey) {
+        @Override
+		public int compareTo(BitKey bitKey) {
             if (bitKey instanceof Small) {
                 Small that = (Small) bitKey;
                 return this.bits == that.bits ? 0
@@ -777,7 +799,8 @@ public interface BitKey
             }
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             StringBuilder buf = new StringBuilder(64);
             buf.append("0x");
             for (int i = 63; i >= 0; i--) {
@@ -786,15 +809,18 @@ public interface BitKey
             return buf.toString();
         }
 
-        public BitKey copy() {
+        @Override
+		public BitKey copy() {
             return new Small(this.bits);
         }
 
-        public BitKey emptyCopy() {
+        @Override
+		public BitKey emptyCopy() {
             return new Small();
         }
 
-        public boolean isEmpty() {
+        @Override
+		public boolean isEmpty() {
             return bits == 0;
         }
     }
@@ -815,7 +841,8 @@ public interface BitKey
             this.bits1 = mid.bits1;
         }
 
-        public void set(int pos) {
+        @Override
+		public void set(int pos) {
             if (pos < 64) {
                 bits0 |= bit(pos);
             } else if (pos < 128) {
@@ -826,7 +853,8 @@ public interface BitKey
             }
         }
 
-        public boolean get(int pos) {
+        @Override
+		public boolean get(int pos) {
             if (pos < 64) {
                 return (bits0 & bit(pos)) != 0;
             } else if (pos < 128) {
@@ -836,7 +864,8 @@ public interface BitKey
             }
         }
 
-        public void clear(int pos) {
+        @Override
+		public void clear(int pos) {
             if (pos < 64) {
                 bits0 &= ~bit(pos);
             } else if (pos < 128) {
@@ -847,12 +876,14 @@ public interface BitKey
             }
         }
 
-        public void clear() {
+        @Override
+		public void clear() {
             bits0 = 0;
             bits1 = 0;
         }
 
-        public int cardinality() {
+        @Override
+		public int cardinality() {
             return bitCount(bits0)
                + bitCount(bits1);
         }
@@ -872,7 +903,8 @@ public interface BitKey
             this.bits1 &= bits1;
         }
 
-        public BitKey or(BitKey bitKey) {
+        @Override
+		public BitKey or(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 final BitKey.Small other = (BitKey.Small) bitKey;
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
@@ -895,7 +927,8 @@ public interface BitKey
             throw createException(bitKey);
         }
 
-        public BitKey orNot(BitKey bitKey) {
+        @Override
+		public BitKey orNot(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 final BitKey.Small other = (BitKey.Small) bitKey;
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
@@ -918,7 +951,8 @@ public interface BitKey
             throw createException(bitKey);
         }
 
-        public BitKey and(BitKey bitKey) {
+        @Override
+		public BitKey and(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 final BitKey.Small other = (BitKey.Small) bitKey;
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
@@ -941,7 +975,8 @@ public interface BitKey
             throw createException(bitKey);
         }
 
-        public BitKey andNot(BitKey bitKey) {
+        @Override
+		public BitKey andNot(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 final BitKey.Small other = (BitKey.Small) bitKey;
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
@@ -969,7 +1004,8 @@ public interface BitKey
             this.bits1 &= ~bits1;
         }
 
-        public boolean isSuperSetOf(BitKey bitKey) {
+        @Override
+		public boolean isSuperSetOf(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 BitKey.Small other = (BitKey.Small) bitKey;
                 return ((this.bits0 | other.bits) == this.bits0);
@@ -997,7 +1033,8 @@ public interface BitKey
             return false;
         }
 
-        public boolean intersects(BitKey bitKey) {
+        @Override
+		public boolean intersects(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 BitKey.Small other = (BitKey.Small) bitKey;
                 return (this.bits0 & other.bits) != 0;
@@ -1020,18 +1057,21 @@ public interface BitKey
             return false;
         }
 
-        public BitSet toBitSet() {
+        @Override
+		public BitSet toBitSet() {
             final BitSet bitSet = new BitSet(128);
             copyFromLong(bitSet, 0, bits0);
             copyFromLong(bitSet, 64, bits1);
             return bitSet;
         }
-        public Iterator<Integer> iterator() {
+        @Override
+		public Iterator<Integer> iterator() {
             return new Iterator<Integer>() {
                 long bits0 = Mid128.this.bits0;
                 long bits1 = Mid128.this.bits1;
                 int pos = -1;
-                public boolean hasNext() {
+                @Override
+				public boolean hasNext() {
                     if (bits0 != 0) {
                         if (bits0 == Long.MIN_VALUE) {
                             pos = 63;
@@ -1094,16 +1134,19 @@ public interface BitKey
                         return true;
                     }
                 }
-                public Integer next() {
+                @Override
+				public Integer next() {
                     return Integer.valueOf(pos);
                 }
-                public void remove() {
+                @Override
+				public void remove() {
                     throw new UnsupportedOperationException("remove");
                 }
             };
         }
 
-        public int nextSetBit(int fromIndex) {
+        @Override
+		public int nextSetBit(int fromIndex) {
             if (fromIndex < 0) {
                 throw new IndexOutOfBoundsException(
                     "fromIndex < 0: " + fromIndex);
@@ -1133,7 +1176,8 @@ public interface BitKey
             }
         }
 
-        public boolean equals(Object o) {
+        @Override
+		public boolean equals(Object o) {
             if (this == o) {
                 return true;
             }
@@ -1164,14 +1208,16 @@ public interface BitKey
             return false;
         }
 
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             long h = 1234;
             h ^= bits0;
             h ^= bits1 * 2;
             return (int)((h >> 32) ^ h);
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             StringBuilder buf = new StringBuilder(64);
             buf.append("0x");
             for (int i = 127; i >= 0; i--) {
@@ -1180,21 +1226,25 @@ public interface BitKey
             return buf.toString();
         }
 
-        public BitKey copy() {
+        @Override
+		public BitKey copy() {
             return new Mid128(this);
         }
 
-        public BitKey emptyCopy() {
+        @Override
+		public BitKey emptyCopy() {
             return new Mid128();
         }
 
-        public boolean isEmpty() {
+        @Override
+		public boolean isEmpty() {
             return bits0 == 0
                 && bits1 == 0;
         }
 
         // implement Comparable (in lazy, expensive fashion)
-        public int compareTo(BitKey bitKey) {
+        @Override
+		public int compareTo(BitKey bitKey) {
             if (bitKey instanceof Mid128) {
                 Mid128 that = (Mid128) bitKey;
                 if (this.bits1 != that.bits1) {
@@ -1270,25 +1320,30 @@ public interface BitKey
             return n;
         }
 
-        public void set(int pos) {
+        @Override
+		public void set(int pos) {
             bits[chunkPos(pos)] |= bit(pos);
         }
 
-        public boolean get(int pos) {
+        @Override
+		public boolean get(int pos) {
             return (bits[chunkPos(pos)] & bit(pos)) != 0;
         }
 
-        public void clear(int pos) {
+        @Override
+		public void clear(int pos) {
             bits[chunkPos(pos)] &= ~bit(pos);
         }
 
-        public void clear() {
+        @Override
+		public void clear() {
             for (int i = 0; i < bits.length; i++) {
                 bits[i] = 0;
             }
         }
 
-        public int cardinality() {
+        @Override
+		public int cardinality() {
             int n = 0;
             for (int i = 0; i < bits.length; i++) {
                 n += bitCount(bits[i]);
@@ -1336,7 +1391,8 @@ public interface BitKey
             }
         }
 
-        public BitKey or(BitKey bitKey) {
+        @Override
+		public BitKey or(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 final BitKey.Small other = (BitKey.Small) bitKey;
                 final BitKey.Big bk = (BitKey.Big) copy();
@@ -1365,7 +1421,8 @@ public interface BitKey
             throw createException(bitKey);
         }
 
-        public BitKey orNot(BitKey bitKey) {
+        @Override
+		public BitKey orNot(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 final BitKey.Small other = (BitKey.Small) bitKey;
                 final BitKey.Big bk = (BitKey.Big) copy();
@@ -1394,7 +1451,8 @@ public interface BitKey
             throw createException(bitKey);
         }
 
-        public BitKey and(BitKey bitKey) {
+        @Override
+		public BitKey and(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 final BitKey.Small bk = (BitKey.Small) bitKey.copy();
                 bk.and(bits[0]);
@@ -1421,7 +1479,8 @@ public interface BitKey
             throw createException(bitKey);
         }
 
-        public BitKey andNot(BitKey bitKey) {
+        @Override
+		public BitKey andNot(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 final BitKey.Small other = (BitKey.Small) bitKey;
                 final BitKey.Big bk = (BitKey.Big) copy();
@@ -1459,7 +1518,8 @@ public interface BitKey
             this.bits[0] &= ~bits;
         }
 
-        public boolean isSuperSetOf(BitKey bitKey) {
+        @Override
+		public boolean isSuperSetOf(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 BitKey.Small other = (BitKey.Small) bitKey;
                 return ((this.bits[0] | other.bits) == this.bits[0]);
@@ -1490,7 +1550,8 @@ public interface BitKey
             return false;
         }
 
-        public boolean intersects(BitKey bitKey) {
+        @Override
+		public boolean intersects(BitKey bitKey) {
             if (bitKey instanceof BitKey.Small) {
                 BitKey.Small other = (BitKey.Small) bitKey;
                 return (this.bits[0] & other.bits) != 0;
@@ -1514,7 +1575,8 @@ public interface BitKey
             return false;
         }
 
-        public BitSet toBitSet() {
+        @Override
+		public BitSet toBitSet() {
             final BitSet bitSet = new BitSet(64);
             int pos = 0;
             for (int i = 0; i < bits.length; i++) {
@@ -1524,12 +1586,14 @@ public interface BitKey
             return bitSet;
         }
 
-        public Iterator<Integer> iterator() {
+        @Override
+		public Iterator<Integer> iterator() {
             return new Iterator<Integer>() {
                 long[] bits = Big.this.bits.clone();
                 int pos = -1;
                 int index = 0;
-                public boolean hasNext() {
+                @Override
+				public boolean hasNext() {
                     if (index >= bits.length) {
                         return false;
                     }
@@ -1584,17 +1648,20 @@ public interface BitKey
                     return false;
                 }
 
-                public Integer next() {
+                @Override
+				public Integer next() {
                     return Integer.valueOf(pos);
                 }
 
-                public void remove() {
+                @Override
+				public void remove() {
                     throw new UnsupportedOperationException("remove");
                 }
             };
         }
 
-        public int nextSetBit(int fromIndex) {
+        @Override
+		public int nextSetBit(int fromIndex) {
             if (fromIndex < 0) {
                 throw new IndexOutOfBoundsException(
                     "fromIndex < 0: " + fromIndex);
@@ -1617,7 +1684,8 @@ public interface BitKey
             }
         }
 
-        public boolean equals(Object o) {
+        @Override
+		public boolean equals(Object o) {
             if (this == o) {
                 return true;
             }
@@ -1676,7 +1744,8 @@ public interface BitKey
             return false;
         }
 
-        public int hashCode() {
+        @Override
+		public int hashCode() {
             // It is important that leading 0s, and bits.length do not affect
             // the hash code. For instance, we want {1} to be equal to
             // {1, 0, 0}. This algorithm in fact ignores all 0s.
@@ -1690,7 +1759,8 @@ public interface BitKey
             return (int)((h >> 32) ^ h);
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             StringBuilder buf = new StringBuilder(64);
             buf.append("0x");
             int start = bits.length * 64 - 1;
@@ -1700,15 +1770,18 @@ public interface BitKey
             return buf.toString();
         }
 
-        public BitKey copy() {
+        @Override
+		public BitKey copy() {
             return new Big(this);
         }
 
-        public BitKey emptyCopy() {
+        @Override
+		public BitKey emptyCopy() {
             return new Big(bits.length << ChunkBitCount);
         }
 
-        public boolean isEmpty() {
+        @Override
+		public boolean isEmpty() {
             for (long bit : bits) {
                 if (bit != 0) {
                     return false;
@@ -1717,7 +1790,8 @@ public interface BitKey
             return true;
         }
 
-        public int compareTo(BitKey bitKey) {
+        @Override
+		public int compareTo(BitKey bitKey) {
             if (bitKey instanceof Big) {
                 return compareUnsignedArrays(this.bits, ((Big) bitKey).bits);
             } else if (bitKey instanceof Mid128) {

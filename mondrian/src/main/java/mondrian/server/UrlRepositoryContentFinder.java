@@ -39,7 +39,8 @@ public class UrlRepositoryContentFinder
         this.url = url;
     }
 
-    public String getContent() {
+    @Override
+	public String getContent() {
         try {
             return Util.readURL(
                 url, Util.toMap(System.getProperties()));
@@ -48,7 +49,8 @@ public class UrlRepositoryContentFinder
         }
     }
 
-    public void shutdown() {
+    @Override
+	public void shutdown() {
         // nothing to do
     }
 }

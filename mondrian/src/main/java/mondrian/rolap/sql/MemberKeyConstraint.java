@@ -47,7 +47,8 @@ public class MemberKeyConstraint
         cacheKey = Pair.of(columnList, valueList);
     }
 
-    public void addConstraint(
+    @Override
+	public void addConstraint(
         SqlQuery sqlQuery, RolapCube baseCube, AggStar aggStar)
     {
         for (int i = 0; i < columnList.size(); i++) {
@@ -63,7 +64,8 @@ public class MemberKeyConstraint
         }
     }
 
-    public void addLevelConstraint(
+    @Override
+	public void addLevelConstraint(
         SqlQuery sqlQuery,
         RolapCube baseCube,
         AggStar aggStar,
@@ -71,22 +73,26 @@ public class MemberKeyConstraint
     {
     }
 
-    public MemberChildrenConstraint getMemberChildrenConstraint(
+    @Override
+	public MemberChildrenConstraint getMemberChildrenConstraint(
         RolapMember parent)
     {
         return null;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return "MemberKeyConstraint";
     }
 
 
-    public Object getCacheKey() {
+    @Override
+	public Object getCacheKey() {
         return cacheKey;
     }
 
-    public Evaluator getEvaluator() {
+    @Override
+	public Evaluator getEvaluator() {
         return null;
     }
 

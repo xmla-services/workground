@@ -111,7 +111,8 @@ public class RolapNativeSql {
             compilers.add(compiler);
         }
 
-        public StringBuilder compile(Exp exp) {
+        @Override
+		public StringBuilder compile(Exp exp) {
             for (SqlCompiler compiler : compilers) {
                 StringBuilder s = compiler.compile(exp);
                 if (s != null) {
@@ -121,7 +122,8 @@ public class RolapNativeSql {
             return null;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return compilers.toString();
         }
     }
@@ -130,7 +132,8 @@ public class RolapNativeSql {
      * Compiles a numeric literal to SQL.
      */
     class NumberSqlCompiler implements SqlCompiler {
-        public StringBuilder compile(Exp exp) {
+        @Override
+		public StringBuilder compile(Exp exp) {
             if (!(exp instanceof Literal)) {
                 return null;
             }
@@ -147,7 +150,8 @@ public class RolapNativeSql {
             return dialect.quoteDecimalLiteral(expr);
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return "NumberSqlCompiler";
         }
     }
@@ -167,7 +171,8 @@ public class RolapNativeSql {
      */
     class StoredMeasureSqlCompiler extends MemberSqlCompiler {
 
-        public StringBuilder compile(Exp exp) {
+        @Override
+		public StringBuilder compile(Exp exp) {
             exp = unwind(exp);
             if (!(exp instanceof MemberExpr)) {
                 return null;
@@ -217,7 +222,8 @@ public class RolapNativeSql {
             return dialect.quoteDecimalLiteral(expr);
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return "StoredMeasureSqlCompiler";
         }
     }
@@ -233,7 +239,8 @@ public class RolapNativeSql {
             super(Category.Logical, "MATCHES", 2);
         }
 
-        public StringBuilder compile(Exp exp) {
+        @Override
+		public StringBuilder compile(Exp exp) {
             if (!match(exp)) {
                 return null;
             }
@@ -362,7 +369,8 @@ public class RolapNativeSql {
                 return null;
             }
         }
-        public String toString() {
+        @Override
+		public String toString() {
             return "MatchingSqlCompiler";
         }
     }
@@ -377,7 +385,8 @@ public class RolapNativeSql {
             this.compiler = argumentCompiler;
         }
 
-        public StringBuilder compile(Exp exp) {
+        @Override
+		public StringBuilder compile(Exp exp) {
             exp = unwind(exp);
             if (!(exp instanceof MemberExpr)) {
                 return null;
@@ -393,7 +402,8 @@ public class RolapNativeSql {
             return compiler.compile(exp);
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return "CalculatedMemberSqlCompiler";
         }
     }
@@ -471,7 +481,8 @@ public class RolapNativeSql {
             this.compiler = argumentCompiler;
         }
 
-        public StringBuilder compile(Exp exp) {
+        @Override
+		public StringBuilder compile(Exp exp) {
             StringBuilder[] args = compileArgs(exp, compiler);
             if (args == null) {
                 return null;
@@ -489,7 +500,8 @@ public class RolapNativeSql {
             return buf;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return new StringBuilder("FunCallSqlCompiler[").append(mdx).append("]").toString();
         }
     }
@@ -519,7 +531,8 @@ public class RolapNativeSql {
             super(category, "()", "", 1, argumentCompiler);
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return "ParenthesisSqlCompiler";
         }
     }
@@ -543,7 +556,8 @@ public class RolapNativeSql {
             this.compiler = argumentCompiler;
         }
 
-        public StringBuilder compile(Exp exp) {
+        @Override
+		public StringBuilder compile(Exp exp) {
             StringBuilder[] args = compileArgs(exp, compiler);
             if (args == null) {
                 return null;
@@ -551,7 +565,8 @@ public class RolapNativeSql {
             return new StringBuilder("(").append(args[0]).append(" ").append(sql).append(" ").append(args[1]).append(")");
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return new StringBuilder("InfixSqlCompiler[").append(mdx).append("]").toString();
         }
     }
@@ -571,7 +586,8 @@ public class RolapNativeSql {
             this.compiler = argumentCompiler;
         }
 
-        public StringBuilder compile(Exp exp) {
+        @Override
+		public StringBuilder compile(Exp exp) {
             StringBuilder[] args = compileArgs(exp, compiler);
             if (args == null) {
                 return null;
@@ -579,7 +595,8 @@ public class RolapNativeSql {
             return new StringBuilder("(").append(args[0]).append(" is null").append(")");
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return new StringBuilder("IsEmptySqlCompiler[").append(mdx).append("]").toString();
         }
     }
@@ -597,7 +614,8 @@ public class RolapNativeSql {
             this.valueCompiler = valueCompiler;
         }
 
-        public StringBuilder compile(Exp exp) {
+        @Override
+		public StringBuilder compile(Exp exp) {
             if (!match(exp)) {
                 return null;
             }

@@ -383,19 +383,22 @@ public class SqlStatement {
     switch ( type ) {
       case OBJECT:
         return new Accessor() {
-          public Object get() throws SQLException {
+          @Override
+		public Object get() throws SQLException {
             return resultSet.getObject( columnPlusOne );
           }
         };
       case STRING:
         return new Accessor() {
-          public Object get() throws SQLException {
+          @Override
+		public Object get() throws SQLException {
             return resultSet.getString( columnPlusOne );
           }
         };
       case INT:
         return new Accessor() {
-          public Object get() throws SQLException {
+          @Override
+		public Object get() throws SQLException {
             final int val = resultSet.getInt( columnPlusOne );
             if ( val == 0 && resultSet.wasNull() ) {
               return null;
@@ -405,7 +408,8 @@ public class SqlStatement {
         };
       case LONG:
         return new Accessor() {
-          public Object get() throws SQLException {
+          @Override
+		public Object get() throws SQLException {
             final long val = resultSet.getLong( columnPlusOne );
             if ( val == 0 && resultSet.wasNull() ) {
               return null;
@@ -415,7 +419,8 @@ public class SqlStatement {
         };
       case DOUBLE:
         return new Accessor() {
-          public Object get() throws SQLException {
+          @Override
+		public Object get() throws SQLException {
             final double val = resultSet.getDouble( columnPlusOne );
             if ( val == 0 && resultSet.wasNull() ) {
               return null;
@@ -427,7 +432,8 @@ public class SqlStatement {
         // this type is only present to work around a defect in the Snowflake jdbc driver.
         // there is currently no plan to support the DECIMAL/BigDecimal type internally
         return new Accessor() {
-          public Object get() throws SQLException {
+          @Override
+		public Object get() throws SQLException {
             final BigDecimal decimal = resultSet.getBigDecimal( columnPlusOne );
             if ( decimal == null && resultSet.wasNull() ) {
               return null;

@@ -151,7 +151,8 @@ public class CubeAccess {
         }
     }
 
-    public boolean equals(Object object) {
+    @Override
+	public boolean equals(Object object) {
         if (!(object instanceof CubeAccess)) {
             return false;
         }
@@ -177,7 +178,8 @@ public class CubeAccess {
         return true;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         int h = mdxCube.hashCode();
         h = Util.hash(h, hierarchyList);
         h = Util.hash(h, memberList);

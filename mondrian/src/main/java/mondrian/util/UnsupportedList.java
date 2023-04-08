@@ -43,123 +43,148 @@ public abstract class UnsupportedList<T> implements List<T> {
     protected UnsupportedList() {
     }
 
-    public boolean isEmpty() {
+    @Override
+	public boolean isEmpty() {
         return (size() == 0);
     }
 
-    public int size() {
+    @Override
+	public int size() {
         throw new UnsupportedOperationException(new StringBuilder(getClass().getName()).append(".size").toString());
     }
 
-    public T get(int index) {
+    @Override
+	public T get(int index) {
         throw new UnsupportedOperationException(new StringBuilder(getClass().getName()).append(".get").toString());
     }
 
-    public T set(int index, T element) {
+    @Override
+	public T set(int index, T element) {
         throw new UnsupportedOperationException(new StringBuilder(getClass().getName()).append(".set").toString());
     }
 
-    public Object[] toArray() {
+    @Override
+	public Object[] toArray() {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".toArray").toString());
     }
 
-    public void add(int index, T element) {
+    @Override
+	public void add(int index, T element) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".add").toString());
     }
 
-    public T remove(int index) {
+    @Override
+	public T remove(int index) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".remove").toString());
     }
 
-    public int indexOf(Object o) {
+    @Override
+	public int indexOf(Object o) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".indexOf").toString());
     }
 
-    public int lastIndexOf(Object o) {
+    @Override
+	public int lastIndexOf(Object o) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".lastIndexOf").toString());
     }
 
-    public List<T> subList(int fromIndex, int toIndex) {
+    @Override
+	public List<T> subList(int fromIndex, int toIndex) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".subList").toString());
     }
 
-    public boolean contains(Object o) {
+    @Override
+	public boolean contains(Object o) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".contains").toString());
     }
 
-    public <T> T[] toArray(T[] a) {
+    @Override
+	public <T> T[] toArray(T[] a) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".toArray").toString());
     }
 
-    public boolean add(T o) {
+    @Override
+	public boolean add(T o) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".add").toString());
     }
 
-    public boolean remove(Object o) {
+    @Override
+	public boolean remove(Object o) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".remove").toString());
     }
 
-    public boolean containsAll(Collection<?> c) {
+    @Override
+	public boolean containsAll(Collection<?> c) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".containsAll").toString());
     }
 
-    public boolean addAll(Collection<? extends T> c) {
+    @Override
+	public boolean addAll(Collection<? extends T> c) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".addAll").toString());
     }
 
-    public boolean addAll(int index, Collection<? extends T> c) {
+    @Override
+	public boolean addAll(int index, Collection<? extends T> c) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".addAll").toString());
     }
 
-    public boolean removeAll(Collection<?> c) {
+    @Override
+	public boolean removeAll(Collection<?> c) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".removeAll").toString());
     }
 
-    public boolean retainAll(Collection<?> c) {
+    @Override
+	public boolean retainAll(Collection<?> c) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".retainAll").toString());
     }
 
-    public void clear() {
+    @Override
+	public void clear() {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".clear").toString());
     }
 
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".equals").toString());
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".hashCode").toString());
     }
 
-    public ListIterator<T> listIterator() {
+    @Override
+	public ListIterator<T> listIterator() {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".listIterator").toString());
     }
 
-    public ListIterator<T> listIterator(int index) {
+    @Override
+	public ListIterator<T> listIterator(int index) {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".listIterator").toString());
     }
 
-    public Iterator<T> iterator() {
+    @Override
+	public Iterator<T> iterator() {
         throw new UnsupportedOperationException(
             new StringBuilder(getClass().getName()).append(".iterator").toString());
     }
@@ -175,11 +200,13 @@ public abstract class UnsupportedList<T> implements List<T> {
             this.lastRet = -1;
         }
 
-        public boolean hasNext() {
+        @Override
+		public boolean hasNext() {
             return (cursor != size());
         }
 
-        public T next() {
+        @Override
+		public T next() {
             try {
                 T next = get(cursor);
                 lastRet = cursor++;
@@ -194,7 +221,8 @@ public abstract class UnsupportedList<T> implements List<T> {
             }
         }
 
-        public void remove() {
+        @Override
+		public void remove() {
             throw new UnsupportedOperationException(
                 new StringBuilder(getClass().getName()).append(".remove").toString());
         }
@@ -205,11 +233,13 @@ public abstract class UnsupportedList<T> implements List<T> {
             this.cursor = index;
         }
 
-        public boolean hasPrevious() {
+        @Override
+		public boolean hasPrevious() {
             return cursor != 0;
         }
 
-        public T previous() {
+        @Override
+		public T previous() {
             try {
                 int i = cursor - 1;
                 T previous = get(i);
@@ -220,15 +250,18 @@ public abstract class UnsupportedList<T> implements List<T> {
             }
         }
 
-        public int nextIndex() {
+        @Override
+		public int nextIndex() {
             return cursor;
         }
 
-        public int previousIndex() {
+        @Override
+		public int previousIndex() {
             return cursor - 1;
         }
 
-        public void set(T o) {
+        @Override
+		public void set(T o) {
 /*
             if (lastRet == -1)
                 throw new IllegalStateException();
@@ -242,7 +275,8 @@ public abstract class UnsupportedList<T> implements List<T> {
                 new StringBuilder(getClass().getName()).append(".set").toString());
         }
 
-        public void add(T o) {
+        @Override
+		public void add(T o) {
             throw new UnsupportedOperationException(
                 new StringBuilder(getClass().getName()).append(".add").toString());
         }
@@ -256,7 +290,8 @@ public abstract class UnsupportedList<T> implements List<T> {
             super();
         }
 
-        public boolean hasNext() {
+        @Override
+		public boolean hasNext() {
             try {
                 get(cursor);
                 return true;

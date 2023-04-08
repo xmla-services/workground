@@ -71,7 +71,8 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 	         return id;
 	    }
 
-	  public Entry<PropertyList, Context> activate() {
+	  @Override
+	public Entry<PropertyList, Context> activate() {
 
             port = freePort();
             RolapSchemaPool.instance().clear();

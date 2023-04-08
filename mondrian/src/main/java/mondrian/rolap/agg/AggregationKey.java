@@ -88,12 +88,14 @@ public class AggregationKey
             compoundPredicateList == null
                 ? null
                 : new AbstractList<BitKey>() {
-                    public BitKey get(int index) {
+                    @Override
+					public BitKey get(int index) {
                         return compoundPredicateList.get(index)
                             .getConstrainedColumnBitKey();
                     }
 
-                    public int size() {
+                    @Override
+					public int size() {
                         return compoundPredicateList.size();
                     }
                 });
@@ -109,7 +111,8 @@ public class AggregationKey
         return Util.hash(retCode, compoundPredicateBitKeys);
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         if (hashCode == 0) {
             // Compute hash code on first use. It is expensive to compute, and
             // not always required.
@@ -118,7 +121,8 @@ public class AggregationKey
         return hashCode;
     }
 
-    public boolean equals(Object other) {
+    @Override
+	public boolean equals(Object other) {
         if (!(other instanceof AggregationKey)) {
             return false;
         }
@@ -159,7 +163,8 @@ public class AggregationKey
         return true;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return
             new StringBuilder(star.getFactTable().getTableName())
                 .append(" ")

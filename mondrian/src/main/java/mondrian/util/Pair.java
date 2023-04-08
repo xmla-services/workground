@@ -64,7 +64,8 @@ public class Pair <L, R>
         return new Pair<L, R>(left, right);
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         if (obj instanceof Pair) {
             //noinspection unchecked
             Pair<L, R> pair = (Pair) obj;
@@ -74,14 +75,16 @@ public class Pair <L, R>
         return false;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         int k = (left == null) ? 0 : left.hashCode();
         int k1 = (right == null) ? 0 : right.hashCode();
         return ((k << 4) | k) ^ k1;
     }
 
 
-    public int compareTo(Pair<L, R> that) {
+    @Override
+	public int compareTo(Pair<L, R> that) {
         int c = compare((Comparable) this.left, (Comparable)that.left);
         if (c == 0) {
             c = compare((Comparable) this.right, (Comparable)that.right);
@@ -89,22 +92,26 @@ public class Pair <L, R>
         return c;
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuilder("<").append(left).append(", ").append(right).append(">").toString();
     }
 
     // implement Map.Entry
-    public L getKey() {
+    @Override
+	public L getKey() {
         return left;
     }
 
     // implement Map.Entry
-    public R getValue() {
+    @Override
+	public R getValue() {
         return right;
     }
 
     // implement Map.Entry
-    public R setValue(R value) {
+    @Override
+	public R setValue(R value) {
         R previous = right;
         right = value;
         return previous;
@@ -145,18 +152,22 @@ public class Pair <L, R>
         final Iterable<Pair<L, R>> iterable)
     {
         return new Iterable<L>() {
-            public Iterator<L> iterator() {
+            @Override
+			public Iterator<L> iterator() {
                 final Iterator<Pair<L, R>> iterator = iterable.iterator();
                 return new Iterator<L>() {
-                    public boolean hasNext() {
+                    @Override
+					public boolean hasNext() {
                         return iterator.hasNext();
                     }
 
-                    public L next() {
+                    @Override
+					public L next() {
                         return iterator.next().left;
                     }
 
-                    public void remove() {
+                    @Override
+					public void remove() {
                         iterator.remove();
                     }
                 };
@@ -176,18 +187,22 @@ public class Pair <L, R>
         final Iterable<Pair<L, R>> iterable)
     {
         return new Iterable<R>() {
-            public Iterator<R> iterator() {
+            @Override
+			public Iterator<R> iterator() {
                 final Iterator<Pair<L, R>> iterator = iterable.iterator();
                 return new Iterator<R>() {
-                    public boolean hasNext() {
+                    @Override
+					public boolean hasNext() {
                         return iterator.hasNext();
                     }
 
-                    public R next() {
+                    @Override
+					public R next() {
                         return iterator.next().right;
                     }
 
-                    public void remove() {
+                    @Override
+					public void remove() {
                         iterator.remove();
                     }
                 };
@@ -200,15 +215,18 @@ public class Pair <L, R>
      */
     public static <L, R> List<L> left(final List<Pair<L, R>> list) {
         return new AbstractList<L>() {
-            public L get(int index) {
+            @Override
+			public L get(int index) {
                 return list.get(index).left;
             }
 
-            public int size() {
+            @Override
+			public int size() {
                 return list.size();
             }
 
-            public L remove(int index) {
+            @Override
+			public L remove(int index) {
                 Pair<L, R> pair = list.remove(index);
                 return pair == null ? null : pair.left;
             }
@@ -220,15 +238,18 @@ public class Pair <L, R>
      */
     public static <L, R> List<R> right(final List<Pair<L, R>> list) {
         return new AbstractList<R>() {
-            public R get(int index) {
+            @Override
+			public R get(int index) {
                 return list.get(index).right;
             }
 
-            public int size() {
+            @Override
+			public int size() {
                 return list.size();
             }
 
-            public R remove(int index) {
+            @Override
+			public R remove(int index) {
                 Pair<L, R> pair = list.remove(index);
                 return pair == null ? null : pair.right;
             }

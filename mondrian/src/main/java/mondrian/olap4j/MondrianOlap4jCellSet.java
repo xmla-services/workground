@@ -132,19 +132,23 @@ abstract class MondrianOlap4jCellSet
             new MondrianOlap4jCellSetAxis(this, queryAxis, (RolapAxis) axis);
     }
 
-    public CellSetMetaData getMetaData() {
+    @Override
+	public CellSetMetaData getMetaData() {
         return metaData;
     }
 
-    public List<CellSetAxis> getAxes() {
+    @Override
+	public List<CellSetAxis> getAxes() {
         return axisList;
     }
 
-    public CellSetAxis getFilterAxis() {
+    @Override
+	public CellSetAxis getFilterAxis() {
         return filterAxis;
     }
 
-    public Cell getCell(List<Integer> coordinates) {
+    @Override
+	public Cell getCell(List<Integer> coordinates) {
         int[] coords = new int[coordinates.size()];
         for (int i = 0; i < coords.length; i++) {
             coords[i] = coordinates.get(i);
@@ -152,7 +156,8 @@ abstract class MondrianOlap4jCellSet
         return getCellInternal(coords);
     }
 
-    public Cell getCell(int ordinal) {
+    @Override
+	public Cell getCell(int ordinal) {
         final int[] pos = ordinalToCoordinateArray(ordinal);
         return getCellInternal(pos);
     }
@@ -175,7 +180,8 @@ abstract class MondrianOlap4jCellSet
         return pos;
     }
 
-    public Cell getCell(Position... positions) {
+    @Override
+	public Cell getCell(Position... positions) {
         int[] coords = new int[positions.length];
         for (int i = 0; i < coords.length; i++) {
             coords[i] = positions[i].getOrdinal();
@@ -234,7 +240,8 @@ abstract class MondrianOlap4jCellSet
         return buf.toString();
     }
 
-    public List<Integer> ordinalToCoordinates(int ordinal) {
+    @Override
+	public List<Integer> ordinalToCoordinates(int ordinal) {
         final int[] ints = ordinalToCoordinateArray(ordinal);
         final List<Integer> list = new ArrayList<Integer>(ints.length);
         for (int i : ints) {
@@ -243,7 +250,8 @@ abstract class MondrianOlap4jCellSet
         return list;
     }
 
-    public int coordinatesToOrdinal(List<Integer> coordinates) {
+    @Override
+	public int coordinatesToOrdinal(List<Integer> coordinates) {
         List<CellSetAxis> axes = getAxes();
         if (coordinates.size() != axes.size()) {
             throw new IllegalArgumentException(
@@ -268,11 +276,13 @@ abstract class MondrianOlap4jCellSet
         return ordinal;
     }
 
-    public boolean next() throws SQLException {
+    @Override
+	public boolean next() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void close() {
+    @Override
+	public void close() {
         if (closed) {
             return;
         }
@@ -283,597 +293,735 @@ abstract class MondrianOlap4jCellSet
         olap4jStatement.onResultSetClose(this);
     }
 
-    public boolean wasNull() throws SQLException {
+    @Override
+	public boolean wasNull() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public String getString(int columnIndex) throws SQLException {
+    @Override
+	public String getString(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean getBoolean(int columnIndex) throws SQLException {
+    @Override
+	public boolean getBoolean(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public byte getByte(int columnIndex) throws SQLException {
+    @Override
+	public byte getByte(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public short getShort(int columnIndex) throws SQLException {
+    @Override
+	public short getShort(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getInt(int columnIndex) throws SQLException {
+    @Override
+	public int getInt(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public long getLong(int columnIndex) throws SQLException {
+    @Override
+	public long getLong(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public float getFloat(int columnIndex) throws SQLException {
+    @Override
+	public float getFloat(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public double getDouble(int columnIndex) throws SQLException {
+    @Override
+	public double getDouble(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public BigDecimal getBigDecimal(
+    @Override
+	public BigDecimal getBigDecimal(
         int columnIndex, int scale) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public byte[] getBytes(int columnIndex) throws SQLException {
+    @Override
+	public byte[] getBytes(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Date getDate(int columnIndex) throws SQLException {
+    @Override
+	public Date getDate(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Time getTime(int columnIndex) throws SQLException {
+    @Override
+	public Time getTime(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Timestamp getTimestamp(int columnIndex) throws SQLException {
+    @Override
+	public Timestamp getTimestamp(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public InputStream getAsciiStream(int columnIndex) throws SQLException {
+    @Override
+	public InputStream getAsciiStream(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public InputStream getUnicodeStream(int columnIndex) throws SQLException {
+    @Override
+	public InputStream getUnicodeStream(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public InputStream getBinaryStream(int columnIndex) throws SQLException {
+    @Override
+	public InputStream getBinaryStream(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public String getString(String columnLabel) throws SQLException {
+    @Override
+	public String getString(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean getBoolean(String columnLabel) throws SQLException {
+    @Override
+	public boolean getBoolean(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public byte getByte(String columnLabel) throws SQLException {
+    @Override
+	public byte getByte(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public short getShort(String columnLabel) throws SQLException {
+    @Override
+	public short getShort(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getInt(String columnLabel) throws SQLException {
+    @Override
+	public int getInt(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public long getLong(String columnLabel) throws SQLException {
+    @Override
+	public long getLong(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public float getFloat(String columnLabel) throws SQLException {
+    @Override
+	public float getFloat(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public double getDouble(String columnLabel) throws SQLException {
+    @Override
+	public double getDouble(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public BigDecimal getBigDecimal(
+    @Override
+	public BigDecimal getBigDecimal(
         String columnLabel, int scale) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public byte[] getBytes(String columnLabel) throws SQLException {
+    @Override
+	public byte[] getBytes(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Date getDate(String columnLabel) throws SQLException {
+    @Override
+	public Date getDate(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Time getTime(String columnLabel) throws SQLException {
+    @Override
+	public Time getTime(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Timestamp getTimestamp(String columnLabel) throws SQLException {
+    @Override
+	public Timestamp getTimestamp(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public InputStream getAsciiStream(String columnLabel) throws SQLException {
+    @Override
+	public InputStream getAsciiStream(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public InputStream getUnicodeStream(
+    @Override
+	public InputStream getUnicodeStream(
         String columnLabel) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public InputStream getBinaryStream(String columnLabel) throws SQLException {
+    @Override
+	public InputStream getBinaryStream(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public SQLWarning getWarnings() throws SQLException {
+    @Override
+	public SQLWarning getWarnings() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void clearWarnings() throws SQLException {
+    @Override
+	public void clearWarnings() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public String getCursorName() throws SQLException {
+    @Override
+	public String getCursorName() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Object getObject(int columnIndex) throws SQLException {
+    @Override
+	public Object getObject(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Object getObject(String columnLabel) throws SQLException {
+    @Override
+	public Object getObject(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int findColumn(String columnLabel) throws SQLException {
+    @Override
+	public int findColumn(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Reader getCharacterStream(int columnIndex) throws SQLException {
+    @Override
+	public Reader getCharacterStream(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Reader getCharacterStream(String columnLabel) throws SQLException {
+    @Override
+	public Reader getCharacterStream(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
+    @Override
+	public BigDecimal getBigDecimal(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public BigDecimal getBigDecimal(String columnLabel) throws SQLException {
+    @Override
+	public BigDecimal getBigDecimal(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean isBeforeFirst() throws SQLException {
+    @Override
+	public boolean isBeforeFirst() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean isAfterLast() throws SQLException {
+    @Override
+	public boolean isAfterLast() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean isFirst() throws SQLException {
+    @Override
+	public boolean isFirst() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean isLast() throws SQLException {
+    @Override
+	public boolean isLast() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void beforeFirst() throws SQLException {
+    @Override
+	public void beforeFirst() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void afterLast() throws SQLException {
+    @Override
+	public void afterLast() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean first() throws SQLException {
+    @Override
+	public boolean first() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean last() throws SQLException {
+    @Override
+	public boolean last() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getRow() throws SQLException {
+    @Override
+	public int getRow() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean absolute(int row) throws SQLException {
+    @Override
+	public boolean absolute(int row) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean relative(int rows) throws SQLException {
+    @Override
+	public boolean relative(int rows) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean previous() throws SQLException {
+    @Override
+	public boolean previous() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void setFetchDirection(int direction) throws SQLException {
+    @Override
+	public void setFetchDirection(int direction) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getFetchDirection() throws SQLException {
+    @Override
+	public int getFetchDirection() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void setFetchSize(int rows) throws SQLException {
+    @Override
+	public void setFetchSize(int rows) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getFetchSize() throws SQLException {
+    @Override
+	public int getFetchSize() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getType() throws SQLException {
+    @Override
+	public int getType() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public int getConcurrency() throws SQLException {
+    @Override
+	public int getConcurrency() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean rowUpdated() throws SQLException {
+    @Override
+	public boolean rowUpdated() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean rowInserted() throws SQLException {
+    @Override
+	public boolean rowInserted() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean rowDeleted() throws SQLException {
+    @Override
+	public boolean rowDeleted() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateNull(int columnIndex) throws SQLException {
+    @Override
+	public void updateNull(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateBoolean(int columnIndex, boolean x) throws SQLException {
+    @Override
+	public void updateBoolean(int columnIndex, boolean x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateByte(int columnIndex, byte x) throws SQLException {
+    @Override
+	public void updateByte(int columnIndex, byte x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateShort(int columnIndex, short x) throws SQLException {
+    @Override
+	public void updateShort(int columnIndex, short x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateInt(int columnIndex, int x) throws SQLException {
+    @Override
+	public void updateInt(int columnIndex, int x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateLong(int columnIndex, long x) throws SQLException {
+    @Override
+	public void updateLong(int columnIndex, long x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateFloat(int columnIndex, float x) throws SQLException {
+    @Override
+	public void updateFloat(int columnIndex, float x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateDouble(int columnIndex, double x) throws SQLException {
+    @Override
+	public void updateDouble(int columnIndex, double x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateBigDecimal(
+    @Override
+	public void updateBigDecimal(
         int columnIndex, BigDecimal x) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateString(int columnIndex, String x) throws SQLException {
+    @Override
+	public void updateString(int columnIndex, String x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateBytes(int columnIndex, byte x[]) throws SQLException {
+    @Override
+	public void updateBytes(int columnIndex, byte x[]) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateDate(int columnIndex, Date x) throws SQLException {
+    @Override
+	public void updateDate(int columnIndex, Date x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateTime(int columnIndex, Time x) throws SQLException {
+    @Override
+	public void updateTime(int columnIndex, Time x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateTimestamp(
+    @Override
+	public void updateTimestamp(
         int columnIndex, Timestamp x) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateAsciiStream(
+    @Override
+	public void updateAsciiStream(
         int columnIndex, InputStream x, int length) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateBinaryStream(
+    @Override
+	public void updateBinaryStream(
         int columnIndex, InputStream x, int length) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateCharacterStream(
+    @Override
+	public void updateCharacterStream(
         int columnIndex, Reader x, int length) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateObject(
+    @Override
+	public void updateObject(
         int columnIndex, Object x, int scaleOrLength) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateObject(int columnIndex, Object x) throws SQLException {
+    @Override
+	public void updateObject(int columnIndex, Object x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateNull(String columnLabel) throws SQLException {
+    @Override
+	public void updateNull(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateBoolean(
+    @Override
+	public void updateBoolean(
         String columnLabel, boolean x) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateByte(String columnLabel, byte x) throws SQLException {
+    @Override
+	public void updateByte(String columnLabel, byte x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateShort(String columnLabel, short x) throws SQLException {
+    @Override
+	public void updateShort(String columnLabel, short x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateInt(String columnLabel, int x) throws SQLException {
+    @Override
+	public void updateInt(String columnLabel, int x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateLong(String columnLabel, long x) throws SQLException {
+    @Override
+	public void updateLong(String columnLabel, long x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateFloat(String columnLabel, float x) throws SQLException {
+    @Override
+	public void updateFloat(String columnLabel, float x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateDouble(String columnLabel, double x) throws SQLException {
+    @Override
+	public void updateDouble(String columnLabel, double x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateBigDecimal(
+    @Override
+	public void updateBigDecimal(
         String columnLabel, BigDecimal x) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateString(String columnLabel, String x) throws SQLException {
+    @Override
+	public void updateString(String columnLabel, String x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateBytes(String columnLabel, byte x[]) throws SQLException {
+    @Override
+	public void updateBytes(String columnLabel, byte x[]) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateDate(String columnLabel, Date x) throws SQLException {
+    @Override
+	public void updateDate(String columnLabel, Date x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateTime(String columnLabel, Time x) throws SQLException {
+    @Override
+	public void updateTime(String columnLabel, Time x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateTimestamp(
+    @Override
+	public void updateTimestamp(
         String columnLabel, Timestamp x) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateAsciiStream(
+    @Override
+	public void updateAsciiStream(
         String columnLabel, InputStream x, int length) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateBinaryStream(
+    @Override
+	public void updateBinaryStream(
         String columnLabel, InputStream x, int length) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateCharacterStream(
+    @Override
+	public void updateCharacterStream(
         String columnLabel, Reader reader, int length) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateObject(
+    @Override
+	public void updateObject(
         String columnLabel, Object x, int scaleOrLength) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public void updateObject(String columnLabel, Object x) throws SQLException {
+    @Override
+	public void updateObject(String columnLabel, Object x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void insertRow() throws SQLException {
+    @Override
+	public void insertRow() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateRow() throws SQLException {
+    @Override
+	public void updateRow() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void deleteRow() throws SQLException {
+    @Override
+	public void deleteRow() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void refreshRow() throws SQLException {
+    @Override
+	public void refreshRow() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void cancelRowUpdates() throws SQLException {
+    @Override
+	public void cancelRowUpdates() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void moveToInsertRow() throws SQLException {
+    @Override
+	public void moveToInsertRow() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void moveToCurrentRow() throws SQLException {
+    @Override
+	public void moveToCurrentRow() throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public OlapStatement getStatement() {
+    @Override
+	public OlapStatement getStatement() {
         return olap4jStatement;
     }
 
-    public Object getObject(
+    @Override
+	public Object getObject(
         int columnIndex, Map<String, Class<?>> map) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public Ref getRef(int columnIndex) throws SQLException {
+    @Override
+	public Ref getRef(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Blob getBlob(int columnIndex) throws SQLException {
+    @Override
+	public Blob getBlob(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Clob getClob(int columnIndex) throws SQLException {
+    @Override
+	public Clob getClob(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Array getArray(int columnIndex) throws SQLException {
+    @Override
+	public Array getArray(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Object getObject(
+    @Override
+	public Object getObject(
         String columnLabel, Map<String, Class<?>> map) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public Ref getRef(String columnLabel) throws SQLException {
+    @Override
+	public Ref getRef(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Blob getBlob(String columnLabel) throws SQLException {
+    @Override
+	public Blob getBlob(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Clob getClob(String columnLabel) throws SQLException {
+    @Override
+	public Clob getClob(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Array getArray(String columnLabel) throws SQLException {
+    @Override
+	public Array getArray(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Date getDate(int columnIndex, Calendar cal) throws SQLException {
+    @Override
+	public Date getDate(int columnIndex, Calendar cal) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Date getDate(String columnLabel, Calendar cal) throws SQLException {
+    @Override
+	public Date getDate(String columnLabel, Calendar cal) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Time getTime(int columnIndex, Calendar cal) throws SQLException {
+    @Override
+	public Time getTime(int columnIndex, Calendar cal) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Time getTime(String columnLabel, Calendar cal) throws SQLException {
+    @Override
+	public Time getTime(String columnLabel, Calendar cal) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public Timestamp getTimestamp(
+    @Override
+	public Timestamp getTimestamp(
         int columnIndex, Calendar cal) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public Timestamp getTimestamp(
+    @Override
+	public Timestamp getTimestamp(
         String columnLabel, Calendar cal) throws SQLException
     {
         throw new UnsupportedOperationException();
     }
 
-    public URL getURL(int columnIndex) throws SQLException {
+    @Override
+	public URL getURL(int columnIndex) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public URL getURL(String columnLabel) throws SQLException {
+    @Override
+	public URL getURL(String columnLabel) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateRef(int columnIndex, Ref x) throws SQLException {
+    @Override
+	public void updateRef(int columnIndex, Ref x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateRef(String columnLabel, Ref x) throws SQLException {
+    @Override
+	public void updateRef(String columnLabel, Ref x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateBlob(int columnIndex, Blob x) throws SQLException {
+    @Override
+	public void updateBlob(int columnIndex, Blob x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateBlob(String columnLabel, Blob x) throws SQLException {
+    @Override
+	public void updateBlob(String columnLabel, Blob x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateClob(int columnIndex, Clob x) throws SQLException {
+    @Override
+	public void updateClob(int columnIndex, Clob x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateClob(String columnLabel, Clob x) throws SQLException {
+    @Override
+	public void updateClob(String columnLabel, Clob x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateArray(int columnIndex, Array x) throws SQLException {
+    @Override
+	public void updateArray(int columnIndex, Array x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public void updateArray(String columnLabel, Array x) throws SQLException {
+    @Override
+	public void updateArray(String columnLabel, Array x) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
     // implement Wrapper
 
-    public <T> T unwrap(Class<T> iface) throws SQLException {
+    @Override
+	public <T> T unwrap(Class<T> iface) throws SQLException {
         throw new UnsupportedOperationException();
     }
 
-    public boolean isWrapperFor(Class<?> iface) throws SQLException {
+    @Override
+	public boolean isWrapperFor(Class<?> iface) throws SQLException {
         throw new UnsupportedOperationException();
     }
 }

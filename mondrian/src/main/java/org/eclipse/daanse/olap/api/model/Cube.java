@@ -30,7 +30,8 @@ import mondrian.olap.SchemaReader;
  */
 public interface Cube extends OlapElement, MetaElement {
 
-    String getName();
+    @Override
+	String getName();
 
     Schema getSchema();
 

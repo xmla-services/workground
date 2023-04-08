@@ -43,7 +43,8 @@ public class RolapVirtualCubeMeasure
         this.metaData = metaData;
     }
 
-    public Object getPropertyValue(String propertyName, boolean matchCase) {
+    @Override
+	public Object getPropertyValue(String propertyName, boolean matchCase) {
         // Look first in this member (against the virtual cube), then
         // fallback on the base measure.
         // This allows, for instance, a measure to be invisible in a virtual
@@ -55,27 +56,33 @@ public class RolapVirtualCubeMeasure
         return value;
     }
 
-    public RolapCube getCube() {
+    @Override
+	public RolapCube getCube() {
         return cubeMeasure.getCube();
     }
 
-    public Object getStarMeasure() {
+    @Override
+	public Object getStarMeasure() {
         return cubeMeasure.getStarMeasure();
     }
 
-    public Expression getMondrianDefExpression() {
+    @Override
+	public Expression getMondrianDefExpression() {
         return cubeMeasure.getMondrianDefExpression();
     }
 
-    public RolapAggregator getAggregator() {
+    @Override
+	public RolapAggregator getAggregator() {
         return cubeMeasure.getAggregator();
     }
 
-    public RolapResult.ValueFormatter getFormatter() {
+    @Override
+	public RolapResult.ValueFormatter getFormatter() {
         return cubeMeasure.getFormatter();
     }
 
-    public Map<String, Object> getMetadata() {
+    @Override
+	public Map<String, Object> getMetadata() {
         return metaData;
     }
 }

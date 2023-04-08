@@ -39,7 +39,8 @@ public class CustomizedFunctionTable extends FunTableImpl {
         this.specialFunctions = specialFunctions;
     }
 
-    public void defineFunctions(Builder builder) {
+    @Override
+	public void defineFunctions(Builder builder) {
         final FunTable builtinFunTable = BuiltinFunTable.instance();
 
         // Includes all the keywords form builtin function table

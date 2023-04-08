@@ -86,7 +86,8 @@ public class CrossJoinTest {
 
   static final Comparator<List<Member>> memberComparator =
     new Comparator<List<Member>>() {
-      public int compare( List<Member> ma1, List<Member> ma2 ) {
+      @Override
+	public int compare( List<Member> ma1, List<Member> ma2 ) {
         for ( int i = 0; i < ma1.size(); i++ ) {
           int c = ma1.get( i ).compareTo( ma2.get( i ) );
           if ( c < 0 ) {
@@ -143,7 +144,8 @@ private PropertySaver5 propSaver;
 
     String s = Locus.execute(
       execution, "CrossJoinTest", new Locus.Action<String>() {
-        public String execute() {
+        @Override
+		public String execute() {
           TupleIterable iterable = calc.makeIterable( l4, l3 );
           return CrossJoinTest.this.toString( iterable );
         }
@@ -203,7 +205,8 @@ private PropertySaver5 propSaver;
     final Execution execution ) {
     return Locus.execute(
       execution, "CrossJoinTest", new Locus.Action<Integer>() {
-        public Integer execute() {
+        @Override
+		public Integer execute() {
           TupleIterable iterable =
             crossJoinFunDef.new CrossJoinIterCalc(
               getResolvedFunCall(), null ).makeIterable( list1, list2 );
@@ -420,39 +423,48 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     TestFunDef() {
     }
 
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
       throw new UnsupportedOperationException();
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
       return "SomeName";
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
       throw new UnsupportedOperationException();
     }
 
-    public int getReturnCategory() {
+    @Override
+	public int getReturnCategory() {
       throw new UnsupportedOperationException();
     }
 
-    public int[] getParameterCategories() {
+    @Override
+	public int[] getParameterCategories() {
       throw new UnsupportedOperationException();
     }
 
-    public Exp createCall( Validator validator, Exp[] args ) {
+    @Override
+	public Exp createCall( Validator validator, Exp[] args ) {
       throw new UnsupportedOperationException();
     }
 
-    public String getSignature() {
+    @Override
+	public String getSignature() {
       throw new UnsupportedOperationException();
     }
 
-    public void unparse( Exp[] args, PrintWriter pw ) {
+    @Override
+	public void unparse( Exp[] args, PrintWriter pw ) {
       throw new UnsupportedOperationException();
     }
 
-    public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+    @Override
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       throw new UnsupportedOperationException();
     }
   }
@@ -461,39 +473,48 @@ void testResultLimitWithinCrossjoin_1(TestingContext foodMartContext) {
     public NullFunDef() {
     }
 
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
       return Syntax.Function;
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
       return "";
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
       return "";
     }
 
-    public int getReturnCategory() {
+    @Override
+	public int getReturnCategory() {
       return 0;
     }
 
-    public int[] getParameterCategories() {
+    @Override
+	public int[] getParameterCategories() {
       return new int[ 0 ];
     }
 
-    public Exp createCall( Validator validator, Exp[] args ) {
+    @Override
+	public Exp createCall( Validator validator, Exp[] args ) {
       return null;
     }
 
-    public String getSignature() {
+    @Override
+	public String getSignature() {
       return "";
     }
 
-    public void unparse( Exp[] args, PrintWriter pw ) {
+    @Override
+	public void unparse( Exp[] args, PrintWriter pw ) {
       //
     }
 
-    public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
+    @Override
+	public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       return null;
     }
   }

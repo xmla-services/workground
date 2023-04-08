@@ -36,7 +36,8 @@ public abstract class QueryPart implements Walkable {
     }
 
     // implement Walkable
-    public Object[] getChildren() {
+    @Override
+	public Object[] getChildren() {
         // By default, a QueryPart is atomic (has no children).
         return null;
     }

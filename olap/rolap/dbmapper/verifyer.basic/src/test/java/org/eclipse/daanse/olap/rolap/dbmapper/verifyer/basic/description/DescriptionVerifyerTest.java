@@ -447,7 +447,8 @@ public class DescriptionVerifyerTest {
         someList.addAll(Arrays.asList(values));
 
         Answer<List<N>> answer = new Answer<List<N>>() {
-            public List<N> answer(InvocationOnMock invocation) throws Throwable {
+            @Override
+			public List<N> answer(InvocationOnMock invocation) throws Throwable {
                 return someList;
             }
         };

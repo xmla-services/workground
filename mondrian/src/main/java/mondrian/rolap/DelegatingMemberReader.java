@@ -36,31 +36,37 @@ class DelegatingMemberReader implements MemberReader {
         this.memberReader = memberReader;
     }
 
-    public RolapMember substitute(RolapMember member) {
+    @Override
+	public RolapMember substitute(RolapMember member) {
         return memberReader.substitute(member);
     }
 
-    public RolapMember desubstitute(RolapMember member) {
+    @Override
+	public RolapMember desubstitute(RolapMember member) {
         return memberReader.desubstitute(member);
     }
 
-    public RolapMember getMemberByKey(
+    @Override
+	public RolapMember getMemberByKey(
         RolapLevel level, List<Comparable> keyValues)
     {
         return memberReader.getMemberByKey(level, keyValues);
     }
 
-    public RolapMember getLeadMember(RolapMember member, int n) {
+    @Override
+	public RolapMember getLeadMember(RolapMember member, int n) {
         return memberReader.getLeadMember(member, n);
     }
 
-    public List<RolapMember> getMembersInLevel(
+    @Override
+	public List<RolapMember> getMembersInLevel(
         RolapLevel level)
     {
         return memberReader.getMembersInLevel(level);
     }
 
-    public void getMemberRange(
+    @Override
+	public void getMemberRange(
         RolapLevel level,
         RolapMember startMember,
         RolapMember endMember,
@@ -69,7 +75,8 @@ class DelegatingMemberReader implements MemberReader {
         memberReader.getMemberRange(level, startMember, endMember, list);
     }
 
-    public int compare(
+    @Override
+	public int compare(
         RolapMember m1,
         RolapMember m2,
         boolean siblingsAreEqual)
@@ -77,30 +84,36 @@ class DelegatingMemberReader implements MemberReader {
         return memberReader.compare(m1, m2, siblingsAreEqual);
     }
 
-    public RolapHierarchy getHierarchy() {
+    @Override
+	public RolapHierarchy getHierarchy() {
         return memberReader.getHierarchy();
     }
 
-    public boolean setCache(MemberCache cache) {
+    @Override
+	public boolean setCache(MemberCache cache) {
         return memberReader.setCache(cache);
     }
 
-    public List<RolapMember> getMembers() {
+    @Override
+	public List<RolapMember> getMembers() {
         return memberReader.getMembers();
     }
 
-    public List<RolapMember> getRootMembers() {
+    @Override
+	public List<RolapMember> getRootMembers() {
         return memberReader.getRootMembers();
     }
 
-    public void getMemberChildren(
+    @Override
+	public void getMemberChildren(
         RolapMember parentMember,
         List<RolapMember> children)
     {
         getMemberChildren(parentMember, children, null);
     }
 
-    public Map<? extends Member, Access> getMemberChildren(
+    @Override
+	public Map<? extends Member, Access> getMemberChildren(
         RolapMember parentMember,
         List<RolapMember> children,
         MemberChildrenConstraint constraint)
@@ -109,7 +122,8 @@ class DelegatingMemberReader implements MemberReader {
             parentMember, children, constraint);
     }
 
-    public void getMemberChildren(
+    @Override
+	public void getMemberChildren(
         List<RolapMember> parentMembers,
         List<RolapMember> children)
     {
@@ -117,7 +131,8 @@ class DelegatingMemberReader implements MemberReader {
             parentMembers, children);
     }
 
-    public Map<? extends Member, Access> getMemberChildren(
+    @Override
+	public Map<? extends Member, Access> getMemberChildren(
         List<RolapMember> parentMembers,
         List<RolapMember> children,
         MemberChildrenConstraint constraint)
@@ -126,37 +141,44 @@ class DelegatingMemberReader implements MemberReader {
             parentMembers, children, constraint);
     }
 
-    public int getMemberCount() {
+    @Override
+	public int getMemberCount() {
         return memberReader.getMemberCount();
     }
 
-    public RolapMember lookupMember(
+    @Override
+	public RolapMember lookupMember(
         List<Id.Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         return memberReader.lookupMember(uniqueNameParts, failIfNotFound);
     }
 
-    public List<RolapMember> getMembersInLevel(
+    @Override
+	public List<RolapMember> getMembersInLevel(
         RolapLevel level, TupleConstraint constraint)
     {
         return memberReader.getMembersInLevel(
             level, constraint);
     }
 
-    public int getLevelMemberCount(RolapLevel level) {
+    @Override
+	public int getLevelMemberCount(RolapLevel level) {
         return memberReader.getLevelMemberCount(level);
     }
 
-    public MemberBuilder getMemberBuilder() {
+    @Override
+	public MemberBuilder getMemberBuilder() {
         return memberReader.getMemberBuilder();
     }
 
-    public RolapMember getDefaultMember() {
+    @Override
+	public RolapMember getDefaultMember() {
         return memberReader.getDefaultMember();
     }
 
-    public RolapMember getMemberParent(RolapMember member) {
+    @Override
+	public RolapMember getMemberParent(RolapMember member) {
         return memberReader.getMemberParent(member);
     }
 }

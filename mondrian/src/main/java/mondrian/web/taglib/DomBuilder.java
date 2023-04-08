@@ -130,14 +130,16 @@ public class DomBuilder {
             super(parent, axis);
         }
 
-        Element build(int rowIndex) {
+        @Override
+		Element build(int rowIndex) {
             boolean even = (rowIndex % 2 != 0);  // counting starts at row 1
             Element row = elem("row", parent);
             build(row, positions.get(rowIndex), even);
             return row;
         }
 
-        int getRowCount() {
+        @Override
+		int getRowCount() {
             return positions.size();
         }
 
@@ -180,11 +182,13 @@ public class DomBuilder {
             super(parent, axis);
         }
 
-        int getRowCount() {
+        @Override
+		int getRowCount() {
             return levels;
         }
 
-        Element build(int rowIndex) {
+        @Override
+		Element build(int rowIndex) {
             Element row = elem("row", parent);
             if (dimCount > 1 && rowIndex == 0) {
                 buildCornerElement(row);

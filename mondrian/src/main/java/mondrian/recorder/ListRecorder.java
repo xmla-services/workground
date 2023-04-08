@@ -34,7 +34,8 @@ public class ListRecorder extends AbstractRecorder {
         infoList = new ArrayList<Entry>();
     }
 
-    public void clear() {
+    @Override
+	public void clear() {
         super.clear();
         errorList.clear();
         warnList.clear();
@@ -53,7 +54,8 @@ public class ListRecorder extends AbstractRecorder {
         return infoList.iterator();
     }
 
-    protected void recordMessage(
+    @Override
+	protected void recordMessage(
         final String msg,
         final Object info,
         final MsgType msgType)

@@ -34,7 +34,8 @@ public class OrPredicate extends ListPredicate {
         super(predicateList);
     }
 
-    public boolean evaluate(List<Object> valueList) {
+    @Override
+	public boolean evaluate(List<Object> valueList) {
         // NOTE: If we know that every predicate in the list is a
         // ValueColumnPredicate, we could optimize the evaluate method by
         // building a value list at construction time. But it's a tradeoff,
@@ -47,7 +48,8 @@ public class OrPredicate extends ListPredicate {
         return false;
     }
 
-    public StarPredicate or(StarPredicate predicate) {
+    @Override
+	public StarPredicate or(StarPredicate predicate) {
         if (predicate instanceof OrPredicate
             && predicate.getConstrainedColumnBitKey().equals(
                 getConstrainedColumnBitKey()))
@@ -67,7 +69,8 @@ public class OrPredicate extends ListPredicate {
         }
     }
 
-    public StarPredicate and(StarPredicate predicate) {
+    @Override
+	public StarPredicate and(StarPredicate predicate) {
         List<StarPredicate> list = new ArrayList<StarPredicate>();
         list.add(this);
         list.add(predicate);
@@ -219,7 +222,8 @@ public class OrPredicate extends ListPredicate {
         buf.append(")");
     }
 
-    public void toSql(SqlQuery sqlQuery, StringBuilder buf) {
+    @Override
+	public void toSql(SqlQuery sqlQuery, StringBuilder buf) {
         //
         // If possible, translate the predicate using IN lists.
         //
@@ -273,7 +277,8 @@ public class OrPredicate extends ListPredicate {
         buf.append(")");
     }
 
-    protected String getOp() {
+    @Override
+	protected String getOp() {
         return "or";
     }
 }

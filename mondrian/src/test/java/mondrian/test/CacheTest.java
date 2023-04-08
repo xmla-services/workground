@@ -95,7 +95,8 @@ public class CacheTest {
         final List<Future<Boolean>> futures = new ArrayList<Future<Boolean>>();
         for (int i = 0; i < parallel; i++) {
             Callable<Boolean> runnable = new Callable<Boolean>() {
-                public Boolean call() {
+                @Override
+				public Boolean call() {
                     TestUtil.assertQueryReturns(
                 		connection,
                         "select [Gender].Children * [Product].Children on 0\n"

@@ -30,7 +30,8 @@ import mondrian.test.DiffRepository;
  */
 public class XmlaExcel2007Test extends XmlaBaseTestCase {
 
-    protected String getSessionId(Action action) {
+    @Override
+	protected String getSessionId(Action action) {
         return getSessionId("XmlaExcel2000Test", action);
     }
 
@@ -40,11 +41,13 @@ public class XmlaExcel2007Test extends XmlaBaseTestCase {
         }
     }
 
-    protected Class<? extends XmlaRequestCallback> getServletCallbackClass() {
+    @Override
+	protected Class<? extends XmlaRequestCallback> getServletCallbackClass() {
         return Callback.class;
     }
 
-    protected DiffRepository getDiffRepos() {
+    @Override
+	protected DiffRepository getDiffRepos() {
         return DiffRepository.lookup(XmlaExcel2007Test.class);
     }
 

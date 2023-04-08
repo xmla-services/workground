@@ -744,7 +744,8 @@ public class PerformanceTest {
     // N=10M, L=1M: 4006 first; 3919 +- 39; 3868 min; 4774 max
     // N=50M, L=2.5M: 36350 first; 27977 +- 446; 27603 min; 29452 max
     ARRAY( 18640353 ) {
-      <T extends Comparable<T>> List<T> sort(
+      @Override
+	<T extends Comparable<T>> List<T> sort(
         List<T> list, Comparator<T> comp, int limit ) {
         return Sorter.stablePartialSortArray( list, comp, limit );
       }
@@ -756,7 +757,8 @@ public class PerformanceTest {
     // N=10M, L=10K: 867 first; 608 +- 38; 558 min; 706 max
     // N=10M, L=1M: 3179 first; 1357 +- 77; 1227 min; 1479 max
     MARC( 2153571 ) {
-      <T extends Comparable<T>> List<T> sort(
+      @Override
+	<T extends Comparable<T>> List<T> sort(
         List<T> list, Comparator<T> comp, int limit ) {
         return Sorter.stablePartialSortMarc( list, comp, limit );
       }
@@ -769,7 +771,8 @@ public class PerformanceTest {
     // N=10M, L=1M: 6896 first; 6896 +- 85; 6806 min; 7233 max
     // N=10M, L=500K: 6896 first; 6896 +- 85; 6806 min; 7233 max
     JULIAN( 1000919 ) {
-      <T extends Comparable<T>> List<T> sort(
+      @Override
+	<T extends Comparable<T>> List<T> sort(
         List<T> list, Comparator<T> comp, int limit ) {
         return Sorter.stablePartialSortJulian( list, comp, limit );
       }
@@ -899,32 +902,39 @@ public class PerformanceTest {
   public static class CounterUdf implements UserDefinedFunction {
     public static final AtomicInteger count = new AtomicInteger();
 
-    public String getName() {
+    @Override
+	public String getName() {
       return "CounterUdf";
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
       return "Counts the number of times it is called.";
     }
 
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
       return Syntax.Function;
     }
 
-    public Type getReturnType( Type[] parameterTypes ) {
+    @Override
+	public Type getReturnType( Type[] parameterTypes ) {
       return new NumericType();
     }
 
-    public Type[] getParameterTypes() {
+    @Override
+	public Type[] getParameterTypes() {
       return new Type[] {};
     }
 
-    public Object execute( Evaluator evaluator, Argument[] arguments ) {
+    @Override
+	public Object execute( Evaluator evaluator, Argument[] arguments ) {
       count.incrementAndGet();
       return evaluator.evaluateCurrent();
     }
 
-    public String[] getReservedWords() {
+    @Override
+	public String[] getReservedWords() {
       return null;
     }
   }
@@ -933,7 +943,8 @@ public class PerformanceTest {
     implements Comparator<T> {
     int count;
 
-    public int compare( T e0, T e1 ) {
+    @Override
+	public int compare( T e0, T e1 ) {
       ++count;
       return e0.compareTo( e1 );
     }

@@ -94,7 +94,8 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         return null;
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final ListCalc listCalc = compiler.compileList(call.getArg(0));
         final Calc calc =
             call.getArgCount() > 1
@@ -123,7 +124,8 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             this(name,type, listCalc, calc, null);
         }
 
-        public Object evaluate(Evaluator evaluator) {
+        @Override
+		public Object evaluate(Evaluator evaluator) {
             evaluator.getTiming().markStart(AggregateFunDef.TIMING_NAME);
             final int savepoint = evaluator.savepoint();
             try {
@@ -379,7 +381,8 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             }
         }
 
-        public boolean dependsOn(Hierarchy hierarchy) {
+        @Override
+		public boolean dependsOn(Hierarchy hierarchy) {
             if (hierarchy.getDimension().isMeasures()) {
                 return true;
             }

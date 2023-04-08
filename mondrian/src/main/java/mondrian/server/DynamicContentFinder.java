@@ -73,7 +73,8 @@ public class DynamicContentFinder
         final long period = interval.right.toMillis(interval.left);
         timer.schedule(
             new TimerTask() {
-                public void run() {
+                @Override
+				public void run() {
                     reloadDataSources();
                 }
             },
@@ -84,7 +85,8 @@ public class DynamicContentFinder
     /**
      * Cleans up all background updating jobs.
      */
-    public void shutdown() {
+    @Override
+	public void shutdown() {
         super.shutdown();
         timer.cancel();
     }

@@ -28,7 +28,8 @@ import mondrian.olap.QueryAxis;
 public class MdxVisitorImpl implements MdxVisitor {
     private boolean shouldVisitChildren = true;
 
-    public boolean shouldVisitChildren() {
+    @Override
+	public boolean shouldVisitChildren() {
         boolean returnValue = shouldVisitChildren;
         turnOnVisitChildren();
         return returnValue;
@@ -42,60 +43,73 @@ public class MdxVisitorImpl implements MdxVisitor {
         shouldVisitChildren = false;
     }
 
-    public Object visit(Query query) {
+    @Override
+	public Object visit(Query query) {
         return null;
     }
 
-    public Object visit(QueryAxis queryAxis) {
+    @Override
+	public Object visit(QueryAxis queryAxis) {
         return null;
     }
 
-    public Object visit(Formula formula) {
+    @Override
+	public Object visit(Formula formula) {
         return null;
     }
 
-    public Object visit(UnresolvedFunCall call) {
+    @Override
+	public Object visit(UnresolvedFunCall call) {
         return null;
     }
 
-    public Object visit(ResolvedFunCall call) {
+    @Override
+	public Object visit(ResolvedFunCall call) {
         return null;
     }
 
-    public Object visit(Id id) {
+    @Override
+	public Object visit(Id id) {
         return null;
     }
 
-    public Object visit(ParameterExpr parameterExpr) {
+    @Override
+	public Object visit(ParameterExpr parameterExpr) {
         return null;
     }
 
-    public Object visit(DimensionExpr dimensionExpr) {
+    @Override
+	public Object visit(DimensionExpr dimensionExpr) {
         // do nothing
         return null;
     }
 
-    public Object visit(HierarchyExpr hierarchyExpr) {
+    @Override
+	public Object visit(HierarchyExpr hierarchyExpr) {
         // do nothing
         return null;
     }
 
-    public Object visit(LevelExpr levelExpr) {
+    @Override
+	public Object visit(LevelExpr levelExpr) {
         // do nothing
         return null;
     }
 
-    public Object visit(MemberExpr memberExpr) {
+    @Override
+	public Object visit(MemberExpr memberExpr) {
         // do nothing
         return null;
     }
 
-    public Object visit(NamedSetExpr namedSetExpr) {
+    @Override
+	public Object visit(NamedSetExpr namedSetExpr) {
         // do nothing
         return null;
     }
 
-    public Object visit(Literal literal) {
+    @Override
+	public Object visit(Literal literal) {
         // do nothing
         return null;
     }

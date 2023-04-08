@@ -79,11 +79,13 @@ public class RolapCubeMember
     }
 
     // final is important for performance
-    public final RolapCube getCube() {
+    @Override
+	public final RolapCube getCube() {
         return cubeLevel.getCube();
     }
 
-    public final RolapCubeMember getDataMember() {
+    @Override
+	public final RolapCubeMember getDataMember() {
         RolapMember member = (RolapMember) super.getDataMember();
         if (member == null) {
             return null;
@@ -91,7 +93,8 @@ public class RolapCubeMember
         return new RolapCubeMember(parentCubeMember, member, cubeLevel);
     }
 
-    public int compareTo(Object o) {
+    @Override
+	public int compareTo(Object o) {
         // light wrapper around rolap member compareTo
         RolapCubeMember other = null;
         if (o instanceof VisualTotalMember) {
@@ -104,15 +107,18 @@ public class RolapCubeMember
         return member.compareTo(other.member);
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return getUniqueName();
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return member.hashCode();
     }
 
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         if (o == this) {
             return true;
         }
@@ -126,7 +132,8 @@ public class RolapCubeMember
         return false;
     }
 
-    public boolean equals(OlapElement o) {
+    @Override
+	public boolean equals(OlapElement o) {
         return o.getClass() == RolapCubeMember.class
             && equals((RolapCubeMember) o);
     }
@@ -140,12 +147,14 @@ public class RolapCubeMember
     }
 
     // override with stricter return type; final important for performance
-    public final RolapCubeHierarchy getHierarchy() {
+    @Override
+	public final RolapCubeHierarchy getHierarchy() {
         return cubeLevel.getHierarchy();
     }
 
     // override with stricter return type; final important for performance
-    public final RolapCubeDimension getDimension() {
+    @Override
+	public final RolapCubeDimension getDimension() {
         return cubeLevel.getDimension();
     }
 
@@ -159,17 +168,20 @@ public class RolapCubeMember
      * and hence different hierarchies, dimensions, and cubes.
      */
     // override with stricter return type; final important for performance
-    public final RolapCubeLevel getLevel() {
+    @Override
+	public final RolapCubeLevel getLevel() {
         return cubeLevel;
     }
 
-    public void setProperty(String name, Object value) {
+    @Override
+	public void setProperty(String name, Object value) {
         synchronized (this) {
             super.setProperty(name, value);
         }
     }
 
-    public Object getPropertyValue(String propertyName, boolean matchCase) {
+    @Override
+	public Object getPropertyValue(String propertyName, boolean matchCase) {
         // we need to wrap these children as rolap cube members
         Property property = Property.lookup(propertyName, matchCase);
         if (property != null) {
@@ -207,18 +219,21 @@ public class RolapCubeMember
         return member.getPropertyValue(propertyName, matchCase);
     }
 
-    public Object getPropertyValue(String propertyName) {
+    @Override
+	public Object getPropertyValue(String propertyName) {
         return this.getPropertyValue(propertyName, true);
     }
 
-    public final RolapCubeMember getParentMember() {
+    @Override
+	public final RolapCubeMember getParentMember() {
         return parentCubeMember;
     }
 
     // this method is overridden to make sure that any HierarchyExpr returns
     // the cube hierarchy vs. shared hierarchy.  this is the case for
     // SqlMemberSource.RolapParentChildMemberNoClosure
-    public Exp getExpression() {
+    @Override
+	public Exp getExpression() {
         Exp exp = member.getExpression();
         if (exp instanceof ResolvedFunCall) {
             // convert any args to RolapCubeHierarchies
@@ -238,7 +253,8 @@ public class RolapCubeMember
         return exp;
     }
 
-    public OlapElement lookupChild(
+    @Override
+	public OlapElement lookupChild(
         SchemaReader schemaReader,
         Id.Segment childName,
         MatchType matchType)

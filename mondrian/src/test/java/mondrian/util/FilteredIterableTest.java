@@ -40,7 +40,8 @@ public class FilteredIterableTest{
             new FilteredIterableList<Integer>(
                 base,
                 new FilteredIterableList.Filter<Integer>() {
-                    public boolean accept(final Integer i) {
+                    @Override
+					public boolean accept(final Integer i) {
                         return false;
                     }
                 });
@@ -60,7 +61,8 @@ public class FilteredIterableTest{
             new FilteredIterableList<Integer>(
                 base,
                 new FilteredIterableList.Filter<Integer>() {
-                    public boolean accept(final Integer i) {
+                    @Override
+					public boolean accept(final Integer i) {
                         return i < 2;
                     }
                 });
@@ -80,7 +82,8 @@ public class FilteredIterableTest{
             new FilteredIterableList<Integer>(
                 base,
                 new FilteredIterableList.Filter<Integer>() {
-                    public boolean accept(final Integer i) {
+                    @Override
+					public boolean accept(final Integer i) {
                         return true;
                     }
                 });

@@ -282,7 +282,8 @@ public class RolapResult extends ResultBase {
                 new mondrian.calc.impl.AbstractListCalc(
                         "AbstractListCalc",setType, new Calc[0])
                 {
-                  public TupleList evaluateList(
+                  @Override
+				public TupleList evaluateList(
                           Evaluator evaluator)
                   {
                     ArrayList<Member> children = new ArrayList<Member>();
@@ -301,7 +302,8 @@ public class RolapResult extends ResultBase {
                     return new mondrian.calc.impl.UnaryTupleList(children);
                   }
 
-                  public boolean dependsOn(Hierarchy hierarchy) {
+                  @Override
+				public boolean dependsOn(Hierarchy hierarchy) {
                     return true;
                   }
                 };
@@ -311,7 +313,8 @@ public class RolapResult extends ResultBase {
         Exp partialExp =
                 new ResolvedFunCall(
                         new mondrian.olap.fun.FunDefBase("$x", "x", "In") {
-                          public Calc compileCall(
+                          @Override
+						public Calc compileCall(
                                   ResolvedFunCall call, mondrian.calc.ExpCompiler compiler)
                           {
                             //for debug
@@ -319,7 +322,8 @@ public class RolapResult extends ResultBase {
                             return partialCalc;
                           }
 
-                          public void unparse(Exp[] args, PrintWriter pw) {
+                          @Override
+						public void unparse(Exp[] args, PrintWriter pw) {
                             pw.print("$RollupAccessibleChildren()");
                           }
                         },
@@ -456,7 +460,8 @@ public class RolapResult extends ResultBase {
           final List<Member> prevSlicerMembers = new ArrayList<Member>();
 
           final Calc calcCached = new GenericCalc("DummyExp", query.slicerCalc.getType() ) {
-            public Object evaluate( Evaluator evaluator ) {
+            @Override
+			public Object evaluate( Evaluator evaluator ) {
               try {
                 evaluator.getTiming().markStart( "EvalForSlicer" );
                 TupleList list =
@@ -475,7 +480,8 @@ public class RolapResult extends ResultBase {
             }
 
             // depend on the full evaluation context
-            public boolean dependsOn( Hierarchy hierarchy ) {
+            @Override
+			public boolean dependsOn( Hierarchy hierarchy ) {
               return true;
             }
           };
@@ -799,7 +805,8 @@ public class RolapResult extends ResultBase {
     return false;
   }
 
-  public final Execution getExecution() {
+  @Override
+public final Execution getExecution() {
     return execution;
   }
 
@@ -809,18 +816,21 @@ public class RolapResult extends ResultBase {
     CalculatedMeasureVisitor() {
     }
 
-    public Object visit( DimensionExpr dimensionExpr ) {
+    @Override
+	public Object visit( DimensionExpr dimensionExpr ) {
       dimension = dimensionExpr.getDimension();
       return null;
     }
 
-    public Object visit( HierarchyExpr hierarchyExpr ) {
+    @Override
+	public Object visit( HierarchyExpr hierarchyExpr ) {
       Hierarchy hierarchy = hierarchyExpr.getHierarchy();
       dimension = hierarchy.getDimension();
       return null;
     }
 
-    public Object visit( MemberExpr memberExpr ) {
+    @Override
+	public Object visit( MemberExpr memberExpr ) {
       Member member = memberExpr.getMember();
       dimension = member.getHierarchy().getDimension();
       return null;
@@ -975,7 +985,8 @@ public class RolapResult extends ResultBase {
     }
   }
 
-  protected Logger getLogger() {
+  @Override
+protected Logger getLogger() {
     return LOGGER;
   }
 
@@ -984,7 +995,8 @@ public class RolapResult extends ResultBase {
   }
 
   // implement Result
-  public Axis[] getAxes() {
+  @Override
+public Axis[] getAxes() {
     return axes;
   }
 
@@ -995,7 +1007,8 @@ public class RolapResult extends ResultBase {
    *          Cell position.
    * @return the Cell associated with the Cell position.
    */
-  public Cell getCell( int[] pos ) {
+  @Override
+public Cell getCell( int[] pos ) {
     if ( pos.length != point.size() ) {
       throw Util.newError( "coordinates should have dimension " + point.size() );
     }
@@ -1580,7 +1593,8 @@ public class RolapResult extends ResultBase {
       this.limit = MondrianProperties.instance().ResultLimit.get();
     }
 
-    public Iterator<Member> iterator() {
+    @Override
+	public Iterator<Member> iterator() {
       return members.iterator();
     }
 
@@ -1730,7 +1744,8 @@ public class RolapResult extends ResultBase {
       this.result = result;
     }
 
-    protected Evaluator.NamedSetEvaluator evaluateNamedSet( final NamedSet namedSet, boolean create ) {
+    @Override
+	protected Evaluator.NamedSetEvaluator evaluateNamedSet( final NamedSet namedSet, boolean create ) {
       final String name = namedSet.getNameUniqueWithinQuery();
       RolapNamedSetEvaluator value;
       if ( namedSet.isDynamic() && !create ) {
@@ -1745,7 +1760,8 @@ public class RolapResult extends ResultBase {
       return value;
     }
 
-    protected Evaluator.SetEvaluator evaluateSet( final Exp exp, boolean create ) {
+    @Override
+	protected Evaluator.SetEvaluator evaluateSet( final Exp exp, boolean create ) {
       // Sanity check: This expression HAS to return a set.
       if ( !( exp.getType() instanceof SetType ) ) {
         throw Util.newInternal( "Trying to evaluate set but expression does not return a set" );
@@ -1771,7 +1787,8 @@ public class RolapResult extends ResultBase {
       return value;
     }
 
-    public Object getParameterValue( ParameterSlot slot ) {
+    @Override
+	public Object getParameterValue( ParameterSlot slot ) {
       if ( slot.isParameterSet() ) {
         return slot.getParameterValue();
       }
@@ -1860,7 +1877,8 @@ public class RolapResult extends ResultBase {
      * Formatter that always returns the empty string.
      */
     public static final ValueFormatter EMPTY = new ValueFormatter() {
-      public String format( Object value, String formatString ) {
+      @Override
+	public String format( Object value, String formatString ) {
         return "";
       }
     };
@@ -1882,7 +1900,8 @@ public class RolapResult extends ResultBase {
       this.cf = cf;
     }
 
-    public String format( Object value, String formatString ) {
+    @Override
+	public String format( Object value, String formatString ) {
       return cf.formatCell( value );
     }
   }
@@ -1904,7 +1923,8 @@ public class RolapResult extends ResultBase {
       this.locale = locale;
     }
 
-    public String format( Object value, String formatString ) {
+    @Override
+	public String format( Object value, String formatString ) {
       if ( value == Util.nullValue ) {
         value = null;
       }
@@ -1969,7 +1989,8 @@ public class RolapResult extends ResultBase {
       this.valueFormatter = valueFormatter;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
       // Combine the upper 32 bits of the key with the lower 32 bits.
       // We used to use 'key ^ (key >>> 32)' but that was bad, because
       // CellKey.Two encodes (i, j) as
@@ -1979,7 +2000,8 @@ public class RolapResult extends ResultBase {
       return (int) ( key ^ ( key >>> 11 ) ^ ( key >>> 24 ) );
     }
 
-    public boolean equals( Object o ) {
+    @Override
+	public boolean equals( Object o ) {
       if ( o instanceof CellInfo ) {
         CellInfo that = (CellInfo) o;
         return that.key == this.key;
@@ -2062,19 +2084,23 @@ public class RolapResult extends ResultBase {
       this.cellInfoMap = new HashMap<CellKey, CellInfo>();
     }
 
-    public int size() {
+    @Override
+	public int size() {
       return this.cellInfoMap.size();
     }
 
-    public void trimToSize() {
+    @Override
+	public void trimToSize() {
       // empty
     }
 
-    public void clear() {
+    @Override
+	public void clear() {
       this.cellInfoMap.clear();
     }
 
-    public CellInfo create( int[] pos ) {
+    @Override
+	public CellInfo create( int[] pos ) {
       CellKey key = this.point.copy();
       CellInfo ci = this.cellInfoMap.get( key );
       if ( ci == null ) {
@@ -2084,7 +2110,8 @@ public class RolapResult extends ResultBase {
       return ci;
     }
 
-    public CellInfo lookup( int[] pos ) {
+    @Override
+	public CellInfo lookup( int[] pos ) {
       CellKey key = CellKey.Generator.newCellKey( pos );
       return this.cellInfoMap.get( key );
     }
@@ -2158,7 +2185,8 @@ public class RolapResult extends ResultBase {
      * For axis of size 0.
      */
     static class Zero implements CellKeyMaker {
-      public long generate( int[] pos ) {
+      @Override
+	public long generate( int[] pos ) {
         return 0;
       }
     }
@@ -2167,7 +2195,8 @@ public class RolapResult extends ResultBase {
      * For axis of size 1.
      */
     static class One implements CellKeyMaker {
-      public long generate( int[] pos ) {
+      @Override
+	public long generate( int[] pos ) {
         return pos[0];
       }
     }
@@ -2176,7 +2205,8 @@ public class RolapResult extends ResultBase {
      * For axis of size 2.
      */
     static class Two implements CellKeyMaker {
-      public long generate( int[] pos ) {
+      @Override
+	public long generate( int[] pos ) {
         long l = pos[0];
         l += ( MAX_AXIS_SIZE_2 * (long) pos[1] );
         return l;
@@ -2187,7 +2217,8 @@ public class RolapResult extends ResultBase {
      * For axis of size 3.
      */
     static class Three implements CellKeyMaker {
-      public long generate( int[] pos ) {
+      @Override
+	public long generate( int[] pos ) {
         long l = pos[0];
         l += ( MAX_AXIS_SIZE_3 * (long) pos[1] );
         l += ( MAX_AXIS_SIZE_3 * MAX_AXIS_SIZE_3 * (long) pos[2] );
@@ -2199,7 +2230,8 @@ public class RolapResult extends ResultBase {
      * For axis of size 4.
      */
     static class Four implements CellKeyMaker {
-      public long generate( int[] pos ) {
+      @Override
+	public long generate( int[] pos ) {
         long l = pos[0];
         l += ( MAX_AXIS_SIZE_4 * (long) pos[1] );
         l += ( MAX_AXIS_SIZE_4 * MAX_AXIS_SIZE_4 * (long) pos[2] );
@@ -2238,24 +2270,29 @@ public class RolapResult extends ResultBase {
       }
     }
 
-    public int size() {
+    @Override
+	public int size() {
       return this.cellInfoPool.size();
     }
 
-    public void trimToSize() {
+    @Override
+	public void trimToSize() {
       this.cellInfoPool.trimToSize();
     }
 
-    public void clear() {
+    @Override
+	public void clear() {
       this.cellInfoPool.clear();
     }
 
-    public CellInfo create( int[] pos ) {
+    @Override
+	public CellInfo create( int[] pos ) {
       long key = this.cellKeyMaker.generate( pos );
       return this.cellInfoPool.add( new CellInfo( key ) );
     }
 
-    public CellInfo lookup( int[] pos ) {
+    @Override
+	public CellInfo lookup( int[] pos ) {
       long key = this.cellKeyMaker.generate( pos );
       return this.cellInfoPool.add( new CellInfo( key ) );
     }
@@ -2362,7 +2399,8 @@ public class RolapResult extends ResultBase {
       return false;
     }
 
-    public ValueFormatter getFormatter() {
+    @Override
+	public ValueFormatter getFormatter() {
       return valueFormatter;
     }
   }

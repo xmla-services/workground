@@ -56,7 +56,8 @@ public class JoinImpl implements Join {
         return leftAlias;
     }
 
-    public void setLeftAlias(String value) {
+    @Override
+	public void setLeftAlias(String value) {
         this.leftAlias = value;
     }
 
@@ -65,7 +66,8 @@ public class JoinImpl implements Join {
         return leftKey;
     }
 
-    public void setLeftKey(String value) {
+    @Override
+	public void setLeftKey(String value) {
         this.leftKey = value;
     }
 
@@ -74,7 +76,8 @@ public class JoinImpl implements Join {
         return rightAlias;
     }
 
-    public void setRightAlias(String value) {
+    @Override
+	public void setRightAlias(String value) {
         this.rightAlias = value;
     }
 
@@ -83,7 +86,8 @@ public class JoinImpl implements Join {
         return rightKey;
     }
 
-    public void setRightKey(String value) {
+    @Override
+	public void setRightKey(String value) {
         this.rightKey = value;
     }
 

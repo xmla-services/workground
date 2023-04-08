@@ -46,7 +46,8 @@ class TupleItemFunDef extends FunDefBase {
             "mmtn");
     }
 
-    public Type getResultType(Validator validator, Exp[] args) {
+    @Override
+	public Type getResultType(Validator validator, Exp[] args) {
         // Suppose we are called as follows:
         //   ([Gender].CurrentMember, [Store].CurrentMember).Item(n)
         //
@@ -55,7 +56,8 @@ class TupleItemFunDef extends FunDefBase {
         return MemberType.Unknown;
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final Type type = call.getArg(0).getType();
         if (type instanceof MemberType) {
             final MemberCalc memberCalc =
@@ -65,7 +67,8 @@ class TupleItemFunDef extends FunDefBase {
             return new AbstractMemberCalc(
             		call.getFunName(),call.getType(), new Calc[] {memberCalc, indexCalc})
             {
-                public Member evaluateMember(Evaluator evaluator) {
+                @Override
+				public Member evaluateMember(Evaluator evaluator) {
                     final Member member =
                             memberCalc.evaluateMember(evaluator);
                     final int index =
@@ -86,7 +89,8 @@ class TupleItemFunDef extends FunDefBase {
             {
                 final Member[] nullTupleMembers =
                         FunUtil.makeNullTuple((TupleType) tupleCalc.getType());
-                public Member evaluateMember(Evaluator evaluator) {
+                @Override
+				public Member evaluateMember(Evaluator evaluator) {
                     final Member[] members =
                             tupleCalc.evaluateTuple(evaluator);
                     assert members == null

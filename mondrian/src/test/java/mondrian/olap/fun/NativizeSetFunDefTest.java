@@ -1723,7 +1723,8 @@ public class NativizeSetFunDefTest extends BatchTestCase {
                 connection,
                 NativizeSetFunDefTest.class.getName(),
                 new Locus.Action<String>() {
-                    public String execute() {
+                    @Override
+					public String execute() {
                         return connection.parseQuery(query).toString();
                     }
                 }

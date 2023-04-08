@@ -32,7 +32,8 @@ public class PrintStreamRecorder extends AbstractRecorder {
         this.err = err;
     }
 
-    protected void recordMessage(
+    @Override
+	protected void recordMessage(
         final String msg,
         final Object info,
         final MsgType msgType)

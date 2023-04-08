@@ -43,16 +43,19 @@ class MondrianOlap4jDimension
         this.dimension = dimension;
     }
 
-    public boolean equals(Object obj) {
+    @Override
+	public boolean equals(Object obj) {
         return obj instanceof MondrianOlap4jDimension
             && dimension.equals(((MondrianOlap4jDimension) obj).dimension);
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return dimension.hashCode();
     }
 
-    public NamedList<Hierarchy> getHierarchies() {
+    @Override
+	public NamedList<Hierarchy> getHierarchies() {
         final NamedList<MondrianOlap4jHierarchy> list =
             new NamedListImpl<MondrianOlap4jHierarchy>();
         final MondrianOlap4jConnection olap4jConnection =
@@ -68,11 +71,13 @@ class MondrianOlap4jDimension
         return Olap4jUtil.cast(list);
     }
 
-    public Hierarchy getDefaultHierarchy() {
+    @Override
+	public Hierarchy getDefaultHierarchy() {
         return getHierarchies().get(0);
     }
 
-    public Type getDimensionType() throws OlapException {
+    @Override
+	public Type getDimensionType() throws OlapException {
         final DimensionType dimensionType = dimension.getDimensionType();
         switch (dimensionType) {
         case StandardDimension:
@@ -86,31 +91,37 @@ class MondrianOlap4jDimension
         }
     }
 
-    public String getName() {
+    @Override
+	public String getName() {
         return dimension.getName();
     }
 
-    public String getUniqueName() {
+    @Override
+	public String getUniqueName() {
         return dimension.getUniqueName();
     }
 
-    public String getCaption() {
+    @Override
+	public String getCaption() {
         return dimension.getLocalized(
             OlapElement.LocalizedProperty.CAPTION,
             olap4jSchema.getLocale());
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return dimension.getLocalized(
             OlapElement.LocalizedProperty.DESCRIPTION,
             olap4jSchema.getLocale());
     }
 
-    public boolean isVisible() {
+    @Override
+	public boolean isVisible() {
         return dimension.isVisible();
     }
 
-    protected OlapElement getOlapElement() {
+    @Override
+	protected OlapElement getOlapElement() {
         return dimension;
     }
 }

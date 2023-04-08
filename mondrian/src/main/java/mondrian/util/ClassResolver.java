@@ -51,7 +51,8 @@ public interface ClassResolver {
     /** Implementation of {@link ClassResolver} that calls
      * {@link Thread#getContextClassLoader()} on the current thread. */
     class ThreadContextClassResolver extends AbstractClassResolver {
-        protected ClassLoader getClassLoader() {
+        @Override
+		protected ClassLoader getClassLoader() {
             ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
             return contextClassLoader != null ? contextClassLoader : getClass().getClassLoader();
         }
@@ -60,7 +61,8 @@ public interface ClassResolver {
     /** Partial implementation of {@link ClassResolver}. Derived class just
      * needs to implement {@link #getClassLoader()}. */
     abstract class AbstractClassResolver implements ClassResolver {
-        public <T> T instantiateSafe(String className, Object... args) {
+        @Override
+		public <T> T instantiateSafe(String className, Object... args) {
             try {
                 final Class<T> clazz = forName(className, true);
                 if (args.length == 0) {
@@ -87,7 +89,8 @@ public interface ClassResolver {
             }
         }
 
-        public <T> Class<T> forName(String className, boolean initialize)
+        @Override
+		public <T> Class<T> forName(String className, boolean initialize)
             throws ClassNotFoundException
         {
             //noinspection unchecked
@@ -110,7 +113,8 @@ public interface ClassResolver {
                 : getClass().getClassLoader();
         }
 
-        public Iterable<URL> getResources(String name) throws IOException {
+        @Override
+		public Iterable<URL> getResources(String name) throws IOException {
             final Enumeration<URL> resources =
                 getClassLoaderNotNull().getResources(name);
             //noinspection unchecked

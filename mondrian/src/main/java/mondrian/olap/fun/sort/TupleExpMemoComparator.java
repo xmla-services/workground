@@ -86,7 +86,8 @@ abstract class TupleExpMemoComparator extends TupleComparator.TupleExpComparator
     }
   }
 
-  public int compare( List<Member> a1, List<Member> a2 ) {
+  @Override
+public int compare( List<Member> a1, List<Member> a2 ) {
     CancellationChecker.checkCancelOrTimeout( count++,
       evaluator.getQuery().getStatement().getCurrentExecution() );
     List<Member> a1Members = dependentMembers( a1 );

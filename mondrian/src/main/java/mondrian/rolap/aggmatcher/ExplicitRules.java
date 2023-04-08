@@ -276,7 +276,8 @@ public class ExplicitRules {
             }
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             StringWriter sw = new StringWriter(256);
             PrintWriter pw = new PrintWriter(sw);
             print(pw, "");
@@ -368,13 +369,15 @@ public class ExplicitRules {
             return ignoreCase;
         }
 
-        public boolean isExcluded(final String tableName) {
+        @Override
+		public boolean isExcluded(final String tableName) {
             return (this.ignoreCase)
                 ? this.name.equals(tableName)
                 : this.name.equalsIgnoreCase(tableName);
         }
 
-        public void validate(final MessageRecorder msgRecorder) {
+        @Override
+		public void validate(final MessageRecorder msgRecorder) {
             msgRecorder.pushContextName("ExcludeName");
             try {
                 String name = getName();
@@ -413,7 +416,8 @@ public class ExplicitRules {
             }
         }
 
-        public void print(final PrintWriter pw, final String prefix) {
+        @Override
+		public void print(final PrintWriter pw, final String prefix) {
             pw.print(prefix);
             pw.println("ExplicitRules.PatternTableDef.ExcludeName:");
 
@@ -445,11 +449,13 @@ public class ExplicitRules {
                 : Pattern.compile(pattern);
         }
 
-        public boolean isExcluded(final String tableName) {
+        @Override
+		public boolean isExcluded(final String tableName) {
             return pattern.matcher(tableName).matches();
         }
 
-        public void validate(final MessageRecorder msgRecorder) {
+        @Override
+		public void validate(final MessageRecorder msgRecorder) {
             msgRecorder.pushContextName("ExcludePattern");
             try {
                 checkAttributeString(
@@ -466,7 +472,8 @@ public class ExplicitRules {
             }
         }
 
-        public void print(final PrintWriter pw, final String prefix) {
+        @Override
+		public void print(final PrintWriter pw, final String prefix) {
             pw.print(prefix);
             pw.println("ExplicitRules.PatternTableDef.ExcludePattern:");
 
@@ -766,7 +773,8 @@ public class ExplicitRules {
                 }
             }
 
-            public String toString() {
+            @Override
+			public String toString() {
                 StringWriter sw = new StringWriter(256);
                 PrintWriter pw = new PrintWriter(sw);
                 print(pw, "");
@@ -975,7 +983,8 @@ public class ExplicitRules {
                 }
             }
 
-            public String toString() {
+            @Override
+			public String toString() {
                 StringWriter sw = new StringWriter(256);
                 PrintWriter pw = new PrintWriter(sw);
                 print(pw, "");
@@ -1102,7 +1111,8 @@ public class ExplicitRules {
          */
         protected Recognizer.Matcher getIgnoreMatcher() {
             return new Recognizer.Matcher() {
-                public boolean matches(final String name) {
+                @Override
+				public boolean matches(final String name) {
                     for (Iterator<String> it =
                             ExplicitRules.TableDef.this.getIgnoreColumnNames();
                         it.hasNext();)
@@ -1128,7 +1138,8 @@ public class ExplicitRules {
          */
         protected Recognizer.Matcher getFactCountMatcher() {
             return new Recognizer.Matcher() {
-                public boolean matches(String name) {
+                @Override
+				public boolean matches(String name) {
                     // Match is case insensitive
                     final String factCountName = TableDef.this.factCountName;
                     return factCountName != null
@@ -1359,7 +1370,8 @@ public class ExplicitRules {
             }
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             StringWriter sw = new StringWriter(256);
             PrintWriter pw = new PrintWriter(sw);
             print(pw, "");
@@ -1446,7 +1458,8 @@ public class ExplicitRules {
          * Does the given tableName match this NameTableDef (either exact match
          * or, if set, a case insensitive match).
          */
-        public boolean matches(final String tableName) {
+        @Override
+		public boolean matches(final String tableName) {
             return (this.ignoreCase)
                 ? this.name.equalsIgnoreCase(tableName)
                 : this.name.equals(tableName);
@@ -1455,7 +1468,8 @@ public class ExplicitRules {
         /**
          * Validate name and base class.
          */
-        public void validate(final MessageRecorder msgRecorder) {
+        @Override
+		public void validate(final MessageRecorder msgRecorder) {
             msgRecorder.pushContextName("NameTableDef");
             try {
                 checkAttributeString(msgRecorder, name, "name");
@@ -1466,7 +1480,8 @@ public class ExplicitRules {
             }
         }
 
-        public void print(final PrintWriter pw, final String prefix) {
+        @Override
+		public void print(final PrintWriter pw, final String prefix) {
             pw.print(prefix);
             pw.println("ExplicitRules.NameTableDef:");
             super.print(pw, prefix);
@@ -1553,7 +1568,8 @@ public class ExplicitRules {
          * Return true if the tableName 1) matches the pattern and 2) is not
          * matched by any of the Excludes.
          */
-        public boolean matches(final String tableName) {
+        @Override
+		public boolean matches(final String tableName) {
             if (! pattern.matcher(tableName).matches()) {
                 return false;
             } else {
@@ -1569,7 +1585,8 @@ public class ExplicitRules {
         /**
          * Validate excludes and base class.
          */
-        public void validate(final MessageRecorder msgRecorder) {
+        @Override
+		public void validate(final MessageRecorder msgRecorder) {
             msgRecorder.pushContextName("PatternTableDef");
             try {
                 checkAttributeString(msgRecorder, pattern.pattern(), "pattern");
@@ -1583,7 +1600,8 @@ public class ExplicitRules {
             }
         }
 
-        public void print(final PrintWriter pw, final String prefix) {
+        @Override
+		public void print(final PrintWriter pw, final String prefix) {
             pw.print(prefix);
             pw.println("ExplicitRules.PatternTableDef:");
             super.print(pw, prefix);

@@ -30,7 +30,8 @@ import mondrian.test.DiffRepository;
  */
 public class MultiDimVCTest extends ClearViewBase {
 
-    public DiffRepository getDiffRepos() {
+    @Override
+	public DiffRepository getDiffRepos() {
         return getDiffReposStatic();
     }
 
@@ -38,7 +39,8 @@ public class MultiDimVCTest extends ClearViewBase {
         return DiffRepository.lookup(MultiDimVCTest.class);
     }
 
-    @Tag("cacheHitSuit1Test")
+    @Override
+	@Tag("cacheHitSuit1Test")
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     protected void runTest(TestingContext context) {

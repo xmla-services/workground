@@ -45,7 +45,8 @@ class CaseMatchFunDef extends FunDefBase {
         super(dummyFunDef);
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final Exp[] args = call.getArgs();
         final List<Calc> calcList = new ArrayList<Calc>();
         final Calc valueCalc =
@@ -68,7 +69,8 @@ class CaseMatchFunDef extends FunDefBase {
         final Calc[] calcs = calcList.toArray(new Calc[calcList.size()]);
 
         return new GenericCalc(call.getFunName(),call.getType()) {
-            public Object evaluate(Evaluator evaluator) {
+            @Override
+			public Object evaluate(Evaluator evaluator) {
                 Object value = valueCalc.evaluate(evaluator);
                 for (int i = 0; i < matchCalcs.length; i++) {
                     Object match = matchCalcs[i].evaluate(evaluator);
@@ -79,7 +81,8 @@ class CaseMatchFunDef extends FunDefBase {
                 return defaultCalc.evaluate(evaluator);
             }
 
-            public Calc[] getCalcs() {
+            @Override
+			public Calc[] getCalcs() {
                 return calcs;
             }
         };
@@ -94,7 +97,8 @@ class CaseMatchFunDef extends FunDefBase {
                 Syntax.Case);
         }
 
-        public FunDef resolve(
+        @Override
+		public FunDef resolve(
             Exp[] args,
             Validator validator,
             List<Conversion> conversions)
@@ -137,7 +141,8 @@ class CaseMatchFunDef extends FunDefBase {
             return new CaseMatchFunDef(dummy);
         }
 
-        public boolean requiresExpression(int k) {
+        @Override
+		public boolean requiresExpression(int k) {
             return true;
         }
     }

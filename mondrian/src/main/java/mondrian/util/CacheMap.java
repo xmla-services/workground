@@ -43,26 +43,31 @@ public class CacheMap<S, T> implements Map<S, T> {
         this.maxSize = size;
     }
 
-    public void clear() {
+    @Override
+	public void clear() {
         this.head = new LinkedNode(null, null);
         this.tail = new LinkedNode(head, null);
         map.clear();
     }
 
-    public boolean containsKey(final Object key) {
+    @Override
+	public boolean containsKey(final Object key) {
         return map.containsKey(key);
     }
 
-    public boolean containsValue(final Object value) {
+    @Override
+	public boolean containsValue(final Object value) {
         return this.values().contains(value);
     }
 
-    public Set entrySet() {
+    @Override
+	public Set entrySet() {
         final Set<Map.Entry<S, T>> set = new HashSet<Map.Entry<S, T>>();
         for (final Map.Entry<S, Pair<S, T>> entry : this.map.entrySet()) {
             set.add(
                 new Map.Entry<S, T>() {
-                    public boolean equals(Object s) {
+                    @Override
+					public boolean equals(Object s) {
                         if (s instanceof Map.Entry) {
                             return ((Map.Entry) s).getKey().equals(
                                 entry.getKey())
@@ -73,19 +78,23 @@ public class CacheMap<S, T> implements Map<S, T> {
                         }
                     }
 
-                    public S getKey() {
+                    @Override
+					public S getKey() {
                         return entry.getKey();
                     }
 
-                    public T getValue() {
+                    @Override
+					public T getValue() {
                         return entry.getValue().value;
                     }
 
-                    public int hashCode() {
+                    @Override
+					public int hashCode() {
                         return entry.hashCode();
                     }
 
-                    public T setValue(final T x) {
+                    @Override
+					public T setValue(final T x) {
                         return entry.setValue(
                             new Pair<S, T>(
                                 x,
@@ -96,7 +105,8 @@ public class CacheMap<S, T> implements Map<S, T> {
         return set;
     }
 
-    public T get(final Object key) {
+    @Override
+	public T get(final Object key) {
         final Pair<S, T> pair = map.get(key);
         if (pair != null) {
             final LinkedNode<S> node = pair.getNode();
@@ -111,15 +121,18 @@ public class CacheMap<S, T> implements Map<S, T> {
         }
     }
 
-    public boolean isEmpty() {
+    @Override
+	public boolean isEmpty() {
         return map.isEmpty();
     }
 
-    public Set<S> keySet() {
+    @Override
+	public Set<S> keySet() {
         return map.keySet();
     }
 
-    public T put(final S key, final T value) {
+    @Override
+	public T put(final S key, final T value) {
         final Pair<S, T> pair =
             new Pair<S, T>(value, new LinkedNode(head, key));
         final Pair<S, T> obj = map.put(key, pair);
@@ -134,11 +147,13 @@ public class CacheMap<S, T> implements Map<S, T> {
         }
     }
 
-    public void putAll(final Map t) {
+    @Override
+	public void putAll(final Map t) {
         throw new UnsupportedOperationException();
     }
 
-    public T remove(final Object key) {
+    @Override
+	public T remove(final Object key) {
         final Pair<S, T> pair = map.get(key);
         if (pair == null) {
             return null;
@@ -147,11 +162,13 @@ public class CacheMap<S, T> implements Map<S, T> {
         return map.remove(key).value;
     }
 
-    public int size() {
+    @Override
+	public int size() {
         return map.size();
     }
 
-    public Collection<T> values() {
+    @Override
+	public Collection<T> values() {
         final List<T> vals = new ArrayList<T>();
         for (final Pair<S, T> pair : map.values()) {
             vals.add(pair.value);
@@ -159,16 +176,19 @@ public class CacheMap<S, T> implements Map<S, T> {
         return vals;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         return map.hashCode();
     }
 
-    public String toString() {
+    @Override
+	public String toString() {
         return new StringBuilder("Ordered keys: ").append(head.toString()).append("\n")
                 .append("Map:").append(map.toString()).toString();
     }
 
-    public boolean equals(Object o) {
+    @Override
+	public boolean equals(Object o) {
         CacheMap c = (CacheMap) o;
         return map.equals(c.map);
     }
@@ -192,7 +212,8 @@ public class CacheMap<S, T> implements Map<S, T> {
             return node.get();
         }
 
-        public boolean equals(final Object o) {
+        @Override
+		public boolean equals(final Object o) {
             return o != null && o.equals(this.value);
         }
     }
@@ -228,7 +249,8 @@ public class CacheMap<S, T> implements Map<S, T> {
             return this.prev;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             if (this.next != null) {
                 if (key != null) {
                     return new StringBuilder(key.toString()).append(", ").append(this.next.toString()).toString();

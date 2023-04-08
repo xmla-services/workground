@@ -337,7 +337,8 @@ public class DynamicDatasourceXmlaServletTest {
             super(dataSources);
         }
 
-        protected void flushCatalog(String catalogName) {
+        @Override
+		protected void flushCatalog(String catalogName) {
             flushCatalogList.add(catalogName);
         }
 

@@ -241,27 +241,33 @@ public abstract class FunDefBase implements FunDef {
     public void init(Context context) {
         this.context=context;
     }
-    public String getName() {
+    @Override
+	public String getName() {
         return name;
     }
 
-    public String getDescription() {
+    @Override
+	public String getDescription() {
         return description;
     }
 
-    public Syntax getSyntax() {
+    @Override
+	public Syntax getSyntax() {
         return Syntax.class.getEnumConstants()[flags];
     }
 
-    public int getReturnCategory() {
+    @Override
+	public int getReturnCategory() {
         return returnCategory;
     }
 
-    public int[] getParameterCategories() {
+    @Override
+	public int[] getParameterCategories() {
         return parameterCategories;
     }
 
-    public Exp createCall(Validator validator, Exp[] args) {
+    @Override
+	public Exp createCall(Validator validator, Exp[] args) {
         int[] categories = getParameterCategories();
         Util.assertTrue(categories.length == args.length);
         for (int i = 0; i < args.length; i++) {
@@ -413,20 +419,23 @@ public abstract class FunDefBase implements FunDef {
                 .append(this.name).append("'").toString());
     }
 
-    public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
+    @Override
+	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         throw Util.newInternal(
             new StringBuilder("function '").append( getSignature())
                 .append("' has not been implemented").toString());
     }
 
-    public String getSignature() {
+    @Override
+	public String getSignature() {
         return getSyntax().getSignature(
             getName(),
             getReturnCategory(),
             getParameterCategories());
     }
 
-    public void unparse(Exp[] args, PrintWriter pw) {
+    @Override
+	public void unparse(Exp[] args, PrintWriter pw) {
         getSyntax().unparse(getName(), args, pw);
     }
 }

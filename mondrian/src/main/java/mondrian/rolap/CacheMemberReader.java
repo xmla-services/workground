@@ -56,25 +56,30 @@ class CacheMemberReader implements MemberReader, MemberCache {
     }
 
     // implement MemberReader
-    public RolapHierarchy getHierarchy() {
+    @Override
+	public RolapHierarchy getHierarchy() {
         return source.getHierarchy();
     }
 
-    public boolean setCache(MemberCache cache) {
+    @Override
+	public boolean setCache(MemberCache cache) {
         // we do not support cache writeback -- we must be masters of our
         // own cache
         return false;
     }
 
-    public RolapMember substitute(RolapMember member) {
+    @Override
+	public RolapMember substitute(RolapMember member) {
         return member;
     }
 
-    public RolapMember desubstitute(RolapMember member) {
+    @Override
+	public RolapMember desubstitute(RolapMember member) {
         return member;
     }
 
-    public RolapMember getMemberByKey(
+    @Override
+	public RolapMember getMemberByKey(
         RolapLevel level, List<Comparable> keyValues)
     {
         assert keyValues.size() == 1;
@@ -82,31 +87,37 @@ class CacheMemberReader implements MemberReader, MemberCache {
     }
 
     // implement MemberReader
-    public List<RolapMember> getMembers() {
+    @Override
+	public List<RolapMember> getMembers() {
         return members;
     }
 
     // implement MemberCache
-    public Object makeKey(RolapMember parent, Object key) {
+    @Override
+	public Object makeKey(RolapMember parent, Object key) {
         return new MemberKey(parent, key);
     }
 
     // implement MemberCache
-    public RolapMember getMember(Object key) {
+    @Override
+	public RolapMember getMember(Object key) {
         return mapKeyToMember.get(key);
     }
-    public RolapMember getMember(Object key, boolean mustCheckCacheStatus) {
+    @Override
+	public RolapMember getMember(Object key, boolean mustCheckCacheStatus) {
         return mapKeyToMember.get(key);
     }
 
     // implement MemberCache
-    public Object putMember(Object key, RolapMember value) {
+    @Override
+	public Object putMember(Object key, RolapMember value) {
         return mapKeyToMember.put(key, value);
     }
 
     // don't need to implement this MemberCache method because we're never
     // used in a context where it is needed
-    public void putChildren(
+    @Override
+	public void putChildren(
         RolapMember member,
         MemberChildrenConstraint constraint,
         List<RolapMember> children)
@@ -116,7 +127,8 @@ class CacheMemberReader implements MemberReader, MemberCache {
 
     // don't need to implement this MemberCache method because we're never
     // used in a context where it is needed
-    public void putChildren(
+    @Override
+	public void putChildren(
         RolapLevel level,
         TupleConstraint constraint,
         List<RolapMember> children)
@@ -125,24 +137,28 @@ class CacheMemberReader implements MemberReader, MemberCache {
     }
 
     // this cache is immutable
-    public boolean isMutable()
+    @Override
+	public boolean isMutable()
     {
         return false;
     }
 
-    public RolapMember removeMember(Object key)
+    @Override
+	public RolapMember removeMember(Object key)
     {
         throw new UnsupportedOperationException();
     }
 
-    public RolapMember removeMemberAndDescendants(Object key)
+    @Override
+	public RolapMember removeMemberAndDescendants(Object key)
     {
         throw new UnsupportedOperationException();
     }
 
     // don't need to implement this MemberCache method because we're never
     // used in a context where it is needed
-    public List<RolapMember> getChildrenFromCache(
+    @Override
+	public List<RolapMember> getChildrenFromCache(
         RolapMember member,
         MemberChildrenConstraint constraint)
     {
@@ -151,21 +167,24 @@ class CacheMemberReader implements MemberReader, MemberCache {
 
     // don't need to implement this MemberCache method because we're never
     // used in a context where it is needed
-    public List<RolapMember> getLevelMembersFromCache(
+    @Override
+	public List<RolapMember> getLevelMembersFromCache(
         RolapLevel level,
         TupleConstraint constraint)
     {
         return null;
     }
 
-    public RolapMember lookupMember(
+    @Override
+	public RolapMember lookupMember(
         List<Id.Segment> uniqueNameParts,
         boolean failIfNotFound)
     {
         return RolapUtil.lookupMember(this, uniqueNameParts, failIfNotFound);
     }
 
-    public List<RolapMember> getRootMembers() {
+    @Override
+	public List<RolapMember> getRootMembers() {
         List<RolapMember> list = new ArrayList<RolapMember>();
         for (RolapMember member : members) {
             if (member.getParentMember() == null) {
@@ -175,7 +194,8 @@ class CacheMemberReader implements MemberReader, MemberCache {
         return list;
     }
 
-    public List<RolapMember> getMembersInLevel(
+    @Override
+	public List<RolapMember> getMembersInLevel(
         RolapLevel level)
     {
         List<RolapMember> list = new ArrayList<RolapMember>();
@@ -188,14 +208,16 @@ class CacheMemberReader implements MemberReader, MemberCache {
         return list;
     }
 
-    public List<RolapMember> getMembersInLevel(
+    @Override
+	public List<RolapMember> getMembersInLevel(
         RolapLevel level,
         TupleConstraint constraint)
     {
         return getMembersInLevel(level);
     }
 
-    public int getLevelMemberCount(RolapLevel level) {
+    @Override
+	public int getLevelMemberCount(RolapLevel level) {
         int count = 0;
         int levelDepth = level.getDepth();
         for (Member member : members) {
@@ -206,7 +228,8 @@ class CacheMemberReader implements MemberReader, MemberCache {
         return count;
     }
 
-    public void getMemberChildren(
+    @Override
+	public void getMemberChildren(
         RolapMember parentMember,
         List<RolapMember> children)
     {
@@ -217,7 +240,8 @@ class CacheMemberReader implements MemberReader, MemberCache {
         }
     }
 
-    public Map<? extends Member, Access> getMemberChildren(
+    @Override
+	public Map<? extends Member, Access> getMemberChildren(
         RolapMember member,
         List<RolapMember> children,
         MemberChildrenConstraint constraint)
@@ -226,7 +250,8 @@ class CacheMemberReader implements MemberReader, MemberCache {
         return Util.toNullValuesMap(children);
     }
 
-    public void getMemberChildren(
+    @Override
+	public void getMemberChildren(
         List<RolapMember> parentMembers,
         List<RolapMember> children)
     {
@@ -237,7 +262,8 @@ class CacheMemberReader implements MemberReader, MemberCache {
         }
     }
 
-    public Map<? extends Member, Access> getMemberChildren(
+    @Override
+	public Map<? extends Member, Access> getMemberChildren(
         List<RolapMember> parentMembers,
         List<RolapMember> children,
         MemberChildrenConstraint constraint)
@@ -246,7 +272,8 @@ class CacheMemberReader implements MemberReader, MemberCache {
         return Util.toNullValuesMap(children);
     }
 
-    public RolapMember getLeadMember(RolapMember member, int n) {
+    @Override
+	public RolapMember getLeadMember(RolapMember member, int n) {
         if (n >= 0) {
             for (int ordinal = member.getOrdinal(); ordinal < members.size();
                  ordinal++)
@@ -271,7 +298,8 @@ class CacheMemberReader implements MemberReader, MemberCache {
         }
     }
 
-    public void getMemberRange(
+    @Override
+	public void getMemberRange(
         RolapLevel level,
         RolapMember startMember,
         RolapMember endMember,
@@ -288,11 +316,13 @@ class CacheMemberReader implements MemberReader, MemberCache {
         }
     }
 
-    public int getMemberCount() {
+    @Override
+	public int getMemberCount() {
         return members.size();
     }
 
-    public int compare(
+    @Override
+	public int compare(
         RolapMember m1,
         RolapMember m2,
         boolean siblingsAreEqual)
@@ -311,11 +341,13 @@ class CacheMemberReader implements MemberReader, MemberCache {
         return (m1.getOrdinal() < m2.getOrdinal()) ? -1 : 1;
     }
 
-    public MemberBuilder getMemberBuilder() {
+    @Override
+	public MemberBuilder getMemberBuilder() {
         return null;
     }
 
-    public RolapMember getDefaultMember() {
+    @Override
+	public RolapMember getDefaultMember() {
         RolapMember defaultMember =
             (RolapMember) getHierarchy().getDefaultMember();
         if (defaultMember != null) {
@@ -324,7 +356,8 @@ class CacheMemberReader implements MemberReader, MemberCache {
         return getRootMembers().get(0);
     }
 
-    public RolapMember getMemberParent(RolapMember member) {
+    @Override
+	public RolapMember getMemberParent(RolapMember member) {
         return member.getParentMember();
     }
 }

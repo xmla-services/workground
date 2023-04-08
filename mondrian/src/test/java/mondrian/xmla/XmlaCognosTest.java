@@ -289,15 +289,18 @@ public class XmlaCognosTest extends XmlaBaseTestCase {
                 connection);
     }
 
-    protected DiffRepository getDiffRepos() {
+    @Override
+	protected DiffRepository getDiffRepos() {
         return DiffRepository.lookup(XmlaCognosTest.class);
     }
 
-    protected Class<? extends XmlaRequestCallback> getServletCallbackClass() {
+    @Override
+	protected Class<? extends XmlaRequestCallback> getServletCallbackClass() {
         return null;
     }
 
-    protected String getSessionId(Action action) {
+    @Override
+	protected String getSessionId(Action action) {
         return null;
     }
 }
