@@ -29,7 +29,7 @@ class JsonSaxWriter implements SaxWriter {
     private int indent;
     private String[] indentStrings = INITIAL_INDENT_STRINGS;
     private String indentString = indentStrings[0];
-    private final ArrayStack<Frame> stack = new ArrayStack<Frame>();
+    private final ArrayStack<Frame> stack = new ArrayStack<>();
     private OutputStream outputStream;
 
     private static final String[] INITIAL_INDENT_STRINGS = {

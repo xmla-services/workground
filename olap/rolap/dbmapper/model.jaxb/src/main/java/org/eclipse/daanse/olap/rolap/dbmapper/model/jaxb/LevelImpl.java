@@ -169,7 +169,7 @@ public class LevelImpl implements Level {
     @Override
     public List<PropertyImpl> property() {
         if (property == null) {
-            property = new ArrayList<PropertyImpl>();
+            property = new ArrayList<>();
         }
         return this.property;
     }

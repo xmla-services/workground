@@ -48,7 +48,7 @@ public abstract class SubstitutingMemberReader extends DelegatingMemberReader {
     // Helper methods
 
     private List<RolapMember> desubstitute(List<RolapMember> members) {
-        List<RolapMember> list = new ArrayList<RolapMember>(members.size());
+        List<RolapMember> list = new ArrayList<>(members.size());
         for (RolapMember member : members) {
             list.add(desubstitute(member));
         }
@@ -56,7 +56,7 @@ public abstract class SubstitutingMemberReader extends DelegatingMemberReader {
     }
 
     private List<RolapMember> substitute(List<RolapMember> members) {
-        List<RolapMember> list = new ArrayList<RolapMember>(members.size());
+        List<RolapMember> list = new ArrayList<>(members.size());
         for (RolapMember member : members) {
             list.add(substitute(member));
         }

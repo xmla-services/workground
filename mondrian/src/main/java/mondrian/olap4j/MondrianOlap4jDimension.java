@@ -57,7 +57,7 @@ class MondrianOlap4jDimension
     @Override
 	public NamedList<Hierarchy> getHierarchies() {
         final NamedList<MondrianOlap4jHierarchy> list =
-            new NamedListImpl<MondrianOlap4jHierarchy>();
+            new NamedListImpl<>();
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
         final mondrian.olap.SchemaReader schemaReader =

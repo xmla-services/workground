@@ -52,7 +52,7 @@ public class SmartMemberListCache <K, V> {
     public SmartCache<Pair<K, Object>, V> cache;
 
     public SmartMemberListCache() {
-        cache = new SoftSmartCache<Pair<K, Object>, V>();
+        cache = new SoftSmartCache<>();
     }
 
     public Object put(K key, SqlConstraint constraint, V value) {
@@ -60,13 +60,13 @@ public class SmartMemberListCache <K, V> {
         if (cacheKey == null) {
             return null;
         }
-        Pair<K, Object> key2 = new Pair<K, Object>(key, cacheKey);
+        Pair<K, Object> key2 = new Pair<>(key, cacheKey);
         return cache.put(key2, value);
     }
 
     public V get(K key, SqlConstraint constraint) {
         Pair<K, Object> key2 =
-            new Pair<K, Object>(key, constraint.getCacheKey());
+            new Pair<>(key, constraint.getCacheKey());
         return cache.get(key2);
     }
 

@@ -149,7 +149,7 @@ public class Formula extends QueryPart {
             }
 
             final List<MemberProperty> memberPropertyList =
-                new ArrayList<MemberProperty>(Arrays.asList(memberProperties));
+                new ArrayList<>(Arrays.asList(memberProperties));
 
             // put CELL_FORMATTER_SCRIPT_LANGUAGE first, if it exists; we must
             // see it before CELL_FORMATTER_SCRIPT.
@@ -598,7 +598,7 @@ public class Formula extends QueryPart {
          * This check is required to avoid infinite recursion
          */
         private boolean hasCyclicReference(Exp expr) {
-            List<MemberExpr> expList = new ArrayList<MemberExpr>();
+            List<MemberExpr> expList = new ArrayList<>();
             return hasCyclicReference(expr, expList);
         }
 
@@ -633,7 +633,7 @@ public class Formula extends QueryPart {
         }
 
         private List<MemberExpr> cloneForEachBranch(List<MemberExpr> expList) {
-            ArrayList<MemberExpr> list = new ArrayList<MemberExpr>();
+            ArrayList<MemberExpr> list = new ArrayList<>();
             list.addAll(expList);
             return list;
         }

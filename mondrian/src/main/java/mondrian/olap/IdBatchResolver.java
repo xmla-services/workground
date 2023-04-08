@@ -70,17 +70,17 @@ public final class IdBatchResolver {
     // dimension and hierarchy unique names are collected during init
     // to assist in classifying Ids as potentially resolvable to members.
     private final Collection<String> dimensionUniqueNames =
-        new ArrayList<String>();
+        new ArrayList<>();
     private final Collection<String> hierarchyUniqueNames =
-        new ArrayList<String>();
+        new ArrayList<>();
     // level names are checked against the identifiers to avoid incorrectly
     // interpreting a Dimension.Level reference as Dimension.Member.
     private final Collection<String> levelNames =
-        new ArrayList<String>();
+        new ArrayList<>();
 
     // Set of identifiers, sorted via IdComparator, which orders based
     // first on segment length (shortest to longest), then alphabetically.
-    private  SortedSet<Id> identifiers = new TreeSet<Id>(new IdComparator());
+    private  SortedSet<Id> identifiers = new TreeSet<>(new IdComparator());
 
     public IdBatchResolver(Query query) {
         this.query = query;
@@ -163,7 +163,7 @@ public final class IdBatchResolver {
         SortedSet<Id> identifiers)
     {
         final Map<QueryPart, QueryPart> resolvedIdentifiers =
-            new HashMap<QueryPart, QueryPart>();
+            new HashMap<>();
 
         while (identifiers.size() > 0) {
             Id parent = identifiers.first();
@@ -429,7 +429,7 @@ public final class IdBatchResolver {
     }
 
     private List<Id> findChildIds(Id parent, SortedSet<Id> identifiers) {
-        List<Id> childIds = new ArrayList<Id>();
+        List<Id> childIds = new ArrayList<>();
         for (Id id : identifiers) {
             final List<Id.Segment> idSeg = id.getSegments();
             final List<Id.Segment> parentSegments = parent.getSegments();
@@ -448,7 +448,7 @@ public final class IdBatchResolver {
      * Adds each parent segment to the set.
      */
     private void expandIdentifiers(Set<Id> identifiers) {
-        Set<Id> expandedIdentifiers = new HashSet<Id>();
+        Set<Id> expandedIdentifiers = new HashSet<>();
         for (Id id : identifiers) {
             for (int i = 1; i < id.getSegments().size(); i++) {
                 expandedIdentifiers.add(new Id(id.getSegments().subList(0, i)));

@@ -149,7 +149,7 @@ public class ExplainPlanTest {
         + "\n", s );
 
     // Plan after execution, including profiling.
-    final ArrayList<String> strings = new ArrayList<String>();
+    final ArrayList<String> strings = new ArrayList<>();
     ( (mondrian.server.Statement) statement ).enableProfiling( new ProfileHandler() {
       @Override
 	public void explain( String plan, QueryTiming timing ) {
@@ -400,7 +400,7 @@ public class ExplainPlanTest {
 
     final OlapStatement statement = connection.createStatement();
 
-    final ArrayList<String> strings = new ArrayList<String>();
+    final ArrayList<String> strings = new ArrayList<>();
     ( (mondrian.server.Statement) statement ).enableProfiling( new ProfileHandler() {
       @Override
 	public void explain( String plan, QueryTiming timing ) {

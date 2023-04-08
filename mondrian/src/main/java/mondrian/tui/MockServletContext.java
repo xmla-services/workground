@@ -270,7 +270,7 @@ public class MockServletContext implements ServletContext {
     @Override
 	public void setAttribute(String s, Object obj) {
         if (this.attributes == Collections.EMPTY_MAP) {
-            this.attributes = new HashMap<String, Object>();
+            this.attributes = new HashMap<>();
         }
         this.attributes.put(s, obj);
     }
@@ -310,7 +310,7 @@ public class MockServletContext implements ServletContext {
     }
     public void addResource(String name, URL url) {
         if (this.resources == Collections.EMPTY_MAP) {
-            this.resources = new HashMap<String, URL>();
+            this.resources = new HashMap<>();
         }
         this.resources.put(name, url);
     }

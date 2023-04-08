@@ -1413,7 +1413,7 @@ public class AggregationOnDistinctCountMeasuresTest {
             Id.Segment.toList("Gender", "All Gender", "F"),
             salesCubeSchemaReader);
 
-        List<Member> memberList = new ArrayList<Member>();
+        List<Member> memberList = new ArrayList<>();
         memberList.add(maleChildMember);
         memberList.add(maleChildMember);
         memberList.add(femaleChildMember);

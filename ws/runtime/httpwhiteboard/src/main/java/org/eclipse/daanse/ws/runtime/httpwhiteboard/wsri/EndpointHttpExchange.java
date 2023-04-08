@@ -37,7 +37,7 @@ public final class EndpointHttpExchange extends HttpExchange {
     private final ExchangeResponseHeaders resHeaders;
     private final ServletContext servletContext;
     private final HttpContext httpContext;
-    private static final Set<String> attributes = new HashSet<String>();
+    private static final Set<String> attributes = new HashSet<>();
     static {
         attributes.add(MessageContext.SERVLET_CONTEXT);
         attributes.add(MessageContext.SERVLET_REQUEST);

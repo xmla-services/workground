@@ -88,7 +88,7 @@ public class CacheControlImpl implements CacheControl {
         if (member == null) {
             throw new NullPointerException();
         }
-        final ArrayList<Member> list = new ArrayList<Member>();
+        final ArrayList<Member> list = new ArrayList<>();
         list.add(member);
         return new MemberCellRegion(list, descendants);
     }
@@ -117,8 +117,8 @@ public class CacheControlImpl implements CacheControl {
 	public CellRegion createCrossjoinRegion(CellRegion... regions) {
         assert regions != null;
         assert regions.length >= 2;
-        final HashSet<Dimension> set = new HashSet<Dimension>();
-        final List<CellRegionImpl> list = new ArrayList<CellRegionImpl>();
+        final HashSet<Dimension> set = new HashSet<>();
+        final List<CellRegionImpl> list = new ArrayList<>();
         for (CellRegion region : regions) {
             int prevSize = set.size();
             List<Dimension> dimensionality = region.getDimensionality();
@@ -158,7 +158,7 @@ public class CacheControlImpl implements CacheControl {
         if (regions.length < 2) {
             throw new IllegalArgumentException();
         }
-        final List<CellRegionImpl> list = new ArrayList<CellRegionImpl>();
+        final List<CellRegionImpl> list = new ArrayList<>();
         for (CellRegion region : regions) {
             if (!region.getDimensionality().equals(
                     regions[0].getDimensionality()))
@@ -359,7 +359,7 @@ public class CacheControlImpl implements CacheControl {
         //     Crossjoin(a1, a2, r3, a4))
 
         // First, decompose into a flat list of non-union regions.
-        List<CellRegionImpl> nonUnionList = new LinkedList<CellRegionImpl>();
+        List<CellRegionImpl> nonUnionList = new LinkedList<>();
         flattenUnion(region, nonUnionList);
 
         for (int i = 0; i < nonUnionList.size(); i++) {
@@ -369,7 +369,7 @@ public class CacheControlImpl implements CacheControl {
                 if (firstUnion == null) {
                     break;
                 }
-                List<CellRegionImpl> list = new ArrayList<CellRegionImpl>();
+                List<CellRegionImpl> list = new ArrayList<>();
                 for (CellRegionImpl unionComponent : firstUnion.regions) {
                     // For each unionComponent in (r1, r2, r3),
                     // create Crossjoin(a1, a2, r1, a4).
@@ -400,7 +400,7 @@ public class CacheControlImpl implements CacheControl {
         }
         if (region instanceof UnionCellRegion) {
             final UnionCellRegion union = (UnionCellRegion) region;
-            List<CellRegionImpl> list = new ArrayList<CellRegionImpl>();
+            List<CellRegionImpl> list = new ArrayList<>();
             for (CellRegionImpl child : union.regions) {
                 list.add(copyReplacing(child, seek, replacement));
             }
@@ -408,7 +408,7 @@ public class CacheControlImpl implements CacheControl {
         }
         if (region instanceof CrossjoinCellRegion) {
             final CrossjoinCellRegion crossjoin = (CrossjoinCellRegion) region;
-            List<CellRegionImpl> list = new ArrayList<CellRegionImpl>();
+            List<CellRegionImpl> list = new ArrayList<>();
             for (CellRegionImpl child : crossjoin.components) {
                 list.add(copyReplacing(child, seek, replacement));
             }
@@ -483,7 +483,7 @@ public class CacheControlImpl implements CacheControl {
      * @return List of members mentioned in cell region specification
      */
     public static List<Member> findMeasures(CellRegion region) {
-        final List<Member> list = new ArrayList<Member>();
+        final List<Member> list = new ArrayList<>();
         final CellRegionVisitor visitor =
             new CellRegionVisitorImpl() {
                 @Override
@@ -507,7 +507,7 @@ public class CacheControlImpl implements CacheControl {
 
     public static SegmentColumn[] findAxisValues(CellRegion region) {
         final List<SegmentColumn> list =
-            new ArrayList<SegmentColumn>();
+            new ArrayList<>();
         final CellRegionVisitor visitor =
             new CellRegionVisitorImpl() {
                 @Override
@@ -516,7 +516,7 @@ public class CacheControlImpl implements CacheControl {
                         return;
                     }
                     final Map<String, Set<Comparable>> levels =
-                        new HashMap<String, Set<Comparable>>();
+                        new HashMap<>();
                     for (Member member : region.memberList) {
                         while (true) {
                             if (member == null || member.isAll()) {
@@ -578,7 +578,7 @@ public class CacheControlImpl implements CacheControl {
 
     public static List<RolapStar> getStarList(CellRegion region) {
         // Figure out which measure (therefore star) it belongs to.
-        List<RolapStar> starList = new ArrayList<RolapStar>();
+        List<RolapStar> starList = new ArrayList<>();
         final List<Member> measuresList = findMeasures(region);
         for (Member measure : measuresList) {
             if (measure instanceof RolapStoredMeasure) {
@@ -670,7 +670,7 @@ public class CacheControlImpl implements CacheControl {
         synchronized (MEMBER_CACHE_LOCK) {
             // firstly clear all cache associated with native sets
             connection.getSchema().getNativeRegistry().flushAllNativeSetCache();
-            final List<CellRegion> cellRegionList = new ArrayList<CellRegion>();
+            final List<CellRegion> cellRegionList = new ArrayList<>();
             ((MemberSetPlus) memberSet).accept(
                 new MemberSetVisitorImpl() {
                     @Override
@@ -809,7 +809,7 @@ public class CacheControlImpl implements CacheControl {
     {
         memberSet.accept(
             new MemberSetVisitor() {
-                final Set<RolapLevel> levelSet = new HashSet<RolapLevel>();
+                final Set<RolapLevel> levelSet = new HashSet<>();
 
                 private void visitMember(
                     RolapMember member,
@@ -886,7 +886,7 @@ public class CacheControlImpl implements CacheControl {
             try {
                 // Execute the command
                 final List<CellRegion> cellRegionList =
-                    new ArrayList<CellRegion>();
+                    new ArrayList<>();
                 ((MemberEditCommandPlus) cmd).execute(cellRegionList);
 
                 // Flush the cells touched by the regions
@@ -904,7 +904,7 @@ public class CacheControlImpl implements CacheControl {
                         {
                             try {
                                 final List<CellRegionImpl> crossList =
-                                    new ArrayList<CellRegionImpl>();
+                                    new ArrayList<>();
                                 crossList.add(
                                     (CellRegionImpl)
                                         createMeasuresRegion(cube));
@@ -1113,10 +1113,10 @@ public class CacheControlImpl implements CacheControl {
     static class CrossjoinCellRegion implements CellRegionImpl {
         final List<Dimension> dimensions;
         private List<CellRegionImpl> components =
-            new ArrayList<CellRegionImpl>();
+            new ArrayList<>();
 
         CrossjoinCellRegion(List<CellRegionImpl> regions) {
-            final List<Dimension> dimensionality = new ArrayList<Dimension>();
+            final List<Dimension> dimensionality = new ArrayList<>();
             compute(regions, components, dimensionality);
             dimensions = Collections.unmodifiableList(dimensionality);
         }
@@ -1126,7 +1126,7 @@ public class CacheControlImpl implements CacheControl {
             List<CellRegionImpl> components,
             List<Dimension> dimensionality)
         {
-            final Set<Dimension> dimensionSet = new HashSet<Dimension>();
+            final Set<Dimension> dimensionSet = new HashSet<>();
             for (CellRegionImpl region : regions) {
                 addComponents(region, components);
 
@@ -1353,7 +1353,7 @@ public class CacheControlImpl implements CacheControl {
             RolapMember upperMember,
             boolean recurse)
         {
-            final List<RolapMember> list = new ArrayList<RolapMember>();
+            final List<RolapMember> list = new ArrayList<>();
             memberReader.getMemberRange(level, lowerMember, upperMember, list);
             for (RolapMember member : list) {
                 visit(member);
@@ -1427,7 +1427,7 @@ public class CacheControlImpl implements CacheControl {
         public final RolapHierarchy hierarchy;
 
         SimpleMemberSet(List<RolapMember> members, boolean descendants) {
-            this.members = new ArrayList<RolapMember>(members);
+            this.members = new ArrayList<>(members);
             stripMemberList(this.members);
             this.descendants = descendants;
             this.hierarchy =
@@ -1450,7 +1450,7 @@ public class CacheControlImpl implements CacheControl {
 
         @Override
 		public MemberSetPlus filter(RolapLevel level) {
-            List<RolapMember> filteredMembers = new ArrayList<RolapMember>();
+            List<RolapMember> filteredMembers = new ArrayList<>();
             for (RolapMember member : members) {
                 if (member.getLevel().equals(level)) {
                     filteredMembers.add(member);
@@ -1498,7 +1498,7 @@ public class CacheControlImpl implements CacheControl {
         @Override
 		public MemberSetPlus filter(RolapLevel level) {
             final List<MemberSetPlus> filteredItems =
-                new ArrayList<MemberSetPlus>();
+                new ArrayList<>();
             for (MemberSetPlus item : items) {
                 final MemberSetPlus filteredItem = item.filter(level);
                 if (filteredItem == EmptyMemberSet.INSTANCE) {
@@ -1614,7 +1614,7 @@ public class CacheControlImpl implements CacheControl {
             {
                 final MemberReader memberReader =
                     level.getHierarchy().getMemberReader();
-                final List<RolapMember> list = new ArrayList<RolapMember>();
+                final List<RolapMember> list = new ArrayList<>();
                 memberReader.getMemberChildren(lower, list);
                 if (list.isEmpty()) {
                     return EmptyMemberSet.INSTANCE;
@@ -1793,7 +1793,7 @@ public class CacheControlImpl implements CacheControl {
         final MemberSetPlus memberSet;
         final Map<String, Object> propertyValues;
         final List<RolapMember> members =
-            new ArrayList<RolapMember>();
+            new ArrayList<>();
 
         ChangeMemberPropsCommand(
             MemberSetPlus memberSet,
@@ -1868,7 +1868,7 @@ public class CacheControlImpl implements CacheControl {
         // It's sufficient to flush the member.
         cellRegionList.add(createMemberRegion(member, true));
 
-        return new Callable<Boolean>() {
+        return new Callable<>() {
             @Override
 			public Boolean call() throws Exception {
                 final MemberCache memberCache = getMemberCache(member);
@@ -1942,7 +1942,7 @@ public class CacheControlImpl implements CacheControl {
         // to flush its parent.
         cellRegionList.add(createMemberRegion(parent, false));
 
-        return new Callable<Boolean>() {
+        return new Callable<>() {
             @Override
 			public Boolean call() throws Exception {
                 final MemberCache memberCache = getMemberCache(member);
@@ -1962,7 +1962,7 @@ public class CacheControlImpl implements CacheControl {
                     // A list existed before. We can save a SQL query.
                     // Might be immutable. Let's append to it.
                     if (childrenList.isEmpty()) {
-                        childrenList = new ArrayList<RolapMember>();
+                        childrenList = new ArrayList<>();
                     }
                     childrenList.add(member);
                     memberCache.putChildren(

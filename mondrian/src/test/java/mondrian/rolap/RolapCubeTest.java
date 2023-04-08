@@ -284,7 +284,7 @@ public class RolapCubeTest {
             SchemaReader readerWarehouseAndSales =
                 warehouseAndSalesCube.getSchemaReader().withLocus();
 
-            List<Member> members = new ArrayList<Member>();
+            List<Member> members = new ArrayList<>();
             List<Member> warehouseMembers =
                 warehouseMembersCanadaMexicoUsa(readerWarehouseAndSales);
             Dimension warehouseDim = warehouseMembers.get(0).getDimension();

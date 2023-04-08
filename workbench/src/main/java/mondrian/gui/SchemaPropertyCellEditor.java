@@ -39,7 +39,7 @@ public class SchemaPropertyCellEditor
     Workbench workbench;
 
     final List<CellEditorListener> listeners =
-        new ArrayList<CellEditorListener>();
+        new ArrayList<>();
 
     JTextField stringEditor;
     JTextArea cdataTextArea;
@@ -265,7 +265,7 @@ public class SchemaPropertyCellEditor
         {
             List<String> udfs = getUdfs();
             ComboBoxModel cAlludfs =
-                new DefaultComboBoxModel(new Vector<String>(udfs));
+                new DefaultComboBoxModel(new Vector<>(udfs));
 
             listEditor.setEditable(true);
             listEditor.setToolTipText(null);
@@ -280,7 +280,7 @@ public class SchemaPropertyCellEditor
         {
             List<String> formatStrs = getFormatStrings();
             ComboBoxModel cAllformatStrs =
-                new DefaultComboBoxModel(new Vector<String>(formatStrs));
+                new DefaultComboBoxModel(new Vector<>(formatStrs));
 
             listEditor.setEditable(true);
             listEditor.setToolTipText(null);
@@ -401,7 +401,7 @@ public class SchemaPropertyCellEditor
         {
             List<String> source = getSource();
             ComboBoxModel cAllsource =
-                new DefaultComboBoxModel(new Vector<String>(source));
+                new DefaultComboBoxModel(new Vector<>(source));
 
             listEditor.setEditable(true);
             listEditor.setToolTipText(null);
@@ -464,7 +464,7 @@ public class SchemaPropertyCellEditor
         {
             List<String> source = getDimensions();
             ComboBoxModel cAllsource =
-                new DefaultComboBoxModel(new Vector<String>(source));
+                new DefaultComboBoxModel(new Vector<>(source));
 
             listEditor.setEditable(false);
             listEditor.setToolTipText(null);
@@ -480,7 +480,7 @@ public class SchemaPropertyCellEditor
         {
             List<String> source = getHierarchies();
             ComboBoxModel cAllsource =
-                new DefaultComboBoxModel(new Vector<String>(source));
+                new DefaultComboBoxModel(new Vector<>(source));
 
             listEditor.setEditable(false);
             listEditor.setToolTipText(null);
@@ -498,7 +498,7 @@ public class SchemaPropertyCellEditor
             List<String> source = getLevels(
                 ((MondrianGuiDef.HierarchyGrant) tableModel.target).hierarchy);
             ComboBoxModel cAllsource =
-                new DefaultComboBoxModel(new Vector<String>(source));
+                new DefaultComboBoxModel(new Vector<>(source));
 
             listEditor.setEditable(false);
             listEditor.setToolTipText(null);
@@ -517,7 +517,7 @@ public class SchemaPropertyCellEditor
         {
             List<String> source = getCubes();
             ComboBoxModel cAllsource =
-                new DefaultComboBoxModel(new Vector<String>(source));
+                new DefaultComboBoxModel(new Vector<>(source));
 
             listEditor.setEditable(false);
             listEditor.setToolTipText(null);
@@ -534,14 +534,14 @@ public class SchemaPropertyCellEditor
                    || (targetClassz == MondrianGuiDef.Measure.class
                        && propertyName.equals("column")))
         {
-            Vector<String> fks = new Vector<String>(
+            Vector<String> fks = new Vector<>(
                 jdbcMetaData.getFactTableFKs(
                     selectedFactTableSchema, selectedFactTable));
             fks.add(
                 0, getResourceConverter().getString(
                     "schemaPropertyCellEditor.allColumns",
                     "<< All Columns >>"));
-            Vector<String> allcols = new Vector<String>(
+            Vector<String> allcols = new Vector<>(
                 jdbcMetaData.getAllColumns(
                     selectedFactTableSchema, selectedFactTable));
             ComboBoxModel cFks = new DefaultComboBoxModel(fks);
@@ -603,7 +603,7 @@ public class SchemaPropertyCellEditor
             }
 
             ComboBoxModel cAllcols =
-                new DefaultComboBoxModel(new Vector<String>(allcols));
+                new DefaultComboBoxModel(new Vector<>(allcols));
 
             listEditor.setEditable(true);
             listEditor.setToolTipText(null);
@@ -669,7 +669,7 @@ public class SchemaPropertyCellEditor
                 allcols = Collections.emptyList();
             }
             ComboBoxModel cAllcols =
-                new DefaultComboBoxModel(new Vector<String>(allcols));
+                new DefaultComboBoxModel(new Vector<>(allcols));
 
             listEditor.setEditable(true);
             listEditor.setToolTipText(null);
@@ -713,7 +713,7 @@ public class SchemaPropertyCellEditor
             List<String> allcols = jdbcMetaData.getAllColumns(null, null);
 
             ComboBoxModel cAllcols =
-                new DefaultComboBoxModel(new Vector<String>(allcols));
+                new DefaultComboBoxModel(new Vector<>(allcols));
 
             listEditor.setEditable(true);
             listEditor.setToolTipText(null);
@@ -729,7 +729,7 @@ public class SchemaPropertyCellEditor
         {
             List<String> allschemas = jdbcMetaData.getAllSchemas();
             ComboBoxModel cAllschemas =
-                new DefaultComboBoxModel(new Vector<String>(allschemas));
+                new DefaultComboBoxModel(new Vector<>(allschemas));
 
             listEditor.setEditable(true);
             listEditor.setToolTipText(null);
@@ -765,15 +765,15 @@ public class SchemaPropertyCellEditor
                 schema = tProps.schema;
             }
             Vector<String> factTables =
-                new Vector<String>(jdbcMetaData.getFactTables(schema));
+                new Vector<>(jdbcMetaData.getFactTables(schema));
             Vector<String> allTablesMinusFact =
-                new Vector<String>(
+                new Vector<>(
                     jdbcMetaData.getAllTables(
                         schema, selectedFactTable));
             Vector<String> allTables =
-                new Vector<String>(jdbcMetaData.getAllTables(schema));
+                new Vector<>(jdbcMetaData.getAllTables(schema));
             Vector<String> dimeTables =
-                new Vector<String>(
+                new Vector<>(
                     jdbcMetaData.getDimensionTables(
                         schema, selectedFactTable));
 
@@ -806,13 +806,13 @@ public class SchemaPropertyCellEditor
                         ((MondrianGuiDef.Hierarchy) tableModel.target).relation;
                 }
                 if (relation instanceof MondrianGuiDef.Join) {
-                    TreeSet<String> joinTables = new TreeSet<String>();
+                    TreeSet<String> joinTables = new TreeSet<>();
                     // getTableNamesForJoin calls itself recursively and
                     // collects table names in joinTables.
                     SchemaExplorer.getTableNamesForJoin(relation, joinTables);
                     cAllTables =
                         new DefaultComboBoxModel(
-                            new Vector<String>(
+                            new Vector<>(
                                 joinTables));
                 }
             }
@@ -1246,7 +1246,7 @@ public class SchemaPropertyCellEditor
             /* save the nested table as well */
             if (activeEditor == tableEditor) {
                 if (tableEditor.isEditing()) {
-                    List<JTable> nestedTableEditors = new ArrayList<JTable>();
+                    List<JTable> nestedTableEditors = new ArrayList<>();
                     JTable nestedTableEditor = tableEditor;
                     // Get the list of nested tables from outer->inner sequence,
                     // descending towards innermost nested table
@@ -1292,7 +1292,7 @@ public class SchemaPropertyCellEditor
     }
 
     private List<String> getUdfs() {
-        List<String> udfs = new ArrayList<String>();
+        List<String> udfs = new ArrayList<>();
         MondrianGuiDef.Schema s = this.getSchema();
         if (s != null) {
             MondrianGuiDef.UserDefinedFunction[] u = s.userDefinedFunctions;
@@ -1309,7 +1309,7 @@ public class SchemaPropertyCellEditor
     }
 
     private List<String> getFormatStrings() {
-        List<String> fs = new ArrayList<String>();
+        List<String> fs = new ArrayList<>();
         MondrianGuiDef.Schema s = this.getSchema();
         if (s != null) {
             MondrianGuiDef.Cube[] c = s.cubes;
@@ -1355,7 +1355,7 @@ public class SchemaPropertyCellEditor
 
     // shared dimensions in schema
     private List<String> getSource() {
-        List<String> source = new ArrayList<String>();
+        List<String> source = new ArrayList<>();
         MondrianGuiDef.Schema s = this.getSchema();
         if (s != null) {
             MondrianGuiDef.Dimension[] u = s.dimensions;
@@ -1367,7 +1367,7 @@ public class SchemaPropertyCellEditor
     }
 
     private List<String> getCubes() {
-        List<String> source = new ArrayList<String>();
+        List<String> source = new ArrayList<>();
         //===source.add(noSelect);
         MondrianGuiDef.Schema s = this.getSchema();
         if (s != null) {
@@ -1398,7 +1398,7 @@ public class SchemaPropertyCellEditor
     }
 
     private List<String> getDimensions() {
-        List<String> dims = new ArrayList<String>();
+        List<String> dims = new ArrayList<>();
         Object po = getParentObject(); // cubegrant
         if (po != null) {
             MondrianGuiDef.CubeGrant parent = (MondrianGuiDef.CubeGrant) po;
@@ -1423,7 +1423,7 @@ public class SchemaPropertyCellEditor
     }
 
     private List<String> getHierarchies() {
-        List<String> hiers = new ArrayList<String>();
+        List<String> hiers = new ArrayList<>();
         Object po = getParentObject(); // cubegrant
         if (po != null) {
             MondrianGuiDef.CubeGrant parent = (MondrianGuiDef.CubeGrant) po;
@@ -1482,7 +1482,7 @@ public class SchemaPropertyCellEditor
 
     private String cacheCube = "";
     private String cacheHierarchy = "";
-    private List<String> hlevels = new ArrayList<String>();
+    private List<String> hlevels = new ArrayList<>();
 
     private List<String> getLevels(String hierarchy) {
         if (hierarchy == null || hierarchy.equals("")) {
@@ -1518,7 +1518,7 @@ public class SchemaPropertyCellEditor
         if (cacheCube.equals(parent.cube) && cacheHierarchy.equals(hierarchy)) {
             return hlevels;
         }
-        hlevels = new ArrayList<String>();
+        hlevels = new ArrayList<>();
         cacheCube = parent.cube;
         cacheHierarchy = hierarchy;
         MondrianGuiDef.Schema s = getSchema();

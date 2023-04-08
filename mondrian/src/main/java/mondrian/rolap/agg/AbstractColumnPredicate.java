@@ -97,7 +97,7 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
                 return orColumn(starColumnPredicate);
             }
         }
-        final List<StarPredicate> list = new ArrayList<StarPredicate>(2);
+        final List<StarPredicate> list = new ArrayList<>(2);
         list.add(this);
         list.add(predicate);
         return new OrPredicate(list);
@@ -109,7 +109,7 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
         if (predicate instanceof ListColumnPredicate) {
             ListColumnPredicate that = (ListColumnPredicate) predicate;
             final List<StarColumnPredicate> list =
-                new ArrayList<StarColumnPredicate>();
+                new ArrayList<>();
             list.add(this);
             list.addAll(that.getPredicates());
             return new ListColumnPredicate(
@@ -117,7 +117,7 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
                 list);
         } else {
             final List<StarColumnPredicate> list =
-                new ArrayList<StarColumnPredicate>(2);
+                new ArrayList<>(2);
             list.add(this);
             list.add(predicate);
             return new ListColumnPredicate(
@@ -128,7 +128,7 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
 
     @Override
 	public StarPredicate and(StarPredicate predicate) {
-        final List<StarPredicate> list = new ArrayList<StarPredicate>(2);
+        final List<StarPredicate> list = new ArrayList<>(2);
         list.add(this);
         list.add(predicate);
         return new AndPredicate(list);
@@ -144,7 +144,7 @@ public abstract class AbstractColumnPredicate implements StarColumnPredicate {
         List<StarColumnPredicate> list)
     {
         List<StarColumnPredicate> newList =
-            new ArrayList<StarColumnPredicate>(list.size());
+            new ArrayList<>(list.size());
         for (StarColumnPredicate predicate : list) {
             newList.add(predicate.cloneWithColumn(column));
         }

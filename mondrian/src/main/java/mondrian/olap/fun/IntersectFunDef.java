@@ -83,7 +83,7 @@ class IntersectFunDef extends FunDefBase
                 // identical using hashCode and equals, we want to retrieve
                 // the actual key, and java.util.Set only has containsKey.
                 RetrievableSet<List<Member>> rightSet =
-                    new RetrievableHashSet<List<Member>>(
+                    new RetrievableHashSet<>(
                         rightList.size() * 3 / 2);
                 for (List<Member> tuple : rightList) {
                     rightSet.add(tuple);
@@ -93,7 +93,7 @@ class IntersectFunDef extends FunDefBase
                     TupleCollections.createList(
                         arity, Math.min(leftList.size(), rightList.size()));
                 final Set<List<Member>> resultSet =
-                    all ? null : new HashSet<List<Member>>();
+                    all ? null : new HashSet<>();
                 for (List<Member> leftTuple : leftList) {
                     List<Member> rightKey = rightSet.getKey(leftTuple);
                     if (rightKey == null) {
@@ -138,7 +138,7 @@ class IntersectFunDef extends FunDefBase
                             // clone on first VisualTotalMember -- to avoid
                             // alloc/copy in the common case where there are
                             // no VisualTotalMembers
-                            tuple = new ArrayList<Member>(leftTuple);
+                            tuple = new ArrayList<>(leftTuple);
                         }
                         tuple.set(i, member);
                     }

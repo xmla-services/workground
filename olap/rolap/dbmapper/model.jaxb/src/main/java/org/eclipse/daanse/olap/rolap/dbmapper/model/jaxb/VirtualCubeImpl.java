@@ -78,7 +78,7 @@ public class VirtualCubeImpl implements VirtualCube {
     @Override
     public List<VirtualCubeDimensionImpl> virtualCubeDimension() {
         if (virtualCubeDimension == null) {
-            virtualCubeDimension = new ArrayList<VirtualCubeDimensionImpl>();
+            virtualCubeDimension = new ArrayList<>();
         }
         return this.virtualCubeDimension;
     }
@@ -86,7 +86,7 @@ public class VirtualCubeImpl implements VirtualCube {
     @Override
     public List<VirtualCubeMeasureImpl> virtualCubeMeasure() {
         if (virtualCubeMeasure == null) {
-            virtualCubeMeasure = new ArrayList<VirtualCubeMeasureImpl>();
+            virtualCubeMeasure = new ArrayList<>();
         }
         return this.virtualCubeMeasure;
     }
@@ -94,7 +94,7 @@ public class VirtualCubeImpl implements VirtualCube {
     @Override
     public List<CalculatedMemberImpl> calculatedMember() {
         if (calculatedMember == null) {
-            calculatedMember = new ArrayList<CalculatedMemberImpl>();
+            calculatedMember = new ArrayList<>();
         }
         return this.calculatedMember;
     }
@@ -102,7 +102,7 @@ public class VirtualCubeImpl implements VirtualCube {
     @Override
     public List<NamedSetImpl> namedSet() {
         if (namedSet == null) {
-            namedSet = new ArrayList<NamedSetImpl>();
+            namedSet = new ArrayList<>();
         }
         return this.namedSet;
     }

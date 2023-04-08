@@ -145,19 +145,19 @@ public class RolapCube extends CubeBase {
     /**
      * List of calculated members.
      */
-    private final List<Formula> calculatedMemberList = new ArrayList<Formula>();
+    private final List<Formula> calculatedMemberList = new ArrayList<>();
 
     /**
      * Role-based cache of calculated members
      */
     private final SoftSmartCache<Role, List<Member>>
         roleToAccessibleCalculatedMembers =
-        new SoftSmartCache<Role, List<Member>>();
+        new SoftSmartCache<>();
 
     /**
      * List of named sets.
      */
-    private final List<Formula> namedSetList = new ArrayList<Formula>();
+    private final List<Formula> namedSetList = new ArrayList<>();
 
     /** Contains {@link HierarchyUsage}s for this cube */
     private final List<HierarchyUsage> hierarchyUsages;
@@ -166,7 +166,7 @@ public class RolapCube extends CubeBase {
     private ExplicitRules.Group aggGroup;
 
     private final Map<Hierarchy, HierarchyUsage> firstUsageMap =
-        new HashMap<Hierarchy, HierarchyUsage>();
+        new HashMap<>();
 
     /**
      * Refers {@link RolapCubeUsages} if this is a virtual cube
@@ -176,7 +176,7 @@ public class RolapCube extends CubeBase {
     RolapBaseCubeMeasure factCountMeasure;
 
     final List<RolapHierarchy> hierarchyList =
-        new ArrayList<RolapHierarchy>();
+        new ArrayList<>();
 
     /**
      * Set to true when a cube is being modified after creation.
@@ -186,15 +186,15 @@ public class RolapCube extends CubeBase {
     private boolean loadInProgress = false;
 
     private Map<RolapLevel, RolapCubeLevel> virtualToBaseMap =
-        new HashMap<RolapLevel, RolapCubeLevel>();
+        new HashMap<>();
 
     final BitKey closureColumnBitKey;
 
     final List<RolapAction> actionList =
-            new ArrayList<RolapAction>();
+            new ArrayList<>();
 
     final List<RolapWritebackTable> writebackTableList =
-            new ArrayList<RolapWritebackTable>();
+            new ArrayList<>();
     /**
      * Used for virtual cubes.
      * Contains a list of all base cubes related to a virtual cube
@@ -239,7 +239,7 @@ public class RolapCube extends CubeBase {
         this.metadata = metadata;
         this.caption = caption;
         this.fact = fact;
-        this.hierarchyUsages = new ArrayList<HierarchyUsage>();
+        this.hierarchyUsages = new ArrayList<>();
         this.context = context;
 
         if (! isVirtual()) {
@@ -363,7 +363,7 @@ public class RolapCube extends CubeBase {
         RolapLevel measuresLevel = this.measuresHierarchy.newMeasuresLevel();
 
         List<RolapMember> measureList =
-            new ArrayList<RolapMember>(xmlCube.measure().size());
+            new ArrayList<>(xmlCube.measure().size());
         Member defaultMeasure = null;
         for (int i = 0; i < xmlCube.measure().size(); i++) {
             RolapBaseCubeMeasure measure =
@@ -425,7 +425,7 @@ public class RolapCube extends CubeBase {
             if(action instanceof DrillThroughAction) {
                 DrillThroughAction drillThroughAction = (DrillThroughAction)action;
 
-                List<RolapDrillThroughColumn> columns = new ArrayList<RolapDrillThroughColumn>();
+                List<RolapDrillThroughColumn> columns = new ArrayList<>();
 
                 for(DrillThroughElement drillThroughColumn: drillThroughAction.drillThroughElement()) {
                     if(drillThroughColumn instanceof DrillThroughAttribute) {
@@ -523,7 +523,7 @@ public class RolapCube extends CubeBase {
         }
 
         for(org.eclipse.daanse.olap.rolap.dbmapper.model.api.WritebackTable writebackTable: xmlCube.writebackTable()) {
-            List<RolapWritebackColumn> columns = new ArrayList<RolapWritebackColumn>();
+            List<RolapWritebackColumn> columns = new ArrayList<>();
 
             for(WritebackColumn writebackColumn: writebackTable.columns()) {
                 if(writebackColumn instanceof WritebackAttribute) {
@@ -662,8 +662,8 @@ public class RolapCube extends CubeBase {
 
         measure.setProperty(Property.BACK_COLOR.name, xmlMeasure.backColor());
 
-        List<String> propNames = new ArrayList<String>();
-        List<String> propExprs = new ArrayList<String>();
+        List<String> propNames = new ArrayList<>();
+        List<String> propExprs = new ArrayList<>();
         validateMemberProps(
             xmlMeasure.calculatedMemberProperty(), propNames, propExprs, xmlMeasure.name());
         for (int j = 0; j < propNames.size(); j++) {
@@ -735,19 +735,19 @@ public class RolapCube extends CubeBase {
         // Recreate CalculatedMembers, as the original members point to
         // incorrect dimensional ordinals for the virtual cube.
         List<RolapVirtualCubeMeasure> origMeasureList =
-            new ArrayList<RolapVirtualCubeMeasure>();
+            new ArrayList<>();
         List<CalculatedMember> origCalcMeasureList =
-            new ArrayList<CalculatedMember>();
+            new ArrayList<>();
         CubeComparator cubeComparator = new CubeComparator();
         Map<RolapCube, List<CalculatedMember>>
             calculatedMembersMap =
-            new TreeMap<RolapCube, List<CalculatedMember>>(
+            new TreeMap<>(
                 cubeComparator);
         Member defaultMeasure = null;
 
         this.cubeUsages = new RolapCubeUsages(xmlVirtualCube.cubeUsages());
 
-        HashMap<String, VirtualCubeMeasure> measureHash = new HashMap<String, VirtualCubeMeasure>();
+        HashMap<String, VirtualCubeMeasure> measureHash = new HashMap<>();
 
         for (VirtualCubeMeasure xmlMeasure
             : xmlVirtualCube.virtualCubeMeasure())
@@ -792,7 +792,7 @@ public class RolapCube extends CubeBase {
                             calculatedMembersMap.get(cube);
                         if (memberList == null) {
                             memberList =
-                                new ArrayList<CalculatedMember>();
+                                new ArrayList<>();
                         }
                         memberList.add(calcMember);
                         origCalcMeasureList.add(calcMember);
@@ -846,7 +846,7 @@ public class RolapCube extends CubeBase {
         // to their base cubes first, then resolve them relative to this
         // cube so the correct dimension ordinals are used
         List<RolapVirtualCubeMeasure> modifiedMeasureList =
-            new ArrayList<RolapVirtualCubeMeasure>(origMeasureList);
+            new ArrayList<>(origMeasureList);
         for (Object o : calculatedMembersMap.keySet()) {
             RolapCube baseCube = (RolapCube) o;
             List<CalculatedMember> xmlCalculatedMemberList =
@@ -866,7 +866,7 @@ public class RolapCube extends CubeBase {
         // Add the original calculated members from the base cubes to our
         // list of calculated members
         List<CalculatedMember> xmlCalculatedMemberList =
-            new ArrayList<CalculatedMember>();
+            new ArrayList<>();
         for (Object o : calculatedMembersMap.keySet()) {
             RolapCube baseCube = (RolapCube) o;
             xmlCalculatedMemberList.addAll(
@@ -943,7 +943,7 @@ public class RolapCube extends CubeBase {
             // those members that weren't originally defined
             // on this virtual cube.
             List<Formula> calculatedMemberListCopy =
-                new ArrayList<Formula>(calculatedMemberList);
+                new ArrayList<>(calculatedMemberList);
             calculatedMemberList.clear();
             for (Formula calculatedMember : calculatedMemberListCopy) {
                 if (findOriginalMembers(
@@ -973,7 +973,7 @@ public class RolapCube extends CubeBase {
         // We modify the measures schema reader one last time with a version
         // which includes all calculated members as well.
         final List<RolapMember> finalMeasureMembers =
-            new ArrayList<RolapMember>();
+            new ArrayList<>();
         for (RolapVirtualCubeMeasure measure : origMeasureList) {
             finalMeasureMembers.add((RolapMember)measure);
         }
@@ -1132,7 +1132,7 @@ public class RolapCube extends CubeBase {
         // (We cannot do this in the constructor, because
         // cannot parse the generated query, because the schema has not been
         // set in the cube at this point.)
-        List<Formula> formulaList = new ArrayList<Formula>();
+        List<Formula> formulaList = new ArrayList<>();
         createCalcMembersAndNamedSets(
             xmlCube.calculatedMember(),
             xmlCube.namedSet(),
@@ -1153,7 +1153,7 @@ public class RolapCube extends CubeBase {
         String cubeName,
         List<RolapMember> measures)
     {
-        Map<Integer, String> ordinals = new HashMap<Integer, String>();
+        Map<Integer, String> ordinals = new HashMap<>();
         for (RolapMember measure : measures) {
             Integer ordinal = measure.getOrdinal();
             if (!ordinals.containsKey(ordinal)) {
@@ -1226,13 +1226,13 @@ public class RolapCube extends CubeBase {
         buf.append("WITH").append(Util.nl);
 
         // Check the members individually, and generate SQL.
-        final Set<String> fqNames = new LinkedHashSet<String>();
+        final Set<String> fqNames = new LinkedHashSet<>();
         for (int i = 0; i < xmlCalcMembers.size(); i++) {
             preCalcMember(xmlCalcMembers, i, buf, cube, errOnDups, fqNames);
         }
 
         // Check the named sets individually (for uniqueness) and generate SQL.
-        Set<String> nameSet = new HashSet<String>();
+        Set<String> nameSet = new HashSet<>();
         for (Formula namedSet : namedSetList) {
             nameSet.add(namedSet.getName());
         }
@@ -1477,8 +1477,8 @@ public class RolapCube extends CubeBase {
 
         final List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.CalculatedMemberProperty> xmlProperties =
                 xmlCalcMember.calculatedMemberProperty();
-        List<String> propNames = new ArrayList<String>();
-        List<String> propExprs = new ArrayList<String>();
+        List<String> propNames = new ArrayList<>();
+        List<String> propExprs = new ArrayList<>();
         validateMemberProps(
             xmlProperties, propNames, propExprs, xmlCalcMember.name());
 
@@ -1678,7 +1678,7 @@ public class RolapCube extends CubeBase {
             return;
         }
         List<RolapBaseCubeMeasure> storedMeasures =
-            new ArrayList<RolapBaseCubeMeasure>();
+            new ArrayList<>();
         for (Member measure : getMeasures()) {
             if (measure instanceof RolapBaseCubeMeasure) {
                 storedMeasures.add((RolapBaseCubeMeasure) measure);
@@ -1881,7 +1881,7 @@ public class RolapCube extends CubeBase {
                 } else if (hierUsage == null) {
                     hierUsage = hu;
                 } else {
-                    list = new ArrayList<HierarchyUsage>();
+                    list = new ArrayList<>();
                     if (getLogger().isDebugEnabled()) {
                         getLogger().debug(
                             new StringBuilder("RolapCube.getUsages: ")
@@ -1952,7 +1952,7 @@ public class RolapCube extends CubeBase {
                 } else if (hierUsage == null) {
                     hierUsage = hu;
                 } else {
-                    list = new ArrayList<HierarchyUsage>();
+                    list = new ArrayList<>();
                     if (getLogger().isDebugEnabled()) {
                         getLogger().debug(
                             new StringBuilder("RolapCube.getUsagesBySource: ")
@@ -2495,7 +2495,7 @@ public class RolapCube extends CubeBase {
             return relation;
         }
 
-        Map<String, RelNode> nodeMap = new HashMap<String, RelNode>();
+        Map<String, RelNode> nodeMap = new HashMap<>();
 
         // Create RelNode in top down order (year -> day)
         for (int i = 0; i < levels.length; i++) {
@@ -2756,7 +2756,7 @@ public class RolapCube extends CubeBase {
      */
     @Override
 	public Set<Dimension> nonJoiningDimensions(Member[] tuple) {
-        Set<Dimension> otherDims = new HashSet<Dimension>();
+        Set<Dimension> otherDims = new HashSet<>();
         for (Member member : tuple) {
             if (!member.isCalculated()) {
                 otherDims.add(member.getDimension());
@@ -2777,11 +2777,11 @@ public class RolapCube extends CubeBase {
     @Override
 	public Set<Dimension> nonJoiningDimensions(Set<Dimension> otherDims) {
         Dimension[] baseCubeDimensions = getDimensions();
-        Set<String>  baseCubeDimNames = new HashSet<String>();
+        Set<String>  baseCubeDimNames = new HashSet<>();
         for (Dimension baseCubeDimension : baseCubeDimensions) {
             baseCubeDimNames.add(baseCubeDimension.getUniqueName());
         }
-        Set<Dimension> nonJoiningDimensions = new HashSet<Dimension>();
+        Set<Dimension> nonJoiningDimensions = new HashSet<>();
         for (Dimension otherDim : otherDims) {
             if (!baseCubeDimNames.contains(otherDim.getUniqueName())) {
                 nonJoiningDimensions.add(otherDim);
@@ -3075,7 +3075,7 @@ public class RolapCube extends CubeBase {
 
         try {
             loadInProgress = true;
-            final List<Formula> setList = new ArrayList<Formula>();
+            final List<Formula> setList = new ArrayList<>();
             createCalcMembersAndNamedSets(
                 Collections.<CalculatedMember>emptyList(),
                 Collections.singletonList(xmlNamedSet),
@@ -3115,7 +3115,7 @@ public class RolapCube extends CubeBase {
 
         try {
             loadInProgress = true;
-            final List<RolapMember> memberList = new ArrayList<RolapMember>();
+            final List<RolapMember> memberList = new ArrayList<>();
             createCalcMembersAndNamedSets(
                 Collections.singletonList(xmlCalcMember),
                 Collections.<org.eclipse.daanse.olap.rolap.dbmapper.model.api.NamedSet>emptyList(),
@@ -3146,7 +3146,7 @@ public class RolapCube extends CubeBase {
         String name,
         Calc calc)
     {
-        final List<Id.Segment> segmentList = new ArrayList<Id.Segment>();
+        final List<Id.Segment> segmentList = new ArrayList<>();
         segmentList.addAll(
             Util.parseIdentifier(hierarchy.getUniqueName()));
         segmentList.add(new Id.NameSegment(name));
@@ -3287,7 +3287,7 @@ public class RolapCube extends CubeBase {
 
         @Override
 		public List<Member> getCalculatedMembers(Hierarchy hierarchy) {
-            ArrayList<Member> list = new ArrayList<Member>();
+            ArrayList<Member> list = new ArrayList<>();
 
             if (getRole().getAccess(hierarchy) == Access.NONE) {
                 return list;
@@ -3303,7 +3303,7 @@ public class RolapCube extends CubeBase {
 
         @Override
 		public List<Member> getCalculatedMembers(Level level) {
-            List<Member> list = new ArrayList<Member>();
+            List<Member> list = new ArrayList<>();
 
             if (getRole().getAccess(level) == Access.NONE) {
                 return list;
@@ -3338,7 +3338,7 @@ public class RolapCube extends CubeBase {
 
             //Without roleToAccessibleCalculatedMembers
             //Issues with session objects
-            List<Member> list = new ArrayList<Member>();
+            List<Member> list = new ArrayList<>();
 
             for (Formula formula : calculatedMemberList) {
                 Member member = formula.getMdxMember();
@@ -3394,7 +3394,7 @@ public class RolapCube extends CubeBase {
         @Override
 		public List<NameResolver.Namespace> getNamespaces() {
             final List<NameResolver.Namespace> list =
-                new ArrayList<NameResolver.Namespace>();
+                new ArrayList<>();
             list.add(this);
             list.addAll(schema.getSchemaReader().getNamespaces());
             return list;
@@ -3484,8 +3484,8 @@ public class RolapCube extends CubeBase {
             this.virtualCube = virtualCube;
             this.baseCube = baseCube;
             this.measuresLevel = measuresLevel;
-            this.measuresFound = new ArrayList<RolapVirtualCubeMeasure>();
-            this.calcMembersSeen = new ArrayList<RolapCalculatedMember>();
+            this.measuresFound = new ArrayList<>();
+            this.calcMembersSeen = new ArrayList<>();
         }
 
         @Override
@@ -3606,7 +3606,7 @@ public class RolapCube extends CubeBase {
       if (!cube.isVirtual()) {
         return Collections.singletonList(cube);
       }
-      List<RolapCube> cubesList = new ArrayList<RolapCube>();
+      List<RolapCube> cubesList = new ArrayList<>();
       Set<RolapCube> cubes = new TreeSet<>(new RolapCube.CubeComparator());
       for (Member member : cube.getMeasures()) {
         if (member instanceof RolapStoredMeasure) {

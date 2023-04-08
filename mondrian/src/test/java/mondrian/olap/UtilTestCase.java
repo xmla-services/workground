@@ -511,7 +511,7 @@ public class UtilTestCase{
 
     @Test
     public void testReplaceProperties() {
-        Map<String, String> map = new HashMap<String, String>();
+        Map<String, String> map = new HashMap<>();
         map.put("foo", "bar");
         map.put("empty", "");
         map.put("null", null);
@@ -629,7 +629,7 @@ public class UtilTestCase{
 
         total = "";
         UnionIterator<String> unionIterator =
-            new UnionIterator<String>(xyList, abcList);
+            new UnionIterator<>(xyList, abcList);
         while (unionIterator.hasNext()) {
             total += unionIterator.next() + ";";
         }
@@ -675,7 +675,7 @@ public class UtilTestCase{
         // MondrianOlap4jDriver (in mondrian) and
         // XmlaOlap4jDriver (in olap4j.jar).
         List<String> expectedClassNames =
-            new ArrayList<String>(
+            new ArrayList<>(
                 Arrays.asList(
                     // Usually on the list, but not guaranteed:
                     // "sun.jdbc.odbc.JdbcOdbcDriver",
@@ -692,7 +692,7 @@ public class UtilTestCase{
      */
     @Test
     public void testArrayStack() {
-        final ArrayStack<String> stack = new ArrayStack<String>();
+        final ArrayStack<String> stack = new ArrayStack<>();
         assertEquals(0, stack.size());
         stack.add("a");
         assertEquals(1, stack.size());
@@ -953,7 +953,7 @@ public class UtilTestCase{
     @Test
     public void testCartesianProductList() {
         final CartesianProductList<String> list =
-            new CartesianProductList<String>(
+            new CartesianProductList<>(
                 Arrays.asList(
                     Arrays.asList("a", "b"),
                     Arrays.asList("1", "2", "3")));
@@ -967,7 +967,7 @@ public class UtilTestCase{
 
         // One element empty
         final CartesianProductList<String> list2 =
-            new CartesianProductList<String>(
+            new CartesianProductList<>(
                 Arrays.asList(
                     Arrays.<String>asList(),
                     Arrays.asList("1", "2", "3")));
@@ -977,7 +977,7 @@ public class UtilTestCase{
 
         // Other component empty
         final CartesianProductList<String> list3 =
-            new CartesianProductList<String>(
+            new CartesianProductList<>(
                 Arrays.asList(
                     Arrays.asList("a", "b"),
                     Arrays.<String>asList()));
@@ -987,7 +987,7 @@ public class UtilTestCase{
 
         // Zeroary
         final CartesianProductList<String> list4 =
-            new CartesianProductList<String>(
+            new CartesianProductList<>(
                 Collections.<List<String>>emptyList());
         assertFalse(list4.isEmpty());
 //        assertEquals("[[]]", list4.toString());
@@ -995,7 +995,7 @@ public class UtilTestCase{
 
         // 1-ary
         final CartesianProductList<String> list5 =
-            new CartesianProductList<String>(
+            new CartesianProductList<>(
                 Collections.singletonList(
                     Arrays.asList("a", "b")));
         assertEquals("[[a], [b]]", list5.toString());
@@ -1003,7 +1003,7 @@ public class UtilTestCase{
 
         // 3-ary
         final CartesianProductList<String> list6 =
-            new CartesianProductList<String>(
+            new CartesianProductList<>(
                 Arrays.asList(
                     Arrays.asList("a", "b", "c", "d"),
                     Arrays.asList("1", "2"),
@@ -1022,7 +1022,7 @@ public class UtilTestCase{
             Arrays.asList(strings).toString());
 
         CartesianProductList<Object> list7 =
-            new CartesianProductList<Object>(
+            new CartesianProductList<>(
                 Arrays.<List<Object>>asList(
                     Arrays.<Object>asList(
                         "1",
@@ -1045,7 +1045,7 @@ public class UtilTestCase{
     }
 
     private <T> void checkCartesianListContents(CartesianProductList<T> list) {
-        List<List<T>> arrayList = new ArrayList<List<T>>();
+        List<List<T>> arrayList = new ArrayList<>();
         for (List<T> ts : list) {
             arrayList.add(ts);
         }
@@ -1148,7 +1148,7 @@ public class UtilTestCase{
     public void testCombiningGenerator() {
         assertEquals(
             1,
-            new CombiningGenerator<String>(Collections.<String>emptyList())
+            new CombiningGenerator<>(Collections.<String>emptyList())
                 .size());
         assertEquals(
             1,
@@ -1231,7 +1231,7 @@ public class UtilTestCase{
         assertTrue(three.compareTo(two) > 0);
         assertEquals(0x02, three.byteAt(1));
 
-        final HashSet<ByteString> set = new HashSet<ByteString>();
+        final HashSet<ByteString> set = new HashSet<>();
         set.addAll(Arrays.asList(empty0, two, three, two, empty1, three));
         assertEquals(3, set.size());
     }
@@ -1262,7 +1262,7 @@ public class UtilTestCase{
     public void testArraySortedSet() {
         String[] abce = {"a", "b", "c", "e"};
         final SortedSet<String> abceSet =
-            new ArraySortedSet<String>(abce);
+            new ArraySortedSet<>(abce);
 
         // test size, isEmpty, contains
         assertEquals(4, abceSet.size());
@@ -1285,7 +1285,7 @@ public class UtilTestCase{
         // empty set
         String[] empty = {};
         final SortedSet<String> emptySet =
-            new ArraySortedSet<String>(empty);
+            new ArraySortedSet<>(empty);
         int n = 0;
         for (String s : emptySet) {
             ++n;
@@ -1311,14 +1311,14 @@ public class UtilTestCase{
         checkToString("[]", emptySet);
 
         // same hashCode etc. as similar hashset
-        final HashSet<String> abcHashset = new HashSet<String>();
+        final HashSet<String> abcHashset = new HashSet<>();
         abcHashset.addAll(Arrays.asList(abce));
         assertEquals(abcHashset, abceSet);
         assertEquals(abceSet, abcHashset);
         assertEquals(abceSet.hashCode(), abcHashset.hashCode());
 
         // subset to end
-        final Set<String> subsetEnd = new ArraySortedSet<String>(abce, 1, 4);
+        final Set<String> subsetEnd = new ArraySortedSet<>(abce, 1, 4);
         checkToString("[b, c, e]", subsetEnd);
         assertEquals(3, subsetEnd.size());
         assertFalse(subsetEnd.isEmpty());
@@ -1327,7 +1327,7 @@ public class UtilTestCase{
         assertFalse(subsetEnd.contains("z"));
 
         // subset from start
-        final Set<String> subsetStart = new ArraySortedSet<String>(abce, 0, 2);
+        final Set<String> subsetStart = new ArraySortedSet<>(abce, 0, 2);
         checkToString("[a, b]", subsetStart);
         assertEquals(2, subsetStart.size());
         assertFalse(subsetStart.isEmpty());
@@ -1335,7 +1335,7 @@ public class UtilTestCase{
         assertFalse(subsetStart.contains("c"));
 
         // subset from neither start or end
-        final Set<String> subset = new ArraySortedSet<String>(abce, 1, 2);
+        final Set<String> subset = new ArraySortedSet<>(abce, 1, 2);
         checkToString("[b]", subset);
         assertEquals(1, subset.size());
         assertFalse(subset.isEmpty());
@@ -1344,7 +1344,7 @@ public class UtilTestCase{
         assertFalse(subset.contains("e"));
 
         // empty subset
-        final Set<String> subsetEmpty = new ArraySortedSet<String>(abce, 1, 1);
+        final Set<String> subsetEmpty = new ArraySortedSet<>(abce, 1, 1);
         checkToString("[]", subsetEmpty);
         assertEquals(0, subsetEmpty.size());
         assertTrue(subsetEmpty.isEmpty());
@@ -1363,12 +1363,12 @@ public class UtilTestCase{
         assertEquals("[]", abceSet.subSet("z", "c").toString());
 
         // merge
-        final ArraySortedSet<String> ar1 = new ArraySortedSet<String>(abce);
+        final ArraySortedSet<String> ar1 = new ArraySortedSet<>(abce);
         final ArraySortedSet<String> ar2 =
-            new ArraySortedSet<String>(
+            new ArraySortedSet<>(
                 new String[] {"d"});
         final ArraySortedSet<String> ar3 =
-            new ArraySortedSet<String>(
+            new ArraySortedSet<>(
                 new String[] {"b", "c"});
         checkToString("[a, b, c, e]", ar1);
         checkToString("[d]", ar2);
@@ -1380,7 +1380,7 @@ public class UtilTestCase{
     private void checkToString(String expected, Set<String> set) {
         assertEquals(expected, set.toString());
 
-        final List<String> list = new ArrayList<String>();
+        final List<String> list = new ArrayList<>();
         list.addAll(set);
         assertEquals(expected, list.toString());
 
@@ -1438,7 +1438,7 @@ public class UtilTestCase{
         assertFalse(triple0.hashCode() == triple3.hashCode());
 
         final SortedSet<Triple<Integer, String, Boolean>> set =
-            new TreeSet<Triple<Integer, String, Boolean>>(
+            new TreeSet<>(
                 Arrays.asList(triple0, triple1, triple2, triple3, triple1));
         assertEquals(3, set.size());
         assertEquals(
@@ -1493,7 +1493,7 @@ public class UtilTestCase{
         class BaconationException extends RuntimeException {};
         Map<String, Object> nullValuesMap =
             Util.toNullValuesMap(
-                new ArrayList<String>(
+                new ArrayList<>(
                     Arrays.asList(
                         "CHUNKY",
                         "BACON!!"))

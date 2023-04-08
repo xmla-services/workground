@@ -164,11 +164,11 @@ public class MondrianFoodMartLoaderX {
     private File file;
 
     private final Map<String, Column[]> tableMetadataToLoad =
-        new HashMap<String, Column[]>();
+        new HashMap<>();
     private final Map<String, Column[]> aggregateTableMetadataToLoad =
-        new HashMap<String, Column[]>();
+        new HashMap<>();
     private final Map<String, List<UniqueConstraint>> tableConstraints =
-        new HashMap<String, List<UniqueConstraint>>();
+        new HashMap<>();
     private Dialect dialect;
     private boolean infobrightLoad;
     private long lastUpdate = 0;
@@ -431,7 +431,7 @@ public class MondrianFoodMartLoaderX {
         try {
             final Condition<String> tableFilter;
             if (include != null || exclude != null) {
-                tableFilter = new Condition<String>() {
+                tableFilter = new Condition<>() {
                     @Override
 					public boolean test(String tableName) {
                         if (include != null) {
@@ -453,7 +453,7 @@ public class MondrianFoodMartLoaderX {
                     }
                 };
             } else {
-                tableFilter = new Condition<String>() {
+                tableFilter = new Condition<>() {
                     @Override
 					public boolean test(String s) {
                         return true;
@@ -577,7 +577,7 @@ public class MondrianFoodMartLoaderX {
             String quotedColumnNames = null;
             Column[] orderedColumns = null;
             StringBuilder massagedLine = new StringBuilder();
-            final List<String> batch = new ArrayList<String>(batchSize);
+            final List<String> batch = new ArrayList<>(batchSize);
 
             Pattern regex = null;
             String quoteChar = null;
@@ -1081,7 +1081,7 @@ public class MondrianFoodMartLoaderX {
 
             rs = statement.executeQuery(ddl);
 
-            List<String> batch = new ArrayList<String>(batchSize);
+            List<String> batch = new ArrayList<>(batchSize);
             boolean displayedInsert = false;
 
             while (rs.next()) {
@@ -2142,7 +2142,7 @@ public class MondrianFoodMartLoaderX {
             List<UniqueConstraint> constraintList =
                 tableConstraints.get(tableName);
             if (constraintList == null) {
-                constraintList = new ArrayList<UniqueConstraint>();
+                constraintList = new ArrayList<>();
                 tableConstraints.put(tableName, constraintList);
             }
             constraintList.add(

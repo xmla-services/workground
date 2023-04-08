@@ -32,11 +32,11 @@ import static mondrian.rolap.util.ExpressionUtil.genericExpression;
 public class RolapCacheRegion {
     private final BitKey bitKey;
     private final Map<Integer, StarColumnPredicate> columnPredicates =
-        new HashMap<Integer, StarColumnPredicate>();
+        new HashMap<>();
     private final Map<String, StarColumnPredicate> columnPredicatesByName =
-        new HashMap<String, StarColumnPredicate>();
+        new HashMap<>();
     private Map<List<RolapStar.Column>, StarPredicate> predicates =
-        new HashMap<List<RolapStar.Column>, StarPredicate>();
+        new HashMap<>();
 
     public RolapCacheRegion(
         RolapStar star,
@@ -111,7 +111,7 @@ public class RolapCacheRegion {
         final List<RolapStar.Column> columnList =
             predicate.getConstrainedColumnList();
         predicates.put(
-            new ArrayList<RolapStar.Column>(columnList),
+            new ArrayList<>(columnList),
             predicate);
         for (RolapStar.Column column : columnList) {
             bitKey.set(column.getBitPosition());

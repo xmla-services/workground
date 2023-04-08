@@ -1109,7 +1109,7 @@ public class CacheControlTest {
      */
     private CellRegion memberRegion(Connection connection, String uniqueName) {
         final String[] names = uniqueName.split("\\.");
-        final List<Id.Segment> ids = new ArrayList<Id.Segment>(names.length);
+        final List<Id.Segment> ids = new ArrayList<>(names.length);
         for (int i = 0; i < names.length; i++) {
             String name = names[i];
             assert name.startsWith("[") && name.endsWith("]");

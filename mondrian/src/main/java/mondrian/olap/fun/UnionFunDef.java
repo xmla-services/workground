@@ -82,7 +82,7 @@ public class UnionFunDef extends FunDefBase {
             result.addAll(list1);
             return result;
         } else {
-            Set<List<Member>> added = new HashSet<List<Member>>();
+            Set<List<Member>> added = new HashSet<>();
             TupleList result = TupleCollections.createList(list0.getArity());
             FunUtil.addUnique(result, list0, added);
             FunUtil.addUnique(result, list1, added);

@@ -70,7 +70,7 @@ class MondrianOlap4jCatalog
     @Override
 	public NamedList<Schema> getSchemas() throws OlapException {
         final NamedList<MondrianOlap4jSchema> list =
-            new NamedListImpl<MondrianOlap4jSchema>();
+            new NamedListImpl<>();
         for (Map.Entry<String, RolapSchema> entry : schemaMap.entrySet()) {
             String schemaName = entry.getKey();
             final org.eclipse.daanse.olap.api.model.Schema schema = entry.getValue();

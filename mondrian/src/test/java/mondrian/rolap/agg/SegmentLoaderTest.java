@@ -163,7 +163,7 @@ public class SegmentLoaderTest extends BatchTestCase {
 
         GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
         ArrayList<GroupingSet> groupingSets =
-            new ArrayList<GroupingSet>();
+            new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
         groupingSets.add(groupableSetsInfo);
         SegmentLoader loader = new SegmentLoader(cacheMgr) {
@@ -180,7 +180,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             }
         };
         final List<Future<Map<Segment, SegmentWithData>>> segmentFutures =
-            new ArrayList<Future<Map<Segment, SegmentWithData>>>();
+            new ArrayList<>();
         loader.load(0, groupingSets, null, segmentFutures);
         for (Future<?> future : segmentFutures) {
             Util.safeGet(future, "");
@@ -246,7 +246,7 @@ public class SegmentLoaderTest extends BatchTestCase {
 
         GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
         ArrayList<GroupingSet> groupingSets =
-            new ArrayList<GroupingSet>();
+            new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
         groupingSets.add(groupableSetsInfo);
         SegmentLoader loader = new SegmentLoader(cacheMgr) {
@@ -263,7 +263,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             }
         };
         final List<Future<Map<Segment, SegmentWithData>>> segmentFutures =
-            new ArrayList<Future<Map<Segment, SegmentWithData>>>();
+            new ArrayList<>();
         loader.load(0, groupingSets, null, segmentFutures);
         SegmentWithData detailedSegment =
             getFor(
@@ -282,7 +282,7 @@ public class SegmentLoaderTest extends BatchTestCase {
 
         GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
         ArrayList<GroupingSet> groupingSets =
-            new ArrayList<GroupingSet>();
+            new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
         groupingSets.add(groupableSetsInfo);
         SegmentLoader loader = new SegmentLoader(cacheMgr) {
@@ -304,7 +304,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             }
         };
         final List<Future<Map<Segment, SegmentWithData>>> segmentFutures =
-            new ArrayList<Future<Map<Segment, SegmentWithData>>>();
+            new ArrayList<>();
         loader.load(0, groupingSets, null, segmentFutures);
         for (Future<?> future : segmentFutures) {
             Util.safeGet(future, "");
@@ -344,7 +344,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     }
 
     private List<Object[]> trim(final int length, final List<Object[]> data) {
-        return new AbstractList<Object[]>() {
+        return new AbstractList<>() {
             @Override
             public Object[] get(int index) {
                 return Util.copyOf(data.get(index), length);
@@ -365,7 +365,7 @@ public class SegmentLoaderTest extends BatchTestCase {
         prepareContext(context);
         GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
         ArrayList<GroupingSet> groupingSets =
-            new ArrayList<GroupingSet>();
+            new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
         SegmentLoader loader = new SegmentLoader(cacheMgr) {
             @Override
@@ -381,7 +381,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             }
         };
         final List<Future<Map<Segment, SegmentWithData>>> segmentFutures =
-            new ArrayList<Future<Map<Segment, SegmentWithData>>>();
+            new ArrayList<>();
         loader.load(0, groupingSets, null, segmentFutures);
         for (Future<?> future : segmentFutures) {
             Util.safeGet(future, "");
@@ -406,7 +406,7 @@ public class SegmentLoaderTest extends BatchTestCase {
 
         GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
 
-        List<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
+        List<GroupingSet> groupingSets = new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
         groupingSets.add(groupableSetsInfo);
 
@@ -507,7 +507,7 @@ public class SegmentLoaderTest extends BatchTestCase {
         SortedSet<Comparable>[] axisValueSet =
             loader.getDistinctValueWorkspace(axisCount);
         boolean[] axisContainsNull = new boolean[axisCount];
-        List<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
+        List<GroupingSet> groupingSets = new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
 
         loader.processData(
@@ -559,7 +559,7 @@ public class SegmentLoaderTest extends BatchTestCase {
         SortedSet<Comparable>[] axisValueSet =
                 loader.getDistinctValueWorkspace(axisCount);
         boolean[] axisContainsNull = new boolean[axisCount];
-        List<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
+        List<GroupingSet> groupingSets = new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
 
         loader.processData(
@@ -581,7 +581,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     {
         prepareContext(context);
         GroupingSet groupingSetsInfo = getDefaultGroupingSet(context.createConnection());
-        final List<Object[]> data = new ArrayList<Object[]>();
+        final List<Object[]> data = new ArrayList<>();
         data.add(new Object[]{"1997", "Food", "Deli", "F", "5990"});
         data.add(new Object[]{"1997", "Food", "Deli", "M", "6047"});
         data.add(new Object[]{"1997", "Food", "Canned_Products", "F", "867"});
@@ -601,7 +601,7 @@ public class SegmentLoaderTest extends BatchTestCase {
                 return stmt;
             }
         };
-        List<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
+        List<GroupingSet> groupingSets = new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
 
         SortedSet<Comparable>[] axisValueSet =
@@ -640,7 +640,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     }
 
     private void verifyUnitSalesDetailedForSparse(SegmentWithData segment) {
-        Map<CellKey, Double> cells = new HashMap<CellKey, Double>();
+        Map<CellKey, Double> cells = new HashMap<>();
         cells.put(
             CellKey.Generator.newCellKey(new int[]{0, 2, 1, 0}),
             368.0);
@@ -673,7 +673,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     }
 
     private void verifyUnitSalesAggregateForSparse(SegmentWithData segment) {
-        Map<CellKey, Double> cells = new HashMap<CellKey, Double>();
+        Map<CellKey, Double> cells = new HashMap<>();
         cells.put(
             CellKey.Generator.newCellKey(new int[]{0, 2, 1}),
             841.0);
@@ -745,7 +745,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testGroupingSetsUtilForMissingGroupingBitKeys(TestingContext context) {
         prepareContext(context);
-        List<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
+        List<GroupingSet> groupingSets = new ArrayList<>();
         groupingSets.add(getDefaultGroupingSet(context.createConnection()));
         groupingSets.add(getGroupingSetRollupOnGender(context.createConnection()));
         GroupingSetsList detail = new GroupingSetsList(groupingSets);
@@ -759,7 +759,7 @@ public class SegmentLoaderTest extends BatchTestCase {
         key.set(0);
         assertEquals(key, bitKeysList.get(1));
 
-        groupingSets = new ArrayList<GroupingSet>();
+        groupingSets = new ArrayList<>();
         groupingSets.add(getDefaultGroupingSet(context.createConnection()));
         groupingSets.add(getGroupingSetRollupOnGenderAndProductFamily(context.createConnection()));
         bitKeysList = new GroupingSetsList(groupingSets)
@@ -799,7 +799,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             star.lookupColumn(tableProductClass, fieldProductDepartment);
         RolapStar.Column gender = star.lookupColumn(tableCustomer, fieldGender);
 
-        List<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
+        List<GroupingSet> groupingSets = new ArrayList<>();
         groupingSets.add(getDefaultGroupingSet(context.createConnection()));
         groupingSets.add(getGroupingSetRollupOnProductDepartment(context.createConnection()));
         groupingSets.add(getGroupingSetRollupOnGenderAndProductDepartment(context.createConnection()));
@@ -888,7 +888,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             star.lookupColumn(tableProductClass, fieldProductDepartment);
         RolapStar.Column gender = star.lookupColumn(tableCustomer, fieldGender);
 
-        List<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
+        List<GroupingSet> groupingSets = new ArrayList<>();
         groupingSets.add(getDefaultGroupingSet(context.createConnection()));
         groupingSets.add(getGroupingSetRollupOnProductDepartment(context.createConnection()));
         groupingSets.add(getGroupingSetRollupOnGenderAndProductDepartment(context.createConnection()));
@@ -927,7 +927,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testGroupingSetsUtilSetsForGroupingFunctionIndex(TestingContext context) {
         prepareContext(context);
-        List<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
+        List<GroupingSet> groupingSets = new ArrayList<>();
         groupingSets.add(getDefaultGroupingSet(context.createConnection()));
         groupingSets.add(getGroupingSetRollupOnProductDepartment(context.createConnection()));
         groupingSets.add(getGroupingSetRollupOnGenderAndProductDepartment(context.createConnection()));
@@ -964,7 +964,7 @@ public class SegmentLoaderTest extends BatchTestCase {
             groupingSetsInfo.getSegments().get(0).getColumns();
         RolapStar.Column[] summaryColumns =
             groupableSetsInfo.getSegments().get(0).getColumns();
-        List<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
+        List<GroupingSet> groupingSets = new ArrayList<>();
         groupingSets.add(groupingSetsInfo);
         groupingSets.add(groupableSetsInfo);
 
@@ -1019,7 +1019,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     }
 
     private List<Object[]> getData(boolean incSummaryData) {
-        List<Object[]> data = new ArrayList<Object[]>();
+        List<Object[]> data = new ArrayList<>();
         data.add(new Object[]{"1997", "Food", "Deli", "F", "5990", 0});
         data.add(new Object[]{"1997", "Food", "Deli", "M", "6047", 0});
         if (incSummaryData) {
@@ -1056,7 +1056,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     private List<Object[]> getDataWithNullInRollupColumn(
         boolean incSummaryData)
     {
-        List<Object[]> data = new ArrayList<Object[]>();
+        List<Object[]> data = new ArrayList<>();
         data.add(new Object[]{"1997", "Food", "Deli", "F", "5990", 0});
         data.add(new Object[]{"1997", "Food", "Deli", "M", "6047", 0});
         data.add(new Object[]{"1997", "Food", "Deli", null, "867", 0});
@@ -1069,7 +1069,7 @@ public class SegmentLoaderTest extends BatchTestCase {
     private List<Object[]> getDataWithNullInAxisColumn(
         boolean incSummaryData)
     {
-        List<Object[]> data = new ArrayList<Object[]>();
+        List<Object[]> data = new ArrayList<>();
         data.add(new Object[]{"1997", "Food", "Deli", "F", "5990", 0});
         data.add(new Object[]{"1997", "Food", "Deli", "M", "6047", 0});
         if (incSummaryData) {

@@ -39,7 +39,7 @@ public class ConcurrentValidatingQueryRunner extends Thread {
     private long mRunTime;
     private long mStartTime;
     private long mStopTime;
-    private volatile List<Throwable> mExceptions = new ArrayList<Throwable>();
+    private volatile List<Throwable> mExceptions = new ArrayList<>();
     private String threadName;
     private int mRunCount;
     private int mSuccessCount;
@@ -236,7 +236,7 @@ public class ConcurrentValidatingQueryRunner extends Thread {
     {
         ConcurrentValidatingQueryRunner[] runners =
             new ConcurrentValidatingQueryRunner[numThreads];
-        List<Throwable> allExceptions = new ArrayList<Throwable>();
+        List<Throwable> allExceptions = new ArrayList<>();
 
         for (int idx = 0; idx < runners.length; idx++) {
             runners[idx] = new ConcurrentValidatingQueryRunner(

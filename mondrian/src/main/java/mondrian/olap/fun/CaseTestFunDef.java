@@ -55,7 +55,7 @@ class CaseTestFunDef extends FunDefBase {
                 new BooleanCalc[args.length / 2];
         final Calc[] exprCalcs =
                 new Calc[args.length / 2];
-        final List<Calc> calcList = new ArrayList<Calc>();
+        final List<Calc> calcList = new ArrayList<>();
         for (int i = 0, j = 0; i < exprCalcs.length; i++) {
             conditionCalcs[i] =
                     compiler.compileBoolean(args[j++]);

@@ -92,9 +92,9 @@ public class SegmentCacheTest {
             .add(testWorker);
 
         final List<SegmentHeader> createdHeaders =
-            new ArrayList<SegmentHeader>();
+            new ArrayList<>();
         final List<SegmentHeader> deletedHeaders =
-            new ArrayList<SegmentHeader>();
+            new ArrayList<>();
         final SegmentCache.SegmentCacheListener listener =
             new SegmentCache.SegmentCacheListener() {
                 @Override

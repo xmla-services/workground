@@ -381,7 +381,7 @@ public class RolapMemberBase
                 return getCaption();
 
             case Property.CONTRIBUTING_CHILDREN_ORDINAL:
-                list = new ArrayList<RolapMember>();
+                list = new ArrayList<>();
                 getHierarchy().getMemberReader().getMemberChildren(this, list);
                 return list;
 
@@ -441,7 +441,7 @@ public class RolapMemberBase
                                     .getApproxRowCount();
                             } else {
                                 ArrayList<RolapMember> list =
-                                    new ArrayList<RolapMember>();
+                                    new ArrayList<>();
                                 getHierarchy().getMemberReader()
                                     .getMemberChildren(
                                         RolapMemberBase.this, list);
@@ -725,7 +725,7 @@ public class RolapMemberBase
         try {
             // Getting the members by Level is the fastest way that I could
             // find for getting all of a hierarchy's members.
-            List<List<Member>> list = new ArrayList<List<Member>>();
+            List<List<Member>> list = new ArrayList<>();
             Level[] levels = hierarchy.getLevels();
             for (Level level : levels) {
                 List<Member> members =
@@ -1038,7 +1038,7 @@ public class RolapMemberBase
                 || (props == null)
                 || (props.length > 3))
             {
-                return new HashMap<String, Object>();
+                return new HashMap<>();
             } else {
                 return new Flat3Map();
             }

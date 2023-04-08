@@ -49,7 +49,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
 
     private final Set<Member> memberSet;
     private final ResolvedFunCallFinder finder;
-    private final Set<Member> activeMembers = new HashSet<Member>();
+    private final Set<Member> activeMembers = new HashSet<>();
     private final ResolvedFunCall call;
     private final boolean mapToAllMember;
 

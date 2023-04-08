@@ -53,7 +53,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2012/engine/400", name = "DefaultCompatibilityLevel")
   public JAXBElement<Long> createDefaultCompatibilityLevel(Long value) {
-    return new JAXBElement<Long>(_DefaultCompatibilityLevel_QNAME, Long.class, null, value);
+    return new JAXBElement<>(_DefaultCompatibilityLevel_QNAME, Long.class, null, value);
   }
 
 }

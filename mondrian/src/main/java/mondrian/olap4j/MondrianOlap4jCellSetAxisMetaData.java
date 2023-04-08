@@ -39,7 +39,7 @@ import mondrian.olap.type.TypeUtil;
 class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
     private final QueryAxis queryAxis;
     private final MondrianOlap4jCellSetMetaData cellSetMetaData;
-    private final List<Property> propertyList = new ArrayList<Property>();
+    private final List<Property> propertyList = new ArrayList<>();
 
     /**
      * Creates a MondrianOlap4jCellSetAxisMetaData.
@@ -111,7 +111,7 @@ class MondrianOlap4jCellSetAxisMetaData implements CellSetAxisMetaData {
         if (exp == null) {
             return Collections.emptyList();
         }
-        List<Hierarchy> hierarchyList = new ArrayList<Hierarchy>();
+        List<Hierarchy> hierarchyList = new ArrayList<>();
         for (org.eclipse.daanse.olap.api.model.Hierarchy hierarchy
             : TypeUtil.getHierarchies(exp.getType()))
         {

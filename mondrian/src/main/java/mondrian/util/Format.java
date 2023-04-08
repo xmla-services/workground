@@ -92,7 +92,7 @@ public class Format {
      * <p>If the number of entries in the cache exceeds 1000,
      */
     private static final Map<String, Format> cache =
-        new LinkedHashMap<String, Format>() {
+        new LinkedHashMap<>() {
             @Override
 			public boolean removeEldestEntry(Map.Entry<String, Format> entry) {
                 return size() > CacheLimit;
@@ -127,7 +127,7 @@ public class Format {
      * "en", or "" for the default) to a {@link Format.FormatLocale}.
      */
     private static final Map<String, FormatLocale> mapLocaleToFormatLocale =
-        new HashMap<String, FormatLocale>();
+        new HashMap<>();
 
     /**
      * Cache of parsed format strings and their thousand separator
@@ -135,7 +135,7 @@ public class Format {
      * over and over again.
      */
     private static final Map<String, ArrayStack<Integer>>
-        thousandSeparatorTokenMap = new HashMap<String, ArrayStack<Integer>>();
+        thousandSeparatorTokenMap = new HashMap<>();
 
     /**
      * Locale for US English, also the default for English and for all
@@ -804,7 +804,7 @@ public class Format {
                     countOccurrences(
                         formatStringBuffer,
                         getFormatToken(FORMAT_THOUSEP).charAt(0));
-                cachedThousandSeparatorPositions = new ArrayStack<Integer>();
+                cachedThousandSeparatorPositions = new ArrayStack<>();
                 if (nbThousandSeparators > 1) {
                     // Extract the whole part of the format string
                     final int decimalPos =
@@ -852,7 +852,7 @@ public class Format {
 
         private ArrayStack<Integer> getThousandSeparatorPositions() {
             // Defensive copy
-            return new ArrayStack<Integer>(cachedThousandSeparatorPositions);
+            return new ArrayStack<>(cachedThousandSeparatorPositions);
         }
 
         private int countOccurrences(final String s, final char c) {
@@ -1449,7 +1449,7 @@ public class Format {
     private static final int FORMAT_M_UPPER = 62;
 
     private static final Map<Integer, String> formatTokenToFormatString =
-        new HashMap<Integer, String>();
+        new HashMap<>();
 
     private static Token nfe(
         int code, int flags, String token, String purpose, String description)
@@ -2059,7 +2059,7 @@ public class Format {
          * to fast-resolve a macro token without iterating.
          */
         private static final Map<String, MacroToken> MAP =
-            new HashMap<String, MacroToken>();
+            new HashMap<>();
 
         static {
             for (MacroToken macroToken : values()) {
@@ -2134,7 +2134,7 @@ public class Format {
         }
         this.locale = locale;
 
-        List<BasicFormat> alternateFormatList = new ArrayList<BasicFormat>();
+        List<BasicFormat> alternateFormatList = new ArrayList<>();
         FormatType[] formatType = {null};
         while (formatString.length() > 0) {
             formatString = parseFormatString(
@@ -2462,8 +2462,8 @@ public class Format {
         }
 
         // Scan through the format string for format elements.
-        List<BasicFormat> formatList = new ArrayList<BasicFormat>();
-        List<Integer> thousands = new ArrayList<Integer>();
+        List<BasicFormat> formatList = new ArrayList<>();
+        List<Integer> thousands = new ArrayList<>();
         int decimalShift = 0;
         loop:
         while (formatString.length() > 0) {
@@ -3194,7 +3194,7 @@ public class Format {
             // Now print the number. That will happen backwards, so we
             // store it temporarily and then invert.
             ArrayStack<Character> formattedWholeDigits =
-                new ArrayStack<Character>();
+                new ArrayStack<>();
             // We need to keep track of how many digits we printed in the
             // current token.
             int nbInserted = 0;

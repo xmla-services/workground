@@ -33,9 +33,9 @@ public class MemorySegmentCache implements SegmentCache {
     // Use a thread-safe map because the SegmentCache
     // interface requires thread safety.
     private final Map<SegmentHeader, SoftReference<SegmentBody>> map =
-        new ConcurrentHashMap<SegmentHeader, SoftReference<SegmentBody>>();
+        new ConcurrentHashMap<>();
     private final List<SegmentCacheListener> listeners =
-        new CopyOnWriteArrayList<SegmentCacheListener>();
+        new CopyOnWriteArrayList<>();
 
     @Override
 	public SegmentBody get(SegmentHeader header) {
@@ -65,7 +65,7 @@ public class MemorySegmentCache implements SegmentCache {
 
     @Override
 	public List<SegmentHeader> getSegmentHeaders() {
-        return new ArrayList<SegmentHeader>(map.keySet());
+        return new ArrayList<>(map.keySet());
     }
 
     @Override
@@ -74,7 +74,7 @@ public class MemorySegmentCache implements SegmentCache {
         // and throwing an exception?
         assert header != null;
         assert body != null;
-        map.put(header, new SoftReference<SegmentBody>(body));
+        map.put(header, new SoftReference<>(body));
         fireSegmentCacheEvent(
             new SegmentCache.SegmentCacheListener.SegmentCacheEvent() {
                 @Override

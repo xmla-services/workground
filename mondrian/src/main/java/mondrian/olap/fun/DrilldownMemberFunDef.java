@@ -114,7 +114,7 @@ class DrilldownMemberFunDef extends FunDefBase {
                     return v0;
                 }
 
-                Set<Member> set1 = new HashSet<Member>(v1.slice(0));
+                Set<Member> set1 = new HashSet<>(v1.slice(0));
 
                 TupleList result = TupleCollections.createList(v0.getArity());
                 int i = 0, n = v0.size();

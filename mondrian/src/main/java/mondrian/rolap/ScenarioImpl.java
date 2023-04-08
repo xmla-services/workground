@@ -40,7 +40,7 @@ public final class ScenarioImpl implements Scenario {
     private final int id;
 
     private final List<WritebackCell> writebackCells =
-        new ArrayList<WritebackCell>();
+        new ArrayList<>();
 
     private RolapMember member;
 
@@ -161,7 +161,7 @@ public final class ScenarioImpl implements Scenario {
         writebackCells.add(
             new WritebackCell(
                 baseCube,
-                new ArrayList<RolapMember>(members),
+                new ArrayList<>(members),
                 constrainedColumnsBitKey,
                 compactKeyValues,
                 newValue,

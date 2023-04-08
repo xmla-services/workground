@@ -209,7 +209,7 @@ public class RolapConnection extends ConnectionBase {
         connectInfo.get( RolapConnectionProperties.Role.name() );
       if ( roleNameList != null ) {
         List<String> roleNames = Util.parseCommaList( roleNameList );
-        List<Role> roleList = new ArrayList<Role>();
+        List<Role> roleList = new ArrayList<>();
         for ( String roleName : roleNames ) {
           final LockBox.Entry entry =
             server.getLockBox().get( roleName );
@@ -850,7 +850,7 @@ public Context getContext() {
 
       this.underlying = result;
       this.axis = axis;
-      this.map = new HashMap<Integer, Integer>();
+      this.map = new HashMap<>();
       int axisCount = underlying.getAxes().length;
       this.pos = new int[ axisCount ];
       this.slicerAxis = underlying.getSlicerAxis();
@@ -869,7 +869,7 @@ public Context getContext() {
         filteredTupleList =
           new DelegatingTupleList(
             tupleList.getArity(),
-            new FilteredIterableList<List<Member>>(
+            new FilteredIterableList<>(
               tupleList,
               new FilteredIterableList.Filter<List<Member>>() {
                 @Override

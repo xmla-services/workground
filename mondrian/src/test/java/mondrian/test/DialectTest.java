@@ -1021,7 +1021,7 @@ public class DialectTest {
                                String expectedLast ) throws SQLException {
     ResultSet resultSet =
             getConnection(context).createStatement().executeQuery( query );
-    List<String> values = new ArrayList<String>();
+    List<String> values = new ArrayList<>();
     while ( resultSet.next() ) {
       values.add( resultSet.getString( 1 ) );
       if ( resultSet.wasNull() ) {
@@ -1048,9 +1048,9 @@ public class DialectTest {
     try {
       stmt = getConnection(context).createStatement();
       ResultSet resultSet = stmt.executeQuery( sql );
-      Set<List<String>> actualValues = new HashSet<List<String>>();
+      Set<List<String>> actualValues = new HashSet<>();
       while ( resultSet.next() ) {
-        final List<String> row = new ArrayList<String>();
+        final List<String> row = new ArrayList<>();
         for ( int i = 0; i < typeList.size(); i++ ) {
           final String s;
           final String type = typeList.get( i );
@@ -1067,7 +1067,7 @@ public class DialectTest {
         }
         actualValues.add( row );
       }
-      Set<List<String>> expectedRows = new HashSet<List<String>>();
+      Set<List<String>> expectedRows = new HashSet<>();
       for ( String[] strings : valueList ) {
         expectedRows.add( Arrays.asList( strings ) );
       }

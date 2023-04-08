@@ -159,7 +159,7 @@ public class Aggregation {
             final SegmentLoader segmentLoader = new SegmentLoader(cacheMgr);
             segmentLoader.load(
                 cellRequestCount,
-                new ArrayList<GroupingSet>(
+                new ArrayList<>(
                     Collections.singletonList(groupingSet)),
                 compoundPredicateList,
                 segmentFutures);
@@ -172,7 +172,7 @@ public class Aggregation {
         BitKey measureBitKey,
         StarColumnPredicate[] predicates)
     {
-        List<Segment> segments = new ArrayList<Segment>(measures.size());
+        List<Segment> segments = new ArrayList<>(measures.size());
         for (RolapStar.Measure measure : measures) {
             measureBitKey.set(measure.getBitPosition());
             Segment segment =
@@ -220,7 +220,7 @@ public class Aggregation {
         // We want to handle the special case "drilldown" which occurs pretty
         // often. Here, the parent is here as a constraint with a single member
         // and the list of children as well.
-        List<Member> potentialParents = new ArrayList<Member>();
+        List<Member> potentialParents = new ArrayList<>();
         for (final StarColumnPredicate predicate : predicates) {
             Member m;
             if (predicate instanceof MemberColumnPredicate) {

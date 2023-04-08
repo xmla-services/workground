@@ -49,7 +49,7 @@ public class SharedDimensionImpl implements SharedDimension {
     @Override
     public List<AnnotationImpl> annotations() {
         if (annotations == null) {
-            annotations = new ArrayList<AnnotationImpl>();
+            annotations = new ArrayList<>();
         }
         return this.annotations;
     }
@@ -57,7 +57,7 @@ public class SharedDimensionImpl implements SharedDimension {
     @Override
     public List<HierarchyImpl> hierarchy() {
         if (hierarchy == null) {
-            hierarchy = new ArrayList<HierarchyImpl>();
+            hierarchy = new ArrayList<>();
         }
         return this.hierarchy;
     }

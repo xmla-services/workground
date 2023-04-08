@@ -106,7 +106,7 @@ public class SqlTupleReader implements TupleReader {
   private static final Logger LOGGER =
     LoggerFactory.getLogger( SqlTupleReader.class );
   protected final TupleConstraint constraint;
-  List<TargetBase> targets = new ArrayList<TargetBase>();
+  List<TargetBase> targets = new ArrayList<>();
   int maxRows = 0;
 
   /**
@@ -141,7 +141,7 @@ public class SqlTupleReader implements TupleReader {
     boolean parentChild;
     List<RolapMember> members;
     final HashMap<Object, RolapMember> keyToMember =
-      new HashMap<Object, RolapMember>();
+      new HashMap<>();
     List<List<RolapMember>> siblings;
     // if set, the rows for this target come from the array rather
     // than native sql
@@ -165,9 +165,9 @@ public class SqlTupleReader implements TupleReader {
       // members[i] is the current member of level#i, and siblings[i]
       // is the current member of level#i plus its siblings
       members =
-        new ArrayList<RolapMember>(
+        new ArrayList<>(
           Collections.<RolapMember>nCopies( levels.length, null ) );
-      siblings = new ArrayList<List<RolapMember>>();
+      siblings = new ArrayList<>();
       for ( int i = 0; i < levels.length + 1; i++ ) {
         siblings.add( new ArrayList<RolapMember>() );
       }
@@ -389,7 +389,7 @@ public void addLevelMembers(
 
   @Override
 public Object getCacheKey() {
-    List<Object> key = new ArrayList<Object>();
+    List<Object> key = new ArrayList<>();
     key.add( constraint.getCacheKey() );
     key.add( SqlTupleReader.class );
     for ( TargetBase target : targets ) {
@@ -456,7 +456,7 @@ public Object getCacheKey() {
       if ( execQuery ) {
         // we're only reading tuples from the targets that are
         // non-enum targets
-        List<TargetBase> partialTargets = new ArrayList<TargetBase>();
+        List<TargetBase> partialTargets = new ArrayList<>();
         for ( TargetBase target : targetGroup ) {
           if ( target.srcMembers == null ) {
             partialTargets.add( target );
@@ -931,7 +931,7 @@ public TupleList readTuples(
    * @param partialResult list containing the columns and rows corresponding to data fetched through sql
    */
   private void savePartialResult( List<List<RolapMember>> partialResult ) {
-    List<RolapMember> row = new ArrayList<RolapMember>();
+    List<RolapMember> row = new ArrayList<>();
     for ( TargetBase target : targets ) {
       if ( target.srcMembers == null ) {
         row.add( target.getCurrMember() );

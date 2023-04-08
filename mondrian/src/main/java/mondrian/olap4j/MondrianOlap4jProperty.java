@@ -34,23 +34,23 @@ class MondrianOlap4jProperty implements IMondrianOlap4jProperty, Named {
      * olap4j standard.
      */
     static final Map<String, MondrianOlap4jProperty> MEMBER_EXTENSIONS =
-        new LinkedHashMap<String, MondrianOlap4jProperty>();
+        new LinkedHashMap<>();
 
     /**
      * Map of cell properties that are built into Mondrian but are not in the
      * olap4j standard.
      */
     static final Map<String, MondrianOlap4jProperty> CELL_EXTENSIONS =
-        new LinkedHashMap<String, MondrianOlap4jProperty>();
+        new LinkedHashMap<>();
 
     static {
         // Build set of names of olap4j standard member properties.
-        final Set<String> memberNames = new HashSet<String>();
+        final Set<String> memberNames = new HashSet<>();
         for (Property property : Property.StandardMemberProperty.values()) {
             memberNames.add(property.getName());
         }
 
-        final Set<String> cellNames = new HashSet<String>();
+        final Set<String> cellNames = new HashSet<>();
         for (Property property : StandardCellProperty.values()) {
             cellNames.add(property.getName());
         }

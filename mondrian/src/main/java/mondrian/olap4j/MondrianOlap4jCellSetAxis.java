@@ -81,7 +81,7 @@ class MondrianOlap4jCellSetAxis implements CellSetAxis {
 
     @Override
 	public List<Position> getPositions() {
-        return new AbstractList<Position>() {
+        return new AbstractList<>() {
             @Override
 			public Position get(final int index) {
                 return new MondrianOlap4jPosition(axis.getTupleList(), index);
@@ -132,7 +132,7 @@ class MondrianOlap4jCellSetAxis implements CellSetAxis {
 
         @Override
 		public List<Member> getMembers() {
-            return new AbstractList<Member>() {
+            return new AbstractList<>() {
                 @Override
 				public Member get(int slice) {
                     final org.eclipse.daanse.olap.api.model.Member mondrianMember =

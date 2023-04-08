@@ -20,7 +20,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Table;
 public class TableUtil {
     public static Map<String,String> getHintMap(Table table) {
         java.util.Map<String,String> h =
-            new java.util.HashMap<String,String>();
+            new java.util.HashMap<>();
         if (table.hint() != null) {
             int size = table.hint().size();
             for (int i = 0; i < size; i++) {

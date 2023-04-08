@@ -504,7 +504,7 @@ public class TypeUtil {
         }
         if (type instanceof TupleType) {
             final TupleType tupleType = (TupleType) type;
-            List<Hierarchy> hierarchyList = new ArrayList<Hierarchy>();
+            List<Hierarchy> hierarchyList = new ArrayList<>();
             for (Type elementType : tupleType.elementTypes) {
                 hierarchyList.add(elementType.getHierarchy());
             }

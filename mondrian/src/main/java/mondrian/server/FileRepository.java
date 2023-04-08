@@ -120,7 +120,7 @@ public class FileRepository implements Repository {
         RolapConnection connection)
     {
         final List<Map<String, Object>> propsList =
-            new ArrayList<Map<String, Object>>();
+            new ArrayList<>();
         for (DatabaseInfo dsInfo : getServerInfo().datasourceMap.values()) {
             propsList.add(dsInfo.properties);
         }
@@ -337,7 +337,7 @@ public class FileRepository implements Repository {
         RolapConnection connection,
         String databaseName)
     {
-        return new ArrayList<String>(
+        return new ArrayList<>(
             getServerInfo().datasourceMap.get(databaseName)
                 .catalogMap.keySet());
     }
@@ -346,7 +346,7 @@ public class FileRepository implements Repository {
 	public List<String> getDatabaseNames(
         RolapConnection connection)
     {
-        return new ArrayList<String>(
+        return new ArrayList<>(
             getServerInfo().datasourceMap.keySet());
     }
 
@@ -375,7 +375,7 @@ public class FileRepository implements Repository {
     // tests
     static class ServerInfo {
         private Map<String, DatabaseInfo> datasourceMap =
-            new HashMap<String, DatabaseInfo>();
+            new HashMap<>();
 
         // Method is created to variable has been been accessible by unit tests
         Map<String, DatabaseInfo> getDatasourceMap() {
@@ -389,7 +389,7 @@ public class FileRepository implements Repository {
         private final String name;
         private final Map<String, Object> properties;
         Map<String, CatalogInfo> catalogMap =
-            new HashMap<String, CatalogInfo>();
+            new HashMap<>();
 
         DatabaseInfo(String name, Map<String, Object> properties) {
             this.name = name;

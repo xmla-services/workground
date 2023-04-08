@@ -46,7 +46,7 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
     final MondrianOlap4jConnection olap4jConnection;
 
     private static final Comparator<Catalog> CATALOG_COMP =
-        new Comparator<Catalog>() {
+        new Comparator<>() {
             @Override
 			public int compare(Catalog o1, Catalog o2) {
                 return o1.getName().compareTo(o2.getName());
@@ -54,7 +54,7 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
         };
 
     private static final Comparator<Schema> SCHEMA_COMP =
-        new Comparator<Schema>() {
+        new Comparator<>() {
             @Override
 			public int compare(Schema o1, Schema o2) {
                 return o1.getName().compareTo(o2.getName());
@@ -100,7 +100,7 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
         throws OlapException
     {
         Map<String, Object> restrictionMap =
-            new HashMap<String, Object>();
+            new HashMap<>();
         assert patternValues.length % 2 == 0;
         for (int i = 0; i < patternValues.length / 2; ++i) {
             final String key = (String) patternValues[i * 2];
@@ -778,7 +778,7 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
         }
         List<String> headerList =
             Arrays.asList("TABLE_SCHEM", "TABLE_CAT");
-        List<List<Object>> rowList = new ArrayList<List<Object>>();
+        List<List<Object>> rowList = new ArrayList<>();
         for (Catalog catalog
                 : Util.sort(
                     olap4jConnection.getOlapCatalogs(),
@@ -809,7 +809,7 @@ abstract class MondrianOlap4jDatabaseMetaData implements OlapDatabaseMetaData {
 
         List<String> headerList =
             Arrays.asList("TABLE_CAT");
-        List<List<Object>> rowList = new ArrayList<List<Object>>();
+        List<List<Object>> rowList = new ArrayList<>();
         for (Catalog catalog
                 : Util.sort(
                     olap4jConnection.getOlapCatalogs(),

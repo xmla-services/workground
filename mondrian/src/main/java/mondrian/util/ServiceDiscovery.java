@@ -54,7 +54,7 @@ public class ServiceDiscovery<T> {
      * @return ServiceDiscovery for finding instances of the given interface
      */
     public static <T> ServiceDiscovery<T> forClass(Class<T> theInterface) {
-        return new ServiceDiscovery<T>(theInterface);
+        return new ServiceDiscovery<>(theInterface);
     }
 
     /**
@@ -79,9 +79,9 @@ public class ServiceDiscovery<T> {
     public List<Class<T>> getImplementor() {
         // Use linked hash set to eliminate duplicates but still return results
         // in the order they were added.
-        Set<Class<T>> uniqueClasses = new LinkedHashSet<Class<T>>();
+        Set<Class<T>> uniqueClasses = new LinkedHashSet<>();
         ServiceLoader.load(theInterface).forEach(s->uniqueClasses.add((Class<T>) s.getClass()));
-        List<Class<T>> rtn = new ArrayList<Class<T>>();
+        List<Class<T>> rtn = new ArrayList<>();
         rtn.addAll(uniqueClasses);
         return rtn;
     }

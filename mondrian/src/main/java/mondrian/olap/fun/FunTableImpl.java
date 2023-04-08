@@ -86,7 +86,7 @@ public abstract class FunTableImpl implements FunTable {
         String name,
         Syntax syntax)
     {
-        return new Pair<String, Syntax>(name.toUpperCase(), syntax);
+        return new Pair<>(name.toUpperCase(), syntax);
     }
 
     @Override
@@ -101,7 +101,7 @@ public abstract class FunTableImpl implements FunTable {
 
     @Override
 	public List<Resolver> getResolvers() {
-        final List<Resolver> list = new ArrayList<Resolver>();
+        final List<Resolver> list = new ArrayList<>();
         for (List<Resolver> resolvers : mapNameToResolvers.values()) {
             list.addAll(resolvers);
         }
@@ -134,13 +134,13 @@ public abstract class FunTableImpl implements FunTable {
      * called, then {@link #organizeFunctions()} sorts and indexes the map.
      */
     private class BuilderImpl implements Builder {
-        private final List<Resolver> resolverList = new ArrayList<Resolver>();
-        private final List<FunInfo> funInfoList = new ArrayList<FunInfo>();
+        private final List<Resolver> resolverList = new ArrayList<>();
+        private final List<FunInfo> funInfoList = new ArrayList<>();
         private final Map<Pair<String, Syntax>, List<Resolver>>
             mapNameToResolvers =
-            new HashMap<Pair<String, Syntax>, List<Resolver>>();
-        private final Set<String> reservedWords = new HashSet<String>();
-        private final Set<String> propertyWords = new HashSet<String>();
+            new HashMap<>();
+        private final Set<String> reservedWords = new HashSet<>();
+        private final Set<String> propertyWords = new HashSet<>();
 
         @Override
 		public void define(FunDef funDef) {
@@ -178,7 +178,7 @@ public abstract class FunTableImpl implements FunTable {
 
             // Map upper-case function names to resolvers.
             final List<List<Resolver>> nonSingletonResolverLists =
-                new ArrayList<List<Resolver>>();
+                new ArrayList<>();
             for (Resolver resolver : resolverList) {
                 Pair<String, Syntax> key =
                     FunTableImpl.makeResolverKey(
@@ -186,7 +186,7 @@ public abstract class FunTableImpl implements FunTable {
                         resolver.getSyntax());
                 List<Resolver> list = mapNameToResolvers.get(key);
                 if (list == null) {
-                    list = new ArrayList<Resolver>();
+                    list = new ArrayList<>();
                     mapNameToResolvers.put(key, list);
                 }
                 list.add(resolver);
@@ -197,7 +197,7 @@ public abstract class FunTableImpl implements FunTable {
 
             // Sort lists by signature (skipping singleton lists)
             final Comparator<Resolver> comparator =
-                new Comparator<Resolver>() {
+                new Comparator<>() {
                     @Override
 					public int compare(Resolver o1, Resolver o2) {
                         return o1.getSignature().compareTo(o2.getSignature());

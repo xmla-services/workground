@@ -135,7 +135,7 @@ public class Target extends TargetBase {
             == ResultStyle.LIST;
         final int limit = MondrianProperties.instance().ResultLimit.get();
 
-        final List<RolapMember> l = new AbstractList<RolapMember>() {
+        final List<RolapMember> l = new AbstractList<>() {
             private boolean moreRows = true;
             private int offset = 0;
             private RolapMember first = null;
@@ -249,7 +249,7 @@ public class Target extends TargetBase {
 
             @Override
 			public Iterator<RolapMember> iterator() {
-                return new Iterator<RolapMember>() {
+                return new Iterator<>() {
                     private int cursor = 0;
 
                     @Override

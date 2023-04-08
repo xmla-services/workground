@@ -60,14 +60,14 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         LoggerFactory.getLogger(SegmentCacheIndexImpl.class);
 
     private final Map<List, List<SegmentHeader>> bitkeyMap =
-        new HashMap<List, List<SegmentHeader>>();
+        new HashMap<>();
 
     /**
      * The fact map allows us to spot quickly which
      * segments have facts relating to a given header.
      */
     private final Map<List, FactInfo> factMap =
-        new HashMap<List, FactInfo>();
+        new HashMap<>();
 
     /**
      * The fuzzy fact map allows us to spot quickly which
@@ -79,10 +79,10 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
     // compound predicates into rich objects that can be serialized
     // as part of the SegmentHeader.
     private final Map<List, FuzzyFactInfo> fuzzyFactMap =
-        new HashMap<List, FuzzyFactInfo>();
+        new HashMap<>();
 
     private final Map<SegmentHeader, HeaderInfo> headerMap =
-        new HashMap<SegmentHeader, HeaderInfo>();
+        new HashMap<>();
 
     private final Thread thread;
 
@@ -168,7 +168,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
                 // Be lazy. Don't allocate a list unless there is at least one
                 // entry.
                 if (list.isEmpty()) {
-                    list = new ArrayList<SegmentHeader>();
+                    list = new ArrayList<>();
                 }
                 list.add(header);
             }
@@ -208,7 +208,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
             if (loading) {
                 // We are currently loading this segment. It isnt' in cache.
                 // We put a slot into which the data will become available.
-                headerInfo.slot = new SlotFuture<SegmentBody>();
+                headerInfo.slot = new SlotFuture<>();
             }
             headerMap.put(header, headerInfo);
         }
@@ -216,7 +216,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         final List bitkeyKey = makeBitkeyKey(header);
         List<SegmentHeader> headerList = bitkeyMap.get(bitkeyKey);
         if (headerList == null) {
-            headerList = new ArrayList<SegmentHeader>();
+            headerList = new ArrayList<>();
             bitkeyMap.put(bitkeyKey, headerList);
         }
         if (!headerList.contains(header)) {
@@ -469,7 +469,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
                 // Be lazy. Don't allocate a list unless there is at least one
                 // entry.
                 if (list.isEmpty()) {
-                    list = new ArrayList<SegmentHeader>();
+                    list = new ArrayList<>();
                 }
                 list.add(header);
             }
@@ -515,7 +515,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
 	public void printCacheState(PrintWriter pw) {
         checkThread();
         final List<List<SegmentHeader>> values =
-            new ArrayList<List<SegmentHeader>>(
+            new ArrayList<>(
                 bitkeyMap.values());
         Collections.sort(
             values,
@@ -537,7 +537,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
             });
         for (List<SegmentHeader> key : values) {
             final List<SegmentHeader> headerList =
-                new ArrayList<SegmentHeader>(key);
+                new ArrayList<>(key);
             Collections.sort(
                 headerList,
                 new Comparator<SegmentHeader>() {
@@ -576,7 +576,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
     @Override
 	public void cancel(Execution exec) {
         checkThread();
-        List<SegmentHeader> toRemove = new ArrayList<SegmentHeader>();
+        List<SegmentHeader> toRemove = new ArrayList<>();
         for (Entry<SegmentHeader, HeaderInfo> entry : headerMap.entrySet()) {
             if (entry.getValue().clients.remove(exec)) {
                 if (entry.getValue().slot != null
@@ -771,7 +771,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         // effort to roll up.
 
         final List<List<SegmentHeader>> list =
-            new ArrayList<List<SegmentHeader>>();
+            new ArrayList<>();
         final List<BitKey> ancestors =
             factInfo.bitkeyPoset.getAncestors(constrainedColsBitKey);
         for (BitKey bitKey : ancestors) {
@@ -852,7 +852,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         List<SegmentHeader> headers)
     {
         final List<Pair<SegmentHeader, List<SegmentColumn>>> matchingHeaders =
-            new ArrayList<Pair<SegmentHeader, List<SegmentColumn>>>();
+            new ArrayList<>();
         headerLoop:
         for (SegmentHeader header : headers) {
             // Skip headers that have exclusions.
@@ -863,7 +863,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
             }
 
             List<SegmentColumn> nonWildcards =
-                new ArrayList<SegmentColumn>();
+                new ArrayList<>();
             for (SegmentColumn column : header.getConstrainedColumns()) {
                 final SegmentColumn constrainedColumn =
                     header.getConstrainedColumn(column.columnExpression);
@@ -906,8 +906,8 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         }
 
         // Collect the list of non-wildcarded columns.
-        final List<SegmentColumn> columnList = new ArrayList<SegmentColumn>();
-        final List<String> columnNameList = new ArrayList<String>();
+        final List<SegmentColumn> columnList = new ArrayList<>();
+        final List<String> columnNameList = new ArrayList<>();
         for (Pair<SegmentHeader, List<SegmentColumn>> pair : matchingHeaders) {
             for (SegmentColumn column : pair.right) {
                 if (!columnNameList.contains(column.columnExpression)) {
@@ -927,7 +927,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         // Gather known values of each column. For each value, remember which
         // segments refer to it.
         final List<List<Comparable>> valueLists =
-            new ArrayList<List<Comparable>>();
+            new ArrayList<>();
         for (SegmentColumn column : columnList) {
             // For each value, which equivalence class it belongs to.
             final SortedMap<Comparable, BitSet> valueMap =
@@ -988,7 +988,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
             // this case, from 8 values to 4 classes.) We can use any value in a
             // class to stand for all values.
             final Map<BitSet, Comparable> eqclassPrimaryValues =
-                new HashMap<BitSet, Comparable>();
+                new HashMap<>();
             for (Map.Entry<Comparable, BitSet> entry : valueMap.entrySet()) {
                 final BitSet bitSet = entry.getValue();
                 if (!eqclassPrimaryValues.containsKey(bitSet)) {
@@ -997,7 +997,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
                 }
             }
             valueLists.add(
-                new ArrayList<Comparable>(
+                new ArrayList<>(
                     eqclassPrimaryValues.values()));
         }
 
@@ -1009,10 +1009,10 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
         // the segment that contains the most value combinations that we are are
         // not currently covering.
         final CartesianProductList<Comparable> tuples =
-            new CartesianProductList<Comparable>(valueLists);
-        final List<SegmentHeader> usedSegments = new ArrayList<SegmentHeader>();
+            new CartesianProductList<>(valueLists);
+        final List<SegmentHeader> usedSegments = new ArrayList<>();
         final List<SegmentHeader> unusedSegments =
-            new ArrayList<SegmentHeader>(Pair.left(matchingHeaders));
+            new ArrayList<>(Pair.left(matchingHeaders));
         tupleLoop:
         for (List<Comparable> tuple : tuples) {
             // If the value combination is handled by one of the used segments,
@@ -1057,7 +1057,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
 
     private static class FactInfo {
         private static final PartiallyOrderedSet.Ordering<BitKey> ORDERING =
-            new PartiallyOrderedSet.Ordering<BitKey>() {
+            new PartiallyOrderedSet.Ordering<>() {
                 @Override
 				public boolean lessThan(BitKey e1, BitKey e2) {
                     return e2.isSuperSetOf(e1);
@@ -1065,10 +1065,10 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
             };
 
         private final List<SegmentHeader> headerList =
-            new ArrayList<SegmentHeader>();
+            new ArrayList<>();
 
         private final PartiallyOrderedSet<BitKey> bitkeyPoset =
-            new PartiallyOrderedSet<BitKey>(ORDERING);
+            new PartiallyOrderedSet<>(ORDERING);
 
         private SegmentBuilder.SegmentConverter converter;
 
@@ -1078,7 +1078,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
 
     private static class FuzzyFactInfo {
         private final List<SegmentHeader> headerList =
-            new ArrayList<SegmentHeader>();
+            new ArrayList<>();
 
         FuzzyFactInfo() {
         }
@@ -1103,7 +1103,7 @@ public class SegmentCacheIndexImpl implements SegmentCacheIndex {
          * A list of clients interested in this segment.
          */
         private final List<Execution> clients =
-            new CopyOnWriteArrayList<Execution>();
+            new CopyOnWriteArrayList<>();
         /**
          * Whether this segment is already considered stale and must
          * be deleted after it is done loading. This can happen

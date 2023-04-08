@@ -56,7 +56,7 @@ public class ActionImpl implements Action {
     @Override
     public List<? extends Annotation> annotations() {
         if (annotations == null) {
-            annotations = new ArrayList<AnnotationImpl>();
+            annotations = new ArrayList<>();
         }
         return this.annotations;
     }

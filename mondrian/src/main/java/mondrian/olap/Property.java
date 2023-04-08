@@ -98,14 +98,14 @@ public class Property extends EnumeratedValues.BasicValue {
      * property.
      */
     private static final Map<String, Property> synonyms =
-        new HashMap<String, Property>();
+        new HashMap<>();
 
     /**
      * Map of upper-case names to property definitions, for case-insensitive
      * match. Also contains synonyms.
      */
     public static final Map<String, Property> mapUpperNameToProperties =
-        new HashMap<String, Property>();
+        new HashMap<>();
 
     public static final int FORMAT_EXP_PARSED_ORDINAL = 0;
     /**
@@ -730,7 +730,7 @@ public class Property extends EnumeratedValues.BasicValue {
      * The various property names which define a format string.
      */
     static final Set<String> FORMAT_PROPERTIES =
-        new HashSet<String>(
+        new HashSet<>(
             Arrays.asList(
                 "format", "format_string", "FORMAT", FORMAT_STRING.name));
 
@@ -819,7 +819,7 @@ public class Property extends EnumeratedValues.BasicValue {
     }
 
     public static final EnumeratedValues<Property> enumeration =
-        new EnumeratedValues<Property>(
+        new EnumeratedValues<>(
             new Property[] {
                 FORMAT_EXP_PARSED,
                 AGGREGATION_TYPE,

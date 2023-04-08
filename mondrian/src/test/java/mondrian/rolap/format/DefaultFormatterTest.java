@@ -23,7 +23,7 @@ public class DefaultFormatterTest {
 
     // property values and their expected formatted values
     private static final Map<Object, String> VALUES =
-            new HashMap<Object, String>() {{
+            new HashMap<>() {{
                 // string
                 put("String", "String");
 

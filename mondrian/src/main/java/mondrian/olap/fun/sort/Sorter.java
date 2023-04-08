@@ -871,7 +871,7 @@ public class Sorter {
     partialSort( pairs, pairComp, length );
 
     // Use an abstract list to avoid doing a copy. The result is immutable.
-    return new AbstractList<T>() {
+    return new AbstractList<>() {
       @Override
       public T get( int index ) {
         return pairs[ index ].t;

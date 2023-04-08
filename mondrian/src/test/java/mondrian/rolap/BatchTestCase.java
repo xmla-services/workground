@@ -99,7 +99,7 @@ public class BatchTestCase{
         String[] tableNames, String[] fieldNames, String[][] fieldValues,
         String cubeName, String measure)
     {
-        List<String> values = new ArrayList<String>();
+        List<String> values = new ArrayList<>();
         for (int i = 0; i < tableNames.length; i++) {
             values.add(fieldValues[i][0]);
         }
@@ -120,7 +120,7 @@ public class BatchTestCase{
         String[] tableNames, String[] fieldNames, String[][] fieldValues,
         String cubeName, String measure, CellRequestConstraint constraint)
     {
-        List<String> values = new ArrayList<String>();
+        List<String> values = new ArrayList<>();
         for (int i = 0; i < tableNames.length; i++) {
             values.add(fieldValues[i][0]);
         }
@@ -223,8 +223,7 @@ public class BatchTestCase{
                         new GroupingSetsCollector(true);
                     final List<Future<Map<Segment, SegmentWithData>>>
                         segmentFutures =
-                            new ArrayList<
-                                Future<Map<Segment, SegmentWithData>>>();
+                            new ArrayList<>();
                     batch.loadAggregation(collector, segmentFutures);
                     return collector.getGroupingSets().get(0);
                 }
@@ -720,7 +719,7 @@ public class BatchTestCase{
             new String[] { "time_by_day", "time_by_day", "time_by_day" };
         String[] aggConstraintColumns =
             new String[] { "the_year", "quarter", "month_of_year" };
-        List<String[]> aggConstraintValues = new ArrayList<String[]>();
+        List<String[]> aggConstraintValues = new ArrayList<>();
 
         for (String[] value : values) {
             assert value.length == 3;
@@ -738,7 +737,7 @@ public class BatchTestCase{
             new String[] { "store", "store"};
         String[] aggConstraintColumns =
             new String[] { "store_country", "store_state"};
-        List<String[]> aggConstraintValues = new ArrayList<String[]>();
+        List<String[]> aggConstraintValues = new ArrayList<>();
 
         for (String[] value : values) {
             assert value.length == 2;
@@ -756,7 +755,7 @@ public class BatchTestCase{
             new String[] { "product_class", "product_class"};
         String[] aggConstraintColumns =
             new String[] { "product_family", "product_department"};
-        List<String[]> aggConstraintValues = new ArrayList<String[]>();
+        List<String[]> aggConstraintValues = new ArrayList<>();
 
         for (String[] value : values) {
             assert value.length == 2;
@@ -1178,11 +1177,11 @@ public class BatchTestCase{
                 starColumn[i] = star.lookupColumn(table, column);
             }
 
-            List<StarPredicate> orPredList = new ArrayList<StarPredicate>();
+            List<StarPredicate> orPredList = new ArrayList<>();
             for (String[] values : valueList) {
                 assert (values.length == tables.length);
                 List<StarPredicate> andPredList =
-                    new ArrayList<StarPredicate>();
+                    new ArrayList<>();
                 for (int i = 0; i < values.length; i++) {
                     andPredList.add(
                         new ValueColumnPredicate(starColumn[i], values[i]));

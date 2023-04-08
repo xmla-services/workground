@@ -67,7 +67,7 @@ public abstract class RolapNativeSet extends RolapNative {
     LoggerFactory.getLogger( RolapNativeSet.class );
 
   private SmartCache<Object, TupleList> cache =
-    new SoftSmartCache<Object, TupleList>();
+    new SoftSmartCache<>();
 
   /**
    * Returns whether certain member types (e.g. calculated members) should disable native SQL evaluation for
@@ -160,7 +160,7 @@ public abstract class RolapNativeSet extends RolapNative {
      */
     @Override
 	public Object getCacheKey() {
-      List<Object> key = new ArrayList<Object>();
+      List<Object> key = new ArrayList<>();
       key.add( super.getCacheKey() );
       // only add args that will be retrieved through native sql;
       // args that are sets with calculated members aren't executed
@@ -246,7 +246,7 @@ public abstract class RolapNativeSet extends RolapNative {
       // [MONDRIAN-2411] adds the roles to the key. Normally, the
       // schemaReader would apply the roles, but we cache the lists over
       // its head.
-      List<Object> key = new ArrayList<Object>();
+      List<Object> key = new ArrayList<>();
       key.add( tr.getCacheKey() );
       key.addAll( Arrays.asList( args ) );
       key.add( maxRows );
@@ -274,7 +274,7 @@ public abstract class RolapNativeSet extends RolapNative {
       TupleList partialResult = result;
       List<List<RolapMember>> newPartialResult = null;
       if ( hasEnumTargets && partialResult == null ) {
-        newPartialResult = new ArrayList<List<RolapMember>>();
+        newPartialResult = new ArrayList<>();
       }
       Context context= schemaReader.getContext();
       if ( args.length == 1 ) {
@@ -294,7 +294,7 @@ public abstract class RolapNativeSet extends RolapNative {
       // less constraints
       if ( completeWithNullValues && result.size() < maxRows ) {
         RolapLevel l = args[ 0 ].getLevel();
-        List<RolapMember> list = new ArrayList<RolapMember>();
+        List<RolapMember> list = new ArrayList<>();
         for ( List<Member> lm : result ) {
           for ( Member m : lm ) {
             list.add( (RolapMember) m );
@@ -547,7 +547,7 @@ public abstract class RolapNativeSet extends RolapNative {
     extends DelegatingSchemaReader
     implements SchemaReaderWithMemberReaderAvailable {
     private final Map<Hierarchy, MemberReader> hierarchyReaders =
-      new HashMap<Hierarchy, MemberReader>();
+      new HashMap<>();
 
     SchemaReaderWithMemberReaderCache( SchemaReader schemaReader ) {
       super( schemaReader );

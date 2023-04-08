@@ -34,10 +34,10 @@ import static mondrian.rolap.util.ExpressionUtil.getExpression;
  */
 public class RolapStatisticsCache {
     private final RolapStar star;
-    private final Map<List, Long> columnMap = new HashMap<List, Long>();
-    private final Map<List, Long> tableMap = new HashMap<List, Long>();
+    private final Map<List, Long> columnMap = new HashMap<>();
+    private final Map<List, Long> tableMap = new HashMap<>();
     private final Map<String, Long> queryMap =
-        new HashMap<String, Long>();
+        new HashMap<>();
 
     public RolapStatisticsCache(RolapStar star) {
         this.star = star;

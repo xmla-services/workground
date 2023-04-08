@@ -57,7 +57,7 @@ class SparseSegmentBody extends AbstractSegmentBody {
     @Override
     public Map<CellKey, Object> getValueMap() {
         final Map<CellKey, Object> map =
-            new HashMap<CellKey, Object>(keys.length * 3 / 2);
+            new HashMap<>(keys.length * 3 / 2);
         for (int i = 0; i < keys.length; i++) {
             map.put(keys[i], data[i]);
         }

@@ -51,10 +51,10 @@ class RolapConnectionPool {
         new RolapConnectionPool();
 
     private final Map<Object, ObjectPool> mapConnectKeyToPool =
-        new HashMap<Object, ObjectPool>();
+        new HashMap<>();
 
     private final Map<Object, DataSource> dataSourceMap =
-        new WeakHashMap<Object, DataSource>();
+        new WeakHashMap<>();
 
     private RolapConnectionPool() {
     }

@@ -57,7 +57,7 @@ public class DimensionUsageImpl implements DimensionUsage {
     @Override
     public List<AnnotationImpl> annotations() {
         if (annotations == null) {
-            annotations = new ArrayList<AnnotationImpl>();
+            annotations = new ArrayList<>();
         }
         return this.annotations;
     }

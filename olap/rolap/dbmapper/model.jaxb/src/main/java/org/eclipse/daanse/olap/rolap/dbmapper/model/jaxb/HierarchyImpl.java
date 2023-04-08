@@ -87,7 +87,7 @@ public class HierarchyImpl implements Hierarchy {
     @Override
     public List<LevelImpl> level() {
         if (level == null) {
-            level = new ArrayList<LevelImpl>();
+            level = new ArrayList<>();
         }
         return this.level;
     }
@@ -95,7 +95,7 @@ public class HierarchyImpl implements Hierarchy {
     @Override
     public List<MemberReaderParameterImpl> memberReaderParameter() {
         if (memberReaderParameter == null) {
-            memberReaderParameter = new ArrayList<MemberReaderParameterImpl>();
+            memberReaderParameter = new ArrayList<>();
         }
         return this.memberReaderParameter;
     }

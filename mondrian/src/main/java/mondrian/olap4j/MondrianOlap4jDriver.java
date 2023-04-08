@@ -134,7 +134,7 @@ public class MondrianOlap4jDriver implements Driver {
 	public DriverPropertyInfo[] getPropertyInfo(
         String url, Properties info) throws SQLException
     {
-        List<DriverPropertyInfo> list = new ArrayList<DriverPropertyInfo>();
+        List<DriverPropertyInfo> list = new ArrayList<>();
 
         // First, add the contents of info
         for (Map.Entry<Object, Object> entry : info.entrySet()) {

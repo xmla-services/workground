@@ -138,7 +138,7 @@ public class RolapNativeFilter extends RolapNativeSet {
 
     @Override
 	public Object getCacheKey() {
-      List<Object> key = new ArrayList<Object>();
+      List<Object> key = new ArrayList<>();
       key.add( super.getCacheKey() );
       // Note required to use string in order for caching to work
       if ( filterExpr != null ) {

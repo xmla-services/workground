@@ -20,7 +20,7 @@ import java.util.Map;
  * references. Used for testing.
  */
 public class HardSmartCache <K, V> extends SmartCacheImpl<K, V> {
-    Map<K, V> cache = new HashMap<K, V>();
+    Map<K, V> cache = new HashMap<>();
 
     @Override
 	public V putImpl(K key, V value) {

@@ -68,7 +68,7 @@ public class SQLiteDatabaseProvider implements DatabaseProvider {
 		connectProperties.put(RolapConnectionProperties.Jdbc.name(), JDBC_SQLITE_MEMORY);
 //		connectProperties.put(RolapConnectionProperties.JdbcUser.name(),MYSQL_USER);
 //		connectProperties.put(RolapConnectionProperties.JdbcPassword.name(), MYSQL_PASSWORD);
-		return new AbstractMap.SimpleEntry<PropertyList, Context>(connectProperties, context);
+		return new AbstractMap.SimpleEntry<>(connectProperties, context);
 	}
 
 	@Override

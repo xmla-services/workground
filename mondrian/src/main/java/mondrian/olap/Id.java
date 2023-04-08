@@ -98,7 +98,7 @@ public class Id
      * @return New identifier
      */
     public Id append(Segment segment) {
-        List<Segment> newSegments = new ArrayList<Segment>(segments);
+        List<Segment> newSegments = new ArrayList<>(segments);
         newSegments.add(segment);
         return new Id(newSegments);
     }
@@ -178,7 +178,7 @@ public class Id
          */
         public static List<Segment> toList(String... nameParts) {
             final List<Segment> segments =
-                new ArrayList<Segment>(nameParts.length);
+                new ArrayList<>(nameParts.length);
             for (String namePart : nameParts) {
                 segments.add(new NameSegment(namePart));
             }
@@ -320,7 +320,7 @@ public class Id
                 throw new IllegalArgumentException();
             }
             this.subSegmentList =
-                new UnmodifiableArrayList<NameSegment>(
+                new UnmodifiableArrayList<>(
                     subSegmentList.toArray(
                         new NameSegment[subSegmentList.size()]));
         }

@@ -457,7 +457,7 @@ abstract class Recognizer {
                 } else if (matchCount == 0) {
                     if (notSeenForeignKeys.isEmpty()) {
                         notSeenForeignKeys =
-                            new ArrayList<JdbcSchema.Table.Column.Usage>();
+                            new ArrayList<>();
                     }
                     notSeenForeignKeys.add(factUsage);
                 }
@@ -842,7 +842,7 @@ abstract class Recognizer {
         // Collection of messages for unused columns, sorted by column name
         // so that tests are deterministic.
         SortedMap<String, String> unusedColumnMsgs =
-            new TreeMap<String, String>();
+            new TreeMap<>();
         for (JdbcSchema.Table.Column aggColumn : aggTable.getColumns()) {
             if (! aggColumn.hasUsage()) {
                 String msg = mres.AggUnknownColumn.str(
@@ -1006,7 +1006,7 @@ abstract class Recognizer {
     protected List<RolapCube> findCubes() {
         String name = dbFactTable.getName();
 
-        List<RolapCube> list = new ArrayList<RolapCube>();
+        List<RolapCube> list = new ArrayList<>();
         RolapSchema schema = star.getSchema();
         for (RolapCube cube : schema.getCubeList()) {
             if (cube.isVirtual()) {

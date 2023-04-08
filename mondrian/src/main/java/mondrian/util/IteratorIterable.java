@@ -23,13 +23,13 @@ import java.util.List;
  * from that array.</p>
  */
 public class IteratorIterable<E> implements Iterable<E> {
-    private final List<E> list = new ArrayList<E>();
+    private final List<E> list = new ArrayList<>();
     private final Iterator<E> recordingIterator;
 
     /** Creates an IteratorIterable. */
     public IteratorIterable(final Iterator<E> iterator) {
         this.recordingIterator =
-            new Iterator<E>() {
+            new Iterator<>() {
                 @Override
 				public boolean hasNext() {
                     return iterator.hasNext();

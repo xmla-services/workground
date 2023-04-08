@@ -77,7 +77,7 @@ public class VerticaDialect extends JdbcDialectImpl {
 
     private static final Map<Integer, BestFitColumnType> VERTICA_TYPE_MAP;
     static {
-        Map<Integer, BestFitColumnType> typeMapInitial = new HashMap<Integer, BestFitColumnType>();
+        Map<Integer, BestFitColumnType> typeMapInitial = new HashMap<>();
         typeMapInitial.put(Types.SMALLINT, BestFitColumnType.LONG);
         typeMapInitial.put(Types.TINYINT, BestFitColumnType.LONG);
         typeMapInitial.put(Types.INTEGER, BestFitColumnType.LONG);

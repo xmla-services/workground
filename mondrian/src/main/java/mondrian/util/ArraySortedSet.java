@@ -112,7 +112,7 @@ public class ArraySortedSet<E extends Comparable<E>>
         if (from == start && to == end) {
             return this;
         }
-        return new ArraySortedSet<E>(values, from, to);
+        return new ArraySortedSet<>(values, from, to);
     }
 
     private List<E> asList() {
@@ -230,7 +230,7 @@ public class ArraySortedSet<E extends Comparable<E>>
 
         // Note that m < k if there were duplicates. Result has fewer elements
         // than sum of inputs. But it's not worth truncating the array.
-        return new ArraySortedSet<E>(merged, 0, m);
+        return new ArraySortedSet<>(merged, 0, m);
     }
 
     @Override

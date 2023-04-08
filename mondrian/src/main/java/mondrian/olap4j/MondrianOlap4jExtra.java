@@ -285,7 +285,7 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
 	public List<String> getSchemaRoleNames(Schema schema) {
         MondrianOlap4jSchema olap4jSchema = (MondrianOlap4jSchema) schema;
         // TODO: this returns ALL roles, no the current user's roles
-        return new ArrayList<String>(
+        return new ArrayList<>(
             ((RolapSchema) olap4jSchema.schema).roleNames());
     }
 
@@ -366,7 +366,7 @@ class MondrianOlap4jExtra implements XmlaHandler.XmlaExtra {
             OlapWrapper wrapper = (OlapWrapper) element;
             if (wrapper.isWrapperFor(MetaElement.class)) {
                 final MetaElement annotated = wrapper.unwrap(MetaElement.class);
-                final Map<String, Object> map = new HashMap<String, Object>();
+                final Map<String, Object> map = new HashMap<>();
                 for (Map.Entry<String, Object> entry
                     : annotated.getMetadata().entrySet())
                 {

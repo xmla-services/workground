@@ -50,7 +50,7 @@ public class RolapSchemaPool {
 
     private final Map<SchemaKey, ExpiringReference<RolapSchema>>
         mapKeyToSchema =
-            new HashMap<SchemaKey, ExpiringReference<RolapSchema>>();
+            new HashMap<>();
 
     // REVIEW: This map is now considered unsafe. If two schemas have identical
     // metadata but a different underlying database connection, we should not
@@ -58,7 +58,7 @@ public class RolapSchemaPool {
     // definition, this field can probably be removed.
     private final Map<ByteString, ExpiringReference<RolapSchema>>
         mapMd5ToSchema =
-            new HashMap<ByteString, ExpiringReference<RolapSchema>>();
+            new HashMap<>();
 
     private final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
@@ -324,7 +324,7 @@ public class RolapSchemaPool {
         final String pinTimeout)
     {
         final ExpiringReference<RolapSchema> reference =
-            new ExpiringReference<RolapSchema>(
+            new ExpiringReference<>(
                 schema, pinTimeout);
         if (md5Bytes != null) {
             mapMd5ToSchema.put(md5Bytes, reference);
@@ -506,7 +506,7 @@ public class RolapSchemaPool {
 
     public void clear() {
         lock.writeLock().lock();
-        List<RolapSchema> schemas = new ArrayList<RolapSchema>();
+        List<RolapSchema> schemas = new ArrayList<>();
         try {
             if (RolapSchema.LOGGER.isDebugEnabled()) {
                 RolapSchema.LOGGER.debug(
@@ -541,7 +541,7 @@ public class RolapSchemaPool {
     public List<RolapSchema> getRolapSchemas() {
         lock.readLock().lock();
         try {
-            List<RolapSchema> list = new ArrayList<RolapSchema>();
+            List<RolapSchema> list = new ArrayList<>();
             for (RolapSchema schema : Util.GcIterator
                 .over(mapKeyToSchema.values()))
             {

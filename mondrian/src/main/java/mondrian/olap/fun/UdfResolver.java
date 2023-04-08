@@ -388,9 +388,9 @@ public class UdfResolver implements Resolver {
         private List adaptList(final TupleList tupleList) {
             // List is required to be mutable -- so make a copy.
             if (tupleList.getArity() == 1) {
-                return new ArrayList<Member>(tupleList.slice(0));
+                return new ArrayList<>(tupleList.slice(0));
             } else {
-                return new ArrayList<Member[]>(
+                return new ArrayList<>(
                     TupleCollections.asMemberArrayList(tupleList));
             }
         }

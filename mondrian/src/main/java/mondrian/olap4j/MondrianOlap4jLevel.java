@@ -148,7 +148,7 @@ class MondrianOlap4jLevel
      * @return List of properties
      */
     NamedList<Property> getProperties(boolean includeStandard) {
-        final NamedList<Property> list = new ArrayNamedListImpl<Property>() {
+        final NamedList<Property> list = new ArrayNamedListImpl<>() {
             @Override
 			public String getName(Object property) {
                 return ((Property)property).getName();
@@ -183,7 +183,7 @@ class MondrianOlap4jLevel
                         mondrianConnection.getSchemaReader().withLocus();
                     final List<org.eclipse.daanse.olap.api.model.Member> levelMembers =
                         schemaReader.getLevelMembers(level, true);
-                    return new AbstractList<Member>() {
+                    return new AbstractList<>() {
                         @Override
 						public Member get(int index) {
                             return olap4jConnection.toOlap4j(

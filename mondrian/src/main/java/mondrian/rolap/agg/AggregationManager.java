@@ -156,7 +156,7 @@ public class AggregationManager extends RolapAggregationManager {
                             region,
                             this));
                 final List<Future<Boolean>> futures =
-                    new ArrayList<Future<Boolean>>();
+                    new ArrayList<>();
                 for (Callable<Boolean> task : result.tasks) {
                     futures.add(segmentCacheManager.cacheExecutor.submit(task));
                 }

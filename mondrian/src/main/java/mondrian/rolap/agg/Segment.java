@@ -139,7 +139,7 @@ public class Segment {
     this.predicates = predicates;
     this.excludedRegions = excludedRegions;
     this.compoundPredicateList = compoundPredicateList;
-    final List<BitKey> compoundPredicateBitKeys = compoundPredicateList == null ? null : new AbstractList<BitKey>() {
+    final List<BitKey> compoundPredicateBitKeys = compoundPredicateList == null ? null : new AbstractList<>() {
       @Override
 	public BitKey get( int index ) {
         return compoundPredicateList.get( index ).getConstrainedColumnBitKey();

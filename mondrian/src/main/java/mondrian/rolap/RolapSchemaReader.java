@@ -72,7 +72,7 @@ public class RolapSchemaReader
 {
     protected final Role role;
     private final Map<Hierarchy, MemberReader> hierarchyReaders =
-        new ConcurrentHashMap<Hierarchy, MemberReader>();
+        new ConcurrentHashMap<>();
     protected final RolapSchema schema;
     private final SqlConstraintFactory sqlConstraintFactory =
         SqlConstraintFactory.instance();
@@ -223,7 +223,7 @@ public class RolapSchemaReader
     private List<RolapMember> internalGetMemberChildren(
         Member member, MemberChildrenConstraint constraint)
     {
-        List<RolapMember> children = new ArrayList<RolapMember>();
+        List<RolapMember> children = new ArrayList<>();
         final Hierarchy hierarchy = member.getHierarchy();
         final MemberReader memberReader = getMemberReader(hierarchy);
         memberReader.getMemberChildren(
@@ -389,7 +389,7 @@ public class RolapSchemaReader
             final Hierarchy hierarchy = members.get(0).getHierarchy();
             final MemberReader memberReader = getMemberReader(hierarchy);
             final List<RolapMember> rolapMemberList = Util.cast(members);
-            final List<RolapMember> children = new ArrayList<RolapMember>();
+            final List<RolapMember> children = new ArrayList<>();
             memberReader.getMemberChildren(
                 rolapMemberList,
                 children,
@@ -593,7 +593,7 @@ public class RolapSchemaReader
                 (RolapMember) parent, childNames);
         List<RolapMember> children =
             internalGetMemberChildren(parent, constraint);
-        List<Member> childMembers = new ArrayList<Member>();
+        List<Member> childMembers = new ArrayList<>();
         childMembers.addAll(children);
         return childMembers;
     }
@@ -656,7 +656,7 @@ public class RolapSchemaReader
     @Override
 	public List<Dimension> getCubeDimensions(Cube cube) {
         assert cube != null;
-        final List<Dimension> dimensions = new ArrayList<Dimension>();
+        final List<Dimension> dimensions = new ArrayList<>();
         for (Dimension dimension : cube.getDimensions()) {
             switch (role.getAccess(dimension)) {
             case NONE:
@@ -672,7 +672,7 @@ public class RolapSchemaReader
     @Override
 	public List<Hierarchy> getDimensionHierarchies(Dimension dimension) {
         assert dimension != null;
-        final List<Hierarchy> hierarchies = new ArrayList<Hierarchy>();
+        final List<Hierarchy> hierarchies = new ArrayList<>();
         for (Hierarchy hierarchy : dimension.getHierarchies()) {
             switch (role.getAccess(hierarchy)) {
             case NONE:
@@ -740,7 +740,7 @@ public class RolapSchemaReader
     @Override
 	public Cube[] getCubes() {
         List<RolapCube> cubes = schema.getCubeList();
-        List<Cube> visibleCubes = new ArrayList<Cube>(cubes.size());
+        List<Cube> visibleCubes = new ArrayList<>(cubes.size());
 
         for (Cube cube : cubes) {
             if (role.canAccess(cube)) {
@@ -827,7 +827,7 @@ public class RolapSchemaReader
         final Hierarchy hierarchy = member.getHierarchy();
         final MemberReader memberReader = getMemberReader(hierarchy);
         final ArrayList<RolapMember> memberChildren =
-            new ArrayList<RolapMember>();
+            new ArrayList<>();
 
         return memberReader.getMemberChildren(
             (RolapMember) member,

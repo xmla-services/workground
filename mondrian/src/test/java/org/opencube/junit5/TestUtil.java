@@ -1154,7 +1154,7 @@ public class TestUtil {
 	     * Returns an iterator over cells in an olap4j cell set.
 	     */
 	    static Iterable<org.olap4j.Cell> cellIter( final CellSet cellSet ) {
-	      return new Iterable<org.olap4j.Cell>() {
+	      return new Iterable<>() {
 	        @Override
 			public Iterator<org.olap4j.Cell> iterator() {
 	          int[] axisDimensions = new int[ cellSet.getAxes().size() ];
@@ -1164,7 +1164,7 @@ public class TestUtil {
 	          }
 	          final CoordinateIterator
 	            coordIter = new CoordinateIterator( axisDimensions );
-	          return new Iterator<org.olap4j.Cell>() {
+	          return new Iterator<>() {
 	            @Override
 				public boolean hasNext() {
 	              return coordIter.hasNext();
@@ -1174,7 +1174,7 @@ public class TestUtil {
 				public org.olap4j.Cell next() {
 	              final int[] ints = coordIter.next();
 	              final List<Integer> list =
-	                new AbstractList<Integer>() {
+	                new AbstractList<>() {
 	                  @Override
 					public Integer get( int index ) {
 	                    return ints[ index ];

@@ -60,7 +60,7 @@ public class AggNameImpl implements AggName {
     @Override
     public List<AggColumnNameImpl> aggIgnoreColumn() {
         if (aggIgnoreColumn == null) {
-            aggIgnoreColumn = new ArrayList<AggColumnNameImpl>();
+            aggIgnoreColumn = new ArrayList<>();
         }
         return this.aggIgnoreColumn;
     }
@@ -68,7 +68,7 @@ public class AggNameImpl implements AggName {
     @Override
     public List<AggForeignKeyImpl> aggForeignKey() {
         if (aggForeignKey == null) {
-            aggForeignKey = new ArrayList<AggForeignKeyImpl>();
+            aggForeignKey = new ArrayList<>();
         }
         return this.aggForeignKey;
     }
@@ -76,7 +76,7 @@ public class AggNameImpl implements AggName {
     @Override
     public List<AggMeasureImpl> aggMeasure() {
         if (aggMeasure == null) {
-            aggMeasure = new ArrayList<AggMeasureImpl>();
+            aggMeasure = new ArrayList<>();
         }
         return this.aggMeasure;
     }
@@ -84,7 +84,7 @@ public class AggNameImpl implements AggName {
     @Override
     public List<AggLevelImpl> aggLevel() {
         if (aggLevel == null) {
-            aggLevel = new ArrayList<AggLevelImpl>();
+            aggLevel = new ArrayList<>();
         }
         return this.aggLevel;
     }
@@ -115,7 +115,7 @@ public class AggNameImpl implements AggName {
     @Override
     public List<? extends AggMeasureFactCount> measuresFactCount() {
         if (measuresFactCount == null) {
-            measuresFactCount = new ArrayList<AggMeasureFactCountImpl>();
+            measuresFactCount = new ArrayList<>();
         }
         return measuresFactCount;
     }

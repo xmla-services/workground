@@ -55,7 +55,7 @@ public class TraversalList<T> extends UnsupportedList<List<T>> {
 
     @Override
 	public Iterator<List<T>> iterator() {
-        return new Iterator<List<T>>() {
+        return new Iterator<>() {
             private int currentIndex = 0;
             private List<T> precalculated;
 
@@ -117,7 +117,7 @@ public class TraversalList<T> extends UnsupportedList<List<T>> {
 
     @Override
 	public List<List<T>> subList(final int first, final int last) {
-        return new AbstractList<List<T>>() {
+        return new AbstractList<>() {
             @Override
 			public List<T> get(int index) {
                 return TraversalList.this.get(index + first);

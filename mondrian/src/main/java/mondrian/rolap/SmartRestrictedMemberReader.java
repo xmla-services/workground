@@ -51,7 +51,7 @@ class SmartRestrictedMemberReader extends RestrictedMemberReader {
     // Our little ad-hoc cache.
     final Map<RolapMember, AccessAwareMemberList>
         memberToChildren =
-            new WeakHashMap<RolapMember, AccessAwareMemberList>();
+            new WeakHashMap<>();
 
     // The lock for cache access.
     final ReadWriteLock lock = new ReentrantReadWriteLock();

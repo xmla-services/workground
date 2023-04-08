@@ -429,7 +429,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         }
 
         if ( list.getArity() == 1 ) {
-          memberValueMap = new HashMap<Member, Object>();
+          memberValueMap = new HashMap<>();
           tupleValueMap = null;
           for ( Member member : list.slice( 0 ) ) {
             evaluator.setContext( member );
@@ -453,7 +453,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           }
           numValues = memberValueMap.keySet().size();
         } else {
-          tupleValueMap = new HashMap<List<Member>, Object>();
+          tupleValueMap = new HashMap<>();
           memberValueMap = null;
           for ( List<Member> tuple : list ) {
             evaluator.setContext( tuple );
@@ -640,7 +640,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
    * Data structure which contains a list and can return the position of an element in the list in O(log N).
    */
   static class RankedMemberList {
-    Map<Member, Integer> map = new HashMap<Member, Integer>();
+    Map<Member, Integer> map = new HashMap<>();
 
     RankedMemberList( List<Member> members ) {
       int i = -1;

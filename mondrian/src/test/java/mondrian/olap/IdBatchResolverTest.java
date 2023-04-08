@@ -405,7 +405,7 @@ public class IdBatchResolverTest  {
         String msg, Collection<String> strings, Collection<String> list)
     {
         if (!strings.containsAll(list)) {
-            List<String> copy = new ArrayList<String>(list);
+            List<String> copy = new ArrayList<>(list);
             copy.removeAll(strings);
             fail(
                 String.format(

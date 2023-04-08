@@ -74,8 +74,8 @@ abstract class DenseSegmentBodyTestBase<T extends AbstractSegmentBody, V>
 
   @Test
   public void testGetValueMap_NoNullCells_NoNullAxes() {
-    SortedSet<Comparable> axis1 = new TreeSet<Comparable>(asList(1, 2));
-    SortedSet<Comparable> axis2 = new TreeSet<Comparable>(asList(3));
+    SortedSet<Comparable> axis1 = new TreeSet<>(asList(1, 2));
+    SortedSet<Comparable> axis2 = new TreeSet<>(asList(3));
     List<Pair<SortedSet<Comparable>, Boolean>> axes = asList(
         of(axis1, false), of(axis2, false));
     T body = withAxes(axes, nonNull, nonNull, nonNull);
@@ -84,8 +84,8 @@ abstract class DenseSegmentBodyTestBase<T extends AbstractSegmentBody, V>
 
   @Test
   public void testGetValueMap_NoNullCells_HasNullAxes() {
-    SortedSet<Comparable> axis1 = new TreeSet<Comparable>(asList(1, 2));
-    SortedSet<Comparable> axis2 = new TreeSet<Comparable>(asList(3));
+    SortedSet<Comparable> axis1 = new TreeSet<>(asList(1, 2));
+    SortedSet<Comparable> axis2 = new TreeSet<>(asList(3));
     List<Pair<SortedSet<Comparable>, Boolean>> axes = asList(
         of(axis1, false), of(axis2, true));
     T body = withAxes(axes, nonNull, nonNull, nonNull, nonNull);
@@ -94,8 +94,8 @@ abstract class DenseSegmentBodyTestBase<T extends AbstractSegmentBody, V>
 
   @Test
   public void testGetValueMap_HasNullCells_NoNullAxes() {
-    SortedSet<Comparable> axis1 = new TreeSet<Comparable>(asList(1, 2));
-    SortedSet<Comparable> axis2 = new TreeSet<Comparable>(asList(3));
+    SortedSet<Comparable> axis1 = new TreeSet<>(asList(1, 2));
+    SortedSet<Comparable> axis2 = new TreeSet<>(asList(3));
     List<Pair<SortedSet<Comparable>, Boolean>> axes = asList(
         of(axis1, false), of(axis2, false));
     T body = withAxes(axes, nonNull, nullValue, nonNull, nullValue, nonNull);
@@ -104,8 +104,8 @@ abstract class DenseSegmentBodyTestBase<T extends AbstractSegmentBody, V>
 
   @Test
   public void testGetValueMap_HasNullCells_HasNullAxes() {
-    SortedSet<Comparable> axis1 = new TreeSet<Comparable>(asList(1, 2));
-    SortedSet<Comparable> axis2 = new TreeSet<Comparable>(asList(3));
+    SortedSet<Comparable> axis1 = new TreeSet<>(asList(1, 2));
+    SortedSet<Comparable> axis2 = new TreeSet<>(asList(3));
     List<Pair<SortedSet<Comparable>, Boolean>> axes = asList(
         of(axis1, false), of(axis2, true));
     T body = withAxes(
@@ -115,8 +115,8 @@ abstract class DenseSegmentBodyTestBase<T extends AbstractSegmentBody, V>
 
   @Test
   public void testGetValueMap_OnlyNullCells_NoNullAxes() {
-    SortedSet<Comparable> axis1 = new TreeSet<Comparable>(asList(1, 2));
-    SortedSet<Comparable> axis2 = new TreeSet<Comparable>(asList(3));
+    SortedSet<Comparable> axis1 = new TreeSet<>(asList(1, 2));
+    SortedSet<Comparable> axis2 = new TreeSet<>(asList(3));
     List<Pair<SortedSet<Comparable>, Boolean>> axes = asList(
         of(axis1, false), of(axis2, false));
     T body = withAxes(axes, nullValue, nullValue);
@@ -125,8 +125,8 @@ abstract class DenseSegmentBodyTestBase<T extends AbstractSegmentBody, V>
 
   @Test
   public void testGetValueMap_OnlyNullCells_HasNullAxes() {
-    SortedSet<Comparable> axis1 = new TreeSet<Comparable>(asList(1, 2));
-    SortedSet<Comparable> axis2 = new TreeSet<Comparable>(asList(3));
+    SortedSet<Comparable> axis1 = new TreeSet<>(asList(1, 2));
+    SortedSet<Comparable> axis2 = new TreeSet<>(asList(3));
     List<Pair<SortedSet<Comparable>, Boolean>> axes = asList(
         of(axis1, false), of(axis2, true));
     T body = withAxes(axes, nullValue, nullValue);

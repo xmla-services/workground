@@ -154,7 +154,7 @@ public class SegmentHeader implements Serializable {
      */
     public SegmentHeader clone(SegmentColumn[] overrideValues) {
         Map<String, SegmentColumn> colsToAdd =
-            new HashMap<String, SegmentColumn>();
+            new HashMap<>();
         for (SegmentColumn cc : this.constrainedColumns) {
             colsToAdd.put(cc.columnExpression, cc);
         }
@@ -167,7 +167,7 @@ public class SegmentHeader implements Serializable {
                 schemaChecksum,
                 cubeName,
                 measureName,
-                new ArrayList<SegmentColumn>(colsToAdd.values()),
+                new ArrayList<>(colsToAdd.values()),
                 Collections.<String>emptyList(),
                 rolapStarFactTableName,
                 constrainedColsBitKey,
@@ -226,7 +226,7 @@ public class SegmentHeader implements Serializable {
      */
     public SegmentHeader constrain(SegmentColumn[] region) {
         final Map<String, SegmentColumn> newRegions =
-            new HashMap<String, SegmentColumn>();
+            new HashMap<>();
         for (SegmentColumn excludedRegion : excludedRegions) {
             newRegions.put(
                 excludedRegion.columnExpression,
@@ -258,7 +258,7 @@ public class SegmentHeader implements Serializable {
                 compoundPredicates,
                 rolapStarFactTableName,
                 constrainedColsBitKey,
-                new ArrayList<SegmentColumn>(newRegions.values()));
+                new ArrayList<>(newRegions.values()));
     }
 
     @Override

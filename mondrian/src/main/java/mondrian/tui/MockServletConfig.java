@@ -36,7 +36,7 @@ public class MockServletConfig implements ServletConfig {
         this(null);
     }
     public MockServletConfig(ServletContext servletContext) {
-        this.initParams = new HashMap<String, String>();
+        this.initParams = new HashMap<>();
         this.servletContext = servletContext;
     }
 

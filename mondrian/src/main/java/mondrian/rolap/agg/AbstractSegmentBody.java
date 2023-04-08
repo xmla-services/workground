@@ -58,10 +58,10 @@ abstract class AbstractSegmentBody implements SegmentBody {
 
     @Override
 	public Map<CellKey, Object> getValueMap() {
-        return new AbstractMap<CellKey, Object>() {
+        return new AbstractMap<>() {
             @Override
 			public Set<Entry<CellKey, Object>> entrySet() {
-                return new AbstractSet<Entry<CellKey, Object>>() {
+                return new AbstractSet<>() {
                     @Override
 					public Iterator<Entry<CellKey, Object>> iterator() {
                         return new SegmentBodyIterator();

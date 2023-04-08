@@ -45,7 +45,7 @@ public class TestTest {
 		public Entry<PropertyList, Context> activate() {
 			PropertyList props = new PropertyList();
 			props.put("x", "y");
-			return new AbstractMap.SimpleEntry<PropertyList, Context>(props, new SQLLiteContext());
+			return new AbstractMap.SimpleEntry<>(props, new SQLLiteContext());
 		}
 
 		@Override

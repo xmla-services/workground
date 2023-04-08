@@ -92,9 +92,9 @@ public class CacheTest {
         final Monitor monitor = server.getMonitor();
         final ServerInfo serverBefore = monitor.getServer();
 
-        final List<Future<Boolean>> futures = new ArrayList<Future<Boolean>>();
+        final List<Future<Boolean>> futures = new ArrayList<>();
         for (int i = 0; i < parallel; i++) {
-            Callable<Boolean> runnable = new Callable<Boolean>() {
+            Callable<Boolean> runnable = new Callable<>() {
                 @Override
 				public Boolean call() {
                     TestUtil.assertQueryReturns(

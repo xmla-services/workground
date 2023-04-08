@@ -84,7 +84,7 @@ public class CubeImpl implements Cube {
     @Override
     public List<CubeDimension> dimensionUsageOrDimension() {
         if (dimensionUsageOrDimension == null) {
-            dimensionUsageOrDimension = new ArrayList<CubeDimension>();
+            dimensionUsageOrDimension = new ArrayList<>();
         }
         return this.dimensionUsageOrDimension;
     }
@@ -92,7 +92,7 @@ public class CubeImpl implements Cube {
     @Override
     public List<MeasureImpl> measure() {
         if (measure == null) {
-            measure = new ArrayList<MeasureImpl>();
+            measure = new ArrayList<>();
         }
         return this.measure;
     }
@@ -100,7 +100,7 @@ public class CubeImpl implements Cube {
     @Override
     public List<CalculatedMemberImpl> calculatedMember() {
         if (calculatedMember == null) {
-            calculatedMember = new ArrayList<CalculatedMemberImpl>();
+            calculatedMember = new ArrayList<>();
         }
         return this.calculatedMember;
     }
@@ -108,7 +108,7 @@ public class CubeImpl implements Cube {
     @Override
     public List<NamedSetImpl> namedSet() {
         if (namedSet == null) {
-            namedSet = new ArrayList<NamedSetImpl>();
+            namedSet = new ArrayList<>();
         }
         return this.namedSet;
     }
@@ -116,7 +116,7 @@ public class CubeImpl implements Cube {
     @Override
     public List<DrillThroughActionImpl> drillThroughAction() {
         if (drillThroughAction == null) {
-            drillThroughAction = new ArrayList<DrillThroughActionImpl>();
+            drillThroughAction = new ArrayList<>();
         }
         return this.drillThroughAction;
     }
@@ -186,7 +186,7 @@ public class CubeImpl implements Cube {
     @Override
     public List<WritebackTableImpl> writebackTable() {
         if (writebackTable == null) {
-            writebackTable = new ArrayList<WritebackTableImpl>();
+            writebackTable = new ArrayList<>();
         }
         return this.writebackTable;
     }
@@ -208,7 +208,7 @@ public class CubeImpl implements Cube {
     @Override
     public List<? extends Action> action() {
         if (action == null) {
-            action = new ArrayList<ActionImpl>();
+            action = new ArrayList<>();
         }
         return action;
     }

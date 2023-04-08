@@ -40,7 +40,7 @@ public class SchemaGrantImpl implements SchemaGrant {
     @Override
     public List<CubeGrantImpl> cubeGrant() {
         if (cubeGrant == null) {
-            cubeGrant = new ArrayList<CubeGrantImpl>();
+            cubeGrant = new ArrayList<>();
         }
         return this.cubeGrant;
     }

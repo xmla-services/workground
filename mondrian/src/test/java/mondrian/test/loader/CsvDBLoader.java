@@ -174,13 +174,13 @@ public class CsvDBLoader extends DBLoader {
     }
 
     public Table[] getTablesFromFile() throws Exception {
-        List<Table> list = new ArrayList<Table>();
+        List<Table> list = new ArrayList<>();
         loadTables(this.inputFile, list);
         return list.toArray(new Table[list.size()]);
     }
 
     public Table[] getTables(File[] files) throws Exception {
-        List<Table> list = new ArrayList<Table>();
+        List<Table> list = new ArrayList<>();
         for (File file : files) {
             loadTables(file, list);
         }
@@ -188,7 +188,7 @@ public class CsvDBLoader extends DBLoader {
     }
 
     public Table[] getTables(Reader reader) throws Exception {
-        List<Table> list = new ArrayList<Table>();
+        List<Table> list = new ArrayList<>();
         loadTables(reader, list);
         return list.toArray(new Table[list.size()]);
     }
@@ -217,7 +217,7 @@ public class CsvDBLoader extends DBLoader {
         }
         @Override
 		public Iterator<Row> iterator() {
-            return new Iterator<Row>() {
+            return new Iterator<>() {
                 String[] line;
                 @Override
 				public boolean hasNext() {
@@ -292,8 +292,8 @@ public class CsvDBLoader extends DBLoader {
         CsvLoader csvloader = null;
         try {
             Table table = null;
-            List<String> beforeActionList = new ArrayList<String>();
-            List<String> afterActionList = new ArrayList<String>();
+            List<String> beforeActionList = new ArrayList<>();
+            List<String> afterActionList = new ArrayList<>();
             String tableName = null;
             String[] columnNames = null;
             String[] columnTypes = null;
@@ -561,7 +561,7 @@ public class CsvDBLoader extends DBLoader {
 
                     } else if (nosOfRowsStr != -1) {
 //System.out.println("CsvLoader.loadTables: nosOfRowsStr="+nosOfRowsStr);
-                        List<Row> list = new ArrayList<Row>();
+                        List<Row> list = new ArrayList<>();
 
                         list.add(new RowDefault(values));
                         nosOfRowsStr--;
@@ -612,7 +612,7 @@ if (value0.startsWith("# ")) {
         String[] columnNames, String[] columnTypes, int lineNos)
         throws Exception
     {
-        List<Column> list = new ArrayList<Column>();
+        List<Column> list = new ArrayList<>();
         for (int i = 0; i < columnNames.length; i++) {
             String columnName = columnNames[i];
 //System.out.println("columnName="+columnName);
@@ -780,7 +780,7 @@ if (value0.startsWith("# ")) {
         String batchSizeStr = null;
         String outputDirectory = null;
         boolean force = false;
-        List<File> files = new ArrayList<File>();
+        List<File> files = new ArrayList<>();
         String inputDirectory = null;
         String regex = null;
 

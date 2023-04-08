@@ -13,7 +13,7 @@ public class SoapNsUtil {
 
     public static Map<String, String> nsMap(SOAPElement soapElement) {
         boolean isEnvelop = SOAPEnvelope.class.isInstance(soapElement);
-        Map<String, String> nsMap = new HashMap<String, String>();
+        Map<String, String> nsMap = new HashMap<>();
         Iterator<String> nsPrefixIterator = soapElement.getNamespacePrefixes();
         while (nsPrefixIterator.hasNext()) {
             String prefix = nsPrefixIterator.next();

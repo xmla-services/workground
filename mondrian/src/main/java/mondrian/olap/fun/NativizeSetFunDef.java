@@ -105,7 +105,7 @@ public class NativizeSetFunDef extends FunDefBase {
      */
     private final SubstitutionMap substitutionMap = new SubstitutionMap();
     private final HashSet<Dimension> dimensions =
-        new LinkedHashSet<Dimension>();
+        new LinkedHashSet<>();
 
     private boolean isFirstCompileCall = true;
 
@@ -564,7 +564,7 @@ public class NativizeSetFunDef extends FunDefBase {
 
         private void addFormulasToQuery() {
             NativizeSetFunDef.LOGGER.debug("FormulaResolvingVisitor addFormulas");
-            List<Formula> formulas = new ArrayList<Formula>();
+            List<Formula> formulas = new ArrayList<>();
 
             for (Level level : levels) {
                 Formula memberFormula = createDefaultMemberFormula(level);
@@ -674,7 +674,7 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         private Object flattenSetFunDef(ResolvedFunCall call) {
-            List<Exp> newArgs = new ArrayList<Exp>();
+            List<Exp> newArgs = new ArrayList<>();
             flattenSetMembers(newArgs, call.getArgs());
             addSentinelMembers(newArgs);
             if (newArgs.size() != call.getArgCount()) {
@@ -778,7 +778,7 @@ public class NativizeSetFunDef extends FunDefBase {
     }
 
     private static class SubstitutionMap {
-        private final Map<String, Level> map = new HashMap<String, Level>();
+        private final Map<String, Level> map = new HashMap<>();
 
         public boolean isEmpty() {
             return map.isEmpty();
@@ -852,7 +852,7 @@ public class NativizeSetFunDef extends FunDefBase {
             ReassemblyGuide guide = new ReassemblyGuide(0);
 
             List<ReassemblyCommand> cmdTuple =
-                new ArrayList<ReassemblyCommand>(arity);
+                new ArrayList<>(arity);
             for (List<Member> srcTuple : simplifiedList) {
                 cmdTuple.clear();
                 for (Member mbr : srcTuple) {
@@ -887,7 +887,7 @@ public class NativizeSetFunDef extends FunDefBase {
 
         private List<Collection<String>> findNativeMembers() {
             List<Collection<String>> nativeMembers =
-                new ArrayList<Collection<String>>(arity);
+                new ArrayList<>(arity);
 
             for (int i = 0; i < arity; i++) {
                 nativeMembers.add(new LinkedHashSet<String>());
@@ -1359,7 +1359,7 @@ public class NativizeSetFunDef extends FunDefBase {
         public Iterable<Range> subRanges(final int col) {
             final Range parent = this;
 
-            return new Iterable<Range>() {
+            return new Iterable<>() {
                 final int rangeCol = col;
 
                 @Override
@@ -1370,10 +1370,10 @@ public class NativizeSetFunDef extends FunDefBase {
         }
 
         public Iterable<Member> getMembers(final int col) {
-            return new Iterable<Member>() {
+            return new Iterable<>() {
                 @Override
 				public Iterator<Member> iterator() {
-                    return new Iterator<Member>() {
+                    return new Iterator<>() {
                         private int cursor = from;
 
                         @Override
@@ -1442,7 +1442,7 @@ public class NativizeSetFunDef extends FunDefBase {
     private static class ReassemblyGuide {
         private final int index;
         private final List<ReassemblyCommand> commands =
-            new ArrayList<ReassemblyCommand>();
+            new ArrayList<>();
 
         public ReassemblyGuide(int index) {
             this.index = index;

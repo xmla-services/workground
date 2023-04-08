@@ -153,7 +153,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
           final Member member = memberCalc.evaluateMember( evaluator );
-          List<Member> result = new ArrayList<Member>();
+          List<Member> result = new ArrayList<>();
           int depth = -1;
           if ( depthCalc != null ) {
             depth = depthCalc.evaluateInteger( evaluator );
@@ -178,7 +178,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         @Override
 		public TupleList evaluateList( Evaluator evaluator ) {
           final Member member = memberCalc.evaluateMember( evaluator );
-          List<Member> result = new ArrayList<Member>();
+          List<Member> result = new ArrayList<>();
           final int depth = depthCalc.evaluateInteger( evaluator );
           final SchemaReader schemaReader =
             evaluator.getSchemaReader();
@@ -203,7 +203,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           final Evaluator context =
             evaluator.isNonEmpty() ? evaluator : null;
           final Member member = memberCalc.evaluateMember( evaluator );
-          List<Member> result = new ArrayList<Member>();
+          List<Member> result = new ArrayList<>();
           final SchemaReader schemaReader =
             evaluator.getSchemaReader();
           final Level level =
@@ -230,7 +230,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final boolean self,
     final boolean after,
     final Evaluator context ) {
-    List<Member> children = new ArrayList<Member>();
+    List<Member> children = new ArrayList<>();
     children.add( member );
     for ( int depth = 0;; ++depth ) {
       if ( depth == depthLimitFinal ) {
@@ -279,14 +279,14 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
       }
       return;
     }
-    List<Member> children = new ArrayList<Member>();
+    List<Member> children = new ArrayList<>();
     children.add( member );
     for ( int depth = 0; depthLimit == -1 || depth <= depthLimit; ++depth ) {
       children = schemaReader.getMemberChildren( children );
       if ( children.size() == 0 ) {
         throw Util.newInternal( "drillable member must have children" );
       }
-      List<Member> nextChildren = new ArrayList<Member>();
+      List<Member> nextChildren = new ArrayList<>();
       for ( Member child : children ) {
         // TODO: Implement this more efficiently. The current
         // implementation of isDrillable for a parent-child hierarchy
@@ -353,7 +353,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     if ( leaves ) {
       assert !before && !self && !after;
       do {
-        List<Member> nextMembers = new ArrayList<Member>();
+        List<Member> nextMembers = new ArrayList<>();
         for ( Member member : members ) {
           final int currentDepth = member.getLevel().getDepth();
           if(currentDepth == levelDepth) {
@@ -379,7 +379,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
         members = nextMembers;
       } while ( members.size() > 0 );
     } else {
-      List<Member> fertileMembers = new ArrayList<Member>();
+      List<Member> fertileMembers = new ArrayList<>();
       do {
         fertileMembers.clear();
         for ( Member member : members ) {
@@ -436,7 +436,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     }
 
     public static String[] getNames() {
-      List<String> names = new ArrayList<String>();
+      List<String> names = new ArrayList<>();
       for ( Flag flags : Flag.class.getEnumConstants() ) {
         names.add( flags.name() );
       }

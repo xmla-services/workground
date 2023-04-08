@@ -48,7 +48,7 @@ class UnionRoleImpl implements Role {
      * @param roleList List of constituent roles
      */
     UnionRoleImpl(List<Role> roleList) {
-        this.roleList = new ArrayList<Role>(roleList);
+        this.roleList = new ArrayList<>(roleList);
     }
 
     @Override
@@ -156,7 +156,7 @@ class UnionRoleImpl implements Role {
 
     @Override
 	public HierarchyAccess getAccessDetails(final Hierarchy hierarchy) {
-        List<HierarchyAccess> list = new ArrayList<HierarchyAccess>();
+        List<HierarchyAccess> list = new ArrayList<>();
         for (Role role : roleList) {
             final HierarchyAccess accessDetails =
                 role.getAccessDetails(hierarchy);

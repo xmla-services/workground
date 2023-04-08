@@ -65,7 +65,7 @@ public class LockBox {
      * to prevent the entry from being garbage collected.
      */
     private final Map<LockBoxEntryImpl, Object> map =
-        new WeakHashMap<LockBoxEntryImpl, Object>();
+        new WeakHashMap<>();
     private final Random random = new Random();
     private final byte[] bytes = new byte[16]; // 128 bit... secure enough
     private long ordinal;

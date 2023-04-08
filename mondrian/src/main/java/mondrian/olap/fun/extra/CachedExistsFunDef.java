@@ -99,7 +99,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
           }
 
           // Build subtotal cache
-          HashMap<String, TupleList> setCache = new HashMap<String, TupleList>();
+          HashMap<String, TupleList> setCache = new HashMap<>();
           TupleList setToCache = listCalc1.evaluateList( evaluator );
           for ( List<Member> tuple : setToCache ) {
             String subtotalKey = makeSubtotalKey( subtotalToListIndex, tuple, subtotal );
@@ -134,7 +134,7 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
    * @return
    */
   private List<Hierarchy> getHierarchies( Type t ) {
-    List<Hierarchy> hiers = new ArrayList<Hierarchy>();
+    List<Hierarchy> hiers = new ArrayList<>();
     if ( t instanceof MemberType ) {
       hiers.add( getHierarchy( t ) );
     } else if ( t instanceof TupleType ) {

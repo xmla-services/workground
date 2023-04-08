@@ -432,7 +432,7 @@ public class XmlUtil {
 
         protected void addError(ErrorInfo ei) {
             if (this.errors == null) {
-                this.errors = new ArrayList<ErrorInfo>();
+                this.errors = new ArrayList<>();
             }
             this.errors.add(ei);
         }

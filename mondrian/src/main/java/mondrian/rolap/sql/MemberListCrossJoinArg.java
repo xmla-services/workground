@@ -172,7 +172,7 @@ public class MemberListCrossJoinArg implements CrossJoinArg {
         {
             return null;
         }
-        List<RolapMember> members = new ArrayList<RolapMember>();
+        List<RolapMember> members = new ArrayList<>();
 
         for (RolapMember m : args) {
             if (m.isNull()) {

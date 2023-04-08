@@ -22,10 +22,10 @@ public class Locus {
     public final String component;
 
     private static final ThreadLocal<ArrayStack<Locus>> THREAD_LOCAL =
-        new ThreadLocal<ArrayStack<Locus>>() {
+        new ThreadLocal<>() {
             @Override
 			protected ArrayStack<Locus> initialValue() {
-                return new ArrayStack<Locus>();
+                return new ArrayStack<>();
             }
         };
 

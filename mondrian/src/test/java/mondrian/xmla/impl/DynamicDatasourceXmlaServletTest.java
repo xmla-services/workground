@@ -330,7 +330,7 @@ public class DynamicDatasourceXmlaServletTest {
 
     private static class MockDynamicContentFinder extends DynamicContentFinder
     {
-        private List<String> flushCatalogList = new ArrayList<String>();
+        private List<String> flushCatalogList = new ArrayList<>();
 
         public MockDynamicContentFinder(String dataSources)
         {

@@ -87,7 +87,7 @@ public class MeasureImpl implements Measure {
     @Override
     public List<CalculatedMemberPropertyImpl> calculatedMemberProperty() {
         if (calculatedMemberProperty == null) {
-            calculatedMemberProperty = new ArrayList<CalculatedMemberPropertyImpl>();
+            calculatedMemberProperty = new ArrayList<>();
         }
         return this.calculatedMemberProperty;
     }

@@ -105,7 +105,7 @@ public class RolapNativeSql {
      * to find a matching sql compiler.
      */
     static class CompositeSqlCompiler implements SqlCompiler {
-        List<SqlCompiler> compilers = new ArrayList<SqlCompiler>();
+        List<SqlCompiler> compilers = new ArrayList<>();
 
         public void add(SqlCompiler compiler) {
             compilers.add(compiler);

@@ -79,7 +79,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2003/engine", name = "LastSchemaUpdate")
   public JAXBElement<XMLGregorianCalendar> createLastSchemaUpdate(XMLGregorianCalendar value) {
-    return new JAXBElement<XMLGregorianCalendar>(_LastSchemaUpdate_QNAME, XMLGregorianCalendar.class, null, value);
+    return new JAXBElement<>(_LastSchemaUpdate_QNAME, XMLGregorianCalendar.class, null, value);
   }
 
   /**
@@ -92,7 +92,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2003/engine", name = "LastDataUpdate")
   public JAXBElement<XMLGregorianCalendar> createLastDataUpdate(XMLGregorianCalendar value) {
-    return new JAXBElement<XMLGregorianCalendar>(_LastDataUpdate_QNAME, XMLGregorianCalendar.class, null, value);
+    return new JAXBElement<>(_LastDataUpdate_QNAME, XMLGregorianCalendar.class, null, value);
   }
 
 }

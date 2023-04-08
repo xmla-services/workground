@@ -1336,7 +1336,7 @@ public enum RowsetDefinition {
         if (sortColumnDefinitions == null) {
             return null;
         }
-        return new Comparator<Rowset.Row>() {
+        return new Comparator<>() {
             @Override
 			public int compare(Rowset.Row row1, Rowset.Row row2) {
                 // A faster implementation is welcome.
@@ -1976,7 +1976,7 @@ public enum RowsetDefinition {
         private List<XmlElement> getRestrictions(
             RowsetDefinition rowsetDefinition)
         {
-            List<XmlElement> restrictionList = new ArrayList<XmlElement>();
+            List<XmlElement> restrictionList = new ArrayList<>();
             final Column[] columns = rowsetDefinition.columnDefinitions.clone();
             Arrays.sort(
                     columns,
@@ -2254,7 +2254,7 @@ public enum RowsetDefinition {
 
         private static List<Enumeration> getEnumerators() {
             // Build a set because we need to eliminate duplicates.
-            SortedSet<Enumeration> enumeratorSet = new TreeSet<Enumeration>(
+            SortedSet<Enumeration> enumeratorSet = new TreeSet<>(
                 new Comparator<Enumeration>() {
                     @Override
 					public int compare(Enumeration o1, Enumeration o2) {
@@ -2271,7 +2271,7 @@ public enum RowsetDefinition {
                     }
                 }
             }
-            return new ArrayList<Enumeration>(enumeratorSet);
+            return new ArrayList<>(enumeratorSet);
         }
 
         @Override
@@ -4888,7 +4888,7 @@ TODO: see above
                 // schema. It is safe to use get(0)
                 final Schema schema = catalog.getSchemas().get(0);
                 List<XmlaHandler.XmlaExtra.FunctionDefinition> funDefs =
-                    new ArrayList<XmlaHandler.XmlaExtra.FunctionDefinition>();
+                    new ArrayList<>();
 
                 // olap4j does not support describing functions. Call an
                 // auxiliary method.
@@ -6016,7 +6016,7 @@ TODO: see above
                     }
                     String levelListStr = buf.toString();
 
-                    List<Member> calcMembers = new ArrayList<Member>();
+                    List<Member> calcMembers = new ArrayList<>();
                     for (Measure measure
                         : filter(
                             cube.getMeasures(),
@@ -7563,7 +7563,7 @@ TODO: see above
     }
 
     public static final Function<Catalog,String> CATALOG_NAME_GETTER =
-        new Function<Catalog,String>() {
+        new Function<>() {
             @Override
 			public String apply(Catalog catalog) {
                 return catalog.getName();
@@ -7571,7 +7571,7 @@ TODO: see above
         };
 
     public static final Function<Schema,String> SCHEMA_NAME_GETTER =
-        new Function< Schema,String>() {
+        new Function<>() {
             @Override
 			public String apply(Schema schema) {
                 return schema.getName();
@@ -7580,7 +7580,7 @@ TODO: see above
 
     public static final Function<MetadataElement,String>
         ELEMENT_NAME_GETTER =
-        new Function< MetadataElement,String>() {
+        new Function<>() {
             @Override
 			public String apply(MetadataElement element) {
                 return element.getName();
@@ -7589,7 +7589,7 @@ TODO: see above
 
     public static final Function< MetadataElement,String>
         ELEMENT_UNAME_GETTER =
-        new Function< MetadataElement,String>() {
+        new Function<>() {
             @Override
 			public String apply(MetadataElement element) {
                 return element.getUniqueName();
@@ -7598,7 +7598,7 @@ TODO: see above
 
     public static final Function<Member,Member.Type>
         MEMBER_TYPE_GETTER =
-        new Function<Member,Member.Type>() {
+        new Function<>() {
             @Override
 			public Member.Type apply(Member member) {
                 return member.getMemberType();
@@ -7607,7 +7607,7 @@ TODO: see above
 
     public static final Function< PropertyDefinition,String>
         PROPDEF_NAME_GETTER =
-        new Function<PropertyDefinition,String>() {
+        new Function<>() {
             @Override
 			public String apply(PropertyDefinition property) {
                 return property.name();
@@ -7674,7 +7674,7 @@ TODO: see above
         XmlaRequest request, Map<Column, String> map)
     {
         final Map<String, Object> restrictionsMap =
-            new HashMap<String, Object>(request.getRestrictions());
+            new HashMap<>(request.getRestrictions());
         for (Map.Entry<Column, String> entry : map.entrySet()) {
             restrictionsMap.put(
                 entry.getKey().name,
@@ -7701,11 +7701,11 @@ TODO: see above
         final OlapConnection connection,
         final Predicate<Catalog>... conds)
     {
-        return new Iterable<Catalog>() {
+        return new Iterable<>() {
             @Override
 			public Iterator<Catalog> iterator() {
                 try {
-                    return new Iterator<Catalog>() {
+                    return new Iterator<>() {
                         final Iterator<Catalog> catalogIter =
                             Util.filter(
                                 connection.getOlapCatalogs(),
@@ -7828,7 +7828,7 @@ TODO: see above
         @Override
 		public NamedList<Hierarchy> getHierarchies() {
             final NamedList<Hierarchy> hierarchyList =
-                new ArrayNamedListImpl<Hierarchy>() {
+                new ArrayNamedListImpl<>() {
                     @Override
 					public String getName(Object hierarchy) {
                         return ((Hierarchy)hierarchy).getName();

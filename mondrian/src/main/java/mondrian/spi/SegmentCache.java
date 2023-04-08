@@ -213,7 +213,7 @@ public interface SegmentCache {
      */
     public static class SegmentCacheInjector {
         private static final List<SegmentCache> caches =
-            new ArrayList<SegmentCache>();
+            new ArrayList<>();
         /**
          * Adds a {@link SegmentCache} instance for Mondrian's use.
          */

@@ -97,8 +97,8 @@ public class SqlContextConstraint
         }
         if (cube.isVirtual()) {
             Query query = context.getQuery();
-            Set<RolapCube> baseCubes = new HashSet<RolapCube>();
-            List<RolapCube> baseCubeList = new ArrayList<RolapCube>();
+            Set<RolapCube> baseCubes = new HashSet<>();
+            List<RolapCube> baseCubeList = new ArrayList<>();
             if (!findVirtualCubeBaseCubes(query, baseCubes, baseCubeList)) {
                 return false;
             }
@@ -232,12 +232,12 @@ public class SqlContextConstraint
     SqlContextConstraint(RolapEvaluator evaluator, boolean strict) {
         this.evaluator = evaluator.push();
         this.strict = strict;
-        cacheKey = new ArrayList<Object>();
+        cacheKey = new ArrayList<>();
         cacheKey.add(getClass());
         cacheKey.add(strict);
 
-        List<Member> members = new ArrayList<Member>();
-        List<Member> expandedMembers = new ArrayList<Member>();
+        List<Member> members = new ArrayList<>();
+        List<Member> expandedMembers = new ArrayList<>();
 
         members.addAll(
             Arrays.asList(

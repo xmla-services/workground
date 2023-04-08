@@ -538,7 +538,7 @@ public class ValidationUtils {
                 if (!isEmpty(primaryKeyTable)
                     && (hierarchy.relation instanceof MondrianGuiDef.Join))
                 {
-                    TreeSet<String> joinTables = new TreeSet<String>();
+                    TreeSet<String> joinTables = new TreeSet<>();
                     SchemaExplorer.getTableNamesForJoin(
                         hierarchy.relation, joinTables);
                     if (!joinTables.contains(primaryKeyTable)) {
@@ -905,7 +905,7 @@ public class ValidationUtils {
                     && parentHierarchy != null
                     && parentHierarchy.relation instanceof MondrianGuiDef.Join)
                 {
-                    TreeSet<String> joinTables = new TreeSet<String>();
+                    TreeSet<String> joinTables = new TreeSet<>();
                     SchemaExplorer.getTableNamesForJoin(
                         parentHierarchy.relation, joinTables);
                     if (!joinTables.contains(table)) {

@@ -54,7 +54,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
     private final RelationOrJoin currentRelation;
     private final RolapCubeHierarchyMemberReader reader;
     private HierarchyUsage usage;
-    private final Map<String, String> aliases = new HashMap<String, String>();
+    private final Map<String, String> aliases = new HashMap<>();
     private RolapCubeMember currentDefaultMember;
     private final int ordinal;
 
@@ -641,10 +641,10 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             List<RolapMember> children,
             MemberChildrenConstraint constraint)
         {
-            List<RolapMember> rolapChildren = new ArrayList<RolapMember>();
-            List<RolapMember> rolapParents = new ArrayList<RolapMember>();
+            List<RolapMember> rolapChildren = new ArrayList<>();
+            List<RolapMember> rolapParents = new ArrayList<>();
             Map<String, RolapCubeMember> lookup =
-                new HashMap<String, RolapCubeMember>();
+                new HashMap<>();
 
             // extract RolapMembers from their RolapCubeMember objects
             // populate lookup for reconnecting parents and children
@@ -690,7 +690,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             // Put them in a temporary hash table first. Register them later,
             // when we know their size (hence their 'cost' to the cache pool).
             Map<RolapMember, List<RolapMember>> tempMap =
-                new HashMap<RolapMember, List<RolapMember>>();
+                new HashMap<>();
             for (RolapMember member1 : parentMembers) {
                 tempMap.put(member1, Collections.<RolapMember>emptyList());
             }
@@ -715,7 +715,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                     // let's ignore it.
                     continue;
                 } else if (cacheList == Collections.EMPTY_LIST) {
-                    cacheList = new ArrayList<RolapMember>();
+                    cacheList = new ArrayList<>();
                     tempMap.put(parentMember, cacheList);
                 }
                 cacheList.add(child);
@@ -748,7 +748,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             synchronized (cacheHelper) {
                 checkCacheStatus();
 
-                List<RolapMember> missed = new ArrayList<RolapMember>();
+                List<RolapMember> missed = new ArrayList<>();
                 for (RolapMember parentMember : parentMembers) {
                     List<RolapMember> list =
                         rolapCubeCacheHelper.getChildrenFromCache(
@@ -800,7 +800,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                         super.getMembersInLevel(
                             level, constraint);
                 }
-                List<RolapMember> newlist = new ArrayList<RolapMember>();
+                List<RolapMember> newlist = new ArrayList<>();
                 for (RolapMember member : list) {
                     // note that there is a special case for the all member
 
@@ -1006,10 +1006,10 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             List<RolapMember> children,
             MemberChildrenConstraint constraint)
         {
-            List<RolapMember> rolapChildren = new ArrayList<RolapMember>();
-            List<RolapMember> rolapParents = new ArrayList<RolapMember>();
+            List<RolapMember> rolapChildren = new ArrayList<>();
+            List<RolapMember> rolapParents = new ArrayList<>();
             Map<String, RolapCubeMember> lookup =
-                new HashMap<String, RolapCubeMember>();
+                new HashMap<>();
 
             // extract RolapMembers from their RolapCubeMember objects
             // populate lookup for reconnecting parents and children
@@ -1053,7 +1053,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             // Put them in a temporary hash table first. Register them later,
             // when we know their size (hence their 'cost' to the cache pool).
             Map<RolapMember, List<RolapMember>> tempMap =
-                new HashMap<RolapMember, List<RolapMember>>();
+                new HashMap<>();
             for (RolapMember member1 : parentMembers) {
                 tempMap.put(member1, Collections.<RolapMember>emptyList());
             }
@@ -1079,7 +1079,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             List<RolapMember> children,
             MemberChildrenConstraint constraint)
         {
-            List<RolapMember> missed = new ArrayList<RolapMember>();
+            List<RolapMember> missed = new ArrayList<>();
             for (RolapMember parentMember : parentMembers) {
                 // the null member has no children
                 if (!parentMember.isNull()) {
@@ -1117,7 +1117,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                             level, constraint);
                 }
 
-                return new UnsupportedList<RolapMember>() {
+                return new UnsupportedList<>() {
                     @Override
 					public RolapMember get(final int index) {
                         return mutate(list.get(index));
@@ -1131,7 +1131,7 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                     @Override
 					public Iterator<RolapMember> iterator() {
                         final Iterator<RolapMember> it = list.iterator();
-                        return new Iterator<RolapMember>() {
+                        return new Iterator<>() {
                             @Override
 							public boolean hasNext() {
                                 return it.hasNext();

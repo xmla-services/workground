@@ -81,7 +81,7 @@ public class SchemaImpl implements Schema {
     @Override
     public List<ParameterImpl> parameter() {
         if (parameter == null) {
-            parameter = new ArrayList<ParameterImpl>();
+            parameter = new ArrayList<>();
         }
         return this.parameter;
     }
@@ -89,7 +89,7 @@ public class SchemaImpl implements Schema {
     @Override
     public List<PrivateDimensionImpl> dimension() {
         if (dimension == null) {
-            dimension = new ArrayList<PrivateDimensionImpl>();
+            dimension = new ArrayList<>();
         }
         return this.dimension;
     }
@@ -97,7 +97,7 @@ public class SchemaImpl implements Schema {
     @Override
     public List<CubeImpl> cube() {
         if (cube == null) {
-            cube = new ArrayList<CubeImpl>();
+            cube = new ArrayList<>();
         }
         return this.cube;
     }
@@ -105,7 +105,7 @@ public class SchemaImpl implements Schema {
     @Override
     public List<VirtualCubeImpl> virtualCube() {
         if (virtualCube == null) {
-            virtualCube = new ArrayList<VirtualCubeImpl>();
+            virtualCube = new ArrayList<>();
         }
         return this.virtualCube;
     }
@@ -113,7 +113,7 @@ public class SchemaImpl implements Schema {
     @Override
     public List<NamedSetImpl> namedSet() {
         if (namedSet == null) {
-            namedSet = new ArrayList<NamedSetImpl>();
+            namedSet = new ArrayList<>();
         }
         return this.namedSet;
     }
@@ -121,7 +121,7 @@ public class SchemaImpl implements Schema {
     @Override
     public List<RoleImpl> roles() {
         if (role == null) {
-            role = new ArrayList<RoleImpl>();
+            role = new ArrayList<>();
         }
         return this.role;
     }
@@ -130,7 +130,7 @@ public class SchemaImpl implements Schema {
     @Deprecated
     public List<UserDefinedFunctionImpl> userDefinedFunctions() {
         if (userDefinedFunction == null) {
-            userDefinedFunction = new ArrayList<UserDefinedFunctionImpl>();
+            userDefinedFunction = new ArrayList<>();
         }
         return this.userDefinedFunction;
     }

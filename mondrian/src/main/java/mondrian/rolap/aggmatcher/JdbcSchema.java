@@ -87,7 +87,7 @@ public class JdbcSchema {
     }
 
     private static final Map<DataSource, SoftReference<JdbcSchema>> dbMap =
-        new HashMap<DataSource, SoftReference<JdbcSchema>>();
+        new HashMap<>();
 
     /**
      * How often between sweeping through the dbMap looking for nulls.
@@ -154,7 +154,7 @@ public class JdbcSchema {
         }
         if (db == null) {
             db = factory.makeDB(dataSource);
-            dbMap.put(dataSource, new SoftReference<JdbcSchema>(db));
+            dbMap.put(dataSource, new SoftReference<>(db));
         }
 
         sweepDB();
@@ -467,7 +467,7 @@ public class JdbcSchema {
 
                 public Map<String, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression> getProperties() {
                     Map<String, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression> map =
-                        new HashMap<String, org.eclipse.daanse.olap.rolap.dbmapper.model.api.Expression>();
+                        new HashMap<>();
                     if (properties == null) {
                         return map;
                     }
@@ -567,7 +567,7 @@ public class JdbcSchema {
                     new ColumnR(
                         JdbcSchema.Table.this.getName(),
                         name);
-                this.usages = new ArrayList<JdbcSchema.Table.Column.Usage>();
+                this.usages = new ArrayList<>();
             }
 
             /**
@@ -1141,7 +1141,7 @@ public class JdbcSchema {
 
         public Map<String, Column> getColumnMap() {
             if (columnMap == null) {
-                columnMap = new HashMap<String, Column>();
+                columnMap = new HashMap<>();
             }
             return columnMap;
         }
@@ -1157,7 +1157,7 @@ public class JdbcSchema {
      * is in deterministic order.
      */
     private final SortedMap<String, Table> tables =
-        new TreeMap<String, Table>();
+        new TreeMap<>();
 
     public JdbcSchema(final DataSource dataSource) {
         this.dataSource = dataSource;

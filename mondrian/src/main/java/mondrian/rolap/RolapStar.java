@@ -76,7 +76,7 @@ public class RolapStar {
      * Keeps track of the columns across all tables. Should have
      * a number of elements equal to columnCount.
      */
-    private final List<Column> columnList = new ArrayList<Column>();
+    private final List<Column> columnList = new ArrayList<>();
 
 
     /**
@@ -89,7 +89,7 @@ public class RolapStar {
      * Partially ordered list of AggStars associated with this RolapStar's fact
      * table.
      */
-    private final List<AggStar> aggStars = new LinkedList<AggStar>();
+    private final List<AggStar> aggStars = new LinkedList<>();
 
     private DataSourceChangeListener changeListener;
 
@@ -97,7 +97,7 @@ public class RolapStar {
     // RolapStar.Column
     private StarNetworkNode factNode;
     private Map<String, StarNetworkNode> nodeLookup =
-        new HashMap<String, StarNetworkNode>();
+        new HashMap<>();
 
     private final RolapStatisticsCache statisticsCache;
 
@@ -200,7 +200,7 @@ public class RolapStar {
 
     public void register(SegmentWithData segment) {
         localBars.get().segmentRefs.add(
-            new SoftReference<SegmentWithData>(segment));
+            new SoftReference<>(segment));
     }
 
     public RolapStatisticsCache getStatisticsCache() {
@@ -233,11 +233,11 @@ public class RolapStar {
             new ReferenceMap(ReferenceMap.WEAK, ReferenceMap.WEAK);
 
         private final List<SoftReference<SegmentWithData>> segmentRefs =
-            new ArrayList<SoftReference<SegmentWithData>>();
+            new ArrayList<>();
     }
 
     private final ThreadLocal<Bar> localBars =
-        new ThreadLocal<Bar>() {
+        new ThreadLocal<>() {
             @Override
 			protected Bar initialValue() {
                 return new Bar();
@@ -482,7 +482,7 @@ public class RolapStar {
      * algorithm used to order the AggStars has been changed.
      */
     public void reOrderAggStarList() {
-        List<AggStar> oldList = new ArrayList<AggStar>(aggStars);
+        List<AggStar> oldList = new ArrayList<>(aggStars);
         aggStars.clear();
         for (AggStar aggStar : oldList) {
             addAggStar(aggStar);
@@ -682,7 +682,7 @@ public class RolapStar {
      * Returns a list of all aliases used in this star.
      */
     public List<String> getAliasList() {
-        List<String> aliasList = new ArrayList<String>();
+        List<String> aliasList = new ArrayList<>();
         if (factTable != null) {
             collectAliases(aliasList, factTable);
         }
@@ -863,7 +863,7 @@ public class RolapStar {
      */
     public static class Column {
         public static final Comparator<Column> COMPARATOR =
-            new Comparator<Column>() {
+            new Comparator<>() {
                 @Override
 				public int compare(
                     Column object1,
@@ -1310,7 +1310,7 @@ public class RolapStar {
             if (this.joinCondition != null) {
                 this.joinCondition.table = this;
             }
-            this.columnList = new ArrayList<Column>();
+            this.columnList = new ArrayList<>();
             this.children = Collections.emptyList();
             Util.assertTrue((parent == null) == (joinCondition == null));
         }
@@ -1358,7 +1358,7 @@ public class RolapStar {
          * Returns an array of all columns in this star with a given name.
          */
         public Column[] lookupColumns(String columnName) {
-            List<Column> l = new ArrayList<Column>();
+            List<Column> l = new ArrayList<>();
             for (Column column : getColumns()) {
                 if (column.getExpression() instanceof org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column) {
                     org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column columnExpr =
@@ -1646,7 +1646,7 @@ public class RolapStar {
                     starTable = new RolapStar.Table(
                         star, relation, this, joinCondition);
                     if (this.children.isEmpty()) {
-                        this.children = new ArrayList<Table>();
+                        this.children = new ArrayList<>();
                     }
                     this.children.add(starTable);
                 }

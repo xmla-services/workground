@@ -435,7 +435,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                     int originalSize = members.size();
                     sets[i] =
                         AggregateCalc.optimizeMemberSet(
-                            new LinkedHashSet<Member>(members),
+                            new LinkedHashSet<>(members),
                             reader,
                             baseCubeForMeasure,
                             evaluator);
@@ -444,7 +444,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
                     }
                 } else {
                     sets[i] =
-                        new LinkedHashSet<Member>(
+                        new LinkedHashSet<>(
                             membersOccurencesInTuple[i].keySet());
                 }
             }
@@ -468,7 +468,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             //noinspection unchecked
             Map<Member, Integer>[] counters = new Map[tupleLength];
             for (int i = 0; i < counters.length; i++) {
-                counters[i] = new LinkedHashMap<Member, Integer>();
+                counters[i] = new LinkedHashMap<>();
             }
             for (List<Member> tuple : tupleList) {
                 for (int i = 0; i < tuple.size(); i++) {
@@ -492,8 +492,8 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             Evaluator evaluator)
         {
             boolean didOptimize;
-            Set<Member> membersToBeOptimized = new LinkedHashSet<Member>();
-            Set<Member> optimizedMembers = new LinkedHashSet<Member>();
+            Set<Member> membersToBeOptimized = new LinkedHashSet<>();
+            Set<Member> optimizedMembers = new LinkedHashSet<>();
             while (members.size() > 0) {
                 Iterator<Member> iterator = members.iterator();
                 Member first = iterator.next();
@@ -579,11 +579,11 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
         }
 
         private static TupleList crossProd(Set<Member>[] sets) {
-            final List<TupleList> tupleLists = new ArrayList<TupleList>();
+            final List<TupleList> tupleLists = new ArrayList<>();
             for (Set<Member> set : sets) {
                 tupleLists.add(
                     new UnaryTupleList(
-                        new ArrayList<Member>(set)));
+                        new ArrayList<>(set)));
             }
             if (tupleLists.size() == 1) {
                 return tupleLists.get(0);
@@ -595,7 +595,7 @@ public class AggregateFunDef extends AbstractAggregateFunDef {
             Dimension dimension,
             Cube baseCube)
         {
-            HashSet<Dimension> dimensions = new HashSet<Dimension>();
+            HashSet<Dimension> dimensions = new HashSet<>();
             dimensions.add(dimension);
             return baseCube.nonJoiningDimensions(dimensions).size() == 0;
         }

@@ -36,7 +36,7 @@ public class BlockingHashMap<K, V> {
      * @param capacity Capacity
      */
     public BlockingHashMap(int capacity) {
-        map = new ConcurrentHashMap<K, SlotFuture<V>>(capacity);
+        map = new ConcurrentHashMap<>(capacity);
     }
 
     /**

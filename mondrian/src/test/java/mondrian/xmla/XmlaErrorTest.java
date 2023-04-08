@@ -194,7 +194,7 @@ System.out.println("password=" + password);
     }
 
     static Element[] getChildElements(Node node) {
-        List<Element> list = new ArrayList<Element>();
+        List<Element> list = new ArrayList<>();
 
         NodeList nlist = node.getChildNodes();
         int len = nlist.getLength();
@@ -402,7 +402,7 @@ System.out.println("password=" + password);
                         Util.parseConnectString(connectString);
             String catalog = connectProperties.get(
                 RolapConnectionProperties.Catalog.name());
-            catalogNameUrls = new TreeMap<String, String>();
+            catalogNameUrls = new TreeMap<>();
             catalogNameUrls.put("FoodMart", catalog);
         }
         return catalogNameUrls;

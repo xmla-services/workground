@@ -1364,7 +1364,7 @@ public class SegmentCacheManager {
           switch ( e.getEventType() ) {
             case ENTRY_CREATED:
               command =
-                new Command<Void>() {
+                new Command<>() {
                   @Override
 				public Void call() {
                     cacheMgr.externalSegmentCreated(
@@ -1381,7 +1381,7 @@ public class SegmentCacheManager {
               break;
             case ENTRY_DELETED:
               command =
-                new Command<Void>() {
+                new Command<>() {
                   @Override
 				public Void call() {
                     cacheMgr.externalSegmentDeleted(

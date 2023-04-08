@@ -179,7 +179,7 @@ public class RolapProfilingEvaluator extends RolapEvaluator {
         public void accept(CalcWriter calcWriter) {
             // Populate arguments with statistics.
             final Map<String, Object> argumentMap =
-                new LinkedHashMap<String, Object>();
+                new LinkedHashMap<>();
             if (calcWriter.enableProfiling()) {
                 argumentMap.put("callCount", callCount);
                 argumentMap.put("callMillis", callMillis);
@@ -247,7 +247,7 @@ public class RolapProfilingEvaluator extends RolapEvaluator {
         @Override
         public void accept(CalcWriter calcWriter) {
             final Map<String, Object> argumentMap =
-                new LinkedHashMap<String, Object>();
+                new LinkedHashMap<>();
             if (calcWriter.enableProfiling()) {
                 argumentMap.put("callCount", callCount);
                 argumentMap.put("callMillis", callMillis);

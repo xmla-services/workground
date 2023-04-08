@@ -145,7 +145,7 @@ class SegmentArrayQuerySpec extends AbstractQuerySpec {
         List<RolapStar.Column[]> groupingSetsColumns =
             groupingSetsList.getGroupingSetsColumns();
         for (RolapStar.Column[] groupingSetsColumn : groupingSetsColumns) {
-            ArrayList<String> groupingColumnsExpr = new ArrayList<String>();
+            ArrayList<String> groupingColumnsExpr = new ArrayList<>();
             for (RolapStar.Column aColumn : groupingSetsColumn) {
                 final String columnExpr = aColumn.generateExprString(sqlQuery);
                 if (groupingSetsAliases.containsKey(columnExpr)) {

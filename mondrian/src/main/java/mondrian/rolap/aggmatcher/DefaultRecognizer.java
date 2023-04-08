@@ -214,7 +214,7 @@ class DefaultRecognizer extends Recognizer {
         msgRecorder.pushContextName("DefaultRecognizer.matchLevel");
         try {
             List<Pair<RolapLevel, JdbcSchema.Table.Column>> levelMatches =
-                new ArrayList<Pair<RolapLevel, JdbcSchema.Table.Column>>();
+                new ArrayList<>();
             level_loop:
             for (Level level : hierarchy.getLevels()) {
                 if (level.isAll()) {
@@ -235,8 +235,7 @@ class DefaultRecognizer extends Recognizer {
                 {
                     if (matcher.matches(aggColumn.getName())) {
                         levelMatches.add(
-                            new Pair<RolapLevel,
-                                JdbcSchema.Table.Column>(
+                            new Pair<>(
                                     rLevel, aggColumn));
                         continue level_loop;
                     }

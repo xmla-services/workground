@@ -248,7 +248,7 @@ public class XmlaSupport {
     // Setup the Map used to instantiate XMLA template documents.
     // Have to see if we need to be able to dynamically change these values.
     static {
-        ENV = new HashMap<String, String>();
+        ENV = new HashMap<>();
         ENV.put("catalog", CATALOG_NAME);
         ENV.put("datasource", DATASOURCE_INFO);
     }

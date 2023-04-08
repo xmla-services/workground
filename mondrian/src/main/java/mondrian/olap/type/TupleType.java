@@ -95,7 +95,7 @@ public class TupleType implements Type {
 
     public List<Hierarchy> getHierarchies() {
         final List<Hierarchy> hierarchies =
-            new ArrayList<Hierarchy>(elementTypes.length);
+            new ArrayList<>(elementTypes.length);
         for (Type elementType : elementTypes) {
             hierarchies.add(elementType.getHierarchy());
         }
@@ -178,7 +178,7 @@ public class TupleType implements Type {
     }
 
     private Type createCommonTupleType(TupleType that, int[] conversionCount) {
-        final List<Type> elementTypes = new ArrayList<Type>();
+        final List<Type> elementTypes = new ArrayList<>();
         for (int i = 0; i < this.elementTypes.length; i++) {
             Type commonType = this.elementTypes[i].computeCommonType(
                 that.elementTypes[i], conversionCount);

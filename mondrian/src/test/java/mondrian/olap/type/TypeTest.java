@@ -148,7 +148,7 @@ public class TypeTest {
 
                 final int toCategory = TypeUtil.typeToCategory(toType);
                 final List<Resolver.Conversion> conversions =
-                    new ArrayList<Resolver.Conversion>();
+                    new ArrayList<>();
                 final boolean canConvert =
                     TypeUtil.canConvert(
                         0,

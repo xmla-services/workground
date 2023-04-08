@@ -165,7 +165,7 @@ class GenerateFunDef extends FunDefBase {
                     }
                 } else {
                     final Set<List<Member>> emitted =
-                            new HashSet<List<Member>>();
+                            new HashSet<>();
                     final TupleCursor cursor = iterable1.tupleCursor();
 
                     int rowCount = 0;

@@ -35,7 +35,7 @@ public class I18n {
     private static String defaultIcon = "nopic";
 
     private static List<LanguageChangedListener> languageChangedListeners =
-        new ArrayList<LanguageChangedListener>();
+        new ArrayList<>();
 
     public static void addOnLanguageChangedListener(
         LanguageChangedListener listener)
@@ -49,7 +49,7 @@ public class I18n {
     }
 
     public static List<Locale> getListOfAvailableLanguages(Class cl) {
-        List<Locale> supportedLocales = new ArrayList<Locale>();
+        List<Locale> supportedLocales = new ArrayList<>();
 
         try {
             Set<String> names = getResourcesInPackage(cl, cl.getName());
@@ -164,7 +164,7 @@ public class I18n {
 
         ClassLoader cl = coreClass.getClassLoader();
         Enumeration<URL> dirEnum = cl.getResources(localPackageName);
-        Set<String> names = new LinkedHashSet<String>(); // deterministic
+        Set<String> names = new LinkedHashSet<>(); // deterministic
         while (dirEnum.hasMoreElements()) {
             URL resUrl = dirEnum.nextElement();
 

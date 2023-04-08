@@ -529,7 +529,7 @@ public class GroupingSetQueryTest extends BatchTestCase{
         if (prop.ReadAggregates.get() && prop.UseAggregates.get()) {
             return;
         }
-        List<String[]> compoundMembers = new ArrayList<String[]>();
+        List<String[]> compoundMembers = new ArrayList<>();
         compoundMembers.add(new String[] {"USA", "OR"});
         compoundMembers.add(new String[] {"CANADA", "BC"});
         CellRequestConstraint constraint =

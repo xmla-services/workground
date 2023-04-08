@@ -204,7 +204,7 @@ public class FunInfo implements Comparable<FunInfo> {
     }
 
     private static List<Object> toList(Object a) {
-        final List<Object> list = new ArrayList<Object>();
+        final List<Object> list = new ArrayList<>();
         if (a == null) {
             return list;
         }

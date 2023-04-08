@@ -60,7 +60,7 @@ class DistinctFunDef extends FunDefBase {
         @Override
 		public TupleList evaluateList(Evaluator evaluator) {
             TupleList list = listCalc.evaluateList(evaluator);
-            Set<List<Member>> set = new HashSet<List<Member>>(list.size());
+            Set<List<Member>> set = new HashSet<>(list.size());
             TupleList result = list.cloneList(list.size());
             for (List<Member> element : list) {
                 if (set.add(element)) {

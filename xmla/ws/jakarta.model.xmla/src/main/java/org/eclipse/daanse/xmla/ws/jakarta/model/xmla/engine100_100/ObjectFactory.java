@@ -62,7 +62,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", name = "DbStorageLocation")
   public JAXBElement<String> createDbStorageLocation(String value) {
-    return new JAXBElement<String>(_DbStorageLocation_QNAME, String.class, null, value);
+    return new JAXBElement<>(_DbStorageLocation_QNAME, String.class, null, value);
   }
 
   /**
@@ -74,7 +74,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", name = "HoldoutMaxPercent")
   public JAXBElement<Integer> createHoldoutMaxPercent(Integer value) {
-    return new JAXBElement<Integer>(_HoldoutMaxPercent_QNAME, Integer.class, null, value);
+    return new JAXBElement<>(_HoldoutMaxPercent_QNAME, Integer.class, null, value);
   }
 
   /**
@@ -86,7 +86,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", name = "HoldoutMaxCases")
   public JAXBElement<Integer> createHoldoutMaxCases(Integer value) {
-    return new JAXBElement<Integer>(_HoldoutMaxCases_QNAME, Integer.class, null, value);
+    return new JAXBElement<>(_HoldoutMaxCases_QNAME, Integer.class, null, value);
   }
 
   /**
@@ -98,7 +98,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", name = "HoldoutSeed")
   public JAXBElement<Integer> createHoldoutSeed(Integer value) {
-    return new JAXBElement<Integer>(_HoldoutSeed_QNAME, Integer.class, null, value);
+    return new JAXBElement<>(_HoldoutSeed_QNAME, Integer.class, null, value);
   }
 
   /**
@@ -110,7 +110,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2008/engine/100/100", name = "HoldoutActualSize")
   public JAXBElement<Integer> createHoldoutActualSize(Integer value) {
-    return new JAXBElement<Integer>(_HoldoutActualSize_QNAME, Integer.class, null, value);
+    return new JAXBElement<>(_HoldoutActualSize_QNAME, Integer.class, null, value);
   }
 
 }

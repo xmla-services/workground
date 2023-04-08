@@ -55,7 +55,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2013/engine/800", name = "SubscriptionId")
   public JAXBElement<String> createSubscriptionId(String value) {
-    return new JAXBElement<String>(_SubscriptionId_QNAME, String.class, null, value);
+    return new JAXBElement<>(_SubscriptionId_QNAME, String.class, null, value);
   }
 
   /**
@@ -67,7 +67,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2013/engine/800", name = "DaxOptimizationMode")
   public JAXBElement<String> createDaxOptimizationMode(String value) {
-    return new JAXBElement<String>(_DaxOptimizationMode_QNAME, String.class, null, value);
+    return new JAXBElement<>(_DaxOptimizationMode_QNAME, String.class, null, value);
   }
 
 }

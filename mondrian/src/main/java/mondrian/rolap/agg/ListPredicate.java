@@ -30,7 +30,7 @@ import mondrian.rolap.sql.SqlQuery;
  */
 public abstract class ListPredicate implements StarPredicate {
     protected final List<StarPredicate> children =
-        new ArrayList<StarPredicate>();
+        new ArrayList<>();
 
     /**
      * Hash map of children predicates, keyed off of the hash code of each
@@ -53,12 +53,12 @@ public abstract class ListPredicate implements StarPredicate {
         hashValue = 0;
         // Ensure that columns are sorted by bit-key, for determinacy.
         final SortedSet<RolapStar.Column> columnSet =
-            new TreeSet<RolapStar.Column>(RolapStar.Column.COMPARATOR);
+            new TreeSet<>(RolapStar.Column.COMPARATOR);
         for (StarPredicate predicate : predicateList) {
             children.add(predicate);
             columnSet.addAll(predicate.getConstrainedColumnList());
         }
-        columns = new ArrayList<RolapStar.Column>(columnSet);
+        columns = new ArrayList<>(columnSet);
     }
 
     @Override
@@ -123,12 +123,12 @@ public abstract class ListPredicate implements StarPredicate {
                 // already done
                 if (childrenHashMap == null) {
                     childrenHashMap =
-                        new HashMap<Integer, List<StarPredicate>>();
+                        new HashMap<>();
                     for (StarPredicate thisChild : getChildren()) {
                         Integer key = new Integer(thisChild.hashCode());
                         List<StarPredicate> predList = childrenHashMap.get(key);
                         if (predList == null) {
-                            predList = new ArrayList<StarPredicate>();
+                            predList = new ArrayList<>();
                         }
                         predList.add(thisChild);
                         childrenHashMap.put(key, predList);

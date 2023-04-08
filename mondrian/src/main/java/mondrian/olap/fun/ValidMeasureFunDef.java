@@ -126,7 +126,7 @@ public class ValidMeasureFunDef extends FunDefBase
                     virtualCube, baseCube, memberList);
             // declare members array and fill in with all needed members
             final List<Member> validMeasureMembers =
-                new ArrayList<Member>(memberList);
+                new ArrayList<>(memberList);
             // start adding to validMeasureMembers at right place
             for (Dimension vMinusBDimension : vMinusBDimensions) {
                 // add default|all member for each hierarchy
@@ -173,7 +173,7 @@ public class ValidMeasureFunDef extends FunDefBase
             Evaluator evaluator)
         {
             Member[] currentMembers = evaluator.getMembers();
-            List<Member> calculatedMembers = new ArrayList<Member>();
+            List<Member> calculatedMembers = new ArrayList<>();
             for (Member currentMember : currentMembers) {
                 if (currentMember.isCalculated()) {
                     calculatedMembers.add(currentMember);
@@ -192,8 +192,8 @@ public class ValidMeasureFunDef extends FunDefBase
             RolapCube baseCube,
             List<Member> memberList)
         {
-            List<Dimension> vMinusBDimensions = new ArrayList<Dimension>();
-            Set<Dimension> virtualCubeDims = new HashSet<Dimension>();
+            List<Dimension> vMinusBDimensions = new ArrayList<>();
+            Set<Dimension> virtualCubeDims = new HashSet<>();
             virtualCubeDims.addAll(Arrays.asList(virtualCube.getDimensions()));
 
             Set<Dimension> nonJoiningDims =

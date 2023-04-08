@@ -52,12 +52,12 @@ public class AndPredicate extends ListPredicate {
         if (predicate instanceof AndPredicate) {
             ListPredicate that = (ListPredicate) predicate;
             final List<StarPredicate> list =
-                new ArrayList<StarPredicate>(children);
+                new ArrayList<>(children);
             list.addAll(that.children);
             return new AndPredicate(list);
         } else {
             final List<StarPredicate> list =
-                new ArrayList<StarPredicate>(children);
+                new ArrayList<>(children);
             list.add(predicate);
             return new AndPredicate(list);
         }
@@ -66,7 +66,7 @@ public class AndPredicate extends ListPredicate {
 
     @Override
 	public StarPredicate or(StarPredicate predicate) {
-        List<StarPredicate> list = new ArrayList<StarPredicate>();
+        List<StarPredicate> list = new ArrayList<>();
         list.add(this);
         list.add(predicate);
         return new OrPredicate(list);
@@ -161,7 +161,7 @@ public class AndPredicate extends ListPredicate {
          // Arranging children according to the bit position. This is required
          // as RHS of IN list needs to list the column values in the same order.
         Set<ValueColumnPredicate> sortedPredicates =
-            new TreeSet<ValueColumnPredicate>();
+            new TreeSet<>();
 
         for (StarPredicate predicate : children) {
             // inListPossible() checks guarantees that predicate is of type

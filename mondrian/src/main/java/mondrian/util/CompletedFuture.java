@@ -51,7 +51,7 @@ public class CompletedFuture<V> implements Future<V> {
      * @return Completed future that will yield the result
      */
     public static <T> CompletedFuture<T> success(T t) {
-        return new CompletedFuture<T>(t, null);
+        return new CompletedFuture<>(t, null);
     }
 
     /**
@@ -61,7 +61,7 @@ public class CompletedFuture<V> implements Future<V> {
      * @return Completed future that will throw
      */
     public static <T> CompletedFuture<T> fail(Throwable e) {
-        return new CompletedFuture<T>(null, new ExecutionException(e));
+        return new CompletedFuture<>(null, new ExecutionException(e));
     }
 
     @Override

@@ -199,7 +199,7 @@ public class JdbcMetaData {
             return null;
         }
 
-        List<String> schemaNames = new ArrayList<String>();
+        List<String> schemaNames = new ArrayList<>();
         ResultSet rs = null;
         try {
             try {
@@ -483,7 +483,7 @@ public class JdbcMetaData {
         if (minusTable == null) {
             return getAllTables(schemaName);
         } else {
-            List<String> allTablesMinusOne = new ArrayList<String>();
+            List<String> allTablesMinusOne = new ArrayList<>();
             for (String s : getAllTables(schemaName)) {
                 if (s.endsWith(minusTable)) {
                     // startsWith and endsWith cannot be compared with
@@ -511,7 +511,7 @@ public class JdbcMetaData {
         String schemaName,
         String factTable)
     {
-        List<String> dimeTables = new ArrayList<String>();
+        List<String> dimeTables = new ArrayList<>();
         if (factTable == null) {
             return dimeTables;
         } else {
@@ -543,7 +543,7 @@ public class JdbcMetaData {
 
     /* get all foreign keys in given fact table */
     public List<String> getFactTableFKs(String schemaName, String factTable) {
-        List<String> fks = new ArrayList<String>();
+        List<String> fks = new ArrayList<>();
         if (factTable == null) {
             return fks;
         } else {
@@ -564,7 +564,7 @@ public class JdbcMetaData {
      * column string is formatted.
      */
     public List<String> getAllColumns(String schemaName, String tableName) {
-        List<String> allcols = new ArrayList<String>();
+        List<String> allcols = new ArrayList<>();
 
         if (tableName == null) {
             List<String> allTables = getAllTables(schemaName);
@@ -597,7 +597,7 @@ public class JdbcMetaData {
      * Column string is formatted.
      */
     public List<DbColumn> getAllDbColumns(String schemaName, String tableName) {
-        List<DbColumn> allcols = new ArrayList<DbColumn>();
+        List<DbColumn> allcols = new ArrayList<>();
 
         if (tableName == null) {
             List<String> allTables = getAllTables(schemaName);
@@ -743,7 +743,7 @@ public class JdbcMetaData {
         }
 
         class TableTracker {
-            List<DbTable> namedTable = new ArrayList<DbTable>();
+            List<DbTable> namedTable = new ArrayList<>();
 
             public void add(DbTable table) {
                 namedTable.add(table);
@@ -777,7 +777,7 @@ public class JdbcMetaData {
 
         private List<String> getAllSchemas() {
             if (allSchemas == null) {
-                allSchemas = new ArrayList<String>();
+                allSchemas = new ArrayList<>();
 
                 allSchemas.addAll(schemas.keySet());
             }
@@ -836,7 +836,7 @@ public class JdbcMetaData {
         }
 
         private List<String> getAllTables(String sname, boolean factOnly) {
-            List<String> v = new ArrayList<String>();
+            List<String> v = new ArrayList<>();
 
             if (sname == null || sname.equals("")) {
                 // return a list of "schemaname -> table name" string objects
@@ -868,7 +868,7 @@ public class JdbcMetaData {
 
         /* get all foreign keys in given fact table */
         private List<String> getFactTableFKs(String sname, String factTable) {
-            List<String> f = new ArrayList<String>();
+            List<String> f = new ArrayList<>();
 
             if (sname == null || sname.equals("")) {
                 TableTracker tracker = tables.get(factTable);
@@ -926,7 +926,7 @@ public class JdbcMetaData {
         private List<String> getDimensionTables(
             String sname, String factTable)
         {
-            List<String> f = new ArrayList<String>();
+            List<String> f = new ArrayList<>();
 
             if (sname == null || sname.equals("")) {
                 TableTracker tracker = tables.get(factTable);
@@ -1004,7 +1004,7 @@ public class JdbcMetaData {
         }
 
         private List<String> getAllColumns(String sname, String tableName) {
-            List<String> f = new ArrayList<String>();
+            List<String> f = new ArrayList<>();
 
             if (sname == null || sname.equals("")) {
                 TableTracker tracker = tables.get(tableName);
@@ -1048,7 +1048,7 @@ public class JdbcMetaData {
         }
 
         private List<DbColumn> getAllDbColumns(String sname, String tableName) {
-            List<DbColumn> f = new ArrayList<DbColumn>();
+            List<DbColumn> f = new ArrayList<>();
 
             if (sname == null || sname.equals("")) {
                 TableTracker tracker = tables.get(tableName);
@@ -1260,7 +1260,7 @@ public class JdbcMetaData {
          * sorted map key=column, value=data type of column
          */
         final Map<String, DbColumn> colsDataType =
-            new TreeMap<String, DbColumn>();
+            new TreeMap<>();
 
         private void addColsDataType(DbColumn columnDefinition) {
             colsDataType.put(columnDefinition.name, columnDefinition);
@@ -1280,7 +1280,7 @@ public class JdbcMetaData {
          * Sorted map key = foreign key col, value=primary key table associated
          * with this fk.
          */
-        final Map<String, String> fks = new TreeMap<String, String>();
+        final Map<String, String> fks = new TreeMap<>();
 
         private void addFks(String fk, String pkt) {
             fks.put(fk, pkt);

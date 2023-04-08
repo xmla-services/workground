@@ -215,7 +215,7 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
     }
 
     private <T> List<T> toList(Iterable<T> iterable) {
-        final ArrayList<T> list = new ArrayList<T>();
+        final ArrayList<T> list = new ArrayList<>();
         for (T t : iterable) {
             list.add(t);
         }
@@ -431,7 +431,7 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
          * @return List of dimensions that the expression does not depend on
          */
         private Hierarchy[] getIndependentHierarchies(Calc calc) {
-            List<Hierarchy> list = new ArrayList<Hierarchy>();
+            List<Hierarchy> list = new ArrayList<>();
             final List<RolapHierarchy> hierarchies =
                 ((RolapCube) getValidator().getQuery().getCube())
                     .getHierarchies();

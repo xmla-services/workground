@@ -45,7 +45,7 @@ public abstract class Composite {
     public static <T> Iterable<T> of(
         Iterable<? extends T>... iterables)
     {
-        return new CompositeIterable<T>(iterables);
+        return new CompositeIterable<>(iterables);
     }
 
     /**
@@ -90,7 +90,7 @@ public abstract class Composite {
 
         public CompositeIterator(final Iterable<T>[] iterables) {
             this.iteratorIterator =
-                new IterableIterator<T>(iterables);
+                new IterableIterator<>(iterables);
                 Arrays.asList(iterables).iterator();
             this.iterator = Collections.<T>emptyList().iterator();
             this.hasNext = true;

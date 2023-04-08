@@ -96,7 +96,7 @@ public class SetType implements Type {
             return ((TupleType)elementType).getHierarchies();
         }
         else { //MemberType
-            ArrayList<Hierarchy> result = new ArrayList<Hierarchy>();
+            ArrayList<Hierarchy> result = new ArrayList<>();
             result.add(this.getHierarchy());
             return result;
         }

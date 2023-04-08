@@ -128,7 +128,7 @@ public class CalculatedMemberImpl implements CalculatedMember {
     @Override
     public List<CalculatedMemberPropertyImpl> calculatedMemberProperty() {
         if (calculatedMemberProperty == null) {
-            calculatedMemberProperty = new ArrayList<CalculatedMemberPropertyImpl>();
+            calculatedMemberProperty = new ArrayList<>();
         }
         return this.calculatedMemberProperty;
     }

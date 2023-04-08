@@ -100,12 +100,12 @@ public class Workbench extends javax.swing.JFrame {
     private String openFile = null;
 
     private Map<JInternalFrame, JMenuItem> schemaWindowMap =
-        new HashMap<JInternalFrame, JMenuItem>();
+        new HashMap<>();
 
     private final List<JInternalFrame> mdxWindows =
-        new ArrayList<JInternalFrame>();
+        new ArrayList<>();
     private final List<JInternalFrame> jdbcWindows =
-        new ArrayList<JInternalFrame>();
+        new ArrayList<>();
     private int windowMenuMapIndex = 1;
 
     private static final String KETTLE_PLUGIN_BASE_FOLDERS = "kettle-plugins,"

@@ -71,13 +71,13 @@ public class MemberCacheHelper implements MemberCache {
     public MemberCacheHelper(RolapHierarchy rolapHierarchy) {
         this.rolapHierarchy = rolapHierarchy;
         this.mapLevelToMembers =
-            new SmartMemberListCache<RolapLevel, List<RolapMember>>();
+            new SmartMemberListCache<>();
         this.mapKeyToMember =
-            new SoftSmartCache<Object, RolapMember>();
+            new SoftSmartCache<>();
         this.mapMemberToChildren =
-            new SmartMemberListCache<RolapMember, List<RolapMember>>();
+            new SmartMemberListCache<>();
         this.mapParentToNamedChildren =
-            new SmartIncrementalCache<RolapMember, Collection<RolapMember>>();
+            new SmartIncrementalCache<>();
 
         if (rolapHierarchy != null) {
             changeListener =
@@ -232,7 +232,7 @@ public class MemberCacheHelper implements MemberCache {
         if (cachedChildren == null) {
             // initialize with a sorted set
             mapParentToNamedChildren.put(
-                parent, new TreeSet<RolapMember>(children));
+                parent, new TreeSet<>(children));
         } else {
             mapParentToNamedChildren.addToEntry(parent, children);
         }

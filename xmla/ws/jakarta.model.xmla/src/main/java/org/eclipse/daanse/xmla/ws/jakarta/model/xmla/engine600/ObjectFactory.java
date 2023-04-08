@@ -53,7 +53,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2013/engine/600", name = "SupportedCompatibilityLevels")
   public JAXBElement<String> createSupportedCompatibilityLevels(String value) {
-    return new JAXBElement<String>(_SupportedCompatibilityLevels_QNAME, String.class, null, value);
+    return new JAXBElement<>(_SupportedCompatibilityLevels_QNAME, String.class, null, value);
   }
 
 }

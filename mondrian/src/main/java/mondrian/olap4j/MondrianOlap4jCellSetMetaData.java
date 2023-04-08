@@ -32,7 +32,7 @@ class MondrianOlap4jCellSetMetaData implements CellSetMetaData {
     final MondrianOlap4jStatement olap4jStatement;
     final Query query;
     private final NamedList<CellSetAxisMetaData> axesMetaData =
-        new ArrayNamedListImpl<CellSetAxisMetaData>() {
+        new ArrayNamedListImpl<>() {
             @Override
 			public String getName(Object axisMetaData) {
                 return ((CellSetAxisMetaData)axisMetaData)
@@ -63,7 +63,7 @@ class MondrianOlap4jCellSetMetaData implements CellSetMetaData {
     @Override
 	public NamedList<Property> getCellProperties() {
         final ArrayNamedListImpl<Property> list =
-            new ArrayNamedListImpl<Property>() {
+            new ArrayNamedListImpl<>() {
                 @Override
 				public String getName(Object property) {
                     return ((Property)property).getName();

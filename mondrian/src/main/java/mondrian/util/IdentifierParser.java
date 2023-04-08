@@ -109,7 +109,7 @@ public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
      * Implementation of Builder that builds a tuple.
      */
     public static class TupleBuilder extends BuilderImpl {
-        protected final List<Member> memberList = new ArrayList<Member>();
+        protected final List<Member> memberList = new ArrayList<>();
 
         public TupleBuilder(
             SchemaReader schemaReader,
@@ -166,7 +166,7 @@ public class IdentifierParser extends org.olap4j.impl.IdentifierParser {
      * Implementation of Builder that builds a member list.
      */
     public static class MemberListBuilder extends BuilderImpl {
-        public final List<Member> memberList = new ArrayList<Member>();
+        public final List<Member> memberList = new ArrayList<>();
 
         public MemberListBuilder(
             SchemaReader schemaReader, Cube cube, Hierarchy hierarchy)

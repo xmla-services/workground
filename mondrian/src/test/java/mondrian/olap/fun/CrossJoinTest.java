@@ -85,7 +85,7 @@ public class CrossJoinTest {
     Arrays.<Member>asList( new TestMember( "Y" ), new TestMember( "Z" ) ) );
 
   static final Comparator<List<Member>> memberComparator =
-    new Comparator<List<Member>>() {
+    new Comparator<>() {
       @Override
 	public int compare( List<Member> ma1, List<Member> ma2 ) {
         for ( int i = 0; i < ma1.size(); i++ ) {

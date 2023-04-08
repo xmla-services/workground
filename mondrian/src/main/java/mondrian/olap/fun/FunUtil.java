@@ -347,7 +347,7 @@ public class FunUtil extends Util {
    * @return List of non-calculated members
    */
   static List<Member> removeCalculatedMembers( List<Member> memberList ) {
-    List<Member> clone = new ArrayList<Member>();
+    List<Member> clone = new ArrayList<>();
     for ( Member member : memberList ) {
       if ( member.isCalculated()
         && !member.isParentChildPhysicalMember() ) {
@@ -1158,7 +1158,7 @@ public class FunUtil extends Util {
     // If m == null, then "level" was lower than member's level.
     // periodsToDate([Time].[Quarter], [Time].[1997] is valid,
     //  but will return an empty List
-    List<Member> members = new ArrayList<Member>();
+    List<Member> members = new ArrayList<>();
     if ( m != null ) {
       // e.g. m is [Time].[1997] and member is [Time].[1997].[Q1].[3]
       // we now have to make m to be the first member of the range,
@@ -1176,7 +1176,7 @@ public class FunUtil extends Util {
     Member endMember ) {
     final Level level = startMember.getLevel();
     Util.assertTrue( level == endMember.getLevel() );
-    List<Member> members = new ArrayList<Member>();
+    List<Member> members = new ArrayList<>();
     evaluator.getSchemaReader().getMemberRange(
       level, startMember, endMember, members );
 
@@ -1278,7 +1278,7 @@ public class FunUtil extends Util {
       return member.getHierarchy().getNullMember();
     }
 
-    final List<Member> ancestors = new ArrayList<Member>();
+    final List<Member> ancestors = new ArrayList<>();
     final SchemaReader schemaReader = evaluator.getSchemaReader();
     schemaReader.getMemberAncestors( member, ancestors );
 
@@ -1671,7 +1671,7 @@ public class FunUtil extends Util {
     if ( !includeCalcMembers ) {
       memberList = FunUtil.removeCalculatedMembers( memberList );
     }
-    final List<Member> memberListClone = new ArrayList<Member>( memberList );
+    final List<Member> memberListClone = new ArrayList<>( memberList );
     tupleList = new UnaryTupleList( memberListClone );
     return Sorter.hierarchizeTupleList( tupleList, false );
   }
@@ -1873,7 +1873,7 @@ public class FunUtil extends Util {
     final List<Hierarchy> leftHierarchies,
     final List<Hierarchy> rightHierarchies,
     final Evaluator eval ) {
-    List<Member> checkedMembers = new ArrayList<Member>();
+    List<Member> checkedMembers = new ArrayList<>();
 
     for ( Member leftMember : leftTuple ) {
       Member rightMember = FunUtil.getCorrespondingMember(

@@ -51,7 +51,7 @@ public class CustomizedParserTest {
 	}
 
     CustomizedFunctionTable getCustomizedFunctionTable(Set<String> funNameSet) {
-        Set<FunDef> specialFunctions = new HashSet<FunDef>();
+        Set<FunDef> specialFunctions = new HashSet<>();
         specialFunctions.add(new ParenthesesFunDef(Category.Numeric));
 
         CustomizedFunctionTable cftab =
@@ -102,7 +102,7 @@ public class CustomizedParserTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testAddition(TestingContext foodMartContext) {
-        Set<String> functionNameSet = new HashSet<String>();
+        Set<String> functionNameSet = new HashSet<>();
         functionNameSet.add("+");
         CustomizedFunctionTable cftab =
             getCustomizedFunctionTable(functionNameSet);
@@ -120,7 +120,7 @@ public class CustomizedParserTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testSubtraction(TestingContext foodMartContext) {
-        Set<String> functionNameSet = new HashSet<String>();
+        Set<String> functionNameSet = new HashSet<>();
         functionNameSet.add("-");
         CustomizedFunctionTable cftab =
             getCustomizedFunctionTable(functionNameSet);
@@ -138,7 +138,7 @@ public class CustomizedParserTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     void testSingleMultiplication(TestingContext foodMartContext) {
-        Set<String> functionNameSet = new HashSet<String>();
+        Set<String> functionNameSet = new HashSet<>();
         functionNameSet.add("*");
         CustomizedFunctionTable cftab =
             getCustomizedFunctionTable(functionNameSet);
@@ -156,7 +156,7 @@ public class CustomizedParserTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testMultipleMultiplication(TestingContext foodMartContext) {
-        Set<String> functionNameSet = new HashSet<String>();
+        Set<String> functionNameSet = new HashSet<>();
         functionNameSet.add("*");
         CustomizedFunctionTable cftab =
             getCustomizedFunctionTable(functionNameSet);
@@ -174,7 +174,7 @@ public class CustomizedParserTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testLiterals(TestingContext foodMartContext) {
-        Set<String> functionNameSet = new HashSet<String>();
+        Set<String> functionNameSet = new HashSet<>();
         functionNameSet.add("+");
         CustomizedFunctionTable cftab =
             getCustomizedFunctionTable(functionNameSet);
@@ -192,7 +192,7 @@ public class CustomizedParserTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testMissingObjectFail(TestingContext foodMartContext) {
-        Set<String> functionNameSet = new HashSet<String>();
+        Set<String> functionNameSet = new HashSet<>();
         functionNameSet.add("+");
         CustomizedFunctionTable cftab =
             getCustomizedFunctionTable(functionNameSet);
@@ -223,7 +223,7 @@ public class CustomizedParserTest {
     }
 
     private void testMissingObject(TestingContext foodMartContext,boolean strictValidation) {
-        Set<String> functionNameSet = new HashSet<String>();
+        Set<String> functionNameSet = new HashSet<>();
         functionNameSet.add("+");
         CustomizedFunctionTable cftab =
             getCustomizedFunctionTable(functionNameSet);
@@ -269,7 +269,7 @@ public class CustomizedParserTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testMultiplicationFail(TestingContext foodMartContext) {
-        Set<String> functionNameSet = new HashSet<String>();
+        Set<String> functionNameSet = new HashSet<>();
         functionNameSet.add("+");
         CustomizedFunctionTable cftab =
             getCustomizedFunctionTable(functionNameSet);
@@ -291,7 +291,7 @@ public class CustomizedParserTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testMixingAttributesFail(TestingContext foodMartContext) {
-        Set<String> functionNameSet = new HashSet<String>();
+        Set<String> functionNameSet = new HashSet<>();
         functionNameSet.add("+");
         CustomizedFunctionTable cftab =
             getCustomizedFunctionTable(functionNameSet);
@@ -313,7 +313,7 @@ public class CustomizedParserTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testCrossJoinFail(TestingContext foodMartContext) {
-        Set<String> functionNameSet = new HashSet<String>();
+        Set<String> functionNameSet = new HashSet<>();
         functionNameSet.add("+");
         functionNameSet.add("-");
         functionNameSet.add("*");
@@ -338,7 +338,7 @@ public class CustomizedParserTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testMeasureSlicerFail(TestingContext foodMartContext) {
-        Set<String> functionNameSet = new HashSet<String>();
+        Set<String> functionNameSet = new HashSet<>();
         functionNameSet.add("+");
         functionNameSet.add("-");
         functionNameSet.add("*");
@@ -363,7 +363,7 @@ public class CustomizedParserTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testTupleFail(TestingContext foodMartContext) {
-        Set<String> functionNameSet = new HashSet<String>();
+        Set<String> functionNameSet = new HashSet<>();
         functionNameSet.add("+");
         functionNameSet.add("-");
         functionNameSet.add("*");
@@ -397,7 +397,7 @@ public class CustomizedParserTest {
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )
     void testMixingMemberLimitation(TestingContext foodMartContext) {
-        Set<String> functionNameSet = new HashSet<String>();
+        Set<String> functionNameSet = new HashSet<>();
         functionNameSet.add("+");
         CustomizedFunctionTable cftab =
             getCustomizedFunctionTable(functionNameSet);

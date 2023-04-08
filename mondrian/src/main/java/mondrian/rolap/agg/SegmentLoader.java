@@ -175,7 +175,7 @@ public class SegmentLoader {
     GroupingSetsList groupingSetsList = new GroupingSetsList( groupingSets );
     RolapStar.Column[] defaultColumns = groupingSetsList.getDefaultColumns();
 
-    final Map<Segment, SegmentWithData> segmentMap = new HashMap<Segment, SegmentWithData>();
+    final Map<Segment, SegmentWithData> segmentMap = new HashMap<>();
     Throwable throwable = null;
     try {
       int arity = defaultColumns.length;
@@ -388,7 +388,7 @@ public class SegmentLoader {
           createDataSets( sparse, groupingSetsList.getDefaultSegments(), groupingSetsList.getDefaultAxes(), types );
       return Collections.singletonMap( BitKey.EMPTY, datasets );
     }
-    Map<BitKey, GroupingSetsList.Cohort> datasetsMap = new HashMap<BitKey, GroupingSetsList.Cohort>();
+    Map<BitKey, GroupingSetsList.Cohort> datasetsMap = new HashMap<>();
     List<GroupingSet> groupingSets = groupingSetsList.getGroupingSets();
     List<BitKey> groupingColumnsBitKeyList = groupingSetsList.getRollupColumnsBitKeyList();
     for ( int i = 0; i < groupingSets.size(); i++ ) {
@@ -410,7 +410,7 @@ public class SegmentLoader {
 
   private GroupingSetsList.Cohort createDataSets( boolean sparse, List<Segment> segments, SegmentAxis[] axes,
       List<BestFitColumnType> types ) {
-    final List<SegmentDataset> datasets = new ArrayList<SegmentDataset>( segments.size() );
+    final List<SegmentDataset> datasets = new ArrayList<>( segments.size() );
     final int n;
     if ( sparse ) {
       n = 0;
@@ -462,7 +462,7 @@ public class SegmentLoader {
     // When caching is enabled, we must register the SQL statement
     // in the index. We don't want to cancel SQL statements that are shared
     // across threads unless it is safe.
-    final Consumer<Statement>  callbackWithCaching = new Consumer<Statement> () {
+    final Consumer<Statement>  callbackWithCaching = new Consumer<> () {
       @Override
 	public void accept( final Statement stmt ) {
         cacheMgr.execute( new SegmentCacheManager.Command<Void>() {
@@ -499,7 +499,7 @@ public class SegmentLoader {
 
     // When using no cache, we register the SQL statement directly
     // with the execution instance for cleanup.
-    final Consumer<Statement> callbackNoCaching = new Consumer<Statement>() {
+    final Consumer<Statement> callbackNoCaching = new Consumer<>() {
         @Override
 		public void accept(final Statement stmt) {
             locus.execution.registerStatement(locus, stmt);
@@ -535,7 +535,7 @@ public class SegmentLoader {
     // the processed data set.
     final List<BestFitColumnType> processedTypes;
     if ( groupingSetsList.useGroupingSets() ) {
-      processedTypes = new ArrayList<BestFitColumnType>( types.subList( 0, groupingColumnStartIndex ) );
+      processedTypes = new ArrayList<>( types.subList( 0, groupingColumnStartIndex ) );
       processedTypes.add( BestFitColumnType.OBJECT );
     } else {
       processedTypes = types;
@@ -767,7 +767,7 @@ public class SegmentLoader {
     // Workspace to build up lists of distinct values for each axis.
     SortedSet<Comparable>[] axisValueSets = new SortedSet[arity];
     for ( int i = 0; i < axisValueSets.length; i++ ) {
-      axisValueSets[i] = new TreeSet<Comparable>();
+      axisValueSets[i] = new TreeSet<>();
     }
     return axisValueSets;
   }
@@ -908,7 +908,7 @@ public class SegmentLoader {
     }
 
     public List<BestFitColumnType> getTypes() {
-      return new AbstractList<BestFitColumnType>() {
+      return new AbstractList<>() {
         @Override
 		public BestFitColumnType get( int index ) {
           return columns[index].type;

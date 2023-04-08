@@ -47,7 +47,7 @@ import mondrian.olap.Util;
 */
 public class JavaFunDef extends FunDefBase {
     private static final Map<Class, Integer> mapClazzToCategory =
-        new HashMap<Class, Integer>();
+        new HashMap<>();
     private static final String className = JavaFunDef.class.getName();
 
     static {
@@ -148,7 +148,7 @@ public class JavaFunDef extends FunDefBase {
      * @return List of function definitions
      */
     public static List<FunDef> scan(Class clazz) {
-        List<FunDef> list = new ArrayList<FunDef>();
+        List<FunDef> list = new ArrayList<>();
         Method[] methods = clazz.getMethods();
         for (Method method : methods) {
             if (Modifier.isStatic(method.getModifiers())

@@ -12593,7 +12593,7 @@ Intel platforms):
    */
   @Test
   void testDumpFunctions() throws IOException {
-    final List<FunInfo> funInfoList = new ArrayList<FunInfo>();
+    final List<FunInfo> funInfoList = new ArrayList<>();
     funInfoList.addAll( BuiltinFunTable.instance().getFunInfoList() );
     assertEquals( NUM_EXPECTED_FUNCTIONS, funInfoList.size() );
 

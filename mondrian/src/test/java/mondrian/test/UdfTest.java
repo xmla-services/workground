@@ -1840,7 +1840,7 @@ public class UdfTest {
             // Note: must call Argument.evaluateList. If we call
             // Argument.evaluate we may get an Iterable.
             Iterable iterable = args[0].evaluateIterable(eval);
-            List<Object> list = new ArrayList<Object>();
+            List<Object> list = new ArrayList<>();
             for (Object o : iterable) {
                 list.add(o);
             }

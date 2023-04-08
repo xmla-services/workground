@@ -67,7 +67,7 @@ public class MondrianOlap4jHierarchy
     @Override
 	public NamedList<Level> getLevels() {
         final NamedList<MondrianOlap4jLevel> list =
-            new NamedListImpl<MondrianOlap4jLevel>();
+            new NamedListImpl<>();
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
         final mondrian.olap.SchemaReader schemaReader =
@@ -108,7 +108,7 @@ public class MondrianOlap4jHierarchy
                 .getLevelMembers(
                     hierarchy.getLevels()[0], true);
 
-        return new AbstractNamedList<Member>() {
+        return new AbstractNamedList<>() {
             @Override
 			public String getName(Object member) {
                 return ((Member)member).getName();

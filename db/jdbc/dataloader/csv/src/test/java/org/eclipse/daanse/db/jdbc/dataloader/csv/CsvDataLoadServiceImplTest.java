@@ -156,7 +156,7 @@ class CsvDataLoadServiceImplTest {
 			String csvFilePrefix, String encoding, Boolean quoteDetectionEnabled, Boolean clearTableBeforeLoad)
 			throws IOException {
 		conf = ca.getFactoryConfiguration(CsvDataLoadServiceImplTest.COMPONENT_NAME, "1", "?");
-		Dictionary<String, Object> dict = new Hashtable<String, Object>();
+		Dictionary<String, Object> dict = new Hashtable<>();
 		if (lineSeparatorDetectionEnabled != null) {
 
 			dict.put("lineSeparatorDetectionEnabled", lineSeparatorDetectionEnabled);

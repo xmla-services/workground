@@ -104,10 +104,10 @@ public class RolapResult extends ResultBase {
   private Modulos modulos = null;
   private final int maxEvalDepth = MondrianProperties.instance().MaxEvalDepth.get();
 
-  private final Map<Integer, Boolean> positionsHighCardinality = new HashMap<Integer, Boolean>();
-  private final Map<Integer, TupleCursor> positionsIterators = new HashMap<Integer, TupleCursor>();
-  private final Map<Integer, Integer> positionsIndexes = new HashMap<Integer, Integer>();
-  private final Map<Integer, List<List<Member>>> positionsCurrent = new HashMap<Integer, List<List<Member>>>();
+  private final Map<Integer, Boolean> positionsHighCardinality = new HashMap<>();
+  private final Map<Integer, TupleCursor> positionsIterators = new HashMap<>();
+  private final Map<Integer, Integer> positionsIndexes = new HashMap<>();
+  private final Map<Integer, List<List<Member>>> positionsCurrent = new HashMap<>();
 
   /**
    * Creates a RolapResult.
@@ -249,18 +249,18 @@ public class RolapResult extends ResultBase {
       final AxisMemberList axisMembers = new AxisMemberList();
 
       // list of ALL Members that are not default Members
-      final List<Member> nonDefaultAllMembers = new ArrayList<Member>();
+      final List<Member> nonDefaultAllMembers = new ArrayList<>();
 
       // List of Members of Hierarchies that do not have an ALL Member
-      List<List<Member>> nonAllMembers = new ArrayList<List<Member>>();
+      List<List<Member>> nonAllMembers = new ArrayList<>();
 
       // List of Measures
-      final List<Member> measureMembers = new ArrayList<Member>();
+      final List<Member> measureMembers = new ArrayList<>();
 
       /////////////////////////////////////////////////////////////////
       // Determine Subcube
       //
-      HashMap<Hierarchy, HashMap<Member, Member>> subcubeHierarchies = new HashMap<Hierarchy, HashMap<Member, Member>>();
+      HashMap<Hierarchy, HashMap<Member, Member>> subcubeHierarchies = new HashMap<>();
 
       for(Map.Entry<Hierarchy, Calc> entry : query.subcubeHierarchyCalcs.entrySet()) {
         Hierarchy hierarchy = entry.getKey();
@@ -269,7 +269,7 @@ public class RolapResult extends ResultBase {
 
         Calc calc = entry.getValue();
 
-        HashMap<Member, Member> subcubeHierarchyMembers = new HashMap<Member, Member>();
+        HashMap<Member, Member> subcubeHierarchyMembers = new HashMap<>();
 
         mondrian.olap.type.Type memberType1 =
                 new mondrian.olap.type.MemberType(
@@ -286,7 +286,7 @@ public class RolapResult extends ResultBase {
 				public TupleList evaluateList(
                           Evaluator evaluator)
                   {
-                    ArrayList<Member> children = new ArrayList<Member>();
+                    ArrayList<Member> children = new ArrayList<>();
                     Member expandingMember = ((RolapEvaluator) evaluator).getExpanding();
 
                     if(subcubeHierarchyMembers.containsKey(expandingMember)) {
@@ -457,7 +457,7 @@ public class RolapResult extends ResultBase {
 
           final Calc valueCalc = new ValueCalc( new ScalarType() ) ;
 
-          final List<Member> prevSlicerMembers = new ArrayList<Member>();
+          final List<Member> prevSlicerMembers = new ArrayList<>();
 
           final Calc calcCached = new GenericCalc("DummyExp", query.slicerCalc.getType() ) {
             @Override
@@ -776,7 +776,7 @@ public class RolapResult extends ResultBase {
     if ( toRemove > 0 ) {
       TupleList newList = new ListTupleList( tupleList.getArity() - toRemove, new ArrayList<Member>() );
       for ( List<Member> tuple : tupleList ) {
-        List<Member> ntuple = new ArrayList<Member>();
+        List<Member> ntuple = new ArrayList<>();
         for ( int i = 0; i < tuple.size(); i++ ) {
           if ( !unary[i] ) {
             ntuple.add( tuple.get( i ) );
@@ -839,7 +839,7 @@ public final Execution getExecution() {
 
   protected boolean replaceNonAllMembers( List<List<Member>> nonAllMembers, AxisMemberList axisMembers ) {
     boolean changed = false;
-    List<Member> mList = new ArrayList<Member>();
+    List<Member> mList = new ArrayList<>();
     for ( ListIterator<List<Member>> it = nonAllMembers.listIterator(); it.hasNext(); ) {
       List<Member> ms = it.next();
       Hierarchy h = ms.get( 0 ).getHierarchy();
@@ -851,7 +851,7 @@ public final Execution getExecution() {
       }
       if ( !mList.isEmpty() ) {
         changed = true;
-        it.set( new ArrayList<Member>( mList ) );
+        it.set( new ArrayList<>( mList ) );
       }
     }
     return changed;
@@ -1290,7 +1290,7 @@ public Cell getCell( int[] pos ) {
           final TupleCursor tupleCursor = tupleList.tupleCursor();
           positionsIterators.put( axisOrdinal, tupleCursor );
           positionsIndexes.put( axisOrdinal, 0 );
-          final List<List<Member>> subPositions = new ArrayList<List<Member>>();
+          final List<List<Member>> subPositions = new ArrayList<>();
           for ( int i = 0; i < limit && tupleCursor.forward(); i++ ) {
             subPositions.add( tupleCursor.current() );
           }
@@ -1330,7 +1330,7 @@ public Cell getCell( int[] pos ) {
         }
       } else {
         for ( List<Member> tuple : tupleList ) {
-          List<Member> measures = new ArrayList<Member>( statement.getQuery().getMeasuresMembers() );
+          List<Member> measures = new ArrayList<>( statement.getQuery().getMeasuresMembers() );
           for ( Member measure : measures ) {
             if ( measure instanceof RolapBaseCubeMeasure ) {
               RolapBaseCubeMeasure baseCubeMeasure = (RolapBaseCubeMeasure) measure;
@@ -1451,7 +1451,7 @@ public Cell getCell( int[] pos ) {
         continue;
       }
       evaluator.setContext( measure );
-      List<Member> exprMembers = new ArrayList<Member>();
+      List<Member> exprMembers = new ArrayList<>();
       processMemberExpr( member, exprMembers );
       ( (VisualTotalMember) member ).setExpression( evaluator, exprMembers );
     }
@@ -1584,8 +1584,8 @@ public Cell getCell( int[] pos ) {
 
     AxisMemberList() {
       this.countOnly = false;
-      this.members = new ArrayList<Member>();
-      this.membersByHierarchy = new HashMap<Hierarchy, Set<Member>>();
+      this.members = new ArrayList<>();
+      this.membersByHierarchy = new HashMap<>();
       this.totalCellCount = 1;
       this.axisCount = 0;
       // Now that the axes are evaluated, make sure that the number of
@@ -1731,9 +1731,9 @@ public Cell getCell( int[] pos ) {
     /**
      * Maps the names of sets to their values. Populated on demand.
      */
-    private final Map<String, RolapSetEvaluator> setEvaluators = new HashMap<String, RolapSetEvaluator>();
+    private final Map<String, RolapSetEvaluator> setEvaluators = new HashMap<>();
     private final Map<String, RolapNamedSetEvaluator> namedSetEvaluators =
-        new HashMap<String, RolapNamedSetEvaluator>();
+        new HashMap<>();
 
     final RolapResult result;
     private static final Object CycleSentinel = new Object();
@@ -2081,7 +2081,7 @@ public Cell getCell( int[] pos ) {
      */
     CellInfoMap( CellKey point ) {
       this.point = point;
-      this.cellInfoMap = new HashMap<CellKey, CellInfo>();
+      this.cellInfoMap = new HashMap<>();
     }
 
     @Override
@@ -2244,12 +2244,12 @@ public Cell getCell( int[] pos ) {
     private final CellKeyMaker cellKeyMaker;
 
     CellInfoPool( int axisLength ) {
-      this.cellInfoPool = new ObjectPool<CellInfo>();
+      this.cellInfoPool = new ObjectPool<>();
       this.cellKeyMaker = createCellKeyMaker( axisLength );
     }
 
     CellInfoPool( int axisLength, int initialSize ) {
-      this.cellInfoPool = new ObjectPool<CellInfo>( initialSize );
+      this.cellInfoPool = new ObjectPool<>( initialSize );
       this.cellKeyMaker = createCellKeyMaker( axisLength );
     }
 
@@ -2302,7 +2302,7 @@ public Cell getCell( int[] pos ) {
     if ( axis1.isEmpty() && axis2 instanceof TupleList ) {
       return (TupleList) axis2;
     }
-    Set<List<Member>> set = new HashSet<List<Member>>();
+    Set<List<Member>> set = new HashSet<>();
     TupleList list = TupleCollections.createList( axis2.getArity() );
     for ( List<Member> tuple : axis1 ) {
       if ( set.add( tuple ) ) {

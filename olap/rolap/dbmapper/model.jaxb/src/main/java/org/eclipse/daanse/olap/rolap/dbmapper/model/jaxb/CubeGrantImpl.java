@@ -40,7 +40,7 @@ public class CubeGrantImpl implements CubeGrant {
     @Override
     public List<DimensionGrantImpl> dimensionGrant() {
         if (dimensionGrant == null) {
-            dimensionGrant = new ArrayList<DimensionGrantImpl>();
+            dimensionGrant = new ArrayList<>();
         }
         return this.dimensionGrant;
     }
@@ -48,7 +48,7 @@ public class CubeGrantImpl implements CubeGrant {
     @Override
     public List<HierarchyGrantImpl> hierarchyGrant() {
         if (hierarchyGrant == null) {
-            hierarchyGrant = new ArrayList<HierarchyGrantImpl>();
+            hierarchyGrant = new ArrayList<>();
         }
         return this.hierarchyGrant;
     }

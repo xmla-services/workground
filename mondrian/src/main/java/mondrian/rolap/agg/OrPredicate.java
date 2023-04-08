@@ -58,12 +58,12 @@ public class OrPredicate extends ListPredicate {
             // Keeping them separate helps the SQL translation to IN-list.
             ListPredicate that = (ListPredicate) predicate;
             final List<StarPredicate> list =
-                new ArrayList<StarPredicate>(children);
+                new ArrayList<>(children);
             list.addAll(that.children);
             return new OrPredicate(list);
         } else {
             final List<StarPredicate> list =
-                new ArrayList<StarPredicate>(children);
+                new ArrayList<>(children);
             list.add(predicate);
             return new OrPredicate(list);
         }
@@ -71,7 +71,7 @@ public class OrPredicate extends ListPredicate {
 
     @Override
 	public StarPredicate and(StarPredicate predicate) {
-        List<StarPredicate> list = new ArrayList<StarPredicate>();
+        List<StarPredicate> list = new ArrayList<>();
         list.add(this);
         list.add(predicate);
         return new AndPredicate(list);
@@ -110,7 +110,7 @@ public class OrPredicate extends ListPredicate {
         List<StarPredicate> predicateGroup =
             predicateMap.get(inListRhsBitKey);
         if (predicateGroup == null) {
-            predicateGroup = new ArrayList<StarPredicate> ();
+            predicateGroup = new ArrayList<> ();
             predicateMap.put(inListRhsBitKey, predicateGroup);
         }
         predicateGroup.add(predicate);
@@ -144,7 +144,7 @@ public class OrPredicate extends ListPredicate {
     {
         // Make a col position to column map to aid search.
         Map<Integer, RolapStar.Column> columnMap =
-            new HashMap<Integer, RolapStar.Column>();
+            new HashMap<>();
 
         for (RolapStar.Column column : columns) {
             columnMap.put(column.getBitPosition(), column);
@@ -244,7 +244,7 @@ public class OrPredicate extends ListPredicate {
         // super.toSql().
         //
         final Map<BitKey, List<StarPredicate>> predicateMap =
-            new LinkedHashMap<BitKey, List<StarPredicate>> ();
+            new LinkedHashMap<> ();
 
         boolean first = true;
         checkInList(sqlQuery, predicateMap);

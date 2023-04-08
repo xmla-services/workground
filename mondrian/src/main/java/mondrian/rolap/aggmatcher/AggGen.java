@@ -50,15 +50,15 @@ public class AggGen {
     /** map RolapStar.Table to list of JdbcSchema Column Usages */
     private final Map<RolapStar.Table, List<JdbcSchema.Table.Column.Usage>>
         collapsedColumnUsages =
-        new HashMap<RolapStar.Table, List<JdbcSchema.Table.Column.Usage>>();
+        new HashMap<>();
 
     /** set of JdbcSchema Column Usages */
     private final Set<JdbcSchema.Table.Column.Usage> notLostColumnUsages =
-        new HashSet<JdbcSchema.Table.Column.Usage>();
+        new HashSet<>();
 
     /** list of JdbcSchema Column Usages */
     private final List<JdbcSchema.Table.Column.Usage> measures =
-        new ArrayList<JdbcSchema.Table.Column.Usage>();
+        new ArrayList<>();
 
     private boolean isReady;
 
@@ -387,7 +387,7 @@ public class AggGen {
         List<JdbcSchema.Table.Column.Usage> list =
             collapsedColumnUsages.get(rt);
         if (list == null) {
-            list = new ArrayList<JdbcSchema.Table.Column.Usage>();
+            list = new ArrayList<>();
             collapsedColumnUsages.put(rt, list);
         }
 
@@ -486,7 +486,7 @@ public class AggGen {
         // if this is a dimension table, then walk down the levels until
         // we hit the current column
         List<JdbcSchema.Table.Column.Usage> list =
-            new ArrayList<JdbcSchema.Table.Column.Usage>();
+            new ArrayList<>();
         for (RolapStar.Column rc : rt.getColumns()) {
             // do not include name columns
             if (rc.isNameColumn()) {

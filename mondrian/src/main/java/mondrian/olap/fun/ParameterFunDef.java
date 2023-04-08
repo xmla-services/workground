@@ -250,7 +250,7 @@ public class ParameterFunDef extends FunDefBase {
             Exp exp = args[2];
             Validator validator =
                 Util.createSimpleValidator(BuiltinFunTable.instance());
-            final List<Conversion> conversionList = new ArrayList<Conversion>();
+            final List<Conversion> conversionList = new ArrayList<>();
             String typeName = Category.instance.getName(category).toUpperCase();
             if (!validator.canConvert(2, exp, category, conversionList)) {
                 throw FunUtil.newEvalException(

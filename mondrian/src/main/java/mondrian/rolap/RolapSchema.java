@@ -102,14 +102,14 @@ public class RolapSchema implements Schema {
      * Holds cubes in this schema.
      */
     private final Map<String, RolapCube> mapNameToCube =
-        new HashMap<String, RolapCube>();
+        new HashMap<>();
 
     /**
      * Maps {@link String shared hierarchy name} to {@link MemberReader}.
      * Shared between all statements which use this connection.
      */
     private final Map<String, MemberReader> mapSharedHierarchyToReader =
-        new HashMap<String, MemberReader>();
+        new HashMap<>();
 
     /**
      * Maps {@link String names of shared hierarchies} to {@link
@@ -117,7 +117,7 @@ public class RolapSchema implements Schema {
      */
     private final Map<String, RolapHierarchy> mapSharedHierarchyNameToHierarchy
         =
-        new HashMap<String, RolapHierarchy>();
+        new HashMap<>();
 
     /**
      * The default role for connections to this schema.
@@ -140,13 +140,13 @@ public class RolapSchema implements Schema {
     /**
      * Maps {@link String names of roles} to {@link Role roles with those names}.
      */
-    private final Map<String, Role> mapNameToRole = new HashMap<String, Role>();
+    private final Map<String, Role> mapNameToRole = new HashMap<>();
 
     /**
      * Maps {@link String names of sets} to {@link NamedSet named sets}.
      */
     private final Map<String, NamedSet> mapNameToSet =
-        new HashMap<String, NamedSet>();
+        new HashMap<>();
 
     /**
      * Table containing all standard MDX functions, plus user-defined functions
@@ -157,7 +157,7 @@ public class RolapSchema implements Schema {
     private org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema xmlSchema;
 
     final List<RolapSchemaParameter > parameterList =
-        new ArrayList<RolapSchemaParameter >();
+        new ArrayList< >();
 
     private Date schemaLoadDate;
 
@@ -168,7 +168,7 @@ public class RolapSchema implements Schema {
      * that has
      * {@link mondrian.rolap.RolapConnectionProperties#Ignore Ignore}=true.
      */
-    private final List<Exception> warningList = new ArrayList<Exception>();
+    private final List<Exception> warningList = new ArrayList<>();
     private Map<String, Object> metadata;
 
     /**
@@ -544,7 +544,7 @@ public class RolapSchema implements Schema {
         // calculated members, because calculated members will need to use the
         // function table.
         final Map<String, UdfResolver.UdfFactory> mapNameToUdf =
-            new HashMap<String, UdfResolver.UdfFactory>();
+            new HashMap<>();
         for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.UserDefinedFunction udf
             : xmlSchema.userDefinedFunctions())
         {
@@ -566,7 +566,7 @@ public class RolapSchema implements Schema {
         }
 
         // Create parameters.
-        Set<String> parameterNames = new HashSet<String>();
+        Set<String> parameterNames = new HashSet<>();
         for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Parameter xmlParameter : xmlSchema.parameter()) {
             String name = xmlParameter.name();
             if (!parameterNames.add(name)) {
@@ -724,7 +724,7 @@ public class RolapSchema implements Schema {
         }
 
         List<? extends org.eclipse.daanse.olap.rolap.dbmapper.model.api.RoleUsage> usages = xmlRole.union().roleUsage();
-        List<Role> roleList = new ArrayList<Role>(usages.size());
+        List<Role> roleList = new ArrayList<>(usages.size());
         for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.RoleUsage roleUsage : usages) {
             Role role = mapNameToRole.get(roleUsage.roleName());
             if (role == null) {
@@ -1021,7 +1021,7 @@ public class RolapSchema implements Schema {
     }
 
     public List<RolapCube> getCubesWithStar(RolapStar star) {
-        List<RolapCube> list = new ArrayList<RolapCube>();
+        List<RolapCube> list = new ArrayList<>();
         for (RolapCube cube : mapNameToCube.values()) {
             if (star == cube.getStar()) {
                 list.add(cube);
@@ -1054,7 +1054,7 @@ public class RolapSchema implements Schema {
     }
 
     public List<RolapCube> getCubeList() {
-        return new ArrayList<RolapCube>(mapNameToCube.values());
+        return new ArrayList<>(mapNameToCube.values());
     }
 
     @Override
@@ -1401,7 +1401,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
      */
     public class RolapStarRegistry {
         private final Map<List<String>, RolapStar> stars =
-            new HashMap<List<String>, RolapStar>();
+            new HashMap<>();
 
         RolapStarRegistry() {
         }
@@ -1451,7 +1451,7 @@ System.out.println("RolapSchema.createMemberReader: CONTAINS NAME");
         private final List<UdfResolver.UdfFactory> udfFactoryList;
 
         RolapSchemaFunctionTable(Collection<UdfResolver.UdfFactory> udfs) {
-            udfFactoryList = new ArrayList<UdfResolver.UdfFactory>(udfs);
+            udfFactoryList = new ArrayList<>(udfs);
         }
 
         @Override

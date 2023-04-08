@@ -146,13 +146,13 @@ public class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void  testFemaleCustomerCountWithConstraints(TestingContext context) {
         prepareContext(context);
-        List<String[]> Q1M1 = new ArrayList<String[]> ();
+        List<String[]> Q1M1 = new ArrayList<> ();
         Q1M1.add(new String[] {"1997", "Q1", "1"});
 
-        List<String[]> Q2M5 = new ArrayList<String[]> ();
+        List<String[]> Q2M5 = new ArrayList<> ();
         Q2M5.add(new String[] {"1997", "Q2", "5"});
 
-        List<String[]> Q1M1Q2M5 = new ArrayList<String[]> ();
+        List<String[]> Q1M1Q2M5 = new ArrayList<> ();
         Q1M1Q2M5.add(new String[] {"1997", "Q1", "1"});
         Q1M1Q2M5.add(new String[] {"1997", "Q2", "5"});
         Connection connection = context.createConnection();
@@ -925,7 +925,7 @@ public class TestAggregationManager extends BatchTestCase {
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)
     public void testCountDistinctBatchLoading(TestingContext context) {
         prepareContext(context);
-        List<String[]> compoundMembers = new ArrayList<String[]>();
+        List<String[]> compoundMembers = new ArrayList<>();
         compoundMembers.add(new String[] {"1997", "Q1", "1"});
         compoundMembers.add(new String[] {"1997", "Q3", "7"});
 
@@ -1340,7 +1340,7 @@ public class TestAggregationManager extends BatchTestCase {
         // separate out the compound constraint from the "regular" constraints
         // and Aggregate tables can still be used.
 
-        List<String[]> compoundMembers = new ArrayList<String[]> ();
+        List<String[]> compoundMembers = new ArrayList<> ();
         compoundMembers.add(new String[] {"1997", "Q1", "1"});
         Connection connection = context.createConnection();
         CellRequest request = createRequest(connection,

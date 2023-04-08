@@ -435,7 +435,7 @@ public class BasicQueryTest {
 
       "/* multi-line comment containing -- single-line comment */", };
 
-    List<String> allCommentList = new ArrayList<String>();
+    List<String> allCommentList = new ArrayList<>();
     for ( String comment : comments ) {
       allCommentList.add( comment );
       if ( comment.indexOf( "\n" ) >= 0 ) {
@@ -745,7 +745,7 @@ public class BasicQueryTest {
         executeQuery(context.createConnection(), "select [Gender].Members on 0,\n" + "[Time].[Weekly].[1997].[6].Children on 1\n"
             + "from [Sales]\n" + "where [Marital Status].[S]" );
     final Cell cell = result.getCell( new int[] { 0, 0 } );
-    final Map<String, Hierarchy> hierarchyMap = new HashMap<String, Hierarchy>();
+    final Map<String, Hierarchy> hierarchyMap = new HashMap<>();
     for ( Dimension dimension : result.getQuery().getCube().getDimensions() ) {
       for ( Hierarchy hierarchy : dimension.getHierarchies() ) {
         hierarchyMap.put( hierarchy.getUniqueName(), hierarchy );
@@ -3491,7 +3491,7 @@ public class BasicQueryTest {
     // 10 minute per query
     long timeoutMs = (long) threadCount * iterationCount * 600 * 1000;
     final int[] executeCount = new int[] { 0 };
-    final List<QueryAndResult> queries = new ArrayList<QueryAndResult>();
+    final List<QueryAndResult> queries = new ArrayList<>();
     queries.addAll( Arrays.asList( sampleQueries ) );
     queries.addAll( taglibQueries );
     TestCaseForker threaded = new TestCaseForker( this, timeoutMs, threadCount, new ChooseRunnable() {
@@ -6118,7 +6118,7 @@ public class BasicQueryTest {
     BasicQueryTest testCase;
     long timeoutMs;
     Thread[] threads;
-    List<Throwable> failures = new ArrayList<Throwable>();
+    List<Throwable> failures = new ArrayList<>();
     ChooseRunnable chooseRunnable;
 
     public TestCaseForker(

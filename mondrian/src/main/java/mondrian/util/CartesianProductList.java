@@ -35,7 +35,7 @@ public class CartesianProductList<T>
 
     @Override
     public List<T> get(int index) {
-        final List<T> result = new ArrayList<T>();
+        final List<T> result = new ArrayList<>();
         for (int i = lists.size(); --i >= 0;) {
             final List<T> list = lists.get(i);
             final int size = list.size();

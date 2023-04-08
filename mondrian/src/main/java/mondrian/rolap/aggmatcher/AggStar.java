@@ -172,10 +172,10 @@ public class AggStar {
         org.eclipse.daanse.olap.rolap.dbmapper.model.api.Column column,
         RolapStar.Table table)
     {
-        final Set<RolapStar.Column> columns = new HashSet<RolapStar.Column>();
+        final Set<RolapStar.Column> columns = new HashSet<>();
         RolapStar.collectColumns(columns, table, column);
 
-        final List<Table.Level> levelList = new ArrayList<Table.Level>();
+        final List<Table.Level> levelList = new ArrayList<>();
         collectLevels(levelList, aggTable, null);
 
         for (Table.Level level : levelList) {
@@ -261,7 +261,7 @@ public class AggStar {
         this.distinctMeasureBitKey = bitKey.emptyCopy();
         this.aggTable = new AggStar.FactTable(aggTable);
         this.columns = new AggStar.Table.Column[star.getColumnCount()];
-        this.levelColumnsToJoin = new HashMap<Integer, AggStar.Table.Column>();
+        this.levelColumnsToJoin = new HashMap<>();
     }
 
     /**
@@ -801,7 +801,7 @@ public class AggStar {
         /** The name of the table in the database. */
         private final String name;
         private final Relation relation;
-        protected final List<Level> levels = new ArrayList<Level>();
+        protected final List<Level> levels = new ArrayList<>();
         protected List<DimTable> children;
 
         Table(final String name, final Relation relation) {
@@ -879,7 +879,7 @@ public class AggStar {
          */
         protected void addTable(final DimTable child) {
             if (children == Collections.EMPTY_LIST) {
-                children = new ArrayList<DimTable>();
+                children = new ArrayList<>();
             }
             children.add(child);
         }
@@ -1188,7 +1188,7 @@ public class AggStar {
         {
             super(name, relation);
             this.totalColumnSize = totalColumnSize;
-            this.measures = new ArrayList<Measure>();
+            this.measures = new ArrayList<>();
             this.numberOfRows = numberOfRows;
         }
 
@@ -1264,7 +1264,7 @@ public class AggStar {
          * Returns a list of the columns in this table.
          */
         public List<Column> getColumns() {
-            List<Column> list = new ArrayList<Column>();
+            List<Column> list = new ArrayList<>();
             list.addAll(measures);
             list.addAll(levels);
             for (DimTable dimTable : getChildTables()) {

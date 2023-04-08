@@ -275,9 +275,9 @@ class ExplicitRecognizer extends Recognizer {
             // Try to match a Level's name against the RolapLevel
             // unique name.
             List<Pair<RolapLevel, ExplicitRules.TableDef.Level>> levelMatches =
-                new ArrayList<Pair<RolapLevel, ExplicitRules.TableDef.Level>>();
+                new ArrayList<>();
             List<ExplicitRules.TableDef.Level> aggLevels =
-                new ArrayList<ExplicitRules.TableDef.Level>();
+                new ArrayList<>();
 
             Map<String, Column> aggTableColumnMap =
                 getCaseInsensitiveColumnMap();
@@ -293,7 +293,7 @@ class ExplicitRecognizer extends Recognizer {
                         tableDefLevelUniqueNameMap.get(levelUniqueName);
                     if (aggTableColumnMap.containsKey(level.getColumnName())) {
                         levelMatches.add(
-                            new Pair<RolapLevel, ExplicitRules.TableDef.Level>(
+                            new Pair<>(
                                 rLevel, level));
                         aggLevels.add(level);
                     }
@@ -349,7 +349,7 @@ class ExplicitRecognizer extends Recognizer {
     private Map<String, Column> getProperties(
         Map<String, String> properties, Map<String, Column> columnMap)
     {
-        Map<String, Column> map = new HashMap<String, Column>();
+        Map<String, Column> map = new HashMap<>();
         for (Map.Entry<String, String> entry : properties.entrySet()) {
             map.put(entry.getKey(), getColumn(entry.getValue(), columnMap));
         }
@@ -360,7 +360,7 @@ class ExplicitRecognizer extends Recognizer {
     getTableDefLevelUniqueNameMap()
     {
         Map<String, ExplicitRules.TableDef.Level> tableDefUniqueNameMap =
-            new HashMap<String, ExplicitRules.TableDef.Level>();
+            new HashMap<>();
         for (ExplicitRules.TableDef.Level level : getTableDef().getLevels()) {
             tableDefUniqueNameMap.put(level.getName(), level);
         }
@@ -369,7 +369,7 @@ class ExplicitRecognizer extends Recognizer {
 
     private Map<String, Column> getCaseInsensitiveColumnMap() {
         Map<String, Column> aggTableColumnMap =
-            new TreeMap<String, Column>(String.CASE_INSENSITIVE_ORDER);
+            new TreeMap<>(String.CASE_INSENSITIVE_ORDER);
         aggTableColumnMap.putAll(aggTable.getColumnMap());
         return Collections.unmodifiableMap(aggTableColumnMap);
     }

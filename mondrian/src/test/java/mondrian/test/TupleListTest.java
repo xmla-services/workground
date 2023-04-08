@@ -187,7 +187,7 @@ public class TupleListTest {
         final Member genderMMember = xxx(connection, "[Gender].[M]");
         final Member storeUsaMember = xxx(connection, "[Store].[USA]");
 
-        final List<List<Member>> arrayList = new ArrayList<List<Member>>();
+        final List<List<Member>> arrayList = new ArrayList<>();
         TupleList fm = new DelegatingTupleList(2, arrayList);
 
         fm.addTuple(genderFMember, storeUsaMember);
@@ -234,7 +234,7 @@ public class TupleListTest {
                     final Member genderFMember = xxx(connection, "[Gender].[F]");
                     final Member storeUsaMember = xxx(connection, "[Store].[USA]");
                     final List<List<Member>> arrayList =
-                        new ArrayList<List<Member>>();
+                        new ArrayList<>();
                     final TupleList fm =
                         new DelegatingTupleList(2, arrayList);
                     fm.addTuple(genderFMember, storeUsaMember);
