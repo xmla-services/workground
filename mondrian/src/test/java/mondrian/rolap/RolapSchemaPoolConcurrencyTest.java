@@ -59,7 +59,7 @@ public class RolapSchemaPoolConcurrencyTest
 
     @BeforeEach
     public void beforeEach() {
-        addedSchemas = new ArrayList<RolapSchema>();
+        addedSchemas = new ArrayList<>();
 
         poolSpy = spy(RolapSchemaPool.instance());
         doAnswer(new RolapAnswer()).when(poolSpy)
@@ -98,7 +98,7 @@ public class RolapSchemaPoolConcurrencyTest
         final int cycles = 500;
         final int addersAmount = 10 * 2;
 
-        List<Adder> adders = new ArrayList<Adder>(addersAmount);
+        List<Adder> adders = new ArrayList<>(addersAmount);
         for (int i = 0; i < addersAmount / 2; i++) {
             adders.add(new Adder(poolSpy, cycles, false));
             adders.add(new Adder(poolSpy, cycles, true));
@@ -120,18 +120,18 @@ public class RolapSchemaPoolConcurrencyTest
         final int removersAmount = 5;
         final int addersAmount = removersAmount * 2;
 
-        List<Adder> adders = new ArrayList<Adder>(addersAmount);
-        List<Remover> removers = new ArrayList<Remover>(removersAmount);
+        List<Adder> adders = new ArrayList<>(addersAmount);
+        List<Remover> removers = new ArrayList<>(removersAmount);
         for (int i = 0; i < removersAmount; i++) {
             BlockingQueue<RolapSchema> shared =
-                new LinkedBlockingQueue<RolapSchema>();
+                new LinkedBlockingQueue<>();
             adders.add(new Adder(poolSpy, cycles, false, shared));
             adders.add(new Adder(poolSpy, cycles, true, shared));
             removers.add(new Remover(poolSpy, shared));
         }
 
         List<Callable<String>> actors =
-            new ArrayList<Callable<String>>(addersAmount + removersAmount);
+            new ArrayList<>(addersAmount + removersAmount);
         actors.addAll(adders);
         actors.addAll(removers);
         Collections.shuffle(actors);
@@ -152,7 +152,7 @@ public class RolapSchemaPoolConcurrencyTest
         final int actorsAmount = 20;
 
         List<SingleSchemaGetter> actors =
-            new ArrayList<SingleSchemaGetter>(actorsAmount);
+            new ArrayList<>(actorsAmount);
         for (int i = 0; i < actorsAmount; i++) {
             String catalogUrl = UUID.randomUUID().toString();
 
@@ -181,22 +181,22 @@ public class RolapSchemaPoolConcurrencyTest
         final int listingCycles = 500;
         final int gettersAmount = 10;
 
-        List<Adder> adders = new ArrayList<Adder>(addersAmount);
-        List<Remover> removers = new ArrayList<Remover>(removersAmount);
+        List<Adder> adders = new ArrayList<>(addersAmount);
+        List<Remover> removers = new ArrayList<>(removersAmount);
         for (int i = 0; i < removersAmount; i++) {
             BlockingQueue<RolapSchema> shared =
-                new LinkedBlockingQueue<RolapSchema>();
+                new LinkedBlockingQueue<>();
             adders.add(new Adder(poolSpy, addingCycles, false, shared));
             adders.add(new Adder(poolSpy, addingCycles, true, shared));
             removers.add(new Remover(poolSpy, shared));
         }
 
-        List<Getter> getters = new ArrayList<Getter>(gettersAmount);
+        List<Getter> getters = new ArrayList<>(gettersAmount);
         for (int i = 0; i < gettersAmount; i++) {
             getters.add(new Getter(poolSpy, listingCycles));
         }
 
-        List<Callable<String>> actors = new ArrayList<Callable<String>>(
+        List<Callable<String>> actors = new ArrayList<>(
             addersAmount + removersAmount);
         actors.addAll(adders);
         actors.addAll(removers);
@@ -216,12 +216,12 @@ public class RolapSchemaPoolConcurrencyTest
     private void runTest(final List<? extends Callable<String>> actors)
             throws Exception
     {
-        List<String> errors = new ArrayList<String>();
+        List<String> errors = new ArrayList<>();
         ExecutorService executorService =
                 Executors.newFixedThreadPool(actors.size());
         try {
             CompletionService<String> completionService =
-                    new ExecutorCompletionService<String>(executorService);
+                    new ExecutorCompletionService<>(executorService);
             for (Callable<String> reader : actors) {
                 completionService.submit(reader);
             }
@@ -275,7 +275,7 @@ public class RolapSchemaPoolConcurrencyTest
             this.catalogUrl = "catalog";
             this.needsCheckSum = needsCheckSum;
             this.sharedQueue = sharedQueue;
-            this.added = new ArrayList<RolapSchema>(cycles);
+            this.added = new ArrayList<>(cycles);
         }
 
         @Override

@@ -276,10 +276,10 @@ public class SegmentWithData extends Segment {
                 newAxisKeys = axisKeys;
                 axisPosMaps[j] = null; // identity map
             } else {
-                List<Object> newAxisKeyList = new ArrayList<Object>();
+                List<Object> newAxisKeyList = new ArrayList<>();
                 Map<Integer, Integer> map =
                     axisPosMaps[j] =
-                    new HashMap<Integer, Integer>();
+                    new HashMap<>();
                 for (int bit = keepBitSet.nextSetBit(0);
                     bit >= 0;
                     bit = keepBitSet.nextSetBit(bit + 1))

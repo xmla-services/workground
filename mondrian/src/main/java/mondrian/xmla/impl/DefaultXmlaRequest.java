@@ -315,7 +315,7 @@ public class DefaultXmlaRequest
         throws XmlaException
     {
         Map<String, List<String>> restrictions =
-            new HashMap<String, List<String>>();
+            new HashMap<>();
         Element[] childElems =
             XmlaUtil.filterChildElements(
                 restrictionsRoot,
@@ -334,7 +334,7 @@ public class DefaultXmlaRequest
                         if (restrictions.containsKey(key)) {
                             values = restrictions.get(key);
                         } else {
-                            values = new ArrayList<String>();
+                            values = new ArrayList<>();
                             restrictions.put(key, values);
                         }
 
@@ -385,7 +385,7 @@ public class DefaultXmlaRequest
             && !restrictions.containsKey(key))
         {
             List<String> values;
-            values = new ArrayList<String>();
+            values = new ArrayList<>();
             restrictions.put(this.properties.get(key), values);
 
             if (LOGGER.isDebugEnabled()) {
@@ -403,7 +403,7 @@ public class DefaultXmlaRequest
     }
 
     private void initProperties(Element propertiesRoot) throws XmlaException {
-        Map<String, String> properties = new HashMap<String, String>();
+        Map<String, String> properties = new HashMap<>();
         Element[] childElems =
             XmlaUtil.filterChildElements(
                 propertiesRoot,
@@ -449,7 +449,7 @@ public class DefaultXmlaRequest
     }
 
     private void initParameters(Element parameterElement) throws XmlaException {
-        Map<String, String> parameters = new HashMap<String, String>();
+        Map<String, String> parameters = new HashMap<>();
 
         NodeList nlst = parameterElement.getChildNodes();
         for (int i = 0, nlen = nlst.getLength(); i < nlen; i++) {
@@ -587,7 +587,7 @@ public class DefaultXmlaRequest
     }
 
     public void setProperty(String key, String value) {
-        HashMap<String, String> newProperties = new HashMap<String, String>(this.properties);
+        HashMap<String, String> newProperties = new HashMap<>(this.properties);
         newProperties.put(key, value);
         this.properties = Collections.unmodifiableMap(newProperties);
     }

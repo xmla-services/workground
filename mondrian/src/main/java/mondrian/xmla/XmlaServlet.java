@@ -50,7 +50,7 @@ public abstract class XmlaServlet
     protected XmlaHandler xmlaHandler = null;
     protected String charEncoding = null;
     private final List<XmlaRequestCallback> callbackList =
-        new ArrayList<XmlaRequestCallback>();
+        new ArrayList<>();
 
     private XmlaHandler.ConnectionFactory connectionFactory;
 
@@ -183,7 +183,7 @@ public abstract class XmlaServlet
 
             response.setContentType(mimeType.getMimeType());
 
-            Map<String, Object> context = new HashMap<String, Object>();
+            Map<String, Object> context = new HashMap<>();
 
             try {
                 if (LOGGER.isDebugEnabled()) {

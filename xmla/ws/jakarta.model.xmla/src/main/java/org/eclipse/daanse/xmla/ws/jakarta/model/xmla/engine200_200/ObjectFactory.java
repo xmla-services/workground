@@ -86,7 +86,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", name = "StorageEngineUsed")
   public JAXBElement<String> createStorageEngineUsed(String value) {
-    return new JAXBElement<String>(_StorageEngineUsed_QNAME, String.class, null, value);
+    return new JAXBElement<>(_StorageEngineUsed_QNAME, String.class, null, value);
   }
 
   /**
@@ -98,7 +98,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", name = "ImagePath")
   public JAXBElement<String> createImagePath(String value) {
-    return new JAXBElement<String>(_ImagePath_QNAME, String.class, null, value);
+    return new JAXBElement<>(_ImagePath_QNAME, String.class, null, value);
   }
 
   /**
@@ -110,7 +110,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", name = "ImageUrl")
   public JAXBElement<String> createImageUrl(String value) {
-    return new JAXBElement<String>(_ImageUrl_QNAME, String.class, null, value);
+    return new JAXBElement<>(_ImageUrl_QNAME, String.class, null, value);
   }
 
   /**
@@ -122,7 +122,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", name = "ImageUniqueID")
   public JAXBElement<String> createImageUniqueID(String value) {
-    return new JAXBElement<String>(_ImageUniqueID_QNAME, String.class, null, value);
+    return new JAXBElement<>(_ImageUniqueID_QNAME, String.class, null, value);
   }
 
   /**
@@ -134,7 +134,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", name = "ImageVersion")
   public JAXBElement<String> createImageVersion(String value) {
-    return new JAXBElement<String>(_ImageVersion_QNAME, String.class, null, value);
+    return new JAXBElement<>(_ImageVersion_QNAME, String.class, null, value);
   }
 
   /**
@@ -146,7 +146,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", name = "Token")
   public JAXBElement<String> createToken(String value) {
-    return new JAXBElement<String>(_Token_QNAME, String.class, null, value);
+    return new JAXBElement<>(_Token_QNAME, String.class, null, value);
   }
 
   /**
@@ -158,7 +158,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", name = "ProcessingRecommendation")
   public JAXBElement<String> createProcessingRecommendation(String value) {
-    return new JAXBElement<String>(_ProcessingRecommendation_QNAME, String.class, null, value);
+    return new JAXBElement<>(_ProcessingRecommendation_QNAME, String.class, null, value);
   }
 
   /**
@@ -170,7 +170,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", name = "ProcessingState")
   public JAXBElement<String> createProcessingState(String value) {
-    return new JAXBElement<String>(_ProcessingState_QNAME, String.class, null, value);
+    return new JAXBElement<>(_ProcessingState_QNAME, String.class, null, value);
   }
 
   /**
@@ -182,7 +182,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200/200", name = "ShareDimensionStorage")
   public JAXBElement<String> createShareDimensionStorage(String value) {
-    return new JAXBElement<String>(_ShareDimensionStorage_QNAME, String.class, null, value);
+    return new JAXBElement<>(_ShareDimensionStorage_QNAME, String.class, null, value);
   }
 
 }

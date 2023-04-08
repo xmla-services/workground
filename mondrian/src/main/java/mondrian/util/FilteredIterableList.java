@@ -47,7 +47,7 @@ public class FilteredIterableList<T> extends AbstractSequentialList<T> {
         this.internal = list;
         this.isEmpty = ! this.listIterator(0).hasNext();
         this.size = -1;
-        this.cached = new CacheMap<Integer, T>(4);
+        this.cached = new CacheMap<>(4);
     }
 
     @Override
@@ -93,7 +93,7 @@ public class FilteredIterableList<T> extends AbstractSequentialList<T> {
                     }
                 }
                 final T first = nextTmp;
-                this.lastListIterator = new ListIterator<T>() {
+                this.lastListIterator = new ListIterator<>() {
                     private int idx = 0;
                     private T nxt = first;
                     private void postNext() {
@@ -201,7 +201,7 @@ public class FilteredIterableList<T> extends AbstractSequentialList<T> {
 
     private void ensurePlainList() {
         if (this.plainList == null) {
-            final List<T> tmpPlainList = new ArrayList<T>();
+            final List<T> tmpPlainList = new ArrayList<>();
             for (final Iterator<T> it = this.listIterator(0); it.hasNext();) {
                 tmpPlainList.add(it.next());
             }

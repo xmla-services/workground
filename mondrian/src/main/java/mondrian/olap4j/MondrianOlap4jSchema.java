@@ -74,7 +74,7 @@ class MondrianOlap4jSchema
     @Override
 	public NamedList<Cube> getCubes() throws OlapException {
         NamedList<MondrianOlap4jCube> list =
-            new NamedListImpl<MondrianOlap4jCube>();
+            new NamedListImpl<>();
         final MondrianOlap4jConnection olap4jConnection =
             olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
         for (org.eclipse.daanse.olap.api.model.Cube cube
@@ -91,7 +91,7 @@ class MondrianOlap4jSchema
         final MondrianOlap4jConnection olap4jConnection =
             olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
         final SortedSet<MondrianOlap4jDimension> dimensions =
-            new TreeSet<MondrianOlap4jDimension>(
+            new TreeSet<>(
                 new Comparator<MondrianOlap4jDimension>() {
                     @Override
 					public int compare(
@@ -110,7 +110,7 @@ class MondrianOlap4jSchema
             }
         }
         NamedList<MondrianOlap4jDimension> list =
-            new NamedListImpl<MondrianOlap4jDimension>();
+            new NamedListImpl<>();
         list.addAll(dimensions);
         return Olap4jUtil.cast(list);
     }

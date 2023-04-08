@@ -33,8 +33,8 @@ public class CubeAccess {
     private Hierarchy[] noAccessHierarchies;
     /** array of members which have limited access */
     private Member[]  limitedMembers;
-    private final List<Hierarchy> hierarchyList = new ArrayList<Hierarchy>();
-    private final List<Member> memberList = new ArrayList<Member>();
+    private final List<Hierarchy> hierarchyList = new ArrayList<>();
+    private final List<Member> memberList = new ArrayList<>();
     private final Cube mdxCube;
 
     /**

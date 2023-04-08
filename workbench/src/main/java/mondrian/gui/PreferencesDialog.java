@@ -464,7 +464,7 @@ public class PreferencesDialog extends javax.swing.JDialog {
         if (currentSchemas != null && currentSchemas.trim().length() > 0) {
             String schemasArray[] = currentSchemas.trim().split("[,;]");
 
-            Set<String> validSchemas = new TreeSet<String>();
+            Set<String> validSchemas = new TreeSet<>();
             StringBuffer schemasInError = new StringBuffer();
 
             for (int i = 0; i < schemasArray.length; i++) {

@@ -659,15 +659,15 @@ public class SqlConstraintUtilsTest {
      */
     @Test
     void testGetSetFromCalculatedMember() {
-        List<Member> listColumn1 = new ArrayList<Member>();
-        List<Member> listColumn2 = new ArrayList<Member>();
+        List<Member> listColumn1 = new ArrayList<>();
+        List<Member> listColumn2 = new ArrayList<>();
 
         listColumn1.add(new TestMember("elem1_col1"));
         listColumn1.add(new TestMember("elem2_col1"));
         listColumn2.add(new TestMember("elem1_col2"));
         listColumn2.add(new TestMember("elem2_col2"));
 
-        final List<List<Member>> table = new ArrayList<List<Member>>();
+        final List<List<Member>> table = new ArrayList<>();
         table.add(listColumn1);
         table.add(listColumn2);
 
@@ -688,15 +688,15 @@ public class SqlConstraintUtilsTest {
     void testGetSetFromCalculatedMember_disjoint() {
         final int ARITY = 2;
 
-        List<Member> listColumn1 = new ArrayList<Member>();
-        List<Member> listColumn2 = new ArrayList<Member>();
+        List<Member> listColumn1 = new ArrayList<>();
+        List<Member> listColumn2 = new ArrayList<>();
 
         listColumn1.add(new TestMember("elem1_col1"));
         listColumn1.add(new TestMember("elem2_col1"));
         listColumn2.add(new TestMember("elem1_col2"));
         listColumn2.add(new TestMember("elem2_col2"));
 
-        final List<List<Member>> table = new ArrayList<List<Member>>();
+        final List<List<Member>> table = new ArrayList<>();
         table.add(listColumn1);
         table.add(listColumn2);
 
@@ -779,7 +779,7 @@ public class SqlConstraintUtilsTest {
         Hierarchy hierarchy = mock(Hierarchy.class);
 
         // create members
-        List<Member> members = new ArrayList<Member>();
+        List<Member> members = new ArrayList<>();
         members.add(createMemberMock(false, false, hierarchy)); // 0:passed
         members.add(createMemberMock(true, false, hierarchy)); // 1:not passed
         members.add(createMemberMock(true, true, hierarchy)); // 2:passed
@@ -837,10 +837,10 @@ public class SqlConstraintUtilsTest {
     }
 
     private void setSlicerContext(RolapEvaluator e, Member m) {
-      List<Member> members = new ArrayList<Member>();
+      List<Member> members = new ArrayList<>();
       members.add( m );
-      Map<Hierarchy, Set<Member>> membersByHierarchy = new HashMap<Hierarchy, Set<Member>>();
-      membersByHierarchy.put( m.getHierarchy(), new HashSet<Member>(members) );
+      Map<Hierarchy, Set<Member>> membersByHierarchy = new HashMap<>();
+      membersByHierarchy.put( m.getHierarchy(), new HashSet<>(members) );
       e.setSlicerContext( members, membersByHierarchy );
     }
 }

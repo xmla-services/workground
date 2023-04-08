@@ -271,7 +271,7 @@ Does not work without the notify on add feature.
             + "ON ROWS \n"
             + "from [Sales]";
 
-        List<Result> list = new ArrayList<Result>();
+        List<Result> list = new ArrayList<>();
         MemoryMonitor mm = null;
         try {
             MemoryMonitorFactory.setThreadLocalClassName(

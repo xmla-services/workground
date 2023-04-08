@@ -77,7 +77,7 @@ public abstract class AbstractMemoryMonitor
      * Constructor of this base class.
      */
     protected AbstractMemoryMonitor() {
-        listeners = new LinkedList<Entry>();
+        listeners = new LinkedList<>();
     }
 
     /**

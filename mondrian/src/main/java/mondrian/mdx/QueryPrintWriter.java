@@ -22,7 +22,7 @@ import mondrian.olap.Parameter;
  * subsequent times as "ParamRef".
  */
 public class QueryPrintWriter extends PrintWriter {
-    final Set<Parameter> parameters = new HashSet<Parameter>();
+    final Set<Parameter> parameters = new HashSet<>();
 
     public QueryPrintWriter(Writer writer) {
         super(writer);

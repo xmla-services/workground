@@ -48,7 +48,7 @@ class CaseMatchFunDef extends FunDefBase {
     @Override
 	public Calc compileCall(ResolvedFunCall call, ExpCompiler compiler) {
         final Exp[] args = call.getArgs();
-        final List<Calc> calcList = new ArrayList<Calc>();
+        final List<Calc> calcList = new ArrayList<>();
         final Calc valueCalc =
                 compiler.compileScalar(args[0], true);
         calcList.add(valueCalc);

@@ -81,7 +81,7 @@ public abstract class XmlaBaseTestCase {
 
     private static int sessionIdCounter = 1000;
     private static Map<String, String> sessionIdMap =
-        new HashMap<String, String>();
+        new HashMap<>();
     // session id property
     public static final String SESSION_ID_PROP     = "session.id";
     // request.type
@@ -109,14 +109,14 @@ public abstract class XmlaBaseTestCase {
      * of many spurious MondrianServer instances.
      */
     private final HashMap<List<String>, Servlet>
-        SERVLET_CACHE = new HashMap<List<String>, Servlet>();
+        SERVLET_CACHE = new HashMap<>();
 
     /**
      * Cache servlet instances between test invocations. Prevents creation
      * of many spurious MondrianServer instances.
      */
     private final HashMap<List<String>, MondrianServer>
-        SERVER_CACHE = new HashMap<List<String>, MondrianServer>();
+        SERVER_CACHE = new HashMap<>();
 
     protected void tearDown() {
         for (MondrianServer server : SERVER_CACHE.values()) {
@@ -455,7 +455,7 @@ System.out.println("Got CONTINUE");
 
     protected Map<String, String> getCatalogNameUrls(Connection connection) {
         if (catalogNameUrls == null) {
-            catalogNameUrls = new TreeMap<String, String>();
+            catalogNameUrls = new TreeMap<>();
             String connectString = ((RolapConnection)connection).getConnectInfo().toString();
             PropertyList connectProperties =
                         Util.parseConnectString(connectString);

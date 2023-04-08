@@ -226,7 +226,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "gender", "F" ) );
     BatchLoader.Batch maritalStatusBatch =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "marital_status", "M" ) );
-    ArrayList<BatchLoader.Batch> batchList = new ArrayList<BatchLoader.Batch>();
+    ArrayList<BatchLoader.Batch> batchList = new ArrayList<>();
     batchList.add( genderBatch );
     batchList.add( maritalStatusBatch );
     List<BatchLoader.CompositeBatch> groupedBatches = BatchLoader.groupBatches( batchList );
@@ -240,7 +240,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
   void testGroupBatchesForNonGroupableBatchesWithConstraints(TestingContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    List<String[]> compoundMembers = new ArrayList<String[]>();
+    List<String[]> compoundMembers = new ArrayList<>();
     compoundMembers.add( new String[] { "USA", "CA" } );
     compoundMembers.add( new String[] { "Canada", "BC" } );
     CellRequestConstraint constraint = makeConstraintCountryState( compoundMembers );
@@ -250,7 +250,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     BatchLoader.Batch maritalStatusBatch =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "marital_status", "M",
             constraint ) );
-    ArrayList<BatchLoader.Batch> batchList = new ArrayList<BatchLoader.Batch>();
+    ArrayList<BatchLoader.Batch> batchList = new ArrayList<>();
     batchList.add( genderBatch );
     batchList.add( maritalStatusBatch );
     List<BatchLoader.CompositeBatch> groupedBatches = BatchLoader.groupBatches( batchList );
@@ -280,7 +280,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             return true;
           }
         };
-    ArrayList<BatchLoader.Batch> batchList = new ArrayList<BatchLoader.Batch>();
+    ArrayList<BatchLoader.Batch> batchList = new ArrayList<>();
     batchList.add( genderBatch );
     batchList.add( superBatch );
     List<BatchLoader.CompositeBatch> groupedBatches = BatchLoader.groupBatches( batchList );
@@ -332,7 +332,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             return batch.equals( group2Agg1 );
           }
         };
-    ArrayList<BatchLoader.Batch> batchList = new ArrayList<BatchLoader.Batch>();
+    ArrayList<BatchLoader.Batch> batchList = new ArrayList<>();
     batchList.add( group1Agg1 );
     batchList.add( group1Agg2 );
     batchList.add( group1Detailed );
@@ -404,7 +404,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
             fieldValuesWarehouseCountry, fieldValuesYear, fieldValuesStoreType, fieldValuesProductFamily },
             warehouseCube, measure2 );
 
-    List<BatchLoader.Batch> batchList = new ArrayList<BatchLoader.Batch>();
+    List<BatchLoader.Batch> batchList = new ArrayList<>();
 
     batchList.add( batch1RollupOnGender );
     batchList.add( batch2RollupOnStoreType );
@@ -441,7 +441,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     BatchLoader.Batch batch2 =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "gender", "F" ) );
     Map<AggregationKey, BatchLoader.CompositeBatch> batchGroups =
-        new HashMap<AggregationKey, BatchLoader.CompositeBatch>();
+        new HashMap<>();
     fbcr.addToCompositeBatch( batchGroups, batch1, batch2 );
     assertEquals( 1, batchGroups.size() );
     BatchLoader.CompositeBatch compositeBatch = batchGroups.get( batch1.batchKey );
@@ -464,7 +464,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     BatchLoader.Batch aggBatchAlreadyInComposite =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "gender", "F" ) );
     Map<AggregationKey, BatchLoader.CompositeBatch> batchGroups =
-        new HashMap<AggregationKey, BatchLoader.CompositeBatch>();
+        new HashMap<>();
     BatchLoader.CompositeBatch existingCompositeBatch = new BatchLoader.CompositeBatch( detailedBatch );
     existingCompositeBatch.add( aggBatchAlreadyInComposite );
     batchGroups.put( detailedBatch.batchKey, existingCompositeBatch );
@@ -492,7 +492,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     BatchLoader.Batch aggBatchAlreadyInComposite =
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "city", "F" ) );
     Map<AggregationKey, BatchLoader.CompositeBatch> batchGroups =
-        new HashMap<AggregationKey, BatchLoader.CompositeBatch>();
+        new HashMap<>();
     BatchLoader.CompositeBatch existingCompositeBatch = new BatchLoader.CompositeBatch( aggBatchToAddToDetailedBatch );
     existingCompositeBatch.add( aggBatchAlreadyInComposite );
     batchGroups.put( aggBatchToAddToDetailedBatch.batchKey, existingCompositeBatch );
@@ -523,7 +523,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
         fbcr.new Batch( createRequest(connection, cubeNameSales, measureUnitSales, "customer", "state_province", "F" ) );
 
     Map<AggregationKey, BatchLoader.CompositeBatch> batchGroups =
-        new HashMap<AggregationKey, BatchLoader.CompositeBatch>();
+        new HashMap<>();
     BatchLoader.CompositeBatch existingAggCompositeBatch =
         new BatchLoader.CompositeBatch( aggBatchToAddToDetailedBatch );
     existingAggCompositeBatch.add( aggBatchAlreadyInCompositeOfAgg );
@@ -573,7 +573,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
   void testCanBatchForBatchWithConstraint(TestingContext context) {
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
-    List<String[]> compoundMembers = new ArrayList<String[]>();
+    List<String[]> compoundMembers = new ArrayList<>();
     compoundMembers.add( new String[] { "USA", "CA" } );
     compoundMembers.add( new String[] { "Canada", "BC" } );
     CellRequestConstraint constraint = makeConstraintCountryState( compoundMembers );
@@ -599,13 +599,13 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     prepareContext(context);
     final BatchLoader fbcr = createFbcr( null, salesCube );
     Connection connection = context.createConnection();
-    List<String[]> compoundMembers1 = new ArrayList<String[]>();
+    List<String[]> compoundMembers1 = new ArrayList<>();
     compoundMembers1.add( new String[] { "USA", "CA" } );
     compoundMembers1.add( new String[] { "Canada", "BC" } );
     CellRequestConstraint constraint1 = makeConstraintCountryState( compoundMembers1 );
 
     // Different constraint will cause the Batch not to match.
-    List<String[]> compoundMembers2 = new ArrayList<String[]>();
+    List<String[]> compoundMembers2 = new ArrayList<>();
     compoundMembers2.add( new String[] { "USA", "CA" } );
     compoundMembers2.add( new String[] { "USA", "OR" } );
     CellRequestConstraint constraint2 = makeConstraintCountryState( compoundMembers2 );
@@ -876,7 +876,7 @@ public class FastBatchingCellReaderTest extends BatchTestCase{
     compositeBatch.add( summaryBatch );
 
     final List<Future<Map<Segment, SegmentWithData>>> segmentFutures =
-        new ArrayList<Future<Map<Segment, SegmentWithData>>>();
+        new ArrayList<>();
     MondrianServer.forConnection(context.createConnection()).getAggregationManager().cacheMgr.execute(
         new SegmentCacheManager.Command<Void>() {
           private final Locus locus = Locus.peek();

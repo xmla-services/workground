@@ -78,7 +78,7 @@ public class AggregationKey
         this.compoundPredicateList =
             compoundPredicateMap == null
                 ? Collections.<StarPredicate>emptyList()
-                : new ArrayList<StarPredicate>(compoundPredicateMap.values());
+                : new ArrayList<>(compoundPredicateMap.values());
     }
 
     public final int computeHashCode() {

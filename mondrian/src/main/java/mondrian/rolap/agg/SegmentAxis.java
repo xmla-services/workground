@@ -81,7 +81,7 @@ public class SegmentAxis {
         } else {
             this.keys = keys;
             mapKeyToOffset =
-                new HashMap<Comparable, Integer>(keys.length * 3 / 2);
+                new HashMap<>(keys.length * 3 / 2);
             for (int i = 0; i < keys.length; i++) {
                 mapKeyToOffset.put(keys[i], i);
             }
@@ -117,7 +117,7 @@ public class SegmentAxis {
         if (predicates.size() < 10) {
             return null;
         }
-        final HashSet<Object> set = new HashSet<Object>();
+        final HashSet<Object> set = new HashSet<>();
         for (StarColumnPredicate subPredicate : predicates) {
             if (subPredicate instanceof ValueColumnPredicate) {
                 ValueColumnPredicate valueColumnPredicate =

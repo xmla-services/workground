@@ -157,14 +157,14 @@ class DrilldownLevelFunDef extends FunDefBase {
             calculatedMembers = schemaReader.getCalculatedMembers(hierarchy);
         }
         else {
-            calculatedMembers = new ArrayList<Member>();
+            calculatedMembers = new ArrayList<>();
         }
-        HashMap<Member,List<Member>> calcMembersByParent = new HashMap<Member,List<Member>>();
+        HashMap<Member,List<Member>> calcMembersByParent = new HashMap<>();
         for(Member member: calculatedMembers) {
             if(member.getParentMember() != null) {
                 List<Member> children = calcMembersByParent.get(member.getParentMember());
                 if(children == null) {
-                    children = new ArrayList<Member>();
+                    children = new ArrayList<>();
                     calcMembersByParent.put(member.getParentMember(), children);
                 }
                 children.add(member);
@@ -193,9 +193,9 @@ class DrilldownLevelFunDef extends FunDefBase {
             }
         }
 
-        List<Member> drilledSet = new ArrayList<Member>();
+        List<Member> drilledSet = new ArrayList<>();
 
-        List<Member> parentMembers = new ArrayList<Member>();
+        List<Member> parentMembers = new ArrayList<>();
 
         for (int i = 0, m = list.size(); i < m; i++) {
             Member member = list.get(i);

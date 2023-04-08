@@ -84,7 +84,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
         Evaluator evaluator)
     {
         // Determine unique levels in the set
-        final Set<Level> levels = new LinkedHashSet<Level>();
+        final Set<Level> levels = new LinkedHashSet<>();
         Hierarchy hierarchy = null;
 
 
@@ -106,7 +106,7 @@ class AddCalculatedMembersFunDef extends FunDefBase {
 
         // For each level, add the calculated members from both
         // the schema and the query
-        List<Member> workingList = new ArrayList<Member>(memberList);
+        List<Member> workingList = new ArrayList<>(memberList);
         final SchemaReader schemaReader =
                 evaluator.getQuery().getSchemaReader(true);
         for (Level level : levels) {

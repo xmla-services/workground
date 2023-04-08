@@ -42,7 +42,7 @@ public class ConcatenableList<T> extends AbstractList<T> {
      * Creates an empty ConcatenableList.
      */
     public ConcatenableList() {
-        this.lists = new ArrayList<List<T>>();
+        this.lists = new ArrayList<>();
         this.plainList = null;
     }
 
@@ -65,7 +65,7 @@ public class ConcatenableList<T> extends AbstractList<T> {
      */
     public void consolidate() {
         if (this.plainList == null) {
-            this.plainList = new ArrayList<T>();
+            this.plainList = new ArrayList<>();
             for (final List<T> list : lists) {
                 // REVIEW: List.addAll is probably more efficient.
                 for (final T t : list) {
@@ -195,7 +195,7 @@ public class ConcatenableList<T> extends AbstractList<T> {
     @Override
 	public Iterator<T> iterator() {
         if (this.plainList == null) {
-            return new Iterator<T>() {
+            return new Iterator<>() {
                 private final Iterator<List<T>> listsIt = lists.iterator();
                 private Iterator<T> currentListIt;
 

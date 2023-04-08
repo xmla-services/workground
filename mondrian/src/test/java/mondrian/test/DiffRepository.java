@@ -142,7 +142,7 @@ public class DiffRepository
     private static final String ResourceSqlDialectAttr = "dialect";
 
     private static final ThreadLocal<String> CurrentTestCaseName =
-        new ThreadLocal<String>();
+        new ThreadLocal<>();
 
     /**
      * Holds one diff-repository per class. It is necessary for all testcases
@@ -150,7 +150,7 @@ public class DiffRepository
      * repos gets loaded once per testcase, then only one diff is recorded.
      */
     private static final Map<Class, DiffRepository> mapClassToRepos =
-        new HashMap<Class, DiffRepository>();
+        new HashMap<>();
 
     /**
      * Default prefix directories.
@@ -446,7 +446,7 @@ public class DiffRepository
      * repository file
      */
     public List<String> getTestCaseNames() {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         final NodeList childNodes = root.getChildNodes();
         for (int i = 0; i < childNodes.getLength(); i++) {
             Node child = childNodes.item(i);

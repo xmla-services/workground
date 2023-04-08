@@ -27,7 +27,7 @@ public class ResolvedFunCallFinder
 {
     private final ResolvedFunCall call;
     public boolean found;
-    private final Set<Member> activeMembers = new HashSet<Member>();
+    private final Set<Member> activeMembers = new HashSet<>();
 
     public ResolvedFunCallFinder(ResolvedFunCall call)
     {

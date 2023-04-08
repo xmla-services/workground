@@ -3394,7 +3394,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:schemas-microsoft-com:xml-analysis", name = "AllowedRowsExpression")
     public JAXBElement<String> createAllowedRowsExpression(String value) {
-        return new JAXBElement<String>(_AllowedRowsExpression_QNAME, String.class, null, value);
+        return new JAXBElement<>(_AllowedRowsExpression_QNAME, String.class, null, value);
     }
 
     /**
@@ -3406,7 +3406,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "urn:schemas-microsoft-com:xml-analysis", name = "ShareDimensionStorage")
     public JAXBElement<String> createShareDimensionStorage(String value) {
-        return new JAXBElement<String>(_ShareDimensionStorage_QNAME, String.class, null, value);
+        return new JAXBElement<>(_ShareDimensionStorage_QNAME, String.class, null, value);
     }
 
     /**
@@ -3419,7 +3419,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "and", scope = BooleanExpr.class)
     public JAXBElement<BooleanExpr> createBooleanExprAnd(BooleanExpr value) {
-        return new JAXBElement<BooleanExpr>(_BooleanExprAnd_QNAME, BooleanExpr.class, BooleanExpr.class, value);
+        return new JAXBElement<>(_BooleanExprAnd_QNAME, BooleanExpr.class, BooleanExpr.class, value);
     }
 
     /**
@@ -3432,7 +3432,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "or", scope = BooleanExpr.class)
     public JAXBElement<BooleanExpr> createBooleanExprOr(BooleanExpr value) {
-        return new JAXBElement<BooleanExpr>(_BooleanExprOr_QNAME, BooleanExpr.class, BooleanExpr.class, value);
+        return new JAXBElement<>(_BooleanExprOr_QNAME, BooleanExpr.class, BooleanExpr.class, value);
     }
 
     /**
@@ -3445,7 +3445,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "not", scope = BooleanExpr.class)
     public JAXBElement<UnaryExpr> createBooleanExprNot(UnaryExpr value) {
-        return new JAXBElement<UnaryExpr>(_BooleanExprNot_QNAME, UnaryExpr.class, BooleanExpr.class, value);
+        return new JAXBElement<>(_BooleanExprNot_QNAME, UnaryExpr.class, BooleanExpr.class, value);
     }
 
     /**
@@ -3457,7 +3457,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "leaf", scope = BooleanExpr.class)
     public JAXBElement<PredLeaf> createBooleanExprLeaf(PredLeaf value) {
-        return new JAXBElement<PredLeaf>(_BooleanExprLeaf_QNAME, PredLeaf.class, BooleanExpr.class, value);
+        return new JAXBElement<>(_BooleanExprLeaf_QNAME, PredLeaf.class, BooleanExpr.class, value);
     }
 
     /**
@@ -3469,7 +3469,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "Not", scope = AndOrType.class)
     public JAXBElement<NotType> createAndOrTypeNot(NotType value) {
-        return new JAXBElement<NotType>(_AndOrTypeNot_QNAME, NotType.class, AndOrType.class, value);
+        return new JAXBElement<>(_AndOrTypeNot_QNAME, NotType.class, AndOrType.class, value);
     }
 
     /**
@@ -3482,7 +3482,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "Or", scope = AndOrType.class)
     public JAXBElement<AndOrType> createAndOrTypeOr(AndOrType value) {
-        return new JAXBElement<AndOrType>(_AndOrTypeOr_QNAME, AndOrType.class, AndOrType.class, value);
+        return new JAXBElement<>(_AndOrTypeOr_QNAME, AndOrType.class, AndOrType.class, value);
     }
 
     /**
@@ -3495,7 +3495,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "And", scope = AndOrType.class)
     public JAXBElement<AndOrType> createAndOrTypeAnd(AndOrType value) {
-        return new JAXBElement<AndOrType>(_AndOrTypeAnd_QNAME, AndOrType.class, AndOrType.class, value);
+        return new JAXBElement<>(_AndOrTypeAnd_QNAME, AndOrType.class, AndOrType.class, value);
     }
 
     /**
@@ -3508,7 +3508,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "Equal", scope = AndOrType.class)
     public JAXBElement<BoolBinop> createAndOrTypeEqual(BoolBinop value) {
-        return new JAXBElement<BoolBinop>(_AndOrTypeEqual_QNAME, BoolBinop.class, AndOrType.class, value);
+        return new JAXBElement<>(_AndOrTypeEqual_QNAME, BoolBinop.class, AndOrType.class, value);
     }
 
     /**
@@ -3521,7 +3521,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "NotEqual", scope = AndOrType.class)
     public JAXBElement<BoolBinop> createAndOrTypeNotEqual(BoolBinop value) {
-        return new JAXBElement<BoolBinop>(_AndOrTypeNotEqual_QNAME, BoolBinop.class, AndOrType.class, value);
+        return new JAXBElement<>(_AndOrTypeNotEqual_QNAME, BoolBinop.class, AndOrType.class, value);
     }
 
     /**
@@ -3534,7 +3534,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "Less", scope = AndOrType.class)
     public JAXBElement<BoolBinop> createAndOrTypeLess(BoolBinop value) {
-        return new JAXBElement<BoolBinop>(_AndOrTypeLess_QNAME, BoolBinop.class, AndOrType.class, value);
+        return new JAXBElement<>(_AndOrTypeLess_QNAME, BoolBinop.class, AndOrType.class, value);
     }
 
     /**
@@ -3547,7 +3547,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "LessOrEqual", scope = AndOrType.class)
     public JAXBElement<BoolBinop> createAndOrTypeLessOrEqual(BoolBinop value) {
-        return new JAXBElement<BoolBinop>(_AndOrTypeLessOrEqual_QNAME, BoolBinop.class, AndOrType.class, value);
+        return new JAXBElement<>(_AndOrTypeLessOrEqual_QNAME, BoolBinop.class, AndOrType.class, value);
     }
 
     /**
@@ -3560,7 +3560,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "Greater", scope = AndOrType.class)
     public JAXBElement<BoolBinop> createAndOrTypeGreater(BoolBinop value) {
-        return new JAXBElement<BoolBinop>(_AndOrTypeGreater_QNAME, BoolBinop.class, AndOrType.class, value);
+        return new JAXBElement<>(_AndOrTypeGreater_QNAME, BoolBinop.class, AndOrType.class, value);
     }
 
     /**
@@ -3573,7 +3573,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "GreaterOrEqual", scope = AndOrType.class)
     public JAXBElement<BoolBinop> createAndOrTypeGreaterOrEqual(BoolBinop value) {
-        return new JAXBElement<BoolBinop>(_AndOrTypeGreaterOrEqual_QNAME, BoolBinop.class, AndOrType.class, value);
+        return new JAXBElement<>(_AndOrTypeGreaterOrEqual_QNAME, BoolBinop.class, AndOrType.class, value);
     }
 
     /**
@@ -3586,7 +3586,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "Like", scope = AndOrType.class)
     public JAXBElement<BoolBinop> createAndOrTypeLike(BoolBinop value) {
-        return new JAXBElement<BoolBinop>(_AndOrTypeLike_QNAME, BoolBinop.class, AndOrType.class, value);
+        return new JAXBElement<>(_AndOrTypeLike_QNAME, BoolBinop.class, AndOrType.class, value);
     }
 
     /**
@@ -3599,7 +3599,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "NotLike", scope = AndOrType.class)
     public JAXBElement<BoolBinop> createAndOrTypeNotLike(BoolBinop value) {
-        return new JAXBElement<BoolBinop>(_AndOrTypeNotLike_QNAME, BoolBinop.class, AndOrType.class, value);
+        return new JAXBElement<>(_AndOrTypeNotLike_QNAME, BoolBinop.class, AndOrType.class, value);
     }
 
 }

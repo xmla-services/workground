@@ -86,7 +86,7 @@ final class GroupingSetsList {
         List<GroupingSet> groupingSets)
     {
         List<RolapStar.Column[]> groupingColumns =
-            new ArrayList<RolapStar.Column[]>();
+            new ArrayList<>();
         for (GroupingSet aggBatchDetail : groupingSets) {
             groupingColumns.add(
                 aggBatchDetail.segment0.getColumns());
@@ -114,13 +114,13 @@ final class GroupingSetsList {
         if (!useGroupingSet) {
             return Collections.singletonList(BitKey.EMPTY);
         }
-        final List<BitKey> rollupColumnsBitKeyList = new ArrayList<BitKey>();
+        final List<BitKey> rollupColumnsBitKeyList = new ArrayList<>();
         final int bitKeyLength = getDefaultColumns().length;
         for (RolapStar.Column[] groupingSetColumns : groupingSetsColumns) {
             BitKey groupingColumnsBitKey =
                 BitKey.Factory.makeBitKey(bitKeyLength);
             Set<RolapStar.Column> columns =
-                new HashSet<RolapStar.Column>(
+                new HashSet<>(
                     Arrays.asList(groupingSetColumns));
             int bitPosition = 0;
             for (RolapStar.Column rollupColumn : rollupColumns) {
@@ -151,11 +151,11 @@ final class GroupingSetsList {
     }
 
     private List<RolapStar.Column> findRollupColumns() {
-        Set<RolapStar.Column> rollupSet = new TreeSet<RolapStar.Column>(
+        Set<RolapStar.Column> rollupSet = new TreeSet<>(
             RolapStar.ColumnComparator.instance);
         for (RolapStar.Column[] groupingSetColumn : groupingSetsColumns) {
             Set<RolapStar.Column> summaryColumns =
-                new HashSet<RolapStar.Column>(
+                new HashSet<>(
                     Arrays.asList(groupingSetColumn));
             for (RolapStar.Column column : getDefaultColumns()) {
                 if (!summaryColumns.contains(column)) {
@@ -163,7 +163,7 @@ final class GroupingSetsList {
                 }
             }
         }
-        return new ArrayList<RolapStar.Column>(rollupSet);
+        return new ArrayList<>(rollupSet);
     }
 
     public boolean useGroupingSets() {

@@ -97,7 +97,7 @@ public class RolapCell implements Cell {
 
     @Override
 	public List<Integer> getCoordinateList() {
-        return new AbstractList<Integer>() {
+        return new AbstractList<>() {
             @Override
 			public Integer get(int index) {
                 return pos[index];
@@ -305,7 +305,7 @@ public class RolapCell implements Cell {
         // This is a list containing an AndPredicate for each position in the
         // slicer axis
         List<StarPredicate> listOfStarPredicatesForSlicerPositions =
-            new ArrayList<StarPredicate>();
+            new ArrayList<>();
         // Now we re-iterate the positions' members,
         // creating the slicer constraint
         for (Position position : listOfPositions) {
@@ -313,7 +313,7 @@ public class RolapCell implements Cell {
             // current position (excluding the members of the position
             // that are already constrained in the membersForDrillthrough array)
             List<StarPredicate> listOfStarPredicatesForCurrentPosition =
-                new ArrayList<StarPredicate>();
+                new ArrayList<>();
             // Iterate the members of the current position
             for (Member member : position) {
                 RolapHierarchy rolapHierarchy =
@@ -424,7 +424,7 @@ public class RolapCell implements Cell {
         RolapCube defaultCube)
     {
         if (defaultCube != null && defaultCube.isVirtual()) {
-            List<RolapCube> cubes = new ArrayList<RolapCube>();
+            List<RolapCube> cubes = new ArrayList<>();
             for (RolapMember member : defaultCube.getMeasuresMembers()) {
                 if (member instanceof RolapVirtualCubeMeasure) {
                     RolapVirtualCubeMeasure measure =

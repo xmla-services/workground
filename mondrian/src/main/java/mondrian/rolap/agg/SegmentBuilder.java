@@ -153,7 +153,7 @@ public class SegmentBuilder {
         List<StarPredicate> compoundPredicates)
     {
         final List<StarColumnPredicate> predicateList =
-            new ArrayList<StarColumnPredicate>();
+            new ArrayList<>();
         for (int i = 0; i < constrainedColumns.length; i++) {
             RolapStar.Column constrainedColumn = constrainedColumns[i];
             final SortedSet<Comparable> values =
@@ -171,7 +171,7 @@ public class SegmentBuilder {
                         values.first());
             } else {
                 final List<StarColumnPredicate> valuePredicateList =
-                    new ArrayList<StarColumnPredicate>();
+                    new ArrayList<>();
                 for (Object value : values) {
                     valuePredicateList.add(
                         new ValueColumnPredicate(
@@ -235,7 +235,7 @@ public class SegmentBuilder {
         List<Map.Entry<SegmentHeader, SegmentBody>>  segments =
             UnmodifiableArrayList.of(map.entrySet());
         final SegmentHeader firstHeader = segments.get(0).getKey();
-        final List<AxisInfo> axes = new ArrayList<AxisInfo>(keepColumns.size());
+        final List<AxisInfo> axes = new ArrayList<>(keepColumns.size());
         int z = 0, j = 0;
         List<SegmentColumn> firstHeaderConstrainedColumns =
             firstHeader.getConstrainedColumns();
@@ -264,7 +264,7 @@ public class SegmentBuilder {
                 final SortedSet<Comparable> requestedValues =
                     headerColumn.getValues();
                 if (axis.valueSet == null) {
-                    axis.valueSet = new TreeSet<Comparable>(values);
+                    axis.valueSet = new TreeSet<>(values);
                     axis.hasNull = hasNull;
                     axis.requestedValues = requestedValues;
                 } else {
@@ -278,7 +278,7 @@ public class SegmentBuilder {
                         // they may not have all values present.
                         // Make sure we don't lose any values.
                         filteredValues = axis.valueSet;
-                        filteredValues.addAll(new TreeSet<Comparable>(values));
+                        filteredValues.addAll(new TreeSet<>(values));
                         filteredHasNull = hasNull || axis.hasNull;
                     } else if (axis.requestedValues == null) {
                         filteredValues = values;
@@ -332,9 +332,9 @@ public class SegmentBuilder {
         // should box values (e.g double to Double and back), and we should read
         // a stripe of values from the and add them up into a single cell.
         final Map<CellKey, List<Object>> cellValues =
-            new HashMap<CellKey, List<Object>>();
+            new HashMap<>();
         TreeSet<ColumnValues> addedIntersections =
-            new TreeSet <ColumnValues>();
+            new TreeSet <>();
 
         for (Map.Entry<SegmentHeader, SegmentBody> entry : map.entrySet()) {
             final int[] pos = new int[axes.size()];
@@ -388,7 +388,7 @@ public class SegmentBuilder {
                 }
                 final CellKey ck = CellKey.Generator.newCellKey(pos);
                 if (!cellValues.containsKey(ck)) {
-                    cellValues.put(ck, new ArrayList<Object>());
+                    cellValues.put(ck, new ArrayList<>());
                 }
                 if ( map.size() == 1 ) {
                   // No de-duping needed when rolling up only 1 segment
@@ -396,9 +396,9 @@ public class SegmentBuilder {
                 } else {
                   if ( axisValueSetsAsArrays == null ) {
                     // Cache segment axis values as lists for fast lookup
-                    axisValueSetsAsArrays = new ArrayList<List<Comparable>>();
+                    axisValueSetsAsArrays = new ArrayList<>();
                     for ( int i = 0; i < body.getAxisValueSets().length; i++ ) {
-                      List<Comparable> columnVals = new ArrayList<Comparable>();
+                      List<Comparable> columnVals = new ArrayList<>();
                       columnVals.addAll( body.getAxisValueSets()[i] );
                       axisValueSetsAsArrays.add( columnVals );
                     }
@@ -416,7 +416,7 @@ public class SegmentBuilder {
 
         // Build the axis list.
         final List<Pair<SortedSet<Comparable>, Boolean>> axisList =
-            new ArrayList<Pair<SortedSet<Comparable>, Boolean>>();
+            new ArrayList<>();
         BigInteger bigValueCount = BigInteger.ONE;
         for (AxisInfo axis : axes) {
             axisList.add(Pair.of(axis.valueSet, axis.hasNull));
@@ -451,7 +451,7 @@ public class SegmentBuilder {
             // The rule says we must use a sparse dataset.
             // First, aggregate the values of each key.
             final Map<CellKey, Object> data =
-                new HashMap<CellKey, Object>();
+                new HashMap<>();
             for (Entry<CellKey, List<Object>> entry
                 : cellValues.entrySet())
             {
@@ -539,7 +539,7 @@ public class SegmentBuilder {
 
         // Create header.
         final List<SegmentColumn> constrainedColumns =
-            new ArrayList<SegmentColumn>();
+            new ArrayList<>();
         for (int i = 0; i < axes.size(); i++) {
             AxisInfo axisInfo = axes.get(i);
 
@@ -739,7 +739,7 @@ public class SegmentBuilder {
         Collection<StarColumnPredicate> predicates)
     {
         List<SegmentColumn> ccs =
-            new ArrayList<SegmentColumn>(predicates.size());
+            new ArrayList<>(predicates.size());
         for (StarColumnPredicate predicate : predicates) {
             if (predicate instanceof LiteralStarPredicate) {
                 if (((LiteralStarPredicate) predicate).getValue()) {
@@ -748,7 +748,7 @@ public class SegmentBuilder {
                     continue;
                 }
             }
-            List<Comparable> values = new ArrayList<Comparable>();
+            List<Comparable> values = new ArrayList<>();
             predicate.values(Util.cast(values));
             Comparable[] valuesArray =
                 values.toArray(new Comparable[values.size()]);
@@ -780,7 +780,7 @@ public class SegmentBuilder {
     public static SegmentHeader toHeader(Segment segment) {
         final List<SegmentColumn> cc =
             SegmentBuilder.toConstrainedColumns(segment.predicates);
-        final List<String> cp = new ArrayList<String>();
+        final List<String> cp = new ArrayList<>();
 
         StringBuilder buf = new StringBuilder();
 
@@ -810,7 +810,7 @@ public class SegmentBuilder {
         BitKey bitKey)
     {
         final List<RolapStar.Column> list =
-            new ArrayList<RolapStar.Column>();
+            new ArrayList<>();
         for (int bit : bitKey) {
             list.add(star.getColumn(bit));
         }
@@ -928,7 +928,7 @@ public class SegmentBuilder {
       List<Comparable> colVals;
 
       ColumnValues( SegmentBody body, CellKey cellKey, ArrayList<List<Comparable>> axisValues ) {
-        colVals = new ArrayList<Comparable>();
+        colVals = new ArrayList<>();
         for ( int i = 0; i < body.getAxisValueSets().length; i++ ) {
           int ordinal = cellKey.getAxis( i );
           if ( ordinal == axisValues.get( i ).size() ) {

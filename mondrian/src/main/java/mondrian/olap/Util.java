@@ -1311,7 +1311,7 @@ public class Util extends XOMUtil {
     {
         List<Member> calcMembers =
             reader.getCalculatedMembers(level.getHierarchy());
-        List<Member> calcMembersInThisLevel = new ArrayList<Member>();
+        List<Member> calcMembersInThisLevel = new ArrayList<>();
         for (Member calcMember : calcMembers) {
             if (calcMember.getLevel().equals(level)) {
                 calcMembersInThisLevel.add(calcMember);
@@ -1319,7 +1319,7 @@ public class Util extends XOMUtil {
         }
         if (!calcMembersInThisLevel.isEmpty()) {
             List<Member> newMemberList =
-                new ConcatenableList<Member>();
+                new ConcatenableList<>();
             newMemberList.addAll(members);
             newMemberList.addAll(calcMembersInThisLevel);
             return newMemberList;
@@ -1451,7 +1451,7 @@ public class Util extends XOMUtil {
             }
             return list;
         }
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
         final String[] strings = nameCommaList.split(",");
         for (String string : strings) {
             final int count = names.size();
@@ -1638,9 +1638,9 @@ public class Util extends XOMUtil {
         case 1:
             return Collections.singletonList(t[0]);
         case 2:
-            return new Flat2List<T>(t[0], t[1]);
+            return new Flat2List<>(t[0], t[1]);
         case 3:
-            return new Flat3List<T>(t[0], t[1], t[2]);
+            return new Flat3List<>(t[0], t[1], t[2]);
         default:
             // REVIEW: AbstractList contains a modCount field; we could
             //   write our own implementation and reduce creation overhead a
@@ -1668,9 +1668,9 @@ public class Util extends XOMUtil {
         case 1:
             return Collections.singletonList(t.get(0));
         case 2:
-            return new Flat2List<T>(t.get(0), t.get(1));
+            return new Flat2List<>(t.get(0), t.get(1));
         case 3:
-            return new Flat3List<T>(t.get(0), t.get(1), t.get(2));
+            return new Flat3List<>(t.get(0), t.get(1), t.get(2));
         default:
             // REVIEW: AbstractList contains a modCount field; we could
             //   write our own implementation and reduce creation overhead a
@@ -1845,10 +1845,10 @@ public class Util extends XOMUtil {
         if (conds.length == 0) {
             return iterable;
         }
-        return new Iterable<T>() {
+        return new Iterable<>() {
             @Override
 			public Iterator<T> iterator() {
-                return new Iterator<T>() {
+                return new Iterator<>() {
                     final Iterator<T> iterator = iterable.iterator();
                     T next;
                     boolean hasNext = moveToNext();
@@ -1910,7 +1910,7 @@ public class Util extends XOMUtil {
     public static List<IdentifierSegment> toOlap4j(
         final List<Id.Segment> segments)
     {
-        return new AbstractList<IdentifierSegment>() {
+        return new AbstractList<>() {
             @Override
 			public IdentifierSegment get(int index) {
                 return toOlap4j(segments.get(index));
@@ -2049,8 +2049,8 @@ public class Util extends XOMUtil {
     }
 
     public static <T> Set<T> newIdentityHashSetFake() {
-        final HashMap<T, Boolean> map = new HashMap<T, Boolean>();
-        return new Set<T>() {
+        final HashMap<T, Boolean> map = new HashMap<>();
+        return new Set<>() {
             @Override
 			public int size() {
                 return map.size();
@@ -2162,7 +2162,7 @@ public class Util extends XOMUtil {
         if (!(set1 instanceof ArraySortedSet)
             || !(set2 instanceof ArraySortedSet))
         {
-            final TreeSet<E> set = new TreeSet<E>(set1);
+            final TreeSet<E> set = new TreeSet<>(set1);
             set.retainAll(set2);
             return set;
         }
@@ -2412,7 +2412,7 @@ public class Util extends XOMUtil {
      *    {@link Throwable#getCause cause}.
      */
     public static String[] convertStackToString(Throwable e) {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         while (e != null) {
             String sMsg = getErrorMessage(e);
             list.add(sMsg);
@@ -2535,10 +2535,10 @@ public class Util extends XOMUtil {
         implements Iterable<Pair<String, String>>, Serializable
     {
         List<Pair<String, String>> list =
-            new ArrayList<Pair<String, String>>();
+            new ArrayList<>();
 
         public PropertyList() {
-            this.list = new ArrayList<Pair<String, String>>();
+            this.list = new ArrayList<>();
         }
 
         private PropertyList(List<Pair<String, String>> list) {
@@ -2548,7 +2548,7 @@ public class Util extends XOMUtil {
         @SuppressWarnings({"CloneDoesntCallSuperClone"})
         @Override
         public PropertyList clone() {
-            return new PropertyList(new ArrayList<Pair<String, String>>(list));
+            return new PropertyList(new ArrayList<>(list));
         }
 
         public String get(String key) {
@@ -2579,7 +2579,7 @@ public class Util extends XOMUtil {
                     return old;
                 }
             }
-            list.add(new Pair<String, String>(key, value));
+            list.add(new Pair<>(key, value));
             return null;
         }
 
@@ -3063,7 +3063,7 @@ public class Util extends XOMUtil {
                 List<Resolver> resolvers = funTable.getResolvers(name, syntax);
                 final Resolver resolver = resolvers.get(0);
                 final List<Resolver.Conversion> conversionList =
-                    new ArrayList<Resolver.Conversion>();
+                    new ArrayList<>();
                 final FunDef def =
                     resolver.resolve(args, this, conversionList);
                 assert conversionList.isEmpty();
@@ -3324,7 +3324,7 @@ public class Util extends XOMUtil {
      * @return String-to-string map
      */
     public static Map<String, String> toMap(final Properties properties) {
-        return new AbstractMap<String, String>() {
+        return new AbstractMap<>() {
             @Override
 			@SuppressWarnings({"unchecked"})
             public Set<Entry<String, String>> entrySet() {
@@ -3467,7 +3467,7 @@ public class Util extends XOMUtil {
         if (Util.Retrowoven
             && !(iterable instanceof Iterable))
         {
-            return new Iterable<T>() {
+            return new Iterable<>() {
                 @Override
 				public Iterator<T> iterator() {
                     return ((Collection<T>) iterable).iterator();
@@ -4194,10 +4194,10 @@ public class Util extends XOMUtil {
         public static <T2> Iterable<T2> over(
             final Iterable<? extends Reference<T2>> referenceIterable)
         {
-            return new Iterable<T2>() {
+            return new Iterable<>() {
                 @Override
 				public Iterator<T2> iterator() {
-                    return new GcIterator<T2>(referenceIterable.iterator());
+                    return new GcIterator<>(referenceIterable.iterator());
                 }
             };
         }
@@ -4338,7 +4338,7 @@ public class Util extends XOMUtil {
      * modify it are made.
      */
     public static <K, V> Map<K, V> toNullValuesMap(List<K> list) {
-        return new NullValuesMap<K, V>(list);
+        return new NullValuesMap<>(list);
     }
 
     private static class NullValuesMap<K, V> extends AbstractMap<K, V> {
@@ -4349,12 +4349,12 @@ public class Util extends XOMUtil {
         }
         @Override
 		public Set<Entry<K, V>> entrySet() {
-            return new AbstractSet<Entry<K, V>>() {
+            return new AbstractSet<>() {
                 @Override
 				public Iterator<Entry<K, V>>
                     iterator()
                 {
-                    return new Iterator<Entry<K, V>>() {
+                    return new Iterator<>() {
                         private int pt = 0;
                         @Override
 						public void remove() {
@@ -4389,10 +4389,10 @@ public class Util extends XOMUtil {
         }
         @Override
 		public Set<K> keySet() {
-            return new AbstractSet<K>() {
+            return new AbstractSet<>() {
                 @Override
 				public Iterator<K> iterator() {
-                    return new Iterator<K>() {
+                    return new Iterator<>() {
                         private int pt = -1;
                         @Override
 						public void remove() {
@@ -4420,7 +4420,7 @@ public class Util extends XOMUtil {
         }
         @Override
 		public Collection<V> values() {
-            return new AbstractList<V>() {
+            return new AbstractList<>() {
                 @Override
 				public V get(int index) {
                     return null;

@@ -266,8 +266,8 @@ public class DefaultRules {
 
     private DefaultRules(final DefaultDef.AggRules rules) {
         this.rules = rules;
-        this.factToPattern = new HashMap<String, Recognizer.Matcher>();
-        this.foreignKeyMatcherMap = new HashMap<String, Recognizer.Matcher>();
+        this.factToPattern = new HashMap<>();
+        this.foreignKeyMatcherMap = new HashMap<>();
         this.tag =
             MondrianProperties.instance().AggregateRuleTag.getDefaultValue();
     }

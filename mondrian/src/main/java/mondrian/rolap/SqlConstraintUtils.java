@@ -121,7 +121,7 @@ public class SqlConstraintUtils {
             && !(members[0] instanceof RolapStoredMeasure))
     {
       RolapStoredMeasure measure = (RolapStoredMeasure) baseCube.getMeasures().get(0);
-      ArrayList<Member> memberList = new ArrayList<Member>(Arrays.asList(members));
+      ArrayList<Member> memberList = new ArrayList<>(Arrays.asList(members));
       memberList.add(0, measure);
       members = memberList.toArray(new Member[0]);
     }
@@ -166,7 +166,7 @@ public class SqlConstraintUtils {
     }
 
     Map<Expression, Set<RolapMember>> mapOfSlicerMembers = null;
-    HashMap<Expression, Boolean> done = new HashMap<Expression, Boolean>();
+    HashMap<Expression, Boolean> done = new HashMap<>();
 
     for ( int i = 0; i < columns.length; i++ ) {
       final RolapStar.Column column = columns[i];
@@ -291,7 +291,7 @@ public class SqlConstraintUtils {
   public static Map<RolapLevel, List<RolapMember>> getRolesConstraints( Evaluator evaluator ) {
     Member[] mm = evaluator.getMembers();
     SchemaReader schemaReader = evaluator.getSchemaReader();
-    Map<RolapLevel, List<RolapMember>> roleConstraints = new LinkedHashMap<RolapLevel, List<RolapMember>>( mm.length );
+    Map<RolapLevel, List<RolapMember>> roleConstraints = new LinkedHashMap<>( mm.length );
     for ( Member member : mm ) {
       boolean isRolesMember =
           ( member instanceof LimitedRollupMember ) || ( member instanceof MultiCardinalityDefaultMember );
@@ -299,7 +299,7 @@ public class SqlConstraintUtils {
         List<Level> hierarchyLevels = schemaReader.getHierarchyLevels( member.getHierarchy() );
         for ( Level affectedLevel : hierarchyLevels ) {
           List<Member> availableMembers = schemaReader.getLevelMembers( affectedLevel, false );
-          List<RolapMember> slicerMembers = new ArrayList<RolapMember>( availableMembers.size() );
+          List<RolapMember> slicerMembers = new ArrayList<>( availableMembers.size() );
           for ( Member available : availableMembers ) {
             if ( !available.isAll() ) {
               slicerMembers.add( (RolapMember) available );
@@ -320,7 +320,7 @@ public class SqlConstraintUtils {
    */
   static StarPredicate getSlicerTuplesPredicate( TupleList tupleList, RolapCube baseCube, AggStar aggStar,
       SqlQuery sqlQuery, RolapEvaluator evaluator ) {
-    List<StarPredicate> tupleListPredicate = new ArrayList<StarPredicate>();
+    List<StarPredicate> tupleListPredicate = new ArrayList<>();
     for ( List<Member> tuple : tupleList ) {
       tupleListPredicate.add( getTupleConstraint( tuple, baseCube, aggStar, sqlQuery, evaluator ) );
     }
@@ -330,7 +330,7 @@ public class SqlConstraintUtils {
   public static boolean isDisjointTuple( TupleList tupleList ) {
     // This assumes the same level for each hierarchy;
     // won't work if the level restriction is eliminated
-    List<Set<Member>> counters = new ArrayList<Set<Member>>( tupleList.getArity() );
+    List<Set<Member>> counters = new ArrayList<>( tupleList.getArity() );
     for ( int i = 0; i < tupleList.size(); i++ ) {
       final List<Member> tuple = tupleList.get( i );
       for ( int j = 0; j < tupleList.getArity(); j++ ) {
@@ -349,7 +349,7 @@ public class SqlConstraintUtils {
   }
 
   public static boolean hasMultipleLevelSlicer( Evaluator evaluator ) {
-    Map<Dimension, Level> levels = new HashMap<Dimension, Level>();
+    Map<Dimension, Level> levels = new HashMap<>();
     List<Member> slicerMembers =
         expandSupportedCalculatedMembers( ( (RolapEvaluator) evaluator ).getSlicerMembers(), evaluator ).getMembers();
     for ( Member member : slicerMembers ) {
@@ -369,7 +369,7 @@ public class SqlConstraintUtils {
    */
   private static AndPredicate getTupleConstraint( List<Member> tuple, RolapCube baseCube, AggStar aggStar,
       SqlQuery sqlQuery, RolapEvaluator evaluator ) {
-    List<StarPredicate> predicateList = new ArrayList<StarPredicate>();
+    List<StarPredicate> predicateList = new ArrayList<>();
     // Member[] members = expandSupportedCalculatedMembers(tuple, evaluator);
     for ( Member member : tuple ) {
       addMember( (RolapMember) member, predicateList, baseCube, aggStar, sqlQuery );
@@ -382,7 +382,7 @@ public class SqlConstraintUtils {
    */
   private static void addMember( RolapMember member, List<StarPredicate> predicateList, RolapCube baseCube,
       AggStar aggStar, SqlQuery sqlQuery ) {
-    ArrayList<MemberColumnPredicate> memberList = new ArrayList<MemberColumnPredicate>();
+    ArrayList<MemberColumnPredicate> memberList = new ArrayList<>();
     // add parents until a unique level is reached
     for ( RolapMember currMember = member; currMember != null; currMember = currMember.getParentMember() ) {
       if ( currMember.isAll() ) {
@@ -465,10 +465,10 @@ public class SqlConstraintUtils {
    * @return only non-all members
    */
   private static List<RolapMember> getNonAllMembers( Collection<RolapMember> slicerMembersSet ) {
-    List<RolapMember> slicerMembers = new ArrayList<RolapMember>( slicerMembersSet );
+    List<RolapMember> slicerMembers = new ArrayList<>( slicerMembersSet );
 
     // search and destroy [all](s)
-    List<RolapMember> allMembers = new ArrayList<RolapMember>();
+    List<RolapMember> allMembers = new ArrayList<>();
     for ( RolapMember slicerMember : slicerMembers ) {
       if ( slicerMember.isAll() ) {
         allMembers.add( slicerMember );
@@ -503,14 +503,14 @@ public class SqlConstraintUtils {
 
   public static Map<Level, List<RolapMember>> getRoleConstraintMembers( SchemaReader schemaReader, Member[] members ) {
     // LinkedHashMap keeps insert-order
-    Map<Level, List<RolapMember>> roleMembers = new LinkedHashMap<Level, List<RolapMember>>();
+    Map<Level, List<RolapMember>> roleMembers = new LinkedHashMap<>();
     Role role = schemaReader.getRole();
     for ( Member member : members ) {
       if ( member instanceof LimitedRollupMember || member instanceof MultiCardinalityDefaultMember ) {
         // iterate relevant levels to get accessible members
         List<Level> hierarchyLevels = schemaReader.getHierarchyLevels( member.getHierarchy() );
         for ( Level affectedLevel : hierarchyLevels ) {
-          List<RolapMember> slicerMembers = new ArrayList<RolapMember>();
+          List<RolapMember> slicerMembers = new ArrayList<>();
           boolean hasCustom = false;
           List<Member> availableMembers = schemaReader.getLevelMembers( affectedLevel, false );
           for ( Member availableMember : availableMembers ) {
@@ -564,7 +564,7 @@ public class SqlConstraintUtils {
    */
   private static Map<Expression, Set<RolapMember>> getSlicerMemberMap( Evaluator evaluator ) {
     Map<Expression, Set<RolapMember>> mapOfSlicerMembers =
-        new HashMap<Expression, Set<RolapMember>>();
+        new HashMap<>();
     List<Member> slicerMembers = ( (RolapEvaluator) evaluator ).getSlicerMembers();
     List<Member> expandedSlicers =
         evaluator.isEvalAxes() ? expandSupportedCalculatedMembers( slicerMembers, evaluator.push() ).getMembers()
@@ -601,7 +601,7 @@ public class SqlConstraintUtils {
   }
 
   public static boolean hasMultiPositionSlicer( List<Member> slicerMembers ) {
-    Map<Hierarchy, Member> mapOfSlicerMembers = new HashMap<Hierarchy, Member>();
+    Map<Hierarchy, Member> mapOfSlicerMembers = new HashMap<>();
     for ( Member slicerMember : slicerMembers ) {
       Hierarchy hierarchy = slicerMember.getHierarchy();
       if ( mapOfSlicerMembers.containsKey( hierarchy ) ) {
@@ -764,8 +764,8 @@ public class SqlConstraintUtils {
    * @return Unique ordinal cube members
    */
   protected static List<Member> getUniqueOrdinalMembers( List<Member> members ) {
-    ArrayList<Integer> currentOrdinals = new ArrayList<Integer>();
-    ArrayList<Member> uniqueMembers = new ArrayList<Member>();
+    ArrayList<Integer> currentOrdinals = new ArrayList<>();
+    ArrayList<Member> uniqueMembers = new ArrayList<>();
 
     for ( Member member : members ) {
       final RolapMemberBase m = (RolapMemberBase) member;
@@ -786,7 +786,7 @@ public class SqlConstraintUtils {
       mapOfSlicerMembers = ( (RolapEvaluator) evaluator ).getSlicerMembersByHierarchy();
     }
     if ( mapOfSlicerMembers != null ) {
-      List<Member> listOfMembers = new ArrayList<Member>();
+      List<Member> listOfMembers = new ArrayList<>();
       // Iterate the given list of members, removing any whose hierarchy
       // has multiple members on the slicer axis
       for ( Member member : members ) {
@@ -832,7 +832,7 @@ public class SqlConstraintUtils {
    *         members that are the default member of their hierarchy
    */
   static List<Member> removeCalculatedAndDefaultMembers( List<Member> members ) {
-    List<Member> memberList = new ArrayList<Member>( members.size() );
+    List<Member> memberList = new ArrayList<>( members.size() );
     Iterator<Member> iterator = members.iterator();
     if ( iterator.hasNext() ) {
       Member firstMember = iterator.next();
@@ -864,7 +864,7 @@ public class SqlConstraintUtils {
   }
 
   static List<Member> removeCalculatedMembers( List<Member> members ) {
-    return new FilteredIterableList<Member>( members, new FilteredIterableList.Filter<Member>() {
+    return new FilteredIterableList<>( members, new FilteredIterableList.Filter<Member>() {
       @Override
 	public boolean accept( final Member m ) {
         return !m.isCalculated() || m.isParentChildPhysicalMember();
@@ -1025,7 +1025,7 @@ public class SqlConstraintUtils {
       case 1:
         return new MemberColumnPredicate( column, members.iterator().next() );
       default:
-        List<StarColumnPredicate> predicateList = new ArrayList<StarColumnPredicate>();
+        List<StarColumnPredicate> predicateList = new ArrayList<>();
         for ( RolapMember member : members ) {
           predicateList.add( new MemberColumnPredicate( column, member ) );
         }
@@ -1034,7 +1034,7 @@ public class SqlConstraintUtils {
   }
 
   private static LinkedHashSet<RolapMember> getUniqueParentMembers( Collection<RolapMember> members ) {
-    LinkedHashSet<RolapMember> set = new LinkedHashSet<RolapMember>();
+    LinkedHashSet<RolapMember> set = new LinkedHashSet<>();
     for ( RolapMember m : members ) {
       m = m.getParentMember();
       if ( m != null ) {
@@ -1067,7 +1067,7 @@ public class SqlConstraintUtils {
   private static String constrainMultiLevelMembers( SqlQuery sqlQuery, RolapCube baseCube, AggStar aggStar,
       List<RolapMember> members, RolapLevel fromLevel, boolean restrictMemberTypes, boolean exclude ) {
     // Use LinkedHashMap so that keySet() is deterministic.
-    Map<RolapMember, List<RolapMember>> parentChildrenMap = new LinkedHashMap<RolapMember, List<RolapMember>>();
+    Map<RolapMember, List<RolapMember>> parentChildrenMap = new LinkedHashMap<>();
     StringBuilder condition = new StringBuilder();
     StringBuilder condition1 = new StringBuilder();
     if ( exclude ) {
@@ -1134,7 +1134,7 @@ public class SqlConstraintUtils {
         RolapMember p = m.getParentMember();
         List<RolapMember> childrenList = parentChildrenMap.get( p );
         if ( childrenList == null ) {
-          childrenList = new ArrayList<RolapMember>();
+          childrenList = new ArrayList<>();
           parentChildrenMap.put( p, childrenList );
         }
         childrenList.add( m );
@@ -1229,7 +1229,7 @@ public class SqlConstraintUtils {
 
       // If no children to be generated for this parent then we are done
       if ( !children.isEmpty() ) {
-        Map<RolapMember, List<RolapMember>> tmpParentChildrenMap = new HashMap<RolapMember, List<RolapMember>>();
+        Map<RolapMember, List<RolapMember>> tmpParentChildrenMap = new HashMap<>();
 
         if ( levelCount > 0 ) {
           condition2.append( " and " );
@@ -1301,7 +1301,7 @@ public class SqlConstraintUtils {
    * @return number of unique member keys in a list of members
    */
   private static int getNumUniqueMemberKeys( List<RolapMember> members ) {
-    final HashSet<Object> set = new HashSet<Object>();
+    final HashSet<Object> set = new HashSet<>();
     for ( RolapMember m : members ) {
       set.add( m.getKey() );
     }
@@ -1583,7 +1583,7 @@ public class SqlConstraintUtils {
           // Add to the nullParent map
           List<RolapMember> childrenList = parentWithNullToChildrenMap.get( p );
           if ( childrenList == null ) {
-            childrenList = new ArrayList<RolapMember>();
+            childrenList = new ArrayList<>();
             parentWithNullToChildrenMap.put( p, childrenList );
           }
 
@@ -1944,7 +1944,7 @@ public class SqlConstraintUtils {
   }
 
   private static Member[] getCJArgMembers( CrossJoinArg[] cjArgs ) {
-    Set<Member> members = new HashSet<Member>();
+    Set<Member> members = new HashSet<>();
     for ( CrossJoinArg arg : cjArgs ) {
       if ( arg.getMembers() != null ) {
         members.addAll( arg.getMembers() );

@@ -177,7 +177,7 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
         }
 
         // Verify that args are valid
-        List<RolapLevel> levels = new ArrayList<RolapLevel>();
+        List<RolapLevel> levels = new ArrayList<>();
         for (CrossJoinArg cjArg : cjArgs) {
             RolapLevel level = cjArg.getLevel();
             if (level != null) {
@@ -259,7 +259,7 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
     }
 
     private Set<Member> getCJArgMembers(CrossJoinArg[] cjArgs) {
-        Set<Member> members = new HashSet<Member>();
+        Set<Member> members = new HashSet<>();
          for (CrossJoinArg arg : cjArgs) {
              if (arg.getMembers() != null) {
                  members.addAll(arg.getMembers());

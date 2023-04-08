@@ -126,7 +126,7 @@ public class XmlaHandlerTypeTest  {
 
         // map of sql expressions to the corresponding (optional) datatype
         // attribute (RolapBaseCubeMeasure.Datatype)
-        Map<String, String> expressionTypeMap = new HashMap<String, String>();
+        Map<String, String> expressionTypeMap = new HashMap<>();
         expressionTypeMap.put("'StringValue'", "String");
         expressionTypeMap.put("cast(1.0001 as decimal)", null);
         expressionTypeMap.put("cast(1.0001 as decimal)", "Numeric");

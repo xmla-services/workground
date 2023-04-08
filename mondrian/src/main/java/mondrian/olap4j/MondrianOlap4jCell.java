@@ -75,7 +75,7 @@ public class MondrianOlap4jCell implements Cell {
 
     @Override
 	public List<Integer> getCoordinateList() {
-        ArrayList<Integer> list = new ArrayList<Integer>(coordinates.length);
+        ArrayList<Integer> list = new ArrayList<>(coordinates.length);
         for (int coordinate : coordinates) {
             list.add(coordinate);
         }

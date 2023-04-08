@@ -26,10 +26,10 @@ import mondrian.rolap.RolapStar;
 public class DrillThroughCellRequest extends CellRequest {
 
     private final List<RolapStar.Column> drillThroughColumns =
-        new ArrayList<RolapStar.Column>();
+        new ArrayList<>();
 
     private final List<RolapStar.Measure> drillThroughMeasures =
-        new ArrayList<RolapStar.Measure>();
+        new ArrayList<>();
     private final List<OlapElement> nonApplicableMembers;
 
     public DrillThroughCellRequest(

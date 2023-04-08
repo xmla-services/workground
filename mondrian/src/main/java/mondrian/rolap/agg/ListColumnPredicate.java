@@ -76,7 +76,7 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
     }
 
     private static Set<Object> createValues(List<StarColumnPredicate> list) {
-        final HashSet<Object> set = new HashSet<Object>();
+        final HashSet<Object> set = new HashSet<>();
         for (StarColumnPredicate predicate : list) {
             if (predicate instanceof ValueColumnPredicate) {
                 set.add(((ValueColumnPredicate) predicate).getValue());
@@ -162,13 +162,13 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
                 // already done
                 if (childrenHashMap == null) {
                     childrenHashMap =
-                        new HashMap<Integer, List<StarColumnPredicate>>();
+                        new HashMap<>();
                     for (StarColumnPredicate thisChild : getPredicates()) {
                         Integer key = thisChild.hashCode();
                         List<StarColumnPredicate> predList =
                             childrenHashMap.get(key);
                         if (predList == null) {
-                            predList = new ArrayList<StarColumnPredicate>();
+                            predList = new ArrayList<>();
                             childrenHashMap.put(key, predList);
                         }
                         predList.add(thisChild);
@@ -252,7 +252,7 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
             return evaluate(valueColumnPredicate.getValue());
         }
         if (other instanceof ListColumnPredicate) {
-            final List<Object> thatSet = new ArrayList<Object>();
+            final List<Object> thatSet = new ArrayList<>();
             ((ListColumnPredicate) other).values(thatSet);
             for (Object o : thatSet) {
                 if (evaluate(o)) {
@@ -280,7 +280,7 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         }
         StarColumnPredicate columnPredicate = (StarColumnPredicate) predicate;
         List<StarColumnPredicate> newChildren =
-            new ArrayList<StarColumnPredicate>(children);
+            new ArrayList<>(children);
         int changeCount = 0;
         final Iterator<StarColumnPredicate> iterator = newChildren.iterator();
         while (iterator.hasNext()) {
@@ -304,14 +304,14 @@ public class ListColumnPredicate extends AbstractColumnPredicate {
         if (predicate instanceof ListColumnPredicate) {
             ListColumnPredicate that = (ListColumnPredicate) predicate;
             final List<StarColumnPredicate> list =
-                new ArrayList<StarColumnPredicate>(children);
+                new ArrayList<>(children);
             list.addAll(that.children);
             return new ListColumnPredicate(
                 getConstrainedColumn(),
                 list);
         } else {
             final List<StarColumnPredicate> list =
-                new ArrayList<StarColumnPredicate>(children);
+                new ArrayList<>(children);
             list.add(predicate);
             return new ListColumnPredicate(
                 getConstrainedColumn(),

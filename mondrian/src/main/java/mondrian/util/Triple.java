@@ -50,7 +50,7 @@ public class Triple<T0, T1, T2>
      * @return a new Triple
      */
     public static <T0, T1, T2> Triple<T0, T1, T2> of(T0 v0, T1 v1, T2 v2) {
-        return new Triple<T0, T1, T2>(v0, v1, v2);
+        return new Triple<>(v0, v1, v2);
     }
 
     @Override
@@ -126,12 +126,12 @@ public class Triple<T0, T1, T2>
     public static <T0, T1, T2> Iterable<T0> iter0(
         final Iterable<Triple<T0, T1, T2>> iterable)
     {
-        return new Iterable<T0>() {
+        return new Iterable<>() {
             @Override
 			public Iterator<T0> iterator() {
                 final Iterator<Triple<T0, T1, T2>> iterator =
                     iterable.iterator();
-                return new Iterator<T0>() {
+                return new Iterator<>() {
                     @Override
 					public boolean hasNext() {
                         return iterator.hasNext();
@@ -163,12 +163,12 @@ public class Triple<T0, T1, T2>
     public static <T0, T1, T2> Iterable<T1> iter1(
         final Iterable<Triple<T0, T1, T2>> iterable)
     {
-        return new Iterable<T1>() {
+        return new Iterable<>() {
             @Override
 			public Iterator<T1> iterator() {
                 final Iterator<Triple<T0, T1, T2>> iterator =
                     iterable.iterator();
-                return new Iterator<T1>() {
+                return new Iterator<>() {
                     @Override
 					public boolean hasNext() {
                         return iterator.hasNext();
@@ -199,12 +199,12 @@ public class Triple<T0, T1, T2>
     public static <T0, T1, T2> Iterable<T2> iter2(
         final Iterable<Triple<T0, T1, T2>> iterable)
     {
-        return new Iterable<T2>() {
+        return new Iterable<>() {
             @Override
 			public Iterator<T2> iterator() {
                 final Iterator<Triple<T0, T1, T2>> iterator =
                     iterable.iterator();
-                return new Iterator<T2>() {
+                return new Iterator<>() {
                     @Override
 					public boolean hasNext() {
                         return iterator.hasNext();

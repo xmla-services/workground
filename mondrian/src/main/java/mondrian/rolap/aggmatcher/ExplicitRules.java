@@ -173,7 +173,7 @@ public class ExplicitRules {
          */
         public void addExclude(final ExplicitRules.Exclude exclude) {
             if (excludes == Collections.EMPTY_LIST) {
-                excludes = new ArrayList<Exclude>();
+                excludes = new ArrayList<>();
             }
             excludes.add(exclude);
         }
@@ -183,7 +183,7 @@ public class ExplicitRules {
          */
         public void addTableDef(final ExplicitRules.TableDef tableDef) {
             if (tableDefs == Collections.EMPTY_LIST) {
-                tableDefs = new ArrayList<TableDef>();
+                tableDefs = new ArrayList<>();
             }
             tableDefs.add(tableDef);
         }
@@ -668,7 +668,7 @@ public class ExplicitRules {
             private Map<String, String> makePropertyMap(
                 List<? extends AggLevelProperty> properties)
             {
-                Map<String, String> map = new HashMap<String, String>();
+                Map<String, String> map = new HashMap<>();
                 for (AggLevelProperty prop : properties) {
                     map.put(prop.name(), prop.column());
                 }
@@ -1189,7 +1189,7 @@ public class ExplicitRules {
          */
         protected void addIgnoreColumnName(final String ignoreName) {
             if (this.ignoreColumnNames == Collections.EMPTY_LIST) {
-                this.ignoreColumnNames = new ArrayList<String>();
+                this.ignoreColumnNames = new ArrayList<>();
             }
             this.ignoreColumnNames.add(ignoreName);
         }
@@ -1200,7 +1200,7 @@ public class ExplicitRules {
          */
         protected void addFK(final AggForeignKey fk) {
             if (this.foreignKeyMap == Collections.EMPTY_MAP) {
-                this.foreignKeyMap = new HashMap<String, String>();
+                this.foreignKeyMap = new HashMap<>();
             }
             this.foreignKeyMap.put(
                 fk.factColumn(),
@@ -1220,7 +1220,7 @@ public class ExplicitRules {
          */
         protected void add(final Level level) {
             if (this.levels == Collections.EMPTY_LIST) {
-                this.levels = new ArrayList<Level>();
+                this.levels = new ArrayList<>();
             }
             this.levels.add(level);
         }
@@ -1230,7 +1230,7 @@ public class ExplicitRules {
          */
         protected void add(final Measure measure) {
             if (this.measures == Collections.EMPTY_LIST) {
-                this.measures = new ArrayList<Measure>();
+                this.measures = new ArrayList<>();
             }
             this.measures.add(measure);
         }
@@ -1249,10 +1249,10 @@ public class ExplicitRules {
             try {
                 // used to detect duplicates
                 Map<String, Object> namesToObjects =
-                    new HashMap<String, Object>();
+                    new HashMap<>();
                 // used to detect duplicates
                 Map<String, Object> columnsToObjects =
-                    new HashMap<String, Object>();
+                    new HashMap<>();
 
                 for (Level level : levels) {
                     level.validate(msgRecorder);
@@ -1559,7 +1559,7 @@ public class ExplicitRules {
          */
         private void add(final Exclude exclude) {
             if (this.excludes == Collections.EMPTY_LIST) {
-                this.excludes = new ArrayList<Exclude>();
+                this.excludes = new ArrayList<>();
             }
             this.excludes.add(exclude);
         }

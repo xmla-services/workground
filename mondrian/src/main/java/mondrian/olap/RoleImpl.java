@@ -45,16 +45,16 @@ import mondrian.rolap.RolapCubeDimension;
 public class RoleImpl implements Role {
     private boolean mutable = true;
     private final Map<Schema, Access> schemaGrants =
-        new HashMap<Schema, Access>();
+        new HashMap<>();
     private final Map<Cube, Access> cubeGrants =
-        new HashMap<Cube, Access>();
+        new HashMap<>();
     private final Map<Dimension, Access> dimensionGrants =
-        new HashMap<Dimension, Access>();
+        new HashMap<>();
     private final Map<Hierarchy, HierarchyAccessImpl> hierarchyGrants =
-        new HashMap<Hierarchy, HierarchyAccessImpl>();
+        new HashMap<>();
     private static final Logger LOGGER =
         LoggerFactory.getLogger(RoleImpl.class);
-    private final List<Object[]> hashCache = new ArrayList<Object[]>();
+    private final List<Object[]> hashCache = new ArrayList<>();
     private int hash = 0;
 
     /**
@@ -693,7 +693,7 @@ public class RoleImpl implements Role {
         private final Access access;
         private final Level bottomLevel;
         private final Map<String, MemberAccess> memberGrants =
-            new HashMap<String, MemberAccess>();
+            new HashMap<>();
         private final RollupPolicy rollupPolicy;
         private final Role role;
 
@@ -1011,7 +1011,7 @@ public class RoleImpl implements Role {
         // let to grow indefinitely. This would cause problems
         // on high cardinality dimensions.
         private final Map<String, Boolean> parentsCache =
-            new WeakHashMap<String, Boolean>();
+            new WeakHashMap<>();
         public MemberAccess(
             Member member,
             Access access)
@@ -1133,10 +1133,10 @@ public class RoleImpl implements Role {
         extends DelegatingHierarchyAccess
     {
         private final Map<Member, Access> memberAccessMap =
-            new WeakHashMap<Member, Access>();
+            new WeakHashMap<>();
         private RollupPolicy rollupPolicy;
         private Map<Member, Boolean> inaccessibleDescendantsMap =
-            new WeakHashMap<Member, Boolean>();
+            new WeakHashMap<>();
         private Integer topLevelDepth;
         private Integer bottomLevelDepth;
 

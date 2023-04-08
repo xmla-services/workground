@@ -161,12 +161,12 @@ public class MockHttpServletRequest implements HttpServletRequest {
         this.bodyContent = bodyContent;
         this.attributes = Collections.emptyMap();
         //this.bin = new ByteArrayInputStream(bytes);
-        this.headers = new LinkedHashMap<String, List<String>>();
-        this.requestDispatchers = new HashMap<String, RequestDispatcher>();
-        this.parameters = new HashMap<String, String[]>();
-        this.cookies = new ArrayList<Cookie>();
-        this.locales = new ArrayList<Locale>();
-        this.roles = new HashMap<String, Boolean>();
+        this.headers = new LinkedHashMap<>();
+        this.requestDispatchers = new HashMap<>();
+        this.parameters = new HashMap<>();
+        this.cookies = new ArrayList<>();
+        this.locales = new ArrayList<>();
+        this.roles = new HashMap<>();
         this.requestedSessionIdIsFromCookie = true;
         this.method = "GET";
         this.protocol = "HTTP/1.1";
@@ -366,7 +366,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
     @Override
 	public void setAttribute(String name, Object obj) {
         if (attributes == Collections.EMPTY_MAP) {
-            attributes = new HashMap<String, Object>();
+            attributes = new HashMap<>();
         }
         this.attributes.put(name, obj);
     }
@@ -838,7 +838,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
     public void setHeader(String name, String value) {
         List<String> valueList = headers.get(name);
         if (valueList == null) {
-            valueList = new ArrayList<String>();
+            valueList = new ArrayList<>();
             headers.put(name, valueList);
         }
         valueList.add(value);
@@ -893,7 +893,7 @@ public class MockHttpServletRequest implements HttpServletRequest {
     public void addHeader(String key, String value) {
         List<String> valueList = headers.get(key);
         if (valueList == null) {
-            valueList = new ArrayList<String>();
+            valueList = new ArrayList<>();
             headers.put(key, valueList);
         }
         valueList.add(value);

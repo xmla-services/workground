@@ -415,7 +415,7 @@ public class Olap4jTest {
                 "DRILLTHROUGH MAXROWS 100\n"
                 + "SELECT FROM [Sales] WHERE [Measures].[Unit Sales]");
         final ArrayBlockingQueue<String> results =
-            new ArrayBlockingQueue<String>(1);
+            new ArrayBlockingQueue<>(1);
 
         // Synchronous. Works fine.
         ResultSetMetaData metaData = resultSet.getMetaData();
@@ -527,7 +527,7 @@ public class Olap4jTest {
         final AtomicInteger tryCancelCount = new AtomicInteger();
         final AtomicInteger actualCancelCount = new AtomicInteger();
         final AtomicReference<Statement> stmtRef =
-            new AtomicReference<Statement>();
+            new AtomicReference<>();
         try {
 
             final OlapConnection connection =

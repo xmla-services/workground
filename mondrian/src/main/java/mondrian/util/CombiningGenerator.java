@@ -54,13 +54,13 @@ public class CombiningGenerator<E> extends AbstractList<List<E>> {
      * @return Combing generator containing the power set
      */
     public static <T> CombiningGenerator<T> of(Collection<T> elements) {
-        return new CombiningGenerator<T>(elements);
+        return new CombiningGenerator<>(elements);
     }
 
     @Override
     public List<E> get(final int index) {
         final int size = Integer.bitCount(index);
-        return new AbstractList<E>() {
+        return new AbstractList<>() {
             @Override
 			public E get(int index1) {
                 if (index1 < 0 || index1 >= size) {
@@ -116,11 +116,11 @@ public class CombiningGenerator<E> extends AbstractList<List<E>> {
      * @param args ignored
      */
     public static void main(String[] args) {
-        List<String> seed = new ArrayList<String>();
+        List<String> seed = new ArrayList<>();
         for (int i = 0; i < 8; i++) {
             seed.add(String.valueOf(i));
         }
-        List<List<String>> result = new CombiningGenerator<String>(seed);
+        List<List<String>> result = new CombiningGenerator<>(seed);
         for (List<String> i : result) {
             for (Object o : i) {
                 System.out.print("|");

@@ -29,7 +29,7 @@ public class JTreeUpdater
     implements TreeExpansionListener, TreeSelectionListener
 {
     private JTree tree = null;
-    private Set<TreePath> expandedTreePaths = new HashSet<TreePath>();
+    private Set<TreePath> expandedTreePaths = new HashSet<>();
     private TreePath[] selectedTreePaths = new TreePath[0];
 
     /**

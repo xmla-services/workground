@@ -220,7 +220,7 @@ public class ResultLoader {
      * to data fetched through sql
      */
     private void savePartialResult(List<List<RolapMember>> partialResult) {
-        List<RolapMember> row = new ArrayList<RolapMember>();
+        List<RolapMember> row = new ArrayList<>();
         for (TargetBase target : targets) {
             if (target.getSrcMembers() == null) {
                 row.add(target.getCurrMember());

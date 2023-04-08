@@ -40,7 +40,7 @@ public class ExpressionViewImpl implements ExpressionView {
     @Override
     public List<SQLImpl> sql() {
         if (sql == null) {
-            sql = new ArrayList<SQLImpl>();
+            sql = new ArrayList<>();
         }
         return this.sql;
     }

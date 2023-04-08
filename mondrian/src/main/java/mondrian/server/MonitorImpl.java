@@ -393,7 +393,7 @@ public List<SqlStatementInfo> getSqlStatements() {
     private final MutableServerInfo server = new MutableServerInfo( null );
 
     private final Map<Integer, MutableConnectionInfo> connectionMap =
-        new LinkedHashMap<Integer, MutableConnectionInfo>( MondrianProperties.instance().ExecutionHistorySize.get(),
+        new LinkedHashMap<>( MondrianProperties.instance().ExecutionHistorySize.get(),
             0.8f, false ) {
           private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
           private static final long serialVersionUID = 1L;
@@ -414,7 +414,7 @@ public List<SqlStatementInfo> getSqlStatements() {
         };
 
     private final Map<Long, MutableSqlStatementInfo> sqlStatementMap =
-        new LinkedHashMap<Long, MutableSqlStatementInfo>( MondrianProperties.instance().ExecutionHistorySize.get(),
+        new LinkedHashMap<>( MondrianProperties.instance().ExecutionHistorySize.get(),
             0.8f, false ) {
           private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
           private static final long serialVersionUID = 1L;
@@ -433,7 +433,7 @@ public List<SqlStatementInfo> getSqlStatements() {
         };
 
     private final Map<Long, MutableStatementInfo> statementMap =
-        new LinkedHashMap<Long, MutableStatementInfo>( MondrianProperties.instance().ExecutionHistorySize.get(), 0.8f,
+        new LinkedHashMap<>( MondrianProperties.instance().ExecutionHistorySize.get(), 0.8f,
             false ) {
           private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
           private static final long serialVersionUID = 1L;
@@ -452,7 +452,7 @@ public List<SqlStatementInfo> getSqlStatements() {
         };
 
     private final Map<Long, MutableExecutionInfo> executionMap =
-        new LinkedHashMap<Long, MutableExecutionInfo>( MondrianProperties.instance().ExecutionHistorySize.get(), 0.8f,
+        new LinkedHashMap<>( MondrianProperties.instance().ExecutionHistorySize.get(), 0.8f,
             false ) {
           private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
           private static final long serialVersionUID = 1L;
@@ -475,7 +475,7 @@ public List<SqlStatementInfo> getSqlStatements() {
      * system.
      */
     private final Map<Long, MutableExecutionInfo> retiredExecutionMap =
-        new LinkedHashMap<Long, MutableExecutionInfo>( MondrianProperties.instance().ExecutionHistorySize.get(), 0.8f,
+        new LinkedHashMap<>( MondrianProperties.instance().ExecutionHistorySize.get(), 0.8f,
             false ) {
           private final int maxSize = MondrianProperties.instance().ExecutionHistorySize.get();
           private static final long serialVersionUID = 1L;
@@ -797,7 +797,7 @@ public List<SqlStatementInfo> getSqlStatements() {
 
     @Override
 	public Object visit( ConnectionsCommand connectionsCommand ) {
-      List<ConnectionInfo> list = new ArrayList<ConnectionInfo>();
+      List<ConnectionInfo> list = new ArrayList<>();
       for ( MutableConnectionInfo info : connectionMap.values() ) {
         list.add( info.fix() );
       }
@@ -811,7 +811,7 @@ public List<SqlStatementInfo> getSqlStatements() {
 
     @Override
 	public Object visit( SqlStatementsCommand command ) {
-      List<SqlStatementInfo> list = new ArrayList<SqlStatementInfo>();
+      List<SqlStatementInfo> list = new ArrayList<>();
       for ( MutableSqlStatementInfo info : sqlStatementMap.values() ) {
         list.add( info.fix() );
       }
@@ -820,7 +820,7 @@ public List<SqlStatementInfo> getSqlStatements() {
 
     @Override
 	public Object visit( StatementsCommand command ) {
-      List<StatementInfo> list = new ArrayList<StatementInfo>();
+      List<StatementInfo> list = new ArrayList<>();
       for ( MutableStatementInfo info : statementMap.values() ) {
         list.add( info.fix() );
       }
@@ -837,9 +837,9 @@ public List<SqlStatementInfo> getSqlStatements() {
     private boolean running = true;
 
     private final BlockingQueue<Pair<Handler, Message>> eventQueue =
-        new ArrayBlockingQueue<Pair<Handler, Message>>( 1000 );
+        new ArrayBlockingQueue<>( 1000 );
 
-    private final BlockingHashMap<Command, Object> responseMap = new BlockingHashMap<Command, Object>( 1000 );
+    private final BlockingHashMap<Command, Object> responseMap = new BlockingHashMap<>( 1000 );
 
     @Override
 	public void run() {

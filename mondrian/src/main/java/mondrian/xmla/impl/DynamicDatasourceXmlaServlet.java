@@ -29,7 +29,7 @@ public class DynamicDatasourceXmlaServlet extends MondrianXmlaServlet {
      * instances.
      */
     private final Map<String, DynamicContentFinder> finders =
-        new HashMap<String, DynamicContentFinder>();
+        new HashMap<>();
 
     @Override
     protected RepositoryContentFinder makeContentFinder(String dataSources) {

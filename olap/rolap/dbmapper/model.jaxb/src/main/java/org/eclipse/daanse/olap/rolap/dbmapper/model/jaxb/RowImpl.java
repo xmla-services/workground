@@ -33,7 +33,7 @@ public class RowImpl implements Row {
     @Override
     public List<ValueImpl> values() {
         if (value == null) {
-            value = new ArrayList<ValueImpl>();
+            value = new ArrayList<>();
         }
         return this.value;
     }

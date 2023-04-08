@@ -165,7 +165,7 @@ public class DiscoverServiceImpl implements DiscoverService {
     public List<DiscoverDataSourcesResponseRow> dataSources(DiscoverDataSourcesRequest requestApi) {
         try {
 
-            Consumer<SOAPMessage> msg = new Consumer<SOAPMessage>() {
+            Consumer<SOAPMessage> msg = new Consumer<>() {
 
                 @Override
                 public void accept(SOAPMessage message) {

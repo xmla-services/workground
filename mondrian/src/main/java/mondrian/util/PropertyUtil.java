@@ -77,10 +77,10 @@ public class PropertyUtil {
     }
 
     private static Iterable<Node> iter(final NodeList nodeList) {
-        return new Iterable<Node>() {
+        return new Iterable<>() {
             @Override
 			public Iterator<Node> iterator() {
-                return new Iterator<Node>() {
+                return new Iterator<>() {
                     int pos = 0;
 
                     @Override
@@ -139,7 +139,7 @@ public class PropertyUtil {
             assert documentElement.getNodeName().equals("PropertyDefinitions");
             NodeList propertyDefinitions =
                 documentElement.getChildNodes();
-            propertyDefinitionMap = new TreeMap<String, PropertyDef>();
+            propertyDefinitionMap = new TreeMap<>();
             for (Node element : iter(propertyDefinitions)) {
                 if (element.getNodeName().equals("PropertyDefinition")) {
                     String name = getChildCdata(element, "Name");
@@ -304,7 +304,7 @@ public class PropertyUtil {
                 out.println("    <td><strong>Description</strong></td>");
                 out.println("    </tr>");
 
-                SortedSet<String> categories = new TreeSet<String>();
+                SortedSet<String> categories = new TreeSet<>();
                 for (PropertyDef def : propertyDefinitionMap.values()) {
                     categories.add(def.category);
                 }

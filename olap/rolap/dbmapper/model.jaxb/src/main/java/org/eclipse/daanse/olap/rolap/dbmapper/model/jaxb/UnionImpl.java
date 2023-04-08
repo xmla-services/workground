@@ -33,7 +33,7 @@ public class UnionImpl implements Union {
     @Override
     public List<RoleUsageImpl> roleUsage() {
         if (roleUsage == null) {
-            roleUsage = new ArrayList<RoleUsageImpl>();
+            roleUsage = new ArrayList<>();
         }
         return this.roleUsage;
     }

@@ -29,13 +29,13 @@ import mondrian.rolap.agg.SegmentCacheWorker;
 public class Session
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(Session.class);
-    final static Map<String, Session> sessions = new HashMap<String, Session>();
+    final static Map<String, Session> sessions = new HashMap<>();
 
     static java.util.Timer timer = new Timer(true);
     static java.util.TimerTask timerTask = new java.util.TimerTask() {
         @Override
 		public void run() {
-            List<String> toRemove = new ArrayList<String>();
+            List<String> toRemove = new ArrayList<>();
             for(Map.Entry<String, Session> entry : sessions.entrySet()) {
                 Session session = entry.getValue();
                 java.time.Duration duration = java.time.Duration.between(

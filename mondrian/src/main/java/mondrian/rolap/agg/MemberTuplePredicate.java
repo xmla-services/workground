@@ -115,7 +115,7 @@ public class MemberTuplePredicate implements StarPredicate {
         RolapMember member,
         RolapCube baseCube)
     {
-        List<RolapStar.Column> columnList = new ArrayList<RolapStar.Column>();
+        List<RolapStar.Column> columnList = new ArrayList<>();
         while (true) {
             RolapLevel level = member.getLevel();
             RolapStar.Column column = null;
@@ -283,8 +283,8 @@ public class MemberTuplePredicate implements StarPredicate {
 
         Bound(RolapMember member, RelOp relOp) {
             this.member = member;
-            List<Object> valueList = new ArrayList<Object>();
-            List<RelOp> relOpList = new ArrayList<RelOp>();
+            List<Object> valueList = new ArrayList<>();
+            List<RelOp> relOpList = new ArrayList<>();
             while (true) {
                 valueList.add(0, member.getKey());
                 relOpList.add(0, relOp);

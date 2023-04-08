@@ -115,7 +115,7 @@ public class SmartMemberReader implements MemberReader {
     // implement MemberReader
     @Override
 	public List<RolapMember> getMembers() {
-        List<RolapMember> v = new ConcatenableList<RolapMember>();
+        List<RolapMember> v = new ConcatenableList<>();
         RolapLevel[] levels = (RolapLevel[]) getHierarchy().getLevels();
         // todo: optimize by walking to children for members we know about
         for (RolapLevel level : levels) {
@@ -214,7 +214,7 @@ public class SmartMemberReader implements MemberReader {
         synchronized (cacheHelper) {
             checkCacheStatus();
 
-            List<RolapMember> missed = new ArrayList<RolapMember>();
+            List<RolapMember> missed = new ArrayList<>();
             for (RolapMember parentMember : parentMembers) {
                 List<RolapMember> list =
                     cacheHelper.getChildrenFromCache(parentMember, constraint);
@@ -266,12 +266,12 @@ public class SmartMemberReader implements MemberReader {
             //   -- jhyde, 2004/6/10.
             Util.assertPrecondition(isSorted(members), "isSorted(members)");
         }
-        List<RolapMember> children = new ConcatenableList<RolapMember>();
+        List<RolapMember> children = new ConcatenableList<>();
         source.getMemberChildren(members, children, constraint);
         // Put them in a temporary hash table first. Register them later, when
         // we know their size (hence their 'cost' to the cache pool).
         Map<RolapMember, List<RolapMember>> tempMap =
-            new HashMap<RolapMember, List<RolapMember>>();
+            new HashMap<>();
         for (RolapMember member1 : members) {
             tempMap.put(member1, Collections.EMPTY_LIST);
         }
@@ -293,7 +293,7 @@ public class SmartMemberReader implements MemberReader {
                 // let's ignore it.
                 continue;
             } else if (list == Collections.EMPTY_LIST) {
-                list = new ArrayList<RolapMember>();
+                list = new ArrayList<>();
                 tempMap.put(parentMember, list);
             }
             ((List)list).add(child);
@@ -445,7 +445,7 @@ public class SmartMemberReader implements MemberReader {
                 Util.assertTrue(pos1 != pos2);
                 return pos1 < pos2 ? -1 : 1;
             } else {
-                List<RolapMember> children = new ArrayList<RolapMember>();
+                List<RolapMember> children = new ArrayList<>();
                 getMemberChildren(m1.getParentMember(), children);
                 int pos1 = -1, pos2 = -1;
                 for (int i = 0, n = children.size(); i < n; i++) {
@@ -504,7 +504,7 @@ public class SmartMemberReader implements MemberReader {
                 siblingList = reader.getRootMembers();
                 this.parentIterator = null;
             } else {
-                siblingList = new ArrayList<RolapMember>();
+                siblingList = new ArrayList<>();
                 reader.getMemberChildren(parent, siblingList);
                 this.parentIterator = new SiblingIterator(reader, parent);
             }
@@ -539,7 +539,7 @@ public class SmartMemberReader implements MemberReader {
                     throw Util.newInternal("there is no next member");
                 }
                 RolapMember parent = parentIterator.nextMember();
-                List<RolapMember> siblingList = new ArrayList<RolapMember>();
+                List<RolapMember> siblingList = new ArrayList<>();
                 reader.getMemberChildren(parent, siblingList);
                 this.siblings = siblingList;
                 this.position = 0;
@@ -563,7 +563,7 @@ public class SmartMemberReader implements MemberReader {
                     throw Util.newInternal("there is no next member");
                 }
                 RolapMember parent = parentIterator.previousMember();
-                List<RolapMember> siblingList = new ArrayList<RolapMember>();
+                List<RolapMember> siblingList = new ArrayList<>();
                 reader.getMemberChildren(parent, siblingList);
                 this.siblings = siblingList;
                 this.position = this.siblings.size() - 1;

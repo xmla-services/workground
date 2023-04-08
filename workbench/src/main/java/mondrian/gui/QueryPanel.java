@@ -75,14 +75,14 @@ public class QueryPanel extends javax.swing.JPanel {
     }
 
     private void setCatalogs() {
-        List<String> v = new ArrayList<String>();
+        List<String> v = new ArrayList<>();
         Iterator<JMenuItem> it = schemaWindowMap.values().iterator();
         while (it.hasNext()) {
             JMenuItem elem = it.next();
             v.add(elem.getText());
         }
         ComboBoxModel cCatalogs =
-            new DefaultComboBoxModel(new Vector<String>(v));
+            new DefaultComboBoxModel(new Vector<>(v));
         schemaList.setModel(cCatalogs);
     }
 

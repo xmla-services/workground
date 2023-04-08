@@ -469,7 +469,7 @@ public class DataSourceChangeListenerTest {
                 throw Util.newInternal(e, "while joining thread #" + i);
             }
         }
-        List<String> messages = new ArrayList<String>();
+        List<String> messages = new ArrayList<>();
         for (Worker worker : workers) {
             for (Throwable throwable : worker.failures) {
                 messages.add(getStackTrace(throwable));
@@ -481,7 +481,7 @@ public class DataSourceChangeListenerTest {
     }
 
     private static abstract class Worker implements Runnable {
-        final List<Throwable> failures = new ArrayList<Throwable>();
+        final List<Throwable> failures = new ArrayList<>();
 
         @Override
 		public void run() {
@@ -500,7 +500,7 @@ public class DataSourceChangeListenerTest {
         private final List<String> sqlQueries;
 
         public SqlLogger() {
-            this.sqlQueries = new ArrayList<String>();
+            this.sqlQueries = new ArrayList<>();
         }
 
         public void clear() {

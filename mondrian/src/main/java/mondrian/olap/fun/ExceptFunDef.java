@@ -61,7 +61,7 @@ class ExceptFunDef extends FunDefBase {
                 if (list1.isEmpty()) {
                     return list0;
                 }
-                final Set<List<Member>> set1 = new HashSet<List<Member>>(list1);
+                final Set<List<Member>> set1 = new HashSet<>(list1);
                 final TupleList result =
                     new ArrayTupleList(list0.getArity(), list0.size());
                 for (List<Member> tuple1 : list0) {

@@ -325,7 +325,7 @@ public class HighDimensionsTest {
         StringBuffer buffer2 = new StringBuffer();
 
         final List<SoftReference> softReferences =
-                new ArrayList<SoftReference>();
+                new ArrayList<>();
         // Tests results aren't got from database before this point
         int ii = 0;
         for (final Position o

@@ -51,7 +51,7 @@ public class RoleImpl implements Role {
     @Override
     public List<SchemaGrantImpl> schemaGrant() {
         if (schemaGrant == null) {
-            schemaGrant = new ArrayList<SchemaGrantImpl>();
+            schemaGrant = new ArrayList<>();
         }
         return this.schemaGrant;
     }

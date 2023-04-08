@@ -43,13 +43,13 @@ import mondrian.util.ArrayStack;
  * @author jhyde
  */
 abstract class ValidatorImpl implements Validator {
-    protected final ArrayStack<QueryPart> stack = new ArrayStack<QueryPart>();
+    protected final ArrayStack<QueryPart> stack = new ArrayStack<>();
     private final FunTable funTable;
     private final Map<QueryPart, QueryPart> resolvedNodes =
-        new HashMap<QueryPart, QueryPart>();
+        new HashMap<>();
     private final QueryPart placeHolder = Literal.zero;
     private final Map<FunCall, List<String>> scopeExprs =
-        new HashMap<FunCall, List<String>>();
+        new HashMap<>();
 
     /**
      * Creates a ValidatorImpl.
@@ -195,9 +195,9 @@ abstract class ValidatorImpl implements Validator {
         assert resolvers != null;
 
         final List<Resolver.Conversion> conversionList =
-            new ArrayList<Resolver.Conversion>();
+            new ArrayList<>();
         int minConversionCost = Integer.MAX_VALUE;
-        List<FunDef> matchDefs = new ArrayList<FunDef>();
+        List<FunDef> matchDefs = new ArrayList<>();
         List<Resolver.Conversion> matchConversionList = null;
         for (Resolver resolver : resolvers) {
             conversionList.clear();
@@ -209,7 +209,7 @@ abstract class ValidatorImpl implements Validator {
                     matchDefs.clear();
                     matchDefs.add(def);
                     matchConversionList =
-                        new ArrayList<Resolver.Conversion>(conversionList);
+                        new ArrayList<>(conversionList);
                 } else if (conversionCost == minConversionCost) {
                     matchDefs.add(def);
                 } else {

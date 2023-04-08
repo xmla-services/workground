@@ -381,7 +381,7 @@ public abstract class DBLoader {
         public void setBeforeActions(List<String> beforeActionList) {
             if (! beforeActionList.isEmpty()) {
                 if (this.beforeActionList == Collections.EMPTY_LIST) {
-                    this.beforeActionList = new ArrayList<String>();
+                    this.beforeActionList = new ArrayList<>();
                 }
                 this.beforeActionList.addAll(beforeActionList);
             }
@@ -389,7 +389,7 @@ public abstract class DBLoader {
         public void setAfterActions(List<String> afterActionList) {
             if (! afterActionList.isEmpty()) {
                 if (this.afterActionList == Collections.EMPTY_LIST) {
-                    this.afterActionList = new ArrayList<String>();
+                    this.afterActionList = new ArrayList<>();
                 }
                 this.afterActionList.addAll(afterActionList);
             }
@@ -480,7 +480,7 @@ public abstract class DBLoader {
         // yyyy-mm-dd hh:mm:ss.fffffffff
         public static final Type Timestamp = new Type("TIMESTAMP");
         public static final Map<String, Type> extraTypes =
-            new HashMap<String, Type>();
+            new HashMap<>();
 
         public static Type getType(String typeName) {
             String upperCaseTypeName = typeName.toUpperCase();

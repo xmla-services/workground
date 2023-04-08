@@ -95,7 +95,7 @@ public class DrillThrough extends QueryPart {
         if (returnList == null) {
             return Collections.emptyList();
         }
-        List<OlapElement> returnClauseElements = new ArrayList<OlapElement>();
+        List<OlapElement> returnClauseElements = new ArrayList<>();
         SchemaReader reader = query.getSchemaReader(true);
         for (Exp exp : returnList) {
             final OlapElement olapElement =

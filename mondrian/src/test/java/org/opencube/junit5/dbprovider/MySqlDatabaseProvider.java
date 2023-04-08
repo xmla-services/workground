@@ -96,7 +96,7 @@ public class MySqlDatabaseProvider extends AbstractDockerBasesDatabaseProvider {
 				connectProperties.put(RolapConnectionProperties.JdbcPassword.name(), MYSQL_PASSWORD);
 
 				// jdbc:mysql://<hostname>:<port>/<dbname>?prop1;
-				return new AbstractMap.SimpleEntry<PropertyList, Context>(connectProperties, new MysqlContext(dataSource));
+				return new AbstractMap.SimpleEntry<>(connectProperties, new MysqlContext(dataSource));
 
 			} catch (Exception e) {
 //				e.printStackTrace();

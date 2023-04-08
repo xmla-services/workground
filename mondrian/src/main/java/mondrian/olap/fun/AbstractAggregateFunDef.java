@@ -257,7 +257,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
         Set<Dimension> nonJoiningDimensions =
             AbstractAggregateFunDef.nonJoiningDimensions(baseCube, tuplesForAggregation);
         final Set<List<Member>> processedTuples =
-            new LinkedHashSet<List<Member>>(tuplesForAggregation.size());
+            new LinkedHashSet<>(tuplesForAggregation.size());
         for (List<Member> tuple : tuplesForAggregation) {
             List<Member> tupleCopy = tuple;
             for (int j = 0; j < tuple.size(); j++) {
@@ -265,7 +265,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
                 if (nonJoiningDimensions.contains(member.getDimension())) {
                     if (tupleCopy == tuple) {
                         // Avoid making a copy until we have to change a tuple.
-                        tupleCopy = new ArrayList<Member>(tuple);
+                        tupleCopy = new ArrayList<>(tuple);
                     }
                     final Hierarchy hierarchy =
                         member.getDimension().getHierarchy();
@@ -280,7 +280,7 @@ public class AbstractAggregateFunDef extends FunDefBase {
         }
         return new DelegatingTupleList(
             tuplesForAggregation.getArity(),
-            new ArrayList<List<Member>>(
+            new ArrayList<>(
                 processedTuples));
     }
 

@@ -177,7 +177,7 @@ public class Scanner {
     /** Initialize the scanner */
     public void init() throws IOException {
         initReswords();
-        lines = new ArrayList<Integer>();
+        lines = new ArrayList<>();
         iChar = iPrevChar = 0;
         advance();
     }
@@ -237,7 +237,7 @@ public class Scanner {
         //   grep -list // |
         //   sed -e 's/,//' |
         //   awk '{printf "initResword(%20s,%c%s%c);",$1,34,$1,34}'
-        m_resWordsTable = new Hashtable<String, Integer>();
+        m_resWordsTable = new Hashtable<>();
         iMaxResword = 0;
 //      initResword(ParserSym.ALL,                  "ALL");
         initResword(ParserSym.AND,                  "AND");

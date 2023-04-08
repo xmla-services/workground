@@ -163,7 +163,7 @@ public class SegmentBuilderTest {
                 new String[] {"col1", "col2", "col3"}, null, 2, 12, true,
                 // col2 & col3 have nullAxisFlag=T
                 new boolean[] {false, true, false}),
-            new HashSet<String>(Arrays.asList("col1", "col2")),
+            new HashSet<>(Arrays.asList("col1", "col2")),
             null, RolapAggregator.Sum, Datatype.Numeric);
 
         // expected value is 2 * MOCK_CELL_VALUE for each of 3 column values,
@@ -353,7 +353,7 @@ public class SegmentBuilderTest {
         // checks that cell key coordinates are generated correctly
         // when a null member is present.
         List<Pair<SortedSet<Comparable>, Boolean>> axes =
-            new ArrayList<Pair<SortedSet<Comparable>, Boolean>>();
+            new ArrayList<>();
         axes.add(new Pair<SortedSet<Comparable>, Boolean>(
             new TreeSet<Comparable>(
                 Arrays.asList("foo1", "bar1")), true)); // nullAxisFlag=T
@@ -424,7 +424,7 @@ public class SegmentBuilderTest {
                 makeSegmentMap(
                     new String[] {"col1", "col2", "col3"},
                     null, 47000, 4, false, null),
-                new HashSet<String>(Arrays.asList("col1", "col2")),
+                new HashSet<>(Arrays.asList("col1", "col2")),
                 null, RolapAggregator.Sum, Datatype.Numeric);
         assertTrue(rollup.right instanceof SparseSegmentBody);
     }
@@ -442,7 +442,7 @@ public class SegmentBuilderTest {
                 makeSegmentMap(
                     new String[] {"col1", "col2", "col3"},
                     null, 44000, 4, false, null),
-                new HashSet<String>(Arrays.asList("col1", "col2")),
+                new HashSet<>(Arrays.asList("col1", "col2")),
                 null, RolapAggregator.Sum, Datatype.Numeric);
         assertTrue(rollup.right instanceof SparseSegmentBody);
     }
@@ -455,7 +455,7 @@ public class SegmentBuilderTest {
                 makeSegmentMap(
                     new String[] {"col1", "col2", "col3"},
                     null, 10, 15, false, null),
-                new HashSet<String>(Arrays.asList("col1", "col2")),
+                new HashSet<>(Arrays.asList("col1", "col2")),
                 null, RolapAggregator.Sum, Datatype.Numeric);
         assertTrue(rollup.right instanceof DenseDoubleSegmentBody);
 
@@ -466,7 +466,7 @@ public class SegmentBuilderTest {
                     new String[] {"col1", "col2", "col3", "col4"},
                     null, 11, 10000, false, null),
                     // 1331 possible intersections (11*3)
-                new HashSet<String>(Arrays.asList("col1", "col2", "col3")),
+                new HashSet<>(Arrays.asList("col1", "col2", "col3")),
                 null, RolapAggregator.Sum, Datatype.Numeric);
         assertTrue(rollup.right instanceof DenseDoubleSegmentBody);
     }
@@ -496,8 +496,8 @@ public class SegmentBuilderTest {
       }
 
       List<Pair<SortedSet<Comparable>, Boolean>> axes =
-          new ArrayList<Pair<SortedSet<Comparable>, Boolean>>();
-      List<SegmentColumn> segmentColumns = new ArrayList<SegmentColumn>();
+          new ArrayList<>();
+      List<SegmentColumn> segmentColumns = new ArrayList<>();
       for (int i = 0; i < colValues.length; i++) {
         axes.add(of(toSortedSet(colValues[i]), false));
         segmentColumns.add(new SegmentColumn(
@@ -908,7 +908,7 @@ public class SegmentBuilderTest {
             false);
         loadCacheWithQueries(connection, cachePopulatingQueries);
         Map<SegmentHeader, SegmentBody> map = getReversibleTestMap(connection, Order.FORWARD);
-        Set<String> keepColumnsSet = new HashSet<String>();
+        Set<String> keepColumnsSet = new HashSet<>();
         keepColumnsSet.addAll(Arrays.asList(keepColumns));
         Pair<SegmentHeader, SegmentBody> rolledForward = SegmentBuilder.rollup(
             map,
@@ -967,11 +967,11 @@ public class SegmentBuilderTest {
 
         List<SegmentHeader> headers = cache.getSegmentHeaders();
         Map<SegmentHeader, SegmentBody> testMap =
-            new HashMap<SegmentHeader, SegmentBody>() {
+            new HashMap<>() {
             @Override
 			public Set<Entry<SegmentHeader, SegmentBody>> entrySet() {
                 List<Entry<SegmentHeader, SegmentBody>> list =
-                    new ArrayList<Entry<SegmentHeader, SegmentBody>>();
+                    new ArrayList<>();
                 list.addAll(super.entrySet());
                 Collections.sort(
                     list,
@@ -988,13 +988,13 @@ public class SegmentBuilderTest {
                     });
                 LinkedHashSet<Entry<SegmentHeader, SegmentBody>>
                     orderedSet =
-                    new LinkedHashSet<Entry<SegmentHeader, SegmentBody>>();
+                    new LinkedHashSet<>();
                 orderedSet.addAll(list);
                 return orderedSet;
             }
             @Override
 			public Set<SegmentHeader> keySet() {
-                List<SegmentHeader> list = new ArrayList<SegmentHeader>();
+                List<SegmentHeader> list = new ArrayList<>();
                 list.addAll(super.keySet());
                 Collections.sort(
                     list,
@@ -1011,7 +1011,7 @@ public class SegmentBuilderTest {
                     });
                 LinkedHashSet<SegmentHeader>
                     orderedSet =
-                    new LinkedHashSet<SegmentHeader>();
+                    new LinkedHashSet<>();
                 orderedSet.addAll(list);
                 return orderedSet;
             }
@@ -1047,7 +1047,7 @@ public class SegmentBuilderTest {
             colVals,
             numPopulatedCells, wildcardCols, nullAxisFlags);
         Map<SegmentHeader, SegmentBody> map =
-            new HashMap<SegmentHeader, SegmentBody>();
+            new HashMap<>();
         map.put(headerBody.left, headerBody.right);
 
         return map;
@@ -1058,10 +1058,10 @@ public class SegmentBuilderTest {
         boolean wildcardCols, boolean[] nullAxisFlags)
     {
         final List<SegmentColumn> constrainedColumns =
-            new ArrayList<SegmentColumn>();
+            new ArrayList<>();
 
         final List<Pair<SortedSet<Comparable>, Boolean>> axes =
-            new ArrayList<Pair<SortedSet<Comparable>, Boolean>>();
+            new ArrayList<>();
         for (int i = 0; i < colVals.length; i++) {
             String colExp = colExps[i];
             SortedSet<Comparable> headerVals = null;
@@ -1116,7 +1116,7 @@ public class SegmentBuilderTest {
 
   private static SortedSet<Comparable> toSortedSet(Comparable... comparables) {
     List<Comparable> list = asList(comparables);
-    return new TreeSet<Comparable>(list);
+    return new TreeSet<>(list);
   }
 
   void testRollupWithNonUniqueColumns() {
@@ -1126,7 +1126,7 @@ public class SegmentBuilderTest {
                   new String[] {"col1", "col2", "col3", "col2"},
                   new String[][] {{"0.0"}, {"0.0"}, {"0.0"}, {"0.0"}},
                   10, 15, false, null),
-              new HashSet<String>(Arrays.asList("col1", "col2")),
+              new HashSet<>(Arrays.asList("col1", "col2")),
               null, RolapAggregator.Sum, Datatype.Numeric);
       assertEquals(3, rollup.left.getConstrainedColumns().size());
   }

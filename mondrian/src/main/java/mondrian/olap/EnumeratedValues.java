@@ -35,7 +35,7 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
     implements Cloneable
 {
     /** Map symbol names to values */
-    private Map<String, V> valuesByName = new LinkedHashMap<String, V>();
+    private Map<String, V> valuesByName = new LinkedHashMap<>();
 
     /** the smallest ordinal value */
     private int min = Integer.MAX_VALUE;
@@ -279,7 +279,7 @@ public class EnumeratedValues<V extends EnumeratedValues.Value>
      * Returns the members of this enumeration, sorted by name.
      */
     public List<V> getValuesSortedByName() {
-        List<V> list = new ArrayList<V>();
+        List<V> list = new ArrayList<>();
         final String[] names = getNames();
         Arrays.sort(names);
         for (String name : names) {

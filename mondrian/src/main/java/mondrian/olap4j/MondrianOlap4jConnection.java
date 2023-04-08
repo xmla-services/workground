@@ -164,7 +164,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
      * different names; the same RolapSchema object will be used.
      */
     final Map<org.eclipse.daanse.olap.api.model.Schema, MondrianOlap4jSchema> schemaMap =
-        new HashMap<org.eclipse.daanse.olap.api.model.Schema, MondrianOlap4jSchema>();
+        new HashMap<>();
 
     private final MondrianOlap4jDatabaseMetaData olap4jDatabaseMetaData;
 
@@ -249,9 +249,9 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
             (CatalogFinder) mondrianServer;
 
         NamedList<MondrianOlap4jCatalog> olap4jCatalogs = new
-            NamedListImpl<MondrianOlap4jCatalog>();
+            NamedListImpl<>();
         this.olap4jDatabases =
-            new NamedListImpl<MondrianOlap4jDatabase>();
+            new NamedListImpl<>();
 
         List<Map<String, Object>> dbpropsMaps =
             mondrianServer.getDatabases(mondrianConnection);
@@ -264,14 +264,14 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
                 String.valueOf(dbpropsMap.get("ProviderType")),
                 ",");
         List<ProviderType> pTypes =
-            new ArrayList<ProviderType>();
+            new ArrayList<>();
         while (st.hasMoreTokens()) {
             pTypes.add(ProviderType.valueOf(st.nextToken()));
         }
         st = new StringTokenizer(
             String.valueOf(dbpropsMap.get("AuthenticationMode")), ",");
         List<AuthenticationMode> aModes =
-            new ArrayList<AuthenticationMode>();
+            new ArrayList<>();
         while (st.hasMoreTokens()) {
             aModes.add(AuthenticationMode.valueOf(st.nextToken()));
         }
@@ -771,7 +771,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
     NamedList<MondrianOlap4jMember> toOlap4j(
         final List<Member> memberList)
     {
-        return new AbstractNamedList<MondrianOlap4jMember>() {
+        return new AbstractNamedList<>() {
             @Override
 			public String getName(Object olap4jMember) {
                 return ((MondrianOlap4jMember)olap4jMember).getName();
@@ -851,7 +851,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
      */
     public void setRoleNames(List<String> roleNames) throws OlapException {
         final RolapConnection connection1 = getMondrianConnection();
-        final List<Role> roleList = new ArrayList<Role>();
+        final List<Role> roleList = new ArrayList<>();
         for (String roleName : roleNames) {
             if (roleName == null) {
                 throw new NullPointerException("null role name");
@@ -878,7 +878,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         default:
             role = RoleImpl.union(roleList);
             this.roleNames =
-                Collections.unmodifiableList(new ArrayList<String>(roleNames));
+                Collections.unmodifiableList(new ArrayList<>(roleNames));
             this.roleName = this.roleNames.toString();
             break;
         }
@@ -1104,7 +1104,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         }
 
         private List<IdentifierNode> toOlap4j(Id[] dimensionProperties) {
-            final List<IdentifierNode> list = new ArrayList<IdentifierNode>();
+            final List<IdentifierNode> list = new ArrayList<>();
             for (Id property : dimensionProperties) {
                 list.add(toOlap4j(property));
             }
@@ -1206,7 +1206,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         }
 
         private List<ParseTreeNode> toOlap4j(List<Exp> exprList) {
-            final List<ParseTreeNode> result = new ArrayList<ParseTreeNode>();
+            final List<ParseTreeNode> result = new ArrayList<>();
             for (Exp expr : exprList) {
                 result.add(toOlap4j(expr));
             }
@@ -1218,7 +1218,7 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         }
 
         private List<AxisNode> toOlap4j(QueryAxis[] axes) {
-            final ArrayList<AxisNode> axisList = new ArrayList<AxisNode>();
+            final ArrayList<AxisNode> axisList = new ArrayList<>();
             for (QueryAxis axis : axes) {
                 axisList.add(toOlap4j(axis));
             }
@@ -1226,11 +1226,11 @@ public abstract class MondrianOlap4jConnection implements OlapConnection {
         }
 
         private List<ParseTreeNode> toOlap4j(Formula[] formulas) {
-            final List<ParseTreeNode> list = new ArrayList<ParseTreeNode>();
+            final List<ParseTreeNode> list = new ArrayList<>();
             for (Formula formula : formulas) {
                 if (formula.isMember()) {
                     List<PropertyValueNode> memberPropertyList =
-                        new ArrayList<PropertyValueNode>();
+                        new ArrayList<>();
                     for (Object child : formula.getChildren()) {
                         if (child instanceof MemberProperty) {
                             MemberProperty memberProperty =

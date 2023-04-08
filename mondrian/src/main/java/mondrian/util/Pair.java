@@ -61,7 +61,7 @@ public class Pair <L, R>
      * @return a new Pair
      */
     public static <L, R> Pair<L, R> of(L left, R right) {
-        return new Pair<L, R>(left, right);
+        return new Pair<>(left, right);
     }
 
     @Override
@@ -151,11 +151,11 @@ public class Pair <L, R>
     public static <L, R> Iterable<L> leftIter(
         final Iterable<Pair<L, R>> iterable)
     {
-        return new Iterable<L>() {
+        return new Iterable<>() {
             @Override
 			public Iterator<L> iterator() {
                 final Iterator<Pair<L, R>> iterator = iterable.iterator();
-                return new Iterator<L>() {
+                return new Iterator<>() {
                     @Override
 					public boolean hasNext() {
                         return iterator.hasNext();
@@ -186,11 +186,11 @@ public class Pair <L, R>
     public static <L, R> Iterable<R> rightIter(
         final Iterable<Pair<L, R>> iterable)
     {
-        return new Iterable<R>() {
+        return new Iterable<>() {
             @Override
 			public Iterator<R> iterator() {
                 final Iterator<Pair<L, R>> iterator = iterable.iterator();
-                return new Iterator<R>() {
+                return new Iterator<>() {
                     @Override
 					public boolean hasNext() {
                         return iterator.hasNext();
@@ -214,7 +214,7 @@ public class Pair <L, R>
      * Returns a list of the left elements of a list of pairs.
      */
     public static <L, R> List<L> left(final List<Pair<L, R>> list) {
-        return new AbstractList<L>() {
+        return new AbstractList<>() {
             @Override
 			public L get(int index) {
                 return list.get(index).left;
@@ -237,7 +237,7 @@ public class Pair <L, R>
      * Returns a list of the right elements of a list of pairs.
      */
     public static <L, R> List<R> right(final List<Pair<L, R>> list) {
-        return new AbstractList<R>() {
+        return new AbstractList<>() {
             @Override
 			public R get(int index) {
                 return list.get(index).right;

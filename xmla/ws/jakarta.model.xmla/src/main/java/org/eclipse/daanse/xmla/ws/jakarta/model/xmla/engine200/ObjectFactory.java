@@ -81,7 +81,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200", name = "CalculationError")
   public JAXBElement<String> createCalculationError(String value) {
-    return new JAXBElement<String>(_CalculationError_QNAME, String.class, null, value);
+    return new JAXBElement<>(_CalculationError_QNAME, String.class, null, value);
   }
 
   /**
@@ -94,7 +94,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2010/engine/200", name = "CompatibilityLevel")
   public JAXBElement<BigInteger> createCompatibilityLevel(BigInteger value) {
-    return new JAXBElement<BigInteger>(_CompatibilityLevel_QNAME, BigInteger.class, null, value);
+    return new JAXBElement<>(_CompatibilityLevel_QNAME, BigInteger.class, null, value);
   }
 
 }

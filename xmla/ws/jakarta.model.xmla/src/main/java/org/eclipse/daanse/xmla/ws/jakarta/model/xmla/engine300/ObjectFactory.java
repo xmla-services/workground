@@ -101,7 +101,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2011/engine/300", name = "DataEmbeddingStyle")
   public JAXBElement<String> createDataEmbeddingStyle(String value) {
-    return new JAXBElement<String>(_DataEmbeddingStyle_QNAME, String.class, null, value);
+    return new JAXBElement<>(_DataEmbeddingStyle_QNAME, String.class, null, value);
   }
 
   /**
@@ -114,7 +114,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2011/engine/300", name = "QueryImpersonationInfo")
   public JAXBElement<ImpersonationInfo> createQueryImpersonationInfo(ImpersonationInfo value) {
-    return new JAXBElement<ImpersonationInfo>(_QueryImpersonationInfo_QNAME, ImpersonationInfo.class, null, value);
+    return new JAXBElement<>(_QueryImpersonationInfo_QNAME, ImpersonationInfo.class, null, value);
   }
 
   /**
@@ -126,7 +126,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2011/engine/300", name = "QueryHints")
   public JAXBElement<String> createQueryHints(String value) {
-    return new JAXBElement<String>(_QueryHints_QNAME, String.class, null, value);
+    return new JAXBElement<>(_QueryHints_QNAME, String.class, null, value);
   }
 
   /**
@@ -138,7 +138,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2011/engine/300", name = "StringStoresCompatibilityLevel")
   public JAXBElement<Integer> createStringStoresCompatibilityLevel(Integer value) {
-    return new JAXBElement<Integer>(_StringStoresCompatibilityLevel_QNAME, Integer.class, null, value);
+    return new JAXBElement<>(_StringStoresCompatibilityLevel_QNAME, Integer.class, null, value);
   }
 
   /**
@@ -150,7 +150,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2011/engine/300", name = "CurrentStringStoresCompatibilityLevel")
   public JAXBElement<Integer> createCurrentStringStoresCompatibilityLevel(Integer value) {
-    return new JAXBElement<Integer>(_CurrentStringStoresCompatibilityLevel_QNAME, Integer.class, null, value);
+    return new JAXBElement<>(_CurrentStringStoresCompatibilityLevel_QNAME, Integer.class, null, value);
   }
 
   /**
@@ -162,7 +162,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2011/engine/300", name = "ProcessingState")
   public JAXBElement<String> createProcessingState(String value) {
-    return new JAXBElement<String>(_ProcessingState_QNAME, String.class, null, value);
+    return new JAXBElement<>(_ProcessingState_QNAME, String.class, null, value);
   }
 
   /**
@@ -174,7 +174,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2011/engine/300", name = "StructureType")
   public JAXBElement<String> createStructureType(String value) {
-    return new JAXBElement<String>(_StructureType_QNAME, String.class, null, value);
+    return new JAXBElement<>(_StructureType_QNAME, String.class, null, value);
   }
 
   /**
@@ -186,7 +186,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2011/engine/300", name = "ServerMode")
   public JAXBElement<String> createServerMode(String value) {
-    return new JAXBElement<String>(_ServerMode_QNAME, String.class, null, value);
+    return new JAXBElement<>(_ServerMode_QNAME, String.class, null, value);
   }
 
 }

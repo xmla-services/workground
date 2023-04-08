@@ -29,7 +29,7 @@ public class QueryRunner extends Thread {
     private long mRunTime;
     private long mStartTime;
     private long mStopTime;
-    private List<Exception> mExceptions = new ArrayList<Exception>();
+    private List<Exception> mExceptions = new ArrayList<>();
     private int mMyId;
     private int mRunCount;
     private int mSuccessCount;

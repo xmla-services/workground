@@ -73,7 +73,7 @@ public class CrossJoinArgFactory {
         final RolapEvaluator evaluator)
     {
         Set<CrossJoinArg> joinArgs =
-            new LinkedHashSet<CrossJoinArg>();
+            new LinkedHashSet<>();
         for (QueryAxis ax : evaluator.getQuery().getAxes()) {
             List<CrossJoinArg[]> axesArgs =
                 checkCrossJoinArg(evaluator, ax.getSet(), true);
@@ -95,10 +95,10 @@ public class CrossJoinArgFactory {
      * we can't guess which set of members can be used in the sql constraint.
      */
     private Set<CrossJoinArg> stripConflictingArgs(Set<CrossJoinArg> joinArgs) {
-        Set<Hierarchy> skip = new HashSet<Hierarchy>();
-        Set<Hierarchy> encountered = new HashSet<Hierarchy>();
+        Set<Hierarchy> skip = new HashSet<>();
+        Set<Hierarchy> encountered = new HashSet<>();
         // linked to keep arg order for sql
-        Set<CrossJoinArg> result = new LinkedHashSet<CrossJoinArg>();
+        Set<CrossJoinArg> result = new LinkedHashSet<>();
         for (CrossJoinArg arg : joinArgs) {
             if (arg.getLevel() == null) {
                 continue;
@@ -212,7 +212,7 @@ public class CrossJoinArgFactory {
     {
             if (isSetOfConstrainedMeasures(fun, args)) {
             HashMap<Dimension, List<RolapMember>> memberLists =
-                new LinkedHashMap<Dimension, List<RolapMember>>();
+                new LinkedHashMap<>();
             for (Exp arg : args) {
                 addConstrainingMembersToMap(arg, memberLists);
             }
@@ -280,7 +280,7 @@ public class CrossJoinArgFactory {
                 if (memberLists.containsKey(dimension)) {
                     members = memberLists.get(dimension);
                 } else {
-                    members = new ArrayList<RolapMember>();
+                    members = new ArrayList<>();
                 }
                 members.add((RolapMember) ((MemberExpr) tupleArg).getMember());
                 memberLists.put(dimension, members);
@@ -310,7 +310,7 @@ public class CrossJoinArgFactory {
         Exp[] args,
         RolapEvaluator evaluator)
     {
-        List<CrossJoinArg> argList = new ArrayList<CrossJoinArg>();
+        List<CrossJoinArg> argList = new ArrayList<>();
         for (List<RolapMember> memberList : memberLists.values()) {
             if (memberList.size() == countNonLiteralMeasures(args)) {
                 // when the memberList and args list have the same length
@@ -334,8 +334,8 @@ public class CrossJoinArgFactory {
 
     private List<RolapMember> removeDuplicates(List<RolapMember> list)
     {
-        Set<RolapMember> set = new HashSet<RolapMember>();
-        List<RolapMember> uniqueList = new ArrayList<RolapMember>();
+        Set<RolapMember> set = new HashSet<>();
+        List<RolapMember> uniqueList = new ArrayList<>();
         for (RolapMember element : list) {
             if (set.add(element)) {
                 uniqueList.add(element);
@@ -425,7 +425,7 @@ public class CrossJoinArgFactory {
         }
 
         List<CrossJoinArg[]> allArgsBothInputs =
-            new ArrayList<CrossJoinArg[]>();
+            new ArrayList<>();
         // Now combine the cjArgs from both sides
         CrossJoinArg[] combinedCJArgs =
             Util.appendArrays(
@@ -478,7 +478,7 @@ public class CrossJoinArgFactory {
             }
         }
 
-        List<RolapMember> memberList = new ArrayList<RolapMember>();
+        List<RolapMember> memberList = new ArrayList<>();
         for (Exp arg : args) {
             if (!(arg instanceof MemberExpr)) {
                 return null;

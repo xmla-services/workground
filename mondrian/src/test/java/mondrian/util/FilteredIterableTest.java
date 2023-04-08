@@ -31,13 +31,13 @@ public class FilteredIterableTest{
 
     @Test
     void testEmptyList() throws Exception {
-        final List<Integer> base = new ArrayList<Integer>();
+        final List<Integer> base = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             base.add(i);
         }
 
         final List<Integer> empty =
-            new FilteredIterableList<Integer>(
+            new FilteredIterableList<>(
                 base,
                 new FilteredIterableList.Filter<Integer>() {
                     @Override
@@ -52,13 +52,13 @@ public class FilteredIterableTest{
 
     @Test
     void testGetter() throws Exception {
-        final List<Integer> base = new ArrayList<Integer>();
+        final List<Integer> base = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
             base.add(i);
         }
 
         final List<Integer> empty =
-            new FilteredIterableList<Integer>(
+            new FilteredIterableList<>(
                 base,
                 new FilteredIterableList.Filter<Integer>() {
                     @Override
@@ -73,13 +73,13 @@ public class FilteredIterableTest{
 
     @Test
     void test2Elements() throws Exception {
-        final List<Integer> base = new ArrayList<Integer>();
+        final List<Integer> base = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             base.add(i);
         }
 
         final List<Integer> identical =
-            new FilteredIterableList<Integer>(
+            new FilteredIterableList<>(
                 base,
                 new FilteredIterableList.Filter<Integer>() {
                     @Override

@@ -150,7 +150,7 @@ public class MemberCacheControlTest {
      */
     private static <K, V> Map<K, V> createMap(List<K> keys, List<V> values) {
         assert keys.size() == values.size();
-        final Map<K, V> map = new HashMap<K, V>(keys.size());
+        final Map<K, V> map = new HashMap<>(keys.size());
         for (int i = 0; i < keys.size(); ++i) {
             map.put(keys.get(i), values.get(i));
         }

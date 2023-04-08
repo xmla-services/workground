@@ -20,7 +20,7 @@ public class ExpiringReferenceTest
     void testSimpleExpiryMode() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
-            new ExpiringReference<Object>(referent, "1s");
+            new ExpiringReference<>(referent, "1s");
         Thread.sleep(500);
         assertNotNull(reference.hardRef);
         Thread.sleep(600);
@@ -31,7 +31,7 @@ public class ExpiringReferenceTest
     void testExpiryModeReAccess() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
-            new ExpiringReference<Object>(referent, "1s");
+            new ExpiringReference<>(referent, "1s");
         Thread.sleep(500);
         assertNotNull(reference.get("1s"));
         assertNotNull(reference.hardRef);
@@ -49,7 +49,7 @@ public class ExpiringReferenceTest
     void testExpiryModeReAccessWithEmptyGet() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
-            new ExpiringReference<Object>(referent, "1s");
+            new ExpiringReference<>(referent, "1s");
         assertNotNull(reference.hardRef);
         Thread.sleep(500);
         assertNotNull(reference.get());
@@ -62,7 +62,7 @@ public class ExpiringReferenceTest
     void testSimpleSoftMode() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
-            new ExpiringReference<Object>(referent, "-1s");
+            new ExpiringReference<>(referent, "-1s");
         assertNull(reference.hardRef);
         assertNotNull(reference.get());
         assertNull(reference.hardRef);
@@ -72,7 +72,7 @@ public class ExpiringReferenceTest
     void testSimplePermMode() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
-            new ExpiringReference<Object>(referent, "0s");
+            new ExpiringReference<>(referent, "0s");
         assertNotNull(reference.hardRef);
         Thread.sleep(500);
         assertNotNull(reference.hardRef);
@@ -84,7 +84,7 @@ public class ExpiringReferenceTest
     void testPermModeFollowedByNonPermGet() throws Exception {
         final Object referent = new Object();
         final ExpiringReference<Object> reference =
-            new ExpiringReference<Object>(referent, "0s");
+            new ExpiringReference<>(referent, "0s");
         assertNotNull(reference.hardRef);
         Thread.sleep(500);
         assertNotNull(reference.hardRef);

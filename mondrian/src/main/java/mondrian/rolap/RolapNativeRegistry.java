@@ -27,7 +27,7 @@ import mondrian.olap.NativeEvaluator;
 public class RolapNativeRegistry extends RolapNative {
 
     private Map<String, RolapNative> nativeEvaluatorMap =
-        new HashMap<String, RolapNative>();
+        new HashMap<>();
 
     private final ReadWriteLock readWriteLock = new ReentrantReadWriteLock();
     private final Lock readLock = readWriteLock.readLock();

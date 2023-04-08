@@ -79,7 +79,7 @@ public class ExpCacheDescriptor {
     }
 
     private void computeDepends(Calc calc, Evaluator evaluator) {
-        final List<Integer> ordinalList = new ArrayList<Integer>();
+        final List<Integer> ordinalList = new ArrayList<>();
         final Member[] members = evaluator.getMembers();
         for (int i = 0; i < members.length; i++) {
             Hierarchy hierarchy = members[i].getHierarchy();

@@ -51,7 +51,7 @@ public class UnionIterator<T> implements Iterator<T> {
             // Retroweaver has its own version of Iterable, but
             // Collection doesn't implement it. Solve the problem by
             // creating an explicit Iterable wrapper.
-            list = new ArrayList<Iterable<? extends T>>(iterables.length);
+            list = new ArrayList<>(iterables.length);
             for (Iterable<? extends T> iterable : iterables) {
                 //noinspection unchecked
                 list.add(new MyIterable(iterable));
@@ -70,7 +70,7 @@ public class UnionIterator<T> implements Iterator<T> {
      */
     public UnionIterator(Collection<? extends T>... iterables) {
         List<Iterable<? extends T>> list =
-            new ArrayList<Iterable<? extends T>>(iterables.length);
+            new ArrayList<>(iterables.length);
         for (Iterable<? extends T> iterable : iterables) {
             //noinspection unchecked
             list.add(new MyIterable(iterable));
@@ -130,10 +130,10 @@ public class UnionIterator<T> implements Iterator<T> {
     public static <T> Iterable<T> over(
         final Iterable<? extends T>... iterables)
     {
-        return new Iterable<T>() {
+        return new Iterable<>() {
             @Override
 			public Iterator<T> iterator() {
-                return new UnionIterator<T>(iterables);
+                return new UnionIterator<>(iterables);
             }
         };
     }
@@ -155,10 +155,10 @@ public class UnionIterator<T> implements Iterator<T> {
     public static <T> Iterable<T> over(
         final Collection<? extends T>... collections)
     {
-        return new Iterable<T>() {
+        return new Iterable<>() {
             @Override
 			public Iterator<T> iterator() {
-                return new UnionIterator<T>(collections);
+                return new UnionIterator<>(collections);
             }
         };
     }

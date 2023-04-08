@@ -27,7 +27,7 @@ public class GroupingSetsCollector {
 
     private final boolean useGroupingSets;
 
-    private ArrayList<GroupingSet> groupingSets = new ArrayList<GroupingSet>();
+    private ArrayList<GroupingSet> groupingSets = new ArrayList<>();
 
     public GroupingSetsCollector(boolean useGroupingSets) {
         this.useGroupingSets = useGroupingSets;

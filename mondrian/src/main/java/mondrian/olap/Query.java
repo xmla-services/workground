@@ -118,10 +118,10 @@ public class Query extends QueryPart {
     /**
      * Definitions of all parameters used in this query.
      */
-    private final List<Parameter> parameters = new ArrayList<Parameter>();
+    private final List<Parameter> parameters = new ArrayList<>();
 
     private final Map<String, Parameter> parametersByName =
-        new HashMap<String, Parameter>();
+        new HashMap<>();
 
     /**
      * Cell properties. Not currently used.
@@ -179,7 +179,7 @@ public class Query extends QueryPart {
     private ResultStyle resultStyle =
         Util.Retrowoven ? ResultStyle.LIST : ResultStyle.ITERABLE;
 
-    private Map<String, Object> evalCache = new HashMap<String, Object>();
+    private Map<String, Object> evalCache = new HashMap<>();
 
     /**
      * List of aliased expressions defined in this query, and where they are
@@ -187,7 +187,7 @@ public class Query extends QueryPart {
      * name.
      */
     private final List<ScopedNamedSet> scopedNamedSets =
-        new ArrayList<ScopedNamedSet>();
+        new ArrayList<>();
     private boolean ownStatement;
 
   /**
@@ -259,12 +259,12 @@ public class Query extends QueryPart {
         this.slicerAxis = slicerAxis;
         this.cellProps = cellProps;
         this.parameters.addAll(Arrays.asList(parameters));
-        this.measuresMembers = new HashSet<Member>();
+        this.measuresMembers = new HashSet<>();
         // assume, for now, that cross joins on virtual cubes can be
         // processed natively; as we parse the query, we'll know otherwise
         this.nativeCrossJoinVirtualCube = true;
         this.strictValidation = strictValidation;
-        this.alertedNonNativeFunDefs = new HashSet<FunDef>();
+        this.alertedNonNativeFunDefs = new HashSet<>();
         statement.setQuery(this);
         resolve();
 
@@ -619,8 +619,8 @@ public class Query extends QueryPart {
         return resultStyle;
     }
 
-    public HashMap<Hierarchy, Calc> subcubeHierarchyCalcs = new HashMap<Hierarchy, Calc>();
-    public HashMap<Hierarchy, HashMap<Member, Member>> subcubeHierarchies = new HashMap<Hierarchy, HashMap<Member, Member>>();
+    public HashMap<Hierarchy, Calc> subcubeHierarchyCalcs = new HashMap<>();
+    public HashMap<Hierarchy, HashMap<Member, Member>> subcubeHierarchies = new HashMap<>();
 
     /**
      * Generates compiled forms of all expressions.
@@ -645,7 +645,7 @@ public class Query extends QueryPart {
                 Exp resultExp = null;
 
                 List<Exp> subcubeAxisExps = this.subcube.getAxisExps();
-                ArrayList<Exp> hierarchyExps = new ArrayList<Exp>();
+                ArrayList<Exp> hierarchyExps = new ArrayList<>();
                 for(int j = 0; j < subcubeAxisExps.size(); j++) {
                     Exp subcubeAxisExp = subcubeAxisExps.get(j);
                     subcubeAxisExp = subcubeAxisExp.accept(compiler.getValidator());
@@ -699,7 +699,7 @@ public class Query extends QueryPart {
                 }
             }
 
-            HashMap<Hierarchy, HashMap<Member, Member>> newSubcubeHierarchies = new HashMap<Hierarchy, HashMap<Member, Member>>();
+            HashMap<Hierarchy, HashMap<Member, Member>> newSubcubeHierarchies = new HashMap<>();
         }
 
         if (formulas != null) {
@@ -742,7 +742,7 @@ public class Query extends QueryPart {
 
         // Validate axes.
         if (axes != null) {
-            Set<Integer> axisNames = new HashSet<Integer>();
+            Set<Integer> axisNames = new HashSet<>();
             for (QueryAxis axis : axes) {
                 validator.validate(axis);
                 if (!axisNames.add(axis.getAxisOrdinal().logicalOrdinal())) {
@@ -873,7 +873,7 @@ public class Query extends QueryPart {
 	public Object[] getChildren() {
         // Chidren are axes, slicer, and formulas (in that order, to be
         // consistent with replaceChild).
-        List<QueryPart> list = new ArrayList<QueryPart>();
+        List<QueryPart> list = new ArrayList<>();
         list.addAll(Arrays.asList(axes));
         if (slicerAxis != null) {
             list.add(slicerAxis);
@@ -924,7 +924,7 @@ public class Query extends QueryPart {
         }
         if (exprType instanceof TupleType) {
             final Type[] types = ((TupleType) exprType).elementTypes;
-            ArrayList<Hierarchy> hierarchyList = new ArrayList<Hierarchy>();
+            ArrayList<Hierarchy> hierarchyList = new ArrayList<>();
             for (Type type : types) {
                 hierarchyList.add(getTypeHierarchy(type));
             }
@@ -1040,7 +1040,7 @@ public class Query extends QueryPart {
                     new StringBuilder("Invalid value '").append(value).append("' for parameter '")
                         .append(parameterName).append("', type ").append(type).toString());
             }
-            List<Member> expList = new ArrayList<Member>();
+            List<Member> expList = new ArrayList<>();
             final List list = (List) value;
             final SetType setType = (SetType) type;
             final Type elementType = setType.getElementType();
@@ -1326,7 +1326,7 @@ public class Query extends QueryPart {
         }
 
         // remove formula from query
-        List<Formula> formulaList = new ArrayList<Formula>();
+        List<Formula> formulaList = new ArrayList<>();
         for (Formula formula1 : formulas) {
             if (!formula1.getUniqueName().equalsIgnoreCase(uniqueName)) {
                 formulaList.add(formula1);
@@ -1400,7 +1400,7 @@ public class Query extends QueryPart {
     }
 
     List<Member> getDefinedMembers() {
-        List<Member> definedMembers = new ArrayList<Member>();
+        List<Member> definedMembers = new ArrayList<>();
         for (final Formula formula : formulas) {
             if (formula.isMember()
                 && formula.getElement() != null
@@ -1730,7 +1730,7 @@ public class Query extends QueryPart {
 
             Hierarchy hierarchy = level.getHierarchy();
             if(query.subcubeHierarchies.containsKey(hierarchy)) {
-                ArrayList<Member> newMembers = new ArrayList<Member>();
+                ArrayList<Member> newMembers = new ArrayList<>();
                 HashMap<Member, Member> subcubeMembers = query.subcubeHierarchies.get(hierarchy);
                 for (int i = 0; i < members.size(); i++) {
                     Member sourceMember = members.get(i);
@@ -1782,7 +1782,7 @@ public class Query extends QueryPart {
             //Must be RolapMember, not LimitedRollupMember
             Member rolapMember = query.getRolapMember(member);
             Map<Member, Access> sourceMembers = (Map<Member, Access>)super.getMemberChildrenWithDetails(rolapMember, evaluator);
-            HashMap<Member, Access> newMembers = new HashMap<Member, Access>();
+            HashMap<Member, Access> newMembers = new HashMap<>();
             for(Map.Entry<Member, Access> entry : sourceMembers.entrySet()) {
                 Member subcubeMember = query.getSubcubeMember(entry.getKey(), false);
                 if(subcubeMember != null) {
@@ -1818,7 +1818,7 @@ public class Query extends QueryPart {
 
         @Override
 		public List<Member> getCalculatedMembers(Hierarchy hierarchy) {
-            List<Member> result = new ArrayList<Member>();
+            List<Member> result = new ArrayList<>();
             // Add calculated members in the cube.
             final List<Member> calculatedMembers =
                 super.getCalculatedMembers(hierarchy);
@@ -1836,7 +1836,7 @@ public class Query extends QueryPart {
 		public List<Member> getCalculatedMembers(Level level) {
             List<Member> hierarchyMembers =
                 getCalculatedMembers(level.getHierarchy());
-            List<Member> result = new ArrayList<Member>();
+            List<Member> result = new ArrayList<>();
             for (Member member : hierarchyMembers) {
                 if (member.getLevel().equals(level)) {
                     result.add(member);
@@ -2032,7 +2032,7 @@ public class Query extends QueryPart {
         @Override
 		public List<NameResolver.Namespace> getNamespaces() {
             final List<NameResolver.Namespace> list =
-                new ArrayList<NameResolver.Namespace>();
+                new ArrayList<>();
             list.add(this);
             list.addAll(super.getNamespaces());
             return list;
@@ -2157,7 +2157,7 @@ public class Query extends QueryPart {
         @Override
 		public List<NameResolver.Namespace> getNamespaces() {
             final List<NameResolver.Namespace> list =
-                new ArrayList<NameResolver.Namespace>();
+                new ArrayList<>();
             list.add(this);
             list.addAll(super.getNamespaces());
             return list;
@@ -2465,7 +2465,7 @@ public class Query extends QueryPart {
     }
 
     private List<Member> getSubcubeMembers(List<Member> members, boolean addNullMember) {
-        ArrayList<Member> newMembers = new ArrayList<Member>();
+        ArrayList<Member> newMembers = new ArrayList<>();
         for(Member sourceMember: members) {
             Member subcubeMember = this.getSubcubeMember(sourceMember, addNullMember);
             if(subcubeMember != null) {
@@ -2476,7 +2476,7 @@ public class Query extends QueryPart {
     }
 
     private List<Member> getRolapMembers(List<Member> members) {
-        ArrayList<Member> newMembers = new ArrayList<Member>();
+        ArrayList<Member> newMembers = new ArrayList<>();
         for(Member sourceMember: members) {
             newMembers.add(this.getRolapMember(sourceMember));
         }

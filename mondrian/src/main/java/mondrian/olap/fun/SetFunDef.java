@@ -259,7 +259,7 @@ public class SetFunDef extends FunDefBase {
         ExpCompiler compiler,
         List<ResultStyle> resultStyles)
     {
-        List<Calc> calcs = new ArrayList<Calc>(args.length);
+        List<Calc> calcs = new ArrayList<>(args.length);
         for (Exp arg : args) {
             calcs.add(SetFunDef.createCalc(arg, compiler, resultStyles));
         }

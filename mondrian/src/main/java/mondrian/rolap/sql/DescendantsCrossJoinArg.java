@@ -49,7 +49,7 @@ public class DescendantsCrossJoinArg implements CrossJoinArg {
         if (member == null) {
             return null;
         }
-        final List<RolapMember> list = new ArrayList<RolapMember>();
+        final List<RolapMember> list = new ArrayList<>();
         list.add(member);
         return list;
     }

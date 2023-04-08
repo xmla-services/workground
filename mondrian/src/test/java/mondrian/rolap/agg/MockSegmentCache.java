@@ -39,10 +39,10 @@ import mondrian.spi.SegmentHeader;
  */
 public class MockSegmentCache implements SegmentCache {
     private static final Map<SegmentHeader, SegmentBody> cache =
-        new ConcurrentHashMap<SegmentHeader, SegmentBody>();
+        new ConcurrentHashMap<>();
 
     private final List<SegmentCacheListener> listeners =
-        new CopyOnWriteArrayList<SegmentCacheListener>();
+        new CopyOnWriteArrayList<>();
 
     private Random rnd;
 
@@ -154,7 +154,7 @@ public class MockSegmentCache implements SegmentCache {
 
     @Override
 	public List<SegmentHeader> getSegmentHeaders() {
-        return new ArrayList<SegmentHeader>(cache.keySet());
+        return new ArrayList<>(cache.keySet());
     }
 
     @Override

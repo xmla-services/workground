@@ -124,7 +124,7 @@ call.getFunName(),call.getType(), new Calc[] {memberCalc, indexValueCalc})
         if ((indexValue == 0) || member.isNull()) {
             return Collections.emptyList();
         }
-        List<Member> list = new ArrayList<Member>();
+        List<Member> list = new ArrayList<>();
 
         // set with just member
         if ((indexValue == 1) || (indexValue == -1)) {

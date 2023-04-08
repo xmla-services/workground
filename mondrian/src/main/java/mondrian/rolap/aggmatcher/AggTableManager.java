@@ -335,7 +335,7 @@ public class AggTableManager {
      */
     protected List<ExplicitRules.Group> getAggGroups(RolapStar star) {
         List<ExplicitRules.Group> aggGroups =
-            new ArrayList<ExplicitRules.Group>();
+            new ArrayList<>();
         for (RolapCube cube : schema.getCubesWithStar(star)) {
             if (cube.hasAggGroup() && cube.getAggGroup().hasRules()) {
                 aggGroups.add(cube.getAggGroup());

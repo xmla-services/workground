@@ -689,7 +689,7 @@ public class BuiltinFunTable extends FunTableImpl {
                     {
                         Member member =
                             evaluator.getPreviousContext(hierarchy);
-                        List<Member> members = new ArrayList<Member>();
+                        List<Member> members = new ArrayList<>();
                         evaluator.getSchemaReader()
                             .getParentChildContributingChildren(
                                 member.getDataMember(),
@@ -897,7 +897,7 @@ public class BuiltinFunTable extends FunTableImpl {
                 if (member.isNull()) {
                     return Collections.emptyList();
                 }
-                final List<Member> result = new ArrayList<Member>();
+                final List<Member> result = new ArrayList<>();
                 result.add(member);
                 schemaReader.getMemberAncestors(member, result);
                 return result;

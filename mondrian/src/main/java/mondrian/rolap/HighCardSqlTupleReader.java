@@ -73,7 +73,7 @@ protected void prepareTuples(
       if ( execQuery ) {
         // we're only reading tuples from the targets that are
         // non-enum targets
-        List<TargetBase> partialTargets = new ArrayList<TargetBase>();
+        List<TargetBase> partialTargets = new ArrayList<>();
         for ( TargetBase target : targets ) {
           if ( target.getSrcMembers() == null ) {
             partialTargets.add( target );
@@ -165,7 +165,7 @@ public TupleList readTuples(
     }
 
     final List<List<Member>> list =
-      new TraversalList<Member>( lists, Member.class );
+      new TraversalList<>( lists, Member.class );
     TupleList tupleList = new DelegatingTupleList( n, list );
 
     // need to hierarchize the columns from the enumerated targets

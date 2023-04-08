@@ -666,7 +666,7 @@ public interface BitKey
          */
         @Override
 		public Iterator<Integer> iterator() {
-            return new Iterator<Integer>() {
+            return new Iterator<>() {
                 int pos = -1;
                 long bits = Small.this.bits;
                 @Override
@@ -1066,7 +1066,7 @@ public interface BitKey
         }
         @Override
 		public Iterator<Integer> iterator() {
-            return new Iterator<Integer>() {
+            return new Iterator<>() {
                 long bits0 = Mid128.this.bits0;
                 long bits1 = Mid128.this.bits1;
                 int pos = -1;
@@ -1588,7 +1588,7 @@ public interface BitKey
 
         @Override
 		public Iterator<Integer> iterator() {
-            return new Iterator<Integer>() {
+            return new Iterator<>() {
                 long[] bits = Big.this.bits.clone();
                 int pos = -1;
                 int index = 0;

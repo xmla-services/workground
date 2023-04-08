@@ -55,7 +55,7 @@ public class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
     @Override
 	protected Map<String, String> getCatalogNameUrls(Connection connection) {
         if (catalogNameUrls == null) {
-            catalogNameUrls = new TreeMap<String, String>();
+            catalogNameUrls = new TreeMap<>();
             String connectString = connection.getConnectString();
             PropertyList connectProperties =
                 Util.parseConnectString(connectString);

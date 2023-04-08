@@ -134,7 +134,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         } else {
           level = levelCalc.evaluateLevel( evaluator );
         }
-        List<Member> result = new ArrayList<Member>();
+        List<Member> result = new ArrayList<>();
         assert list.getArity() == 1;
         for ( Member member : list.slice( 0 ) ) {
           result.add( member );

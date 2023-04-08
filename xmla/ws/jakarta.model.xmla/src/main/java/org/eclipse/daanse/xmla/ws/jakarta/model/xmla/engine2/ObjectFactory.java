@@ -53,7 +53,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2003/engine/2", name = "MemberKeysUnique")
   public JAXBElement<String> createMemberKeysUnique(String value) {
-    return new JAXBElement<String>(_MemberKeysUnique_QNAME, String.class, null, value);
+    return new JAXBElement<>(_MemberKeysUnique_QNAME, String.class, null, value);
   }
 
 }

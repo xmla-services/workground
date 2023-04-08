@@ -29,7 +29,7 @@ public class SchemaTreeCellEditor
     private final ClassLoader myClassLoader;
     JComboBox listEditor;
     final List<CellEditorListener> listeners =
-        new ArrayList<CellEditorListener>();
+        new ArrayList<>();
 
     /** Creates a new instance of SchemaTreeCellEditor */
     public SchemaTreeCellEditor(

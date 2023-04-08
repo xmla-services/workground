@@ -65,7 +65,7 @@ abstract class MondrianOlap4jCellSet
     protected boolean closed;
     private final MondrianOlap4jCellSetMetaData metaData;
     private final List<CellSetAxis> axisList =
-        new ArrayList<CellSetAxis>();
+        new ArrayList<>();
     private CellSetAxis filterAxis;
 
     /**
@@ -243,7 +243,7 @@ abstract class MondrianOlap4jCellSet
     @Override
 	public List<Integer> ordinalToCoordinates(int ordinal) {
         final int[] ints = ordinalToCoordinateArray(ordinal);
-        final List<Integer> list = new ArrayList<Integer>(ints.length);
+        final List<Integer> list = new ArrayList<>(ints.length);
         for (int i : ints) {
             list.add(i);
         }

@@ -104,7 +104,7 @@ public class SqlQueryTest  extends BatchTestCase {
             sqlQuery.addGroupingFunction("gf0");
             sqlQuery.addFromTable("s", "t1", "t1alias", null, null, true);
             sqlQuery.addWhere("a=b");
-            ArrayList<String> groupingsetsList = new ArrayList<String>();
+            ArrayList<String> groupingsetsList = new ArrayList<>();
             groupingsetsList.add("gs1");
             groupingsetsList.add("gs2");
             groupingsetsList.add("gs3");
@@ -197,7 +197,7 @@ public class SqlQueryTest  extends BatchTestCase {
     void testToStringForForcedIndexHint(TestingContext context) {
         Connection connection = context.createConnection();
         prepareContext(connection);
-        Map<String, String> hints = new HashMap<String, String>();
+        Map<String, String> hints = new HashMap<>();
         hints.put("force_index", "myIndex");
 
         String unformattedMysql =
@@ -499,7 +499,7 @@ public class SqlQueryTest  extends BatchTestCase {
             sqlQuery.addWhere("a=b");
             sqlQuery.addGroupingFunction("g1");
             sqlQuery.addGroupingFunction("g2");
-            ArrayList<String> groupingsetsList = new ArrayList<String>();
+            ArrayList<String> groupingsetsList = new ArrayList<>();
             groupingsetsList.add("gs1");
             groupingsetsList.add("gs2");
             groupingsetsList.add("gs3");
@@ -554,12 +554,12 @@ public class SqlQueryTest  extends BatchTestCase {
             sqlQuery.addGroupingFunction("c0");
             sqlQuery.addGroupingFunction("c1");
             sqlQuery.addGroupingFunction("c2");
-            ArrayList<String> groupingSetlist1 = new ArrayList<String>();
+            ArrayList<String> groupingSetlist1 = new ArrayList<>();
             groupingSetlist1.add("c0");
             groupingSetlist1.add("c1");
             groupingSetlist1.add("c2");
             sqlQuery.addGroupingSet(groupingSetlist1);
-            ArrayList<String> groupingsetsList2 = new ArrayList<String>();
+            ArrayList<String> groupingsetsList2 = new ArrayList<>();
             groupingsetsList2.add("c1");
             groupingsetsList2.add("c2");
             sqlQuery.addGroupingSet(groupingsetsList2);

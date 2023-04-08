@@ -823,7 +823,7 @@ public class XmlaHandler {
         }
     }
 
-    private ArrayList<XmlaRequest> currentRequests = new ArrayList<XmlaRequest>();
+    private ArrayList<XmlaRequest> currentRequests = new ArrayList<>();
 
     private void checkedCanceled(XmlaRequest request) {
         String canceled = request.getProperties().get("CANCELED");
@@ -928,7 +928,7 @@ public class XmlaHandler {
                             columns.add(
                                     new Column("Text", Types.VARCHAR, 0)
                             );
-                            List<Object[]> rows = new ArrayList<Object[]>();
+                            List<Object[]> rows = new ArrayList<>();
 
                             try {
                                 mondrian.rolap.RolapSchema rolapSchema = new mondrian.rolap.RolapSchema(
@@ -1005,7 +1005,7 @@ public class XmlaHandler {
                 } else if (queryPart instanceof DmvQuery) {
                     DmvQuery dmvQuery = (DmvQuery)queryPart;
 
-                    HashMap<String, String> upperCaseProperties = new HashMap<String, String>();
+                    HashMap<String, String> upperCaseProperties = new HashMap<>();
                     for (String key : request.getProperties().keySet()) {
                         String newKey = null;
                         if(key != null) {
@@ -1014,9 +1014,9 @@ public class XmlaHandler {
                         upperCaseProperties.put(newKey, request.getProperties().get(key));
                     }
 
-                    HashMap<String, Object> restrictions = new HashMap<String, Object>();
+                    HashMap<String, Object> restrictions = new HashMap<>();
                     if(upperCaseProperties.containsKey(PropertyDefinition.Catalog.name().toUpperCase())) {
-                        List<String> restriction = new ArrayList<String>();
+                        List<String> restriction = new ArrayList<>();
                         restriction.add(request.getProperties().get("Catalog"));
                         restrictions.put(
                                 Property.StandardMemberProperty.CATALOG_NAME.name(),
@@ -1819,7 +1819,7 @@ public class XmlaHandler {
     }
 
     static class TabularRowSet implements QueryResult {
-        private List<Column> columns = new ArrayList<Column>();
+        private List<Column> columns = new ArrayList<>();
         private List<Object[]> rows;
         private int totalCount;
 
@@ -1856,7 +1856,7 @@ public class XmlaHandler {
             // Populate data; assume that SqlStatement is already positioned
             // on first row (or isDone() is true), and assume that the
             // number of rows returned is limited.
-            rows = new ArrayList<Object[]>();
+            rows = new ArrayList<>();
             while (rs.next()) {
                 Object[] row = new Object[columnCount];
                 for (int i = 0; i < columnCount; i++) {
@@ -1887,7 +1887,7 @@ public class XmlaHandler {
                 }
             }
 
-            rows = new ArrayList<Object[]>();
+            rows = new ArrayList<>();
             Object[] row = new Object[columns.size()];
             for (int k = 0; k < row.length; k++) {
                 row[k] = k;
@@ -2206,7 +2206,7 @@ public class XmlaHandler {
             public String getXsdType() {return this.xsdType; }
         }
 
-        protected static Map<String, CellProperty> cellPropertyMap =new HashMap<String, CellProperty>() {{
+        protected static Map<String, CellProperty> cellPropertyMap =new HashMap<>() {{
             put("CELL_ORDINAL", new CellProperty("CELL_ORDINAL", "CellOrdinal", "xsd:unsignedInt"));
             put("VALUE", new CellProperty("VALUE", "Value", null));
             put("FORMATTED_VALUE", new CellProperty("FORMATTED_VALUE", "FmtValue", "xsd:string"));
@@ -2226,7 +2226,7 @@ public class XmlaHandler {
                 rename(StandardMemberProperty.DISPLAY_INFO, "DisplayInfo"));
 
         protected static final Map<String, StandardMemberProperty> longProps =
-            new HashMap<String, StandardMemberProperty>();
+            new HashMap<>();
 
         static {
             longProps.put("UName", StandardMemberProperty.MEMBER_UNIQUE_NAME);
@@ -2302,7 +2302,7 @@ public class XmlaHandler {
         private XmlaExtra extra;
         private OlapConnection connection;
         private mondrian.olap4j.MondrianOlap4jConnection mondrianOlap4jConnection;
-        private List<String> queryCellPropertyNames = new ArrayList<String> ();
+        private List<String> queryCellPropertyNames = new ArrayList<> ();
 
         protected MDDataSet_Multidimensional(
             CellSet cellSet,
@@ -2375,7 +2375,7 @@ public class XmlaHandler {
             // -----------
             writer.startSequence("AxesInfo", "AxisInfo");
             final List<CellSetAxis> axes = cellSet.getAxes();
-            List<Hierarchy> axisHierarchyList = new ArrayList<Hierarchy>();
+            List<Hierarchy> axisHierarchyList = new ArrayList<>();
             for (int i = 0; i < axes.size(); i++) {
                 List<Hierarchy> hiers =
                     axisInfo(writer, axes.get(i), "Axis" + i);
@@ -2394,11 +2394,11 @@ public class XmlaHandler {
                 // The slicer axes contains the default hierarchy
                 // of each dimension not seen on another axis.
                 List<Dimension> unseenDimensionList =
-                    new ArrayList<Dimension>(cube.getDimensions());
+                    new ArrayList<>(cube.getDimensions());
                 for (Hierarchy hier1 : axisHierarchyList) {
                     unseenDimensionList.remove(hier1.getDimension());
                 }
-                hierarchies = new ArrayList<Hierarchy>();
+                hierarchies = new ArrayList<>();
                 for (Dimension dimension : unseenDimensionList) {
                     for (Hierarchy hierarchy : dimension.getHierarchies()) {
                         hierarchies.add(hierarchy);
@@ -2426,7 +2426,7 @@ public class XmlaHandler {
                     cellPropertyName = cellPropertyName.toUpperCase();
                 }
                 CellProperty cellProperty = cellPropertyMap.get(cellPropertyName);
-                List<Object> values = new ArrayList<Object>();
+                List<Object> values = new ArrayList<>();
                 values.add("name");
                 values.add(cellPropertyName);
                 if(cellProperty != null && cellProperty.getXsdType() != null) {
@@ -2456,7 +2456,7 @@ public class XmlaHandler {
             Iterator<org.olap4j.Position> it = axis.getPositions().iterator();
             if (it.hasNext()) {
                 final org.olap4j.Position position = it.next();
-                hierarchies = new ArrayList<Hierarchy>();
+                hierarchies = new ArrayList<>();
                 for (Member member : position.getMembers()) {
                     hierarchies.add(member.getHierarchy());
                 }
@@ -2539,7 +2539,7 @@ public class XmlaHandler {
             if (longProp == null) {
                 longProp = prop;
             }
-            List<Object> values = new ArrayList<Object>();
+            List<Object> values = new ArrayList<>();
             values.add("name");
             values.add(
                 new StringBuilder(hierarchy.getUniqueName())
@@ -2633,7 +2633,7 @@ public class XmlaHandler {
                 writer.startSequence("Tuples", "Tuple");
                 writer.startSequence("Tuple", "Member");
 
-                Map<String, Integer> memberMap = new HashMap<String, Integer>();
+                Map<String, Integer> memberMap = new HashMap<>();
                 Member positionMember;
                 final List<Position> slicerPositions =
                     slicerAxis.getPositions();
@@ -2941,7 +2941,7 @@ public class XmlaHandler {
         private void cellData(SaxWriter writer) {
             writer.startSequence("CellData", "Cell");
             final int axisCount = cellSet.getAxes().size();
-            List<Integer> pos = new ArrayList<Integer>();
+            List<Integer> pos = new ArrayList<>();
             for (int i = 0; i < axisCount; i++) {
                 pos.add(-1);
             }
@@ -3207,7 +3207,7 @@ public class XmlaHandler {
             // Build a list of the lowest level used on each non-COLUMNS axis.
             Level[] levels = new Level[dimensionCount];
             List<ColumnHandler> columnHandlerList =
-                new ArrayList<ColumnHandler>();
+                new ArrayList<>();
             int memberOrdinal = 0;
             if (!empty) {
                 for (int i = axes.size() - 1; i > 0; i--) {
@@ -3466,7 +3466,7 @@ public class XmlaHandler {
         try {
             //copied from rowset.unparse(response);
 
-            final List<Rowset.Row> rows = new ArrayList<Rowset.Row>();
+            final List<Rowset.Row> rows = new ArrayList<>();
             rowset.populate(response, null, rows);
             final Comparator<Rowset.Row> comparator = rowsetDefinition.getComparator();
             if (comparator != null) {

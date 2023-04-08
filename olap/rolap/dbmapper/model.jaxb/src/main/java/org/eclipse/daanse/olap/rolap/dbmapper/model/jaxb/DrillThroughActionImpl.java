@@ -58,7 +58,7 @@ public class DrillThroughActionImpl implements DrillThroughAction {
     @Override
     public List<DrillThroughElement> drillThroughElement() {
         if (drillThroughElement == null) {
-            drillThroughElement = new ArrayList<DrillThroughElement>();
+            drillThroughElement = new ArrayList<>();
         }
         return this.drillThroughElement;
     }

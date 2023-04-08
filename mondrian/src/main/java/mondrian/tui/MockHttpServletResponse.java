@@ -109,7 +109,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
         this.charEncoding = "ISO-8859-1";
         this.errorCode = SC_OK;
         this.statusCode = SC_OK;
-        this.headers = new HashMap<String, List<String>>();
+        this.headers = new HashMap<>();
         this.outputStream = new MockServletOutputStream(bufferSize);
     }
 
@@ -255,7 +255,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
     @Override
 	public void addCookie(Cookie cookie) {
         if (cookies.isEmpty()) {
-            cookies = new ArrayList<Cookie>();
+            cookies = new ArrayList<>();
         }
         cookies.add(cookie);
     }
@@ -375,7 +375,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	public void setHeader(String name, String value) {
         List<String> valueList = headers.get(name);
         if (valueList == null) {
-            valueList = new ArrayList<String>();
+            valueList = new ArrayList<>();
             headers.put(name, valueList);
         }
         valueList.add(value);
@@ -389,7 +389,7 @@ public class MockHttpServletResponse implements HttpServletResponse {
 	public void addHeader(String name, String value) {
         List<String> valueList = headers.get(name);
         if (null == valueList) {
-            valueList = new ArrayList<String>();
+            valueList = new ArrayList<>();
             headers.put(name, valueList);
         }
         valueList.add(value);

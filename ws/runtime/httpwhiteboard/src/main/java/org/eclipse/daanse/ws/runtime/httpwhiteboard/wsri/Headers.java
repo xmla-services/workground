@@ -53,7 +53,7 @@ public class Headers implements Map<String,List<String>> {
     HashMap<String,List<String>> map;
 
     public Headers() {
-        map = new HashMap<String,List<String>>(32);
+        map = new HashMap<>(32);
     }
 
     /* Normalize the key by converting to following form.
@@ -144,7 +144,7 @@ public class Headers implements Map<String,List<String>> {
         String k = normalize(key);
         List<String> l = map.get(k);
         if (l == null) {
-            l = new LinkedList<String>();
+            l = new LinkedList<>();
             map.put(k,l);
         }
         l.add (value);
@@ -158,7 +158,7 @@ public class Headers implements Map<String,List<String>> {
      * @param value the header value to set.
      */
     public void set (String key, String value) {
-        LinkedList<String> l = new LinkedList<String>();
+        LinkedList<String> l = new LinkedList<>();
         l.add (value);
         put (key, l);
     }

@@ -206,7 +206,7 @@ way too noisy
         }
 */
 
-        List<Element> elems = new ArrayList<Element>();
+        List<Element> elems = new ArrayList<>();
         NodeList nlst = parent.getChildNodes();
         for (int i = 0, nlen = nlst.getLength(); i < nlen; i++) {
             Node n = nlst.item(i);
@@ -409,7 +409,7 @@ way too noisy
                     }
                 }
             );
-        List<Rowset.Row> rowList = new ArrayList<Rowset.Row>();
+        List<Rowset.Row> rowList = new ArrayList<>();
         rowset.populate(
             new DefaultXmlaResponse(
                 new ByteArrayOutputStream(),
@@ -419,7 +419,7 @@ way too noisy
             rowList);
         MetadataRowset result = new MetadataRowset();
         final List<RowsetDefinition.Column> colDefs =
-            new ArrayList<RowsetDefinition.Column>();
+            new ArrayList<>();
         for (RowsetDefinition.Column columnDefinition
             : rowsetDefinition.columnDefinitions)
         {
@@ -521,8 +521,8 @@ way too noisy
      * Result of a metadata query.
      */
     public static class MetadataRowset {
-        public final List<String> headerList = new ArrayList<String>();
-        public final List<List<Object>> rowList = new ArrayList<List<Object>>();
+        public final List<String> headerList = new ArrayList<>();
+        public final List<List<Object>> rowList = new ArrayList<>();
     }
 
     /**
@@ -562,7 +562,7 @@ way too noisy
 
     public static class ElementNameEncoder {
         private final Map<String, String> map =
-            new ConcurrentHashMap<String, String>();
+            new ConcurrentHashMap<>();
         public static final ElementNameEncoder INSTANCE =
             new ElementNameEncoder();
 

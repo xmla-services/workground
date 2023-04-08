@@ -110,7 +110,7 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         List<RolapMember> children,
         MemberChildrenConstraint constraint)
     {
-        List<RolapMember> fullChildren = new ArrayList<RolapMember>();
+        List<RolapMember> fullChildren = new ArrayList<>();
         memberReader.getMemberChildren
           (parentMember, fullChildren, constraint);
         return processMemberChildren(fullChildren, children, constraint);
@@ -132,7 +132,7 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         List<RolapMember> children,
         MemberChildrenConstraint constraint)
     {
-        List<RolapMember> fullChildren = new ArrayList<RolapMember>();
+        List<RolapMember> fullChildren = new ArrayList<>();
         memberReader.getMemberChildren(parentMembers, fullChildren, constraint);
         return processMemberChildren(fullChildren, children, constraint);
     }
@@ -145,7 +145,7 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         // todo: optimize if parentMember is beyond last level
         List<RolapMember> grandChildren = null;
         Map<RolapMember, Access> memberToAccessMap =
-            new LinkedHashMap<RolapMember, Access>();
+            new LinkedHashMap<>();
         for (int i = 0; i < fullChildren.size(); i++) {
             RolapMember member = fullChildren.get(i);
 
@@ -158,7 +158,7 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
                 // we deal with raggedness before we apply access-control.
                 fullChildren.remove(i);
                 if (grandChildren == null) {
-                    grandChildren = new ArrayList<RolapMember>();
+                    grandChildren = new ArrayList<>();
                 } else {
                     grandChildren.clear();
                 }
@@ -261,7 +261,7 @@ public class RestrictedMemberReader extends DelegatingMemberReader {
         final List<RolapMember> membersInLevel =
             memberReader.getMembersInLevel(
                 level, constraint);
-        List<RolapMember> filteredMembers = new ArrayList<RolapMember>();
+        List<RolapMember> filteredMembers = new ArrayList<>();
         filterMembers(membersInLevel, filteredMembers);
         return filteredMembers;
     }

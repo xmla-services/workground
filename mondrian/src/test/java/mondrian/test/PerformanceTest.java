@@ -293,7 +293,7 @@ public class PerformanceTest {
     // Take customers 0-2000 and 5000-7000. Using contiguous bursts,
     // Mondrian has a chance to optimize how it reads cells from the
     // database.
-    List<Member> memberList = new ArrayList<Member>();
+    List<Member> memberList = new ArrayList<>();
     for ( int i = 0; i < positionList.size(); i++ ) {
       Position position = positionList.get( i );
       ++i;
@@ -725,7 +725,7 @@ public class PerformanceTest {
     final int limit = 10;  // should be 10 in checked-in code
     final int runCount = 10;
 
-    final List<Integer> originals = new ArrayList<Integer>( N );
+    final List<Integer> originals = new ArrayList<>( N );
     Random random = new Random( 1235 );
     for ( int i = 0; i < N; i++ ) {
       originals.add( random.nextInt( N ) );
@@ -821,7 +821,7 @@ public class PerformanceTest {
           }
         default:
           final CountingComparator<Integer> comp =
-            new CountingComparator<Integer>();
+            new CountingComparator<>();
           List<Integer> x = sort( list, comp, limit );
           if ( limit == 10 && list.size() == 1000000 && false ) {
             assertEquals(compCount, comp.count, name());
@@ -837,7 +837,7 @@ public class PerformanceTest {
    */
   static class Statistician {
     private final String desc;
-    private final List<Long> durations = new ArrayList<Long>();
+    private final List<Long> durations = new ArrayList<>();
 
     public Statistician( String desc ) {
       super();

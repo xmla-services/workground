@@ -38,8 +38,8 @@ public class DmvXmlaRequest
             String sessionId
     )
     {
-        this.restrictions = new HashMap<String, Object>(restrictions);
-        this.properties = new HashMap<String, String>(properties);
+        this.restrictions = new HashMap<>(restrictions);
+        this.properties = new HashMap<>(properties);
         this.roleName = roleName;
         this.requestType = requestType;
         this.username = username;
@@ -51,7 +51,7 @@ public class DmvXmlaRequest
 	public XmlaConstants.Method getMethod() { return XmlaConstants.Method.DISCOVER; }
 
     @Override
-	public Map<String, String> getProperties() { return new HashMap<String, String>(); }
+	public Map<String, String> getProperties() { return new HashMap<>(); }
 
     @Override
 	public Map<String, Object> getRestrictions() { return this.restrictions; }

@@ -179,7 +179,7 @@ public class RolapSchemaReaderTest {
         Connection connection = context.createConnection();
         try {
             SchemaReader reader = connection.getSchemaReader().withLocus();
-            final Map<String, Cube> cubes = new HashMap<String, Cube>();
+            final Map<String, Cube> cubes = new HashMap<>();
             for (Cube cube : reader.getCubes()) {
                 cubes.put(cube.getName(), cube);
             }
@@ -189,9 +189,9 @@ public class RolapSchemaReaderTest {
 
             final Cube salesCube = cubes.get("Sales");
             final Map<String, Dimension> dimensions =
-                new HashMap<String, Dimension>();
+                new HashMap<>();
             final Map<String, Hierarchy> hierarchies =
-                new HashMap<String, Hierarchy>();
+                new HashMap<>();
             for (Dimension dimension : reader.getCubeDimensions(salesCube)) {
                 dimensions.put(dimension.getName(), dimension);
                 for (Hierarchy hierarchy

@@ -257,7 +257,7 @@ public abstract class AbstractQuerySpec implements QuerySpec {
     {
         final Dialect dialect = outerSqlQuery.getDialect();
         final Map<String, String> groupingSetsAliases =
-            new HashMap<String, String>();
+            new HashMap<>();
         // Generate something like
         //
         //  select d0, d1, count(m0)

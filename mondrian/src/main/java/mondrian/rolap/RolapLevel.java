@@ -200,7 +200,7 @@ public class RolapLevel extends LevelBase {
             }
         }
         this.properties = properties;
-        List<Property> list = new ArrayList<Property>();
+        List<Property> list = new ArrayList<>();
         for (Level level = this; level != null;
              level = level.getParentLevel())
         {
@@ -394,7 +394,7 @@ public class RolapLevel extends LevelBase {
     // helper for constructor
     private static RolapProperty[] createProperties(org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level xmlLevel)
     {
-        List<RolapProperty> list = new ArrayList<RolapProperty>();
+        List<RolapProperty> list = new ArrayList<>();
         final Expression nameExp = LevelUtil.getNameExp(xmlLevel);
 
         if (nameExp != null) {
@@ -561,7 +561,7 @@ public class RolapLevel extends LevelBase {
     {
         if (name instanceof Id.KeySegment) {
             Id.KeySegment keySegment = (Id.KeySegment) name;
-            List<Comparable> keyValues = new ArrayList<Comparable>();
+            List<Comparable> keyValues = new ArrayList<>();
             for (Id.NameSegment nameSegment : keySegment.getKeyParts()) {
                 final String keyValue = nameSegment.name;
                 if (RolapUtil.mdxNullLiteral().equalsIgnoreCase(keyValue)) {
@@ -607,7 +607,7 @@ public class RolapLevel extends LevelBase {
 
     private List<Expression> getInheritedKeyExps() {
         final List<Expression> list =
-            new ArrayList<Expression>();
+            new ArrayList<>();
         for (RolapLevel x = this;; x = (RolapLevel) x.getParentLevel()) {
             final Expression keyExp1 = x.getKeyExp();
             if (keyExp1 != null) {

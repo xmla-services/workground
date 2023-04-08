@@ -93,7 +93,7 @@ public class CrossJoinFunDef extends FunDefBase {
   @Override
 public Type getResultType( Validator validator, Exp[] args ) {
     // CROSSJOIN(<Set1>,<Set2>) has type [Hie1] x [Hie2].
-    List<MemberType> list = new ArrayList<MemberType>();
+    List<MemberType> list = new ArrayList<>();
     for ( Exp arg : args ) {
       final Type type = arg.getType();
       if ( type instanceof SetType ) {
@@ -464,7 +464,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         final List<List<List<Member>>> lists = Arrays.<List<List<Member>>> asList( l1, l2 );
         final Member[] members = new Member[arity];
 
-        final CartesianProductList cartesianProductList = new CartesianProductList<List<Member>>( lists );
+        final CartesianProductList cartesianProductList = new CartesianProductList<>( lists );
 
         @Override
         public List<Member> get( int index ) {
@@ -532,7 +532,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
 	@SuppressWarnings( { "unchecked" } )
     protected TupleList makeList( final TupleList l1, final TupleList l2 ) {
       final int arity = l1.getArity() + l2.getArity();
-      final List<Member> members = new ArrayList<Member>( arity * l1.size() * l2.size() );
+      final List<Member> members = new ArrayList<>( arity * l1.size() * l2.size() );
       for ( List<Member> ma1 : l1 ) {
         for ( List<Member> ma2 : l2 ) {
           members.addAll( ma1 );
@@ -618,7 +618,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     // large - which means we're allocating a huge array which we might
     // pare down later by applying NON EMPTY constraints - which is a
     // concern.
-    List<Member> result = new ArrayList<Member>( (int) size * arity );
+    List<Member> result = new ArrayList<>( (int) size * arity );
 
     final Member[] partialArray = new Member[arity];
     final List<Member> partial = Arrays.asList( partialArray );
@@ -653,7 +653,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
 
     private final Set<Member> queryMeasureSet;
     private final ResolvedFunCallFinder finder;
-    private final Set<Member> activeMeasures = new HashSet<Member>();
+    private final Set<Member> activeMeasures = new HashSet<>();
 
     /**
      * Creates a MeasureVisitor.
@@ -787,8 +787,8 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
     // This information is used for each iteration so it makes
     // sense to create and cache it.
     if ( measureSet == null || memberSet == null ) {
-      measureSet = new HashSet<Member>();
-      memberSet = new HashSet<Member>();
+      measureSet = new HashSet<>();
+      memberSet = new HashSet<>();
       Set<Member> queryMeasureSet = query.getMeasuresMembers();
       MeasureVisitor measureVisitor = new MeasureVisitor( measureSet, call );
 
@@ -847,7 +847,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
         }
       }
 
-      Map<Hierarchy, Set<Member>> mapOfSlicerMembers = new HashMap<Hierarchy, Set<Member>>();
+      Map<Hierarchy, Set<Member>> mapOfSlicerMembers = new HashMap<>();
       if ( evaluator instanceof RolapEvaluator ) {
         RolapEvaluator rev = (RolapEvaluator) evaluator;
         mapOfSlicerMembers = rev.getSlicerMembersByHierarchy();
@@ -860,8 +860,8 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
       // All Members and others elements will be an array of all top-level
       // Members when there is not an All Member.
       SchemaReader schemaReader = evaluator.getSchemaReader();
-      allMemberList = new ArrayList<Member>();
-      List<Member[]> nonAllMemberList = new ArrayList<Member[]>();
+      allMemberList = new ArrayList<>();
+      List<Member[]> nonAllMemberList = new ArrayList<>();
 
       Member em;
       boolean isSlicerMember;

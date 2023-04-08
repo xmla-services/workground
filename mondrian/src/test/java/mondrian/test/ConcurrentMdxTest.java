@@ -1312,7 +1312,7 @@ public class ConcurrentMdxTest {
         LOGGER.debug("Test seed: " + seed);
         final Random random = new Random(seed);
 
-        final List<OlapStatement> statements = new ArrayList<OlapStatement>();
+        final List<OlapStatement> statements = new ArrayList<>();
         ExecutorService executorService =
             Executors.newFixedThreadPool(
                 propSaver.properties

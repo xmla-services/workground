@@ -84,14 +84,14 @@ public class GroupingSetsListTest {
   }
 
   private List<RolapStar.Column[]> expectedGroupingSetsColumns() {
-    List<RolapStar.Column[]> ls = new ArrayList<RolapStar.Column[]>();
+    List<RolapStar.Column[]> ls = new ArrayList<>();
     ls.add(columns);
     ls.add(new RolapStar.Column[] {col1, col2, col3});
     ls.add(new RolapStar.Column[] {col1, col2});
     return ls;
   }
   private static List<GroupingSet> createGroupingSetList() {
-    List<GroupingSet> grList = new ArrayList<GroupingSet>();
+    List<GroupingSet> grList = new ArrayList<>();
     //We have 3 grouping sets for testing
     //detailed grouping set - all columns used
     grList.add(createGroupingSet(4));
@@ -102,7 +102,7 @@ public class GroupingSetsListTest {
   }
   private static GroupingSet createGroupingSet(int columnCount) {
     StarColumnPredicate[] predicates = new StarColumnPredicate[] {};
-    List<StarPredicate> compPredicates = new ArrayList<StarPredicate>();
+    List<StarPredicate> compPredicates = new ArrayList<>();
    RolapStar.Column[] c = new RolapStar.Column[columnCount];
     //Every grouping set will contain different count of columns
     for (int i = 0; i < columnCount; i++) {

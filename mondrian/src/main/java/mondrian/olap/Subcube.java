@@ -98,7 +98,7 @@ public class Subcube extends QueryPart {
     }
 
     public List<Exp> getAxisExps() {
-        ArrayList<Exp> exps = new ArrayList<Exp>();
+        ArrayList<Exp> exps = new ArrayList<>();
         if(this.subcube != null) {
             exps.addAll(this.subcube.getAxisExps());
         }

@@ -73,9 +73,9 @@ public class MinusStarPredicate extends AbstractColumnPredicate {
 
     @Override
 	public void values(Collection<Object> collection) {
-        Set<Object> plusValues = new HashSet<Object>();
+        Set<Object> plusValues = new HashSet<>();
         plus.values(plusValues);
-        List<Object> minusValues = new ArrayList<Object>();
+        List<Object> minusValues = new ArrayList<>();
         minus.values(minusValues);
         plusValues.removeAll(minusValues);
         collection.addAll(plusValues);
@@ -125,7 +125,7 @@ public class MinusStarPredicate extends AbstractColumnPredicate {
                 ListColumnPredicate list =
                     (ListColumnPredicate) predicate;
                 List<StarColumnPredicate> unionList =
-                    new ArrayList<StarColumnPredicate>();
+                    new ArrayList<>();
                 unionList.addAll(minusList.getPredicates());
                 unionList.addAll(list.getPredicates());
                 return new MinusStarPredicate(
@@ -144,7 +144,7 @@ public class MinusStarPredicate extends AbstractColumnPredicate {
                 }
                 // Case 2: 'minus' is a list, 'constraint' is a value.
                 List<StarColumnPredicate> unionList =
-                    new ArrayList<StarColumnPredicate>();
+                    new ArrayList<>();
                 unionList.addAll(minusList.getPredicates());
                 unionList.add(
                     new ValueColumnPredicate(

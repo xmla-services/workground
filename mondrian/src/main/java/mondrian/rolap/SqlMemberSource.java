@@ -131,9 +131,9 @@ class SqlMemberSource
         if (level.isAll()) {
             return null;
         }
-        List<Datatype> datatypeList = new ArrayList<Datatype>();
+        List<Datatype> datatypeList = new ArrayList<>();
         List<Expression> columnList =
-            new ArrayList<Expression>();
+            new ArrayList<>();
         for (RolapLevel x = level;; x = (RolapLevel) x.getParentLevel()) {
             columnList.add(x.keyExp);
             datatypeList.add(x.getDatatype());
@@ -262,7 +262,7 @@ class SqlMemberSource
             return sqlQuery.toString();
         }
         if (!sqlQuery.getDialect().allowsFromQuery()) {
-            List<String> columnList = new ArrayList<String>();
+            List<String> columnList = new ArrayList<>();
             int columnCount = 0;
             for (int i = levelDepth; i >= 0; i--) {
                 RolapLevel level2 = levels[i];
@@ -364,9 +364,9 @@ class SqlMemberSource
                 -1, -1, null);
         try {
             final List<SqlStatement.Accessor> accessors = stmt.getAccessors();
-            List<RolapMember> list = new ArrayList<RolapMember>();
+            List<RolapMember> list = new ArrayList<>();
             Map<MemberKey, RolapMember> map =
-                new HashMap<MemberKey, RolapMember>();
+                new HashMap<>();
             RolapMember root = null;
             if (hierarchy.hasAll()) {
                 root = hierarchy.getAllMember();

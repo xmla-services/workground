@@ -155,7 +155,7 @@ public class XmlaTestContext {
             DiffRepository.class.getClassLoader().getResource(
                 "mondrian/xmla/test/XmlaTest.ref.xml");
         DiffRepository diffRepos = new DiffRepository(refUrl);
-        List<String[]> stringList = new ArrayList<String[]>();
+        List<String[]> stringList = new ArrayList<>();
         for (String testName : diffRepos.getTestCaseNames()) {
             String templateRequest = diffRepos.get(testName, "request");
             String request = xmlFromTemplate(templateRequest, ENV);

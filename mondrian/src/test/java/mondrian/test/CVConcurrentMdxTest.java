@@ -83,7 +83,7 @@ public class CVConcurrentMdxTest {
 
         // test partially filled aggregation cache
         // add test classes
-        List<Class> testList = new ArrayList<Class>();
+        List<Class> testList = new ArrayList<>();
         //List<TestSuite> suiteList = new ArrayList<TestSuite>();
 
         testList.add(PartialCacheTest.class);
@@ -114,7 +114,7 @@ public class CVConcurrentMdxTest {
 
         // test partially filled aggregation cache
         // add test classes
-        List<Class> testList = new ArrayList<Class>();
+        List<Class> testList = new ArrayList<>();
         //List<TestSuite> suiteList = new ArrayList<TestSuite>();
 
         testList.add(PartialCacheVCTest.class);
@@ -205,7 +205,7 @@ public class CVConcurrentMdxTest {
      * @return array of QueryAndResult
      */
     private QueryAndResult[] generateQueryArray(List<Class> testList) {
-        List<QueryAndResult> queryList = new ArrayList<QueryAndResult>();
+        List<QueryAndResult> queryList = new ArrayList<>();
         for (int i = 0; i < testList.size(); i++) {
             Class testClass = testList.get(i);
             try {

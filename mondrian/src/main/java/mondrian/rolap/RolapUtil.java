@@ -236,7 +236,7 @@ public class RolapUtil {
      * <p>NOTE: Synchronization policy: Lock the {@link RolapConnection} class
      * before modifying or using this member.
      */
-    private static final Set<String> loadedDrivers = new HashSet<String>();
+    private static final Set<String> loadedDrivers = new HashSet<>();
 
     static RolapMember[] toArray(List<RolapMember> v) {
         return v.isEmpty()
@@ -286,7 +286,7 @@ public class RolapUtil {
             if (member == null) {
                 children = reader.getRootMembers();
             } else {
-                children = new ArrayList<RolapMember>();
+                children = new ArrayList<>();
                 reader.getMemberChildren(member, children);
                 member = null;
             }
@@ -547,13 +547,13 @@ public class RolapUtil {
         view.setAlias(getAlias(inlineTable));
 
         final int columnCount = inlineTable.columnDefs().size();
-        List<String> columnNames = new ArrayList<String>();
-        List<String> columnTypes = new ArrayList<String>();
+        List<String> columnNames = new ArrayList<>();
+        List<String> columnTypes = new ArrayList<>();
         for (int i = 0; i < columnCount; i++) {
             columnNames.add(inlineTable.columnDefs().get(i).name());
             columnTypes.add(inlineTable.columnDefs().get(i).type().getValue());
         }
-        List<String[]> valueList = new ArrayList<String[]>();
+        List<String[]> valueList = new ArrayList<>();
         for (Row row : inlineTable.rows()) {
             String[] values = new String[columnCount];
             for (Value value : row.values()) {
@@ -749,7 +749,7 @@ public class RolapUtil {
     public static List<String> makeRolapStarKey(
         final Relation fact)
     {
-      List<String> rlStarKey = new ArrayList<String>();
+      List<String> rlStarKey = new ArrayList<>();
       Table table = null;
       rlStarKey.add(getAlias(fact));
       if (fact instanceof Table) {

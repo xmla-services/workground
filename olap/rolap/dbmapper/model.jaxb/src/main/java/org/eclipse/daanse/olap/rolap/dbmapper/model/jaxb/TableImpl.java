@@ -61,7 +61,7 @@ public class TableImpl implements Table {
     @Override
     public List<AggExcludeImpl> aggExclude() {
         if (aggExclude == null) {
-            aggExclude = new ArrayList<AggExcludeImpl>();
+            aggExclude = new ArrayList<>();
         }
         return this.aggExclude;
     }
@@ -69,7 +69,7 @@ public class TableImpl implements Table {
     @Override
     public List<AggTable> aggTable() {
         if (aggTable == null) {
-            aggTable = new ArrayList<AggTable>();
+            aggTable = new ArrayList<>();
         }
         return this.aggTable;
     }
@@ -77,7 +77,7 @@ public class TableImpl implements Table {
     @Override
     public List<HintImpl> hint() {
         if (hint == null) {
-            hint = new ArrayList<HintImpl>();
+            hint = new ArrayList<>();
         }
         return this.hint;
     }

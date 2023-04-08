@@ -89,7 +89,7 @@ public class ExistingFunDef extends FunDefBase {
     }
 
     private static List<Hierarchy> getHierarchies(final List<Member> members) {
-        List<Hierarchy> hierarchies = new ArrayList<Hierarchy>(members.size());
+        List<Hierarchy> hierarchies = new ArrayList<>(members.size());
         for (Member member : members) {
             hierarchies.add(member.getHierarchy());
         }

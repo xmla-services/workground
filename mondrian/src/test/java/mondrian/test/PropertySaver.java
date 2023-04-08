@@ -40,10 +40,10 @@ public class PropertySaver {
         MondrianProperties.instance();
 
     private final Map<Property, String> originalValues =
-        new HashMap<Property, String>();
+        new HashMap<>();
 
     private final Map<Logger, Level> originalLoggerLevels =
-        new HashMap<Logger, Level>();
+        new HashMap<>();
 
     // wacky initializer to prevent compiler from internalizing the
     // string (we don't want it to be == other occurrences of "NOT_SET")

@@ -390,11 +390,11 @@ class DbCreatorServiceImplTest {
     }
 
     private static  <N> Answer<List<N>> setupDummyListAnswer(N... values) {
-        final List<N> someList = new ArrayList<N>();
+        final List<N> someList = new ArrayList<>();
 
         someList.addAll(Arrays.asList(values));
 
-        Answer<List<N>> answer = new Answer<List<N>>() {
+        Answer<List<N>> answer = new Answer<>() {
             @Override
 			public List<N> answer(InvocationOnMock invocation) throws Throwable {
                 return someList;

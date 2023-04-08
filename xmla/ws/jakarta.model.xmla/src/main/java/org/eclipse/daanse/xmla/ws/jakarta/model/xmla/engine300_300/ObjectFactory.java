@@ -130,7 +130,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2011/engine/300/300", name = "DirectQueryMode")
   public JAXBElement<String> createDirectQueryMode(String value) {
-    return new JAXBElement<String>(_DirectQueryMode_QNAME, String.class, null, value);
+    return new JAXBElement<>(_DirectQueryMode_QNAME, String.class, null, value);
   }
 
   /**
@@ -142,7 +142,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2011/engine/300/300", name = "AllowedRowsExpression")
   public JAXBElement<String> createAllowedRowsExpression(String value) {
-    return new JAXBElement<String>(_AllowedRowsExpression_QNAME, String.class, null, value);
+    return new JAXBElement<>(_AllowedRowsExpression_QNAME, String.class, null, value);
   }
 
   /**
@@ -154,7 +154,7 @@ public class ObjectFactory {
    */
   @XmlElementDecl(namespace = "http://schemas.microsoft.com/analysisservices/2011/engine/300/300", name = "DirectQueryUsage")
   public JAXBElement<String> createDirectQueryUsage(String value) {
-    return new JAXBElement<String>(_DirectQueryUsage_QNAME, String.class, null, value);
+    return new JAXBElement<>(_DirectQueryUsage_QNAME, String.class, null, value);
   }
 
 }

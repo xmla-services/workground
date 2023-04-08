@@ -34,9 +34,9 @@ public class XmlaExtraTest{
     @Test
      void testGetDataSourceDoesntLeakPassword() throws Exception {
         final List<Map<String, Object>> expectedList =
-            new ArrayList<Map<String,Object>>();
+            new ArrayList<>();
         final Map<String, Object> expectedMap =
-            new HashMap<String, Object>();
+            new HashMap<>();
         expectedMap.put(
             "DataSourceInfo",
             "Provider=Mondrian;Jdbc=foo;JdbcPassword=bar;JdbcUser=bacon");

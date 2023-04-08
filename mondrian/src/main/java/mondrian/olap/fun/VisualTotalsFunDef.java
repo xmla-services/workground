@@ -106,7 +106,7 @@ public class VisualTotalsFunDef extends FunDefBase {
 		public TupleList evaluateList(Evaluator evaluator) {
             final List<Member> list =
                 listCalc.evaluateList(evaluator).slice(0);
-            final List<Member> resultList = new ArrayList<Member>(list);
+            final List<Member> resultList = new ArrayList<>(list);
             final int memberCount = list.size();
             for (int i = memberCount - 1; i >= 0; --i) {
                 Member member = list.get(i);
@@ -149,7 +149,7 @@ public class VisualTotalsFunDef extends FunDefBase {
         private List<Member> followingDescendants(
             Member member, int i, final List<Member> list)
         {
-            List<Member> childMemberList = new ArrayList<Member>();
+            List<Member> childMemberList = new ArrayList<>();
             while (i < list.size()) {
                 Member descendant = list.get(i);
                 if (descendant.equals(member)) {

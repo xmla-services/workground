@@ -92,7 +92,7 @@ public class MondrianOlap4jMember
                                 .getMemberChildren(member);
                     }
                 });
-        return new AbstractNamedList<MondrianOlap4jMember>() {
+        return new AbstractNamedList<>() {
             @Override
 			public String getName(Object member) {
                 return ((MondrianOlap4jMember)member).getName();
@@ -206,7 +206,7 @@ public class MondrianOlap4jMember
 
     @Override
 	public List<Member> getAncestorMembers() {
-        final List<Member> list = new ArrayList<Member>();
+        final List<Member> list = new ArrayList<>();
         MondrianOlap4jMember m = getParentMember();
         while (m != null) {
             list.add(m);

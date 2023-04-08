@@ -81,7 +81,7 @@ public class AggLevelImpl implements AggLevel {
     @Override
     public List<AggLevelProperty> properties() {
         if (properties == null) {
-            properties = new ArrayList<AggLevelProperty>();
+            properties = new ArrayList<>();
         }
         return properties;
     }

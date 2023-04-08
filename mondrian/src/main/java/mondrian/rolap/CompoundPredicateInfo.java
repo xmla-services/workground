@@ -114,7 +114,7 @@ public class CompoundPredicateInfo {
 
     compoundBitKey = BitKey.Factory.makeBitKey( starColumnCount );
     compoundBitKey.clear();
-    compoundGroupMap = new LinkedHashMap<BitKey, List<RolapCubeMember[]>>();
+    compoundGroupMap = new LinkedHashMap<>();
     unsatisfiable = makeCompoundGroup( starColumnCount, cube, tupleList, compoundGroupMap );
 
     if ( unsatisfiable ) {
@@ -238,7 +238,7 @@ public class CompoundPredicateInfo {
       Map<BitKey, List<RolapCubeMember[]>> compoundGroupMap ) {
     List<RolapCubeMember[]> compoundGroup = compoundGroupMap.get( bitKey );
     if ( compoundGroup == null ) {
-      compoundGroup = new ArrayList<RolapCubeMember[]>();
+      compoundGroup = new ArrayList<>();
       compoundGroupMap.put( bitKey, compoundGroup );
     }
     compoundGroup.add( tuple );
@@ -269,7 +269,7 @@ public class CompoundPredicateInfo {
 
   private StarPredicate makeCompoundPredicate( Map<BitKey, List<RolapCubeMember[]>> compoundGroupMap,
       RolapCube baseCube, Evaluator evaluator ) {
-    List<StarPredicate> compoundPredicateList = new ArrayList<StarPredicate>();
+    List<StarPredicate> compoundPredicateList = new ArrayList<>();
     for ( List<RolapCubeMember[]> group : compoundGroupMap.values() ) {
       // e.g {[USA].[CA], [Canada].[BC]}
       StarPredicate compoundGroupPredicate = null;
@@ -372,7 +372,7 @@ public class CompoundPredicateInfo {
         throw MondrianResource.instance().UnsupportedCalculatedMember.ex( member.getName(), null );
       }
     }
-    List<StarPredicate> predicates = new ArrayList<StarPredicate>( expandedMemberList.size() );
+    List<StarPredicate> predicates = new ArrayList<>( expandedMemberList.size() );
     for ( Member iMember : expandedMemberList ) {
       RolapCubeMember iCubeMember = ( (RolapCubeMember) iMember );
       RolapCubeLevel iLevel = iCubeMember.getLevel();
@@ -392,10 +392,10 @@ public class CompoundPredicateInfo {
 
   private StarPredicate makeSetPredicate( final Exp exp, Evaluator evaluator ) {
     TupleIterable evaluatedSet = evaluator.getSetEvaluator( exp, true ).evaluateTupleIterable();
-    ArrayList<StarPredicate> orList = new ArrayList<StarPredicate>();
+    ArrayList<StarPredicate> orList = new ArrayList<>();
     OrPredicate orPredicate = null;
     for ( List<Member> complexSetItem : evaluatedSet ) {
-      List<StarPredicate> andList = new ArrayList<StarPredicate>();
+      List<StarPredicate> andList = new ArrayList<>();
       for ( Member singleSetItem : complexSetItem ) {
         final List<List<Member>> singleItemList =
             Collections.singletonList( Collections.singletonList( singleSetItem ) );

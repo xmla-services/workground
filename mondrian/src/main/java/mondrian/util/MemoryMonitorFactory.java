@@ -66,7 +66,7 @@ public final class MemoryMonitorFactory
      * implementation. Generally, this should only be used for testing.
      */
     private static final ThreadLocal<String> ClassName =
-        new ThreadLocal<String>();
+        new ThreadLocal<>();
 
     /**
      * Get the class name of a <code>MemoryMonitor</code> implementation

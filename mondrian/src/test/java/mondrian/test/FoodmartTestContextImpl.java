@@ -256,7 +256,7 @@ public synchronized Connection getConnection() {
         getConnectionProperties(),
         null,
         null );
-    connectionRef = new SoftReference<Connection>( connection );
+    connectionRef = new SoftReference<>( connection );
     return connection;
   }
 
@@ -571,7 +571,7 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
       .get( RolapConnectionProperties.Jdbc.name() );
 
     String cookie = XmlaOlap4jDriver.nextCookie();
-    Map<String, String> catalogs = new HashMap<String, String>();
+    Map<String, String> catalogs = new HashMap<>();
     catalogs.put( "FoodMart", "" );
     XmlaOlap4jDriver.PROXY_MAP.put(
       cookie, new MondrianInprocProxy(
@@ -683,7 +683,7 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
    * Returns an iterator over cells in a result.
    */
   static Iterable<Cell> cellIter( final Result result ) {
-    return new Iterable<Cell>() {
+    return new Iterable<>() {
       @Override
 	public Iterator<Cell> iterator() {
         int[] axisDimensions = new int[ result.getAxes().length ];
@@ -693,7 +693,7 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
         }
         final CoordinateIterator
           coordIter = new CoordinateIterator( axisDimensions );
-        return new Iterator<Cell>() {
+        return new Iterator<>() {
           @Override
 		public boolean hasNext() {
             return coordIter.hasNext();
@@ -718,7 +718,7 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
    * Returns an iterator over cells in an olap4j cell set.
    */
   static Iterable<org.olap4j.Cell> cellIter( final CellSet cellSet ) {
-    return new Iterable<org.olap4j.Cell>() {
+    return new Iterable<>() {
       @Override
 	public Iterator<org.olap4j.Cell> iterator() {
         int[] axisDimensions = new int[ cellSet.getAxes().size() ];
@@ -728,7 +728,7 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
         }
         final CoordinateIterator
           coordIter = new CoordinateIterator( axisDimensions );
-        return new Iterator<org.olap4j.Cell>() {
+        return new Iterator<>() {
           @Override
 		public boolean hasNext() {
             return coordIter.hasNext();
@@ -738,7 +738,7 @@ public CellSet executeOlap4jXmlaQuery( String queryString )
 		public org.olap4j.Cell next() {
             final int[] ints = coordIter.next();
             final List<Integer> list =
-              new AbstractList<Integer>() {
+              new AbstractList<>() {
                 @Override
 				public Integer get( int index ) {
                   return ints[ index ];
@@ -2077,7 +2077,7 @@ public boolean databaseIsValid() {
   public static class SnoopingSchemaProcessor
     extends FilterDynamicSchemaProcessor {
     public static final ThreadLocal<String> THREAD_RESULT =
-      new ThreadLocal<String>();
+      new ThreadLocal<>();
 
     @Override
 	protected String filter(

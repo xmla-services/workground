@@ -43,7 +43,7 @@ public class ConcatenableListTest{
      */
     @Test
     void testBasicIteration() {
-        List<String> testList = new ConcatenableList<String>();
+        List<String> testList = new ConcatenableList<>();
         testList.addAll(Arrays.asList(VALUE_1));
         testList.addAll(new ArrayList<String>());
         testList.addAll(new ArrayList<String>());
@@ -79,7 +79,7 @@ public class ConcatenableListTest{
      */
     @Test
     void testIteratorNextWithoutHasNext() {
-        List<String> testList = new ConcatenableList<String>();
+        List<String> testList = new ConcatenableList<>();
         testList.addAll(Arrays.asList(VALUE_1));
         testList.addAll(new ArrayList<String>());
         testList.addAll(new ArrayList<String>());
@@ -110,7 +110,7 @@ public class ConcatenableListTest{
      */
     @Test
     void testGetZeroWithMultipleEmptyLists() {
-        List<String> testList = new ConcatenableList<String>();
+        List<String> testList = new ConcatenableList<>();
 
         testList.addAll(new ArrayList<String>());
         testList.addAll(new ArrayList<String>());

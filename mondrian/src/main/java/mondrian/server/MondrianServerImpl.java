@@ -486,7 +486,7 @@ class MondrianServerImpl
 
     @Override
 	public List<Statement> getStatements(String sessionId) {
-        List<Statement> result = new ArrayList<Statement>();
+        List<Statement> result = new ArrayList<>();
         for(Statement statement: statementMap.values()) {
             if(statement.getMondrianConnection().getConnectInfo().get("sessionId").equals(sessionId)) {
                 result.add(statement);

@@ -87,7 +87,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
      * password.
      */
     private final Map<String, SessionInfo> sessionInfos =
-        new HashMap<String, SessionInfo>();
+        new HashMap<>();
 
     @Override
 	public void init(ServletConfig servletConfig) throws ServletException {

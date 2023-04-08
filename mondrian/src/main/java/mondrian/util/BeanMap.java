@@ -30,7 +30,7 @@ public class BeanMap extends AbstractMap<String, Object> {
     private final Object o;
     private final Info info;
     private static final Map<Class, Info> INFO_MAP =
-        new WeakHashMap<Class, Info>();
+        new WeakHashMap<>();
 
     /**
      * Creates a map view onto an object.
@@ -55,12 +55,12 @@ public class BeanMap extends AbstractMap<String, Object> {
 
     @Override
     public Set<Entry<String, Object>> entrySet() {
-        return new AbstractSet<Entry<String, Object>>() {
+        return new AbstractSet<>() {
             @Override
             public Iterator<Entry<String, Object>> iterator() {
                 final Iterator<BeanField> fieldIterator =
                     info.fields.iterator();
-                return new Iterator<Entry<String, Object>>() {
+                return new Iterator<>() {
                     @Override
 					public boolean hasNext() {
                         return fieldIterator.hasNext();
@@ -91,7 +91,7 @@ public class BeanMap extends AbstractMap<String, Object> {
     }
 
     private static class Info {
-        private List<BeanField> fields = new ArrayList<BeanField>();
+        private List<BeanField> fields = new ArrayList<>();
 
         public Info(Class<? extends Object> clazz) {
             for (final Field field : clazz.getDeclaredFields()) {

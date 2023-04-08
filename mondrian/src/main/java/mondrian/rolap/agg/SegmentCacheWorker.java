@@ -66,7 +66,7 @@ public final class SegmentCacheWorker {
      */
     public static List<SegmentCache> initCache() {
         final List<SegmentCache> caches =
-            new ArrayList<SegmentCache>();
+            new ArrayList<>();
         // First try to get the segmentcache impl class from
         // mondrian properties.
         final String cacheName =

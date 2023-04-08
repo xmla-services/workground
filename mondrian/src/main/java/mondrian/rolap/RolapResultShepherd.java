@@ -59,7 +59,7 @@ public class RolapResultShepherd {
      * List of tasks that should be monitored by the shepherd thread.
      */
     private final List<Pair<FutureTask<Result>, Execution>> tasks =
-        new CopyOnWriteArrayList<Pair<FutureTask<Result>,Execution>>();
+        new CopyOnWriteArrayList<>();
 
     private final Timer timer =
         Util.newTimer("mondrian.rolap.RolapResultShepherd#timer", true);
@@ -150,11 +150,11 @@ public class RolapResultShepherd {
     {
         // We must wrap this execution into a task that so that we are able
         // to monitor, cancel and detach from it.
-        FutureTask<Result> task = new FutureTask<Result>(callable);
+        FutureTask<Result> task = new FutureTask<>(callable);
 
         // Register this task with the shepherd thread
         final Pair<FutureTask<Result>, Execution> pair =
-            new Pair<FutureTask<Result>, Execution>(
+            new Pair<>(
                 task,
                 execution);
         tasks.add(pair);

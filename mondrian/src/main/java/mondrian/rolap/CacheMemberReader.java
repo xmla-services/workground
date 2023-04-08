@@ -47,7 +47,7 @@ class CacheMemberReader implements MemberReader, MemberCache {
             // we don't want the reader to write back to our cache
             Util.discard(source.setCache(this));
         }
-        this.mapKeyToMember = new HashMap<Object, RolapMember>();
+        this.mapKeyToMember = new HashMap<>();
         this.members = source.getMembers();
         for (int i = 0; i < members.size(); i++) {
             RolapMember member = RolapUtil.strip(members.get(i));
@@ -185,7 +185,7 @@ class CacheMemberReader implements MemberReader, MemberCache {
 
     @Override
 	public List<RolapMember> getRootMembers() {
-        List<RolapMember> list = new ArrayList<RolapMember>();
+        List<RolapMember> list = new ArrayList<>();
         for (RolapMember member : members) {
             if (member.getParentMember() == null) {
                 list.add(member);
@@ -198,7 +198,7 @@ class CacheMemberReader implements MemberReader, MemberCache {
 	public List<RolapMember> getMembersInLevel(
         RolapLevel level)
     {
-        List<RolapMember> list = new ArrayList<RolapMember>();
+        List<RolapMember> list = new ArrayList<>();
         int levelDepth = level.getDepth();
         for (RolapMember member : members) {
             if (member.getLevel().getDepth() == levelDepth) {

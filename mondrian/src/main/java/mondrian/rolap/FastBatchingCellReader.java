@@ -111,7 +111,7 @@ public class FastBatchingCellReader implements CellReader {
      */
     private boolean dirty;
 
-    private final List<CellRequest> cellRequests = new ArrayList<CellRequest>();
+    private final List<CellRequest> cellRequests = new ArrayList<>();
 
     private final Execution execution;
 
@@ -266,10 +266,10 @@ public class FastBatchingCellReader implements CellReader {
         // loading requires several iterations, we just append to the list. We
         // don't mind if it takes a while for SQL statements to return.
         final List<Future<Map<Segment, SegmentWithData>>> sqlSegmentMapFutures =
-            new ArrayList<Future<Map<Segment, SegmentWithData>>>();
+            new ArrayList<>();
 
         final List<CellRequest> cellRequests1 =
-            new ArrayList<CellRequest>(cellRequests);
+            new ArrayList<>(cellRequests);
 
         preloadColumnCardinality(cellRequests1);
 
@@ -288,7 +288,7 @@ public class FastBatchingCellReader implements CellReader {
             // Segments that have been retrieved from cache this cycle. Allows
             // us to reduce calls to the external cache.
             Map<SegmentHeader, SegmentBody> headerBodies =
-                new HashMap<SegmentHeader, SegmentBody>();
+                new HashMap<>();
 
             // Load each suggested segment from cache, and place it in
             // thread-local cache. Note that this step can't be done by the
@@ -320,7 +320,7 @@ public class FastBatchingCellReader implements CellReader {
             // Rollups that succeeded. Will tell cache mgr to put the headers
             // into the index and the header/bodies in cache.
             final Map<SegmentHeader, SegmentBody> succeededRollups =
-                new HashMap<SegmentHeader, SegmentBody>();
+                new HashMap<>();
 
             for (final BatchLoader.RollupInfo rollup : response.rollups) {
                 // Gather the required segments.
@@ -332,7 +332,7 @@ public class FastBatchingCellReader implements CellReader {
                     continue;
                 }
 
-                final Set<String> keepColumns = new HashSet<String>();
+                final Set<String> keepColumns = new HashSet<>();
                 for (RolapStar.Column column : rollup.constrainedColumns) {
                     keepColumns.add(
                         genericExpression(column.getExpression()));
@@ -445,7 +445,7 @@ public class FastBatchingCellReader implements CellReader {
             // Figure out which cell requests are not satisfied by any of the
             // segments retrieved.
             @SuppressWarnings("unchecked")
-            List<CellRequest> old = new ArrayList<CellRequest>(cellRequests1);
+            List<CellRequest> old = new ArrayList<>(cellRequests1);
             cellRequests1.clear();
             for (CellRequest cellRequest : old) {
                 if (cellRequest.getMeasure().getStar()
@@ -490,7 +490,7 @@ public class FastBatchingCellReader implements CellReader {
      *
      */
     private void preloadColumnCardinality(List<CellRequest> cellRequests) {
-        List<BitKey> loaded = new ArrayList<BitKey>();
+        List<BitKey> loaded = new ArrayList<>();
         for (CellRequest req : cellRequests) {
             if (!loaded.contains(req.getConstrainedColumnsBitKey())) {
                 for (RolapStar.Column col : req.getConstrainedColumns()) {
@@ -522,7 +522,7 @@ public class FastBatchingCellReader implements CellReader {
         candidateLoop:
         for (List<SegmentHeader> headers : rollup.candidateLists) {
             final Map<SegmentHeader, SegmentBody> map =
-                new HashMap<SegmentHeader, SegmentBody>();
+                new HashMap<>();
             for (SegmentHeader header : headers) {
                 SegmentBody body = loadSegmentFromCache(headerBodies, header);
                 if (body == null) {
@@ -594,20 +594,20 @@ class BatchLoader {
     private final RolapCube cube;
 
     private final Map<AggregationKey, Batch> batches =
-        new HashMap<AggregationKey, Batch>();
+        new HashMap<>();
 
     private final Set<SegmentHeader> cacheHeaders =
-        new LinkedHashSet<SegmentHeader>();
+        new LinkedHashSet<>();
 
     private final Map<SegmentHeader, Future<SegmentBody>> futures =
-        new HashMap<SegmentHeader, Future<SegmentBody>>();
+        new HashMap<>();
 
-    private final List<RollupInfo> rollups = new ArrayList<RollupInfo>();
+    private final List<RollupInfo> rollups = new ArrayList<>();
 
-    private final Set<BitKey> rollupBitmaps = new HashSet<BitKey>();
+    private final Set<BitKey> rollupBitmaps = new HashSet<>();
 
     private final Map<List, SegmentBuilder.SegmentConverter> converterMap =
-        new HashMap<List, SegmentBuilder.SegmentConverter>();
+        new HashMap<>();
 
     public BatchLoader(
         Locus locus,
@@ -832,8 +832,8 @@ class BatchLoader {
           BitKey headerBitKey = header.getConstrainedColumnsBitKey();
           // get all constrained values for relevant bitKey positions
           List<SortedSet<Comparable>> headerValues =
-              new ArrayList<SortedSet<Comparable>>(bitKey.cardinality());
-          Map<Integer, Integer> valueIndexes = new HashMap<Integer, Integer>();
+              new ArrayList<>(bitKey.cardinality());
+          Map<Integer, Integer> valueIndexes = new HashMap<>();
           int relevantCCIdx = 0, keyValuesIdx = 0;
           for (int bitPos : headerBitKey) {
               if (bitKey.get(bitPos)) {
@@ -920,10 +920,10 @@ class BatchLoader {
 
         // Sort the batches into deterministic order.
         List<Batch> batchList =
-            new ArrayList<Batch>(batches.values());
+            new ArrayList<>(batches.values());
         Collections.sort(batchList, BatchComparator.instance);
         final List<Future<Map<Segment, SegmentWithData>>> segmentMapFutures =
-            new ArrayList<Future<Map<Segment, SegmentWithData>>>();
+            new ArrayList<>();
         if (shouldUseGroupingFunction()) {
             LOGGER.debug("Using grouping sets");
             List<CompositeBatch> groupedBatches = groupBatches(batchList);
@@ -949,7 +949,7 @@ class BatchLoader {
         // request.
         return new LoadBatchResponse(
             cellRequests,
-            new ArrayList<SegmentHeader>(cacheHeaders),
+            new ArrayList<>(cacheHeaders),
             rollups,
             converterMap,
             segmentMapFutures,
@@ -958,7 +958,7 @@ class BatchLoader {
 
     static List<CompositeBatch> groupBatches(List<Batch> batchList) {
         Map<AggregationKey, CompositeBatch> batchGroups =
-            new HashMap<AggregationKey, CompositeBatch>();
+            new HashMap<>();
         for (int i = 0; i < batchList.size(); i++) {
             for (int j = i + 1; j < batchList.size();) {
                 final Batch iBatch = batchList.get(i);
@@ -1065,7 +1065,7 @@ class BatchLoader {
         final Batch detailedBatch;
 
         /** Batches whose data can be fetched using rollup on detailed batch */
-        final List<Batch> summaryBatches = new ArrayList<Batch>();
+        final List<Batch> summaryBatches = new ArrayList<>();
 
         CompositeBatch(Batch detailedBatch) {
             this.detailedBatch = detailedBatch;
@@ -1195,20 +1195,20 @@ class BatchLoader {
         // the CellRequest's constrained columns
         final RolapStar.Column[] columns;
         final List<RolapStar.Measure> measuresList =
-            new ArrayList<RolapStar.Measure>();
+            new ArrayList<>();
         final Set<StarColumnPredicate>[] valueSets;
         final AggregationKey batchKey;
         // string representation; for debug; set lazily in toString
         private String string;
         private int cellRequestCount;
         private List<StarColumnPredicate[]> tuples =
-            new ArrayList<StarColumnPredicate[]>();
+            new ArrayList<>();
 
         public Batch(CellRequest request) {
             columns = request.getConstrainedColumns();
             valueSets = new HashSet[columns.length];
             for (int i = 0; i < valueSets.length; i++) {
-                valueSets[i] = new HashSet<StarColumnPredicate>();
+                valueSets[i] = new HashSet<>();
             }
             batchKey = new AggregationKey(request);
         }
@@ -1375,7 +1375,7 @@ class BatchLoader {
                 final String expr =
                     genericExpression(distinctMeasure.getExpression());
                 final List<RolapStar.Measure> distinctMeasuresList =
-                    new ArrayList<RolapStar.Measure>();
+                    new ArrayList<>();
                 for (int i = 0; i < measuresList.size();) {
                     final RolapStar.Measure measure = measuresList.get(i);
                     if (measure.getAggregator().isDistinct()
@@ -1506,7 +1506,7 @@ class BatchLoader {
             List<RolapStar.Measure> measuresList)
         {
             List<RolapStar.Measure> distinctSqlMeasureList =
-                new ArrayList<RolapStar.Measure>();
+                new ArrayList<>();
             for (RolapStar.Measure measure : measuresList) {
                 if (measure.getAggregator().isDistinct()
                     && measure.getExpression() instanceof

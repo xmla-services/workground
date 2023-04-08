@@ -76,7 +76,7 @@ public class CmdRunner {
     private static String CATALOG_NAME = "FoodMart";
 
     private static final Map<Object, String> paraNameValues =
-        new HashMap<Object, String>();
+        new HashMap<>();
 
     private static String[][] commentDelim;
     private static char[] commentStartChars;
@@ -242,8 +242,8 @@ public class CmdRunner {
      * Looks up the definition of a property with a given name.
      */
     private static class PropertyInfo {
-        private final List<Property> propertyList = new ArrayList<Property>();
-        private final List<String> propertyNameList = new ArrayList<String>();
+        private final List<Property> propertyList = new ArrayList<>();
+        private final List<String> propertyNameList = new ArrayList<>();
 
         PropertyInfo(MondrianProperties properties) {
             final Class<? extends Object> clazz = properties.getClass();
@@ -1283,7 +1283,7 @@ public class CmdRunner {
         throws Exception
     {
         String catalogURL = CmdRunner.getCatalogURLProperty();
-        Map<String, String> catalogNameUrls = new HashMap<String, String>();
+        Map<String, String> catalogNameUrls = new HashMap<>();
         catalogNameUrls.put(CATALOG_NAME, catalogURL);
 
         long start = System.currentTimeMillis();
@@ -1327,7 +1327,7 @@ public class CmdRunner {
         throws Exception
     {
         String catalogURL = CmdRunner.getCatalogURLProperty();
-        Map<String, String> catalogNameUrls = new HashMap<String, String>();
+        Map<String, String> catalogNameUrls = new HashMap<>();
         catalogNameUrls.put(CATALOG_NAME, catalogURL);
 
         long start = System.currentTimeMillis();
@@ -1848,7 +1848,7 @@ public class CmdRunner {
         } else if (tokens.length == 2) {
             String funcname = tokens[1];
             List<FunInfo> funInfoList = funTable.getFunInfoList();
-            List<FunInfo> matches = new ArrayList<FunInfo>();
+            List<FunInfo> matches = new ArrayList<>();
 
             for (FunInfo fi : funInfoList) {
                 if (fi.getName().equalsIgnoreCase(funcname)) {
@@ -2444,7 +2444,7 @@ public class CmdRunner {
         private boolean noCache = false;
         private String roleName;
         private int validateXmlaResponse = VALIDATE_NONE;
-        private final List<String> filenames = new ArrayList<String>();
+        private final List<String> filenames = new ArrayList<>();
         private int doingWhat = DO_MDX;
         private String singleMdxCmd;
         private boolean highCardResults;

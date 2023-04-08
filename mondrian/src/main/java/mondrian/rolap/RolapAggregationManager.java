@@ -100,7 +100,7 @@ public abstract class RolapAggregationManager {
         List<OlapElement> applicableMembers = getApplicableReturnClauseMembers(
             cube, members, returnClauseMembers, extendedContext);
         List<OlapElement> nonApplicableMembers =
-            new ArrayList<OlapElement>(
+            new ArrayList<>(
                 (List<OlapElement>)CollectionUtils
                     .subtract(returnClauseMembers, applicableMembers));
 
@@ -122,7 +122,7 @@ public abstract class RolapAggregationManager {
             return Collections.emptyList();
         }
         List<OlapElement> applicableReturnClauseMembers =
-            new ArrayList<OlapElement>();
+            new ArrayList<>();
         final RolapCube drillthroughCube = getDrillthroughCube(cube, members);
         final Map<String, OlapElement> measureUniqueNameMap =
             getMeasureUniqueNameMap(drillthroughCube);
@@ -149,7 +149,7 @@ public abstract class RolapAggregationManager {
         RolapCube drillthroughCube)
     {
         final Map<String, OlapElement> measureUniqueNameMap =
-            new HashMap<String, OlapElement>();
+            new HashMap<>();
         for (Member measureMember : drillthroughCube.getMeasures())  {
             measureUniqueNameMap
                 .put(measureMember.getUniqueName(), measureMember);
@@ -598,7 +598,7 @@ public abstract class RolapAggregationManager {
     {
         List<RolapCubeMember[]> compoundGroup = compoundGroupMap.get(bitKey);
         if (compoundGroup == null) {
-            compoundGroup = new ArrayList<RolapCubeMember[]>();
+            compoundGroup = new ArrayList<>();
             compoundGroupMap.put(bitKey, compoundGroup);
         }
         compoundGroup.add(tuple);
@@ -703,7 +703,7 @@ public abstract class RolapAggregationManager {
         RolapCube baseCube)
     {
         List<StarPredicate> compoundPredicateList =
-            new ArrayList<StarPredicate> ();
+            new ArrayList<> ();
         for (List<RolapCubeMember[]> group : compoundGroupMap.values()) {
              // e.g {[USA].[CA], [Canada].[BC]}
             StarPredicate compoundGroupPredicate = null;
@@ -807,7 +807,7 @@ public abstract class RolapAggregationManager {
     {
         final List<Member> measureList = CacheControlImpl.findMeasures(region);
         final List<RolapStar.Measure> starMeasureList =
-            new ArrayList<RolapStar.Measure>();
+            new ArrayList<>();
         RolapCube baseCube = null;
         for (Member measure : measureList) {
             if (!(measure instanceof RolapStoredMeasure)) {

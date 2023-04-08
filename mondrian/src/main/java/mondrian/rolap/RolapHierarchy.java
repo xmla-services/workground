@@ -302,7 +302,7 @@ public class RolapHierarchy extends HierarchyBase {
                 getUniqueName());
         }
 
-        Set<String> levelNameSet = new HashSet<String>();
+        Set<String> levelNameSet = new HashSet<>();
         for (org.eclipse.daanse.olap.rolap.dbmapper.model.api.Level level : xmlHierarchy.level()) {
             if (!levelNameSet.add(level.name())) {
                 throw MondrianResource.instance().HierarchyLevelNamesNotUnique
@@ -364,7 +364,7 @@ public class RolapHierarchy extends HierarchyBase {
         }
         // Use linked hash map because it retains order.
         final Map<String, Object> map =
-            new LinkedHashMap<String, Object>();
+            new LinkedHashMap<>();
         for (Annotation annotation : annotations) {
             final String name = annotation.name();
             final String value = annotation.content();
@@ -1038,7 +1038,7 @@ public class RolapHierarchy extends HierarchyBase {
         if (goesLower) {
             // We still have to go one more level down.
             Map<Member, Access> newMap =
-                new HashMap<Member, Access>();
+                new HashMap<>();
             for (Member member : membersWithAccess.keySet()) {
                 int savepoint = evaluator.savepoint();
                 try {
@@ -1055,7 +1055,7 @@ public class RolapHierarchy extends HierarchyBase {
             return getLowestMembersForAccess(
                 evaluator, hAccess, newMap);
         }
-        return new ArrayList<Member>(membersWithAccess.keySet());
+        return new ArrayList<>(membersWithAccess.keySet());
     }
 
     /**

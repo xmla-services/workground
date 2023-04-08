@@ -4696,7 +4696,7 @@ public class SchemaExplorer
         }
         if (parent != null) {
             Field[] fs = parent.getClass().getFields();
-            List<String> names = new ArrayList<String>();
+            List<String> names = new ArrayList<>();
             for (int i = 0; i < fs.length; i++) {
                 if (fs[i].getType().isArray()
                     && (fs[i].getType().getComponentType().isInstance(o)))

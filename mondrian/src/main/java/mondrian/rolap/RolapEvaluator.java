@@ -176,8 +176,8 @@ public class RolapEvaluator implements Evaluator {
     currentMembers = parent.currentMembers.clone();
     calculations = parent.calculations.clone();
     calculationCount = parent.calculationCount;
-    slicerMembers = new ArrayList<Member>( parent.slicerMembers );
-    slicerMembersByHierarchy = new HashMap<Hierarchy, Set<Member>>( parent.slicerMembersByHierarchy );
+    slicerMembers = new ArrayList<>( parent.slicerMembers );
+    slicerMembersByHierarchy = new HashMap<>( parent.slicerMembersByHierarchy );
     slicerTuples = parent.slicerTuples;
     slicerPredicateInfo = parent.slicerPredicateInfo;
     disjointSlicerTuple = parent.disjointSlicerTuple;
@@ -192,7 +192,7 @@ public class RolapEvaluator implements Evaluator {
     // null) and the new aggregation list (if any).
     List<List<List<Member>>> aggregationLists = null;
     if ( parent.aggregationLists != null ) {
-      aggregationLists = new ArrayList<List<List<Member>>>( parent.aggregationLists );
+      aggregationLists = new ArrayList<>( parent.aggregationLists );
     }
     // compoundPredicates.addAll(parent.compoundPredicates);
 
@@ -202,7 +202,7 @@ public class RolapEvaluator implements Evaluator {
 
     if ( aggregationList != null ) {
       if ( aggregationLists == null ) {
-        aggregationLists = new ArrayList<List<List<Member>>>();
+        aggregationLists = new ArrayList<>();
       }
       aggregationLists.add( aggregationList );
       List<Member> tuple = aggregationList.get( 0 );
@@ -235,8 +235,8 @@ public class RolapEvaluator implements Evaluator {
     currentMembers = root.defaultMembers.clone();
     calculations = new RolapCalculation[currentMembers.length];
     calculationCount = 0;
-    slicerMembers = new ArrayList<Member>();
-    slicerMembersByHierarchy = new HashMap<Hierarchy, Set<Member>>();
+    slicerMembers = new ArrayList<>();
+    slicerMembersByHierarchy = new HashMap<>();
     aggregationLists = null;
 
     commands = new Object[10];
@@ -640,9 +640,9 @@ public final int hashCode() {
     }
     if ( toRemove > 0 ) {
       // collapse tuple
-      final Set<List<Member>> processedTuples = new LinkedHashSet<List<Member>>( slicerTuples.size() );
+      final Set<List<Member>> processedTuples = new LinkedHashSet<>( slicerTuples.size() );
       for ( List<Member> tuple : slicerTuples ) {
-        List<Member> tupleCopy = new ArrayList<Member>( slicerTuples.getArity() - toRemove );
+        List<Member> tupleCopy = new ArrayList<>( slicerTuples.getArity() - toRemove );
         for ( int j = 0; j < tuple.size(); j++ ) {
           final Member member = tuple.get( j );
           if ( !removeMember[j] ) {
@@ -651,7 +651,7 @@ public final int hashCode() {
         }
         processedTuples.add( tupleCopy );
       }
-      return new DelegatingTupleList( slicerTuples.getArity() - toRemove, new ArrayList<List<Member>>(
+      return new DelegatingTupleList( slicerTuples.getArity() - toRemove, new ArrayList<>(
           processedTuples ) );
     }
     return slicerTuples;
@@ -1383,7 +1383,7 @@ public final void setEvalAxes( boolean evalAxes ) {
     int h = 0;
     h = h * 31 + Arrays.asList( currentMembers ).hashCode();
     h =
-        h * 31 + new HashSet<RolapCalculation>( Arrays.asList( calculations ).subList( 0, calculationCount ) )
+        h * 31 + new HashSet<>( Arrays.asList( calculations ).subList( 0, calculationCount ) )
             .hashCode();
     h = h * 31 + slicerMembers.hashCode();
     h = h * 31 + ( expandingMember == null ? 0 : expandingMember.hashCode() );
@@ -1394,7 +1394,7 @@ public final void setEvalAxes( boolean evalAxes ) {
     if ( false ) {
       // Enable this code block to debug checksum mismatches.
       System.err.println( new StringBuilder("h=").append(h).append(": ").append(Arrays.asList( Arrays.asList( currentMembers ),
-          new HashSet<RolapCalculation>( Arrays.asList( calculations ).subList( 0, calculationCount ) ),
+          new HashSet<>( Arrays.asList( calculations ).subList( 0, calculationCount ) ),
           expandingMember, aggregationLists, nonEmpty, nativeEnabled, firstExpanding, evalAxes )).toString() );
     }
     return h;

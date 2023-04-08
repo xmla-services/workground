@@ -43,7 +43,7 @@ public class BlockingHashMapTest{
     @Test
     void testBlockingHashMap() throws InterruptedException {
         BlockingHashMap<Integer, Integer> map =
-            new BlockingHashMap<Integer, Integer>(100);
+            new BlockingHashMap<>(100);
 
         ExecutorService exec = Executors.newFixedThreadPool(20);
         try {

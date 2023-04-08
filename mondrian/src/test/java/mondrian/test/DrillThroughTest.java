@@ -2125,7 +2125,7 @@ public class DrillThroughTest {
         String[] expectedColumnValues = {"Gourmet Supermarket",
           "Small Grocery"};
         Set<String> expectedValues =
-            new HashSet<String>(Arrays.asList(expectedColumnValues));
+            new HashSet<>(Arrays.asList(expectedColumnValues));
         int expectedRowCount = 10859;
         int rowCount = 0;
         ResultSet rs = null;

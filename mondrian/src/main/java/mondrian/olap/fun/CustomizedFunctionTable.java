@@ -28,7 +28,7 @@ public class CustomizedFunctionTable extends FunTableImpl {
 
     public CustomizedFunctionTable(Set<String> builtinFunctions) {
         supportedBuiltinFunctions = builtinFunctions;
-        this.specialFunctions = new HashSet<FunDef>();
+        this.specialFunctions = new HashSet<>();
     }
 
     public CustomizedFunctionTable(

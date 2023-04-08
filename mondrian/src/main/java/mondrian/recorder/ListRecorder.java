@@ -29,9 +29,9 @@ public class ListRecorder extends AbstractRecorder {
     private final List<Entry> infoList;
 
     public ListRecorder() {
-        errorList = new ArrayList<Entry>();
-        warnList = new ArrayList<Entry>();
-        infoList = new ArrayList<Entry>();
+        errorList = new ArrayList<>();
+        warnList = new ArrayList<>();
+        infoList = new ArrayList<>();
     }
 
     @Override

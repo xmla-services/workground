@@ -62,7 +62,7 @@ public class AggPatternImpl implements AggPattern {
     @Override
     public List<AggColumnNameImpl> aggIgnoreColumn() {
         if (aggIgnoreColumn == null) {
-            aggIgnoreColumn = new ArrayList<AggColumnNameImpl>();
+            aggIgnoreColumn = new ArrayList<>();
         }
         return this.aggIgnoreColumn;
     }
@@ -70,7 +70,7 @@ public class AggPatternImpl implements AggPattern {
     @Override
     public List<AggForeignKeyImpl> aggForeignKey() {
         if (aggForeignKey == null) {
-            aggForeignKey = new ArrayList<AggForeignKeyImpl>();
+            aggForeignKey = new ArrayList<>();
         }
         return this.aggForeignKey;
     }
@@ -78,7 +78,7 @@ public class AggPatternImpl implements AggPattern {
     @Override
     public List<AggMeasureImpl> aggMeasure() {
         if (aggMeasure == null) {
-            aggMeasure = new ArrayList<AggMeasureImpl>();
+            aggMeasure = new ArrayList<>();
         }
         return this.aggMeasure;
     }
@@ -86,7 +86,7 @@ public class AggPatternImpl implements AggPattern {
     @Override
     public List<AggLevelImpl> aggLevel() {
         if (aggLevel == null) {
-            aggLevel = new ArrayList<AggLevelImpl>();
+            aggLevel = new ArrayList<>();
         }
         return this.aggLevel;
     }
@@ -94,7 +94,7 @@ public class AggPatternImpl implements AggPattern {
     @Override
     public List<AggExcludeImpl> aggExclude() {
         if (aggExclude == null) {
-            aggExclude = new ArrayList<AggExcludeImpl>();
+            aggExclude = new ArrayList<>();
         }
         return this.aggExclude;
     }

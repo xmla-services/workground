@@ -47,7 +47,7 @@ abstract class Rowset implements XmlaConstants {
     protected final Map<String, Object> restrictions;
     protected final Map<String, String> properties;
     protected final Map<String, String> extraProperties =
-        new HashMap<String, String>();
+        new HashMap<>();
     protected final XmlaRequest request;
     protected final XmlaHandler handler;
     protected final boolean deep;
@@ -70,7 +70,7 @@ abstract class Rowset implements XmlaConstants {
         this.request = request;
         this.handler = handler;
         ArrayList<RowsetDefinition.Column> list =
-            new ArrayList<RowsetDefinition.Column>();
+            new ArrayList<>();
         for (Map.Entry<String, Object> restrictionEntry
             : restrictions.entrySet())
         {
@@ -172,7 +172,7 @@ abstract class Rowset implements XmlaConstants {
     public final void unparse(XmlaResponse response)
         throws XmlaException, SQLException
     {
-        final List<Row> rows = new ArrayList<Row>();
+        final List<Row> rows = new ArrayList<>();
         populate(response, null, rows);
         final Comparator<Row> comparator = rowsetDefinition.getComparator();
         if (comparator != null) {
@@ -302,7 +302,7 @@ abstract class Rowset implements XmlaConstants {
                 }
             } else if (value instanceof Rowset) {
                 Rowset rowset = (Rowset) value;
-                final List<Row> rows = new ArrayList<Row>();
+                final List<Row> rows = new ArrayList<>();
                 rowset.populate(response, null, rows);
                 writer.startSequence(column.name, "row");
                 for (Row row1 : rows) {
@@ -415,7 +415,7 @@ abstract class Rowset implements XmlaConstants {
                 Util.wildcardToRegexp(
                     Collections.singletonList(wildcard.pattern));
             final Matcher matcher = Pattern.compile(regexp).matcher("");
-            return new Predicate<E>() {
+            return new Predicate<>() {
                 @Override
 				public boolean test(E element) {
                     V value = getter.apply(element);
@@ -424,7 +424,7 @@ abstract class Rowset implements XmlaConstants {
             };
         } else if (restriction instanceof List) {
             final List<V> requiredValues = (List) restriction;
-            return new Predicate<E>() {
+            return new Predicate<>() {
                 @Override
 				public boolean test(E element) {
                     if (element == null) {
@@ -492,7 +492,7 @@ abstract class Rowset implements XmlaConstants {
         final String catalogName =
             properties.get(PropertyDefinition.Catalog.name());
         if (catalogName != null) {
-            return new Predicate< Catalog>() {
+            return new Predicate<>() {
                 @Override
 				public boolean test(Catalog catalog) {
                     return catalog.getName().equals(catalogName);
@@ -510,12 +510,12 @@ abstract class Rowset implements XmlaConstants {
         if (restriction == null) {
             return null;
         } else if (restriction instanceof List) {
-            restrictionList = new ArrayList<String>();
+            restrictionList = new ArrayList<>();
             for(Object o: (List)restriction) {
                 restrictionList.add(o.toString());
             }
         } else {
-            restrictionList = new ArrayList<String>();
+            restrictionList = new ArrayList<>();
             restrictionList.add(restriction.toString());
         }
         return restrictionList;
@@ -531,8 +531,8 @@ abstract class Rowset implements XmlaConstants {
         private final ArrayList<String> names;
         private final ArrayList<Object> values;
         Row() {
-            this.names = new ArrayList<String>();
-            this.values = new ArrayList<Object>();
+            this.names = new ArrayList<>();
+            this.values = new ArrayList<>();
         }
 
         void set(String name, Object value) {

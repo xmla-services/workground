@@ -53,7 +53,7 @@ public class ObjectPoolTest{
 
     @Test
     void testString() throws Exception {
-        ObjectPool<String> strings = new ObjectPool<String>();
+        ObjectPool<String> strings = new ObjectPool<>();
         int nos = 100000;
         String[] ss1 = genStringsArray(nos);
         for (int i = 0; i < nos; i++) {
@@ -101,7 +101,7 @@ public class ObjectPoolTest{
 
     @Test
     void testKeyValue() throws Exception {
-        ObjectPool<KeyValue> op = new ObjectPool<KeyValue>();
+        ObjectPool<KeyValue> op = new ObjectPool<>();
         int nos = 100000;
         KeyValue[] kv1 = genKeyValueArray(nos);
         for (int i = 0; i < nos; i++) {
@@ -199,8 +199,8 @@ public class ObjectPoolTest{
         final long t1 = System.currentTimeMillis();
         assert density > 0 && density <= 1;
         int space = (int) (entryCount / density);
-        ObjectPool<Object> objectPool = new ObjectPool<Object>();
-        HashSet<Object> set = new HashSet<Object>();
+        ObjectPool<Object> objectPool = new ObjectPool<>();
+        HashSet<Object> set = new HashSet<>();
         Random random = new Random(1234);
         int distinctCount = 0;
         final String longString =
@@ -265,7 +265,7 @@ public class ObjectPoolTest{
         return (String[]) l.toArray(new String[l.size()]);
     }
     private static List<String> genStringsList(int nos) {
-        List<String> l = new ArrayList<String>(nos);
+        List<String> l = new ArrayList<>(nos);
         for (int i = 0; i < nos; i++) {
             l.add(Integer.valueOf(i).toString());
         }
@@ -276,7 +276,7 @@ public class ObjectPoolTest{
         return l.toArray(new KeyValue[l.size()]);
     }
     private static List<KeyValue> genKeyValueList(int nos) {
-        List<KeyValue> l = new ArrayList<KeyValue>(nos);
+        List<KeyValue> l = new ArrayList<>(nos);
         for (int i = 0; i < nos; i++) {
             l.add(new KeyValue(i, Integer.valueOf(i)));
         }

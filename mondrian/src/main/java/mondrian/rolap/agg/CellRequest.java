@@ -236,7 +236,7 @@ public class CellRequest {
         StarPredicate compoundPredicate)
     {
         if (compoundPredicateMap == null) {
-            compoundPredicateMap = new TreeMap<BitKey, StarPredicate>();
+            compoundPredicateMap = new TreeMap<>();
         }
         compoundPredicateMap.put(compoundBitKey, compoundPredicate);
     }
@@ -246,7 +246,7 @@ public class CellRequest {
         String predicateString)
     {
         if (compoundPredicateStrings == null) {
-            compoundPredicateStrings = new ArrayList<String>();
+            compoundPredicateStrings = new ArrayList<>();
         }
         compoundPredicateStrings.add(predicateString);
     }
@@ -296,7 +296,7 @@ public class CellRequest {
             return Collections.unmodifiableList(compoundPredicateStrings);
         }
         if (compoundPredicateMap != null) {
-            List<String> stringPredicates = new ArrayList<String>();
+            List<String> stringPredicates = new ArrayList<>();
             for (StarPredicate predicate : compoundPredicateMap.values()) {
                 stringPredicates.add(
                     CompoundPredicateInfo.getPredicateString(
@@ -389,7 +389,7 @@ public class CellRequest {
      */
     public Map<String, Comparable> getMappedCellValues() {
         final Map<String, Comparable> map =
-            new HashMap<String, Comparable>();
+            new HashMap<>();
         final RolapStar.Column[] columns =
             this.getConstrainedColumns();
         final Object[] values = this.getSingleValues();

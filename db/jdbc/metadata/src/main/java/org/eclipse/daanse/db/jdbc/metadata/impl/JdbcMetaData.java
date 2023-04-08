@@ -358,7 +358,7 @@ public class JdbcMetaData {
 
         class TableTracker {
 
-            List<DbTable> namedTable = new ArrayList<DbTable>();
+            List<DbTable> namedTable = new ArrayList<>();
 
             public void add(DbTable table) {
                 namedTable.add(table);
@@ -388,7 +388,7 @@ public class JdbcMetaData {
 
         private List<String> getAllSchemas() {
             if (allSchemas == null) {
-                allSchemas = new ArrayList<String>();
+                allSchemas = new ArrayList<>();
 
                 allSchemas.addAll(schemas.keySet());
             }
@@ -443,7 +443,7 @@ public class JdbcMetaData {
         }
 
         private List<String> getAllTables(String sname, boolean factOnly) {
-            List<String> v = new ArrayList<String>();
+            List<String> v = new ArrayList<>();
 
             if (sname == null || sname.equals("")) {
                 // return a list of "schemaname -> table name" string objects
@@ -533,7 +533,7 @@ public class JdbcMetaData {
          * sorted map key=column, value=data type of column
          */
         final Map<String, DbColumn> colsDataType =
-            new TreeMap<String, DbColumn>();
+            new TreeMap<>();
 
         private void addColsDataType(DbColumn columnDefinition) {
             colsDataType.put(columnDefinition.name, columnDefinition);
@@ -554,7 +554,7 @@ public class JdbcMetaData {
          * Sorted map key = foreign key col, value=primary key table associated
          * with this fk.
          */
-        final Map<String, String> fks = new TreeMap<String, String>();
+        final Map<String, String> fks = new TreeMap<>();
 
         private void addFks(String fk, String pkt) {
             fks.put(fk, pkt);

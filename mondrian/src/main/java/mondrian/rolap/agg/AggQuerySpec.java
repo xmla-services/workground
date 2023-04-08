@@ -119,7 +119,7 @@ class AggQuerySpec {
         List<RolapStar.Column[]> groupingSetsColumns =
             groupingSetsList.getGroupingSetsColumns();
         for (RolapStar.Column[] groupingSetColumns : groupingSetsColumns) {
-            ArrayList<String> groupingColumnsExpr = new ArrayList<String>();
+            ArrayList<String> groupingColumnsExpr = new ArrayList<>();
 
             for (RolapStar.Column aColumnArr : groupingSetColumns) {
                 groupingColumnsExpr.add(findColumnExpr(aColumnArr, sqlQuery));

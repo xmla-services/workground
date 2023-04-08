@@ -63,7 +63,7 @@ class ResultComparator {
 
         Cube cube = result.getQuery().getCube();
         Dimension[] dims = cube.getDimensions();
-        HashSet<String> defaultDimMembers = new HashSet<String>();
+        HashSet<String> defaultDimMembers = new HashSet<>();
 
         for (Dimension dim : dims) {
             String uniqueName =

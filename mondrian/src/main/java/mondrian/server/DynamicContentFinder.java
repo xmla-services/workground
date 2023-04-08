@@ -134,9 +134,7 @@ public class DynamicContentFinder
             String,
             Pair<DataSourcesConfig.DataSource, DataSourcesConfig.Catalog>>
             newDatasourceCatalogNames =
-                new HashMap<String,
-                    Pair<DataSourcesConfig.DataSource,
-                        DataSourcesConfig.Catalog>>();
+                new HashMap<>();
         for (DataSourcesConfig.DataSource dataSource
             : newDataSources.dataSources)
         {

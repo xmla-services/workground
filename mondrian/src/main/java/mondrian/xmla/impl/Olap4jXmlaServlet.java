@@ -183,7 +183,7 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
     getDiscoverDatasourcesPreConfiguredResponse(
         ServletConfig servletConfig)
     {
-        final Map<String, Object> map = new LinkedHashMap<String, Object>();
+        final Map<String, Object> map = new LinkedHashMap<>();
         foo(map, "DataSourceName", servletConfig, "dataSourceName");
         foo(
             map, "DataSourceDescription",
@@ -217,7 +217,7 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
         private final Map<String, Object> discoverDatasourcesResponse;
         private final String olap4jDriverClassName;
         private final Map<String, BasicDataSource> datasourcesPool =
-            new HashMap<String, BasicDataSource>();
+            new HashMap<>();
         private final int idleConnectionsCleanupTimeoutMs;
         private final int maxPerUserConnectionCount;
 
@@ -367,7 +367,7 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
         final ServletConfig servletConfig,
         final String prefix)
     {
-        Map<String, String> options = new LinkedHashMap<String, String>();
+        Map<String, String> options = new LinkedHashMap<>();
 
         // Get properties from servlet config.
         @SuppressWarnings({"unchecked"})

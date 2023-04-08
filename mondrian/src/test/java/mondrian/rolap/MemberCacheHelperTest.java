@@ -42,7 +42,7 @@ public class MemberCacheHelperTest {
     private MemberChildrenConstraint defMemChildrenConstraint =
         DefaultMemberChildrenConstraint.instance();
 
-    private List<RolapMember> children = new ArrayList<RolapMember>();
+    private List<RolapMember> children = new ArrayList<>();
 
     private MemberCacheHelper cacheHelper = new MemberCacheHelper(null);
 
@@ -147,7 +147,7 @@ public class MemberCacheHelperTest {
         List<String> childNames = fillChildren(children, 3);
         when(childByNameConstraint.getChildNames()).thenReturn(
             childNames.subList(1, 3));
-        List<MemberKey> childKeys = new ArrayList<MemberKey>();
+        List<MemberKey> childKeys = new ArrayList<>();
 
         for (RolapMember member : children) {
             when(member.getParentMember()).thenReturn(parentMember);
@@ -176,7 +176,7 @@ public class MemberCacheHelperTest {
     }
 
     private List<String> fillChildren(List<RolapMember> children, int count) {
-        List<String> names = new ArrayList<String>();
+        List<String> names = new ArrayList<>();
         for (int i = 0; i < count; i++) {
             RolapMember member = mock(RolapMember.class);
             String name = "Member-" + i;

@@ -78,7 +78,7 @@ public abstract class AbstractRecorder implements MessageRecorder {
 
     protected AbstractRecorder(final int errorMsgLimit) {
         this.errorMsgLimit = errorMsgLimit;
-        this.contexts = new ArrayList<String>();
+        this.contexts = new ArrayList<>();
         this.startTime = System.currentTimeMillis();
     }
 

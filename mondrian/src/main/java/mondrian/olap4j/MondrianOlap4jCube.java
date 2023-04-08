@@ -82,7 +82,7 @@ class MondrianOlap4jCube
     @Override
 	public NamedList<Dimension> getDimensions() {
         NamedList<MondrianOlap4jDimension> list =
-            new NamedListImpl<MondrianOlap4jDimension>();
+            new NamedListImpl<>();
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
         final mondrian.olap.SchemaReader schemaReader =
@@ -101,7 +101,7 @@ class MondrianOlap4jCube
     @Override
 	public NamedList<Hierarchy> getHierarchies() {
         NamedList<MondrianOlap4jHierarchy> list =
-            new NamedListImpl<MondrianOlap4jHierarchy>();
+            new NamedListImpl<>();
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
         final mondrian.olap.SchemaReader schemaReader =
@@ -138,7 +138,7 @@ class MondrianOlap4jCube
                     dimension.getDefaultHierarchy()
                         .getLevels().get(0);
             final List<Measure> measures =
-                new ArrayList<Measure>();
+                new ArrayList<>();
             List<org.eclipse.daanse.olap.api.model.Member> levelMembers = cube.getMeasures();
             for (org.eclipse.daanse.olap.api.model.Member member : levelMembers) {
                 // This corrects MONDRIAN-1123, a ClassCastException (see below)
@@ -164,7 +164,7 @@ class MondrianOlap4jCube
     @Override
 	public NamedList<NamedSet> getSets() {
         final NamedListImpl<MondrianOlap4jNamedSet> list =
-            new NamedListImpl<MondrianOlap4jNamedSet>();
+            new NamedListImpl<>();
         final MondrianOlap4jConnection olap4jConnection =
             olap4jSchema.olap4jCatalog.olap4jDatabaseMetaData.olap4jConnection;
         for (org.eclipse.daanse.olap.api.model.NamedSet namedSet : cube.getNamedSets()) {
@@ -224,7 +224,7 @@ class MondrianOlap4jCube
         List<IdentifierSegment> nameParts)
     {
         final List<mondrian.olap.Id.Segment> segmentList =
-            new ArrayList<mondrian.olap.Id.Segment>();
+            new ArrayList<>();
         for (IdentifierSegment namePart : nameParts) {
             segmentList.add(Util.convert(namePart));
         }
@@ -257,7 +257,7 @@ class MondrianOlap4jCube
         // Add ancestors and/or the parent. Ancestors are prepended, to ensure
         // hierarchical order.
         final List<MondrianOlap4jMember> list =
-            new ArrayList<MondrianOlap4jMember>();
+            new ArrayList<>();
         if (treeOps.contains(Member.TreeOp.ANCESTORS)) {
             for (MondrianOlap4jMember m = member.getParentMember();
                 m != null;
@@ -294,7 +294,7 @@ class MondrianOlap4jCube
                 if (siblingMember.equals(member)) {
                     targetList =
                         remainingSiblingsList =
-                            new ArrayList<MondrianOlap4jMember>();
+                            new ArrayList<>();
                 } else {
                     targetList.add(siblingMember);
                 }

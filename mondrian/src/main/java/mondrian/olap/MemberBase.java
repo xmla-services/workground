@@ -271,7 +271,7 @@ public Exp getExpression() {
 public List<Member> getAncestorMembers() {
     final SchemaReader schemaReader =
       getDimension().getSchema().getSchemaReader();
-    final ArrayList<Member> ancestorList = new ArrayList<Member>();
+    final ArrayList<Member> ancestorList = new ArrayList<>();
     schemaReader.getMemberAncestors( this, ancestorList );
     return ancestorList;
   }
