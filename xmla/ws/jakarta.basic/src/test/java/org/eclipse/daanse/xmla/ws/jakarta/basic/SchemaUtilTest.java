@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 
-public class SchemaUtilTest {
+class SchemaUtilTest {
     @Test
     void testSchemaGen() throws Exception {
         DiscoverResponse response = new DiscoverResponse();

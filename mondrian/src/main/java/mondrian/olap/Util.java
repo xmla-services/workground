@@ -1771,7 +1771,7 @@ public class Util extends XOMUtil {
     public static List<Id.Segment> convert(
         List<IdentifierSegment> olap4jSegmentList)
     {
-        return olap4jSegmentList.stream().map(it -> convert(it)).collect(Collectors.toList());
+        return olap4jSegmentList.stream().map(it -> convert(it)).toList();
     }
 
     /**

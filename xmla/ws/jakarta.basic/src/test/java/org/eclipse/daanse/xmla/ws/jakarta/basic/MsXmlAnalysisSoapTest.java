@@ -42,7 +42,7 @@ import org.xmlunit.assertj3.XmlAssert;
 
 import jakarta.xml.soap.SOAPMessage;
 
-public class MsXmlAnalysisSoapTest {
+class MsXmlAnalysisSoapTest {
 
     @InjectBundleContext
     BundleContext bc;

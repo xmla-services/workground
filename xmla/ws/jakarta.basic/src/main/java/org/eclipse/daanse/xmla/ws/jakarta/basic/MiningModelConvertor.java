@@ -13,6 +13,14 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertTranslationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.DataItemConvertor.convertDataItem;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.AlgorithmParameter;
 import org.eclipse.daanse.xmla.api.xmla.AttributeTranslation;
 import org.eclipse.daanse.xmla.api.xmla.FoldingParameters;
@@ -30,16 +38,10 @@ import org.eclipse.daanse.xmla.model.record.xmla.MiningModelPermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.MiningModelR;
 import org.eclipse.daanse.xmla.model.record.xmla.MiningModelingFlagR;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertTranslationList;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.DataItemConvertor.convertDataItem;
-
 public class MiningModelConvertor {
+
+	private MiningModelConvertor() {
+	}
 
     public static MiningModel convertMiningModel(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningModel miningModel) {
         if (miningModel != null) {
@@ -72,9 +74,9 @@ public class MiningModelConvertor {
 
     private static List<MiningModelPermission> convertMiningModelPermissionList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningModelPermission> list) {
         if (list != null) {
-            return list.stream().map(MiningModelConvertor::convertMiningModelPermission).collect(Collectors.toList());
+            return list.stream().map(MiningModelConvertor::convertMiningModelPermission).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static MiningModelPermission convertMiningModelPermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningModelPermission miningModelPermission) {
@@ -99,9 +101,9 @@ public class MiningModelConvertor {
 
     private static List<MiningModelColumn> convertMiningModelColumnList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningModelColumn> list) {
         if (list != null) {
-            return list.stream().map(MiningModelConvertor::convertMiningModelColumn).collect(Collectors.toList());
+            return list.stream().map(MiningModelConvertor::convertMiningModelColumn).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static MiningModelColumn convertMiningModelColumn(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningModelColumn miningModelColumn) {
@@ -127,9 +129,9 @@ public class MiningModelConvertor {
 
     public static List<MiningModelingFlag> convertMiningModelingFlagList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningModelingFlag> list) {
         if (list != null) {
-            return list.stream().map(MiningModelConvertor::convertMiningModelingFlag).collect(Collectors.toList());
+            return list.stream().map(MiningModelConvertor::convertMiningModelingFlag).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static MiningModelingFlag convertMiningModelingFlag(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningModelingFlag miningModelingFlag) {
@@ -141,9 +143,9 @@ public class MiningModelConvertor {
 
     public static List<AttributeTranslation> convertAttributeTranslationList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AttributeTranslation> list) {
         if (list != null) {
-            return list.stream().map(MiningModelConvertor::convertAttributeTranslation).collect(Collectors.toList());
+            return list.stream().map(MiningModelConvertor::convertAttributeTranslation).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static AttributeTranslation convertAttributeTranslation(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AttributeTranslation attributeTranslation) {
@@ -162,9 +164,9 @@ public class MiningModelConvertor {
 
     private static List<AlgorithmParameter> convertAlgorithmParameterList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AlgorithmParameter> list) {
         if (list != null) {
-            return list.stream().map(MiningModelConvertor::convertAlgorithmParameter).collect(Collectors.toList());
+            return list.stream().map(MiningModelConvertor::convertAlgorithmParameter).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static AlgorithmParameter convertAlgorithmParameter(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.AlgorithmParameter algorithmParameter) {

@@ -30,49 +30,51 @@ import jakarta.xml.bind.util.JAXBResult;
 
 public class SchemaUtil {
 
-    static Map<Class<?>[], Schema> map = new ConcurrentHashMap<>();
+	private SchemaUtil() {
+	}
 
-    //
-    public static final Schema generateSchema(String ns, Class<?>... classes) throws JAXBException, IOException {
+	static Map<Class<?>[], Schema> map = new ConcurrentHashMap<>();
 
-        Schema schema = map.get(classes);
-        if (schema != null) {
-            return schema;
-        }
-        JAXBContext applicationContext = JAXBContext.newInstance(classes);
-        JAXBContext schemaContext = JAXBContext.newInstance(Schema.class);
-        JaxBSchemaOutputResolver resolver = new JaxBSchemaOutputResolver(schemaContext);
-        applicationContext.generateSchema(resolver);
-        Marshaller marshaller = schemaContext.createMarshaller();
-        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        schema = (Schema) resolver.schemas.get(ns)
-                .getResult();
-        marshaller.marshal(schema, System.out);
-        map.put(classes, schema);
-        return schema;
-    }
+	//
+	public static final Schema generateSchema(String ns, Class<?>... classes) throws JAXBException, IOException {
 
-    public static final class JaxBSchemaOutputResolver extends SchemaOutputResolver {
+		Schema schema = map.get(classes);
+		if (schema != null) {
+			return schema;
+		}
+		JAXBContext applicationContext = JAXBContext.newInstance(classes);
+		JAXBContext schemaContext = JAXBContext.newInstance(Schema.class);
+		JaxBSchemaOutputResolver resolver = new JaxBSchemaOutputResolver(schemaContext);
+		applicationContext.generateSchema(resolver);
+		Marshaller marshaller = schemaContext.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+		schema = (Schema) resolver.schemas.get(ns).getResult();
+		marshaller.marshal(schema, System.out);
+		map.put(classes, schema);
+		return schema;
+	}
 
-        private JAXBContext context;
-        private Map<String, JAXBResult> schemas = new HashMap<>();
+	public static final class JaxBSchemaOutputResolver extends SchemaOutputResolver {
 
-        public JaxBSchemaOutputResolver(JAXBContext context) {
-            this.context = context;
-        }
+		private JAXBContext context;
+		private Map<String, JAXBResult> schemas = new HashMap<>();
 
-        public Result createOutput(String namespaceURI, String suggestedFileName) throws IOException {
-            System.out.println("Generate schema for " + namespaceURI + " with suggested name " + suggestedFileName);
-            try {
-                JAXBResult result = new JAXBResult(context);
-                result.setSystemId(namespaceURI);
-                schemas.put(namespaceURI, result);
-                return result;
-            } catch (JAXBException e) {
-                throw new IOException(e);
-            }
-        }
+		public JaxBSchemaOutputResolver(JAXBContext context) {
+			this.context = context;
+		}
 
-    }
+		public Result createOutput(String namespaceURI, String suggestedFileName) throws IOException {
+			System.out.println("Generate schema for " + namespaceURI + " with suggested name " + suggestedFileName);
+			try {
+				JAXBResult result = new JAXBResult(context);
+				result.setSystemId(namespaceURI);
+				schemas.put(namespaceURI, result);
+				return result;
+			} catch (JAXBException e) {
+				throw new IOException(e);
+			}
+		}
+
+	}
 
 }

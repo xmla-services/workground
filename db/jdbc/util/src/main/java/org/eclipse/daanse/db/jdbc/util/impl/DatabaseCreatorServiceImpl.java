@@ -44,11 +44,11 @@ public class DatabaseCreatorServiceImpl implements DatabaseCreatorService {
             final Dialect dialect = optional.get();
             try (Connection connection = dataSource.getConnection()) {
                 List<String> dropTableList = dbStructure.getTables().parallelStream()
-                    .map(t -> dropTableSQL(t, dialect)).collect(Collectors.toList());
+                    .map(t -> dropTableSQL(t, dialect)).toList();
                 List<String> createTableList = dbStructure.getTables().parallelStream()
-                    .map(t -> createTableSQL(t, dialect)).collect(Collectors.toList());
+                    .map(t -> createTableSQL(t, dialect)).toList();
                 List<String> createIndexList = dbStructure.getTables().parallelStream()
-                    .flatMap(t -> createIndexSqls(t, dialect).stream()).collect(Collectors.toList());
+                    .flatMap(t -> createIndexSqls(t, dialect).stream()).toList();
 
                 final Statement statement = connection.createStatement();
                 StringBuilder sb = new StringBuilder("CREATE DATABASE IF NOT EXISTS ")

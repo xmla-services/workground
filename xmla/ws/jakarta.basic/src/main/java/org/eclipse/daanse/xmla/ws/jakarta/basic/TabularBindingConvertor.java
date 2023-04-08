@@ -13,6 +13,8 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.TabularBinding;
 import org.eclipse.daanse.xmla.model.record.xmla.DSVTableBindingR;
 import org.eclipse.daanse.xmla.model.record.xmla.QueryBindingR;
@@ -21,26 +23,24 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DSVTableBinding;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.QueryBinding;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TableBinding;
 
-import java.util.Optional;
-
 public class TabularBindingConvertor {
+
+	private TabularBindingConvertor() {
+	}
 
     public static TabularBinding convertTabularBinding(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.TabularBinding source) {
         if (source != null) {
-            if (source instanceof TableBinding) {
-                TableBinding tableBinding = (TableBinding) source;
+            if (source instanceof TableBinding tableBinding) {
                 return new TableBindingR(Optional.ofNullable(tableBinding.getDataSourceID()),
                     tableBinding.getDbTableName(),
                     Optional.ofNullable(tableBinding.getDbSchemaName()));
             }
-            if (source instanceof QueryBinding) {
-                QueryBinding queryBinding = (QueryBinding) source;
+            if (source instanceof QueryBinding queryBinding) {
                 return new QueryBindingR(Optional.ofNullable(queryBinding.getDataSourceID()),
                     queryBinding.getQueryDefinition());
 
             }
-            if (source instanceof DSVTableBinding) {
-                DSVTableBinding dsvTableBinding = (DSVTableBinding) source;
+            if (source instanceof DSVTableBinding dsvTableBinding) {
                 return new DSVTableBindingR(Optional.ofNullable(dsvTableBinding.getDataSourceViewID()),
                     dsvTableBinding.getTableID(),
                     Optional.ofNullable(dsvTableBinding.getDataEmbeddingStyle()));

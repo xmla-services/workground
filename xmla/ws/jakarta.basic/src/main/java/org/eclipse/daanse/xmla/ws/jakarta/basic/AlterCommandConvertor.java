@@ -13,6 +13,11 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertObjectExpansion;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertScope;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.MajorObjectConvertor.convertMajorObject;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ObjectReferenceConvertor.convertObjectReference;
+
 import org.eclipse.daanse.xmla.api.xmla.MajorObject;
 import org.eclipse.daanse.xmla.api.xmla.ObjectExpansion;
 import org.eclipse.daanse.xmla.api.xmla.ObjectReference;
@@ -20,21 +25,18 @@ import org.eclipse.daanse.xmla.api.xmla.Scope;
 import org.eclipse.daanse.xmla.model.record.xmla.AlterR;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Alter;
 
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertObjectExpansion;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertScope;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.MajorObjectConvertor.convertMajorObject;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ObjectReferenceConvertor.convertObjectReference;
-
 public class AlterCommandConvertor {
 
-    public static AlterR convertAlterCommand(Alter alter) {
-        ObjectReference object = convertObjectReference(alter.getObject());
-        MajorObject objectDefinition = convertMajorObject(alter.getObjectDefinition());
-        Scope scope = convertScope(alter.getScope());
-        Boolean allowCreate = alter.isAllowCreate();
-        ObjectExpansion objectExpansion = convertObjectExpansion(alter.getObjectExpansion());
+	private AlterCommandConvertor() {
+	}
 
-        AlterR alterCommand = new AlterR(object, objectDefinition, scope, allowCreate, objectExpansion);
-        return alterCommand;
-    }
+	public static AlterR convertAlterCommand(Alter alter) {
+		ObjectReference object = convertObjectReference(alter.getObject());
+		MajorObject objectDefinition = convertMajorObject(alter.getObjectDefinition());
+		Scope scope = convertScope(alter.getScope());
+		Boolean allowCreate = alter.isAllowCreate();
+		ObjectExpansion objectExpansion = convertObjectExpansion(alter.getObjectExpansion());
+
+		return new AlterR(object, objectDefinition, scope, allowCreate, objectExpansion);
+	}
 }

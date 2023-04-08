@@ -1,5 +1,13 @@
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertImpersonationInfo;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertTranslationList;
+
+import java.util.List;
+import java.util.Optional;
+
 import org.eclipse.daanse.xmla.api.xmla.Account;
 import org.eclipse.daanse.xmla.api.xmla.Assembly;
 import org.eclipse.daanse.xmla.api.xmla.Cube;
@@ -16,16 +24,10 @@ import org.eclipse.daanse.xmla.model.record.xmla.AccountR;
 import org.eclipse.daanse.xmla.model.record.xmla.DatabasePermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.DatabaseR;
 
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CommandConvertor.convertImpersonationInfo;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.ConvertorUtil.convertToInstant;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.CubeConvertor.convertTranslationList;
-
 public class DatabaseConvertor {
+
+	private DatabaseConvertor() {
+	}
     public static Database convertDatabase(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Database database) {
         if (database != null) {
             return new DatabaseR(database.getName(),
@@ -72,9 +74,9 @@ public class DatabaseConvertor {
 
     private static List<DatabasePermission> convertDatabasePermissionList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DatabasePermission> list) {
         if (list != null) {
-            return list.stream().map(DatabaseConvertor::convertDatabasePermission).collect(Collectors.toList());
+            return list.stream().map(DatabaseConvertor::convertDatabasePermission).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static DatabasePermission convertDatabasePermission(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DatabasePermission databasePermission) {
@@ -97,58 +99,58 @@ public class DatabaseConvertor {
 
     public static List<Assembly> convertAssemblyList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Assembly> list) {
         if (list != null) {
-            return list.stream().map(MajorObjectConvertor::convertAssembly).collect(Collectors.toList());
+            return list.stream().map(MajorObjectConvertor::convertAssembly).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static List<Role> convertRoleList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Role> list) {
         if (list != null) {
-            return list.stream().map(RoleConvertor::convertRole).collect(Collectors.toList());
+            return list.stream().map(RoleConvertor::convertRole).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static List<MiningStructure> convertMiningStructureList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MiningStructure> list) {
         if (list != null) {
-            return list.stream().map(MiningStructureConvertor::convertMiningStructure).collect(Collectors.toList());
+            return list.stream().map(MiningStructureConvertor::convertMiningStructure).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static List<Cube> convertCubeList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Cube> list) {
         if (list != null) {
-            return list.stream().map(CubeConvertor::convertCube).collect(Collectors.toList());
+            return list.stream().map(CubeConvertor::convertCube).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static List<Dimension> convertDimensionList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Dimension> list) {
         if (list != null) {
-            return list.stream().map(DimensionConvertor::convertDimension).collect(Collectors.toList());
+            return list.stream().map(DimensionConvertor::convertDimension).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static List<DataSourceView> convertDataSourceViewList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSourceView> list) {
         if (list != null) {
-            return list.stream().map(CommandConvertor::convertDataSourceView).collect(Collectors.toList());
+            return list.stream().map(CommandConvertor::convertDataSourceView).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static List<DataSource> convertDataSourceList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DataSource> list) {
         if (list != null) {
-            return list.stream().map(CommandConvertor::convertDataSource).collect(Collectors.toList());
+            return list.stream().map(CommandConvertor::convertDataSource).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static List<Account> convertAccountList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Account> list) {
         if (list != null) {
-            return list.stream().map(DatabaseConvertor::convertAccount).collect(Collectors.toList());
+            return list.stream().map(DatabaseConvertor::convertAccount).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static Account convertAccount(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Account account) {
@@ -163,8 +165,8 @@ public class DatabaseConvertor {
 
     public static List<Database> convertDatabaseList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.Database> list) {
         if (list != null) {
-            return list.stream().map(DatabaseConvertor::convertDatabase).collect(Collectors.toList());
+            return list.stream().map(DatabaseConvertor::convertDatabase).toList();
         }
-        return null;
+        return List.of();
     }
 }

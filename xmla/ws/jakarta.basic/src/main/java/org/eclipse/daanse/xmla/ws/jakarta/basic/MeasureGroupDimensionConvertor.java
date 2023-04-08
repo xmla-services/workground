@@ -13,6 +13,11 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
+import static org.eclipse.daanse.xmla.ws.jakarta.basic.DataItemConvertor.convertDataItemList;
+
+import java.util.List;
+
 import org.eclipse.daanse.xmla.api.xmla.DataItem;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupAttribute;
 import org.eclipse.daanse.xmla.api.xmla.MeasureGroupDimension;
@@ -29,108 +34,103 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.DegenerateMeasureGroup
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ManyToManyMeasureGroupDimension;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.RegularMeasureGroupDimension;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.AnnotationConvertor.convertAnnotationList;
-import static org.eclipse.daanse.xmla.ws.jakarta.basic.DataItemConvertor.convertDataItemList;
-
 public class MeasureGroupDimensionConvertor {
 
-    public static MeasureGroupDimension convertMeasureGroupDimension(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupDimension measureGroupDimension) {
-        if (measureGroupDimension != null) {
-            if (measureGroupDimension instanceof ManyToManyMeasureGroupDimension) {
-                ManyToManyMeasureGroupDimension manyToManyMeasureGroupDimension =
-                    (ManyToManyMeasureGroupDimension) measureGroupDimension;
-                return new ManyToManyMeasureGroupDimensionR(manyToManyMeasureGroupDimension.getCubeDimensionID(),
-                    convertAnnotationList(manyToManyMeasureGroupDimension.getAnnotations() == null ? null :
-                        manyToManyMeasureGroupDimension.getAnnotations().getAnnotation()),
-                    convertMeasureGroupDimensionBinding(manyToManyMeasureGroupDimension.getSource()),
-                    manyToManyMeasureGroupDimension.getMeasureGroupID(),
-                    manyToManyMeasureGroupDimension.getDirectSlice());
-            }
-            if (measureGroupDimension instanceof RegularMeasureGroupDimension) {
-                RegularMeasureGroupDimension regularMeasureGroupDimension =
-                    (RegularMeasureGroupDimension) measureGroupDimension;
-                return new RegularMeasureGroupDimensionR(regularMeasureGroupDimension.getCubeDimensionID(),
-                    convertAnnotationList(regularMeasureGroupDimension.getAnnotations() == null ? null :
-                        regularMeasureGroupDimension.getAnnotations().getAnnotation()),
-                    convertMeasureGroupDimensionBinding(regularMeasureGroupDimension.getSource()),
-                    regularMeasureGroupDimension.getCardinality(),
-                    convertRegularMeasureGroupDimensionAttributes(regularMeasureGroupDimension.getAttributes()));
-            }
-            if (measureGroupDimension instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReferenceMeasureGroupDimension) {
-                org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReferenceMeasureGroupDimension referenceMeasureGroupDimension =
-                    (org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReferenceMeasureGroupDimension) measureGroupDimension;
-                return new ReferenceMeasureGroupDimensionR(referenceMeasureGroupDimension.getCubeDimensionID(),
-                    convertAnnotationList(referenceMeasureGroupDimension.getAnnotations() == null ? null :
-                        referenceMeasureGroupDimension.getAnnotations().getAnnotation()),
-                    convertMeasureGroupDimensionBinding(referenceMeasureGroupDimension.getSource()),
-                    referenceMeasureGroupDimension.getIntermediateCubeDimensionID(),
-                    referenceMeasureGroupDimension.getIntermediateGranularityAttributeID(),
-                    referenceMeasureGroupDimension.getMaterialization(),
-                    referenceMeasureGroupDimension.getProcessingState());
-            }
-            if (measureGroupDimension instanceof DegenerateMeasureGroupDimension) {
-                DegenerateMeasureGroupDimension degenerateMeasureGroupDimension =
-                    (DegenerateMeasureGroupDimension) measureGroupDimension;
-                return new DegenerateMeasureGroupDimensionR(degenerateMeasureGroupDimension.getCubeDimensionID(),
-                    convertAnnotationList(degenerateMeasureGroupDimension.getAnnotations() == null
-                        ? null : degenerateMeasureGroupDimension.getAnnotations().getAnnotation()),
-                    convertMeasureGroupDimensionBinding(degenerateMeasureGroupDimension.getSource()),
-                    degenerateMeasureGroupDimension.getShareDimensionStorage());
-            }
-            if (measureGroupDimension instanceof DataMiningMeasureGroupDimension) {
-                DataMiningMeasureGroupDimension dataMiningMeasureGroupDimension =
-                    (DataMiningMeasureGroupDimension) measureGroupDimension;
-                return new DataMiningMeasureGroupDimensionR(dataMiningMeasureGroupDimension.getCubeDimensionID(),
-                    convertAnnotationList(dataMiningMeasureGroupDimension.getAnnotations() == null ? null :
-                        dataMiningMeasureGroupDimension.getAnnotations().getAnnotation()),
-                    convertMeasureGroupDimensionBinding(dataMiningMeasureGroupDimension.getSource()),
-                    dataMiningMeasureGroupDimension.getCaseCubeDimensionID());
-            }
-        }
-        return null;
-    }
+	private MeasureGroupDimensionConvertor() {
+	}
 
-    private static List<MeasureGroupAttribute> convertRegularMeasureGroupDimensionAttributes(
-        org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.RegularMeasureGroupDimension.Attributes attributes
-    ) {
-        if (attributes != null) {
-            return convertMeasureGroupAttributeList(attributes.getAttribute());
-        }
-        return null;
-    }
+	public static MeasureGroupDimension convertMeasureGroupDimension(
+			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupDimension measureGroupDimension) {
+		if (measureGroupDimension != null) {
+			if (measureGroupDimension instanceof ManyToManyMeasureGroupDimension manyToManyMeasureGroupDimension) {
 
-    private static List<MeasureGroupAttribute> convertMeasureGroupAttributeList(List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupAttribute> attributeList) {
-        if (attributeList != null) {
-            return attributeList.stream().map(MeasureGroupDimensionConvertor::convertMeasureGroupAttribute).collect(Collectors.toList());
-        }
-        return null;
-    }
+				return new ManyToManyMeasureGroupDimensionR(manyToManyMeasureGroupDimension.getCubeDimensionID(),
+						convertAnnotationList(manyToManyMeasureGroupDimension.getAnnotations() == null ? null
+								: manyToManyMeasureGroupDimension.getAnnotations().getAnnotation()),
+						convertMeasureGroupDimensionBinding(manyToManyMeasureGroupDimension.getSource()),
+						manyToManyMeasureGroupDimension.getMeasureGroupID(),
+						manyToManyMeasureGroupDimension.getDirectSlice());
+			}
+			if (measureGroupDimension instanceof RegularMeasureGroupDimension regularMeasureGroupDimension) {
 
-    private static MeasureGroupAttribute convertMeasureGroupAttribute(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupAttribute measureGroupAttribute) {
-        if (measureGroupAttribute != null) {
-            return new MeasureGroupAttributeR(measureGroupAttribute.getAttributeID(),
-                convertMeasureGroupAttributeKeyColumns(measureGroupAttribute.getKeyColumns()),
-                measureGroupAttribute.getType(),
-                convertAnnotationList(measureGroupAttribute.getAnnotations() == null ? null :
-                    measureGroupAttribute.getAnnotations().getAnnotation()));
-        }
-        return null;
-    }
+				return new RegularMeasureGroupDimensionR(regularMeasureGroupDimension.getCubeDimensionID(),
+						convertAnnotationList(regularMeasureGroupDimension.getAnnotations() == null ? null
+								: regularMeasureGroupDimension.getAnnotations().getAnnotation()),
+						convertMeasureGroupDimensionBinding(regularMeasureGroupDimension.getSource()),
+						regularMeasureGroupDimension.getCardinality(),
+						convertRegularMeasureGroupDimensionAttributes(regularMeasureGroupDimension.getAttributes()));
+			}
+			if (measureGroupDimension instanceof org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.ReferenceMeasureGroupDimension referenceMeasureGroupDimension) {
 
-    private static List<DataItem> convertMeasureGroupAttributeKeyColumns(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupAttribute.KeyColumns keyColumns) {
-        if (keyColumns != null) {
-            return convertDataItemList(keyColumns.getKeyColumn());
-        }
-        return null;
-    }
+				return new ReferenceMeasureGroupDimensionR(referenceMeasureGroupDimension.getCubeDimensionID(),
+						convertAnnotationList(referenceMeasureGroupDimension.getAnnotations() == null ? null
+								: referenceMeasureGroupDimension.getAnnotations().getAnnotation()),
+						convertMeasureGroupDimensionBinding(referenceMeasureGroupDimension.getSource()),
+						referenceMeasureGroupDimension.getIntermediateCubeDimensionID(),
+						referenceMeasureGroupDimension.getIntermediateGranularityAttributeID(),
+						referenceMeasureGroupDimension.getMaterialization(),
+						referenceMeasureGroupDimension.getProcessingState());
+			}
+			if (measureGroupDimension instanceof DegenerateMeasureGroupDimension degenerateMeasureGroupDimension) {
 
-    private static MeasureGroupDimensionBinding convertMeasureGroupDimensionBinding(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupDimensionBinding source) {
-        if (source != null) {
-            return new MeasureGroupDimensionBindingR(source.getCubeDimensionID());
-        }
-        return null;
-    }
+				return new DegenerateMeasureGroupDimensionR(degenerateMeasureGroupDimension.getCubeDimensionID(),
+						convertAnnotationList(degenerateMeasureGroupDimension.getAnnotations() == null ? null
+								: degenerateMeasureGroupDimension.getAnnotations().getAnnotation()),
+						convertMeasureGroupDimensionBinding(degenerateMeasureGroupDimension.getSource()),
+						degenerateMeasureGroupDimension.getShareDimensionStorage());
+			}
+			if (measureGroupDimension instanceof DataMiningMeasureGroupDimension dataMiningMeasureGroupDimension) {
+				return new DataMiningMeasureGroupDimensionR(dataMiningMeasureGroupDimension.getCubeDimensionID(),
+						convertAnnotationList(dataMiningMeasureGroupDimension.getAnnotations() == null ? null
+								: dataMiningMeasureGroupDimension.getAnnotations().getAnnotation()),
+						convertMeasureGroupDimensionBinding(dataMiningMeasureGroupDimension.getSource()),
+						dataMiningMeasureGroupDimension.getCaseCubeDimensionID());
+			}
+		}
+		return null;
+	}
+
+	private static List<MeasureGroupAttribute> convertRegularMeasureGroupDimensionAttributes(
+			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.RegularMeasureGroupDimension.Attributes attributes) {
+		if (attributes != null) {
+			return convertMeasureGroupAttributeList(attributes.getAttribute());
+		}
+		return List.of();
+	}
+
+	private static List<MeasureGroupAttribute> convertMeasureGroupAttributeList(
+			List<org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupAttribute> attributeList) {
+		if (attributeList != null) {
+			return attributeList.stream().map(MeasureGroupDimensionConvertor::convertMeasureGroupAttribute).toList();
+		}
+		return List.of();
+	}
+
+	private static MeasureGroupAttribute convertMeasureGroupAttribute(
+			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupAttribute measureGroupAttribute) {
+		if (measureGroupAttribute != null) {
+			return new MeasureGroupAttributeR(measureGroupAttribute.getAttributeID(),
+					convertMeasureGroupAttributeKeyColumns(measureGroupAttribute.getKeyColumns()),
+					measureGroupAttribute.getType(),
+					convertAnnotationList(measureGroupAttribute.getAnnotations() == null ? null
+							: measureGroupAttribute.getAnnotations().getAnnotation()));
+		}
+		return null;
+	}
+
+	private static List<DataItem> convertMeasureGroupAttributeKeyColumns(
+			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupAttribute.KeyColumns keyColumns) {
+		if (keyColumns != null) {
+			return convertDataItemList(keyColumns.getKeyColumn());
+		}
+		return List.of();
+	}
+
+	private static MeasureGroupDimensionBinding convertMeasureGroupDimensionBinding(
+			org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla.MeasureGroupDimensionBinding source) {
+		if (source != null) {
+			return new MeasureGroupDimensionBindingR(source.getCubeDimensionID());
+		}
+		return null;
+	}
 }

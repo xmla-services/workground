@@ -13,6 +13,13 @@
  */
 package org.eclipse.daanse.xmla.ws.jakarta.basic;
 
+import java.io.Serializable;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.List;
+
+import javax.xml.datatype.XMLGregorianCalendar;
+
 import org.eclipse.daanse.xmla.api.exception.StartEnd;
 import org.eclipse.daanse.xmla.api.exception.Type;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine200.WarningColumn;
@@ -24,19 +31,14 @@ import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_exception.MessageLocat
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_exception.Messages;
 import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.xmla_exception.WarningType;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.Serializable;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class ConvertorUtil {
+
+	private ConvertorUtil() {
+	}
 
     public static Exception convertException(org.eclipse.daanse.xmla.api.exception.Exception exception) {
         if (exception != null) {
-            Exception res = new Exception();
-            return res;
+            return new Exception();
         }
         return null;
     }
@@ -52,15 +54,14 @@ public class ConvertorUtil {
 
     private static List<Serializable> convertWarningOrErrorList(List<Type> warningOrErrorList) {
         if (warningOrErrorList != null) {
-            return warningOrErrorList.stream().map(ConvertorUtil::convertWarningOrError).collect(Collectors.toList());
+            return warningOrErrorList.stream().map(ConvertorUtil::convertWarningOrError).toList();
         }
-        return null;
+        return List.of();
     }
 
     private static Serializable convertWarningOrError(Type type) {
         if (type != null) {
-            if (type instanceof org.eclipse.daanse.xmla.api.exception.ErrorType) {
-                org.eclipse.daanse.xmla.api.exception.ErrorType et = (org.eclipse.daanse.xmla.api.exception.ErrorType) type;
+            if (type instanceof org.eclipse.daanse.xmla.api.exception.ErrorType et) {
                 ErrorType res = new ErrorType();
                 res.setErrorCode(et.errorCode());
                 res.setDescription(et.description());
@@ -70,8 +71,7 @@ public class ConvertorUtil {
                 res.setSource(et.source());
                 return res;
             }
-            if (type instanceof org.eclipse.daanse.xmla.api.exception.WarningType) {
-                org.eclipse.daanse.xmla.api.exception.WarningType wt = (org.eclipse.daanse.xmla.api.exception.WarningType) type;
+            if (type instanceof org.eclipse.daanse.xmla.api.exception.WarningType wt) {
                 WarningType res = new WarningType();
                 res.setDescription(wt.description());
                 res.setHelpFile(wt.helpFile());
