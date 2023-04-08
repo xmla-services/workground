@@ -271,6 +271,26 @@
             </execution>
           </executions>
         </plugin>
+        <plugin>
+   	      <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>0.8.9</version>
+          <executions>
+            <execution>
+              <id>jacoco-report-bndrun</id>
+              <goals>
+                <goal>report-integration</goal>
+              </goals>
+              <configuration>
+                <formats>
+                  <format>XML</format>
+                </formats>
+                <dataFile>${project.build.directory}/tmp/TEST/test/generated/jacoco.exec</dataFile>
+                <outputDirectory>${project.reporting.outputDirectory}/jacoco</outputDirectory>
+               </configuration>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
@@ -335,6 +355,10 @@
         <configuration>
           <skipTests>true</skipTests>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </build>
