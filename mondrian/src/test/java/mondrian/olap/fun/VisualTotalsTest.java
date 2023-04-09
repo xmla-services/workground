@@ -37,7 +37,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  *
  * @author efine
  */
-public class VisualTotalsTest {
+class VisualTotalsTest {
 	@Test
     void testSubstituteEmpty() {
         final String actual = VisualTotalsFunDef.substitute("", "anything");

@@ -42,7 +42,7 @@ import mondrian.rolap.RolapCell;
  * @author Yury_Bakhmutski
  * @since Nov 18, 2015
  */
-public class DrillThroughFieldListTest {
+class DrillThroughFieldListTest {
   private PropertySaver5 propSaver;
 
   @BeforeEach

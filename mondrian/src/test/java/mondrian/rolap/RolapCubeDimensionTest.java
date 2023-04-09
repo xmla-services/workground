@@ -26,7 +26,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class RolapCubeDimensionTest {
+class RolapCubeDimensionTest {
 
   private RolapCubeDimension stubRolapCubeDimension(boolean virtualCube) {
     RolapCube cube = mock(RolapCube.class);

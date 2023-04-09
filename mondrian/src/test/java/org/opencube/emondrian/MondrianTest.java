@@ -40,7 +40,7 @@ import mondrian.spi.CatalogLocator;
 
 //@ExtendWith(MondrianRuntimeExtension.class)
 
-public class MondrianTest {
+class MondrianTest {
 
 
 	public static final String query = "SELECT  \n"//

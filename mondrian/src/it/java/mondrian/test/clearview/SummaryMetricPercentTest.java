@@ -25,7 +25,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class SummaryMetricPercentTest extends ClearViewBase {
+class SummaryMetricPercentTest extends ClearViewBase {
 
     public SummaryMetricPercentTest() {
         super();

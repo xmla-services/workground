@@ -26,7 +26,7 @@ import mondrian.olap.MondrianProperties;
  * Test case for non-collapsed levels in agg tables, based on the "Species"
  * schema.
  */
-public class SpeciesNonCollapsedAggTest extends AggTableTestCase {
+class SpeciesNonCollapsedAggTest extends AggTableTestCase {
 
     public static final String ANIMAL_SCHEMA =
         "<?xml version='1.0'?>\n"

@@ -31,7 +31,7 @@ import mondrian.spi.DynamicSchemaProcessor;
 /**
  * Test for {@link RolapSchemaPool}.
  */
-public class RolapSchemaPoolTest {
+class RolapSchemaPoolTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)

@@ -31,7 +31,7 @@ import java.util.concurrent.Future;
  * @author Thiyagu
  * @since 24-May-2007
  */
-public class FastBatchingCellReaderTest extends BatchTestCase {
+class FastBatchingCellReaderTest extends BatchTestCase {
 
   private Locus locus;
   private Execution e;

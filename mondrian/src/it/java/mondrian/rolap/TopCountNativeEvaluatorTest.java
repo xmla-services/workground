@@ -28,7 +28,7 @@ import static org.mockito.Mockito.*;
  * @author Andrey Khayrutdinov
  * @see RolapNativeTopCount#createEvaluator(RolapEvaluator, FunDef, Exp[])
  */
-public class TopCountNativeEvaluatorTest extends FoodMartTestCase {
+class TopCountNativeEvaluatorTest extends FoodMartTestCase {
 
     @Override
     public void setUp() throws Exception {

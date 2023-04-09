@@ -30,7 +30,7 @@ import org.eigenbase.xom.XOMUtil;
 /**
  * @author Andrey Khayrutdinov
  */
-public class RolapSchemaTest extends PropertyRestoringTestCase {
+class RolapSchemaTest extends PropertyRestoringTestCase {
   private RolapSchema schemaSpy;
   private static RolapStar rlStarMock = mock(RolapStar.class);
 

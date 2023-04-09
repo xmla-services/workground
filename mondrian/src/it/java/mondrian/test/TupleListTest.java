@@ -23,7 +23,7 @@ import java.util.*;
  *
  * @author jhyde
  */
-public class TupleListTest extends FoodMartTestCase {
+class TupleListTest extends FoodMartTestCase {
     public TupleListTest(String name) {
         super(name);
     }

@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 import org.osgi.test.common.annotation.InjectService;
 
 
-public class ServiceTest {
+class ServiceTest {
     @Test
     void serviceExists(@InjectService List<Dialect> dialects) throws Exception {
 

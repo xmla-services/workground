@@ -63,7 +63,7 @@ import java.util.Set;
  * @author jhyde
  * @since May 18, 2007
  */
-public class DialectTest extends TestCase {
+class DialectTest extends TestCase {
   private Connection connection;
   private Dialect dialect;
   private static final String INFOBRIGHT_UNSUPPORTED =

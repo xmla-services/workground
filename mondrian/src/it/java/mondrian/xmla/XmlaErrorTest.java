@@ -39,7 +39,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Richard M. Emberson
  */
 @SuppressWarnings({"ThrowableInstanceNeverThrown"})
-public class XmlaErrorTest extends XmlaBaseTestCase
+class XmlaErrorTest extends XmlaBaseTestCase
     implements XmlaConstants
 {
     static boolean doAuthorization = false;

@@ -11,7 +11,7 @@ package mondrian.spi.impl;
 
 import junit.framework.TestCase;
 
-public class JdbcDialectImplTest extends TestCase {
+class JdbcDialectImplTest extends TestCase {
   private static final String ILLEGAL_BOOLEAN_LITERAL =
       "illegal for base dialect implemetation boolean literal";
   private static final String ILLEGAL_BOOLEAN_LITERAL_MESSAGE =

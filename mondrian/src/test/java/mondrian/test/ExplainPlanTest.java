@@ -51,7 +51,7 @@ import mondrian.spi.ProfileHandler;
  * @author Benny
  *
  */
-public class ExplainPlanTest {
+class ExplainPlanTest {
 
   private PropertySaver5 propSaver;
   @BeforeEach

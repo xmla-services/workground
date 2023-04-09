@@ -23,7 +23,7 @@ import mondrian.util.Bug;
  *
  * @author pierluiggi@users.sourceforge.net
  */
-public class IndexedValuesTest extends FoodMartTestCase {
+class IndexedValuesTest extends FoodMartTestCase {
     public IndexedValuesTest(final String name) {
         super(name);
     }

@@ -27,7 +27,7 @@ import java.util.List;
  * @author jlopez, lcanals
  * @since May, 2008
  */
-public class HighDimensionsTest extends FoodMartTestCase {
+class HighDimensionsTest extends FoodMartTestCase {
     public HighDimensionsTest() {
     }
 

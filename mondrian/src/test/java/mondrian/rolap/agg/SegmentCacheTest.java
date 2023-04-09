@@ -37,7 +37,7 @@ import mondrian.test.BasicQueryTest;
  *
  * @author LBoudreau
  */
-public class SegmentCacheTest {
+class SegmentCacheTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)

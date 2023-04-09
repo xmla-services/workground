@@ -36,7 +36,7 @@ import mondrian.test.PropertySaver5;
  * @author Rushan Chen
  * @author Stefan Bischof
  */
-public class CustomizedParserTest {
+class CustomizedParserTest {
 
 	private PropertySaver5 propSaver;
 

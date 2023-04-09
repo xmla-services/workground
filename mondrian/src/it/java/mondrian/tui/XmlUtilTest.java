@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class XmlUtilTest extends TestCase {
+class XmlUtilTest extends TestCase {
 
     void testSelectAsNodesWithEmptyNamespace()
             throws IOException, SAXException, XPathException

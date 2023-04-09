@@ -37,7 +37,7 @@ import static org.mockito.Mockito.mock;
  *
  * @author Yury Bakhmutski
  */
-public class UnionFunDefTest extends FoodMartTestCase {
+class UnionFunDefTest extends FoodMartTestCase {
 
   /**
    * Test for MONDRIAN-2250 issue.

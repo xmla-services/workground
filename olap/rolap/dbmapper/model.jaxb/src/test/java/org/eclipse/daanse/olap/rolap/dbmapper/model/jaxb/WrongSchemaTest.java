@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import jakarta.xml.bind.JAXBException;
 
-public class WrongSchemaTest {
+class WrongSchemaTest {
 
     @Test
     void testRrequiredAatrebutesInWrongSchema() throws Exception {

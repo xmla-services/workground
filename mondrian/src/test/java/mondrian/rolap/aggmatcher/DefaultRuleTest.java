@@ -31,7 +31,7 @@ import mondrian.recorder.ListRecorder;
  *
  * @author Richard M. Emberson
  */
-public class DefaultRuleTest {
+class DefaultRuleTest {
     private static final Logger LOGGER =
         LoggerFactory.getLogger(DefaultRuleTest.class);
     private static final String TEST_RULE_XML = "TestRule.xml";

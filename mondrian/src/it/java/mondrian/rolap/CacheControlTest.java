@@ -23,7 +23,7 @@ import java.util.List;
  * @author jhyde
  * @since Sep 27, 2006
  */
-public class CacheControlTest extends FoodMartTestCase {
+class CacheControlTest extends FoodMartTestCase {
     /**
      * Creates a CacheControlTest.
      */

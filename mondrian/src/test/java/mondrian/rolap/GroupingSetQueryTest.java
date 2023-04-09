@@ -43,7 +43,7 @@ import mondrian.test.SqlPattern;
  * @author Thiyagu
  * @since 08-Jun-2007
  */
-public class GroupingSetQueryTest extends BatchTestCase{
+class GroupingSetQueryTest extends BatchTestCase{
 
     private MondrianProperties prop = MondrianProperties.instance();
 

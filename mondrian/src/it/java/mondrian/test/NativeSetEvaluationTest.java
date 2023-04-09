@@ -26,7 +26,7 @@ import mondrian.util.Bug;
  *
  * <p>
  */
-public class NativeSetEvaluationTest extends BatchTestCase {
+class NativeSetEvaluationTest extends BatchTestCase {
 
   /**
    * Checks that a given MDX query results in a particular SQL statement being generated.

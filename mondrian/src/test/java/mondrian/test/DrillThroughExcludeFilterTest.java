@@ -20,7 +20,7 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-public class DrillThroughExcludeFilterTest {
+class DrillThroughExcludeFilterTest {
 
     String schema = "<Schema name=\"MYFoodmart\">\n"
             + "  <Dimension visible=\"true\" highCardinality=\"false\" name=\"Store\">\n"

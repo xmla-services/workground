@@ -39,7 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author jhyde
  * @since August 7, 2006
  */
-public class PerformanceTest extends FoodMartTestCase {
+class PerformanceTest extends FoodMartTestCase {
   /**
    * Certain tests are enabled only if logging is enabled at debug level or higher.
    */

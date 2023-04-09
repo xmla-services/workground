@@ -39,7 +39,7 @@ import mondrian.spi.ProfileHandler;
  * @author Benny
  *
  */
-public class ExplainPlanTest extends FoodMartTestCase {
+class ExplainPlanTest extends FoodMartTestCase {
 
   public ExplainPlanTest() {
     super();

@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author Andrey Khayrutdinov
  */
-public class SqlStatementTest extends TestCase {
+class SqlStatementTest extends TestCase {
 
   private Monitor monitor;
   private MondrianServer srv;

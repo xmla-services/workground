@@ -15,7 +15,7 @@ import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentHeader;
 import mondrian.test.FoodMartTestCase;
 
-public class SegmentCacheIndexImplTest extends FoodMartTestCase {
+class SegmentCacheIndexImplTest extends FoodMartTestCase {
     void testNoHeaderOnLoad() {
         final SegmentCacheIndexImpl index =
             new SegmentCacheIndexImpl(Thread.currentThread());

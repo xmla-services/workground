@@ -25,7 +25,7 @@ import javax.xml.namespace.NamespaceContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class NamespaceContextImplTest {
+class NamespaceContextImplTest {
 
     Map<String, String> namespaces = new HashMap<>();
     NamespaceContext namespaceContext;

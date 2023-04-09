@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class GrandTotalTest extends ClearViewBase {
+class GrandTotalTest extends ClearViewBase {
 
     public GrandTotalTest() {
         super();

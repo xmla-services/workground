@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class MiscTest extends ClearViewBase {
+class MiscTest extends ClearViewBase {
 
     public MiscTest() {
         super();

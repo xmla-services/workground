@@ -17,7 +17,7 @@ import java.util.SortedSet;
 /**
  * @author Andrey Khayrutdinov
  */
-public class DenseDoubleSegmentBodyTest extends
+class DenseDoubleSegmentBodyTest extends
   DenseSegmentBodyTestBase<DenseDoubleSegmentBody, Double>
 {
 

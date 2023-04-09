@@ -28,7 +28,7 @@ import mondrian.test.DiffRepository;
  *
  * @author Khanh Vu
  */
-public class BatchedFillTest extends ClearViewBase {
+class BatchedFillTest extends ClearViewBase {
 
     @Override
 	public DiffRepository getDiffRepos() {

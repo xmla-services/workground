@@ -26,7 +26,7 @@ import org.opencube.junit5.propupdator.AppandSteelWheelsCatalogAsFile;
 /**
  * @author Andrey Khayrutdinov
  */
-public class SteelWheelsAggregationTest extends SteelWheelsTestCase {
+class SteelWheelsAggregationTest extends SteelWheelsTestCase {
 
     private static final String QUERY = ""
             + "WITH\n"

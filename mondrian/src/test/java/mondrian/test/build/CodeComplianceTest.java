@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
  */
 @Disabled
 //ant test was disabled
-public class CodeComplianceTest
+class CodeComplianceTest
         extends AntTestBase
 {
 

@@ -44,7 +44,7 @@ import org.osgi.test.junit5.cm.ConfigurationExtension;
 
 @ExtendWith(ConfigurationExtension.class)
 @ExtendWith(MockitoExtension.class)
-public class ServiceTest {
+class ServiceTest {
 
     private static final String TARGET_EXT = ".target";
     @InjectBundleContext

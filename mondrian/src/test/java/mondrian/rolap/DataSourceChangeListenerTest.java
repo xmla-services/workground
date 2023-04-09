@@ -57,7 +57,7 @@ import mondrian.util.Pair;
  * @author Bart Pappyn
  * @since Jan 05, 2007
  */
-public class DataSourceChangeListenerTest {
+class DataSourceChangeListenerTest {
 
     private PropertySaver5 propSaver;
     @BeforeEach

@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class MemHungryTest extends ClearViewBase {
+class MemHungryTest extends ClearViewBase {
 
     public MemHungryTest() {
         super();

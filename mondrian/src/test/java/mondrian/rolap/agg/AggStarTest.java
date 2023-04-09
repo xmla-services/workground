@@ -24,7 +24,7 @@ import mondrian.rolap.aggmatcher.AggStar;
 import mondrian.rolap.aggmatcher.JdbcSchema;
 import mondrian.test.PropertySaver5;
 
-public class AggStarTest {
+class AggStarTest {
 
   private AggStar aggStar;
   private RolapStar star;

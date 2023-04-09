@@ -25,7 +25,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class MySqlDialect3Test {
+class MySqlDialect3Test {
     private static final String ILLEGAL_BOOLEAN_LITERAL = "illegal for this dialect boolean literal";
     private static final String ILLEGAL_BOOLEAN_LITERAL_MESSAGE = "Illegal BOOLEAN literal:  ";
     private static final String BOOLEAN_LITERAL_TRUE = "True";

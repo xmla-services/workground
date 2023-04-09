@@ -49,7 +49,7 @@ import mondrian.util.Bug;
  * @author jlopez, lcanals
  * @since May, 2008
  */
-public class HighDimensionsTest {
+class HighDimensionsTest {
 
     private PropertySaver5 propSaver;
 

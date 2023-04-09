@@ -35,7 +35,7 @@ import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.github.dockerjava.zerodep.ZerodepDockerHttpClient;
 
-public class DockerJavaContainerRuntimeTest {
+class DockerJavaContainerRuntimeTest {
 
     @Test
     void testName(@InjectService(service = ContainerRuntime.class) ContainerRuntime containerRuntime) throws Exception {

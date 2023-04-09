@@ -18,7 +18,7 @@ import org.eclipse.daanse.mdx.parser.api.MdxParserException;
 import org.eclipse.daanse.mdx.parser.ccc.MdxParserWrapper;
 import org.eclipse.daanse.mdx.unparser.simple.SimpleUnparser;
 
-public class Test {
+class Test {
 
     @org.junit.jupiter.api.Test
     void testdefault() throws MdxParserException {

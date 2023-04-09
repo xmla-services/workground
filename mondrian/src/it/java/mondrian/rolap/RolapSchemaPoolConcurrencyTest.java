@@ -32,7 +32,7 @@ import static org.mockito.Mockito.spy;
 /**
  * @author Andrey Khayrutdinov
  */
-public class RolapSchemaPoolConcurrencyTest extends TestCase
+class RolapSchemaPoolConcurrencyTest extends TestCase
         implements Answer<RolapSchema>
 {
 

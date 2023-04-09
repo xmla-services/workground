@@ -48,7 +48,7 @@ import aQute.bnd.annotation.service.ServiceCapability;
         @Property(key = "xmlaService.target", value = "(" + Constants.XMLASERVICE_FILTER_KEY + "="
                 + Constants.XMLASERVICE_FILTER_VALUE + ")"),
         @Property(key = "osgi.soap.endpoint.contextpath", value = Constants.WS_PATH) })
-public class InitialisationTest {
+class InitialisationTest {
     private Logger logger = LoggerFactory.getLogger(InitialisationTest.class);
 
     @InjectBundleContext

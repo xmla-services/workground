@@ -19,7 +19,7 @@ import mondrian.spi.Dialect;
  * @author jhyde
  * @since Dec 15, 2005
  */
-public class MultipleHierarchyTest extends BatchTestCase {
+class MultipleHierarchyTest extends BatchTestCase {
     private static final String timeWeekly =
         TestContext.hierarchyName("Time", "Weekly");
     private static final String timeTime =

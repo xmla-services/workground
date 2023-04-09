@@ -18,7 +18,7 @@ import static mondrian.rolap.agg.AggregationOnInvalidRoleTest.executeAnalyzerQue
 /**
  * @author Andrey Khayrutdinov
  */
-public class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
+class AggregationOnInvalidRoleWhenNotIgnoringTest extends CsvDBTestCase {
 
     @Override
     protected String getFileName() {

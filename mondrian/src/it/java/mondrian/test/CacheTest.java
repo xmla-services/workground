@@ -23,7 +23,7 @@ import java.util.concurrent.*;
  *
  * @author Julian Hyde
  */
-public class CacheTest extends FoodMartTestCase {
+class CacheTest extends FoodMartTestCase {
     /**
      * Tests that if N queries are executed at the same time, only one segment
      * request will be sent. The query that arrives second should see that there

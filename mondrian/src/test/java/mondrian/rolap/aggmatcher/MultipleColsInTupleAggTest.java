@@ -37,7 +37,7 @@ import mondrian.test.SqlPattern;
  *
  * @author Will Gorman
  */
-public class MultipleColsInTupleAggTest extends AggTableTestCase {
+class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     @BeforeAll
     public static void beforeAll() {

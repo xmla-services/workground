@@ -28,7 +28,7 @@ import mondrian.olap.Query;
 import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;
 
-public class PropertiesFunctionTest {
+class PropertiesFunctionTest {
 
   private static final String TIME_MEMBER_CAPTION = "1997";
   private static final String TIME_WEEKLY_MEMBER_CAPTION = "All Time.Weeklys";

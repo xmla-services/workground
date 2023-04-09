@@ -51,7 +51,7 @@ import org.osgi.test.junit5.service.ServiceExtension;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
-public class DatabaseVerifyerTest {
+class DatabaseVerifyerTest {
 
     public static final String COMPONENT_NAME = "org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.jdbc.DatabaseVerifyer";
     @InjectService(filter = "(component.name=" + COMPONENT_NAME + ")")

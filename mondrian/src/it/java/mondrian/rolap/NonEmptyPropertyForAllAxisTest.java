@@ -8,7 +8,7 @@ import mondrian.test.TestContext;
 /**
  * Tests the {@link MondrianProperties#EnableNonEmptyOnAllAxis} property.
  */
-public class NonEmptyPropertyForAllAxisTest extends FoodMartTestCase {
+class NonEmptyPropertyForAllAxisTest extends FoodMartTestCase {
     void testNonEmptyForAllAxesWithPropertySet() {
         propSaver.set(
             MondrianProperties.instance().EnableNonEmptyOnAllAxis, true);

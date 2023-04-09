@@ -33,7 +33,7 @@ import mondrian.olap.MondrianProperties;
  * @author ajoglekar
  * @since Dec 03, 2007
  */
-public class IgnoreUnrelatedDimensionsTest {
+class IgnoreUnrelatedDimensionsTest {
 
     private PropertySaver5 propSaver;
 

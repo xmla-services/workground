@@ -26,7 +26,7 @@ import mondrian.calc.impl.UnaryTupleList;
  *
  * @author <a>Richard M. Emberson</a>
  */
-public class ModulosTest {
+class ModulosTest {
 
 	@Test
     void testMany() {

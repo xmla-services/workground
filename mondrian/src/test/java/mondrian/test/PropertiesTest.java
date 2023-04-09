@@ -40,7 +40,7 @@ import mondrian.olap.SchemaReader;
  * @author anikitin
  * @since 5 July, 2005
  */
-public class PropertiesTest {
+class PropertiesTest {
 
     /**
      * Tests existence and values of mandatory member properties.

@@ -21,7 +21,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  *
  * @author Yury Bakhmutski
  */
-public class CrossJoinArgFactoryTest {
+class CrossJoinArgFactoryTest {
 
      /**
      * test for MONDRIAN-2287 issue. Tests if correct result is returned

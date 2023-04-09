@@ -14,7 +14,7 @@ import mondrian.test.TestContext;
 /**
  * @author Andrey Khayrutdinov
  */
-public class AggregationOverAggTableTest extends AggTableTestCase {
+class AggregationOverAggTableTest extends AggTableTestCase {
 
     @Override
     protected String getFileName() {

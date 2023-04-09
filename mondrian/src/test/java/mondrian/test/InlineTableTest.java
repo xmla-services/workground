@@ -31,7 +31,7 @@ import mondrian.olap.MondrianProperties;
  *
  * @author jhyde
  */
-public class InlineTableTest {
+class InlineTableTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )

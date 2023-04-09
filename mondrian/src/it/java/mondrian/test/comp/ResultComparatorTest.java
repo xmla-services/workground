@@ -100,7 +100,7 @@ import javax.xml.parsers.DocumentBuilder;
  * &lt;/mdbTest&gt;
  * </blockquote>
  */
-public class ResultComparatorTest extends FoodMartTestCase {
+class ResultComparatorTest extends FoodMartTestCase {
 
     private File file;
 

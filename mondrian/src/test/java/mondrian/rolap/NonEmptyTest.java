@@ -69,7 +69,7 @@ import mondrian.util.Bug;
  * @author av
  * @since Nov 21, 2005
  */
-public class NonEmptyTest extends BatchTestCase {
+class NonEmptyTest extends BatchTestCase {
   SqlConstraintFactory scf = SqlConstraintFactory.instance();
 
   private static final String STORE_TYPE_LEVEL =

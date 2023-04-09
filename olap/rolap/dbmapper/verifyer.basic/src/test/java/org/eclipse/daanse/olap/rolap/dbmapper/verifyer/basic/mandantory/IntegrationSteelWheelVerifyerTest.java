@@ -15,7 +15,7 @@ import org.osgi.test.junit5.service.ServiceSource;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
-public class IntegrationSteelWheelVerifyerTest {
+class IntegrationSteelWheelVerifyerTest {
 
 	public static final String COMPONENT_NAME = "org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.mandantory"
 			+ ".MandantoriesVerifyer";

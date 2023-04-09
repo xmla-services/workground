@@ -31,7 +31,7 @@ import mondrian.rolap.StarColumnPredicate;
 import mondrian.rolap.StarPredicate;
 import mondrian.util.ByteString;
 
-public class GroupingSetsListTest {
+class GroupingSetsListTest {
 
   private static List<GroupingSet> groupingSetList;
   private static GroupingSetsList testObject;

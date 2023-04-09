@@ -23,7 +23,7 @@ import org.eclipse.daanse.db.dialect.db.common.Util;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class MicrosoftSqlServerDialectTest {
+class MicrosoftSqlServerDialectTest {
 
     private static final String ILLEGAL_BOOLEAN_LITERAL = "illegal for this dialect boolean literal";
     private static final String ILLEGAL_BOOLEAN_LITERAL_MESSAGE = "Illegal BOOLEAN literal:  ";

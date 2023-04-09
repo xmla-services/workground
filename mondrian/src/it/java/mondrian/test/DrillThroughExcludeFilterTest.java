@@ -11,7 +11,7 @@ package mondrian.test;
 import org.eclipse.daanse.olap.api.result.Cell;
 import org.eclipse.daanse.olap.api.result.Result;
 
-public class DrillThroughExcludeFilterTest extends FoodMartTestCase {
+class DrillThroughExcludeFilterTest extends FoodMartTestCase {
 
     String schema = "<Schema name=\"MYFoodmart\">\n"
             + "  <Dimension visible=\"true\" highCardinality=\"false\" name=\"Store\">\n"

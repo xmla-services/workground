@@ -16,7 +16,7 @@ import static mondrian.rolap.RolapNativeTopCountTestCases.*;
 /**
  * @author Andrey Khayrutdinov
  */
-public class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
+class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
 
     private void assertResultsAreEqual(String testCase, String query) {
         assertResultsAreEqual(testCase, query, getTestContext());

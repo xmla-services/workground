@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 class SelectSubCubeClauseTest {
 
 	@Nested
-	public class SelectSubCubeClauseNameTest {
+	class SelectSubCubeClauseNameTest {
 
 		@Test
 		void testUnQuoted() throws MdxParserException {

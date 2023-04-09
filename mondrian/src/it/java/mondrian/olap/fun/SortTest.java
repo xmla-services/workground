@@ -19,7 +19,7 @@ import mondrian.test.FoodMartTestCase;
  * @author jhyde
  * @since Sep 21, 2006
  */
-public class SortTest extends FoodMartTestCase {
+class SortTest extends FoodMartTestCase {
   void testFoo() {
     // Check that each value compares according to its position in the total
     // order. For example, NaN compares greater than

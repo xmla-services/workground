@@ -36,7 +36,7 @@ import mondrian.spi.DynamicSchemaProcessor;
  *
  * @author hhaas
  */
-public class CaptionTest{
+class CaptionTest{
 
     /**
      * set caption "Anzahl Verkauf" for measure "Unit Sales"

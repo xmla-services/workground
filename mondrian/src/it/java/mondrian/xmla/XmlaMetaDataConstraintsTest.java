@@ -29,7 +29,7 @@ import java.util.*;
  * Then it runs a few queries to check that the filtering
  * occurs as expected.
  */
-public class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
+class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();

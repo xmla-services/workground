@@ -32,7 +32,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.Util.PropertyList;
 
-public class TestTest {
+class TestTest {
 
 	public static class ExampleDatabaseProvider implements DatabaseProvider {
 

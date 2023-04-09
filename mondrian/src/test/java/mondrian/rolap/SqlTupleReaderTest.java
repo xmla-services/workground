@@ -40,7 +40,7 @@ import mondrian.rolap.sql.TupleConstraint;
 /**
  * Created by Dmitriy Stepanov on 20.01.18.
  */
-public class SqlTupleReaderTest {
+class SqlTupleReaderTest {
 
 
   @Test

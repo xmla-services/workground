@@ -17,7 +17,7 @@ import static mondrian.rolap.RolapNativeTopCountTestCases.*;
  * @author Andrey Khayrutdinov
  * @see RolapNativeTopCountTestCases
  */
-public class RolapNativeTopCountTest extends BatchTestCase {
+class RolapNativeTopCountTest extends BatchTestCase {
 
     public void setUp() throws Exception {
         super.setUp();

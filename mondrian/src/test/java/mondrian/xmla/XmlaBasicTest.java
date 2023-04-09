@@ -59,7 +59,7 @@ import mondrian.tui.XmlaSupport;
  *
  * @author Richard M. Emberson
  */
-public class XmlaBasicTest extends XmlaBaseTestCase {
+class XmlaBasicTest extends XmlaBaseTestCase {
 
     public static final String FORMAT_TABLULAR = "Tabular";
 

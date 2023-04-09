@@ -67,7 +67,7 @@ import mondrian.test.TestContext;
  * {@link SqlConstraintUtils}.
  *
  */
-public class SqlConstraintUtilsTest extends FoodMartTestCase {
+class SqlConstraintUtilsTest extends FoodMartTestCase {
 
     // ~ Constructors ----------------------------------------------------------
 

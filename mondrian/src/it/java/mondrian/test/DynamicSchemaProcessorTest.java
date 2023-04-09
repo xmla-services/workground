@@ -22,7 +22,7 @@ import junit.framework.TestCase;
  *
  * @author ngoodman
  */
-public class DynamicSchemaProcessorTest
+class DynamicSchemaProcessorTest
     extends TestCase
 {
 

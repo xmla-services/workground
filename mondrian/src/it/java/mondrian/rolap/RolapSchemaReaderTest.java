@@ -20,7 +20,7 @@ import java.util.*;
 /**
  * Unit test for {@link SchemaReader}.
  */
-public class RolapSchemaReaderTest extends FoodMartTestCase {
+class RolapSchemaReaderTest extends FoodMartTestCase {
     public RolapSchemaReaderTest(String name) {
         super(name);
     }

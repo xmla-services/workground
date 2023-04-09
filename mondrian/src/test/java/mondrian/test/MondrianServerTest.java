@@ -39,7 +39,7 @@ import mondrian.xmla.test.XmlaTestContext;
  * @author jhyde
  * @since 2010/11/22
  */
-public class MondrianServerTest {
+class MondrianServerTest {
     /**
      * Tests an embedded server.
      */

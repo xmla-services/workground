@@ -26,7 +26,7 @@ import mondrian.spi.UserDefinedFunction;
 /**
  * Created by nbaker on 8/2/16.
  */
-public class ServiceDiscoveryTest{
+class ServiceDiscoveryTest{
 
   @org.junit.jupiter.api.Test
   void testGetImplementor() throws Exception {

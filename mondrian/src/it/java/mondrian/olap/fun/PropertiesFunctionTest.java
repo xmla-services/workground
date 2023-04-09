@@ -19,7 +19,7 @@ import mondrian.olap.type.StringType;
 import mondrian.olap.type.Type;
 import mondrian.test.FoodMartTestCase;
 
-public class PropertiesFunctionTest extends FoodMartTestCase {
+class PropertiesFunctionTest extends FoodMartTestCase {
 
   private static final String TIME_MEMBER_CAPTION = "1997";
   private static final String TIME_WEEKLY_MEMBER_CAPTION = "All Time.Weeklys";

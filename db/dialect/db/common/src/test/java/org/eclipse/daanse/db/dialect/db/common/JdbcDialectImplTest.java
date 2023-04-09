@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class JdbcDialectImplTest{
+class JdbcDialectImplTest{
   private static final String ILLEGAL_BOOLEAN_LITERAL =
       "illegal for base dialect implemetation boolean literal";
   private static final String ILLEGAL_BOOLEAN_LITERAL_MESSAGE =

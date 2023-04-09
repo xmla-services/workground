@@ -26,7 +26,7 @@ import org.opencube.junit5.context.TestingContext;
 import org.opencube.junit5.dataloader.FastFoodmardDataLoader;
 import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
-public class ExplicitRecognizerTest extends AggTableTestCase {
+class ExplicitRecognizerTest extends AggTableTestCase {
 
 	@BeforeAll
 	public static void beforeAll() {

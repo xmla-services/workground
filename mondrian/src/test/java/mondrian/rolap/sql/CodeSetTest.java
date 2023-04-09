@@ -26,7 +26,7 @@ import mondrian.olap.MondrianException;
  * @author Tatsiana_Kasiankova
  *
  */
-public class CodeSetTest {
+class CodeSetTest {
 
   private static final String MONDRIAN_ERROR_NO_GENERIC_VARIANT =
       "Mondrian Error:Internal error: View has no 'generic' variant";

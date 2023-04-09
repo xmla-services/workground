@@ -22,7 +22,7 @@ import java.util.Arrays;
  * @author jhyde
  * @since 24 April, 2009
  */
-public class ScenarioTest extends FoodMartTestCase {
+class ScenarioTest extends FoodMartTestCase {
     /**
      * Tests creating a scenario and setting a connection's active scenario.
      */

@@ -62,7 +62,7 @@ import mondrian.rolap.RolapHierarchy.LimitedRollupMember;
  * @author jhyde
  * @since Feb 21, 2003
  */
-public class AccessControlTest {
+class AccessControlTest {
 
     private static final String BiServer1574Role1 =
         "<Role name=\"role1\">\n"

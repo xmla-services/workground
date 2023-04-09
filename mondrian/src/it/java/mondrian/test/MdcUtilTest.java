@@ -26,7 +26,7 @@ import mondrian.rolap.RolapUtil;
  * 
  * @author Benny
  */
-public class MdcUtilTest extends BatchTestCase {
+class MdcUtilTest extends BatchTestCase {
 
   private static Logger rolapUtilLogger = LoggerFactory.getLogger( mondrian.rolap.RolapUtil.class );
 

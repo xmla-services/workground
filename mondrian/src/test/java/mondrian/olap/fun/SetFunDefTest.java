@@ -29,7 +29,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  * @author ajogleka
  * @since 19 December, 2007
  */
-public class SetFunDefTest {
+class SetFunDefTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)

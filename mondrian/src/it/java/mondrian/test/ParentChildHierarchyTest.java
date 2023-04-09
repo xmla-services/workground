@@ -25,7 +25,7 @@ import java.util.List;
  * @author jhyde
  * @since Mar 6, 2003
  */
-public class ParentChildHierarchyTest extends FoodMartTestCase {
+class ParentChildHierarchyTest extends FoodMartTestCase {
     public ParentChildHierarchyTest(String name) {
         super(name);
     }

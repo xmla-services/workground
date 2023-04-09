@@ -26,7 +26,7 @@ import org.olap4j.OlapConnection;
 import mondrian.olap.MondrianServer;
 import mondrian.server.FileRepository.CatalogInfo;
 
-public class FileRepositoryTest {
+class FileRepositoryTest {
 
     @Test
      void testGetServerInfo_ifGetDataSourceInfoIsCalled() {

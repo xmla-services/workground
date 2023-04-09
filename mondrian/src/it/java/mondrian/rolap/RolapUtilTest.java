@@ -23,7 +23,7 @@ import org.eigenbase.xom.XOMUtil;
 import junit.framework.TestCase;
 import mondrian.olap.MondrianDef;
 
-public class RolapUtilTest extends TestCase {
+class RolapUtilTest extends TestCase {
 
   private static final String FILTER_QUERY =
       "`TableAlias`.`promotion_id` = 112";

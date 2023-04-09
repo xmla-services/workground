@@ -39,7 +39,7 @@ import mondrian.xmla.DataSourcesConfig;
  * @author Thiyagu, Ajit
  * @since Mar 30, 2007
  */
-public class DynamicDatasourceXmlaServletTest {
+class DynamicDatasourceXmlaServletTest {
 
     private static final String CATALOG_0_NAME = "FoodMart0";
     private static final String CATALOG_1_NAME = "FoodMart1";

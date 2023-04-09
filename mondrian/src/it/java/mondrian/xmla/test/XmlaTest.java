@@ -45,7 +45,7 @@ import javax.xml.transform.stream.StreamResult;
  *
  * @author Gang Chen
  */
-public class XmlaTest extends TestCase {
+class XmlaTest extends TestCase {
 
     private static final Logger LOGGER =
             LoggerFactory.getLogger(XmlaTest.class);

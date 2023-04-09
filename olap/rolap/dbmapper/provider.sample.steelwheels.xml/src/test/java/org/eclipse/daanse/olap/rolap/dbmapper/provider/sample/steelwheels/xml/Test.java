@@ -6,7 +6,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.api.Schema;
 import org.eclipse.daanse.olap.rolap.dbmapper.provider.api.DbMappingSchemaProvider;
 import org.osgi.test.common.annotation.InjectService;
 
-public class Test {
+class Test {
 
     @org.junit.jupiter.api.Test
     void testName(@InjectService DbMappingSchemaProvider provider) throws Exception {

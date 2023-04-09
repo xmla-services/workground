@@ -17,7 +17,7 @@ import mondrian.util.Pair;
 /**
  * @author Andrey Khayrutdinov
  */
-public class DenseIntSegmentBodyTest extends
+class DenseIntSegmentBodyTest extends
   DenseSegmentBodyTestBase<DenseIntSegmentBody, Integer>
 {
 

@@ -33,7 +33,7 @@ import mondrian.olap.MondrianProperties;
  * @author jhyde
  * @since Dec 15, 2005
  */
-public class MultipleHierarchyTest {
+class MultipleHierarchyTest {
     private static final String timeWeekly =
         hierarchyName("Time", "Weekly");
     private static final String timeTime =

@@ -31,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * @author Thiyagu, Ajit
  * @since Mar 30, 2007
  */
-public class DynamicDatasourceXmlaServletTest extends TestCase {
+class DynamicDatasourceXmlaServletTest extends TestCase {
 
     private static final String CATALOG_0_NAME = "FoodMart0";
     private static final String CATALOG_1_NAME = "FoodMart1";

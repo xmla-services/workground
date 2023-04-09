@@ -37,7 +37,7 @@ import mondrian.server.monitor.Monitor;
 /**
  * @author Andrey Khayrutdinov
  */
-public class SqlStatementTest {
+class SqlStatementTest {
 
   private Monitor monitor;
   private MondrianServer srv;

@@ -46,7 +46,7 @@ import mondrian.util.Bug;
  *
  * @author gjohnson
  */
-public class ParserTest {
+class ParserTest {
 
 
     static final BuiltinFunTable funTable = BuiltinFunTable.instance();

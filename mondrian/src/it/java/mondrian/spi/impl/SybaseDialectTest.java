@@ -25,7 +25,7 @@ import static org.mockito.Mockito.doCallRealMethod;
  *
  * @author Yury Bakhmutski
  */
-public class SybaseDialectTest extends TestCase {
+class SybaseDialectTest extends TestCase {
     @Mock
     SybaseDialect sybaseDialectMock;
 

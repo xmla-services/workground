@@ -6,7 +6,7 @@ import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.CubeRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.MeasureRBuilder;
 import org.eclipse.daanse.olap.rolap.dbmapper.model.record.builder.SchemaRBuilder;
 
-public class Test {
+class Test {
     @org.junit.jupiter.api.Test
     void testName() throws Exception {
         SchemaRBuilder.builder()

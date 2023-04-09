@@ -20,7 +20,7 @@ import java.sql.Statement;
 import junit.framework.TestCase;
 import mondrian.spi.Dialect;
 
-public class MonetDbDialectTest extends TestCase {
+class MonetDbDialectTest extends TestCase {
   private Connection connection = mock( Connection.class );
   private DatabaseMetaData metaData = mock( DatabaseMetaData.class );
 

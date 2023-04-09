@@ -34,7 +34,7 @@ import mondrian.rolap.RolapConnectionProperties;
   * Test if AggSchemaScan and AggCatalogScan properties are used in JdbcSchema loadTablesOfType
   *
   */
-public class AggSchemaScanTest {
+class AggSchemaScanTest {
 	
   @BeforeAll
   public static void beforeAll() {

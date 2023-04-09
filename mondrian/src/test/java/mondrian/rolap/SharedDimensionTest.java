@@ -26,7 +26,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  *
  * @author Rushan Chen
  */
-public class SharedDimensionTest  {
+class SharedDimensionTest  {
 
     private static final String sharedDimension =
         "<Dimension name=\"Employee\">\n"

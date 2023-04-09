@@ -48,7 +48,7 @@ import java.util.Map;
  * @author jhyde
  * @since August 7, 2006
  */
-public class SchemaTest extends FoodMartTestCase {
+class SchemaTest extends FoodMartTestCase {
 
     private static final String CUBES_AB =
             "<Cube name=\"CubeA\" defaultMeasure=\"Unit Sales\">\n"

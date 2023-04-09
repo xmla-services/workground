@@ -14,7 +14,7 @@ import mondrian.test.TestContext;
 /**
  * @author Andrey Khayrutdinov
  */
-public class NativeFilterAgainstAggTableTest extends BatchTestCase {
+class NativeFilterAgainstAggTableTest extends BatchTestCase {
 
     @Override
     public void setUp() throws Exception {

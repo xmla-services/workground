@@ -26,7 +26,7 @@ import mondrian.olap.Util;
  *
  * @author mcampbell, Stefan Bischof
  */
-public class BlockingHashMapTest{
+class BlockingHashMapTest{
 
     private final Random random = Util.createRandom(-1);
     private static final int SLEEP_TIME = 100;

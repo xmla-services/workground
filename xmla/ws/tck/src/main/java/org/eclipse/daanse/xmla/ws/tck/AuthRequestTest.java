@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
         @Property(key = "xmlaService.target", value = "(" + Constants.XMLASERVICE_FILTER_KEY + "="
                 + Constants.XMLASERVICE_FILTER_VALUE + ")"),
         @Property(key = "osgi.soap.endpoint.contextpath", value = Constants.WS_PATH) })
-public class AuthRequestTest {
+class AuthRequestTest {
     private Logger logger = LoggerFactory.getLogger(AuthRequestTest.class);
 
     public static final String REQUEST_AUTHENTICATE_1 = """

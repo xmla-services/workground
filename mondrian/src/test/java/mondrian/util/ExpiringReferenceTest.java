@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
-public class ExpiringReferenceTest
+class ExpiringReferenceTest
 {
     @Test
     void testSimpleExpiryMode() throws Exception {

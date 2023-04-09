@@ -47,7 +47,7 @@ import jakarta.xml.ws.Provider;
 @WithFactoryConfiguration(factoryPid = "org.eclipse.daanse.ws.handler.SOAPLoggingHandler", name = "test-ms-config", location = "?", properties = {
         @Property(key = "osgi.soap.endpoint.selector", value = "(service.pid=*)") })
 @RequireServiceComponentRuntime
-public class ClientDiscoverTest {
+class ClientDiscoverTest {
     XmlaServiceClientImpl client = new XmlaServiceClientImpl("http://localhost:8090/xmla");
     // Register a Provider using whiteboardpattern and xmlassert to check xml
     @InjectBundleContext

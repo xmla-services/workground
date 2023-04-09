@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 /**
  * @author Andrey Khayrutdinov
  */
-public class ImpalaDialectTest{
+class ImpalaDialectTest{
   private static Connection connection = mock( Connection.class );
   private static DatabaseMetaData metaData = mock( DatabaseMetaData.class );
   private static ImpalaDialect impalaDialect;

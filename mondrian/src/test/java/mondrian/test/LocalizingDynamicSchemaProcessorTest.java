@@ -24,7 +24,7 @@ import mondrian.spi.DynamicSchemaProcessor;
  *
  * @author bcosta
  */
-public class LocalizingDynamicSchemaProcessorTest
+class LocalizingDynamicSchemaProcessorTest
 {
     /**
      * Tests to make sure that our LocalizingDynamicSchemaProcessor works, with

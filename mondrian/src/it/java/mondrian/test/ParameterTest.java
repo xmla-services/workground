@@ -32,7 +32,7 @@ import java.util.*;
  * @author jhyde
  * @since Feb 13, 2003
  */
-public class ParameterTest extends FoodMartTestCase {
+class ParameterTest extends FoodMartTestCase {
     public ParameterTest(String name) {
         super(name);
     }

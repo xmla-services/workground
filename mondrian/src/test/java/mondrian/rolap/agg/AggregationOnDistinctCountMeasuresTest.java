@@ -71,7 +71,7 @@ import mondrian.test.SqlPattern;
  * @author ajogleka
  * @since 19 December, 2007
  */
-public class AggregationOnDistinctCountMeasuresTest {
+class AggregationOnDistinctCountMeasuresTest {
     private final MondrianProperties props = MondrianProperties.instance();
     private  final String cubeNameSales = "Sales";
 

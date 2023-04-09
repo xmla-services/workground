@@ -27,7 +27,7 @@ import mondrian.olap.MondrianProperties;
  *
  * @author Matt Campbell
  */
-public class UsagePrefixTest extends AggTableTestCase {
+class UsagePrefixTest extends AggTableTestCase {
 
     private static final String MONDRIAN_595_CSV = "MONDRIAN-595.csv";
 

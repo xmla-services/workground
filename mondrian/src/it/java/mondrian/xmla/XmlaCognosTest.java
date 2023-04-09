@@ -24,7 +24,7 @@ import org.eigenbase.util.property.BooleanProperty;
  * @author Thiyagu, Shishir
  */
 
-public class XmlaCognosTest extends XmlaBaseTestCase {
+class XmlaCognosTest extends XmlaBaseTestCase {
 
     public XmlaCognosTest() {
     }

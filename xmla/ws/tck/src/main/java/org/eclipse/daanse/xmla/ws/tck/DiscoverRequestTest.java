@@ -91,7 +91,7 @@ import org.slf4j.LoggerFactory;
 @WithFactoryConfiguration(factoryPid = "org.eclipse.daanse.ws.handler.SOAPLoggingHandler", name = "test-ms-config", location = "?", properties = {
         @Property(key = "osgi.soap.endpoint.selector", value = "(service.pid=*)") })
 @RequireServiceComponentRuntime
-public class DiscoverRequestTest {
+class DiscoverRequestTest {
     private Logger logger = LoggerFactory.getLogger(DiscoverRequestTest.class);
 
     @InjectBundleContext

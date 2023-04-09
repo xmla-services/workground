@@ -51,7 +51,7 @@ import mondrian.util.ByteString;
  * @author Andrey Khayrutdinov
  */
 @Disabled //has not been fixed during creating Daanse project
-public class RolapSchemaPoolConcurrencyTest
+class RolapSchemaPoolConcurrencyTest
 {
 
     private List<RolapSchema> addedSchemas;

@@ -66,7 +66,7 @@ import mondrian.util.DelegatingInvocationHandler;
  * @author Thiyagu
  * @since 06-Jun-2007
  */
-public class SegmentLoaderTest extends BatchTestCase {
+class SegmentLoaderTest extends BatchTestCase {
 
     private Execution execution;
     private Locus locus;

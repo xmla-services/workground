@@ -35,7 +35,7 @@ import mondrian.test.SqlPattern;
 /**
  * Test case for pushing MDX filter conditions down to SQL.
  */
-public class NativeFilterMatchingTest extends BatchTestCase {
+class NativeFilterMatchingTest extends BatchTestCase {
 
     private PropertySaver5 propSaver;
     @BeforeEach

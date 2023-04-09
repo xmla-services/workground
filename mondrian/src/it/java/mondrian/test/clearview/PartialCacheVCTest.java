@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class PartialCacheVCTest extends ClearViewBase {
+class PartialCacheVCTest extends ClearViewBase {
 
     public PartialCacheVCTest() {
         super();

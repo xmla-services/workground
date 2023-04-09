@@ -34,7 +34,7 @@ import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 import mondrian.test.loader.CsvDBTestCase;
 
-public class AggMeasureFactCountTest extends CsvDBTestCase {
+class AggMeasureFactCountTest extends CsvDBTestCase {
 
     private static final String SCHEMA = ""
             + "<Schema name=\"FoodMart\">\n"

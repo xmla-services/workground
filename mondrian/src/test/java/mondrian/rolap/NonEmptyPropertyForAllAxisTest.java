@@ -38,7 +38,7 @@ import mondrian.test.PropertySaver5;
 /**
  * Tests the {@link MondrianProperties#EnableNonEmptyOnAllAxis} property.
  */
-public class NonEmptyPropertyForAllAxisTest {
+class NonEmptyPropertyForAllAxisTest {
     private PropertySaver5 propSaver;
     @BeforeEach
     public void beforeEach() {

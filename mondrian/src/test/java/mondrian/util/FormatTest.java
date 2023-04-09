@@ -27,7 +27,7 @@ import mondrian.olap.Util;
  * @author jhyde, Stefan Bischof
  * @since May 26, 2006
  */
-public class FormatTest {
+class FormatTest {
 
     public static final char Euro = '\u20AC';
     public static final char Nbsp = ' ';

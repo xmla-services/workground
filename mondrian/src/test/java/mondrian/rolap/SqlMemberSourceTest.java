@@ -41,7 +41,7 @@ import org.junit.jupiter.api.Test;
 import mondrian.util.ByteString;
 import org.opencube.junit5.SchemaUtil;
 
-public class SqlMemberSourceTest {
+class SqlMemberSourceTest {
   private static final String STORE_TABLE = "store";
   private static final String MY_SQL_PRODUCT_VERSION = "3.23.58";
   private static final String MY_SQL_PRODUCT_NAME = "MySQL";

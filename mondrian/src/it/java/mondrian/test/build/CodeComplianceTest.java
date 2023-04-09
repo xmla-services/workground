@@ -18,7 +18,7 @@ package mondrian.test.build;
  * @author Chard Nelson
  * @since Sep 8, 2009
  */
-public class CodeComplianceTest
+class CodeComplianceTest
     extends AntTestBase
 {
     /**

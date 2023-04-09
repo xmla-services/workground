@@ -23,7 +23,7 @@ import mondrian.olap.ResourceLimitExceededException;
 import mondrian.test.PropertySaver5;
 
 
-public class ArrayTupleListTest {
+class ArrayTupleListTest {
 
   /**
   * Access properties via this object and their values will be reset.

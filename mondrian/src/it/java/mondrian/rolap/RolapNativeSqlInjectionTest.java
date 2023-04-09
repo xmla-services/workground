@@ -16,7 +16,7 @@ import mondrian.test.TestContext;
 /**
  * @author Andrey Khayrutdinov
  */
-public class RolapNativeSqlInjectionTest extends FoodMartTestCase {
+class RolapNativeSqlInjectionTest extends FoodMartTestCase {
 
     @Override
     protected void setUp() throws Exception {

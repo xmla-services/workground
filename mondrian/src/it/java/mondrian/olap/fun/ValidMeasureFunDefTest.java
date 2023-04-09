@@ -22,7 +22,7 @@ import java.sql.SQLException;
  *
  * Created by Yury_Bakhmutski on 9/2/2015.
  */
-public class ValidMeasureFunDefTest extends TestCase {
+class ValidMeasureFunDefTest extends TestCase {
 
   /**
    * Test for MONDRIAN-1032 issue.

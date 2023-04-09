@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
  * @author Shishir
  * @since 08 May, 2007
  */
-public class CellPropertyTest{
+class CellPropertyTest{
     private CellProperty cellProperty;
 
     @BeforeEach

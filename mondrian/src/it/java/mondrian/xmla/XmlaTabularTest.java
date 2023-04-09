@@ -17,7 +17,7 @@ import mondrian.test.TestContext;
  *
  * @author Julio Caub&iacute;n, jhyde
  */
-public class XmlaTabularTest extends XmlaBaseTestCase {
+class XmlaTabularTest extends XmlaBaseTestCase {
 
     public XmlaTabularTest() {
     }

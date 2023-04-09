@@ -16,7 +16,7 @@ import mondrian.util.Bug;
 import java.io.InputStream;
 import java.util.Arrays;
 
-public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
+class SteelWheelsSchemaTest extends SteelWheelsTestCase {
     /**
      * Sanity check, that enumerates the Measures dimension.
      */

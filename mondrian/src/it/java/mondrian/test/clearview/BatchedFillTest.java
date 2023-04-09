@@ -24,7 +24,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class BatchedFillTest extends ClearViewBase {
+class BatchedFillTest extends ClearViewBase {
 
     public BatchedFillTest() {
         super();

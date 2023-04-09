@@ -28,7 +28,7 @@ import mondrian.test.DiffRepository;
  *
  * @author Richard M. Emberson
  */
-public class XmlaExcelXPTest extends XmlaBaseTestCase {
+class XmlaExcelXPTest extends XmlaBaseTestCase {
 
     @Override
 	protected String getSessionId(Action action) {

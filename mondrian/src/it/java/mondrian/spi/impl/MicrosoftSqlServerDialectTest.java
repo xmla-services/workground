@@ -21,7 +21,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class MicrosoftSqlServerDialectTest extends TestCase {
+class MicrosoftSqlServerDialectTest extends TestCase {
 
   private static final String ILLEGAL_BOOLEAN_LITERAL =
       "illegal for this dialect boolean literal";

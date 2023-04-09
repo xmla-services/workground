@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class MultiLevelVCTest extends ClearViewBase {
+class MultiLevelVCTest extends ClearViewBase {
 
     public MultiLevelVCTest() {
         super();

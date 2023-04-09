@@ -45,7 +45,7 @@ import mondrian.olap.fun.MemberOrderKeyFunDef;
 import mondrian.server.Execution;
 import mondrian.server.Statement;
 
-public class SorterTest{
+class SorterTest{
 
   @Mock Evaluator evaluator;
   @Mock Query query;

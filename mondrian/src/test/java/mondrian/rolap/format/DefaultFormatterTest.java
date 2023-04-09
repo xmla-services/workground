@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit Test for {@link DefaultFormatter}.
  */
-public class DefaultFormatterTest {
+class DefaultFormatterTest {
 
     // property values and their expected formatted values
     private static final Map<Object, String> VALUES =

@@ -33,7 +33,7 @@ import mondrian.server.monitor.ServerInfo;
  *
  * @author jhyde
  */
-public class MonitorTest {
+class MonitorTest {
     private void println(Object x) {
         // Enable for debugging, but not for checked-in code.
         if (false) {

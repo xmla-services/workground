@@ -49,7 +49,7 @@ import static org.mockito.Mockito.*;
 /**
  * @author Andrey Khayrutdinov
  */
-public class RolapSchemaTest {
+class RolapSchemaTest {
   private RolapSchema schemaSpy;
   private static RolapStar rlStarMock = mock(RolapStar.class);
 

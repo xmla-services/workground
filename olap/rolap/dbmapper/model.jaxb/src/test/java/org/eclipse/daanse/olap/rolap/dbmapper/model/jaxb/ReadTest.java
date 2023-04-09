@@ -56,7 +56,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 
-public class ReadTest {
+class ReadTest {
 
     private static final String BOTTOM_LEVEL = "bottomLevel";
 	private static final String ROLLUP_POLICY = "rollupPolicy";

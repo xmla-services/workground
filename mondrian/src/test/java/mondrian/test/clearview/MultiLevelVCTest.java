@@ -28,7 +28,7 @@ import mondrian.test.DiffRepository;
  *
  * @author Khanh Vu
  */
-public class MultiLevelVCTest extends ClearViewBase {
+class MultiLevelVCTest extends ClearViewBase {
 
     @Override
 	public DiffRepository getDiffRepos() {

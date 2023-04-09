@@ -27,7 +27,7 @@ import static java.util.Collections.singleton;
  *
  * @author mcampbell
  */
-public class SegmentBuilderTest extends BatchTestCase {
+class SegmentBuilderTest extends BatchTestCase {
 
     public static final double MOCK_CELL_VALUE = 123.123;
 

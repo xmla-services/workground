@@ -24,7 +24,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class TopBottomTest extends ClearViewBase {
+class TopBottomTest extends ClearViewBase {
 
     public TopBottomTest() {
         super();

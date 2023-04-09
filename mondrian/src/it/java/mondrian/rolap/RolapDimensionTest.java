@@ -14,7 +14,7 @@ import mondrian.test.PropertyRestoringTestCase;
 
 import org.mockito.Mockito;
 
-public class RolapDimensionTest extends PropertyRestoringTestCase {
+class RolapDimensionTest extends PropertyRestoringTestCase {
 
   private RolapSchema schema;
   private RolapCube cube;

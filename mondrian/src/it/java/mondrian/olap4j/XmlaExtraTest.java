@@ -24,7 +24,7 @@ import mondrian.olap.Util.PropertyList;
 import mondrian.rolap.RolapConnection;
 import mondrian.rolap.RolapConnectionProperties;
 
-public class XmlaExtraTest extends TestCase {
+class XmlaExtraTest extends TestCase {
     /**
      * This test makes sure that the value of
      * {@link RolapConnectionProperties#JdbcPassword} isn't leaked through

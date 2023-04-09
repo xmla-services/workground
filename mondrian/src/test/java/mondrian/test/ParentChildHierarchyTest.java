@@ -54,7 +54,7 @@ import mondrian.util.Bug;
  * @author jhyde
  * @since Mar 6, 2003
  */
-public class ParentChildHierarchyTest {
+class ParentChildHierarchyTest {
 
 
     // -- Helper methods -------------------------------------------------------

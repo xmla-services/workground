@@ -27,7 +27,7 @@ import junit.framework.Assert;
  * @author sasebb
  * @since March 30, 2005
  */
-public class CompatibilityTest extends FoodMartTestCase {
+class CompatibilityTest extends FoodMartTestCase {
     private boolean originalNeedDimensionPrefix;
     private final MondrianProperties props = MondrianProperties.instance();
 

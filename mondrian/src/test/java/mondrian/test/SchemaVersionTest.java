@@ -31,7 +31,7 @@ import mondrian.olap.Util;
 /**
  * Unit test for automatic detection of schema version.
  */
-public class SchemaVersionTest {
+class SchemaVersionTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)

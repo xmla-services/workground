@@ -22,7 +22,7 @@ import java.util.*;
  * @author mkambol
  * @since 25 January, 2007
  */
-public class RolapCubeTest extends FoodMartTestCase {
+class RolapCubeTest extends FoodMartTestCase {
 
     void testProcessFormatStringAttributeToIgnoreNullFormatString() {
         RolapCube cube =

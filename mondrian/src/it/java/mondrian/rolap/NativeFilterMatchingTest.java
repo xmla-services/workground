@@ -16,7 +16,7 @@ import mondrian.test.TestContext;
 /**
  * Test case for pushing MDX filter conditions down to SQL.
  */
-public class NativeFilterMatchingTest extends BatchTestCase {
+class NativeFilterMatchingTest extends BatchTestCase {
     void testPositiveMatching() throws Exception {
         if (!MondrianProperties.instance().EnableNativeFilter.get()) {
             // No point testing these if the native filters

@@ -52,7 +52,7 @@ import mondrian.server.Locus;
 import mondrian.server.Statement;
 import mondrian.test.PropertySaver5;
 
-public class IdBatchResolverTest  {
+class IdBatchResolverTest  {
 
 	@Mock
      Query query;
@@ -516,7 +516,7 @@ public class IdBatchResolverTest  {
         }
     }
 
-    public class FactoryImplTestWrapper extends Parser.FactoryImpl {
+    class FactoryImplTestWrapper extends Parser.FactoryImpl {
 
         @Override
         public Query makeQuery(

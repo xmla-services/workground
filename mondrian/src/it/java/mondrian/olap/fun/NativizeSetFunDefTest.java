@@ -23,7 +23,7 @@ import mondrian.test.TestContext;
  * @author jrand
  * @since Oct 14, 2009
  */
-public class NativizeSetFunDefTest extends BatchTestCase {
+class NativizeSetFunDefTest extends BatchTestCase {
     public void setUp() throws Exception {
         super.setUp();
         propSaver.set(

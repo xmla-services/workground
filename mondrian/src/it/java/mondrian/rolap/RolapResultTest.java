@@ -20,7 +20,7 @@ import mondrian.test.TestContext;
  * @author <a>Richard M. Emberson</a>
  * @since Feb 21 2007
  */
-public class RolapResultTest extends AggTableTestCase {
+class RolapResultTest extends AggTableTestCase {
 
     private static final String RolapResultTest = "RolapResultTest.csv";
 

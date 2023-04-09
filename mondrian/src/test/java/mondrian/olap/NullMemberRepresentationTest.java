@@ -29,7 +29,7 @@ import mondrian.rolap.RolapUtil;
  * {@link MondrianProperties#NullMemberRepresentation} property.
  * @author ajogleka
  */
-public class NullMemberRepresentationTest {
+class NullMemberRepresentationTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)

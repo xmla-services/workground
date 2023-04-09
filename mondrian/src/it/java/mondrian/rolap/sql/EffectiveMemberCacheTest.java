@@ -13,7 +13,7 @@ import mondrian.rolap.*;
 import mondrian.spi.Dialect;
 import mondrian.test.*;
 
-public class EffectiveMemberCacheTest extends BatchTestCase {
+class EffectiveMemberCacheTest extends BatchTestCase {
 
     TestContext testContext;
 

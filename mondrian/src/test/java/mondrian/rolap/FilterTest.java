@@ -39,7 +39,7 @@ import mondrian.test.SqlPattern;
  * @author Rushan Chen
  * @since April 28, 2009
  */
-public class FilterTest extends BatchTestCase {
+class FilterTest extends BatchTestCase {
 
   private PropertySaver5 propSaver;
   @BeforeEach

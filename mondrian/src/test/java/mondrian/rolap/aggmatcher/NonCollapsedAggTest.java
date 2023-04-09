@@ -28,7 +28,7 @@ import mondrian.olap.MondrianProperties;
  *
  * @author Luc Boudreau
  */
-public class NonCollapsedAggTest extends AggTableTestCase {
+class NonCollapsedAggTest extends AggTableTestCase {
 
     private static final String CUBE_1 =
         "<Cube name=\"foo\">\n"

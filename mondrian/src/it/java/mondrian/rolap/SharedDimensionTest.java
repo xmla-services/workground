@@ -18,7 +18,7 @@ import mondrian.test.TestContext;
  *
  * @author Rushan Chen
  */
-public class SharedDimensionTest extends FoodMartTestCase {
+class SharedDimensionTest extends FoodMartTestCase {
 
     private static final String sharedDimension =
         "<Dimension name=\"Employee\">\n"

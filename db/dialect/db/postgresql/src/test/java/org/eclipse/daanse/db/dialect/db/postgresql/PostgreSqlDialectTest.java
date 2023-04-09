@@ -22,7 +22,7 @@ import java.sql.Statement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class PostgreSqlDialectTest {
+class PostgreSqlDialectTest {
     private Connection connection = mock(Connection.class);
     private DatabaseMetaData metaData = mock(DatabaseMetaData.class);
     Statement statmentMock = mock(Statement.class);

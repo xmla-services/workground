@@ -23,7 +23,7 @@ import mondrian.olap.type.NullType;
  * @author Matt
  * @author stbischof
  */
-public class ConstantCalcTest{
+class ConstantCalcTest{
 	
 	@Test
     void testNullEvaluatesToConstantDoubleNull() {

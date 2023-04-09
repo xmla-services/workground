@@ -23,7 +23,7 @@ import java.util.Iterator;
  *
  * @author Richard Emberson
  */
-public class BitKeyTest extends TestCase {
+class BitKeyTest extends TestCase {
     public BitKeyTest(String name) {
         super(name);
     }

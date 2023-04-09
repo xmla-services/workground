@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
  * They must be deactivated by default.
  * @author LBoudreau
  */
-public class SteelWheelsPerformanceTest extends TestCase {
+class SteelWheelsPerformanceTest extends TestCase {
     /**
      * Certain tests are enabled only if logging is enabled.
      */

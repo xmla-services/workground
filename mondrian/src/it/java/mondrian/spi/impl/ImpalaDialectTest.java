@@ -21,7 +21,7 @@ import mondrian.spi.Dialect;
 /**
  * @author Andrey Khayrutdinov
  */
-public class ImpalaDialectTest extends TestCase {
+class ImpalaDialectTest extends TestCase {
   private Connection connection = mock( Connection.class );
   private DatabaseMetaData metaData = mock( DatabaseMetaData.class );
   private ImpalaDialect impalaDialect;

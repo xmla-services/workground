@@ -22,7 +22,7 @@ import mondrian.spi.Dialect;
  *
  * @author Aleksandr Kozlov
  */
-public class OrderByAliasTest extends BatchTestCase {
+class OrderByAliasTest extends BatchTestCase {
 
   @Override
   protected void setUp() throws Exception {

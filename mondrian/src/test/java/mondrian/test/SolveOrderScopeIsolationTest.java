@@ -49,7 +49,7 @@ import mondrian.olap.Util;
  * @author ajogleka
  * @since Apr 04, 2008
  */
-public class SolveOrderScopeIsolationTest {
+class SolveOrderScopeIsolationTest {
     SolveOrderMode defaultSolveOrderMode;
 
     //private PropertySaver5 propSaver;

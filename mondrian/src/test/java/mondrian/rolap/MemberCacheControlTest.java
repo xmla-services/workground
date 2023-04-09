@@ -76,7 +76,7 @@ import mondrian.test.PropertySaver5;
  * @author mberkowitz
  * @since Jan 2008
  */
-public class MemberCacheControlTest {
+class MemberCacheControlTest {
     private Locus locus;
 
     // TODO: add multi-thread tests.

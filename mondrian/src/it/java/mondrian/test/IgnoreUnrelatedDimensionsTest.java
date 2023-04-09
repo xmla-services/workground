@@ -20,7 +20,7 @@ import mondrian.olap.MondrianProperties;
  * @author ajoglekar
  * @since Dec 03, 2007
  */
-public class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
+class IgnoreUnrelatedDimensionsTest extends FoodMartTestCase {
 
     private static final String cubeSales3 =
         "<Cube name=\"Sales 3\">\n"

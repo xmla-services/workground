@@ -31,7 +31,7 @@ import static org.mockito.Mockito.when;
  * @author Thiyagu
  * @since 06-Jun-2007
  */
-public class SqlQueryTest extends BatchTestCase {
+class SqlQueryTest extends BatchTestCase {
     private String origWarnIfNoPatternForDialect;
 
     private MondrianProperties prop = MondrianProperties.instance();

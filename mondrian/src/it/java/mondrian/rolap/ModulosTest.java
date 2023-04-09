@@ -24,7 +24,7 @@ import java.util.Collections;
  *
  * @author <a>Richard M. Emberson</a>
  */
-public class ModulosTest extends TestCase {
+class ModulosTest extends TestCase {
     public ModulosTest() {
     }
 

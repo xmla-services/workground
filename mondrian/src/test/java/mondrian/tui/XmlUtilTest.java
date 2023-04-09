@@ -25,7 +25,7 @@ import org.xml.sax.SAXException;
 
 import mondrian.xmla.XmlaConstants;
 
-public class XmlUtilTest{
+class XmlUtilTest{
 
 	@Test
     void testSelectAsNodesWithEmptyNamespace()

@@ -47,7 +47,7 @@ import mondrian.olap.MondrianProperties;
  *
  * @author Thiyagu,Ajit
  */
-public class ConcurrentMdxTest {
+class ConcurrentMdxTest {
     private static final Logger LOGGER =
         LoggerFactory.getLogger(FoodMartTestCase.class);
 

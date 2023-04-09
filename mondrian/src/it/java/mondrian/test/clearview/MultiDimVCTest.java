@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class MultiDimVCTest extends ClearViewBase {
+class MultiDimVCTest extends ClearViewBase {
 
     public MultiDimVCTest() {
         super();

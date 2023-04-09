@@ -21,7 +21,7 @@ import java.sql.DatabaseMetaData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class MonetDbDialectTest {
+class MonetDbDialectTest {
     private Connection connection = mock(Connection.class);
     private DatabaseMetaData metaData = mock(DatabaseMetaData.class);
 

@@ -25,7 +25,7 @@ import java.io.InputStream;
  * @author jhyde
  * @since April 30, 2005
  */
-public class NamedSetTest extends FoodMartTestCase {
+class NamedSetTest extends FoodMartTestCase {
 
     public NamedSetTest() {
         super();

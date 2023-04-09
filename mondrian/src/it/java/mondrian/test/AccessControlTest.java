@@ -29,7 +29,7 @@ import java.util.List;
  * @author jhyde
  * @since Feb 21, 2003
  */
-public class AccessControlTest extends FoodMartTestCase {
+class AccessControlTest extends FoodMartTestCase {
 
     private static final String BiServer1574Role1 =
         "<Role name=\"role1\">\n"

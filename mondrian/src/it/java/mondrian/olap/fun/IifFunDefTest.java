@@ -22,7 +22,7 @@ import mondrian.olap.FunDef;
 import mondrian.olap.fun.SetFunDef.SetListCalc;
 import mondrian.olap.type.SetType;
 
-public class IifFunDefTest extends TestCase {
+class IifFunDefTest extends TestCase {
 
   private Exp logicalParamMock = mock( Exp.class );
   private Exp trueCaseParamMock = mock( Exp.class );

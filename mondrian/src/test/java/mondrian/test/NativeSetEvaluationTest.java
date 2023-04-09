@@ -50,7 +50,7 @@ import mondrian.util.Bug;
  *
  * <p>
  */
-public class NativeSetEvaluationTest extends BatchTestCase {
+class NativeSetEvaluationTest extends BatchTestCase {
 
   private PropertySaver5 propSaver;
 

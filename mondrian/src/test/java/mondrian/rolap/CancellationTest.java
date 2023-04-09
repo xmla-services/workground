@@ -39,7 +39,7 @@ import mondrian.server.Execution;
 import mondrian.server.Locus;
 import mondrian.test.PropertySaver5;
 
-public class CancellationTest {
+class CancellationTest {
 
     private PropertySaver5 propSaver;
 
@@ -135,7 +135,7 @@ public class CancellationTest {
                 });
         }
 
-    public class CrossJoinFunDefTester extends CrossJoinFunDef {
+    class CrossJoinFunDefTester extends CrossJoinFunDef {
         public CrossJoinFunDefTester(FunDef dummyFunDef) {
             super(dummyFunDef);
         }

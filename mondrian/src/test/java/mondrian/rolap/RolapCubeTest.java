@@ -49,7 +49,7 @@ import static org.opencube.junit5.TestUtil.withSchema;
  * @author mkambol
  * @since 25 January, 2007
  */
-public class RolapCubeTest {
+class RolapCubeTest {
 
     private PropertySaver5 propSaver;
 

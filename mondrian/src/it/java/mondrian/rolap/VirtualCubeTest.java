@@ -28,7 +28,7 @@ import java.util.List;
  * @author remberson
  * @since Feb 14, 2003
  */
-public class VirtualCubeTest extends BatchTestCase {
+class VirtualCubeTest extends BatchTestCase {
     /**
      * Creates an anonymous VirtualCubeTest.
      */

@@ -19,7 +19,7 @@ import junit.framework.Assert;
 /**
  * Unit test for automatic detection of schema version.
  */
-public class SchemaVersionTest extends FoodMartTestCase {
+class SchemaVersionTest extends FoodMartTestCase {
     void testSchema3withVersion() {
         TestContext testContext =
             TestContext.instance().withSchema(SCHEMA_3_VHEADER + SCHEMA_3_BODY);

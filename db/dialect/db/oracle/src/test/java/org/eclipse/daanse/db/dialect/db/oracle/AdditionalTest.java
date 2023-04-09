@@ -30,7 +30,7 @@ import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.junit.jupiter.api.Test;
 
-public class AdditionalTest {
+class AdditionalTest {
 
 
     @Test

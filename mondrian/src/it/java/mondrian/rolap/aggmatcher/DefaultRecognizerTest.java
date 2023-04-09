@@ -12,7 +12,7 @@ package mondrian.rolap.aggmatcher;
 import mondrian.rolap.BatchTestCase;
 import mondrian.test.TestContext;
 
-public class DefaultRecognizerTest extends BatchTestCase {
+class DefaultRecognizerTest extends BatchTestCase {
 
     protected void setUp() throws Exception {
         super.setUp();

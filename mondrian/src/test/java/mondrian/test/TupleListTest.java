@@ -49,7 +49,7 @@ import mondrian.server.Locus;
  *
  * @author jhyde
  */
-public class TupleListTest {
+class TupleListTest {
 
     @Test
     void testTupleList() {

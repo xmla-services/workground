@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class GroupingSetsListTest extends TestCase {
+class GroupingSetsListTest extends TestCase {
 
   private List<GroupingSet> groupingSetList;
   private GroupingSetsList testObject;

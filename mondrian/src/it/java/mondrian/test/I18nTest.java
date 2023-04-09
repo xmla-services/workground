@@ -24,7 +24,7 @@ import java.util.Locale;
  * @author jhyde
  * @since September 22, 2005
  */
-public class I18nTest extends FoodMartTestCase {
+class I18nTest extends FoodMartTestCase {
     public static final char Euro = '\u20AC';
     public static final char Nbsp = '\u00A0';
     public static final char EA = '\u00e9'; // e acute

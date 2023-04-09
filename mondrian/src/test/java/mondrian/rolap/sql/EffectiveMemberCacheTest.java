@@ -28,7 +28,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 
-public class EffectiveMemberCacheTest {
+class EffectiveMemberCacheTest {
 
     private PropertySaver5 propSaver;
 

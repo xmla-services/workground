@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Yury Bakhmutski
  */
-public class SybaseDialectTest{
+class SybaseDialectTest{
 
     SybaseDialect sybaseDialectMock=mock(SybaseDialect.class);
 

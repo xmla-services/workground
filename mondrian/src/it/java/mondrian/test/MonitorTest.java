@@ -26,7 +26,7 @@ import java.util.List;
  *
  * @author jhyde
  */
-public class MonitorTest extends FoodMartTestCase {
+class MonitorTest extends FoodMartTestCase {
     private void println(Object x) {
         // Enable for debugging, but not for checked-in code.
         if (false) {

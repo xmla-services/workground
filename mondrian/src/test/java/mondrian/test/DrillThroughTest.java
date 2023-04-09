@@ -72,7 +72,7 @@ import mondrian.rolap.RolapStar;
  * @author jhyde
  * @since May 10, 2006
  */
-public class DrillThroughTest {
+class DrillThroughTest {
     // DRILLTHROUGH MDX queries
     private static final String CURRENT_MEMBER_CUSTOMER_FULL_NAME =
         "Jeanne Derry";

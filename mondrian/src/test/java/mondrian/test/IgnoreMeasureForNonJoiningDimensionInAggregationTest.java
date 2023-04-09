@@ -32,7 +32,7 @@ import mondrian.olap.MondrianProperties;
  * @author ajoglekar
  * @since Dec 12, 2007
  */
-public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
+class IgnoreMeasureForNonJoiningDimensionInAggregationTest
 {
     private PropertySaver5 propSaver;
 

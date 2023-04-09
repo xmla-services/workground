@@ -41,7 +41,7 @@ import static org.opencube.junit5.TestUtil.assertQueryReturns;
  * @author jng
  * @since 16 April, 2004
  */
-public class RolapConnectionTest {
+class RolapConnectionTest {
     private static final ThreadLocal<InitialContext> THREAD_INITIAL_CONTEXT =
         new ThreadLocal<>();
 

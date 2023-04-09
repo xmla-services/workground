@@ -87,7 +87,7 @@ import mondrian.util.Bug;
  * @since Feb 14, 2003
  */
 @SuppressWarnings( "squid:S2699" )
-public class BasicQueryTest extends FoodMartTestCase {
+class BasicQueryTest extends FoodMartTestCase {
   static final String EmptyResult = "Axis #0:\n" + "{}\n" + "Axis #1:\n" + "Axis #2:\n";
 
   private static final String timeWeekly = TestContext.hierarchyName( "Time", "Weekly" );

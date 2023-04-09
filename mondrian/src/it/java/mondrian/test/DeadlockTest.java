@@ -13,7 +13,7 @@ package mondrian.test;
 import mondrian.olap.MondrianProperties;
 
 
-public class DeadlockTest extends FoodMartTestCase {
+class DeadlockTest extends FoodMartTestCase {
 
     void testSegmentLoadDeadlock() {
         // http://jira.pentaho.com/browse/MONDRIAN-1726

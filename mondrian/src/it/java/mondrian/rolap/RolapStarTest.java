@@ -26,7 +26,7 @@ import javax.sql.DataSource;
  *
  * @author pedrovale
  */
-public class RolapStarTest extends FoodMartTestCase {
+class RolapStarTest extends FoodMartTestCase {
 
     static class RolapStarForTests extends RolapStar {
         public RolapStarForTests(

@@ -42,7 +42,7 @@ import mondrian.rolap.RolapStar;
 import mondrian.rolap.StarPredicate;
 import mondrian.rolap.sql.SqlQuery;
 
-public class DrillThroughQuerySpecTest {
+class DrillThroughQuerySpecTest {
 
   private static DrillThroughCellRequest requestMock;
   private static StarPredicate starPredicateMock;

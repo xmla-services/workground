@@ -52,7 +52,7 @@ import mondrian.olap.Util;
  * @author sasebb
  * @since March 30, 2005
  */
-public class CompatibilityTest {
+class CompatibilityTest {
 	private PropertySaver5 propSaver;
     private static boolean originalNeedDimensionPrefix;
     private final MondrianProperties props = MondrianProperties.instance();

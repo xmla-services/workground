@@ -30,7 +30,7 @@ import java.sql.SQLException;
  * @author jhyde
  * @since December 15, 2008
  */
-public class Ssas2005CompatibilityTest extends FoodMartTestCase {
+class Ssas2005CompatibilityTest extends FoodMartTestCase {
 
     /**
      * Whether member naming rules are implemented.

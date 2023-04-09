@@ -22,7 +22,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  *
  * @author Luc Boudreau
  */
-public class CurrentDateMemberUdfTest {
+class CurrentDateMemberUdfTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )

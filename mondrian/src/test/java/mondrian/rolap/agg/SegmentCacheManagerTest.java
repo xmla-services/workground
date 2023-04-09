@@ -32,7 +32,7 @@ import mondrian.olap.MondrianServer;
 import mondrian.server.Execution;
 import mondrian.server.Locus;
 
-public class SegmentCacheManagerTest {
+class SegmentCacheManagerTest {
 
   @Mock private MondrianServer mondrianServer;
   private Locus locus = new Locus( new Execution( null, 0 ), "component", "message" );
