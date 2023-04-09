@@ -133,7 +133,7 @@ public class JdbcMetaData {
                 }
             }
             tableNames.stream().parallel().forEach(
-                (tbname) -> {
+                tbname -> {
                     DbTable dbt = null;
 
                     // Note: Imported keys are foreign keys which are primary keys

@@ -402,7 +402,7 @@ public abstract class AbstractSchemaWalker {
             //CalculatedMember
             if (virtCube.calculatedMember() != null) {
                 virtCube.calculatedMember()
-                    .forEach(cm -> checkCalculatedMember(cm));
+                    .forEach(this::checkCalculatedMember);
             }
         }
     }
@@ -531,7 +531,7 @@ public abstract class AbstractSchemaWalker {
 
     protected void checkNamedSetList(List<? extends NamedSet> namedSet) {
         if (namedSet != null) {
-            namedSet.forEach(ns -> checkNamedSet(ns));
+            namedSet.forEach(this::checkNamedSet);
 
         }
     }
@@ -768,7 +768,7 @@ public abstract class AbstractSchemaWalker {
 
     private void checkCalculatedMemberList(List<? extends CalculatedMember> list) {
         if (list != null) {
-            list.forEach(cm -> checkCalculatedMember(cm));
+            list.forEach(this::checkCalculatedMember);
         }
     }
 

@@ -46,13 +46,13 @@ public class SchemaUpdater implements PropertyUpdater {
 	}
 
 	public static SchemaUpdater createSubstitutingCube(final String cubeName, final String dimensionDefs, boolean removeCatalog) {
-		return new SchemaUpdater((schema) -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs), removeCatalog);
+		return new SchemaUpdater(schema -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs), removeCatalog);
 
 	}
 
 	public static SchemaUpdater createSubstitutingCube(final String cubeName, final String dimensionDefs) {
 
-		return new SchemaUpdater((schema) -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs));
+		return new SchemaUpdater(schema -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs));
 
 	}
 
@@ -60,7 +60,7 @@ public class SchemaUpdater implements PropertyUpdater {
 			final String memberDefs) {
 
 		return new SchemaUpdater(
-				(schema) -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs, memberDefs));
+				schema -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs, memberDefs));
 
 	}
 
@@ -68,14 +68,14 @@ public class SchemaUpdater implements PropertyUpdater {
 													   final String memberDefs, boolean removeCatalog) {
 
 		return new SchemaUpdater(
-				(schema) -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs, memberDefs), removeCatalog);
+				schema -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs, memberDefs), removeCatalog);
 
 	}
 
 	public static SchemaUpdater createSubstitutingCube(final String cubeName, final String dimensionDefs,
 			final String measureDefs, final String memberDefs, final String namedSetDefs) {
 
-		return new SchemaUpdater((schema) -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs,
+		return new SchemaUpdater(schema -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs,
 				measureDefs, memberDefs, namedSetDefs));
 
 	}
@@ -83,7 +83,7 @@ public class SchemaUpdater implements PropertyUpdater {
 	public static SchemaUpdater createSubstitutingCube(final String cubeName, final String dimensionDefs,
 													   final String measureDefs, final String memberDefs, final String namedSetDefs, boolean removeCatalog) {
 
-		return new SchemaUpdater((schema) -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs,
+		return new SchemaUpdater(schema -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs,
 				measureDefs, memberDefs, namedSetDefs), removeCatalog);
 
 	}
@@ -96,7 +96,7 @@ public class SchemaUpdater implements PropertyUpdater {
 													   final String namedSetDefs,
 													   final String defaultMeasure) {
 
-		return new SchemaUpdater((schema) -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs,
+		return new SchemaUpdater(schema -> SchemaUtil.createSubstitutingCube(schema, cubeName, dimensionDefs,
 				measureDefs, memberDefs, namedSetDefs, defaultMeasure));
 
 	}

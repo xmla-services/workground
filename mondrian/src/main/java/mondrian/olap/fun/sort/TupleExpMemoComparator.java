@@ -52,7 +52,7 @@ abstract class TupleExpMemoComparator extends TupleComparator.TupleExpComparator
   // applies the Calc to a tuple, memorizing results
   protected Object eval( List<Member> key ) {
     try {
-      return valueCache.get( key, (k) -> evaluateCalc( k ) );
+      return valueCache.get( key, this::evaluateCalc );
     } catch ( Exception e ) {
       if ( e.getCause() instanceof CellRequestQuantumExceededException ) {
         // this exception can occur if evaluation required greater than
