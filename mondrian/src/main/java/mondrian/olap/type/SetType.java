@@ -53,8 +53,7 @@ public class SetType implements Type {
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof SetType) {
-            SetType that = (SetType) obj;
+        if (obj instanceof SetType that) {
             return Objects.equals(this.elementType, that.elementType);
         } else {
             return false;
@@ -130,10 +129,9 @@ public class SetType implements Type {
 
     @Override
 	public Type computeCommonType(Type type, int[] conversionCount) {
-        if (!(type instanceof SetType)) {
+        if (!(type instanceof SetType that)) {
             return null;
         }
-        SetType that = (SetType) type;
         final Type mostGeneralElementType =
             this.getElementType().computeCommonType(
                 that.getElementType(), conversionCount);
@@ -145,10 +143,9 @@ public class SetType implements Type {
 
     @Override
 	public boolean isInstance(Object value) {
-        if (!(value instanceof List)) {
+        if (!(value instanceof List list)) {
             return false;
         }
-        List list = (List) value;
         for (Object o : list) {
             if (!elementType.isInstance(o)) {
                 return false;

@@ -98,9 +98,7 @@ public class RolapCubeDimension extends RolapDimension {
     RolapCube lookupFactCube(
         CubeDimension cubeDim, RolapSchema schema)
     {
-      if (cubeDim instanceof VirtualCubeDimension) {
-        final VirtualCubeDimension virtualCubeDim =
-            (VirtualCubeDimension)cubeDim;
+      if (cubeDim instanceof VirtualCubeDimension virtualCubeDim) {
         if (virtualCubeDim.cubeName() != null) {
           return schema.lookupCube(virtualCubeDim.cubeName());
         }
@@ -127,11 +125,10 @@ public class RolapCubeDimension extends RolapDimension {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof RolapCubeDimension)) {
+        if (!(o instanceof RolapCubeDimension that)) {
             return false;
         }
 
-        RolapCubeDimension that = (RolapCubeDimension)o;
         if (!cube.equals(that.cube)) {
             return false;
         }

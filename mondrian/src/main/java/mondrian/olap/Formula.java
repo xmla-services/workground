@@ -195,11 +195,10 @@ public class Formula extends QueryPart {
             final SchemaReader schemaReader = q.getSchemaReader(false);
             for (int i = 0; i < segments.size(); i++) {
                 final Id.Segment segment0 = segments.get(i);
-                if (!(segment0 instanceof Id.NameSegment)) {
+                if (!(segment0 instanceof Id.NameSegment segment)) {
                     throw Util.newError(
                         "Calculated member name must not contain member keys");
                 }
-                final Id.NameSegment segment = (Id.NameSegment) segment0;
                 OlapElement parent = mdxElement;
                 mdxElement = null;
                 // The last segment of the id is the name of the calculated
@@ -233,11 +232,10 @@ public class Formula extends QueryPart {
                         }
                     } else {
                         final Hierarchy hierarchy;
-                        if (parent instanceof Dimension
+                        if (parent instanceof Dimension dimension
                             && MondrianProperties.instance()
                                 .SsasCompatibleNaming.get())
                         {
-                            Dimension dimension = (Dimension) parent;
                             if (dimension.getHierarchies().length == 1) {
                                 hierarchy = dimension.getHierarchies()[0];
                             } else {
@@ -454,8 +452,7 @@ public class Formula extends QueryPart {
      *   or not a number.
      */
     private static Number quickEval(Exp exp) {
-        if (exp instanceof Literal) {
-            Literal literal = (Literal) exp;
+        if (exp instanceof Literal literal) {
             final Object value = literal.getValue();
             if (value instanceof Number) {
                 return (Number) value;
@@ -463,8 +460,7 @@ public class Formula extends QueryPart {
                 return null;
             }
         }
-        if (exp instanceof FunCall) {
-            FunCall call = (FunCall) exp;
+        if (exp instanceof FunCall call) {
             if (call.getFunName().equals("-")
                 && call.getSyntax() == Syntax.Prefix)
             {
@@ -603,23 +599,19 @@ public class Formula extends QueryPart {
         }
 
         private boolean hasCyclicReference(Exp expr, List<MemberExpr> expList) {
-            if (expr instanceof MemberExpr) {
-                MemberExpr memberExpr = (MemberExpr) expr;
+            if (expr instanceof MemberExpr memberExpr) {
                 if (expList.contains(expr)) {
                     return true;
                 }
                 expList.add(memberExpr);
                 Member member = memberExpr.getMember();
-                if (member instanceof RolapCalculatedMember) {
-                    RolapCalculatedMember calculatedMember =
-                        (RolapCalculatedMember) member;
+                if (member instanceof RolapCalculatedMember calculatedMember) {
                     Exp exp1 =
                         calculatedMember.getExpression().accept(validator);
                     return hasCyclicReference(exp1, expList);
                 }
             }
-            if (expr instanceof FunCall) {
-                FunCall funCall = (FunCall) expr;
+            if (expr instanceof FunCall funCall) {
                 Exp[] exps = funCall.getArgs();
                 for (int i = 0; i < exps.length; i++) {
                     if (hasCyclicReference(

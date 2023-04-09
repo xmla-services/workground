@@ -133,8 +133,7 @@ class SetItemFunDef extends FunDefBase {
             calcList.add(indexCalc);
         }
         Calc[] calcs = calcList.toArray(new Calc[calcList.size()]);
-        if (elementType instanceof TupleType) {
-            final TupleType tupleType = (TupleType) elementType;
+        if (elementType instanceof TupleType tupleType) {
             final Member[] nullTuple = FunUtil.makeNullTuple(tupleType);
             if (isString) {
                 return new AbstractTupleCalc(call.getFunName(),call.getType(), calcs) {

@@ -121,8 +121,7 @@ public class Vba {
         "Returns an expression that has been converted to a Variant of subtype "
         + "Double.")
     public static double cDbl(Object expression) {
-        if (expression instanceof Number) {
-            Number number = (Number) expression;
+        if (expression instanceof Number number) {
             return number.doubleValue();
         } else {
             final String s = String.valueOf(expression);
@@ -136,8 +135,7 @@ public class Vba {
         "Returns an expression that has been converted to a Variant of subtype "
         + "Integer.")
     public static int cInt(Object expression) {
-        if (expression instanceof Number) {
-            Number number = (Number) expression;
+        if (expression instanceof Number number) {
             final int intValue = number.intValue();
             if (number instanceof Float || number instanceof Double) {
                 final double doubleValue = number.doubleValue();

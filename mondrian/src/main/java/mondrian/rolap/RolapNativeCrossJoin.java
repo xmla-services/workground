@@ -83,9 +83,7 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
 
         public RolapMember findMember(Object key) {
             for (CrossJoinArg arg : args) {
-                if (arg instanceof MemberListCrossJoinArg) {
-                    final MemberListCrossJoinArg crossJoinArg =
-                        (MemberListCrossJoinArg) arg;
+                if (arg instanceof MemberListCrossJoinArg crossJoinArg) {
                     final List<RolapMember> memberList =
                         crossJoinArg.getMembers();
                     for (RolapMember rolapMember : memberList) {
@@ -146,9 +144,7 @@ public class RolapNativeCrossJoin extends RolapNativeSet {
         int countNonNativeInputArg = 0;
 
         for (CrossJoinArg arg : cjArgs) {
-            if (arg instanceof MemberListCrossJoinArg) {
-                MemberListCrossJoinArg cjArg =
-                    (MemberListCrossJoinArg)arg;
+            if (arg instanceof MemberListCrossJoinArg cjArg) {
                 if (cjArg.hasAllMember() || cjArg.isEmptyCrossJoinArg()) {
                     ++countNonNativeInputArg;
                 }

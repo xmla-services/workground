@@ -121,9 +121,7 @@ public class AndPredicate extends ListPredicate {
             for (StarPredicate predicate : children) {
                 // If any predicate requires comparison to null value, cannot
                 // use IN list for this predicate.
-                if (predicate instanceof ValueColumnPredicate) {
-                    ValueColumnPredicate columnPred =
-                        ((ValueColumnPredicate) predicate);
+                if (predicate instanceof ValueColumnPredicate columnPred) {
                     if (columnPred.getValue() == RolapUtil.sqlNullValue) {
                         // This column predicate cannot be translated to IN
                         inListRHSBitKey.clear(

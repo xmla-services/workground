@@ -94,11 +94,9 @@ public class ValueColumnPredicate
 
     @Override
 	public boolean equals(Object other) {
-        if (!(other instanceof ValueColumnPredicate)) {
+        if (!(other instanceof ValueColumnPredicate that)) {
             return false;
         }
-        final ValueColumnPredicate that = (ValueColumnPredicate) other;
-
         // First compare the column bitkeys.
         if (!getConstrainedColumnBitKey().equals(
                 that.getConstrainedColumnBitKey()))

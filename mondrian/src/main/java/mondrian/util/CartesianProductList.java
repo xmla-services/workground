@@ -63,8 +63,7 @@ public class CartesianProductList<T>
             int y = index % size;
             index /= size;
             Object t = list.get(y);
-            if (t instanceof List) {
-                List tList = (List) t;
+            if (t instanceof List tList) {
                 for (int j = tList.size(); --j >= 0;) {
                     a[n++] = tList.get(j);
                 }

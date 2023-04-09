@@ -179,10 +179,9 @@ public class ParameterImpl
      */
     @Override
 	public boolean equals(Object other) {
-        if (!(other instanceof ParameterImpl)) {
+        if (!(other instanceof ParameterImpl that)) {
             return false;
         }
-        ParameterImpl that = (ParameterImpl) other;
         return that.getName().equals(this.getName())
             && that.defaultExp.equals(this.defaultExp);
     }
@@ -241,8 +240,7 @@ public class ParameterImpl
     protected Object convert(Object value) {
         // Convert from old-style tuple list (list of member or member[])
         // to new-style list (TupleList).
-        if (value instanceof List && !(value instanceof TupleList)) {
-            List list = (List) value;
+        if (value instanceof List list && !(value instanceof TupleList)) {
             return TupleCollections.asTupleList(list);
         }
         if (value instanceof MemberExpr) {
@@ -255,8 +253,7 @@ public class ParameterImpl
     }
 
     public static Object convertBack(Object value) {
-        if (value instanceof TupleList) {
-            TupleList tupleList = (TupleList) value;
+        if (value instanceof TupleList tupleList) {
             if (tupleList.getArity() == 1) {
                 return tupleList.slice(0);
             } else {

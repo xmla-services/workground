@@ -1781,8 +1781,7 @@ public class ReadTest {
     }
 
     private void checkDimension(Object object, Map<String, Object> map) {
-        if (object instanceof PrivateDimension) {
-            PrivateDimension dimension = (PrivateDimension) object;
+        if (object instanceof PrivateDimension dimension) {
             assertEquals(map.get(NAME), dimension.name());
             assertEquals(map.get(FOREIGN_KEY), dimension.foreignKey());
             assertEquals(get(TYPE, map), dimension.type() == null ? null : dimension.type().getValue());
@@ -1950,8 +1949,7 @@ public class ReadTest {
             assertNull(expression);
         } else {
             List<Map<String, Object>> list = (List<Map<String, Object>>) o;
-            if (expression instanceof ExpressionView) {
-                ExpressionView expressionView  = (ExpressionView)expression;
+            if (expression instanceof ExpressionView expressionView) {
                 assertEquals(expressionView.sql().size(), list.size());
                 for (int i = 0; i < expressionView.sql().size(); i++) {
                     checkExpressionItem(expressionView.sql().get(i), list.get(i));

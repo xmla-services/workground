@@ -272,8 +272,7 @@ public class RolapLevel extends LevelBase {
         String tableName = null;
 
         Expression expr = getKeyExp();
-        if (expr instanceof Column) {
-            Column mc = (Column) expr;
+        if (expr instanceof Column mc) {
             tableName = ExpressionUtil.getTableAlias(mc);
         }
         return tableName;
@@ -559,8 +558,7 @@ public class RolapLevel extends LevelBase {
 	public OlapElement lookupChild(
         SchemaReader schemaReader, Id.Segment name, MatchType matchType)
     {
-        if (name instanceof Id.KeySegment) {
-            Id.KeySegment keySegment = (Id.KeySegment) name;
+        if (name instanceof Id.KeySegment keySegment) {
             List<Comparable> keyValues = new ArrayList<>();
             for (Id.NameSegment nameSegment : keySegment.getKeyParts()) {
                 final String keyValue = nameSegment.name;

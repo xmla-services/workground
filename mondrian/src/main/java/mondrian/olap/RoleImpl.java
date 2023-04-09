@@ -88,10 +88,9 @@ public class RoleImpl implements Role {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof RoleImpl)) {
+        if (!(obj instanceof RoleImpl r)) {
             return false;
         }
-        final RoleImpl r = (RoleImpl) obj;
         return r.hashCache.equals(this.hashCache);
     }
 

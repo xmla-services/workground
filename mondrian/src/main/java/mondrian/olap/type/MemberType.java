@@ -186,10 +186,9 @@ public class MemberType implements Type {
         if (type instanceof TupleType) {
             return type.computeCommonType(this, conversionCount);
         }
-        if (!(type instanceof MemberType)) {
+        if (!(type instanceof MemberType that)) {
             return null;
         }
-        MemberType that = (MemberType) type;
         if (this.getMember() != null
             && this.getMember().equals(that.getMember()))
         {

@@ -118,11 +118,9 @@ public class RolapNativeRegistry extends RolapNative {
         try {
             for (String key : nativeEvaluatorMap.keySet()) {
                 RolapNative currentRolapNative = nativeEvaluatorMap.get(key);
-                if (currentRolapNative instanceof RolapNativeSet
+                if (currentRolapNative instanceof RolapNativeSet currentRolapNativeSet
                         && currentRolapNative != null)
                 {
-                    RolapNativeSet currentRolapNativeSet =
-                            (RolapNativeSet) currentRolapNative;
                     currentRolapNativeSet.flushCache();
                 }
             }

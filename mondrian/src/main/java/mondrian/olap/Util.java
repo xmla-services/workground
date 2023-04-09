@@ -720,11 +720,10 @@ public class Util extends XOMUtil {
             // match, then for an after match, return the first child
             // of each subsequent level; for a before match, return the
             // last child
-            if (child instanceof Member
+            if (child instanceof Member bestChild
                 && !matchType.isExact()
                 && !Util.equalName(child.getName(), name.getName()))
             {
-                Member bestChild = (Member) child;
                 for (int j = i + 1; j < names.size(); j++) {
                     List<Member> childrenList =
                         schemaReader.getMemberChildren(bestChild);
@@ -822,17 +821,13 @@ public class Util extends XOMUtil {
 
     public static OlapElement lookup(Query q, List<Id.Segment> nameParts) {
         final Exp exp = lookup(q, nameParts, false);
-        if (exp instanceof MemberExpr) {
-            MemberExpr memberExpr = (MemberExpr) exp;
+        if (exp instanceof MemberExpr memberExpr) {
             return memberExpr.getMember();
-        } else if (exp instanceof LevelExpr) {
-            LevelExpr levelExpr = (LevelExpr) exp;
+        } else if (exp instanceof LevelExpr levelExpr) {
             return levelExpr.getLevel();
-        } else if (exp instanceof HierarchyExpr) {
-            HierarchyExpr hierarchyExpr = (HierarchyExpr) exp;
+        } else if (exp instanceof HierarchyExpr hierarchyExpr) {
             return hierarchyExpr.getHierarchy();
-        } else if (exp instanceof DimensionExpr) {
-            DimensionExpr dimensionExpr = (DimensionExpr) exp;
+        } else if (exp instanceof DimensionExpr dimensionExpr) {
             return dimensionExpr.getDimension();
         } else {
             throw Util.newInternal("Not an olap element: " + exp);
@@ -1002,20 +997,15 @@ public class Util extends XOMUtil {
      */
     public static Exp createExpr(OlapElement element)
     {
-        if (element instanceof Member) {
-            Member member = (Member) element;
+        if (element instanceof Member member) {
             return new MemberExpr(member);
-        } else if (element instanceof Level) {
-            Level level = (Level) element;
+        } else if (element instanceof Level level) {
             return new LevelExpr(level);
-        } else if (element instanceof Hierarchy) {
-            Hierarchy hierarchy = (Hierarchy) element;
+        } else if (element instanceof Hierarchy hierarchy) {
             return new HierarchyExpr(hierarchy);
-        } else if (element instanceof Dimension) {
-            Dimension dimension = (Dimension) element;
+        } else if (element instanceof Dimension dimension) {
             return new DimensionExpr(dimension);
-        } else if (element instanceof NamedSet) {
-            NamedSet namedSet = (NamedSet) element;
+        } else if (element instanceof NamedSet namedSet) {
             return new NamedSetExpr(namedSet);
         } else {
             throw Util.newInternal("Unexpected element type: " + element);
@@ -3998,8 +3988,7 @@ public class Util extends XOMUtil {
 
         @Override
 		public boolean equals(Object o) {
-            if (o instanceof Flat2List) {
-                Flat2List that = (Flat2List) o;
+            if (o instanceof Flat2List that) {
                 return Objects.equals(this.t0, that.t0)
                     && Objects.equals(this.t1, that.t1);
             }
@@ -4105,8 +4094,7 @@ public class Util extends XOMUtil {
 
         @Override
 		public boolean equals(Object o) {
-            if (o instanceof Flat3List) {
-                Flat3List that = (Flat3List) o;
+            if (o instanceof Flat3List that) {
                 return Objects.equals(this.t0, that.t0)
                     && Objects.equals(this.t1, that.t1)
                     && Objects.equals(this.t2, that.t2);

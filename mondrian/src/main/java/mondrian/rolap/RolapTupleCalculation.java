@@ -54,8 +54,7 @@ class RolapTupleCalculation implements RolapCalculation {
         if (this == obj) {
             return true;
         }
-        if (obj instanceof RolapTupleCalculation) {
-            RolapTupleCalculation calculation = (RolapTupleCalculation) obj;
+        if (obj instanceof RolapTupleCalculation calculation) {
             return this.hierarchyList.equals(calculation.hierarchyList)
                 && this.calc.equals(calculation.calc);
         }

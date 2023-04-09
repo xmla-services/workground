@@ -278,10 +278,9 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
 
                 for (int i = 0; i < nlen; i++) {
                     Node n = nlst.item(i);
-                    if (!(n instanceof Element)) {
+                    if (!(n instanceof Element e)) {
                         continue;
                     }
-                    Element e = (Element) n;
                     String localName = e.getLocalName();
 
                     if (localName.equals(XMLA_SECURITY)
@@ -776,8 +775,7 @@ public abstract class DefaultXmlaServlet extends XmlaServlet {
         String faultCode;
         String faultString;
         String detail;
-        if (t instanceof XmlaException) {
-            XmlaException xex = (XmlaException) t;
+        if (t instanceof XmlaException xex) {
             code = xex.getCode();
             faultString = new StringBuilder(xex.getFaultString()).append(" ").append(xex.getDetail()).toString();
             faultCode = XmlaException.formatFaultCode(xex);

@@ -39,9 +39,7 @@ public class Convert {
         Iterator<Node> nodeIterator = propertiesElement.getChildElements();
         while (nodeIterator.hasNext()) {
             Node node = nodeIterator.next();
-            if (node instanceof SOAPElement) {
-                SOAPElement propertyList = (SOAPElement) node;
-
+            if (node instanceof SOAPElement propertyList) {
                 if (Constants.QNAME_MSXMLA_PROPERTYLIST.equals(propertyList.getElementQName())) {
 
                     return propertyListToproperties(propertyList);
@@ -60,8 +58,7 @@ public class Convert {
         while (nodeIteratorPropertyList.hasNext()) {
             Node n = nodeIteratorPropertyList.next();
 
-            if (n instanceof SOAPElement) {
-                SOAPElement propertyListElement = (SOAPElement) n;
+            if (n instanceof SOAPElement propertyListElement) {
                 String name = propertyListElement.getLocalName();
                 Optional<PropertyListElementDefinition> opd = PropertyListElementDefinition.byName(name);
                 opd.ifPresent(pd -> properties.addProperty(pd, propertyListElement.getTextContent()));

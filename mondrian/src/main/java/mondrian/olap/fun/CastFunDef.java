@@ -134,10 +134,9 @@ public class CastFunDef extends FunDefBase {
             if (args.length != 2) {
                 return null;
             }
-            if (!(args[1] instanceof Literal)) {
+            if (!(args[1] instanceof Literal literal)) {
                 return null;
             }
-            Literal literal = (Literal) args[1];
             String typeName = (String) literal.getValue();
             int returnCategory;
             if (typeName.equalsIgnoreCase("String")) {

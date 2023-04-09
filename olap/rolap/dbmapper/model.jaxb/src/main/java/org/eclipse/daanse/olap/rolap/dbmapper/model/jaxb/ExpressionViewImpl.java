@@ -65,10 +65,9 @@ public class ExpressionViewImpl implements ExpressionView {
 
     @Override
 	public boolean equals(Object obj) {
-        if (!(obj instanceof ExpressionView)) {
+        if (!(obj instanceof ExpressionView that)) {
             return false;
         }
-        ExpressionView that = (ExpressionView) obj;
         if (sql().size() != that.sql().size()) {
             return false;
         }

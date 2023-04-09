@@ -109,8 +109,7 @@ public class Olap4jXmlaServlet extends DefaultXmlaServlet {
         } catch (IllegalAccessException e) {
             // ignore
         }
-        if (connection instanceof OlapWrapper) {
-            OlapWrapper olapWrapper = (OlapWrapper) connection;
+        if (connection instanceof OlapWrapper olapWrapper) {
             return olapWrapper.unwrap(clazz);
         }
         throw new SQLException("not an instance");

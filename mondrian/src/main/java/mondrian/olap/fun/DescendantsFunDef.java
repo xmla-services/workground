@@ -84,8 +84,7 @@ class DescendantsFunDef extends FunDefBase {
   @Override
 public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     final Type type0 = call.getArg( 0 ).getType();
-    if ( type0 instanceof SetType ) {
-      final SetType setType = (SetType) type0;
+    if ( type0 instanceof SetType setType ) {
       if ( setType.getElementType() instanceof TupleType ) {
         throw MondrianResource.instance()
           .DescendantsAppliedToSetOfTuples.ex();

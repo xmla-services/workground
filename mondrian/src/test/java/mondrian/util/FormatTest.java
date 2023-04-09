@@ -622,8 +622,7 @@ public class FormatTest {
         Format format = new Format(formatString, locale);
         String actualResult = format.format(o);
         Util.discard(actualResult);
-        if (o instanceof BigDecimal) {
-            BigDecimal bigDecimal = (BigDecimal) o;
+        if (o instanceof BigDecimal bigDecimal) {
             checkFormat(locale, bigDecimal.doubleValue(), formatString);
             checkFormat(locale, bigDecimal.floatValue(), formatString);
             checkFormat(locale, bigDecimal.longValue(), formatString);
@@ -640,8 +639,7 @@ public class FormatTest {
         Format format = new Format(formatString, locale);
         String actualResult = format.format(o);
         assertEquals(expectedResult, actualResult);
-        if (o instanceof BigDecimal) {
-            BigDecimal bigDecimal = (BigDecimal) o;
+        if (o instanceof BigDecimal bigDecimal) {
             checkFormat(
                 locale, bigDecimal.doubleValue(), formatString, expectedResult);
 

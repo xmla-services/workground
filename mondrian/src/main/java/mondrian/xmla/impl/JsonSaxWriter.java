@@ -224,8 +224,7 @@ class JsonSaxWriter implements SaxWriter {
      * @param value Value
      */
     private void value(Object value) {
-        if (value instanceof String) {
-            String s = (String) value;
+        if (value instanceof String s) {
             Util.quoteForMdx(buf, s);
         } else {
             buf.append(value);

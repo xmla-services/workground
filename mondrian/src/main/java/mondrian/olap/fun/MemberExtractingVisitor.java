@@ -83,8 +83,7 @@ public class MemberExtractingVisitor extends MdxVisitorImpl {
         final Type type = parameter.getType();
         if (type instanceof mondrian.olap.type.MemberType) {
             final Object value = parameter.getValue();
-            if (value instanceof Member) {
-                final Member member = (Member) value;
+            if (value instanceof Member member) {
                 if (!member.isMeasure() && !member.isCalculated()) {
                     addMember(member);
                 }

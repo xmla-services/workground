@@ -761,12 +761,10 @@ RME is this right
         RolapMember member)
     {
         if (!MondrianProperties.instance().UseAggregates.get()
-                || !(constraint instanceof SqlContextConstraint))
+                || !(constraint instanceof SqlContextConstraint contextConstraint))
         {
             return null;
         }
-        SqlContextConstraint contextConstraint =
-                (SqlContextConstraint) constraint;
         Evaluator evaluator = contextConstraint.getEvaluator();
         RolapCube cube = (RolapCube) evaluator.getCube();
         RolapStar star = cube.getStar();
@@ -786,13 +784,9 @@ RME is this right
                     .getMembersArray();
 
         // if measure is calculated, we can't continue
-        if (!(members[0] instanceof RolapBaseCubeMeasure)) {
+        if (!(members[0] instanceof RolapBaseCubeMeasure measure)) {
             return null;
         }
-        RolapBaseCubeMeasure measure = (RolapBaseCubeMeasure)members[0];
-        // we need to do more than this!  we need the rolap star ordinal, not
-        // the rolap cube
-
         int bitPosition =
             ((RolapStar.Measure)measure.getStarMeasure()).getBitPosition();
 

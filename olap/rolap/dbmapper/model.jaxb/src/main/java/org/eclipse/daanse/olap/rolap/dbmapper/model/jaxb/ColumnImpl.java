@@ -67,10 +67,9 @@ public class ColumnImpl implements Column {
 
     @Override
 	public boolean equals(Object obj) {
-            if (!(obj instanceof Column)) {
+            if (!(obj instanceof Column that)) {
                 return false;
             }
-            Column that = (Column) obj;
             return name().equals(that.name()) &&
                 Objects.equals(table(), that.table());
     }

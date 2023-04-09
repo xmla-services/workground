@@ -70,9 +70,7 @@ public class RangeColumnPredicate extends AbstractColumnPredicate {
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof RangeColumnPredicate) {
-            RangeColumnPredicate that =
-                (RangeColumnPredicate) obj;
+        if (obj instanceof RangeColumnPredicate that) {
             return this.lowerInclusive == that.lowerInclusive
                 && this.lowerBound.equals(that.lowerBound)
                 && this.upperInclusive == that.upperInclusive

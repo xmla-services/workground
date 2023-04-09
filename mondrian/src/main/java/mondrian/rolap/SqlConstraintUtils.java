@@ -658,9 +658,7 @@ public class SqlConstraintUtils {
     if ( expression == null ) {
       expression = member.getExpression();
     }
-    if ( expression instanceof ResolvedFunCall ) {
-      ResolvedFunCall fun = (ResolvedFunCall) expression;
-
+    if ( expression instanceof ResolvedFunCall fun ) {
       if ( fun.getFunDef() instanceof ParenthesesFunDef ) {
         assert ( fun.getArgCount() == 1 );
         expandExpressions( member, fun.getArg( 0 ), evaluator, expandedSet );
@@ -692,9 +690,7 @@ public class SqlConstraintUtils {
   }
 
   public static boolean isSupportedExpressionForCalculatedMember( final Exp expression ) {
-    if ( expression instanceof ResolvedFunCall ) {
-      ResolvedFunCall fun = (ResolvedFunCall) expression;
-
+    if ( expression instanceof ResolvedFunCall fun ) {
       if ( fun.getFunDef() instanceof AggregateFunDef ) {
         return true;
       }
@@ -1907,8 +1903,7 @@ public class SqlConstraintUtils {
 
   public static boolean containsValidMeasure( Exp... expressions ) {
     for ( Exp expression : expressions ) {
-      if ( expression instanceof ResolvedFunCall ) {
-        ResolvedFunCall fun = ( (ResolvedFunCall) expression );
+      if ( expression instanceof ResolvedFunCall fun ) {
         return fun.getFunDef() instanceof ValidMeasureFunDef || containsValidMeasure( fun.getArgs() );
       }
     }

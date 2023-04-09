@@ -125,11 +125,9 @@ public Type getResultType( Validator validator, Exp[] args ) {
    *          List of types to add to
    */
   private static void addTypes( final Type type, List<MemberType> list ) {
-    if ( type instanceof SetType ) {
-      SetType setType = (SetType) type;
+    if ( type instanceof SetType setType ) {
       CrossJoinFunDef.addTypes( setType.getElementType(), list );
-    } else if ( type instanceof TupleType ) {
-      TupleType tupleType = (TupleType) type;
+    } else if ( type instanceof TupleType tupleType ) {
       for ( Type elementType : tupleType.elementTypes ) {
         CrossJoinFunDef.addTypes( elementType, list );
       }
@@ -246,8 +244,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
       IterCalc calc2 = (IterCalc) calcs[1];
 
       TupleIterable o1 = calc1.evaluateIterable( evaluator );
-      if ( o1 instanceof TupleList ) {
-        TupleList l1 = (TupleList) o1;
+      if ( o1 instanceof TupleList l1 ) {
         l1 = nonEmptyOptimizeList( evaluator, l1, call );
         if ( l1.isEmpty() ) {
           return TupleCollections.emptyList( getType().getArity() );
@@ -256,8 +253,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
       }
 
       TupleIterable o2 = calc2.evaluateIterable( evaluator );
-      if ( o2 instanceof TupleList ) {
-        TupleList l2 = (TupleList) o2;
+      if ( o2 instanceof TupleList l2 ) {
         l2 = nonEmptyOptimizeList( evaluator, l2, call );
         if ( l2.isEmpty() ) {
           return TupleCollections.emptyList( getType().getArity() );
@@ -674,8 +670,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
       final Type type = parameter.getType();
       if ( type instanceof mondrian.olap.type.MemberType ) {
         final Object value = parameter.getValue();
-        if ( value instanceof Member ) {
-          final Member member = (Member) value;
+        if ( value instanceof Member member ) {
           process( member );
         }
       }
@@ -848,8 +843,7 @@ public Calc compileCall( final ResolvedFunCall call, ExpCompiler compiler ) {
       }
 
       Map<Hierarchy, Set<Member>> mapOfSlicerMembers = new HashMap<>();
-      if ( evaluator instanceof RolapEvaluator ) {
-        RolapEvaluator rev = (RolapEvaluator) evaluator;
+      if ( evaluator instanceof RolapEvaluator rev ) {
         mapOfSlicerMembers = rev.getSlicerMembersByHierarchy();
       }
 

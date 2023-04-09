@@ -246,8 +246,7 @@ public class XmlaHandler {
                 request.getRestrictions().get(
                     Property.StandardMemberProperty
                         .CATALOG_NAME.name());
-            if (restriction instanceof List) {
-                final List requiredValues = (List) restriction;
+            if (restriction instanceof List requiredValues) {
                 catalogName =
                     String.valueOf(
                         requiredValues.get(0));
@@ -422,8 +421,7 @@ public class XmlaHandler {
                         long lval = (Long) inputValue;
                         setValueAndType(lval);
 
-                    } else if (inputValue instanceof BigInteger) {
-                        BigInteger bi = (BigInteger) inputValue;
+                    } else if (inputValue instanceof BigInteger bi) {
                         // See if it can be an integer or long
                         long lval = bi.longValue();
                         if (bi.equals(BigInteger.valueOf(lval))) {
@@ -437,8 +435,7 @@ public class XmlaHandler {
                             this.isDecimal = false;
                         }
 
-                    } else if (inputValue instanceof Float) {
-                        Float f = (Float) inputValue;
+                    } else if (inputValue instanceof Float f) {
                         // See if it can be an integer or long
                         long lval = f.longValue();
                         if (f.equals(new Float(lval))) {
@@ -453,8 +450,7 @@ public class XmlaHandler {
                             this.isDecimal = true;
                         }
 
-                    } else if (inputValue instanceof Double) {
-                        Double d = (Double) inputValue;
+                    } else if (inputValue instanceof Double d) {
                         // See if it can be an integer or long
                         long lval = d.longValue();
                         if (d.equals(new Double(lval))) {
@@ -469,9 +465,7 @@ public class XmlaHandler {
                             this.isDecimal = true;
                         }
 
-                    } else if (inputValue instanceof BigDecimal) {
-                        // See if it can be an integer or long
-                        BigDecimal bd = (BigDecimal) inputValue;
+                    } else if (inputValue instanceof BigDecimal bd) {
                         try {
                             // Can it be converted to a long
                             // Throws ArithmeticException on conversion failure.
@@ -539,8 +533,7 @@ public class XmlaHandler {
                         this.valueType = XSD_FLOAT;
                         this.isDecimal = true;
 
-                    } else if (inputValue instanceof BigDecimal) {
-                        BigDecimal bd = (BigDecimal) inputValue;
+                    } else if (inputValue instanceof BigDecimal bd) {
                         double dval = bd.doubleValue();
                         // make with same scale as Double
                         try {
@@ -561,13 +554,7 @@ public class XmlaHandler {
                         }
                         this.isDecimal = true;
 
-                    } else if (inputValue instanceof BigInteger) {
-                        // What should be done here? Convert ot BigDecimal
-                        // and see if it can be a double or not?
-                        // See if there is loss of precision in the convertion?
-                        // Don't know. For now, just keep it a integral
-                        // value.
-                        BigInteger bi = (BigInteger) inputValue;
+                    } else if (inputValue instanceof BigInteger bi) {
                         // See if it can be an integer or long
                         long lval = bi.longValue();
                         if (bi.equals(BigInteger.valueOf(lval))) {
@@ -608,14 +595,12 @@ public class XmlaHandler {
                     this.value = inputValue;
                     this.isDecimal = false;
 
-                } else if (inputValue instanceof Byte) {
-                    Byte b = (Byte) inputValue;
+                } else if (inputValue instanceof Byte b) {
                     this.valueType = XSD_BYTE;
                     this.value = b.intValue();
                     this.isDecimal = false;
 
-                } else if (inputValue instanceof Short) {
-                    Short s = (Short) inputValue;
+                } else if (inputValue instanceof Short s) {
                     this.valueType = XSD_SHORT;
                     this.value = s.intValue();
                     this.isDecimal = false;
@@ -624,8 +609,7 @@ public class XmlaHandler {
                     // See if it can be an integer or long
                     setValueAndType((Long) inputValue);
 
-                } else if (inputValue instanceof BigInteger) {
-                    BigInteger bi = (BigInteger) inputValue;
+                } else if (inputValue instanceof BigInteger bi) {
                     // See if it can be an integer or long
                     long lval = bi.longValue();
                     if (bi.equals(BigInteger.valueOf(lval))) {
@@ -649,9 +633,7 @@ public class XmlaHandler {
                     this.value = inputValue;
                     this.isDecimal = true;
 
-                } else if (inputValue instanceof BigDecimal) {
-                    // See if it can be a double
-                    BigDecimal bd = (BigDecimal) inputValue;
+                } else if (inputValue instanceof BigDecimal bd) {
                     double dval = bd.doubleValue();
                     // make with same scale as Double
                     try {
@@ -990,8 +972,7 @@ public class XmlaHandler {
 
                 if (queryPart instanceof DrillThrough) {
                     result = executeDrillThroughQuery(request);
-                } else if (queryPart instanceof CalculatedFormula) {
-                    CalculatedFormula calculatedFormula = (CalculatedFormula)queryPart;
+                } else if (queryPart instanceof CalculatedFormula calculatedFormula) {
                     Formula formula = calculatedFormula.getFormula();
                     final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
                     final mondrian.rolap.RolapCube cube = (mondrian.rolap.RolapCube)
@@ -1002,9 +983,7 @@ public class XmlaHandler {
                     else {
                         cube.createNamedSet(formula);
                     }
-                } else if (queryPart instanceof DmvQuery) {
-                    DmvQuery dmvQuery = (DmvQuery)queryPart;
-
+                } else if (queryPart instanceof DmvQuery dmvQuery) {
                     HashMap<String, String> upperCaseProperties = new HashMap<>();
                     for (String key : request.getProperties().keySet()) {
                         String newKey = null;
@@ -1041,14 +1020,12 @@ public class XmlaHandler {
                     );
 
                     return;
-                } else if (queryPart instanceof Refresh) {
-                    Refresh refresh = (Refresh)queryPart;
+                } else if (queryPart instanceof Refresh refresh) {
                     final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
                     final mondrian.rolap.RolapCube cube = (mondrian.rolap.RolapCube)
                             schema.lookupCube(refresh.getCubeName(), true);
                     cube.flushCache(rolapConnection);
-                } else if (queryPart instanceof Update) {
-                    Update update = (Update)queryPart;
+                } else if (queryPart instanceof Update update) {
                     final mondrian.rolap.RolapSchema schema = rolapConnection.getSchema();
                     for(Update.UpdateClause updateClause: update.getUpdateClauses()) {
                         StringWriter sw = new StringWriter();
@@ -1091,9 +1068,7 @@ public class XmlaHandler {
 
                         writeBackCell.setValue(doubleValue, AllocationPolicy.EQUAL_ALLOCATION);
                     }
-                } else if (queryPart instanceof TransactionCommand) {
-                    TransactionCommand transactionCommand = (TransactionCommand)queryPart;
-
+                } else if (queryPart instanceof TransactionCommand transactionCommand) {
                     String sessionId = request.getSessionId();
                     Session session = Session.get(sessionId);
                     if(transactionCommand.getCommand() == TransactionCommand.Command.BEGIN) {
@@ -2796,9 +2771,7 @@ public class XmlaHandler {
                 } else if (longProp == StandardMemberProperty.DEPTH) {
                     value = member.getDepth();
                 } else {
-                    if(longProp instanceof IMondrianOlap4jProperty) {
-                        IMondrianOlap4jProperty currentProperty =
-                                (IMondrianOlap4jProperty) longProp;
+                    if(longProp instanceof IMondrianOlap4jProperty currentProperty) {
                         String thisHierarchyName = member.getHierarchy().getName();
                         String thatHierarchyName = currentProperty.getLevel()
                                 .getHierarchy().getName();
@@ -3508,8 +3481,7 @@ public class XmlaHandler {
             return true;
         }
 
-        if(exp instanceof mondrian.mdx.UnresolvedFunCall) {
-            mondrian.mdx.UnresolvedFunCall unresolvedFunCall = (mondrian.mdx.UnresolvedFunCall) exp;
+        if(exp instanceof mondrian.mdx.UnresolvedFunCall unresolvedFunCall) {
             final String functionName = unresolvedFunCall.getFunName();
 
             Object o1, o2;

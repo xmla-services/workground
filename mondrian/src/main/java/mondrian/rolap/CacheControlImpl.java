@@ -398,16 +398,14 @@ public class CacheControlImpl implements CacheControl {
         if (region == seek) {
             return replacement;
         }
-        if (region instanceof UnionCellRegion) {
-            final UnionCellRegion union = (UnionCellRegion) region;
+        if (region instanceof UnionCellRegion union) {
             List<CellRegionImpl> list = new ArrayList<>();
             for (CellRegionImpl child : union.regions) {
                 list.add(copyReplacing(child, seek, replacement));
             }
             return new UnionCellRegion(list);
         }
-        if (region instanceof CrossjoinCellRegion) {
-            final CrossjoinCellRegion crossjoin = (CrossjoinCellRegion) region;
+        if (region instanceof CrossjoinCellRegion crossjoin) {
             List<CellRegionImpl> list = new ArrayList<>();
             for (CellRegionImpl child : crossjoin.components) {
                 list.add(copyReplacing(child, seek, replacement));
@@ -429,8 +427,7 @@ public class CacheControlImpl implements CacheControl {
         CellRegionImpl region,
         List<CellRegionImpl> list)
     {
-        if (region instanceof UnionCellRegion) {
-            UnionCellRegion union = (UnionCellRegion) region;
+        if (region instanceof UnionCellRegion union) {
             for (CellRegionImpl region1 : union.regions) {
                 flattenUnion(region1, list);
             }
@@ -449,8 +446,7 @@ public class CacheControlImpl implements CacheControl {
         CellRegionImpl region,
         List<CellRegionImpl> list)
     {
-        if (region instanceof CrossjoinCellRegion) {
-            CrossjoinCellRegion crossjoin = (CrossjoinCellRegion) region;
+        if (region instanceof CrossjoinCellRegion crossjoin) {
             for (CellRegionImpl component : crossjoin.components) {
                 flattenCrossjoin(component, list);
             }
@@ -581,8 +577,7 @@ public class CacheControlImpl implements CacheControl {
         List<RolapStar> starList = new ArrayList<>();
         final List<Member> measuresList = findMeasures(region);
         for (Member measure : measuresList) {
-            if (measure instanceof RolapStoredMeasure) {
-                RolapStoredMeasure storedMeasure = (RolapStoredMeasure) measure;
+            if (measure instanceof RolapStoredMeasure storedMeasure) {
                 final RolapStar.Measure starMeasure =
                     (RolapStar.Measure) storedMeasure.getStarMeasure();
                 if (!starList.contains(starMeasure.getStar())) {
@@ -1152,9 +1147,7 @@ public class CacheControlImpl implements CacheControl {
             CellRegionImpl region,
             List<CellRegionImpl> list)
         {
-            if (region instanceof CrossjoinCellRegion) {
-                CrossjoinCellRegion crossjoinRegion =
-                    (CrossjoinCellRegion) region;
+            if (region instanceof CrossjoinCellRegion crossjoinRegion) {
                 for (CellRegionImpl component : crossjoinRegion.components) {
                     list.add(component);
                 }

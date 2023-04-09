@@ -308,8 +308,7 @@ public class HierarchyUsage {
 
     @Override
 	public boolean equals(Object o) {
-        if (o instanceof HierarchyUsage) {
-            HierarchyUsage other = (HierarchyUsage) o;
+        if (o instanceof HierarchyUsage other) {
             return (this.kind == other.kind)
                 && Objects.equals(this.fact, other.fact)
                 && this.hierarchyName.equals(other.hierarchyName)

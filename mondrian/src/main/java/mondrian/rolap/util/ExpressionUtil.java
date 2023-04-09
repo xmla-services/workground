@@ -51,18 +51,16 @@ public class ExpressionUtil {
 
     public static boolean equals(Expression expression, Object obj) {
         if (expression instanceof Column) {
-            if (!(obj instanceof Column)) {
+            if (!(obj instanceof Column that)) {
                 return false;
             }
-            Column that = (Column) obj;
             return expression.name().equals(that.name()) &&
                 Objects.equals(expression.table(), that.table());
         }
         if (expression instanceof ExpressionView) {
-            if (!(obj instanceof ExpressionView)) {
+            if (!(obj instanceof ExpressionView that)) {
                 return false;
             }
-            ExpressionView that = (ExpressionView) obj;
             if (((ExpressionView) expression).sql().size() != that.sql().size()) {
                 return false;
             }

@@ -107,10 +107,8 @@ public class TypeUtil {
             final Hierarchy hierarchy2 = memberType2.getHierarchy();
             return equal(hierarchy1, hierarchy2);
         }
-        if (type1 instanceof TupleType) {
-            TupleType tupleType1 = (TupleType) type1;
-            if (type2 instanceof TupleType) {
-                TupleType tupleType2 = (TupleType) type2;
+        if (type1 instanceof TupleType tupleType1) {
+            if (type2 instanceof TupleType tupleType2) {
                 if (tupleType1.elementTypes.length
                         == tupleType2.elementTypes.length)
                 {
@@ -502,8 +500,7 @@ public class TypeUtil {
         if (type instanceof SetType) {
             type = ((SetType) type).getElementType();
         }
-        if (type instanceof TupleType) {
-            final TupleType tupleType = (TupleType) type;
+        if (type instanceof TupleType tupleType) {
             List<Hierarchy> hierarchyList = new ArrayList<>();
             for (Type elementType : tupleType.elementTypes) {
                 hierarchyList.add(elementType.getHierarchy());

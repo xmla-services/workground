@@ -316,10 +316,9 @@ public class RolapCubeHierarchy extends RolapHierarchy {
             aliases.put(
                 RelationUtil.getAlias(((Relation) oldrel)),
                 RelationUtil.getAlias(((Relation) newrel)));
-        } else if (oldrel instanceof Join
+        } else if (oldrel instanceof Join oldjoin
             && newrel instanceof Join)
         {
-            Join oldjoin = (Join)oldrel;
             Join newjoin = (Join)newrel;
             extractNewAliases(left(oldjoin), left(newjoin));
             extractNewAliases(right(oldjoin), right(newjoin));
@@ -333,11 +332,10 @@ public class RolapCubeHierarchy extends RolapHierarchy {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof RolapCubeHierarchy)) {
+        if (!(o instanceof RolapCubeHierarchy that)) {
             return false;
         }
 
-        RolapCubeHierarchy that = (RolapCubeHierarchy)o;
         return cubeDimension.equals(that.cubeDimension)
             && getUniqueName().equals(that.getUniqueName());
     }

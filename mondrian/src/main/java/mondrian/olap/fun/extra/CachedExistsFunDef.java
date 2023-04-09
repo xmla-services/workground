@@ -137,13 +137,11 @@ public Calc compileCall( ResolvedFunCall call, ExpCompiler compiler ) {
     List<Hierarchy> hiers = new ArrayList<>();
     if ( t instanceof MemberType ) {
       hiers.add( getHierarchy( t ) );
-    } else if ( t instanceof TupleType ) {
-      TupleType tupleType = (TupleType) t;
+    } else if ( t instanceof TupleType tupleType ) {
       for ( Type elementType : tupleType.elementTypes ) {
         hiers.add( getHierarchy( elementType ) );
       }
-    } else if ( t instanceof SetType ) {
-      SetType setType = (SetType) t;
+    } else if ( t instanceof SetType setType ) {
       if ( setType.getElementType() instanceof MemberType ) {
         hiers.add( getHierarchy( setType.getElementType() ) );
       } else if ( setType.getElementType() instanceof TupleType ) {

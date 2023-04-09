@@ -61,8 +61,7 @@ public class RelationUtil {
 
     public static boolean equals(Relation relation, Object o) {
         if (relation instanceof View) {
-            if (o instanceof View) {
-                View that = (View) o;
+            if (o instanceof View that) {
                 if (!Objects.equals(relation.alias(), that.alias())) {
                     return false;
                 }
@@ -82,8 +81,7 @@ public class RelationUtil {
             }
         }
         if (relation instanceof Table) {
-            if (o instanceof Table) {
-                Table that = (Table) o;
+            if (o instanceof Table that) {
                 return ((Table) relation).name().equals(that.name()) &&
                     Objects.equals(relation.alias(), that.alias()) &&
                     Objects.equals(((Table) relation).schema(), that.schema());
@@ -92,8 +90,7 @@ public class RelationUtil {
             }
         }
         if (relation instanceof InlineTable) {
-            if (o instanceof InlineTable) {
-                InlineTable that = (InlineTable) o;
+            if (o instanceof InlineTable that) {
                 return relation.alias().equals(that.alias());
             } else {
                 return false;

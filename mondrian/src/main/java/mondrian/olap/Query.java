@@ -1015,8 +1015,7 @@ public class Query extends QueryPart {
             if (value instanceof Number || value == null) {
                 return value;
             }
-            if (value instanceof String) {
-                String s = (String) value;
+            if (value instanceof String s) {
                 try {
                     return Integer.parseInt(s);
                 } catch (NumberFormatException e) {
@@ -1187,10 +1186,9 @@ public class Query extends QueryPart {
      * Looks up a named set.
      */
     private NamedSet lookupNamedSet(Id.Segment segment) {
-        if (!(segment instanceof Id.NameSegment)) {
+        if (!(segment instanceof Id.NameSegment nameSegment)) {
             return null;
         }
-        Id.NameSegment nameSegment = (Id.NameSegment) segment;
         for (Formula formula : formulas) {
             if (!formula.isMember()
                 && formula.getElement() != null
@@ -1522,8 +1520,7 @@ public class Query extends QueryPart {
      */
     public void addMeasuresMembers(OlapElement olapElement)
     {
-        if (olapElement instanceof Member) {
-            Member member = (Member) olapElement;
+        if (olapElement instanceof Member member) {
             if (member.isMeasure()) {
                 measuresMembers.add(member);
             }
@@ -1930,8 +1927,7 @@ public class Query extends QueryPart {
             // Then delegate to the next reader.
             OlapElement olapElement = super.lookupCompoundInternal(
                 parent, names, failIfNotFound, category, matchType);
-            if (olapElement instanceof Member) {
-                Member member = (Member) olapElement;
+            if (olapElement instanceof Member member) {
                 final Formula formula = (Formula)
                     member.getPropertyValue(Property.FORMULA.name);
                 if (formula != null) {
@@ -2414,8 +2410,7 @@ public class Query extends QueryPart {
          * @param exp Expression that may be an "AS"
          */
         private void registerAlias(QueryPart parent, Exp exp) {
-            if (exp instanceof FunCall) {
-                FunCall call2 = (FunCall) exp;
+            if (exp instanceof FunCall call2) {
                 if (call2.getSyntax() == Syntax.Infix
                     && call2.getFunName().equals("AS"))
                 {
@@ -2508,13 +2503,11 @@ public class Query extends QueryPart {
     }
 
     private Exp replaceSubcubeMember(Exp exp) {
-        if(exp instanceof MemberExpr) {
-            MemberExpr memberExpr = (MemberExpr)exp;
+        if(exp instanceof MemberExpr memberExpr) {
             Member subcubeMember = this.getSubcubeMember(memberExpr.getMember(), true);
             return new MemberExpr(subcubeMember);
         }
-        if(exp instanceof ResolvedFunCall) {
-            ResolvedFunCall resolvedFunCall = (ResolvedFunCall) exp;
+        if(exp instanceof ResolvedFunCall resolvedFunCall) {
             for (int i = 0; i < resolvedFunCall.getArgs().length; i++) {
                 resolvedFunCall.getArgs()[i] = replaceSubcubeMember(resolvedFunCall.getArgs()[i]);
             }

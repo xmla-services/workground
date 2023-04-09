@@ -278,10 +278,9 @@ public class RolapUtil {
         boolean failIfNotFound)
     {
         for (Id.Segment segment : segments) {
-            if (!(segment instanceof Id.NameSegment)) {
+            if (!(segment instanceof Id.NameSegment nameSegment)) {
                 break;
             }
-            final Id.NameSegment nameSegment = (Id.NameSegment) segment;
             List<RolapMember> children;
             if (member == null) {
                 children = reader.getRootMembers();
@@ -474,10 +473,9 @@ public class RolapUtil {
         Id.Segment searchName,
         MatchType matchType)
     {
-        if (!(searchName instanceof Id.NameSegment)) {
+        if (!(searchName instanceof Id.NameSegment nameSegment)) {
             return null;
         }
-        final Id.NameSegment nameSegment = (Id.NameSegment) searchName;
         switch (matchType) {
         case FIRST:
             return members.get(0);

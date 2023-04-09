@@ -501,20 +501,17 @@ public interface BitKey
 
         @Override
 		public BitKey or(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                final BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 final BitKey.Small bk = (BitKey.Small) copy();
                 bk.or(other.bits);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                final BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 final BitKey.Mid128 bk = (BitKey.Mid128) other.copy();
                 bk.or(this.bits, 0);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                final BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 final BitKey.Big bk = (BitKey.Big) other.copy();
                 bk.or(this.bits);
                 return bk;
@@ -525,20 +522,17 @@ public interface BitKey
 
         @Override
 		public BitKey orNot(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                final BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 final BitKey.Small bk = (BitKey.Small) copy();
                 bk.orNot(other.bits);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                final BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 final BitKey.Mid128 bk = (BitKey.Mid128) other.copy();
                 bk.orNot(this.bits, 0);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                final BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 final BitKey.Big bk = (BitKey.Big) other.copy();
                 bk.orNot(this.bits);
                 return bk;
@@ -549,20 +543,17 @@ public interface BitKey
 
         @Override
 		public BitKey and(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                final BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 final BitKey.Small bk = (BitKey.Small) copy();
                 bk.and(other.bits);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                final BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 final BitKey.Small bk = (BitKey.Small) copy();
                 bk.and(other.bits0);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                final BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 final BitKey.Small bk = (BitKey.Small) copy();
                 bk.and(other.bits[0]);
                 return bk;
@@ -573,20 +564,17 @@ public interface BitKey
 
         @Override
 		public BitKey andNot(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                final BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 final BitKey.Small bk = (BitKey.Small) copy();
                 bk.andNot(other.bits);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                final BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 final BitKey.Small bk = (BitKey.Small) copy();
                 bk.andNot(other.bits0);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                final BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 final BitKey.Small bk = (BitKey.Small) copy();
                 bk.andNot(other.bits[0]);
                 return bk;
@@ -601,17 +589,14 @@ public interface BitKey
 
         @Override
 		public boolean isSuperSetOf(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 return ((this.bits | other.bits) == this.bits);
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 return ((this.bits | other.bits0) == this.bits)
                     && (other.bits1 == 0);
 
-            } else if (bitKey instanceof BitKey.Big) {
-                BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 if ((this.bits | other.bits[0]) != this.bits) {
                     return false;
                 } else {
@@ -628,16 +613,13 @@ public interface BitKey
 
         @Override
 		public boolean intersects(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 return (this.bits & other.bits) != 0;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 return (this.bits & other.bits0) != 0;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 return (this.bits & other.bits[0]) != 0;
             }
             return false;
@@ -740,16 +722,13 @@ public interface BitKey
             if (this == o) {
                 return true;
             }
-            if (o instanceof BitKey.Small) {
-                BitKey.Small other = (BitKey.Small) o;
+            if (o instanceof BitKey.Small other) {
                 return (this.bits == other.bits);
 
-            } else if (o instanceof BitKey.Mid128) {
-                BitKey.Mid128 other = (BitKey.Mid128) o;
+            } else if (o instanceof BitKey.Mid128 other) {
                 return (this.bits == other.bits0) && (other.bits1 == 0);
 
-            } else if (o instanceof BitKey.Big) {
-                BitKey.Big other = (BitKey.Big) o;
+            } else if (o instanceof BitKey.Big other) {
                 if (this.bits != other.bits[0]) {
                     return false;
                 } else {
@@ -771,13 +750,11 @@ public interface BitKey
 
         @Override
 		public int compareTo(BitKey bitKey) {
-            if (bitKey instanceof Small) {
-                Small that = (Small) bitKey;
+            if (bitKey instanceof Small that) {
                 return this.bits == that.bits ? 0
                     : this.bits < that.bits ? -1
                     : 1;
-            } else if (bitKey instanceof Mid128) {
-                Mid128 that = (Mid128) bitKey;
+            } else if (bitKey instanceof Mid128 that) {
                 if (that.bits1 != 0) {
                     return -1;
                 }
@@ -905,20 +882,17 @@ public interface BitKey
 
         @Override
 		public BitKey or(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                final BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
                 bk.or(other.bits, 0);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                final BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
                 bk.or(other.bits0, other.bits1);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                final BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 final BitKey.Big bk = (BitKey.Big) other.copy();
                 bk.or(this.bits0, this.bits1);
                 return bk;
@@ -929,20 +903,17 @@ public interface BitKey
 
         @Override
 		public BitKey orNot(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                final BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
                 bk.orNot(other.bits, 0);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                final BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
                 bk.orNot(other.bits0, other.bits1);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                final BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 final BitKey.Big bk = (BitKey.Big) other.copy();
                 bk.orNot(this.bits0, this.bits1);
                 return bk;
@@ -953,20 +924,17 @@ public interface BitKey
 
         @Override
 		public BitKey and(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                final BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
                 bk.and(other.bits, 0);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                final BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
                 bk.and(other.bits0, other.bits1);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                final BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
                 bk.and(other.bits[0], other.bits[1]);
                 return bk;
@@ -977,20 +945,17 @@ public interface BitKey
 
         @Override
 		public BitKey andNot(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                final BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
                 bk.andNot(other.bits, 0);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                final BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
                 bk.andNot(other.bits0, other.bits1);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                final BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 final BitKey.Mid128 bk = (BitKey.Mid128) copy();
                 bk.andNot(other.bits[0], other.bits[1]);
                 return bk;
@@ -1006,17 +971,14 @@ public interface BitKey
 
         @Override
 		public boolean isSuperSetOf(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 return ((this.bits0 | other.bits) == this.bits0);
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 return ((this.bits0 | other.bits0) == this.bits0)
                     && ((this.bits1 | other.bits1) == this.bits1);
 
-            } else if (bitKey instanceof BitKey.Big) {
-                BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 if ((this.bits0 | other.bits[0]) != this.bits0) {
                     return false;
                 } else if ((this.bits1 | other.bits[1]) != this.bits1) {
@@ -1035,17 +997,14 @@ public interface BitKey
 
         @Override
 		public boolean intersects(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 return (this.bits0 & other.bits) != 0;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 return (this.bits0 & other.bits0) != 0
                     || (this.bits1 & other.bits1) != 0;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 if ((this.bits0 & other.bits[0]) != 0) {
                     return true;
                 } else if ((this.bits1 & other.bits[1]) != 0) {
@@ -1181,17 +1140,14 @@ public interface BitKey
             if (this == o) {
                 return true;
             }
-            if (o instanceof BitKey.Small) {
-                BitKey.Small other = (BitKey.Small) o;
+            if (o instanceof BitKey.Small other) {
                 return (this.bits0 == other.bits) && (this.bits1 == 0);
 
-            } else if (o instanceof BitKey.Mid128) {
-                BitKey.Mid128 other = (BitKey.Mid128) o;
+            } else if (o instanceof BitKey.Mid128 other) {
                 return (this.bits0 == other.bits0)
                     && (this.bits1 == other.bits1);
 
-            } else if (o instanceof BitKey.Big) {
-                BitKey.Big other = (BitKey.Big) o;
+            } else if (o instanceof BitKey.Big other) {
                 if (this.bits0 != other.bits[0]) {
                     return false;
                 } else if (this.bits1 != other.bits[1]) {
@@ -1245,14 +1201,12 @@ public interface BitKey
         // implement Comparable (in lazy, expensive fashion)
         @Override
 		public int compareTo(BitKey bitKey) {
-            if (bitKey instanceof Mid128) {
-                Mid128 that = (Mid128) bitKey;
+            if (bitKey instanceof Mid128 that) {
                 if (this.bits1 != that.bits1) {
                     return compareUnsigned(this.bits1, that.bits1);
                 }
                 return compareUnsigned(this.bits0, that.bits0);
-            } else if (bitKey instanceof Small) {
-                Small that = (Small) bitKey;
+            } else if (bitKey instanceof Small that) {
                 if (this.bits1 != 0) {
                     return 1;
                 }
@@ -1393,20 +1347,17 @@ public interface BitKey
 
         @Override
 		public BitKey or(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                final BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 final BitKey.Big bk = (BitKey.Big) copy();
                 bk.or(other.bits);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                final BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 final BitKey.Big bk = (BitKey.Big) copy();
                 bk.or(other.bits0, other.bits1);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                final BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 if (other.size() > size()) {
                     final BitKey.Big bk = (BitKey.Big) other.copy();
                     bk.or(bits);
@@ -1423,20 +1374,17 @@ public interface BitKey
 
         @Override
 		public BitKey orNot(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                final BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 final BitKey.Big bk = (BitKey.Big) copy();
                 bk.orNot(other.bits);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                final BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 final BitKey.Big bk = (BitKey.Big) copy();
                 bk.orNot(other.bits0, other.bits1);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                final BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 if (other.size() > size()) {
                     final BitKey.Big bk = (BitKey.Big) other.copy();
                     bk.orNot(bits);
@@ -1463,8 +1411,7 @@ public interface BitKey
                 bk.and(bits[0], bits[1]);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                final BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 if (other.size() < size()) {
                     final BitKey.Big bk = (BitKey.Big) other.copy();
                     bk.and(bits);
@@ -1481,20 +1428,17 @@ public interface BitKey
 
         @Override
 		public BitKey andNot(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                final BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 final BitKey.Big bk = (BitKey.Big) copy();
                 bk.andNot(other.bits);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                final BitKey.Mid128 other = (Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 final BitKey.Big bk = (BitKey.Big) copy();
                 bk.andNot(other.bits0, other.bits1);
                 return bk;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                final BitKey.Big other = (BitKey.Big) bitKey;
+            } else if (bitKey instanceof BitKey.Big other) {
                 final BitKey.Big bk = (BitKey.Big) copy();
                 bk.andNot(other.bits);
                 return bk;
@@ -1520,18 +1464,14 @@ public interface BitKey
 
         @Override
 		public boolean isSuperSetOf(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 return ((this.bits[0] | other.bits) == this.bits[0]);
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 return ((this.bits[0] | other.bits0) == this.bits[0])
                     && ((this.bits[1] | other.bits1) == this.bits[1]);
 
-            } else if (bitKey instanceof BitKey.Big) {
-                BitKey.Big other = (BitKey.Big) bitKey;
-
+            } else if (bitKey instanceof BitKey.Big other) {
                 int len = Math.min(bits.length, other.bits.length);
                 for (int i = 0; i < len; i++) {
                     if ((this.bits[i] | other.bits[i]) != this.bits[i]) {
@@ -1552,18 +1492,14 @@ public interface BitKey
 
         @Override
 		public boolean intersects(BitKey bitKey) {
-            if (bitKey instanceof BitKey.Small) {
-                BitKey.Small other = (BitKey.Small) bitKey;
+            if (bitKey instanceof BitKey.Small other) {
                 return (this.bits[0] & other.bits) != 0;
 
-            } else if (bitKey instanceof BitKey.Mid128) {
-                BitKey.Mid128 other = (BitKey.Mid128) bitKey;
+            } else if (bitKey instanceof BitKey.Mid128 other) {
                 return (this.bits[0] & other.bits0) != 0
                     || (this.bits[1] & other.bits1) != 0;
 
-            } else if (bitKey instanceof BitKey.Big) {
-                BitKey.Big other = (BitKey.Big) bitKey;
-
+            } else if (bitKey instanceof BitKey.Big other) {
                 int len = Math.min(bits.length, other.bits.length);
                 for (int i = 0; i < len; i++) {
                     if ((this.bits[i] & other.bits[i]) != 0) {
@@ -1689,8 +1625,7 @@ public interface BitKey
             if (this == o) {
                 return true;
             }
-            if (o instanceof BitKey.Small) {
-                BitKey.Small other = (BitKey.Small) o;
+            if (o instanceof BitKey.Small other) {
                 if (this.bits[0] != other.bits) {
                     return false;
                 } else {
@@ -1702,8 +1637,7 @@ public interface BitKey
                     return true;
                 }
 
-            } else if (o instanceof BitKey.Mid128) {
-                BitKey.Mid128 other = (BitKey.Mid128) o;
+            } else if (o instanceof BitKey.Mid128 other) {
                 if (this.bits[0] != other.bits0) {
                     return false;
                 } else if (this.bits[1] != other.bits1) {
@@ -1717,9 +1651,7 @@ public interface BitKey
                     return true;
                 }
 
-            } else if (o instanceof BitKey.Big) {
-                BitKey.Big other = (BitKey.Big) o;
-
+            } else if (o instanceof BitKey.Big other) {
                 int len = Math.min(bits.length, other.bits.length);
                 for (int i = 0; i < len; i++) {
                     if (this.bits[i] != other.bits[i]) {
@@ -1794,8 +1726,7 @@ public interface BitKey
 		public int compareTo(BitKey bitKey) {
             if (bitKey instanceof Big) {
                 return compareUnsignedArrays(this.bits, ((Big) bitKey).bits);
-            } else if (bitKey instanceof Mid128) {
-                Mid128 that = (Mid128) bitKey;
+            } else if (bitKey instanceof Mid128 that) {
                 return -that.compareToBig(this);
             } else {
                 Small that = (Small) bitKey;

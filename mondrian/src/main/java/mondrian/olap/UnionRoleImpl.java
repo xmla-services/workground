@@ -65,10 +65,9 @@ class UnionRoleImpl implements Role {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof UnionRoleImpl)) {
+        if (!(obj instanceof UnionRoleImpl r)) {
             return false;
         }
-        final UnionRoleImpl r = (UnionRoleImpl) obj;
         if (r.roleList.size() != this.roleList.size()) {
             return false;
         }

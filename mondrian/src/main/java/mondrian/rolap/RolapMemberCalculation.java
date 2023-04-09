@@ -99,8 +99,7 @@ class RolapMemberCalculation implements RolapCalculation {
      * @return Whether expression contains a call to an aggregate function.
      */
     private static boolean foundAggregateFunction(Exp exp) {
-        if (exp instanceof ResolvedFunCall) {
-            ResolvedFunCall resolvedFunCall = (ResolvedFunCall) exp;
+        if (exp instanceof ResolvedFunCall resolvedFunCall) {
             if (resolvedFunCall.getFunDef() instanceof AggregateFunDef) {
                 return true;
             } else {

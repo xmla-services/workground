@@ -261,8 +261,7 @@ public class SchemaExplorer
             {
                 if (columnIndex == 0) {
                     AWTEvent currentEvent = EventQueue.getCurrentEvent();
-                    if (currentEvent instanceof KeyEvent) {
-                        KeyEvent ke = (KeyEvent) currentEvent;
+                    if (currentEvent instanceof KeyEvent ke) {
                         int kcode = ke.getKeyCode();
                         if (kcode == KeyEvent.VK_TAB) {
                             if ((ke.getModifiersEx()
@@ -1492,7 +1491,7 @@ public class SchemaExplorer
             }
         }
         // Object path = tree.getSelectionPath().getLastPathComponent();
-        if (!(path instanceof MondrianGuiDef.Cube)) {
+        if (!(path instanceof MondrianGuiDef.Cube cube)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -1503,7 +1502,6 @@ public class SchemaExplorer
             return;
         }
 
-        MondrianGuiDef.Cube cube = (MondrianGuiDef.Cube) path;
         MondrianGuiDef.Measure measure = new MondrianGuiDef.Measure();
         measure.name = "";
         measure.name =
@@ -1555,7 +1553,7 @@ public class SchemaExplorer
             }
         }
 
-        if (!(path instanceof MondrianGuiDef.Table)) {
+        if (!(path instanceof MondrianGuiDef.Table factTable)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -1565,8 +1563,6 @@ public class SchemaExplorer
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        MondrianGuiDef.Table factTable = (MondrianGuiDef.Table) path;
 
         MondrianGuiDef.AggPattern aggname = new MondrianGuiDef.AggPattern();
         aggname.pattern = "";
@@ -1622,15 +1618,13 @@ public class SchemaExplorer
             }
         }
 
-        if (!(path instanceof MondrianGuiDef.Table)) {
+        if (!(path instanceof MondrianGuiDef.Table factTable)) {
             JOptionPane.showMessageDialog(
                 this, getResourceConverter().getString(
                     "schemaExplorer.tableNotSelected.alert",
                     "Table not selected."), alert, JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        MondrianGuiDef.Table factTable = (MondrianGuiDef.Table) path;
 
         MondrianGuiDef.AggName aggname = new MondrianGuiDef.AggName();
         aggname.name = "";
@@ -1714,10 +1708,7 @@ public class SchemaExplorer
 
         aggexclude.ignorecase = Boolean.TRUE;
 
-        if (path instanceof MondrianGuiDef.Table) {
-            MondrianGuiDef.Table parent =
-                (MondrianGuiDef.Table) path;  // fact table
-
+        if (path instanceof MondrianGuiDef.Table parent) {
             NodeDef[] temp = parent.aggExcludes;
             parent.aggExcludes = new MondrianGuiDef.AggExclude[temp.length + 1];
             for (int i = 0; i < temp.length; i++) {
@@ -1764,7 +1755,7 @@ public class SchemaExplorer
                 }
             }
         }
-        if (!(path instanceof MondrianGuiDef.AggTable)) {
+        if (!(path instanceof MondrianGuiDef.AggTable aggTable)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -1775,8 +1766,6 @@ public class SchemaExplorer
             return;
         }
 
-
-        MondrianGuiDef.AggTable aggTable = (MondrianGuiDef.AggTable) path;
 
         MondrianGuiDef.AggIgnoreColumn aggicol =
             new MondrianGuiDef.AggIgnoreColumn();
@@ -1819,7 +1808,7 @@ public class SchemaExplorer
                 }
             }
         }
-        if (!(path instanceof MondrianGuiDef.AggTable)) {
+        if (!(path instanceof MondrianGuiDef.AggTable aggTable)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -1830,8 +1819,6 @@ public class SchemaExplorer
             return;
         }
 
-
-        MondrianGuiDef.AggTable aggTable = (MondrianGuiDef.AggTable) path;
 
         MondrianGuiDef.AggForeignKey aggfkey =
             new MondrianGuiDef.AggForeignKey();
@@ -1872,7 +1859,7 @@ public class SchemaExplorer
                 }
             }
         }
-        if (!(path instanceof MondrianGuiDef.AggTable)) {
+        if (!(path instanceof MondrianGuiDef.AggTable aggTable)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -1883,8 +1870,6 @@ public class SchemaExplorer
             return;
         }
 
-
-        MondrianGuiDef.AggTable aggTable = (MondrianGuiDef.AggTable) path;
 
         MondrianGuiDef.AggMeasure aggmeasure = new MondrianGuiDef.AggMeasure();
 
@@ -1923,7 +1908,7 @@ public class SchemaExplorer
                 }
             }
         }
-        if (!(path instanceof MondrianGuiDef.AggTable)) {
+        if (!(path instanceof MondrianGuiDef.AggTable aggTable)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -1934,8 +1919,6 @@ public class SchemaExplorer
             return;
         }
 
-
-        MondrianGuiDef.AggTable aggTable = (MondrianGuiDef.AggTable) path;
 
         MondrianGuiDef.AggLevel agglevel = new MondrianGuiDef.AggLevel();
 
@@ -1974,7 +1957,7 @@ public class SchemaExplorer
                 }
             }
         }
-        if (!(path instanceof MondrianGuiDef.AggLevel)) {
+        if (!(path instanceof MondrianGuiDef.AggLevel aggLevel)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -1984,7 +1967,6 @@ public class SchemaExplorer
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-        MondrianGuiDef.AggLevel aggLevel = (MondrianGuiDef.AggLevel) path;
         MondrianGuiDef.AggLevelProperty aggLevelProperty =
             new MondrianGuiDef.AggLevelProperty();
 
@@ -2151,7 +2133,7 @@ public class SchemaExplorer
                 }
             }
         }
-        if (!(path instanceof MondrianGuiDef.VirtualCube)) {
+        if (!(path instanceof MondrianGuiDef.VirtualCube cube)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -2162,8 +2144,6 @@ public class SchemaExplorer
             return;
         }
 
-
-        MondrianGuiDef.VirtualCube cube = (MondrianGuiDef.VirtualCube) path;
 
         MondrianGuiDef.VirtualCubeMeasure measure =
             new MondrianGuiDef.VirtualCubeMeasure();
@@ -2634,7 +2614,7 @@ public class SchemaExplorer
                 }
             }
         }
-        if (!(path instanceof MondrianGuiDef.VirtualCube)) {
+        if (!(path instanceof MondrianGuiDef.VirtualCube cube)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -2644,8 +2624,6 @@ public class SchemaExplorer
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        MondrianGuiDef.VirtualCube cube = (MondrianGuiDef.VirtualCube) path;
 
         MondrianGuiDef.VirtualCubeDimension dimension =
             new MondrianGuiDef.VirtualCubeDimension();
@@ -2817,7 +2795,7 @@ public class SchemaExplorer
                 }
             }
         }
-        if (!(path instanceof MondrianGuiDef.Cube)) {
+        if (!(path instanceof MondrianGuiDef.Cube cube)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -2827,8 +2805,6 @@ public class SchemaExplorer
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        MondrianGuiDef.Cube cube = (MondrianGuiDef.Cube) path;
 
         MondrianGuiDef.DimensionUsage dimension =
             new MondrianGuiDef.DimensionUsage();
@@ -2875,7 +2851,7 @@ public class SchemaExplorer
                 }
             }
         }
-        if (!(path instanceof MondrianGuiDef.Role)) {
+        if (!(path instanceof MondrianGuiDef.Role role)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -2884,8 +2860,6 @@ public class SchemaExplorer
                 alert, JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        MondrianGuiDef.Role role = (MondrianGuiDef.Role) path;
 
         MondrianGuiDef.SchemaGrant schemaGrant =
             new MondrianGuiDef.SchemaGrant();
@@ -2929,7 +2903,7 @@ public class SchemaExplorer
             }
         }
 
-        if (!(path instanceof MondrianGuiDef.SchemaGrant)) {
+        if (!(path instanceof MondrianGuiDef.SchemaGrant schemaGrant)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -2939,9 +2913,6 @@ public class SchemaExplorer
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        MondrianGuiDef.SchemaGrant schemaGrant =
-            (MondrianGuiDef.SchemaGrant) path;
 
         MondrianGuiDef.CubeGrant cubeGrant = new MondrianGuiDef.CubeGrant();
         cubeGrant.access = "";
@@ -2984,7 +2955,7 @@ public class SchemaExplorer
                 }
             }
         }
-        if (!(path instanceof MondrianGuiDef.CubeGrant)) {
+        if (!(path instanceof MondrianGuiDef.CubeGrant cubeGrant)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -2994,8 +2965,6 @@ public class SchemaExplorer
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        MondrianGuiDef.CubeGrant cubeGrant = (MondrianGuiDef.CubeGrant) path;
 
         MondrianGuiDef.DimensionGrant dimeGrant =
             new MondrianGuiDef.DimensionGrant();
@@ -3041,7 +3010,7 @@ public class SchemaExplorer
             }
         }
 
-        if (!(path instanceof MondrianGuiDef.CubeGrant)) {
+        if (!(path instanceof MondrianGuiDef.CubeGrant cubeGrant)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -3051,8 +3020,6 @@ public class SchemaExplorer
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        MondrianGuiDef.CubeGrant cubeGrant = (MondrianGuiDef.CubeGrant) path;
 
         MondrianGuiDef.HierarchyGrant hieGrant =
             new MondrianGuiDef.HierarchyGrant();
@@ -3099,7 +3066,7 @@ public class SchemaExplorer
             }
         }
 
-        if (!(path instanceof MondrianGuiDef.HierarchyGrant)) {
+        if (!(path instanceof MondrianGuiDef.HierarchyGrant hieGrant)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -3109,9 +3076,6 @@ public class SchemaExplorer
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        MondrianGuiDef.HierarchyGrant hieGrant =
-            (MondrianGuiDef.HierarchyGrant) path;
 
         MondrianGuiDef.MemberGrant memberGrant =
             new MondrianGuiDef.MemberGrant();
@@ -3182,7 +3146,7 @@ public class SchemaExplorer
         TreePath tpath = null;
         tpath = getTreePath(evt);
         Object path = tree.getSelectionPath().getLastPathComponent();
-        if (!(path instanceof MondrianGuiDef.Annotations)) {
+        if (!(path instanceof MondrianGuiDef.Annotations annotations)) {
             JOptionPane.showMessageDialog(
                 this, getResourceConverter().getString(
                     "schemaExplorer.annotationsNotSelected.alert",
@@ -3191,8 +3155,6 @@ public class SchemaExplorer
             return;
         }
 
-        MondrianGuiDef.Annotations annotations =
-            (MondrianGuiDef.Annotations) path;
         MondrianGuiDef.Annotation annotation = new MondrianGuiDef.Annotation();
         annotation.name =
             getNewName(
@@ -3229,7 +3191,7 @@ public class SchemaExplorer
                 }
             }
         }
-        if (!(path instanceof MondrianGuiDef.Hierarchy)) {
+        if (!(path instanceof MondrianGuiDef.Hierarchy hierarchy)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -3239,8 +3201,6 @@ public class SchemaExplorer
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        MondrianGuiDef.Hierarchy hierarchy = (MondrianGuiDef.Hierarchy) path;
 
         MondrianGuiDef.Level level = new MondrianGuiDef.Level();
         level.uniqueMembers = false;
@@ -3304,9 +3264,7 @@ public class SchemaExplorer
         MondrianGuiDef.SQL sql = new MondrianGuiDef.SQL();
         sql.dialect = "generic";
 
-        if (path instanceof MondrianGuiDef.ExpressionView) {
-            MondrianGuiDef.ExpressionView expview =
-                (MondrianGuiDef.ExpressionView) path;
+        if (path instanceof MondrianGuiDef.ExpressionView expview) {
             // add sql to ExpressionView
             NodeDef[] temp = expview.expressions;
             expview.expressions = new MondrianGuiDef.SQL[temp.length + 1];
@@ -3371,21 +3329,13 @@ public class SchemaExplorer
 
         final MondrianGuiDef.Script script = new MondrianGuiDef.Script();
 
-        if (path instanceof MondrianGuiDef.UserDefinedFunction) {
-            final MondrianGuiDef.UserDefinedFunction parent =
-                (MondrianGuiDef.UserDefinedFunction) path;
+        if (path instanceof MondrianGuiDef.UserDefinedFunction parent) {
             parent.script = script;
-        } else if (path instanceof MondrianGuiDef.CellFormatter) {
-            final MondrianGuiDef.CellFormatter parent =
-                (MondrianGuiDef.CellFormatter) path;
+        } else if (path instanceof MondrianGuiDef.CellFormatter parent) {
             parent.script = script;
-        } else if (path instanceof MondrianGuiDef.MemberFormatter) {
-            final MondrianGuiDef.MemberFormatter parent =
-                (MondrianGuiDef.MemberFormatter) path;
+        } else if (path instanceof MondrianGuiDef.MemberFormatter parent) {
             parent.script = script;
-        } else if (path instanceof MondrianGuiDef.PropertyFormatter) {
-            final MondrianGuiDef.PropertyFormatter parent =
-                (MondrianGuiDef.PropertyFormatter) path;
+        } else if (path instanceof MondrianGuiDef.PropertyFormatter parent) {
             parent.script = script;
         }
 
@@ -3431,13 +3381,9 @@ public class SchemaExplorer
         final MondrianGuiDef.CellFormatter formatter =
             new MondrianGuiDef.CellFormatter();
 
-        if (path instanceof MondrianGuiDef.Measure) {
-            final MondrianGuiDef.Measure parent =
-                (MondrianGuiDef.Measure) path;
+        if (path instanceof MondrianGuiDef.Measure parent) {
             parent.cellFormatter = formatter;
-        } else if (path instanceof MondrianGuiDef.CalculatedMember) {
-            final MondrianGuiDef.CalculatedMember parent =
-                (MondrianGuiDef.CalculatedMember) path;
+        } else if (path instanceof MondrianGuiDef.CalculatedMember parent) {
             parent.cellFormatter = formatter;
         }
 
@@ -3670,7 +3616,7 @@ public class SchemaExplorer
                 }
             }
         }
-        if (!(path instanceof MondrianGuiDef.Measure)) {
+        if (!(path instanceof MondrianGuiDef.Measure measure)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -3680,8 +3626,6 @@ public class SchemaExplorer
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        MondrianGuiDef.Measure measure = (MondrianGuiDef.Measure) path;
 
         MondrianGuiDef.MeasureExpression measureExp =
             new MondrianGuiDef.MeasureExpression();
@@ -3736,12 +3680,9 @@ public class SchemaExplorer
         MondrianGuiDef.Formula formulaElement = new MondrianGuiDef.Formula();
         formulaElement.cdata = "";
 
-        if (path instanceof MondrianGuiDef.NamedSet) {
-            MondrianGuiDef.NamedSet ns = (MondrianGuiDef.NamedSet) path;
+        if (path instanceof MondrianGuiDef.NamedSet ns) {
             ns.formulaElement = formulaElement;
-        } else if (path instanceof MondrianGuiDef.CalculatedMember) {
-            MondrianGuiDef.CalculatedMember ns =
-                (MondrianGuiDef.CalculatedMember) path;
+        } else if (path instanceof MondrianGuiDef.CalculatedMember ns) {
             ns.formulaElement = formulaElement;
         }
 
@@ -3818,9 +3759,7 @@ public class SchemaExplorer
             }
         }
 
-        if (path instanceof MondrianGuiDef.Hierarchy) {
-            MondrianGuiDef.Hierarchy h = (MondrianGuiDef.Hierarchy) path;
-
+        if (path instanceof MondrianGuiDef.Hierarchy h) {
             // add relation to hierarchy
             h.relation = relation;
         } else if (path instanceof MondrianGuiDef.Cube) {
@@ -3876,7 +3815,7 @@ public class SchemaExplorer
             }
         }
 
-        if (!(path instanceof MondrianGuiDef.Dimension)) {
+        if (!(path instanceof MondrianGuiDef.Dimension dimension)) {
             JOptionPane.showMessageDialog(
                 this,
                 getResourceConverter().getString(
@@ -3886,8 +3825,6 @@ public class SchemaExplorer
                 JOptionPane.WARNING_MESSAGE);
             return;
         }
-
-        MondrianGuiDef.Dimension dimension = (MondrianGuiDef.Dimension) path;
 
         MondrianGuiDef.Hierarchy hierarchy = new MondrianGuiDef.Hierarchy();
 
@@ -4148,7 +4085,7 @@ public class SchemaExplorer
             }
         }
 
-        if (!(path instanceof MondrianGuiDef.Level)) {
+        if (!(path instanceof MondrianGuiDef.Level level)) {
             JOptionPane.showMessageDialog(
                 this, getResourceConverter().getString(
                     "schemaExplorer.levelNotSelected.alert",
@@ -4156,7 +4093,6 @@ public class SchemaExplorer
             return;
         }
 
-        MondrianGuiDef.Level level = (MondrianGuiDef.Level) path;
         MondrianGuiDef.Closure closure = new MondrianGuiDef.Closure();
         closure.parentColumn = "";
         closure.childColumn = "";
@@ -4223,11 +4159,8 @@ public class SchemaExplorer
 
         for (int i = e.getPath().getPathCount() - 1; i >= 0; i--) {
             Object comp = e.getPath().getPathComponent(i);
-            if (comp instanceof MondrianGuiDef.Cube) {
-                final MondrianGuiDef.Cube cube = (MondrianGuiDef.Cube) comp;
-                if (cube.fact instanceof MondrianGuiDef.Table) {
-                    final MondrianGuiDef.Table table =
-                        (MondrianGuiDef.Table) cube.fact;
+            if (comp instanceof MondrianGuiDef.Cube cube) {
+                if (cube.fact instanceof MondrianGuiDef.Table table) {
                     selectedFactTable = table.name;
                     selectedFactTableSchema = table.schema;
                 }
@@ -4806,9 +4739,7 @@ public class SchemaExplorer
                     jPopupMenu.setPath(path);
                     jPopupMenu.removeAll();
                     Object pathSelected = path.getLastPathComponent();
-                    if (pathSelected instanceof MondrianGuiDef.Schema) {
-                        MondrianGuiDef.Schema s =
-                            (MondrianGuiDef.Schema) pathSelected;
+                    if (pathSelected instanceof MondrianGuiDef.Schema s) {
                         jPopupMenu.add(addCube);
                         jPopupMenu.add(addDimension);
                         jPopupMenu.add(addNamedSet);
@@ -5606,9 +5537,7 @@ public class SchemaExplorer
                     (i == 0)
                     ? theRelOrJoin_L
                     : theRelOrJoin_R;
-                if (theCurrentRelOrJoin instanceof MondrianGuiDef.Table) {
-                    MondrianGuiDef.Table theTable =
-                        ((MondrianGuiDef.Table) theCurrentRelOrJoin);
+                if (theCurrentRelOrJoin instanceof MondrianGuiDef.Table theTable) {
                     String theTableName = (theTable.alias != null
                                            && theTable.alias.trim().length()
                                               > 0)
@@ -5642,9 +5571,7 @@ public class SchemaExplorer
                     (i == 0)
                     ? theRelOrJoin_L
                     : theRelOrJoin_R;
-                if (theCurrentRelOrJoin instanceof MondrianGuiDef.Table) {
-                    MondrianGuiDef.Table theTable =
-                        ((MondrianGuiDef.Table) theCurrentRelOrJoin);
+                if (theCurrentRelOrJoin instanceof MondrianGuiDef.Table theTable) {
                     if (theTable.alias != null && theTable.alias
                         .equals(anAlias))
                     {

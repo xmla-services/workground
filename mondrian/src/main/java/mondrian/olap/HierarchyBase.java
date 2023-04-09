@@ -182,8 +182,7 @@ public abstract class HierarchyBase
         MatchType matchType)
     {
         OlapElement oe;
-        if (s instanceof Id.NameSegment) {
-            Id.NameSegment nameSegment = (Id.NameSegment) s;
+        if (s instanceof Id.NameSegment nameSegment) {
             oe = Util.lookupHierarchyLevel(this, nameSegment.getName());
             if (oe == null) {
                 oe = Util.lookupHierarchyRootMember(

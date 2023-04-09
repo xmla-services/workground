@@ -109,8 +109,7 @@ public abstract class OlapElementBase
 
     @Override
 	public String getLocalized(LocalizedProperty prop, Locale locale) {
-        if (this instanceof MetaElement) {
-            MetaElement metaElement = (MetaElement) this;
+        if (this instanceof MetaElement metaElement) {
             final Map<String, Object> metaMap = metaElement.getMetadata();
 
            final String seek = new StringBuilder(prop.name().toLowerCase()).append(".").append(locale).toString();

@@ -235,9 +235,7 @@ public class RolapCubeMember
     @Override
 	public Exp getExpression() {
         Exp exp = member.getExpression();
-        if (exp instanceof ResolvedFunCall) {
-            // convert any args to RolapCubeHierarchies
-            ResolvedFunCall fcall = (ResolvedFunCall)exp;
+        if (exp instanceof ResolvedFunCall fcall) {
             for (int i = 0; i < fcall.getArgCount(); i++) {
                 if (fcall.getArg(i) instanceof HierarchyExpr) {
                     HierarchyExpr expr = (HierarchyExpr)fcall.getArg(i);

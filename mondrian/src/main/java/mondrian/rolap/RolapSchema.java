@@ -308,10 +308,9 @@ public class RolapSchema implements Schema {
 
     @Override
 	public boolean equals(Object o) {
-        if (!(o instanceof RolapSchema)) {
+        if (!(o instanceof RolapSchema other)) {
             return false;
         }
-        RolapSchema other = (RolapSchema) o;
         return other.key.equals(key);
     }
 

@@ -503,8 +503,7 @@ public class XmlUtil {
         }
 
         final ErrorHandler errorHandler = parser.getErrorHandler();
-        if (errorHandler instanceof SaxErrorHandler) {
-            final SaxErrorHandler saxEH = (SaxErrorHandler) errorHandler;
+        if (errorHandler instanceof SaxErrorHandler saxEH) {
             final List<SaxErrorHandler.ErrorInfo> errors = saxEH.getErrors();
 
             if (errors != null && errors.size() > 0) {
@@ -662,11 +661,9 @@ public class XmlUtil {
             } else if (node instanceof DocumentFragment) {
                 format.setOmitXMLDeclaration(true);
                 serial.serialize((DocumentFragment) node);
-            } else if (node instanceof Text) {
-                Text text = (Text) node;
+            } else if (node instanceof Text text) {
                 return text.getData();
-            } else if (node instanceof Attr) {
-                Attr attr = (Attr) node;
+            } else if (node instanceof Attr attr) {
                 String name = attr.getName();
                 String value = attr.getValue();
                 writer.write(name);

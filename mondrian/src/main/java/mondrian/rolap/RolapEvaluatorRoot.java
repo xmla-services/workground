@@ -176,10 +176,9 @@ public RolapEvaluatorRoot( Statement statement ) {
       if ( this == other ) {
         return true;
       }
-      if ( !( other instanceof CompiledExpKey ) ) {
+      if ( !( other instanceof CompiledExpKey otherKey ) ) {
         return false;
       }
-      CompiledExpKey otherKey = (CompiledExpKey) other;
       return this.scalar == otherKey.scalar && this.resultStyle == otherKey.resultStyle && this.exp.equals(
           otherKey.exp );
     }

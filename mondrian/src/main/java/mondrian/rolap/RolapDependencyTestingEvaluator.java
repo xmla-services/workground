@@ -223,8 +223,7 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
     }
 
     private void toString(Object o, PrintWriter pw) {
-        if (o instanceof Object[]) {
-            Object[] a = (Object[]) o;
+        if (o instanceof Object[] a) {
             pw.print("{");
             for (int i = 0; i < a.length; i++) {
                 Object o1 = a[i];
@@ -234,11 +233,9 @@ public class RolapDependencyTestingEvaluator extends RolapEvaluator {
                 toString(o1, pw);
             }
             pw.print("}");
-        } else if (o instanceof List) {
-            List list = (List) o;
+        } else if (o instanceof List list) {
             toString(list.toArray(), pw);
-        } else if (o instanceof Member) {
-            Member member = (Member) o;
+        } else if (o instanceof Member member) {
             pw.print(member.getUniqueName());
         } else {
             pw.print(o);

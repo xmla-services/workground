@@ -236,9 +236,7 @@ public class SchemaTreeCellRenderer
                         myClassLoader.getResource(
                             workbench.getResourceConverter().getGUIReference(
                                 "join"))));
-            } else if (value instanceof MondrianGuiDef.Table) {
-                // Set the table name to alias if present.
-                MondrianGuiDef.Table theTable = (MondrianGuiDef.Table) value;
+            } else if (value instanceof MondrianGuiDef.Table theTable) {
                 String theName =
                     (theTable.alias != null
                      && theTable.alias.trim().length() > 0)

@@ -247,8 +247,7 @@ public class ExplicitRules {
             RolapStar.Table table = getStar().getFactTable();
             Relation relation = table.getRelation();
 
-            if (relation instanceof Table) {
-                Table mtable = (Table) relation;
+            if (relation instanceof Table mtable) {
                 schema = mtable.schema();
             }
             return schema;
@@ -1300,8 +1299,7 @@ public class ExplicitRules {
                     if (columnsToObjects.containsKey(measure.getColumnName())) {
                         Object o =
                             columnsToObjects.get(measure.getColumnName());
-                        if (o instanceof Measure) {
-                            Measure m = (Measure) o;
+                        if (o instanceof Measure m) {
                             msgRecorder.reportError(
                                 mres.DuplicateMeasureColumnNames.str(
                                     msgRecorder.getContext(),

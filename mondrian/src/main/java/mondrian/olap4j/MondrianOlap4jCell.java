@@ -108,8 +108,7 @@ public class MondrianOlap4jCell implements Cell {
     @Override
 	public double getDoubleValue() throws OlapException {
         Object o = cell.getValue();
-        if (o instanceof Number) {
-            Number number = (Number) o;
+        if (o instanceof Number number) {
             return number.doubleValue();
         }
         throw olap4jCellSet.olap4jStatement.olap4jConnection.helper

@@ -389,8 +389,7 @@ public class AggTableManager {
 
                 for (RolapStar.Column rc : rcs) {
                     // its a measure
-                    if (rc instanceof RolapStar.Measure) {
-                        RolapStar.Measure rm = (RolapStar.Measure) rc;
+                    if (rc instanceof RolapStar.Measure rm) {
                         JdbcSchema.Table.Column.Usage usage =
                             factColumn.newUsage(JdbcSchema.UsageType.MEASURE);
                         usage.setSymbolicName(rm.getName());

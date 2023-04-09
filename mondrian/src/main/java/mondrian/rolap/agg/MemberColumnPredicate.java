@@ -57,10 +57,9 @@ public class MemberColumnPredicate extends ValueColumnPredicate {
 
     @Override
 	public boolean equals(Object other) {
-        if (!(other instanceof MemberColumnPredicate)) {
+        if (!(other instanceof MemberColumnPredicate that)) {
             return false;
         }
-        final MemberColumnPredicate that = (MemberColumnPredicate) other;
         return member.equals(that.getMember());
     }
 

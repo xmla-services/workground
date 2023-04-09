@@ -285,8 +285,7 @@ abstract class ValidatorImpl implements Validator {
         final Object parent = stack.get(n - 1);
         if (parent instanceof Formula) {
             return ((Formula) parent).isMember();
-        } else if (parent instanceof ResolvedFunCall) {
-            final ResolvedFunCall funCall = (ResolvedFunCall) parent;
+        } else if (parent instanceof ResolvedFunCall funCall) {
             if (funCall.getFunDef().getSyntax() == Syntax.Parentheses) {
                 return requiresExpression(n - 1);
             } else {
@@ -302,8 +301,7 @@ abstract class ValidatorImpl implements Validator {
                 final int[] parameterTypes = funDef.getParameterCategories();
                 return parameterTypes[k] != Category.Set;
             }
-        } else if (parent instanceof UnresolvedFunCall) {
-            final UnresolvedFunCall funCall = (UnresolvedFunCall) parent;
+        } else if (parent instanceof UnresolvedFunCall funCall) {
             if (funCall.getSyntax() == Syntax.Parentheses
                 || funCall.getFunName().equals("*"))
             {

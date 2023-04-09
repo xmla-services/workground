@@ -153,10 +153,9 @@ public class CubeAccess {
 
     @Override
 	public boolean equals(Object object) {
-        if (!(object instanceof CubeAccess)) {
+        if (!(object instanceof CubeAccess cubeAccess)) {
             return false;
         }
-        CubeAccess cubeAccess = (CubeAccess) object;
         List<Hierarchy> hierarchyList = cubeAccess.getNoAccessHierarchyList();
         List<Member> limitedMemberList = cubeAccess.getLimitedMemberList();
 

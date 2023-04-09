@@ -101,8 +101,7 @@ public class HierarchyType implements Type {
 
     @Override
 	public boolean equals(Object obj) {
-        if (obj instanceof HierarchyType) {
-            HierarchyType that = (HierarchyType) obj;
+        if (obj instanceof HierarchyType that) {
             return Objects.equals(this.hierarchy, that.hierarchy)
                 && Objects.equals(this.dimension, that.dimension);
         }
@@ -111,10 +110,9 @@ public class HierarchyType implements Type {
 
     @Override
 	public Type computeCommonType(Type type, int[] conversionCount) {
-        if (!(type instanceof HierarchyType)) {
+        if (!(type instanceof HierarchyType that)) {
             return null;
         }
-        HierarchyType that = (HierarchyType) type;
         if (this.getHierarchy() != null
             && this.getHierarchy().equals(that.getHierarchy()))
         {
