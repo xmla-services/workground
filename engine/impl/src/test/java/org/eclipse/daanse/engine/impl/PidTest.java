@@ -17,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
-public class PidTest {
+class PidTest {
 
     @Test
     void testPidNotChanged() throws Exception {

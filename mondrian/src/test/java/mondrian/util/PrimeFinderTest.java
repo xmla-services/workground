@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
  * @author jhyde, Stefan Bischof
  * @since Feb 4, 2007
  */
-public class PrimeFinderTest{
+class PrimeFinderTest{
 
     private void assertStatistics(int from, int to, String expected) {
         StringWriter sw = new StringWriter();

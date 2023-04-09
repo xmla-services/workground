@@ -23,7 +23,7 @@ import mondrian.test.DiffRepository;
  *
  * @author Richard M. Emberson
  */
-public class XmlaExcel2000Test extends XmlaBaseTestCase {
+class XmlaExcel2000Test extends XmlaBaseTestCase {
 
     public XmlaExcel2000Test() {
         super();

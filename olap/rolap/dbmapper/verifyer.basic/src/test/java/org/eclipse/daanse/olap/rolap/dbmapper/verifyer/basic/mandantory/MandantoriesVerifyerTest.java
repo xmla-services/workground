@@ -146,7 +146,7 @@ import org.osgi.test.junit5.service.ServiceExtension;
 
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
-public class MandantoriesVerifyerTest {
+class MandantoriesVerifyerTest {
 
     public static final String COMPONENT_NAME = "org.eclipse.daanse.olap.rolap.dbmapper.verifyer.basic.mandantory" +
         ".MandantoriesVerifyer";

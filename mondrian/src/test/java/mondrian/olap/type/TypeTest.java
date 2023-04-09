@@ -41,7 +41,7 @@ import mondrian.olap.fun.Resolver;
  * @since Jan 17, 2008
  */
 
-public class TypeTest {
+class TypeTest {
 
 	@ParameterizedTest
 	@ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class )

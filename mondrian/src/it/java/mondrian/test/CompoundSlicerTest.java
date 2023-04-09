@@ -18,7 +18,7 @@ import mondrian.util.Bug;
  * @author jhyde
  * @since 15 May, 2009
  */
-public class CompoundSlicerTest extends FoodMartTestCase {
+class CompoundSlicerTest extends FoodMartTestCase {
     /**
      * Creates a CompoundSlicerTest.
      */

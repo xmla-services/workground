@@ -40,7 +40,7 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
 
 import mondrian.rolap.RolapConnectionProperties;
 import mondrian.test.PropertySaver5;
-public class HierarchyBugTest {
+class HierarchyBugTest {
 	private PropertySaver5 propSaver;
 
 	@BeforeEach

@@ -62,7 +62,7 @@ import static org.mockito.Mockito.when;
     location = "?", properties = {
     @Property(key = "osgi.soap.endpoint.selector", value = "(service.pid=*)")})
 @RequireServiceComponentRuntime
-public class ExecuteRequestTest {
+class ExecuteRequestTest {
 
     private Logger logger = LoggerFactory.getLogger(ExecuteRequestTest.class);
 

@@ -49,7 +49,7 @@ import mondrian.spi.impl.FilterDynamicSchemaProcessor;
  * @author jhyde
  * @since April 30, 2005
  */
-public class NamedSetTest {
+class NamedSetTest {
 
 	private PropertySaver5 propSaver;
 

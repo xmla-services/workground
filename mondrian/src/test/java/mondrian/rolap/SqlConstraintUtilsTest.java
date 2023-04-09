@@ -73,7 +73,7 @@ import mondrian.server.Execution;
  * {@link SqlConstraintUtils}.
  *
  */
-public class SqlConstraintUtilsTest {
+class SqlConstraintUtilsTest {
 
     private void assertSameContent(
         String msg, Collection<Member> expected, Collection<Member> actual)

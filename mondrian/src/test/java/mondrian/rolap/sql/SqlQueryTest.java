@@ -53,7 +53,7 @@ import mondrian.test.SqlPattern;
  * @author Thiyagu
  * @since 06-Jun-2007
  */
-public class SqlQueryTest  extends BatchTestCase {
+class SqlQueryTest  extends BatchTestCase {
     //private String origWarnIfNoPatternForDialect;
 
     private MondrianProperties prop = MondrianProperties.instance();
@@ -896,7 +896,7 @@ public class SqlQueryTest  extends BatchTestCase {
                 && getDialect(connection).supportsGroupingSets();
     }
 
-    public class JdbcDialectImplForTest extends JdbcDialectImpl{
+    class JdbcDialectImplForTest extends JdbcDialectImpl{
 
         @Override
         protected boolean isSupportedProduct(String productName, String productVersion) {

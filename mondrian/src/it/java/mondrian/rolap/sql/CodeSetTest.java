@@ -24,7 +24,7 @@ import static org.mockito.Mockito.when;
  * @author Tatsiana_Kasiankova
  *
  */
-public class CodeSetTest extends TestCase {
+class CodeSetTest extends TestCase {
 
   private static final String MONDRIAN_ERROR_NO_GENERIC_VARIANT =
       "Mondrian Error:Internal error: View has no 'generic' variant";

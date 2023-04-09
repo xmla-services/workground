@@ -32,7 +32,7 @@ import org.mockito.Mockito;
 import mondrian.rolap.RestrictedMemberReader.MultiCardinalityDefaultMember;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 
-public class RestrictedMemberReaderTest {
+class RestrictedMemberReaderTest {
 
   private RestrictedMemberReader rmr;
   private MemberReader mr;

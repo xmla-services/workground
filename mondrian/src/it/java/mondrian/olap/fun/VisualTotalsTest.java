@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author efine
  */
-public class VisualTotalsTest extends TestCase {
+class VisualTotalsTest extends TestCase {
     void testSubstituteEmpty() {
         final String actual = VisualTotalsFunDef.substitute("", "anything");
         final String expected = "";

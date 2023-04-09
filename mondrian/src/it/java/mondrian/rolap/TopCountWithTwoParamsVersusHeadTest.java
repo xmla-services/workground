@@ -28,7 +28,7 @@ import static mondrian.rolap.RolapNativeTopCountTestCases.*;
  *
  * @author Andrey Khayrutdinov
  */
-public class TopCountWithTwoParamsVersusHeadTest extends BatchTestCase {
+class TopCountWithTwoParamsVersusHeadTest extends BatchTestCase {
 
     private void assertResultsAreEqual(
         String testCase,

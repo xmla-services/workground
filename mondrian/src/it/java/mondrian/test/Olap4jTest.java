@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.*;
  *
  * @author jhyde
  */
-public class Olap4jTest extends FoodMartTestCase {
+class Olap4jTest extends FoodMartTestCase {
     @SuppressWarnings({"UnusedDeclaration"})
     public Olap4jTest() {
         super();

@@ -13,7 +13,7 @@ import mondrian.spi.Dialect;
 import mondrian.test.SqlPattern;
 import mondrian.test.TestContext;
 
-public class NativeEvalVirtualCubeTest extends BatchTestCase {
+class NativeEvalVirtualCubeTest extends BatchTestCase {
 
   /**
    * Both dims fully join to the applicable base cube.

@@ -47,7 +47,7 @@ import mondrian.test.PropertySaver5;
 /**
  * @author Andrey Khayrutdinov
  */
-public class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
+class RolapNativeTopCountVersusNonNativeTest extends BatchTestCase {
 
     private PropertySaver5 propSaver;
 

@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * @author Marc Berkowitz
  * @since Nov 2008
  */
-public class PartialSortTest{
+class PartialSortTest{
     public static final Logger LOGGER =
 	    LoggerFactory.getLogger( PartialSortTest.class );
   final Random random = new Random();

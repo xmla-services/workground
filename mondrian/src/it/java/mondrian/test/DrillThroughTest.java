@@ -35,7 +35,7 @@ import javax.sql.DataSource;
  * @author jhyde
  * @since May 10, 2006
  */
-public class DrillThroughTest extends FoodMartTestCase {
+class DrillThroughTest extends FoodMartTestCase {
 
     public DrillThroughTest() {
         super();

@@ -35,7 +35,7 @@ import mondrian.test.SqlPattern;
  *
  * @author Eric McDermid
  */
-public class SelectNotInGroupByTest extends BatchTestCase {
+class SelectNotInGroupByTest extends BatchTestCase {
 
     public static final String storeDimensionLevelIndependent =
         "<Dimension name=\"CustomStore\">\n"

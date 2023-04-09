@@ -79,7 +79,7 @@ import mondrian.xmla.XmlaHandler;
  *
  * @author jhyde
  */
-public class Olap4jTest {
+class Olap4jTest {
 
     private PropertySaver5 propSaver;
 

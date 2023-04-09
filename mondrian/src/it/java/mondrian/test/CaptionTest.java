@@ -22,7 +22,7 @@ import java.util.List;
  *
  * @author hhaas
  */
-public class CaptionTest extends TestCase {
+class CaptionTest extends TestCase {
 
     /**
      * set caption "Anzahl Verkauf" for measure "Unit Sales"

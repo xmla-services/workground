@@ -29,7 +29,7 @@ import mondrian.test.DiffRepository;
  * @author Khanh Vu
  */
 @Disabled //disabled for CI build
-public class MemHungryTest extends ClearViewBase {
+class MemHungryTest extends ClearViewBase {
 
     @Override
 	public DiffRepository getDiffRepos() {

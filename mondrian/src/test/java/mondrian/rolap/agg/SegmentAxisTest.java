@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class SegmentAxisTest {
+class SegmentAxisTest {
 
     @Test
     void testIsTested() {

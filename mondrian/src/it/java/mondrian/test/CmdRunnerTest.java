@@ -20,7 +20,7 @@ import java.io.*;
  * @author jhyde
  * @since Jun 2, 2006
  */
-public class CmdRunnerTest extends FoodMartTestCase {
+class CmdRunnerTest extends FoodMartTestCase {
     protected DiffRepository getDiffRepos() {
         return DiffRepository.lookup(CmdRunnerTest.class);
     }

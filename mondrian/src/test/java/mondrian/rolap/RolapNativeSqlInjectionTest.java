@@ -29,7 +29,7 @@ import mondrian.test.PropertySaver5;
 /**
  * @author Andrey Khayrutdinov
  */
-public class RolapNativeSqlInjectionTest {
+class RolapNativeSqlInjectionTest {
 
     private PropertySaver5 propSaver;
     @BeforeEach

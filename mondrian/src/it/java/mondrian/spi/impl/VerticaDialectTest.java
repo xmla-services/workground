@@ -17,7 +17,7 @@ import java.sql.DatabaseMetaData;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class VerticaDialectTest extends TestCase {
+class VerticaDialectTest extends TestCase {
   private Connection connection = mock( Connection.class );
   private DatabaseMetaData metaData = mock( DatabaseMetaData.class );
   private VerticaDialect dialect;

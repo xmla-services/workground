@@ -22,7 +22,7 @@ import mondrian.test.TestContext;
  *
  * @author Will Gorman
  */
-public class MultipleColsInTupleAggTest extends AggTableTestCase {
+class MultipleColsInTupleAggTest extends AggTableTestCase {
 
     public MultipleColsInTupleAggTest() {
         super();

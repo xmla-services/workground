@@ -34,7 +34,7 @@ import mondrian.rolap.sql.SqlQuery;
 /**
  * @author Andrey Khayrutdinov
  */
-public class NumberSqlCompilerTest {
+class NumberSqlCompilerTest {
 
     private static RolapNativeSql.NumberSqlCompiler compiler;
 

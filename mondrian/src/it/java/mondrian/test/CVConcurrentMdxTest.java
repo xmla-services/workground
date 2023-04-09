@@ -32,7 +32,7 @@ import java.util.*;
  *
  * @author Khanh Vu
  */
-public class CVConcurrentMdxTest extends FoodMartTestCase {
+class CVConcurrentMdxTest extends FoodMartTestCase {
     private MondrianProperties props;
 
     public CVConcurrentMdxTest() {

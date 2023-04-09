@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 /**
  * Unit Test for {@link RolapMemberBase}.
  */
-public class RolapMemberBaseTest extends TestCase {
+class RolapMemberBaseTest extends TestCase {
 
     private static final String PROPERTY_NAME_1 = "property1";
     private static final String PROPERTY_NAME_2 = "property2";

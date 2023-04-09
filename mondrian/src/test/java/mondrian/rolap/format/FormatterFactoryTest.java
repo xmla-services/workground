@@ -20,7 +20,7 @@ import mondrian.spi.CellFormatter;
 import mondrian.spi.MemberFormatter;
 import mondrian.spi.PropertyFormatter;
 
-public class FormatterFactoryTest {
+class FormatterFactoryTest {
 
     private FormatterFactory factory = FormatterFactory.instance();
 

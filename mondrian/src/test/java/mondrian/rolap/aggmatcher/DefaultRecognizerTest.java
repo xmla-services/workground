@@ -26,7 +26,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.test.PropertySaver5;
 
-public class DefaultRecognizerTest {
+class DefaultRecognizerTest {
 
     private PropertySaver5 propSaver;
 

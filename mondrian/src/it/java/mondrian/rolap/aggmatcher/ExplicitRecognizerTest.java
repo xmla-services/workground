@@ -13,7 +13,7 @@ import mondrian.test.*;
 
 import java.sql.*;
 
-public class ExplicitRecognizerTest extends AggTableTestCase {
+class ExplicitRecognizerTest extends AggTableTestCase {
 
     protected void setUp() throws Exception {
         super.setUp(); // parent setUp enabled agg

@@ -27,7 +27,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author Andrey Khayrutdinov
  */
-public class NumberSqlCompilerTest extends TestCase {
+class NumberSqlCompilerTest extends TestCase {
 
     private RolapNativeSql.NumberSqlCompiler compiler;
 

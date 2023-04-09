@@ -21,7 +21,7 @@ import mondrian.test.FoodMartTestCase;
 import static org.mockito.Mockito.*;
 
 
-public class CancellationTest extends FoodMartTestCase {
+class CancellationTest extends FoodMartTestCase {
 
     void testNonEmptyListCancellation() throws MondrianException {
         // tests that cancellation/timeout is checked in
@@ -97,7 +97,7 @@ public class CancellationTest extends FoodMartTestCase {
                 });
         }
 
-    public class CrossJoinFunDefTester extends CrossJoinFunDef {
+    class CrossJoinFunDefTester extends CrossJoinFunDef {
         public CrossJoinFunDefTester(FunDef dummyFunDef) {
             super(dummyFunDef);
         }

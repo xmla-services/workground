@@ -37,7 +37,7 @@ import java.util.*;
  * @author mberkowitz
  * @since Jan 2008
  */
-public class MemberCacheControlTest extends FoodMartTestCase {
+class MemberCacheControlTest extends FoodMartTestCase {
     private Locus locus;
 
     // TODO: add multi-thread tests.

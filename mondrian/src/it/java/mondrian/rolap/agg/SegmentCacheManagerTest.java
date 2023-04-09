@@ -27,7 +27,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-public class SegmentCacheManagerTest extends TestCase {
+class SegmentCacheManagerTest extends TestCase {
 
   @Mock private MondrianServer mondrianServer;
   private Locus locus = new Locus( new Execution( null, 0 ), "component", "message" );

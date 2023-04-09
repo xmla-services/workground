@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Brian Burton, Julian Hyde, Stefan Bischof
  */
-public class Base64Test
+class Base64Test
 {
     private static final long SEED = 12345678;
     private static Random s_random = new Random(SEED);

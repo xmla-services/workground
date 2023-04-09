@@ -36,7 +36,7 @@ import static org.mockito.Mockito.eq;
 /**
  * Created by Dmitriy Stepanov on 20.01.18.
  */
-public class SqlTupleReaderTest extends TestCase {
+class SqlTupleReaderTest extends TestCase {
 
 
   void testAddLevelMemberSql() throws Exception {

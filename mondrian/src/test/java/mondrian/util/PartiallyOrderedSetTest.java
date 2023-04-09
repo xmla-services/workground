@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Unit test for {@link PartiallyOrderedSet}.
  */
-public class PartiallyOrderedSetTest {
+class PartiallyOrderedSetTest {
     private static final boolean debug = false;
     private final int SCALE = 250; // 100, 1000, 3000 are also reasonable values
     final long seed = new Random().nextLong();

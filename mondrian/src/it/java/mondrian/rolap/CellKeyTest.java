@@ -20,7 +20,7 @@ import mondrian.test.TestContext;
  *
  * @author Richard M. Emberson
  */
-public class CellKeyTest extends FoodMartTestCase {
+class CellKeyTest extends FoodMartTestCase {
     public CellKeyTest() {
     }
 

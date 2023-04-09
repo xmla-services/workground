@@ -26,7 +26,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class HangerDimensionTest extends ClearViewBase {
+class HangerDimensionTest extends ClearViewBase {
 
     public HangerDimensionTest() {
         super();

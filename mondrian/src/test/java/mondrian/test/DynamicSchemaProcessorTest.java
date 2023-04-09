@@ -29,7 +29,7 @@ import mondrian.spi.DynamicSchemaProcessor;
  *
  * @author ngoodman
  */
-public class DynamicSchemaProcessorTest
+class DynamicSchemaProcessorTest
 {
 
     public static final String FRAGMENT_ONE =

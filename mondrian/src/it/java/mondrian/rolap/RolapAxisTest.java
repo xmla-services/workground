@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Unit test for lists and iterators over members and tuples.
  */
-public class RolapAxisTest extends FoodMartTestCase {
+class RolapAxisTest extends FoodMartTestCase {
     public RolapAxisTest() {
         super();
     }

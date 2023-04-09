@@ -30,7 +30,7 @@ import mondrian.test.DiffRepository;
  *
  * @author Khanh Vu
  */
-public class HangerDimensionTest extends ClearViewBase {
+class HangerDimensionTest extends ClearViewBase {
 
     @Override
 	public DiffRepository getDiffRepos() {

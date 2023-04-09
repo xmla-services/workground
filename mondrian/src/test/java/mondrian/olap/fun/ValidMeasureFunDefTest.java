@@ -25,7 +25,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  *
  * Created by Yury_Bakhmutski on 9/2/2015.
  */
-public class ValidMeasureFunDefTest {
+class ValidMeasureFunDefTest {
 
   /**
    * Test for MONDRIAN-1032 issue.

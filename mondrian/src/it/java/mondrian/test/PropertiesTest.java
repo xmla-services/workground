@@ -18,7 +18,7 @@ import mondrian.olap.*;
  * @author anikitin
  * @since 5 July, 2005
  */
-public class PropertiesTest extends FoodMartTestCase {
+class PropertiesTest extends FoodMartTestCase {
 
     public PropertiesTest(String name) {
         super(name);

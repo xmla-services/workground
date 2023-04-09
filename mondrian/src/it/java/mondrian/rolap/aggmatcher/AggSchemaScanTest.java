@@ -25,7 +25,7 @@ import java.sql.SQLException;
   * Test if AggSchemaScan and AggCatalogScan properties are used in JdbcSchema loadTablesOfType
   *
   */
-public class AggSchemaScanTest extends FoodMartTestCase {
+class AggSchemaScanTest extends FoodMartTestCase {
 
   public AggSchemaScanTest( String name ) {
     super(name);

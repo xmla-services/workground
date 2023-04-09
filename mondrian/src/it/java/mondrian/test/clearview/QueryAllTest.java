@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class QueryAllTest extends ClearViewBase {
+class QueryAllTest extends ClearViewBase {
 
     public QueryAllTest() {
         super();

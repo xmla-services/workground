@@ -39,7 +39,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  *
  * @author Andrey Khayrutdinov
  */
-public class TopCountWithTwoParamsVersusHeadTest extends BatchTestCase {
+class TopCountWithTwoParamsVersusHeadTest extends BatchTestCase {
 
     private void assertResultsAreEqual(
         Connection connection,

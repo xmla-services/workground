@@ -30,7 +30,7 @@ import mondrian.tui.CmdRunner;
  * @author jhyde
  * @since Jun 2, 2006
  */
-public class CmdRunnerTest {
+class CmdRunnerTest {
     public Connection connection;
     protected DiffRepository getDiffRepos() {
         return DiffRepository.lookup(CmdRunnerTest.class);

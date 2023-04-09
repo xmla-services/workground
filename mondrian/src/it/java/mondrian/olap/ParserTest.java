@@ -31,7 +31,7 @@ import java.util.List;
  *
  * @author gjohnson
  */
-public class ParserTest extends FoodMartTestCase {
+class ParserTest extends FoodMartTestCase {
     public ParserTest(String name) {
         super(name);
     }

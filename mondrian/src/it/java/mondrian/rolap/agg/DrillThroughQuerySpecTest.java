@@ -30,7 +30,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-public class DrillThroughQuerySpecTest extends TestCase {
+class DrillThroughQuerySpecTest extends TestCase {
 
   private DrillThroughCellRequest requestMock;
   private StarPredicate starPredicateMock;

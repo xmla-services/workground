@@ -24,7 +24,7 @@ import javax.sql.DataSource;
 /**
  * Test for {@link RolapSchemaPool}.
  */
-public class RolapSchemaPoolTest extends FoodMartTestCase {
+class RolapSchemaPoolTest extends FoodMartTestCase {
 
     public RolapSchemaPoolTest(String name) {
         super(name);

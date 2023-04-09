@@ -18,7 +18,7 @@ import mondrian.test.FoodMartTestCase;
 import mondrian.test.TestAppender;
 import mondrian.test.TestContext;
 
-public class OrderKeyOneToOneCheckTest extends FoodMartTestCase {
+class OrderKeyOneToOneCheckTest extends FoodMartTestCase {
 
   private TestAppender memberSourceAppender;
   private TestAppender sqlReaderAppender;

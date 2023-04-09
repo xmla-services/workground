@@ -26,7 +26,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class OrderTest extends ClearViewBase {
+class OrderTest extends ClearViewBase {
 
     public OrderTest() {
         super();

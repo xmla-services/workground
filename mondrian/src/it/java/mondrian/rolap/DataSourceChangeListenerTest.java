@@ -28,7 +28,7 @@ import java.util.*;
  * @author Bart Pappyn
  * @since Jan 05, 2007
  */
-public class DataSourceChangeListenerTest extends BatchTestCase {
+class DataSourceChangeListenerTest extends BatchTestCase {
 
     public DataSourceChangeListenerTest() {
         super();

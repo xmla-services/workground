@@ -21,7 +21,7 @@ import java.util.Properties;
  *
  * @author Yury_Bakhmutski.
  */
-public class XmlaDimensionPropertiesTest extends XmlaBaseTestCase {
+class XmlaDimensionPropertiesTest extends XmlaBaseTestCase {
 
     void testOneHierarchyProperties() throws Exception {
         executeTest("HR");

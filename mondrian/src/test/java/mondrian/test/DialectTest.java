@@ -71,7 +71,7 @@ import mondrian.util.DelegatingInvocationHandler;
  * @author jhyde
  * @since May 18, 2007
  */
-public class DialectTest {
+class DialectTest {
   private Connection connection;
   private Dialect dialect;
   private static final String INFOBRIGHT_UNSUPPORTED =

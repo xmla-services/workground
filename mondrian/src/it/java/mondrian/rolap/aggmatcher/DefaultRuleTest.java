@@ -27,7 +27,7 @@ import java.util.Iterator;
  *
  * @author Richard M. Emberson
  */
-public class DefaultRuleTest extends TestCase {
+class DefaultRuleTest extends TestCase {
     private static final Logger LOGGER =
         LoggerFactory.getLogger(DefaultRuleTest.class);
     private static final String DIRECTORY =

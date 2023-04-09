@@ -50,7 +50,7 @@ import java.util.concurrent.CancellationException;
  *
  * @author gjohnson
  */
-public class FunctionTest extends FoodMartTestCase {
+class FunctionTest extends FoodMartTestCase {
 
   private static final Logger LOGGER = LoggerFactory.getLogger( FunctionTest.class );
   private static final int NUM_EXPECTED_FUNCTIONS = 329;

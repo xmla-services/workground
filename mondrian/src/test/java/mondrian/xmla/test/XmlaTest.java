@@ -60,7 +60,7 @@ import mondrian.xmla.impl.DefaultXmlaResponse;
  *
  * @author Gang Chen
  */
-public class XmlaTest{
+class XmlaTest{
 	
     protected static final String SCHEMA_TEST_DATE =
             "xxxx-xx-xxTxx:xx:xx";

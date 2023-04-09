@@ -20,7 +20,7 @@ import java.sql.DatabaseMetaData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class VerticaDialectTest{
+class VerticaDialectTest{
   private Connection connection = mock( Connection.class );
   private DatabaseMetaData metaData = mock( DatabaseMetaData.class );
   private VerticaDialect dialect;

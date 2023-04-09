@@ -41,7 +41,7 @@ import mondrian.util.Bug;
  * @author jhyde
  * @since Dec 31, 2007
  */
-public class VbaTest   {
+class VbaTest   {
     private static final double SMALL = 1e-10d;
     private static final Date SAMPLE_DATE = sampleDate();
 

@@ -24,7 +24,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class PredicateFilterTest extends ClearViewBase {
+class PredicateFilterTest extends ClearViewBase {
 
     public PredicateFilterTest() {
         super();

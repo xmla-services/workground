@@ -55,7 +55,7 @@ import mondrian.rolap.RolapSchemaPool;
  * @author jhyde
  * @since December 15, 2008
  */
-public class Ssas2005CompatibilityTest {
+class Ssas2005CompatibilityTest {
 
     /**
      * Whether member naming rules are implemented.

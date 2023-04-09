@@ -20,7 +20,7 @@ import java.util.Random;
  * @author jhyde
  * @since Jun 26, 2006
  */
-public class ParallelTest extends FoodMartTestCase {
+class ParallelTest extends FoodMartTestCase {
 
     public ParallelTest(String name) {
         super(name);

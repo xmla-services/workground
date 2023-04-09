@@ -21,7 +21,7 @@ import java.util.TimeZone;
 
 import org.junit.jupiter.api.Test;
 
-public class ScheduleTest {
+class ScheduleTest {
     public static final Time time0827 = ScheduleUtil.createTime(8, 27, 00);
     public static final Time time1600 = ScheduleUtil.createTime(16, 00, 0);
     public static final Time time0000 = ScheduleUtil.createTime(00, 00, 0);

@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 import mondrian.spi.SegmentBody;
 import mondrian.spi.SegmentHeader;
 
-public class SegmentCacheIndexImplTest {
+class SegmentCacheIndexImplTest {
 	@Test
     void testNoHeaderOnLoad() {
         final SegmentCacheIndexImpl index =

@@ -25,7 +25,7 @@ import mondrian.olap.fun.TestMember;
 /**
  * Unit test for lists and iterators over members and tuples.
  */
-public class RolapAxisTest {
+class RolapAxisTest {
 
     @Test
     void testMemberArrayList() {

@@ -25,7 +25,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 import mondrian.test.PropertySaver5;
 import mondrian.test.SqlPattern;
 
-public class NativeEvalVirtualCubeTest extends BatchTestCase {
+class NativeEvalVirtualCubeTest extends BatchTestCase {
 
   private PropertySaver5 propSaver;
   @BeforeEach

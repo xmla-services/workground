@@ -26,7 +26,7 @@ import mondrian.olap.Id;
  * @author jhyde
  * @since 21 December, 2001
  */
-public class Test {
+class Test {
     PrintWriter pw;
     RolapConnection connection;
 

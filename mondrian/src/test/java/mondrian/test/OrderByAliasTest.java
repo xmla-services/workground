@@ -36,7 +36,7 @@ import mondrian.rolap.BatchTestCase;
  *
  * @author Aleksandr Kozlov
  */
-public class OrderByAliasTest extends BatchTestCase {
+class OrderByAliasTest extends BatchTestCase {
 
   private PropertySaver5 propSaver;
 

@@ -37,7 +37,7 @@ import mondrian.olap.MondrianProperties;
  * @author jhyde
  * @since Apr 19, 2004
  */
-public class RaggedHierarchyTest {
+class RaggedHierarchyTest {
 
 	private PropertySaver5 propSaver;
 

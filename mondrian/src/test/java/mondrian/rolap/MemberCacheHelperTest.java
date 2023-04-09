@@ -28,7 +28,7 @@ import org.mockito.stubbing.Answer;
 import mondrian.rolap.sql.MemberChildrenConstraint;
 
 
-public class MemberCacheHelperTest {
+class MemberCacheHelperTest {
 
     @Mock
     private RolapMember parentMember;

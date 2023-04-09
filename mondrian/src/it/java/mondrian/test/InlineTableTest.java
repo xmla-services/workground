@@ -18,7 +18,7 @@ import mondrian.spi.Dialect;
  *
  * @author jhyde
  */
-public class InlineTableTest extends FoodMartTestCase {
+class InlineTableTest extends FoodMartTestCase {
 
     public InlineTableTest(String name) {
         super(name);

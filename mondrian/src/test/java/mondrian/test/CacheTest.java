@@ -41,7 +41,7 @@ import mondrian.server.monitor.ServerInfo;
  *
  * @author Julian Hyde
  */
-public class CacheTest {
+class CacheTest {
     /**
      * Tests that if N queries are executed at the same time, only one segment
      * request will be sent. The query that arrives second should see that there

@@ -36,7 +36,7 @@ import mondrian.test.PropertySaver5;
  * @author Andrey Khayrutdinov
  * @see RolapNativeTopCount#createEvaluator(RolapEvaluator, FunDef, Exp[])
  */
-public class TopCountNativeEvaluatorTest {
+class TopCountNativeEvaluatorTest {
 
     private PropertySaver5 propSaver;
     @BeforeEach

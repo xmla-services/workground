@@ -47,7 +47,7 @@ import static org.mockito.Mockito.*;
  * @author jng
  * @since 16 April, 2004
  */
-public class RolapConnectionTest extends TestCase {
+class RolapConnectionTest extends TestCase {
     private static final ThreadLocal<InitialContext> THREAD_INITIAL_CONTEXT =
         new ThreadLocal<InitialContext>();
 

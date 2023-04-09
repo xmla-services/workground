@@ -27,7 +27,7 @@ import mondrian.olap.Util;
  *
  * @author Richard Emberson
  */
-public class BitKeyTest {
+class BitKeyTest {
     /**
      * Test that negative size throws IllegalArgumentException.
      *

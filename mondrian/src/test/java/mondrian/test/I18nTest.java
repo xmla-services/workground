@@ -38,7 +38,7 @@ import mondrian.util.Format;
  * @author jhyde
  * @since September 22, 2005
  */
-public class I18nTest {
+class I18nTest {
     public static final char Euro = '\u20AC';
     public static final char Nbsp = ' ';
     public static final char EA = '\u00e9'; // e acute

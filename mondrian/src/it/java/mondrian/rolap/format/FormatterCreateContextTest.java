@@ -13,7 +13,7 @@ import mondrian.olap.MondrianDef;
 
 import junit.framework.TestCase;
 
-public class FormatterCreateContextTest extends TestCase {
+class FormatterCreateContextTest extends TestCase {
 
     void testElementDataShouldSupersedeAttributeData() {
         MondrianDef.ElementFormatter elementData =

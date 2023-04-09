@@ -20,7 +20,7 @@ import java.sql.Statement;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class PostgreSqlDialectTest extends TestCase {
+class PostgreSqlDialectTest extends TestCase {
   private Connection connection = mock( Connection.class );
   private DatabaseMetaData metaData = mock( DatabaseMetaData.class );
   Statement statmentMock = mock( Statement.class );

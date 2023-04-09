@@ -43,7 +43,7 @@ import mondrian.test.PropertySaver5;
  *
  * @author Sherman Wood
  */
-public class AggGenTest {
+class AggGenTest {
 
     private PropertySaver5 propSaver;
 

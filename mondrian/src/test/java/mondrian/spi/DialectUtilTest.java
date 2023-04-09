@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.Test;
 
-public class DialectUtilTest{
+class DialectUtilTest{
 
   @Test
   void testCleanUnicodeAwareCaseFlag_InputNull() {

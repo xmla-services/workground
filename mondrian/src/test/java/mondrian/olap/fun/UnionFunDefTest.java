@@ -44,7 +44,7 @@ import mondrian.rolap.RolapMemberBase;
  *
  * @author Yury Bakhmutski
  */
-public class UnionFunDefTest {
+class UnionFunDefTest {
 
   /**
    * Test for MONDRIAN-2250 issue.

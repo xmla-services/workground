@@ -28,7 +28,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 
-public class MemberCacheHelperTest extends TestCase {
+class MemberCacheHelperTest extends TestCase {
 
     @Mock
     private RolapMember parentMember;

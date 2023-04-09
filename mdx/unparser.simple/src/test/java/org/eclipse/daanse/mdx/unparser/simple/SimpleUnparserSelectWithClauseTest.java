@@ -33,7 +33,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SimpleUnparserSelectWithClauseTest {
+class SimpleUnparserSelectWithClauseTest {
 
     private SimpleUnparser unparser = new SimpleUnparser();
 

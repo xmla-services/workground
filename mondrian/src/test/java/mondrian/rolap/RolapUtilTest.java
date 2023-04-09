@@ -30,7 +30,7 @@ import org.junit.jupiter.api.Test;
 import mondrian.olap.MondrianDef;
 import org.opencube.junit5.SchemaUtil;
 
-public class RolapUtilTest {
+class RolapUtilTest {
 
   private static final String FILTER_QUERY =
       "`TableAlias`.`promotion_id` = 112";

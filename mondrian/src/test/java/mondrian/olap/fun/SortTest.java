@@ -31,7 +31,7 @@ import mondrian.test.PropertySaver5;
  * @author jhyde
  * @since Sep 21, 2006
  */
-public class SortTest {
+class SortTest {
 
   /**
    * Access properties via this object and their values will be reset.

@@ -31,7 +31,7 @@ import javax.sql.DataSource;
  *
  * @author Sherman Wood
  */
-public class AggGenTest extends FoodMartTestCase {
+class AggGenTest extends FoodMartTestCase {
 
     public AggGenTest(String name) {
         super(name);

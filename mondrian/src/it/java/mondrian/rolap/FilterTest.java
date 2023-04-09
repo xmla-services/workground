@@ -20,7 +20,7 @@ import mondrian.test.TestContext;
  * @author Rushan Chen
  * @since April 28, 2009
  */
-public class FilterTest extends BatchTestCase {
+class FilterTest extends BatchTestCase {
   public FilterTest() {
     super();
   }

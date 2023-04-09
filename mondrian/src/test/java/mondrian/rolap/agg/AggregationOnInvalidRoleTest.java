@@ -24,7 +24,7 @@ import mondrian.test.loader.CsvDBTestCase;
 /**
  * @author Andrey Khayrutdinov
  */
-public class AggregationOnInvalidRoleTest extends CsvDBTestCase {
+class AggregationOnInvalidRoleTest extends CsvDBTestCase {
 
     @Override
     protected String getFileName() {

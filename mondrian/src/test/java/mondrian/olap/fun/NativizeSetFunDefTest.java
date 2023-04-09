@@ -41,7 +41,7 @@ import mondrian.test.SqlPattern;
  * @author jrand
  * @since Oct 14, 2009
  */
-public class NativizeSetFunDefTest extends BatchTestCase {
+class NativizeSetFunDefTest extends BatchTestCase {
 
     private PropertySaver5 propSaver;
 

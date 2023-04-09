@@ -70,7 +70,7 @@ import jakarta.xml.ws.handler.Handler;
 @ExtendWith(BundleContextExtension.class)
 @ExtendWith(ServiceExtension.class)
 @RequireHttpWhiteboard
-public class SoapWhiteboardTest {
+class SoapWhiteboardTest {
 
 	private static final String ECHO_NS = "http://demo.ws.daanse.eclipse.org/";
 	private static final String SERVER_PORT_EMBEDDED_SERVER_PORT = "9999";

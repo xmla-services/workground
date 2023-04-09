@@ -18,7 +18,7 @@ import mondrian.rolap.aggmatcher.JdbcSchema;
 import mondrian.test.PropertyRestoringTestCase;
 import org.mockito.Mockito;
 
-public class AggStarTest extends PropertyRestoringTestCase {
+class AggStarTest extends PropertyRestoringTestCase {
 
   private AggStar aggStar;
   private RolapStar star;

@@ -15,7 +15,7 @@ import mondrian.test.FoodMartTestCase;
  *
  * @author Yury Bakhmutski
  */
-public class CrossJoinArgFactoryTest  extends FoodMartTestCase {
+class CrossJoinArgFactoryTest  extends FoodMartTestCase {
 
      /**
      * test for MONDRIAN-2287 issue. Tests if correct result is returned

@@ -68,7 +68,7 @@ import mondrian.util.Pair;
  *
  * @author mcampbell
  */
-public class SegmentBuilderTest {
+class SegmentBuilderTest {
 
     public static final double MOCK_CELL_VALUE = 123.123;
 

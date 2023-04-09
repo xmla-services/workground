@@ -13,7 +13,7 @@ import mondrian.spi.*;
 
 import junit.framework.TestCase;
 
-public class FormatterFactoryTest extends TestCase {
+class FormatterFactoryTest extends TestCase {
 
     private FormatterFactory factory = FormatterFactory.instance();
 

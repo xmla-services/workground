@@ -11,7 +11,7 @@ package mondrian.rolap;
 
 import mondrian.test.FoodMartTestCase;
 
-public class RolapEvaluatorTest extends FoodMartTestCase {
+class RolapEvaluatorTest extends FoodMartTestCase {
 
     void testGetSlicerPredicateInfo() throws Exception {
         RolapResult result = (RolapResult) executeQuery(

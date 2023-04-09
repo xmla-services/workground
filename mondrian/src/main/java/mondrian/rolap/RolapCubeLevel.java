@@ -486,8 +486,8 @@ public class RolapCubeLevel extends RolapLevel {
                 RolapMember upperMember;
                 if (upperBound == null) {
                     upperMember = null;
-                } else if (upperBound instanceof MemberColumnPredicate memberColumnPredicate) {
-                    upperMember = memberColumnPredicate.getMember();
+                } else if (upperBound instanceof MemberColumnPredicate mcp) {
+                    upperMember = mcp.getMember();
                 } else {
                     throw new UnsupportedOperationException();
                 }

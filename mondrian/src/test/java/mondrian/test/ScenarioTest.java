@@ -46,7 +46,7 @@ import org.opencube.junit5.propupdator.SchemaUpdater;
  * @author jhyde
  * @since 24 April, 2009
  */
-public class ScenarioTest {
+class ScenarioTest {
     /**
      * Tests creating a scenario and setting a connection's active scenario.
      */

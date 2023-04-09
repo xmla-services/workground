@@ -29,7 +29,7 @@ import java.sql.Types;
 import org.eclipse.daanse.db.dialect.api.BestFitColumnType;
 import org.junit.jupiter.api.Test;
 
-public class AdditionalTest {
+class AdditionalTest {
 
     @Test
     void testMonetBooleanColumn() throws SQLException {

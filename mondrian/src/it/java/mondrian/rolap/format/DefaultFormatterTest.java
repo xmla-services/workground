@@ -17,7 +17,7 @@ import java.util.Map;
 /**
  * Unit Test for {@link DefaultFormatter}.
  */
-public class DefaultFormatterTest extends TestCase {
+class DefaultFormatterTest extends TestCase {
 
     // property values and their expected formatted values
     private static final Map<Object, String> VALUES =

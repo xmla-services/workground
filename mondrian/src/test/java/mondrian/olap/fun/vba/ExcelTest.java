@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
  * @author jhyde
  * @since Jan 16, 2008
  */
-public class ExcelTest{
+class ExcelTest{
     private static final double SMALL = 1e-10d;
 
     @Test

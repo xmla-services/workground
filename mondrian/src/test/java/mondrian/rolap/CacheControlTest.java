@@ -47,7 +47,7 @@ import mondrian.test.PropertySaver5;
  * @author jhyde
  * @since Sep 27, 2006
  */
-public class CacheControlTest {
+class CacheControlTest {
 
     private PropertySaver5 propSaver;
 

@@ -24,7 +24,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-public class FileRepositoryTest extends TestCase {
+class FileRepositoryTest extends TestCase {
 
      void testGetServerInfo_ifGetDataSourceInfoIsCalled() {
         final String datasourceNameStub = "DATASOURCE_NAME";

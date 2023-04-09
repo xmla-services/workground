@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import mondrian.server.Execution;
 import mondrian.test.PropertySaver5;
 
-  public class CancellationCheckerTest {
+  class CancellationCheckerTest {
       
     protected PropertySaver5 propSaver= new PropertySaver5();
   

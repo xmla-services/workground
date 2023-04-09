@@ -32,7 +32,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
  * @author <a>Richard M. Emberson</a>
  * @since Mar 01 2007
  */
-public class NullValueTest{
+class NullValueTest{
 
 
 	@ParameterizedTest

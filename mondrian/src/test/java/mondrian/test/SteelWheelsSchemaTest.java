@@ -45,7 +45,7 @@ import mondrian.rolap.RolapConnectionProperties;
 import mondrian.spi.impl.FilterDynamicSchemaProcessor;
 import mondrian.util.Bug;
 
-public class SteelWheelsSchemaTest extends SteelWheelsTestCase {
+class SteelWheelsSchemaTest extends SteelWheelsTestCase {
 
 	private PropertySaver5 propSaver;
 

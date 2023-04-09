@@ -66,7 +66,7 @@ import mondrian.rolap.RolapConnectionProperties;
  * @author jhyde
  * @since Feb 13, 2003
  */
-public class ParameterTest {
+class ParameterTest {
 
     // -- Helper methods ----------
 

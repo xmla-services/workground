@@ -20,7 +20,7 @@ import mondrian.test.TestContext;
 /**
  * Query test.
  */
-public class QueryTest extends FoodMartTestCase {
+class QueryTest extends FoodMartTestCase {
     private QueryPart[] cellProps = {
         new CellProperty(Id.Segment.toList("Value")),
         new CellProperty(Id.Segment.toList("Formatted_Value")),

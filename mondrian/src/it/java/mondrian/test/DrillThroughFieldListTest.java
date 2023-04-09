@@ -27,7 +27,7 @@ import java.util.List;
  * @author Yury_Bakhmutski
  * @since Nov 18, 2015
  */
-public class DrillThroughFieldListTest extends FoodMartTestCase {
+class DrillThroughFieldListTest extends FoodMartTestCase {
   private TestContext context = getTestContext();
 
   public DrillThroughFieldListTest() {

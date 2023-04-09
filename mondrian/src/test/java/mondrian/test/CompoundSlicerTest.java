@@ -34,7 +34,7 @@ import mondrian.util.Bug;
  * @author jhyde
  * @since 15 May, 2009
  */
-public class CompoundSlicerTest {
+class CompoundSlicerTest {
 
     private PropertySaver5 propSaver;
 

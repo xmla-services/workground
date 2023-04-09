@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
  * @author jlopez, lcanals, Stefan Bischof
  * @since May, 2008
  */
-public class FilteredIterableTest{
+class FilteredIterableTest{
     public FilteredIterableTest() {
     }
 

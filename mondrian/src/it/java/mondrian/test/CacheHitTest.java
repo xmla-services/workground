@@ -27,7 +27,7 @@ import junit.framework.TestSuite;
  *
  * @author kvu
  */
-public class CacheHitTest extends FoodMartTestCase {
+class CacheHitTest extends FoodMartTestCase {
 
     /**
      * Runs a set of small MDX queries that targets a small region

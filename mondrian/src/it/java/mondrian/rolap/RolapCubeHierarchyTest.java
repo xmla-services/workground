@@ -22,7 +22,7 @@ import javax.sql.DataSource;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.doReturn;
 
-public class RolapCubeHierarchyTest extends FoodMartTestCase {
+class RolapCubeHierarchyTest extends FoodMartTestCase {
 
   void testMONDRIAN2535() {
     assertQueryReturns(

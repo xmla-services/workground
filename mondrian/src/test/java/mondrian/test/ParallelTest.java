@@ -32,7 +32,7 @@ import mondrian.olap.Util;
  * @author jhyde
  * @since Jun 26, 2006
  */
-public class ParallelTest {
+class ParallelTest {
 
 
     @ParameterizedTest

@@ -82,7 +82,7 @@ import mondrian.spi.UserDefinedFunction;
  * @author jhyde
  * @since Apr 29, 2005
  */
-public class UdfTest {
+class UdfTest {
 
 
 
@@ -1827,7 +1827,7 @@ public class UdfTest {
     /**
      * Function that is non-static.
      */
-    public class ReverseFunctionNotStatic extends ReverseFunction {
+    class ReverseFunctionNotStatic extends ReverseFunction {
     }
 
     /**

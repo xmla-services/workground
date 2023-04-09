@@ -42,7 +42,7 @@ import mondrian.test.TestContext;
  * @author ajogleka
  * @since 19 December, 2007
  */
-public class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
+class AggregationOnDistinctCountMeasuresTest extends BatchTestCase {
     private final MondrianProperties props = MondrianProperties.instance();
 
     private SchemaReader salesCubeSchemaReader = null;

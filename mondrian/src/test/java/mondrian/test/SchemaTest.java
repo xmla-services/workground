@@ -86,7 +86,7 @@ import mondrian.util.Bug;
  * @author jhyde
  * @since August 7, 2006
  */
-public class SchemaTest {
+class SchemaTest {
 
     private PropertySaver5 propSaver;
 

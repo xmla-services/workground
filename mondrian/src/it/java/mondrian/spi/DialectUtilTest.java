@@ -11,7 +11,7 @@ package mondrian.spi;
 
 import junit.framework.TestCase;
 
-public class DialectUtilTest extends TestCase {
+class DialectUtilTest extends TestCase {
 
   void testCleanUnicodeAwareCaseFlag_InputNull() {
     String inputExpression = null;

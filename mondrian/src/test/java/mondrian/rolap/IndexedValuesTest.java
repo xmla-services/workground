@@ -30,7 +30,7 @@ import mondrian.olap.MondrianProperties;
  *
  * @author pierluiggi@users.sourceforge.net
  */
-public class IndexedValuesTest {
+class IndexedValuesTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)

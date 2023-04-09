@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author LBoudreau
  */
-public class SegmentCacheTest extends BasicQueryTest {
+class SegmentCacheTest extends BasicQueryTest {
     @Override
     protected void setUp() throws Exception {
         super.setUp();

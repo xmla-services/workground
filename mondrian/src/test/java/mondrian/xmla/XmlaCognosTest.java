@@ -32,7 +32,7 @@ import mondrian.test.DiffRepository;
  * @author Thiyagu, Shishir
  */
 
-public class XmlaCognosTest extends XmlaBaseTestCase {
+class XmlaCognosTest extends XmlaBaseTestCase {
 
 
     @AfterEach

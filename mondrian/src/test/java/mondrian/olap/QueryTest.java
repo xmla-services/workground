@@ -28,7 +28,7 @@ import mondrian.server.Statement;
 /**
  * Query test.
  */
-public class QueryTest {
+class QueryTest {
     private QueryPart[] cellProps = {
         new CellProperty(Id.Segment.toList("Value")),
         new CellProperty(Id.Segment.toList("Formatted_Value")),

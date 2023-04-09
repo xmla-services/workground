@@ -25,7 +25,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class MetricFilterTest extends ClearViewBase {
+class MetricFilterTest extends ClearViewBase {
 
     public MetricFilterTest() {
         super();

@@ -42,7 +42,7 @@ import mondrian.olap.SchemaReader;
 /**
  * Unit test for {@link SchemaReader}.
  */
-public class RolapSchemaReaderTest {
+class RolapSchemaReaderTest {
 
     @ParameterizedTest
     @ContextSource(propertyUpdater = AppandFoodMartCatalogAsFile.class, dataloader = FastFoodmardDataLoader.class)

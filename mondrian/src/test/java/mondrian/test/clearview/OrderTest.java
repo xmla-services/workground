@@ -30,7 +30,7 @@ import mondrian.test.DiffRepository;
  *
  * @author Khanh Vu
  */
-public class OrderTest extends ClearViewBase {
+class OrderTest extends ClearViewBase {
 
     @Override
 	public DiffRepository getDiffRepos() {

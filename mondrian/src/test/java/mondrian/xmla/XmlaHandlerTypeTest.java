@@ -42,7 +42,7 @@ import mondrian.rolap.RolapCube;
  *
  * @author mcampbell
  */
-public class XmlaHandlerTypeTest  {
+class XmlaHandlerTypeTest  {
 
     TestVal[] typeTests = {
         TestVal.having("StringValue", "xsd:string", "String"),

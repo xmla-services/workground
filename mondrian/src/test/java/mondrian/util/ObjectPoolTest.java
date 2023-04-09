@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
  *
  * @author Richard Emberson, Stefan Bischof
  */
-public class ObjectPoolTest{
+class ObjectPoolTest{
 
     static class KeyValue {
         long key;

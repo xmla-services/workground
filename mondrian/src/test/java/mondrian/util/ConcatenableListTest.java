@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
  * <p>Currently oriented at testing fixes for a couple of known bugs;
  * these should not be considered to be otherwise comprehensive.</p>
  */
-public class ConcatenableListTest{
+class ConcatenableListTest{
 
     // Just some placeholder constants for expected values in backing lists
     private final String NON_EMPTY_MARKER = "Not empty",

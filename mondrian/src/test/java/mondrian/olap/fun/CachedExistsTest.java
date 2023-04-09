@@ -26,7 +26,7 @@ import mondrian.rolap.RolapConnectionProperties;
  *
  * @author Benny Chow
  */
-public class CachedExistsTest{
+class CachedExistsTest{
 
 
 	@ParameterizedTest

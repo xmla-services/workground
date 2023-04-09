@@ -56,7 +56,7 @@ import mondrian.test.clearview.TopBottomTest;
  *
  * @author Khanh Vu
  */
-public class CVConcurrentMdxTest {
+class CVConcurrentMdxTest {
     private MondrianProperties props;
 
     private PropertySaver5 propSaver;

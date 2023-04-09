@@ -38,7 +38,7 @@ import mondrian.rolap.RolapStar.Column;
  *
  * @author pedrovale
  */
-public class RolapStarTest {
+class RolapStarTest {
 
     static class RolapStarForTests extends RolapStar {
         public RolapStarForTests(

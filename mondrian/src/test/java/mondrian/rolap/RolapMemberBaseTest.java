@@ -28,7 +28,7 @@ import mondrian.spi.PropertyFormatter;
 /**
  * Unit Test for {@link RolapMemberBase}.
  */
-public class RolapMemberBaseTest {
+class RolapMemberBaseTest {
 
     private static final String PROPERTY_NAME_1 = "property1";
     private static final String PROPERTY_NAME_2 = "property2";

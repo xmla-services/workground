@@ -27,7 +27,7 @@ import java.util.*;
  *
  * @author mcampbell
  */
-public class XmlaHandlerTypeTest extends FoodMartTestCase {
+class XmlaHandlerTypeTest extends FoodMartTestCase {
 
     TestVal[] typeTests = {
         TestVal.having("StringValue", "xsd:string", "String"),

@@ -42,7 +42,7 @@ import java.util.regex.Pattern;
  * @author jhyde
  * @since Apr 29, 2005
  */
-public class UdfTest extends FoodMartTestCase {
+class UdfTest extends FoodMartTestCase {
 
     public UdfTest() {
     }
@@ -1689,7 +1689,7 @@ public class UdfTest extends FoodMartTestCase {
     /**
      * Function that is non-static.
      */
-    public class ReverseFunctionNotStatic extends ReverseFunction {
+    class ReverseFunctionNotStatic extends ReverseFunction {
     }
 
     /**

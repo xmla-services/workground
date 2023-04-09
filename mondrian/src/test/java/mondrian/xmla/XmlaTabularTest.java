@@ -26,7 +26,7 @@ import mondrian.test.DiffRepository;
  *
  * @author Julio Caub&iacute;n, jhyde
  */
-public class XmlaTabularTest extends XmlaBaseTestCase {
+class XmlaTabularTest extends XmlaBaseTestCase {
 
     @AfterEach
     public void afterEach() {

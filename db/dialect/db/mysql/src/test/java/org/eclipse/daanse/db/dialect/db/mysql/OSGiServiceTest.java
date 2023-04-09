@@ -21,7 +21,7 @@ import org.eclipse.daanse.db.dialect.api.Dialect;
 import org.junit.jupiter.api.Test;
 import org.osgi.test.common.annotation.InjectService;
 
-public class OSGiServiceTest {
+class OSGiServiceTest {
     @Test
     void serviceExists(@InjectService List<Dialect> dialects) throws Exception {
 

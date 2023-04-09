@@ -25,7 +25,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class SummaryTest extends ClearViewBase {
+class SummaryTest extends ClearViewBase {
 
     public SummaryTest() {
         super();

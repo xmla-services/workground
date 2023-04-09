@@ -35,7 +35,7 @@ import mondrian.rolap.RolapUtil;
  */
 //disabled by reason of we don't plan use log4j
 @Disabled
-public class MdcUtilTest {
+class MdcUtilTest {
 
   private static Logger rolapUtilLogger = LoggerFactory.getLogger( RolapUtil.class );
 

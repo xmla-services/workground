@@ -18,7 +18,7 @@ import mondrian.test.TestContext;
  *
  * @author Richard M. Emberson
  */
-public class XmlaExcel2007Test extends XmlaBaseTestCase {
+class XmlaExcel2007Test extends XmlaBaseTestCase {
 
     protected String getSessionId(Action action) {
         return getSessionId("XmlaExcel2000Test", action);

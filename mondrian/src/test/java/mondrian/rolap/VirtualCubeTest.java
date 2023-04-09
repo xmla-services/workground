@@ -50,7 +50,7 @@ import mondrian.test.SqlPattern;
  * @author remberson
  * @since Feb 14, 2003
  */
-public class VirtualCubeTest extends BatchTestCase {
+class VirtualCubeTest extends BatchTestCase {
 
     private PropertySaver5 propSaver;
 

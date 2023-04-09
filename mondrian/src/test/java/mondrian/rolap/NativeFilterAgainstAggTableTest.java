@@ -28,7 +28,7 @@ import mondrian.test.SqlPattern;
 /**
  * @author Andrey Khayrutdinov
  */
-public class NativeFilterAgainstAggTableTest extends BatchTestCase {
+class NativeFilterAgainstAggTableTest extends BatchTestCase {
 
     private PropertySaver5 propSaver;
     @BeforeAll

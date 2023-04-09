@@ -33,7 +33,7 @@ import static mondrian.olap.SolveOrderMode.SCOPED;
  * @author ajogleka
  * @since Apr 04, 2008
  */
-public class SolveOrderScopeIsolationTest extends FoodMartTestCase {
+class SolveOrderScopeIsolationTest extends FoodMartTestCase {
     SolveOrderMode defaultSolveOrderMode;
 
     public void setUp() throws Exception {

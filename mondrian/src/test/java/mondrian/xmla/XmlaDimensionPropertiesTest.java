@@ -30,7 +30,7 @@ import mondrian.test.DiffRepository;
  *
  * @author Yury_Bakhmutski.
  */
-public class XmlaDimensionPropertiesTest extends XmlaBaseTestCase {
+class XmlaDimensionPropertiesTest extends XmlaBaseTestCase {
 
 	@BeforeEach
     public void beforeEach() throws ClassNotFoundException {

@@ -36,7 +36,7 @@ import mondrian.test.PropertySaver5;
  *
  * @author Richard M. Emberson
  */
-public class CellKeyTest  {
+class CellKeyTest  {
 
     private PropertySaver5 propSaver;
     @BeforeEach

@@ -30,7 +30,7 @@ import java.util.concurrent.*;
  *
  * @author Thiyagu,Ajit
  */
-public class ConcurrentMdxTest extends FoodMartTestCase {
+class ConcurrentMdxTest extends FoodMartTestCase {
     private static final Logger LOGGER =
         LoggerFactory.getLogger(FoodMartTestCase.class);
 

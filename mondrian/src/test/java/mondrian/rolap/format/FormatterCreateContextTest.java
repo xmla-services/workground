@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 
 import mondrian.olap.MondrianDef;
 
-public class FormatterCreateContextTest {
+class FormatterCreateContextTest {
 
 	@Test
     void testElementDataShouldSupersedeAttributeData() {

@@ -36,7 +36,7 @@ import mondrian.olap.Query;
  *
  * @author Richard Emberson
  */
-public class MemoryMonitorTest {
+class MemoryMonitorTest {
     static final int PERCENT_100 = 100;
 
     protected static int convertThresholdToPercentage(

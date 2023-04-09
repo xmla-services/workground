@@ -31,7 +31,7 @@ import java.sql.SQLException;
  * @author jhyde
  * @since 2010/11/22
  */
-public class MondrianServerTest extends TestCase {
+class MondrianServerTest extends TestCase {
     /**
      * Tests an embedded server.
      */

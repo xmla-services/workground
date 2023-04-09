@@ -22,7 +22,7 @@ import mondrian.test.FoodMartTestCase;
  * @author ajogleka
  * @since 19 December, 2007
  */
-public class SetFunDefTest extends FoodMartTestCase {
+class SetFunDefTest extends FoodMartTestCase {
 
     void testSetWithMembersFromDifferentHierarchies() {
         assertQueryFailsInSetValidation(

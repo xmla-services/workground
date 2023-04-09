@@ -39,7 +39,7 @@ import mondrian.test.DiffRepository;
  * Then it runs a few queries to check that the filtering
  * occurs as expected.
  */
-public class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
+class XmlaMetaDataConstraintsTest extends XmlaBaseTestCase {
 
     @BeforeEach
     public void beforeEach() throws ClassNotFoundException {

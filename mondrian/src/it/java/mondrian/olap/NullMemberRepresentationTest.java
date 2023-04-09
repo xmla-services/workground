@@ -20,7 +20,7 @@ import java.io.IOException;
  * {@link mondrian.olap.MondrianProperties#NullMemberRepresentation} property.
  * @author ajogleka
  */
-public class NullMemberRepresentationTest extends FoodMartTestCase {
+class NullMemberRepresentationTest extends FoodMartTestCase {
 
     void testClosingPeriodMemberLeafWithCustomNullRepresentation() {
         assertQueryReturns(

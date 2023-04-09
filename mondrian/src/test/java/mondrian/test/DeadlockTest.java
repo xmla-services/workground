@@ -24,7 +24,7 @@ import org.opencube.junit5.propupdator.AppandFoodMartCatalogAsFile;
 
 import mondrian.olap.MondrianProperties;
 
-public class DeadlockTest {
+class DeadlockTest {
 
     private PropertySaver5 propSaver;
 

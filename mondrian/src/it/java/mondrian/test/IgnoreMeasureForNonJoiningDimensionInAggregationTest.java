@@ -22,7 +22,7 @@ import mondrian.rolap.agg.AggregationManager;
  * @author ajoglekar
  * @since Dec 12, 2007
  */
-public class IgnoreMeasureForNonJoiningDimensionInAggregationTest
+class IgnoreMeasureForNonJoiningDimensionInAggregationTest
     extends FoodMartTestCase
 {
     protected void setUp() throws Exception {

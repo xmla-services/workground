@@ -23,7 +23,7 @@ import junit.framework.TestSuite;
  *
  * @author Khanh Vu
  */
-public class CVBasicTest extends ClearViewBase {
+class CVBasicTest extends ClearViewBase {
 
     public CVBasicTest() {
         super();
