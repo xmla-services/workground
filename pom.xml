@@ -273,7 +273,7 @@
           <executions>
             <execution>
               <id>jacoco-report-bndrun</id>
-              <phase>verify</phase>
+              <phase>post-integration-test</phase>
               <goals>
                 <goal>report-integration</goal>
               </goals>
