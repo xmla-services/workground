@@ -403,7 +403,7 @@ abstract class Rowset implements XmlaConstants {
         final Object restriction = restrictions.get(column.name);
 
         if (restriction == null) {
-            return (input)->true;
+            return input -> true;
         } else if (restriction instanceof XmlaUtil.Wildcard wildcard) {
             String regexp =
                 Util.wildcardToRegexp(
@@ -493,7 +493,7 @@ abstract class Rowset implements XmlaConstants {
                 }
             };
         } else {
-            return (in)->true;
+            return in -> true;
         }
     }
 

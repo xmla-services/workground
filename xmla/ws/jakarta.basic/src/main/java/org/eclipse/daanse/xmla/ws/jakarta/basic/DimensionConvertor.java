@@ -59,6 +59,7 @@ import org.eclipse.daanse.xmla.model.record.xmla.DimensionPermissionR;
 import org.eclipse.daanse.xmla.model.record.xmla.DimensionR;
 import org.eclipse.daanse.xmla.model.record.xmla.HierarchyR;
 import org.eclipse.daanse.xmla.model.record.xmla.LevelR;
+import org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.RelationshipEnd.Attributes.Attribute;
 
 public class DimensionConvertor {
 
@@ -369,7 +370,7 @@ public class DimensionConvertor {
 
     private static List<String> convertRelationshipEndAttributes(org.eclipse.daanse.xmla.ws.jakarta.model.xmla.engine300_300.RelationshipEnd.Attributes attributes) {
         if (attributes != null && attributes.getAttribute() != null) {
-            return attributes.getAttribute().stream().map(i -> i.getAttributeID()).toList();
+            return attributes.getAttribute().stream().map(Attribute::getAttributeID).toList();
         }
         return List.of();
 

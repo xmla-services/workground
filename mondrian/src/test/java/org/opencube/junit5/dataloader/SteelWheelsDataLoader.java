@@ -53,7 +53,7 @@ public class SteelWheelsDataLoader implements DataLoader {
 
 	private List<String> dropTableSQLs() {
 
-		return tables.stream().map(t -> dropTableSQL(t)).toList();
+		return tables.stream().map(this::dropTableSQL).toList();
 	}
 
 	private String dropTableSQL(String table) {

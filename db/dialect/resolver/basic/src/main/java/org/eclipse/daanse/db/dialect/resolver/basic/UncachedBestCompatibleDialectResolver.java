@@ -88,7 +88,7 @@ public class UncachedBestCompatibleDialectResolver implements DialectResolver {
     }
 
     private Predicate<Entry<Dialect, Boolean>> compatibleDialect() {
-        return entry -> entry.getValue();
+        return Entry::getValue;
     }
 
 }

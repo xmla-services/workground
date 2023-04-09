@@ -38,6 +38,7 @@ import org.eclipse.daanse.engine.api.Context;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.PullImageResultCallback;
+import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.HostConfig;
 import com.github.dockerjava.api.model.PortBinding;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
@@ -66,7 +67,7 @@ public abstract class AbstractDockerBasesDatabaseProvider implements DatabasePro
 	            .exec()
 	            .stream()
 	            .filter(Objects::nonNull)
-	            .map(it -> it.getId())
+	            .map(Container::getId)
 	            .findAny();
 	         return id;
 	    }
