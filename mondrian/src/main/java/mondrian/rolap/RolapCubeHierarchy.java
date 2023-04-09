@@ -317,9 +317,8 @@ public class RolapCubeHierarchy extends RolapHierarchy {
                 RelationUtil.getAlias(((Relation) oldrel)),
                 RelationUtil.getAlias(((Relation) newrel)));
         } else if (oldrel instanceof Join oldjoin
-            && newrel instanceof Join)
+            && newrel instanceof Join newjoin)
         {
-            Join newjoin = (Join)newrel;
             extractNewAliases(left(oldjoin), left(newjoin));
             extractNewAliases(right(oldjoin), right(newjoin));
         } else {
