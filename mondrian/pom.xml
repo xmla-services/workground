@@ -132,12 +132,6 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-      <groupId>org.mozilla</groupId>
-      <artifactId>rhino</artifactId>
-      <version>1.7.14</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.db.dialect.api</artifactId>
       <version>${revision}</version>
@@ -179,11 +173,6 @@
       <scope>compile</scope>
     </dependency>
 
-
-    <dependency>
-      <groupId>biz.aQute.bnd</groupId>
-      <artifactId>biz.aQute.bndlib</artifactId>
-    </dependency>
     <dependency>
       <groupId>com.univocity</groupId>
       <artifactId>univocity-parsers</artifactId>
@@ -200,12 +189,6 @@
     <dependency>
       <groupId>net.java.dev.jna</groupId>
       <artifactId>jna</artifactId>
-      <scope>compile</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>mysql</groupId>
-      <artifactId>mysql-connector-java</artifactId>
       <scope>compile</scope>
     </dependency>
 
@@ -323,12 +306,6 @@
       <scope>runtime</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.oracle</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
@@ -344,12 +321,6 @@
       <scope>runtime</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.eclipse.daanse</groupId>
-      <artifactId>org.eclipse.daanse.db.dialect.db.netezza</artifactId>
-      <version>${revision}</version>
-      <scope>runtime</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
@@ -365,18 +336,7 @@
       <scope>runtime</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.olap4j</groupId>
-      <artifactId>olap4j-tck</artifactId>
-      <scope>test</scope>
-    </dependency>
 
-    <dependency>
-      <groupId>org.mozilla</groupId>
-      <artifactId>rhino</artifactId>
-      <version>1.7.14</version>
-      <scope>runtime</scope>
-    </dependency>
     <dependency>
       <groupId>org.eclipse.daanse</groupId>
       <artifactId>org.eclipse.daanse.repackage.rhino.engine</artifactId>
