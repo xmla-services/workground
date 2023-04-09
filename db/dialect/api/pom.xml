@@ -16,7 +16,6 @@
     <groupId>org.eclipse.daanse</groupId>
     <artifactId>org.eclipse.daanse.db.dialect</artifactId>
     <version>${revision}</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>org.eclipse.daanse.db.dialect.api</artifactId>
 </project>
