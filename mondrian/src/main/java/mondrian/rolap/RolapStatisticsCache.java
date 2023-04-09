@@ -137,9 +137,8 @@ public class RolapStatisticsCache {
             return approxCardinality;
         }
         if (relation instanceof Table table
-            && expression instanceof Column)
+            && expression instanceof Column column)
         {
-            final Column column = (Column) expression;
             return getColumnCardinality(
                 null,
                 table.schema(),
